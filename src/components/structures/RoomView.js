@@ -716,17 +716,11 @@ module.exports = React.createClass({
     },
 
     onResendAllClick: function() {
-        dis.dispatch({
-            action: 'resend_all_events',
-            room: this.state.room,
-        });
+        Resend.resendUnsentEvents(this.state.room);
     },
 
     onCancelAllClick: function() {
-        dis.dispatch({
-            action: 'cancel_all_events',
-            room: this.state.room,
-        });
+        Resend.cancelUnsentEvents(this.state.room);
     },
 
     onJoinButtonClicked: function(ev) {

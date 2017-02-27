@@ -26,7 +26,6 @@ var ContextualMenu = require("./ContextualMenu");
 var RoomListSorter = require("../../RoomListSorter");
 var UserActivity = require("../../UserActivity");
 var Presence = require("../../Presence");
-var Resend = require("../../Resend");
 var dis = require("../../dispatcher");
 
 var Login = require("./login/Login");
@@ -521,20 +520,6 @@ module.exports = React.createClass({
                 break;
             case 'set_theme':
                 this._onSetTheme(payload.value);
-                break;
-            case 'resend_all_events':
-                payload.room.getPendingEvents().filter(function(ev) {
-                    return ev.status === Matrix.EventStatus.NOT_SENT;
-                }).forEach(function(event) {
-                    Resend.resend(event);
-                });
-                break;
-            case 'cancel_all_events':
-                payload.room.getPendingEvents().filter(function(ev) {
-                    return ev.status === Matrix.EventStatus.NOT_SENT;
-                }).forEach(function(event) {
-                    Resend.removeFromQueue(event);
-                });
                 break;
             case 'on_logged_in':
                 this._onLoggedIn();

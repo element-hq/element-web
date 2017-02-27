@@ -20,6 +20,20 @@ var sdk = require('./index');
 var Modal = require('./Modal');
 
 module.exports = {
+    resendUnsentEvents: function(room) {
+        room.getPendingEvents().filter(function(ev) {
+            return ev.status === Matrix.EventStatus.NOT_SENT;
+        }).forEach(function(event) {
+            module.exports.resend(event);
+        });
+    },
+    cancelUnsentEvents: function(room) {
+        room.getPendingEvents().filter(function(ev) {
+            return ev.status === Matrix.EventStatus.NOT_SENT;
+        }).forEach(function(event) {
+            module.exports.removeFromQueue(event);
+        });
+    },
     resend: function(event) {
         const room = MatrixClientPeg.get().getRoom(event.getRoomId());
         MatrixClientPeg.get().resendEvent(
@@ -47,7 +61,6 @@ module.exports = {
             });
         });
     },
-
     removeFromQueue: function(event) {
         MatrixClientPeg.get().cancelPendingEvent(event);
         dis.dispatch({

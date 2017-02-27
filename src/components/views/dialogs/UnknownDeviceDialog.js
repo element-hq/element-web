@@ -159,10 +159,7 @@ export default React.createClass({
                     <button className="mx_Dialog_primary" autoFocus={ true }
                             onClick={() => {
                                 this.props.onFinished();
-                                dis.dispatch({
-                                    action: 'resend_all_events',
-                                    room: this.props.room,
-                                });
+                                Resend.resendUnsentEvents(this.props.room);
                             }}>
                         Send anyway
                     </button>
