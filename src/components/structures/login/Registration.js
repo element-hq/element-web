@@ -16,18 +16,20 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import q from 'q';
 
-var sdk = require('../../../index');
-var dis = require('../../../dispatcher');
-var Signup = require("../../../Signup");
-var ServerConfig = require("../../views/login/ServerConfig");
-var MatrixClientPeg = require("../../../MatrixClientPeg");
-var RegistrationForm = require("../../views/login/RegistrationForm");
-var CaptchaForm = require("../../views/login/CaptchaForm");
-var RtsClient = require("../../../RtsClient");
+import React from 'react';
 
-var MIN_PASSWORD_LENGTH = 6;
+import sdk from '../../../index';
+import dis from '../../../dispatcher';
+import Signup from '../../../Signup';
+import ServerConfig from '../../views/login/ServerConfig';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import RegistrationForm from '../../views/login/RegistrationForm';
+import CaptchaForm from '../../views/login/CaptchaForm';
+import RtsClient from '../../../RtsClient';
+
+const MIN_PASSWORD_LENGTH = 6;
 
 /**
  * TODO: It would be nice to make use of the InteractiveAuthEntryComponents
@@ -206,22 +208,16 @@ module.exports = React.createClass({
                 });
                 return;
             }
-            self.props.onLoggedIn({
-                userId: response.user_id,
-                deviceId: response.device_id,
-                homeserverUrl: self.registerLogic.getHomeserverUrl(),
-                identityServerUrl: self.registerLogic.getIdentityServerUrl(),
-                accessToken: response.access_token
-            });
 
             // Done regardless of `teamSelected`. People registering with non-team emails
             // will just nop. The point of this being we might not have the email address
             // that the user registered with at this stage (depending on whether this
             // is the client they initiated registration).
+            let trackPromise = q(null);
             if (self._rtsClient) {
                 // Track referral if self.props.referrer set, get team_token in order to
                 // retrieve team config and see welcome page etc.
-                self._rtsClient.trackReferral(
+                trackPromise = self._rtsClient.trackReferral(
                     self.props.referrer || '', // Default to empty string = not referred
                     self.registerLogic.params.idSid,
                     self.registerLogic.params.clientSecret
@@ -229,7 +225,6 @@ module.exports = React.createClass({
                     const teamToken = data.team_token;
                     // Store for use /w welcome pages
                     window.localStorage.setItem('mx_team_token', teamToken);
-                    self.props.onTeamMemberRegistered(teamToken);
 
                     self._rtsClient.getTeam(teamToken).then((team) => {
                         console.log(
@@ -248,30 +243,25 @@ module.exports = React.createClass({
                     }, (err) => {
                         console.error('Error getting team config', err);
                     });
+
+                    return teamToken;
                 }, (err) => {
                     console.error('Error tracking referral', err);
                 });
             }
 
-            if (self.props.brand) {
-                MatrixClientPeg.get().getPushers().done((resp)=>{
-                    var pushers = resp.pushers;
-                    for (var i = 0; i < pushers.length; ++i) {
-                        if (pushers[i].kind == 'email') {
-                            var emailPusher = pushers[i];
-                            emailPusher.data = { brand: self.props.brand };
-                            MatrixClientPeg.get().setPusher(emailPusher).done(() => {
-                                console.log("Set email branding to " + self.props.brand);
-                            }, (error) => {
-                                console.error("Couldn't set email branding: " + error);
-                            });
-                        }
-                    }
-                }, (error) => {
-                    console.error("Couldn't get pushers: " + error);
-                });
-            }
-
+            return trackPromise.then((teamToken) => {
+                console.info('Team token promise',teamToken);
+                self.props.onLoggedIn({
+                    userId: response.user_id,
+                    deviceId: response.device_id,
+                    homeserverUrl: self.registerLogic.getHomeserverUrl(),
+                    identityServerUrl: self.registerLogic.getIdentityServerUrl(),
+                    accessToken: response.access_token
+                }, teamToken);
+            }).done(() => {
+                self._setupPushers();
+            });
         }, function(err) {
             if (err.message) {
                 self.setState({
@@ -282,6 +272,28 @@ module.exports = React.createClass({
                 busy: false
             });
             console.log(err);
+        });
+    },
+
+    _setupPushers: function() {
+        if (!self.props.brand) {
+            return;
+        }
+        MatrixClientPeg.get().getPushers().done((resp)=>{
+            var pushers = resp.pushers;
+            for (var i = 0; i < pushers.length; ++i) {
+                if (pushers[i].kind == 'email') {
+                    var emailPusher = pushers[i];
+                    emailPusher.data = { brand: self.props.brand };
+                    MatrixClientPeg.get().setPusher(emailPusher).done(() => {
+                        console.log("Set email branding to " + self.props.brand);
+                    }, (error) => {
+                        console.error("Couldn't set email branding: " + error);
+                    });
+                }
+            }
+        }, (error) => {
+            console.error("Couldn't get pushers: " + error);
         });
     },
 

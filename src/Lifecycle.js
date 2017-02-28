@@ -277,6 +277,9 @@ export function setLoggedIn(credentials) {
                 credentials.userId, credentials.guest,
                 credentials.homeserverUrl);
 
+    // Resolves by default
+    let teamPromise = q(null);
+
     // persist the session
     if (localStorage) {
         try {
@@ -300,20 +303,12 @@ export function setLoggedIn(credentials) {
             console.warn("Error using local storage: can't persist session!", e);
         }
 
-        if (rtsClient) {
-            rtsClient.login(credentials.userId).then((body) => {
+        if (rtsClient && !credentials.guest) {
+            teamPromise = rtsClient.login(credentials.userId).then((body) => {
                 if (body.team_token) {
                     localStorage.setItem("mx_team_token", body.team_token);
-                    dis.dispatch({
-                        action: 'set_team_token',
-                        value: body.team_token,
-                    })
                 }
-            }, (err) =>{
-                console.error(
-                    "Failed to get team token on login, not persisting to localStorage",
-                    err
-                );
+                return body.team_token;
             });
         }
     } else {
@@ -322,7 +317,12 @@ export function setLoggedIn(credentials) {
 
     MatrixClientPeg.replaceUsingCreds(credentials);
 
-    dis.dispatch({action: 'on_logged_in'});
+    teamPromise.then((teamToken) => {
+        dis.dispatch({action: 'on_logged_in', teamToken: teamToken});
+    }, (err) => {
+        console.warn("Failed to get team token on login", err);
+        dis.dispatch({action: 'on_logged_in', teamToken: null});
+    });
 
     startMatrixClient();
 }

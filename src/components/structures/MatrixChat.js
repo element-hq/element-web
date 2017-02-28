@@ -518,11 +518,8 @@ module.exports = React.createClass({
             case 'set_theme':
                 this._onSetTheme(payload.value);
                 break;
-            case 'set_team_token':
-                this._onSetTeamToken(payload.value);
-                break;
             case 'on_logged_in':
-                this._onLoggedIn();
+                this._onLoggedIn(payload.teamToken);
                 break;
             case 'on_logged_out':
                 this._onLoggedOut();
@@ -696,25 +693,22 @@ module.exports = React.createClass({
     },
 
     /**
-     * Called when the team token is acquired at registration or login. This
-     * should only happen if the configured RTS (see config.json teamServerURL)
-     * recognises the user as having an email address that matches a team.
-     */
-    _onSetTeamToken: function(teamToken) {
-        this._teamToken = teamToken;
-        this._setPage(PageTypes.HomePage);
-    },
-
-    /**
      * Called when a new logged in session has started
      */
-    _onLoggedIn: function(credentials) {
+    _onLoggedIn: function(teamToken) {
         this.guestCreds = null;
         this.notifyNewScreen('');
         this.setState({
             screen: undefined,
             logged_in: true,
         });
+
+        if (teamToken) {
+            this._teamToken = teamToken;
+            this._setPage(PageTypes.HomePage);
+        } else if (this._is_registered) {
+            this._setPage(PageTypes.UserSettings);
+        }
     },
 
     /**
@@ -731,6 +725,7 @@ module.exports = React.createClass({
             currentRoomId: null,
             page_type: PageTypes.RoomDirectory,
         });
+        this._teamToken = null;
     },
 
     /**
@@ -1001,22 +996,11 @@ module.exports = React.createClass({
         }
     },
 
-    onRegistered: function(credentials) {
+    onRegistered: function(credentials, teamToken) {
+        // teamToken may not be truthy
+        this._teamToken = teamToken;
+        this._is_registered = true;
         Lifecycle.setLoggedIn(credentials);
-        // do post-registration stuff
-        // This now goes straight to user settings
-        // We use _setPage since if we wait for
-        // showScreen to do the dispatch loop,
-        // the showScreen dispatch will race with the
-        // sdk sync finishing and we'll probably see
-        // the page type still unset when the MatrixClient
-        // is started and show the Room Directory instead.
-        //this.showScreen("view_user_settings");
-        this._setPage(PageTypes.UserSettings);
-    },
-
-    onTeamMemberRegistered: function(teamToken) {
-        this._onSetTeamToken(teamToken);
     },
 
     onFinishPostRegistration: function() {
