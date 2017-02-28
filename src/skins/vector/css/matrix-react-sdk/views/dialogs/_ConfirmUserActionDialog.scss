@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,21 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_BaseAvatar {
-    position: relative;
+.mx_ConfirmUserActionDialog_avatar {
+    float: left;
+    margin-right: 20px;
 }
 
-.mx_BaseAvatar_initial {
-    position: absolute;
-    color: $avatar-initial-color;
-    text-align: center;
-    speak: none;
-    pointer-events: none;
-    font-weight: normal;
+.mx_ConfirmUserActionDialog_name {
+    font-size: 150%;
 }
 
-.mx_BaseAvatar_image {
-    border-radius: 40px;
-    vertical-align: top;
-    background-color: #fff;
+.mx_ConfirmUserActionDialog_userId {
+    font-style: italic;
+}
+
+.mx_ConfirmUserActionDialog_reasonField {
+    margin-bottom: 40px;
+    width: 90%;
+    font-size: 120%;
+    height: 35px;
 }

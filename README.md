@@ -21,6 +21,9 @@ released version of Riot:
    as desired. See below for details.
 1. Enter the URL into your browser and log into Riot!
 
+Releases are signed by PGP, and can be checked against the public key
+at https://riot.im/packages/keys/riot-master.asc
+
 Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
 over https.
@@ -114,7 +117,8 @@ built it yourself.
 
 To run as a desktop app:
 
-1. Follow the instructions in 'Building From Source' above
+1. Follow the instructions in 'Building From Source' above, but run
+   `npm run build` instead of `npm run dist` (since we don't need the tarball).
 2. Install electron and run it:
 
    ```
