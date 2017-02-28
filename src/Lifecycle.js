@@ -278,7 +278,7 @@ export function setLoggedIn(credentials) {
                 credentials.homeserverUrl);
 
     // Resolves by default
-    let teamPromise = q(null);
+    let teamPromise = Promise.resolve(null);
 
     // persist the session
     if (localStorage) {
