@@ -1131,7 +1131,6 @@ module.exports = React.createClass({
                     customIsUrl={this.getCurrentIsUrl()}
                     registrationUrl={this.props.registrationUrl}
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
-                    onTeamMemberRegistered={this.onTeamMemberRegistered}
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick}
                     onRegisterClick={this.onRegisterClick}

@@ -60,7 +60,6 @@ module.exports = React.createClass({
             teamServerURL: React.PropTypes.string.isRequired,
         }),
         teamSelected: React.PropTypes.object,
-        onTeamMemberRegistered: React.PropTypes.func.isRequired,
 
         defaultDeviceDisplayName: React.PropTypes.string,
 
@@ -259,7 +258,7 @@ module.exports = React.createClass({
                     identityServerUrl: self.registerLogic.getIdentityServerUrl(),
                     accessToken: response.access_token
                 }, teamToken);
-            }).done(() => {
+            }).then(() => {
                 self._setupPushers();
             });
         }, function(err) {
@@ -276,7 +275,7 @@ module.exports = React.createClass({
     },
 
     _setupPushers: function() {
-        if (!self.props.brand) {
+        if (!this.props.brand) {
             return;
         }
         MatrixClientPeg.get().getPushers().done((resp)=>{
@@ -284,9 +283,9 @@ module.exports = React.createClass({
             for (var i = 0; i < pushers.length; ++i) {
                 if (pushers[i].kind == 'email') {
                     var emailPusher = pushers[i];
-                    emailPusher.data = { brand: self.props.brand };
+                    emailPusher.data = { brand: this.props.brand };
                     MatrixClientPeg.get().setPusher(emailPusher).done(() => {
-                        console.log("Set email branding to " + self.props.brand);
+                        console.log("Set email branding to " + this.props.brand);
                     }, (error) => {
                         console.error("Couldn't set email branding: " + error);
                     });
