@@ -19,14 +19,13 @@ const onAction = function(payload) {
 
 let ref = null;
 
-module.exports = {
-    startListening: function () {
-        ref = dis.register(onAction);
-    },
-    stopListening: function () {
-        if (ref){
-            dis.unregister(ref);
-            ref = null;
-        }
-    },
-};
+export function startListening () {
+    ref = dis.register(onAction);
+}
+
+export function stopListening () {
+    if (ref) {
+        dis.unregister(ref);
+        ref = null;
+    }
+}

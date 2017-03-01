@@ -41,7 +41,7 @@ var Lifecycle = require('../../Lifecycle');
 var PageTypes = require('../../PageTypes');
 
 var createRoom = require("../../createRoom");
-var UDEHandler = require("../../UnknownDeviceErrorHandler");
+import * as UDEHandler from '../../UnknownDeviceErrorHandler';
 
 module.exports = React.createClass({
     displayName: 'MatrixChat',
