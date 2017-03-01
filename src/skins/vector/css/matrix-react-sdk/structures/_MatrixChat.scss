@@ -100,6 +100,11 @@ limitations under the License.
      * flex itself.
      */
     display: flex;
+
+    /* To fix https://github.com/vector-im/riot-web/issues/3298 where Safari
+       needed height 100% all the way down to the HomePage.
+    */
+    height: 100%;
 }
 
 .mx_MatrixChat .mx_RightPanel {
