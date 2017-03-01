@@ -36,6 +36,7 @@ export default React.createClass({
             description: "",
             button: "OK",
             focus: true,
+            hasCancelButton: true,
         };
     },
 
@@ -49,6 +50,11 @@ export default React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const cancelButton = this.props.hasCancelButton ? (
+            <button onClick={this.onCancel}>
+                Cancel
+            </button>
+        ) : null;
         return (
             <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished}
                 onEnterPressed={ this.onOk }
@@ -61,10 +67,7 @@ export default React.createClass({
                     <button className="mx_Dialog_primary" onClick={this.onOk} autoFocus={this.props.focus}>
                         {this.props.button}
                     </button>
-
-                    <button onClick={this.onCancel}>
-                        Cancel
-                    </button>
+                    {cancelButton}
                 </div>
             </BaseDialog>
         );
