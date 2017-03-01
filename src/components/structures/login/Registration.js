@@ -233,7 +233,7 @@ module.exports = React.createClass({
             }, teamToken);
         }).then(() => {
             return this._setupPushers();
-        }.done());
+        }).done();
     },
 
     _setupPushers: function() {
