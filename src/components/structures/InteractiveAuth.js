@@ -81,7 +81,6 @@ export default React.createClass({
             startAuthStage: this._startAuthStage,
             inputs: this.props.inputs,
             stateUpdated: this._authStateUpdated,
-            makeRegistrationUrl: this.props.makeRegistrationUrl,
             matrixClient: this.props.matrixClient,
             sessionId: this.props.sessionId,
             clientSecret: this.props.clientSecret,
@@ -165,14 +164,25 @@ export default React.createClass({
                 loginType={stage}
                 matrixClient={this.props.matrixClient}
                 authSessionId={this._authLogic.getSessionId()}
+                clientSecret={this._authLogic.getClientSecret()}
                 stageParams={this._authLogic.getStageParams(stage)}
                 submitAuthDict={this._submitAuthDict}
                 errorText={this.state.stageErrorText}
                 busy={this.state.busy}
                 inputs={this.props.inputs}
                 stageState={this.state.stageState}
+                fail={this._onAuthStageFailed}
+                setEmailSid={this._setEmailSid}
+                makeRegistrationUrl={this.props.makeRegistrationUrl}
             />
         );
+    },
+
+    _onAuthStageFailed: function(e) {
+        this.props.onFinished(false, e);
+    },
+    _setEmailSid: function(sid) {
+        this._authLogic.setEmailSid(sid);
     },
 
     render: function() {

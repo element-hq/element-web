@@ -32,15 +32,27 @@ import sdk from '../../../index';
  *                         one HS whilst beign a guest on another).
  * loginType:              the login type of the auth stage being attempted
  * authSessionId:          session id from the server
+ * clientSecret:           The client secret in use for ID server auth sessions
  * stageParams:            params from the server for the stage being attempted
  * errorText:              error message from a previous attempt to authenticate
  * submitAuthDict:         a function which will be called with the new auth dict
  * busy:                   a boolean indicating whether the auth logic is doing something
  *                         the user needs to wait for.
- * inputs                  Object of inputs provided by the user, as in js-sdk
+ * inputs:                 Object of inputs provided by the user, as in js-sdk
  *                         interactive-auth
- * stageState              Stage-specific object used for communicating state information
+ * stageState:             Stage-specific object used for communicating state information
  *                         to the UI from the state-specific auth logic.
+ *                         Defined keys for stages are:
+ *                             m.login.email.identity:
+ *                              * emailSid: string representing the sid of the active
+ *                                          verification session from the ID server, or
+ *                                          null if no session is active.
+ * fail:                   a function which should be called with an error object if an
+ *                         error occurred during the auth stage. This will cause the auth
+ *                         session to be failed and the process to go back to the start.
+ * setEmailSid:            m.login.email.identity only: a function to be called with the
+ *                         email sid after a token is requested.
+ * makeRegistrationUrl     A function that makes a registration URL
  *
  * Each component may also provide the following functions (beyond the standard React ones):
  *    focus: set the input focus appropriately in the form.
@@ -181,17 +193,55 @@ export const EmailIdentityAuthEntry = React.createClass({
     propTypes: {
         matrixClient: React.PropTypes.object,
         submitAuthDict: React.PropTypes.func.isRequired,
-        errorText: React.PropTypes.string,
         authSessionId: React.PropTypes.string.isRequired,
+        clientSecret: React.PropTypes.string.isRequired,
         inputs: React.PropTypes.object.isRequired,
         stageState: React.PropTypes.object.isRequired,
+        fail: React.PropTypes.func.isRequired,
+        setEmailSid: React.PropTypes.func.isRequired,
+        makeRegistrationUrl: React.PropTypes.func.isRequired,
+    },
+
+    getInitialState: function() {
+        return {
+            requestingToken: false,
+        };
+    },
+
+    componentWillMount: function() {
+        if (this.props.stageState.emailSid === null) {
+            this.setState({requestingToken: true});
+            this._requestEmailToken().catch((e) => {
+                this.props.fail(e);
+            }).finally(() => {
+                this.setState({requestingToken: false});
+            }).done();
+        }
+    },
+
+    /*
+     * Requests a verification token by email.
+     */
+    _requestEmailToken: function() {
+        const nextLink = this.props.makeRegistrationUrl({
+            client_secret: this.props.clientSecret,
+            hs_url: this.props.matrixClient.getHomeserverUrl(),
+            is_url: this.props.matrixClient.getIdentityServerUrl(),
+            session_id: this.props.authSessionId,
+        });
+
+        return this.props.matrixClient.requestRegisterEmailToken(
+            this.props.inputs.emailAddress,
+            this.props.clientSecret,
+            1, // TODO: Multiple send attempts?
+            nextLink,
+        ).then((result) => {
+            this.props.setEmailSid(result.sid);
+        });
     },
 
     render: function() {
-        // XXX: we now have 2 separate 'busy's - get rid of one
-        // why can't InteractiveAuth manage whether the general
-        // auth logic is busy?
-        if (this.props.stageState.busy) {
+        if (this.state.requestingToken) {
             const Loader = sdk.getComponent("elements.Spinner");
             return <Loader />;
         } else {
