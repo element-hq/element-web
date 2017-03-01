@@ -507,7 +507,7 @@ module.exports = React.createClass({
             userHasUsedEncryption = localStorage.getItem('mx_user_has_used_encryption');
         }
         if (!userHasUsedEncryption) {
-            var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             Modal.createDialog(QuestionDialog, {
                 title: "Warning!",
                 hasCancelButton: false,
