@@ -123,6 +123,7 @@ export default React.createClass({
         this.setState({
             authStage: stageType,
             stageState: stageState,
+            errorText: stageState.error,
         }, () => {
             if (oldStage != stageType) this._setFocus();
         });
