@@ -66,7 +66,7 @@ export const PasswordAuthEntry = React.createClass({
     },
 
     propTypes: {
-        matrixClient: React.PropTypes.object,
+        matrixClient: React.PropTypes.object.isRequired,
         submitAuthDict: React.PropTypes.func.isRequired,
         errorText: React.PropTypes.string,
         // is the auth logic currently waiting for something to
@@ -191,7 +191,7 @@ export const EmailIdentityAuthEntry = React.createClass({
     },
 
     propTypes: {
-        matrixClient: React.PropTypes.object,
+        matrixClient: React.PropTypes.object.isRequired,
         submitAuthDict: React.PropTypes.func.isRequired,
         authSessionId: React.PropTypes.string.isRequired,
         clientSecret: React.PropTypes.string.isRequired,
@@ -259,6 +259,7 @@ export const FallbackAuthEntry = React.createClass({
     displayName: 'FallbackAuthEntry',
 
     propTypes: {
+        matrixClient: React.PropTypes.object.isRequired,
         authSessionId: React.PropTypes.string.isRequired,
         loginType: React.PropTypes.string.isRequired,
         submitAuthDict: React.PropTypes.func.isRequired,
