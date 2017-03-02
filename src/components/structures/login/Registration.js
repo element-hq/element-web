@@ -181,10 +181,11 @@ module.exports = React.createClass({
         // will just nop. The point of this being we might not have the email address
         // that the user registered with at this stage (depending on whether this
         // is the client they initiated registration).
+        let trackPromise = q(null);
         if (this._rtsClient) {
             // Track referral if this.props.referrer set, get team_token in order to
             // retrieve team config and see welcome page etc.
-            this._rtsClient.trackReferral(
+            trackPromise = this._rtsClient.trackReferral(
                 this.props.referrer || '', // Default to empty string = not referred
                 this.registerLogic.params.idSid,
                 this.registerLogic.params.clientSecret
