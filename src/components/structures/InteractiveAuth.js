@@ -78,7 +78,6 @@ export default React.createClass({
         this._authLogic = new InteractiveAuth({
             authData: this.props.authData,
             doRequest: this._requestCallback,
-            startAuthStage: this._startAuthStage,
             inputs: this.props.inputs,
             stateUpdated: this._authStateUpdated,
             matrixClient: this.props.matrixClient,
