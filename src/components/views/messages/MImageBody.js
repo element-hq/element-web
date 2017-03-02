@@ -25,6 +25,7 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
 import q from 'q';
+import UserSettingsStore from '../../../UserSettingsStore';
 
 module.exports = React.createClass({
     displayName: 'MImageBody',
@@ -42,7 +43,7 @@ module.exports = React.createClass({
             decryptedUrl: null,
             decryptedThumbnailUrl: null,
             decryptedBlob: null,
-            error: null
+            error: null,
         };
     },
 
@@ -55,7 +56,7 @@ module.exports = React.createClass({
             const ImageView = sdk.getComponent("elements.ImageView");
             const params = {
                 src: httpUrl,
-                mxEvent: this.props.mxEvent
+                mxEvent: this.props.mxEvent,
             };
 
             if (content.info) {
@@ -70,22 +71,26 @@ module.exports = React.createClass({
 
     _isGif: function() {
         const content = this.props.mxEvent.getContent();
-        return (content && content.info && content.info.mimetype === "image/gif");
+        return (
+          content &&
+          content.info &&
+          content.info.mimetype === "image/gif"
+        );
     },
 
     onImageEnter: function(e) {
-        if (!this._isGif()) {
+        if (!this._isGif() || UserSettingsStore.getSyncedSetting("autoplayGifsAndVideos", false)) {
             return;
         }
-        var imgElement = e.target;
+        const imgElement = e.target;
         imgElement.src = this._getContentUrl();
     },
 
     onImageLeave: function(e) {
-        if (!this._isGif()) {
+        if (!this._isGif() || UserSettingsStore.getSyncedSetting("autoplayGifsAndVideos", false)) {
             return;
         }
-        var imgElement = e.target;
+        const imgElement = e.target;
         imgElement.src = this._getThumbUrl();
     },
 
@@ -101,6 +106,7 @@ module.exports = React.createClass({
     _getThumbUrl: function() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
+            // Don't use the thumbnail for clients wishing to autoplay gifs.
             if (this.state.decryptedThumbnailUrl) {
                 return this.state.decryptedThumbnailUrl;
             }
@@ -115,15 +121,15 @@ module.exports = React.createClass({
         this.fixupHeight();
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            var thumbnailPromise = q(null);
+            let thumbnailPromise = q(null);
             if (content.info.thumbnail_file) {
                 thumbnailPromise = decryptFile(
-                    content.info.thumbnail_file
+                    content.info.thumbnail_file,
                 ).then(function(blob) {
                     return readBlobAsDataUri(blob);
                 });
             }
-            var decryptedBlob;
+            let decryptedBlob;
             thumbnailPromise.then((thumbnailUrl) => {
                 return decryptFile(content.file).then(function(blob) {
                     decryptedBlob = blob;
@@ -168,7 +174,7 @@ module.exports = React.createClass({
         // the alternative here would be 600*timelineWidth/800; to scale them down to fit inside a 4:3 bounding box
 
         //console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
-        var thumbHeight = null;
+        let thumbHeight = null;
         if (content.info) {
             thumbHeight = ImageUtils.thumbHeight(content.info.w, content.info.h, timelineWidth, maxHeight);
         }
@@ -190,7 +196,6 @@ module.exports = React.createClass({
         }
 
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-
             // Need to decrypt the attachment
             // The attachment is decrypted in componentDidMount.
             // For now add an img tag with a spinner.
@@ -210,7 +215,12 @@ module.exports = React.createClass({
         }
 
         const contentUrl = this._getContentUrl();
-        const thumbUrl = this._getThumbUrl();
+        let thumbUrl;
+        if (this._isGif() && UserSettingsStore.getSyncedSetting("autoplayGifsAndVideos", false)) {
+          thumbUrl = contentUrl;
+        } else {
+          thumbUrl = this._getThumbUrl();
+        }
 
         if (thumbUrl) {
             return (

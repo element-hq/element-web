@@ -23,6 +23,7 @@ import Model from '../../../Modal';
 import sdk from '../../../index';
 import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
 import q from 'q';
+import UserSettingsStore from '../../../UserSettingsStore';
 
 module.exports = React.createClass({
     displayName: 'MVideoBody',
@@ -152,11 +153,11 @@ module.exports = React.createClass({
 
         const contentUrl = this._getContentUrl();
         const thumbUrl = this._getThumbUrl();
-
-        var height = null;
-        var width = null;
-        var poster = null;
-        var preload = "metadata";
+        const autoplay = UserSettingsStore.getSyncedSetting("autoplayGifsAndVideos", false);
+        let height = null;
+        let width = null;
+        let poster = null;
+        let preload = "metadata";
         if (content.info) {
             const scale = this.thumbScale(content.info.w, content.info.h, 480, 360);
             if (scale) {
@@ -169,11 +170,10 @@ module.exports = React.createClass({
                 preload = "none";
             }
         }
-
         return (
             <span className="mx_MVideoBody">
                 <video className="mx_MVideoBody" src={contentUrl} alt={content.body}
-                    controls preload={preload} autoPlay={false}
+                    controls preload={preload} muted={autoplay} autoPlay={autoplay}
                     height={height} width={width} poster={poster}>
                 </video>
                 <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />

@@ -39,6 +39,10 @@ const REACT_SDK_VERSION =
 // 'id' gives the key name in the im.vector.web.settings account data event
 // 'label' is how we describe it in the UI.
 const SETTINGS_LABELS = [
+    {
+        id: 'autoplayGifsAndVideos',
+        label: 'Autoplay GIFs and videos',
+    },
 /*
     {
         id: 'alwaysShowTimestamps',
