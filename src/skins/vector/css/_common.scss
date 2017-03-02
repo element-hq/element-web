@@ -263,6 +263,10 @@ textarea {
     padding-bottom: 12px;
 }
 
+.mx_TextInputDialog_validateMsg {
+  color: $warning-color;
+}
+
 .mx_TextInputDialog_input {
     font-size: 15px;
     border-radius: 3px;
