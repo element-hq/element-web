@@ -74,7 +74,8 @@ module.exports = React.createClass({
         return (
           content &&
           content.info &&
-          content.info.mimetype === "image/gif");
+          content.info.mimetype === "image/gif"
+        );
     },
 
     onImageEnter: function(e) {
@@ -104,9 +105,8 @@ module.exports = React.createClass({
 
     _getThumbUrl: function() {
         const content = this.props.mxEvent.getContent();
-        console.log(content);
         if (content.file !== undefined) {
-            // Don't use the thumbnail for client's wishing to autoplay gifs.
+            // Don't use the thumbnail for clients wishing to autoplay gifs.
             if (this.state.decryptedThumbnailUrl) {
                 return this.state.decryptedThumbnailUrl;
             }
