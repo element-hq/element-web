@@ -363,6 +363,7 @@ module.exports = React.createClass({
                 // stop the client: if we are syncing whilst the registration
                 // is completed in another browser, we'll be 401ed for using
                 // a guest access token for a non-guest account.
+                // It will be restarted in onReturnToGuestClick
                 Lifecycle.stopMatrixClient();
 
                 this.notifyNewScreen('register');
