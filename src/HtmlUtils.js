@@ -96,8 +96,8 @@ var sanitizeHtmlParams = {
     ],
     allowedAttributes: {
         // custom ones first:
-        font: ['color', 'style'], // custom to matrix
-        span: ['style'],
+        font: ['color', 'data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
+        span: ['data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
         a: ['href', 'name', 'target', 'rel'], // remote target: custom to matrix
         // We don't currently allow img itself by default, but this
         // would make sense if we did
@@ -143,28 +143,31 @@ var sanitizeHtmlParams = {
             return { tagName: tagName, attribs : attribs };
         },
         '*': function(tagName, attribs) {
-            // Only allow certain CSS attributes to avoid XSS attacks
-            // Sanitizing values to avoid `url(...)` and `expression(...)` attacks
-            if (!attribs.style) {
-                return { tagName: tagName, attribs: attribs };
-            }
+            // Delete any style previously assigned
+            delete attribs.style;
 
-            const pairs = attribs.style.split(';');
-            let sanitisedStyle = "";
-            for (let i = 0; i < pairs.length; i++) {
-                const pair = pairs[i].split(':');
-                if (!Object.keys(ALLOWED_CSS).includes(pair[0]) ||
-                    !ALLOWED_CSS[pair[0]].test(pair[1])
+            // Sanitise and transform data-mx-color and data-mx-bg-color to their CSS
+            // equivalents
+            const customCSSMapper = {
+                'data-mx-color': 'color',
+                'data-mx-bg-color': 'background-color',
+                // $customAttributeKey: $cssAttributeKey
+            };
+
+            let style = "";
+            Object.keys(customCSSMapper).forEach((customAttributeKey) => {
+                const cssAttributeKey = customCSSMapper[customAttributeKey];
+                const customAttributeValue = attribs[customAttributeKey];
+                if (customAttributeValue &&
+                    typeof customAttributeValue === 'string' &&
+                    /#[0-9a-fA-F]{6}/.test(customAttributeValue)
                 ) {
-                    continue;
+                    style += cssAttributeKey + ":" + customAttributeValue + ";";
                 }
-                sanitisedStyle += pair[0] + ":" + pair[1] + ";";
-            }
+            });
 
-            if (sanitisedStyle) {
-                attribs.style = sanitisedStyle;
-            } else {
-                delete attribs.style;
+            if (style) {
+                attribs.style = style;
             }
 
             return { tagName: tagName, attribs: attribs };
