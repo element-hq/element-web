@@ -33,7 +33,10 @@ module.exports = React.createClass({
         className: React.PropTypes.string,
         labelClassName: React.PropTypes.string,
         placeholderClassName: React.PropTypes.string,
+        // Overrides blurToSubmit if true
         blurToCancel: React.PropTypes.bool,
+        // Will cause onValueChanged(value, true) to fire on blur
+        blurToSubmit: React.PropTypes.bool,
         editable: React.PropTypes.bool,
     },
 
@@ -51,6 +54,7 @@ module.exports = React.createClass({
             editable: true,
             className: "mx_EditableText",
             placeholderClassName: "mx_EditableText_placeholder",
+            blurToSubmit: false,
         };
     },
 
@@ -182,9 +186,9 @@ module.exports = React.createClass({
         }
     },
 
-    onFinish: function(ev) {
+    onFinish: function(ev, shouldSubmit) {
         var self = this;
-        var submit = (ev.key === "Enter");
+        var submit = (ev.key === "Enter") || shouldSubmit;
         this.setState({
             phase: this.Phases.Display,
         }, function() {
@@ -199,7 +203,7 @@ module.exports = React.createClass({
         if (this.props.blurToCancel)
             {this.cancelEdit();}
         else
-            {this.onFinish(ev);}
+            {this.onFinish(ev, this.props.blurToSubmit);}
 
         this.showPlaceholder(!this.value);
     },
