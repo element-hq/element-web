@@ -139,7 +139,8 @@ var sanitizeHtmlParams = {
             return { tagName: tagName, attribs : attribs };
         },
         '*': function(tagName, attribs) {
-            // Delete any style previously assigned
+            // Delete any style previously assigned, style is an allowedTag for font and span
+            // because attributes are stripped after transforming
             delete attribs.style;
 
             // Sanitise and transform data-mx-color and data-mx-bg-color to their CSS
