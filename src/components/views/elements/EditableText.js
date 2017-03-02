@@ -123,6 +123,7 @@ module.exports = React.createClass({
         this.value = this.props.initialValue;
         this.showPlaceholder(!this.value);
         this.onValueChanged(false);
+        this.refs.editable_div.blur();
     },
 
     onValueChanged: function(shouldSubmit) {
@@ -192,7 +193,9 @@ module.exports = React.createClass({
         this.setState({
             phase: this.Phases.Display,
         }, function() {
-            self.onValueChanged(submit);
+            if (this.value !== this.props.initialValue) {
+                self.onValueChanged(submit);
+            }
         });
     },
 
