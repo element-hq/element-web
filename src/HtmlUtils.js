@@ -163,6 +163,7 @@ var sanitizeHtmlParams = {
                     /#[0-9a-fA-F]{6}/.test(customAttributeValue)
                 ) {
                     style += cssAttributeKey + ":" + customAttributeValue + ";";
+                    delete attribs[customAttributeKey];
                 }
             });
 
