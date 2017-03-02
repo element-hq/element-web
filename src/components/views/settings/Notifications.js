@@ -458,8 +458,8 @@ module.exports = React.createClass({
                 '.m.rule.master': 'master',
 
                 // The default push rules displayed by Vector UI
-                // XXX: .m.rule.contains_user_name is not managed (not a fancy rule for Vector?)
                 '.m.rule.contains_display_name': 'vector',
+                '.m.rule.contains_user_name': 'vector',
                 '.m.rule.room_one_to_one': 'vector',
                 '.m.rule.message': 'vector',
                 '.m.rule.invite_for_me': 'vector',
@@ -512,6 +512,7 @@ module.exports = React.createClass({
 
             var vectorRuleIds = [
                 '.m.rule.contains_display_name',
+                '.m.rule.contains_user_name',
                 '_keywords',
                 '.m.rule.room_one_to_one',
                 '.m.rule.message',
