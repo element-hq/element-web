@@ -65,6 +65,9 @@ module.exports = React.createClass({
         // displayname, if any, to set on the device when logging
         // in/registering.
         defaultDeviceDisplayName: React.PropTypes.string,
+
+        // A function that makes a registration URL
+        makeRegistrationUrl: React.PropTypes.func.isRequired,
     },
 
     childContextTypes: {
