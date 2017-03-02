@@ -716,17 +716,11 @@ module.exports = React.createClass({
     },
 
     onResendAllClick: function() {
-        var eventsToResend = this._getUnsentMessages(this.state.room);
-        eventsToResend.forEach(function(event) {
-            Resend.resend(event);
-        });
+        Resend.resendUnsentEvents(this.state.room);
     },
 
     onCancelAllClick: function() {
-        var eventsToResend = this._getUnsentMessages(this.state.room);
-        eventsToResend.forEach(function(event) {
-            Resend.removeFromQueue(event);
-        });
+        Resend.cancelUnsentEvents(this.state.room);
     },
 
     onJoinButtonClicked: function(ev) {

@@ -20,9 +20,24 @@ var sdk = require('./index');
 var Modal = require('./Modal');
 
 module.exports = {
+    resendUnsentEvents: function(room) {
+        room.getPendingEvents().filter(function(ev) {
+            return ev.status === Matrix.EventStatus.NOT_SENT;
+        }).forEach(function(event) {
+            module.exports.resend(event);
+        });
+    },
+    cancelUnsentEvents: function(room) {
+        room.getPendingEvents().filter(function(ev) {
+            return ev.status === Matrix.EventStatus.NOT_SENT;
+        }).forEach(function(event) {
+            module.exports.removeFromQueue(event);
+        });
+    },
     resend: function(event) {
+        const room = MatrixClientPeg.get().getRoom(event.getRoomId());
         MatrixClientPeg.get().resendEvent(
-            event, MatrixClientPeg.get().getRoom(event.getRoomId())
+            event, room
         ).done(function(res) {
             dis.dispatch({
                 action: 'message_sent',
@@ -33,16 +48,11 @@ module.exports = {
             // https://github.com/vector-im/riot-web/issues/3148
             console.log('Resend got send failure: ' + err.name + '('+err+')');
             if (err.name === "UnknownDeviceError") {
-                var UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
-                Modal.createDialog(UnknownDeviceDialog, {
-                    devices: err.devices,
-                    room: MatrixClientPeg.get().getRoom(event.getRoomId()),
-                    onFinished: (r) => {
-                        // XXX: temporary logging to try to diagnose
-                        // https://github.com/vector-im/riot-web/issues/3148
-                        console.log('UnknownDeviceDialog closed with '+r);
-                    },
-                }, "mx_Dialog_unknownDevice");
+                dis.dispatch({
+                    action: 'unknown_device_error',
+                    err: err,
+                    room: room,
+                });
             }
 
             dis.dispatch({
@@ -51,7 +61,6 @@ module.exports = {
             });
         });
     },
-
     removeFromQueue: function(event) {
         MatrixClientPeg.get().cancelPendingEvent(event);
         dis.dispatch({

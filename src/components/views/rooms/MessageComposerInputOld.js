@@ -34,16 +34,11 @@ export function onSendMessageFailed(err, room) {
     // https://github.com/vector-im/riot-web/issues/3148
     console.log('MessageComposer got send failure: ' + err.name + '('+err+')');
     if (err.name === "UnknownDeviceError") {
-        const UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
-        Modal.createDialog(UnknownDeviceDialog, {
-            devices: err.devices,
+        dis.dispatch({
+            action: 'unknown_device_error',
+            err: err,
             room: room,
-            onFinished: (r) => {
-                // XXX: temporary logging to try to diagnose
-                // https://github.com/vector-im/riot-web/issues/3148
-                console.log('UnknownDeviceDialog closed with '+r);
-            },
-        }, "mx_Dialog_unknownDevice");
+        });
     }
     dis.dispatch({
         action: 'message_send_failed',

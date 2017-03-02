@@ -105,6 +105,15 @@ function _setCallListeners(call) {
         call.hangup();
         _setCallState(undefined, call.roomId, "ended");
     });
+    call.on('send_event_error', function(err) {
+        if (err.name === "UnknownDeviceError") {
+            dis.dispatch({
+                action: 'unknown_device_error',
+                err: err,
+                room: MatrixClientPeg.get().getRoom(call.roomId),
+            });
+        }
+    });
     call.on("hangup", function() {
         _setCallState(undefined, call.roomId, "ended");
     });
