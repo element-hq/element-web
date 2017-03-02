@@ -27,6 +27,7 @@ export default class Login {
         this._fallbackHsUrl = fallbackHsUrl;
         this._currentFlowIndex = 0;
         this._flows = [];
+        this._defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
     }
 
     getHomeserverUrl() {
