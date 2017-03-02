@@ -38,7 +38,7 @@ module.exports = React.createClass({
         onLoggedIn: React.PropTypes.func.isRequired,
         clientSecret: React.PropTypes.string,
         sessionId: React.PropTypes.string,
-        makeRegistrationUrl: React.PropTypes.func,
+        makeRegistrationUrl: React.PropTypes.func.isRequired,
         idSid: React.PropTypes.string,
         customHsUrl: React.PropTypes.string,
         customIsUrl: React.PropTypes.string,
