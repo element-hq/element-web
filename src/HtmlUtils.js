@@ -28,7 +28,7 @@ emojione.imagePathSVG = 'emojione/svg/';
 emojione.imageType = 'svg';
 
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
-const COLOR_REGEX = /#[0-9a-fA-F]{6}/;
+const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
 /* modified from https://github.com/Ranks/emojione/blob/master/lib/js/emojione.js
  * because we want to include emoji shortnames in title text
