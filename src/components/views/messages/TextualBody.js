@@ -246,6 +246,10 @@ module.exports = React.createClass({
         var mxEvent = this.props.mxEvent;
         var content = mxEvent.getContent();
 
+        if (mxEvent.isRedacted()) {
+            content = {body: "Message redacted by " + mxEvent.event.redacted_because.sender};
+        }
+
         var body = HtmlUtils.bodyToHtml(content, this.props.highlights, {});
 
         if (this.props.highlightLink) {

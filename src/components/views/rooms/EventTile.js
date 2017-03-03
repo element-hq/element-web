@@ -396,6 +396,7 @@ module.exports = WithMatrixClient(React.createClass({
 
         var e2eEnabled = this.props.matrixClient.isRoomEncrypted(this.props.mxEvent.getRoomId());
         var isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
+        const isRedacted = this.props.mxEvent.isRedacted();
 
         var classes = classNames({
             mx_EventTile: true,
@@ -412,6 +413,7 @@ module.exports = WithMatrixClient(React.createClass({
             mx_EventTile_verified: this.state.verified == true,
             mx_EventTile_unverified: this.state.verified == false,
             mx_EventTile_bad: this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted',
+            mx_EventTile_redacted: isRedacted,
         });
         var permalink = "#/room/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId();
 
@@ -486,6 +488,8 @@ module.exports = WithMatrixClient(React.createClass({
         else if (e2eEnabled) {
             e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12"/>;
         }
+        const timestamp = this.props.mxEvent.isRedacted() ?
+            null : <MessageTimestamp ts={this.props.mxEvent.getTs()} />;
 
         if (this.props.tileShape === "notif") {
             var room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());
@@ -501,7 +505,7 @@ module.exports = WithMatrixClient(React.createClass({
                         { avatar }
                         <a href={ permalink }>
                             { sender }
-                            <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                            { timestamp }
                         </a>
                     </div>
                     <div className="mx_EventTile_line" >
@@ -530,7 +534,7 @@ module.exports = WithMatrixClient(React.createClass({
                     <a className="mx_EventTile_senderDetailsLink" href={ permalink }>
                         <div className="mx_EventTile_senderDetails">
                                 { sender }
-                                <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                                { timestamp }
                         </div>
                     </a>
                 </div>
@@ -546,7 +550,7 @@ module.exports = WithMatrixClient(React.createClass({
                     { sender }
                     <div className="mx_EventTile_line">
                         <a href={ permalink }>
-                            <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                            { timestamp }
                         </a>
                         { e2e }
                         <EventTileType ref="tile"
@@ -564,7 +568,6 @@ module.exports = WithMatrixClient(React.createClass({
 }));
 
 module.exports.haveTileForEvent = function(e) {
-    if (e.isRedacted()) return false;
     if (eventTileTypes[e.getType()] == undefined) return false;
     if (eventTileTypes[e.getType()] == 'messages.TextualEvent') {
         return TextForEvent.textForEvent(e) !== '';
