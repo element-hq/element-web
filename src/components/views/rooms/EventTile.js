@@ -388,7 +388,7 @@ module.exports = WithMatrixClient(React.createClass({
 
         var e2eEnabled = this.props.matrixClient.isRoomEncrypted(this.props.mxEvent.getRoomId());
         var isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
-        const isRedacted = this.props.mxEvent.isRedacted();
+        const isRedacted = (eventType === 'm.room.message') && this.props.mxEvent.isRedacted();
 
         var classes = classNames({
             mx_EventTile: true,
@@ -415,7 +415,10 @@ module.exports = WithMatrixClient(React.createClass({
         let avatarSize;
         let needsSenderProfile;
 
-        if (this.props.tileShape === "notif") {
+        if (isRedacted) {
+            avatarSize = 0;
+            needsSenderProfile = false;
+        } else if (this.props.tileShape === "notif") {
             avatarSize = 24;
             needsSenderProfile = true;
         } else if (isInfoMessage) {
@@ -560,6 +563,8 @@ module.exports = WithMatrixClient(React.createClass({
 }));
 
 module.exports.haveTileForEvent = function(e) {
+    // Only messages have a tile (black-rectangle) if redacted
+    if (e.isRedacted() && e.getType() !== 'm.room.message') return false;
     if (eventTileTypes[e.getType()] == undefined) return false;
     if (eventTileTypes[e.getType()] == 'messages.TextualEvent') {
         return TextForEvent.textForEvent(e) !== '';

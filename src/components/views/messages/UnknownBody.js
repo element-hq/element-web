@@ -22,10 +22,13 @@ module.exports = React.createClass({
     displayName: 'UnknownBody',
 
     render: function() {
-        var content = this.props.mxEvent.getContent();
+        var text = this.props.mxEvent.getContent().body;
+        if (this.props.mxEvent.isRedacted()) {
+            text = "This event was redacted";
+        }
         return (
             <span className="mx_UnknownBody">
-                {content.body}
+                {text}
             </span>
         );
     },
