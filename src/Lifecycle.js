@@ -155,7 +155,7 @@ function _loginWithToken(queryParams, defaultDeviceDisplayName) {
 function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
     console.log("Doing guest login on %s", hsUrl);
 
-    // TODO: we should probably de-duplicate this and Signup.Login.loginAsGuest.
+    // TODO: we should probably de-duplicate this and Login.loginAsGuest.
     // Not really sure where the right home for it is.
 
     // create a temporary MatrixClient to do the login
@@ -314,6 +314,9 @@ export function setLoggedIn(credentials) {
     } else {
         console.warn("No local storage available: can't persist session!");
     }
+
+    // stop any running clients before we create a new one with these new credentials
+    stopMatrixClient();
 
     MatrixClientPeg.replaceUsingCreds(credentials);
 

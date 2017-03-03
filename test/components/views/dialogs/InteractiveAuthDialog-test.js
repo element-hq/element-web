@@ -57,6 +57,7 @@ describe('InteractiveAuthDialog', function () {
 
         const dlg = ReactDOM.render(
             <InteractiveAuthDialog
+                matrixClient={client}
                 authData={{
                     session: "sess",
                     flows: [

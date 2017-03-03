@@ -71,6 +71,7 @@ export default class DevicesPanelEntry extends React.Component {
             var InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
             Modal.createDialog(InteractiveAuthDialog, {
+                matrixClient: MatrixClientPeg.get(),
                 authData: error.data,
                 makeRequest: this._makeDeleteRequest,
             });

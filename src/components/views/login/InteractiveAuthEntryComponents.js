@@ -18,7 +18,6 @@ limitations under the License.
 import React from 'react';
 
 import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -28,13 +27,32 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
  * Call getEntryComponentForLoginType() to get a component suitable for a
  * particular login type. Each component requires the same properties:
  *
+ * matrixClient:           A matrix client. May be a different one to the one
+ *                         currently being used generally (eg. to register with
+ *                         one HS whilst beign a guest on another).
  * loginType:              the login type of the auth stage being attempted
  * authSessionId:          session id from the server
+ * clientSecret:           The client secret in use for ID server auth sessions
  * stageParams:            params from the server for the stage being attempted
  * errorText:              error message from a previous attempt to authenticate
  * submitAuthDict:         a function which will be called with the new auth dict
  * busy:                   a boolean indicating whether the auth logic is doing something
  *                         the user needs to wait for.
+ * inputs:                 Object of inputs provided by the user, as in js-sdk
+ *                         interactive-auth
+ * stageState:             Stage-specific object used for communicating state information
+ *                         to the UI from the state-specific auth logic.
+ *                         Defined keys for stages are:
+ *                             m.login.email.identity:
+ *                              * emailSid: string representing the sid of the active
+ *                                          verification session from the ID server, or
+ *                                          null if no session is active.
+ * fail:                   a function which should be called with an error object if an
+ *                         error occurred during the auth stage. This will cause the auth
+ *                         session to be failed and the process to go back to the start.
+ * setEmailSid:            m.login.email.identity only: a function to be called with the
+ *                         email sid after a token is requested.
+ * makeRegistrationUrl     A function that makes a registration URL
  *
  * Each component may also provide the following functions (beyond the standard React ones):
  *    focus: set the input focus appropriately in the form.
@@ -48,6 +66,7 @@ export const PasswordAuthEntry = React.createClass({
     },
 
     propTypes: {
+        matrixClient: React.PropTypes.object.isRequired,
         submitAuthDict: React.PropTypes.func.isRequired,
         errorText: React.PropTypes.string,
         // is the auth logic currently waiting for something to
@@ -73,7 +92,7 @@ export const PasswordAuthEntry = React.createClass({
 
         this.props.submitAuthDict({
             type: PasswordAuthEntry.LOGIN_TYPE,
-            user: MatrixClientPeg.get().credentials.userId,
+            user: this.props.matrixClient.credentials.userId,
             password: this.refs.passwordField.value,
         });
     },
@@ -164,10 +183,83 @@ export const RecaptchaAuthEntry = React.createClass({
     },
 });
 
+export const EmailIdentityAuthEntry = React.createClass({
+    displayName: 'EmailIdentityAuthEntry',
+
+    statics: {
+        LOGIN_TYPE: "m.login.email.identity",
+    },
+
+    propTypes: {
+        matrixClient: React.PropTypes.object.isRequired,
+        submitAuthDict: React.PropTypes.func.isRequired,
+        authSessionId: React.PropTypes.string.isRequired,
+        clientSecret: React.PropTypes.string.isRequired,
+        inputs: React.PropTypes.object.isRequired,
+        stageState: React.PropTypes.object.isRequired,
+        fail: React.PropTypes.func.isRequired,
+        setEmailSid: React.PropTypes.func.isRequired,
+        makeRegistrationUrl: React.PropTypes.func.isRequired,
+    },
+
+    getInitialState: function() {
+        return {
+            requestingToken: false,
+        };
+    },
+
+    componentWillMount: function() {
+        if (this.props.stageState.emailSid === null) {
+            this.setState({requestingToken: true});
+            this._requestEmailToken().catch((e) => {
+                this.props.fail(e);
+            }).finally(() => {
+                this.setState({requestingToken: false});
+            }).done();
+        }
+    },
+
+    /*
+     * Requests a verification token by email.
+     */
+    _requestEmailToken: function() {
+        const nextLink = this.props.makeRegistrationUrl({
+            client_secret: this.props.clientSecret,
+            hs_url: this.props.matrixClient.getHomeserverUrl(),
+            is_url: this.props.matrixClient.getIdentityServerUrl(),
+            session_id: this.props.authSessionId,
+        });
+
+        return this.props.matrixClient.requestRegisterEmailToken(
+            this.props.inputs.emailAddress,
+            this.props.clientSecret,
+            1, // TODO: Multiple send attempts?
+            nextLink,
+        ).then((result) => {
+            this.props.setEmailSid(result.sid);
+        });
+    },
+
+    render: function() {
+        if (this.state.requestingToken) {
+            const Loader = sdk.getComponent("elements.Spinner");
+            return <Loader />;
+        } else {
+            return (
+                <div>
+                    <p>An email has been sent to <i>{this.props.inputs.emailAddress}</i></p>
+                    <p>Please check your email to continue registration.</p>
+                </div>
+            );
+        }
+    },
+});
+
 export const FallbackAuthEntry = React.createClass({
     displayName: 'FallbackAuthEntry',
 
     propTypes: {
+        matrixClient: React.PropTypes.object.isRequired,
         authSessionId: React.PropTypes.string.isRequired,
         loginType: React.PropTypes.string.isRequired,
         submitAuthDict: React.PropTypes.func.isRequired,
@@ -189,7 +281,7 @@ export const FallbackAuthEntry = React.createClass({
     },
 
     _onShowFallbackClick: function() {
-        var url = MatrixClientPeg.get().getFallbackAuthUrl(
+        var url = this.props.matrixClient.getFallbackAuthUrl(
             this.props.loginType,
             this.props.authSessionId
         );
@@ -199,7 +291,7 @@ export const FallbackAuthEntry = React.createClass({
     _onReceiveMessage: function(event) {
         if (
             event.data === "authDone" &&
-            event.origin === MatrixClientPeg.get().getHomeserverUrl()
+            event.origin === this.props.matrixClient.getHomeserverUrl()
         ) {
             this.props.submitAuthDict({});
         }
@@ -220,6 +312,7 @@ export const FallbackAuthEntry = React.createClass({
 const AuthEntryComponents = [
     PasswordAuthEntry,
     RecaptchaAuthEntry,
+    EmailIdentityAuthEntry,
 ];
 
 export function getEntryComponentForLoginType(loginType) {
