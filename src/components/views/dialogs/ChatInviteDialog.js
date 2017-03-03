@@ -87,20 +87,18 @@ module.exports = React.createClass({
             this.refs.textinput.value = this.props.value;
         }
         // Create a Fuse instance for fuzzy searching this._userList
-        if (!this._fuse) {
-            this._fuse = new Fuse(
-                // Use an empty list at first that will later be populated
-                // (see this._updateUserList)
-                [],
-                {
-                    shouldSort: true,
-                    location: 0, // The index of the query in the test string
-                    distance: 5, // The distance away from location the query can be
-                    // 0.0 = exact match, 1.0 = match anything
-                    threshold: 0.3,
-                }
-            );
-        }
+        this._fuse = new Fuse(
+            // Use an empty list at first that will later be populated
+            // (see this._updateUserList)
+            [],
+            {
+                shouldSort: true,
+                location: 0, // The index of the query in the test string
+                distance: 5, // The distance away from location the query can be
+                // 0.0 = exact match, 1.0 = match anything
+                threshold: 0.3,
+            }
+        );
         this._updateUserList();
     },
 
