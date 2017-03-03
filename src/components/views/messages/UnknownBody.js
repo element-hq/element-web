@@ -17,14 +17,19 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var MatrixClientPeg = require('../../../MatrixClientPeg');
 
 module.exports = React.createClass({
     displayName: 'UnknownBody',
 
     render: function() {
-        var text = this.props.mxEvent.getContent().body;
-        if (this.props.mxEvent.isRedacted()) {
-            text = "This event was redacted";
+        const ev = this.props.mxEvent;
+        var text = ev.getContent().body;
+        if (ev.isRedacted()) {
+            const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
+            const because = ev.getUnsigned().redacted_because;
+            const name = room.getMember(because.sender).name || because.sender;
+            text = "This event was redacted by " + name;
         }
         return (
             <span className="mx_UnknownBody">
