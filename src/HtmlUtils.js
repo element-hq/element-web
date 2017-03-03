@@ -28,6 +28,7 @@ emojione.imagePathSVG = 'emojione/svg/';
 emojione.imageType = 'svg';
 
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
+const COLOR_REGEX = /#[0-9a-fA-F]{6}/;
 
 /* modified from https://github.com/Ranks/emojione/blob/master/lib/js/emojione.js
  * because we want to include emoji shortnames in title text
@@ -87,11 +88,12 @@ var sanitizeHtmlParams = {
         // deliberately no h1/h2 to stop people shouting.
         'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
         'nl', 'li', 'b', 'i', 'u', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
-        'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre'
+        'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'span',
     ],
     allowedAttributes: {
         // custom ones first:
-        font: ['color'], // custom to matrix
+        font: ['color', 'data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
+        span: ['data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
         a: ['href', 'name', 'target', 'rel'], // remote target: custom to matrix
         // We don't currently allow img itself by default, but this
         // would make sense if we did
@@ -135,6 +137,38 @@ var sanitizeHtmlParams = {
             }
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
             return { tagName: tagName, attribs : attribs };
+        },
+        '*': function(tagName, attribs) {
+            // Delete any style previously assigned, style is an allowedTag for font and span
+            // because attributes are stripped after transforming
+            delete attribs.style;
+
+            // Sanitise and transform data-mx-color and data-mx-bg-color to their CSS
+            // equivalents
+            const customCSSMapper = {
+                'data-mx-color': 'color',
+                'data-mx-bg-color': 'background-color',
+                // $customAttributeKey: $cssAttributeKey
+            };
+
+            let style = "";
+            Object.keys(customCSSMapper).forEach((customAttributeKey) => {
+                const cssAttributeKey = customCSSMapper[customAttributeKey];
+                const customAttributeValue = attribs[customAttributeKey];
+                if (customAttributeValue &&
+                    typeof customAttributeValue === 'string' &&
+                    COLOR_REGEX.test(customAttributeValue)
+                ) {
+                    style += cssAttributeKey + ":" + customAttributeValue + ";";
+                    delete attribs[customAttributeKey];
+                }
+            });
+
+            if (style) {
+                attribs.style = style;
+            }
+
+            return { tagName: tagName, attribs: attribs };
         },
     },
 };
