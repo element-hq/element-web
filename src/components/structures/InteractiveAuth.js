@@ -41,11 +41,12 @@ export default React.createClass({
         // callback
         makeRequest: React.PropTypes.func.isRequired,
 
-        // callback called when the auth process has finished
+        // callback called when the auth process has finished,
+        // successfully or unsuccessfully.
         // @param {bool} status True if the operation requiring
         //     auth was completed sucessfully, false if canceled.
         // @param result The result of the authenticated call
-        onFinished: React.PropTypes.func.isRequired,
+        onAuthFinished: React.PropTypes.func.isRequired,
 
         // Inputs provided by the user to the auth process
         // and used by various stages. As passed to js-sdk
@@ -87,9 +88,9 @@ export default React.createClass({
         });
 
         this._authLogic.attemptAuth().then((result) => {
-            this.props.onFinished(true, result);
+            this.props.onAuthFinished(true, result);
         }).catch((error) => {
-            this.props.onFinished(false, error);
+            this.props.onAuthFinished(false, error);
             console.error("Error during user-interactive auth:", error);
             if (this._unmounted) {
                 return;
@@ -179,7 +180,7 @@ export default React.createClass({
     },
 
     _onAuthStageFailed: function(e) {
-        this.props.onFinished(false, e);
+        this.props.onAuthFinished(false, e);
     },
     _setEmailSid: function(sid) {
         this._authLogic.setEmailSid(sid);

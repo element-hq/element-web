@@ -338,7 +338,7 @@ module.exports = React.createClass({
                 <InteractiveAuth
                     matrixClient={this._matrixClient}
                     makeRequest={this._makeRegisterRequest}
-                    onFinished={this._onUIAuthFinished}
+                    onAuthFinished={this._onUIAuthFinished}
                     inputs={this._getUIAuthInputs()}
                     makeRegistrationUrl={this.props.makeRegistrationUrl}
                     sessionId={this.props.sessionId}

@@ -52,23 +52,62 @@ export default React.createClass({
         };
     },
 
+    getInitialState: function() {
+        return {
+            authError: null,
+        }
+    },
+
+    _onAuthFinished: function(success, result) {
+        if (success) {
+            this.props.onFinished(true);
+        } else {
+            this.setState({
+                authError: result,
+            });
+        }
+    },
+
+    _onDismissClick: function() {
+        this.props.onFinished(false);
+    },
+
     render: function() {
         const InteractiveAuth = sdk.getComponent("structures.InteractiveAuth");
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
-        return (
-            <BaseDialog className="mx_InteractiveAuthDialog"
-                onFinished={this.props.onFinished}
-                title={this.props.title}
-            >
+        let content;
+        if (this.state.authError) {
+            content = (
+                <div>
+                    <div>{this.state.authError.message || this.state.authError.toString()}</div>
+                    <br />
+                    <AccessibleButton onClick={this._onDismissClick}
+                        className="mx_UserSettings_button"
+                    >
+                        Dismiss
+                    </AccessibleButton>
+                </div>
+            );
+        } else {
+            content = (
                 <div>
                     <InteractiveAuth ref={this._collectInteractiveAuth}
                         matrixClient={this.props.matrixClient}
                         authData={this.props.authData}
                         makeRequest={this.props.makeRequest}
-                        onFinished={this.props.onFinished}
+                        onAuthFinished={this._onAuthFinished}
                     />
                 </div>
+            );
+        }
+
+        return (
+            <BaseDialog className="mx_InteractiveAuthDialog"
+                onFinished={this.props.onFinished}
+                title={this.state.authError ? 'Error' : this.props.title}
+            >
+                {content}
             </BaseDialog>
         );
     },
