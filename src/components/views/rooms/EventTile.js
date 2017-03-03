@@ -29,14 +29,6 @@ var dispatcher = require("../../../dispatcher");
 
 var ObjectUtils = require('../../../ObjectUtils');
 
-var bounce = false;
-try {
-    if (global.localStorage) {
-        bounce = global.localStorage.getItem('avatar_bounce') == 'true';
-    }
-} catch (e) {
-}
-
 var eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
     'm.room.member' : 'messages.TextualEvent',
