@@ -209,11 +209,11 @@ module.exports = React.createClass({
                             MatrixClientPeg.get().joinRoom(room.room_id);
                         }
                     });
-
-                    return teamToken;
                 }, (err) => {
                     console.error('Error getting team config', err);
                 });
+
+                return teamToken;
             }, (err) => {
                 console.error('Error tracking referral', err);
             });
