@@ -97,18 +97,27 @@ module.exports = React.createClass({
             if (inviteList === null) return;
         }
 
+        const addrTexts = inviteList.map(addr => addr.address);
         if (inviteList.length > 0) {
-            if (this._isDmChat(inviteList)) {
+            if (this._isDmChat(addrTexts)) {
+                const userId = inviteList[0].address;
                 // Direct Message chat
-                var room = this._getDirectMessageRoom(inviteList[0]);
-                if (room) {
-                    // A Direct Message room already exists for this user and you
-                    // so go straight to that room
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: room.roomId,
+                const rooms = this._getDirectMessageRooms(userId);
+                if (rooms.length > 0) {
+                    // A Direct Message room already exists for this user, so select a
+                    // room from a list that is similar to the one in MemberInfo panel
+                    const ChatCreateOrReuseDialog = sdk.getComponent(
+                        "views.dialogs.ChatCreateOrReuseDialog"
+                    );
+                    Modal.createDialog(ChatCreateOrReuseDialog, {
+                        userId: userId,
+                        onFinished: (success) => {
+                            if (success) {
+                                this.props.onFinished(true, inviteList[0]);
+                            }
+                            // else show this ChatInviteDialog again
+                        }
                     });
-                    this.props.onFinished(true, inviteList[0]);
                 } else {
                     this._startChat(inviteList);
                 }
@@ -238,22 +247,20 @@ module.exports = React.createClass({
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
     },
 
-    _getDirectMessageRoom: function(addr) {
+    _getDirectMessageRooms: function(addr) {
         const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
-        var dmRooms = dmRoomMap.getDMRoomsForUserId(addr);
-        if (dmRooms.length > 0) {
-            // Cycle through all the DM rooms and find the first non forgotten or parted room
-            for (let i = 0; i < dmRooms.length; i++) {
-                let room = MatrixClientPeg.get().getRoom(dmRooms[i]);
-                if (room) {
-                    const me = room.getMember(MatrixClientPeg.get().credentials.userId);
-                    if (me.membership == 'join') {
-                        return room;
-                    }
+        const dmRooms = dmRoomMap.getDMRoomsForUserId(addr);
+        const rooms = [];
+        dmRooms.forEach(dmRoom => {
+            let room = MatrixClientPeg.get().getRoom(dmRoom);
+            if (room) {
+                const me = room.getMember(MatrixClientPeg.get().credentials.userId);
+                if (me.membership == 'join') {
+                    rooms.push(room);
                 }
             }
-        }
-        return null;
+        });
+        return rooms;
     },
 
     _startChat: function(addrs) {
@@ -386,8 +393,11 @@ module.exports = React.createClass({
         return false;
     },
 
-    _isDmChat: function(addrs) {
-        if (addrs.length === 1 && getAddressType(addrs[0]) === "mx" && !this.props.roomId) {
+    _isDmChat: function(addrTexts) {
+        if (addrTexts.length === 1 &&
+            getAddressType(addrTexts[0]) === "mx" &&
+            !this.props.roomId
+        ) {
             return true;
         } else {
             return false;

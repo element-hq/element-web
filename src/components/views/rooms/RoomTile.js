@@ -35,6 +35,7 @@ module.exports = React.createClass({
     propTypes: {
         connectDragSource: React.PropTypes.func,
         connectDropTarget: React.PropTypes.func,
+        onClick: React.PropTypes.func,
         isDragging: React.PropTypes.bool,
 
         room: React.PropTypes.object.isRequired,
@@ -104,6 +105,9 @@ module.exports = React.createClass({
             action: 'view_room',
             room_id: this.props.room.roomId,
         });
+        if (this.props.onClick) {
+            this.props.onClick();
+        }
     },
 
     onMouseEnter: function() {
