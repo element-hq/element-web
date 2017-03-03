@@ -60,7 +60,7 @@ export default React.createClass({
 
     _onAuthFinished: function(success, result) {
         if (success) {
-            this.props.onFinished(true);
+            this.props.onFinished(true, result);
         } else {
             this.setState({
                 authError: result,

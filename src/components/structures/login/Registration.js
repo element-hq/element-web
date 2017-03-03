@@ -22,7 +22,6 @@ import React from 'react';
 
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
-import Signup from '../../../Signup';
 import ServerConfig from '../../views/login/ServerConfig';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import RegistrationForm from '../../views/login/RegistrationForm';
