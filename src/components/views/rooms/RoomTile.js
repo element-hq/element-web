@@ -101,12 +101,8 @@ module.exports = React.createClass({
     },
 
     onClick: function() {
-        dis.dispatch({
-            action: 'view_room',
-            room_id: this.props.room.roomId,
-        });
         if (this.props.onClick) {
-            this.props.onClick();
+            this.props.onClick(this.props.room.roomId);
         }
     },
 

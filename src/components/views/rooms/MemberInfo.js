@@ -553,6 +553,13 @@ module.exports = WithMatrixClient(React.createClass({
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
     },
 
+    onRoomTileClick(roomId) {
+        dis.dispatch({
+            action: 'view_room',
+            room_id: roomId,
+        });
+    },
+
     _renderDevices: function() {
         if (!this._enableDevices) {
             return null;
@@ -613,6 +620,7 @@ module.exports = WithMatrixClient(React.createClass({
                             unread={Unread.doesRoomHaveUnreadMessages(room)}
                             highlight={highlight}
                             isInvite={me.membership == "invite"}
+                            onClick={this.onRoomTileClick}
                         />
                     );
                 }

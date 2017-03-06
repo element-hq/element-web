@@ -28,25 +28,20 @@ export default class CreateOrReuseChatDialog extends React.Component {
 
     constructor(props) {
         super(props);
-        this._onNewDMClick = this._onNewDMClick.bind(this);
-        this.dispatcherRef = dis.register(this._onAction.bind(this));
+        this.onNewDMClick = this.onNewDMClick.bind(this);
+        this.onRoomTileClick = this.onRoomTileClick.bind(this);
     }
 
-    componentWillUnmount() {
-        dis.unregister(this.dispatcherRef);
-    }
-
-    _onAction(payload) {
-        switch(payload.action) {
-            case 'view_room':
-                this.props.onFinished(true);
-                break;
-            default:
-        }
-    }
-
-    _onNewDMClick() {
+    onNewDMClick() {
         createRoom({dmUserId: this.props.userId});
+        this.props.onFinished(true);
+    }
+
+    onRoomTileClick(roomId) {
+        dis.dispatch({
+            action: 'view_room',
+            room_id: roomId,
+        });
         this.props.onFinished(true);
     }
 
@@ -74,6 +69,7 @@ export default class CreateOrReuseChatDialog extends React.Component {
                         unread={Unread.doesRoomHaveUnreadMessages(room)}
                         highlight={highlight}
                         isInvite={me.membership == "invite"}
+                        onClick={this.onRoomTileClick}
                     />
                 );
             }
@@ -85,7 +81,7 @@ export default class CreateOrReuseChatDialog extends React.Component {
         });
         const startNewChat = <AccessibleButton
             className="mx_MemberInfo_createRoom"
-            onClick={this._onNewDMClick}
+            onClick={this.onNewDMClick}
         >
             <div className="mx_RoomTile_avatar">
                 <img src="img/create-big.svg" width="26" height="26" />
