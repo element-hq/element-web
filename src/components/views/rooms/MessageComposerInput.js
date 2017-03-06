@@ -513,9 +513,16 @@ export default class MessageComposerInput extends React.Component {
     };
 
     handleReturn = (ev) => {
-        if (ev.shiftKey) {
-            this.onEditorContentChanged(RichUtils.insertSoftNewline(this.state.editorState));
-            return true;
+        const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
+        // If we're in any of these three types of blocks, shift enter should insert soft newlines
+        // And just enter should end the block
+        if(['blockquote', 'unordered-list-item', 'ordered-list-item'].includes(currentBlockType)) {
+            if(ev.shiftKey) {
+                this.onEditorContentChanged(RichUtils.insertSoftNewline(this.state.editorState));
+                return true;
+            }
+
+            return false;
         }
 
         const contentState = this.state.editorState.getCurrentContent();
