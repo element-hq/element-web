@@ -26,17 +26,17 @@ import createRoom from '../../../createRoom';
 
 export default class CreateOrReuseChatDialog extends React.Component {
 
-    constructor (props) {
+    constructor(props) {
         super(props);
         this._onNewDMClick = this._onNewDMClick.bind(this);
     }
 
-    _onNewDMClick () {
+    _onNewDMClick() {
         createRoom({dmUserId: this.props.userId});
         this.props.onFinished(true);
     }
 
-    render () {
+    render() {
         const client = MatrixClientPeg.get();
 
         const dmRoomMap = new DMRoomMap(client);
