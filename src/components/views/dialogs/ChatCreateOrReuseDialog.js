@@ -29,7 +29,11 @@ export default class CreateOrReuseChatDialog extends React.Component {
     constructor(props) {
         super(props);
         this._onNewDMClick = this._onNewDMClick.bind(this);
-        dis.register(this._onAction.bind(this));
+        this.dispatcherRef = dis.register(this._onAction.bind(this));
+    }
+
+    componentWillUnmount() {
+        dis.unregister(this.dispatcherRef);
     }
 
     _onAction(payload) {
