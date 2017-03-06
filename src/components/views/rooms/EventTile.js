@@ -65,6 +65,12 @@ module.exports = WithMatrixClient(React.createClass({
         /* the MatrixEvent to show */
         mxEvent: React.PropTypes.object.isRequired,
 
+        /* true if mxEvent is redacted. This is a prop because using mxEvent.isRedacted()
+         * might not be enough when deciding shouldComponentUpdate - prevProps.mxEvent
+         * references the same this.props.mxEvent.
+         */
+        isRedacted: React.PropTypes.bool,
+
         /* true if this is a continuation of the previous event (which has the
          * effect of not showing another avatar/displayname
          */
@@ -388,7 +394,7 @@ module.exports = WithMatrixClient(React.createClass({
 
         var e2eEnabled = this.props.matrixClient.isRoomEncrypted(this.props.mxEvent.getRoomId());
         var isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
-        const isRedacted = (eventType === 'm.room.message') && this.props.mxEvent.isRedacted();
+        const isRedacted = (eventType === 'm.room.message') && this.props.isRedacted;
 
         var classes = classNames({
             mx_EventTile: true,
