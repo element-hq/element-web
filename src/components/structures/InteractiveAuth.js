@@ -45,7 +45,14 @@ export default React.createClass({
         // successfully or unsuccessfully.
         // @param {bool} status True if the operation requiring
         //     auth was completed sucessfully, false if canceled.
-        // @param result The result of the authenticated call
+        // @param {object} result The result of the authenticated call
+        //     if successful, otherwise the error object
+        // @param {object} extra Additional information about the UI Auth
+        //     process:
+        //      * emailSid {string} If email auth was performed, the sid of
+        //            the auth session.
+        //      * clientSecret {string} The client secret used in auth
+        //            sessions with the ID server.
         onAuthFinished: React.PropTypes.func.isRequired,
 
         // Inputs provided by the user to the auth process
@@ -88,7 +95,11 @@ export default React.createClass({
         });
 
         this._authLogic.attemptAuth().then((result) => {
-            this.props.onAuthFinished(true, result);
+            const extra = {
+                emailSid: this._authLogic.getEmailSid(),
+                clientSecret: this._authLogic.getClientSecret(),
+            };
+            this.props.onAuthFinished(true, result, extra);
         }).catch((error) => {
             this.props.onAuthFinished(false, error);
             console.error("Error during user-interactive auth:", error);

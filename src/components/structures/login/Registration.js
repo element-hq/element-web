@@ -153,7 +153,7 @@ module.exports = React.createClass({
         });
     },
 
-    _onUIAuthFinished: function(success, response) {
+    _onUIAuthFinished: function(success, response, extra) {
         if (!success) {
             this.setState({
                 busy: false,
@@ -168,26 +168,19 @@ module.exports = React.createClass({
             busy: true,
             doingUIAuth: false,
         });
-        this.props.onLoggedIn({
-            userId: response.user_id,
-            deviceId: response.device_id,
-            homeserverUrl: this.state.hsUrl,
-            identityServerUrl: this.state.isUrl,
-            accessToken: response.access_token,
-        });
 
         // Done regardless of `teamSelected`. People registering with non-team emails
         // will just nop. The point of this being we might not have the email address
         // that the user registered with at this stage (depending on whether this
         // is the client they initiated registration).
         let trackPromise = q(null);
-        if (this._rtsClient) {
+        if (this._rtsClient && extra.emailSid) {
             // Track referral if this.props.referrer set, get team_token in order to
             // retrieve team config and see welcome page etc.
             trackPromise = this._rtsClient.trackReferral(
                 this.props.referrer || '', // Default to empty string = not referred
-                this.registerLogic.params.idSid,
-                this.registerLogic.params.clientSecret
+                extra.emailSid,
+                extra.clientSecret,
             ).then((data) => {
                 const teamToken = data.team_token;
                 // Store for use /w welcome pages
@@ -223,13 +216,13 @@ module.exports = React.createClass({
             this.props.onLoggedIn({
                 userId: response.user_id,
                 deviceId: response.device_id,
-                homeserverUrl: this.registerLogic.getHomeserverUrl(),
-                identityServerUrl: this.registerLogic.getIdentityServerUrl(),
+                homeserverUrl: this._matrixClient.getHomeserverUrl(),
+                identityServerUrl: this._matrixClient.getIdentityServerUrl(),
                 accessToken: response.access_token
             }, teamToken);
         }).then(() => {
             return this._setupPushers();
-        }).done();
+        });
     },
 
     _setupPushers: function() {
@@ -316,7 +309,7 @@ module.exports = React.createClass({
         );
     },
 
-    _getUIAuthInputs() {
+    _getUIAuthInputs: function() {
         return {
             emailAddress: this.state.formVals.email,
             phoneCountry: this.state.formVals.phoneCountry,
