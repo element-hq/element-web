@@ -18,18 +18,19 @@ var MatrixClientPeg = require('./MatrixClientPeg');
 var dis = require('./dispatcher');
 var sdk = require('./index');
 var Modal = require('./Modal');
+import { EventStatus } from 'matrix-js-sdk';
 
 module.exports = {
     resendUnsentEvents: function(room) {
         room.getPendingEvents().filter(function(ev) {
-            return ev.status === Matrix.EventStatus.NOT_SENT;
+            return ev.status === EventStatus.NOT_SENT;
         }).forEach(function(event) {
             module.exports.resend(event);
         });
     },
     cancelUnsentEvents: function(room) {
         room.getPendingEvents().filter(function(ev) {
-            return ev.status === Matrix.EventStatus.NOT_SENT;
+            return ev.status === EventStatus.NOT_SENT;
         }).forEach(function(event) {
             module.exports.removeFromQueue(event);
         });

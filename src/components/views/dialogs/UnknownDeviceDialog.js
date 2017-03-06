@@ -19,6 +19,7 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import GeminiScrollbar from 'react-gemini-scrollbar';
+import Resend from '../../../Resend';
 
 function DeviceListEntry(props) {
     const {userId, device} = props;
