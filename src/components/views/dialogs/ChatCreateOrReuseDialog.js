@@ -29,6 +29,16 @@ export default class CreateOrReuseChatDialog extends React.Component {
     constructor(props) {
         super(props);
         this._onNewDMClick = this._onNewDMClick.bind(this);
+        dis.register(this._onAction.bind(this));
+    }
+
+    _onAction(payload) {
+        switch(payload.action) {
+            case 'view_room':
+                this.props.onFinished(true);
+                break;
+            default:
+        }
     }
 
     _onNewDMClick() {
@@ -60,7 +70,6 @@ export default class CreateOrReuseChatDialog extends React.Component {
                         unread={Unread.doesRoomHaveUnreadMessages(room)}
                         highlight={highlight}
                         isInvite={me.membership == "invite"}
-                        onClick={() => this.props.onFinished(true)}
                     />
                 );
             }
@@ -88,7 +97,7 @@ export default class CreateOrReuseChatDialog extends React.Component {
                 }}
                 title='Create a new chat or reuse an existing one'
             >
-                <h3>Direct chats</h3>
+                You already have existing direct chats with this user:
                 {tiles}
                 {startNewChat}
             </BaseDialog>
