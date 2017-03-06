@@ -411,7 +411,9 @@ module.exports = React.createClass({
 
         // is this a continuation of the previous message?
         var continuation = false;
-        if (prevEvent !== null && prevEvent.sender && mxEv.sender
+
+        if (prevEvent !== null
+                && !prevEvent.isRedacted() && prevEvent.sender && mxEv.sender
                 && mxEv.sender.userId === prevEvent.sender.userId
                 && mxEv.getType() == prevEvent.getType()) {
             continuation = true;
