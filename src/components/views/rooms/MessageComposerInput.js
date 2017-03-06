@@ -487,8 +487,8 @@ export default class MessageComposerInput extends React.Component {
                 'strike': (text) => `~~${text}~~`,
                 'code-block': (text) => `\`\`\`\n${text}\n\`\`\``,
                 'blockquote': (text) => text.split('\n').map((line) => `> ${line}\n`).join(''),
-                'unordered-list-item': (text) => text.split('\n').map((line) => `- ${line}\n`).join(''),
-                'ordered-list-item': (text) => text.split('\n').map((line, i) => `${i + 1}. ${line}\n`).join(''),
+                'unordered-list-item': (text) => text.split('\n').map((line) => `\n- ${line}`).join(''),
+                'ordered-list-item': (text) => text.split('\n').map((line, i) => `\n${i + 1}. ${line}`).join(''),
             }[command];
 
             if (modifyFn) {
