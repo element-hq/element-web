@@ -10,9 +10,19 @@ const COMMANDS = [
         description: 'Displays action',
     },
     {
+        command: '/part',
+        args: '[#alias:domain]',
+        description: 'Leave room',
+    },
+    {
         command: '/ban',
         args: '<user-id> [reason]',
         description: 'Bans user with given id',
+    },
+    {
+        command: '/unban',
+        args: '<user-id>',
+        description: 'Unbans user with given id',
     },
     {
         command: '/deop',
@@ -43,6 +53,11 @@ const COMMANDS = [
         command: '/ddg',
         args: '<query>',
         description: 'Searches DuckDuckGo for results',
+    },
+    {
+        command: '/op',
+        args: '<userId> [<power level>]',
+        description: 'Define the power level of a user',
     }
 ];
 
