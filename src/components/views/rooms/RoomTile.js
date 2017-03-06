@@ -19,7 +19,6 @@ limitations under the License.
 var React = require('react');
 var ReactDOM = require("react-dom");
 var classNames = require('classnames');
-var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 import DMRoomMap from '../../../utils/DMRoomMap';
 var sdk = require('../../../index');
