@@ -14,7 +14,7 @@ export default class RoomProvider extends AutocompleteProvider {
     constructor() {
         super(ROOM_REGEX);
         this.matcher = new FuzzyMatcher([], {
-            keys: ['name', 'aliases'],
+            keys: ['name', 'roomId', 'aliases'],
         });
     }
 
@@ -26,7 +26,7 @@ export default class RoomProvider extends AutocompleteProvider {
         const {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
             // the only reason we need to do this is because Fuse only matches on properties
-            this.matcher.setObjects(client.getRooms().filter(room => !!room).map(room => {
+            this.matcher.setObjects(client.getRooms().filter(room => !!room && !!getDisplayAliasForRoom(room)).map(room => {
                 return {
                     room: room,
                     name: room.name,
