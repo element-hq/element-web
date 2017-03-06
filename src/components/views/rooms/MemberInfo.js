@@ -569,7 +569,7 @@ module.exports = WithMatrixClient(React.createClass({
         } else if (devices === null) {
             devComponents = "Unable to load device list";
         } else if (devices.length === 0) {
-            devComponents = "No registered devices";
+            devComponents = "No devices with registered encryption keys";
         } else {
             devComponents = [];
             for (var i = 0; i < devices.length; i++) {
