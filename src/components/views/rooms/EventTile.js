@@ -413,7 +413,7 @@ module.exports = WithMatrixClient(React.createClass({
             mx_EventTile_unverified: this.state.verified == false,
             mx_EventTile_bad: this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted',
         });
-        var permalink = "#/room/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId();
+        var permalink = "https://matrix.to/#/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId();
 
         var readAvatars = this.getReadAvatars();
 
