@@ -75,6 +75,8 @@ import views$create_room$RoomAlias from './components/views/create_room/RoomAlia
 views$create_room$RoomAlias && (module.exports.components['views.create_room.RoomAlias'] = views$create_room$RoomAlias);
 import views$dialogs$BaseDialog from './components/views/dialogs/BaseDialog';
 views$dialogs$BaseDialog && (module.exports.components['views.dialogs.BaseDialog'] = views$dialogs$BaseDialog);
+import views$dialogs$ChatCreateOrReuseDialog from './components/views/dialogs/ChatCreateOrReuseDialog';
+views$dialogs$ChatCreateOrReuseDialog && (module.exports.components['views.dialogs.ChatCreateOrReuseDialog'] = views$dialogs$ChatCreateOrReuseDialog);
 import views$dialogs$ChatInviteDialog from './components/views/dialogs/ChatInviteDialog';
 views$dialogs$ChatInviteDialog && (module.exports.components['views.dialogs.ChatInviteDialog'] = views$dialogs$ChatInviteDialog);
 import views$dialogs$ConfirmUserActionDialog from './components/views/dialogs/ConfirmUserActionDialog';
