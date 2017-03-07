@@ -146,6 +146,13 @@ var RoomSubList = React.createClass({
         }
     },
 
+    onRoomTileClick(roomId) {
+        dis.dispatch({
+            action: 'view_room',
+            room_id: roomId,
+        });
+    },
+
     tsOfNewestEvent: function(room) {
         for (var i = room.timeline.length - 1; i >= 0; --i) {
             var ev = room.timeline[i];
@@ -364,7 +371,9 @@ var RoomSubList = React.createClass({
                     highlight={ room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites' }
                     isInvite={ self.props.label === 'Invites' }
                     refreshSubList={ self._updateSubListCount }
-                    incomingCall={ null } />
+                    incomingCall={ null }
+                    onClick={ self.onRoomTileClick }
+                />
             );
         });
     },
