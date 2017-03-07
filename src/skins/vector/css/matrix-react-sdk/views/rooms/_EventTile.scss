@@ -130,6 +130,16 @@ limitations under the License.
     color: $event-notsent-color;
 }
 
+.mx_EventTile_redacted {
+    padding-top: 0px;
+}
+
+.mx_EventTile_redacted .mx_EventTile_line,
+.mx_EventTile_redacted:hover .mx_EventTile_line,
+.mx_EventTile_redacted.menu .mx_EventTile_line {
+    background-color: $primary-fg-color;
+}
+
 .mx_EventTile_highlight,
 .mx_EventTile_highlight .markdown-body
  {
