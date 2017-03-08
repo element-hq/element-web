@@ -192,7 +192,6 @@ module.exports = React.createClass({
                 const teamToken = data.team_token;
                 // Store for use /w welcome pages
                 window.localStorage.setItem('mx_team_token', teamToken);
-                this.props.onTeamMemberRegistered(teamToken);
 
                 this._rtsClient.getTeam(teamToken).then((team) => {
                     console.log(
