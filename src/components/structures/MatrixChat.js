@@ -738,13 +738,11 @@ module.exports = React.createClass({
         if (teamToken) {
             this._teamToken = teamToken;
             dis.dispatch({action: 'view_home_page'});
-            return;
         } else if (this._is_registered) {
             dis.dispatch({action: 'view_user_settings'});
-            return;
+        } else {
+            dis.dispatch({action: 'view_room_directory'});
         }
-
-        dis.dispatch({action: 'view_room_directory'});
     },
 
     /**
