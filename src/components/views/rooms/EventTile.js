@@ -25,7 +25,7 @@ var TextForEvent = require('../../../TextForEvent');
 import WithMatrixClient from '../../../wrappers/WithMatrixClient';
 
 var ContextualMenu = require('../../structures/ContextualMenu');
-var dispatcher = require("../../../dispatcher");
+import dis from '../../../dispatcher';
 
 var ObjectUtils = require('../../../ObjectUtils');
 
@@ -356,7 +356,7 @@ module.exports = WithMatrixClient(React.createClass({
 
     onSenderProfileClick: function(event) {
         var mxEvent = this.props.mxEvent;
-        dispatcher.dispatch({
+        dis.dispatch({
             action: 'insert_displayname',
             displayname: (mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()).replace(' (IRC)', ''),
         });
@@ -369,6 +369,17 @@ module.exports = WithMatrixClient(React.createClass({
             require(['../../../async-components/views/dialogs/EncryptedEventDialog'], cb);
         }, {
             event: event,
+        });
+    },
+
+    onPermalinkClicked: function(e) {
+        // This allows the permalink to be open in a new tab/window or copied as
+        // matrix.to, but also for it to enable routing within Riot when clicked.
+        e.preventDefault();
+        dis.dispatch({
+            action: 'view_room',
+            event_id: this.props.mxEvent.getId(),
+            room_id: this.props.mxEvent.getRoomId(),
         });
     },
 
@@ -413,7 +424,10 @@ module.exports = WithMatrixClient(React.createClass({
             mx_EventTile_unverified: this.state.verified == false,
             mx_EventTile_bad: this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted',
         });
-        var permalink = "https://matrix.to/#/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId();
+
+        const permalink = "https://matrix.to/#/" +
+            this.props.mxEvent.getRoomId() + "/" +
+            this.props.mxEvent.getId();
 
         var readAvatars = this.getReadAvatars();
 
@@ -493,13 +507,13 @@ module.exports = WithMatrixClient(React.createClass({
             return (
                 <div className={classes}>
                     <div className="mx_EventTile_roomName">
-                        <a href={ permalink }>
+                        <a href={ permalink } onClick={this.onPermalinkClicked}>
                             { room ? room.name : '' }
                         </a>
                     </div>
                     <div className="mx_EventTile_senderDetails">
                         { avatar }
-                        <a href={ permalink }>
+                        <a href={ permalink } onClick={this.onPermalinkClicked}>
                             { sender }
                             <MessageTimestamp ts={this.props.mxEvent.getTs()} />
                         </a>
@@ -527,7 +541,11 @@ module.exports = WithMatrixClient(React.createClass({
                             tileShape={this.props.tileShape}
                             onWidgetLoad={this.props.onWidgetLoad} />
                     </div>
-                    <a className="mx_EventTile_senderDetailsLink" href={ permalink }>
+                    <a
+                        className="mx_EventTile_senderDetailsLink"
+                        href={ permalink }
+                        onClick={this.onPermalinkClicked}
+                    >
                         <div className="mx_EventTile_senderDetails">
                                 { sender }
                                 <MessageTimestamp ts={this.props.mxEvent.getTs()} />
@@ -545,7 +563,7 @@ module.exports = WithMatrixClient(React.createClass({
                     { avatar }
                     { sender }
                     <div className="mx_EventTile_line">
-                        <a href={ permalink }>
+                        <a href={ permalink } onClick={this.onPermalinkClicked}>
                             <MessageTimestamp ts={this.props.mxEvent.getTs()} />
                         </a>
                         { e2e }
