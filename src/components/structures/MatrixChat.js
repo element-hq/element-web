@@ -724,7 +724,7 @@ module.exports = React.createClass({
 
         // If screenAfterLogin is set, use that, then null it so that a second login will
         // result in view_home_page, _user_settings or _room_directory
-        if (this.state.screenAfterLogin) {
+        if (this.state.screenAfterLogin && this.state.screenAfterLogin.screen) {
             this.showScreen(
                 this.state.screenAfterLogin.screen,
                 this.state.screenAfterLogin.params
