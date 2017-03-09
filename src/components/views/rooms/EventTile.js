@@ -29,14 +29,6 @@ import dis from '../../../dispatcher';
 
 var ObjectUtils = require('../../../ObjectUtils');
 
-var bounce = false;
-try {
-    if (global.localStorage) {
-        bounce = global.localStorage.getItem('avatar_bounce') == 'true';
-    }
-} catch (e) {
-}
-
 var eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
     'm.room.member' : 'messages.TextualEvent',
@@ -72,6 +64,12 @@ module.exports = WithMatrixClient(React.createClass({
 
         /* the MatrixEvent to show */
         mxEvent: React.PropTypes.object.isRequired,
+
+        /* true if mxEvent is redacted. This is a prop because using mxEvent.isRedacted()
+         * might not be enough when deciding shouldComponentUpdate - prevProps.mxEvent
+         * references the same this.props.mxEvent.
+         */
+        isRedacted: React.PropTypes.bool,
 
         /* true if this is a continuation of the previous event (which has the
          * effect of not showing another avatar/displayname
@@ -407,6 +405,7 @@ module.exports = WithMatrixClient(React.createClass({
 
         var e2eEnabled = this.props.matrixClient.isRoomEncrypted(this.props.mxEvent.getRoomId());
         var isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
+        const isRedacted = (eventType === 'm.room.message') && this.props.isRedacted;
 
         var classes = classNames({
             mx_EventTile: true,
@@ -423,6 +422,7 @@ module.exports = WithMatrixClient(React.createClass({
             mx_EventTile_verified: this.state.verified == true,
             mx_EventTile_unverified: this.state.verified == false,
             mx_EventTile_bad: this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted',
+            mx_EventTile_redacted: isRedacted,
         });
 
         const permalink = "https://matrix.to/#/" +
@@ -435,7 +435,10 @@ module.exports = WithMatrixClient(React.createClass({
         let avatarSize;
         let needsSenderProfile;
 
-        if (this.props.tileShape === "notif") {
+        if (isRedacted) {
+            avatarSize = 0;
+            needsSenderProfile = false;
+        } else if (this.props.tileShape === "notif") {
             avatarSize = 24;
             needsSenderProfile = true;
         } else if (isInfoMessage) {
@@ -500,6 +503,8 @@ module.exports = WithMatrixClient(React.createClass({
         else if (e2eEnabled) {
             e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12"/>;
         }
+        const timestamp = this.props.mxEvent.isRedacted() ?
+            null : <MessageTimestamp ts={this.props.mxEvent.getTs()} />;
 
         if (this.props.tileShape === "notif") {
             var room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());
@@ -515,7 +520,7 @@ module.exports = WithMatrixClient(React.createClass({
                         { avatar }
                         <a href={ permalink } onClick={this.onPermalinkClicked}>
                             { sender }
-                            <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                            { timestamp }
                         </a>
                     </div>
                     <div className="mx_EventTile_line" >
@@ -548,7 +553,7 @@ module.exports = WithMatrixClient(React.createClass({
                     >
                         <div className="mx_EventTile_senderDetails">
                                 { sender }
-                                <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                                { timestamp }
                         </div>
                     </a>
                 </div>
@@ -564,7 +569,7 @@ module.exports = WithMatrixClient(React.createClass({
                     { sender }
                     <div className="mx_EventTile_line">
                         <a href={ permalink } onClick={this.onPermalinkClicked}>
-                            <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                            { timestamp }
                         </a>
                         { e2e }
                         <EventTileType ref="tile"
@@ -582,7 +587,8 @@ module.exports = WithMatrixClient(React.createClass({
 }));
 
 module.exports.haveTileForEvent = function(e) {
-    if (e.isRedacted()) return false;
+    // Only messages have a tile (black-rectangle) if redacted
+    if (e.isRedacted() && e.getType() !== 'm.room.message') return false;
     if (eventTileTypes[e.getType()] == undefined) return false;
     if (eventTileTypes[e.getType()] == 'messages.TextualEvent') {
         return TextForEvent.textForEvent(e) !== '';
