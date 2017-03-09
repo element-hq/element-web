@@ -254,12 +254,6 @@ async function loadApp() {
         UpdateChecker.start();
 
         var MatrixChat = sdk.getComponent('structures.MatrixChat');
-
-        // Clone the current location before MatrixChat gets a chance to change it. This
-        // can be used to go to the correct screen after login
-        const entryLocation = {};
-        Object.keys(window.location).forEach((k) => {entryLocation[k] = window.location[k]});
-
         window.matrixChat = ReactDOM.render(
             <MatrixChat
                 onNewScreen={onNewScreen}
