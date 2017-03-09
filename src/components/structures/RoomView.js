@@ -915,8 +915,6 @@ module.exports = React.createClass({
     },
 
     uploadFile: function(file) {
-        var self = this;
-
         if (MatrixClientPeg.get().isGuest()) {
             var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
@@ -928,8 +926,16 @@ module.exports = React.createClass({
 
         ContentMessages.sendContentToRoom(
             file, this.state.room.roomId, MatrixClientPeg.get()
-        ).done(undefined, function(error) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        ).done(undefined, (error) => {
+            if (error.name === "UnknownDeviceError") {
+                dis.dispatch({
+                    action: 'unknown_device_error',
+                    err: error,
+                    room: this.state.room,
+                });
+                return;
+            }
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to upload file",
                 description: error.toString()
