@@ -253,7 +253,7 @@ async function loadApp() {
     } else if (validBrowser) {
         UpdateChecker.start();
 
-        var MatrixChat = sdk.getComponent('structures.MatrixChat');
+        const MatrixChat = sdk.getComponent('structures.MatrixChat');
         window.matrixChat = ReactDOM.render(
             <MatrixChat
                 onNewScreen={onNewScreen}
