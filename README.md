@@ -263,21 +263,28 @@ Triaging issues
 Issues will be triaged by the core team using the following primary set of tags:
 
 priority:
-    P1: top priority; typically blocks releases.
-    P2: one below that
-    P3: non-urgent
-    P4/P5: bluesky some day, who knows.
+
+* P1: top priority; typically blocks releases
+* P2: still need to fix, but lower than P1
+* P3: non-urgent
+* P4: intereseting idea - bluesky some day
+* P5: recorded for posterity/to avoid duplicates. No intention to resolves right now.
 
 bug or feature:
-  bug severity:
-     * cosmetic - feature works functionally but UI/UX is broken.
-     * critical - whole app doesn't work
-     * major - entire feature doesn't work
-     * minor - partially broken feature (but still usable)
 
-     * release blocker
+* bug
+* feature
 
-     * ui/ux (think of this as cosmetic)
+bug severity:
+  
+* cosmetic - feature works functionally but UI/UX is broken
+* critical - whole app doesn't work
+* major - entire feature doesn't work
+* minor - partially broken feature (but still usable)
 
-     * network (specific to network conditions)
-     * platform (platform specific)
+additional categories:
+
+* release blocker
+* ui/ux (think of this as cosmetic)
+* network (specific to network conditions)
+* platform (platform specific)
