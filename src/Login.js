@@ -105,21 +105,38 @@ export default class Login {
         });
     }
 
-    loginViaPassword(username, pass) {
-        var self = this;
-        var isEmail = username.indexOf("@") > 0;
-        var loginParams = {
-            password: pass,
-            initial_device_display_name: this._defaultDeviceDisplayName,
-        };
-        if (isEmail) {
-            loginParams.medium = 'email';
-            loginParams.address = username;
+    loginViaPassword(username, phoneCountry, phoneNumber, pass) {
+        const self = this;
+
+        const isEmail = username.indexOf("@") > 0;
+
+        let identifier;
+        if (phoneCountry && phoneNumber) {
+            identifier = {
+                type: 'm.id.phone',
+                country: phoneCountry,
+                number: phoneNumber,
+            };
+        } else if (isEmail) {
+            identifier = {
+                type: 'm.id.thirdparty',
+                medium: 'email',
+                address: username,
+            };
         } else {
-            loginParams.user = username;
+            identifier = {
+                type: 'm.id.user',
+                user: username,
+            };
         }
 
-        var client = this._createTemporaryClient();
+        const loginParams = {
+            password: pass,
+            identifier: identifier,
+            initial_device_display_name: this._defaultDeviceDisplayName,
+        };
+
+        const client = this._createTemporaryClient();
         return client.login('m.login.password', loginParams).then(function(data) {
             return q({
                 homeserverUrl: self._hsUrl,

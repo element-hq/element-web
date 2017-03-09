@@ -27,8 +27,8 @@ import React from 'react';
 export default function AccessibleButton(props) {
     const {element, onClick, children, ...restProps} = props;
     restProps.onClick = onClick;
-    restProps.onKeyDown = function(e) {
-        if (e.keyCode == 13 || e.keyCode == 32) return onClick();
+    restProps.onKeyUp = function(e) {
+        if (e.keyCode == 13 || e.keyCode == 32) return onClick(e);
     };
     restProps.tabIndex = restProps.tabIndex || "0";
     restProps.role = "button";
