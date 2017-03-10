@@ -20,7 +20,6 @@ import {Editor, EditorState, RichUtils, CompositeDecorator,
     convertFromRaw, convertToRaw, Modifier, EditorChangeType,
     getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState} from 'draft-js';
 
-import {stateToMarkdown as __stateToMarkdown} from 'draft-js-export-markdown';
 import classNames from 'classnames';
 import escape from 'lodash/escape';
 import Q from 'q';
@@ -40,20 +39,12 @@ import * as HtmlUtils from '../../../HtmlUtils';
 import Autocomplete from './Autocomplete';
 import {Completion} from "../../../autocomplete/Autocompleter";
 import Markdown from '../../../Markdown';
+import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import {onSendMessageFailed} from './MessageComposerInputOld';
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
 const KEY_M = 77;
-
-const ZWS_CODE = 8203;
-const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
-function stateToMarkdown(state) {
-    return __stateToMarkdown(state)
-        .replace(
-            ZWS, // draft-js-export-markdown adds these
-            ''); // this is *not* a zero width space, trust me :)
-}
 
 /*
  * The textInput part of the MessageComposer
@@ -101,6 +92,7 @@ export default class MessageComposerInput extends React.Component {
 
     client: MatrixClient;
     autocomplete: Autocomplete;
+    historyManager: ComposerHistoryManager;
 
     constructor(props, context) {
         super(props, context);
@@ -145,110 +137,13 @@ export default class MessageComposerInput extends React.Component {
         return EditorState.moveFocusToEnd(editorState);
     }
 
-    componentWillMount() {
-        const component = this;
-        this.sentHistory = {
-            // The list of typed messages. Index 0 is more recent
-            data: [],
-            // The position in data currently displayed
-            position: -1,
-            // The room the history is for.
-            roomId: null,
-            // The original text before they hit UP
-            originalText: null,
-            // The textarea element to set text to.
-            element: null,
-
-            init: function(element, roomId) {
-                this.roomId = roomId;
-                this.element = element;
-                this.position = -1;
-                const storedData = window.sessionStorage.getItem(
-                    "mx_messagecomposer_history_" + roomId,
-                );
-                if (storedData) {
-                    this.data = JSON.parse(storedData);
-                }
-                if (this.roomId) {
-                    this.setLastTextEntry();
-                }
-            },
-
-            push: function(text) {
-                // store a message in the sent history
-                this.data.unshift(text);
-                window.sessionStorage.setItem(
-                    "mx_messagecomposer_history_" + this.roomId,
-                    JSON.stringify(this.data),
-                );
-                // reset history position
-                this.position = -1;
-                this.originalText = null;
-            },
-
-            // move in the history. Returns true if we managed to move.
-            next: function(offset) {
-                if (this.position === -1) {
-                    // user is going into the history, save the current line.
-                    this.originalText = this.element.value;
-                } else {
-                    // user may have modified this line in the history; remember it.
-                    this.data[this.position] = this.element.value;
-                }
-
-                if (offset > 0 && this.position === (this.data.length - 1)) {
-                    // we've run out of history
-                    return false;
-                }
-
-                // retrieve the next item (bounded).
-                let newPosition = this.position + offset;
-                newPosition = Math.max(-1, newPosition);
-                newPosition = Math.min(newPosition, this.data.length - 1);
-                this.position = newPosition;
-
-                if (this.position !== -1) {
-                    // show the message
-                    this.element.value = this.data[this.position];
-                } else if (this.originalText !== undefined) {
-                    // restore the original text the user was typing.
-                    this.element.value = this.originalText;
-                }
-
-                return true;
-            },
-
-            saveLastTextEntry: function() {
-                // save the currently entered text in order to restore it later.
-                // NB: This isn't 'originalText' because we want to restore
-                // sent history items too!
-                const contentJSON = JSON.stringify(convertToRaw(component.state.editorState.getCurrentContent()));
-                window.sessionStorage.setItem("mx_messagecomposer_input_" + this.roomId, contentJSON);
-            },
-
-            setLastTextEntry: function() {
-                const contentJSON = window.sessionStorage.getItem("mx_messagecomposer_input_" + this.roomId);
-                if (contentJSON) {
-                    const content = convertFromRaw(JSON.parse(contentJSON));
-                    component.setState({
-                        editorState: component.createEditorState(component.state.isRichtextEnabled, content),
-                    });
-                }
-            },
-        };
-    }
-
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
-        this.sentHistory.init(
-            this.refs.editor,
-            this.props.room.roomId,
-        );
+        this.historyManager = new ComposerHistoryManager(this.props.room.roomId);
     }
 
     componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
-        this.sentHistory.saveLastTextEntry();
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -290,7 +185,7 @@ export default class MessageComposerInput extends React.Component {
                 if (formatted_body) {
                     let content = RichText.HTMLtoContentState(`<blockquote>${formatted_body}</blockquote>`);
                     if (!this.state.isRichtextEnabled) {
-                        content = ContentState.createFromText(stateToMarkdown(content));
+                        content = ContentState.createFromText(RichText.stateToMarkdown(content));
                     }
 
                     const blockMap = content.getBlockMap();
@@ -414,8 +309,6 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
-        console.log(state);
-
         super.setState(state, () => {
             if (callback != null) {
                 callback();
@@ -434,12 +327,14 @@ export default class MessageComposerInput extends React.Component {
     }
 
     enableRichtext(enabled: boolean) {
+        if (enabled === this.state.isRichtextEnabled) return;
+
         let contentState = null;
         if (enabled) {
             const md = new Markdown(this.state.editorState.getCurrentContent().getPlainText());
             contentState = RichText.HTMLtoContentState(md.toHTML());
         } else {
-            let markdown = stateToMarkdown(this.state.editorState.getCurrentContent());
+            let markdown = RichText.stateToMarkdown(this.state.editorState.getCurrentContent());
             if (markdown[markdown.length - 1] === '\n') {
                 markdown = markdown.substring(0, markdown.length - 1); // stateToMarkdown tacks on an extra newline (?!?)
             }
@@ -513,15 +408,15 @@ export default class MessageComposerInput extends React.Component {
     };
 
     handleReturn = (ev) => {
+        if(ev.shiftKey) {
+            this.onEditorContentChanged(RichUtils.insertSoftNewline(this.state.editorState));
+            return true;
+        }
+
         const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
         // If we're in any of these three types of blocks, shift enter should insert soft newlines
         // And just enter should end the block
         if(['blockquote', 'unordered-list-item', 'ordered-list-item'].includes(currentBlockType)) {
-            if(ev.shiftKey) {
-                this.onEditorContentChanged(RichUtils.insertSoftNewline(this.state.editorState));
-                return true;
-            }
-
             return false;
         }
 
@@ -586,8 +481,10 @@ export default class MessageComposerInput extends React.Component {
             sendTextFn = this.client.sendEmoteMessage;
         }
 
-        // XXX: We don't actually seem to use this history?
-        this.sentHistory.push(contentHTML || contentText);
+        this.historyManager.addItem(
+            this.state.isRichtextEnabled ? contentHTML : contentState.getPlainText(),
+            this.state.isRichtextEnabled ? 'html' : 'markdown');
+
         let sendMessagePromise;
         if (contentHTML) {
             sendMessagePromise = sendHtmlFn.call(
@@ -614,14 +511,30 @@ export default class MessageComposerInput extends React.Component {
 
     onUpArrow = async (e) => {
         const completion = this.autocomplete.onUpArrow();
-        if (completion != null) {
-            e.preventDefault();
+        if (completion == null) {
+            const newContent = this.historyManager.getItem(-1, this.state.isRichtextEnabled ? 'html' : 'markdown');
+            if (!newContent) return false;
+            const editorState = EditorState.push(this.state.editorState,
+                newContent,
+                'insert-characters');
+            this.setState({editorState});
+            return true;
         }
+        e.preventDefault();
         return await this.setDisplayedCompletion(completion);
     };
 
     onDownArrow = async (e) => {
         const completion = this.autocomplete.onDownArrow();
+        if (completion == null) {
+            const newContent = this.historyManager.getItem(+1, this.state.isRichtextEnabled ? 'html' : 'markdown');
+            if (!newContent) return false;
+            const editorState = EditorState.push(this.state.editorState,
+                newContent,
+                'insert-characters');
+            this.setState({editorState});
+            return true;
+        }
         e.preventDefault();
         return await this.setDisplayedCompletion(completion);
     };

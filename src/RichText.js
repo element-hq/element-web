@@ -16,6 +16,7 @@ import * as sdk from './index';
 import * as emojione from 'emojione';
 import {stateToHTML} from 'draft-js-export-html';
 import {SelectionRange} from "./autocomplete/Autocompleter";
+import {stateToMarkdown as __stateToMarkdown} from 'draft-js-export-markdown';
 
 const MARKDOWN_REGEX = {
     LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
@@ -29,6 +30,15 @@ const MARKDOWN_REGEX = {
 const USERNAME_REGEX = /@\S+:\S+/g;
 const ROOM_REGEX = /#\S+:\S+/g;
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp, 'g');
+
+const ZWS_CODE = 8203;
+const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
+export function stateToMarkdown(state) {
+    return __stateToMarkdown(state)
+        .replace(
+            ZWS, // draft-js-export-markdown adds these
+            ''); // this is *not* a zero width space, trust me :)
+}
 
 export const contentStateToHTML = (contentState: ContentState) => {
     return stateToHTML(contentState, {
