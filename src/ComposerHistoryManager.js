@@ -44,14 +44,20 @@ export default class ComposerHistoryManager {
 
         // TODO: Performance issues?
         for(; sessionStorage.getItem(`${this.prefix}[${this.lastIndex}]`); this.lastIndex++, this.currentIndex++) {
-            history.push(JSON.parse(sessionStorage.getItem(`${this.prefix}[${this.lastIndex}]`)));
+            this.history.push(
+                Object.assign(
+                    new HistoryItem(),
+                    JSON.parse(sessionStorage.getItem(`${this.prefix}[${this.lastIndex}]`)),
+                ),
+            );
         }
+        this.currentIndex--;
     }
 
     addItem(message: string, format: MessageFormat) {
         const item = new HistoryItem(message, format);
         this.history.push(item);
-        this.currentIndex = this.lastIndex;
+        this.currentIndex = this.lastIndex + 1;
         sessionStorage.setItem(`${this.prefix}[${this.lastIndex++}]`, JSON.stringify(item));
     }
 

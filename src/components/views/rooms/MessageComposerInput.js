@@ -320,7 +320,6 @@ export default class MessageComposerInput extends React.Component {
                 const selection = RichText.selectionStateToTextOffsets(
                     this.state.editorState.getSelection(),
                     this.state.editorState.getCurrentContent().getBlocksAsArray());
-                console.log(textContent);
                 this.props.onContentChanged(textContent, selection);
             }
         });
@@ -541,7 +540,6 @@ export default class MessageComposerInput extends React.Component {
 
     // tab and shift-tab are mapped to down and up arrow respectively
     onTab = async (e) => {
-        console.log('onTab');
         e.preventDefault(); // we *never* want tab's default to happen, but we do want up/down sometimes
         if (this.autocomplete.state.completionList.length === 0) {
             await this.autocomplete.forceComplete();
@@ -567,7 +565,6 @@ export default class MessageComposerInput extends React.Component {
 
         if (displayedCompletion == null) {
             if (this.state.originalEditorState) {
-                console.log('setting editorState to originalEditorState');
                 let editorState = this.state.originalEditorState;
                 // This is a workaround from https://github.com/facebook/draft-js/issues/458
                 // Due to the way we swap editorStates, Draft does not rerender at times

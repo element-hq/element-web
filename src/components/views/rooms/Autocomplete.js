@@ -197,7 +197,6 @@ export default class Autocomplete extends React.Component {
 
     setState(state, func) {
         super.setState(state, func);
-        console.log(state);
     }
 
     render() {
