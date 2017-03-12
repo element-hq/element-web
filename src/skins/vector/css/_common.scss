@@ -193,6 +193,10 @@ textarea {
     cursor: pointer;
 }
 
+.mx_Dialog_cancelButton object {
+    pointer-events: none;
+}
+
 .mx_Dialog_content {
     margin: 24px 58px 68px 0;
     font-size: 14px;
