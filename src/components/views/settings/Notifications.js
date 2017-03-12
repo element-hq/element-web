@@ -238,9 +238,10 @@ module.exports = React.createClass({
                 self._refreshFromServer();
             }, function(error) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                console.error("Failed to change settings: " + error);
                 Modal.createDialog(ErrorDialog, {
-                    title: "Can't change settings",
-                    description: error.toString(),
+                    title: "Error",
+                    description: "Failed to change settings",
                     onFinished: self._refreshFromServer
                 });
             });
@@ -307,9 +308,10 @@ module.exports = React.createClass({
             self._refreshFromServer();
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Can't update user notification settings: " + error);
             Modal.createDialog(ErrorDialog, {
-                title: "Can't update user notification settings",
-                description: error.toString(),
+                title: "Error",
+                description: "Can't update user notification settings",
                 onFinished: self._refreshFromServer
             });
         });
@@ -348,9 +350,10 @@ module.exports = React.createClass({
 
         var onError = function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Failed to update keywords: " + error);
             Modal.createDialog(ErrorDialog, {
-                title: "Can't update keywords",
-                description: error.toString(),
+                title: "Error",
+                description: "Failed to update keywords",
                 onFinished: self._refreshFromServer
             });
         }

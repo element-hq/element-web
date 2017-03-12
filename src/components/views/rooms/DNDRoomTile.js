@@ -84,9 +84,10 @@ var roomTileSource = {
                     //component.state.set({ spinner: component.state.spinner-- });
                 }).fail(function(err) {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    console.error("Failed to remove tag " + item.originalList.props.tagName + " from room: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Failed to remove tag " + item.originalList.props.tagName + " from room",
-                        description: err.toString()
+                        title: "Error",
+                        description: "Failed to remove tag " + item.originalList.props.tagName + " from room",
                     });
                 });
             }
@@ -103,9 +104,10 @@ var roomTileSource = {
                     //component.state.set({ spinner: component.state.spinner-- });
                 }).fail(function(err) {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    console.error("Failed to add tag " + item.targetList.props.tagName + " to room: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Failed to add tag " + item.targetList.props.tagName + " to room",
-                        description: err.toString()
+                        title: "Error",
+                        description: "Failed to add tag " + item.targetList.props.tagName + " to room",
                     });
                 });
             }

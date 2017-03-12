@@ -58,9 +58,10 @@ module.exports = React.createClass({
                         };
                     }).fail(function(err) {
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        console.error("Failed to remove tag " + tagNameOff + " from room: " + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Failed to remove tag " + tagNameOff + " from room",
-                            description: err.toString()
+                            title: "Error",
+                            description: "Failed to remove tag " + tagNameOff + " from room",
                         });
                     });
                 }
@@ -75,9 +76,10 @@ module.exports = React.createClass({
                         };
                     }).fail(function(err) {
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        console.error("Failed to add tag " + tagNameOn + " to room: " + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Failed to add tag " + tagNameOn + " to room",
-                            description: err.toString()
+                            title: "Error",
+                            description: "Failed to add tag " + tagNameOn + " to room",
                         });
                     });
                 }
@@ -148,9 +150,10 @@ module.exports = React.createClass({
                 };
             }, (err) => {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                console.error("Failed to set DM status of room: " + err);
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failed to set Direct Message status of room",
-                    description: err.toString()
+                    title: "Error",
+                    description: "Failed to set Direct Message status of room",
                 });
             });
         });

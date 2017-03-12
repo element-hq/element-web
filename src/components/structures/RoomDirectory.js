@@ -208,9 +208,10 @@ module.exports = React.createClass({
                 }, function(err) {
                     modal.close();
                     this.refreshRoomList();
+                    console.error("Failed to " + step + ": " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Failed to "+step,
-                        description: err.toString()
+                        title: "Error",
+                        description: "Failed to " + step,
                     });
                 });
             }
