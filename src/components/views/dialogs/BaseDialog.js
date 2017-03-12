@@ -18,6 +18,7 @@ import React from 'react';
 
 import * as KeyCode from '../../../KeyCode';
 import AccessibleButton from '../elements/AccessibleButton';
+import sdk from '../../../index';
 
 /**
  * Basic container for modal dialogs.
