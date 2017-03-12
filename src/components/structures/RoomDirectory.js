@@ -162,7 +162,7 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to get public room list",
-                description: err.message
+                description: "The server may be unavailable or overloaded",
             });
         });
     },
