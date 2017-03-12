@@ -24,7 +24,7 @@ import Unread from '../../../Unread';
 import classNames from 'classnames';
 import createRoom from '../../../createRoom';
 
-export default class CreateOrReuseChatDialog extends React.Component {
+export default class ChatCreateOrReuseChatDialog extends React.Component {
 
     constructor(props) {
         super(props);
@@ -91,7 +91,7 @@ export default class CreateOrReuseChatDialog extends React.Component {
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
-            <BaseDialog className='mx_CreateOrReuseChatDialog'
+            <BaseDialog className='mx_ChatCreateOrReuseChatDialog'
                 onFinished={() => {
                     this.props.onFinished(false)
                 }}
@@ -105,7 +105,7 @@ export default class CreateOrReuseChatDialog extends React.Component {
     }
 }
 
-CreateOrReuseChatDialog.propTyps = {
+ChatCreateOrReuseChatDialog.propTyps = {
     userId: React.PropTypes.string.isRequired,
     onFinished: React.PropTypes.func.isRequired,
 };
