@@ -187,9 +187,9 @@ textarea {
 }
 
 .mx_Dialog_cancelButton {
-    float: right;
-    margin-top: 5px;
-    margin-right: 5px;
+    position: absolute;
+    right: 11px;
+    top: 13px;
     cursor: pointer;
 }
 
