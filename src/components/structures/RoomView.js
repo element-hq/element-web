@@ -1018,7 +1018,7 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Search failed",
-                description: error.toString()
+                description: "Server may be unavailable, overloaded, or search timed out :("
             });
         }).finally(function() {
             self.setState({
