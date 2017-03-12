@@ -930,9 +930,10 @@ module.exports = React.createClass({
             file, this.state.room.roomId, MatrixClientPeg.get()
         ).done(undefined, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Failed to upload file " + file + " " + error);
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to upload file",
-                description: error.toString()
+                description: "Server may be unavailable, overloaded, or the file too big",
             });
         });
     },
@@ -1016,6 +1017,7 @@ module.exports = React.createClass({
             });
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Search failed: " + error);
             Modal.createDialog(ErrorDialog, {
                 title: "Search failed",
                 description: "Server may be unavailable, overloaded, or search timed out :("

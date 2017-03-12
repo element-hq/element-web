@@ -237,9 +237,10 @@ module.exports = WithMatrixClient(React.createClass({
                         console.log("Kick success");
                     }, function(err) {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        console.error("Kick error: " + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Kick error",
-                            description: err.message
+                            title: "Error", 
+                            description: "Failed to kick user",
                         });
                     }
                 ).finally(()=>{
@@ -278,9 +279,10 @@ module.exports = WithMatrixClient(React.createClass({
                         console.log("Ban success");
                     }, function(err) {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        console.error("Ban error: " + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Ban error",
-                            description: err.message,
+                            title: "Error",
+                            description: "Failed to ban user",
                         });
                     }
                 ).finally(()=>{
@@ -327,9 +329,10 @@ module.exports = WithMatrixClient(React.createClass({
                     // get out of sync if we force setState here!
                     console.log("Mute toggle success");
                 }, function(err) {
+                    console.error("Mute error: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Mute error",
-                        description: err.message
+                        title: "Error",
+                        description: "Failed to mute user",
                     });
                 }
             ).finally(()=>{
@@ -375,9 +378,10 @@ module.exports = WithMatrixClient(React.createClass({
                         description: "This action cannot be performed by a guest user. Please register to be able to do this."
                     });
                 } else {
+                    console.error("Toggle moderator error:" + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Moderator toggle error",
-                        description: err.message
+                        title: "Error",
+                        description: "Failed to toggle moderator status",
                     });
                 }
             }
@@ -395,9 +399,10 @@ module.exports = WithMatrixClient(React.createClass({
                 console.log("Power change success");
             }, function(err) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                console.error("Failed to change power level " + err);
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failure to change power level",
-                    description: err.message
+                    title: "Error",
+                    description: "Failed to change power level",
                 });
             }
         ).finally(()=>{

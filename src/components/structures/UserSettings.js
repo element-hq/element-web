@@ -206,6 +206,7 @@ module.exports = React.createClass({
             });
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Failed to load user settings: " + error);
             Modal.createDialog(ErrorDialog, {
                 title: "Can't load user settings",
                 description: "Server may be unavailable or overloaded",
@@ -246,10 +247,11 @@ module.exports = React.createClass({
             self._refreshFromServer();
         }, function(err) {
             var errMsg = (typeof err === "string") ? err : (err.error || "");
+            console.error("Failed to set avatar: " + err);
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Error",
-                description: "Failed to set avatar. " + errMsg
+                description: "Failed to set avatar."
             });
         });
     },
@@ -286,6 +288,7 @@ module.exports = React.createClass({
             errMsg += ` (HTTP status ${err.httpStatus})`;
         }
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        console.error("Failed to change password: " + errMsg);
         Modal.createDialog(ErrorDialog, {
             title: "Error",
             description: errMsg
@@ -337,9 +340,10 @@ module.exports = React.createClass({
             });
         }, (err) => {
             this.setState({email_add_pending: false});
+            console.error("Unable to add email address " + email_address + " " + err);
             Modal.createDialog(ErrorDialog, {
-                title: "Unable to add email address",
-                description: err.message
+                title: "Error",
+                description: "Unable to add email address"
             });
         });
         ReactDOM.findDOMNode(this.refs.add_threepid_input).blur();
@@ -361,9 +365,10 @@ module.exports = React.createClass({
                         return this._refreshFromServer();
                     }).catch((err) => {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        console.error("Unable to remove contact information: " + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Unable to remove contact information",
-                            description: err.toString(),
+                            title: "Error",
+                            description: "Unable to remove contact information",
                         });
                     }).done();
                 }
@@ -401,9 +406,10 @@ module.exports = React.createClass({
                 });
             } else {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                console.error("Unable to verify email address: " + err);
                 Modal.createDialog(ErrorDialog, {
-                    title: "Unable to verify email address",
-                    description: err.toString(),
+                    title: "Error",
+                    description: "Unable to verify email address",
                 });
             }
         });

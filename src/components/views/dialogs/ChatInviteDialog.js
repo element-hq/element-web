@@ -318,8 +318,8 @@ module.exports = React.createClass({
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failure to invite",
-                    description: err.toString()
+                    title: "Error",
+                    description: "Failed to invite",
                 });
                 return null;
             })
@@ -331,8 +331,8 @@ module.exports = React.createClass({
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failure to invite user",
-                    description: err.toString()
+                    title: "Error",
+                    description: "Failed to invite user",
                 });
                 return null;
             })
@@ -352,8 +352,8 @@ module.exports = React.createClass({
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failure to invite",
-                    description: err.toString()
+                    title: "Error",
+                    description: "Failed to invite",
                 });
                 return null;
             })
