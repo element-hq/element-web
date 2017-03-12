@@ -208,7 +208,7 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Can't load user settings",
-                description: error.toString()
+                description: "Server may be unavailable or overloaded",
             });
         });
     },
