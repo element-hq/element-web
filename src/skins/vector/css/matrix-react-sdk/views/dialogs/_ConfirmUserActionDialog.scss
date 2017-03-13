@@ -14,22 +14,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_ConfirmUserActionDialog .mx_Dialog_content {
+    min-height: 48px;
+    margin-bottom: 24px;
+}
+
 .mx_ConfirmUserActionDialog_avatar {
     float: left;
     margin-right: 20px;
+    margin-top: -2px;
 }
 
 .mx_ConfirmUserActionDialog_name {
-    font-size: 150%;
+    font-size: 18px;
 }
 
 .mx_ConfirmUserActionDialog_userId {
-    font-style: italic;
+    font-size: 13px;
 }
 
 .mx_ConfirmUserActionDialog_reasonField {
-    margin-bottom: 40px;
+    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    font-size: 14px;
+    color: $primary-fg-color;
+
+    border-radius: 3px;
+    border: solid 1px $input-border-color;
+    line-height: 36px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+
+    margin-bottom: 24px;
+
     width: 90%;
-    font-size: 120%;
-    height: 35px;
 }
