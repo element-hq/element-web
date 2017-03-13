@@ -25,7 +25,7 @@ var DEBUG_SCROLL = false;
 
 // The amount of extra scroll distance to allow prior to unfilling.
 // See _getExcessHeight.
-const UNPAGINATION_PADDING = 3000;
+const UNPAGINATION_PADDING = 6000;
 // The number of milliseconds to debounce calls to onUnfillRequest, to prevent
 // many scroll events causing many unfilling requests.
 const UNFILL_REQUEST_DEBOUNCE_MS = 200;
