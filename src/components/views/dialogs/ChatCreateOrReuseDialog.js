@@ -97,9 +97,13 @@ export default class ChatCreateOrReuseDialog extends React.Component {
                 }}
                 title='Create a new chat or reuse an existing one'
             >
-                You already have existing direct chats with this user:
-                {tiles}
-                {startNewChat}
+                <div className="mx_Dialog_content">
+                    You already have existing direct chats with this user:
+                    <div className="mx_ChatCreateOrReuseDialog_tiles">
+                        {tiles}
+                        {startNewChat}
+                    </div>
+                </div>
             </BaseDialog>
         );
     }
