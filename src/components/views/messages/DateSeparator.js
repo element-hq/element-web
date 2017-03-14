@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+import { getDateAsLabel } from '../../../utils/DateUtils'
 
 var days = [
     "Sunday",
@@ -31,26 +32,8 @@ var days = [
 module.exports = React.createClass({
     displayName: 'DateSeparator',
     render: function() {
-        var date = new Date(this.props.ts);
-        var today = new Date();
-        var yesterday = new Date();
-        yesterday.setDate(today.getDate() - 1);
-        var label;
-        if (date.toDateString() === today.toDateString()) {
-            label = "Today";
-        }
-        else if (date.toDateString() === yesterday.toDateString()) {
-            label = "Yesterday";
-        }
-        else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
-            label = days[date.getDay()];
-        }
-        else {
-            label = date.toDateString();
-        }
-
         return (
-            <h2>{ label }</h2>
+            <h2 style={this.props.style} >{ getDateAsLabel(this.props.ts) }</h2>
         );
     }
 });
