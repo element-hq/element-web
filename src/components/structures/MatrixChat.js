@@ -325,6 +325,8 @@ module.exports = React.createClass({
     },
 
     onAction: function(payload) {
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         var roomIndexDelta = 1;
 
         var self = this;
@@ -391,30 +393,54 @@ module.exports = React.createClass({
                 this.notifyNewScreen('forgot_password');
                 break;
             case 'leave_room':
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-
-                var roomId = payload.room_id;
                 Modal.createDialog(QuestionDialog, {
                     title: "Leave room",
                     description: "Are you sure you want to leave the room?",
-                    onFinished: function(should_leave) {
+                    onFinished: (should_leave) => {
                         if (should_leave) {
-                            var d = MatrixClientPeg.get().leave(roomId);
+                            const d = MatrixClientPeg.get().leave(payload.room_id);
 
                             // FIXME: controller shouldn't be loading a view :(
-                            var Loader = sdk.getComponent("elements.Spinner");
-                            var modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
+                            const Loader = sdk.getComponent("elements.Spinner");
+                            const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
-                            d.then(function() {
+                            d.then(() => {
                                 modal.close();
-                                dis.dispatch({action: 'view_next_room'});
-                            }, function(err) {
+                                if (this.currentRoomId === payload.room_id) {
+                                    dis.dispatch({action: 'view_next_room'});
+                                }
+                            }, (err) => {
                                 modal.close();
                                 console.error("Failed to leave room " + payload.room_id + " " + err);
                                 Modal.createDialog(ErrorDialog, {
                                     title: "Failed to leave room",
                                     description: "Server may be unavailable, overloaded, or you hit a bug."
+                                });
+                            });
+                        }
+                    }
+                });
+                break;
+            case 'reject_invite':
+                Modal.createDialog(QuestionDialog, {
+                    title: "Reject invitation",
+                    description: "Are you sure you want to reject the invitation?",
+                    onFinished: (confirm) => {
+                        if (confirm) {
+                            // FIXME: controller shouldn't be loading a view :(
+                            const Loader = sdk.getComponent("elements.Spinner");
+                            const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
+
+                            MatrixClientPeg.get().leave(payload.room_id).done(() => {
+                                modal.close();
+                                if (this.currentRoomId === payload.room_id) {
+                                    dis.dispatch({action: 'view_next_room'});
+                                }
+                            }, (err) => {
+                                modal.close();
+                                Modal.createDialog(ErrorDialog, {
+                                    title: "Failed to reject invitation",
+                                    description: err.toString()
                                 });
                             });
                         }
