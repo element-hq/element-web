@@ -1,6 +1,5 @@
 /*
 Copyright 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,20 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_HomePage {
-    max-width: 960px;
-    width: 100%;
-    height: 100%;
-    overflow-y: hidden;
-    margin-left: auto;
-    margin-right: auto;
-}
-.mx_HomePage iframe {
-	width: 100%;
-	height: 90%;
-	border: 0px;
+.mx_ChatCreateOrReuseDialog .mx_ChatCreateOrReuseDialog_tiles {
+    margin-top: 24px;
 }
 
-.mx_HomePage_body {
-    margin-left: 63px;
+.mx_ChatCreateOrReuseDialog .mx_Dialog_content {
+    margin-bottom: 24px;
+}
+
+.mx_ChatCreateOrReuseDialog .mx_RoomTile_badge {
+    display: none;
 }

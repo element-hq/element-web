@@ -102,15 +102,24 @@ var validBrowser = checkBrowserFeatures([
     "objectfit"
 ]);
 
+// Parse the given window.location and return parameters that can be used when calling
+// MatrixChat.showScreen(screen, params)
+function getScreenFromLocation(location) {
+    const fragparts = parseQsFromFragment(location);
+    return {
+        screen: fragparts.location.substring(1),
+        params: fragparts.params,
+    }
+}
+
 // Here, we do some crude URL analysis to allow
 // deep-linking.
 function routeUrl(location) {
     if (!window.matrixChat) return;
 
-    console.log("Routing URL "+location);
-    var fragparts = parseQsFromFragment(location);
-    window.matrixChat.showScreen(fragparts.location.substring(1),
-                                 fragparts.params);
+    console.log("Routing URL ", location.href);
+    const s = getScreenFromLocation(location);
+    window.matrixChat.showScreen(s.screen, s.params);
 }
 
 function onHashChange(ev) {
@@ -121,22 +130,13 @@ function onHashChange(ev) {
     routeUrl(window.location);
 }
 
-var loaded = false;
-var lastLoadedScreen = null;
-
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
 var onNewScreen = function(screen) {
     console.log("newscreen "+screen);
-    // just remember the most recent screen while we are loading, so that the
-    // user doesn't see the URL bar doing a dance
-    if (!loaded) {
-        lastLoadedScreen = screen;
-    } else {
-        var hash = '#/' + screen;
-        lastLocationHashSet = hash;
-        window.location.hash = hash;
-    }
+    var hash = '#/' + screen;
+    lastLocationHashSet = hash;
+    window.location.hash = hash;
 }
 
 // We use this to work out what URL the SDK should
@@ -268,8 +268,7 @@ async function loadApp() {
     } else if (validBrowser) {
         UpdateChecker.start();
 
-        var MatrixChat = sdk.getComponent('structures.MatrixChat');
-
+        const MatrixChat = sdk.getComponent('structures.MatrixChat');
         window.matrixChat = ReactDOM.render(
             <MatrixChat
                 onNewScreen={onNewScreen}
@@ -280,19 +279,11 @@ async function loadApp() {
                 startingFragmentQueryParams={fragparts.params}
                 enableGuest={true}
                 onLoadCompleted={onLoadCompleted}
+                initialScreenAfterLogin={getScreenFromLocation(window.location)}
                 defaultDeviceDisplayName={PlatformPeg.get().getDefaultDeviceDisplayName()}
             />,
             document.getElementById('matrixchat')
         );
-
-        routeUrl(window.location);
-
-        // we didn't propagate screen changes to the URL bar while we were loading; do it now.
-        loaded = true;
-        if (lastLoadedScreen) {
-            onNewScreen(lastLoadedScreen);
-            lastLoadedScreen = null;
-        }
     }
     else {
         console.error("Browser is missing required features.");
