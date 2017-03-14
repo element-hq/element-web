@@ -1,0 +1,154 @@
+
+// typical text (dark-on-white in light skin)
+$primary-fg-color: #454545;
+$primary-bg-color: #ffffff;
+
+// used for dialog box text
+$light-fg-color: #000;
+
+// used for focusing form controls
+$focus-bg-color: #dddddd;
+
+// button UI (white-on-green in light skin)
+$accent-fg-color: #ffffff;
+$accent-color: #76CFA6;
+
+$selection-fg-color: $primary-bg-color;
+
+// red warning colour
+$warning-color: #ff0064;
+
+$preview-bar-bg-color: #f7f7f7;
+
+// left-panel style muted accent color
+$secondary-accent-color: #eaf5f0;
+
+// used by RoomDirectory permissions
+$plinth-bg-color: $secondary-accent-color;
+
+// used by RoomDropTarget
+$droptarget-bg-color: rgba(255,255,255,0.5);
+
+// used by AddressSelector
+$selected-color: #eaf5f0;
+
+// selected for hoverover & selected event tiles
+$event-selected-color: #f7f7f7;
+
+// used for the hairline dividers in RoomView
+$primary-hairline-color: #e5e5e5;
+
+// used for the border of input text fields
+$input-border-color: #f0f0f0;
+
+// apart from login forms, which have stronger border
+$strong-input-border-color: #c7c7c7;
+
+// used for UserSettings EditableText
+$input-underline-color: rgba(0, 0, 0, 0.5);
+$input-fg-color: rgba(0, 0, 0, 0.9);
+
+// context menus
+$menu-border-color: rgba(187, 187, 187, 0.5);
+$menu-bg-color: #f6f6f6;
+
+$avatar-initial-color: #ffffff;
+
+$h3-color: #000;
+
+$dialog-background-bg-color: #e9e9e9;
+$lightbox-background-bg-color: #000;
+
+$greyed-fg-color: #888;
+
+$neutral-badge-color: #dbdbdb;
+
+$preview-widget-bar-color: #fff;
+$preview-widget-fg-color: $greyed-fg-color;
+
+$blockquote-bar-color: #fff;
+$blockquote-fg-color: #000;
+
+$settings-grey-fg-color: #000;
+
+$voip-decline-color: #f48080;
+$voip-accept-color: #80f480;
+
+$rte-bg-color: #e9e9e9;
+$rte-code-bg-color: rgba(0, 0, 0, 0.04);
+
+// ********************
+
+$roomtile-name-color: rgba(0, 0, 0, 0.8);
+$roomtile-selected-bg-color: rgba(255, 255, 255, 0.8);
+$roomtile-focused-bg-color: rgba(255, 255, 255, 0.9);
+
+$roomsublist-label-fg-color: $h3-color;
+$roomsublist-label-bg-color: #d3efe1;
+
+// ********************
+
+// event tile lifecycle
+$event-encrypting-color: #abddbc;
+$event-sending-color: #000;
+$event-notsent-color: #f44;
+
+// event timestamp
+$event-timestamp-color: #000;
+
+$edit-button-url: "../../img/icon_context_message.svg";
+
+// e2e
+$e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
+$e2e-unverified-color: #e8bf37;
+$e2e-warning-color: #ba6363;
+
+/*** ImageView ***/
+$lightbox-bg-color: #454545;
+$lightbox-fg-color: #ffffff;
+$lightbox-border-color: #ffffff;
+
+// unused?
+$progressbar-color: #000;
+
+.mx_EventTile {
+    color: #333 !important;
+}
+
+.mx_EventTile_line {
+    color: #333 !important;
+    font-weight:600;
+}
+
+.mx_EventTile_avatar {
+    color: #000 !important;
+}
+
+.mx_TextualEvent {
+	color:#000 !important;
+}
+
+.linkified {
+	color: #126B4B !important;
+	opacity: .9 !important;
+}
+
+.mx_MessageComposer_input {
+	color: #126B4B !important;
+	font-weight: bold !important;
+	opacity: 1 !important;
+}
+
+
+
+.mx_SearchBox_search {
+color: rgba(0, 0, 0, 1) !important;
+font-weight: bold !important;
+opacity: 1 !important;
+}
+
+span.mx_SenderProfile {
+    color: rgba(0, 0, 0, 1) !important;
+    font-weight:800;
+    opacity: 1  !important;
+    }
