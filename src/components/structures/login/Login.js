@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -64,8 +65,10 @@ module.exports = React.createClass({
             enteredHomeserverUrl: this.props.customHsUrl || this.props.defaultHsUrl,
             enteredIdentityServerUrl: this.props.customIsUrl || this.props.defaultIsUrl,
 
-            // used for preserving username when changing homeserver
+            // used for preserving form values when changing homeserver
             username: "",
+            phoneCountry: null,
+            phoneNumber: "",
         };
     },
 
@@ -73,20 +76,21 @@ module.exports = React.createClass({
         this._initLoginLogic();
     },
 
-    onPasswordLogin: function(username, password) {
-        var self = this;
-        self.setState({
+    onPasswordLogin: function(username, phoneCountry, phoneNumber, password) {
+        this.setState({
             busy: true,
             errorText: null,
             loginIncorrect: false,
         });
 
-        this._loginLogic.loginViaPassword(username, password).then(function(data) {
-            self.props.onLoggedIn(data);
-        }, function(error) {
-            self._setStateFromError(error, true);
-        }).finally(function() {
-            self.setState({
+        this._loginLogic.loginViaPassword(
+            username, phoneCountry, phoneNumber, password,
+        ).then((data) => {
+            this.props.onLoggedIn(data);
+        }, (error) => {
+            this._setStateFromError(error, true);
+        }).finally(() => {
+            this.setState({
                 busy: false
             });
         }).done();
@@ -117,6 +121,14 @@ module.exports = React.createClass({
 
     onUsernameChanged: function(username) {
         this.setState({ username: username });
+    },
+
+    onPhoneCountryChanged: function(phoneCountry) {
+        this.setState({ phoneCountry: phoneCountry });
+    },
+
+    onPhoneNumberChanged: function(phoneNumber) {
+        this.setState({ phoneNumber: phoneNumber });
     },
 
     onHsUrlChanged: function(newHsUrl) {
@@ -225,7 +237,11 @@ module.exports = React.createClass({
                     <PasswordLogin
                         onSubmit={this.onPasswordLogin}
                         initialUsername={this.state.username}
+                        initialPhoneCountry={this.state.phoneCountry}
+                        initialPhoneNumber={this.state.phoneNumber}
                         onUsernameChanged={this.onUsernameChanged}
+                        onPhoneCountryChanged={this.onPhoneCountryChanged}
+                        onPhoneNumberChanged={this.onPhoneNumberChanged}
                         onForgotPasswordClick={this.props.onForgotPasswordClick}
                         loginIncorrect={this.state.loginIncorrect}
                     />

@@ -19,9 +19,12 @@ import React from 'react';
 import { field_input_incorrect } from '../../../UiEffects';
 import sdk from '../../../index';
 import Email from '../../../email';
+import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
 import Modal from '../../../Modal';
 
 const FIELD_EMAIL = 'field_email';
+const FIELD_PHONE_COUNTRY = 'field_phone_country';
+const FIELD_PHONE_NUMBER = 'field_phone_number';
 const FIELD_USERNAME = 'field_username';
 const FIELD_PASSWORD = 'field_password';
 const FIELD_PASSWORD_CONFIRM = 'field_password_confirm';
@@ -35,6 +38,8 @@ module.exports = React.createClass({
     propTypes: {
         // Values pre-filled in the input boxes when the component loads
         defaultEmail: React.PropTypes.string,
+        defaultPhoneCountry: React.PropTypes.string,
+        defaultPhoneNumber: React.PropTypes.string,
         defaultUsername: React.PropTypes.string,
         defaultPassword: React.PropTypes.string,
         teamsConfig: React.PropTypes.shape({
@@ -71,6 +76,8 @@ module.exports = React.createClass({
         return {
             fieldValid: {},
             selectedTeam: null,
+            // The ISO2 country code selected in the phone number entry
+            phoneCountry: this.props.defaultPhoneCountry,
         };
     },
 
@@ -85,6 +92,7 @@ module.exports = React.createClass({
         this.validateField(FIELD_PASSWORD_CONFIRM);
         this.validateField(FIELD_PASSWORD);
         this.validateField(FIELD_USERNAME);
+        this.validateField(FIELD_PHONE_NUMBER);
         this.validateField(FIELD_EMAIL);
 
         var self = this;
@@ -118,6 +126,8 @@ module.exports = React.createClass({
             username: this.refs.username.value.trim() || this.props.guestUsername,
             password: this.refs.password.value.trim(),
             email: email,
+            phoneCountry: this.state.phoneCountry,
+            phoneNumber: this.refs.phoneNumber.value.trim(),
         });
 
         if (promise) {
@@ -173,6 +183,11 @@ module.exports = React.createClass({
                 }
                 const emailValid = email === '' || Email.looksValid(email);
                 this.markFieldValid(field_id, emailValid, "RegistrationForm.ERR_EMAIL_INVALID");
+                break;
+            case FIELD_PHONE_NUMBER:
+                const phoneNumber = this.refs.phoneNumber.value;
+                const phoneNumberValid = phoneNumber === '' || phoneNumberLooksValid(phoneNumber);
+                this.markFieldValid(field_id, phoneNumberValid, "RegistrationForm.ERR_PHONE_NUMBER_INVALID");
                 break;
             case FIELD_USERNAME:
                 // XXX: SPEC-1
@@ -233,6 +248,8 @@ module.exports = React.createClass({
         switch (field_id) {
             case FIELD_EMAIL:
                 return this.refs.email;
+            case FIELD_PHONE_NUMBER:
+                return this.refs.phoneNumber;
             case FIELD_USERNAME:
                 return this.refs.username;
             case FIELD_PASSWORD:
@@ -249,6 +266,12 @@ module.exports = React.createClass({
             cls += 'error';
         }
         return cls;
+    },
+
+    _onPhoneCountryChange(newVal) {
+        this.setState({
+            phoneCountry: newVal,
+        });
     },
 
     render: function() {
@@ -286,6 +309,25 @@ module.exports = React.createClass({
             }
         }
 
+        const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
+        const phoneSection = (
+            <div className="mx_Login_phoneSection">
+                <CountryDropdown ref="phone_country" onOptionChange={this._onPhoneCountryChange}
+                    className="mx_Login_phoneCountry"
+                    value={this.state.phoneCountry}
+                />
+                <input type="text" ref="phoneNumber"
+                    placeholder="Mobile phone number (optional)"
+                    defaultValue={this.props.defaultPhoneNumber}
+                    className={this._classForField(
+                        FIELD_PHONE_NUMBER, 'mx_Login_phoneNumberField', 'mx_Login_field'
+                    )}
+                    onBlur={function() {self.validateField(FIELD_PHONE_NUMBER);}}
+                    value={self.state.phoneNumber}
+                />
+            </div>
+        );
+
         const registerButton = (
             <input className="mx_Login_submit" type="submit" value="Register" />
         );
@@ -300,6 +342,7 @@ module.exports = React.createClass({
                 <form onSubmit={this.onSubmit}>
                     {emailSection}
                     {belowEmailSection}
+                    {phoneSection}
                     <input type="text" ref="username"
                         placeholder={ placeholderUserName } defaultValue={this.props.defaultUsername}
                         className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
