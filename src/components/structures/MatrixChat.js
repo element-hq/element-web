@@ -351,7 +351,9 @@ module.exports = React.createClass({
                 this.notifyNewScreen('register');
                 break;
             case 'start_login':
-                if (MatrixClientPeg.get().isGuest()) {
+                if (MatrixClientPeg.get() &&
+                    MatrixClientPeg.get().isGuest()
+                ) {
                     this.setState({
                         guestCreds: MatrixClientPeg.getCredentials(),
                     });
