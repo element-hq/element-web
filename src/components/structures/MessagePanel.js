@@ -295,7 +295,10 @@ module.exports = React.createClass({
             var last = (i == lastShownEventIndex);
 
             // Wrap consecutive member events in a ListSummary, ignore if redacted
-            if (isMembershipChange(mxEv) && EventTile.haveTileForEvent(mxEv)) {
+            if (isMembershipChange(mxEv) &&
+                EventTile.haveTileForEvent(mxEv) &&
+                !mxEv.isRedacted()
+            ) {
                 let ts1 = mxEv.getTs();
                 // Ensure that the key of the MemberEventListSummary does not change with new
                 // member events. This will prevent it from being re-created unnecessarily, and
@@ -408,7 +411,9 @@ module.exports = React.createClass({
 
         // is this a continuation of the previous message?
         var continuation = false;
-        if (prevEvent !== null && prevEvent.sender && mxEv.sender
+
+        if (prevEvent !== null
+                && !prevEvent.isRedacted() && prevEvent.sender && mxEv.sender
                 && mxEv.sender.userId === prevEvent.sender.userId
                 && mxEv.getType() == prevEvent.getType()) {
             continuation = true;
@@ -461,6 +466,7 @@ module.exports = React.createClass({
                         ref={this._collectEventNode.bind(this, eventId)}
                         data-scroll-token={scrollToken}>
                     <EventTile mxEvent={mxEv} continuation={continuation}
+                        isRedacted={mxEv.isRedacted()}
                         onWidgetLoad={this._onWidgetLoad}
                         readReceipts={readReceipts}
                         readReceiptMap={this._readReceiptMap}
@@ -481,13 +487,17 @@ module.exports = React.createClass({
             // here.
             return !this.props.suppressFirstDateSeparator;
         }
+        const prevEventDate = prevEvent.getDate();
+        if (!nextEventDate || !prevEventDate) {
+            return false;
+        }
         // Return early for events that are > 24h apart
         if (Math.abs(prevEvent.getTs() - nextEventDate.getTime()) > MILLIS_IN_DAY) {
             return true;
         }
 
         // Compare weekdays
-        return prevEvent.getDate().getDay() !== nextEventDate.getDay();
+        return prevEventDate.getDay() !== nextEventDate.getDay();
     },
 
     // get a list of read receipts that should be shown next to this event

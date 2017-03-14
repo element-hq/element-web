@@ -24,7 +24,7 @@ import Unread from '../../../Unread';
 import classNames from 'classnames';
 import createRoom from '../../../createRoom';
 
-export default class CreateOrReuseChatDialog extends React.Component {
+export default class ChatCreateOrReuseDialog extends React.Component {
 
     constructor(props) {
         super(props);
@@ -91,21 +91,25 @@ export default class CreateOrReuseChatDialog extends React.Component {
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
-            <BaseDialog className='mx_CreateOrReuseChatDialog'
+            <BaseDialog className='mx_ChatCreateOrReuseDialog'
                 onFinished={() => {
                     this.props.onFinished(false)
                 }}
                 title='Create a new chat or reuse an existing one'
             >
-                You already have existing direct chats with this user:
-                {tiles}
-                {startNewChat}
+                <div className="mx_Dialog_content">
+                    You already have existing direct chats with this user:
+                    <div className="mx_ChatCreateOrReuseDialog_tiles">
+                        {tiles}
+                        {startNewChat}
+                    </div>
+                </div>
             </BaseDialog>
         );
     }
 }
 
-CreateOrReuseChatDialog.propTyps = {
+ChatCreateOrReuseDialog.propTyps = {
     userId: React.PropTypes.string.isRequired,
     onFinished: React.PropTypes.func.isRequired,
 };

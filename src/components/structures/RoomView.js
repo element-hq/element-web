@@ -936,9 +936,10 @@ module.exports = React.createClass({
                 return;
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Failed to upload file " + file + " " + error);
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to upload file",
-                description: error.toString()
+                description: "Server may be unavailable, overloaded, or the file too big",
             });
         });
     },
@@ -1022,9 +1023,10 @@ module.exports = React.createClass({
             });
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Search failed: " + error);
             Modal.createDialog(ErrorDialog, {
                 title: "Search failed",
-                description: error.toString()
+                description: "Server may be unavailable, overloaded, or search timed out :("
             });
         }).finally(function() {
             self.setState({

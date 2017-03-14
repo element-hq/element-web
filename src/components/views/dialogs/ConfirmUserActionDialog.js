@@ -97,7 +97,7 @@ export default React.createClass({
             >
                 <div className="mx_Dialog_content">
                     <div className="mx_ConfirmUserActionDialog_avatar">
-                        <MemberAvatar member={this.props.member} width={72} height={72} />
+                        <MemberAvatar member={this.props.member} width={48} height={48} />
                     </div>
                     <div className="mx_ConfirmUserActionDialog_name">{this.props.member.name}</div>
                     <div className="mx_ConfirmUserActionDialog_userId">{this.props.member.userId}</div>

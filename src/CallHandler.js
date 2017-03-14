@@ -310,9 +310,10 @@ function _onAction(payload) {
                                 placeCall(call);
                             }, function(err) {
                                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                                console.error("Conference call failed: " + err);
                                 Modal.createDialog(ErrorDialog, {
                                     title: "Failed to set up conference call",
-                                    description: "Conference call failed: " + err,
+                                    description: "Conference call failed.",
                                 });
                             });
                         }
