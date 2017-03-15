@@ -696,6 +696,14 @@ module.exports = React.createClass({
     _onLoadCompleted: function() {
         this.props.onLoadCompleted();
         this.setState({loading: false});
+
+        // Show screens (like 'register') that need to be shown without onLoggedIn
+        // being called. 'register' needs to be routed here when the email confirmation
+        // link is clicked on.
+        if (this.state.screenAfterLogin &&
+            ['register'].indexOf(this.state.screenAfterLogin.screen) !== -1) {
+            this._showScreenAfterLogin();
+        }
     },
 
     /**
@@ -751,6 +759,17 @@ module.exports = React.createClass({
             logged_in: true,
         });
 
+        if (teamToken) {
+            this._teamToken = teamToken;
+            dis.dispatch({action: 'view_home_page'});
+        } else if (this._is_registered) {
+            dis.dispatch({action: 'view_user_settings'});
+        } else {
+            this._showScreenAfterLogin();
+        }
+    },
+
+    _showScreenAfterLogin: function() {
         // If screenAfterLogin is set, use that, then null it so that a second login will
         // result in view_home_page, _user_settings or _room_directory
         if (this.state.screenAfterLogin && this.state.screenAfterLogin.screen) {
@@ -758,17 +777,8 @@ module.exports = React.createClass({
                 this.state.screenAfterLogin.screen,
                 this.state.screenAfterLogin.params
             );
+            this.notifyNewScreen(this.state.screenAfterLogin.screen);
             this.setState({screenAfterLogin: null});
-            return;
-        } else {
-            this.setState({screen: undefined});
-        }
-
-        if (teamToken) {
-            this._teamToken = teamToken;
-            dis.dispatch({action: 'view_home_page'});
-        } else if (this._is_registered) {
-            dis.dispatch({action: 'view_user_settings'});
         } else {
             dis.dispatch({action: 'view_room_directory'});
         }
