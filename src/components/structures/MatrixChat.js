@@ -700,7 +700,8 @@ module.exports = React.createClass({
         // Show screens (like 'register') that need to be shown without onLoggedIn
         // being called. 'register' needs to be routed here when the email confirmation
         // link is clicked on.
-        if (['register'].indexOf(this.state.screenAfterLogin.screen) !== -1) {
+        if (this.state.screenAfterLogin &&
+            ['register'].indexOf(this.state.screenAfterLogin.screen) !== -1) {
             this._showScreenAfterLogin();
         }
     },
