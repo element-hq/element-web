@@ -107,7 +107,6 @@ export default React.createClass({
                 return;
             }
 
-            const msg = error.message || error.toString();
             this.setState({
                 errorText: msg
             });

@@ -155,10 +155,21 @@ module.exports = React.createClass({
 
     _onUIAuthFinished: function(success, response, extra) {
         if (!success) {
+            let msg = response.message || response.toString();
+            // can we give a better error message?
+            if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
+                let msisdn_available = false;
+                for (const flow of response.available_flows) {
+                    msisdn_available |= flow.stages.indexOf('m.login.msisdn') > -1;
+                }
+                if (!msisdn_available) {
+                    msg = "This server does not support authentication with a phone number";
+                }
+            }
             this.setState({
                 busy: false,
                 doingUIAuth: false,
-                errorText: response.message || response.toString(),
+                errorText: msg,
             });
             return;
         }
