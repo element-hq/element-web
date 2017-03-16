@@ -113,6 +113,6 @@ describe('InteractiveAuthDialog', function () {
         }).then(() => {
             expect(onFinished.callCount).toEqual(1);
             expect(onFinished.calledWithExactly(true, {a:1})).toBe(true);
-        }).done(done);
+        }).done(done, done);
     });
 });
