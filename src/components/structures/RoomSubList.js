@@ -417,7 +417,7 @@ var RoomSubList = React.createClass({
         if (this.props.incomingCall) {
             var self = this;
             // Check if the incoming call is for this section
-            var incomingCallRoom = this.state.sortedList.filter(function(room) {
+            var incomingCallRoom = this.props.list.filter(function(room) {
                 return self.props.incomingCall.roomId === room.roomId;
             });
 
@@ -507,7 +507,7 @@ var RoomSubList = React.createClass({
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Failed to add tag " + self.props.tagName + " to room" + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Error", 
+                            title: "Error",
                             description: "Failed to add tag " + self.props.tagName + " to room",
                         });
                     });
