@@ -485,11 +485,12 @@ module.exports = React.createClass({
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.direct'] }
                              label="People"
-                             editable={ false }
+                             editable={ true }
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
+                             alwaysShowHeader={ true }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
