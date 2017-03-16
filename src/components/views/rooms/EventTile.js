@@ -435,10 +435,7 @@ module.exports = WithMatrixClient(React.createClass({
         let avatarSize;
         let needsSenderProfile;
 
-        if (isRedacted) {
-            avatarSize = 0;
-            needsSenderProfile = false;
-        } else if (this.props.tileShape === "notif") {
+        if (this.props.tileShape === "notif") {
             avatarSize = 24;
             needsSenderProfile = true;
         } else if (isInfoMessage) {
@@ -503,8 +500,8 @@ module.exports = WithMatrixClient(React.createClass({
         else if (e2eEnabled) {
             e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12"/>;
         }
-        const timestamp = this.props.mxEvent.isRedacted() ?
-            null : <MessageTimestamp ts={this.props.mxEvent.getTs()} />;
+        const timestamp = this.props.mxEvent.getTs() ?
+            <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
 
         if (this.props.tileShape === "notif") {
             var room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());

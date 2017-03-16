@@ -413,7 +413,7 @@ module.exports = React.createClass({
         var continuation = false;
 
         if (prevEvent !== null
-                && !prevEvent.isRedacted() && prevEvent.sender && mxEv.sender
+                && prevEvent.sender && mxEv.sender
                 && mxEv.sender.userId === prevEvent.sender.userId
                 && mxEv.getType() == prevEvent.getType()) {
             continuation = true;
