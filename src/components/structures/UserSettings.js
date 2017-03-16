@@ -268,6 +268,12 @@ module.exports = React.createClass({
                     but for now be warned.
                 </div>,
             button: "Sign out",
+            extraButtons: [
+                <button className="mx_Dialog_primary"
+                        onClick={this._onExportE2eKeysClicked}>
+                    Export E2E room keys
+                </button>
+            ],
             onFinished: (confirmed) => {
                 if (confirmed) {
                     dis.dispatch({action: 'logout'});
