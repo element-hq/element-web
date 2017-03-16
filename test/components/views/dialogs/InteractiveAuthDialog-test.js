@@ -68,50 +68,51 @@ describe('InteractiveAuthDialog', function () {
                 onFinished={onFinished}
             />, parentDiv);
 
-        // at this point there should be a password box and a submit button
-        const formNode = ReactTestUtils.findRenderedDOMComponentWithTag(dlg, "form");
-        const inputNodes = ReactTestUtils.scryRenderedDOMComponentsWithTag(
-            dlg, "input"
-        );
-        let passwordNode;
-        let submitNode;
-        for (const node of inputNodes) {
-            if (node.type == 'password') {
-                passwordNode = node;
-            } else if (node.type == 'submit') {
-                submitNode = node;
+        // wait for a password box and a submit button
+        test_utils.waitForRenderedDOMComponentWithTag(dlg, "form").then((formNode) => {
+            const inputNodes = ReactTestUtils.scryRenderedDOMComponentsWithTag(
+                dlg, "input"
+            );
+            let passwordNode;
+            let submitNode;
+            for (const node of inputNodes) {
+                if (node.type == 'password') {
+                    passwordNode = node;
+                } else if (node.type == 'submit') {
+                    submitNode = node;
+                }
             }
-        }
-        expect(passwordNode).toExist();
-        expect(submitNode).toExist();
+            expect(passwordNode).toExist();
+            expect(submitNode).toExist();
 
-        // submit should be disabled
-        expect(submitNode.disabled).toBe(true);
+            // submit should be disabled
+            expect(submitNode.disabled).toBe(true);
 
-        // put something in the password box, and hit enter; that should
-        // trigger a request
-        passwordNode.value = "s3kr3t";
-        ReactTestUtils.Simulate.change(passwordNode);
-        expect(submitNode.disabled).toBe(false);
-        ReactTestUtils.Simulate.submit(formNode, {});
+            // put something in the password box, and hit enter; that should
+            // trigger a request
+            passwordNode.value = "s3kr3t";
+            ReactTestUtils.Simulate.change(passwordNode);
+            expect(submitNode.disabled).toBe(false);
+            ReactTestUtils.Simulate.submit(formNode, {});
 
-        expect(doRequest.callCount).toEqual(1);
-        expect(doRequest.calledWithExactly({
-            session: "sess",
-            type: "m.login.password",
-            password: "s3kr3t",
-            user: "@user:id",
-        })).toBe(true);
+            expect(doRequest.callCount).toEqual(1);
+            expect(doRequest.calledWithExactly({
+                session: "sess",
+                type: "m.login.password",
+                password: "s3kr3t",
+                user: "@user:id",
+            })).toBe(true);
 
-        // there should now be a spinner
-        ReactTestUtils.findRenderedComponentWithType(
-            dlg, sdk.getComponent('elements.Spinner'),
-        );
+            // there should now be a spinner
+            ReactTestUtils.findRenderedComponentWithType(
+                dlg, sdk.getComponent('elements.Spinner'),
+            );
 
-        // let the request complete
-        q.delay(1).then(() => {
+            // let the request complete
+            return q.delay(1);
+        }).then(() => {
             expect(onFinished.callCount).toEqual(1);
             expect(onFinished.calledWithExactly(true, {a:1})).toBe(true);
-        }).done(done, done);
+        }).done(done);
     });
 });
