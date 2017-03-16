@@ -21,10 +21,8 @@ export default React.createClass({
     displayName: 'QuestionDialog',
     propTypes: {
         title: React.PropTypes.string,
-        description: React.PropTypes.oneOfType([
-            React.PropTypes.element,
-            React.PropTypes.string,
-        ]),
+        description: React.PropTypes.node,
+        extraButtons: React.PropTypes.node,
         button: React.PropTypes.string,
         focus: React.PropTypes.bool,
         onFinished: React.PropTypes.func.isRequired,
@@ -34,6 +32,7 @@ export default React.createClass({
         return {
             title: "",
             description: "",
+            extraButtons: null,
             button: "OK",
             focus: true,
             hasCancelButton: true,
@@ -67,6 +66,7 @@ export default React.createClass({
                     <button className="mx_Dialog_primary" onClick={this.onOk} autoFocus={this.props.focus}>
                         {this.props.button}
                     </button>
+                    {this.props.extraButtons}
                     {cancelButton}
                 </div>
             </BaseDialog>
