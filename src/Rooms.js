@@ -79,6 +79,24 @@ export function looksLikeDirectMessageRoom(room, me) {
     return false;
 }
 
+export function guessAndSetDMRoom(room, isDirect) {
+    let newTarget;
+    if (isDirect) {
+        const guessedTarget = guessDMRoomTarget(
+            room, room.getMember(MatrixClientPeg.get().credentials.userId),
+        );
+        newTarget = guessedTarget.userId;
+    } else {
+        newTarget = null;
+    }
+
+    // give some time for the user to see the icon change first, since
+    // this will hide the context menu once it completes
+    return q.delay(500).then(() => {
+        return setDMRoom(room.roomId, newTarget);
+    });
+}
+
 /**
  * Marks or unmarks the given room as being as a DM room.
  * @param {string} roomId The ID of the room to modify

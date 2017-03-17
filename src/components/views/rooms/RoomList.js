@@ -485,6 +485,8 @@ module.exports = React.createClass({
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.direct'] }
                              label="People"
+                             tagName="im.vector.fake.direct"
+                             verb="tag direct chat"
                              editable={ true }
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }
