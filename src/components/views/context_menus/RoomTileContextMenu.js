@@ -138,31 +138,16 @@ module.exports = React.createClass({
 
         if (MatrixClientPeg.get().isGuest()) return;
 
-        let newTarget;
-        if (newIsDirectMessage) {
-            const guessedTarget = Rooms.guessDMRoomTarget(
-                this.props.room,
-                this.props.room.getMember(MatrixClientPeg.get().credentials.userId),
-            );
-            newTarget = guessedTarget.userId;
-        } else {
-            newTarget = null;
-        }
-
-        // give some time for the user to see the icon change first, since
-        // this will hide the context menu once it completes
-        q.delay(500).done(() => {
-            return Rooms.setDMRoom(this.props.room.roomId, newTarget).finally(() => {
-                // Close the context menu
-                if (this.props.onFinished) {
-                    this.props.onFinished();
-                };
-            }, (err) => {
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: "Failed to set Direct Message status of room",
-                    description: err.toString()
-                });
+        Rooms.guessAndSetDMRoom(this.props.room, newIsDirectMessage).finally(() => {
+            // Close the context menu
+            if (this.props.onFinished) {
+                this.props.onFinished();
+            };
+        }, (err) => {
+            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: "Failed to set Direct Message status of room",
+                description: err.toString()
             });
         });
     },
