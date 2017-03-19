@@ -79,6 +79,8 @@ import views$dialogs$ChatCreateOrReuseDialog from './components/views/dialogs/Ch
 views$dialogs$ChatCreateOrReuseDialog && (module.exports.components['views.dialogs.ChatCreateOrReuseDialog'] = views$dialogs$ChatCreateOrReuseDialog);
 import views$dialogs$ChatInviteDialog from './components/views/dialogs/ChatInviteDialog';
 views$dialogs$ChatInviteDialog && (module.exports.components['views.dialogs.ChatInviteDialog'] = views$dialogs$ChatInviteDialog);
+import views$dialogs$ConfirmRedactDialog from './components/views/dialogs/ConfirmRedactDialog';
+views$dialogs$ConfirmRedactDialog && (module.exports.components['views.dialogs.ConfirmRedactDialog'] = views$dialogs$ConfirmRedactDialog);
 import views$dialogs$ConfirmUserActionDialog from './components/views/dialogs/ConfirmUserActionDialog';
 views$dialogs$ConfirmUserActionDialog && (module.exports.components['views.dialogs.ConfirmUserActionDialog'] = views$dialogs$ConfirmUserActionDialog);
 import views$dialogs$DeactivateAccountDialog from './components/views/dialogs/DeactivateAccountDialog';
