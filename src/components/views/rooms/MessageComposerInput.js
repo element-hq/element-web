@@ -541,9 +541,9 @@ export default class MessageComposerInput extends React.Component {
         let sendTextFn = this.client.sendTextMessage;
 
         if (contentText.startsWith('/me')) {
-            contentText = contentText.replace('/me', '');
+            contentText = contentText.replace('/me ', '');
             // bit of a hack, but the alternative would be quite complicated
-            if (contentHTML) contentHTML = contentHTML.replace('/me', '');
+            if (contentHTML) contentHTML = contentHTML.replace('/me ', '');
             sendHtmlFn = this.client.sendHtmlEmote;
             sendTextFn = this.client.sendEmoteMessage;
         }
