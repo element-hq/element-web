@@ -55,7 +55,7 @@ export default React.createClass({
                 title={title}
             >
                 <div className="mx_Dialog_content">
-                    Are you sure you wish to redact this event?
+                    Are you sure you wish to redact (delete) this event?
                     Note that if you redact a room name or topic change, it could undo the change.
                 </div>
                 <div className="mx_Dialog_buttons">
