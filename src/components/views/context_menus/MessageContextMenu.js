@@ -62,19 +62,24 @@ module.exports = React.createClass({
     },
 
     onRedactClick: function() {
-        MatrixClientPeg.get().redactEvent(
-            this.props.mxEvent.getRoomId(), this.props.mxEvent.getId()
-        ).done(function() {
-            // message should disappear by itself
-        }, function(e) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            // display error message stating you couldn't delete this.
-            var code = e.errcode || e.statusCode;
-            Modal.createDialog(ErrorDialog, {
-                title: "Error",
-                description: "You cannot delete this message. (" + code + ")"
-            });
-        });
+        const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
+        Modal.createDialog(ConfirmRedactDialog, {
+            onFinished: (proceed) => {
+                if (!proceed) return;
+
+                MatrixClientPeg.get().redactEvent(
+                    this.props.mxEvent.getRoomId(), this.props.mxEvent.getId()
+                ).catch(function(e) {
+                    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    // display error message stating you couldn't delete this.
+                    var code = e.errcode || e.statusCode;
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Error",
+                        description: "You cannot delete this message. (" + code + ")"
+                    });
+                }).done();
+            },
+        }, 'mx_Dialog_confirmredact');
         if (this.props.onFinished) this.props.onFinished();
     },
 
