@@ -1,25 +1,12 @@
 {
-  "LeftPanel": {
-    "switch_language": "Sprache ändern: ",
-
-    "languages": {
-      "en": "Englisch",
-      "de": "Deutsch"
-    }
-  },
-  "RightPanel": {
-    "NeedToRegisterDialog": {
-      "title": "Botte Registrieren",
-      "description": "Gäste können keine User einladen. Zum Einladen bitte anmelden."
-    },
-    "Buttons": {
-      "Members": "Mitglieder",
-      "Files": "Dateien",
-      "Notifications": "Benachrichtigungen"
-    },
-    "Invite": "Jemand hier einladen"
-  },
-  "SearchBox": {
-    "filterRoom": "Raum Namen filtern"
-  }
+    "LeftPanel.switch_language": "Sprache ändern:",
+    "LeftPanel.languages.en": "Englisch",
+    "LeftPanel.languages.de": "Deutsch",
+    "RightPanel.NeedToRegisterDialog.title": "Botte Registrieren",
+    "RightPanel.NeedToRegisterDialog.description": "Gäste können keine User einladen. Zum Einladen bitte anmelden.",
+    "RightPanel.Buttons.Members": "Mitglieder",
+    "RightPanel.Buttons.Files": "Dateien",
+    "RightPanel.Buttons.Notifications": "Benachrichtigungen",
+    "RightPanel.Invite": "Jemand hier einladen",
+    "SearchBox.filterRoom": "Raum Namen filtern"
 }
