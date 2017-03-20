@@ -17,6 +17,9 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var counterpart = require('counterpart');
+var Translate   = require('react-translate-component');
+var _t = Translate.translate;
 var DragDropContext = require('react-dnd').DragDropContext;
 var HTML5Backend = require('react-dnd-html5-backend');
 var sdk = require('matrix-react-sdk')
@@ -25,8 +28,19 @@ var dis = require('matrix-react-sdk/lib/dispatcher');
 var VectorConferenceHandler = require('../../VectorConferenceHandler');
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 
+// load our own translations
+counterpart.registerTranslations('en', require('../../i18n/en-en'));
+counterpart.registerTranslations('de', require('../../i18n/de-de'));
+
+
 var LeftPanel = React.createClass({
     displayName: 'LeftPanel',
+
+    getDefaultProps: function() {
+      return {
+        locales: ['en', 'de']
+      };
+    },
 
     getInitialState: function() {
         return {
@@ -89,10 +103,19 @@ var LeftPanel = React.createClass({
         this.setState({ searchFilter: term });
     },
 
+    handleChange: function(e) {
+      counterpart.setLocale(e.target.value);
+    },
+
     render: function() {
         var RoomList = sdk.getComponent('rooms.RoomList');
         var BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         var SearchBox = sdk.getComponent('structures.SearchBox');
+        var options = this.props.locales.map(function(locale) {
+          var translationKey = 'LeftPanel.languages.' + locale;
+
+          return <Translate key={locale} value={locale} component="option" content={translationKey} />;
+        });
 
         var collapseButton;
         var classes = "mx_LeftPanel mx_fadable";
@@ -116,6 +139,13 @@ var LeftPanel = React.createClass({
 
         return (
             <aside className={classes} style={{ opacity: this.props.opacity }}>
+                <p>
+                    { _t('LeftPanel.switch_language') }
+
+                    <select defaultValue={counterpart.getLocale()} onChange={this.handleChange}>
+                      {options}
+                    </select>
+                </p>
                 <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />
                 { collapseButton }
                 { callPreview }

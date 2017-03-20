@@ -17,6 +17,9 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var counterpart = require('counterpart');
+var Translate   = require('react-translate-component');
+var _t = Translate.translate;
 var sdk = require('matrix-react-sdk');
 var Matrix = require("matrix-js-sdk");
 var dis = require('matrix-react-sdk/lib/dispatcher');
@@ -25,8 +28,18 @@ var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
 var Modal = require('matrix-react-sdk/lib/Modal');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 
+// load our own translations
+counterpart.registerTranslations('en', require('../../i18n/en-en'));
+counterpart.registerTranslations('de', require('../../i18n/de-de'));
+
 module.exports = React.createClass({
     displayName: 'RightPanel',
+
+    getDefaultProps: function() {
+        return {
+          locales: ['en', 'de']
+        };
+    },
 
     propTypes: {
         userId: React.PropTypes.string, // if showing an orphaned MemberInfo page, this is set
@@ -91,8 +104,8 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get().isGuest()) {
             var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
-                title: "Please Register",
-                description: "Guest users can't invite users. Please register to invite."
+                title: _t('RightPanel.NeedToRegisterDialog.title'),
+                description: _t('RightPanel.NeedToRegisterDialog.description')
             });
             return;
         }
@@ -188,7 +201,7 @@ module.exports = React.createClass({
                         <div className="mx_RightPanel_icon" >
                             <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
                         </div>
-                        <div className="mx_RightPanel_message">Invite to this room</div>
+                        <div className="mx_RightPanel_message">{ _t('RightPanel.Invite') }</div>
                     </AccessibleButton>;
             }
 
@@ -197,26 +210,21 @@ module.exports = React.createClass({
         if (this.props.roomId) {
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
-                        <AccessibleButton className="mx_RightPanel_headerButton"
-                                title="Members" onClick={ this.onMemberListButtonClick }>
+                        <Translate component="AccessibleButton" className="mx_RightPanel_headerButton" attributes={{ title: 'RightPanel.Buttons.Members' }} onClick={ this.onMemberListButtonClick }>
                             <div className="mx_RightPanel_headerButton_badge">{ membersBadge ? membersBadge : <span>&nbsp;</span>}</div>
                             <TintableSvg src="img/icons-people.svg" width="25" height="25"/>
                             { membersHighlight }
-                        </AccessibleButton>
-                        <AccessibleButton
-                                className="mx_RightPanel_headerButton mx_RightPanel_filebutton"
-                                title="Files" onClick={ this.onFileListButtonClick }>
+                        </Translate>
+                        <Translate component="AccessibleButton" className="mx_RightPanel_headerButton mx_RightPanel_filebutton" attributes={{ title: 'RightPanel.Buttons.Files' }} onClick={ this.onFileListButtonClick }>
                             <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
                             <TintableSvg src="img/icons-files.svg" width="25" height="25"/>
                             { filesHighlight }
-                        </AccessibleButton>
-                        <AccessibleButton
-                                className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton"
-                                title="Notifications" onClick={ this.onNotificationListButtonClick }>
+                        </Translate>
+                        <Translate component="AccessibleButton" className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton" attributes={{ title: 'RightPanel.Buttons.Notifications' }} onClick={ this.onNotificationListButtonClick }>
                             <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
                             <TintableSvg src="img/icons-notifications.svg" width="25" height="25"/>
                             { notificationsHighlight }
-                        </AccessibleButton>
+                        </Translate>
                         <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" title="Hide panel" onClick={ this.onCollapseClick }>
                             <TintableSvg src="img/minimise.svg" width="10" height="16"/>
                         </div>
@@ -225,7 +233,7 @@ module.exports = React.createClass({
 
         if (!this.props.collapsed) {
             if(this.props.roomId && this.state.phase == this.Phase.MemberList) {
-                panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />
+                panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} lang={counterpart.getLocale()} />
             }
             else if(this.state.phase == this.Phase.MemberInfo) {
                 var MemberInfo = sdk.getComponent('rooms.MemberInfo');
