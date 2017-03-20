@@ -10,3 +10,6 @@ include:
 
 * Florent VIOLLEAU (https://github.com/floviolleau) <floviolleau at gmail dot com>
   Improve README.md for a better understanding of installation instructions
+
+* Michael Telatynski (https://github.com/t3chguy)
+  Improved consistency of inverted elements in dark theme across browsers
