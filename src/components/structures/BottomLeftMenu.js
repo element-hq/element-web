@@ -113,19 +113,19 @@ module.exports = React.createClass({
                 <div className="mx_BottomLeftMenu_options">
                     <AccessibleButton className="mx_BottomLeftMenu_people" onClick={ this.onPeopleClick } onMouseEnter={ this.onPeopleMouseEnter } onMouseLeave={ this.onPeopleMouseLeave } >
                         <TintableSvg src="img/icons-people.svg" width="25" height="25" />
-                        { this.getLabel({ counterpart.translate('Start chat') }, this.state.peopleHover) }
+                        { this.getLabel(counterpart.translate('Start chat'), this.state.peopleHover) }
                     </AccessibleButton>
                     <AccessibleButton className="mx_BottomLeftMenu_directory" onClick={ this.onDirectoryClick } onMouseEnter={ this.onDirectoryMouseEnter } onMouseLeave={ this.onDirectoryMouseLeave } >
                         <TintableSvg src="img/icons-directory.svg" width="25" height="25"/>
-                        { this.getLabel({ counterpart.translate('Room directory') }, this.state.directoryHover) }
+                        { this.getLabel(counterpart.translate('Room directory'), this.state.directoryHover) }
                     </AccessibleButton>
                     <AccessibleButton className="mx_BottomLeftMenu_createRoom" onClick={ this.onRoomsClick } onMouseEnter={ this.onRoomsMouseEnter } onMouseLeave={ this.onRoomsMouseLeave } >
                         <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
-                        { this.getLabel({ counterpart.translate('Create new room') }, this.state.roomsHover) }
+                        { this.getLabel(counterpart.translate('Create new room'), this.state.roomsHover) }
                     </AccessibleButton>
                     <AccessibleButton className="mx_BottomLeftMenu_settings" onClick={ this.onSettingsClick } onMouseEnter={ this.onSettingsMouseEnter } onMouseLeave={ this.onSettingsMouseLeave } >
                         <TintableSvg src="img/icons-settings.svg" width="25" height="25" />
-                        { this.getLabel({ counterpart.translate('Settings') }, this.state.settingsHover) }
+                        { this.getLabel(counterpart.translate('Settings'), this.state.settingsHover) }
                     </AccessibleButton>
                 </div>
             </div>
