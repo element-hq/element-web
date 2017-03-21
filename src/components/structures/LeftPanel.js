@@ -105,6 +105,7 @@ var LeftPanel = React.createClass({
 
     handleChange: function(e) {
       counterpart.setLocale(e.target.value);
+      React.Component.forceUpdate(callback);
     },
 
     render: function() {

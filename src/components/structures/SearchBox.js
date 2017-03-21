@@ -137,16 +137,14 @@ module.exports = React.createClass({
                         className="mx_SearchBox_searchButton"
                         src="img/icons-search-copy.svg" width="13" height="13"
                     />,
-
-                    <Translate
-                        component="input"
-                        type="text"
+                    <input
                         key="searchfield"
+                        type="text"
                         ref="search"
                         className="mx_SearchBox_search"
                         value={ this.state.searchTerm }
                         onChange={ this.onChange }
-                        attributes={{ placeholder: 'SearchBox.filterRoom' }}
+                        placeholder={ counterpart.translate('SearchBox.filterRoom') }
                     />
                 ];
         }
