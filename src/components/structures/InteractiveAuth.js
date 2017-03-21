@@ -140,9 +140,9 @@ export default React.createClass({
         });
     },
 
-    _requestCallback: function(auth) {
+    _requestCallback: function(auth, background) {
         this.setState({
-            busy: true,
+            busy: !background,
             errorText: null,
             stageErrorText: null,
         });
@@ -150,9 +150,11 @@ export default React.createClass({
             if (this._unmounted) {
                 return;
             }
-            this.setState({
-                busy: false,
-            });
+            if (background) {
+                this.setState({
+                    busy: false,
+                });
+            }
         });
     },
 

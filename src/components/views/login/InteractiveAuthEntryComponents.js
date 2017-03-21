@@ -160,6 +160,7 @@ export const RecaptchaAuthEntry = React.createClass({
         submitAuthDict: React.PropTypes.func.isRequired,
         stageParams: React.PropTypes.object.isRequired,
         errorText: React.PropTypes.string,
+        busy: React.PropTypes.bool,
     },
 
     _onCaptchaResponse: function(response) {
@@ -170,6 +171,11 @@ export const RecaptchaAuthEntry = React.createClass({
     },
 
     render: function() {
+        if (this.props.busy) {
+            const Loader = sdk.getComponent("elements.Spinner");
+            return <Loader />;
+        }
+
         const CaptchaForm = sdk.getComponent("views.login.CaptchaForm");
         var sitePublicKey = this.props.stageParams.public_key;
         return (
