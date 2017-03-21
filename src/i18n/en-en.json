@@ -1,25 +1,12 @@
 {
-  "LeftPanel": {
-    "switch_language": "Switch Language: ",
-
-    "languages": {
-      "en": "English",
-      "de": "German"
-    }
-  },
-  "RightPanel": {
-    "NeedToRegisterDialog": {
-      "title": "Please Register",
-      "description": "Guest users can't invite users. Please register to invite."
-    },
-    "Buttons": {
-      "Members": "Members",
-      "Files": "Files",
-      "Notifications": "Notifications"
-    },
-    "Invite": "Invite to this room"
-  },
-  "SearchBox": {
-    "filterRoom": "Filter room names"
-  }
+  "Switch Language: ": "Switch Language: ",
+  "English": "English",
+  "German": "German",
+  "Please Register": "Please Register",
+  "Guest users can't invite users. Please register to invite.": "Guest users can't invite users. Please register to invite.",
+  "Members": "Members",
+  "Files": "Files",
+  "Notifications": "Notifications",
+  "Invite to this room": "Invite to this room",
+  "Filter room names": "Filter room names"
 }

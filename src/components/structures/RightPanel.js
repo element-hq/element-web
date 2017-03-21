@@ -104,8 +104,8 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get().isGuest()) {
             var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
-                title: _t('RightPanel.NeedToRegisterDialog.title'),
-                description: _t('RightPanel.NeedToRegisterDialog.description')
+                title: _t('Please Register'),
+                description: _t("Guest users can't invite users. Please register to invite.")
             });
             return;
         }
@@ -201,7 +201,7 @@ module.exports = React.createClass({
                         <div className="mx_RightPanel_icon" >
                             <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
                         </div>
-                        <div className="mx_RightPanel_message">{ _t('RightPanel.Invite') }</div>
+                        <div className="mx_RightPanel_message">{ _t('Invite to this room') }</div>
                     </AccessibleButton>;
             }
 
@@ -211,21 +211,21 @@ module.exports = React.createClass({
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
                       <AccessibleButton className="mx_RightPanel_headerButton"
-                              title={ counterpart.translate('RightPanel.Buttons.Members') } onClick={ this.onMemberListButtonClick }>
+                              title={ counterpart.translate('Members') } onClick={ this.onMemberListButtonClick }>
                           <div className="mx_RightPanel_headerButton_badge">{ membersBadge ? membersBadge : <span>&nbsp;</span>}</div>
                           <TintableSvg src="img/icons-people.svg" width="25" height="25"/>
                           { membersHighlight }
                       </AccessibleButton>
                       <AccessibleButton
                               className="mx_RightPanel_headerButton mx_RightPanel_filebutton"
-                              title={ counterpart.translate('RightPanel.Buttons.Files') } onClick={ this.onFileListButtonClick }>
+                              title={ counterpart.translate('Files') } onClick={ this.onFileListButtonClick }>
                           <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
                           <TintableSvg src="img/icons-files.svg" width="25" height="25"/>
                           { filesHighlight }
                       </AccessibleButton>
                       <AccessibleButton
                               className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton"
-                              title={ counterpart.translate('RightPanel.Buttons.Notifications') } onClick={ this.onNotificationListButtonClick }>
+                              title={ counterpart.translate('Notifications') } onClick={ this.onNotificationListButtonClick }>
                           <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
                           <TintableSvg src="img/icons-notifications.svg" width="25" height="25"/>
                           { notificationsHighlight }

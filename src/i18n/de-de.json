@@ -1,12 +1,12 @@
 {
-    "LeftPanel.switch_language": "Sprache ändern:",
-    "LeftPanel.languages.en": "Englisch",
-    "LeftPanel.languages.de": "Deutsch",
-    "RightPanel.NeedToRegisterDialog.title": "Bitte Registrieren",
-    "RightPanel.NeedToRegisterDialog.description": "Gäste können keine User einladen. Zum Einladen bitte anmelden.",
-    "RightPanel.Buttons.Members": "Mitglieder",
-    "RightPanel.Buttons.Files": "Dateien",
-    "RightPanel.Buttons.Notifications": "Benachrichtigungen",
-    "RightPanel.Invite": "In diesen Raum einladen",
-    "SearchBox.filterRoom": "Raum Namen filtern"
+  "Switch Language: ": "Sprache ändern:",
+  "English": "Englisch",
+  "German": "Deutsch",
+  "Please Register": "Bitte Registrieren",
+  "Guest users can't invite users. Please register to invite.": "Gäste können keine User einladen. Zum Einladen bitte anmelden.",
+  "Members": "Mitglieder",
+  "Files": "Dateien",
+  "Notifications": "Benachrichtigungen",
+  "Invite to this room": "In diesen Raum einladen",
+  "Filter room names": "Raum Namen filtern"
 }

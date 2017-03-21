@@ -36,12 +36,6 @@ counterpart.registerTranslations('de', require('../../i18n/de-de'));
 var LeftPanel = React.createClass({
     displayName: 'LeftPanel',
 
-    getDefaultProps: function() {
-      return {
-        locales: ['en', 'de']
-      };
-    },
-
     getInitialState: function() {
         return {
             showCallElement: null,
@@ -103,20 +97,13 @@ var LeftPanel = React.createClass({
         this.setState({ searchFilter: term });
     },
 
-    handleChange: function(e) {
-      counterpart.setLocale(e.target.value);
-      React.Component.forceUpdate(callback);
-    },
-
     render: function() {
+        var userLang = navigator.language || navigator.userLanguage;
+        counterpart.setLocale(userLang);
         var RoomList = sdk.getComponent('rooms.RoomList');
         var BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         var SearchBox = sdk.getComponent('structures.SearchBox');
-        var options = this.props.locales.map(function(locale) {
-          var translationKey = 'LeftPanel.languages.' + locale;
-
-          return <Translate key={locale} value={locale} component="option" content={translationKey} />;
-        });
+        var props = this.props;
 
         var collapseButton;
         var classes = "mx_LeftPanel mx_fadable";
@@ -140,13 +127,6 @@ var LeftPanel = React.createClass({
 
         return (
             <aside className={classes} style={{ opacity: this.props.opacity }}>
-                <p>
-                    { _t('LeftPanel.switch_language') }
-
-                    <select defaultValue={counterpart.getLocale()} onChange={this.handleChange}>
-                      {options}
-                    </select>
-                </p>
                 <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />
                 { collapseButton }
                 { callPreview }
