@@ -18,13 +18,17 @@ import dis from './dispatcher';
 import sdk from './index';
 import Modal from './Modal';
 
+let isDialogOpen = false;
+
 const onAction = function(payload) {
-    if (payload.action === 'unknown_device_error') {
+    if (payload.action === 'unknown_device_error' && !isDialogOpen) {
         var UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
+        isDialogOpen = true;
         Modal.createDialog(UnknownDeviceDialog, {
             devices: payload.err.devices,
             room: payload.room,
             onFinished: (r) => {
+                isDialogOpen = false;
                 // XXX: temporary logging to try to diagnose
                 // https://github.com/vector-im/riot-web/issues/3148
                 console.log('UnknownDeviceDialog closed with '+r);

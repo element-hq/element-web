@@ -63,6 +63,13 @@ module.exports = React.createClass({
         // called when the session load completes
         onLoadCompleted: React.PropTypes.func,
 
+        // Represents the screen to display as a result of parsing the initial
+        // window.location
+        initialScreenAfterLogin: React.PropTypes.shape({
+            screen: React.PropTypes.string.isRequired,
+            params: React.PropTypes.object,
+        }),
+
         // displayname, if any, to set on the device when logging
         // in/registering.
         defaultDeviceDisplayName: React.PropTypes.string,
@@ -89,6 +96,12 @@ module.exports = React.createClass({
         var s = {
             loading: true,
             screen: undefined,
+            screenAfterLogin: this.props.initialScreenAfterLogin,
+
+            // Stashed guest credentials if the user logs out
+            // whilst logged in as a guest user (so they can change
+            // their mind & log back in)
+            guestCreds: null,
 
             // What the LoggedInView would be showing if visible
             page_type: null,
@@ -183,11 +196,6 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
-
-        // Stashed guest credentials if the user logs out
-        // whilst logged in as a guest user (so they can change
-        // their mind & log back in)
-        this.guestCreds = null;
 
         // if the automatic session load failed, the error
         this.sessionLoadError = null;
@@ -317,14 +325,13 @@ module.exports = React.createClass({
     },
 
     onAction: function(payload) {
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         var roomIndexDelta = 1;
 
         var self = this;
         switch (payload.action) {
             case 'logout':
-                if (MatrixClientPeg.get().isGuest()) {
-                    this.guestCreds = MatrixClientPeg.getCredentials();
-                }
                 Lifecycle.logout();
                 break;
             case 'start_registration':
@@ -344,7 +351,13 @@ module.exports = React.createClass({
                 this.notifyNewScreen('register');
                 break;
             case 'start_login':
-                if (this.state.logged_in) return;
+                if (MatrixClientPeg.get() &&
+                    MatrixClientPeg.get().isGuest()
+                ) {
+                    this.setState({
+                        guestCreds: MatrixClientPeg.getCredentials(),
+                    });
+                }
                 this.setStateForNewScreen({
                     screen: 'login',
                 });
@@ -359,8 +372,8 @@ module.exports = React.createClass({
                 // also stash our credentials, then if we restore the session,
                 // we can just do it the same way whether we started upgrade
                 // registration or explicitly logged out
-                this.guestCreds = MatrixClientPeg.getCredentials();
                 this.setStateForNewScreen({
+                    guestCreds: MatrixClientPeg.getCredentials(),
                     screen: "register",
                     upgradeUsername: MatrixClientPeg.get().getUserIdLocalpart(),
                     guestAccessToken: MatrixClientPeg.get().getAccessToken(),
@@ -382,30 +395,54 @@ module.exports = React.createClass({
                 this.notifyNewScreen('forgot_password');
                 break;
             case 'leave_room':
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-
-                var roomId = payload.room_id;
                 Modal.createDialog(QuestionDialog, {
                     title: "Leave room",
                     description: "Are you sure you want to leave the room?",
-                    onFinished: function(should_leave) {
+                    onFinished: (should_leave) => {
                         if (should_leave) {
-                            var d = MatrixClientPeg.get().leave(roomId);
+                            const d = MatrixClientPeg.get().leave(payload.room_id);
 
                             // FIXME: controller shouldn't be loading a view :(
-                            var Loader = sdk.getComponent("elements.Spinner");
-                            var modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
+                            const Loader = sdk.getComponent("elements.Spinner");
+                            const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
-                            d.then(function() {
+                            d.then(() => {
                                 modal.close();
-                                dis.dispatch({action: 'view_next_room'});
-                            }, function(err) {
+                                if (this.currentRoomId === payload.room_id) {
+                                    dis.dispatch({action: 'view_next_room'});
+                                }
+                            }, (err) => {
                                 modal.close();
                                 console.error("Failed to leave room " + payload.room_id + " " + err);
                                 Modal.createDialog(ErrorDialog, {
                                     title: "Failed to leave room",
                                     description: "Server may be unavailable, overloaded, or you hit a bug."
+                                });
+                            });
+                        }
+                    }
+                });
+                break;
+            case 'reject_invite':
+                Modal.createDialog(QuestionDialog, {
+                    title: "Reject invitation",
+                    description: "Are you sure you want to reject the invitation?",
+                    onFinished: (confirm) => {
+                        if (confirm) {
+                            // FIXME: controller shouldn't be loading a view :(
+                            const Loader = sdk.getComponent("elements.Spinner");
+                            const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
+
+                            MatrixClientPeg.get().leave(payload.room_id).done(() => {
+                                modal.close();
+                                if (this.currentRoomId === payload.room_id) {
+                                    dis.dispatch({action: 'view_next_room'});
+                                }
+                            }, (err) => {
+                                modal.close();
+                                Modal.createDialog(ErrorDialog, {
+                                    title: "Failed to reject invitation",
+                                    description: err.toString()
                                 });
                             });
                         }
@@ -659,6 +696,14 @@ module.exports = React.createClass({
     _onLoadCompleted: function() {
         this.props.onLoadCompleted();
         this.setState({loading: false});
+
+        // Show screens (like 'register') that need to be shown without onLoggedIn
+        // being called. 'register' needs to be routed here when the email confirmation
+        // link is clicked on.
+        if (this.state.screenAfterLogin &&
+            ['register'].indexOf(this.state.screenAfterLogin.screen) !== -1) {
+            this._showScreenAfterLogin();
+        }
     },
 
     /**
@@ -709,18 +754,33 @@ module.exports = React.createClass({
      * Called when a new logged in session has started
      */
     _onLoggedIn: function(teamToken) {
-        this.guestCreds = null;
-        this.notifyNewScreen('');
         this.setState({
-            screen: undefined,
+            guestCreds: null,
             logged_in: true,
         });
 
         if (teamToken) {
             this._teamToken = teamToken;
-            this._setPage(PageTypes.HomePage);
+            dis.dispatch({action: 'view_home_page'});
         } else if (this._is_registered) {
-            this._setPage(PageTypes.UserSettings);
+            dis.dispatch({action: 'view_user_settings'});
+        } else {
+            this._showScreenAfterLogin();
+        }
+    },
+
+    _showScreenAfterLogin: function() {
+        // If screenAfterLogin is set, use that, then null it so that a second login will
+        // result in view_home_page, _user_settings or _room_directory
+        if (this.state.screenAfterLogin && this.state.screenAfterLogin.screen) {
+            this.showScreen(
+                this.state.screenAfterLogin.screen,
+                this.state.screenAfterLogin.params
+            );
+            this.notifyNewScreen(this.state.screenAfterLogin.screen);
+            this.setState({screenAfterLogin: null});
+        } else {
+            dis.dispatch({action: 'view_room_directory'});
         }
     },
 
@@ -769,12 +829,6 @@ module.exports = React.createClass({
                             cli.getRooms()
                         )[0].roomId;
                         self.setState({ready: true, currentRoomId: firstRoom, page_type: PageTypes.RoomView});
-                    } else {
-                        if (self._teamToken) {
-                            self.setState({ready: true, page_type: PageTypes.HomePage});
-                        } else {
-                            self.setState({ready: true, page_type: PageTypes.RoomDirectory});
-                        }
                     }
                 } else {
                     self.setState({ready: true, page_type: PageTypes.RoomView});
@@ -791,16 +845,7 @@ module.exports = React.createClass({
 
                 if (presentedId != undefined) {
                     self.notifyNewScreen('room/'+presentedId);
-                } else {
-                    // There is no information on presentedId
-                    // so point user to fallback like /directory
-                    if (self._teamToken) {
-                        self.notifyNewScreen('home');
-                    } else {
-                        self.notifyNewScreen('directory');
-                    }
                 }
-
                 dis.dispatch({action: 'focus_composer'});
             } else {
                 self.setState({ready: true});
@@ -1003,9 +1048,9 @@ module.exports = React.createClass({
 
     onReturnToGuestClick: function() {
         // reanimate our guest login
-        if (this.guestCreds) {
-            Lifecycle.setLoggedIn(this.guestCreds);
-            this.guestCreds = null;
+        if (this.state.guestCreds) {
+            Lifecycle.setLoggedIn(this.state.guestCreds);
+            this.setState({guestCreds: null});
         }
     },
 
@@ -1154,7 +1199,7 @@ module.exports = React.createClass({
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick}
                     onRegisterClick={this.onRegisterClick}
-                    onCancelClick={this.guestCreds ? this.onReturnToGuestClick : null}
+                    onCancelClick={this.state.guestCreds ? this.onReturnToGuestClick : null}
                     />
             );
         } else if (this.state.screen == 'forgot_password') {
@@ -1181,7 +1226,7 @@ module.exports = React.createClass({
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     onForgotPasswordClick={this.onForgotPasswordClick}
                     enableGuest={this.props.enableGuest}
-                    onCancelClick={this.guestCreds ? this.onReturnToGuestClick : null}
+                    onCancelClick={this.state.guestCreds ? this.onReturnToGuestClick : null}
                     initialErrorText={this.sessionLoadError}
                 />
             );
