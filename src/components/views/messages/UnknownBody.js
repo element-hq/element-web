@@ -24,7 +24,7 @@ module.exports = React.createClass({
     render: function() {
         const text = this.props.mxEvent.getContent().body;
         return (
-            <span className="mx_UnknownBody">
+            <span className="mx_UnknownBody" title="Redacted or unknown message type">
                 {text}
             </span>
         );
