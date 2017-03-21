@@ -24,7 +24,7 @@ import sdk from 'matrix-react-sdk';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import DMRoomMap from 'matrix-react-sdk/lib/utils/DMRoomMap';
-import Rooms from 'matrix-react-sdk/lib/Rooms';
+import * as Rooms from 'matrix-react-sdk/lib/Rooms';
 import * as RoomNotifs from 'matrix-react-sdk/lib/RoomNotifs';
 import Modal from 'matrix-react-sdk/lib/Modal';
 
