@@ -37,6 +37,8 @@ var LeftPanel = React.createClass({
     displayName: 'LeftPanel',
 
     getInitialState: function() {
+        var userLang = navigator.language || navigator.userLanguage;
+        counterpart.setLocale(userLang);
         return {
             showCallElement: null,
             searchFilter: '',
@@ -98,8 +100,6 @@ var LeftPanel = React.createClass({
     },
 
     render: function() {
-        var userLang = navigator.language || navigator.userLanguage;
-        counterpart.setLocale(userLang);
         var RoomList = sdk.getComponent('rooms.RoomList');
         var BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         var SearchBox = sdk.getComponent('structures.SearchBox');

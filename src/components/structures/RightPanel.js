@@ -238,7 +238,7 @@ module.exports = React.createClass({
 
         if (!this.props.collapsed) {
             if(this.props.roomId && this.state.phase == this.Phase.MemberList) {
-                panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} lang={counterpart.getLocale()} />
+                panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />
             }
             else if(this.state.phase == this.Phase.MemberInfo) {
                 var MemberInfo = sdk.getComponent('rooms.MemberInfo');
