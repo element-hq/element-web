@@ -111,6 +111,8 @@ import views$elements$DeviceVerifyButtons from './components/views/elements/Devi
 views$elements$DeviceVerifyButtons && (module.exports.components['views.elements.DeviceVerifyButtons'] = views$elements$DeviceVerifyButtons);
 import views$elements$DirectorySearchBox from './components/views/elements/DirectorySearchBox';
 views$elements$DirectorySearchBox && (module.exports.components['views.elements.DirectorySearchBox'] = views$elements$DirectorySearchBox);
+import views$elements$Dropdown from './components/views/elements/Dropdown';
+views$elements$Dropdown && (module.exports.components['views.elements.Dropdown'] = views$elements$Dropdown);
 import views$elements$EditableText from './components/views/elements/EditableText';
 views$elements$EditableText && (module.exports.components['views.elements.EditableText'] = views$elements$EditableText);
 import views$elements$EditableTextContainer from './components/views/elements/EditableTextContainer';
@@ -133,6 +135,8 @@ import views$login$CaptchaForm from './components/views/login/CaptchaForm';
 views$login$CaptchaForm && (module.exports.components['views.login.CaptchaForm'] = views$login$CaptchaForm);
 import views$login$CasLogin from './components/views/login/CasLogin';
 views$login$CasLogin && (module.exports.components['views.login.CasLogin'] = views$login$CasLogin);
+import views$login$CountryDropdown from './components/views/login/CountryDropdown';
+views$login$CountryDropdown && (module.exports.components['views.login.CountryDropdown'] = views$login$CountryDropdown);
 import views$login$CustomServerDialog from './components/views/login/CustomServerDialog';
 views$login$CustomServerDialog && (module.exports.components['views.login.CustomServerDialog'] = views$login$CustomServerDialog);
 import views$login$InteractiveAuthEntryComponents from './components/views/login/InteractiveAuthEntryComponents';
