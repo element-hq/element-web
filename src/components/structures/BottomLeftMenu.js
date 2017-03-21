@@ -18,9 +18,16 @@ limitations under the License.
 
 var React = require('react');
 var ReactDOM = require('react-dom');
+var counterpart = require('counterpart');
+var Translate   = require('react-translate-component');
+var _t = Translate.translate;
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+
+// load our own translations
+counterpart.registerTranslations('en', require('../../i18n/en-en'));
+counterpart.registerTranslations('de', require('../../i18n/de-de'));
 
 module.exports = React.createClass({
     displayName: 'BottomLeftMenu',
@@ -30,6 +37,8 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
+        var userLang = navigator.language || navigator.userLanguage;
+        counterpart.setLocale(userLang);
         return({
             directoryHover : false,
             roomsHover : false,
@@ -104,19 +113,19 @@ module.exports = React.createClass({
                 <div className="mx_BottomLeftMenu_options">
                     <AccessibleButton className="mx_BottomLeftMenu_people" onClick={ this.onPeopleClick } onMouseEnter={ this.onPeopleMouseEnter } onMouseLeave={ this.onPeopleMouseLeave } >
                         <TintableSvg src="img/icons-people.svg" width="25" height="25" />
-                        { this.getLabel("Start chat", this.state.peopleHover) }
+                        { this.getLabel({ counterpart.translate('Start chat') }, this.state.peopleHover) }
                     </AccessibleButton>
                     <AccessibleButton className="mx_BottomLeftMenu_directory" onClick={ this.onDirectoryClick } onMouseEnter={ this.onDirectoryMouseEnter } onMouseLeave={ this.onDirectoryMouseLeave } >
                         <TintableSvg src="img/icons-directory.svg" width="25" height="25"/>
-                        { this.getLabel("Room directory", this.state.directoryHover) }
+                        { this.getLabel({ counterpart.translate('Room directory') }, this.state.directoryHover) }
                     </AccessibleButton>
                     <AccessibleButton className="mx_BottomLeftMenu_createRoom" onClick={ this.onRoomsClick } onMouseEnter={ this.onRoomsMouseEnter } onMouseLeave={ this.onRoomsMouseLeave } >
                         <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
-                        { this.getLabel("Create new room", this.state.roomsHover) }
+                        { this.getLabel({ counterpart.translate('Create new room') }, this.state.roomsHover) }
                     </AccessibleButton>
                     <AccessibleButton className="mx_BottomLeftMenu_settings" onClick={ this.onSettingsClick } onMouseEnter={ this.onSettingsMouseEnter } onMouseLeave={ this.onSettingsMouseLeave } >
                         <TintableSvg src="img/icons-settings.svg" width="25" height="25" />
-                        { this.getLabel("Settings", this.state.settingsHover) }
+                        { this.getLabel({ counterpart.translate('Settings') }, this.state.settingsHover) }
                     </AccessibleButton>
                 </div>
             </div>
