@@ -761,6 +761,14 @@ module.exports = React.createClass({
         return medium[0].toUpperCase() + medium.slice(1);
     },
 
+    presentableTextForThreepid: function(threepid) {
+        if (threepid.medium == 'msisdn') {
+            return '+' + threepid.address;
+        } else {
+            return threepid.address;
+        }
+    },
+
     render: function() {
         var Loader = sdk.getComponent("elements.Spinner");
         switch (this.state.phase) {
@@ -793,7 +801,9 @@ module.exports = React.createClass({
                         <label htmlFor={id}>{this.nameForMedium(val.medium)}</label>
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
-                        <input type="text" key={val.address} id={id} value={val.address} disabled />
+                        <input type="text" key={val.address} id={id}
+                            value={this.presentableTextForThreepid(val)} disabled
+                        />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
                         <img src="img/cancel-small.svg" width="14" height="14" alt="Remove" onClick={this.onRemoveThreepidClicked.bind(this, val)} />
