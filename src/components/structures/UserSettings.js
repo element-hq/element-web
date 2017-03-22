@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -135,8 +136,6 @@ module.exports = React.createClass({
             msisdn_add_pending: false,
             vectorVersion: null,
             rejectingInvites: false,
-            phoneCountry: null,
-            phoneNumber: "",
         };
     },
 
@@ -216,14 +215,6 @@ module.exports = React.createClass({
                 description: "Server may be unavailable or overloaded",
             });
         });
-    },
-
-    _onPhoneCountryChange: function(phoneCountry) {
-        this.setState({ phoneCountry: phoneCountry });
-    },
-
-    _onPhoneNumberChange: function(ev) {
-        this.setState({ phoneNumber: ev.target.value });
     },
 
     onAction: function(payload) {
@@ -338,16 +329,6 @@ module.exports = React.createClass({
         this._addEmail();
     },
 
-    _onAddMsisdnEditFinished: function(value, shouldSubmit) {
-        if (!shouldSubmit) return;
-        this._addMsisdn();
-    },
-
-    _onAddMsisdnSubmit: function(ev) {
-        ev.preventDefault();
-        this._addMsisdn();
-    },
-
     _addEmail: function() {
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
@@ -380,65 +361,6 @@ module.exports = React.createClass({
         });
         ReactDOM.findDOMNode(this.refs.add_email_input).blur();
         this.setState({email_add_pending: true});
-    },
-
-    _addMsisdn: function() {
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-
-        this._addThreepid = new AddThreepid();
-        // we always bind phone numbers when registering, so let's do the
-        // same here.
-        this._addThreepid.addMsisdn(this.state.phoneCountry, this.state.phoneNumber, true).then((resp) => {
-            this._promptForMsisdnVerificationCode(resp.msisdn);
-        }).catch((err) => {
-            console.error("Unable to add phone number: " + err);
-            let msg = err.message;
-            Modal.createDialog(ErrorDialog, {
-                title: "Error",
-                description: msg,
-            });
-        }).finally(() => {
-            this.setState({msisdn_add_pending: false});
-        }).done();;
-        ReactDOM.findDOMNode(this.refs.add_msisdn_input).blur();
-        this.setState({msisdn_add_pending: true});
-    },
-
-    _promptForMsisdnVerificationCode(msisdn, err) {
-        const TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
-        let msgElements = [
-            <div>A text message has been sent to +{msisdn}.
-            Please enter the verification code it contains</div>
-        ];
-        if (err) {
-            let msg = err.error;
-            if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
-                msg = "Incorrect verification code";
-            }
-            msgElements.push(<div className="error">{msg}</div>);
-        }
-        Modal.createDialog(TextInputDialog, {
-            title: "Enter Code",
-            description: <div>{msgElements}</div>,
-            button: "Submit",
-            onFinished: (should_verify, token) => {
-                if (!should_verify) {
-                    this._addThreepid = null;
-                    return;
-                }
-                this.setState({msisdn_add_pending: true});
-                this._addThreepid.haveMsisdnToken(token).then(() => {
-                    this._addThreepid = null;
-                    this.setState({phoneNumber: ''});
-                    return this._refreshFromServer();
-                }).catch((err) => {
-                    this._promptForMsisdnVerificationCode(msisdn, err);
-                }).finally(() => {
-                    this.setState({msisdn_add_pending: false});
-                }).done();
-            }
-        });
     },
 
     onRemoveThreepidClicked: function(threepid) {
@@ -897,7 +819,6 @@ module.exports = React.createClass({
             );
         });
         let addEmailSection;
-        let addMsisdnSection;
         if (this.state.email_add_pending) {
             addEmailSection = <Loader key="_email_add_spinner" />;
         } else if (!MatrixClientPeg.get().isGuest()) {
@@ -920,35 +841,10 @@ module.exports = React.createClass({
                 </div>
             );
         }
-        if (this.state.msisdn_add_pending) {
-            addMsisdnSection = <Loader key="_msisdn_add_spinner" />;
-        } else if (!MatrixClientPeg.get().isGuest()) {
-            const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
-            addMsisdnSection = (
-                <div className="mx_UserSettings_profileTableRow" key="_newMsisdn">
-                    <div className="mx_UserSettings_profileLabelCell">
-                    </div>
-                    <div className="mx_UserSettings_profileInputCell">
-                        <form className="mx_Login_phoneSection" onSubmit={this._onAddMsisdnSubmit}>
-                            <CountryDropdown ref="phone_country" onOptionChange={this._onPhoneCountryChange}
-                                className="mx_Login_phoneCountry"
-                                value={this.state.phoneCountry}
-                            />
-                            <input type="text" ref="phoneNumber"
-                                ref="add_msisdn_input"
-                                className="mx_UserSettings_phoneNumberField"
-                                placeholder="Add phone number"
-                                value={this.state.phoneNumber}
-                                onChange={this._onPhoneNumberChange}
-                            />
-                        </form>
-                    </div>
-                    <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={this._addMsisdn} />
-                    </div>
-                </div>
-            );
-        }
+        const AddPhoneNumber = sdk.getComponent('views.settings.AddPhoneNumber');
+        const addMsisdnSection = (
+            <AddPhoneNumber key="_addMsisdn" onThreepidAdded={this._refreshFromServer} />
+        );
         threepidsSection.push(addEmailSection);
         threepidsSection.push(addMsisdnSection);
 

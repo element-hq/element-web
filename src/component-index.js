@@ -229,6 +229,8 @@ import views$rooms$TopUnreadMessagesBar from './components/views/rooms/TopUnread
 views$rooms$TopUnreadMessagesBar && (module.exports.components['views.rooms.TopUnreadMessagesBar'] = views$rooms$TopUnreadMessagesBar);
 import views$rooms$UserTile from './components/views/rooms/UserTile';
 views$rooms$UserTile && (module.exports.components['views.rooms.UserTile'] = views$rooms$UserTile);
+import views$settings$AddPhoneNumber from './components/views/settings/AddPhoneNumber';
+views$settings$AddPhoneNumber && (module.exports.components['views.settings.AddPhoneNumber'] = views$settings$AddPhoneNumber);
 import views$settings$ChangeAvatar from './components/views/settings/ChangeAvatar';
 views$settings$ChangeAvatar && (module.exports.components['views.settings.ChangeAvatar'] = views$settings$ChangeAvatar);
 import views$settings$ChangeDisplayName from './components/views/settings/ChangeDisplayName';
