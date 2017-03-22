@@ -81,6 +81,13 @@ export default React.createClass({
         return this._scrollStateMap[roomId];
     },
 
+    canResetTimelineInRoom: function(roomId) {
+        if (!this.refs.roomView) {
+            return true;
+        }
+        return this.refs.roomView.canResetTimeline();
+    },
+
     _onKeyDown: function(ev) {
             /*
             // Remove this for now as ctrl+alt = alt-gr so this breaks keyboards which rely on alt-gr for numbers

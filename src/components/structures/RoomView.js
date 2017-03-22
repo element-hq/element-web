@@ -490,6 +490,13 @@ module.exports = React.createClass({
         }
     },
 
+    canResetTimeline: function() {
+        if (!this.refs.messagePanel) {
+            return true;
+        }
+        return this.refs.messagePanel.canResetTimeline();
+    },
+
     // called when state.room is first initialised (either at initial load,
     // after a successful peek, or after we join the room).
     _onRoomLoaded: function(room) {

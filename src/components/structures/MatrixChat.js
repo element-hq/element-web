@@ -806,9 +806,31 @@ module.exports = React.createClass({
      * (useful for setting listeners)
      */
     _onWillStartClient() {
+        var self = this;
         var cli = MatrixClientPeg.get();
 
-        var self = this;
+        // Allow the JS SDK to reap timeline events. This reduces the amount of
+        // memory consumed as the JS SDK stores multiple distinct copies of room
+        // state (each of which can be 10s of MBs) for each DISJOINT timeline. This is
+        // particularly noticeable when there are lots of 'limited' /sync responses
+        // such as when laptops unsleep.
+        // https://github.com/vector-im/riot-web/issues/3307#issuecomment-282895568
+        cli.setCanResetTimelineCallback(function(roomId) {
+            console.log("Request to reset timeline in room ", roomId, " viewing:", self.state.currentRoomId);
+            if (roomId !== self.state.currentRoomId) {
+                // It is safe to remove events from rooms we are not viewing.
+                return true;
+            }
+            // We are viewing the room which we want to reset. It is only safe to do
+            // this if we are not scrolled up in the view. To find out, delegate to
+            // the timeline panel. If the timeline panel doesn't exist, then we assume
+            // it is safe to reset the timeline.
+            if (!self.refs.loggedInView) {
+                return true;
+            }
+            return self.refs.loggedInView.canResetTimelineInRoom(roomId);
+        });
+
         cli.on('sync', function(state, prevState) {
             self.updateStatusIndicator(state, prevState);
             if (state === "SYNCING" && prevState === "SYNCING") {
