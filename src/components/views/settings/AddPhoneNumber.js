@@ -116,6 +116,7 @@ export default WithMatrixClient(React.createClass({
                     this._addThreepid = null;
                     return;
                 }
+                if (this._unmounted) return;
                 this.setState({msisdn_add_pending: true});
                 this._addThreepid.haveMsisdnToken(token).then(() => {
                     this._addThreepid = null;
