@@ -141,26 +141,25 @@ export default React.createClass({
     },
 
     _requestCallback: function(auth, background) {
-        // only set the busy flag if this is a non-background request,
-        // otherwise, the user initiated a request, so make the busy
-        // spinner appear and clear and existing error messages.
-        if (!background) {
-            this.setState({
-                busy: true,
-                errorText: null,
-                stageErrorText: null,
-            });
-        }
-        return this.props.makeRequest(auth).finally(() => {
+        const makeRequestPromise = this.props.makeRequest(auth);
+
+        // if it's a background request, just do it: we don't want
+        // it to affect the state of our UI.
+        if (background) return makeRequestPromise;
+
+        // otherwise, manage the state of the spinner and error messages
+        this.setState({
+            busy: true,
+            errorText: null,
+            stageErrorText: null,
+        });
+        return makeRequestPromise.finally(() => {
             if (this._unmounted) {
                 return;
             }
-            // only unset the busy flag if this is a non-background request
-            if (!background) {
-                this.setState({
-                    busy: false,
-                });
-            }
+            this.setState({
+                busy: false,
+            });
         });
     },
 
