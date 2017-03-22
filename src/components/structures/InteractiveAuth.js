@@ -141,16 +141,20 @@ export default React.createClass({
     },
 
     _requestCallback: function(auth, background) {
-        this.setState({
-            busy: !background,
-            errorText: null,
-            stageErrorText: null,
-        });
+        // only set the busy flag if this is a non-background request
+        if (!background) {
+            this.setState({
+                busy: true,
+                errorText: null,
+                stageErrorText: null,
+            });
+        }
         return this.props.makeRequest(auth).finally(() => {
             if (this._unmounted) {
                 return;
             }
-            if (background) {
+            // only unset the busy flag if this is a non-background request
+            if (!background) {
                 this.setState({
                     busy: false,
                 });
