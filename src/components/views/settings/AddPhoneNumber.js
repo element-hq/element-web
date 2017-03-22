@@ -41,6 +41,11 @@ export default WithMatrixClient(React.createClass({
     componentWillMount: function() {
         this._addThreepid = null;
         this._addMsisdnInput = null;
+        this._unmounted = false;
+    },
+
+    componentWillUnmount: function() {
+        this._unmounted = true;
     },
 
     _onPhoneCountryChange: function(phoneCountry) {
@@ -67,7 +72,6 @@ export default WithMatrixClient(React.createClass({
 
     _addMsisdn: function() {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
         this._addThreepid = new AddThreepid();
         // we always bind phone numbers when registering, so let's do the
@@ -89,6 +93,7 @@ export default WithMatrixClient(React.createClass({
     },
 
     _promptForMsisdnVerificationCode:function (msisdn, err) {
+        if (this._unmounted) return;
         const TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
         let msgElements = [
             <div>A text message has been sent to +{msisdn}.
