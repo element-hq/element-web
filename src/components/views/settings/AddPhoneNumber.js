@@ -22,51 +22,50 @@ import WithMatrixClient from '../../../wrappers/WithMatrixClient';
 import Modal from '../../../Modal';
 
 
-class AddPhoneNumber extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+export default WithMatrixClient(React.createClass({
+    displayName: 'AddPhoneNumber',
 
-        this._addThreepid = null;
-        this._addMsisdnInput = null;
+    propTypes: {
+        matrixClient: React.PropTypes.object.isRequired,
+        onThreepidAdded: React.PropTypes.func,
+    },
 
-        this.state = {
+    getInitialState: function() {
+        return {
             busy: false,
             phoneCountry: null,
             phoneNumber: "",
         };
+    },
 
-        this._onPhoneCountryChange = this._onPhoneCountryChange.bind(this);
-        this._onPhoneNumberChange = this._onPhoneNumberChange.bind(this);
-        this._onAddMsisdnEditFinished = this._onAddMsisdnEditFinished.bind(this);
-        this._onAddMsisdnSubmit = this._onAddMsisdnSubmit.bind(this);
-        this._collectAddMsisdnInput = this._collectAddMsisdnInput.bind(this);
-        this._addMsisdn = this._addMsisdn.bind(this);
-        this._promptForMsisdnVerificationCode = this._promptForMsisdnVerificationCode.bind(this);
-    }
+    componentWillMount: function() {
+        this._addThreepid = null;
+        this._addMsisdnInput = null;
+    },
 
-    _onPhoneCountryChange(phoneCountry) {
+    _onPhoneCountryChange: function(phoneCountry) {
         this.setState({ phoneCountry: phoneCountry });
-    }
+    },
 
-    _onPhoneNumberChange(ev) {
+    _onPhoneNumberChange: function(ev) {
         this.setState({ phoneNumber: ev.target.value });
-    }
+    },
 
-    _onAddMsisdnEditFinished(value, shouldSubmit) {
+    _onAddMsisdnEditFinished: function(value, shouldSubmit) {
         if (!shouldSubmit) return;
         this._addMsisdn();
-    }
+    },
 
-    _onAddMsisdnSubmit(ev) {
+    _onAddMsisdnSubmit: function(ev) {
         ev.preventDefault();
         this._addMsisdn();
-    }
+    },
 
-    _collectAddMsisdnInput(e) {
+    _collectAddMsisdnInput: function(e) {
         this._addMsisdnInput = e;
-    }
+    },
 
-    _addMsisdn() {
+    _addMsisdn: function() {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
@@ -87,9 +86,9 @@ class AddPhoneNumber extends React.Component {
         }).done();;
         this._addMsisdnInput.blur();
         this.setState({msisdn_add_pending: true});
-    }
+    },
 
-    _promptForMsisdnVerificationCode(msisdn, err) {
+    _promptForMsisdnVerificationCode:function (msisdn, err) {
         const TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
         let msgElements = [
             <div>A text message has been sent to +{msisdn}.
@@ -123,9 +122,9 @@ class AddPhoneNumber extends React.Component {
                 }).done();
             }
         });
-    }
+    },
 
-    render() {
+    render: function() {
         const Loader = sdk.getComponent("elements.Spinner");
         if (this.state.msisdn_add_pending) {
             return <Loader />;
@@ -159,12 +158,4 @@ class AddPhoneNumber extends React.Component {
             );
         }
     }
-}
-
-AddPhoneNumber.propTypes = {
-    matrixClient: React.PropTypes.object.isRequired,
-    onThreepidAdded: React.PropTypes.func,
-};
-
-AddPhoneNumber = WithMatrixClient(AddPhoneNumber);
-export default AddPhoneNumber;
+}))
