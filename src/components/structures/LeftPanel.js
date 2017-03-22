@@ -17,6 +17,9 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var counterpart = require('counterpart');
+var Translate   = require('react-translate-component');
+var _t = Translate.translate;
 var DragDropContext = require('react-dnd').DragDropContext;
 var HTML5Backend = require('react-dnd-html5-backend');
 var sdk = require('matrix-react-sdk')
@@ -24,6 +27,11 @@ var dis = require('matrix-react-sdk/lib/dispatcher');
 
 var VectorConferenceHandler = require('../../VectorConferenceHandler');
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
+
+// load our own translations
+counterpart.registerTranslations('en', require('../../i18n/en-en'));
+counterpart.registerTranslations('de', require('../../i18n/de-de'));
+
 
 var LeftPanel = React.createClass({
     displayName: 'LeftPanel',
@@ -34,6 +42,8 @@ var LeftPanel = React.createClass({
     },
 
     getInitialState: function() {
+        var userLang = navigator.language || navigator.userLanguage;
+        counterpart.setLocale(userLang);
         return {
             showCallElement: null,
             searchFilter: '',
@@ -98,6 +108,7 @@ var LeftPanel = React.createClass({
         var RoomList = sdk.getComponent('rooms.RoomList');
         var BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         var SearchBox = sdk.getComponent('structures.SearchBox');
+        var props = this.props;
 
         var collapseButton;
         var classes = "mx_LeftPanel mx_fadable";

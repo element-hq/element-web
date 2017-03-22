@@ -17,13 +17,26 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var counterpart = require('counterpart');
+var Translate   = require('react-translate-component');
+var _t = Translate.translate;
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 
+// load our own translations
+counterpart.registerTranslations('en', require('../../i18n/en-en'));
+counterpart.registerTranslations('de', require('../../i18n/de-de'));
+
 module.exports = React.createClass({
     displayName: 'SearchBox',
+
+    getDefaultProps: function() {
+        return {
+          locales: ['en', 'de']
+        };
+    },
 
     propTypes: {
         collapsed: React.PropTypes.bool,
@@ -87,6 +100,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        console.log(_t('SearchBox.filterRoom'));
         var TintableSvg = sdk.getComponent('elements.TintableSvg');
 
         var collapseTabIndex = this.refs.search && this.refs.search.value !== "" ? "-1" : "0";
@@ -130,7 +144,7 @@ module.exports = React.createClass({
                         className="mx_SearchBox_search"
                         value={ this.state.searchTerm }
                         onChange={ this.onChange }
-                        placeholder="Filter room names"
+                        placeholder={ counterpart.translate('Filter room names') }
                     />
                 ];
         }
