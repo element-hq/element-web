@@ -431,6 +431,10 @@ var TimelinePanel = React.createClass({
         }
     },
 
+    canResetTimeline: function() {
+        return this.refs.messagePanel && this.refs.messagePanel.isAtBottom();
+    },
+
     onRoomRedaction: function(ev, room) {
         if (this.unmounted) return;
 
