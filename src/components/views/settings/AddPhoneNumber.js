@@ -86,8 +86,9 @@ export default WithMatrixClient(React.createClass({
                 description: msg,
             });
         }).finally(() => {
+            if (this._unmounted) return;
             this.setState({msisdn_add_pending: false});
-        }).done();;
+        }).done();
         this._addMsisdnInput.blur();
         this.setState({msisdn_add_pending: true});
     },
@@ -96,7 +97,7 @@ export default WithMatrixClient(React.createClass({
         if (this._unmounted) return;
         const TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
         let msgElements = [
-            <div>A text message has been sent to +{msisdn}.
+            <div key="_static" >A text message has been sent to +{msisdn}.
             Please enter the verification code it contains</div>
         ];
         if (err) {
@@ -104,7 +105,7 @@ export default WithMatrixClient(React.createClass({
             if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
                 msg = "Incorrect verification code";
             }
-            msgElements.push(<div className="error">{msg}</div>);
+            msgElements.push(<div key="_error" className="error">{msg}</div>);
         }
         Modal.createDialog(TextInputDialog, {
             title: "Enter Code",
@@ -123,6 +124,7 @@ export default WithMatrixClient(React.createClass({
                 }).catch((err) => {
                     this._promptForMsisdnVerificationCode(msisdn, err);
                 }).finally(() => {
+                    if (this._unmounted) return;
                     this.setState({msisdn_add_pending: false});
                 }).done();
             }
@@ -133,34 +135,36 @@ export default WithMatrixClient(React.createClass({
         const Loader = sdk.getComponent("elements.Spinner");
         if (this.state.msisdn_add_pending) {
             return <Loader />;
-        } else if (!this.props.matrixClient.isGuest()) {
-            const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
-            // XXX: This CSS relies on the CSS surrounding it in UserSettings as its in
-            // a tabular format to align the submit buttons
-            return (
-                <form className="mx_UserSettings_profileTableRow" onSubmit={this._onAddMsisdnSubmit}>
-                    <div className="mx_UserSettings_profileLabelCell">
-                    </div>
-                    <div className="mx_UserSettings_profileInputCell">
-                        <div className="mx_Login_phoneSection">
-                            <CountryDropdown onOptionChange={this._onPhoneCountryChange}
-                                className="mx_Login_phoneCountry"
-                                value={this.state.phoneCountry}
-                            />
-                            <input type="text"
-                                ref={this._collectAddMsisdnInput}
-                                className="mx_UserSettings_phoneNumberField"
-                                placeholder="Add phone number"
-                                value={this.state.phoneNumber}
-                                onChange={this._onPhoneNumberChange}
-                            />
-                        </div>
-                    </div>
-                    <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                         <input type="image" value="Add" src="img/plus.svg" width="14" height="14" />
-                    </div>
-                </form>
-            );
+        } else if (this.props.matrixClient.isGuest()) {
+            return null;
         }
+
+        const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
+        // XXX: This CSS relies on the CSS surrounding it in UserSettings as its in
+        // a tabular format to align the submit buttons
+        return (
+            <form className="mx_UserSettings_profileTableRow" onSubmit={this._onAddMsisdnSubmit}>
+                <div className="mx_UserSettings_profileLabelCell">
+                </div>
+                <div className="mx_UserSettings_profileInputCell">
+                    <div className="mx_Login_phoneSection">
+                        <CountryDropdown onOptionChange={this._onPhoneCountryChange}
+                            className="mx_Login_phoneCountry"
+                            value={this.state.phoneCountry}
+                        />
+                        <input type="text"
+                            ref={this._collectAddMsisdnInput}
+                            className="mx_UserSettings_phoneNumberField"
+                            placeholder="Add phone number"
+                            value={this.state.phoneNumber}
+                            onChange={this._onPhoneNumberChange}
+                        />
+                    </div>
+                </div>
+                <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
+                     <input type="image" value="Add" src="img/plus.svg" width="14" height="14" />
+                </div>
+            </form>
+        );
     }
 }))
