@@ -55,7 +55,8 @@ class AddThreepid {
     /**
      * Attempt to add a msisdn threepid. This will trigger a side-effect of
      * sending a test message to the provided phone number.
-     * @param {string} emailAddress The email address to add
+     * @param {string} phoneCountry The ISO 2 letter code of the country to resolve phoneNumber in
+     * @param {string} phoneNumber The national or international formatted phone number to add
      * @param {boolean} bind If True, bind this phone number to this mxid on the Identity Server
      * @return {Promise} Resolves when the text message has been sent. Then call haveMsisdnToken().
      */
@@ -102,7 +103,7 @@ class AddThreepid {
     /**
      * Takes a phone number verification code as entered by the user and validates
      * it with the ID server, then if successful, adds the phone number.
-     * @return {Promise} Resolves if the email address was added. Rejects with an object
+     * @return {Promise} Resolves if the phone number was added. Rejects with an object
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */

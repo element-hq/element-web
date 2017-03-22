@@ -387,7 +387,7 @@ module.exports = React.createClass({
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
         this._addThreepid = new AddThreepid();
-        // we always phone numbers when registering, so let's do the
+        // we always bind phone numbers when registering, so let's do the
         // same here.
         this._addThreepid.addMsisdn(this.state.phoneCountry, this.state.phoneNumber, true).then((resp) => {
             this._promptForMsisdnVerificationCode(resp.msisdn);
