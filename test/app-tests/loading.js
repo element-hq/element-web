@@ -188,15 +188,17 @@ describe('loading:', function () {
                 let login = ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.login.Login'));
                 httpBackend.when('POST', '/login').check(function(req) {
+                    console.log(req);
                     expect(req.data.type).toEqual('m.login.password');
-                    expect(req.data.user).toEqual('user');
+                    expect(req.data.identifier.type).toEqual('m.id.user');
+                    expect(req.data.identifier.user).toEqual('user');
                     expect(req.data.password).toEqual('pass');
                 }).respond(200, {
                     user_id: '@user:id',
                     device_id: 'DEVICE_ID',
                     access_token: 'access_token',
                 });
-                login.onPasswordLogin("user", "pass")
+                login.onPasswordLogin("user", undefined, undefined, "pass")
                 return httpBackend.flush();
             }).then(() => {
                 // Wait for another trip around the event loop for the UI to update
