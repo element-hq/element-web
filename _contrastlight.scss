@@ -117,29 +117,37 @@ $progressbar-color: #000;
 
 .mx_EventTile_line {
     color: #333 !important;
-    font-weight:600;
+    font-weight:200;
+    padding-top: 2px !important;
+    padding-bottom:0px !important;
+    line-height: 18px !important;
+    min-height: 18px !important;
 }
 
 .mx_EventTile_avatar {
     color: #000 !important;
 }
 
-.mx_TextualEvent {
-	color:#000 !important;
-}
 
 .linkified {
-	color: #126B4B !important;
+	color: #156d4d !important;
 	opacity: .9 !important;
 }
 
 .mx_MessageComposer_input {
-	color: #126B4B !important;
+	color: #156d4d !important;
 	font-weight: bold !important;
 	opacity: 1 !important;
 }
 
+.mx_LinkPreviewWidget {
+    background-color: #f7f7f7;
+    padding:10px;
+}
 
+.mx_MTextBody {
+    line-height:18px !important;
+}
 
 .mx_SearchBox_search {
 color: rgba(0, 0, 0, 1) !important;
@@ -149,6 +157,6 @@ opacity: 1 !important;
 
 span.mx_SenderProfile {
     color: rgba(0, 0, 0, 1) !important;
-    font-weight:800;
+    font-weight:600;
     opacity: 1  !important;
     }
