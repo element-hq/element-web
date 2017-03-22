@@ -141,7 +141,9 @@ export default React.createClass({
     },
 
     _requestCallback: function(auth, background) {
-        // only set the busy flag if this is a non-background request
+        // only set the busy flag if this is a non-background request,
+        // otherwise, the user initiated a request, so make the busy
+        // spinner appear and clear and existing error messages.
         if (!background) {
             this.setState({
                 busy: true,
