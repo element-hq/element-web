@@ -134,11 +134,11 @@ class AddPhoneNumber extends React.Component {
             // XXX: This CSS relies on the CSS surrounding it in UserSettings as its in
             // a tabular format to align the submit buttons
             return (
-                <div className="mx_UserSettings_profileTableRow">
+                <form className="mx_UserSettings_profileTableRow" onSubmit={this._onAddMsisdnSubmit}>
                     <div className="mx_UserSettings_profileLabelCell">
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
-                        <form className="mx_Login_phoneSection" onSubmit={this._onAddMsisdnSubmit}>
+                        <div className="mx_Login_phoneSection">
                             <CountryDropdown onOptionChange={this._onPhoneCountryChange}
                                 className="mx_Login_phoneCountry"
                                 value={this.state.phoneCountry}
@@ -150,12 +150,12 @@ class AddPhoneNumber extends React.Component {
                                 value={this.state.phoneNumber}
                                 onChange={this._onPhoneNumberChange}
                             />
-                        </form>
+                        </div>
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={this._addMsisdn} />
+                         <input type="image" value="Add" src="img/plus.svg" width="14" height="14" />
                     </div>
-                </div>
+                </form>
             );
         }
     }
