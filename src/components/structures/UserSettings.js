@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -139,6 +140,7 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         this._unmounted = false;
+        this._addThreepid = null;
 
         if (PlatformPeg.get()) {
             q().then(() => {
@@ -321,12 +323,16 @@ module.exports = React.createClass({
         UserSettingsStore.setEnableNotifications(event.target.checked);
     },
 
-    onAddThreepidClicked: function(value, shouldSubmit) {
+    _onAddEmailEditFinished: function(value, shouldSubmit) {
         if (!shouldSubmit) return;
+        this._addEmail();
+    },
+
+    _addEmail: function() {
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
-        var email_address = this.refs.add_threepid_input.value;
+        var email_address = this.refs.add_email_input.value;
         if (!Email.looksValid(email_address)) {
             Modal.createDialog(ErrorDialog, {
                 title: "Invalid Email Address",
@@ -334,10 +340,10 @@ module.exports = React.createClass({
             });
             return;
         }
-        this.add_threepid = new AddThreepid();
+        this._addThreepid = new AddThreepid();
         // we always bind emails when registering, so let's do the
         // same here.
-        this.add_threepid.addEmailAddress(email_address, true).done(() => {
+        this._addThreepid.addEmailAddress(email_address, true).done(() => {
             Modal.createDialog(QuestionDialog, {
                 title: "Verification Pending",
                 description: "Please check your email and click on the link it contains. Once this is done, click continue.",
@@ -352,7 +358,7 @@ module.exports = React.createClass({
                 description: "Unable to add email address"
             });
         });
-        ReactDOM.findDOMNode(this.refs.add_threepid_input).blur();
+        ReactDOM.findDOMNode(this.refs.add_email_input).blur();
         this.setState({email_add_pending: true});
     },
 
@@ -391,8 +397,8 @@ module.exports = React.createClass({
     },
 
     verifyEmailAddress: function() {
-        this.add_threepid.checkEmailLinkClicked().done(() => {
-            this.add_threepid = undefined;
+        this._addThreepid.checkEmailLinkClicked().done(() => {
+            this._addThreepid = null;
             this.setState({
                 phase: "UserSettings.LOADING",
             });
@@ -811,30 +817,35 @@ module.exports = React.createClass({
                 </div>
             );
         });
-        var addThreepidSection;
+        let addEmailSection;
         if (this.state.email_add_pending) {
-            addThreepidSection = <Loader />;
+            addEmailSection = <Loader key="_email_add_spinner" />;
         } else if (!MatrixClientPeg.get().isGuest()) {
-            addThreepidSection = (
-                <div className="mx_UserSettings_profileTableRow" key="new">
+            addEmailSection = (
+                <div className="mx_UserSettings_profileTableRow" key="_newEmail">
                     <div className="mx_UserSettings_profileLabelCell">
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
                         <EditableText
-                            ref="add_threepid_input"
+                            ref="add_email_input"
                             className="mx_UserSettings_editable"
                             placeholderClassName="mx_UserSettings_threepidPlaceholder"
                             placeholder={ "Add email address" }
                             blurToCancel={ false }
-                            onValueChanged={ this.onAddThreepidClicked } />
+                            onValueChanged={ this._onAddEmailEditFinished } />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked.bind(this, undefined, true) }/>
+                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={this._addEmail} />
                     </div>
                 </div>
             );
         }
-        threepidsSection.push(addThreepidSection);
+        const AddPhoneNumber = sdk.getComponent('views.settings.AddPhoneNumber');
+        const addMsisdnSection = (
+            <AddPhoneNumber key="_addMsisdn" onThreepidAdded={this._refreshFromServer} />
+        );
+        threepidsSection.push(addEmailSection);
+        threepidsSection.push(addMsisdnSection);
 
         var accountJsx;
 
