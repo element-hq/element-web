@@ -133,7 +133,6 @@ module.exports = React.createClass({
             threePids: [],
             phase: "UserSettings.LOADING", // LOADING, DISPLAY
             email_add_pending: false,
-            msisdn_add_pending: false,
             vectorVersion: null,
             rejectingInvites: false,
         };

@@ -35,6 +35,7 @@ export default WithMatrixClient(React.createClass({
             busy: false,
             phoneCountry: null,
             phoneNumber: "",
+            msisdn_add_pending: false,
         };
     },
 
@@ -137,7 +138,7 @@ export default WithMatrixClient(React.createClass({
         if (this.state.msisdn_add_pending) {
             return <Loader />;
         } else if (this.props.matrixClient.isGuest()) {
-            return null;
+            return <div />;
         }
 
         const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
