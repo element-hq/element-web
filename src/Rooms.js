@@ -79,6 +79,20 @@ export function looksLikeDirectMessageRoom(room, me) {
     return false;
 }
 
+export function guessAndSetDMRoom(room, isDirect) {
+    let newTarget;
+    if (isDirect) {
+        const guessedTarget = guessDMRoomTarget(
+            room, room.getMember(MatrixClientPeg.get().credentials.userId),
+        );
+        newTarget = guessedTarget.userId;
+    } else {
+        newTarget = null;
+    }
+
+    return setDMRoom(room.roomId, newTarget);
+}
+
 /**
  * Marks or unmarks the given room as being as a DM room.
  * @param {string} roomId The ID of the room to modify
