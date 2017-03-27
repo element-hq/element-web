@@ -283,9 +283,10 @@ module.exports = WithMatrixClient(React.createClass({
     },
 
     getReadAvatars: function() {
-        var ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
-        var avatars = [];
-        var left = 0;
+        const ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
+        const avatars = [];
+        const receiptOffset = 15;
+        let left = 0;
 
         // It's possible that the receipt was sent several days AFTER the event.
         // If it is, we want to display the complete date along with the HH:MM:SS,
@@ -305,6 +306,12 @@ module.exports = WithMatrixClient(React.createClass({
             if ((i < MAX_READ_AVATARS) || this.state.allReadAvatars) {
                 hidden = false;
             }
+            // TODO: we keep the extra read avatars in the dom to make animation simpler
+            // we could optimise this to reduce the dom size.
+
+            // If hidden, set offset equal to the offset of the final visible avatar or
+            // else set it proportional to index
+            left = (hidden ? MAX_READ_AVATARS - 1 : i) * -receiptOffset;
 
             var userId = receipt.roomMember.userId;
             var readReceiptInfo;
@@ -315,11 +322,6 @@ module.exports = WithMatrixClient(React.createClass({
                     readReceiptInfo = {};
                     this.props.readReceiptMap[userId] = readReceiptInfo;
                 }
-            }
-            // TODO: we keep the extra read avatars in the dom to make animation simpler
-            // we could optimise this to reduce the dom size.
-            if (!hidden) {
-                left -= 15;
             }
 
             // add to the start so the most recent is on the end (ie. ends up rightmost)
@@ -341,7 +343,7 @@ module.exports = WithMatrixClient(React.createClass({
             if (remainder > 0) {
                 remText = <span className="mx_EventTile_readAvatarRemainder"
                     onClick={this.toggleAllReadAvatars}
-                    style={{ right: -(left - 15) }}>{ remainder }+
+                    style={{ right: -(left - receiptOffset) }}>{ remainder }+
                 </span>;
             }
         }
