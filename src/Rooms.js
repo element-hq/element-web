@@ -90,11 +90,7 @@ export function guessAndSetDMRoom(room, isDirect) {
         newTarget = null;
     }
 
-    // give some time for the user to see the icon change first, since
-    // this will hide the context menu once it completes
-    return q.delay(500).then(() => {
-        return setDMRoom(room.roomId, newTarget);
-    });
+    return setDMRoom(room.roomId, newTarget);
 }
 
 /**
