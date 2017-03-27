@@ -212,7 +212,7 @@ module.exports = React.createClass({
                 });
 
                 // If the query is a valid address, add an entry for that
-                // This i simportant, otherwise there's no way to invite
+                // This is simportant, otherwise there's no way to invite
                 // a perfectly valid address if there are close matches.
                 const addrType = getAddressType(query);
                 if (addrType !== null) {
