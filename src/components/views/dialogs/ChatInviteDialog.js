@@ -30,15 +30,6 @@ import Fuse from 'fuse.js';
 
 const TRUNCATE_QUERY_LIST = 40;
 
-/*
- * Escapes a string so it can be used in a RegExp
- * Basically just replaces: \ ^ $ * + ? . ( ) | { } [ ]
- * From http://stackoverflow.com/a/6969486
- */
-function escapeRegExp(str) {
-    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-}
-
 module.exports = React.createClass({
     displayName: "ChatInviteDialog",
     propTypes: {
@@ -220,20 +211,19 @@ module.exports = React.createClass({
                     }
                 });
 
-                // If the query isn't a user we know about, but is a
-                // valid address, add an entry for that
-                if (queryList.length == 0) {
-                    const addrType = getAddressType(query);
-                    if (addrType !== null) {
-                        queryList[0] = {
-                            addressType: addrType,
-                            address: query,
-                            isKnown: false,
-                        };
-                        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
-                        if (addrType == 'email') {
-                            this._lookupThreepid(addrType, query).done();
-                        }
+                // If the query is a valid address, add an entry for that
+                // This is important, otherwise there's no way to invite
+                // a perfectly valid address if there are close matches.
+                const addrType = getAddressType(query);
+                if (addrType !== null) {
+                    queryList.unshift({
+                        addressType: addrType,
+                        address: query,
+                        isKnown: false,
+                    });
+                    if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+                    if (addrType == 'email') {
+                        this._lookupThreepid(addrType, query).done();
                     }
                 }
             }
