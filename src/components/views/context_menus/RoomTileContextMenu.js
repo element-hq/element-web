@@ -138,7 +138,9 @@ module.exports = React.createClass({
 
         if (MatrixClientPeg.get().isGuest()) return;
 
-        Rooms.guessAndSetDMRoom(this.props.room, newIsDirectMessage).finally(() => {
+        Rooms.guessAndSetDMRoom(
+            this.props.room, newIsDirectMessage
+        ).delay(500).finally(() => {
             // Close the context menu
             if (this.props.onFinished) {
                 this.props.onFinished();
