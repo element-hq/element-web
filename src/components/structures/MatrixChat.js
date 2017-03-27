@@ -568,6 +568,9 @@ module.exports = React.createClass({
             case 'set_theme':
                 this._onSetTheme(payload.value);
                 break;
+            case 'on_logging_in':
+                this.setState({loggingIn: true});
+                break;
             case 'on_logged_in':
                 this._onLoggedIn(payload.teamToken);
                 break;
@@ -757,6 +760,7 @@ module.exports = React.createClass({
         this.setState({
             guestCreds: null,
             logged_in: true,
+            loggingIn: false,
         });
 
         if (teamToken) {
@@ -1160,7 +1164,11 @@ module.exports = React.createClass({
         // console.log("rendering; loading="+this.state.loading+"; screen="+this.state.screen +
         //             "; logged_in="+this.state.logged_in+"; ready="+this.state.ready);
 
-        if (this.state.loading) {
+        // `loading` might be set to false before `logged_in = true`, causing the default
+        // (`<Login>`) to be visible for a few MS (say, whilst a request is in-flight to
+        // the RTS). So in the meantime, use `loggingIn`, which is true between
+        // actions `on_logging_in` and `on_logged_in`.
+        if (this.state.loading || this.state.loggingIn) {
             var Spinner = sdk.getComponent('elements.Spinner');
             return (
                 <div className="mx_MatrixChat_splash">
