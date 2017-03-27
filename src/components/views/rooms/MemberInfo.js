@@ -218,11 +218,13 @@ module.exports = WithMatrixClient(React.createClass({
     },
 
     onKick: function() {
+        const membership = this.props.member.membership;
+        const kickLabel = membership === "invite" ? "Disinvite" : "Kick";
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
             member: this.props.member,
-            action: 'Kick',
-            askReason: true,
+            action: kickLabel,
+            askReason: membership == "join",
             danger: true,
             onFinished: (proceed, reason) => {
                 if (!proceed) return;
