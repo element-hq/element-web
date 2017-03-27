@@ -16,6 +16,8 @@ limitations under the License.
 */
 
 import React from 'react';
+import url from 'url';
+import classnames from 'classnames';
 
 import sdk from '../../../index';
 
@@ -158,6 +160,7 @@ export const RecaptchaAuthEntry = React.createClass({
         submitAuthDict: React.PropTypes.func.isRequired,
         stageParams: React.PropTypes.object.isRequired,
         errorText: React.PropTypes.string,
+        busy: React.PropTypes.bool,
     },
 
     _onCaptchaResponse: function(response) {
@@ -168,6 +171,11 @@ export const RecaptchaAuthEntry = React.createClass({
     },
 
     render: function() {
+        if (this.props.busy) {
+            const Loader = sdk.getComponent("elements.Spinner");
+            return <Loader />;
+        }
+
         const CaptchaForm = sdk.getComponent("views.login.CaptchaForm");
         var sitePublicKey = this.props.stageParams.public_key;
         return (
@@ -255,6 +263,137 @@ export const EmailIdentityAuthEntry = React.createClass({
     },
 });
 
+export const MsisdnAuthEntry = React.createClass({
+    displayName: 'MsisdnAuthEntry',
+
+    statics: {
+        LOGIN_TYPE: "m.login.msisdn",
+    },
+
+    propTypes: {
+        inputs: React.PropTypes.shape({
+            phoneCountry: React.PropTypes.string,
+            phoneNumber: React.PropTypes.string,
+        }),
+        fail: React.PropTypes.func,
+        clientSecret: React.PropTypes.func,
+        submitAuthDict: React.PropTypes.func.isRequired,
+        matrixClient: React.PropTypes.object,
+        submitAuthDict: React.PropTypes.func,
+    },
+
+    getInitialState: function() {
+        return {
+            token: '',
+            requestingToken: false,
+        };
+    },
+
+    componentWillMount: function() {
+        this._sid = null;
+        this._msisdn = null;
+        this._tokenBox = null;
+
+        this.setState({requestingToken: true});
+        this._requestMsisdnToken().catch((e) => {
+            this.props.fail(e);
+        }).finally(() => {
+            this.setState({requestingToken: false});
+        }).done();
+    },
+
+    /*
+     * Requests a verification token by SMS.
+     */
+    _requestMsisdnToken: function() {
+        return this.props.matrixClient.requestRegisterMsisdnToken(
+            this.props.inputs.phoneCountry,
+            this.props.inputs.phoneNumber,
+            this.props.clientSecret,
+            1, // TODO: Multiple send attempts?
+        ).then((result) => {
+            this._sid = result.sid;
+            this._msisdn = result.msisdn;
+        });
+    },
+
+    _onTokenChange: function(e) {
+        this.setState({
+            token: e.target.value,
+        });
+    },
+
+    _onFormSubmit: function(e) {
+        e.preventDefault();
+        if (this.state.token == '') return;
+
+            this.setState({
+                errorText: null,
+            });
+
+        this.props.matrixClient.submitMsisdnToken(
+            this._sid, this.props.clientSecret, this.state.token
+        ).then((result) => {
+            if (result.success) {
+                const idServerParsedUrl = url.parse(
+                    this.props.matrixClient.getIdentityServerUrl(),
+                )
+                this.props.submitAuthDict({
+                    type: MsisdnAuthEntry.LOGIN_TYPE,
+                    threepid_creds: {
+                        sid: this._sid,
+                        client_secret: this.props.clientSecret,
+                        id_server: idServerParsedUrl.host,
+                    },
+                });
+            } else {
+                this.setState({
+                    errorText: "Token incorrect",
+                });
+            }
+        }).catch((e) => {
+            this.props.fail(e);
+            console.log("Failed to submit msisdn token");
+        }).done();
+    },
+
+    render: function() {
+        if (this.state.requestingToken) {
+            const Loader = sdk.getComponent("elements.Spinner");
+            return <Loader />;
+        } else {
+            const enableSubmit = Boolean(this.state.token);
+            const submitClasses = classnames({
+                mx_InteractiveAuthEntryComponents_msisdnSubmit: true,
+                mx_UserSettings_button: true, // XXX button classes
+            });
+            return (
+                <div>
+                    <p>A text message has been sent to +<i>{this._msisdn}</i></p>
+                    <p>Please enter the code it contains:</p>
+                    <div className="mx_InteractiveAuthEntryComponents_msisdnWrapper">
+                        <form onSubmit={this._onFormSubmit}>
+                            <input type="text"
+                                className="mx_InteractiveAuthEntryComponents_msisdnEntry"
+                                value={this.state.token}
+                                onChange={this._onTokenChange}
+                            />
+                            <br />
+                            <input type="submit" value="Submit"
+                                className={submitClasses}
+                                disabled={!enableSubmit}
+                            />
+                        </form>
+                        <div className="error">
+                            {this.state.errorText}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    },
+});
+
 export const FallbackAuthEntry = React.createClass({
     displayName: 'FallbackAuthEntry',
 
@@ -313,6 +452,7 @@ const AuthEntryComponents = [
     PasswordAuthEntry,
     RecaptchaAuthEntry,
     EmailIdentityAuthEntry,
+    MsisdnAuthEntry,
 ];
 
 export function getEntryComponentForLoginType(loginType) {

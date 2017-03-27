@@ -58,6 +58,22 @@ export function unicodeToImage(str) {
     return str;
 }
 
+/**
+ * Given one or more unicode characters (represented by unicode
+ * character number), return an image node with the corresponding
+ * emoji.
+ *
+ * @param alt {string} String to use for the image alt text
+ * @param unicode {integer} One or more integers representing unicode characters
+ * @returns A img node with the corresponding emoji
+ */
+export function charactersToImageNode(alt, ...unicode) {
+    const fileName = unicode.map((u) => {
+        return u.toString(16);
+    }).join('-');
+    return <img alt={alt} src={`${emojione.imagePathSVG}${fileName}.svg${emojione.cacheBustParam}`}/>;
+}
+
 export function stripParagraphs(html: string): string {
     const contentDiv = document.createElement('div');
     contentDiv.innerHTML = html;

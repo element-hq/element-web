@@ -79,6 +79,8 @@ import views$dialogs$ChatCreateOrReuseDialog from './components/views/dialogs/Ch
 views$dialogs$ChatCreateOrReuseDialog && (module.exports.components['views.dialogs.ChatCreateOrReuseDialog'] = views$dialogs$ChatCreateOrReuseDialog);
 import views$dialogs$ChatInviteDialog from './components/views/dialogs/ChatInviteDialog';
 views$dialogs$ChatInviteDialog && (module.exports.components['views.dialogs.ChatInviteDialog'] = views$dialogs$ChatInviteDialog);
+import views$dialogs$ConfirmRedactDialog from './components/views/dialogs/ConfirmRedactDialog';
+views$dialogs$ConfirmRedactDialog && (module.exports.components['views.dialogs.ConfirmRedactDialog'] = views$dialogs$ConfirmRedactDialog);
 import views$dialogs$ConfirmUserActionDialog from './components/views/dialogs/ConfirmUserActionDialog';
 views$dialogs$ConfirmUserActionDialog && (module.exports.components['views.dialogs.ConfirmUserActionDialog'] = views$dialogs$ConfirmUserActionDialog);
 import views$dialogs$DeactivateAccountDialog from './components/views/dialogs/DeactivateAccountDialog';
@@ -109,6 +111,8 @@ import views$elements$DeviceVerifyButtons from './components/views/elements/Devi
 views$elements$DeviceVerifyButtons && (module.exports.components['views.elements.DeviceVerifyButtons'] = views$elements$DeviceVerifyButtons);
 import views$elements$DirectorySearchBox from './components/views/elements/DirectorySearchBox';
 views$elements$DirectorySearchBox && (module.exports.components['views.elements.DirectorySearchBox'] = views$elements$DirectorySearchBox);
+import views$elements$Dropdown from './components/views/elements/Dropdown';
+views$elements$Dropdown && (module.exports.components['views.elements.Dropdown'] = views$elements$Dropdown);
 import views$elements$EditableText from './components/views/elements/EditableText';
 views$elements$EditableText && (module.exports.components['views.elements.EditableText'] = views$elements$EditableText);
 import views$elements$EditableTextContainer from './components/views/elements/EditableTextContainer';
@@ -131,6 +135,8 @@ import views$login$CaptchaForm from './components/views/login/CaptchaForm';
 views$login$CaptchaForm && (module.exports.components['views.login.CaptchaForm'] = views$login$CaptchaForm);
 import views$login$CasLogin from './components/views/login/CasLogin';
 views$login$CasLogin && (module.exports.components['views.login.CasLogin'] = views$login$CasLogin);
+import views$login$CountryDropdown from './components/views/login/CountryDropdown';
+views$login$CountryDropdown && (module.exports.components['views.login.CountryDropdown'] = views$login$CountryDropdown);
 import views$login$CustomServerDialog from './components/views/login/CustomServerDialog';
 views$login$CustomServerDialog && (module.exports.components['views.login.CustomServerDialog'] = views$login$CustomServerDialog);
 import views$login$InteractiveAuthEntryComponents from './components/views/login/InteractiveAuthEntryComponents';
@@ -223,6 +229,8 @@ import views$rooms$TopUnreadMessagesBar from './components/views/rooms/TopUnread
 views$rooms$TopUnreadMessagesBar && (module.exports.components['views.rooms.TopUnreadMessagesBar'] = views$rooms$TopUnreadMessagesBar);
 import views$rooms$UserTile from './components/views/rooms/UserTile';
 views$rooms$UserTile && (module.exports.components['views.rooms.UserTile'] = views$rooms$UserTile);
+import views$settings$AddPhoneNumber from './components/views/settings/AddPhoneNumber';
+views$settings$AddPhoneNumber && (module.exports.components['views.settings.AddPhoneNumber'] = views$settings$AddPhoneNumber);
 import views$settings$ChangeAvatar from './components/views/settings/ChangeAvatar';
 views$settings$ChangeAvatar && (module.exports.components['views.settings.ChangeAvatar'] = views$settings$ChangeAvatar);
 import views$settings$ChangeDisplayName from './components/views/settings/ChangeDisplayName';

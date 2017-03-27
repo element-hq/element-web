@@ -155,10 +155,21 @@ module.exports = React.createClass({
 
     _onUIAuthFinished: function(success, response, extra) {
         if (!success) {
+            let msg = response.message || response.toString();
+            // can we give a better error message?
+            if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
+                let msisdn_available = false;
+                for (const flow of response.available_flows) {
+                    msisdn_available |= flow.stages.indexOf('m.login.msisdn') > -1;
+                }
+                if (!msisdn_available) {
+                    msg = "This server does not support authentication with a phone number";
+                }
+            }
             this.setState({
                 busy: false,
                 doingUIAuth: false,
-                errorText: response.message || response.toString(),
+                errorText: msg,
             });
             return;
         }
@@ -261,6 +272,9 @@ module.exports = React.createClass({
             case "RegistrationForm.ERR_EMAIL_INVALID":
                 errMsg = "This doesn't look like a valid email address";
                 break;
+            case "RegistrationForm.ERR_PHONE_NUMBER_INVALID":
+                errMsg = "This doesn't look like a valid phone number";
+                break;
             case "RegistrationForm.ERR_USERNAME_INVALID":
                 errMsg = "User names may only contain letters, numbers, dots, hyphens and underscores.";
                 break;
@@ -295,15 +309,20 @@ module.exports = React.createClass({
             guestAccessToken = null;
         }
 
+        // Only send the bind params if we're sending username / pw params
+        // (Since we need to send no params at all to use the ones saved in the
+        // session).
+        const bindThreepids = this.state.formVals.password ? {
+            email: true,
+            msisdn: true,
+        } : {};
+
         return this._matrixClient.register(
             this.state.formVals.username,
             this.state.formVals.password,
             undefined, // session id: included in the auth dict already
             auth,
-            // Only send the bind_email param if we're sending username / pw params
-            // (Since we need to send no params at all to use the ones saved in the
-            // session).
-            Boolean(this.state.formVals.username) || undefined,
+            bindThreepids,
             guestAccessToken,
         );
     },
@@ -354,6 +373,8 @@ module.exports = React.createClass({
                     <RegistrationForm
                         defaultUsername={this.state.formVals.username}
                         defaultEmail={this.state.formVals.email}
+                        defaultPhoneCountry={this.state.formVals.phoneCountry}
+                        defaultPhoneNumber={this.state.formVals.phoneNumber}
                         defaultPassword={this.state.formVals.password}
                         teamsConfig={this.state.teamsConfig}
                         guestUsername={guestUsername}

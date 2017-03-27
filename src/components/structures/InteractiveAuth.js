@@ -140,13 +140,20 @@ export default React.createClass({
         });
     },
 
-    _requestCallback: function(auth) {
+    _requestCallback: function(auth, background) {
+        const makeRequestPromise = this.props.makeRequest(auth);
+
+        // if it's a background request, just do it: we don't want
+        // it to affect the state of our UI.
+        if (background) return makeRequestPromise;
+
+        // otherwise, manage the state of the spinner and error messages
         this.setState({
             busy: true,
             errorText: null,
             stageErrorText: null,
         });
-        return this.props.makeRequest(auth).finally(() => {
+        return makeRequestPromise.finally(() => {
             if (this._unmounted) {
                 return;
             }
