@@ -276,6 +276,11 @@ export function setLoggedIn(credentials) {
     console.log("setLoggedIn => %s (guest=%s) hs=%s",
                 credentials.userId, credentials.guest,
                 credentials.homeserverUrl);
+    // This is dispatched to indicate that the user is still in the process of logging in
+    // because `teamPromise` may take some time to resolve, breaking the assumption that
+    // `setLoggedIn` takes an "instant" to complete, and dispatch `on_logged_in` a few ms
+    // later than MatrixChat might assume.
+    dis.dispatch({action: 'on_logging_in'});
 
     // Resolves by default
     let teamPromise = Promise.resolve(null);

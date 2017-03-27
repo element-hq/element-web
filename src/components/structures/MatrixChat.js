@@ -117,7 +117,8 @@ module.exports = React.createClass({
             // If we're trying to just view a user ID (i.e. /user URL), this is it
             viewUserId: null,
 
-            logged_in: false,
+            loggedIn: false,
+            loggingIn: false,
             collapse_lhs: false,
             collapse_rhs: false,
             ready: false,
@@ -315,7 +316,7 @@ module.exports = React.createClass({
         const newState = {
             screen: undefined,
             viewUserId: null,
-            logged_in: false,
+            loggedIn: false,
             ready: false,
             upgradeUsername: null,
             guestAccessToken: null,
@@ -364,7 +365,7 @@ module.exports = React.createClass({
                 this.notifyNewScreen('login');
                 break;
             case 'start_post_registration':
-                this.setState({ // don't clobber logged_in status
+                this.setState({ // don't clobber loggedIn status
                     screen: 'post_registration'
                 });
                 break;
@@ -388,7 +389,7 @@ module.exports = React.createClass({
                 this.notifyNewScreen('register');
                 break;
             case 'start_password_recovery':
-                if (this.state.logged_in) return;
+                if (this.state.loggedIn) return;
                 this.setStateForNewScreen({
                     screen: 'forgot_password',
                 });
@@ -567,6 +568,9 @@ module.exports = React.createClass({
                 break;
             case 'set_theme':
                 this._onSetTheme(payload.value);
+                break;
+            case 'on_logging_in':
+                this.setState({loggingIn: true});
                 break;
             case 'on_logged_in':
                 this._onLoggedIn(payload.teamToken);
@@ -756,7 +760,8 @@ module.exports = React.createClass({
     _onLoggedIn: function(teamToken) {
         this.setState({
             guestCreds: null,
-            logged_in: true,
+            loggedIn: true,
+            loggingIn: false,
         });
 
         if (teamToken) {
@@ -790,7 +795,7 @@ module.exports = React.createClass({
     _onLoggedOut: function() {
         this.notifyNewScreen('login');
         this.setStateForNewScreen({
-            logged_in: false,
+            loggedIn: false,
             ready: false,
             collapse_lhs: false,
             collapse_rhs: false,
@@ -971,7 +976,7 @@ module.exports = React.createClass({
 
             // we can't view a room unless we're logged in
             // (a guest account is fine)
-            if (!this.state.logged_in) {
+            if (!this.state.loggedIn) {
                 // we may still be loading (ie, trying to register a guest
                 // session); otherwise we're (probably) already showing a login
                 // screen. Either way, we'll show the room once the client starts.
@@ -1157,10 +1162,11 @@ module.exports = React.createClass({
         var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
         var LoggedInView = sdk.getComponent('structures.LoggedInView');
 
-        // console.log("rendering; loading="+this.state.loading+"; screen="+this.state.screen +
-        //             "; logged_in="+this.state.logged_in+"; ready="+this.state.ready);
-
-        if (this.state.loading) {
+        // `loading` might be set to false before `loggedIn = true`, causing the default
+        // (`<Login>`) to be visible for a few MS (say, whilst a request is in-flight to
+        // the RTS). So in the meantime, use `loggingIn`, which is true between
+        // actions `on_logging_in` and `on_logged_in`.
+        if (this.state.loading || this.state.loggingIn) {
             var Spinner = sdk.getComponent('elements.Spinner');
             return (
                 <div className="mx_MatrixChat_splash">
@@ -1174,7 +1180,7 @@ module.exports = React.createClass({
                 <PostRegistration
                     onComplete={this.onFinishPostRegistration} />
             );
-        } else if (this.state.logged_in && this.state.ready) {
+        } else if (this.state.loggedIn && this.state.ready) {
             /* for now, we stuff the entirety of our props and state into the LoggedInView.
              * we should go through and figure out what we actually need to pass down, as well
              * as using something like redux to avoid having a billion bits of state kicking around.
@@ -1189,7 +1195,7 @@ module.exports = React.createClass({
                     {...this.state}
                 />
             );
-        } else if (this.state.logged_in) {
+        } else if (this.state.loggedIn) {
             // we think we are logged in, but are still waiting for the /sync to complete
             var Spinner = sdk.getComponent('elements.Spinner');
             return (
