@@ -96,6 +96,12 @@ module.exports = React.createClass({
                     });
                 }
                 break;
+            case 'on_room_read':
+                payload.room.setUnreadNotificationCount('total', 0);
+                payload.room.setUnreadNotificationCount('highlight', 0);
+                // Force an update because this state is too deep to cause an update
+                this.forceUpdate();
+                break;
         }
     },
 
