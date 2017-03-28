@@ -719,20 +719,17 @@ module.exports = React.createClass({
             );
         }
 
-        var emailNotificationsRow;
-        if (this.props.threepids.filter(function(tp) {
-                if (tp.medium == "email") {
-                    return true;
-                }
-            }).length == 0) {
+        const emailThreepids = this.props.threepids.filter((tp) => tp.medium == "email");
+        let emailNotificationsRow;
+        if (emailThreepids.length == 0) {
             emailNotificationsRow = <div>
                 Add an email address above to configure email notifications
             </div>;
         } else {
             // This only supports the first email address in your profile for now
             emailNotificationsRow = this.emailNotificationsRow(
-                this.props.threepids[0].address,
-                "Enable email notifications ("+this.props.threepids[0].address+")"
+                emailThreepids[0].address,
+                "Enable email notifications ("+emailThreepids[0].address+")"
             );
         }
 
