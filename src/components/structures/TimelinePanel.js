@@ -478,7 +478,9 @@ var TimelinePanel = React.createClass({
         if (this.isAtEndOfLiveTimeline()) {
             this.props.timelineSet.room.setUnreadNotificationCount('total', 0);
             this.props.timelineSet.room.setUnreadNotificationCount('highlight', 0);
-            // XXX: i'm a bit surprised we don't have to emit an event or dispatch to get this picked up
+            dis.dispatch({
+                action: 'on_room_read',
+            });
         }
 
         var currentReadUpToEventId = this._getCurrentReadReceipt(true);

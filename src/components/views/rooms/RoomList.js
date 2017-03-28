@@ -96,6 +96,12 @@ module.exports = React.createClass({
                     });
                 }
                 break;
+            case 'on_room_read':
+                // Force an update because the notif count state is too deep to cause
+                // an update. This forces the local echo of reading notifs to be
+                // reflected by the RoomTiles.
+                this.forceUpdate();
+                break;
         }
     },
 
