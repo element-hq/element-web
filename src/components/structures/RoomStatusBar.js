@@ -96,26 +96,12 @@ module.exports = React.createClass({
     componentWillMount: function() {
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
+
+        this._checkSize();
     },
 
-    componentDidUpdate: function(prevProps, prevState) {
-        if(this.props.onResize && this._checkForResize(prevProps, prevState)) {
-            this.props.onResize();
-        }
-
-        const size = this._getSize(this.props, this.state);
-        if (size > 0) {
-            this.props.onVisible();
-        } else {
-            if (this.hideDebouncer) {
-                clearTimeout(this.hideDebouncer);
-            }
-            this.hideDebouncer = setTimeout(() => {
-                // temporarily stop hiding the statusbar as per
-                // https://github.com/vector-im/riot-web/issues/1991#issuecomment-276953915
-                // this.props.onHidden();
-            }, HIDE_DEBOUNCE_MS);
-        }
+    componentDidUpdate: function() {
+        this._checkSize();
     },
 
     componentWillUnmount: function() {
@@ -142,31 +128,31 @@ module.exports = React.createClass({
         });
     },
 
+    // Check whether current size is greater than 0, if yes call props.onVisible
+    _checkSize: function () {
+        if (this.props.onVisible && this._getSize()) {
+            this.props.onVisible();
+        }
+    },
+
     // We don't need the actual height - just whether it is likely to have
     // changed - so we use '0' to indicate normal size, and other values to
     // indicate other sizes.
-    _getSize: function(props, state) {
-        if (state.syncState === "ERROR" ||
-            (state.usersTyping.length > 0) ||
-            props.numUnreadMessages ||
-            !props.atEndOfLiveTimeline ||
-            props.hasActiveCall ||
-            props.tabComplete.isTabCompleting()
+    _getSize: function() {
+        if (this.state.syncState === "ERROR" ||
+            (this.state.usersTyping.length > 0) ||
+            this.props.numUnreadMessages ||
+            !this.props.atEndOfLiveTimeline ||
+            this.props.hasActiveCall ||
+            this.props.tabComplete.isTabCompleting()
         ) {
             return STATUS_BAR_EXPANDED;
-        } else if (props.tabCompleteEntries) {
+        } else if (this.props.tabCompleteEntries) {
             return STATUS_BAR_HIDDEN;
-        } else if (props.unsentMessageError) {
+        } else if (this.props.unsentMessageError) {
             return STATUS_BAR_EXPANDED_LARGE;
         }
         return STATUS_BAR_HIDDEN;
-    },
-
-    // determine if we need to call onResize
-    _checkForResize: function(prevProps, prevState) {
-        // figure out the old height and the new height of the status bar.
-        return this._getSize(prevProps, prevState)
-            !== this._getSize(this.props, this.state);
     },
 
     // return suitable content for the image on the left of the status bar.
