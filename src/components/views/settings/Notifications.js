@@ -719,9 +719,9 @@ module.exports = React.createClass({
             );
         }
 
-        const emailThreepids = this.props.threepids.filter((tp) => tp.medium == "email");
+        const emailThreepids = this.props.threepids.filter((tp) => tp.medium === "email");
         let emailNotificationsRow;
-        if (emailThreepids.length == 0) {
+        if (emailThreepids.length === 0) {
             emailNotificationsRow = <div>
                 Add an email address above to configure email notifications
             </div>;
