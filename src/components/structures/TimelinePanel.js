@@ -476,9 +476,10 @@ var TimelinePanel = React.createClass({
         // if we are scrolled to the bottom, do a quick-reset of our unreadNotificationCount
         // to avoid having to wait from the remote echo from the homeserver.
         if (this.isAtEndOfLiveTimeline()) {
+            this.props.timelineSet.room.setUnreadNotificationCount('total', 0);
+            this.props.timelineSet.room.setUnreadNotificationCount('highlight', 0);
             dis.dispatch({
                 action: 'on_room_read',
-                room: this.props.timelineSet.room,
             });
         }
 
