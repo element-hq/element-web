@@ -98,7 +98,7 @@ var Notifier = {
         MatrixClientPeg.get().on("Room.receipt", this.boundOnRoomReceipt);
         MatrixClientPeg.get().on("sync", this.boundOnSyncStateChange);
         this.toolbarHidden = false;
-        this.isPrepared = false;
+        this.isSyncing = false;
     },
 
     stop: function() {
@@ -107,7 +107,7 @@ var Notifier = {
             MatrixClientPeg.get().removeListener("Room.receipt", this.boundOnRoomReceipt);
             MatrixClientPeg.get().removeListener('sync', this.boundOnSyncStateChange);
         }
-        this.isPrepared = false;
+        this.isSyncing = false;
     },
 
     supportsDesktopNotifications: function() {
@@ -213,18 +213,18 @@ var Notifier = {
     },
 
     onSyncStateChange: function(state) {
-        if (state === "PREPARED" || state === "SYNCING") {
-            this.isPrepared = true;
+        if (state === "SYNCING") {
+            this.isSyncing = true;
         }
         else if (state === "STOPPED" || state === "ERROR") {
-            this.isPrepared = false;
+            this.isSyncing = false;
         }
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
         if (toStartOfTimeline) return;
         if (!room) return;
-        if (!this.isPrepared) return; // don't alert for any messages initially
+        if (!this.isSyncing) return; // don't alert for any messages initially
         if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) return;
         if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
 
