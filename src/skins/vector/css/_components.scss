@@ -20,6 +20,7 @@
 @import "./matrix-react-sdk/views/dialogs/_SetDisplayNameDialog.scss";
 @import "./matrix-react-sdk/views/dialogs/_UnknownDeviceDialog.scss";
 @import "./matrix-react-sdk/views/elements/_AccessibleButton.scss";
+@import "./matrix-react-sdk/views/dialogs/_ModifyTagDialog.scss";
 @import "./matrix-react-sdk/views/elements/_AddressSelector.scss";
 @import "./matrix-react-sdk/views/elements/_AddressTile.scss";
 @import "./matrix-react-sdk/views/elements/_DirectorySearchBox.scss";
@@ -54,6 +55,7 @@
 @import "./matrix-react-sdk/views/rooms/_TopUnreadMessagesBar.scss";
 @import "./matrix-react-sdk/views/settings/_DevicesPanel.scss";
 @import "./matrix-react-sdk/views/settings/_IntegrationsManager.scss";
+@import "./matrix-react-sdk/views/settings/_RoomTags.scss";
 @import "./matrix-react-sdk/views/voip/_CallView.scss";
 @import "./matrix-react-sdk/views/voip/_IncomingCallbox.scss";
 @import "./matrix-react-sdk/views/voip/_VideoView.scss";

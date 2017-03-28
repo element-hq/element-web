@@ -303,6 +303,10 @@ textarea {
     display: inline;
 }
 
+.mx_textButton.disabled {
+  background-color: $accent-color-disabled;
+}
+
 .mx_button_row {
     margin-top: 69px;
 }

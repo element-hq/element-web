@@ -1,0 +1,24 @@
+.mx_UserSettings_RoomTags_List {
+  width: 75%;
+  margin-left: 12.5% 0%;
+  border-color: $input-border-color;
+  border-style: solid;
+  border-width: 1px 0px;
+  max-height: 10em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-y: auto;
+  margin: 20px 20px;
+}
+.mx_UserSettings_RoomTags_ListTag {
+  display:block;
+  padding: 5px;
+  height: 1.5em;
+}
+
+.mx_UserSettings_RoomTags_ListTag:hover{
+  background-color: rgba(151, 151, 151, 0.25);
+}
+.mx_UserSettings_RoomTags_ListTag.selected {
+  background-color: rgba(151, 151, 151, 0.25);
+}
