@@ -473,16 +473,6 @@ var TimelinePanel = React.createClass({
         // we still have a client.
         if (!MatrixClientPeg.get()) return;
 
-        // if we are scrolled to the bottom, do a quick-reset of our unreadNotificationCount
-        // to avoid having to wait from the remote echo from the homeserver.
-        if (this.isAtEndOfLiveTimeline()) {
-            this.props.timelineSet.room.setUnreadNotificationCount('total', 0);
-            this.props.timelineSet.room.setUnreadNotificationCount('highlight', 0);
-            dis.dispatch({
-                action: 'on_room_read',
-            });
-        }
-
         var currentReadUpToEventId = this._getCurrentReadReceipt(true);
         var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
 
@@ -519,6 +509,14 @@ var TimelinePanel = React.createClass({
             MatrixClientPeg.get().sendReadReceipt(lastReadEvent).catch(() => {
                 // it failed, so allow retries next time the user is active
                 this.last_rr_sent_event_id = undefined;
+            });
+
+            // do a quick-reset of our unreadNotificationCount to avoid having
+            // to wait from the remote echo from the homeserver.
+            this.props.timelineSet.room.setUnreadNotificationCount('total', 0);
+            this.props.timelineSet.room.setUnreadNotificationCount('highlight', 0);
+            dis.dispatch({
+                action: 'on_room_read',
             });
         }
     },
