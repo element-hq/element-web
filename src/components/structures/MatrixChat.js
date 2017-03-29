@@ -29,10 +29,6 @@ var UserActivity = require("../../UserActivity");
 var Presence = require("../../Presence");
 var dis = require("../../dispatcher");
 
-var Login = require("./login/Login");
-var Registration = require("./login/Registration");
-var PostRegistration = require("./login/PostRegistration");
-
 var Modal = require("../../Modal");
 var Tinter = require("../../Tinter");
 var sdk = require('../../index');
@@ -1159,15 +1155,12 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
-        var LoggedInView = sdk.getComponent('structures.LoggedInView');
-
         // `loading` might be set to false before `loggedIn = true`, causing the default
         // (`<Login>`) to be visible for a few MS (say, whilst a request is in-flight to
         // the RTS). So in the meantime, use `loggingIn`, which is true between
         // actions `on_logging_in` and `on_logged_in`.
         if (this.state.loading || this.state.loggingIn) {
-            var Spinner = sdk.getComponent('elements.Spinner');
+            const Spinner = sdk.getComponent('elements.Spinner');
             return (
                 <div className="mx_MatrixChat_splash">
                     <Spinner />
@@ -1176,6 +1169,7 @@ module.exports = React.createClass({
         }
         // needs to be before normal PageTypes as you are logged in technically
         else if (this.state.screen == 'post_registration') {
+            const PostRegistration = sdk.getComponent('structures.login.PostRegistration');
             return (
                 <PostRegistration
                     onComplete={this.onFinishPostRegistration} />
@@ -1185,6 +1179,7 @@ module.exports = React.createClass({
              * we should go through and figure out what we actually need to pass down, as well
              * as using something like redux to avoid having a billion bits of state kicking around.
              */
+            const LoggedInView = sdk.getComponent('structures.LoggedInView');
             return (
                <LoggedInView ref="loggedInView" matrixClient={MatrixClientPeg.get()}
                     onRoomIdResolved={this.onRoomIdResolved}
@@ -1197,7 +1192,7 @@ module.exports = React.createClass({
             );
         } else if (this.state.loggedIn) {
             // we think we are logged in, but are still waiting for the /sync to complete
-            var Spinner = sdk.getComponent('elements.Spinner');
+            const Spinner = sdk.getComponent('elements.Spinner');
             return (
                 <div className="mx_MatrixChat_splash">
                     <Spinner />
@@ -1207,6 +1202,7 @@ module.exports = React.createClass({
                 </div>
             );
         } else if (this.state.screen == 'register') {
+            const Registration = sdk.getComponent('structures.login.Registration');
             return (
                 <Registration
                     clientSecret={this.state.register_client_secret}
@@ -1231,6 +1227,7 @@ module.exports = React.createClass({
                     />
             );
         } else if (this.state.screen == 'forgot_password') {
+            const ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
             return (
                 <ForgotPassword
                     defaultHsUrl={this.getDefaultHsUrl()}
@@ -1242,6 +1239,7 @@ module.exports = React.createClass({
                     onLoginClick={this.onLoginClick} />
             );
         } else {
+            const Login = sdk.getComponent('structures.login.Login');
             var r = (
                 <Login
                     onLoggedIn={Lifecycle.setLoggedIn}
