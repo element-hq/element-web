@@ -156,9 +156,10 @@ var RoomSubList = React.createClass({
     tsOfNewestEvent: function(room) {
         for (var i = room.timeline.length - 1; i >= 0; --i) {
             var ev = room.timeline[i];
-            if (Unread.eventTriggersUnreadCount(ev) ||
-                (ev.sender && ev.sender.userId === MatrixClientPeg.get().credentials.userId))
-            {
+            if (ev.getTs() &&
+                (Unread.eventTriggersUnreadCount(ev) ||
+                (ev.getSender() === MatrixClientPeg.get().credentials.userId))
+            ) {
                 return ev.getTs();
             }
         }
@@ -166,7 +167,7 @@ var RoomSubList = React.createClass({
         // we might only have events that don't trigger the unread indicator,
         // in which case use the oldest event even if normally it wouldn't count.
         // This is better than just assuming the last event was forever ago.
-        if (room.timeline.length) {
+        if (room.timeline.length && room.timeline[0].getTs()) {
             return room.timeline[0].getTs();
         } else {
             return Number.MAX_SAFE_INTEGER;
