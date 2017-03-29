@@ -53,14 +53,12 @@ module.exports = React.createClass({
         // login shouldn't care how password recovery is done.
         onForgotPasswordClick: React.PropTypes.func,
         onCancelClick: React.PropTypes.func,
-
-        initialErrorText: React.PropTypes.string,
     },
 
     getInitialState: function() {
         return {
             busy: false,
-            errorText: this.props.initialErrorText,
+            errorText: null,
             loginIncorrect: false,
             enteredHomeserverUrl: this.props.customHsUrl || this.props.defaultHsUrl,
             enteredIdentityServerUrl: this.props.customIsUrl || this.props.defaultIsUrl,
