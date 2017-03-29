@@ -194,9 +194,6 @@ module.exports = React.createClass({
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
 
-        // if the automatic session load failed, the error
-        this.sessionLoadError = null;
-
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
         }
@@ -285,7 +282,6 @@ module.exports = React.createClass({
             });
         }).catch((e) => {
             console.error("Unable to load session", e);
-            this.sessionLoadError = e.message;
         }).done(()=>{
             // stuff this through the dispatcher so that it happens
             // after the on_logged_in action.
@@ -1240,7 +1236,7 @@ module.exports = React.createClass({
             );
         } else {
             const Login = sdk.getComponent('structures.login.Login');
-            var r = (
+            return (
                 <Login
                     onLoggedIn={Lifecycle.setLoggedIn}
                     onRegisterClick={this.onRegisterClick}
@@ -1253,16 +1249,8 @@ module.exports = React.createClass({
                     onForgotPasswordClick={this.onForgotPasswordClick}
                     enableGuest={this.props.enableGuest}
                     onCancelClick={this.state.guestCreds ? this.onReturnToGuestClick : null}
-                    initialErrorText={this.sessionLoadError}
                 />
             );
-
-            // we only want to show the session load error the first time the
-            // Login component is rendered. This is pretty hacky but I can't
-            // think of another way to achieve it.
-            this.sessionLoadError = null;
-
-            return r;
         }
     }
 });
