@@ -845,10 +845,7 @@ module.exports = React.createClass({
             if (state !== "PREPARED") { return; }
             self.sdkReady = true;
 
-            if (self.starting_room_alias_payload) {
-                dis.dispatch(self.starting_room_alias_payload);
-                delete self.starting_room_alias_payload;
-            } else if (!self.state.page_type) {
+            if (!self.state.page_type) {
                 if (!self.state.currentRoomId) {
                     var firstRoom = null;
                     if (cli.getRooms() && cli.getRooms().length) {
@@ -976,12 +973,7 @@ module.exports = React.createClass({
 
             // we can't view a room unless we're logged in
             // (a guest account is fine)
-            if (!this.state.loggedIn) {
-                // we may still be loading (ie, trying to register a guest
-                // session); otherwise we're (probably) already showing a login
-                // screen. Either way, we'll show the room once the client starts.
-                this.starting_room_alias_payload = payload;
-            } else {
+            if (this.state.loggedIn) {
                 dis.dispatch(payload);
             }
         } else if (screen.indexOf('user/') == 0) {
