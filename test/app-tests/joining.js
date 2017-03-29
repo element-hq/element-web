@@ -23,6 +23,7 @@ var jssdk = require('matrix-js-sdk');
 var sdk = require('matrix-react-sdk');
 var peg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var dis = require('matrix-react-sdk/lib/dispatcher');
+var PageTypes = require('matrix-react-sdk/lib/PageTypes');
 var MatrixChat = sdk.getComponent('structures.MatrixChat');
 var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
 var RoomPreviewBar = sdk.getComponent('rooms.RoomPreviewBar');
@@ -90,9 +91,7 @@ describe('joining a room', function () {
             matrixChat = ReactDOM.render(mc, parentDiv);
 
             // switch to the Directory
-            dis.dispatch({
-                action: 'view_room_directory',
-            });
+            matrixChat._setPage(PageTypes.RoomDirectory);
 
             var roomView;
             // wait for /sync to happen
