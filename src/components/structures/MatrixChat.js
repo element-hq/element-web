@@ -648,16 +648,6 @@ module.exports = React.createClass({
             if (room) {
                 var theAlias = Rooms.getDisplayAliasForRoom(room);
                 if (theAlias) presentedId = theAlias;
-
-                // No need to do this given RoomView triggers it itself...
-                // var color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
-                // var color_scheme = {};
-                // if (color_scheme_event) {
-                //     color_scheme = color_scheme_event.getContent();
-                //     // XXX: we should validate the event
-                // }
-                // console.log("Tinter.tint from _viewRoom");
-                // Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
             }
 
             if (room_info.event_id) {

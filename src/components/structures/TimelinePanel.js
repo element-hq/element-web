@@ -819,7 +819,7 @@ var TimelinePanel = React.createClass({
                     // go via the dispatcher so that the URL is updated
                     dis.dispatch({
                         action: 'view_room',
-                        room_id: this.props.timelineSet.roomId,
+                        room_id: this.props.timelineSet.room.roomId,
                     });
                 };
             }
