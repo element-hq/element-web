@@ -12,7 +12,7 @@
   "Settings": "Einstellungen",
   "powered by Matrix": "gebaut mit Matrix",
   "Custom Server Options": "Optionen für eigenen Server",
-  "customServer_text": "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.\nThis allows you to use Riot with an existing Matrix account on a different home server.\n\nYou can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.",
+  "customServer_text": "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.",
   "Dismiss": "Dismiss",
   "Failed to get protocol list from Home Server": "Failed to get protocol list from Home Server",
   "The Home Server may be too old to support third party networks": "The Home Server may be too old to support third party networks",
@@ -20,6 +20,11 @@
   "#example:": "#beispiel:",
   "Search for a room": "Suche einen Raum",
   "No rooms to show": "Keine Räume zum anzeigen",
-  "World readable": "Öffentlich lesbar",
-  "Guests can join": "Gäste können beitreten"
+  "World readable": "Jeder kann lesen",
+  "Guests can join": "Gäste können beitreten",
+  "Failed to send email: ": "Email konnte nicht versendet werden: ",
+  "The email address linked to your account must be entered.": "Du musst die Email, welche mit deinem Benutzer verbunden ist, eingeben.",
+  "A new password must be entered.": "Ein neues Passwort muss eingegeben werden.",
+  "New passwords must match each other.": "Die neuen Passwörter müssen identisch sein.",
+  "Warning": "Warnung"
 }
