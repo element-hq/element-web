@@ -15,6 +15,12 @@ limitations under the License.
 */
 
 var React = require("react");
+var counterpart = require('counterpart');
+var Translate   = require('react-translate-component');
+
+// load our own translations
+counterpart.registerTranslations('en', require('../../../i18n/en-en'));
+counterpart.registerTranslations('de', require('../../../i18n/de-de'));
 
 module.exports = React.createClass({
     displayName: 'VectorCustomServerDialog',
@@ -22,28 +28,26 @@ module.exports = React.createClass({
         replaces: 'CustomServerDialog',
     },
 
+    getInitialState: function() {
+        var userLang = navigator.language || navigator.userLanguage;
+        counterpart.setLocale(userLang);
+        return null;
+    },
+
     render: function() {
         return (
             <div className="mx_ErrorDialog">
                 <div className="mx_Dialog_title">
-                    Custom Server Options
+                    { counterpart.translate('Custom Server Options') }
                 </div>
                 <div className="mx_Dialog_content">
                     <span>
-                        You can use the custom server options to sign into other Matrix
-                        servers by specifying a different Home server URL.
-                        <br/>
-                        This allows you to use Riot with an existing Matrix account on
-                        a different home server.
-                        <br/>
-                        <br/>
-                        You can also set a custom identity server but you won't be able to
-                        invite users by email address, or be invited by email address yourself.
+                        { counterpart.translate('customServer_text') }
                     </span>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.props.onFinished} autoFocus={true}>
-                        Dismiss
+                        { counterpart.translate('Dismiss') }
                     </button>
                 </div>
             </div>

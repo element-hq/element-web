@@ -17,11 +17,23 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var counterpart = require('counterpart');
+var Translate   = require('react-translate-component');
+
+// load our own translations
+counterpart.registerTranslations('en', require('../../../i18n/en-en'));
+counterpart.registerTranslations('de', require('../../../i18n/de-de'));
 
 module.exports = React.createClass({
     displayName: 'VectorLoginFooter',
     statics: {
         replaces: 'LoginFooter',
+    },
+
+    getInitialState: function() {
+        var userLang = navigator.language || navigator.userLanguage;
+        counterpart.setLocale(userLang);
+        return null;
     },
 
     render: function() {
@@ -30,7 +42,7 @@ module.exports = React.createClass({
                 <a href="https://medium.com/@RiotChat">blog</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
                 <a href="https://twitter.com/@RiotChat">twitter</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
                 <a href="https://github.com/vector-im/vector-web">github</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                <a href="https://matrix.org">powered by Matrix</a>
+                <a href="https://matrix.org">{ counterpart.translate('powered by Matrix') }</a>
             </div>
         );
     }
