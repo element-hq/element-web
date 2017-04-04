@@ -23,6 +23,7 @@ var Translate   = require('react-translate-component');
 // load our own translations
 counterpart.registerTranslations('en', require('../../../i18n/en-en'));
 counterpart.registerTranslations('de', require('../../../i18n/de-de'));
+counterpart.setFallbackLocale('en');
 
 module.exports = React.createClass({
     displayName: 'VectorLoginFooter',
