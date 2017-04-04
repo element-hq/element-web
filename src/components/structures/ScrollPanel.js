@@ -333,34 +333,28 @@ module.exports = React.createClass({
         if (excessHeight <= 0) {
             return;
         }
-        var itemlist = this.refs.itemlist;
-        var tiles = itemlist.children;
+        const tiles = this.refs.itemlist.children;
 
         // The scroll token of the first/last tile to be unpaginated
         let markerScrollToken = null;
 
-        // Subtract clientHeights to simulate the events being unpaginated whilst counting
-        // the events to be unpaginated.
-        if (backwards) {
-            // Iterate forwards from start of tiles, subtracting event tile height
-            let i = 0;
-            while (i < tiles.length && excessHeight > tiles[i].clientHeight) {
-                excessHeight -= tiles[i].clientHeight;
-                if (tiles[i].dataset.scrollToken) {
-                    markerScrollToken = tiles[i].dataset.scrollToken;
-                }
-                i++;
+        // Subtract heights of tiles to simulate the tiles being unpaginated until the
+        // excess height is less than the height of the next tile to subtract. This
+        // prevents excessHeight becoming negative, which could lead to future
+        // pagination.
+        //
+        // If backwards is true, we unpaginate (remove) tiles from the back (top).
+        let i = backwards ? 0 : tiles.length - 1;
+        while (
+            (backwards ? i < tiles.length : i > 0) && excessHeight > tiles[i].clientHeight
+        ) {
+            // Subtract height of tile as if it were unpaginated
+            excessHeight -= tiles[i].clientHeight;
+            // The tile may not have a scroll token, so guard it
+            if (tiles[i].dataset.scrollToken) {
+                markerScrollToken = tiles[i].dataset.scrollToken;
             }
-        } else {
-            // Iterate backwards from end of tiles, subtracting event tile height
-            let i = tiles.length - 1;
-            while (i > 0 && excessHeight > tiles[i].clientHeight) {
-                excessHeight -= tiles[i].clientHeight;
-                if (tiles[i].dataset.scrollToken) {
-                    markerScrollToken = tiles[i].dataset.scrollToken;
-                }
-                i--;
-            }
+            i += backwards ? 1 : -1;
         }
 
         if (markerScrollToken) {
