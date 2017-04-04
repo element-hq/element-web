@@ -263,7 +263,7 @@ var TimelinePanel = React.createClass({
             }
         );
 
-        let count = backwards ? marker : this.state.events.length - marker;
+        let count = backwards ? marker + 1 : this.state.events.length - marker;
 
         if (count > 0) {
             debuglog("TimelinePanel: Unpaginating", count, "in direction", dir);

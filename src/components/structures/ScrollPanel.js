@@ -589,24 +589,35 @@ module.exports = React.createClass({
         var itemlist = this.refs.itemlist;
         var wrapperRect = ReactDOM.findDOMNode(this).getBoundingClientRect();
         var messages = itemlist.children;
+        let newScrollState = null;
 
         for (var i = messages.length-1; i >= 0; --i) {
             var node = messages[i];
             if (!node.dataset.scrollToken) continue;
 
             var boundingRect = node.getBoundingClientRect();
-            if (boundingRect.bottom < wrapperRect.bottom) {
-                this.scrollState = {
-                    stuckAtBottom: false,
-                    trackedScrollToken: node.dataset.scrollToken,
-                    pixelOffset: wrapperRect.bottom - boundingRect.bottom,
-                };
-                debuglog("ScrollPanel: saved scroll state", this.scrollState);
-                return;
+            newScrollState = {
+                stuckAtBottom: false,
+                trackedScrollToken: node.dataset.scrollToken,
+                pixelOffset: wrapperRect.bottom - boundingRect.bottom,
+            };
+            // If the bottom of the panel intersects the ClientRect of node, use this node
+            // as the scrollToken.
+            // If this is false for the entire for-loop, we default to the last node
+            // (which is why newScrollState is set on every iteration).
+            if (boundingRect.top < wrapperRect.bottom &&
+                wrapperRect.bottom < boundingRect.bottom) {
+                // Use this node as the scrollToken
+                break;
             }
         }
-
-        debuglog("ScrollPanel: unable to save scroll state: found no children in the viewport");
+        // This is only false if there were no nodes with `node.dataset.scrollToken` set.
+        if (newScrollState) {
+            this.scrollState = newScrollState;
+            debuglog("ScrollPanel: saved scroll state", this.scrollState);
+        } else {
+            debuglog("ScrollPanel: unable to save scroll state: found no children in the viewport");
+        }
     },
 
     _restoreSavedScrollState: function() {
