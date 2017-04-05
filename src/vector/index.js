@@ -301,6 +301,15 @@ async function loadApp() {
         counterpart.registerTranslations('de', require('../i18n/de-de'));
         counterpart.setFallbackLocale('en');
         dis.register(onAction);
+        if (Object.keys(localSettingsString).length === 0) {
+          var language = navigator.language || navigator.userLanguage;
+          counterpart.setLocale(language);
+          console.log("fire event");
+          dis.dispatch({
+              action: 'set_language',
+              value: language,
+          });
+        }
     }
     else {
         console.error("Browser is missing required features.");

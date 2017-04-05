@@ -17,9 +17,6 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var counterpart = require('counterpart');
-var Translate   = require('react-translate-component');
-var _t = Translate.translate;
 var DragDropContext = require('react-dnd').DragDropContext;
 var HTML5Backend = require('react-dnd-html5-backend');
 var sdk = require('matrix-react-sdk')
