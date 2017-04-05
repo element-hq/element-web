@@ -62,6 +62,7 @@ var VectorConferenceHandler = require('../VectorConferenceHandler');
 var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
+var dis = require("matrix-react-sdk/lib/dispatcher");
 
 import url from 'url';
 
@@ -226,8 +227,16 @@ function onLoadCompleted() {
     }
 }
 
+function onAction(payload) {
+  switch (payload.action) {
+    case 'set_language':
+      counterpart.setLocale(payload.value);
+      break;
+  }
+}
 
 async function loadApp() {
+
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
 
@@ -291,10 +300,7 @@ async function loadApp() {
         counterpart.registerTranslations('en', require('../i18n/en-en'));
         counterpart.registerTranslations('de', require('../i18n/de-de'));
         counterpart.setFallbackLocale('en');
-        console.log("onLoad");
-        console.log(counterpart.getLocale());
-        counterpart.setLocale(localSettingsString.language);
-        console.log(counterpart.getLocale());
+        dis.register(onAction);
     }
     else {
         console.error("Browser is missing required features.");
