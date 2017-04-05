@@ -21,10 +21,5 @@
   "Search for a room": "Suche einen Raum",
   "No rooms to show": "Keine Räume zum anzeigen",
   "World readable": "Jeder kann lesen",
-  "Guests can join": "Gäste können beitreten",
-  "Failed to send email: ": "Email konnte nicht versendet werden: ",
-  "The email address linked to your account must be entered.": "Du musst die Email, welche mit deinem Benutzer verbunden ist, eingeben.",
-  "A new password must be entered.": "Ein neues Passwort muss eingegeben werden.",
-  "New passwords must match each other.": "Die neuen Passwörter müssen identisch sein.",
-  "Warning": "Warnung"
+  "Guests can join": "Gäste können beitreten"
 }

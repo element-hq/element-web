@@ -34,11 +34,6 @@ var q = require('q');
 var counterpart = require('counterpart');
 var Translate   = require('react-translate-component');
 
-// load our own translations
-counterpart.registerTranslations('en', require('../../i18n/en-en'));
-counterpart.registerTranslations('de', require('../../i18n/de-de'));
-counterpart.setFallbackLocale('en');
-
 import {instanceForInstanceId, protocolNameForInstanceId} from '../../utils/DirectoryUtils';
 
 linkifyMatrix(linkify);
@@ -57,8 +52,6 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        var userLang = navigator.language || navigator.userLanguage;
-        counterpart.setLocale(userLang);
         return {
             publicRooms: [],
             loading: true,

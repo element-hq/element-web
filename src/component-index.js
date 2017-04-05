@@ -84,7 +84,5 @@ import views$rooms$SearchBar from './components/views/rooms/SearchBar';
 views$rooms$SearchBar && (module.exports.components['views.rooms.SearchBar'] = views$rooms$SearchBar);
 import views$settings$IntegrationsManager from './components/views/settings/IntegrationsManager';
 views$settings$IntegrationsManager && (module.exports.components['views.settings.IntegrationsManager'] = views$settings$IntegrationsManager);
-import views$settings$Language from './components/views/settings/Language';
-views$settings$Language && (module.exports.components['views.settings.Language'] = views$settings$Language);
 import views$settings$Notifications from './components/views/settings/Notifications';
 views$settings$Notifications && (module.exports.components['views.settings.Notifications'] = views$settings$Notifications);

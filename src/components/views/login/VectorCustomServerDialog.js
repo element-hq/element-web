@@ -18,21 +18,10 @@ var React = require("react");
 var counterpart = require('counterpart');
 var Translate   = require('react-translate-component');
 
-// load our own translations
-counterpart.registerTranslations('en', require('../../../i18n/en-en'));
-counterpart.registerTranslations('de', require('../../../i18n/de-de'));
-counterpart.setFallbackLocale('en');
-
 module.exports = React.createClass({
     displayName: 'VectorCustomServerDialog',
     statics: {
         replaces: 'CustomServerDialog',
-    },
-
-    getInitialState: function() {
-        var userLang = navigator.language || navigator.userLanguage;
-        counterpart.setLocale(userLang);
-        return null;
     },
 
     render: function() {

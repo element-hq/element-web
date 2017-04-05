@@ -28,12 +28,6 @@ var dis = require('matrix-react-sdk/lib/dispatcher');
 var VectorConferenceHandler = require('../../VectorConferenceHandler');
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 
-// load our own translations
-counterpart.registerTranslations('en', require('../../i18n/en-en'));
-counterpart.registerTranslations('de', require('../../i18n/de-de'));
-counterpart.setFallbackLocale('en');
-
-
 var LeftPanel = React.createClass({
     displayName: 'LeftPanel',
 
@@ -43,8 +37,6 @@ var LeftPanel = React.createClass({
     },
 
     getInitialState: function() {
-        var userLang = navigator.language || navigator.userLanguage;
-        counterpart.setLocale(userLang);
         return {
             showCallElement: null,
             searchFilter: '',

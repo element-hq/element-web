@@ -25,11 +25,6 @@ var dis = require('matrix-react-sdk/lib/dispatcher');
 var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 
-// load our own translations
-counterpart.registerTranslations('en', require('../../i18n/en-en'));
-counterpart.registerTranslations('de', require('../../i18n/de-de'));
-counterpart.setFallbackLocale('en');
-
 module.exports = React.createClass({
     displayName: 'SearchBox',
 
@@ -101,7 +96,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        console.log(_t('SearchBox.filterRoom'));
         var TintableSvg = sdk.getComponent('elements.TintableSvg');
 
         var collapseTabIndex = this.refs.search && this.refs.search.value !== "" ? "-1" : "0";

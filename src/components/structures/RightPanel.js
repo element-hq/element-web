@@ -28,19 +28,8 @@ var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
 var Modal = require('matrix-react-sdk/lib/Modal');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 
-// load our own translations
-counterpart.registerTranslations('en', require('../../i18n/en-en'));
-counterpart.registerTranslations('de', require('../../i18n/de-de'));
-counterpart.setFallbackLocale('en');
-
 module.exports = React.createClass({
     displayName: 'RightPanel',
-
-    getDefaultProps: function() {
-        return {
-          locales: ['en', 'de']
-        };
-    },
 
     propTypes: {
         userId: React.PropTypes.string, // if showing an orphaned MemberInfo page, this is set

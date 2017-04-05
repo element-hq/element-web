@@ -73,6 +73,8 @@ var lastLocationHashSet = null;
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 CallHandler.setConferenceHandler(VectorConferenceHandler);
 
+var counterpart = require('counterpart');
+
 function checkBrowserFeatures(featureList) {
     if (!window.Modernizr) {
         console.error("Cannot check features - Modernizr global is missing.");
@@ -284,6 +286,15 @@ async function loadApp() {
             />,
             document.getElementById('matrixchat')
         );
+        var localSettingsString = JSON.parse(localStorage.getItem('mx_local_settings') || '{}');
+        sdk.setLanguage(localSettingsString.language);
+        counterpart.registerTranslations('en', require('../i18n/en-en'));
+        counterpart.registerTranslations('de', require('../i18n/de-de'));
+        counterpart.setFallbackLocale('en');
+        console.log("onLoad");
+        console.log(counterpart.getLocale());
+        counterpart.setLocale(localSettingsString.language);
+        console.log(counterpart.getLocale());
     }
     else {
         console.error("Browser is missing required features.");
