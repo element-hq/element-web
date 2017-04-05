@@ -599,8 +599,7 @@ module.exports = React.createClass({
             // as the scrollToken.
             // If this is false for the entire for-loop, we default to the last node
             // (which is why newScrollState is set on every iteration).
-            if (boundingRect.top < wrapperRect.bottom &&
-                wrapperRect.bottom < boundingRect.bottom) {
+            if (boundingRect.top < wrapperRect.bottom) {
                 // Use this node as the scrollToken
                 break;
             }
