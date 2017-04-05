@@ -251,7 +251,7 @@ var TimelinePanel = React.createClass({
     },
 
     onMessageListUnfillRequest: function(backwards, scrollToken) {
-        // If backwards, unpaginate from the back
+        // If backwards, unpaginate from the back (i.e. the start of the timeline)
         let dir = backwards ? EventTimeline.BACKWARDS : EventTimeline.FORWARDS;
         debuglog("TimelinePanel: unpaginating events in direction", dir);
 
