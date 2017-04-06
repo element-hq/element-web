@@ -19,7 +19,6 @@ module.exports = React.createClass({
     			p = JSON.parse(e.data);
 					localStorage.setItem('mx_access_token', JSON.stringify(p.mx_access_token));
       		console.log(p);
-      		console.log(e);
     		}
         return (
         	<div className="dtygelTest">dtygelTest {JSON.stringify(p)}</div>
