@@ -26,8 +26,6 @@ limitations under the License.
 
 module.exports.components = require('matrix-react-sdk/lib/component-index').components;
 
-import structures$AutomatedLoginFromParent from './components/structures/AutomatedLoginFromParent';
-structures$AutomatedLoginFromParent && (module.exports.components['structures.AutomatedLoginFromParent'] = structures$AutomatedLoginFromParent);
 import structures$BottomLeftMenu from './components/structures/BottomLeftMenu';
 structures$BottomLeftMenu && (module.exports.components['structures.BottomLeftMenu'] = structures$BottomLeftMenu);
 import structures$CompatibilityPage from './components/structures/CompatibilityPage';
