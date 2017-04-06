@@ -644,7 +644,7 @@ module.exports = React.createClass({
         // Wait for the first sync to complete so that if a room does have an alias,
         // it would have been retrieved.
         let waitFor = q(null);
-        if (!firstSyncComplete) {
+        if (!this.firstSyncComplete) {
             if (!this.firstSyncPromise) {
                 console.warn('Cannot view a room before first sync. room_id:', room_info.room_id);
                 return;
@@ -851,13 +851,8 @@ module.exports = React.createClass({
             self.firstSyncComplete = true;
             self.firstSyncPromise.resolve();
 
-            if (!self.state.page_type) {
-                // Switch to room view but allow _onLoggedIn to specify a room (if any)
-                self.setState({ready: true});
-                dis.dispatch({action: 'focus_composer'});
-            } else {
-                self.setState({ready: true});
-            }
+            dis.dispatch({action: 'focus_composer'});
+            self.setState({ready: true});
         });
         cli.on('Call.incoming', function(call) {
             dis.dispatch({
