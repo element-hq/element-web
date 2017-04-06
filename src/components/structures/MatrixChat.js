@@ -194,6 +194,10 @@ module.exports = React.createClass({
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
 
+        // Used by _viewRoom before getting state from sync
+        this.firstSyncComplete = false;
+        this.firstSyncPromise = q.defer();
+
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
         }
@@ -637,26 +641,38 @@ module.exports = React.createClass({
             }
         }
 
-        if (this.sdkReady) {
-            // if the SDK is not ready yet, remember what room
-            // we're supposed to be on but don't notify about
-            // the new screen yet (we won't be showing it yet)
-            // The normal case where this happens is navigating
-            // to the room in the URL bar on page load.
-            var presentedId = room_info.room_alias || room_info.room_id;
-            var room = MatrixClientPeg.get().getRoom(room_info.room_id);
+        // Wait for the first sync to complete so that if a room does have an alias,
+        // it would have been retrieved.
+        let waitFor = q(null);
+        if (!firstSyncComplete) {
+            if (!this.firstSyncPromise) {
+                console.warn('Cannot view a room before first sync. room_id:', room_info.room_id);
+                return;
+            }
+            waitFor = this.firstSyncPromise.promise;
+        }
+
+        waitFor.done(() => {
+            let presentedId = room_info.room_alias || room_info.room_id;
+            const room = MatrixClientPeg.get().getRoom(room_info.room_id);
             if (room) {
-                var theAlias = Rooms.getDisplayAliasForRoom(room);
+                const theAlias = Rooms.getDisplayAliasForRoom(room);
                 if (theAlias) presentedId = theAlias;
+
+                // Store this as the ID of the last room accessed. This is so that we can
+                // persist which room is being stored across refreshes and browser quits.
+                if (localStorage) {
+                    localStorage.setItem('mx_last_room_id', room.roomId);
+                }
             }
 
             if (room_info.event_id) {
-                presentedId += "/"+room_info.event_id;
+                presentedId += "/" + room_info.event_id;
             }
-            this.notifyNewScreen('room/'+presentedId);
+            this.notifyNewScreen('room/' + presentedId);
             newState.ready = true;
-        }
-        this.setState(newState);
+            this.setState(newState);
+        });
     },
 
     _createChat: function() {
@@ -683,7 +699,7 @@ module.exports = React.createClass({
         this.props.onLoadCompleted();
         this.setState({loading: false});
 
-        // Show screens (like 'register') that need to be shown without onLoggedIn
+        // Show screens (like 'register') that need to be shown without _onLoggedIn
         // being called. 'register' needs to be routed here when the email confirmation
         // link is clicked on.
         if (this.state.screenAfterLogin &&
@@ -766,6 +782,12 @@ module.exports = React.createClass({
             );
             this.notifyNewScreen(this.state.screenAfterLogin.screen);
             this.setState({screenAfterLogin: null});
+        } else if (localStorage && localStorage.getItem('mx_last_room_id')) {
+            // Before defaulting to directory, show the last viewed room
+            dis.dispatch({
+                action: 'view_room',
+                room_id: localStorage.getItem('mx_last_room_id'),
+            });
         } else {
             dis.dispatch({action: 'view_room_directory'});
         }
@@ -825,33 +847,13 @@ module.exports = React.createClass({
             }
             console.log("MatrixClient sync state => %s", state);
             if (state !== "PREPARED") { return; }
-            self.sdkReady = true;
+
+            self.firstSyncComplete = true;
+            self.firstSyncPromise.resolve();
 
             if (!self.state.page_type) {
-                if (!self.state.currentRoomId) {
-                    var firstRoom = null;
-                    if (cli.getRooms() && cli.getRooms().length) {
-                        firstRoom = RoomListSorter.mostRecentActivityFirst(
-                            cli.getRooms()
-                        )[0].roomId;
-                        self.setState({ready: true, currentRoomId: firstRoom, page_type: PageTypes.RoomView});
-                    }
-                } else {
-                    self.setState({ready: true, page_type: PageTypes.RoomView});
-                }
-
-                // we notifyNewScreen now because now the room will actually be displayed,
-                // and (mostly) now we can get the correct alias.
-                var presentedId = self.state.currentRoomId;
-                var room = MatrixClientPeg.get().getRoom(self.state.currentRoomId);
-                if (room) {
-                    var theAlias = Rooms.getDisplayAliasForRoom(room);
-                    if (theAlias) presentedId = theAlias;
-                }
-
-                if (presentedId != undefined) {
-                    self.notifyNewScreen('room/'+presentedId);
-                }
+                // Switch to room view but allow _onLoggedIn to specify a room (if any)
+                self.setState({ready: true});
                 dis.dispatch({action: 'focus_composer'});
             } else {
                 self.setState({ready: true});
