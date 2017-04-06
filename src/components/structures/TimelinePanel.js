@@ -251,10 +251,12 @@ var TimelinePanel = React.createClass({
     },
 
     onMessageListUnfillRequest: function(backwards, scrollToken) {
+        // If backwards, unpaginate from the back (i.e. the start of the timeline)
         let dir = backwards ? EventTimeline.BACKWARDS : EventTimeline.FORWARDS;
         debuglog("TimelinePanel: unpaginating events in direction", dir);
 
-        // All tiles are inserted by MessagePanel to have a scrollToken === eventId
+        // All tiles are inserted by MessagePanel to have a scrollToken === eventId, and
+        // this particular event should be the first or last to be unpaginated.
         let eventId = scrollToken;
 
         let marker = this.state.events.findIndex(
