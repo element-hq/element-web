@@ -17,6 +17,13 @@ limitations under the License.
 var MatrixClientPeg = require("./MatrixClientPeg");
 var CallHandler = require("./CallHandler");
 
+const roles = {
+    undefined: 'Default',
+    0: 'User',
+    50: 'Moderator',
+    100: 'Admin',
+};
+
 function textForMemberEvent(ev) {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
     var senderName = ev.sender ? ev.sender.name : ev.getSender();
@@ -182,6 +189,53 @@ function textForEncryptionEvent(event) {
     return senderName + " turned on end-to-end encryption (algorithm " + event.getContent().algorithm + ")";
 }
 
+function formatPowerLevel(level, roles, userDefault) {
+    if (roles[level]) {
+        return roles[level] + (level !== undefined ? ` (${level})` : ` (${userDefault})`);
+    } else {
+        return level;
+    }
+}
+
+// Currently will only display a change if a user's power level is changed
+function textForPowerEvent(event) {
+    const senderName = event.sender ? event.sender.name : event.getSender();
+    if (!event.getPrevContent() || !event.getPrevContent().users) {
+        return '';
+    }
+    const userDefault = event.getContent().users_default || 0;
+    // Construct set of userIds
+    let users = [];
+    Object.keys(event.getContent().users).forEach(
+        (userId) => {
+            if (users.indexOf(userId) === -1) users.push(userId);
+        }
+    );
+    Object.keys(event.getPrevContent().users).forEach(
+        (userId) => {
+            if (users.indexOf(userId) === -1) users.push(userId);
+        }
+    );
+    let diff = [];
+    users.forEach((userId) => {
+        // Previous power level
+        const from = event.getPrevContent().users[userId];
+        // Current power level
+        const to = event.getContent().users[userId];
+        if (to !== from) {
+            diff.push(
+                userId +
+                ' from ' + formatPowerLevel(from, roles, userDefault) +
+                ' to ' + formatPowerLevel(to, roles, userDefault)
+            );
+        }
+    });
+    if (!diff.length) {
+        return '';
+    }
+    return senderName + ' changed the power level of ' + diff.join(', ');
+}
+
 var handlers = {
     'm.room.message': textForMessageEvent,
     'm.room.name':    textForRoomNameEvent,
@@ -193,6 +247,7 @@ var handlers = {
     'm.room.third_party_invite': textForThreePidInviteEvent,
     'm.room.history_visibility': textForHistoryVisibilityEvent,
     'm.room.encryption': textForEncryptionEvent,
+    'm.room.power_levels': textForPowerEvent,
 };
 
 module.exports = {
