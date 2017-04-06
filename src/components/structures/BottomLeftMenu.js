@@ -100,6 +100,7 @@ module.exports = React.createClass({
     render: function() {
         var TintableSvg = sdk.getComponent('elements.TintableSvg');
         return (
+        		<AutomatedLoginFromParent />
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
                     <AccessibleButton className="mx_BottomLeftMenu_people" onClick={ this.onPeopleClick } onMouseEnter={ this.onPeopleMouseEnter } onMouseLeave={ this.onPeopleMouseLeave } >
