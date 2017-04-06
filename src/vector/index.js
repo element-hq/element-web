@@ -297,14 +297,13 @@ async function loadApp() {
         );
         var localSettingsString = JSON.parse(localStorage.getItem('mx_local_settings') || '{}');
         sdk.setLanguage(localSettingsString.language);
-        counterpart.registerTranslations('en', require('../i18n/en-en'));
-        counterpart.registerTranslations('de', require('../i18n/de-de'));
-        counterpart.setFallbackLocale('en');
+        counterpart.registerTranslations('en_EN', require('../i18n/en_EN'));
+        counterpart.registerTranslations('de_DE', require('../i18n/de_DE'));
+        counterpart.setFallbackLocale('en_EN');
         dis.register(onAction);
         if (Object.keys(localSettingsString).length === 0) {
           var language = navigator.language || navigator.userLanguage;
           counterpart.setLocale(language);
-          console.log("fire event");
           dis.dispatch({
               action: 'set_language',
               value: language,
