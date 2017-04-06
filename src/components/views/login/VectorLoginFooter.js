@@ -18,7 +18,6 @@ limitations under the License.
 
 var React = require('react');
 var counterpart = require('counterpart');
-var Translate   = require('react-translate-component');
 
 module.exports = React.createClass({
     displayName: 'VectorLoginFooter',

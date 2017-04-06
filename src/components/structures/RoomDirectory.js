@@ -32,7 +32,6 @@ var sanitizeHtml = require('sanitize-html');
 var q = require('q');
 
 var counterpart = require('counterpart');
-var Translate   = require('react-translate-component');
 
 import {instanceForInstanceId, protocolNameForInstanceId} from '../../utils/DirectoryUtils';
 

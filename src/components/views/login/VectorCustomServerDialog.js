@@ -16,7 +16,6 @@ limitations under the License.
 
 var React = require("react");
 var counterpart = require('counterpart');
-var Translate   = require('react-translate-component');
 
 module.exports = React.createClass({
     displayName: 'VectorCustomServerDialog',
@@ -31,9 +30,7 @@ module.exports = React.createClass({
                     { counterpart.translate('Custom Server Options') }
                 </div>
                 <div className="mx_Dialog_content">
-                    <span>
-                        { counterpart.translate('customServer_text') }
-                    </span>
+                    <span dangerouslySetInnerHTML={{__html: counterpart.translate('customServer_text')}} />
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.props.onFinished} autoFocus={true}>

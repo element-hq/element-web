@@ -18,8 +18,6 @@ limitations under the License.
 
 var React = require('react');
 var counterpart = require('counterpart');
-var Translate   = require('react-translate-component');
-var _t = Translate.translate;
 var sdk = require('matrix-react-sdk');
 var Matrix = require("matrix-js-sdk");
 var dis = require('matrix-react-sdk/lib/dispatcher');
@@ -94,8 +92,8 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get().isGuest()) {
             var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
-                title: _t('Please Register'),
-                description: _t("Guest users can't invite users. Please register to invite.")
+                title: counterpart.translate('Please Register'),
+                description: counterpart.translate("Guest users can't invite users. Please register to invite.")
             });
             return;
         }
@@ -191,7 +189,7 @@ module.exports = React.createClass({
                         <div className="mx_RightPanel_icon" >
                             <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
                         </div>
-                        <div className="mx_RightPanel_message">{ _t('Invite to this room') }</div>
+                        <div className="mx_RightPanel_message">{ counterpart.translate('Invite to this room') }</div>
                     </AccessibleButton>;
             }
 

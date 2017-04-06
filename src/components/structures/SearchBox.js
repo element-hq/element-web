@@ -18,8 +18,6 @@ limitations under the License.
 
 var React = require('react');
 var counterpart = require('counterpart');
-var Translate   = require('react-translate-component');
-var _t = Translate.translate;
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
@@ -27,12 +25,6 @@ var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/A
 
 module.exports = React.createClass({
     displayName: 'SearchBox',
-
-    getDefaultProps: function() {
-        return {
-          locales: ['en', 'de']
-        };
-    },
 
     propTypes: {
         collapsed: React.PropTypes.bool,
