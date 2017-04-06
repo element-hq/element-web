@@ -115,17 +115,17 @@ $progressbar-color: #000;
 // better match the theme.  Typically applied to dark grey 'off' buttons or
 // light grey 'on' buttons.
 .mx_filterFlipColor {
-    filter: invert();
+    filter: invert(1);
 }
 
 .gm-scrollbar .thumb {
-    filter: invert();
+    filter: invert(1);
 }
 
 // markdown overrides:
 .mx_EventTile_content .markdown-body {
     pre, code {
-        filter: invert();
+        filter: invert(1);
     }
 
     pre code {

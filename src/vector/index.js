@@ -50,7 +50,7 @@ rageshake.init().then(() => {
  // access via the console
 global.React = require("react");
 if (process.env.NODE_ENV !== 'production') {
-    global.ReactPerf = require("react-addons-perf");
+    global.Perf = require("react-addons-perf");
 }
 
 var RunModernizrTests = require("./modernizr"); // this side-effects a global

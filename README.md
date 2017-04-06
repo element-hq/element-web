@@ -67,6 +67,18 @@ to build.
    (cd node_modules/matrix-js-sdk && npm install)
    (cd node_modules/matrix-react-sdk && npm install)
    ```
+   Whenever you git pull on riot-web you will also probably need to force an update
+   to these dependencies - the easiest way is probably:
+   ```
+   rm -rf node_modules/matrjx-{js,react}-sdk && npm i
+   (cd node_modules/matrix-js-sdk && npm install)
+   (cd node_modules/matrix-react-sdk && npm install)
+   ```
+   However, we recommend setting up a proper development environment (see "Setting
+   up a development environment" below) if you want to run your own copy of the
+   `develop` branch, as it makes it much easier to keep these dependencies
+   up-to-date.  Or just use https://riot.im/develop - the continuous integration
+   release of the develop branch.
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it (see below for details)
 1. `npm run dist` to build a tarball to deploy. Untaring this file will give

@@ -99,7 +99,7 @@
     "css-raw-loader": "^0.1.1",
     "electron-builder": "^11.2.4",
     "electron-builder-squirrel-windows": "^11.2.1",
-    "emojione": "^2.2.3",
+    "emojione": "^2.2.7",
     "eslint": "^3.14.0",
     "eslint-config-google": "^0.7.1",
     "eslint-plugin-flowtype": "^2.30.0",
