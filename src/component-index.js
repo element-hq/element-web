@@ -42,6 +42,8 @@ import structures$SearchBox from './components/structures/SearchBox';
 structures$SearchBox && (module.exports.components['structures.SearchBox'] = structures$SearchBox);
 import structures$ViewSource from './components/structures/ViewSource';
 structures$ViewSource && (module.exports.components['structures.ViewSource'] = structures$ViewSource);
+import structures$AutomatedLoginFromParent from './components/structures/AutomatedLoginFromParent';
+structures$AutomatedLoginFromParent && (module.exports.components['structures.AutomatedLoginFromParent'] = structures$AutomatedLoginFromParent);
 import views$context_menus$MessageContextMenu from './components/views/context_menus/MessageContextMenu';
 views$context_menus$MessageContextMenu && (module.exports.components['views.context_menus.MessageContextMenu'] = views$context_menus$MessageContextMenu);
 import views$context_menus$NotificationStateContextMenu from './components/views/context_menus/NotificationStateContextMenu';
