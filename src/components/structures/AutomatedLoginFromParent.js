@@ -1,7 +1,6 @@
 'use strict';
 
 var React = require('react');
-var ReactDOM = require('react-dom');
 
 module.exports = React.createClass({
     displayName: 'AutomatedLoginFromParent',
@@ -15,8 +14,9 @@ module.exports = React.createClass({
       console.log(e);
     },
     render: function() {
+    		console.log('dtygelTest');
         return (
-        	console.log('oi!');
+        	console.log('oi!')
         );
     }
 });
