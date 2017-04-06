@@ -14,9 +14,15 @@ module.exports = React.createClass({
       console.log(e);
     },
     render: function() {
-    		console.log('dtygelTest');
+    		var p={};
+    		window.onmessage = function(e) {
+    			p = JSON.parse(e.data);
+					localStorage.setItem('mx_access_token', JSON.stringify(p.mx_access_token));
+      		console.log(p);
+      		console.log(e);
+    		}
         return (
-        	console.log('oi!')
+        	<div className="dtygelTest">dtygelTest {JSON.stringify(p)}</div>
         );
     }
 });
