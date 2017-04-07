@@ -19,8 +19,8 @@ limitations under the License.
 // However, this still pulls in all of the js-sdk and we only use a tiny fraction
 // of it. It also causes an Olm error to appear because we don't have an Olm in scope.
 // Instead, we do this:
-import IndexedDbStoreWorker from 'matrix-js-sdk/lib/store/indexeddb-remote-worker';
+import IndexedDBStoreWorker from 'matrix-js-sdk/lib/store/indexeddb-store-worker';
 
-const remoteWorker = new IndexedDbStoreWorker(postMessage);
+const remoteWorker = new IndexedDBStoreWorker(postMessage);
 
 onmessage = remoteWorker.onMessage;
