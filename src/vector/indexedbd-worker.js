@@ -14,12 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// The prescribed way of doing this import would be:
-//import {IndexedDbStoreWorker} from 'matrix-js-sdk';
-// However, this still pulls in all of the js-sdk and we only use a tiny fraction
-// of it. It also causes an Olm error to appear because we don't have an Olm in scope.
-// Instead, we do this:
-import IndexedDBStoreWorker from 'matrix-js-sdk/lib/store/indexeddb-store-worker';
+import {IndexedDBStoreWorker} from 'matrix-js-sdk/lib/indexeddb-worker.js';
 
 const remoteWorker = new IndexedDBStoreWorker(postMessage);
 
