@@ -345,7 +345,7 @@ module.exports = React.createClass({
         //
         // If backwards is true, we unpaginate (remove) tiles from the back (top).
         for (let i = 0; i < tiles.length; i++) {
-            const tile = tiles[backwards ? tiles.length - 1 - i : i];
+            const tile = tiles[backwards ? i : tiles.length - 1 - i];
             // Subtract height of tile as if it were unpaginated
             excessHeight -= tile.clientHeight;
             // The tile may not have a scroll token, so guard it
