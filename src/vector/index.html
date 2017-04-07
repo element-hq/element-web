@@ -40,7 +40,7 @@
     <% for (var i=0; i < htmlWebpackPlugin.files.js.length; i++) {
         // Not a particularly graceful way of not putting the indexeddb worker script
         // into the main page
-        if (htmlWebpackPlugin.files.js[i].endsWith('indexeddb-worker.js')) {
+        if (_.endsWith(htmlWebpackPlugin.files.js[i], 'indexeddb-worker.js')) {
             %>
             <script>
                 window.vector_indexeddb_worker_script = '<%= htmlWebpackPlugin.files.js[i] %>';
