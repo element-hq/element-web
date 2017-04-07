@@ -1,3 +1,100 @@
+Changes in [0.9.8-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.8-rc.1) (2017-04-07)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.7...v0.9.8-rc.1)
+
+ * Add support for indexeddb sync in webworker
+   [\#3578](https://github.com/vector-im/riot-web/pull/3578)
+ * Add CSS to make Emote sender cursor : pointer
+   [\#3574](https://github.com/vector-im/riot-web/pull/3574)
+ * Remove rageshake server
+   [\#3565](https://github.com/vector-im/riot-web/pull/3565)
+ * Adjust CSS for matrix-org/matrix-react-sdk#789
+   [\#3566](https://github.com/vector-im/riot-web/pull/3566)
+ * Fix tests to reflect recent changes
+   [\#3537](https://github.com/vector-im/riot-web/pull/3537)
+ * Do not assume getTs will return comparable integer
+   [\#3536](https://github.com/vector-im/riot-web/pull/3536)
+ * Rename ReactPerf to Perf
+   [\#3535](https://github.com/vector-im/riot-web/pull/3535)
+ * Don't show phone number as target for email notifs
+   [\#3530](https://github.com/vector-im/riot-web/pull/3530)
+ * Fix people section again
+   [\#3458](https://github.com/vector-im/riot-web/pull/3458)
+ * dark theme invert inconsistent across browsers
+   [\#3479](https://github.com/vector-im/riot-web/pull/3479)
+ * CSS for adding phone number in UserSettings
+   [\#3451](https://github.com/vector-im/riot-web/pull/3451)
+ * Support for phone number registration/signin, mk2
+   [\#3426](https://github.com/vector-im/riot-web/pull/3426)
+ * Confirm redactions with a dialog
+   [\#3470](https://github.com/vector-im/riot-web/pull/3470)
+ * Better CSS for redactions
+   [\#3453](https://github.com/vector-im/riot-web/pull/3453)
+ * Fix the people section
+   [\#3448](https://github.com/vector-im/riot-web/pull/3448)
+ * Merge the two RoomTile context menus into one
+   [\#3395](https://github.com/vector-im/riot-web/pull/3395)
+ * Refactor screen set after login
+   [\#3385](https://github.com/vector-im/riot-web/pull/3385)
+ * CSS for redacted EventTiles
+   [\#3379](https://github.com/vector-im/riot-web/pull/3379)
+ * Height:100% for welcome pages on Safari
+   [\#3340](https://github.com/vector-im/riot-web/pull/3340)
+ * `view_room` dispatch from `onClick` RoomTile
+   [\#3376](https://github.com/vector-im/riot-web/pull/3376)
+ * Hide statusAreaBox_line entirely when inCall
+   [\#3350](https://github.com/vector-im/riot-web/pull/3350)
+ * Set padding-bottom: 0px for .mx_Dialog spinner
+   [\#3351](https://github.com/vector-im/riot-web/pull/3351)
+ * Support InteractiveAuth based registration
+   [\#3333](https://github.com/vector-im/riot-web/pull/3333)
+ * Expose notification option for username/MXID
+   [\#3334](https://github.com/vector-im/riot-web/pull/3334)
+ * Float the toggle in the top right of MELS
+   [\#3190](https://github.com/vector-im/riot-web/pull/3190)
+ * More aggressive rageshake log culling
+   [\#3311](https://github.com/vector-im/riot-web/pull/3311)
+ * Don't overflow directory network options
+   [\#3282](https://github.com/vector-im/riot-web/pull/3282)
+ * CSS for ban / kick reason prompt
+   [\#3250](https://github.com/vector-im/riot-web/pull/3250)
+ * Allow forgetting rooms you're banned from
+   [\#3246](https://github.com/vector-im/riot-web/pull/3246)
+ * Fix icon paths in manifest
+   [\#3245](https://github.com/vector-im/riot-web/pull/3245)
+ * Fix broken tests caused by adding IndexedDB support
+   [\#3242](https://github.com/vector-im/riot-web/pull/3242)
+ * CSS for un-ban button in RoomSettings
+   [\#3227](https://github.com/vector-im/riot-web/pull/3227)
+ * Remove z-index property on avatar initials
+   [\#3239](https://github.com/vector-im/riot-web/pull/3239)
+ * Reposition certain icons in the status bar
+   [\#3233](https://github.com/vector-im/riot-web/pull/3233)
+ * CSS for kick/ban confirmation dialog
+   [\#3224](https://github.com/vector-im/riot-web/pull/3224)
+ * Style for split-out interactive auth
+   [\#3217](https://github.com/vector-im/riot-web/pull/3217)
+ * Use the teamToken threaded through from react sdk
+   [\#3196](https://github.com/vector-im/riot-web/pull/3196)
+ * rageshake: Add file server with basic auth
+   [\#3169](https://github.com/vector-im/riot-web/pull/3169)
+ * Fix bug with home icon not appearing when logged in as team member
+   [\#3162](https://github.com/vector-im/riot-web/pull/3162)
+ * Add ISSUE_TEMPLATE
+   [\#2836](https://github.com/vector-im/riot-web/pull/2836)
+ * Store bug reports in separate directories
+   [\#3150](https://github.com/vector-im/riot-web/pull/3150)
+ * Quick and dirty support for custom welcome pages.
+   [\#2575](https://github.com/vector-im/riot-web/pull/2575)
+ * RTS Welcome Pages
+   [\#3103](https://github.com/vector-im/riot-web/pull/3103)
+ * rageshake: Abide by Go standards
+   [\#3149](https://github.com/vector-im/riot-web/pull/3149)
+ * Bug report server script
+   [\#3072](https://github.com/vector-im/riot-web/pull/3072)
+ * Bump olm version
+   [\#3125](https://github.com/vector-im/riot-web/pull/3125)
+
 Changes in [0.9.7](https://github.com/vector-im/riot-web/releases/tag/v0.9.7) (2017-02-04)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.7-rc.3...v0.9.7)
