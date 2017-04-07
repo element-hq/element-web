@@ -264,10 +264,10 @@ module.exports = React.createClass({
             title: "Sign out?",
             description:
                 <div>
-                    For security, logging out will delete any end-to-end encryption keys from this browser,
-                    making previous encrypted chat history unreadable if you log back in.
-                    In future this <a href="https://github.com/vector-im/riot-web/issues/2108">will be improved</a>,
-                    but for now be warned.
+                    For security, logging out will delete any end-to-end encryption keys from this browser.
+
+                    If you want to be able to decrypt your conversation history from future Riot sessions,
+                    please export your room keys for safe-keeping.
                 </div>,
             button: "Sign out",
             extraButtons: [
