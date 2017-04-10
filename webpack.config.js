@@ -19,7 +19,6 @@ module.exports = {
         // CSS themes
         "theme-cadcampo": "./src/skins/vector/css/themes/cadcampo.scss",
         "theme-light": "./src/skins/vector/css/themes/light.scss",
-        "theme-dark": "./src/skins/vector/css/themes/dark.scss",
 
     },
     module: {
