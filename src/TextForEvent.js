@@ -17,12 +17,7 @@ limitations under the License.
 var MatrixClientPeg = require("./MatrixClientPeg");
 var CallHandler = require("./CallHandler");
 
-const roles = {
-    undefined: 'Default',
-    0: 'User',
-    50: 'Moderator',
-    100: 'Admin',
-};
+import * as Roles from './Roles';
 
 function textForMemberEvent(ev) {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
@@ -189,14 +184,6 @@ function textForEncryptionEvent(event) {
     return senderName + " turned on end-to-end encryption (algorithm " + event.getContent().algorithm + ")";
 }
 
-function formatPowerLevel(level, roles, userDefault) {
-    if (roles[level]) {
-        return roles[level] + (level !== undefined ? ` (${level})` : ` (${userDefault})`);
-    } else {
-        return level;
-    }
-}
-
 // Currently will only display a change if a user's power level is changed
 function textForPowerEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
@@ -225,8 +212,8 @@ function textForPowerEvent(event) {
         if (to !== from) {
             diff.push(
                 userId +
-                ' from ' + formatPowerLevel(from, roles, userDefault) +
-                ' to ' + formatPowerLevel(to, roles, userDefault)
+                ' from ' + Roles.textualPowerLevel(from, userDefault) +
+                ' to ' + Roles.textualPowerLevel(to, userDefault)
             );
         }
     });
