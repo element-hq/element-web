@@ -488,6 +488,7 @@ module.exports = {
                     text: (
                         userText || "User did not supply any additional text."
                     ),
+                    app: 'riot-web',
                     version: version,
                     user_agent: userAgent,
                 },
