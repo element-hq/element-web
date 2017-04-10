@@ -82,4 +82,12 @@ export default class BasePlatform {
     screenCaptureErrorString() {
         return "Not implemented";
     }
+
+    /**
+     * Restarts the application, without neccessarily reloading
+     * any application code
+     */
+    reload() {
+        throw new Error("reload not implemented!");
+    }
 }
