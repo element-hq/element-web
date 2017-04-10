@@ -441,10 +441,10 @@ module.exports = React.createClass({
     },
 
     _onClearCacheClicked: function() {
+        if (!PlatformPeg.get()) return;
+
         MatrixClientPeg.get().store.deleteAllData().done(() => {
-            // forceReload=false since we don't really need new HTML/JS files
-            // we just need to restart the JS runtime.
-            window.location.reload(false);
+            PlatformPeg.get().reload();
         });
     },
 
