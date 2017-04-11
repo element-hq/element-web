@@ -15,11 +15,18 @@ limitations under the License.
 */
 
 import q from "q";
-import request from "browser-request";
 
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
 
 import rageshake from './rageshake'
+
+
+// polyfill textencoder if necessary
+import * as TextEncodingUtf8 from 'text-encoding-utf-8';
+let TextDecoder = window.TextEncoder;
+if (!TextEncoder) {
+    TextEncoder = TextEncodingUtf8.TextEncoder;
+}
 
 /**
  * Send a bug report.
@@ -49,36 +56,44 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
 
     console.log("Sending bug report.");
 
-    let logs = [];
+    const body = new FormData();
+    body.append('text', opts.userText || "User did not supply any additional text.");
+    body.append('app', 'riot-web');
+    body.append('version', version);
+    body.append('user_agent', userAgent);
+
     if (opts.sendLogs) {
-        logs = await rageshake.getLogsForReport();
+        const logs = await rageshake.getLogsForReport();
+        for (let entry of logs) {
+            // encode as UTF-8
+            const buf = new TextEncoder().encode(entry.lines);
+
+            body.append('log', new Blob([buf]), entry.id);
+        }
     }
 
-    await q.Promise((resolve, reject) => {
-        request({
-            method: "POST",
-            url: bugReportEndpoint,
-            body: {
-                logs: logs,
-                text: (
-                    opts.userText || "User did not supply any additional text."
-                ),
-                app: 'riot-web',
-                version: version,
-                user_agent: userAgent,
-            },
-            json: true,
-            timeout: 5 * 60 * 1000,
-        }, (err, res) => {
-            if (err) {
-                reject(err);
-                return;
-            }
-            if (res.status < 200 || res.status >= 400) {
-                reject(new Error(`HTTP ${res.status}`));
-                return;
-            }
-            resolve();
-        })
-    });
+    await _submitReport(bugReportEndpoint, body);
+}
+
+function _submitReport(endpoint, body) {
+    const deferred = q.defer();
+
+    const req = new XMLHttpRequest();
+    req.open("POST", endpoint);
+    req.timeout = 5 * 60 * 1000;
+    req.onreadystatechange = function() {
+        if (req.readyState === XMLHttpRequest.DONE) {
+            on_done();
+        }
+    };
+    req.send(body);
+    return deferred.promise;
+
+    function on_done() {
+        if (req.status < 200 || req.status >= 400) {
+            deferred.reject(new Error(`HTTP ${req.status}`));
+            return;
+        }
+        deferred.resolve();
+    }
 }
