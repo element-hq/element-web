@@ -396,7 +396,6 @@ function selectQuery(store, keyRange, resultMapper) {
 let store = null;
 let logger = null;
 let initPromise = null;
-let bugReportEndpoint = null;
 module.exports = {
 
     /**
@@ -430,17 +429,14 @@ module.exports = {
         await store.consume();
     },
 
-    setBugReportEndpoint: function(url) {
-        bugReportEndpoint = url;
-    },
-
     /**
      * Send a bug report.
+     * @param {string} bugReportEndpoint HTTP url to send the report to
      * @param {string} userText Any additional user input.
      * @param {boolean} sendLogs True to send logs
      * @return {Promise} Resolved when the bug report is sent.
      */
-    sendBugReport: async function(userText, sendLogs) {
+    sendBugReport: async function(bugReportEndpoint, userText, sendLogs) {
         if (!logger) {
             throw new Error(
                 "No console logger, did you forget to call init()?"
