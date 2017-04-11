@@ -1,3 +1,10 @@
+Changes in [0.9.8-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.9.8-rc.3) (2017-04-11)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.8-rc.2...v0.9.8-rc.3)
+
+ * Make the clear cache button work on desktop
+   [\#3598](https://github.com/vector-im/riot-web/pull/3598)
+
 Changes in [0.9.8-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.9.8-rc.2) (2017-04-10)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.8-rc.1...v0.9.8-rc.2)
