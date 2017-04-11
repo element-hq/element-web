@@ -139,4 +139,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
     requestNotificationPermission() : Promise {
         return q('granted');
     }
+
+    reload() {
+        electron.remote.getCurrentWebContents().reload();
+    }
 }
