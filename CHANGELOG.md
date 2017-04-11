@@ -1,3 +1,12 @@
+Changes in [0.8.7-rc.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.7-rc.4) (2017-04-11)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.7-rc.3...v0.8.7-rc.4)
+
+ * Fix people section vanishing on 'clear cache'
+   [\#799](https://github.com/matrix-org/matrix-react-sdk/pull/799)
+ * Make the clear cache button work on desktop
+   [\#798](https://github.com/matrix-org/matrix-react-sdk/pull/798)
+
 Changes in [0.8.7-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.7-rc.3) (2017-04-10)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.7-rc.2...v0.8.7-rc.3)
