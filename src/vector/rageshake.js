@@ -430,6 +430,32 @@ module.exports = {
     },
 
     /**
+     * Get a recent snapshot of the logs, ready for attaching to a bug report
+     *
+     * @return {Array<{lines: string, id, string}>}  list of log data
+     */
+    getLogsForReport: async function() {
+        if (!logger) {
+            throw new Error(
+                "No console logger, did you forget to call init()?"
+            );
+        }
+        // If in incognito mode, store is null, but we still want bug report
+        // sending to work going off the in-memory console logs.
+        if (store) {
+            // flush most recent logs
+            await store.flush();
+            return await store.consume();
+        }
+        else {
+            return [{
+                lines: logger.flush(true),
+                id: "-",
+            }];
+        }
+    },
+
+    /**
      * Send a bug report.
      * @param {string} bugReportEndpoint HTTP url to send the report to
      * @param {string} userText Any additional user input.
@@ -437,11 +463,6 @@ module.exports = {
      * @return {Promise} Resolved when the bug report is sent.
      */
     sendBugReport: async function(bugReportEndpoint, userText, sendLogs) {
-        if (!logger) {
-            throw new Error(
-                "No console logger, did you forget to call init()?"
-            );
-        }
         if (!bugReportEndpoint) {
             throw new Error("No bug report endpoint has been set.");
         }
@@ -457,22 +478,11 @@ module.exports = {
             userAgent = window.navigator.userAgent;
         }
 
-        // If in incognito mode, store is null, but we still want bug report
-        // sending to work going off the in-memory console logs.
         console.log("Sending bug report.");
+
         let logs = [];
         if (sendLogs) {
-            if (store) {
-                // flush most recent logs
-                await store.flush();
-                logs = await store.consume();
-            }
-            else {
-                logs.push({
-                    lines: logger.flush(true),
-                    id: "-",
-                });
-            }
+            logs = await this.getLogsForReport();
         }
 
         await q.Promise((resolve, reject) => {
