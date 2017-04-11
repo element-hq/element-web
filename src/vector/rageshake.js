@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
-import request from "browser-request";
 import q from "q";
 
 // This module contains all the code needed to log the console, persist it to
@@ -454,63 +452,4 @@ module.exports = {
             }];
         }
     },
-
-    /**
-     * Send a bug report.
-     * @param {string} bugReportEndpoint HTTP url to send the report to
-     * @param {string} userText Any additional user input.
-     * @param {boolean} sendLogs True to send logs
-     * @return {Promise} Resolved when the bug report is sent.
-     */
-    sendBugReport: async function(bugReportEndpoint, userText, sendLogs) {
-        if (!bugReportEndpoint) {
-            throw new Error("No bug report endpoint has been set.");
-        }
-
-        let version = "UNKNOWN";
-        try {
-            version = await PlatformPeg.get().getAppVersion();
-        }
-        catch (err) {} // PlatformPeg already logs this.
-
-        let userAgent = "UNKNOWN";
-        if (window.navigator && window.navigator.userAgent) {
-            userAgent = window.navigator.userAgent;
-        }
-
-        console.log("Sending bug report.");
-
-        let logs = [];
-        if (sendLogs) {
-            logs = await this.getLogsForReport();
-        }
-
-        await q.Promise((resolve, reject) => {
-            request({
-                method: "POST",
-                url: bugReportEndpoint,
-                body: {
-                    logs: logs,
-                    text: (
-                        userText || "User did not supply any additional text."
-                    ),
-                    app: 'riot-web',
-                    version: version,
-                    user_agent: userAgent,
-                },
-                json: true,
-                timeout: 5 * 60 * 1000,
-            }, (err, res) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                if (res.status < 200 || res.status >= 400) {
-                    reject(new Error(`HTTP ${res.status}`));
-                    return;
-                }
-                resolve();
-            })
-        });
-    }
 };
