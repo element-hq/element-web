@@ -24,14 +24,17 @@ import rageshake from './rageshake'
 /**
  * Send a bug report.
  * @param {string} bugReportEndpoint HTTP url to send the report to
- * @param {string} userText Any additional user input.
- * @param {boolean} sendLogs True to send logs
+ * @param {object} opts optional dictionary of options
+ * @param {string} opts.userText Any additional user input.
+ * @param {boolean} opts.sendLogs True to send logs
  * @return {Promise} Resolved when the bug report is sent.
  */
-export default async function sendBugReport(bugReportEndpoint, userText, sendLogs) {
+export default async function sendBugReport(bugReportEndpoint, opts) {
     if (!bugReportEndpoint) {
         throw new Error("No bug report endpoint has been set.");
     }
+
+    opts = opts || {};
 
     let version = "UNKNOWN";
     try {
@@ -47,7 +50,7 @@ export default async function sendBugReport(bugReportEndpoint, userText, sendLog
     console.log("Sending bug report.");
 
     let logs = [];
-    if (sendLogs) {
+    if (opts.sendLogs) {
         logs = await rageshake.getLogsForReport();
     }
 
@@ -58,7 +61,7 @@ export default async function sendBugReport(bugReportEndpoint, userText, sendLog
             body: {
                 logs: logs,
                 text: (
-                    userText || "User did not supply any additional text."
+                    opts.userText || "User did not supply any additional text."
                 ),
                 app: 'riot-web',
                 version: version,

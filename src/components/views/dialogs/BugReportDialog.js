@@ -48,9 +48,10 @@ export default class BugReportDialog extends React.Component {
             return;
         }
         this.setState({ busy: true, err: null });
-        submit_rageshake(
-            SdkConfig.get().bug_report_endpoint_url, userText, sendLogs,
-        ).then(() => {
+        submit_rageshake(SdkConfig.get().bug_report_endpoint_url, {
+            userText: userText,
+            sendLogs: sendLogs,
+        }).then(() => {
             this.setState({ busy: false });
             this.props.onFinished(false);
         }, (err) => {
