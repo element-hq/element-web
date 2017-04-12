@@ -417,9 +417,10 @@ var TimelinePanel = React.createClass({
                 } else if(lastEv && this.getReadMarkerPosition() === 0) {
                     // we know we're stuckAtBottom, so we can advance the RM
                     // immediately, to save a later render cycle
+
+                    // This call will setState with readMarkerEventId = lastEv.getId()
                     this._setReadMarker(lastEv.getId(), lastEv.getTs(), true);
                     updatedState.readMarkerVisible = false;
-                    updatedState.readMarkerEventId = lastEv.getId();
                     callback = this.props.onReadMarkerUpdated;
                 }
             }
