@@ -132,7 +132,8 @@ module.exports = React.createClass({
                     links.push(node);
                 }
             }
-            else if (node.tagName === "PRE" || node.tagName === "CODE") {
+            else if (node.tagName === "PRE" || node.tagName === "CODE" ||
+                    node.tagName === "BLOCKQUOTE") {
                 continue;
             }
             else if (node.children && node.children.length) {
