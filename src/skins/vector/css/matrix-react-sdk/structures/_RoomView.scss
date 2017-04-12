@@ -206,11 +206,14 @@ hr.mx_RoomView_myReadMarker {
 }
 
 .mx_RoomView_inCall .mx_RoomView_statusAreaBox_line {
-    border-top: 1px hidden;
+    margin-top: 2px;
+    border: none;
+    height: 0px;
 }
 
 .mx_RoomView_inCall .mx_MessageComposer_wrapper {
     border-top: 2px hidden;
+    padding-top: 1px;
 }
 
 .mx_RoomView_inCall .mx_RoomView_statusAreaBox {

@@ -22,6 +22,8 @@ limitations under the License.
     flex-direction: column;
     justify-content: center;
     display: flex;
+    background-color: $preview-bar-bg-color;
+    -webkit-align-items: center;
 }
 
 .mx_RoomPreviewBar_wrapper {

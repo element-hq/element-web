@@ -21,6 +21,9 @@ released version of Riot:
    as desired. See below for details.
 1. Enter the URL into your browser and log into Riot!
 
+Releases are signed by PGP, and can be checked against the public key
+at https://riot.im/packages/keys/riot-master.asc
+
 Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
 over https.
@@ -64,6 +67,18 @@ to build.
    (cd node_modules/matrix-js-sdk && npm install)
    (cd node_modules/matrix-react-sdk && npm install)
    ```
+   Whenever you git pull on riot-web you will also probably need to force an update
+   to these dependencies - the easiest way is probably:
+   ```
+   rm -rf node_modules/matrjx-{js,react}-sdk && npm i
+   (cd node_modules/matrix-js-sdk && npm install)
+   (cd node_modules/matrix-react-sdk && npm install)
+   ```
+   However, we recommend setting up a proper development environment (see "Setting
+   up a development environment" below) if you want to run your own copy of the
+   `develop` branch, as it makes it much easier to keep these dependencies
+   up-to-date.  Or just use https://riot.im/develop - the continuous integration
+   release of the develop branch.
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it (see below for details)
 1. `npm run dist` to build a tarball to deploy. Untaring this file will give
@@ -114,7 +129,8 @@ built it yourself.
 
 To run as a desktop app:
 
-1. Follow the instructions in 'Building From Source' above
+1. Follow the instructions in 'Building From Source' above, but run
+   `npm run build` instead of `npm run dist` (since we don't need the tarball).
 2. Install electron and run it:
 
    ```

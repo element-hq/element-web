@@ -13,10 +13,12 @@ $light-fg-color: #747474;
 $accent-fg-color: $primary-bg-color;
 $accent-color: #76CFA6;
 
-$selection-fg-color: $primary-bg-color;
+$selection-fg-color: $primary-fg-color;
 
 // red warning colour
 $warning-color: #ff0064;
+
+$preview-bar-bg-color: #333;
 
 // left-panel style muted accent color
 $secondary-accent-color: $primary-bg-color;
@@ -28,7 +30,7 @@ $plinth-bg-color: #474747;
 $droptarget-bg-color: rgba(45,45,45,0.5);
 
 // used by AddressSelector
-$selected-color: #eaf5f0;
+$selected-color: #000000;
 
 // selected for hoverover & selected event tiles
 $event-selected-color: #353535;
@@ -72,6 +74,9 @@ $settings-grey-fg-color: #a2a2a2;
 $voip-decline-color: #f48080;
 $voip-accept-color: #80f480;
 
+$rte-bg-color: #353535;
+$rte-code-bg-color: #000;
+
 // ********************
 
 $roomtile-name-color: rgba(186, 186, 186, 0.8);
@@ -85,8 +90,11 @@ $roomsublist-label-bg-color: #454545;
 
 // event tile lifecycle
 $event-encrypting-color: rgba(171, 221, 188, 0.4);
-$event-sending-color: #ddd;
+$event-sending-color: #888;
 $event-notsent-color: #f44;
+
+// event redaction
+$event-redacted-img: url('../../img/redacted-dark.jpg');
 
 // event timestamp
 $event-timestamp-color: #acacac;
@@ -110,18 +118,30 @@ $progressbar-color: #000;
 // better match the theme.  Typically applied to dark grey 'off' buttons or
 // light grey 'on' buttons.
 .mx_filterFlipColor {
-    filter: invert();
+    filter: invert(1);
 }
 
 .gm-scrollbar .thumb {
-    filter: invert();
+    filter: invert(1);
 }
 
-.mx_EventTile_content .markdown-body pre,
-.mx_EventTile_content .markdown-body code {
-    filter: invert();
-}
+// markdown overrides:
+.mx_EventTile_content .markdown-body {
+    pre, code {
+        filter: invert(1);
+    }
 
-.mx_EventTile_content .markdown-body pre code {
-    filter: none;
+    pre code {
+        filter: none;
+    }
+
+    table {
+        tr {
+            background-color: #000000;
+        }
+
+        tr:nth-child(2n) {
+            background-color: #080808;
+        }
+    }
 }

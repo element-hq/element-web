@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_NetworkDropdown {
+.mx_Dropdown {
     position: relative;
 }
 
-.mx_NetworkDropdown_input {
+.mx_Dropdown_input {
     position: relative;
     border-radius: 3px;
     border: 1px solid $strong-input-border-color;
@@ -27,7 +27,7 @@ limitations under the License.
     user-select: none;
 }
 
-.mx_NetworkDropdown_arrow {
+.mx_Dropdown_arrow {
     border-color: $primary-fg-color transparent transparent;
     border-style: solid;
     border-width: 5px 5px 0;
@@ -39,29 +39,30 @@ limitations under the License.
     width: 0
 }
 
-.mx_NetworkDropdown_networkoption {
+.mx_Dropdown_option {
     height: 35px;
     line-height: 35px;
     padding-left: 8px;
     padding-right: 8px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 
-.mx_NetworkDropdown_networkoption img {
+.mx_Dropdown_option img {
     margin: 5px;
     width: 25px;
     vertical-align: middle;
 }
 
-input.mx_NetworkDropdown_networkoption, input.mx_NetworkDropdown_networkoption:focus {
+input.mx_Dropdown_option, input.mx_Dropdown_option:focus {
     border: 0;
     padding-top: 0;
     padding-bottom: 0;
+    // XXX: hack to prevent text box being too big and pushing
+    // its parent out / overlapping the dropdown arrow. Only really
+    // works in the Country dropdown.
+    width: 60%;
 }
 
-.mx_NetworkDropdown_menu {
+.mx_Dropdown_menu {
     position: absolute;
     left: -1px;
     right: -1px;
@@ -72,13 +73,21 @@ input.mx_NetworkDropdown_networkoption, input.mx_NetworkDropdown_networkoption:f
     border-radius: 3px;
     border: 1px solid $accent-color;
     background-color: $primary-bg-color;
+    max-height: 200px;
+    overflow-y: scroll;
 }
 
-.mx_NetworkDropdown_menu .mx_NetworkDropdown_networkoption:hover {
+.mx_Dropdown_menu .mx_Dropdown_option_highlight {
     background-color: $focus-bg-color;
 }
 
-.mx_NetworkDropdown_menu_network {
+.mx_Dropdown_menu {
     font-weight: bold;
+}
+
+.mx_Dropdown_searchPrompt {
+    font-weight: normal;
+    margin-left: 5px;
+    margin-bottom: 5px;
 }
 

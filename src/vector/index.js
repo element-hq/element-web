@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -49,7 +50,7 @@ rageshake.init().then(() => {
  // access via the console
 global.React = require("react");
 if (process.env.NODE_ENV !== 'production') {
-    global.ReactPerf = require("react-addons-perf");
+    global.Perf = require("react-addons-perf");
 }
 
 var RunModernizrTests = require("./modernizr"); // this side-effects a global
@@ -67,10 +68,14 @@ import url from 'url';
 import {parseQs, parseQsFromFragment} from './url_utils';
 import Platform from './platform';
 
+import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+
 var lastLocationHashSet = null;
 
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 CallHandler.setConferenceHandler(VectorConferenceHandler);
+
+MatrixClientPeg.setIndexedDbWorkerScript(window.vector_indexeddb_worker_script);
 
 function checkBrowserFeatures(featureList) {
     if (!window.Modernizr) {
@@ -101,15 +106,24 @@ var validBrowser = checkBrowserFeatures([
     "objectfit"
 ]);
 
+// Parse the given window.location and return parameters that can be used when calling
+// MatrixChat.showScreen(screen, params)
+function getScreenFromLocation(location) {
+    const fragparts = parseQsFromFragment(location);
+    return {
+        screen: fragparts.location.substring(1),
+        params: fragparts.params,
+    }
+}
+
 // Here, we do some crude URL analysis to allow
 // deep-linking.
 function routeUrl(location) {
     if (!window.matrixChat) return;
 
-    console.log("Routing URL "+location);
-    var fragparts = parseQsFromFragment(location);
-    window.matrixChat.showScreen(fragparts.location.substring(1),
-                                 fragparts.params);
+    console.log("Routing URL ", location.href);
+    const s = getScreenFromLocation(location);
+    window.matrixChat.showScreen(s.screen, s.params);
 }
 
 function onHashChange(ev) {
@@ -120,23 +134,13 @@ function onHashChange(ev) {
     routeUrl(window.location);
 }
 
-var loaded = false;
-var lastLoadedScreen = null;
-
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
 var onNewScreen = function(screen) {
     console.log("newscreen "+screen);
-    // just remember the most recent screen while we are loading, so that the
-    // user doesn't see the URL bar doing a dance
-    if (!loaded) {
-        lastLoadedScreen = screen;
-    } else {
-        var hash = '#/' + screen;
-        lastLocationHashSet = hash;
-        window.location.hash = hash;
-        if (ga) ga('send', 'pageview', window.location.pathname + window.location.search + window.location.hash);
-    }
+    var hash = '#/' + screen;
+    lastLocationHashSet = hash;
+    window.location.hash = hash;
 }
 
 // We use this to work out what URL the SDK should
@@ -148,16 +152,30 @@ var onNewScreen = function(screen) {
 // If we're in electron, we should never pass through a file:// URL otherwise
 // the identity server will try to 302 the browser to it, which breaks horribly.
 // so in that instance, hardcode to use riot.im/app for now instead.
-var makeRegistrationUrl = function() {
+var makeRegistrationUrl = function(params) {
+    let url;
     if (window.location.protocol === "file:") {
-        return 'https://riot.im/app/#/register';
+        url = 'https://riot.im/app/#/register';
+    } else {
+        url = (
+            window.location.protocol + '//' +
+            window.location.host +
+            window.location.pathname +
+            '#/register'
+        );
     }
-    else {
-        return window.location.protocol + '//' +
-               window.location.host +
-               window.location.pathname +
-               '#/register';
+
+    const keys = Object.keys(params);
+    for (let i = 0; i < keys.length; ++i) {
+        if (i == 0) {
+            url += '?';
+        } else {
+            url += '&';
+        }
+        const k = keys[i];
+        url += k + '=' + encodeURIComponent(params[k]);
     }
+    return url;
 }
 
 window.addEventListener('hashchange', onHashChange);
@@ -254,31 +272,22 @@ async function loadApp() {
     } else if (validBrowser) {
         UpdateChecker.start();
 
-        var MatrixChat = sdk.getComponent('structures.MatrixChat');
-
+        const MatrixChat = sdk.getComponent('structures.MatrixChat');
         window.matrixChat = ReactDOM.render(
             <MatrixChat
                 onNewScreen={onNewScreen}
-                registrationUrl={makeRegistrationUrl()}
+                makeRegistrationUrl={makeRegistrationUrl}
                 ConferenceHandler={VectorConferenceHandler}
                 config={configJson}
                 realQueryParams={params}
                 startingFragmentQueryParams={fragparts.params}
                 enableGuest={true}
                 onLoadCompleted={onLoadCompleted}
+                initialScreenAfterLogin={getScreenFromLocation(window.location)}
                 defaultDeviceDisplayName={PlatformPeg.get().getDefaultDeviceDisplayName()}
             />,
             document.getElementById('matrixchat')
         );
-
-        routeUrl(window.location);
-
-        // we didn't propagate screen changes to the URL bar while we were loading; do it now.
-        loaded = true;
-        if (lastLoadedScreen) {
-            onNewScreen(lastLoadedScreen);
-            lastLoadedScreen = null;
-        }
     }
     else {
         console.error("Browser is missing required features.");

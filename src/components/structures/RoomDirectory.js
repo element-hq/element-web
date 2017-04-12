@@ -162,7 +162,7 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to get public room list",
-                description: err.message
+                description: "The server may be unavailable or overloaded",
             });
         });
     },
@@ -208,9 +208,10 @@ module.exports = React.createClass({
                 }, function(err) {
                     modal.close();
                     this.refreshRoomList();
+                    console.error("Failed to " + step + ": " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Failed to "+step,
-                        description: err.toString()
+                        title: "Error",
+                        description: "Failed to " + step,
                     });
                 });
             }

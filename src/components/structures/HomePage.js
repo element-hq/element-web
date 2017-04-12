@@ -1,5 +1,6 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,26 +17,24 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import sdk from 'matrix-react-sdk';
 
 module.exports = React.createClass({
-    displayName: 'RoomDropTarget',
+    displayName: 'HomePage',
+
+    propTypes: {
+        teamServerUrl: React.PropTypes.string.isRequired,
+        teamToken: React.PropTypes.string.isRequired,
+        collapsedRhs: React.PropTypes.bool,
+    },
 
     render: function() {
-        if (this.props.placeholder) {
-            return (
-                <div className="mx_RoomDropTarget mx_RoomDropTarget_placeholder">
-                </div>
-            );
-        }
-        else {
-            return (
-                <div className="mx_RoomDropTarget">
-                    <div className="mx_RoomDropTarget_label">
-                        { this.props.label }
-                    </div>
-                </div>
-            );
-        }
+        return (
+        <div className="mx_HomePage">
+            <iframe src={`${this.props.teamServerUrl}/static/${this.props.teamToken}/home.html`}/>
+        </div>
+        );
     }
 });

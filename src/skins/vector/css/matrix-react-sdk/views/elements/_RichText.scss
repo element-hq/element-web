@@ -1,3 +1,7 @@
+// XXX: bleurgh, what is this? These classes totally break the component
+// naming scheme; it's completely unclear where or how they're being used
+// --Matthew
+
 .mx_UserPill {
     color: white;
     background-color: $accent-color;
@@ -25,13 +29,13 @@
     padding: .2em 0;
     margin: 0;
     font-size: 85%;
-    background-color: rgba(0,0,0,.04);
+    background-color: $rte-code-bg-color;
     border-radius: 3px;
 }
 
 .mx_Markdown_HR {
     display: block;
-    background: #e7e7e7;
+    background: $rte-bg-color;
 }
 
 .mx_Markdown_STRIKETHROUGH {

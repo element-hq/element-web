@@ -146,12 +146,20 @@ var RoomSubList = React.createClass({
         }
     },
 
+    onRoomTileClick(roomId) {
+        dis.dispatch({
+            action: 'view_room',
+            room_id: roomId,
+        });
+    },
+
     tsOfNewestEvent: function(room) {
         for (var i = room.timeline.length - 1; i >= 0; --i) {
             var ev = room.timeline[i];
-            if (Unread.eventTriggersUnreadCount(ev) ||
-                (ev.sender && ev.sender.userId === MatrixClientPeg.get().credentials.userId))
-            {
+            if (ev.getTs() &&
+                (Unread.eventTriggersUnreadCount(ev) ||
+                (ev.getSender() === MatrixClientPeg.get().credentials.userId))
+            ) {
                 return ev.getTs();
             }
         }
@@ -159,7 +167,7 @@ var RoomSubList = React.createClass({
         // we might only have events that don't trigger the unread indicator,
         // in which case use the oldest event even if normally it wouldn't count.
         // This is better than just assuming the last event was forever ago.
-        if (room.timeline.length) {
+        if (room.timeline.length && room.timeline[0].getTs()) {
             return room.timeline[0].getTs();
         } else {
             return Number.MAX_SAFE_INTEGER;
@@ -364,7 +372,9 @@ var RoomSubList = React.createClass({
                     highlight={ room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites' }
                     isInvite={ self.props.label === 'Invites' }
                     refreshSubList={ self._updateSubListCount }
-                    incomingCall={ null } />
+                    incomingCall={ null }
+                    onClick={ self.onRoomTileClick }
+                />
             );
         });
     },
@@ -408,7 +418,7 @@ var RoomSubList = React.createClass({
         if (this.props.incomingCall) {
             var self = this;
             // Check if the incoming call is for this section
-            var incomingCallRoom = this.state.sortedList.filter(function(room) {
+            var incomingCallRoom = this.props.list.filter(function(room) {
                 return self.props.incomingCall.roomId === room.roomId;
             });
 
@@ -496,9 +506,10 @@ var RoomSubList = React.createClass({
                         // Do any final stuff here
                     }).fail(function(err) {
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        console.error("Failed to add tag " + self.props.tagName + " to room" + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Failed to add tag " + self.props.tagName + " to room",
-                            description: err.toString()
+                            title: "Error",
+                            description: "Failed to add tag " + self.props.tagName + " to room",
                         });
                     });
                     break;

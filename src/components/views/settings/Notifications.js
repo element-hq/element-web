@@ -238,9 +238,10 @@ module.exports = React.createClass({
                 self._refreshFromServer();
             }, function(error) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                console.error("Failed to change settings: " + error);
                 Modal.createDialog(ErrorDialog, {
-                    title: "Can't change settings",
-                    description: error.toString(),
+                    title: "Error",
+                    description: "Failed to change settings",
                     onFinished: self._refreshFromServer
                 });
             });
@@ -307,9 +308,10 @@ module.exports = React.createClass({
             self._refreshFromServer();
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Can't update user notification settings: " + error);
             Modal.createDialog(ErrorDialog, {
-                title: "Can't update user notification settings",
-                description: error.toString(),
+                title: "Error",
+                description: "Can't update user notification settings",
                 onFinished: self._refreshFromServer
             });
         });
@@ -348,9 +350,10 @@ module.exports = React.createClass({
 
         var onError = function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Failed to update keywords: " + error);
             Modal.createDialog(ErrorDialog, {
-                title: "Can't update keywords",
-                description: error.toString(),
+                title: "Error",
+                description: "Failed to update keywords",
                 onFinished: self._refreshFromServer
             });
         }
@@ -458,8 +461,8 @@ module.exports = React.createClass({
                 '.m.rule.master': 'master',
 
                 // The default push rules displayed by Vector UI
-                // XXX: .m.rule.contains_user_name is not managed (not a fancy rule for Vector?)
                 '.m.rule.contains_display_name': 'vector',
+                '.m.rule.contains_user_name': 'vector',
                 '.m.rule.room_one_to_one': 'vector',
                 '.m.rule.message': 'vector',
                 '.m.rule.invite_for_me': 'vector',
@@ -512,6 +515,7 @@ module.exports = React.createClass({
 
             var vectorRuleIds = [
                 '.m.rule.contains_display_name',
+                '.m.rule.contains_user_name',
                 '_keywords',
                 '.m.rule.room_one_to_one',
                 '.m.rule.message',
@@ -715,20 +719,17 @@ module.exports = React.createClass({
             );
         }
 
-        var emailNotificationsRow;
-        if (this.props.threepids.filter(function(tp) {
-                if (tp.medium == "email") {
-                    return true;
-                }
-            }).length == 0) {
+        const emailThreepids = this.props.threepids.filter((tp) => tp.medium === "email");
+        let emailNotificationsRow;
+        if (emailThreepids.length === 0) {
             emailNotificationsRow = <div>
                 Add an email address above to configure email notifications
             </div>;
         } else {
             // This only supports the first email address in your profile for now
             emailNotificationsRow = this.emailNotificationsRow(
-                this.props.threepids[0].address,
-                "Enable email notifications ("+this.props.threepids[0].address+")"
+                emailThreepids[0].address,
+                "Enable email notifications ("+emailThreepids[0].address+")"
             );
         }
 
