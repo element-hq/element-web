@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import sdk from 'matrix-react-sdk';
-import submit_rageshake from '../../../vector/submit-rageshake';
 import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
 
 export default class BugReportDialog extends React.Component {
@@ -48,14 +47,17 @@ export default class BugReportDialog extends React.Component {
             return;
         }
         this.setState({ busy: true, err: null });
-        submit_rageshake(SdkConfig.get().bug_report_endpoint_url, {
-            userText: userText,
-            sendLogs: sendLogs,
-        }).then(() => {
-            this.setState({ busy: false });
-            this.props.onFinished(false);
-        }, (err) => {
-            this.setState({ busy: false, err: `Failed: ${err.message}` });
+
+        require(['../../../vector/submit-rageshake'], (s) => {
+            s(SdkConfig.get().bug_report_endpoint_url, {
+                userText: userText,
+                sendLogs: sendLogs,
+            }).then(() => {
+                this.setState({ busy: false });
+                this.props.onFinished(false);
+            }, (err) => {
+                this.setState({ busy: false, err: `Failed: ${err.message}` });
+            });
         });
     }
 
