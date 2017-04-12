@@ -386,9 +386,7 @@ module.exports = React.createClass({
                 ret.push(this._getReadMarkerTile(visible));
                 readMarkerVisible = visible;
                 isVisibleReadMarker = visible;
-            }
-
-            if (eventId == this.currentGhostEventId) {
+            } else if (eventId == this.currentGhostEventId) {
                 // if we're showing an animation, continue to show it.
                 ret.push(this._getReadMarkerGhostTile());
             } else if (!isVisibleReadMarker &&
