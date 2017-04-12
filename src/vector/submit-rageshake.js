@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import pako from 'pako';
 import q from "q";
 
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
@@ -68,7 +69,10 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
             // encode as UTF-8
             const buf = new TextEncoder().encode(entry.lines);
 
-            body.append('log', new Blob([buf]), entry.id);
+            // compress
+            const compressed = pako.gzip(buf);
+
+            body.append('compressed-log', new Blob([compressed]), entry.id);
         }
     }
 
