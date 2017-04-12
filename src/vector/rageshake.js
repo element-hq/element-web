@@ -205,9 +205,6 @@ class IndexedDBLogStore {
             }
             let txn = this.db.transaction(["logs", "logslastmod"], "readwrite");
             let objStore = txn.objectStore("logs");
-            objStore.add(this._generateLogEntry(lines));
-            let lastModStore = txn.objectStore("logslastmod");
-            lastModStore.put(this._generateLastModifiedTime());
             txn.oncomplete = (event) => {
                 resolve();
             };
@@ -219,6 +216,9 @@ class IndexedDBLogStore {
                     new Error("Failed to write logs: " + event.target.errorCode)
                 );
             }
+            objStore.add(this._generateLogEntry(lines));
+            let lastModStore = txn.objectStore("logslastmod");
+            lastModStore.put(this._generateLastModifiedTime());
         });
         return this.flushPromise;
     }
