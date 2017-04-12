@@ -26,11 +26,18 @@ export default class BugReportDialog extends React.Component {
             busy: false,
             err: null,
             text: "",
+            progress: null,
         };
+        this._unmounted = false;
         this._onSubmit = this._onSubmit.bind(this);
         this._onCancel = this._onCancel.bind(this);
         this._onTextChange = this._onTextChange.bind(this);
         this._onSendLogsChange = this._onSendLogsChange.bind(this);
+        this._sendProgressCallback = this._sendProgressCallback.bind(this);
+    }
+
+    componentWillUnmount() {
+        this._unmounted = true;
     }
 
     _onCancel(ev) {
@@ -46,17 +53,22 @@ export default class BugReportDialog extends React.Component {
             });
             return;
         }
-        this.setState({ busy: true, err: null });
+        this.setState({ busy: true, progress: null, err: null });
+        this._sendProgressCallback("Loading bug report module");
 
         require(['../../../vector/submit-rageshake'], (s) => {
             s(SdkConfig.get().bug_report_endpoint_url, {
                 userText: userText,
                 sendLogs: sendLogs,
+                progressCallback: this._sendProgressCallback,
             }).then(() => {
-                this.setState({ busy: false });
+                this.setState({ busy: false, progress: null });
                 this.props.onFinished(false);
             }, (err) => {
-                this.setState({ busy: false, err: `Failed: ${err.message}` });
+                this.setState({
+                    busy: false, progress: null,
+                    err: `Failed to send report: ${err.message}`,
+                });
             });
         });
     }
@@ -69,6 +81,13 @@ export default class BugReportDialog extends React.Component {
         this.setState({ sendLogs: ev.target.checked });
     }
 
+    _sendProgressCallback(progress) {
+        if (this._unmounted) {
+            return;
+        }
+        this.setState({progress: progress});
+    }
+
     render() {
         const Loader = sdk.getComponent("elements.Spinner");
 
@@ -79,13 +98,21 @@ export default class BugReportDialog extends React.Component {
             </div>;
         }
 
-        const okLabel = this.state.busy ? <Loader /> : 'Send';
-
         let cancelButton = null;
         if (!this.state.busy) {
             cancelButton = <button onClick={this._onCancel}>
                 Cancel
             </button>;
+        }
+
+        let progress = null;
+        if (this.state.busy) {
+            progress = (
+                <div className="progress">
+                    <Loader />
+                    {this.state.progress} ...
+                </div>
+            );
         }
 
         return (
@@ -110,6 +137,7 @@ export default class BugReportDialog extends React.Component {
                     <input type="checkbox" checked={this.state.sendLogs}
                         onChange={this._onSendLogsChange} id="mx_BugReportDialog_logs"/>
                     <label htmlFor="mx_BugReportDialog_logs">Send logs</label>
+                    {progress}
                     {error}
                 </div>
                 <div className="mx_Dialog_buttons">
@@ -117,8 +145,9 @@ export default class BugReportDialog extends React.Component {
                         className="mx_Dialog_primary danger"
                         onClick={this._onSubmit}
                         autoFocus={true}
+                        disabled={this.state.busy}
                     >
-                        {okLabel}
+                        Send
                     </button>
 
                     {cancelButton}
