@@ -251,10 +251,12 @@ var TimelinePanel = React.createClass({
     },
 
     onMessageListUnfillRequest: function(backwards, scrollToken) {
+        // If backwards, unpaginate from the back (i.e. the start of the timeline)
         let dir = backwards ? EventTimeline.BACKWARDS : EventTimeline.FORWARDS;
         debuglog("TimelinePanel: unpaginating events in direction", dir);
 
-        // All tiles are inserted by MessagePanel to have a scrollToken === eventId
+        // All tiles are inserted by MessagePanel to have a scrollToken === eventId, and
+        // this particular event should be the first or last to be unpaginated.
         let eventId = scrollToken;
 
         let marker = this.state.events.findIndex(
@@ -431,6 +433,10 @@ var TimelinePanel = React.createClass({
         }
     },
 
+    canResetTimeline: function() {
+        return this.refs.messagePanel && this.refs.messagePanel.isAtBottom();
+    },
+
     onRoomRedaction: function(ev, room) {
         if (this.unmounted) return;
 
@@ -469,14 +475,6 @@ var TimelinePanel = React.createClass({
         // we still have a client.
         if (!MatrixClientPeg.get()) return;
 
-        // if we are scrolled to the bottom, do a quick-reset of our unreadNotificationCount
-        // to avoid having to wait from the remote echo from the homeserver.
-        if (this.isAtEndOfLiveTimeline()) {
-            this.props.timelineSet.room.setUnreadNotificationCount('total', 0);
-            this.props.timelineSet.room.setUnreadNotificationCount('highlight', 0);
-            // XXX: i'm a bit surprised we don't have to emit an event or dispatch to get this picked up
-        }
-
         var currentReadUpToEventId = this._getCurrentReadReceipt(true);
         var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
 
@@ -514,6 +512,19 @@ var TimelinePanel = React.createClass({
                 // it failed, so allow retries next time the user is active
                 this.last_rr_sent_event_id = undefined;
             });
+
+            // do a quick-reset of our unreadNotificationCount to avoid having
+            // to wait from the remote echo from the homeserver.
+            // we only do this if we're right at the end, because we're just assuming
+            // that sending an RR for the latest message will set our notif counter
+            // to zero: it may not do this if we send an RR for somewhere before the end.
+            if (this.isAtEndOfLiveTimeline()) {
+                this.props.timelineSet.room.setUnreadNotificationCount('total', 0);
+                this.props.timelineSet.room.setUnreadNotificationCount('highlight', 0);
+                dis.dispatch({
+                    action: 'on_room_read',
+                });
+            }
         }
     },
 
@@ -810,7 +821,7 @@ var TimelinePanel = React.createClass({
                     // go via the dispatcher so that the URL is updated
                     dis.dispatch({
                         action: 'view_room',
-                        room_id: this.props.timelineSet.roomId,
+                        room_id: this.props.timelineSet.room.roomId,
                     });
                 };
             }

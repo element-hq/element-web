@@ -218,11 +218,13 @@ module.exports = WithMatrixClient(React.createClass({
     },
 
     onKick: function() {
+        const membership = this.props.member.membership;
+        const kickLabel = membership === "invite" ? "Disinvite" : "Kick";
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
             member: this.props.member,
-            action: 'Kick',
-            askReason: true,
+            action: kickLabel,
+            askReason: membership == "join",
             danger: true,
             onFinished: (proceed, reason) => {
                 if (!proceed) return;
@@ -237,9 +239,10 @@ module.exports = WithMatrixClient(React.createClass({
                         console.log("Kick success");
                     }, function(err) {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        console.error("Kick error: " + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Kick error",
-                            description: err.message
+                            title: "Error", 
+                            description: "Failed to kick user",
                         });
                     }
                 ).finally(()=>{
@@ -278,9 +281,10 @@ module.exports = WithMatrixClient(React.createClass({
                         console.log("Ban success");
                     }, function(err) {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        console.error("Ban error: " + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Ban error",
-                            description: err.message,
+                            title: "Error",
+                            description: "Failed to ban user",
                         });
                     }
                 ).finally(()=>{
@@ -327,9 +331,10 @@ module.exports = WithMatrixClient(React.createClass({
                     // get out of sync if we force setState here!
                     console.log("Mute toggle success");
                 }, function(err) {
+                    console.error("Mute error: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Mute error",
-                        description: err.message
+                        title: "Error",
+                        description: "Failed to mute user",
                     });
                 }
             ).finally(()=>{
@@ -375,9 +380,10 @@ module.exports = WithMatrixClient(React.createClass({
                         description: "This action cannot be performed by a guest user. Please register to be able to do this."
                     });
                 } else {
+                    console.error("Toggle moderator error:" + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Moderator toggle error",
-                        description: err.message
+                        title: "Error",
+                        description: "Failed to toggle moderator status",
                     });
                 }
             }
@@ -395,9 +401,10 @@ module.exports = WithMatrixClient(React.createClass({
                 console.log("Power change success");
             }, function(err) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                console.error("Failed to change power level " + err);
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failure to change power level",
-                    description: err.message
+                    title: "Error",
+                    description: "Failed to change power level",
                 });
             }
         ).finally(()=>{
@@ -553,6 +560,13 @@ module.exports = WithMatrixClient(React.createClass({
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
     },
 
+    onRoomTileClick(roomId) {
+        dis.dispatch({
+            action: 'view_room',
+            room_id: roomId,
+        });
+    },
+
     _renderDevices: function() {
         if (!this._enableDevices) {
             return null;
@@ -569,7 +583,7 @@ module.exports = WithMatrixClient(React.createClass({
         } else if (devices === null) {
             devComponents = "Unable to load device list";
         } else if (devices.length === 0) {
-            devComponents = "No registered devices";
+            devComponents = "No devices with registered encryption keys";
         } else {
             devComponents = [];
             for (var i = 0; i < devices.length; i++) {
@@ -613,6 +627,7 @@ module.exports = WithMatrixClient(React.createClass({
                             unread={Unread.doesRoomHaveUnreadMessages(room)}
                             highlight={highlight}
                             isInvite={me.membership == "invite"}
+                            onClick={this.onRoomTileClick}
                         />
                     );
                 }

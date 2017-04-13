@@ -96,6 +96,12 @@ module.exports = React.createClass({
                     });
                 }
                 break;
+            case 'on_room_read':
+                // Force an update because the notif count state is too deep to cause
+                // an update. This forces the local echo of reading notifs to be
+                // reflected by the RoomTiles.
+                this.forceUpdate();
+                break;
         }
     },
 
@@ -485,11 +491,14 @@ module.exports = React.createClass({
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.direct'] }
                              label="People"
-                             editable={ false }
+                             tagName="im.vector.fake.direct"
+                             verb="tag direct chat"
+                             editable={ true }
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
+                             alwaysShowHeader={ true }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />

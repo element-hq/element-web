@@ -53,6 +53,7 @@ module.exports = React.createClass({
             <EditableTextContainer
                 getInitialValue={this._getDisplayName}
                 placeholder="No display name"
+                blurToSubmit={true}
                 onSubmit={this._changeDisplayName} />
         );
     }

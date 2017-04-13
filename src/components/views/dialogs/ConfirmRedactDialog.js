@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,27 +16,19 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
+import classnames from 'classnames';
 
+/*
+ * A dialog for confirming a redaction.
+ */
 export default React.createClass({
-    displayName: 'QuestionDialog',
+    displayName: 'ConfirmRedactDialog',
     propTypes: {
-        title: React.PropTypes.string,
-        description: React.PropTypes.node,
-        extraButtons: React.PropTypes.node,
-        button: React.PropTypes.string,
-        focus: React.PropTypes.bool,
         onFinished: React.PropTypes.func.isRequired,
     },
 
-    getDefaultProps: function() {
-        return {
-            title: "",
-            description: "",
-            extraButtons: null,
-            button: "OK",
-            focus: true,
-            hasCancelButton: true,
-        };
+    defaultProps: {
+        danger: false,
     },
 
     onOk: function() {
@@ -49,25 +41,31 @@ export default React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const cancelButton = this.props.hasCancelButton ? (
-            <button onClick={this.onCancel}>
-                Cancel
-            </button>
-        ) : null;
+
+        const title = "Confirm Redaction";
+
+        const confirmButtonClass = classnames({
+            'mx_Dialog_primary': true,
+            'danger': false,
+        });
+
         return (
-            <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished}
+            <BaseDialog className="mx_ConfirmUserActionDialog" onFinished={this.props.onFinished}
                 onEnterPressed={ this.onOk }
-                title={this.props.title}
+                title={title}
             >
                 <div className="mx_Dialog_content">
-                    {this.props.description}
+                    Are you sure you wish to redact (delete) this event?
+                    Note that if you redact a room name or topic change, it could undo the change.
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.onOk} autoFocus={this.props.focus}>
-                        {this.props.button}
+                    <button className={confirmButtonClass} onClick={this.onOk}>
+                        Redact
                     </button>
-                    {this.props.extraButtons}
-                    {cancelButton}
+
+                    <button onClick={this.onCancel}>
+                        Cancel
+                    </button>
                 </div>
             </BaseDialog>
         );

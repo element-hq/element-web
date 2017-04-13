@@ -105,6 +105,15 @@ function _setCallListeners(call) {
         call.hangup();
         _setCallState(undefined, call.roomId, "ended");
     });
+    call.on('send_event_error', function(err) {
+        if (err.name === "UnknownDeviceError") {
+            dis.dispatch({
+                action: 'unknown_device_error',
+                err: err,
+                room: MatrixClientPeg.get().getRoom(call.roomId),
+            });
+        }
+    });
     call.on("hangup", function() {
         _setCallState(undefined, call.roomId, "ended");
     });
@@ -301,9 +310,10 @@ function _onAction(payload) {
                                 placeCall(call);
                             }, function(err) {
                                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                                console.error("Conference call failed: " + err);
                                 Modal.createDialog(ErrorDialog, {
                                     title: "Failed to set up conference call",
-                                    description: "Conference call failed: " + err,
+                                    description: "Conference call failed.",
                                 });
                             });
                         }

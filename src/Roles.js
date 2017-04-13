@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,20 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+export const LEVEL_ROLE_MAP = {
+    undefined: 'Default',
+    0: 'User',
+    50: 'Moderator',
+    100: 'Admin',
+};
 
-'use strict';
-
-var React = require('react');
-
-module.exports = React.createClass({
-    displayName: 'UnknownBody',
-
-    render: function() {
-        const text = this.props.mxEvent.getContent().body;
-        return (
-            <span className="mx_UnknownBody" title="Redacted or unknown message type">
-                {text}
-            </span>
-        );
-    },
-});
+export function textualPowerLevel(level, userDefault) {
+    if (LEVEL_ROLE_MAP[level]) {
+        return LEVEL_ROLE_MAP[level] + (level !== undefined ? ` (${level})` : ` (${userDefault})`);
+    } else {
+        return level;
+    }
+}

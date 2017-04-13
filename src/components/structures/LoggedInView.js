@@ -49,11 +49,16 @@ export default React.createClass({
 
     childContextTypes: {
         matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient),
+        authCache: React.PropTypes.object,
     },
 
     getChildContext: function() {
         return {
             matrixClient: this._matrixClient,
+            authCache: {
+                auth: {},
+                lastUpdate: 0,
+            },
         };
     },
 
@@ -76,6 +81,13 @@ export default React.createClass({
         return this._scrollStateMap[roomId];
     },
 
+    canResetTimelineInRoom: function(roomId) {
+        if (!this.refs.roomView) {
+            return true;
+        }
+        return this.refs.roomView.canResetTimeline();
+    },
+
     _onKeyDown: function(ev) {
             /*
             // Remove this for now as ctrl+alt = alt-gr so this breaks keyboards which rely on alt-gr for numbers
@@ -94,6 +106,17 @@ export default React.createClass({
         var handled = false;
 
         switch (ev.keyCode) {
+            case KeyCode.ESCAPE:
+
+                // Implemented this way so possible handling for other pages is neater
+                switch (this.props.page_type) {
+                    case PageTypes.UserSettings:
+                        this.props.onUserSettingsClose();
+                        handled = true;
+                        break;
+                }
+
+                break;
             case KeyCode.UP:
             case KeyCode.DOWN:
                 if (ev.altKey) {

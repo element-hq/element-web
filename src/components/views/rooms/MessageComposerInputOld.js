@@ -34,16 +34,11 @@ export function onSendMessageFailed(err, room) {
     // https://github.com/vector-im/riot-web/issues/3148
     console.log('MessageComposer got send failure: ' + err.name + '('+err+')');
     if (err.name === "UnknownDeviceError") {
-        const UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
-        Modal.createDialog(UnknownDeviceDialog, {
-            devices: err.devices,
+        dis.dispatch({
+            action: 'unknown_device_error',
+            err: err,
             room: room,
-            onFinished: (r) => {
-                // XXX: temporary logging to try to diagnose
-                // https://github.com/vector-im/riot-web/issues/3148
-                console.log('UnknownDeviceDialog closed with '+r);
-            },
-        }, "mx_Dialog_unknownDevice");
+        });
     }
     dis.dispatch({
         action: 'message_send_failed',
@@ -70,6 +65,9 @@ export default React.createClass({
 
         // js-sdk Room object
         room: React.PropTypes.object.isRequired,
+
+        // The text to use a placeholder in the input box
+        placeholder: React.PropTypes.string.isRequired,
     },
 
     componentWillMount: function() {
@@ -313,7 +311,7 @@ export default React.createClass({
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createDialog(ErrorDialog, {
                         title: "Server error",
-                        description: err.message
+                        description: "Server unavailable, overloaded, or something else went wrong.",
                     });
                 });
             }
@@ -442,7 +440,7 @@ export default React.createClass({
     render: function() {
         return (
             <div className="mx_MessageComposer_input" onClick={ this.onInputClick }>
-                <textarea autoFocus ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder="Type a message..." />
+                <textarea autoFocus ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder={this.props.placeholder} />
             </div>
         );
     }

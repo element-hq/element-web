@@ -115,9 +115,10 @@ module.exports = React.createClass({
         changeAvatar.onFileSelected(ev).catch(function(err) {
             var errMsg = (typeof err === "string") ? err : (err.error || "");
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Failed to set avatar: " + errMsg);
             Modal.createDialog(ErrorDialog, {
                 title: "Error",
-                description: "Failed to set avatar. " + errMsg
+                description: "Failed to set avatar.",
             });
         }).done();
     },

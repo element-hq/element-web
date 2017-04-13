@@ -155,7 +155,7 @@ function _loginWithToken(queryParams, defaultDeviceDisplayName) {
 function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
     console.log("Doing guest login on %s", hsUrl);
 
-    // TODO: we should probably de-duplicate this and Signup.Login.loginAsGuest.
+    // TODO: we should probably de-duplicate this and Login.loginAsGuest.
     // Not really sure where the right home for it is.
 
     // create a temporary MatrixClient to do the login
@@ -276,6 +276,14 @@ export function setLoggedIn(credentials) {
     console.log("setLoggedIn => %s (guest=%s) hs=%s",
                 credentials.userId, credentials.guest,
                 credentials.homeserverUrl);
+    // This is dispatched to indicate that the user is still in the process of logging in
+    // because `teamPromise` may take some time to resolve, breaking the assumption that
+    // `setLoggedIn` takes an "instant" to complete, and dispatch `on_logged_in` a few ms
+    // later than MatrixChat might assume.
+    dis.dispatch({action: 'on_logging_in'});
+
+    // Resolves by default
+    let teamPromise = Promise.resolve(null);
 
     // persist the session
     if (localStorage) {
@@ -300,25 +308,29 @@ export function setLoggedIn(credentials) {
             console.warn("Error using local storage: can't persist session!", e);
         }
 
-        if (rtsClient) {
-            rtsClient.login(credentials.userId).then((body) => {
+        if (rtsClient && !credentials.guest) {
+            teamPromise = rtsClient.login(credentials.userId).then((body) => {
                 if (body.team_token) {
                     localStorage.setItem("mx_team_token", body.team_token);
                 }
-            }, (err) =>{
-                console.error(
-                    "Failed to get team token on login, not persisting to localStorage",
-                    err
-                );
+                return body.team_token;
             });
         }
     } else {
         console.warn("No local storage available: can't persist session!");
     }
 
+    // stop any running clients before we create a new one with these new credentials
+    stopMatrixClient();
+
     MatrixClientPeg.replaceUsingCreds(credentials);
 
-    dis.dispatch({action: 'on_logged_in'});
+    teamPromise.then((teamToken) => {
+        dis.dispatch({action: 'on_logged_in', teamToken: teamToken});
+    }, (err) => {
+        console.warn("Failed to get team token on login", err);
+        dis.dispatch({action: 'on_logged_in', teamToken: null});
+    });
 
     startMatrixClient();
 }

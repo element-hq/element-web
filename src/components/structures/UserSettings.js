@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -39,6 +40,10 @@ const REACT_SDK_VERSION =
 // 'id' gives the key name in the im.vector.web.settings account data event
 // 'label' is how we describe it in the UI.
 const SETTINGS_LABELS = [
+    {
+        id: 'autoplayGifsAndVideos',
+        label: 'Autoplay GIFs and videos',
+    },
 /*
     {
         id: 'alwaysShowTimestamps',
@@ -135,6 +140,7 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         this._unmounted = false;
+        this._addThreepid = null;
 
         if (PlatformPeg.get()) {
             q().then(() => {
@@ -202,9 +208,10 @@ module.exports = React.createClass({
             });
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Failed to load user settings: " + error);
             Modal.createDialog(ErrorDialog, {
                 title: "Can't load user settings",
-                description: error.toString()
+                description: "Server may be unavailable or overloaded",
             });
         });
     },
@@ -242,10 +249,11 @@ module.exports = React.createClass({
             self._refreshFromServer();
         }, function(err) {
             var errMsg = (typeof err === "string") ? err : (err.error || "");
+            console.error("Failed to set avatar: " + err);
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Error",
-                description: "Failed to set avatar. " + errMsg
+                description: "Failed to set avatar."
             });
         });
     },
@@ -256,12 +264,18 @@ module.exports = React.createClass({
             title: "Sign out?",
             description:
                 <div>
-                    For security, logging out will delete any end-to-end encryption keys from this browser,
-                    making previous encrypted chat history unreadable if you log back in.
-                    In future this <a href="https://github.com/vector-im/riot-web/issues/2108">will be improved</a>,
-                    but for now be warned.
+                    For security, logging out will delete any end-to-end encryption keys from this browser.
+
+                    If you want to be able to decrypt your conversation history from future Riot sessions,
+                    please export your room keys for safe-keeping.
                 </div>,
             button: "Sign out",
+            extraButtons: [
+                <button className="mx_Dialog_primary"
+                        onClick={this._onExportE2eKeysClicked}>
+                    Export E2E room keys
+                </button>
+            ],
             onFinished: (confirmed) => {
                 if (confirmed) {
                     dis.dispatch({action: 'logout'});
@@ -282,6 +296,7 @@ module.exports = React.createClass({
             errMsg += ` (HTTP status ${err.httpStatus})`;
         }
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        console.error("Failed to change password: " + errMsg);
         Modal.createDialog(ErrorDialog, {
             title: "Error",
             description: errMsg
@@ -308,12 +323,16 @@ module.exports = React.createClass({
         UserSettingsStore.setEnableNotifications(event.target.checked);
     },
 
-    onAddThreepidClicked: function(value, shouldSubmit) {
+    _onAddEmailEditFinished: function(value, shouldSubmit) {
         if (!shouldSubmit) return;
+        this._addEmail();
+    },
+
+    _addEmail: function() {
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
-        var email_address = this.refs.add_threepid_input.value;
+        var email_address = this.refs.add_email_input.value;
         if (!Email.looksValid(email_address)) {
             Modal.createDialog(ErrorDialog, {
                 title: "Invalid Email Address",
@@ -321,10 +340,10 @@ module.exports = React.createClass({
             });
             return;
         }
-        this.add_threepid = new AddThreepid();
+        this._addThreepid = new AddThreepid();
         // we always bind emails when registering, so let's do the
         // same here.
-        this.add_threepid.addEmailAddress(email_address, true).done(() => {
+        this._addThreepid.addEmailAddress(email_address, true).done(() => {
             Modal.createDialog(QuestionDialog, {
                 title: "Verification Pending",
                 description: "Please check your email and click on the link it contains. Once this is done, click continue.",
@@ -333,12 +352,13 @@ module.exports = React.createClass({
             });
         }, (err) => {
             this.setState({email_add_pending: false});
+            console.error("Unable to add email address " + email_address + " " + err);
             Modal.createDialog(ErrorDialog, {
-                title: "Unable to add email address",
-                description: err.message
+                title: "Error",
+                description: "Unable to add email address"
             });
         });
-        ReactDOM.findDOMNode(this.refs.add_threepid_input).blur();
+        ReactDOM.findDOMNode(this.refs.add_email_input).blur();
         this.setState({email_add_pending: true});
     },
 
@@ -357,9 +377,10 @@ module.exports = React.createClass({
                         return this._refreshFromServer();
                     }).catch((err) => {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        console.error("Unable to remove contact information: " + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Unable to remove contact information",
-                            description: err.toString(),
+                            title: "Error",
+                            description: "Unable to remove contact information",
                         });
                     }).done();
                 }
@@ -376,8 +397,8 @@ module.exports = React.createClass({
     },
 
     verifyEmailAddress: function() {
-        this.add_threepid.checkEmailLinkClicked().done(() => {
-            this.add_threepid = undefined;
+        this._addThreepid.checkEmailLinkClicked().done(() => {
+            this._addThreepid = null;
             this.setState({
                 phase: "UserSettings.LOADING",
             });
@@ -397,9 +418,10 @@ module.exports = React.createClass({
                 });
             } else {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                console.error("Unable to verify email address: " + err);
                 Modal.createDialog(ErrorDialog, {
-                    title: "Unable to verify email address",
-                    description: err.toString(),
+                    title: "Error",
+                    description: "Unable to verify email address",
                 });
             }
         });
@@ -419,10 +441,11 @@ module.exports = React.createClass({
     },
 
     _onClearCacheClicked: function() {
+        if (!PlatformPeg.get()) return;
+
+        MatrixClientPeg.get().stopClient();
         MatrixClientPeg.get().store.deleteAllData().done(() => {
-            // forceReload=false since we don't really need new HTML/JS files
-            // we just need to restart the JS runtime.
-            window.location.reload(false);
+            PlatformPeg.get().reload();
         });
     },
 
@@ -745,6 +768,14 @@ module.exports = React.createClass({
         return medium[0].toUpperCase() + medium.slice(1);
     },
 
+    presentableTextForThreepid: function(threepid) {
+        if (threepid.medium == 'msisdn') {
+            return '+' + threepid.address;
+        } else {
+            return threepid.address;
+        }
+    },
+
     render: function() {
         var Loader = sdk.getComponent("elements.Spinner");
         switch (this.state.phase) {
@@ -777,7 +808,9 @@ module.exports = React.createClass({
                         <label htmlFor={id}>{this.nameForMedium(val.medium)}</label>
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
-                        <input type="text" key={val.address} id={id} value={val.address} disabled />
+                        <input type="text" key={val.address} id={id}
+                            value={this.presentableTextForThreepid(val)} disabled
+                        />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
                         <img src="img/cancel-small.svg" width="14" height="14" alt="Remove" onClick={this.onRemoveThreepidClicked.bind(this, val)} />
@@ -785,30 +818,35 @@ module.exports = React.createClass({
                 </div>
             );
         });
-        var addThreepidSection;
+        let addEmailSection;
         if (this.state.email_add_pending) {
-            addThreepidSection = <Loader />;
+            addEmailSection = <Loader key="_email_add_spinner" />;
         } else if (!MatrixClientPeg.get().isGuest()) {
-            addThreepidSection = (
-                <div className="mx_UserSettings_profileTableRow" key="new">
+            addEmailSection = (
+                <div className="mx_UserSettings_profileTableRow" key="_newEmail">
                     <div className="mx_UserSettings_profileLabelCell">
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
                         <EditableText
-                            ref="add_threepid_input"
+                            ref="add_email_input"
                             className="mx_UserSettings_editable"
                             placeholderClassName="mx_UserSettings_threepidPlaceholder"
                             placeholder={ "Add email address" }
                             blurToCancel={ false }
-                            onValueChanged={ this.onAddThreepidClicked } />
+                            onValueChanged={ this._onAddEmailEditFinished } />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked.bind(this, undefined, true) }/>
+                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={this._addEmail} />
                     </div>
                 </div>
             );
         }
-        threepidsSection.push(addThreepidSection);
+        const AddPhoneNumber = sdk.getComponent('views.settings.AddPhoneNumber');
+        const addMsisdnSection = (
+            <AddPhoneNumber key="_addMsisdn" onThreepidAdded={this._refreshFromServer} />
+        );
+        threepidsSection.push(addEmailSection);
+        threepidsSection.push(addMsisdnSection);
 
         var accountJsx;
 

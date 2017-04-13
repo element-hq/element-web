@@ -84,6 +84,7 @@ export default class MessageComposerInput extends React.Component {
         this.onAction = this.onAction.bind(this);
         this.handleReturn = this.handleReturn.bind(this);
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
+        this.handlePastedFiles = this.handlePastedFiles.bind(this);
         this.onEditorContentChanged = this.onEditorContentChanged.bind(this);
         this.setEditorState = this.setEditorState.bind(this);
         this.onUpArrow = this.onUpArrow.bind(this);
@@ -475,6 +476,10 @@ export default class MessageComposerInput extends React.Component {
         return false;
     }
 
+    handlePastedFiles(files) {
+        this.props.onUploadFileSelected(files, true);
+    }
+
     handleReturn(ev) {
         if (ev.shiftKey) {
             this.onEditorContentChanged(RichUtils.insertSoftNewline(this.state.editorState));
@@ -504,7 +509,7 @@ export default class MessageComposerInput extends React.Component {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createDialog(ErrorDialog, {
                         title: "Server error",
-                        description: err.message
+                        description: "Server unavailable, overloaded, or something else went wrong.",
                     });
                 });
             }
@@ -536,9 +541,9 @@ export default class MessageComposerInput extends React.Component {
         let sendTextFn = this.client.sendTextMessage;
 
         if (contentText.startsWith('/me')) {
-            contentText = contentText.replace('/me', '');
+            contentText = contentText.replace('/me ', '');
             // bit of a hack, but the alternative would be quite complicated
-            if (contentHTML) contentHTML = contentHTML.replace('/me', '');
+            if (contentHTML) contentHTML = contentHTML.replace('/me ', '');
             sendHtmlFn = this.client.sendHtmlEmote;
             sendTextFn = this.client.sendEmoteMessage;
         }
@@ -721,13 +726,14 @@ export default class MessageComposerInput extends React.Component {
                          title={`Markdown is ${this.state.isRichtextEnabled ? 'disabled' : 'enabled'}`}
                          src={`img/button-md-${!this.state.isRichtextEnabled}.png`} />
                     <Editor ref="editor"
-                            placeholder="Type a message…"
+                            placeholder={this.props.placeholder}
                             editorState={this.state.editorState}
                             onChange={this.onEditorContentChanged}
                             blockStyleFn={MessageComposerInput.getBlockStyle}
                             keyBindingFn={MessageComposerInput.getKeyBinding}
                             handleKeyCommand={this.handleKeyCommand}
                             handleReturn={this.handleReturn}
+                            handlePastedFiles={this.handlePastedFiles}
                             stripPastedStyles={!this.state.isRichtextEnabled}
                             onTab={this.onTab}
                             onUpArrow={this.onUpArrow}
@@ -756,6 +762,8 @@ MessageComposerInput.propTypes = {
     onUpArrow: React.PropTypes.func,
 
     onDownArrow: React.PropTypes.func,
+
+    onUploadFileSelected: React.PropTypes.func,
 
     // attempts to confirm currently selected completion, returns whether actually confirmed
     tryComplete: React.PropTypes.func,

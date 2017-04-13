@@ -25,17 +25,9 @@ var TextForEvent = require('../../../TextForEvent');
 import WithMatrixClient from '../../../wrappers/WithMatrixClient';
 
 var ContextualMenu = require('../../structures/ContextualMenu');
-var dispatcher = require("../../../dispatcher");
+import dis from '../../../dispatcher';
 
 var ObjectUtils = require('../../../ObjectUtils');
-
-var bounce = false;
-try {
-    if (global.localStorage) {
-        bounce = global.localStorage.getItem('avatar_bounce') == 'true';
-    }
-} catch (e) {
-}
 
 var eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -48,6 +40,7 @@ var eventTileTypes = {
     'm.room.third_party_invite' : 'messages.TextualEvent',
     'm.room.history_visibility' : 'messages.TextualEvent',
     'm.room.encryption' : 'messages.TextualEvent',
+    'm.room.power_levels' : 'messages.TextualEvent',
 };
 
 var MAX_READ_AVATARS = 5;
@@ -72,6 +65,12 @@ module.exports = WithMatrixClient(React.createClass({
 
         /* the MatrixEvent to show */
         mxEvent: React.PropTypes.object.isRequired,
+
+        /* true if mxEvent is redacted. This is a prop because using mxEvent.isRedacted()
+         * might not be enough when deciding shouldComponentUpdate - prevProps.mxEvent
+         * references the same this.props.mxEvent.
+         */
+        isRedacted: React.PropTypes.bool,
 
         /* true if this is a continuation of the previous event (which has the
          * effect of not showing another avatar/displayname
@@ -285,9 +284,10 @@ module.exports = WithMatrixClient(React.createClass({
     },
 
     getReadAvatars: function() {
-        var ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
-        var avatars = [];
-        var left = 0;
+        const ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
+        const avatars = [];
+        const receiptOffset = 15;
+        let left = 0;
 
         // It's possible that the receipt was sent several days AFTER the event.
         // If it is, we want to display the complete date along with the HH:MM:SS,
@@ -307,6 +307,12 @@ module.exports = WithMatrixClient(React.createClass({
             if ((i < MAX_READ_AVATARS) || this.state.allReadAvatars) {
                 hidden = false;
             }
+            // TODO: we keep the extra read avatars in the dom to make animation simpler
+            // we could optimise this to reduce the dom size.
+
+            // If hidden, set offset equal to the offset of the final visible avatar or
+            // else set it proportional to index
+            left = (hidden ? MAX_READ_AVATARS - 1 : i) * -receiptOffset;
 
             var userId = receipt.roomMember.userId;
             var readReceiptInfo;
@@ -319,7 +325,6 @@ module.exports = WithMatrixClient(React.createClass({
                 }
             }
 
-            //console.log("i = " + i + ", MAX_READ_AVATARS = " + MAX_READ_AVATARS + ", allReadAvatars = " + this.state.allReadAvatars + " visibility = " + style.visibility);
             // add to the start so the most recent is on the end (ie. ends up rightmost)
             avatars.unshift(
                 <ReadReceiptMarker key={userId} member={receipt.roomMember}
@@ -332,12 +337,6 @@ module.exports = WithMatrixClient(React.createClass({
                     showFullTimestamp={receipt.ts >= dayAfterEventTime}
                 />
             );
-
-            // TODO: we keep the extra read avatars in the dom to make animation simpler
-            // we could optimise this to reduce the dom size.
-            if (!hidden) {
-                left -= 15;
-            }
         }
         var remText;
         if (!this.state.allReadAvatars) {
@@ -345,9 +344,8 @@ module.exports = WithMatrixClient(React.createClass({
             if (remainder > 0) {
                 remText = <span className="mx_EventTile_readAvatarRemainder"
                     onClick={this.toggleAllReadAvatars}
-                    style={{ left: left }}>{ remainder }+
+                    style={{ right: -(left - receiptOffset) }}>{ remainder }+
                 </span>;
-                left -= 15;
             }
         }
 
@@ -359,7 +357,7 @@ module.exports = WithMatrixClient(React.createClass({
 
     onSenderProfileClick: function(event) {
         var mxEvent = this.props.mxEvent;
-        dispatcher.dispatch({
+        dis.dispatch({
             action: 'insert_displayname',
             displayname: (mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()).replace(' (IRC)', ''),
         });
@@ -372,6 +370,17 @@ module.exports = WithMatrixClient(React.createClass({
             require(['../../../async-components/views/dialogs/EncryptedEventDialog'], cb);
         }, {
             event: event,
+        });
+    },
+
+    onPermalinkClicked: function(e) {
+        // This allows the permalink to be opened in a new tab/window or copied as
+        // matrix.to, but also for it to enable routing within Riot when clicked.
+        e.preventDefault();
+        dis.dispatch({
+            action: 'view_room',
+            event_id: this.props.mxEvent.getId(),
+            room_id: this.props.mxEvent.getRoomId(),
         });
     },
 
@@ -399,6 +408,7 @@ module.exports = WithMatrixClient(React.createClass({
 
         var e2eEnabled = this.props.matrixClient.isRoomEncrypted(this.props.mxEvent.getRoomId());
         var isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
+        const isRedacted = (eventType === 'm.room.message') && this.props.isRedacted;
 
         var classes = classNames({
             mx_EventTile: true,
@@ -415,8 +425,12 @@ module.exports = WithMatrixClient(React.createClass({
             mx_EventTile_verified: this.state.verified == true,
             mx_EventTile_unverified: this.state.verified == false,
             mx_EventTile_bad: this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted',
+            mx_EventTile_redacted: isRedacted,
         });
-        var permalink = "#/room/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId();
+
+        const permalink = "https://matrix.to/#/" +
+            this.props.mxEvent.getRoomId() + "/" +
+            this.props.mxEvent.getId();
 
         var readAvatars = this.getReadAvatars();
 
@@ -489,6 +503,8 @@ module.exports = WithMatrixClient(React.createClass({
         else if (e2eEnabled) {
             e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12"/>;
         }
+        const timestamp = this.props.mxEvent.getTs() ?
+            <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
 
         if (this.props.tileShape === "notif") {
             var room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());
@@ -496,15 +512,15 @@ module.exports = WithMatrixClient(React.createClass({
             return (
                 <div className={classes}>
                     <div className="mx_EventTile_roomName">
-                        <a href={ permalink }>
+                        <a href={ permalink } onClick={this.onPermalinkClicked}>
                             { room ? room.name : '' }
                         </a>
                     </div>
                     <div className="mx_EventTile_senderDetails">
                         { avatar }
-                        <a href={ permalink }>
+                        <a href={ permalink } onClick={this.onPermalinkClicked}>
                             { sender }
-                            <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                            { timestamp }
                         </a>
                     </div>
                     <div className="mx_EventTile_line" >
@@ -530,10 +546,14 @@ module.exports = WithMatrixClient(React.createClass({
                             tileShape={this.props.tileShape}
                             onWidgetLoad={this.props.onWidgetLoad} />
                     </div>
-                    <a className="mx_EventTile_senderDetailsLink" href={ permalink }>
+                    <a
+                        className="mx_EventTile_senderDetailsLink"
+                        href={ permalink }
+                        onClick={this.onPermalinkClicked}
+                    >
                         <div className="mx_EventTile_senderDetails">
                                 { sender }
-                                <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                                { timestamp }
                         </div>
                     </a>
                 </div>
@@ -548,8 +568,8 @@ module.exports = WithMatrixClient(React.createClass({
                     { avatar }
                     { sender }
                     <div className="mx_EventTile_line">
-                        <a href={ permalink }>
-                            <MessageTimestamp ts={this.props.mxEvent.getTs()} />
+                        <a href={ permalink } onClick={this.onPermalinkClicked}>
+                            { timestamp }
                         </a>
                         { e2e }
                         <EventTileType ref="tile"
@@ -567,7 +587,8 @@ module.exports = WithMatrixClient(React.createClass({
 }));
 
 module.exports.haveTileForEvent = function(e) {
-    if (e.isRedacted()) return false;
+    // Only messages have a tile (black-rectangle) if redacted
+    if (e.isRedacted() && e.getType() !== 'm.room.message') return false;
     if (eventTileTypes[e.getType()] == undefined) return false;
     if (eventTileTypes[e.getType()] == 'messages.TextualEvent') {
         return TextForEvent.textForEvent(e) !== '';

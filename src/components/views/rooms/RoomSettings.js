@@ -54,9 +54,10 @@ const BannedUser = React.createClass({
                     this.props.member.roomId, this.props.member.userId,
                 ).catch((err) => {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    console.error("Failed to unban: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Failed to unban",
-                        description: err.message,
+                        title: "Error",
+                        description: "Failed to unban",
                     });
                 }).done();
             },

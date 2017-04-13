@@ -64,19 +64,14 @@ export default React.createClass({
         const address = this.props.address;
         const name = address.displayName || address.address;
 
-        let imgUrl;
-        if (address.avatarMxc) {
-            imgUrl = MatrixClientPeg.get().mxcUrlToHttp(
-                address.avatarMxc, 25, 25, 'crop'
-            );
-        }
+        let imgUrls = [];
 
-        if (address.addressType === "mx") {
-            if (!imgUrl) imgUrl = 'img/icon-mx-user.svg';
+        if (address.addressType === "mx" && address.avatarMxc) {
+            imgUrls.push(MatrixClientPeg.get().mxcUrlToHttp(
+                address.avatarMxc, 25, 25, 'crop'
+            ));
         } else if (address.addressType === 'email') {
-            if (!imgUrl) imgUrl = 'img/icon-email-user.svg';
-        } else {
-            if (!imgUrl) imgUrl = "img/avatar-error.svg";
+            imgUrls.push('img/icon-email-user.svg');
         }
 
         // Removing networks for now as they're not really supported
@@ -168,7 +163,7 @@ export default React.createClass({
         return (
             <div className={classes}>
                 <div className="mx_AddressTile_avatar">
-                    <BaseAvatar width={25} height={25} name={name} title={name} url={imgUrl} />
+                    <BaseAvatar defaultToInitialLetter={true} width={25} height={25} name={name} title={name} urls={imgUrls} />
                 </div>
                 { info }
                 { dismiss }

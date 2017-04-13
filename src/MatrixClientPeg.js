@@ -50,6 +50,18 @@ class MatrixClientPeg {
         this.opts = {
             initialSyncLimit: 20,
         };
+        this.indexedDbWorkerScript = null;
+    }
+
+    /**
+     * Sets the script href passed to the IndexedDB web worker
+     * If set, a separate web worker will be started to run the IndexedDB
+     * queries on.
+     *
+     * @param {string} script href to the script to be passed to the web worker
+     */
+    setIndexedDbWorkerScript(script) {
+        this.indexedDbWorkerScript = script;
     }
 
     get(): MatrixClient {
@@ -122,12 +134,15 @@ class MatrixClientPeg {
             opts.sessionStore = new Matrix.WebStorageSessionStore(localStorage);
         }
         if (window.indexedDB && localStorage) {
-            opts.store = new Matrix.IndexedDBStore(
-                new Matrix.IndexedDBStoreBackend(window.indexedDB),
-                new Matrix.SyncAccumulator(), {
-                    localStorage: localStorage,
-                }
-            );
+            // FIXME: bodge to remove old database. Remove this after a few weeks.
+            window.indexedDB.deleteDatabase("matrix-js-sdk:default");
+
+            opts.store = new Matrix.IndexedDBStore({
+                indexedDB: window.indexedDB,
+                dbName: "riot-web-sync",
+                localStorage: localStorage,
+                workerScript: this.indexedDbWorkerScript,
+            });
         }
 
         this.matrixClient = Matrix.createClient(opts);

@@ -27,6 +27,9 @@ export default React.createClass({
     displayName: 'InteractiveAuthDialog',
 
     propTypes: {
+        // matrix client to use for UI auth requests
+        matrixClient: React.PropTypes.object.isRequired,
+
         // response from initial request. If not supplied, will do a request on
         // mount.
         authData: React.PropTypes.shape({
@@ -49,22 +52,62 @@ export default React.createClass({
         };
     },
 
+    getInitialState: function() {
+        return {
+            authError: null,
+        }
+    },
+
+    _onAuthFinished: function(success, result) {
+        if (success) {
+            this.props.onFinished(true, result);
+        } else {
+            this.setState({
+                authError: result,
+            });
+        }
+    },
+
+    _onDismissClick: function() {
+        this.props.onFinished(false);
+    },
+
     render: function() {
         const InteractiveAuth = sdk.getComponent("structures.InteractiveAuth");
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
+        let content;
+        if (this.state.authError) {
+            content = (
+                <div>
+                    <div>{this.state.authError.message || this.state.authError.toString()}</div>
+                    <br />
+                    <AccessibleButton onClick={this._onDismissClick}
+                        className="mx_UserSettings_button"
+                    >
+                        Dismiss
+                    </AccessibleButton>
+                </div>
+            );
+        } else {
+            content = (
+                <div>
+                    <InteractiveAuth ref={this._collectInteractiveAuth}
+                        matrixClient={this.props.matrixClient}
+                        authData={this.props.authData}
+                        makeRequest={this.props.makeRequest}
+                        onAuthFinished={this._onAuthFinished}
+                    />
+                </div>
+            );
+        }
+
         return (
             <BaseDialog className="mx_InteractiveAuthDialog"
                 onFinished={this.props.onFinished}
-                title={this.props.title}
+                title={this.state.authError ? 'Error' : this.props.title}
             >
-                <div>
-                    <InteractiveAuth ref={this._collectInteractiveAuth}
-                        authData={this.props.authData}
-                        makeRequest={this.props.makeRequest}
-                        onFinished={this.props.onFinished}
-                    />
-                </div>
+                {content}
             </BaseDialog>
         );
     },

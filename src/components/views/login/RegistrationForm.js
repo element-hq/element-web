@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,18 +15,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+import React from 'react';
+import { field_input_incorrect } from '../../../UiEffects';
+import sdk from '../../../index';
+import Email from '../../../email';
+import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
+import Modal from '../../../Modal';
 
-var React = require('react');
-var UiEffects = require('../../../UiEffects');
-var sdk = require('../../../index');
-var Email = require('../../../email');
-var Modal = require("../../../Modal");
-
-var FIELD_EMAIL = 'field_email';
-var FIELD_USERNAME = 'field_username';
-var FIELD_PASSWORD = 'field_password';
-var FIELD_PASSWORD_CONFIRM = 'field_password_confirm';
+const FIELD_EMAIL = 'field_email';
+const FIELD_PHONE_COUNTRY = 'field_phone_country';
+const FIELD_PHONE_NUMBER = 'field_phone_number';
+const FIELD_USERNAME = 'field_username';
+const FIELD_PASSWORD = 'field_password';
+const FIELD_PASSWORD_CONFIRM = 'field_password_confirm';
 
 /**
  * A pure UI component which displays a registration form.
@@ -36,6 +38,8 @@ module.exports = React.createClass({
     propTypes: {
         // Values pre-filled in the input boxes when the component loads
         defaultEmail: React.PropTypes.string,
+        defaultPhoneCountry: React.PropTypes.string,
+        defaultPhoneNumber: React.PropTypes.string,
         defaultUsername: React.PropTypes.string,
         defaultPassword: React.PropTypes.string,
         teamsConfig: React.PropTypes.shape({
@@ -54,15 +58,13 @@ module.exports = React.createClass({
         // a different username will cause a fresh account to be generated.
         guestUsername: React.PropTypes.string,
 
-        showEmail: React.PropTypes.bool,
         minPasswordLength: React.PropTypes.number,
         onError: React.PropTypes.func,
-        onRegisterClick: React.PropTypes.func // onRegisterClick(Object) => ?Promise
+        onRegisterClick: React.PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
     },
 
     getDefaultProps: function() {
         return {
-            showEmail: false,
             minPasswordLength: 6,
             onError: function(e) {
                 console.error(e);
@@ -74,6 +76,8 @@ module.exports = React.createClass({
         return {
             fieldValid: {},
             selectedTeam: null,
+            // The ISO2 country code selected in the phone number entry
+            phoneCountry: this.props.defaultPhoneCountry,
         };
     },
 
@@ -88,6 +92,7 @@ module.exports = React.createClass({
         this.validateField(FIELD_PASSWORD_CONFIRM);
         this.validateField(FIELD_PASSWORD);
         this.validateField(FIELD_USERNAME);
+        this.validateField(FIELD_PHONE_NUMBER);
         this.validateField(FIELD_EMAIL);
 
         var self = this;
@@ -121,6 +126,8 @@ module.exports = React.createClass({
             username: this.refs.username.value.trim() || this.props.guestUsername,
             password: this.refs.password.value.trim(),
             email: email,
+            phoneCountry: this.state.phoneCountry,
+            phoneNumber: this.refs.phoneNumber.value.trim(),
         });
 
         if (promise) {
@@ -174,8 +181,13 @@ module.exports = React.createClass({
                         showSupportEmail: false,
                     });
                 }
-                const valid = email === '' || Email.looksValid(email);
-                this.markFieldValid(field_id, valid, "RegistrationForm.ERR_EMAIL_INVALID");
+                const emailValid = email === '' || Email.looksValid(email);
+                this.markFieldValid(field_id, emailValid, "RegistrationForm.ERR_EMAIL_INVALID");
+                break;
+            case FIELD_PHONE_NUMBER:
+                const phoneNumber = this.refs.phoneNumber.value;
+                const phoneNumberValid = phoneNumber === '' || phoneNumberLooksValid(phoneNumber);
+                this.markFieldValid(field_id, phoneNumberValid, "RegistrationForm.ERR_PHONE_NUMBER_INVALID");
                 break;
             case FIELD_USERNAME:
                 // XXX: SPEC-1
@@ -227,7 +239,7 @@ module.exports = React.createClass({
         fieldValid[field_id] = val;
         this.setState({fieldValid: fieldValid});
         if (!val) {
-            UiEffects.field_input_incorrect(this.fieldElementById(field_id));
+            field_input_incorrect(this.fieldElementById(field_id));
             this.props.onError(error_code);
         }
     },
@@ -236,6 +248,8 @@ module.exports = React.createClass({
         switch (field_id) {
             case FIELD_EMAIL:
                 return this.refs.email;
+            case FIELD_PHONE_NUMBER:
+                return this.refs.phoneNumber;
             case FIELD_USERNAME:
                 return this.refs.username;
             case FIELD_PASSWORD:
@@ -245,8 +259,8 @@ module.exports = React.createClass({
         }
     },
 
-    _classForField: function(field_id, baseClass) {
-        let cls = baseClass || '';
+    _classForField: function(field_id, ...baseClasses) {
+        let cls = baseClasses.join(' ');
         if (this.state.fieldValid[field_id] === false) {
             if (cls) cls += ' ';
             cls += 'error';
@@ -254,46 +268,71 @@ module.exports = React.createClass({
         return cls;
     },
 
+    _onPhoneCountryChange(newVal) {
+        this.setState({
+            phoneCountry: newVal,
+        });
+    },
+
     render: function() {
         var self = this;
-        var emailSection, belowEmailSection, registerButton;
-        if (this.props.showEmail) {
-            emailSection = (
+
+        const emailSection = (
+            <div>
                 <input type="text" ref="email"
                     autoFocus={true} placeholder="Email address (optional)"
                     defaultValue={this.props.defaultEmail}
                     className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
                     onBlur={function() {self.validateField(FIELD_EMAIL);}}
                     value={self.state.email}/>
-            );
-            if (this.props.teamsConfig) {
-                if (this.props.teamsConfig.supportEmail && this.state.showSupportEmail) {
-                    belowEmailSection = (
-                        <p className="mx_Login_support">
-                            Sorry, but your university is not registered with us just yet.&nbsp;
-                            Email us on&nbsp;
-                            <a href={"mailto:" + this.props.teamsConfig.supportEmail}>
-                                {this.props.teamsConfig.supportEmail}
-                            </a>&nbsp;
-                            to get your university signed up. Or continue to register with Riot to enjoy our open source platform.
-                        </p>
-                    );
-                } else if (this.state.selectedTeam) {
-                    belowEmailSection = (
-                        <p className="mx_Login_support">
-                            You are registering with {this.state.selectedTeam.name}
-                        </p>
-                    );
-                }
+            </div>
+        );
+        let belowEmailSection;
+        if (this.props.teamsConfig) {
+            if (this.props.teamsConfig.supportEmail && this.state.showSupportEmail) {
+                belowEmailSection = (
+                    <p className="mx_Login_support">
+                        Sorry, but your university is not registered with us just yet.&nbsp;
+                        Email us on&nbsp;
+                        <a href={"mailto:" + this.props.teamsConfig.supportEmail}>
+                            {this.props.teamsConfig.supportEmail}
+                        </a>&nbsp;
+                        to get your university signed up. Or continue to register with Riot to enjoy our open source platform.
+                    </p>
+                );
+            } else if (this.state.selectedTeam) {
+                belowEmailSection = (
+                    <p className="mx_Login_support">
+                        You are registering with {this.state.selectedTeam.name}
+                    </p>
+                );
             }
         }
-        if (this.props.onRegisterClick) {
-            registerButton = (
-                <input className="mx_Login_submit" type="submit" value="Register" />
-            );
-        }
 
-        var placeholderUserName = "User name";
+        const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
+        const phoneSection = (
+            <div className="mx_Login_phoneSection">
+                <CountryDropdown ref="phone_country" onOptionChange={this._onPhoneCountryChange}
+                    className="mx_Login_phoneCountry"
+                    value={this.state.phoneCountry}
+                />
+                <input type="text" ref="phoneNumber"
+                    placeholder="Mobile phone number (optional)"
+                    defaultValue={this.props.defaultPhoneNumber}
+                    className={this._classForField(
+                        FIELD_PHONE_NUMBER, 'mx_Login_phoneNumberField', 'mx_Login_field'
+                    )}
+                    onBlur={function() {self.validateField(FIELD_PHONE_NUMBER);}}
+                    value={self.state.phoneNumber}
+                />
+            </div>
+        );
+
+        const registerButton = (
+            <input className="mx_Login_submit" type="submit" value="Register" />
+        );
+
+        let placeholderUserName = "User name";
         if (this.props.guestUsername) {
             placeholderUserName += " (default: " + this.props.guestUsername + ")";
         }
@@ -303,6 +342,7 @@ module.exports = React.createClass({
                 <form onSubmit={this.onSubmit}>
                     {emailSection}
                     {belowEmailSection}
+                    {phoneSection}
                     <input type="text" ref="username"
                         placeholder={ placeholderUserName } defaultValue={this.props.defaultUsername}
                         className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}

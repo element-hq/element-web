@@ -16,9 +16,10 @@ limitations under the License.
 */
 
 import React from 'react';
+import url from 'url';
+import classnames from 'classnames';
 
 import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -28,13 +29,32 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
  * Call getEntryComponentForLoginType() to get a component suitable for a
  * particular login type. Each component requires the same properties:
  *
+ * matrixClient:           A matrix client. May be a different one to the one
+ *                         currently being used generally (eg. to register with
+ *                         one HS whilst beign a guest on another).
  * loginType:              the login type of the auth stage being attempted
  * authSessionId:          session id from the server
+ * clientSecret:           The client secret in use for ID server auth sessions
  * stageParams:            params from the server for the stage being attempted
  * errorText:              error message from a previous attempt to authenticate
  * submitAuthDict:         a function which will be called with the new auth dict
  * busy:                   a boolean indicating whether the auth logic is doing something
  *                         the user needs to wait for.
+ * inputs:                 Object of inputs provided by the user, as in js-sdk
+ *                         interactive-auth
+ * stageState:             Stage-specific object used for communicating state information
+ *                         to the UI from the state-specific auth logic.
+ *                         Defined keys for stages are:
+ *                             m.login.email.identity:
+ *                              * emailSid: string representing the sid of the active
+ *                                          verification session from the ID server, or
+ *                                          null if no session is active.
+ * fail:                   a function which should be called with an error object if an
+ *                         error occurred during the auth stage. This will cause the auth
+ *                         session to be failed and the process to go back to the start.
+ * setEmailSid:            m.login.email.identity only: a function to be called with the
+ *                         email sid after a token is requested.
+ * makeRegistrationUrl     A function that makes a registration URL
  *
  * Each component may also provide the following functions (beyond the standard React ones):
  *    focus: set the input focus appropriately in the form.
@@ -48,6 +68,7 @@ export const PasswordAuthEntry = React.createClass({
     },
 
     propTypes: {
+        matrixClient: React.PropTypes.object.isRequired,
         submitAuthDict: React.PropTypes.func.isRequired,
         errorText: React.PropTypes.string,
         // is the auth logic currently waiting for something to
@@ -73,7 +94,7 @@ export const PasswordAuthEntry = React.createClass({
 
         this.props.submitAuthDict({
             type: PasswordAuthEntry.LOGIN_TYPE,
-            user: MatrixClientPeg.get().credentials.userId,
+            user: this.props.matrixClient.credentials.userId,
             password: this.refs.passwordField.value,
         });
     },
@@ -139,6 +160,7 @@ export const RecaptchaAuthEntry = React.createClass({
         submitAuthDict: React.PropTypes.func.isRequired,
         stageParams: React.PropTypes.object.isRequired,
         errorText: React.PropTypes.string,
+        busy: React.PropTypes.bool,
     },
 
     _onCaptchaResponse: function(response) {
@@ -149,6 +171,11 @@ export const RecaptchaAuthEntry = React.createClass({
     },
 
     render: function() {
+        if (this.props.busy) {
+            const Loader = sdk.getComponent("elements.Spinner");
+            return <Loader />;
+        }
+
         const CaptchaForm = sdk.getComponent("views.login.CaptchaForm");
         var sitePublicKey = this.props.stageParams.public_key;
         return (
@@ -164,10 +191,214 @@ export const RecaptchaAuthEntry = React.createClass({
     },
 });
 
+export const EmailIdentityAuthEntry = React.createClass({
+    displayName: 'EmailIdentityAuthEntry',
+
+    statics: {
+        LOGIN_TYPE: "m.login.email.identity",
+    },
+
+    propTypes: {
+        matrixClient: React.PropTypes.object.isRequired,
+        submitAuthDict: React.PropTypes.func.isRequired,
+        authSessionId: React.PropTypes.string.isRequired,
+        clientSecret: React.PropTypes.string.isRequired,
+        inputs: React.PropTypes.object.isRequired,
+        stageState: React.PropTypes.object.isRequired,
+        fail: React.PropTypes.func.isRequired,
+        setEmailSid: React.PropTypes.func.isRequired,
+        makeRegistrationUrl: React.PropTypes.func.isRequired,
+    },
+
+    getInitialState: function() {
+        return {
+            requestingToken: false,
+        };
+    },
+
+    componentWillMount: function() {
+        if (this.props.stageState.emailSid === null) {
+            this.setState({requestingToken: true});
+            this._requestEmailToken().catch((e) => {
+                this.props.fail(e);
+            }).finally(() => {
+                this.setState({requestingToken: false});
+            }).done();
+        }
+    },
+
+    /*
+     * Requests a verification token by email.
+     */
+    _requestEmailToken: function() {
+        const nextLink = this.props.makeRegistrationUrl({
+            client_secret: this.props.clientSecret,
+            hs_url: this.props.matrixClient.getHomeserverUrl(),
+            is_url: this.props.matrixClient.getIdentityServerUrl(),
+            session_id: this.props.authSessionId,
+        });
+
+        return this.props.matrixClient.requestRegisterEmailToken(
+            this.props.inputs.emailAddress,
+            this.props.clientSecret,
+            1, // TODO: Multiple send attempts?
+            nextLink,
+        ).then((result) => {
+            this.props.setEmailSid(result.sid);
+        });
+    },
+
+    render: function() {
+        if (this.state.requestingToken) {
+            const Loader = sdk.getComponent("elements.Spinner");
+            return <Loader />;
+        } else {
+            return (
+                <div>
+                    <p>An email has been sent to <i>{this.props.inputs.emailAddress}</i></p>
+                    <p>Please check your email to continue registration.</p>
+                </div>
+            );
+        }
+    },
+});
+
+export const MsisdnAuthEntry = React.createClass({
+    displayName: 'MsisdnAuthEntry',
+
+    statics: {
+        LOGIN_TYPE: "m.login.msisdn",
+    },
+
+    propTypes: {
+        inputs: React.PropTypes.shape({
+            phoneCountry: React.PropTypes.string,
+            phoneNumber: React.PropTypes.string,
+        }),
+        fail: React.PropTypes.func,
+        clientSecret: React.PropTypes.func,
+        submitAuthDict: React.PropTypes.func.isRequired,
+        matrixClient: React.PropTypes.object,
+        submitAuthDict: React.PropTypes.func,
+    },
+
+    getInitialState: function() {
+        return {
+            token: '',
+            requestingToken: false,
+        };
+    },
+
+    componentWillMount: function() {
+        this._sid = null;
+        this._msisdn = null;
+        this._tokenBox = null;
+
+        this.setState({requestingToken: true});
+        this._requestMsisdnToken().catch((e) => {
+            this.props.fail(e);
+        }).finally(() => {
+            this.setState({requestingToken: false});
+        }).done();
+    },
+
+    /*
+     * Requests a verification token by SMS.
+     */
+    _requestMsisdnToken: function() {
+        return this.props.matrixClient.requestRegisterMsisdnToken(
+            this.props.inputs.phoneCountry,
+            this.props.inputs.phoneNumber,
+            this.props.clientSecret,
+            1, // TODO: Multiple send attempts?
+        ).then((result) => {
+            this._sid = result.sid;
+            this._msisdn = result.msisdn;
+        });
+    },
+
+    _onTokenChange: function(e) {
+        this.setState({
+            token: e.target.value,
+        });
+    },
+
+    _onFormSubmit: function(e) {
+        e.preventDefault();
+        if (this.state.token == '') return;
+
+            this.setState({
+                errorText: null,
+            });
+
+        this.props.matrixClient.submitMsisdnToken(
+            this._sid, this.props.clientSecret, this.state.token
+        ).then((result) => {
+            if (result.success) {
+                const idServerParsedUrl = url.parse(
+                    this.props.matrixClient.getIdentityServerUrl(),
+                )
+                this.props.submitAuthDict({
+                    type: MsisdnAuthEntry.LOGIN_TYPE,
+                    threepid_creds: {
+                        sid: this._sid,
+                        client_secret: this.props.clientSecret,
+                        id_server: idServerParsedUrl.host,
+                    },
+                });
+            } else {
+                this.setState({
+                    errorText: "Token incorrect",
+                });
+            }
+        }).catch((e) => {
+            this.props.fail(e);
+            console.log("Failed to submit msisdn token");
+        }).done();
+    },
+
+    render: function() {
+        if (this.state.requestingToken) {
+            const Loader = sdk.getComponent("elements.Spinner");
+            return <Loader />;
+        } else {
+            const enableSubmit = Boolean(this.state.token);
+            const submitClasses = classnames({
+                mx_InteractiveAuthEntryComponents_msisdnSubmit: true,
+                mx_UserSettings_button: true, // XXX button classes
+            });
+            return (
+                <div>
+                    <p>A text message has been sent to +<i>{this._msisdn}</i></p>
+                    <p>Please enter the code it contains:</p>
+                    <div className="mx_InteractiveAuthEntryComponents_msisdnWrapper">
+                        <form onSubmit={this._onFormSubmit}>
+                            <input type="text"
+                                className="mx_InteractiveAuthEntryComponents_msisdnEntry"
+                                value={this.state.token}
+                                onChange={this._onTokenChange}
+                            />
+                            <br />
+                            <input type="submit" value="Submit"
+                                className={submitClasses}
+                                disabled={!enableSubmit}
+                            />
+                        </form>
+                        <div className="error">
+                            {this.state.errorText}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    },
+});
+
 export const FallbackAuthEntry = React.createClass({
     displayName: 'FallbackAuthEntry',
 
     propTypes: {
+        matrixClient: React.PropTypes.object.isRequired,
         authSessionId: React.PropTypes.string.isRequired,
         loginType: React.PropTypes.string.isRequired,
         submitAuthDict: React.PropTypes.func.isRequired,
@@ -189,7 +420,7 @@ export const FallbackAuthEntry = React.createClass({
     },
 
     _onShowFallbackClick: function() {
-        var url = MatrixClientPeg.get().getFallbackAuthUrl(
+        var url = this.props.matrixClient.getFallbackAuthUrl(
             this.props.loginType,
             this.props.authSessionId
         );
@@ -199,7 +430,7 @@ export const FallbackAuthEntry = React.createClass({
     _onReceiveMessage: function(event) {
         if (
             event.data === "authDone" &&
-            event.origin === MatrixClientPeg.get().getHomeserverUrl()
+            event.origin === this.props.matrixClient.getHomeserverUrl()
         ) {
             this.props.submitAuthDict({});
         }
@@ -220,6 +451,8 @@ export const FallbackAuthEntry = React.createClass({
 const AuthEntryComponents = [
     PasswordAuthEntry,
     RecaptchaAuthEntry,
+    EmailIdentityAuthEntry,
+    MsisdnAuthEntry,
 ];
 
 export function getEntryComponentForLoginType(loginType) {

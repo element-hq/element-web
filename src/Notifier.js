@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,8 +14,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-'use strict';
 
 var MatrixClientPeg = require("./MatrixClientPeg");
 var PlatformPeg = require("./PlatformPeg");
@@ -99,16 +98,16 @@ var Notifier = {
         MatrixClientPeg.get().on("Room.receipt", this.boundOnRoomReceipt);
         MatrixClientPeg.get().on("sync", this.boundOnSyncStateChange);
         this.toolbarHidden = false;
-        this.isPrepared = false;
+        this.isSyncing = false;
     },
 
     stop: function() {
-        if (MatrixClientPeg.get()) {
+        if (MatrixClientPeg.get() && this.boundOnRoomTimeline) {
             MatrixClientPeg.get().removeListener('Room.timeline', this.boundOnRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.receipt", this.boundOnRoomReceipt);
             MatrixClientPeg.get().removeListener('sync', this.boundOnSyncStateChange);
         }
-        this.isPrepared = false;
+        this.isSyncing = false;
     },
 
     supportsDesktopNotifications: function() {
@@ -214,18 +213,18 @@ var Notifier = {
     },
 
     onSyncStateChange: function(state) {
-        if (state === "PREPARED" || state === "SYNCING") {
-            this.isPrepared = true;
+        if (state === "SYNCING") {
+            this.isSyncing = true;
         }
         else if (state === "STOPPED" || state === "ERROR") {
-            this.isPrepared = false;
+            this.isSyncing = false;
         }
     },
 
     onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
         if (toStartOfTimeline) return;
         if (!room) return;
-        if (!this.isPrepared) return; // don't alert for any messages initially
+        if (!this.isSyncing) return; // don't alert for any messages initially
         if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) return;
         if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
 
