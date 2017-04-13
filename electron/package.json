@@ -1,0 +1,6 @@
+{
+  "description": "Electron main process dependencies",
+  "dependencies": {
+    "electron-window-state": "^4.1.0"
+  }
+}

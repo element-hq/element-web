@@ -36,6 +36,7 @@
     "build": "node scripts/babelcheck.js && npm run build:res && npm run build:bundle",
     "build:dev": "node scripts/babelcheck.js && npm run build:res && npm run build:bundle:dev",
     "dist": "scripts/package.sh",
+    "postinstall": "cd electron && npm i",
     "start:res": "node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --output-filename=bundles/_dev_/[name].js --output-chunk-file=bundles/_dev_/[name].js -w --progress",
     "start:js:prod": "NODE_ENV=production webpack-dev-server -w --progress",
@@ -96,7 +97,6 @@
     "css-raw-loader": "^0.1.1",
     "electron-builder": "^11.2.4",
     "electron-builder-squirrel-windows": "^11.2.1",
-    "electron-window-state": "^4.1.0",
     "emojione": "^2.2.7",
     "eslint": "^3.14.0",
     "eslint-config-google": "^0.7.1",
@@ -145,6 +145,7 @@
     "dereference": true,
     "//files": "We bundle everything, so we only need to include webapp/",
     "files": [
+      "electron/node_modules/**",
       "electron/src/**",
       "electron/img/**",
       "webapp/**",
@@ -159,10 +160,10 @@
     },
     "win": {
       "target": "squirrel"
+    },
+    "directories": {
+      "buildResources": "electron/build",
+      "output": "electron/dist"
     }
-  },
-  "directories": {
-    "buildResources": "electron/build",
-    "output": "electron/dist"
   }
 }
