@@ -135,6 +135,7 @@ To run as a desktop app:
 
    ```
    npm install electron
+   npm run build
    node_modules/.bin/electron .
    ```
 
