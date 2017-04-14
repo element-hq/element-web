@@ -93,11 +93,17 @@ module.exports = React.createClass({
                 description:
                     <div>
                         Resetting password will currently reset any end-to-end encryption keys on all devices,
-                        making encrypted chat history unreadable.
-                        In future this <a href="https://github.com/vector-im/riot-web/issues/2671">may be improved</a>,
-                        but for now be warned.
+                        making encrypted chat history unreadable, unless you first export your room keys
+                        and re-import them afterwards.
+                        In future this <a href="https://github.com/vector-im/riot-web/issues/2671">will be improved</a>.
                     </div>,
                 button: "Continue",
+                extraButtons: [
+                    <button className="mx_Dialog_primary"
+                            onClick={this._onExportE2eKeysClicked}>
+                        Export E2E room keys
+                    </button>
+                ],
                 onFinished: (confirmed) => {
                     if (confirmed) {
                         this.submitPasswordReset(
@@ -108,6 +114,18 @@ module.exports = React.createClass({
                 },
             });
         }
+    },
+
+    _onExportE2eKeysClicked: function() {
+        Modal.createDialogAsync(
+            (cb) => {
+                require.ensure(['../../../async-components/views/dialogs/ExportE2eKeysDialog'], () => {
+                    cb(require('../../../async-components/views/dialogs/ExportE2eKeysDialog'));
+                }, "e2e-export");
+            }, {
+                matrixClient: MatrixClientPeg.get(),
+            }
+        );
     },
 
     onInputChanged: function(stateKey, ev) {
