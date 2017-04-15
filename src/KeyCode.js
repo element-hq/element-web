@@ -32,4 +32,5 @@ module.exports = {
     DELETE: 46,
     KEY_D: 68,
     KEY_E: 69,
+    KEY_K: 75,
 };
