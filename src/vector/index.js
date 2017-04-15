@@ -302,6 +302,7 @@ async function loadApp() {
         sdk.setLanguage(localSettingsString.language);
         counterpart.registerTranslations('en_EN', require('../i18n/en_EN'));
         counterpart.registerTranslations('de_DE', require('../i18n/de_DE'));
+        counterpart.registerTranslations('pt_BR', require('../i18n/pt-br_PT'));
         counterpart.setFallbackLocale('en_EN');
         dis.register(onAction);
         if (Object.keys(localSettingsString).length === 0) {
