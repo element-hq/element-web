@@ -93,6 +93,9 @@ $event-encrypting-color: rgba(171, 221, 188, 0.4);
 $event-sending-color: #888;
 $event-notsent-color: #f44;
 
+// event redaction
+$event-redacted-img: url('../../img/redacted-dark.jpg');
+
 // event timestamp
 $event-timestamp-color: #acacac;
 

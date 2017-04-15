@@ -133,10 +133,18 @@ limitations under the License.
 .mx_EventTile_redacted .mx_EventTile_line .mx_UnknownBody {
     display: block;
     width: 100%;
-    max-width: 300px;
-    height: 24px;
-    border-radius: 4px;
-    background-color: black;
+    height: 36px;
+    background-image: $event-redacted-img;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.mx_EventTile.mx_EventTile_redacted .mx_EventTile_line {
+    /*
+       Prevent changing colour of the background because
+       $event-redacted-img matches $primary-bg-color
+    */
+    background-color: initial !important;
 }
 
 .mx_EventTile_highlight,
