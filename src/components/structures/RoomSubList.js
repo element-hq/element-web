@@ -248,10 +248,9 @@ var RoomSubList = React.createClass({
 
                 if (badges) {
                     result[0] += notificationCount;
-                    if (highlight) {
-                        result[1] = true;
-                    }
                 }
+
+                result[1] |= highlight;
             }
             return result;
         }, [0, false]);
@@ -402,6 +401,9 @@ var RoomSubList = React.createClass({
         var badge;
         if (subListNotifCount > 0) {
             badge = <div className={badgeClasses}>{ FormattingUtils.formatCount(subListNotifCount) }</div>;
+        }
+        else if (subListNotifHighlight) {
+            badge = <div className={badgeClasses}>{ ! }</div>;   
         }
 
         // When collapsed, allow a long hover on the header to show user
