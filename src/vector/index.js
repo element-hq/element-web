@@ -69,12 +69,15 @@ import url from 'url';
 import {parseQs, parseQsFromFragment} from './url_utils';
 import Platform from './platform';
 
+import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+
 var lastLocationHashSet = null;
 
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 CallHandler.setConferenceHandler(VectorConferenceHandler);
 
 var counterpart = require('counterpart');
+MatrixClientPeg.setIndexedDbWorkerScript(window.vector_indexeddb_worker_script);
 
 function checkBrowserFeatures(featureList) {
     if (!window.Modernizr) {
