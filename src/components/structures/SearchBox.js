@@ -21,6 +21,7 @@ var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+var KeyCode = require('matrix-react-sdk/lib/KeyCode');
 
 module.exports = React.createClass({
     displayName: 'SearchBox',
@@ -38,10 +39,12 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
+        document.addEventListener('keydown', this._onKeyDown);
     },
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
+        document.removeEventListener('keydown', this._onKeyDown);
     },
 
     onAction: function(payload) {
@@ -88,6 +91,33 @@ module.exports = React.createClass({
     _clearSearch: function() {
         this.refs.search.value = "";
         this.onChange();
+    },
+
+    _onKeyDown: function(ev) {
+        let handled = false;
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        let ctrlCmdOnly;
+        if (isMac) {
+            ctrlCmdOnly = ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
+        } else {
+            ctrlCmdOnly = ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
+        }
+
+        switch (ev.keyCode) {
+            case KeyCode.KEY_K:
+                if (ctrlCmdOnly) {
+                    if (this.refs.search) {
+                        this.refs.search.focus();
+                    }
+                    handled = true;
+                }
+                break;
+        }
+
+        if (handled) {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
     },
 
     render: function() {
