@@ -63,12 +63,15 @@ module.exports = React.createClass({
 
         var s = this.getRoomLists();
         this.setState(s);
+
+        this.focusedRoomTileRoomId = null;
     },
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         // Initialise the stickyHeaders when the component is created
         this._updateStickyHeaders(true);
+        document.addEventListener('keydown', this._onKeyDown);
     },
 
     componentDidUpdate: function() {
@@ -100,6 +103,8 @@ module.exports = React.createClass({
                 // Force an update because the notif count state is too deep to cause
                 // an update. This forces the local echo of reading notifs to be
                 // reflected by the RoomTiles.
+                //
+                // FIXME: we should surely just be refreshing the right tile...
                 this.forceUpdate();
                 break;
         }
@@ -120,6 +125,8 @@ module.exports = React.createClass({
         }
         // cancel any pending calls to the rate_limited_funcs
         this._delayedRefreshRoomList.cancelPendingCall();
+        document.removeEventListener('keydown', this._onKeyDown);
+
     },
 
     onRoom: function(room) {
@@ -147,6 +154,35 @@ module.exports = React.createClass({
                 self.setState({ isLoadingLeftRooms: false });
             });
         }
+    },
+
+    _onMouseOver: function(ev) {
+        this._lastMouseOverTs = Date.now();
+    },
+
+    _onKeyDown: function(ev) {
+        if (!this.focusedRoomTileRoomId) return;
+        let handled = false;
+
+        switch (ev.keyCode) {
+            case KeyCode.UP:
+                this._onMoveFocus(true);
+                handled = true;
+                break;
+            case KeyCode.DOWN:
+                this._onMoveFocus(false);
+                handled = true;
+                break;
+        }
+
+        if (handled) {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
+    },
+
+    _onMoveFocus: function(up) {
+
     },
 
     onSubListHeaderClick: function(isHidden, scrollToPosition) {
@@ -192,7 +228,15 @@ module.exports = React.createClass({
     },
 
     _delayedRefreshRoomList: new rate_limited_func(function() {
-        this.refreshRoomList();
+        // if the mouse has been moving over the RoomList in the last 500ms
+        // then delay the refresh further to avoid bouncing around under the
+        // cursor
+        if (Date.now() - this._lastMouseOverTs > 500) {
+            this.refreshRoomList();
+        }
+        else {
+            this._delayedRefreshRoomList();
+        }
     }, 500),
 
     refreshRoomList: function() {
@@ -207,7 +251,8 @@ module.exports = React.createClass({
         // us re-rendering all the sublists every time anything changes anywhere
         // in the state of the client.
         this.setState(this.getRoomLists());
-        this._lastRefreshRoomListTs = Date.now();
+        
+        // this._lastRefreshRoomListTs = Date.now();
     },
 
     getRoomLists: function() {
@@ -457,6 +502,10 @@ module.exports = React.createClass({
         this.refs.gemscroll.forceUpdate();
     },
 
+    onRoomTileFocus: function(roomId) {
+        this.focusedRoomTileRoomId = roomId;
+    },
+
     render: function() {
         var RoomSubList = sdk.getComponent('structures.RoomSubList');
         var self = this;
@@ -464,7 +513,7 @@ module.exports = React.createClass({
         return (
             <GeminiScrollbar className="mx_RoomList_scrollbar"
                  autoshow={true} onScroll={ self._whenScrolling } ref="gemscroll">
-            <div className="mx_RoomList">
+            <div className="mx_RoomList" onMouseOver={ this._onMouseOver }>
                 <RoomSubList list={ self.state.lists['im.vector.fake.invite'] }
                              label="Invites"
                              editable={ false }
@@ -474,6 +523,7 @@ module.exports = React.createClass({
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
+                             onRoomTileFocus={ self.onRoomTileFocus }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['m.favourite'] }
@@ -487,6 +537,7 @@ module.exports = React.createClass({
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
+                             onRoomTileFocus={ self.onRoomTileFocus }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.direct'] }
@@ -501,6 +552,7 @@ module.exports = React.createClass({
                              alwaysShowHeader={ true }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
+                             onRoomTileFocus={ self.onRoomTileFocus }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.recent'] }
@@ -513,6 +565,7 @@ module.exports = React.createClass({
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
+                             onRoomTileFocus={ self.onRoomTileFocus }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 { Object.keys(self.state.lists).map(function(tagName) {
@@ -529,6 +582,7 @@ module.exports = React.createClass({
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
+                             onRoomTileFocus={ self.onRoomTileFocus }
                              onShowMoreRooms={ self.onShowMoreRooms } />;
 
                     }
@@ -545,6 +599,7 @@ module.exports = React.createClass({
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
+                             onRoomTileFocus={ self.onRoomTileFocus }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.archived'] }
@@ -559,6 +614,7 @@ module.exports = React.createClass({
                              onHeaderClick= { self.onArchivedHeaderClick }
                              incomingCall={ self.state.incomingCall }
                              searchFilter={ self.props.searchFilter }
+                             onRoomTileFocus={ self.onRoomTileFocus }
                              onShowMoreRooms={ self.onShowMoreRooms } />
             </div>
             </GeminiScrollbar>
