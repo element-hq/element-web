@@ -28,7 +28,7 @@ var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
 var FormattingUtils = require('matrix-react-sdk/lib/utils/FormattingUtils');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 
-// turn this on for drop & drag console debugging galore
+// turn this on for drag & drop console debugging galore
 var debug = false;
 
 const TRUNCATE_AT = 10;
@@ -502,7 +502,7 @@ var RoomSubList = React.createClass({
             // gets triggered and another list is passed in. Doing it one at a time means that
             // we always correctly calculate the highest order for the list - stops multiple
             // rooms getting the same order. This is only really relevant for the first time this
-            // is run with historical room tag data, after that there should only be undefined
+            // is run with historical room tag data, after that there should only be one undefined
             // in the list at a time anyway.
             for (let i = 0; i < list.length; i++) {
                 if (list[i].tags[self.props.tagName] && list[i].tags[self.props.tagName].order === undefined) {
