@@ -62,7 +62,7 @@ var VectorConferenceHandler = require('../VectorConferenceHandler');
 var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
-var dis = require("matrix-react-sdk/lib/dispatcher");
+var dis = require('matrix-react-sdk/lib/dispatcher');
 
 import url from 'url';
 
