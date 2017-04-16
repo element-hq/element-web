@@ -300,10 +300,10 @@ async function loadApp() {
         );
         var localSettingsString = JSON.parse(localStorage.getItem('mx_local_settings') || '{}');
         sdk.setLanguage(localSettingsString.language);
-        counterpart.registerTranslations('en', require('../i18n/en_EN'));
-        counterpart.registerTranslations('de', require('../i18n/de_DE'));
-        counterpart.registerTranslations('pt', require('../i18n/pt-br_PT'));
-        counterpart.setFallbackLocale('en');
+        counterpart.registerTranslations('en-en', require('../i18n/en_EN'));
+        counterpart.registerTranslations('de-de', require('../i18n/de_DE'));
+        counterpart.registerTranslations('pt-br', require('../i18n/pt_BR'));
+        counterpart.setFallbackLocale('en-en');
         dis.register(onAction);
         if (Object.keys(localSettingsString).length === 0) {
           const language = navigator.languages[0] || navigator.language || navigator.userLanguage;
