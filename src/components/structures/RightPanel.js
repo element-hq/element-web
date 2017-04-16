@@ -93,7 +93,7 @@ module.exports = React.createClass({
             var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
                 title: counterpart.translate('Please Register'),
-                description: counterpart.translate("Guest users can't invite users. Please register to invite.")
+                description: counterpart.translate('Guest users can\'t invite users. Please register to invite.')
             });
             return;
         }
