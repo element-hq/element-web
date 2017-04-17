@@ -27,6 +27,7 @@ var RoomNotifs = require('../../../RoomNotifs');
 var FormattingUtils = require('../../../utils/FormattingUtils');
 import AccessibleButton from '../elements/AccessibleButton';
 var UserSettingsStore = require('../../../UserSettingsStore');
+var constantTimeDispatcher = require('../../../ConstantTimeDispatcher');
 
 module.exports = React.createClass({
     displayName: 'RoomTile',
@@ -89,14 +90,20 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        constantTimeDispatcher.register("RoomTile.refresh", this.props.room.roomId, this.onRefresh);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
     },
 
     componentWillUnmount: function() {
+        constantTimeDispatcher.unregister("RoomTile.refresh", this.props.room.roomId, this.onRefresh);
         var cli = MatrixClientPeg.get();
         if (cli) {
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
         }
+    },
+
+    onRefresh: function() {
+        this.forceUpdate();
     },
 
     onClick: function() {

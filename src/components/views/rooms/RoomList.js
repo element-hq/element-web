@@ -28,6 +28,7 @@ var rate_limited_func = require('../../../ratelimitedfunc');
 var Rooms = require('../../../Rooms');
 import DMRoomMap from '../../../utils/DMRoomMap';
 var Receipt = require('../../../utils/Receipt');
+var constantTimeDispatcher = require('../../../ConstantTimeDispatcher');
 
 var HIDE_CONFERENCE_CHANS = true;
 
@@ -57,12 +58,15 @@ module.exports = React.createClass({
         cli.on("Room.name", this.onRoomName);
         cli.on("Room.tags", this.onRoomTags);
         cli.on("Room.receipt", this.onRoomReceipt);
-        cli.on("RoomState.events", this.onRoomStateEvents);
+        // cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("accountData", this.onAccountData);
 
         var s = this.getRoomLists();
         this.setState(s);
+
+        // lookup for which lists a given roomId is currently in.
+        this.listsForRoomId = {};
 
         this.focusedRoomTileRoomId = null;
     },
@@ -100,12 +104,13 @@ module.exports = React.createClass({
                 }
                 break;
             case 'on_room_read':
-                // Force an update because the notif count state is too deep to cause
-                // an update. This forces the local echo of reading notifs to be
-                // reflected by the RoomTiles.
-                //
-                // FIXME: we should surely just be refreshing the right tile...
-                this.forceUpdate();
+                // poke the right RoomTile to refresh, using the constantTimeDispatcher
+                // to avoid each and every RoomTile registering to the 'on_room_read' event
+                // XXX: if we like the constantTimeDispatcher we might want to dispatch
+                // directly from TimelinePanel rather than needlessly bouncing via here.
+                constantTimeDispatcher.dispatch(
+                    "RoomTile.refresh", payload.room.roomId, {}
+                );
                 break;
         }
     },
@@ -119,7 +124,7 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.tags", this.onRoomTags);
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
-            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
+            // MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
         }
@@ -130,10 +135,14 @@ module.exports = React.createClass({
     },
 
     onRoom: function(room) {
+        // XXX: this happens rarely; ideally we should only update the correct
+        // sublists when it does (e.g. via a constantTimeDispatch to the right sublist)
         this._delayedRefreshRoomList();
     },
 
     onDeleteRoom: function(roomId) {
+        // XXX: this happens rarely; ideally we should only update the correct
+        // sublists when it does (e.g. via a constantTimeDispatch to the right sublist)
         this._delayedRefreshRoomList();
     },
 
@@ -194,35 +203,60 @@ module.exports = React.createClass({
         if (toStartOfTimeline) return;
         if (!room) return;
         if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
-        this._delayedRefreshRoomList();
+
+        // rather than regenerate our full roomlists, which is very heavy, we poke the
+        // correct sublists to just re-sort themselves.  This isn't enormously reacty,
+        // but is much faster than the default react reconciler, or having to do voodoo
+        // with shouldComponentUpdate and a pleaseRefresh property or similar.
+        var lists = this.listsByRoomId[room.roomId];
+        if (lists) {
+            lists.forEach(list=>{
+                constantTimeDispatcher.dispatch("RoomSubList.sort", list, { room: room });
+            });
+        }
     },
 
     onRoomReceipt: function(receiptEvent, room) {
         // because if we read a notification, it will affect notification count
         // only bother updating if there's a receipt from us
         if (Receipt.findReadReceiptFromUserId(receiptEvent, MatrixClientPeg.get().credentials.userId)) {
-            this._delayedRefreshRoomList();
+            var lists = this.listsByRoomId[room.roomId];
+            if (lists) {
+                lists.forEach(list=>{
+                    constantTimeDispatcher.dispatch(
+                        "RoomSubList.refreshHeader", list, { room: room }
+                    );
+                });
+            }
         }
     },
 
     onRoomName: function(room) {
-        this._delayedRefreshRoomList();
+        constantTimeDispatcher.dispatch(
+            "RoomTile.refresh", room.roomId, {}
+        );
     },
 
     onRoomTags: function(event, room) {
+        // XXX: this happens rarely; ideally we should only update the correct
+        // sublists when it does (e.g. via a constantTimeDispatch to the right sublist)
         this._delayedRefreshRoomList();
     },
 
-    onRoomStateEvents: function(ev, state) {
-        this._delayedRefreshRoomList();
-    },
+    // onRoomStateEvents: function(ev, state) {
+    //     this._delayedRefreshRoomList();
+    // },
 
     onRoomMemberName: function(ev, member) {
-        this._delayedRefreshRoomList();
+        constantTimeDispatcher.dispatch(
+            "RoomTile.refresh", member.room.roomId, {}
+        );
     },
 
     onAccountData: function(ev) {
         if (ev.getType() == 'm.direct') {
+            // XXX: this happens rarely; ideally we should only update the correct
+            // sublists when it does (e.g. via a constantTimeDispatch to the right sublist)
             this._delayedRefreshRoomList();
         }
     },
@@ -244,12 +278,10 @@ module.exports = React.createClass({
         //     (!this._lastRefreshRoomListTs ? "-" : (Date.now() - this._lastRefreshRoomListTs))
         // );
 
-        // TODO: rather than bluntly regenerating and re-sorting everything
-        // every time we see any kind of room change from the JS SDK
-        // we could do incremental updates on our copy of the state
-        // based on the room which has actually changed.  This would stop
-        // us re-rendering all the sublists every time anything changes anywhere
-        // in the state of the client.
+        // TODO: ideally we'd calculate this once at start, and then maintain
+        // any changes to it incrementally, updating the appropriate sublists
+        // as needed.
+        // Alternatively we'd do something magical with Immutable.js or similar.
         this.setState(this.getRoomLists());
         
         // this._lastRefreshRoomListTs = Date.now();
@@ -266,18 +298,19 @@ module.exports = React.createClass({
         s.lists["m.lowpriority"] = [];
         s.lists["im.vector.fake.archived"] = [];
 
+        this.listsForRoomId = {};
+
         const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
 
         MatrixClientPeg.get().getRooms().forEach(function(room) {
             const me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (!me) return;
-
             // console.log("room = " + room.name + ", me.membership = " + me.membership +
             //             ", sender = " + me.events.member.getSender() +
             //             ", target = " + me.events.member.getStateKey() +
             //             ", prevMembership = " + me.events.member.getPrevContent().membership);
-
             if (me.membership == "invite") {
+                self.listsForRoomId[room.roomId].push("im.vector.fake.invite");
                 s.lists["im.vector.fake.invite"].push(room);
             }
             else if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(room, me, self.props.ConferenceHandler)) {
@@ -288,23 +321,26 @@ module.exports = React.createClass({
             {
                 // Used to split rooms via tags
                 var tagNames = Object.keys(room.tags);
-
                 if (tagNames.length) {
                     for (var i = 0; i < tagNames.length; i++) {
                         var tagName = tagNames[i];
                         s.lists[tagName] = s.lists[tagName] || [];
                         s.lists[tagNames[i]].push(room);
+                        self.listsForRoomId[room.roomId].push(tagNames[i]);
                     }
                 }
                 else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
                     // "Direct Message" rooms (that we're still in and that aren't otherwise tagged)
+                    self.listsForRoomId[room.roomId].push("im.vector.fake.direct");
                     s.lists["im.vector.fake.direct"].push(room);
                 }
                 else {
+                    self.listsForRoomId[room.roomId].push("im.vector.fake.recent");
                     s.lists["im.vector.fake.recent"].push(room);
                 }
             }
             else if (me.membership === "leave") {
+                self.listsForRoomId[room.roomId].push("im.vector.fake.archived");
                 s.lists["im.vector.fake.archived"].push(room);
             }
             else {
@@ -325,8 +361,10 @@ module.exports = React.createClass({
                 const me = room.getMember(MatrixClientPeg.get().credentials.userId);
 
                 if (me && Rooms.looksLikeDirectMessageRoom(room, me)) {
+                    self.listsForRoomId[room.roomId].push("im.vector.fake.direct");
                     s.lists["im.vector.fake.direct"].push(room);
                 } else {
+                    self.listsForRoomId[room.roomId].push("im.vector.fake.recent");
                     s.lists["im.vector.fake.recent"].push(room);
                 }
             }
@@ -342,6 +380,8 @@ module.exports = React.createClass({
                 roomList.push(room.roomId);
                 newMDirectEvent[otherPerson.userId] = roomList;
             }
+
+            console.warn("Resetting room DM state to be " + JSON.stringify(newMDirectEvent));
 
             // if this fails, fine, we'll just do the same thing next time we get the room lists
             MatrixClientPeg.get().setAccountData('m.direct', newMDirectEvent).done();
