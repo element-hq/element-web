@@ -232,6 +232,7 @@ Then similarly with `matrix-react-sdk`:
 1. `git checkout develop`
 1. `npm install`
 1. `rm -r node_modules/matrix-js-sdk; ln -s ../../matrix-js-sdk node_modules/`
+1. `npm run build`
 1. `popd`
 
 Finally, build and start Riot itself:
