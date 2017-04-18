@@ -90,6 +90,7 @@ module.exports = React.createClass({
         constantTimeDispatcher.register("RoomTile.refresh", this.props.room.roomId, this.onRefresh);
         constantTimeDispatcher.register("RoomTile.select", this.props.room.roomId, this.onSelect);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
+        this.onRefresh();        
     },
 
     componentWillUnmount: function() {
