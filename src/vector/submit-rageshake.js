@@ -30,10 +30,17 @@ if (!TextEncoder) {
 
 /**
  * Send a bug report.
+ *
  * @param {string} bugReportEndpoint HTTP url to send the report to
+ *
  * @param {object} opts optional dictionary of options
+ *
  * @param {string} opts.userText Any additional user input.
+ *
  * @param {boolean} opts.sendLogs True to send logs
+ *
+ * @param {function(string)} opts.progressCallback Callback to call with progress updates
+ *
  * @return {Promise} Resolved when the bug report is sent.
  */
 export default async function sendBugReport(bugReportEndpoint, opts) {
@@ -42,7 +49,9 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
     }
 
     opts = opts || {};
+    const progressCallback = opts.progressCallback || (() => {});
 
+    progressCallback("Collecting app version information");
     let version = "UNKNOWN";
     try {
         version = await PlatformPeg.get().getAppVersion();
@@ -63,6 +72,7 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
     body.append('user_agent', userAgent);
 
     if (opts.sendLogs) {
+        progressCallback("Collecting logs");
         const logs = await rageshake.getLogsForReport();
         for (let entry of logs) {
             // encode as UTF-8
@@ -72,17 +82,20 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
         }
     }
 
-    await _submitReport(bugReportEndpoint, body);
+    progressCallback("Uploading report");
+    await _submitReport(bugReportEndpoint, body, progressCallback);
 }
 
-function _submitReport(endpoint, body) {
+function _submitReport(endpoint, body, progressCallback) {
     const deferred = q.defer();
 
     const req = new XMLHttpRequest();
     req.open("POST", endpoint);
     req.timeout = 5 * 60 * 1000;
     req.onreadystatechange = function() {
-        if (req.readyState === XMLHttpRequest.DONE) {
+        if (req.readyState === XMLHttpRequest.LOADING) {
+            progressCallback("Waiting for response from server");
+        } else if (req.readyState === XMLHttpRequest.DONE) {
             on_done();
         }
     };
