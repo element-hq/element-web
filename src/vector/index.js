@@ -303,7 +303,7 @@ async function loadApp() {
         counterpart.registerTranslations('en-en', require('../i18n/en_EN'));
         counterpart.registerTranslations('de-de', require('../i18n/de_DE'));
         counterpart.registerTranslations('pt-br', require('../i18n/pt_BR'));
-        counterpart.setFallbackLocale('en-en');
+        counterpart.setFallbackLocale('en');
         dis.register(onAction);
         if (Object.keys(localSettingsString).length === 0) {
           const language = navigator.languages[0] || navigator.language || navigator.userLanguage;
