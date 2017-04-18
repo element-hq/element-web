@@ -62,13 +62,17 @@ export default class BugReportDialog extends React.Component {
                 sendLogs: sendLogs,
                 progressCallback: this._sendProgressCallback,
             }).then(() => {
-                this.setState({ busy: false, progress: null });
-                this.props.onFinished(false);
+                if (!this._unmounted) {
+                    this.setState({ busy: false, progress: null });
+                    this.props.onFinished(false);
+                }
             }, (err) => {
-                this.setState({
-                    busy: false, progress: null,
-                    err: `Failed to send report: ${err.message}`,
-                });
+                if (!this._unmounted) {
+                    this.setState({
+                        busy: false, progress: null,
+                        err: `Failed to send report: ${err.message}`,
+                    });
+                }
             });
         });
     }
