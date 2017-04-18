@@ -72,10 +72,7 @@ module.exports = React.createClass({
         // order of the sublists
         this.listOrder = [];
 
-        // this.focusedRoomTileRoomId = null;
         this.focusedElement = null;
-        // this.focusedPosition = null;
-        // this.focusMoving = false;
     },
 
     componentDidMount: function() {
@@ -198,60 +195,58 @@ module.exports = React.createClass({
     },
 
     _onMoveFocus: function(up) {
-        // cheat and move focus by faking tab/shift-tab.  This lets us do things
-        // like collapse/uncollapse room headers & truncated lists without having
-        // to reimplement the entirety of the keyboard navigation logic.
-        //
-        // this simply doens't work, as for security apparently you can't inject
-        // UI events any more - c.f. this note from
-        // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
-        //
-        // Note: manually firing an event does not generate the default action
-        // associated with that event. For example, manually firing a key event
-        // does not cause that letter to appear in a focused text input. In the
-        // case of UI events, this is important for security reasons, as it
-        // prevents scripts from simulating user actions that interact with the
-        // browser itself.
-/*
-        var event = document.createEvent('Event');
-        event.initEvent('keydown', true, true);
-        event.keyCode = 9;
-        event.shiftKey = up ? true : false;
-        document.dispatchEvent(event);
-*/
+        var element = this.focusedElement;
 
-        // alternatively, this is the beginning of moving the focus through the list,
-        // navigating the pure datastructure of the list contents, but doesn't let
-        // you navigate through other things
-/*        
-        this.focusMoving = true;
-        if (this.focusPosition) {
-            if (up) {
-                this.focusPosition.index++;
-                if (this.focusPosition.index > this.listsForRoomId[this.focusPosition.list].length) {
-                    // move to the next sublist
+        // unclear why this isn't needed...
+        // var descending = (up == this.focusDirection) ? this.focusDescending : !this.focusDescending;
+        // this.focusDirection = up;
+
+        var descending = false;
+        var classes;
+
+        do {
+            var child = up ? element.lastElementChild : element.firstElementChild;
+            var sibling = up ? element.previousElementSibling : element.nextElementSibling;
+
+            if (descending) {
+                if (child) {
+                    element = child;
+                }
+                else if (sibling) {
+                    element = sibling;
+                }
+                else {
+                    descending = false;
+                    element = element.parentElement;
                 }
             }
             else {
-                this.focusPosition.index--;
-                if (this.focusPosition.index < 0) {
-                    // move to the previous sublist
+                if (sibling) {
+                    element = sibling;
+                    descending = true;
+                }
+                else {
+                    element = element.parentElement;
                 }
             }
-        }
-*/    
-        // alternatively, we can just try to manually implementing the focus switch at the DOM level.
-        // ignores tabindex.
-        var element = this.focusedElement;
-        if (up) {
-            element = element.parentElement.previousElementSibling.firstElementChild;
-        }
-        else {
-            element = element.parentElement.nextElementSibling.firstElementChild;
-        }
+
+            if (element) {
+                classes = element.classList;
+                if (classes.contains("mx_LeftPanel")) { // we hit the top
+                    element = up ? element.lastElementChild : element.firstElementChild;
+                    descending = true;
+                }
+            }
+
+        } while(element && !(
+            classes.contains("mx_RoomTile") ||
+            classes.contains("mx_SearchBox_search") ||
+            classes.contains("mx_RoomSubList_ellipsis")));
 
         if (element) {
             element.focus();
+            this.focusedElement = element;
+            this.focusedDescending = descending;
         }
     },
 
@@ -275,14 +270,6 @@ module.exports = React.createClass({
                 constantTimeDispatcher.dispatch("RoomSubList.sort", list, { room: room });
             });
         }
-
-/*
-        if (this.focusPosition && lists.indexOf(this.focusPosition.list) > -1) {
-            // if we're reordering the list which currently have focus, recalculate
-            // our focus offset
-            this.focusPosition = null;        
-        }
-*/    
     },
 
     onRoomReceipt: function(receiptEvent, room) {
@@ -343,12 +330,6 @@ module.exports = React.createClass({
     }, 500),
 
     refreshRoomList: function() {
-/*        
-        // if we're regenerating the list, then the chances are the contents
-        // or ordering is changing - forget our cached focus position
-        this.focusPosition = null;
-*/    
-
         // console.log("DEBUG: Refresh room list delta=%s ms",
         //     (!this._lastRefreshRoomListTs ? "-" : (Date.now() - this._lastRefreshRoomListTs))
         // );
@@ -641,34 +622,7 @@ module.exports = React.createClass({
     },
 
     onRoomTileFocus: function(roomId, event) {
-        // this.focusedRoomTileRoomId = roomId;
         this.focusedElement = event ? event.target : null;
-
-        /*
-        if (roomId && !this.focusPosition) {
-            var list = this.listsForRoomId[roomId];
-            if (list) {
-                console.warn("Focused to room " + roomId + " not in a list?!");
-            }
-            else {
-                this.focusPosition = {
-                    list: list,
-                    index: this.state.lists[list].findIndex(room=>{
-                        return room.roomId == roomId;
-                    }),
-                };
-            }
-        }
-
-        if (!roomId) {
-            if (this.focusMoving) {
-                this.focusMoving = false;
-            }
-            else {
-                this.focusPosition = null;
-            }
-        }
-        */
     },
 
     render: function() {
