@@ -20,8 +20,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var classNames = require('classnames');
 var sdk = require('matrix-react-sdk')
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var FormattingUtils = require('matrix-react-sdk/lib/utils/FormattingUtils');
 var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 var ConstantTimeDispatcher = require('matrix-react-sdk/lib/ConstantTimeDispatcher');
@@ -32,10 +31,15 @@ module.exports = React.createClass({
     propTypes: {
         label: React.PropTypes.string.isRequired,
         tagName: React.PropTypes.string,
-        roomCount: React.PropTypes.string,
+        roomCount: React.PropTypes.oneOfType([
+            React.PropTypes.string,
+            React.PropTypes.number
+        ]),
         collapsed: React.PropTypes.bool.isRequired, // is LeftPanel collapsed?
         isIncomingCallRoom: React.PropTypes.bool,
+        roomNotificationCount: React.PropTypes.array,
         hidden: React.PropTypes.bool,
+        onClick: React.PropTypes.func,
         onHeaderClick: React.PropTypes.func,
     },
 
@@ -60,7 +64,7 @@ module.exports = React.createClass({
     render: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        var subListNotifications = this.roomNotificationCount();
+        var subListNotifications = this.props.roomNotificationCount;
         var subListNotifCount = subListNotifications[0];
         var subListNotifHighlight = subListNotifications[1];
 
@@ -86,6 +90,7 @@ module.exports = React.createClass({
         // When collapsed, allow a long hover on the header to show user
         // the full tag name and room count
         var title;
+        var roomCount = this.props.roomCount;
         if (this.props.collapsed) {
             title = this.props.label;
             if (roomCount !== '') {
@@ -93,6 +98,7 @@ module.exports = React.createClass({
             }
         }
 
+        var incomingCall;
         if (this.props.isIncomingCallRoom) {
             var IncomingCallBox = sdk.getComponent("voip.IncomingCallBox");
             incomingCall = <IncomingCallBox className="mx_RoomSubList_incomingCall" incomingCall={ this.props.incomingCall }/>;
@@ -102,7 +108,7 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
-                <AccessibleButton onClick={ this.onClick } className="mx_RoomSubList_label" tabIndex={tabindex}>
+                <AccessibleButton onClick={ this.props.onClick } className="mx_RoomSubList_label" tabIndex={tabindex}>
                     { this.props.collapsed ? '' : this.props.label }
                     <div className="mx_RoomSubList_roomCount">{ roomCount }</div>
                     <div className={chevronClasses}></div>

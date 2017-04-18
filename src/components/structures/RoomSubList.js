@@ -28,6 +28,7 @@ var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
 var FormattingUtils = require('matrix-react-sdk/lib/utils/FormattingUtils');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 var ConstantTimeDispatcher = require('matrix-react-sdk/lib/ConstantTimeDispatcher');
+var RoomSubListHeader = require('./RoomSubListHeader.js');
 
 // turn this on for drag & drop console debugging galore
 var debug = false;
@@ -104,7 +105,7 @@ var RoomSubList = React.createClass({
     componentWillMount: function() {
         constantTimeDispatcher.register("RoomSubList.sort", this.props.tagName, this.onSort);
         this.sortList(this.applySearchFilter(this.props.list, this.props.searchFilter), this.props.order);
-        this._fixUndefinedOrder(list);
+        this._fixUndefinedOrder(this.props.list);
     },
 
     componentWillUnmount: function() {
@@ -115,7 +116,7 @@ var RoomSubList = React.createClass({
         // order the room list appropriately before we re-render
         //if (debug) console.log("received new props, list = " + newProps.list);
         this.sortList(this.applySearchFilter(newProps.list, newProps.searchFilter), newProps.order);
-        this._fixUndefinedOrder(list);
+        this._fixUndefinedOrder(newProps.list);
     },
 
     onSort: function() {
@@ -133,7 +134,7 @@ var RoomSubList = React.createClass({
     // The header is collapsable if it is hidden or not stuck
     // The dataset elements are added in the RoomList _initAndPositionStickyHeaders method
     isCollapsableOnClick: function() {
-        var stuck = this.refs.header.dataset.stuck;
+        var stuck = this.refs.header.refs.header.dataset.stuck;
         if (this.state.hidden || stuck === undefined || stuck === "none") {
             return true;
         } else {
@@ -156,7 +157,7 @@ var RoomSubList = React.createClass({
             this.props.onHeaderClick(isHidden);
         } else {
             // The header is stuck, so the click is to be interpreted as a scroll to the header
-            this.props.onHeaderClick(this.state.hidden, this.refs.header.dataset.originalPosition);
+            this.props.onHeaderClick(this.state.hidden, this.refs.header.refs.header.dataset.originalPosition);
         }
     },
 
@@ -508,12 +509,15 @@ var RoomSubList = React.createClass({
             return connectDropTarget(
                 <div>
                     <RoomSubListHeader
+                        ref='header'
                         label={ this.props.label }
                         tagName={ this.props.tagName }
                         roomCount={ roomCount }
                         collapsed={ this.props.collapsed }
                         hidden={ this.state.hidden }
                         isIncomingCallRoom={ isIncomingCallRoom }
+                        roomNotificationCount={ this.roomNotificationCount() }
+                        onClick={ this.onClick }
                         onHeaderClick={ this.props.onHeaderClick }
                     />
                     { subList }
@@ -526,12 +530,15 @@ var RoomSubList = React.createClass({
                 <div className="mx_RoomSubList">
                     { this.props.alwaysShowHeader ? 
                         <RoomSubListHeader
+                            ref='header'
                             label={ this.props.label }
                             tagName={ this.props.tagName }
                             roomCount={ roomCount }
                             collapsed={ this.props.collapsed }
                             hidden={ this.state.hidden }
                             isIncomingCallRoom={ isIncomingCallRoom }
+                            roomNotificationCount={ this.roomNotificationCount() }
+                            onClick={ this.onClick }
                             onHeaderClick={ this.props.onHeaderClick }
                         />
                      : undefined }
