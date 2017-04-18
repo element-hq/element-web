@@ -21,7 +21,6 @@ var GeminiScrollbar = require('react-gemini-scrollbar');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var CallHandler = require('../../../CallHandler');
 var RoomListSorter = require("../../../RoomListSorter");
-var Unread = require('../../../Unread');
 var dis = require("../../../dispatcher");
 var sdk = require('../../../index');
 var rate_limited_func = require('../../../ratelimitedfunc');
@@ -38,7 +37,7 @@ module.exports = React.createClass({
     propTypes: {
         ConferenceHandler: React.PropTypes.any,
         collapsed: React.PropTypes.bool.isRequired,
-        currentRoom: React.PropTypes.string,
+        selectedRoom: React.PropTypes.string,
         searchFilter: React.PropTypes.string,
     },
 
@@ -57,16 +56,15 @@ module.exports = React.createClass({
         cli.on("Room.timeline", this.onRoomTimeline);
         cli.on("Room.name", this.onRoomName);
         cli.on("Room.tags", this.onRoomTags);
-        cli.on("Room.receipt", this.onRoomReceipt);
         // cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("accountData", this.onAccountData);
 
-        var s = this.getRoomLists();
-        this.setState(s);
-
         // lookup for which lists a given roomId is currently in.
         this.listsForRoomId = {};
+
+        var s = this.getRoomLists();
+        this.setState(s);
 
         // order of the sublists
         this.listOrder = [];
@@ -76,6 +74,21 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         // Initialise the stickyHeaders when the component is created
         this._updateStickyHeaders(true);
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        // short-circuit react when the room changes
+        // to avoid rerendering all the sublists everywhere
+        if (nextProps.selectedRoom !== this.props.selectedRoom) {
+            if (this.props.selectedRoom) {
+                constantTimeDispatcher.dispatch(
+                    "RoomTile.select", this.props.selectedRoom, {}
+                );            
+            }
+            constantTimeDispatcher.dispatch(
+                "RoomTile.select", nextProps.selectedRoom, { selected: true }
+            );
+        }
     },
 
     componentDidUpdate: function() {
@@ -111,6 +124,17 @@ module.exports = React.createClass({
                 constantTimeDispatcher.dispatch(
                     "RoomTile.refresh", payload.room.roomId, {}
                 );
+
+                // also have to poke the right list(s)
+                var lists = this.listsForRoomId[payload.room.roomId];
+                if (lists) {
+                    lists.forEach(list=>{
+                        constantTimeDispatcher.dispatch(
+                            "RoomSubList.refreshHeader", list, { room: payload.room }
+                        );
+                    });
+                }
+
                 break;
         }
     },
@@ -123,7 +147,6 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.tags", this.onRoomTags);
-            MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             // MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
@@ -556,7 +579,6 @@ module.exports = React.createClass({
                              label="Invites"
                              editable={ false }
                              order="recent"
-                             selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
@@ -570,7 +592,6 @@ module.exports = React.createClass({
                              verb="favourite"
                              editable={ true }
                              order="manual"
-                             selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
@@ -584,7 +605,6 @@ module.exports = React.createClass({
                              verb="tag direct chat"
                              editable={ true }
                              order="recent"
-                             selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              alwaysShowHeader={ true }
@@ -598,7 +618,6 @@ module.exports = React.createClass({
                              editable={ true }
                              verb="restore"
                              order="recent"
-                             selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
@@ -615,7 +634,6 @@ module.exports = React.createClass({
                              verb={ "tag as " + tagName }
                              editable={ true }
                              order="manual"
-                             selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
@@ -632,7 +650,6 @@ module.exports = React.createClass({
                              verb="demote"
                              editable={ true }
                              order="recent"
-                             selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
@@ -644,7 +661,6 @@ module.exports = React.createClass({
                              label="Historical"
                              editable={ false }
                              order="recent"
-                             selectedRoom={ self.props.selectedRoom }
                              collapsed={ self.props.collapsed }
                              alwaysShowHeader={ true }
                              startAsHidden={ true }
