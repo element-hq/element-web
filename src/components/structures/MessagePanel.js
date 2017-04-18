@@ -389,7 +389,7 @@ module.exports = React.createClass({
             }
 
             // XXX: there should be no need for a ghost tile - we should just use a
-            // a dispatch to start the RM animation.
+            // a dispatch (user_activity_end) to start the RM animation.
             if (eventId == this.currentGhostEventId) {
                 // if we're showing an animation, continue to show it.
                 ret.push(this._getReadMarkerGhostTile());
