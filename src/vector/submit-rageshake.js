@@ -24,7 +24,7 @@ import rageshake from './rageshake'
 
 // polyfill textencoder if necessary
 import * as TextEncodingUtf8 from 'text-encoding-utf-8';
-let TextDecoder = window.TextEncoder;
+let TextEncoder = window.TextEncoder;
 if (!TextEncoder) {
     TextEncoder = TextEncodingUtf8.TextEncoder;
 }
