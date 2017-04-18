@@ -386,7 +386,11 @@ module.exports = React.createClass({
                 ret.push(this._getReadMarkerTile(visible));
                 readMarkerVisible = visible;
                 isVisibleReadMarker = visible;
-            } else if (eventId == this.currentGhostEventId) {
+            }
+
+            // XXX: there should be no need for a ghost tile - we should just use a
+            // a dispatch to start the RM animation.
+            if (eventId == this.currentGhostEventId) {
                 // if we're showing an animation, continue to show it.
                 ret.push(this._getReadMarkerGhostTile());
             } else if (!isVisibleReadMarker &&
