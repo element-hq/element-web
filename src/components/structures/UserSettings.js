@@ -763,6 +763,20 @@ module.exports = React.createClass({
         </div>;
     },
 
+    _showSpoiler: function(event) {
+        const target = event.target;
+        const hidden = target.getAttribute('data-spoiler');
+
+        target.innerHTML = hidden;
+
+        const range = document.createRange();
+        range.selectNodeContents(target);
+
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+    },
+
     nameForMedium: function(medium) {
         if (medium == 'msisdn') return 'Phone';
         return medium[0].toUpperCase() + medium.slice(1);
@@ -957,6 +971,9 @@ module.exports = React.createClass({
                 <div className="mx_UserSettings_section">
                     <div className="mx_UserSettings_advanced">
                         Logged in as {this._me}
+                    </div>
+                    <div className="mx_UserSettings_advanced">
+                        Access Token: <span className="mx_UserSettings_advanced_spoiler" onClick={this._showSpoiler} data-spoiler={ MatrixClientPeg.get().getAccessToken() }>&lt;click to reveal&gt;</span>
                     </div>
                     <div className="mx_UserSettings_advanced">
                         Homeserver is { MatrixClientPeg.get().getHomeserverUrl() }
