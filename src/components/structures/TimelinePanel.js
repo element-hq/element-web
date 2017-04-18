@@ -120,7 +120,7 @@ var TimelinePanel = React.createClass({
         // but for now we just do it per room for simplicity.
         let initialReadMarker = null;
         if (this.props.manageReadMarkers) {
-            const readmarker = this.props.timelineSet.room.getAccountData('m.read_marker');
+            const readmarker = this.props.timelineSet.room.getAccountData('m.fully_read');
             if (readmarker){
                 initialReadMarker = readmarker.getContent().marker;
             } else {
@@ -476,7 +476,7 @@ var TimelinePanel = React.createClass({
         // ignore events for other rooms
         if (room !== this.props.timelineSet.room) return;
 
-        if (ev.getType() !== "m.read_marker") return;
+        if (ev.getType() !== "m.fully_read") return;
 
         const markerEventId = ev.getContent().marker;
         console.log('TimelinePanel: Read marker received from server', markerEventId);
