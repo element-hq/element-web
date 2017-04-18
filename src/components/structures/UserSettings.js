@@ -264,10 +264,10 @@ module.exports = React.createClass({
             title: "Sign out?",
             description:
                 <div>
-                    For security, logging out will delete any end-to-end encryption keys from this browser,
-                    making previous encrypted chat history unreadable if you log back in.
-                    In future this <a href="https://github.com/vector-im/riot-web/issues/2108">will be improved</a>,
-                    but for now be warned.
+                    For security, logging out will delete any end-to-end encryption keys from this browser.
+
+                    If you want to be able to decrypt your conversation history from future Riot sessions,
+                    please export your room keys for safe-keeping.
                 </div>,
             button: "Sign out",
             extraButtons: [
@@ -441,10 +441,11 @@ module.exports = React.createClass({
     },
 
     _onClearCacheClicked: function() {
+        if (!PlatformPeg.get()) return;
+
+        MatrixClientPeg.get().stopClient();
         MatrixClientPeg.get().store.deleteAllData().done(() => {
-            // forceReload=false since we don't really need new HTML/JS files
-            // we just need to restart the JS runtime.
-            window.location.reload(false);
+            PlatformPeg.get().reload();
         });
     },
 

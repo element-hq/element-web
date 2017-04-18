@@ -17,6 +17,8 @@ limitations under the License.
 var MatrixClientPeg = require("./MatrixClientPeg");
 var CallHandler = require("./CallHandler");
 
+import * as Roles from './Roles';
+
 function textForMemberEvent(ev) {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
     var senderName = ev.sender ? ev.sender.name : ev.getSender();
@@ -182,6 +184,45 @@ function textForEncryptionEvent(event) {
     return senderName + " turned on end-to-end encryption (algorithm " + event.getContent().algorithm + ")";
 }
 
+// Currently will only display a change if a user's power level is changed
+function textForPowerEvent(event) {
+    const senderName = event.sender ? event.sender.name : event.getSender();
+    if (!event.getPrevContent() || !event.getPrevContent().users) {
+        return '';
+    }
+    const userDefault = event.getContent().users_default || 0;
+    // Construct set of userIds
+    let users = [];
+    Object.keys(event.getContent().users).forEach(
+        (userId) => {
+            if (users.indexOf(userId) === -1) users.push(userId);
+        }
+    );
+    Object.keys(event.getPrevContent().users).forEach(
+        (userId) => {
+            if (users.indexOf(userId) === -1) users.push(userId);
+        }
+    );
+    let diff = [];
+    users.forEach((userId) => {
+        // Previous power level
+        const from = event.getPrevContent().users[userId];
+        // Current power level
+        const to = event.getContent().users[userId];
+        if (to !== from) {
+            diff.push(
+                userId +
+                ' from ' + Roles.textualPowerLevel(from, userDefault) +
+                ' to ' + Roles.textualPowerLevel(to, userDefault)
+            );
+        }
+    });
+    if (!diff.length) {
+        return '';
+    }
+    return senderName + ' changed the power level of ' + diff.join(', ');
+}
+
 var handlers = {
     'm.room.message': textForMessageEvent,
     'm.room.name':    textForRoomNameEvent,
@@ -193,6 +234,7 @@ var handlers = {
     'm.room.third_party_invite': textForThreePidInviteEvent,
     'm.room.history_visibility': textForHistoryVisibilityEvent,
     'm.room.encryption': textForEncryptionEvent,
+    'm.room.power_levels': textForPowerEvent,
 };
 
 module.exports = {

@@ -50,6 +50,18 @@ class MatrixClientPeg {
         this.opts = {
             initialSyncLimit: 20,
         };
+        this.indexedDbWorkerScript = null;
+    }
+
+    /**
+     * Sets the script href passed to the IndexedDB web worker
+     * If set, a separate web worker will be started to run the IndexedDB
+     * queries on.
+     *
+     * @param {string} script href to the script to be passed to the web worker
+     */
+    setIndexedDbWorkerScript(script) {
+        this.indexedDbWorkerScript = script;
     }
 
     get(): MatrixClient {
@@ -129,6 +141,7 @@ class MatrixClientPeg {
                 indexedDB: window.indexedDB,
                 dbName: "riot-web-sync",
                 localStorage: localStorage,
+                workerScript: this.indexedDbWorkerScript,
             });
         }
 
