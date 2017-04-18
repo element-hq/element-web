@@ -259,7 +259,6 @@ async function loadApp() {
     let configError;
     try {
         configJson = await getConfig();
-        rageshake.setBugReportEndpoint(configJson.bug_report_endpoint_url);
     } catch (e) {
         configError = e;
     }
