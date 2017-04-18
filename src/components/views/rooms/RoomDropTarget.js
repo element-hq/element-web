@@ -31,7 +31,6 @@ module.exports = React.createClass({
         else {
             return (
                 <div className="mx_RoomDropTarget">
-                    <div className="mx_RoomDropTarget_avatar"></div>
                     <div className="mx_RoomDropTarget_label">
                         { this.props.label }
                     </div>

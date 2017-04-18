@@ -48,11 +48,10 @@ limitations under the License.
 }
 
 .mx_MemberInfo_avatar .mx_BaseAvatar {
-    cursor: not-allowed;
 }
 
 .mx_MemberInfo_avatar .mx_BaseAvatar.mx_BaseAvatar_image {
-    cursor: pointer;
+    cursor: zoom-in;
 }
 
 .mx_MemberInfo_profile {

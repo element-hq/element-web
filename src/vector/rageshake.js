@@ -314,17 +314,24 @@ class IndexedDBLogStore {
         let size = 0;
         for (let i = 0; i < allLogIds.length; i++) {
             let lines = await fetchLogs(allLogIds[i]);
+
+            // always include at least one log file, but only include
+            // subsequent ones if they won't take us over the MAX_LOG_SIZE
+            if (i > 0 && size + lines.length > MAX_LOG_SIZE) {
+                // the remaining log IDs should be removed. If we go out of
+                // bounds this is just []
+                //
+                // XXX: there's nothing stopping the current session exceeding
+                // MAX_LOG_SIZE. We ought to think about culling it.
+                removeLogIds = allLogIds.slice(i + 1);
+                break;
+            }
+
             logs.push({
                 lines: lines,
                 id: allLogIds[i],
             });
             size += lines.length;
-            if (size > MAX_LOG_SIZE) {
-                // the remaining log IDs should be removed. If we go out of
-                // bounds this is just []
-                removeLogIds = allLogIds.slice(i + 1);
-                break;
-            }
         }
         if (removeLogIds.length > 0) {
             console.log("Removing logs: ", removeLogIds);
@@ -481,10 +488,12 @@ module.exports = {
                     text: (
                         userText || "User did not supply any additional text."
                     ),
+                    app: 'riot-web',
                     version: version,
                     user_agent: userAgent,
                 },
                 json: true,
+                timeout: 5 * 60 * 1000,
             }, (err, res) => {
                 if (err) {
                     reject(err);

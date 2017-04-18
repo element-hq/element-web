@@ -104,6 +104,23 @@ describe('loading:', function () {
             }
         }
 
+        // Parse the given window.location and return parameters that can be used when calling
+        // MatrixChat.showScreen(screen, params)
+        function getScreenFromLocation(location) {
+            const fragparts = parseQsFromFragment(location);
+            return {
+                screen: fragparts.location.substring(1),
+                params: fragparts.params,
+            }
+        }
+
+        function routeUrl(location, matrixChat) {
+            console.log(Date.now() + "Routing URL " + location);
+            const s = getScreenFromLocation(location);
+            console.log("Showing screen", s);
+            matrixChat.showScreen(s.screen, s.params);
+        }
+
         const MatrixChat = sdk.getComponent('structures.MatrixChat');
         const fragParts = parseQsFromFragment(windowLocation);
         var params = parseQs(windowLocation);
@@ -118,15 +135,9 @@ describe('loading:', function () {
                 startingFragmentQueryParams={fragParts.params}
                 enableGuest={true}
                 onLoadCompleted={loadCompleteDefer.resolve}
+                initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
             />, parentDiv
         );
-
-        function routeUrl(location, matrixChat) {
-            console.log(Date.now() + " Routing URL "+location);
-            var fragparts = parseQsFromFragment(location);
-            matrixChat.showScreen(fragparts.location.substring(1),
-                                  fragparts.params);
-        }
 
         // pause for a cycle, then simulate the window.onload handler
         window.setTimeout(() => {
@@ -188,15 +199,17 @@ describe('loading:', function () {
                 let login = ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.login.Login'));
                 httpBackend.when('POST', '/login').check(function(req) {
+                    console.log(req);
                     expect(req.data.type).toEqual('m.login.password');
-                    expect(req.data.user).toEqual('user');
+                    expect(req.data.identifier.type).toEqual('m.id.user');
+                    expect(req.data.identifier.user).toEqual('user');
                     expect(req.data.password).toEqual('pass');
                 }).respond(200, {
                     user_id: '@user:id',
                     device_id: 'DEVICE_ID',
                     access_token: 'access_token',
                 });
-                login.onPasswordLogin("user", "pass")
+                login.onPasswordLogin("user", undefined, undefined, "pass")
                 return httpBackend.flush();
             }).then(() => {
                 // Wait for another trip around the event loop for the UI to update
@@ -474,7 +487,8 @@ function awaitRoomView(matrixChat, retryLimit, retryCount) {
         retryCount = 0;
     }
 
-    if (!matrixChat.state.ready) {
+    if (matrixChat.state.loading ||
+        !(matrixChat.state.loggedIn && matrixChat.state.ready)) {
         console.log(Date.now() + " Awaiting room view: not ready yet.");
         if (retryCount >= retryLimit) {
             throw new Error("MatrixChat still not ready after " +

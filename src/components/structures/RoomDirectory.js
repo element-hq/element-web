@@ -31,6 +31,8 @@ var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
 var sanitizeHtml = require('sanitize-html');
 var q = require('q');
 
+var counterpart = require('counterpart');
+
 import {instanceForInstanceId, protocolNameForInstanceId} from '../../utils/DirectoryUtils';
 
 linkifyMatrix(linkify);
@@ -80,8 +82,8 @@ module.exports = React.createClass({
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Failed to get protocol list from Home Server",
-                description: "The Home Server may be too old to support third party networks",
+                title: counterpart.translate('Failed to get protocol list from Home Server'),
+                description: counterpart.translate('The Home Server may be too old to support third party networks'),
             });
         });
 
@@ -162,7 +164,7 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to get public room list",
-                description: err.message
+                description: "The server may be unavailable or overloaded",
             });
         });
     },
@@ -208,9 +210,10 @@ module.exports = React.createClass({
                 }, function(err) {
                     modal.close();
                     this.refreshRoomList();
+                    console.error("Failed to " + step + ": " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Failed to "+step,
-                        description: err.toString()
+                        title: "Error",
+                        description: "Failed to " + step,
                     });
                 });
             }
@@ -383,12 +386,12 @@ module.exports = React.createClass({
 
             if (rooms[i].world_readable) {
                 guestRead = (
-                    <div className="mx_RoomDirectory_perm">World readable</div>
+                    <div className="mx_RoomDirectory_perm">{ counterpart.translate('World readable') }</div>
                 );
             }
             if (rooms[i].guest_can_join) {
                 guestJoin = (
-                    <div className="mx_RoomDirectory_perm">Guests can join</div>
+                    <div className="mx_RoomDirectory_perm">{ counterpart.translate('Guests can join') }</div>
                 );
             }
 
@@ -466,7 +469,7 @@ module.exports = React.createClass({
         if (this.state.protocolsLoading) {
             return (
                 <div className="mx_RoomDirectory">
-                    <SimpleRoomHeader title="Directory" />
+                    <SimpleRoomHeader title={ counterpart.translate('Directory') } />
                     <Loader />
                 </div>
             );
@@ -484,7 +487,7 @@ module.exports = React.createClass({
             // request from the scrollpanel because there isn't one
             let scrollpanel_content;
             if (rows.length == 0) {
-                scrollpanel_content = <i>No rooms to show</i>;
+                scrollpanel_content = <i>{ counterpart.translate('No rooms to show') }</i>;
             } else {
                 scrollpanel_content = <table ref="directory_table" className="mx_RoomDirectory_table">
                     <tbody>
@@ -518,9 +521,9 @@ module.exports = React.createClass({
         }
 
 
-        let placeholder = 'Search for a room';
+        let placeholder = counterpart.translate('Search for a room');
         if (!this.state.instanceId) {
-            placeholder = '#example:' + this.state.roomServer;
+            placeholder = counterpart.translate('#example:') + this.state.roomServer;
         } else if (instance_expected_field_type) {
             placeholder = instance_expected_field_type.placeholder;
         }
@@ -537,7 +540,7 @@ module.exports = React.createClass({
         const DirectorySearchBox = sdk.getComponent('elements.DirectorySearchBox');
         return (
             <div className="mx_RoomDirectory">
-                <SimpleRoomHeader title="Directory" />
+                <SimpleRoomHeader title={ counterpart.translate('Directory') } />
                 <div className="mx_RoomDirectory_list">
                     <div className="mx_RoomDirectory_listheader">
                         <DirectorySearchBox

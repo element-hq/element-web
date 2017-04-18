@@ -38,21 +38,12 @@ limitations under the License.
     padding-bottom: 1px;
 }
 
-.mx_RoomDropTarget_avatar {
-    background-color: $primary-bg-color;
-    border-radius: 24px;
-    width: 24px;
-    height: 24px;
-    float: left;
-    margin-left: 7px;
-    margin-right: 7px;
-}
-
 .mx_RoomDropTarget_label {
     position: relative;
     margin-top: 3px;
     line-height: 21px;
     z-index: 1;
+    text-align: center;
 }
 
 .collapsed .mx_RoomDropTarget_avatar {

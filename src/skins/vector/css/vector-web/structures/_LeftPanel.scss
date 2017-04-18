@@ -64,6 +64,7 @@ limitations under the License.
     pointer-events: none;
 }
 
+.mx_LeftPanel .mx_BottomLeftMenu_homePage,
 .mx_LeftPanel .mx_BottomLeftMenu_directory,
 .mx_LeftPanel .mx_BottomLeftMenu_createRoom,
 .mx_LeftPanel .mx_BottomLeftMenu_people,
@@ -72,6 +73,7 @@ limitations under the License.
     cursor: pointer;
 }
 
+.collapsed .mx_BottomLeftMenu_homePage,
 .collapsed .mx_BottomLeftMenu_directory,
 .collapsed .mx_BottomLeftMenu_createRoom,
 .collapsed .mx_BottomLeftMenu_people,
@@ -81,6 +83,7 @@ limitations under the License.
     padding-bottom: 3px ! important;
 }
 
+.mx_LeftPanel .mx_BottomLeftMenu_homePage,
 .mx_LeftPanel .mx_BottomLeftMenu_directory,
 .mx_LeftPanel .mx_BottomLeftMenu_createRoom,
 .mx_LeftPanel .mx_BottomLeftMenu_people {
