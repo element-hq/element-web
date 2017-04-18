@@ -37,7 +37,6 @@ module.exports = React.createClass({
         connectDragSource: React.PropTypes.func,
         connectDropTarget: React.PropTypes.func,
         onClick: React.PropTypes.func,
-        onFocus: React.PropTypes.func,
         isDragging: React.PropTypes.bool,
 
         room: React.PropTypes.object.isRequired,
@@ -118,12 +117,6 @@ module.exports = React.createClass({
     onClick: function() {
         if (this.props.onClick) {
             this.props.onClick(this.props.room.roomId);
-        }
-    },
-
-    onFocus: function(event) {
-        if (this.props.onFocus) {
-            this.props.onFocus(this.props.room.roomId, event);
         }
     },
 
@@ -279,8 +272,7 @@ module.exports = React.createClass({
         let ret = (
             <div> { /* Only native elements can be wrapped in a DnD object. */}
             <AccessibleButton className={classes} tabIndex="0" onClick={this.onClick}
-                              onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}
-                              onFocus={this.onFocus} onBlur={this.onFocus.bind(this, null)}>
+                              onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className={avatarClasses}>
                     <div className="mx_RoomTile_avatar_container">
                         <RoomAvatar room={this.props.room} width={24} height={24} />
