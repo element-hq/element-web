@@ -77,7 +77,6 @@ var RoomSubList = React.createClass({
         showSpinner: React.PropTypes.bool, // true to show a spinner if 0 elements when expanded
         collapsed: React.PropTypes.bool.isRequired, // is LeftPanel collapsed?
         onHeaderClick: React.PropTypes.func,
-        onRoomTileFocus: React.PropTypes.func,
         alwaysShowHeader: React.PropTypes.bool,
         incomingCall: React.PropTypes.object,
         onShowMoreRooms: React.PropTypes.func,
@@ -384,7 +383,6 @@ var RoomSubList = React.createClass({
                     refreshSubList={ self._updateSubListCount }
                     incomingCall={ null }
                     onClick={ self.onRoomTileClick }
-                    onFocus={ self.props.onRoomTileFocus }
                 />
             );
         });
