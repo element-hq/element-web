@@ -50,16 +50,16 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        constantTimeDispatcher.register("RoomSubList.refreshHeader", this.props.tagName, this.onRefresh);
+        // constantTimeDispatcher.register("RoomSubList.refreshHeader", this.props.tagName, this.onRefresh);
     },
 
     componentWillUnmount: function() {
-        constantTimeDispatcher.unregister("RoomSubList.refreshHeader", this.props.tagName, this.onRefresh);
+        // constantTimeDispatcher.unregister("RoomSubList.refreshHeader", this.props.tagName, this.onRefresh);
     },
 
-    onRefresh: function() {
-        this.forceUpdate();
-    },
+    // onRefresh: function() {
+    //     this.forceUpdate();
+    // },
 
     render: function() {
         var TintableSvg = sdk.getComponent("elements.TintableSvg");

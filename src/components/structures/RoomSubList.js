@@ -73,9 +73,6 @@ var RoomSubList = React.createClass({
 
         order: React.PropTypes.string.isRequired,
 
-        // undefined if no room is selected (eg we are showing settings)
-        selectedRoom: React.PropTypes.string,
-
         startAsHidden: React.PropTypes.bool,
         showSpinner: React.PropTypes.bool, // true to show a spinner if 0 elements when expanded
         collapsed: React.PropTypes.bool.isRequired, // is LeftPanel collapsed?
@@ -104,12 +101,14 @@ var RoomSubList = React.createClass({
 
     componentWillMount: function() {
         constantTimeDispatcher.register("RoomSubList.sort", this.props.tagName, this.onSort);
+        constantTimeDispatcher.register("RoomSubList.refreshHeader", this.props.tagName, this.onRefresh);
         this.sortList(this.applySearchFilter(this.props.list, this.props.searchFilter), this.props.order);
         this._fixUndefinedOrder(this.props.list);
     },
 
     componentWillUnmount: function() {
         constantTimeDispatcher.unregister("RoomSubList.sort", this.props.tagName, this.onSort);
+        constantTimeDispatcher.unregister("RoomSubList.refreshHeader", this.props.tagName, this.onRefresh);
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -122,6 +121,10 @@ var RoomSubList = React.createClass({
     onSort: function() {
         this.sortList(this.applySearchFilter(this.props.list, this.props.searchFilter), this.props.order);
         // we deliberately don't waste time trying to fix undefined ordering here
+    },
+
+    onRefresh: function() {
+        this.forceUpdate();
     },
 
     applySearchFilter: function(list, filter) {
@@ -370,7 +373,6 @@ var RoomSubList = React.createClass({
         var self = this;
         var DNDRoomTile = sdk.getComponent("rooms.DNDRoomTile");
         return this.state.sortedList.map(function(room) {
-            var selected = room.roomId == self.props.selectedRoom;
             // XXX: is it evil to pass in self as a prop to RoomTile?
             return (
                 <DNDRoomTile
@@ -378,9 +380,6 @@ var RoomSubList = React.createClass({
                     roomSubList={ self }
                     key={ room.roomId }
                     collapsed={ self.props.collapsed || false}
-                    selected={ selected }
-                    unread={ Unread.doesRoomHaveUnreadMessages(room) }
-                    highlight={ room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites' }
                     isInvite={ self.props.label === 'Invites' }
                     refreshSubList={ self._updateSubListCount }
                     incomingCall={ null }
