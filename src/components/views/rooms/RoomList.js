@@ -56,6 +56,7 @@ module.exports = React.createClass({
         cli.on("Room.timeline", this.onRoomTimeline);
         cli.on("Room.name", this.onRoomName);
         cli.on("Room.tags", this.onRoomTags);
+        cli.on("Room.receipt", this.onRoomReceipt);
         // cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("accountData", this.onAccountData);
@@ -147,6 +148,7 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.tags", this.onRoomTags);
+            MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             // MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
@@ -212,6 +214,11 @@ module.exports = React.createClass({
                 constantTimeDispatcher.dispatch("RoomSubList.sort", list, { room: room });
             });
         }
+
+        // we have to explicitly hit the roomtile which just changed
+        constantTimeDispatcher.dispatch(
+            "RoomTile.refresh", room.roomId, {}
+        );
     },
 
     onRoomReceipt: function(receiptEvent, room) {
@@ -226,6 +233,11 @@ module.exports = React.createClass({
                     );
                 });
             }
+
+            // we have to explicitly hit the roomtile which just changed
+            constantTimeDispatcher.dispatch(
+                "RoomTile.refresh", room.roomId, {}
+            );
         }
     },
 
