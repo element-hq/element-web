@@ -27,6 +27,7 @@ var sdk = require('../../../index');
 var rate_limited_func = require('../../../ratelimitedfunc');
 var Rooms = require('../../../Rooms');
 import DMRoomMap from '../../../utils/DMRoomMap';
+import KeyCode from '../../../KeyCode';
 var Receipt = require('../../../utils/Receipt');
 var constantTimeDispatcher = require('../../../ConstantTimeDispatcher');
 
@@ -68,7 +69,13 @@ module.exports = React.createClass({
         // lookup for which lists a given roomId is currently in.
         this.listsForRoomId = {};
 
-        this.focusedRoomTileRoomId = null;
+        // order of the sublists
+        this.listOrder = [];
+
+        // this.focusedRoomTileRoomId = null;
+        this.focusedElement = null;
+        // this.focusedPosition = null;
+        // this.focusMoving = false;
     },
 
     componentDidMount: function() {
@@ -170,7 +177,7 @@ module.exports = React.createClass({
     },
 
     _onKeyDown: function(ev) {
-        if (!this.focusedRoomTileRoomId) return;
+        if (!this.focusedElement) return;
         let handled = false;
 
         switch (ev.keyCode) {
@@ -191,7 +198,61 @@ module.exports = React.createClass({
     },
 
     _onMoveFocus: function(up) {
+        // cheat and move focus by faking tab/shift-tab.  This lets us do things
+        // like collapse/uncollapse room headers & truncated lists without having
+        // to reimplement the entirety of the keyboard navigation logic.
+        //
+        // this simply doens't work, as for security apparently you can't inject
+        // UI events any more - c.f. this note from
+        // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
+        //
+        // Note: manually firing an event does not generate the default action
+        // associated with that event. For example, manually firing a key event
+        // does not cause that letter to appear in a focused text input. In the
+        // case of UI events, this is important for security reasons, as it
+        // prevents scripts from simulating user actions that interact with the
+        // browser itself.
+/*
+        var event = document.createEvent('Event');
+        event.initEvent('keydown', true, true);
+        event.keyCode = 9;
+        event.shiftKey = up ? true : false;
+        document.dispatchEvent(event);
+*/
 
+        // alternatively, this is the beginning of moving the focus through the list,
+        // navigating the pure datastructure of the list contents, but doesn't let
+        // you navigate through other things
+/*        
+        this.focusMoving = true;
+        if (this.focusPosition) {
+            if (up) {
+                this.focusPosition.index++;
+                if (this.focusPosition.index > this.listsForRoomId[this.focusPosition.list].length) {
+                    // move to the next sublist
+                }
+            }
+            else {
+                this.focusPosition.index--;
+                if (this.focusPosition.index < 0) {
+                    // move to the previous sublist
+                }
+            }
+        }
+*/    
+        // alternatively, we can just try to manually implementing the focus switch at the DOM level.
+        // ignores tabindex.
+        var element = this.focusedElement;
+        if (up) {
+            element = element.parentElement.previousElementSibling.firstElementChild;
+        }
+        else {
+            element = element.parentElement.nextElementSibling.firstElementChild;
+        }
+
+        if (element) {
+            element.focus();
+        }
     },
 
     onSubListHeaderClick: function(isHidden, scrollToPosition) {
@@ -208,19 +269,27 @@ module.exports = React.createClass({
         // correct sublists to just re-sort themselves.  This isn't enormously reacty,
         // but is much faster than the default react reconciler, or having to do voodoo
         // with shouldComponentUpdate and a pleaseRefresh property or similar.
-        var lists = this.listsByRoomId[room.roomId];
+        var lists = this.listsForRoomId[room.roomId];
         if (lists) {
             lists.forEach(list=>{
                 constantTimeDispatcher.dispatch("RoomSubList.sort", list, { room: room });
             });
         }
+
+/*
+        if (this.focusPosition && lists.indexOf(this.focusPosition.list) > -1) {
+            // if we're reordering the list which currently have focus, recalculate
+            // our focus offset
+            this.focusPosition = null;        
+        }
+*/    
     },
 
     onRoomReceipt: function(receiptEvent, room) {
         // because if we read a notification, it will affect notification count
         // only bother updating if there's a receipt from us
         if (Receipt.findReadReceiptFromUserId(receiptEvent, MatrixClientPeg.get().credentials.userId)) {
-            var lists = this.listsByRoomId[room.roomId];
+            var lists = this.listsForRoomId[room.roomId];
             if (lists) {
                 lists.forEach(list=>{
                     constantTimeDispatcher.dispatch(
@@ -274,6 +343,12 @@ module.exports = React.createClass({
     }, 500),
 
     refreshRoomList: function() {
+/*        
+        // if we're regenerating the list, then the chances are the contents
+        // or ordering is changing - forget our cached focus position
+        this.focusPosition = null;
+*/    
+
         // console.log("DEBUG: Refresh room list delta=%s ms",
         //     (!this._lastRefreshRoomListTs ? "-" : (Date.now() - this._lastRefreshRoomListTs))
         // );
@@ -299,16 +374,23 @@ module.exports = React.createClass({
         s.lists["im.vector.fake.archived"] = [];
 
         this.listsForRoomId = {};
+        var otherTagNames = {};
 
         const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
 
         MatrixClientPeg.get().getRooms().forEach(function(room) {
             const me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (!me) return;
+            
             // console.log("room = " + room.name + ", me.membership = " + me.membership +
             //             ", sender = " + me.events.member.getSender() +
             //             ", target = " + me.events.member.getStateKey() +
             //             ", prevMembership = " + me.events.member.getPrevContent().membership);
+
+            if (!self.listsForRoomId[room.roomId]) {
+                self.listsForRoomId[room.roomId] = [];
+            }
+
             if (me.membership == "invite") {
                 self.listsForRoomId[room.roomId].push("im.vector.fake.invite");
                 s.lists["im.vector.fake.invite"].push(room);
@@ -325,8 +407,9 @@ module.exports = React.createClass({
                     for (var i = 0; i < tagNames.length; i++) {
                         var tagName = tagNames[i];
                         s.lists[tagName] = s.lists[tagName] || [];
-                        s.lists[tagNames[i]].push(room);
-                        self.listsForRoomId[room.roomId].push(tagNames[i]);
+                        s.lists[tagName].push(room);
+                        self.listsForRoomId[room.roomId].push(tagName);
+                        otherTagNames[tagName] = 1;
                     }
                 }
                 else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
@@ -390,6 +473,21 @@ module.exports = React.createClass({
         //console.log("calculated new roomLists; im.vector.fake.recent = " + s.lists["im.vector.fake.recent"]);
 
         // we actually apply the sorting to this when receiving the prop in RoomSubLists.
+
+        // we'll need this when we get to iterating through lists programatically - e.g. ctrl-shift-up/down
+/*        
+        this.listOrder = [
+            "im.vector.fake.invite",
+            "m.favourite",
+            "im.vector.fake.recent",
+            "im.vector.fake.direct",
+            Object.keys(otherTagNames).filter(tagName=>{
+                return (!tagName.match(/^m\.(favourite|lowpriority)$/));
+            }).sort(),
+            "m.lowpriority",
+            "im.vector.fake.archived"
+        ];
+*/
 
         return s;
     },
@@ -542,8 +640,35 @@ module.exports = React.createClass({
         this.refs.gemscroll.forceUpdate();
     },
 
-    onRoomTileFocus: function(roomId) {
-        this.focusedRoomTileRoomId = roomId;
+    onRoomTileFocus: function(roomId, event) {
+        // this.focusedRoomTileRoomId = roomId;
+        this.focusedElement = event ? event.target : null;
+
+        /*
+        if (roomId && !this.focusPosition) {
+            var list = this.listsForRoomId[roomId];
+            if (list) {
+                console.warn("Focused to room " + roomId + " not in a list?!");
+            }
+            else {
+                this.focusPosition = {
+                    list: list,
+                    index: this.state.lists[list].findIndex(room=>{
+                        return room.roomId == roomId;
+                    }),
+                };
+            }
+        }
+
+        if (!roomId) {
+            if (this.focusMoving) {
+                this.focusMoving = false;
+            }
+            else {
+                this.focusPosition = null;
+            }
+        }
+        */
     },
 
     render: function() {
@@ -608,7 +733,7 @@ module.exports = React.createClass({
                              onRoomTileFocus={ self.onRoomTileFocus }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
-                { Object.keys(self.state.lists).map(function(tagName) {
+                { Object.keys(self.state.lists).sort().map(function(tagName) {
                     if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
                         return <RoomSubList list={ self.state.lists[tagName] }
                              key={ tagName }

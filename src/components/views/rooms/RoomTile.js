@@ -112,9 +112,9 @@ module.exports = React.createClass({
         }
     },
 
-    onFocus: function() {
+    onFocus: function(event) {
         if (this.props.onFocus) {
-            this.props.onFocus(this.props.room.roomId);
+            this.props.onFocus(this.props.room.roomId, event);
         }
     },
 
