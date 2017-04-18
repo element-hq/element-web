@@ -104,11 +104,9 @@ module.exports = React.createClass({
             incomingCall = <IncomingCallBox className="mx_RoomSubList_incomingCall" incomingCall={ this.props.incomingCall }/>;
         }
 
-        var tabindex = this.props.searchFilter === "" ? "0" : "-1";
-
         return (
             <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
-                <AccessibleButton onClick={ this.props.onClick } className="mx_RoomSubList_label" tabIndex={tabindex}>
+                <AccessibleButton onClick={ this.props.onClick } className="mx_RoomSubList_label" tabIndex="0">
                     { this.props.collapsed ? '' : this.props.label }
                     <div className="mx_RoomSubList_roomCount">{ roomCount }</div>
                     <div className={chevronClasses}></div>
