@@ -104,7 +104,7 @@ module.exports = React.createClass({
     onRefresh: function(params) {
         this.setState({
             unread: Unread.doesRoomHaveUnreadMessages(this.props.room),
-            highlight: this.props.room.getUnreadNotificationCount('highlight') > 0 || this.props.label === 'Invites',
+            highlight: this.props.room.getUnreadNotificationCount('highlight') > 0 || this.props.isInvite,
         });
     },
 
