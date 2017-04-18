@@ -27,7 +27,6 @@ var sdk = require('../../../index');
 var rate_limited_func = require('../../../ratelimitedfunc');
 var Rooms = require('../../../Rooms');
 import DMRoomMap from '../../../utils/DMRoomMap';
-import KeyCode from '../../../KeyCode';
 var Receipt = require('../../../utils/Receipt');
 var constantTimeDispatcher = require('../../../ConstantTimeDispatcher');
 
@@ -71,15 +70,12 @@ module.exports = React.createClass({
 
         // order of the sublists
         this.listOrder = [];
-
-        this.focusedElement = null;
     },
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         // Initialise the stickyHeaders when the component is created
         this._updateStickyHeaders(true);
-        document.addEventListener('keydown', this._onKeyDown);
     },
 
     componentDidUpdate: function() {
@@ -171,83 +167,6 @@ module.exports = React.createClass({
 
     _onMouseOver: function(ev) {
         this._lastMouseOverTs = Date.now();
-    },
-
-    _onKeyDown: function(ev) {
-        if (!this.focusedElement) return;
-        let handled = false;
-
-        switch (ev.keyCode) {
-            case KeyCode.UP:
-                this._onMoveFocus(true);
-                handled = true;
-                break;
-            case KeyCode.DOWN:
-                this._onMoveFocus(false);
-                handled = true;
-                break;
-        }
-
-        if (handled) {
-            ev.stopPropagation();
-            ev.preventDefault();
-        }
-    },
-
-    _onMoveFocus: function(up) {
-        var element = this.focusedElement;
-
-        // unclear why this isn't needed...
-        // var descending = (up == this.focusDirection) ? this.focusDescending : !this.focusDescending;
-        // this.focusDirection = up;
-
-        var descending = false;
-        var classes;
-
-        do {
-            var child = up ? element.lastElementChild : element.firstElementChild;
-            var sibling = up ? element.previousElementSibling : element.nextElementSibling;
-
-            if (descending) {
-                if (child) {
-                    element = child;
-                }
-                else if (sibling) {
-                    element = sibling;
-                }
-                else {
-                    descending = false;
-                    element = element.parentElement;
-                }
-            }
-            else {
-                if (sibling) {
-                    element = sibling;
-                    descending = true;
-                }
-                else {
-                    element = element.parentElement;
-                }
-            }
-
-            if (element) {
-                classes = element.classList;
-                if (classes.contains("mx_LeftPanel")) { // we hit the top
-                    element = up ? element.lastElementChild : element.firstElementChild;
-                    descending = true;
-                }
-            }
-
-        } while(element && !(
-            classes.contains("mx_RoomTile") ||
-            classes.contains("mx_SearchBox_search") ||
-            classes.contains("mx_RoomSubList_ellipsis")));
-
-        if (element) {
-            element.focus();
-            this.focusedElement = element;
-            this.focusedDescending = descending;
-        }
     },
 
     onSubListHeaderClick: function(isHidden, scrollToPosition) {
