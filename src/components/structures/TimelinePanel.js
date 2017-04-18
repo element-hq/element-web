@@ -122,7 +122,7 @@ var TimelinePanel = React.createClass({
         if (this.props.manageReadMarkers) {
             const readmarker = this.props.timelineSet.room.getAccountData('m.fully_read');
             if (readmarker){
-                initialReadMarker = readmarker.getContent().marker;
+                initialReadMarker = readmarker.getContent().event_id;
             } else {
                 initialReadMarker = this._getCurrentReadReceipt();
             }
@@ -478,7 +478,7 @@ var TimelinePanel = React.createClass({
 
         if (ev.getType() !== "m.fully_read") return;
 
-        const markerEventId = ev.getContent().marker;
+        const markerEventId = ev.getContent().event_id;
         console.log('TimelinePanel: Read marker received from server', markerEventId);
 
         this.setState({
@@ -1045,7 +1045,6 @@ var TimelinePanel = React.createClass({
         // events when viewing historical messages, we get stuck in a loop
         // of paginating our way through the entire history of the room.
         var stickyBottom = !this._timelineWindow.canPaginate(EventTimeline.FORWARDS);
-
         return (
             <MessagePanel ref="messagePanel"
                     hidden={ this.props.hidden }
