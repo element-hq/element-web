@@ -57,7 +57,7 @@ module.exports = React.createClass({
         cli.on("Room.name", this.onRoomName);
         cli.on("Room.tags", this.onRoomTags);
         cli.on("Room.receipt", this.onRoomReceipt);
-        // cli.on("RoomState.events", this.onRoomStateEvents);
+        cli.on("RoomState.members", this.onRoomStateMember);
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("accountData", this.onAccountData);
 
@@ -149,7 +149,7 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
             MatrixClientPeg.get().removeListener("Room.tags", this.onRoomTags);
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
-            // MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
+            MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
         }
@@ -253,9 +253,11 @@ module.exports = React.createClass({
         this._delayedRefreshRoomList();
     },
 
-    // onRoomStateEvents: function(ev, state) {
-    //     this._delayedRefreshRoomList();
-    // },
+    onRoomStateMember: function(ev, state, member) {
+        constantTimeDispatcher.dispatch(
+            "RoomTile.refresh", member.roomId, {}
+        );
+    },
 
     onRoomMemberName: function(ev, member) {
         constantTimeDispatcher.dispatch(
