@@ -101,6 +101,10 @@ module.exports = React.createClass({
         }
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        this.onRefresh();
+    },
+
     onRefresh: function(params) {
         this.setState({
             unread: Unread.doesRoomHaveUnreadMessages(this.props.room),
