@@ -478,11 +478,8 @@ var TimelinePanel = React.createClass({
 
         if (ev.getType() !== "m.fully_read") return;
 
-        const markerEventId = ev.getContent().event_id;
-        console.log('TimelinePanel: Read marker received from server', markerEventId);
-
         this.setState({
-            readMarkerEventId: markerEventId,
+            readMarkerEventId: ev.getContent().event_id,
         }, this.props.onReadMarkerUpdated);
     },
 
