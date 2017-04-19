@@ -174,6 +174,7 @@ var TimelinePanel = React.createClass({
         debuglog("TimelinePanel: mounting");
 
         this.last_rr_sent_event_id = undefined;
+        this.last_rm_sent_event_id = undefined;
 
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
