@@ -126,7 +126,6 @@ var TimelinePanel = React.createClass({
             } else {
                 initialReadMarker = this._getCurrentReadReceipt();
             }
-            console.info('Read marker initially', initialReadMarker);
         }
 
         return {
