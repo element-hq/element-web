@@ -531,7 +531,7 @@ var TimelinePanel = React.createClass({
             this.last_rr_sent_event_id = lastReadEvent.getId();
             this.last_rm_sent_event_id = this.state.readMarkerEventId;
 
-            MatrixClientPeg.get().setRoomReadMarker(
+            MatrixClientPeg.get().setRoomReadMarkers(
                 this.props.timelineSet.room.roomId,
                 this.state.readMarkerEventId,
                 lastReadEvent
