@@ -108,6 +108,7 @@ module.exports = React.createClass({
                 if (ctrlCmdOnly) {
                     if (this.refs.search) {
                         this.refs.search.focus();
+                        this.refs.search.select();
                     }
                     handled = true;
                 }
