@@ -75,6 +75,12 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         // Initialise the stickyHeaders when the component is created
         this._updateStickyHeaders(true);
+
+        if (this.props.selectedRoom) {
+            constantTimeDispatcher.dispatch(
+                "RoomTile.select", this.props.selectedRoom, { selected: true }
+            );            
+        }
     },
 
     componentWillReceiveProps: function(nextProps) {
@@ -155,8 +161,6 @@ module.exports = React.createClass({
         }
         // cancel any pending calls to the rate_limited_funcs
         this._delayedRefreshRoomList.cancelPendingCall();
-        document.removeEventListener('keydown', this._onKeyDown);
-
     },
 
     onRoom: function(room) {
