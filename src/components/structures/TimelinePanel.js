@@ -249,6 +249,7 @@ var TimelinePanel = React.createClass({
             client.removeListener("Room.redaction", this.onRoomRedaction);
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
+            client.removeListener("Room.accountData", this.onAccountData);
         }
     },
 
