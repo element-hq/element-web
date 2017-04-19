@@ -478,6 +478,9 @@ var TimelinePanel = React.createClass({
 
         if (ev.getType() !== "m.fully_read") return;
 
+        // XXX: roomReadMarkerTsMap not updated here so it is now inconsistent. Replace
+        // this mechanism of determining where the RM is relative to the view-port with
+        // one supported by the server (the client needs more than an event ID).
         this.setState({
             readMarkerEventId: ev.getContent().event_id,
         }, this.props.onReadMarkerUpdated);
