@@ -541,7 +541,6 @@ var TimelinePanel = React.createClass({
                 this.last_rr_sent_event_id = undefined;
                 this.last_rm_sent_event_id = undefined;
             });
-            console.log('TimelinePanel: Read marker sent to the server ', this.state.readMarkerEventId, );
 
             // do a quick-reset of our unreadNotificationCount to avoid having
             // to wait from the remote echo from the homeserver.
@@ -986,6 +985,8 @@ var TimelinePanel = React.createClass({
     _setReadMarker: function(eventId, eventTs, inhibitSetState) {
         var roomId = this.props.timelineSet.room.roomId;
 
+        // don't update the state (and cause a re-render) if there is
+        // no change to the RM.
         if (eventId === this.state.readMarkerEventId) {
             return;
         }
