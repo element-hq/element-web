@@ -67,7 +67,7 @@
     "react": "^15.4.0",
     "react-addons-css-transition-group": "15.3.2",
     "react-dom": "^15.4.0",
-    "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
+    "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#39d858c",
     "sanitize-html": "^1.11.1",
     "text-encoding-utf-8": "^1.0.1",
     "velocity-vector": "vector-im/velocity#059e3b2",
