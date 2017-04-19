@@ -249,7 +249,7 @@ export default class Dropdown extends React.Component {
             );
         });
 
-        if (!this.state.searchQuery) {
+        if (!this.state.searchQuery && this.props.searchEnabled) {
             options.push(
                 <div key="_searchprompt" className="mx_Dropdown_searchPrompt">
                     Type to search...
@@ -267,16 +267,20 @@ export default class Dropdown extends React.Component {
 
         let menu;
         if (this.state.expanded) {
-            currentValue = <input type="text" className="mx_Dropdown_option"
-                ref={this._collectInputTextBox} onKeyPress={this._onInputKeyPress}
-                onKeyUp={this._onInputKeyUp}
-                onChange={this._onInputChange}
-                value={this.state.searchQuery}
-            />;
+            if (this.props.searchEnabled) {
+                currentValue = <input type="text" className="mx_Dropdown_option"
+                    ref={this._collectInputTextBox} onKeyPress={this._onInputKeyPress}
+                    onKeyUp={this._onInputKeyUp}
+                    onChange={this._onInputChange}
+                    value={this.state.searchQuery}
+                />;
+            }
             menu = <div className="mx_Dropdown_menu" style={menuStyle}>
                 {this._getMenuOptions()}
             </div>;
-        } else {
+        }
+
+        if (!currentValue) {
             const selectedChild = this.props.getShortOption ?
                 this.props.getShortOption(this.props.value) :
                 this.childrenByKey[this.props.value];
@@ -313,6 +317,7 @@ Dropdown.propTypes = {
     onOptionChange: React.PropTypes.func.isRequired,
     // Called when the value of the search field changes
     onSearchChange: React.PropTypes.func,
+    searchEnabled: React.PropTypes.boolean,
     // Function that, given the key of an option, returns
     // a node representing that option to be displayed in the
     // box itself as the currently-selected option (ie. as

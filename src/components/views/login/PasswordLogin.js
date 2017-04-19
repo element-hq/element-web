@@ -60,6 +60,7 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
             password: this.props.initialPassword,
             phoneCountry: this.props.initialPhoneCountry,
             phoneNumber: this.props.initialPhoneNumber,
+            loginType: "mxid",
         };
     },
 
@@ -86,6 +87,10 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
     onUsernameChanged: function(ev) {
         this.setState({username: ev.target.value});
         this.props.onUsernameChanged(ev.target.value);
+    },
+
+    onLoginTypeChange: function(loginType) {
+        this.setState({loginType: loginType});
     },
 
     onPhoneCountryChanged: function(country) {
@@ -120,28 +125,46 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
         });
 
         const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
-        return (
-            <div>
-                <form onSubmit={this.onSubmitForm}>
+        const Dropdown = sdk.getComponent('elements.Dropdown');
+
+        const loginType = {
+            'email':
                 <input className="mx_Login_field mx_Login_username" type="text"
                     name="username" // make it a little easier for browser's remember-password
                     value={this.state.username} onChange={this.onUsernameChanged}
-                    placeholder="Email or user name" autoFocus />
-                or
-                <div className="mx_Login_phoneSection">
-                    <CountryDropdown ref="phone_country" onOptionChange={this.onPhoneCountryChanged}
-                        className="mx_Login_phoneCountry"
-                        value={this.state.phoneCountry}
-                    />
-                    <input type="text" ref="phoneNumber"
-                        onChange={this.onPhoneNumberChanged}
-                        placeholder="Mobile phone number"
-                        className="mx_Login_phoneNumberField mx_Login_field"
-                        value={this.state.phoneNumber}
-                        name="phoneNumber"
-                    />
+                    placeholder="Email or user name" autoFocus />,
+            'mxid':
+                <input className="mx_Login_field mx_Login_username" type="text"
+                    name="username" // make it a little easier for browser's remember-password
+                    value={this.state.username} onChange={this.onUsernameChanged}
+                    placeholder="Email or user name" autoFocus />,
+            'phone': <div className="mx_Login_phoneSection">
+                <CountryDropdown ref="phone_country" onOptionChange={this.onPhoneCountryChanged}
+                    className="mx_Login_phoneCountry"
+                    value={this.state.phoneCountry}
+                />
+                <input type="text" ref="phoneNumber"
+                    onChange={this.onPhoneNumberChanged}
+                    placeholder="Mobile phone number"
+                    className="mx_Login_phoneNumberField mx_Login_field"
+                    value={this.state.phoneNumber}
+                    name="phoneNumber"
+                />
+            </div>
+        }[this.state.loginType];
+
+        return (
+            <div>
+                <form onSubmit={this.onSubmitForm}>
+                <div className="mx_Login_type_container">
+                    <label className="mx_Login_type_label">I want to sign in with my</label>
+                    <Dropdown className="mx_Login_type_dropdown" value={this.state.loginType} onOptionChange={this.onLoginTypeChange}>
+                        <span key="mxid">Matrix ID</span>
+                        <span key="email">Email</span>
+                        <span key="phone">Phone</span>
+                    </Dropdown>
                 </div>
-                <br />
+                {loginType}
                 <input className={pwFieldClass} ref={(e) => {this._passwordField = e;}} type="password"
                     name="password"
                     value={this.state.password} onChange={this.onPasswordChanged}
