@@ -74,7 +74,11 @@ module.exports = React.createClass({
         this.setState(s);
 
         // order of the sublists
-        this.listOrder = [];
+        //this.listOrder = [];
+
+        // loop count to stop a stack overflow if the user keeps waggling the
+        // mouse for >30s in a row, or if running under mocha
+        this._delayedRefreshRoomListLoopCount = 0
     },
 
     componentDidMount: function() {
@@ -284,10 +288,12 @@ module.exports = React.createClass({
         // if the mouse has been moving over the RoomList in the last 500ms
         // then delay the refresh further to avoid bouncing around under the
         // cursor
-        if (Date.now() - this._lastMouseOverTs > 500) {
+        if (Date.now() - this._lastMouseOverTs > 500 || this._delayedRefreshRoomListLoopCount > 60) {
             this.refreshRoomList();
+            this._delayedRefreshRoomListLoopCount = 0;
         }
         else {
+            this._delayedRefreshRoomListLoopCount++;
             this._delayedRefreshRoomList();
         }
     }, 500),
