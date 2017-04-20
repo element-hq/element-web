@@ -536,9 +536,16 @@ var TimelinePanel = React.createClass({
                 this.props.timelineSet.room.roomId,
                 this.state.readMarkerEventId,
                 lastReadEvent
-            ).catch(() => {
+            ).catch((e) => {
+                // /read_markers API is not implemented on this HS, fallback to just RR
+                if (e.errcode === 'M_UNRECOGNIZED') {
+                    return MatrixClientPeg.get().sendReadReceipt(
+                        lastReadEvent
+                    ).catch(() => {
+                        this.last_rr_sent_event_id = undefined;
+                    });
+                }
                 // it failed, so allow retries next time the user is active
-                this.last_rr_sent_event_id = undefined;
                 this.last_rm_sent_event_id = undefined;
             });
 
