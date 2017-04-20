@@ -38,6 +38,7 @@ module.exports = React.createClass({
         connectDropTarget: React.PropTypes.func,
         onClick: React.PropTypes.func,
         isDragging: React.PropTypes.bool,
+        selectedRoom: React.PropTypes.string,
 
         room: React.PropTypes.object.isRequired,
         collapsed: React.PropTypes.bool.isRequired,
@@ -53,10 +54,11 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return({
-            hover : false,
-            badgeHover : false,
+            hover: false,
+            badgeHover: false,
             menuDisplayed: false,
             notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
+            selected: this.props.room ? (this.props.selectedRoom === this.props.room.roomId) : false,
         });
     },
 
@@ -78,28 +80,15 @@ module.exports = React.createClass({
         }
     },
 
-    onAccountData: function(accountDataEvent) {
-        if (accountDataEvent.getType() == 'm.push_rules') {
-            this.setState({
-                notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
-            });
-        }
-    },
-
     componentWillMount: function() {
         constantTimeDispatcher.register("RoomTile.refresh", this.props.room.roomId, this.onRefresh);
         constantTimeDispatcher.register("RoomTile.select", this.props.room.roomId, this.onSelect);
-        MatrixClientPeg.get().on("accountData", this.onAccountData);
-        this.onRefresh();        
+        this.onRefresh();
     },
 
     componentWillUnmount: function() {
         constantTimeDispatcher.unregister("RoomTile.refresh", this.props.room.roomId, this.onRefresh);
         constantTimeDispatcher.unregister("RoomTile.select", this.props.room.roomId, this.onSelect);
-        var cli = MatrixClientPeg.get();
-        if (cli) {
-            MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
-        }
     },
 
     componentWillReceiveProps: function(nextProps) {

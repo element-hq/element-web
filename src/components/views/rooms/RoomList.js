@@ -41,6 +41,12 @@ module.exports = React.createClass({
         searchFilter: React.PropTypes.string,
     },
 
+    shouldComponentUpdate: function(nextProps, nextState) {
+        if (nextProps.collapsed !== this.props.collapsed) return true;
+        if (nextProps.searchFilter !== this.props.searchFilter) return true;
+        return false;
+    },
+
     getInitialState: function() {
         return {
             isLoadingLeftRooms: false,
@@ -75,12 +81,6 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         // Initialise the stickyHeaders when the component is created
         this._updateStickyHeaders(true);
-
-        if (this.props.selectedRoom) {
-            constantTimeDispatcher.dispatch(
-                "RoomTile.select", this.props.selectedRoom, { selected: true }
-            );            
-        }
     },
 
     componentWillReceiveProps: function(nextProps) {
@@ -98,7 +98,7 @@ module.exports = React.createClass({
         }
     },
 
-    componentDidUpdate: function() {
+    componentDidUpdate: function(prevProps, prevState) {
         // Reinitialise the stickyHeaders when the component is updated
         this._updateStickyHeaders(true);
         this._repositionIncomingCallBox(undefined, false);
@@ -265,7 +265,7 @@ module.exports = React.createClass({
 
     onRoomMemberName: function(ev, member) {
         constantTimeDispatcher.dispatch(
-            "RoomTile.refresh", member.room.roomId, {}
+            "RoomTile.refresh", member.roomId, {}
         );
     },
 
@@ -274,6 +274,9 @@ module.exports = React.createClass({
             // XXX: this happens rarely; ideally we should only update the correct
             // sublists when it does (e.g. via a constantTimeDispatch to the right sublist)
             this._delayedRefreshRoomList();
+        }
+        else if (ev.getType() == 'm.push_rules') {
+            this._delayedRefreshRoomList();            
         }
     },
 
@@ -595,6 +598,7 @@ module.exports = React.createClass({
                              order="recent"
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
+                             selectedRoom={ self.props.selectedRoom }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
@@ -607,6 +611,7 @@ module.exports = React.createClass({
                              order="manual"
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
+                             selectedRoom={ self.props.selectedRoom }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
@@ -619,6 +624,7 @@ module.exports = React.createClass({
                              order="recent"
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
+                             selectedRoom={ self.props.selectedRoom }
                              alwaysShowHeader={ true }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
@@ -631,6 +637,7 @@ module.exports = React.createClass({
                              order="recent"
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
+                             selectedRoom={ self.props.selectedRoom }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
@@ -646,6 +653,7 @@ module.exports = React.createClass({
                              order="manual"
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
+                             selectedRoom={ self.props.selectedRoom }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />;
@@ -661,6 +669,7 @@ module.exports = React.createClass({
                              order="recent"
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
+                             selectedRoom={ self.props.selectedRoom }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
@@ -670,6 +679,7 @@ module.exports = React.createClass({
                              editable={ false }
                              order="recent"
                              collapsed={ self.props.collapsed }
+                             selectedRoom={ self.props.selectedRoom }
                              alwaysShowHeader={ true }
                              startAsHidden={ true }
                              showSpinner={ self.state.isLoadingLeftRooms }
