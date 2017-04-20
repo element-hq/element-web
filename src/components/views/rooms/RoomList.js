@@ -600,6 +600,7 @@ module.exports = React.createClass({
             <div className="mx_RoomList" onMouseOver={ this._onMouseOver }>
                 <RoomSubList list={ self.state.lists['im.vector.fake.invite'] }
                              label="Invites"
+                             tagName="im.vector.fake.invite"
                              editable={ false }
                              order="recent"
                              incomingCall={ self.state.incomingCall }
@@ -638,6 +639,7 @@ module.exports = React.createClass({
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.recent'] }
                              label="Rooms"
+                             tagName="im.vector.fake.recent"
                              editable={ true }
                              verb="restore"
                              order="recent"
@@ -682,6 +684,7 @@ module.exports = React.createClass({
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.archived'] }
                              label="Historical"
+                             tagName="im.vector.fake.archived"
                              editable={ false }
                              order="recent"
                              collapsed={ self.props.collapsed }
