@@ -59,7 +59,9 @@ module.exports = React.createClass({
             ContentRepo.getHttpUriForMxc(
                 MatrixClientPeg.get().getHomeserverUrl(),
                 props.oobData.avatarUrl,
-                props.width, props.height, props.resizeMethod
+                window.devicePixelRatio > 1.2 ? 96 : props.width,
+                window.devicePixelRatio > 1.2 ? 96 : props.height,
+                props.resizeMethod
             ), // highest priority
             this.getRoomAvatarUrl(props),
             this.getOneToOneAvatar(props),
@@ -74,7 +76,9 @@ module.exports = React.createClass({
 
         return props.room.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
-            props.width, props.height, props.resizeMethod,
+            window.devicePixelRatio > 1.2 ? 96 : props.width,
+            window.devicePixelRatio > 1.2 ? 96 : props.height,
+            props.resizeMethod,
             false
         );
     },
@@ -103,14 +107,18 @@ module.exports = React.createClass({
             }
             return theOtherGuy.getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
-                props.width, props.height, props.resizeMethod,
+                window.devicePixelRatio > 1.2 ? 96 : props.width,
+                window.devicePixelRatio > 1.2 ? 96 : props.height,
+                props.resizeMethod,
                 false
             );
         } else if (userIds.length == 1) {
             return mlist[userIds[0]].getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
-                props.width, props.height, props.resizeMethod,
-                    false
+                window.devicePixelRatio > 1.2 ? 96 : props.width,
+                window.devicePixelRatio > 1.2 ? 96 : props.height,
+                props.resizeMethod,
+                false
             );
         } else {
            return null;
