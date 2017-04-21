@@ -263,6 +263,11 @@ async function loadApp() {
         configError = e;
     }
 
+    if (window.localStorage && window.localStorage.getItem('accepts_unsupported_browser')) {
+        console.log('User has previously accepted risks in using an unsupported browser');
+        validBrowser = true;
+    }
+
     console.log("Vector starting at "+window.location);
     if (configError) {
         window.matrixChat = ReactDOM.render(<div className="error">
@@ -294,6 +299,7 @@ async function loadApp() {
         var CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
         window.matrixChat = ReactDOM.render(
             <CompatibilityPage onAccept={function() {
+                if (window.localStorage) window.localStorage.setItem('accepts_unsupported_browser', true);
                 validBrowser = true;
                 console.log("User accepts the compatibility risks.");
                 loadApp();
