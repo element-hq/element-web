@@ -55,9 +55,13 @@ module.exports = React.createClass({
 
     componentWillUnmount: function() {
         this._unmounted = true;
-        dis.dispatch({
-            action: 'show_right_panel',
-        });
+
+        if (!this.props.collapsedRhs) {
+            dis.dispatch({
+                action: 'show_right_panel',
+            });
+        }
+
         dis.dispatch({
             action: 'ui_opacity',
             sideOpacity: 1.0,
