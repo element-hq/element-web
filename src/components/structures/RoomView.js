@@ -1254,6 +1254,7 @@ module.exports = React.createClass({
     // jump down to the bottom of this room, where new events are arriving
     jumpToLiveTimeline: function() {
         this.refs.messagePanel.jumpToLiveTimeline();
+        dis.dispatch({action: 'focus_composer'});
     },
 
     // jump up to wherever our read marker is
