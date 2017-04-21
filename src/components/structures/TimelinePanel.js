@@ -546,6 +546,7 @@ var TimelinePanel = React.createClass({
                     });
                 }
                 // it failed, so allow retries next time the user is active
+                this.last_rr_sent_event_id = undefined;
                 this.last_rm_sent_event_id = undefined;
             });
 
