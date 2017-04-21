@@ -81,7 +81,6 @@ module.exports = React.createClass({
         switch (ev.keyCode) {
             case KeyCode.ESCAPE:
                 this.props.onCancelClick();
-                dis.dispatch({action: 'focus_composer'});
                 break;
         }
     },
