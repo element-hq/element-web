@@ -355,6 +355,7 @@ export default class MessageComposerInput extends React.Component {
     }
 
     sendTyping(isTyping) {
+        if (UserSettingsStore.getSyncedSetting('dontSendTypingNotifications', false)) return;
         MatrixClientPeg.get().sendTyping(
             this.props.room.roomId,
             this.isTyping, TYPING_SERVER_TIMEOUT

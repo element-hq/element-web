@@ -44,6 +44,10 @@ const SETTINGS_LABELS = [
         id: 'autoplayGifsAndVideos',
         label: 'Autoplay GIFs and videos',
     },
+    {
+        id: 'dontSendTypingNotifications',
+        label: "Don't send typing notifications",
+    },
 /*
     {
         id: 'alwaysShowTimestamps',
