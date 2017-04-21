@@ -27,8 +27,7 @@ module.exports = React.createClass({
     displayName: 'ServerConfig',
 
     propTypes: {
-        onHsUrlChanged: React.PropTypes.func,
-        onIsUrlChanged: React.PropTypes.func,
+        onServerConfigChange: React.PropTypes.func,
 
         // default URLs are defined in config.json (or the hardcoded defaults)
         // they are used if the user has not overridden them with a custom URL.
@@ -50,8 +49,7 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            onHsUrlChanged: function() {},
-            onIsUrlChanged: function() {},
+            onServerConfigChange: function() {},
             customHsUrl: "",
             customIsUrl: "",
             withToggleButton: false,
@@ -75,7 +73,10 @@ module.exports = React.createClass({
             this._hsTimeoutId = this._waitThenInvoke(this._hsTimeoutId, function() {
                 var hsUrl = this.state.hs_url.trim().replace(/\/$/, "");
                 if (hsUrl === "") hsUrl = this.props.defaultHsUrl;
-                this.props.onHsUrlChanged(hsUrl);
+                this.props.onServerConfigChange({
+                    hsUrl : this.state.hs_url,
+                    isUrl : this.state.is_url,
+                });
             });
         });
     },
@@ -85,7 +86,10 @@ module.exports = React.createClass({
             this._isTimeoutId = this._waitThenInvoke(this._isTimeoutId, function() {
                 var isUrl = this.state.is_url.trim().replace(/\/$/, "");
                 if (isUrl === "") isUrl = this.props.defaultIsUrl;
-                this.props.onIsUrlChanged(isUrl);
+                this.props.onServerConfigChange({
+                    hsUrl : this.state.hs_url,
+                    isUrl : this.state.is_url,
+                });
             });
         });
     },
@@ -102,12 +106,16 @@ module.exports = React.createClass({
             configVisible: visible
         });
         if (!visible) {
-            this.props.onHsUrlChanged(this.props.defaultHsUrl);
-            this.props.onIsUrlChanged(this.props.defaultIsUrl);
+            this.props.onServerConfigChange({
+                hsUrl : this.props.defaultHsUrl,
+                isUrl : this.props.defaultIsUrl,
+            });
         }
         else {
-            this.props.onHsUrlChanged(this.state.hs_url);
-            this.props.onIsUrlChanged(this.state.is_url);
+            this.props.onServerConfigChange({
+                hsUrl : this.state.hs_url,
+                isUrl : this.state.is_url,
+            });
         }
     },
 
