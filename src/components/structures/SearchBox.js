@@ -100,6 +100,10 @@ module.exports = React.createClass({
         }
 
         switch (ev.keyCode) {
+            case KeyCode.ESCAPE:
+                this._clearSearch();
+                dis.dispatch({action: 'focus_composer'});
+                break;
             case KeyCode.KEY_K:
                 if (ctrlCmdOnly) {
                     if (this.refs.search) {
