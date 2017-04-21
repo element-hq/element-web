@@ -9,3 +9,5 @@ npm-debug.log
 
 # test reports created by karma
 /karma-reports
+
+/.idea
