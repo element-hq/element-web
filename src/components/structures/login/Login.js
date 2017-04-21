@@ -230,6 +230,12 @@ module.exports = React.createClass({
         switch (step) {
             case 'm.login.password':
                 const PasswordLogin = sdk.getComponent('login.PasswordLogin');
+                // HSs that are not matrix.org may not be configured to have their
+                // domain name === domain part.
+                let hsDomain = url.parse(this.state.enteredHomeserverUrl).hostname;
+                if (hsDomain !== 'matrix.org') {
+                    hsDomain = null;
+                }
                 return (
                     <PasswordLogin
                         onSubmit={this.onPasswordLogin}
@@ -241,7 +247,7 @@ module.exports = React.createClass({
                         onPhoneNumberChanged={this.onPhoneNumberChanged}
                         onForgotPasswordClick={this.props.onForgotPasswordClick}
                         loginIncorrect={this.state.loginIncorrect}
-                        hsDomain={url.parse(this.state.enteredHomeserverUrl).hostname}
+                        hsDomain={hsDomain}
                     />
                 );
             case 'm.login.cas':

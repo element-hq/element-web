@@ -118,10 +118,21 @@ class PasswordLogin extends React.Component {
                     autoFocus
                 />;
             case PasswordLogin.LOGIN_FIELD_MXID:
+                const mxidInputClasses = classNames({
+                    "mx_Login_field": true,
+                    "mx_Login_username": true,
+                    "mx_Login_field_has_suffix": Boolean(this.props.hsDomain),
+                });
+                let suffix = null;
+                if (this.props.hsDomain) {
+                    suffix = <div className="mx_Login_username_suffix">
+                        :{this.props.hsDomain}
+                    </div>;
+                }
                 return <div className="mx_Login_username_group">
                     <div className="mx_Login_username_prefix">@</div>
                     <input
-                        className="mx_Login_field mx_Login_username"
+                        className={mxidInputClasses}
                         key="username_input"
                         type="text"
                         name="username" // make it a little easier for browser's remember-password
@@ -130,7 +141,7 @@ class PasswordLogin extends React.Component {
                         value={this.state.username}
                         autoFocus
                     />
-                    <div className="mx_Login_username_suffix">:{this.props.hsDomain}</div>
+                    {suffix}
                 </div>;
             case PasswordLogin.LOGIN_FIELD_PHONE:
                 const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
