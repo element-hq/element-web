@@ -1,7 +1,7 @@
-var path = require('path');
-var webpack = require('webpack');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -19,11 +19,11 @@ module.exports = {
 
         // CSS themes
         "theme-light": "./src/skins/vector/css/themes/light.scss",
-        "theme-dark": "./src/skins/vector/css/themes/dark.scss"
+        "theme-dark": "./src/skins/vector/css/themes/dark.scss",
     },
     module: {
         preLoaders: [
-            { test: /\.js$/, loader: "source-map-loader" }
+            { test: /\.js$/, loader: "source-map-loader" },
         ],
         loaders: [
             { test: /\.json$/, loader: "json" },
@@ -39,7 +39,7 @@ module.exports = {
                 //    as webpack inputs.)
                 // 3. ExtractTextPlugin turns that string into a separate asset.
                 loader: ExtractTextPlugin.extract(
-                    "css-raw-loader!postcss-loader?config=postcss.config.js"
+                    "css-raw-loader!postcss-loader?config=postcss.config.js",
                 ),
             },
             {
@@ -54,10 +54,12 @@ module.exports = {
             // there is no need for webpack to parse them - they can just be
             // included as-is.
             /highlight\.js\/lib\/languages/,
+            /highlight\.js\\lib\\languages/,
 
             // olm takes ages for webpack to process, and it's already heavily
             // optimised, so there is little to gain by us uglifying it.
             /olm\/(javascript\/)?olm\.js$/,
+            /olm\\(javascript\\)?olm\.js$/,
         ],
     },
     output: {
@@ -83,7 +85,7 @@ module.exports = {
             // various levels of '.' and '..'
             // Also, sometimes the resource path is absolute.
             return path.relative(process.cwd(), info.resourcePath).replace(/^[\/\.]*/, '');
-        }
+        },
     },
     resolve: {
         alias: {
@@ -106,15 +108,15 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-            }
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+            },
         }),
 
         new ExtractTextPlugin(
             "bundles/[hash]/[name].css",
             {
-                allChunks: true
-            }
+                allChunks: true,
+            },
         ),
 
         new HtmlWebpackPlugin({
