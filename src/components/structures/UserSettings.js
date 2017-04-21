@@ -31,10 +31,14 @@ var SdkConfig = require('../../SdkConfig');
 import AccessibleButton from '../views/elements/AccessibleButton';
 
 // if this looks like a release, use the 'version' from package.json; else use
-// the git sha.
-const REACT_SDK_VERSION =
-      'dist' in package_json ? package_json.version : package_json.gitHead || "<local>";
+// the git sha. Prepend version with v, to look like riot-web version
+const REACT_SDK_VERSION = 'dist' in package_json ? `v${package_json.version}` : package_json.gitHead || '<local>';
 
+// Simple method to help prettify GH Release Tags and Commit Hashes.
+const GHVersionUrl = function(repo, token) {
+    const uriTail = (token.startsWith('v') && token.includes('.')) ? `releases/tag/${token}` : `commit/${token}`;
+    return `https://github.com/${repo}/${uriTail}`;
+}
 
 // Enumerate some simple 'flip a bit' UI settings (if any).
 // 'id' gives the key name in the im.vector.web.settings account data event
@@ -880,12 +884,12 @@ module.exports = React.createClass({
             </div>);
         }
 
-        var olmVersion = MatrixClientPeg.get().olmVersion;
+        const olmVersion = MatrixClientPeg.get().olmVersion;
         // If the olmVersion is not defined then either crypto is disabled, or
         // we are using a version old version of olm. We assume the former.
-        var olmVersionString = "<not-enabled>";
+        let olmVersionString = "<not-enabled>";
         if (olmVersion !== undefined) {
-            olmVersionString = olmVersion[0] + "." + olmVersion[1] + "." + olmVersion[2];
+            olmVersionString = `v${olmVersion[0]}.${olmVersion[1]}.${olmVersion[2]}`;
         }
 
         return (
@@ -965,8 +969,14 @@ module.exports = React.createClass({
                         Identity Server is { MatrixClientPeg.get().getIdentityServerUrl() }
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        matrix-react-sdk version: {REACT_SDK_VERSION}<br/>
-                        riot-web version: {this.state.vectorVersion !== null ? this.state.vectorVersion : 'unknown'}<br/>
+                        matrix-react-sdk version: {(REACT_SDK_VERSION !== '<local>')
+                            ? <a href={ GHVersionUrl('matrix-org/matrix-react-sdk', REACT_SDK_VERSION) }>{REACT_SDK_VERSION}</a>
+                            : REACT_SDK_VERSION
+                        }<br/>
+                        riot-web version: {(this.state.vectorVersion !== null)
+                            ? <a href={ GHVersionUrl('vector-im/riot-web', this.state.vectorVersion.split('-')[0]) }>{this.state.vectorVersion}</a>
+                            : 'unknown'
+                        }<br/>
                         olm version: {olmVersionString}<br/>
                     </div>
                 </div>
