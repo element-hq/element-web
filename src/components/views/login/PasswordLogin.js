@@ -25,56 +25,49 @@ import {field_input_incorrect} from '../../../UiEffects';
 /**
  * A pure UI component which displays a username/password form.
  */
-module.exports = React.createClass({displayName: 'PasswordLogin',
-    propTypes: {
-        onSubmit: React.PropTypes.func.isRequired, // fn(username, password)
-        onForgotPasswordClick: React.PropTypes.func, // fn()
-        initialUsername: React.PropTypes.string,
-        initialPhoneCountry: React.PropTypes.string,
-        initialPhoneNumber: React.PropTypes.string,
-        initialPassword: React.PropTypes.string,
-        onUsernameChanged: React.PropTypes.func,
-        onPhoneCountryChanged: React.PropTypes.func,
-        onPhoneNumberChanged: React.PropTypes.func,
-        onPasswordChanged: React.PropTypes.func,
-        loginIncorrect: React.PropTypes.bool,
-    },
+class PasswordLogin extends React.Component {
+    static defaultProps = {
+        onUsernameChanged: function() {},
+        onPasswordChanged: function() {},
+        onPhoneCountryChanged: function() {},
+        onPhoneNumberChanged: function() {},
+        initialUsername: "",
+        initialPhoneCountry: "",
+        initialPhoneNumber: "",
+        initialPassword: "",
+        loginIncorrect: false,
+        hsDomain: "",
+    }
 
-    getDefaultProps: function() {
-        return {
-            onUsernameChanged: function() {},
-            onPasswordChanged: function() {},
-            onPhoneCountryChanged: function() {},
-            onPhoneNumberChanged: function() {},
-            initialUsername: "",
-            initialPhoneCountry: "",
-            initialPhoneNumber: "",
-            initialPassword: "",
-            loginIncorrect: false,
-        };
-    },
-
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+        this.state = {
             username: this.props.initialUsername,
             password: this.props.initialPassword,
             phoneCountry: this.props.initialPhoneCountry,
             phoneNumber: this.props.initialPhoneNumber,
-            loginType: "mxid",
+            loginType: PasswordLogin.LOGIN_FIELD_MXID,
         };
-    },
 
-    componentWillMount: function() {
+        this.onSubmitForm = this.onSubmitForm.bind(this);
+        this.onUsernameChanged = this.onUsernameChanged.bind(this);
+        this.onLoginTypeChange = this.onLoginTypeChange.bind(this);
+        this.onPhoneCountryChanged = this.onPhoneCountryChanged.bind(this);
+        this.onPhoneNumberChanged = this.onPhoneNumberChanged.bind(this);
+        this.onPasswordChanged = this.onPasswordChanged.bind(this);
+    }
+
+    componentWillMount() {
         this._passwordField = null;
-    },
+    }
 
-    componentWillReceiveProps: function(nextProps) {
+    componentWillReceiveProps(nextProps) {
         if (!this.props.loginIncorrect && nextProps.loginIncorrect) {
             field_input_incorrect(this._passwordField);
         }
-    },
+    }
 
-    onSubmitForm: function(ev) {
+    onSubmitForm(ev) {
         ev.preventDefault();
         this.props.onSubmit(
             this.state.username,
@@ -82,33 +75,87 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
             this.state.phoneNumber,
             this.state.password,
         );
-    },
+    }
 
-    onUsernameChanged: function(ev) {
+    onUsernameChanged(ev) {
         this.setState({username: ev.target.value});
         this.props.onUsernameChanged(ev.target.value);
-    },
+    }
 
-    onLoginTypeChange: function(loginType) {
-        this.setState({loginType: loginType});
-    },
+    onLoginTypeChange(loginType) {
+        this.setState({
+            loginType: loginType,
+            username: "" // Reset because email and username use the same state
+        });
+    }
 
-    onPhoneCountryChanged: function(country) {
+    onPhoneCountryChanged(country) {
         this.setState({phoneCountry: country});
         this.props.onPhoneCountryChanged(country);
-    },
+    }
 
-    onPhoneNumberChanged: function(ev) {
+    onPhoneNumberChanged(ev) {
         this.setState({phoneNumber: ev.target.value});
         this.props.onPhoneNumberChanged(ev.target.value);
-    },
+    }
 
-    onPasswordChanged: function(ev) {
+    onPasswordChanged(ev) {
         this.setState({password: ev.target.value});
         this.props.onPasswordChanged(ev.target.value);
-    },
+    }
 
-    render: function() {
+    renderLoginField(loginType) {
+        switch(loginType) {
+            case PasswordLogin.LOGIN_FIELD_EMAIL:
+                return <input
+                    className="mx_Login_field mx_Login_email"
+                    key="email_input"
+                    type="text"
+                    name="username" // make it a little easier for browser's remember-password
+                    onChange={this.onUsernameChanged}
+                    placeholder="joe@example.com"
+                    value={this.state.username}
+                    autoFocus
+                />;
+            case PasswordLogin.LOGIN_FIELD_MXID:
+                return <div className="mx_Login_username_group">
+                    <div className="mx_Login_username_prefix">@</div>
+                    <input
+                        className="mx_Login_field mx_Login_username"
+                        key="username_input"
+                        type="text"
+                        name="username" // make it a little easier for browser's remember-password
+                        onChange={this.onUsernameChanged}
+                        placeholder="username"
+                        value={this.state.username}
+                        autoFocus
+                    />
+                    <div className="mx_Login_username_suffix">:{this.props.hsDomain}</div>
+                </div>;
+            case PasswordLogin.LOGIN_FIELD_PHONE:
+                const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
+                return <div className="mx_Login_phoneSection">
+                    <CountryDropdown
+                        className="mx_Login_phoneCountry"
+                        ref="phone_country"
+                        onOptionChange={this.onPhoneCountryChanged}
+                        value={this.state.phoneCountry}
+                    />
+                    <input
+                        className="mx_Login_phoneNumberField mx_Login_field"
+                        ref="phoneNumber"
+                        key="phone_input"
+                        type="text"
+                        name="phoneNumber"
+                        onChange={this.onPhoneNumberChanged}
+                        placeholder="Mobile phone number"
+                        value={this.state.phoneNumber}
+                    />
+                </div>;
+        }
+    }
+
+    render() {
         var forgotPasswordJsx;
 
         if (this.props.onForgotPasswordClick) {
@@ -124,47 +171,25 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
             error: this.props.loginIncorrect,
         });
 
-        const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
         const Dropdown = sdk.getComponent('elements.Dropdown');
 
-        const loginType = {
-            'email':
-                <input className="mx_Login_field mx_Login_username" type="text"
-                    name="username" // make it a little easier for browser's remember-password
-                    value={this.state.username} onChange={this.onUsernameChanged}
-                    placeholder="Email or user name" autoFocus />,
-            'mxid':
-                <input className="mx_Login_field mx_Login_username" type="text"
-                    name="username" // make it a little easier for browser's remember-password
-                    value={this.state.username} onChange={this.onUsernameChanged}
-                    placeholder="Email or user name" autoFocus />,
-            'phone': <div className="mx_Login_phoneSection">
-                <CountryDropdown ref="phone_country" onOptionChange={this.onPhoneCountryChanged}
-                    className="mx_Login_phoneCountry"
-                    value={this.state.phoneCountry}
-                />
-                <input type="text" ref="phoneNumber"
-                    onChange={this.onPhoneNumberChanged}
-                    placeholder="Mobile phone number"
-                    className="mx_Login_phoneNumberField mx_Login_field"
-                    value={this.state.phoneNumber}
-                    name="phoneNumber"
-                />
-            </div>
-        }[this.state.loginType];
+        const loginField = this.renderLoginField(this.state.loginType);
 
         return (
             <div>
                 <form onSubmit={this.onSubmitForm}>
                 <div className="mx_Login_type_container">
                     <label className="mx_Login_type_label">I want to sign in with my</label>
-                    <Dropdown className="mx_Login_type_dropdown" value={this.state.loginType} onOptionChange={this.onLoginTypeChange}>
-                        <span key="mxid">Matrix ID</span>
-                        <span key="email">Email</span>
-                        <span key="phone">Phone</span>
+                    <Dropdown
+                        className="mx_Login_type_dropdown"
+                        value={this.state.loginType}
+                        onOptionChange={this.onLoginTypeChange}>
+                            <span key={PasswordLogin.LOGIN_FIELD_MXID}>Matrix ID</span>
+                            <span key={PasswordLogin.LOGIN_FIELD_EMAIL}>Email Address</span>
+                            <span key={PasswordLogin.LOGIN_FIELD_PHONE}>Phone</span>
                     </Dropdown>
                 </div>
-                {loginType}
+                {loginField}
                 <input className={pwFieldClass} ref={(e) => {this._passwordField = e;}} type="password"
                     name="password"
                     value={this.state.password} onChange={this.onPasswordChanged}
@@ -176,4 +201,25 @@ module.exports = React.createClass({displayName: 'PasswordLogin',
             </div>
         );
     }
-});
+}
+
+PasswordLogin.LOGIN_FIELD_EMAIL = "login_field_email";
+PasswordLogin.LOGIN_FIELD_MXID = "login_field_mxid";
+PasswordLogin.LOGIN_FIELD_PHONE = "login_field_phone";
+
+PasswordLogin.propTypes = {
+    onSubmit: React.PropTypes.func.isRequired, // fn(username, password)
+    onForgotPasswordClick: React.PropTypes.func, // fn()
+    initialUsername: React.PropTypes.string,
+    initialPhoneCountry: React.PropTypes.string,
+    initialPhoneNumber: React.PropTypes.string,
+    initialPassword: React.PropTypes.string,
+    onUsernameChanged: React.PropTypes.func,
+    onPhoneCountryChanged: React.PropTypes.func,
+    onPhoneNumberChanged: React.PropTypes.func,
+    onPasswordChanged: React.PropTypes.func,
+    loginIncorrect: React.PropTypes.bool,
+    hsDomain: React.PropTypes.string,
+};
+
+module.exports = PasswordLogin;

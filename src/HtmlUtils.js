@@ -25,6 +25,9 @@ import emojione from 'emojione';
 import classNames from 'classnames';
 
 emojione.imagePathSVG = 'emojione/svg/';
+// Store PNG path for displaying many flags at once (for increased performance over SVG)
+emojione.imagePathPNG = 'emojione/png/';
+// Use SVGs for emojis
 emojione.imageType = 'svg';
 
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
@@ -64,15 +67,22 @@ export function unicodeToImage(str) {
  * emoji.
  *
  * @param alt {string} String to use for the image alt text
+ * @param useSvg {boolean} Whether to use SVG image src. If False, PNG will be used.
  * @param unicode {integer} One or more integers representing unicode characters
  * @returns A img node with the corresponding emoji
  */
-export function charactersToImageNode(alt, ...unicode) {
+export function charactersToImageNode(alt, useSvg, ...unicode) {
     const fileName = unicode.map((u) => {
         return u.toString(16);
     }).join('-');
-    return <img alt={alt} src={`${emojione.imagePathSVG}${fileName}.svg${emojione.cacheBustParam}`}/>;
+    const path = useSvg ? emojione.imagePathSVG : emojione.imagePathPNG;
+    const fileType = useSvg ? 'svg' : 'png';
+    return <img
+        alt={alt}
+        src={`${path}${fileName}.${fileType}${emojione.cacheBustParam}`}
+    />;
 }
+
 
 export function stripParagraphs(html: string): string {
     const contentDiv = document.createElement('div');

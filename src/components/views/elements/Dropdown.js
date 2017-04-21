@@ -248,13 +248,10 @@ export default class Dropdown extends React.Component {
                 </MenuOption>
             );
         });
-
-        if (!this.state.searchQuery && this.props.searchEnabled) {
-            options.push(
-                <div key="_searchprompt" className="mx_Dropdown_searchPrompt">
-                    Type to search...
-                </div>
-            );
+        if (options.length === 0) {
+            return [<div className="mx_Dropdown_option">
+                No results
+            </div>];
         }
         return options;
     }
@@ -317,7 +314,7 @@ Dropdown.propTypes = {
     onOptionChange: React.PropTypes.func.isRequired,
     // Called when the value of the search field changes
     onSearchChange: React.PropTypes.func,
-    searchEnabled: React.PropTypes.boolean,
+    searchEnabled: React.PropTypes.bool,
     // Function that, given the key of an option, returns
     // a node representing that option to be displayed in the
     // box itself as the currently-selected option (ie. as
