@@ -123,6 +123,8 @@ module.exports = React.createClass({
             room: null,
             roomId: null,
             roomLoading: true,
+
+            forwardingMessage: null,
             editingRoomSettings: false,
             uploadingRoomSettings: false,
             numUnreadMessages: 0,
@@ -437,6 +439,11 @@ module.exports = React.createClass({
                     callState: callState
                 });
 
+                break;
+            case 'forward_message':
+                this.setState({
+                    forwardingMessage: payload.content,
+                });
                 break;
         }
     },
@@ -1180,7 +1187,10 @@ module.exports = React.createClass({
     onCancelClick: function() {
         console.log("updateTint from onCancelClick");
         this.updateTint();
-        this.setState({editingRoomSettings: false});
+        this.setState({
+            editingRoomSettings: false,
+            forwardingMessage: null,
+        });
     },
 
     onLeaveClick: function() {
@@ -1462,16 +1472,17 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var RoomHeader = sdk.getComponent('rooms.RoomHeader');
-        var MessageComposer = sdk.getComponent('rooms.MessageComposer');
-        var RoomSettings = sdk.getComponent("rooms.RoomSettings");
-        var AuxPanel = sdk.getComponent("rooms.AuxPanel");
-        var SearchBar = sdk.getComponent("rooms.SearchBar");
-        var ScrollPanel = sdk.getComponent("structures.ScrollPanel");
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        var RoomPreviewBar = sdk.getComponent("rooms.RoomPreviewBar");
-        var Loader = sdk.getComponent("elements.Spinner");
-        var TimelinePanel = sdk.getComponent("structures.TimelinePanel");
+        const RoomHeader = sdk.getComponent('rooms.RoomHeader');
+        const MessageComposer = sdk.getComponent('rooms.MessageComposer');
+        const ForwardMessage = sdk.getComponent("rooms.ForwardMessage");
+        const RoomSettings = sdk.getComponent("rooms.RoomSettings");
+        const AuxPanel = sdk.getComponent("rooms.AuxPanel");
+        const SearchBar = sdk.getComponent("rooms.SearchBar");
+        const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const RoomPreviewBar = sdk.getComponent("rooms.RoomPreviewBar");
+        const Loader = sdk.getComponent("elements.Spinner");
+        const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
 
         if (!this.state.room) {
                 if (this.state.roomLoading) {
@@ -1599,17 +1610,16 @@ module.exports = React.createClass({
             />;
         }
 
-        var aux = null;
-        if (this.state.editingRoomSettings) {
+        let aux = null;
+        if (this.state.forwardingMessage !== null) {
+            aux = <ForwardMessage onCancelClick={this.onCancelClick} collapsedRhs={this.props.collapsedRhs} content={this.state.forwardingMessage} />;
+        } else if (this.state.editingRoomSettings) {
             aux = <RoomSettings ref="room_settings" onSaveClick={this.onSettingsSaveClick} onCancelClick={this.onCancelClick} room={this.state.room} />;
-        }
-        else if (this.state.uploadingRoomSettings) {
+        } else if (this.state.uploadingRoomSettings) {
             aux = <Loader/>;
-        }
-        else if (this.state.searching) {
+        } else if (this.state.searching) {
             aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;
-        }
-        else if (!myMember || myMember.membership !== "join") {
+        } else if (!myMember || myMember.membership !== "join") {
             // We do have a room object for this room, but we're not currently in it.
             // We may have a 3rd party invite to it.
             var inviterName = undefined;
