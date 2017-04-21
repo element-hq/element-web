@@ -65,7 +65,7 @@ input[type=text].error, input[type=password].error {
     border: 1px solid $warning-color;
 }
 
-input[type=text]:focus, textarea:focus {
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
     border: 1px solid $accent-color;
     outline: none;
     box-shadow: none;
