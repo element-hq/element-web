@@ -38,9 +38,7 @@ module.exports = {
                 //    would also drag in the imgs and fonts that our CSS refers to
                 //    as webpack inputs.)
                 // 3. ExtractTextPlugin turns that string into a separate asset.
-                loader: ExtractTextPlugin.extract(
-                    "css-raw-loader!postcss-loader?config=postcss.config.js",
-                ),
+                loader: ExtractTextPlugin.extract("css-raw-loader!postcss-loader?config=postcss.config.js"),
             },
             {
                 // this works similarly to the scss case, without postcss.
@@ -112,12 +110,9 @@ module.exports = {
             },
         }),
 
-        new ExtractTextPlugin(
-            "bundles/[hash]/[name].css",
-            {
-                allChunks: true,
-            },
-        ),
+        new ExtractTextPlugin("bundles/[hash]/[name].css", {
+            allChunks: true,
+        }),
 
         new HtmlWebpackPlugin({
             template: './src/vector/index.html',
