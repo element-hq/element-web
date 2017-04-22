@@ -515,6 +515,7 @@ var RoomSubList = React.createClass({
                         roomCount={ roomCount }
                         collapsed={ this.props.collapsed }
                         hidden={ this.state.hidden }
+                        incomingCall={ this.props.incomingCall }
                         isIncomingCallRoom={ isIncomingCallRoom }
                         roomNotificationCount={ this.roomNotificationCount() }
                         onClick={ this.onClick }
