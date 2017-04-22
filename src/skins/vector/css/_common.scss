@@ -225,6 +225,10 @@ textarea {
     vertical-align: middle;
 }
 
+.mx_Dialog button:focus, .mx_Dialog input[type="submit"]:focus {
+    filter: brightness($focus-brightness);
+}
+
 .mx_Dialog button.mx_Dialog_primary, .mx_Dialog  input[type="submit"].mx_Dialog_primary {
     color: $accent-fg-color;
     background-color: $accent-color;
