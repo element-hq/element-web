@@ -483,7 +483,7 @@ module.exports = React.createClass({
             // Use the offset of the top of the scroll area from the window
             // as this is used to calculate the CSS fixed top position for the stickies
             var scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
-            // Use the offset of the top of the componet from the window
+            // Use the offset of the top of the component from the window
             // as this is used to calculate the CSS fixed top position for the stickies
             var scrollAreaHeight = ReactDOM.findDOMNode(this).getBoundingClientRect().height;
 
