@@ -606,7 +606,7 @@ module.exports = React.createClass({
 
         return (
             <GeminiScrollbar className="mx_RoomList_scrollbar"
-                 autoshow={true} onScroll={ self._whenScrolling } ref="gemscroll">
+                 autoshow={true} onScroll={ self._whenScrolling } onResize={ self._whenScrolling } ref="gemscroll">
             <div className="mx_RoomList" onMouseOver={ this._onMouseOver }>
                 <RoomSubList list={ self.state.lists['im.vector.fake.invite'] }
                              label="Invites"
