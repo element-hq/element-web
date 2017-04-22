@@ -117,9 +117,10 @@ export default React.createClass({
                 }
 
                 break;
+
             case KeyCode.UP:
             case KeyCode.DOWN:
-                if (ev.altKey) {
+                if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey) {
                     var action = ev.keyCode == KeyCode.UP ?
                         'view_prev_room' : 'view_next_room';
                     dis.dispatch({action: action});
@@ -129,13 +130,15 @@ export default React.createClass({
 
             case KeyCode.PAGE_UP:
             case KeyCode.PAGE_DOWN:
-                this._onScrollKeyPressed(ev);
-                handled = true;
+                if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                    this._onScrollKeyPressed(ev);
+                    handled = true;
+                }
                 break;
 
             case KeyCode.HOME:
             case KeyCode.END:
-                if (ev.ctrlKey) {
+                if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
                     this._onScrollKeyPressed(ev);
                     handled = true;
                 }
