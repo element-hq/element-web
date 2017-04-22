@@ -265,9 +265,16 @@ module.exports = React.createClass({
     },
 
     onRoomStateMember: function(ev, state, member) {
-        constantTimeDispatcher.dispatch(
-            "RoomTile.refresh", member.roomId, {}
-        );
+        if (ev.getStateKey() === MatrixClientPeg.get().credentials.userId && 
+            ev.getPrevContent() && ev.getPrevContent().membership === "invite")
+        {
+            this._delayedRefreshRoomList();
+        }
+        else {
+            constantTimeDispatcher.dispatch(
+                "RoomTile.refresh", member.roomId, {}
+            );
+        }
     },
 
     onRoomMemberName: function(ev, member) {
@@ -599,7 +606,7 @@ module.exports = React.createClass({
 
         return (
             <GeminiScrollbar className="mx_RoomList_scrollbar"
-                 autoshow={true} onScroll={ self._whenScrolling } ref="gemscroll">
+                 autoshow={true} onScroll={ self._whenScrolling } onResize={ self._whenScrolling } ref="gemscroll">
             <div className="mx_RoomList" onMouseOver={ this._onMouseOver }>
                 <RoomSubList list={ self.state.lists['im.vector.fake.invite'] }
                              label="Invites"

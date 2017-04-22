@@ -48,6 +48,10 @@ const SETTINGS_LABELS = [
         id: 'hideReadReceipts',
         label: 'Hide read receipts'
     },
+    {
+        id: 'dontSendTypingNotifications',
+        label: "Don't send typing notifications",
+    },
 /*
     {
         id: 'alwaysShowTimestamps',
