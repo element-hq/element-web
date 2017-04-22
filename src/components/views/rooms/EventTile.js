@@ -23,6 +23,7 @@ var Modal = require('../../../Modal');
 var sdk = require('../../../index');
 var TextForEvent = require('../../../TextForEvent');
 import WithMatrixClient from '../../../wrappers/WithMatrixClient';
+import * as UserSettingsStore from "../../../UserSettingsStore";
 
 var ContextualMenu = require('../../structures/ContextualMenu');
 import dis from '../../../dispatcher';
@@ -284,6 +285,11 @@ module.exports = WithMatrixClient(React.createClass({
     },
 
     getReadAvatars: function() {
+        // return early if the user doesn't want any read receipts
+        if (UserSettingsStore.getSyncedSetting('hideReadReceipts', false)) {
+            return (<span className="mx_EventTile_readAvatars"></span>);
+        }
+
         const ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
         const avatars = [];
         const receiptOffset = 15;
