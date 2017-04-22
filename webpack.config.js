@@ -47,17 +47,18 @@ module.exports = {
             },
         ],
         noParse: [
+            // for cross platform compatibility use [\\\/] as the path separator
+            // this ensures that the regex trips on both Windows and *nix
+
             // don't parse the languages within highlight.js. They cause stack
             // overflows (https://github.com/webpack/webpack/issues/1721), and
             // there is no need for webpack to parse them - they can just be
             // included as-is.
-            /highlight\.js\/lib\/languages/,
-            /highlight\.js\\lib\\languages/,
+            /highlight\.js[\\\/]lib[\\\/]languages/,
 
             // olm takes ages for webpack to process, and it's already heavily
             // optimised, so there is little to gain by us uglifying it.
-            /olm\/(javascript\/)?olm\.js$/,
-            /olm\\(javascript\\)?olm\.js$/,
+            /olm[\\\/](javascript[\\\/])?olm\.js$/,
         ],
     },
     output: {
