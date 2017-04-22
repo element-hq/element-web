@@ -1181,6 +1181,7 @@ module.exports = React.createClass({
         console.log("updateTint from onCancelClick");
         this.updateTint();
         this.setState({editingRoomSettings: false});
+        dis.dispatch({action: 'focus_composer'});
     },
 
     onLeaveClick: function() {
