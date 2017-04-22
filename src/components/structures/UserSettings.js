@@ -283,7 +283,7 @@ module.exports = React.createClass({
                 </div>,
             button: "Sign out",
             extraButtons: [
-                <button className="mx_Dialog_primary"
+                <button key="export" className="mx_Dialog_primary"
                         onClick={this._onExportE2eKeysClicked}>
                     Export E2E room keys
                 </button>
