@@ -106,13 +106,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
         notification.onclick = function() {
             dis.dispatch({
                 action: 'view_room',
-                room_id: room.roomId
+                room_id: room.roomId,
             });
             global.focus();
-            const currentWin = electron.remote.getCurrentWindow();
-            currentWin.show();
-            currentWin.restore();
-            currentWin.focus();
+            const win = electron.remote.getCurrentWindow();
+
+            if (win.isMinimized()) win.restore();
+            else if (!win.isVisible()) win.show();
+            else win.focus();
         };
 
         return notification;
