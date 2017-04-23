@@ -94,6 +94,29 @@ limitations under the License.
     left: 1px;
 }
 
+.mx_ContextualMenu_chevron_top {
+        position: absolute;
+    left: 0;
+    top: -7px;
+    width: 0;
+    height: 0;
+    border-bottom: 8px solid rgba(187, 187, 187, 0.5);
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+}
+
+.mx_ContextualMenu_chevron_top:after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-bottom: 7px solid #f6f6f6;
+    border-right: 7px solid transparent;
+    border-left: 7px solid transparent;
+    position: absolute;
+    top: 1px;
+    left: -7px;
+}
+
 .mx_ContextualMenu_field {
     padding: 3px 6px 3px 6px;
     cursor: pointer;

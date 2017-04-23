@@ -18,16 +18,66 @@ limitations under the License.
 
 var React = require('react');
 var DateUtils = require('matrix-react-sdk/lib/DateUtils');
+import { getDateAsLabel } from '../../../utils/DateUtils'
 
 module.exports = React.createClass({
     displayName: 'MessageTimestamp',
-
+    
+    getInitialState: function() {
+        return ({
+            timeSpanHover: false,
+        });
+    },
+    
+    setVisible: function() {
+        this.setState({ timeSpanHover: true });
+    },
+    
+    setInvisible: function() {
+        this.setState({ timeSpanHover: false });
+    },
+    
     render: function() {
         var date = new Date(this.props.ts);
+        
+        
+        var className = 'mx_ContextualMenu_wrapper';
+        
+        var visibility = this.state.timeSpanHover ? 'visible' : 'hidden';
+        var position = {
+            position: 'absolute',
+            top: '30px',
+            left: '2px',
+            visibility: visibility,
+        };
+        
+        var menuClass = 'mx_ContextualMenu';
+        
+        var chevronClassName = 'mx_ContextualMenu_chevron_top';
+        var chevronPosition = {
+            left: '10px'
+        };
+        
+        var dateStyle = {
+            fontSize: '11px'
+        };
+        
         return (
-            <span className="mx_MessageTimestamp">
+        <div>
+            <span className="mx_MessageTimestamp" onMouseEnter={ this.setVisible } onMouseLeave={ this.setInvisible }>
                 { DateUtils.formatTime(date) }
             </span>
+            
+            <div className={className} style={position}>
+              <div className={menuClass}>
+                <div className={chevronClassName} style={chevronPosition}>
+                </div>
+                <div style={dateStyle}>
+                    { getDateAsLabel(date) }
+                </div>
+              </div>
+            </div>
+        </div>
         );
     },
 });
