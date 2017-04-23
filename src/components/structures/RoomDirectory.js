@@ -466,7 +466,7 @@ module.exports = React.createClass({
      */
     handleScrollKey: function(ev) {
         if (this.scrollPanel) {
-            scrollPanel.handleScrollKey(ev);
+            this.scrollPanel.handleScrollKey(ev);
         }
     },
 
