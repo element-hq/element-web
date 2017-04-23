@@ -20,6 +20,8 @@ import PlatformPeg from './PlatformPeg';
 import TextForEvent from './TextForEvent';
 import Avatar from './Avatar';
 import dis from './dispatcher';
+import sdk from './index';
+import Modal from './Modal';
 
 /*
  * Dispatches:
@@ -131,6 +133,14 @@ const Notifier = {
             plaf.requestNotificationPermission().done((result) => {
                 if (result !== 'granted') {
                     // The permission request was dismissed or denied
+                    const description = result === 'denied'
+                        ? 'Your browser is not permitting this app to send you notifications.'
+                        : 'It seems you didn\'t accept notifications when your browser asked';
+                    const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
+                    Modal.createDialog(ErrorDialog, {
+                        title: 'Unable to enable Notifications',
+                        description,
+                    });
                     return;
                 }
 
