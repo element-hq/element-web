@@ -23,7 +23,6 @@ var ContentRepo = require("matrix-js-sdk").ContentRepo;
 var Modal = require('matrix-react-sdk/lib/Modal');
 var sdk = require('matrix-react-sdk');
 var dis = require('matrix-react-sdk/lib/dispatcher');
-var GeminiScrollbar = require('react-gemini-scrollbar');
 
 var linkify = require('linkifyjs');
 var linkifyString = require('linkifyjs/string');
@@ -458,6 +457,17 @@ module.exports = React.createClass({
         }
         fields[requiredFields[requiredFields.length - 1]] = userInput;
         return fields;
+    },
+
+    /**
+     * called by the parent component when PageUp/Down/etc is pressed.
+     *
+     * We pass it down to the scroll panel.
+     */
+    handleScrollKey: function(ev) {
+        if (this.scrollPanel) {
+            scrollPanel.handleScrollKey(ev);
+        }
     },
 
     render: function() {
