@@ -156,6 +156,9 @@ export default React.createClass({
         if (this.refs.roomView) {
             this.refs.roomView.handleScrollKey(ev);
         }
+        else if (this.refs.roomDirectory) {
+            this.refs.roomDirectory.handleScrollKey(ev);
+        }
     },
 
     render: function() {
@@ -216,6 +219,7 @@ export default React.createClass({
 
             case PageTypes.RoomDirectory:
                 page_element = <RoomDirectory
+                    ref="roomDirectory"
                     collapsedRhs={this.props.collapse_rhs}
                     config={this.props.config.roomDirectory}
                 />;
