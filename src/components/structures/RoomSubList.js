@@ -456,8 +456,8 @@ var RoomSubList = React.createClass({
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Failed to add tag " + self.props.tagName + " to room" + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Error",
-                            description: "Failed to add tag " + self.props.tagName + " to room",
+                            title: "Failed to add tag " + self.props.tagName + " to room",
+                            description: ((err && err.message) ? err.message : "Operation failed"),
                         });
                     });
                     break;
