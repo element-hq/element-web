@@ -241,8 +241,8 @@ module.exports = WithMatrixClient(React.createClass({
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Kick error: " + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Error", 
-                            description: "Failed to kick user",
+                            title: "Failed to kick",
+                            description: ((err && err.message) ? err.message : "Operation failed"),
                         });
                     }
                 ).finally(()=>{

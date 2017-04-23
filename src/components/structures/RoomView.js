@@ -947,7 +947,7 @@ module.exports = React.createClass({
             console.error("Failed to upload file " + file + " " + error);
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to upload file",
-                description: "Server may be unavailable, overloaded, or the file too big",
+                description: ((error && error.message) ? error.message : "Server may be unavailable, overloaded, or the file too big"),
             });
         });
     },
@@ -1034,7 +1034,7 @@ module.exports = React.createClass({
             console.error("Search failed: " + error);
             Modal.createDialog(ErrorDialog, {
                 title: "Search failed",
-                description: "Server may be unavailable, overloaded, or search timed out :("
+                description: ((error && error.message) ? error.message : "Server may be unavailable, overloaded, or search timed out :("),
             });
         }).finally(function() {
             self.setState({
