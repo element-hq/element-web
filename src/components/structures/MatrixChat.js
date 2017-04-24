@@ -303,7 +303,6 @@ module.exports = React.createClass({
 
     componentDidUpdate: function() {
         if (this.focusComposer) {
-            console.log('is this the shitty duplicate?');
             dis.dispatch({action: 'focus_composer'});
             this.focusComposer = false;
         }
