@@ -303,7 +303,7 @@ module.exports = React.createClass({
                     {
                         return 'changed_avatar';
                     }
-                    console.info("MELS ignoring duplicate membership join event");
+                    // console.log("MELS ignoring duplicate membership join event");
                     return null;
                 }
                 else {
