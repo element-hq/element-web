@@ -2,16 +2,6 @@ Changes in [0.9.9-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.8...v0.9.9-rc.1)
 
-
-Changes in [0.9.9-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.9-rc.1) (2017-04-21)
-====================================================================================================
-[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.8...v0.9.9-rc.1)
-
-
-Changes in [0.9.9-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.9-rc.1) (2017-04-21)
-====================================================================================================
-[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.8...v0.9.9-rc.1)
-
  * Update js-sdk and matrix-react-sdk to fix registration without a captcha (https://github.com/vector-im/riot-web/issues/3621)
 
 
