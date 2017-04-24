@@ -25,6 +25,7 @@ module.exports = React.createClass({
     displayName: 'ForwardMessage',
 
     propTypes: {
+        currentRoomId: React.PropTypes.string.isRequired,
         content: React.PropTypes.object.isRequired,
 
         // true if RightPanel is collapsed
@@ -74,6 +75,7 @@ module.exports = React.createClass({
     onAction: function(payload) {
         if (payload.action === 'view_room') {
             MatrixClientPeg.get().sendMessage(payload.room_id, this.props.content);
+            if (this.props.currentRoomId === payload.room_id) this.props.onCancelClick();
         }
     },
 
