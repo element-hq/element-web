@@ -111,8 +111,7 @@ var sanitizeHtmlParams = {
     allowedTags: [
         'font', // custom to matrix for IRC-style font coloring
         'del', // for markdown
-        // deliberately no h1/h2 to stop people shouting.
-        'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
         'nl', 'li', 'b', 'i', 'u', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
         'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'span',
     ],
@@ -164,12 +163,6 @@ var sanitizeHtmlParams = {
             }
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
             return { tagName: tagName, attribs : attribs };
-        },
-        'h1': function(tagName, attribs) {
-            return { tagName: 'h3', attribs: attribs };
-        },
-        'h2': function(tagName, attribs) {
-            return { tagName: 'h3', attribs: attribs };
         },
         '*': function(tagName, attribs) {
             // Delete any style previously assigned, style is an allowedTag for font and span
