@@ -176,7 +176,7 @@ module.exports = React.createClass({
                                 { this.getName() }
                             </div>
                             { eventMeta }
-                            <a className="mx_ImageView_link" href={ this.props.src } target="_blank" rel="noopener">
+                            <a className="mx_ImageView_link" href={ this.props.src } download={ this.props.name } target="_blank" rel="noopener">
                                 <div className="mx_ImageView_download">
                                         Download this file<br/>
                                          <span className="mx_ImageView_size">{ size_res }</span>

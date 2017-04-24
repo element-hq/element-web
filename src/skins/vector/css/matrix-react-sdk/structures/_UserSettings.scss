@@ -213,3 +213,9 @@ input.mx_UserSettings_phoneNumberField {
 .mx_UserSettings_avatarPicker_edit > input {
     display: none;
 }
+
+.mx_UserSettings_advanced_spoiler {
+    cursor: pointer;
+    color: $accent-color;
+    word-break: break-all;
+}

@@ -23,7 +23,6 @@ var ContentRepo = require("matrix-js-sdk").ContentRepo;
 var Modal = require('matrix-react-sdk/lib/Modal');
 var sdk = require('matrix-react-sdk');
 var dis = require('matrix-react-sdk/lib/dispatcher');
-var GeminiScrollbar = require('react-gemini-scrollbar');
 
 var linkify = require('linkifyjs');
 var linkifyString = require('linkifyjs/string');
@@ -162,7 +161,7 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to get public room list",
-                description: "The server may be unavailable or overloaded",
+                description: ((err && err.message) ? err.message : "The server may be unavailable or overloaded"),
             });
         });
     },
@@ -210,8 +209,8 @@ module.exports = React.createClass({
                     this.refreshRoomList();
                     console.error("Failed to " + step + ": " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Error",
-                        description: "Failed to " + step,
+                        title: "Failed to " + step,
+                        description: ((err && err.message) ? err.message : "The server may be unavailable or overloaded"),
                     });
                 });
             }
@@ -458,6 +457,17 @@ module.exports = React.createClass({
         }
         fields[requiredFields[requiredFields.length - 1]] = userInput;
         return fields;
+    },
+
+    /**
+     * called by the parent component when PageUp/Down/etc is pressed.
+     *
+     * We pass it down to the scroll panel.
+     */
+    handleScrollKey: function(ev) {
+        if (this.scrollPanel) {
+            this.scrollPanel.handleScrollKey(ev);
+        }
     },
 
     render: function() {

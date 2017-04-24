@@ -90,8 +90,8 @@ var roomTileSource = {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to set direct chat tag " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Error",
-                        description: "Failed to set direct chat tag",
+                        title: "Failed to set direct chat tag",
+                        description: ((err && err.message) ? err.message : "Operation failed"),
                     });
                 });
                 return;
@@ -115,8 +115,8 @@ var roomTileSource = {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to remove tag " + prevTag + " from room: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Error",
-                        description: "Failed to remove tag " + prevTag + " from room",
+                        title: "Failed to remove tag " + prevTag + " from room",
+                        description: ((err && err.message) ? err.message : "Operation failed"),
                     });
                 });
             }
@@ -137,8 +137,8 @@ var roomTileSource = {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to add tag " + newTag + " to room: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Error",
-                        description: "Failed to add tag " + newTag + " to room",
+                        title: "Failed to add tag " + newTag + " to room",
+                        description: ((err && err.message) ? err.message : "Operation failed"),
                     });
                 });
             }

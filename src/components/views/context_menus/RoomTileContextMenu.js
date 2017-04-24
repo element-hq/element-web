@@ -71,7 +71,7 @@ module.exports = React.createClass({
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         Modal.createDialog(ErrorDialog, {
                             title: "Failed to remove tag " + tagNameOff + " from room",
-                            description: err.toString()
+                            description: ((err && err.message) ? err.message : "Operation failed"),
                         });
                     });
                 }
@@ -88,7 +88,7 @@ module.exports = React.createClass({
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         Modal.createDialog(ErrorDialog, {
                             title: "Failed to add tag " + tagNameOn + " to room",
-                            description: err.toString()
+                            description: ((err && err.message) ? err.message : "Operation failed"),
                         });
                     });
                 }
@@ -149,7 +149,7 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to set Direct Message status of room",
-                description: err.toString()
+                description: ((err && err.message) ? err.message : "Operation failed"),
             });
         });
     },
@@ -187,8 +187,8 @@ module.exports = React.createClass({
             var errCode = err.errcode || "unknown error code";
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Error",
-                description: `Failed to forget room (${errCode})`
+                title: `Failed to forget room (${errCode})`,
+                description: ((err && err.message) ? err.message : "Operation failed"),
             });
         });
 
