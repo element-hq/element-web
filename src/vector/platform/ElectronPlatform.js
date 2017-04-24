@@ -81,6 +81,17 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     displayNotification(title: string, msg: string, avatarUrl: string, room: Object): Notification {
+
+        // GNOME notification spec parses HTML tags for styling...
+        // Electron Docs state all supported linux notification systems follow this markup spec
+        // https://github.com/electron/electron/blob/master/docs/tutorial/desktop-environment-integration.md#linux
+        // maybe we should pass basic styling (italics, bold, underline) through from MD
+        // we only have to strip out < and > as the spec doesn't include anything about things like &amp;
+        // so we shouldn't assume that all implementations will treat those properly. Very basic tag parsing is done.
+        if (window.process.platform === 'linux') {
+            msg = msg.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
         // Notifications in Electron use the HTML5 notification API
         const notification = new global.Notification(
             title,

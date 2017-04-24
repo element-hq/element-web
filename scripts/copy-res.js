@@ -10,6 +10,7 @@ const COPY_LIST = [
     ["res/{media,vector-icons}/**", "webapp"],
     ["src/skins/vector/{fonts,img}/**", "webapp"],
     ["node_modules/emojione/assets/svg/*", "webapp/emojione/svg/"],
+    ["node_modules/emojione/assets/png/*", "webapp/emojione/png/"],
     ["./config.json", "webapp", {directwatch: 1}],
 ];
 

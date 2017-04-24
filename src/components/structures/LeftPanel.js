@@ -19,8 +19,10 @@ limitations under the License.
 var React = require('react');
 var DragDropContext = require('react-dnd').DragDropContext;
 var HTML5Backend = require('react-dnd-html5-backend');
+var KeyCode = require('matrix-react-sdk/lib/KeyCode');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
+
 
 var VectorConferenceHandler = require('../../VectorConferenceHandler');
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
@@ -38,6 +40,10 @@ var LeftPanel = React.createClass({
             showCallElement: null,
             searchFilter: '',
         };
+    },
+
+    componentWillMount: function() {
+        this.focusedElement = null;
     },
 
     componentDidMount: function() {
@@ -59,6 +65,91 @@ var LeftPanel = React.createClass({
             case 'call_state':
                 this._recheckCallElement(this.props.selectedRoom);
                 break;
+        }
+    },
+
+    _onFocus: function(ev) {
+        this.focusedElement = ev.target;
+    },
+
+    _onBlur: function(ev) {
+        this.focusedElement = null;
+    },
+
+    _onKeyDown: function(ev) {
+        if (!this.focusedElement) return;
+        let handled = false;
+
+        switch (ev.keyCode) {
+            case KeyCode.UP:
+                this._onMoveFocus(true);
+                handled = true;
+                break;
+            case KeyCode.DOWN:
+                this._onMoveFocus(false);
+                handled = true;
+                break;
+        }
+
+        if (handled) {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
+    },
+
+    _onMoveFocus: function(up) {
+        var element = this.focusedElement;
+
+        // unclear why this isn't needed
+        // var descending = (up == this.focusDirection) ? this.focusDescending : !this.focusDescending;
+        // this.focusDirection = up;
+
+        var descending = false; // are we currently descending or ascending through the DOM tree?
+        var classes;
+
+        do {
+            var child = up ? element.lastElementChild : element.firstElementChild;
+            var sibling = up ? element.previousElementSibling : element.nextElementSibling;
+
+            if (descending) {
+                if (child) {
+                    element = child;
+                }
+                else if (sibling) {
+                    element = sibling;
+                }
+                else {
+                    descending = false;
+                    element = element.parentElement;
+                }
+            }
+            else {
+                if (sibling) {
+                    element = sibling;
+                    descending = true;
+                }
+                else {
+                    element = element.parentElement;
+                }
+            }
+
+            if (element) {
+                classes = element.classList;
+                if (classes.contains("mx_LeftPanel")) { // we hit the top
+                    element = up ? element.lastElementChild : element.firstElementChild;
+                    descending = true;
+                }
+            }
+
+        } while(element && !(
+            classes.contains("mx_RoomTile") ||
+            classes.contains("mx_SearchBox_search") ||
+            classes.contains("mx_RoomSubList_ellipsis")));
+
+        if (element) {
+            element.focus();
+            this.focusedElement = element;
+            this.focusedDescending = descending;
         }
     },
 
@@ -121,7 +212,8 @@ var LeftPanel = React.createClass({
         }
 
         return (
-            <aside className={classes} style={{ opacity: this.props.opacity }}>
+            <aside className={classes} style={{ opacity: this.props.opacity }}
+                   onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
                 <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />
                 { collapseButton }
                 { callPreview }

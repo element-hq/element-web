@@ -27,6 +27,10 @@ limitations under the License.
     user-select: none;
 }
 
+.mx_Dropdown_input:focus {
+    border-color: $accent-color;
+}
+
 .mx_Dropdown_arrow {
     border-color: $primary-fg-color transparent transparent;
     border-style: solid;
@@ -74,7 +78,7 @@ input.mx_Dropdown_option, input.mx_Dropdown_option:focus {
     border: 1px solid $accent-color;
     background-color: $primary-bg-color;
     max-height: 200px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .mx_Dropdown_menu .mx_Dropdown_option_highlight {

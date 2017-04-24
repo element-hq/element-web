@@ -201,9 +201,12 @@ electron.app.on('ready', () => {
         brand: vectorConfig.brand || 'Riot'
     });
 
-    mainWindow.once('ready-to-show', () => {
-        mainWindow.show();
-    });
+    if (!process.argv.includes('--hidden')) {
+        mainWindow.once('ready-to-show', () => {
+            mainWindow.show();
+        });
+    }
+
     mainWindow.on('closed', () => {
         mainWindow = null;
     });
