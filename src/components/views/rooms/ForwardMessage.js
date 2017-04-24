@@ -18,7 +18,7 @@
 import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
-import KeyCode from "../../../KeyCode";
+import KeyCode from '../../../KeyCode';
 
 
 module.exports = React.createClass({
@@ -28,20 +28,13 @@ module.exports = React.createClass({
         currentRoomId: React.PropTypes.string.isRequired,
         content: React.PropTypes.object.isRequired,
 
-        // true if RightPanel is collapsed
-        collapsedRhs: React.PropTypes.bool,
         onCancelClick: React.PropTypes.func.isRequired,
     },
 
     componentWillMount: function() {
         this._unmounted = false;
 
-        if (!this.props.collapsedRhs) {
-            dis.dispatch({
-                action: 'hide_right_panel',
-            });
-        }
-
+        dis.dispatch({action: 'hide_right_panel'});
         dis.dispatch({
             action: 'ui_opacity',
             sideOpacity: 1.0,
@@ -57,12 +50,7 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         this._unmounted = true;
 
-        if (!this.props.collapsedRhs) {
-            dis.dispatch({
-                action: 'show_right_panel',
-            });
-        }
-
+        dis.dispatch({action: 'restore_right_panel'});
         dis.dispatch({
             action: 'ui_opacity',
             sideOpacity: 1.0,
@@ -74,7 +62,19 @@ module.exports = React.createClass({
 
     onAction: function(payload) {
         if (payload.action === 'view_room') {
-            MatrixClientPeg.get().sendMessage(payload.room_id, this.props.content);
+            const Client = MatrixClientPeg.get();
+            Client.sendMessage(payload.room_id, this.props.content).done(() => {
+                dis.dispatch({action: 'message_sent'});
+            }, (err) => {
+                if (err.name === "UnknownDeviceError") {
+                    dis.dispatch({
+                        action: 'unknown_device_error',
+                        err: err,
+                        room: Client.getRoom(payload.room_id),
+                    });
+                }
+                dis.dispatch({action: 'message_send_failed'});
+            });
             if (this.props.currentRoomId === payload.room_id) this.props.onCancelClick();
         }
     },
