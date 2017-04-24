@@ -151,13 +151,17 @@ module.exports = React.createClass({
             );
         }
 
-        if (this.props.mxEvent.getType() === 'm.room.message'
-        && this.props.mxEvent.getContent().msgtype !== 'm.bad.encrypted') {
-            forwardButton = (
-                <div className="mx_MessageContextMenu_field" onClick={this.onForwardClick}>
-                    Forward Message
-                </div>
-            );
+        if (this.props.mxEvent.getType() === 'm.room.message') {
+            const content = this.props.mxEvent.getContent();
+            if (content.msgtype // truthy check msgtype
+            && content.msgtype !== 'm.bad.encrypted'
+            && content.hasOwnProperty('body')) {
+                forwardButton = (
+                    <div className="mx_MessageContextMenu_field" onClick={this.onForwardClick}>
+                        Forward Message
+                    </div>
+                );
+            }
         }
 
         viewSourceButton = (
