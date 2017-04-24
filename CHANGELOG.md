@@ -1,3 +1,10 @@
+Changes in [0.9.9-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.9.9-rc.2) (2017-04-24)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.9-rc.1...v0.9.9-rc.2)
+
+ * Fix bug where links to Riot would fail to open.
+
+
 Changes in [0.9.9-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.9-rc.1) (2017-04-21)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.8...v0.9.9-rc.1)
