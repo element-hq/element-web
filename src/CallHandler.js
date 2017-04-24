@@ -313,7 +313,7 @@ function _onAction(payload) {
                                 console.error("Conference call failed: " + err);
                                 Modal.createDialog(ErrorDialog, {
                                     title: "Failed to set up conference call",
-                                    description: "Conference call failed.",
+                                    description: "Conference call failed. " + ((err && err.message) ? err.message : ""),
                                 });
                             });
                         }

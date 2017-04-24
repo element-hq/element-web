@@ -413,7 +413,7 @@ module.exports = React.createClass({
                                 console.error("Failed to leave room " + payload.room_id + " " + err);
                                 Modal.createDialog(ErrorDialog, {
                                     title: "Failed to leave room",
-                                    description: "Server may be unavailable, overloaded, or you hit a bug."
+                                    description: (err && err.message ? err.message : "Server may be unavailable, overloaded, or you hit a bug."),
                                 });
                             });
                         }

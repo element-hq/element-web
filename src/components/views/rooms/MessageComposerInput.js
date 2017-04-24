@@ -355,6 +355,7 @@ export default class MessageComposerInput extends React.Component {
     }
 
     sendTyping(isTyping) {
+        if (UserSettingsStore.getSyncedSetting('dontSendTypingNotifications', false)) return;
         MatrixClientPeg.get().sendTyping(
             this.props.room.roomId,
             this.isTyping, TYPING_SERVER_TIMEOUT
@@ -509,7 +510,7 @@ export default class MessageComposerInput extends React.Component {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createDialog(ErrorDialog, {
                         title: "Server error",
-                        description: "Server unavailable, overloaded, or something else went wrong.",
+                        description: ((err && err.message) ? err.message : "Server unavailable, overloaded, or something else went wrong."),
                     });
                 });
             }

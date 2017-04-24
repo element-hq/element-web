@@ -20,6 +20,7 @@ var SlashCommands = require("../../../SlashCommands");
 var Modal = require("../../../Modal");
 var MemberEntry = require("../../../TabCompleteEntries").MemberEntry;
 var sdk = require('../../../index');
+import UserSettingsStore from "../../../UserSettingsStore";
 
 var dis = require("../../../dispatcher");
 var KeyCode = require("../../../KeyCode");
@@ -311,7 +312,7 @@ export default React.createClass({
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createDialog(ErrorDialog, {
                         title: "Server error",
-                        description: "Server unavailable, overloaded, or something else went wrong.",
+                        description: ((err && err.message) ? err.message : "Server unavailable, overloaded, or something else went wrong."),
                     });
                 });
             }
@@ -420,6 +421,7 @@ export default React.createClass({
     },
 
     sendTyping: function(isTyping) {
+        if (UserSettingsStore.getSyncedSetting('dontSendTypingNotifications', false)) return;
         MatrixClientPeg.get().sendTyping(
             this.props.room.roomId,
             this.isTyping, TYPING_SERVER_TIMEOUT

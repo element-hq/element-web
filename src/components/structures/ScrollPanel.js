@@ -483,21 +483,25 @@ module.exports = React.createClass({
     handleScrollKey: function(ev) {
         switch (ev.keyCode) {
             case KeyCode.PAGE_UP:
-                this.scrollRelative(-1);
+                if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                    this.scrollRelative(-1);
+                }
                 break;
 
             case KeyCode.PAGE_DOWN:
-                this.scrollRelative(1);
+                if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                    this.scrollRelative(1);
+                }
                 break;
 
             case KeyCode.HOME:
-                if (ev.ctrlKey) {
+                if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
                     this.scrollToTop();
                 }
                 break;
 
             case KeyCode.END:
-                if (ev.ctrlKey) {
+                if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
                     this.scrollToBottom();
                 }
                 break;

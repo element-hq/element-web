@@ -50,6 +50,12 @@ export default React.createClass({
         };
     },
 
+    componentDidMount: function() {
+        if (this.props.focus) {
+            this.refs.button.focus();
+        }
+    },
+
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
@@ -59,7 +65,7 @@ export default React.createClass({
                     {this.props.description}
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.props.onFinished} autoFocus={this.props.focus}>
+                    <button ref="button" className="mx_Dialog_primary" onClick={this.props.onFinished}>
                         {this.props.button}
                     </button>
                 </div>

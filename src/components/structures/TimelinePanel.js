@@ -766,7 +766,9 @@ var TimelinePanel = React.createClass({
 
         // jump to the live timeline on ctrl-end, rather than the end of the
         // timeline window.
-        if (ev.ctrlKey && ev.keyCode == KeyCode.END) {
+        if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey &&
+            ev.keyCode == KeyCode.END)
+        {
             this.jumpToLiveTimeline();
         } else {
             this.refs.messagePanel.handleScrollKey(ev);
