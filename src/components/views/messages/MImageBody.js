@@ -56,6 +56,7 @@ module.exports = React.createClass({
             const ImageView = sdk.getComponent("elements.ImageView");
             const params = {
                 src: httpUrl,
+                name: content.body && content.body.length > 0 ? content.body : 'Attachment',
                 mxEvent: this.props.mxEvent,
             };
 

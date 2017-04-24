@@ -75,7 +75,7 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.props.activeAgo >= 0) {
-            var ago = this.props.currentlyActive ? "now" : (this.getDuration(this.props.activeAgo) + " ago");
+            var ago = this.props.currentlyActive ? "" : "for " + (this.getDuration(this.props.activeAgo));
             // var ago = this.getDuration(this.props.activeAgo) + " ago";
             // if (this.props.currentlyActive) ago += " (now?)";
             return (

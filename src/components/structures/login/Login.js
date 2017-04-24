@@ -17,13 +17,11 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var sdk = require('../../../index');
-var Login = require("../../../Login");
-var PasswordLogin = require("../../views/login/PasswordLogin");
-var CasLogin = require("../../views/login/CasLogin");
-var ServerConfig = require("../../views/login/ServerConfig");
+import React from 'react';
+import ReactDOM from 'react-dom';
+import url from 'url';
+import sdk from '../../../index';
+import Login from '../../../Login';
 
 /**
  * A wire component which glues together login UI components and Login logic
@@ -67,6 +65,7 @@ module.exports = React.createClass({
             username: "",
             phoneCountry: null,
             phoneNumber: "",
+            currentFlow: "m.login.password",
         };
     },
 
@@ -129,23 +128,19 @@ module.exports = React.createClass({
         this.setState({ phoneNumber: phoneNumber });
     },
 
-    onHsUrlChanged: function(newHsUrl) {
+    onServerConfigChange: function(config) {
         var self = this;
-        this.setState({
-            enteredHomeserverUrl: newHsUrl,
+        let newState = {
             errorText: null, // reset err messages
-        }, function() {
-            self._initLoginLogic(newHsUrl);
-        });
-    },
-
-    onIsUrlChanged: function(newIsUrl) {
-        var self = this;
-        this.setState({
-            enteredIdentityServerUrl: newIsUrl,
-            errorText: null, // reset err messages
-        }, function() {
-            self._initLoginLogic(null, newIsUrl);
+        };
+        if (config.hsUrl !== undefined) {
+            newState.enteredHomeserverUrl = config.hsUrl;
+        }
+        if (config.isUrl !== undefined) {
+            newState.enteredIdentityServerUrl = config.isUrl;
+        }
+        this.setState(newState, function() {
+            self._initLoginLogic(config.hsUrl || null, config.isUrl);
         });
     },
 
@@ -161,24 +156,27 @@ module.exports = React.createClass({
         });
         this._loginLogic = loginLogic;
 
-        loginLogic.getFlows().then(function(flows) {
-            // old behaviour was to always use the first flow without presenting
-            // options. This works in most cases (we don't have a UI for multiple
-            // logins so let's skip that for now).
-            loginLogic.chooseFlow(0);
-        }, function(err) {
-            self._setStateFromError(err, false);
-        }).finally(function() {
-            self.setState({
-                busy: false
-            });
-        });
-
         this.setState({
             enteredHomeserverUrl: hsUrl,
             enteredIdentityServerUrl: isUrl,
             busy: true,
             loginIncorrect: false,
+        });
+
+        loginLogic.getFlows().then(function(flows) {
+            // old behaviour was to always use the first flow without presenting
+            // options. This works in most cases (we don't have a UI for multiple
+            // logins so let's skip that for now).
+            loginLogic.chooseFlow(0);
+            self.setState({
+                currentFlow: self._getCurrentFlowStep(),
+            });
+        }, function(err) {
+            self._setStateFromError(err, false);
+        }).finally(function() {
+            self.setState({
+                busy: false,
+            });
         });
     },
 
@@ -231,6 +229,13 @@ module.exports = React.createClass({
     componentForStep: function(step) {
         switch (step) {
             case 'm.login.password':
+                const PasswordLogin = sdk.getComponent('login.PasswordLogin');
+                // HSs that are not matrix.org may not be configured to have their
+                // domain name === domain part.
+                let hsDomain = url.parse(this.state.enteredHomeserverUrl).hostname;
+                if (hsDomain !== 'matrix.org') {
+                    hsDomain = null;
+                }
                 return (
                     <PasswordLogin
                         onSubmit={this.onPasswordLogin}
@@ -242,9 +247,11 @@ module.exports = React.createClass({
                         onPhoneNumberChanged={this.onPhoneNumberChanged}
                         onForgotPasswordClick={this.props.onForgotPasswordClick}
                         loginIncorrect={this.state.loginIncorrect}
+                        hsDomain={hsDomain}
                     />
                 );
             case 'm.login.cas':
+                const CasLogin = sdk.getComponent('login.CasLogin');
                 return (
                     <CasLogin onSubmit={this.onCasLogin} />
                 );
@@ -262,10 +269,11 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var Loader = sdk.getComponent("elements.Spinner");
-        var LoginHeader = sdk.getComponent("login.LoginHeader");
-        var LoginFooter = sdk.getComponent("login.LoginFooter");
-        var loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
+        const Loader = sdk.getComponent("elements.Spinner");
+        const LoginHeader = sdk.getComponent("login.LoginHeader");
+        const LoginFooter = sdk.getComponent("login.LoginFooter");
+        const ServerConfig = sdk.getComponent("login.ServerConfig");
+        const loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
         var loginAsGuestJsx;
         if (this.props.enableGuest) {
@@ -291,15 +299,14 @@ module.exports = React.createClass({
                         <h2>Sign in
                             { loader }
                         </h2>
-                        { this.componentForStep(this._getCurrentFlowStep()) }
+                        { this.componentForStep(this.state.currentFlow) }
                         <ServerConfig ref="serverConfig"
                             withToggleButton={true}
                             customHsUrl={this.props.customHsUrl}
                             customIsUrl={this.props.customIsUrl}
                             defaultHsUrl={this.props.defaultHsUrl}
                             defaultIsUrl={this.props.defaultIsUrl}
-                            onHsUrlChanged={this.onHsUrlChanged}
-                            onIsUrlChanged={this.onIsUrlChanged}
+                            onServerConfigChange={this.onServerConfigChange}
                             delayTimeMs={1000}/>
                         <div className="mx_Login_error">
                                 { this.state.errorText }

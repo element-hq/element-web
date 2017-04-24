@@ -284,6 +284,12 @@ module.exports = WithMatrixClient(React.createClass({
     },
 
     getReadAvatars: function() {
+
+        // return early if there are no read receipts
+        if (!this.props.readReceipts || this.props.readReceipts.length === 0) {
+            return (<span className="mx_EventTile_readAvatars"></span>);
+        }
+
         const ReadReceiptMarker = sdk.getComponent('rooms.ReadReceiptMarker');
         const avatars = [];
         const receiptOffset = 15;

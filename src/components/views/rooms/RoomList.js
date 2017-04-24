@@ -265,9 +265,16 @@ module.exports = React.createClass({
     },
 
     onRoomStateMember: function(ev, state, member) {
-        constantTimeDispatcher.dispatch(
-            "RoomTile.refresh", member.roomId, {}
-        );
+        if (ev.getStateKey() === MatrixClientPeg.get().credentials.userId && 
+            ev.getPrevContent() && ev.getPrevContent().membership === "invite")
+        {
+            this._delayedRefreshRoomList();
+        }
+        else {
+            constantTimeDispatcher.dispatch(
+                "RoomTile.refresh", member.roomId, {}
+            );
+        }
     },
 
     onRoomMemberName: function(ev, member) {
@@ -449,11 +456,10 @@ module.exports = React.createClass({
         var panel = ReactDOM.findDOMNode(this);
         if (!panel) return null;
 
-        if (panel.classList.contains('gm-prevented')) {
-            return panel;
-        } else {
-            return panel.children[2]; // XXX: Fragile!
-        }
+        // empirically, if we have gm-prevented for some reason, the scroll node
+        // is still the 3rd child (i.e. the view child).  This looks to be due
+        // to vdh's improved resize updater logic...?
+        return panel.children[2]; // XXX: Fragile!
     },
 
     _whenScrolling: function(e) {
@@ -476,7 +482,7 @@ module.exports = React.createClass({
             // Use the offset of the top of the scroll area from the window
             // as this is used to calculate the CSS fixed top position for the stickies
             var scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
-            // Use the offset of the top of the componet from the window
+            // Use the offset of the top of the component from the window
             // as this is used to calculate the CSS fixed top position for the stickies
             var scrollAreaHeight = ReactDOM.findDOMNode(this).getBoundingClientRect().height;
 
@@ -499,7 +505,7 @@ module.exports = React.createClass({
         // Use the offset of the top of the scroll area from the window
         // as this is used to calculate the CSS fixed top position for the stickies
         var scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
-        // Use the offset of the top of the componet from the window
+        // Use the offset of the top of the component from the window
         // as this is used to calculate the CSS fixed top position for the stickies
         var scrollAreaHeight = ReactDOM.findDOMNode(this).getBoundingClientRect().height;
 
@@ -599,7 +605,7 @@ module.exports = React.createClass({
 
         return (
             <GeminiScrollbar className="mx_RoomList_scrollbar"
-                 autoshow={true} onScroll={ self._whenScrolling } ref="gemscroll">
+                 autoshow={true} onScroll={ self._whenScrolling } onResize={ self._whenScrolling } ref="gemscroll">
             <div className="mx_RoomList" onMouseOver={ this._onMouseOver }>
                 <RoomSubList list={ self.state.lists['im.vector.fake.invite'] }
                              label="Invites"

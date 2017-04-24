@@ -33,8 +33,6 @@ function countryMatchesSearchQuery(query, country) {
     return false;
 }
 
-const MAX_DISPLAYED_ROWS = 2;
-
 export default class CountryDropdown extends React.Component {
     constructor(props) {
         super(props);
@@ -64,7 +62,7 @@ export default class CountryDropdown extends React.Component {
         // Unicode Regional Indicator Symbol letter 'A'
         const RIS_A = 0x1F1E6;
         const ASCII_A = 65;
-        return charactersToImageNode(iso2,
+        return charactersToImageNode(iso2, true,
             RIS_A + (iso2.charCodeAt(0) - ASCII_A),
             RIS_A + (iso2.charCodeAt(1) - ASCII_A),
         );
@@ -93,10 +91,6 @@ export default class CountryDropdown extends React.Component {
             displayedCountries = COUNTRIES;
         }
 
-        if (displayedCountries.length > MAX_DISPLAYED_ROWS) {
-            displayedCountries = displayedCountries.slice(0, MAX_DISPLAYED_ROWS);
-        }
-
         const options = displayedCountries.map((country) => {
             return <div key={country.iso2}>
                 {this._flagImgForIso2(country.iso2)}
@@ -111,7 +105,7 @@ export default class CountryDropdown extends React.Component {
         return <Dropdown className={this.props.className}
             onOptionChange={this.props.onOptionChange} onSearchChange={this._onSearchChange}
             menuWidth={298} getShortOption={this._flagImgForIso2}
-            value={value}
+            value={value} searchEnabled={true}
         >
             {options}
         </Dropdown>
