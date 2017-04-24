@@ -303,6 +303,7 @@ module.exports = React.createClass({
 
     componentDidUpdate: function() {
         if (this.focusComposer) {
+            console.log('is this the shitty duplicate?');
             dis.dispatch({action: 'focus_composer'});
             this.focusComposer = false;
         }
@@ -547,13 +548,21 @@ module.exports = React.createClass({
                 });
                 break;
             case 'hide_right_panel':
+                this.was_rhs_collapsed = this.state.collapse_rhs;
                 this.setState({
                     collapse_rhs: true,
                 });
                 break;
             case 'show_right_panel':
+                this.was_rhs_collapsed = this.state.collapse_rhs;
                 this.setState({
                     collapse_rhs: false,
+                });
+                break;
+            // sets the panel to its state before last show/hide event
+            case 'restore_right_panel':
+                this.setState({
+                    collapse_rhs: this.was_rhs_collapsed,
                 });
                 break;
             case 'ui_opacity':
