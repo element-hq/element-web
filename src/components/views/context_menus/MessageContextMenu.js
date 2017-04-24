@@ -151,7 +151,8 @@ module.exports = React.createClass({
             );
         }
 
-        if (this.props.mxEvent.getType() === 'm.room.message') {
+        if (this.props.mxEvent.getType() === 'm.room.message'
+        && this.props.mxEvent.getContent().msgtype !== 'm.bad.encrypted') {
             forwardButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onForwardClick}>
                     Forward Message
