@@ -1778,7 +1778,7 @@ module.exports = React.createClass({
                     onSearchClick={this.onSearchClick}
                     onSettingsClick={this.onSettingsClick}
                     onSaveClick={this.onSettingsSaveClick}
-                    onCancelClick={this.onCancelClick}
+                    onCancelClick={aux ? this.onCancelClick : null}
                     onForgetClick={
                         (myMember && myMember.membership === "leave") ? this.onForgetClick : null
                     }
