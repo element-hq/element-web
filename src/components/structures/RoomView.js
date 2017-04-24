@@ -1614,7 +1614,7 @@ module.exports = React.createClass({
 
         let aux = null;
         if (this.state.forwardingMessage !== null) {
-            aux = <ForwardMessage onCancelClick={this.onCancelClick} currentRoomId={this.state.room.roomId} collapsedRhs={this.props.collapsedRhs} content={this.state.forwardingMessage} />;
+            aux = <ForwardMessage onCancelClick={this.onCancelClick} currentRoomId={this.state.room.roomId} content={this.state.forwardingMessage} />;
         } else if (this.state.editingRoomSettings) {
             aux = <RoomSettings ref="room_settings" onSaveClick={this.onSettingsSaveClick} onCancelClick={this.onCancelClick} room={this.state.room} />;
         } else if (this.state.uploadingRoomSettings) {
