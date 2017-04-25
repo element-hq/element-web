@@ -317,7 +317,6 @@ module.exports = React.createClass({
                     className="mx_Login_phoneCountry"
                     value={this.state.phoneCountry}
                 />
-
                 <div className="mx_Login_field_group">
                     <div className="mx_Login_field_prefix">+{this.state.phonePrefix}</div>
                     <input type="text" ref="phoneNumber"
