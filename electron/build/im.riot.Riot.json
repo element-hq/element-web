@@ -18,6 +18,9 @@
     "modules": [
         {
             "name": "node",
+            "cleanup": [
+                "*"
+            ],
             "sources": [
                 {
                     "type": "archive",
