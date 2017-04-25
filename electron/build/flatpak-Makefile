@@ -17,5 +17,7 @@ install:
 	done
 	install -dm755 /app/share/applications
 	install -Dm644 im.riot.Riot.desktop /app/share/applications
+	install -dm755 /app/share/appdata
+	install -Dm644 im.riot.Riot.appdata.xml /app/share/appdata
 
 .PHONY: install all

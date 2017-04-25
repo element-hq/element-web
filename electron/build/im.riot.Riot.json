@@ -51,6 +51,10 @@
                 {
                     "type": "file",
                     "path": "im.riot.Riot.desktop"
+                },
+                {
+                    "type": "file",
+                    "path": "im.riot.Riot.appdata.xml"
                 }
             ]
         }
