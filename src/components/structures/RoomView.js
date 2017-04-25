@@ -1280,7 +1280,8 @@ module.exports = React.createClass({
 
         // we want to show the bar if the read-marker is off the top of the
         // screen.
-        var showBar = (pos < 0);
+        // If pos is null, the event might not be paginated, so show the unread bar!
+        var showBar = pos < 0 || pos === null;
 
         if (this.state.showTopUnreadMessagesBar != showBar) {
             this.setState({showTopUnreadMessagesBar: showBar},
