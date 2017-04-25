@@ -37,6 +37,7 @@ export default class CountryDropdown extends React.Component {
     constructor(props) {
         super(props);
         this._onSearchChange = this._onSearchChange.bind(this);
+        this._onOptionChange = this._onOptionChange.bind(this);
 
         this.state = {
             searchQuery: '',
@@ -48,7 +49,7 @@ export default class CountryDropdown extends React.Component {
             // If no value is given, we start with the first
             // country selected, but our parent component
             // doesn't know this, therefore we do this.
-            this.props.onOptionChange(COUNTRIES[0].iso2);
+            this.props.onOptionChange(COUNTRIES[0]);
         }
     }
 
@@ -56,6 +57,10 @@ export default class CountryDropdown extends React.Component {
         this.setState({
             searchQuery: search,
         });
+    }
+
+    _onOptionChange(iso2) {
+        this.props.onOptionChange(COUNTRIES_BY_ISO2[iso2]);
     }
 
     _flagImgForIso2(iso2) {
@@ -66,6 +71,10 @@ export default class CountryDropdown extends React.Component {
             RIS_A + (iso2.charCodeAt(0) - ASCII_A),
             RIS_A + (iso2.charCodeAt(1) - ASCII_A),
         );
+    }
+
+    getCountryPrefix(iso2) {
+        return COUNTRIES_BY_ISO2[iso2].prefix;
     }
 
     render() {
@@ -102,9 +111,11 @@ export default class CountryDropdown extends React.Component {
         // values between mounting and the initial value propgating
         const value = this.props.value || COUNTRIES[0].iso2;
 
+        const getShortOption = this.props.isSmall ? this._flagImgForIso2 : undefined;
+
         return <Dropdown className={this.props.className}
-            onOptionChange={this.props.onOptionChange} onSearchChange={this._onSearchChange}
-            menuWidth={298} getShortOption={this._flagImgForIso2}
+            onOptionChange={this._onOptionChange} onSearchChange={this._onSearchChange}
+            menuWidth={298} getShortOption={getShortOption}
             value={value} searchEnabled={true}
         >
             {options}
@@ -114,6 +125,7 @@ export default class CountryDropdown extends React.Component {
 
 CountryDropdown.propTypes = {
     className: React.PropTypes.string,
+    isSmall: React.PropTypes.bool,
     onOptionChange: React.PropTypes.func.isRequired,
     value: React.PropTypes.string,
 };

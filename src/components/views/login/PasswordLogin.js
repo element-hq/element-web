@@ -90,8 +90,11 @@ class PasswordLogin extends React.Component {
     }
 
     onPhoneCountryChanged(country) {
-        this.setState({phoneCountry: country});
-        this.props.onPhoneCountryChanged(country);
+        this.setState({
+            phoneCountry: country.iso2,
+            phonePrefix: country.prefix,
+        });
+        this.props.onPhoneCountryChanged(country.iso2);
     }
 
     onPhoneNumberChanged(ev) {
@@ -121,16 +124,17 @@ class PasswordLogin extends React.Component {
                 const mxidInputClasses = classNames({
                     "mx_Login_field": true,
                     "mx_Login_username": true,
+                    "mx_Login_field_has_prefix": true,
                     "mx_Login_field_has_suffix": Boolean(this.props.hsDomain),
                 });
                 let suffix = null;
                 if (this.props.hsDomain) {
-                    suffix = <div className="mx_Login_username_suffix">
+                    suffix = <div className="mx_Login_field_suffix">
                         :{this.props.hsDomain}
                     </div>;
                 }
-                return <div className="mx_Login_username_group">
-                    <div className="mx_Login_username_prefix">@</div>
+                return <div className="mx_Login_field_group">
+                    <div className="mx_Login_field_prefix">@</div>
                     <input
                         className={mxidInputClasses}
                         key="username_input"
@@ -145,6 +149,7 @@ class PasswordLogin extends React.Component {
                 </div>;
             case PasswordLogin.LOGIN_FIELD_PHONE:
                 const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
+                const prefix = this.state.phonePrefix;
                 return <div className="mx_Login_phoneSection">
                     <CountryDropdown
                         className="mx_Login_phoneCountry"
@@ -152,17 +157,20 @@ class PasswordLogin extends React.Component {
                         onOptionChange={this.onPhoneCountryChanged}
                         value={this.state.phoneCountry}
                     />
-                    <input
-                        className="mx_Login_phoneNumberField mx_Login_field"
-                        ref="phoneNumber"
-                        key="phone_input"
-                        type="text"
-                        name="phoneNumber"
-                        onChange={this.onPhoneNumberChanged}
-                        placeholder="Mobile phone number"
-                        value={this.state.phoneNumber}
-                        autoFocus
-                    />
+                    <div className="mx_Login_field_group">
+                        <div className="mx_Login_field_prefix">+{prefix}</div>
+                        <input
+                            className="mx_Login_phoneNumberField mx_Login_field mx_Login_field_has_prefix"
+                            ref="phoneNumber"
+                            key="phone_input"
+                            type="text"
+                            name="phoneNumber"
+                            onChange={this.onPhoneNumberChanged}
+                            placeholder="Mobile phone number"
+                            value={this.state.phoneNumber}
+                            autoFocus
+                        />
+                    </div>
                 </div>;
         }
     }
