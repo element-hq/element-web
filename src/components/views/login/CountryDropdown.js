@@ -73,10 +73,6 @@ export default class CountryDropdown extends React.Component {
         );
     }
 
-    getCountryPrefix(iso2) {
-        return COUNTRIES_BY_ISO2[iso2].prefix;
-    }
-
     render() {
         const Dropdown = sdk.getComponent('elements.Dropdown');
 
