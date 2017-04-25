@@ -171,6 +171,7 @@ const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirector
 });
 
 if (shouldQuit) {
+    console.log("Other instance detected: exiting");
     electron.app.quit()
 }
 
