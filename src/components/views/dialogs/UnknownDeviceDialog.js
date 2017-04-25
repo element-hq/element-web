@@ -149,7 +149,7 @@ export default React.createClass({
             >
                 <GeminiScrollbar autoshow={false} className="mx_Dialog_content">
                     <h4>
-                        This room contains devices that you haven't seen before.
+                        "{this.props.room.name}" contains devices that you haven't seen before.
                     </h4>
                     { warning }
                     Unknown devices:

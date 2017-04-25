@@ -14,7 +14,7 @@ let instance = null;
 export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
-        this.fuse = new Fuse(EMOJI_SHORTNAMES);
+        this.fuse = new Fuse(EMOJI_SHORTNAMES, {});
     }
 
     async getCompletions(query: string, selection: SelectionRange) {

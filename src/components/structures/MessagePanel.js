@@ -279,9 +279,7 @@ module.exports = React.createClass({
             this.currentGhostEventId = null;
         }
 
-        var isMembershipChange = (e) =>
-            e.getType() === 'm.room.member'
-            && (!e.getPrevContent() || e.getContent().membership !== e.getPrevContent().membership);
+        var isMembershipChange = (e) => e.getType() === 'm.room.member';
 
         for (i = 0; i < this.props.events.length; i++) {
             var mxEv = this.props.events[i];
