@@ -123,18 +123,17 @@ module.exports = React.createClass({
         }
     },
 
-    onHsUrlChanged: function(newHsUrl) {
-        this.setState({
-            hsUrl: newHsUrl,
+    onServerConfigChange: function(config) {
+        let newState = {};
+        if (config.hsUrl !== undefined) {
+            newState.hsUrl = config.hsUrl;
+        }
+        if (config.isUrl !== undefined) {
+            newState.isUrl = config.isUrl;
+        }
+        this.setState(newState, function() {
+            this._replaceClient();
         });
-        this._replaceClient();
-    },
-
-    onIsUrlChanged: function(newIsUrl) {
-        this.setState({
-            isUrl: newIsUrl,
-        });
-        this._replaceClient();
     },
 
     _replaceClient: function() {
@@ -390,8 +389,7 @@ module.exports = React.createClass({
                         customIsUrl={this.props.customIsUrl}
                         defaultHsUrl={this.props.defaultHsUrl}
                         defaultIsUrl={this.props.defaultIsUrl}
-                        onHsUrlChanged={this.onHsUrlChanged}
-                        onIsUrlChanged={this.onIsUrlChanged}
+                        onServerConfigChange={this.onServerConfigChange}
                         delayTimeMs={1000}
                     />
                 </div>
