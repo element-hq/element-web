@@ -1,3 +1,10 @@
+Changes in [0.8.8](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.8) (2017-04-25)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.8-rc.2...v0.8.8)
+
+ * No changes
+
+
 Changes in [0.8.8-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.8-rc.2) (2017-04-24)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.8-rc.1...v0.8.8-rc.2)
