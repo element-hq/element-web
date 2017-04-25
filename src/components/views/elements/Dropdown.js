@@ -114,6 +114,9 @@ export default class Dropdown extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        if (!nextProps.children || nextProps.children.length === 0) {
+            return;
+        }
         this._reindexChildren(nextProps.children);
         const firstChild = nextProps.children[0];
         this.setState({
