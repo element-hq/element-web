@@ -1,3 +1,10 @@
+Changes in [0.9.9](https://github.com/vector-im/riot-web/releases/tag/v0.9.9) (2017-04-25)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.9-rc.2...v0.9.9)
+
+ * No changes
+
+
 Changes in [0.9.9-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.9.9-rc.2) (2017-04-24)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.9-rc.1...v0.9.9-rc.2)
