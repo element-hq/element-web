@@ -29,7 +29,14 @@ import DMRoomMap from '../../../utils/DMRoomMap';
 var Receipt = require('../../../utils/Receipt');
 var constantTimeDispatcher = require('../../../ConstantTimeDispatcher');
 
-var HIDE_CONFERENCE_CHANS = true;
+const HIDE_CONFERENCE_CHANS = true;
+
+const VERBS = {
+    'm.favourite': 'favourite',
+    'im.vector.fake.direct': 'tag direct chat',
+    'im.vector.fake.recent': 'restore',
+    'm.lowpriority': 'demote',
+};
 
 module.exports = React.createClass({
     displayName: 'RoomList',
@@ -53,6 +60,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             isLoadingLeftRooms: false,
+            totalRoomCount: null,
             lists: {},
             incomingCall: null,
         };
@@ -73,8 +81,7 @@ module.exports = React.createClass({
         // lookup for which lists a given roomId is currently in.
         this.listsForRoomId = {};
 
-        var s = this.getRoomLists();
-        this.setState(s);
+        this.refreshRoomList();
 
         // order of the sublists
         //this.listOrder = [];
@@ -317,21 +324,29 @@ module.exports = React.createClass({
         // any changes to it incrementally, updating the appropriate sublists
         // as needed.
         // Alternatively we'd do something magical with Immutable.js or similar.
-        this.setState(this.getRoomLists());
+        const lists = this.getRoomLists();
+        let totalRooms = 0;
+        for (const l of Object.values(lists)) {
+            totalRooms += l.length;
+        }
+        this.setState({
+            lists: this.getRoomLists(),
+            totalRoomCount: totalRooms,
+        });
         
         // this._lastRefreshRoomListTs = Date.now();
     },
 
     getRoomLists: function() {
         var self = this;
-        var s = { lists: {} };
+        const lists = {};
 
-        s.lists["im.vector.fake.invite"] = [];
-        s.lists["m.favourite"] = [];
-        s.lists["im.vector.fake.recent"] = [];
-        s.lists["im.vector.fake.direct"] = [];
-        s.lists["m.lowpriority"] = [];
-        s.lists["im.vector.fake.archived"] = [];
+        lists["im.vector.fake.invite"] = [];
+        lists["m.favourite"] = [];
+        lists["im.vector.fake.recent"] = [];
+        lists["im.vector.fake.direct"] = [];
+        lists["m.lowpriority"] = [];
+        lists["im.vector.fake.archived"] = [];
 
         this.listsForRoomId = {};
         var otherTagNames = {};
@@ -353,7 +368,7 @@ module.exports = React.createClass({
 
             if (me.membership == "invite") {
                 self.listsForRoomId[room.roomId].push("im.vector.fake.invite");
-                s.lists["im.vector.fake.invite"].push(room);
+                lists["im.vector.fake.invite"].push(room);
             }
             else if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(room, me, self.props.ConferenceHandler)) {
                 // skip past this room & don't put it in any lists
@@ -366,8 +381,8 @@ module.exports = React.createClass({
                 if (tagNames.length) {
                     for (var i = 0; i < tagNames.length; i++) {
                         var tagName = tagNames[i];
-                        s.lists[tagName] = s.lists[tagName] || [];
-                        s.lists[tagName].push(room);
+                        lists[tagName] = lists[tagName] || [];
+                        lists[tagName].push(room);
                         self.listsForRoomId[room.roomId].push(tagName);
                         otherTagNames[tagName] = 1;
                     }
@@ -375,46 +390,46 @@ module.exports = React.createClass({
                 else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
                     // "Direct Message" rooms (that we're still in and that aren't otherwise tagged)
                     self.listsForRoomId[room.roomId].push("im.vector.fake.direct");
-                    s.lists["im.vector.fake.direct"].push(room);
+                    lists["im.vector.fake.direct"].push(room);
                 }
                 else {
                     self.listsForRoomId[room.roomId].push("im.vector.fake.recent");
-                    s.lists["im.vector.fake.recent"].push(room);
+                    lists["im.vector.fake.recent"].push(room);
                 }
             }
             else if (me.membership === "leave") {
                 self.listsForRoomId[room.roomId].push("im.vector.fake.archived");
-                s.lists["im.vector.fake.archived"].push(room);
+                lists["im.vector.fake.archived"].push(room);
             }
             else {
                 console.error("unrecognised membership: " + me.membership + " - this should never happen");
             }
         });
 
-        if (s.lists["im.vector.fake.direct"].length == 0 &&
+        if (lists["im.vector.fake.direct"].length == 0 &&
             MatrixClientPeg.get().getAccountData('m.direct') === undefined &&
             !MatrixClientPeg.get().isGuest())
         {
             // scan through the 'recents' list for any rooms which look like DM rooms
             // and make them DM rooms
-            const oldRecents = s.lists["im.vector.fake.recent"];
-            s.lists["im.vector.fake.recent"] = [];
+            const oldRecents = lists["im.vector.fake.recent"];
+            lists["im.vector.fake.recent"] = [];
 
             for (const room of oldRecents) {
                 const me = room.getMember(MatrixClientPeg.get().credentials.userId);
 
                 if (me && Rooms.looksLikeDirectMessageRoom(room, me)) {
                     self.listsForRoomId[room.roomId].push("im.vector.fake.direct");
-                    s.lists["im.vector.fake.direct"].push(room);
+                    lists["im.vector.fake.direct"].push(room);
                 } else {
                     self.listsForRoomId[room.roomId].push("im.vector.fake.recent");
-                    s.lists["im.vector.fake.recent"].push(room);
+                    lists["im.vector.fake.recent"].push(room);
                 }
             }
 
             // save these new guessed DM rooms into the account data
             const newMDirectEvent = {};
-            for (const room of s.lists["im.vector.fake.direct"]) {
+            for (const room of lists["im.vector.fake.direct"]) {
                 const me = room.getMember(MatrixClientPeg.get().credentials.userId);
                 const otherPerson = Rooms.getOnlyOtherMember(room, me);
                 if (!otherPerson) continue;
@@ -449,7 +464,7 @@ module.exports = React.createClass({
         ];
 */
 
-        return s;
+        return lists;
     },
 
     _getScrollNode: function() {
@@ -479,6 +494,7 @@ module.exports = React.createClass({
         var incomingCallBox = document.getElementById("incomingCallBox");
         if (incomingCallBox && incomingCallBox.parentElement) {
             var scrollArea = this._getScrollNode();
+            if (!scrollArea) return;
             // Use the offset of the top of the scroll area from the window
             // as this is used to calculate the CSS fixed top position for the stickies
             var scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
@@ -502,6 +518,7 @@ module.exports = React.createClass({
     // properly through React
     _initAndPositionStickyHeaders: function(initialise, scrollToPosition) {
         var scrollArea = this._getScrollNode();
+        if (!scrollArea) return;
         // Use the offset of the top of the scroll area from the window
         // as this is used to calculate the CSS fixed top position for the stickies
         var scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
@@ -599,6 +616,49 @@ module.exports = React.createClass({
         this.refs.gemscroll.forceUpdate();
     },
 
+    _getEmptyContent: function(section) {
+        let greyed = false;
+        if (this.state.totalRoomCount === 0) {
+            const TintableSvg = sdk.getComponent('elements.TintableSvg');
+            switch (section) {
+                case 'm.favourite':
+                case 'm.lowpriority':
+                    greyed = true;
+                    break;
+                case 'im.vector.fake.direct':
+                    return <div className="mx_RoomList_emptySubListTip">
+                        <div className="mx_RoomList_butonPreview">
+                            <TintableSvg src="img/icons-people.svg" width="25" height="25" />
+                        </div>
+                        Use the button below to chat with someone!
+                    </div>;
+                case 'im.vector.fake.recent':
+                    return <div className="mx_RoomList_emptySubListTip">
+                        <div className="mx_RoomList_butonPreview">
+                            <TintableSvg src="img/icons-directory.svg" width="25" height="25" />
+                        </div>
+                        Use the button below to browse the room directory
+                        <br /><br />
+                        <div className="mx_RoomList_butonPreview">
+                            <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
+                        </div>
+                        or this button to start a new one!
+                    </div>;
+            }
+        }
+        const RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
+
+        const labelText = 'Drop here to ' + (VERBS[section] || 'tag ' + section);
+
+        let label;
+        if (greyed) {
+            label = <span className="mx_RoomList_greyedSubListLabel">{labelText}</span>;
+        } else {
+            label = labelText;
+        }
+        return <RoomDropTarget label={label} />;
+    },
+
     render: function() {
         var RoomSubList = sdk.getComponent('structures.RoomSubList');
         var self = this;
@@ -622,7 +682,7 @@ module.exports = React.createClass({
                 <RoomSubList list={ self.state.lists['m.favourite'] }
                              label="Favourites"
                              tagName="m.favourite"
-                             verb="favourite"
+                             emptyContent={this._getEmptyContent('m.favourite')}
                              editable={ true }
                              order="manual"
                              incomingCall={ self.state.incomingCall }
@@ -635,7 +695,7 @@ module.exports = React.createClass({
                 <RoomSubList list={ self.state.lists['im.vector.fake.direct'] }
                              label="People"
                              tagName="im.vector.fake.direct"
-                             verb="tag direct chat"
+                             emptyContent={this._getEmptyContent('im.vector.fake.direct')}
                              editable={ true }
                              order="recent"
                              incomingCall={ self.state.incomingCall }
@@ -650,7 +710,7 @@ module.exports = React.createClass({
                              label="Rooms"
                              tagName="im.vector.fake.recent"
                              editable={ true }
-                             verb="restore"
+                             emptyContent={this._getEmptyContent('im.vector.fake.recent')}
                              order="recent"
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
@@ -665,7 +725,7 @@ module.exports = React.createClass({
                              key={ tagName }
                              label={ tagName }
                              tagName={ tagName }
-                             verb={ "tag as " + tagName }
+                             emptyContent={this._getEmptyContent(tagName)}
                              editable={ true }
                              order="manual"
                              incomingCall={ self.state.incomingCall }
@@ -681,7 +741,7 @@ module.exports = React.createClass({
                 <RoomSubList list={ self.state.lists['m.lowpriority'] }
                              label="Low priority"
                              tagName="m.lowpriority"
-                             verb="demote"
+                             emptyContent={this._getEmptyContent('m.lowpriority')}
                              editable={ true }
                              order="recent"
                              incomingCall={ self.state.incomingCall }
