@@ -176,6 +176,15 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_UserSettings_phoneSection {
+    display:table;
+}
+
+.mx_UserSettings_phoneCountry {
+    width: 70px;
+    display: table-cell;
+}
+
 input.mx_UserSettings_phoneNumberField {
     margin-left: 3px;
     width: 172px;
