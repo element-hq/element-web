@@ -83,6 +83,7 @@ var RoomSubList = React.createClass({
         incomingCall: React.PropTypes.object,
         onShowMoreRooms: React.PropTypes.func,
         searchFilter: React.PropTypes.string,
+        emptyContent: React.PropTypes.node, // content shown if the list is empty
     },
 
     getInitialState: function() {
@@ -521,16 +522,18 @@ var RoomSubList = React.createClass({
 
     render: function() {
         var connectDropTarget = this.props.connectDropTarget;
-        var RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
         var TruncatedList = sdk.getComponent('elements.TruncatedList');
 
         var label = this.props.collapsed ? null : this.props.label;
 
         //console.log("render: " + JSON.stringify(this.state.sortedList));
 
-        var target;
-        if (this.state.sortedList.length == 0 && this.props.editable) {
-            target = <RoomDropTarget label={ 'Drop here to ' + this.props.verb }/>;
+        let content;
+        if (this.state.sortedList.length == 0) {
+            //content = <RoomDropTarget label={ 'Drop here to ' + this.props.verb }/>;
+            content = this.props.emptyContent;
+        } else {
+            content = this.makeRoomTiles();
         }
 
         if (this.state.sortedList.length > 0 || this.props.editable) {
@@ -540,8 +543,7 @@ var RoomSubList = React.createClass({
             if (!this.state.hidden) {
                 subList = <TruncatedList className={ classes } truncateAt={this.state.truncateAt}
                                          createOverflowElement={this._createOverflowTile} >
-                                { target }
-                                { this.makeRoomTiles() }
+                                { content }
                           </TruncatedList>;
             }
             else {
