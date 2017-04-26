@@ -1058,11 +1058,18 @@ var TimelinePanel = React.createClass({
         // events when viewing historical messages, we get stuck in a loop
         // of paginating our way through the entire history of the room.
         var stickyBottom = !this._timelineWindow.canPaginate(EventTimeline.FORWARDS);
+
+        // If the state is PREPARED, we're still waiting for the js-sdk to sync with
+        // the HS and fetch the latest events, so we are effectively forward paginating.
+        const forwardPaginating = (
+            this.state.forwardPaginating || MatrixClientPeg.get().getSyncState() == 'PREPARED'
+        );
+
         return (
             <MessagePanel ref="messagePanel"
                     hidden={ this.props.hidden }
                     backPaginating={ this.state.backPaginating }
-                    forwardPaginating={ this.state.forwardPaginating }
+                    forwardPaginating={ forwardPaginating }
                     events={ this.state.events }
                     highlightedEventId={ this.props.highlightedEventId }
                     readMarkerEventId={ this.state.readMarkerEventId }
