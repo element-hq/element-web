@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -167,6 +168,9 @@ var TimelinePanel = React.createClass({
 
             backPaginating: false,
             forwardPaginating: false,
+
+            // cache of matrixClient.getSyncState() (but from the 'sync' event)
+            clientSyncState: null,
         };
     },
 
@@ -183,6 +187,7 @@ var TimelinePanel = React.createClass({
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("Room.localEchoUpdated", this.onLocalEchoUpdated);
         MatrixClientPeg.get().on("Room.accountData", this.onAccountData);
+        MatrixClientPeg.get().on("sync", this.onSync);
 
         this._initTimeline(this.props);
     },
@@ -251,6 +256,7 @@ var TimelinePanel = React.createClass({
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
             client.removeListener("Room.accountData", this.onAccountData);
+            client.removeListener("sync", this.onSync);
         }
     },
 
@@ -485,6 +491,10 @@ var TimelinePanel = React.createClass({
         this.setState({
             readMarkerEventId: ev.getContent().event_id,
         }, this.props.onReadMarkerUpdated);
+    },
+
+    onSync: function(state, prevState, data) {
+        this.setState({clientSyncState: state});
     },
 
     sendReadReceipt: function() {
@@ -1062,7 +1072,7 @@ var TimelinePanel = React.createClass({
         // If the state is PREPARED, we're still waiting for the js-sdk to sync with
         // the HS and fetch the latest events, so we are effectively forward paginating.
         const forwardPaginating = (
-            this.state.forwardPaginating || MatrixClientPeg.get().getSyncState() == 'PREPARED'
+            this.state.forwardPaginating || this.state.clientSyncState == 'PREPARED'
         );
 
         return (
