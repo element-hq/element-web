@@ -50,7 +50,7 @@ export default class MessageComposer extends React.Component {
             inputState: {
                 style: [],
                 blockType: null,
-                isRichtextEnabled: UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', true),
+                isRichtextEnabled: UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false),
                 wordCount: 0,
             },
             showFormatting: UserSettingsStore.getSyncedSetting('MessageComposer.showFormatting', false),
