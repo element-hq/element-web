@@ -270,7 +270,8 @@ module.exports = React.createClass({
 
     _onPhoneCountryChange(newVal) {
         this.setState({
-            phoneCountry: newVal,
+            phoneCountry: newVal.iso2,
+            phonePrefix: newVal.prefix,
         });
     },
 
@@ -316,15 +317,21 @@ module.exports = React.createClass({
                     className="mx_Login_phoneCountry"
                     value={this.state.phoneCountry}
                 />
-                <input type="text" ref="phoneNumber"
-                    placeholder="Mobile phone number (optional)"
-                    defaultValue={this.props.defaultPhoneNumber}
-                    className={this._classForField(
-                        FIELD_PHONE_NUMBER, 'mx_Login_phoneNumberField', 'mx_Login_field'
-                    )}
-                    onBlur={function() {self.validateField(FIELD_PHONE_NUMBER);}}
-                    value={self.state.phoneNumber}
-                />
+                <div className="mx_Login_field_group">
+                    <div className="mx_Login_field_prefix">+{this.state.phonePrefix}</div>
+                    <input type="text" ref="phoneNumber"
+                        placeholder="Mobile phone number (optional)"
+                        defaultValue={this.props.defaultPhoneNumber}
+                        className={this._classForField(
+                            FIELD_PHONE_NUMBER,
+                            'mx_Login_phoneNumberField',
+                            'mx_Login_field',
+                            'mx_Login_field_has_prefix'
+                        )}
+                        onBlur={function() {self.validateField(FIELD_PHONE_NUMBER);}}
+                        value={self.state.phoneNumber}
+                    />
+                </div>
             </div>
         );
 
