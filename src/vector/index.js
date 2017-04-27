@@ -236,7 +236,7 @@ function onAction(payload) {
     case 'set_language':
       if (payload.value.indexOf("-") > -1) {
         counterpart.setLocale(payload.value.split('-')[0]);
-      } else if (language == 'pt-br') {
+      } else if (payload.value == 'pt-br') {
         counterpart.setLocale('pt_br');
       } else {
         counterpart.setLocale(payload.value);
