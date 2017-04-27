@@ -28,6 +28,10 @@ limitations under the License.
     flex-direction: column;
 }
 
+.mx_RoomDirectory .mx_RoomHeader_simpleHeader {
+    margin-left: 0px;
+}
+
 .mx_RoomDirectory_list {
     flex: 1;
 
