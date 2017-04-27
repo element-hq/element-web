@@ -59,8 +59,8 @@ module.exports = React.createClass({
             ContentRepo.getHttpUriForMxc(
                 MatrixClientPeg.get().getHomeserverUrl(),
                 props.oobData.avatarUrl,
-                window.devicePixelRatio > 1.2 ? 96 : props.width,
-                window.devicePixelRatio > 1.2 ? 96 : props.height,
+                Math.floor(props.width * window.devicePixelRatio),
+                Math.floor(props.height * window.devicePixelRatio),
                 props.resizeMethod
             ), // highest priority
             this.getRoomAvatarUrl(props),
@@ -76,8 +76,8 @@ module.exports = React.createClass({
 
         return props.room.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
-            window.devicePixelRatio > 1.2 ? 96 : props.width,
-            window.devicePixelRatio > 1.2 ? 96 : props.height,
+            Math.floor(props.width * window.devicePixelRatio),
+            Math.floor(props.height * window.devicePixelRatio),
             props.resizeMethod,
             false
         );
@@ -107,16 +107,16 @@ module.exports = React.createClass({
             }
             return theOtherGuy.getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
-                window.devicePixelRatio > 1.2 ? 96 : props.width,
-                window.devicePixelRatio > 1.2 ? 96 : props.height,
+                Math.floor(props.width * window.devicePixelRatio),
+                Math.floor(props.height * window.devicePixelRatio),
                 props.resizeMethod,
                 false
             );
         } else if (userIds.length == 1) {
             return mlist[userIds[0]].getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
-                window.devicePixelRatio > 1.2 ? 96 : props.width,
-                window.devicePixelRatio > 1.2 ? 96 : props.height,
+                Math.floor(props.width * window.devicePixelRatio),
+                Math.floor(props.height * window.devicePixelRatio),
                 props.resizeMethod,
                 false
             );

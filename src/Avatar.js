@@ -22,8 +22,8 @@ module.exports = {
     avatarUrlForMember: function(member, width, height, resizeMethod) {
         var url = member.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
-            window.devicePixelRatio > 1.2 ? 96 : width,
-            window.devicePixelRatio > 1.2 ? 96 : height,
+            Math.floor(width * window.devicePixelRatio),
+            Math.floor(height * window.devicePixelRatio),
             resizeMethod,
             false,
             false
@@ -40,8 +40,8 @@ module.exports = {
     avatarUrlForUser: function(user, width, height, resizeMethod) {
         var url = ContentRepo.getHttpUriForMxc(
             MatrixClientPeg.get().getHomeserverUrl(), user.avatarUrl,
-            window.devicePixelRatio > 1.2 ? 96 : width,
-            window.devicePixelRatio > 1.2 ? 96 : height,
+            Math.floor(width * window.devicePixelRatio),
+            Math.floor(height * window.devicePixelRatio),
             resizeMethod
         );
         if (!url || url.length === 0) {
