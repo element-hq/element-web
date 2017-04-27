@@ -179,11 +179,11 @@ limitations under the License.
     align-self: flex-end;
 }
 
-.mx_Login_username_group {
+.mx_Login_field_group {
     display: flex;
 }
 
-.mx_Login_username_prefix {
+.mx_Login_field_prefix {
     height: 33px;
     padding: 0px 5px;
     line-height: 33px;
@@ -196,7 +196,7 @@ limitations under the License.
     text-align: center;
 }
 
-.mx_Login_username_suffix {
+.mx_Login_field_suffix {
     height: 33px;
     padding: 0px 5px;
     line-height: 33px;
@@ -214,7 +214,9 @@ limitations under the License.
     flex-shrink: 1;
     min-width: 0px;
     border-radius: 3px;
-    /* The "@" is always prefixed, so no rounded corners */
+}
+
+.mx_Login_field_has_prefix {
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
 }
@@ -224,13 +226,8 @@ limitations under the License.
     border-bottom-right-radius: 0px;
 }
 
-.mx_Login_phoneSection {
-    display: table;
-}
-
 .mx_Login_phoneCountry {
-    display: table-cell;
-    width: 70px;
+    margin-bottom: 14px;
 }
 
 .mx_Login_phoneCountry .mx_Dropdown_option {
@@ -245,9 +242,4 @@ limitations under the License.
 .mx_Login_phoneCountry .mx_Dropdown_option img {
     margin: 4px;
     vertical-align: top;
-}
-
-.mx_Login_phoneNumberField {
-    width: 210px;
-    margin-left: 3px;
 }
