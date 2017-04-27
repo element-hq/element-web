@@ -766,6 +766,16 @@ var TimelinePanel = React.createClass({
         return null;
     },
 
+    canJumpToReadMarker: function() {
+        // Only show jump bar if RR !== RM. If they are the same, there are only fully
+        // read messages and unread messages. We already have a badge count and the bottom
+        // bar to jump to "live" when we have unread messages.
+        // We want to show the bar if the read-marker is off the top of the screen.
+        // Also, if pos === null, the event might not be paginated - show the unread bar
+        const pos = this.getReadMarkerPosition();
+        return this.state.readMarkerEventId !== this._getCurrentReadReceipt() && (pos < 0 || pos === null);
+    },
+
     /**
      * called by the parent component when PageUp/Down/etc is pressed.
      *
