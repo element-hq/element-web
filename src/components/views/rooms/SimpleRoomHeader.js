@@ -44,6 +44,9 @@ export default React.createClass({
         title: React.PropTypes.string,
         onCancelClick: React.PropTypes.func,
 
+        // is the RightPanel collapsed?
+        collapsedRhs: React.PropTypes.bool,
+
         // `src` to a TintableSvg. Optional.
         icon: React.PropTypes.string,
     },
