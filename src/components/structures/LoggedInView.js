@@ -221,10 +221,8 @@ export default React.createClass({
             case PageTypes.RoomDirectory:
                 page_element = <RoomDirectory
                     ref="roomDirectory"
-                    collapsedRhs={this.props.collapse_rhs}
                     config={this.props.config.roomDirectory}
                 />;
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>;
                 break;
 
             case PageTypes.HomePage:
