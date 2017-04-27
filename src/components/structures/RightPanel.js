@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var counterpart = require('counterpart');
+import counterpart from 'counterpart';
 var sdk = require('matrix-react-sdk');
 var Matrix = require("matrix-js-sdk");
 var dis = require('matrix-react-sdk/lib/dispatcher');

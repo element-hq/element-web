@@ -63,6 +63,7 @@ var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
 var dis = require('matrix-react-sdk/lib/dispatcher');
+import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 
 import url from 'url';
 
@@ -76,7 +77,7 @@ var lastLocationHashSet = null;
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 CallHandler.setConferenceHandler(VectorConferenceHandler);
 
-var counterpart = require('counterpart');
+import counterpart from 'counterpart';
 MatrixClientPeg.setIndexedDbWorkerScript(window.vector_indexeddb_worker_script);
 
 function checkBrowserFeatures(featureList) {
@@ -233,7 +234,13 @@ function onLoadCompleted() {
 function onAction(payload) {
   switch (payload.action) {
     case 'set_language':
-      counterpart.setLocale(payload.value);
+      if (payload.value.indexOf("-") > -1) {
+        counterpart.setLocale(payload.value.split('-')[0]);
+      } else if (language == 'pt-br') {
+        counterpart.setLocale('pt_br');
+      } else {
+        counterpart.setLocale(payload.value);
+      }
       break;
   }
 }
@@ -302,16 +309,25 @@ async function loadApp() {
             />,
             document.getElementById('matrixchat')
         );
-        var localSettingsString = JSON.parse(localStorage.getItem('mx_local_settings') || '{}');
-        sdk.setLanguage(localSettingsString.language);
-        counterpart.registerTranslations('en-en', require('../i18n/en_EN'));
-        counterpart.registerTranslations('de-de', require('../i18n/de_DE'));
-        counterpart.registerTranslations('pt-br', require('../i18n/pt_BR'));
+        const _localSettings = UserSettingsStore.getLocalSettings();
+        sdk.setLanguage(_localSettings.language);
+        counterpart.registerTranslations('en', require('../i18n/en_EN'));
+        counterpart.registerTranslations('de', require('../i18n/de_DE'));
+        counterpart.registerTranslations('pt_br', require('../i18n/pt_BR'));
         counterpart.setFallbackLocale('en');
         dis.register(onAction);
-        if (Object.keys(localSettingsString).length === 0) {
+        if (!_localSettings.hasOwnProperty('language')) {
           const language = navigator.languages[0] || navigator.language || navigator.userLanguage;
-          counterpart.setLocale(language);
+          if (language.indexOf("-") > -1) {
+            counterpart.setLocale(language.split('-')[0]);
+            UserSettingsStore.setLocalSetting('language', language.split('-')[0]);
+          } else if (language == 'pt-br') {
+            counterpart.setLocale('pt-br');
+            UserSettingsStore.setLocalSetting('language', 'pt_br');
+          } else {
+            counterpart.setLocale(language);
+            UserSettingsStore.setLocalSetting('language', language);
+          }
           dis.dispatch({
               action: 'set_language',
               value: language,

@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var counterpart = require('counterpart');
+import counterpart from 'counterpart';
 
 module.exports = React.createClass({
     displayName: 'VectorLoginFooter',

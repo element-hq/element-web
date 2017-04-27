@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var counterpart = require('counterpart');
+import counterpart from 'counterpart';
 var Notifier = require("matrix-react-sdk/lib/Notifier");
 var sdk = require('matrix-react-sdk')
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
