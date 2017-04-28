@@ -134,8 +134,10 @@ const Notifier = {
                 if (result !== 'granted') {
                     // The permission request was dismissed or denied
                     const description = result === 'denied'
-                        ? 'Your browser is not permitting this app to send you notifications.'
-                        : 'It seems you didn\'t accept notifications when your browser asked';
+                        ? 'Riot does not have permission to send you notifications'
+                        + ' - please check your browser settings'
+                        : 'Riot was not given permission to send notifications'
+                        + '- please try again';
                     const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
                     Modal.createDialog(ErrorDialog, {
                         title: 'Unable to enable Notifications',
