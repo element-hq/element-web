@@ -95,8 +95,8 @@ import views$dialogs$QuestionDialog from './components/views/dialogs/QuestionDia
 views$dialogs$QuestionDialog && (module.exports.components['views.dialogs.QuestionDialog'] = views$dialogs$QuestionDialog);
 import views$dialogs$SessionRestoreErrorDialog from './components/views/dialogs/SessionRestoreErrorDialog';
 views$dialogs$SessionRestoreErrorDialog && (module.exports.components['views.dialogs.SessionRestoreErrorDialog'] = views$dialogs$SessionRestoreErrorDialog);
-import views$dialogs$SetDisplayNameDialog from './components/views/dialogs/SetDisplayNameDialog';
-views$dialogs$SetDisplayNameDialog && (module.exports.components['views.dialogs.SetDisplayNameDialog'] = views$dialogs$SetDisplayNameDialog);
+import views$dialogs$SetMxIdDialog from './components/views/dialogs/SetMxIdDialog';
+views$dialogs$SetMxIdDialog && (module.exports.components['views.dialogs.SetMxIdDialog'] = views$dialogs$SetMxIdDialog);
 import views$dialogs$TextInputDialog from './components/views/dialogs/TextInputDialog';
 views$dialogs$TextInputDialog && (module.exports.components['views.dialogs.TextInputDialog'] = views$dialogs$TextInputDialog);
 import views$dialogs$UnknownDeviceDialog from './components/views/dialogs/UnknownDeviceDialog';

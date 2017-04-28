@@ -69,6 +69,10 @@ module.exports = React.createClass({
         // once it has been resolved.
         onRoomIdResolved: React.PropTypes.func,
 
+        // Called with the credentials of a registered user (if they were a ROU that
+        // transitioned to PWLU)
+        onRegistered: React.PropTypes.func,
+
         // An object representing a third party invite to join this room
         // Fields:
         // * inviteSignUrl (string) The URL used to join this room from an email invite
@@ -764,38 +768,27 @@ module.exports = React.createClass({
         var self = this;
 
         var cli = MatrixClientPeg.get();
-        var display_name_promise = q();
-        // if this is the first room we're joining, check the user has a display name
-        // and if they don't, prompt them to set one.
-        // NB. This unfortunately does not re-use the ChangeDisplayName component because
-        // it doesn't behave quite as desired here (we want an input field here rather than
-        // content-editable, and we want a default).
-        if (cli.getRooms().filter((r) => {
-            return r.hasMembershipState(cli.credentials.userId, "join");
-        })) {
-            display_name_promise = cli.getProfileInfo(cli.credentials.userId).then((result) => {
-                if (!result.displayname) {
-                    var SetDisplayNameDialog = sdk.getComponent('views.dialogs.SetDisplayNameDialog');
-                    var dialog_defer = q.defer();
-                    Modal.createDialog(SetDisplayNameDialog, {
-                        currentDisplayName: result.displayname,
-                        onFinished: (submitted, newDisplayName) => {
-                            if (submitted) {
-                                cli.setDisplayName(newDisplayName).done(() => {
-                                    dialog_defer.resolve();
-                                });
-                            }
-                            else {
-                                dialog_defer.reject();
-                            }
-                        }
-                    });
-                    return dialog_defer.promise;
+        var mxIdPromise = q();
+
+        // If the user is a ROU, allow them to transition to a PWLU
+        if (cli.isGuest()) {
+            const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
+            mxIdPromise = q.defer();
+            Modal.createDialog(SetMxIdDialog, {
+                onFinished: (submitted, credentials) => {
+                    if (!submitted) {
+                        mxIdPromise.reject();
+                    }
+                    this.props.onRegistered(credentials);
+                    mxIdPromise.resolve();
                 }
             });
         }
 
-        display_name_promise.then(() => {
+        mxIdPromise.then(() => {
+            this.setState({
+                joining: true
+            });
             // if this is an invite and has the 'direct' hint set, mark it as a DM room now.
             if (this.state.room) {
                 const me = this.state.room.getMember(MatrixClientPeg.get().credentials.userId);
@@ -870,10 +863,6 @@ module.exports = React.createClass({
                 });
             }
         }).done();
-
-        this.setState({
-            joining: true
-        });
     },
 
     onMessageListScroll: function(ev) {

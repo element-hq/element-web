@@ -43,6 +43,10 @@ export default React.createClass({
         onRoomCreated: React.PropTypes.func,
         onUserSettingsClose: React.PropTypes.func,
 
+        // Called with the credentials of a registered user (if they were a ROU that
+        // transitioned to PWLU)
+        onRegistered: React.PropTypes.func,
+
         teamToken: React.PropTypes.string,
 
         // and lots and lots of other stuff.
@@ -184,6 +188,7 @@ export default React.createClass({
                         roomAddress={this.props.currentRoomAlias || this.props.currentRoomId}
                         autoJoin={this.props.autoJoin}
                         onRoomIdResolved={this.props.onRoomIdResolved}
+                        onRegistered={this.props.onRegistered}
                         eventId={this.props.initialEventId}
                         thirdPartyInvite={this.props.thirdPartyInvite}
                         oobData={this.props.roomOobData}
