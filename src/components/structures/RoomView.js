@@ -778,6 +778,7 @@ module.exports = React.createClass({
                 onFinished: (submitted, credentials) => {
                     if (!submitted) {
                         mxIdPromise.reject();
+                        return;
                     }
                     this.props.onRegistered(credentials);
                     mxIdPromise.resolve();
