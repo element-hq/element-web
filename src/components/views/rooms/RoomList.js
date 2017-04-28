@@ -510,14 +510,9 @@ module.exports = React.createClass({
     },
 
     _getEmptyContent: function(section) {
-        let greyed = false;
         if (this.state.totalRoomCount === 0) {
             const TintableSvg = sdk.getComponent('elements.TintableSvg');
             switch (section) {
-                case 'm.favourite':
-                case 'm.lowpriority':
-                    greyed = true;
-                    break;
                 case 'im.vector.fake.direct':
                     return <div className="mx_RoomList_emptySubListTip">
                         <div className="mx_RoomList_butonPreview">
@@ -543,13 +538,7 @@ module.exports = React.createClass({
 
         const labelText = 'Drop here to ' + (VERBS[section] || 'tag ' + section);
 
-        let label;
-        if (greyed) {
-            label = <span className="mx_RoomList_greyedSubListLabel">{labelText}</span>;
-        } else {
-            label = labelText;
-        }
-        return <RoomDropTarget label={label} />;
+        return <RoomDropTarget label={labelText} />;
     },
 
     render: function() {
