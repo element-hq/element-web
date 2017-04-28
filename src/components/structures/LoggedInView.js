@@ -21,6 +21,7 @@ import React from 'react';
 import KeyCode from '../../KeyCode';
 import Notifier from '../../Notifier';
 import PageTypes from '../../PageTypes';
+import CallMediaHandler from '../../CallMediaHandler';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 
@@ -70,6 +71,10 @@ export default React.createClass({
         // _scrollStateMap is a map from room id to the scroll state returned by
         // RoomView.getScrollState()
         this._scrollStateMap = {};
+
+        // Only run these in electron, at least until a better mechanism for perms exists
+        // https://w3c.github.io/permissions/#dom-permissionname-device-info
+        if (window && window.process && window.process.type) CallMediaHandler.loadDevices();
 
         document.addEventListener('keydown', this._onKeyDown);
     },

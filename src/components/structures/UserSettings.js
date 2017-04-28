@@ -24,6 +24,7 @@ var dis = require("../../dispatcher");
 var q = require('q');
 var package_json = require('../../../package.json');
 var UserSettingsStore = require('../../UserSettingsStore');
+var CallMediaHandler = require('../../CallMediaHandler');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var Email = require('../../email');
 var AddThreepid = require('../../AddThreepid');
@@ -109,7 +110,6 @@ const THEMES = [
     }
 ];
 
-
 module.exports = React.createClass({
     displayName: 'UserSettings',
 
@@ -147,6 +147,7 @@ module.exports = React.createClass({
             email_add_pending: false,
             vectorVersion: null,
             rejectingInvites: false,
+            mediaDevices: null,
         };
     },
 
@@ -166,6 +167,18 @@ module.exports = React.createClass({
                 console.log("Failed to fetch app version", e);
             });
         }
+
+        q().then(() => {
+            return CallMediaHandler.getDevices();
+        }).then((mediaDevices) => {
+            console.log("got mediaDevices", mediaDevices, this._unmounted);
+            if (this._unmounted) return;
+            this.setState({
+                mediaDevices,
+                activeAudioInput: this._localSettings['webrtc_audioinput'] || 'default',
+                activeVideoInput: this._localSettings['webrtc_videoinput'] || 'default',
+            });
+        });
 
         // Bulk rejecting invites:
         // /sync won't have had time to return when UserSettings re-renders from state changes, so getRooms()
@@ -187,6 +200,8 @@ module.exports = React.createClass({
         this._syncedSettings = syncedSettings;
 
         this._localSettings = UserSettingsStore.getLocalSettings();
+        this._setAudioInput = this._setAudioInput.bind(this);
+        this._setVideoInput = this._setVideoInput.bind(this);
     },
 
     componentDidMount: function() {
@@ -775,6 +790,66 @@ module.exports = React.createClass({
         </div>;
     },
 
+    _mapWebRtcDevicesToSpans: function(devices) {
+        return Object.keys(devices).map(
+            (deviceId) => <span key={deviceId}>{devices[deviceId]}</span>
+        );
+    },
+
+    _setAudioInput: function(deviceId) {
+        this.setState({activeAudioInput: deviceId});
+        CallMediaHandler.setAudioInput(deviceId);
+    },
+
+    _setVideoInput: function(deviceId) {
+        this.setState({activeVideoInput: deviceId});
+        CallMediaHandler.setVideoInput(deviceId);
+    },
+
+    _renderWebRtcSettings: function() {
+        if (!(window && window.process && window.process.type)
+         || !this.state.mediaDevices) return;
+
+        const Dropdown = sdk.getComponent('elements.Dropdown');
+
+        let microphoneDropdown = <h5>No Microphones detected</h5>;
+        let webcamDropdown = <h5>No Webcams detected</h5>;
+
+        const audioInputs = this.state.mediaDevices.audioinput;
+        if ('default' in audioInputs) {
+            microphoneDropdown = <div>
+                <h4>Microphone</h4>
+                <Dropdown
+                    className="mx_UserSettings_webRtcDevices_dropdown"
+                    value={this.state.activeAudioInput}
+                    onOptionChange={this._setAudioInput}>
+                    {this._mapWebRtcDevicesToSpans(audioInputs)}
+                </Dropdown>
+            </div>;
+        }
+
+        const videoInputs = this.state.mediaDevices.videoinput;
+        if ('default' in videoInputs) {
+            webcamDropdown = <div>
+                <h4>Cameras</h4>
+                <Dropdown
+                    className="mx_UserSettings_webRtcDevices_dropdown"
+                    value={this.state.activeVideoInput}
+                    onOptionChange={this._setVideoInput}>
+                    {this._mapWebRtcDevicesToSpans(videoInputs)}
+                </Dropdown>
+            </div>;
+        }
+
+        return <div>
+            <h3>WebRTC</h3>
+            <div className="mx_UserSettings_section">
+                {microphoneDropdown}
+                {webcamDropdown}
+            </div>
+        </div>;
+    },
+
     _showSpoiler: function(event) {
         const target = event.target;
         const hidden = target.getAttribute('data-spoiler');
@@ -973,6 +1048,7 @@ module.exports = React.createClass({
 
                 {this._renderUserInterfaceSettings()}
                 {this._renderLabs()}
+                {this._renderWebRtcSettings()}
                 {this._renderDevicesPanel()}
                 {this._renderCryptoInfo()}
                 {this._renderBulkOptions()}
