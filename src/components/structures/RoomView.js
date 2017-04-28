@@ -771,7 +771,7 @@ module.exports = React.createClass({
         var mxIdPromise = q();
 
         // If the user is a ROU, allow them to transition to a PWLU
-        if (cli.isGuest()) {
+        if (cli && cli.isGuest()) {
             const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
             const defered = q.defer();
             mxIdPromise = defered.promise;
