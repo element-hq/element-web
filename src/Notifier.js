@@ -137,7 +137,7 @@ const Notifier = {
                         ? 'Riot does not have permission to send you notifications'
                         + ' - please check your browser settings'
                         : 'Riot was not given permission to send notifications'
-                        + '- please try again';
+                        + ' - please try again';
                     const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
                     Modal.createDialog(ErrorDialog, {
                         title: 'Unable to enable Notifications',
