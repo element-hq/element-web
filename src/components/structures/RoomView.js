@@ -773,15 +773,16 @@ module.exports = React.createClass({
         // If the user is a ROU, allow them to transition to a PWLU
         if (cli.isGuest()) {
             const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
-            mxIdPromise = q.defer();
+            const defered = q.defer();
+            mxIdPromise = defered.promise;
             Modal.createDialog(SetMxIdDialog, {
                 onFinished: (submitted, credentials) => {
                     if (!submitted) {
-                        mxIdPromise.reject();
+                        defered.reject();
                         return;
                     }
                     this.props.onRegistered(credentials);
-                    mxIdPromise.resolve();
+                    defered.resolve();
                 }
             });
         }
