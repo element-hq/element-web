@@ -177,11 +177,20 @@ export default React.createClass({
         if (this.props.tabComplete) {
             this.props.tabComplete.setTextArea(this.refs.textarea);
         }
+        window.addEventListener('beforeunload', this.onPageUnload);
     },
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
         this.sentHistory.saveLastTextEntry();
+        window.removeEventListener('beforeunload', this.onPageUnload);
+    },
+
+    onPageUnload(event) {
+        if (this.isTyping) {
+            return event.returnValue =
+                'You seem to be typing a message, are you sure you want to quit?';
+        }
     },
 
     onAction: function(payload) {
