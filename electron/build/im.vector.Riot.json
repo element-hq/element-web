@@ -14,7 +14,8 @@
         "--share=ipc",
         "--share=network",
         "--socket=pulseaudio",
-        "--socket=x11"
+        "--socket=x11",
+        "--talk-name=org.freedesktop.Notifications"
     ],
     "modules": [
         {
