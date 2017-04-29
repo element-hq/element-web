@@ -16,6 +16,7 @@ limitations under the License.
 
 'use strict';
 var React = require('react');
+var counterpart = require('counterpart');
 var q = require("q");
 var sdk = require('matrix-react-sdk');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
@@ -698,7 +699,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_UserNotifSettings_labelCell">
                             <label htmlFor="enableNotifications">
-                                Enable notifications for this account
+                                { counterpart.translate('Enable notifications for this account') }
                             </label>
                         </div>
                     </div>
@@ -713,7 +714,7 @@ module.exports = React.createClass({
                     {masterPushRuleDiv}
 
                     <div className="mx_UserSettings_notifTable">
-                        All notifications are currently disabled for all targets.
+                        { counterpart.translate('All notifications are currently disabled for all targets') }.
                     </div>
                 </div>
             );
@@ -723,13 +724,13 @@ module.exports = React.createClass({
         let emailNotificationsRow;
         if (emailThreepids.length === 0) {
             emailNotificationsRow = <div>
-                Add an email address above to configure email notifications
+                { counterpart.translate('Add an email address above to configure email notifications') }
             </div>;
         } else {
             // This only supports the first email address in your profile for now
             emailNotificationsRow = this.emailNotificationsRow(
                 emailThreepids[0].address,
-                "Enable email notifications ("+emailThreepids[0].address+")"
+                counterpart.translate("Enable email notifications")+" ("+emailThreepids[0].address+")"
             );
         }
 
@@ -748,12 +749,12 @@ module.exports = React.createClass({
         }
         if (externalKeyWords.length) {
             externalKeyWords = externalKeyWords.join(", ");
-            externalRules.push(<li>Notifications on the following keywords follow rules which can’t be displayed here: { externalKeyWords }</li>);
+            externalRules.push(<li>{ counterpart.translate('Notifications on the following keywords follow rules which can’t be displayed here:') } { externalKeyWords }</li>);
         }
 
         var devicesSection;
         if (this.state.pushers === undefined) {
-            devicesSection = <div className="error">Unable to fetch notification target list</div>
+            devicesSection = <div className="error">{ counterpart.translate('Unable to fetch notification target list') }</div>
         } else if (this.state.pushers.length == 0) {
             devicesSection = null;
         } else {
@@ -783,9 +784,9 @@ module.exports = React.createClass({
         if (externalRules.length) {
             advancedSettings = (
                 <div>
-                    <h3>Advanced notifications settings</h3>
-                    There are advanced notifications which are not shown here.<br/>
-                    You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply.
+                    <h3>{ counterpart.translate('Advanced notifications settings') }</h3>
+                    { counterpart.translate('There are advanced notifications which are not shown here') }.<br/>
+                    { counterpart.translate('You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply') }.
                     <ul>
                         { externalRules }
                     </ul>
@@ -812,7 +813,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_UserNotifSettings_labelCell">
                             <label htmlFor="enableDesktopNotifications">
-                                Enable desktop notifications
+                                { counterpart.translate('Enable desktop notifications') }
                             </label>
                         </div>
                     </div>
@@ -830,7 +831,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_UserNotifSettings_labelCell">
                             <label htmlFor="enableDesktopAudioNotifications">
-                                Enable audible notifications in web client
+                                { counterpart.translate('Enable audible notifications in web client') }
                             </label>
                         </div>
                     </div>
@@ -842,9 +843,9 @@ module.exports = React.createClass({
                             <thead>
                                 <tr>
                                     <th width="55%"></th>
-                                    <th width="15%">Off</th>
-                                    <th width="15%">On</th>
-                                    <th width="15%">Noisy</th>
+                                    <th width="15%">{ counterpart.translate("Off") }</th>
+                                    <th width="15%">{ counterpart.translate("On") }</th>
+                                    <th width="15%">{ counterpart.translate("Noisy") }</th>
                                 </tr>
                             </thead>
                             <tbody>
