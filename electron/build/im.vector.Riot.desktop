@@ -4,6 +4,6 @@ Comment=A feature-rich client for Matrix.org
 Exec=riot-web
 Terminal=false
 Type=Application
-Icon=im.riot.Riot
+Icon=im.vector.Riot
 StartupWMClass="Riot"
 Categories=Network;InstantMessaging;Chat;IRCClient

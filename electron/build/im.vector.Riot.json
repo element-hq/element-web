@@ -1,5 +1,5 @@
 {
-    "id": "im.riot.Riot",
+    "id": "im.vector.Riot",
     "version": "stable",
     "base": "io.atom.electron.BaseApp",
     "base-version": "master",
@@ -50,11 +50,11 @@
                 },
                 {
                     "type": "file",
-                    "path": "im.riot.Riot.desktop"
+                    "path": "im.vector.Riot.desktop"
                 },
                 {
                     "type": "file",
-                    "path": "im.riot.Riot.appdata.xml"
+                    "path": "im.vector.Riot.appdata.xml"
                 }
             ]
         }
