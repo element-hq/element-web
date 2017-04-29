@@ -162,8 +162,8 @@ module.exports = React.createClass({
             console.error("Failed to get publicRooms: %s", JSON.stringify(err));
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Failed to get public room list",
-                description: ((err && err.message) ? err.message : "The server may be unavailable or overloaded"),
+                title: counterpart.translate("Failed to get public room list"),
+                description: ((err && err.message) ? err.message : counterpart.translate("The server may be unavailable or overloaded"))
             });
         });
     },
@@ -177,31 +177,31 @@ module.exports = React.createClass({
      */
     removeFromDirectory: function(room) {
         var alias = get_display_alias_for_room(room);
-        var name = room.name || alias || "Unnamed room";
+        var name = room.name || alias || counterpart.translate("Unnamed room");
 
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
         var desc;
         if (alias) {
-            desc = `Delete the room alias '${alias}' and remove '${name}' from the directory?`;
+            desc = counterpart.translate("Delete the room alias") + " " + alias + " " + counterpart.translate("and remove") + " " + name + " " + counterpart.translate("from the directory") + "?";
         } else {
-            desc = `Remove '${name}' from the directory?`;
+            desc = counterpart.translate("Remove") + " " + name + " " + counterpart.translate("from the directory") + "?";
         }
 
         Modal.createDialog(QuestionDialog, {
-            title: "Remove from Directory",
+            title: counterpart.translate("Remove from Directory"),
             description: desc,
             onFinished: (should_delete) => {
                 if (!should_delete) return;
 
                 var Loader = sdk.getComponent("elements.Spinner");
                 var modal = Modal.createDialog(Loader);
-                var step = `remove '${name}' from the directory.`;
+                var step = counterpart.translate("remove") + " " + name + " " + counterpart.translate("from the directory") + ".";
 
                 MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
                     if (!alias) return;
-                    step = 'delete the alias.';
+                    step = counterpart.translate("delete the alias") + ".";
                     return MatrixClientPeg.get().deleteAlias(alias);
                 }).done(() => {
                     modal.close();
@@ -211,8 +211,8 @@ module.exports = React.createClass({
                     this.refreshRoomList();
                     console.error("Failed to " + step + ": " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Failed to " + step,
-                        description: ((err && err.message) ? err.message : "The server may be unavailable or overloaded"),
+                        title: counterpart.translate("Error"),
+                        description: ((err && err.message) ? err.message : counterpart.translate("The server may be unavailable or overloaded"))
                     });
                 });
             }
@@ -300,8 +300,8 @@ module.exports = React.createClass({
             if (!fields) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Unable to join network",
-                    description: "Riot does not know how to join a room on this network",
+                    title: counterpart.translate("Unable to join network"),
+                    description: counterpart.translate("Riot does not know how to join a room on this network"),
                 });
                 return;
             }
@@ -311,15 +311,15 @@ module.exports = React.createClass({
                 } else {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createDialog(ErrorDialog, {
-                        title: "Room not found",
-                        description: "Couldn't find a matching Matrix room",
+                        title: counterpart.translate("Room not found"),
+                        description: counterpart.translate("Couldn't find a matching Matrix room"),
                     });
                 }
             }, (e) => {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Fetching third party location failed",
-                    description: "Unable to look up room ID from server",
+                    title: counterpart.translate("Fetching third party location failed"),
+                    description: counterpart.translate("Unable to look up room ID from server"),
                 });
             });
         }
@@ -339,8 +339,8 @@ module.exports = React.createClass({
                 if (!room.world_readable && !room.guest_can_join) {
                     var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
                     Modal.createDialog(NeedToRegisterDialog, {
-                        title: "Failed to join the room",
-                        description: "This room is inaccessible to guests. You may be able to join if you register."
+                        title: counterpart.translate("Failed to join the room"),
+                        description: counterpart.translate("This room is inaccessible to guests. You may be able to join if you register") + "."
                     });
                     return;
                 }
@@ -354,7 +354,7 @@ module.exports = React.createClass({
                 avatarUrl: room.avatar_url,
                 // XXX: This logic is duplicated from the JS SDK which
                 // would normally decide what the name is.
-                name: room.name || room_alias || "Unnamed room",
+                name: room.name || room_alias || counterpart.translate("Unnamed room"),
             };
         }
         // It's not really possible to join Matrix rooms by ID because the HS has no way to know
@@ -379,7 +379,7 @@ module.exports = React.createClass({
         var self = this;
         var guestRead, guestJoin, perms;
         for (var i = 0; i < rooms.length; i++) {
-            var name = rooms[i].name || get_display_alias_for_room(rooms[i]) || "Unnamed room";
+            var name = rooms[i].name || get_display_alias_for_room(rooms[i]) || counterpart.translate("Unnamed room");
             guestRead = null;
             guestJoin = null;
 

@@ -21,6 +21,7 @@ import q from 'q';
 import React from 'react';
 import classNames from 'classnames';
 import sdk from 'matrix-react-sdk';
+import counterpart from 'counterpart';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import DMRoomMap from 'matrix-react-sdk/lib/utils/DMRoomMap';
@@ -353,17 +354,17 @@ module.exports = React.createClass({
                 <div className={ favouriteClasses } onClick={this._onClickFavourite} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src="img/icon_context_fave.svg" width="15" height="15" />
                     <img className="mx_RoomTileContextMenu_tag_icon_set" src="img/icon_context_fave_on.svg" width="15" height="15" />
-                    Favourite
+                    { counterpart.translate("Favourite") }
                 </div>
                 <div className={ lowPriorityClasses } onClick={this._onClickLowPriority} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src="img/icon_context_low.svg" width="15" height="15" />
                     <img className="mx_RoomTileContextMenu_tag_icon_set" src="img/icon_context_low_on.svg" width="15" height="15" />
-                    Low Priority
+                    { counterpart.translate("Low Priority") }
                 </div>
                 <div className={ dmClasses } onClick={this._onClickDM} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src="img/icon_context_person.svg" width="15" height="15" />
                     <img className="mx_RoomTileContextMenu_tag_icon_set" src="img/icon_context_person_on.svg" width="15" height="15" />
-                    Direct Chat
+                    { counterpart.translate("Direct Chat") }
                 </div>
             </div>
         );

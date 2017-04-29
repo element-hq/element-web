@@ -20,7 +20,8 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var classNames = require('classnames');
 var DropTarget = require('react-dnd').DropTarget;
-var sdk = require('matrix-react-sdk')
+var sdk = require('matrix-react-sdk');
+import counterpart from 'counterpart';
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Unread = require('matrix-react-sdk/lib/Unread');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
@@ -477,7 +478,7 @@ var RoomSubList = React.createClass({
 
         var target;
         if (this.state.sortedList.length == 0 && this.props.editable) {
-            target = <RoomDropTarget label={ 'Drop here to ' + this.props.verb }/>;
+            target = <RoomDropTarget label={ counterpart.translate("Drop here to") + ' ' + this.props.verb }/>;
         }
 
         var roomCount = this.props.list.length > 0 ? this.props.list.length : '';
