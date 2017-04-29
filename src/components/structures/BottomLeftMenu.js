@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var counterpart = require('counterpart');
+import counterpart from 'counterpart';
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');

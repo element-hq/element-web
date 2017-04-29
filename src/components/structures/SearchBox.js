@@ -17,11 +17,12 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-var counterpart = require('counterpart');
+import counterpart from 'counterpart';
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+var KeyCode = require('matrix-react-sdk/lib/KeyCode');
 
 module.exports = React.createClass({
     displayName: 'SearchBox',
@@ -39,25 +40,23 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
+        document.addEventListener('keydown', this._onKeyDown);
     },
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
+        document.removeEventListener('keydown', this._onKeyDown);
     },
 
     onAction: function(payload) {
-        // Disabling this as I find it really really annoying, and was used to the
-        // previous behaviour - see https://github.com/vector-im/riot-web/issues/3348
-/*        
         switch (payload.action) {
             // Clear up the text field when a room is selected.
             case 'view_room':
-                if (this.refs.search) {
+                if (payload.clear_search && this.refs.search) {
                     this._clearSearch();
                 }
                 break;
         }
-*/        
     },
 
     onChange: function() {
@@ -89,6 +88,38 @@ module.exports = React.createClass({
     _clearSearch: function() {
         this.refs.search.value = "";
         this.onChange();
+    },
+
+    _onKeyDown: function(ev) {
+        let handled = false;
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        let ctrlCmdOnly;
+        if (isMac) {
+            ctrlCmdOnly = ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
+        } else {
+            ctrlCmdOnly = ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
+        }
+
+        switch (ev.keyCode) {
+            case KeyCode.ESCAPE:
+                this._clearSearch();
+                dis.dispatch({action: 'focus_composer'});
+                break;
+            case KeyCode.KEY_K:
+                if (ctrlCmdOnly) {
+                    if (this.refs.search) {
+                        this.refs.search.focus();
+                        this.refs.search.select();
+                    }
+                    handled = true;
+                }
+                break;
+        }
+
+        if (handled) {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
     },
 
     render: function() {

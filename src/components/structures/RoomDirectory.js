@@ -23,7 +23,6 @@ var ContentRepo = require("matrix-js-sdk").ContentRepo;
 var Modal = require('matrix-react-sdk/lib/Modal');
 var sdk = require('matrix-react-sdk');
 var dis = require('matrix-react-sdk/lib/dispatcher');
-var GeminiScrollbar = require('react-gemini-scrollbar');
 
 var linkify = require('linkifyjs');
 var linkifyString = require('linkifyjs/string');
@@ -31,7 +30,7 @@ var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
 var sanitizeHtml = require('sanitize-html');
 var q = require('q');
 
-var counterpart = require('counterpart');
+import counterpart from 'counterpart';
 
 import {instanceForInstanceId, protocolNameForInstanceId} from '../../utils/DirectoryUtils';
 
@@ -164,7 +163,7 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to get public room list",
-                description: "The server may be unavailable or overloaded",
+                description: ((err && err.message) ? err.message : "The server may be unavailable or overloaded"),
             });
         });
     },
@@ -212,8 +211,8 @@ module.exports = React.createClass({
                     this.refreshRoomList();
                     console.error("Failed to " + step + ": " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Error",
-                        description: "Failed to " + step,
+                        title: "Failed to " + step,
+                        description: ((err && err.message) ? err.message : "The server may be unavailable or overloaded"),
                     });
                 });
             }
@@ -462,6 +461,17 @@ module.exports = React.createClass({
         return fields;
     },
 
+    /**
+     * called by the parent component when PageUp/Down/etc is pressed.
+     *
+     * We pass it down to the scroll panel.
+     */
+    handleScrollKey: function(ev) {
+        if (this.scrollPanel) {
+            this.scrollPanel.handleScrollKey(ev);
+        }
+    },
+
     render: function() {
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         const Loader = sdk.getComponent("elements.Spinner");
@@ -540,7 +550,7 @@ module.exports = React.createClass({
         const DirectorySearchBox = sdk.getComponent('elements.DirectorySearchBox');
         return (
             <div className="mx_RoomDirectory">
-                <SimpleRoomHeader title={ counterpart.translate('Directory') } />
+                <SimpleRoomHeader title={ counterpart.translate('Directory') } icon="img/icons-directory.svg" />
                 <div className="mx_RoomDirectory_list">
                     <div className="mx_RoomDirectory_listheader">
                         <DirectorySearchBox

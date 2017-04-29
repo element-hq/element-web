@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 var React = require("react");
-var counterpart = require('counterpart');
+import counterpart from 'counterpart';
 
 module.exports = React.createClass({
     displayName: 'VectorCustomServerDialog',
