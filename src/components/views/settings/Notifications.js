@@ -132,8 +132,8 @@ module.exports = React.createClass({
         }, (error) => {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Error saving email notification preferences",
-                description: "An error occurred whilst saving your email notification preferences.",
+                title: counterpart.translate("Error saving email notification preferences"),
+                description: counterpart.translate("An error occurred whilst saving your email notification preferences") + ".",
             });
         });
     },
@@ -176,8 +176,8 @@ module.exports = React.createClass({
 
         var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
         Modal.createDialog(TextInputDialog, {
-            title: "Keywords",
-            description: "Enter keywords separated by a comma:",
+            title: counterpart.translate("Keywords"),
+            description: counterpart.translate("Enter keywords separated by a comma") + ":",
             value: keywords,
             onFinished: function onFinished(should_leave, newValue) {
 
@@ -241,8 +241,8 @@ module.exports = React.createClass({
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Failed to change settings: " + error);
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failed to change settings",
-                    description: ((error && error.message) ? error.message : "Operation failed"),
+                    title: counterpart.translate("Failed to change settings"),
+                    description: ((error && error.message) ? error.message : counterpart.translate("Operation failed")),
                     onFinished: self._refreshFromServer
                 });
             });
@@ -311,8 +311,8 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Can't update user notification settings: " + error);
             Modal.createDialog(ErrorDialog, {
-                title: "Can't update user notification settings",
-                description: ((error && error.message) ? error.message : "Operation failed"),
+                title: counterpart.translate("Can't update user notification settings"),
+                description: ((error && error.message) ? error.message : counterpart.translate("Operation failed")),
                 onFinished: self._refreshFromServer
             });
         });
@@ -353,8 +353,8 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to update keywords: " + error);
             Modal.createDialog(ErrorDialog, {
-                title: "Failed to update keywords",
-                description: ((error && error.message) ? error.message : "Operation failed"),
+                title: counterpart.translate("Failed to update keywords"),
+                description: ((error && error.message) ? error.message : counterpart.translate("Operation failed")),
                 onFinished: self._refreshFromServer
             });
         }
@@ -563,8 +563,8 @@ module.exports = React.createClass({
 
             // Build the rules not managed by Vector UI
             var otherRulesDescriptions = {
-                '.m.rule.message': "Notify for all other messages/rooms",
-                '.m.rule.fallback': "Notify me for anything else"
+                '.m.rule.message': counterpart.translate("Notify for all other messages/rooms"),
+                '.m.rule.fallback': counterpart.translate("Notify me for anything else"),
             };
 
             for (var i in defaultRules.others) {
@@ -775,7 +775,7 @@ module.exports = React.createClass({
         }
         if (devicesSection) {
             devicesSection = (<div>
-                <h3>Notification targets</h3>
+                <h3>{ counterpart.translate("Notification targets") }</h3>
                 { devicesSection }
             </div>);
         }
