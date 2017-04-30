@@ -1,3 +1,5 @@
+[![Translationsstatus](https://translate.nordgedanken.de/widgets/riot-web/-/svg-badge.svg)](https://translate.nordgedanken.de/engage/riot-web/?utm_source=widget)
+
 Riot
 ====
 
