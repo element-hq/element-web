@@ -24,12 +24,12 @@ import q from 'q';
 const electron = require('electron');
 const remote = electron.remote;
 
-electron.remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
+remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
 
 function onUpdateDownloaded(ev, releaseNotes, ver, date, updateURL) {
     dis.dispatch({
         action: 'new_version',
-        currentVersion: electron.remote.app.getVersion(),
+        currentVersion: remote.app.getVersion(),
         newVersion: ver,
         releaseNotes: releaseNotes,
     });
@@ -68,7 +68,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         try {
             remote.app.setBadgeCount(count);
         } catch (e) {
-            console.error("Failed to set notification count", e);
+            console.error('Failed to set notification count', e);
         }
     }
 
@@ -89,7 +89,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         // we only have to strip out < and > as the spec doesn't include anything about things like &amp;
         // so we shouldn't assume that all implementations will treat those properly. Very basic tag parsing is done.
         if (window.process.platform === 'linux') {
-            msg = msg.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            msg = msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
 
         // Notifications in Electron use the HTML5 notification API
@@ -98,7 +98,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
             {
                 body: msg,
                 icon: avatarUrl,
-                tag: "vector",
+                tag: 'vector',
                 silent: true, // we play our own sounds
             }
         );
@@ -106,13 +106,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
         notification.onclick = function() {
             dis.dispatch({
                 action: 'view_room',
-                room_id: room.roomId
+                room_id: room.roomId,
             });
             global.focus();
-            const currentWin = electron.remote.getCurrentWindow();
-            currentWin.show();
-            currentWin.restore();
-            currentWin.focus();
+            const win = remote.getCurrentWindow();
+
+            if (win.isMinimized()) win.restore();
+            else if (!win.isVisible()) win.show();
+            else win.focus();
         };
 
         return notification;
@@ -123,7 +124,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     getAppVersion() {
-        return q(electron.remote.app.getVersion());
+        return q(remote.app.getVersion());
     }
 
     pollForUpdate() {
@@ -140,7 +141,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     getDefaultDeviceDisplayName() {
-        return "Riot Desktop on " + platformFriendlyName();
+        return 'Riot Desktop on ' + platformFriendlyName();
     }
 
     screenCaptureErrorString() {
@@ -152,6 +153,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     reload() {
-        electron.remote.getCurrentWebContents().reload();
+        remote.getCurrentWebContents().reload();
     }
 }

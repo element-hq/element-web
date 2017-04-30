@@ -548,7 +548,7 @@ module.exports = React.createClass({
         const DirectorySearchBox = sdk.getComponent('elements.DirectorySearchBox');
         return (
             <div className="mx_RoomDirectory">
-                <SimpleRoomHeader title="Directory" />
+                <SimpleRoomHeader title="Directory" icon="img/icons-directory.svg"/>
                 <div className="mx_RoomDirectory_list">
                     <div className="mx_RoomDirectory_listheader">
                         <DirectorySearchBox

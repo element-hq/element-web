@@ -31,6 +31,11 @@ limitations under the License.
     border-color: $accent-color;
 }
 
+/* Disable dropdown highlight on focus */
+.mx_Dropdown_input.mx_AccessibleButton:focus {
+    filter: none;
+}
+
 .mx_Dropdown_arrow {
     border-color: $primary-fg-color transparent transparent;
     border-style: solid;
