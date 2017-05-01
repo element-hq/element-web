@@ -12,6 +12,7 @@ const COPY_LIST = [
     ["node_modules/emojione/assets/svg/*", "webapp/emojione/svg/"],
     ["node_modules/emojione/assets/png/*", "webapp/emojione/png/"],
     ["./config.json", "webapp", {directwatch: 1}],
+    ["src/i18n/**", "webapp/i18n/"],
 ];
 
 const parseArgs = require('minimist');
@@ -80,3 +81,25 @@ function next(i, err) {
 }
 
 next(0);
+
+// Generate Language List
+
+const testFolder = 'src/i18n/';
+const fs = require('fs');
+let languages = {};
+fs.readdir(testFolder, (err, files) => {
+  files.forEach(file => {
+    if (file == 'pt_BR.json') {
+      languages['pt_br'] = file;
+    } else if (file.indexOf("-") > -1) {
+      languages[file.split('-')[0]] = file;
+    } else if (file.indexOf("_") > -1) {
+      languages[file.split('_')[0]] = file;
+    } else if (file == 'languages.json') {
+      // Do Nothing
+    } else {
+      languages[file] = file;
+    }
+  });
+  fs.writeFile('src/i18n/languages.json', JSON.stringify(languages, null, 4), 'utf8');
+})
