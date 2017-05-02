@@ -50,6 +50,10 @@ if (DEBUG_SCROLL) {
  * serialise the scroll state, and returned as the 'trackedScrollToken'
  * attribute by getScrollState().
  *
+ * Child elements that contain elements that have scroll tokens must declare the
+ * contained scroll tokens using 'data-contained-scroll-tokens`. When scrolling
+ * to a contained scroll token, the ScrollPanel will scroll to the container.
+ *
  * Some notes about the implementation:
  *
  * The saved 'scrollState' can exist in one of two states:
