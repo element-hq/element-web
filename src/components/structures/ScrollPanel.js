@@ -551,6 +551,11 @@ module.exports = React.createClass({
         var messages = this.refs.itemlist.children;
         for (var i = messages.length-1; i >= 0; --i) {
             var m = messages[i];
+            if (m.dataset.containedScrollTokens &&
+                m.dataset.containedScrollTokens.indexOf(scrollToken) !== -1) {
+                node = m;
+                break;
+            }
             if (!m.dataset.scrollToken) continue;
             if (m.dataset.scrollToken == scrollToken) {
                 node = m;

@@ -354,7 +354,6 @@ module.exports = React.createClass({
                     <MemberEventListSummary
                         key={key}
                         events={summarisedEvents}
-                        data-scroll-token={eventId}
                         onToggle={this._onWidgetLoad} // Update scroll state
                     >
                             {eventTiles}
