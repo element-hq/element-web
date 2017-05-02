@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -22,7 +22,14 @@ cp config.sample.json webapp/
 
 mkdir -p dist
 cp -r webapp vector-$version
-echo $version > vector-$version/version
+
+# if $version looks like semver with leading v, strip it before writing to file
+if [[ ${version} =~ ^v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+(-.+)?$ ]]; then
+    echo ${version:1} > vector-$version/version
+else
+    echo ${version} > vector-$version/version
+fi
+
 tar chvzf dist/vector-$version.tar.gz vector-$version
 rm -r vector-$version
 
