@@ -56,21 +56,18 @@ export default React.createClass({
         });
     },
 
-    _generateAndCachePassword: function() {
-        const pass = Math.random().toString(36).slice(2);
-        if (localStorage) {
-            localStorage.setItem('mx_pass', pass);
-        }
-        return pass;
+    _generatePassword: function() {
+        return Math.random().toString(36).slice(2);
     },
 
     _makeRegisterRequest: function(auth) {
         // Not upgrading - changing mxids
         const guestAccessToken = null;
+        this._generatedPassword = this._generatePassword();
 
         return this._matrixClient.register(
             this.state.username,
-            this._generateAndCachePassword(),
+            this._generatedPassword,
             undefined, // session id: included in the auth dict already
             auth,
             {},
@@ -98,6 +95,7 @@ export default React.createClass({
             homeserverUrl: this._matrixClient.getHomeserverUrl(),
             identityServerUrl: this._matrixClient.getIdentityServerUrl(),
             accessToken: response.access_token,
+            password: this._generatedPassword,
             teamToken: teamToken,
         });
     },

@@ -303,6 +303,12 @@ export function setLoggedIn(credentials) {
                 localStorage.setItem("mx_device_id", credentials.deviceId);
             }
 
+            // The user registered as a PWLU (PassWord-Less User), the generated password
+            // is cached here such that the user can change it at a later time.
+            if (credentials.password) {
+                localStorage.setItem("mx_pass", credentials.password);
+            }
+
             console.log("Session persisted for %s", credentials.userId);
         } catch (e) {
             console.warn("Error using local storage: can't persist session!", e);
