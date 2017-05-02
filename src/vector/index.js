@@ -63,6 +63,7 @@ var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
 var dis = require('matrix-react-sdk/lib/dispatcher');
+import Modal from 'matrix-react-sdk/lib/Modal';
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 
 import url from 'url';
@@ -78,6 +79,7 @@ var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 CallHandler.setConferenceHandler(VectorConferenceHandler);
 
 import counterpart from 'counterpart';
+
 MatrixClientPeg.setIndexedDbWorkerScript(window.vector_indexeddb_worker_script);
 
 function checkBrowserFeatures(featureList) {
@@ -231,15 +233,79 @@ function onLoadCompleted() {
     }
 }
 
+function getLanguage(langPath, langCode, callback) {
+    let response_return = {};
+    request(
+        { method: "GET", url: langPath },
+        (err, response, body) => {
+            if (err || response.status < 200 || response.status >= 300) {
+                // Lack of a config isn't an error, we should
+                // just use the defaults.
+                // Also treat a blank config as no config, assuming
+                // the status code is 0, because we don't get 404s
+                // from file: URIs so this is the only way we can
+                // not fail if the file doesn't exist when loading
+                // from a file:// URI.
+                if (response) {
+                    if (response.status == 404 || (response.status == 0 && body == '')) {
+                        resp_raw = {};
+                    }
+                }
+                const resp = {err: err, response: resp_raw};
+                err = JSON.parse(resp)['err'];
+                response_cb = JSON.parse(resp)['response'];
+                callback(err, response_cb, langCode);
+                return;
+            }
+
+            // We parse the JSON ourselves rather than use the JSON
+            // parameter, since this throws a parse error on empty
+            // which breaks if there's no config.json and we're
+            // loading from the filesystem (see above).
+
+            response_return = JSON.parse(body);
+            callback(null, response_return, langCode);
+            return;
+        }
+    );
+    return;
+}
+
+function callbackLanguage(err, langJson, langCode){
+  if (err !== null) {
+    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+    Modal.createDialog(ErrorDialog, {
+        title: "Error changing language",
+        description: "Riot was unable to find the correct Data for the selected Language.",
+    });
+    return;
+  } else {
+    console.log("set");
+    console.log(langJson);
+    counterpart.registerTranslations(langCode, langJson);
+  }
+}
+
 function onAction(payload) {
   switch (payload.action) {
     case 'set_language':
-      if (payload.value.indexOf("-") > -1) {
-        counterpart.setLocale(payload.value.split('-')[0]);
-      } else if (payload.value == 'pt-br') {
-        counterpart.setLocale('pt_br');
+      const i18nFolder = 'i18n/';
+      const languages = require('../i18n/languages.json');
+      if (languages.hasOwnProperty(payload.value)) {
+        getLanguage(i18nFolder + languages[payload.value], payload.value, callbackLanguage);
+        if (payload.value.indexOf("-") > -1) {
+          counterpart.setLocale(payload.value.split('-')[0]);
+        } else if (payload.value == 'pt_br') {
+          counterpart.setLocale('pt_br');
+        } else {
+          counterpart.setLocale(payload.value);
+        }
       } else {
-        counterpart.setLocale(payload.value);
+        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createDialog(ErrorDialog, {
+            title: "Error changing language",
+            description: "Riot was unable to find the correct Data for the selected Language.",
+        });
       }
       break;
   }
@@ -311,10 +377,6 @@ async function loadApp() {
         );
         const _localSettings = UserSettingsStore.getLocalSettings();
         sdk.setLanguage(_localSettings.language);
-        counterpart.registerTranslations('en', require('../i18n/en_EN'));
-        counterpart.registerTranslations('de', require('../i18n/de_DE'));
-        counterpart.registerTranslations('pt_br', require('../i18n/pt_BR'));
-        counterpart.setFallbackLocale('en');
         dis.register(onAction);
         if (!_localSettings.hasOwnProperty('language')) {
           const language = navigator.languages[0] || navigator.language || navigator.userLanguage;
@@ -322,7 +384,7 @@ async function loadApp() {
             counterpart.setLocale(language.split('-')[0]);
             UserSettingsStore.setLocalSetting('language', language.split('-')[0]);
           } else if (language == 'pt-br') {
-            counterpart.setLocale('pt-br');
+            counterpart.setLocale('pt_br');
             UserSettingsStore.setLocalSetting('language', 'pt_br');
           } else {
             counterpart.setLocale(language);
@@ -332,6 +394,7 @@ async function loadApp() {
               action: 'set_language',
               value: language,
           });
+          counterpart.setFallbackLocale('en');
         }
     }
     else {
