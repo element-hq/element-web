@@ -555,6 +555,9 @@ module.exports = React.createClass({
         var messages = this.refs.itemlist.children;
         for (var i = messages.length-1; i >= 0; --i) {
             var m = messages[i];
+            // 'data-contained-scroll-tokens' has been set, indicating that a child
+            // element contains elements that each have a token. Check this array of
+            // tokens for `scrollToken`.
             if (m.dataset.containedScrollTokens &&
                 m.dataset.containedScrollTokens.indexOf(scrollToken) !== -1) {
                 node = m;
