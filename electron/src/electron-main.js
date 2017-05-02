@@ -30,6 +30,9 @@ const tray = require('./tray');
 
 const VectorMenu = require('./vectormenu');
 
+
+if (process.defaultApp) electron.app.setPath("userData", electron.app.getPath("userData") + "-dev");
+
 let vectorConfig = {};
 try {
     vectorConfig = require('../../webapp/config.json');
