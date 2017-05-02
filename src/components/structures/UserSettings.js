@@ -32,13 +32,22 @@ import AccessibleButton from '../views/elements/AccessibleButton';
 
 // if this looks like a release, use the 'version' from package.json; else use
 // the git sha. Prepend version with v, to look like riot-web version
-const REACT_SDK_VERSION = 'dist' in package_json ? `v${package_json.version}` : package_json.gitHead || '<local>';
+const REACT_SDK_VERSION = 'dist' in package_json ? package_json.version : package_json.gitHead || '<local>';
 
 // Simple method to help prettify GH Release Tags and Commit Hashes.
-const GHVersionUrl = function(repo, token) {
-    const uriTail = (token.startsWith('v') && token.includes('.')) ? `releases/tag/${token}` : `commit/${token}`;
-    return `https://github.com/${repo}/${uriTail}`;
-}
+const semVerRegex = /^v?(\d+\.\d+\.\d+)(?:-(?:\d+-g)?(.+))?|$/i;
+const gHVersionLabel = function(repo, token) {
+    const match = token.match(semVerRegex);
+    let url; // assume commit hash
+    if (match && match[1]) { // basic semVer string possibly with commit hash
+        url = (match.length > 1 && match[2])
+            ? `https://github.com/${repo}/commit/${match[2]}`
+            : `https://github.com/${repo}/releases/tag/v${match[1]}`;
+    } else {
+        url = `https://github.com/${repo}/commit/${token.split('-')[0]}`;
+    }
+    return <a href={url}>{token}</a>;
+};
 
 // Enumerate some simple 'flip a bit' UI settings (if any).
 // 'id' gives the key name in the im.vector.web.settings account data event
@@ -911,7 +920,7 @@ module.exports = React.createClass({
         // we are using a version old version of olm. We assume the former.
         let olmVersionString = "<not-enabled>";
         if (olmVersion !== undefined) {
-            olmVersionString = `v${olmVersion[0]}.${olmVersion[1]}.${olmVersion[2]}`;
+            olmVersionString = `${olmVersion[0]}.${olmVersion[1]}.${olmVersion[2]}`;
         }
 
         return (
@@ -995,11 +1004,11 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_UserSettings_advanced">
                         matrix-react-sdk version: {(REACT_SDK_VERSION !== '<local>')
-                            ? <a href={ GHVersionUrl('matrix-org/matrix-react-sdk', REACT_SDK_VERSION) }>{REACT_SDK_VERSION}</a>
+                            ? gHVersionLabel('matrix-org/matrix-react-sdk', REACT_SDK_VERSION)
                             : REACT_SDK_VERSION
                         }<br/>
                         riot-web version: {(this.state.vectorVersion !== null)
-                            ? <a href={ GHVersionUrl('vector-im/riot-web', this.state.vectorVersion.split('-')[0]) }>{this.state.vectorVersion}</a>
+                            ? gHVersionLabel('vector-im/riot-web', this.state.vectorVersion)
                             : 'unknown'
                         }<br/>
                         olm version: {olmVersionString}<br/>
