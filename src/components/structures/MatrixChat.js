@@ -1166,6 +1166,7 @@ module.exports = React.createClass({
                     onRoomIdResolved={this.onRoomIdResolved}
                     onRoomCreated={this.onRoomCreated}
                     onUserSettingsClose={this.onUserSettingsClose}
+                    onRegistered={this.onRegistered}
                     teamToken={this._teamToken}
                     {...this.props}
                     {...this.state}
