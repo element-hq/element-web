@@ -62,5 +62,19 @@
     "Noisy": "Laut",
     "Notification targets": "Benachrichtigungsziel",
     "Notifications on the following keywords follow rules which can’t be displayed here": "Benachrichtigungen zu folgenden Stichwörtern folgen Regeln, die hier nicht angezeigt werden können",
-    "Notify for all other messages/rooms": "Benachrichtigung für alle anderen Mitteilungen/ Räume"
+    "Notify for all other messages/rooms": "Benachrichtigung für alle anderen Mitteilungen/ Räume",
+    "Operation failed": "Ausführung fehlgeschlagen",
+    "Reject": "ablehnen",
+    "Remove": "entfernen",
+    "remove": "Entferner",
+    "Remove from Directory": "Vom Raum Verzeichnis entfernen",
+    "Riot does not know how to join a room on this network": "Riot weiß nicht, wie es einem Raum auf diesem Netzwerk beitreten soll",
+    "Room not found": "Raum nicht gefunden",
+    "There are advanced notifications which are not shown here": "Es existieren erweiterte Benachrichtigungen, welche hier nicht angezeigt werden",
+    "The server may be unavailable or overloaded": "Der Server ist vermutlich nicht erreichbar oder überlastet",
+    "This room is inaccessible to guests. You may be able to join if you register": "Dieser Raum ist nicht verfügbar für Gäste. Vermutlich klappt es wenn du dich anmeldest",
+    "Unable to fetch notification target list": "Nicht möglich die Zielliste für Benachrichtigungen zu erhalten",
+    "Unable to join network": "Nicht möglich Netzwerk beizutreten",
+    "unknown error code": "unbekannte Fehlernummer",
+    "Unnamed room": "Unbenannter Raum"
 }
