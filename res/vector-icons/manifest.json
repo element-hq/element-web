@@ -1,5 +1,9 @@
 {
-	"name": "Riot",
+	"name": "Riot - Matrix Client",
+    "short_name": "Riot",
+    "display": "standalone",
+    "theme_color": "#76CFA6",
+    "start_url": "../",
 	"icons": [
 		{
 			"src": "android-chrome-36x36.png",
@@ -37,5 +41,13 @@
 			"type": "image\/png",
 			"density": "4.0"
 		}
-	]
+	],
+    "related_applications": [{
+        "platform": "play",
+        "url": "https://play.google.com/store/apps/details?id=im.vector.alpha",
+        "id": "im.vector.alpha"
+    }, {
+        "platform": "itunes",
+        "url": "https://itunes.apple.com/gb/app/riot-open-source-team-collaboration-via-matrix/id1083446067"
+    }]
 }
