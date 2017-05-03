@@ -93,7 +93,6 @@ export default class MessageComposerInput extends React.Component {
         this.onEscape = this.onEscape.bind(this);
         this.setDisplayedCompletion = this.setDisplayedCompletion.bind(this);
         this.onMarkdownToggleClicked = this.onMarkdownToggleClicked.bind(this);
-        this.onPageUnload = this.onPageUnload.bind(this);
 
         const isRichtextEnabled = UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false);
 
@@ -234,13 +233,11 @@ export default class MessageComposerInput extends React.Component {
             this.refs.editor,
             this.props.room.roomId
         );
-        window.addEventListener('beforeunload', this.onPageUnload);
     }
 
     componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
         this.sentHistory.saveLastTextEntry();
-        window.removeEventListener('beforeunload', this.onPageUnload);
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -249,13 +246,6 @@ export default class MessageComposerInput extends React.Component {
             const state = this.getSelectionInfo(nextState.editorState);
             state.isRichtextEnabled = nextState.isRichtextEnabled;
             this.props.onInputStateChanged(state);
-        }
-    }
-
-    onPageUnload(event) {
-        if (this.isTyping) {
-            return event.returnValue =
-                'You seem to be typing a message, are you sure you want to quit?';
         }
     }
 
