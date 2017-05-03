@@ -100,10 +100,6 @@ module.exports = React.createClass({
         this._checkSize();
     },
 
-    componentDidMount: function() {
-        window.addEventListener('beforeunload', this.onPageUnload);
-    },
-
     componentDidUpdate: function() {
         this._checkSize();
     },
@@ -115,7 +111,6 @@ module.exports = React.createClass({
             client.removeListener("sync", this.onSyncStateChange);
             client.removeListener("RoomMember.typing", this.onRoomMemberTyping);
         }
-        window.removeEventListener('beforeunload', this.onPageUnload);
     },
 
     onSyncStateChange: function(state, prevState) {
@@ -131,13 +126,6 @@ module.exports = React.createClass({
         this.setState({
             usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
         });
-    },
-
-    onPageUnload(event) {
-        if (this.props.hasActiveCall) {
-            return event.returnValue =
-                'You seem to be in a call, are you sure you want to quit?';
-        }
     },
 
     // Check whether current size is greater than 0, if yes call props.onVisible

@@ -371,6 +371,9 @@ module.exports = React.createClass({
         if (ContentMessages.getCurrentUploads().length > 0) {
             return event.returnValue =
                 'You seem to be uploading files, are you sure you want to quit?';
+        } else if (this._getCallForRoom() && this.state.callState !== 'ended') {
+            return event.returnValue =
+                'You seem to be in a call, are you sure you want to quit?';
         }
     },
 
