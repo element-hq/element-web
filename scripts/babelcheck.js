@@ -16,7 +16,7 @@ exec("babel -V", function (error, stdout, stderr) {
     if ((error && error.code) || parseInt(stdout.substr(0,1), 10) < 6) {
         console.log("\033[31m\033[1m"+
             '*****************************************\n'+
-            '* vector-web has moved to babel 6       *\n'+
+            '* riot-web has moved to babel 6         *\n'+
             '* Please "rm -rf node_modules && npm i" *\n'+
             '* then restore links as appropriate     *\n'+
             '*****************************************\n'+
