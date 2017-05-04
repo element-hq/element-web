@@ -511,6 +511,12 @@ module.exports = React.createClass({
     },
 
     _getEmptyContent: function(section) {
+        const RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
+
+        if (this.props.collapsed) {
+            return <RoomDropTarget label="" />;
+        }
+
         const RoleButton = sdk.getComponent('elements.RoleButton');
         if (this.state.totalRoomCount === 0) {
             const TintableSvg = sdk.getComponent('elements.TintableSvg');
@@ -531,7 +537,6 @@ module.exports = React.createClass({
                     </div>;
             }
         }
-        const RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
 
         const labelText = 'Drop here to ' + (VERBS[section] || 'tag ' + section);
 
