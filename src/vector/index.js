@@ -404,25 +404,29 @@ async function loadApp() {
             document.getElementById('matrixchat')
         );
         const _localSettings = UserSettingsStore.getLocalSettings();
-        sdk.setLanguage(_localSettings.language);
         dis.register(onAction);
         if (!_localSettings.hasOwnProperty('language')) {
           const language = navigator.languages[0] || navigator.language || navigator.userLanguage;
           if (language.indexOf("-") > -1) {
+            dis.dispatch({
+                action: 'set_language',
+                value: language.split('-')[0],
+            });
             counterpart.setLocale(language.split('-')[0]);
             UserSettingsStore.setLocalSetting('language', language.split('-')[0]);
-          } else if (language == 'pt-br') {
-            counterpart.setLocale('pt_br');
-            UserSettingsStore.setLocalSetting('language', 'pt_br');
           } else {
+            dis.dispatch({
+                action: 'set_language',
+                value: language,
+            });
             counterpart.setLocale(language);
             UserSettingsStore.setLocalSetting('language', language);
           }
+        }else {
           dis.dispatch({
               action: 'set_language',
-              value: language,
+              value: _localSettings.language,
           });
-          counterpart.setFallbackLocale('en');
         }
     }
     else {

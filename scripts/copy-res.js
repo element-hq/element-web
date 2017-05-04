@@ -131,6 +131,11 @@ next(0);
 
 const testFolder = 'src/i18n/';
 let languages = {};
+// Check if webapp exists
+if (!fs.existsSync('webapp')){
+  fs.mkdirSync('webapp');
+}
+// Check if i18n exists
 if (!fs.existsSync('webapp/i18n/')){
   fs.mkdirSync('webapp/i18n/');
 }

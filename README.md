@@ -275,6 +275,11 @@ If any of these steps error with, `file table overflow`, you are probably on a m
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
 You'll need to do this in each new terminal you open before building Riot.
 
+How to add a new translation?
+=============================
+
+Head to the [translating doc](docs/translating.md)
+
 Triaging issues
 ===============
 
