@@ -478,7 +478,7 @@ var RoomSubList = React.createClass({
 
         var target;
         if (this.state.sortedList.length == 0 && this.props.editable) {
-            target = <RoomDropTarget label={ counterpart.translate("Drop here to") + ' ' + this.props.verb }/>;
+            target = <RoomDropTarget label={ counterpart.translate("Drop here to %(verb)s", {verb: this.props.verb}) }/>;
         }
 
         var roomCount = this.props.list.length > 0 ? this.props.list.length : '';
