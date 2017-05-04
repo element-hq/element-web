@@ -14,7 +14,6 @@ const COPY_LIST = [
     ["./config.json", "webapp", {directwatch: 1}],
     ["src/i18n/", "webapp/i18n/", {languages: 1}],
     ["node_modules/matrix-react-sdk/src/i18n/strings/", "webapp/i18n/", {languages: 1}],
-    ["node_modules/matrix-react-sdk/src/i18n/global/", "webapp/i18n/", {languages: 1}],
 ];
 
 const parseArgs = require('minimist');
@@ -27,10 +26,8 @@ function generateFileArray(dir, files_) {
   files_ = files_ || [];
   var files = fs.readdirSync(dir);
   for (var i in files){
-    if (files[i] !== "languages.json") {
-      var name = files[i];
-      files_.push(name);
-    };
+    var name = files[i];
+    files_.push(name);
   }
   return files_;
 }
@@ -147,8 +144,6 @@ fs.readdir(testFolder, (err, files) => {
       languages[file.split('-')[0]] = file;
     } else if (file.indexOf("_") > -1) {
       languages[file.split('_')[0]] = file;
-    } else if (file == 'languages.json') {
-      // Do Nothing
     } else {
       languages[file] = file;
     }
