@@ -528,8 +528,6 @@ var RoomSubList = React.createClass({
 
         var label = this.props.collapsed ? null : this.props.label;
 
-        //console.log("render: " + JSON.stringify(this.state.sortedList));
-
         let content;
         if (this.state.sortedList.length == 0) {
             //content = <RoomDropTarget label={ 'Drop here to ' + this.props.verb }/>;
