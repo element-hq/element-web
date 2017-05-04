@@ -184,9 +184,9 @@ module.exports = React.createClass({
 
         var desc;
         if (alias) {
-            desc = counterpart.translate("Delete the room alias") + " " + alias + " " + counterpart.translate("and remove") + " " + name + " " + counterpart.translate("from the directory") + "?";
+            desc = counterpart.translate("Delete the room alias %(alias)s and remove %(name)s from the directory?", {alias: alias, name: name});
         } else {
-            desc = counterpart.translate("Remove") + " " + name + " " + counterpart.translate("from the directory") + "?";
+            desc = counterpart.translate("Remove %(name)s from the directory?", {name: name});
         }
 
         Modal.createDialog(QuestionDialog, {
@@ -197,7 +197,7 @@ module.exports = React.createClass({
 
                 var Loader = sdk.getComponent("elements.Spinner");
                 var modal = Modal.createDialog(Loader);
-                var step = counterpart.translate("remove") + " " + name + " " + counterpart.translate("from the directory") + ".";
+                var step = counterpart.translate("remove %(name)s from the directory", {name: name}) + ".";
 
                 MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
                     if (!alias) return;

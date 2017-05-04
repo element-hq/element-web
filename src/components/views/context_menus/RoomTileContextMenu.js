@@ -71,8 +71,8 @@ module.exports = React.createClass({
                     }).fail(function(err) {
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         Modal.createDialog(ErrorDialog, {
-                            title: "Failed to remove tag " + tagNameOff + " from room",
-                            description: ((err && err.message) ? err.message : "Operation failed"),
+                            title: counterpart.translate("Failed to remove tag %(tagName)s from room", {tagName: tagNameOff}),
+                            description: ((err && err.message) ? err.message : counterpart.translate("Operation failed")),
                         });
                     });
                 }
@@ -88,8 +88,8 @@ module.exports = React.createClass({
                     }).fail(function(err) {
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         Modal.createDialog(ErrorDialog, {
-                            title: "Failed to add tag " + tagNameOn + " to room",
-                            description: ((err && err.message) ? err.message : "Operation failed"),
+                            title: counterpart.translate("Failed to remove tag %(tagName)s from room", {tagName: tagNameOn}),
+                            description: ((err && err.message) ? err.message : counterpart.translate("Operation failed")),
                         });
                     });
                 }
@@ -149,8 +149,8 @@ module.exports = React.createClass({
         }, (err) => {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Failed to set Direct Message status of room",
-                description: ((err && err.message) ? err.message : "Operation failed"),
+                title: counterpart.translate("Failed to set Direct Message status of room"),
+                description: ((err && err.message) ? err.message : counterpart.translate("Operation failed")),
             });
         });
     },
@@ -188,8 +188,8 @@ module.exports = React.createClass({
             var errCode = err.errcode || "unknown error code";
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: `Failed to forget room (${errCode})`,
-                description: ((err && err.message) ? err.message : "Operation failed"),
+                title: counterpart.translate("Failed to forget room %(errCode)s", {errCode: errCode}),
+                description: ((err && err.message) ? err.message : counterpart.translate("Operation failed")),
             });
         });
 
@@ -275,22 +275,22 @@ module.exports = React.createClass({
                 <div className={ alertMeClasses } onClick={this._onClickAlertMe} >
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute-off-copy.svg" width="16" height="12" />
-                    All messages (loud)
+                    { counterpart.translate("All messages (loud)") }
                 </div>
                 <div className={ allNotifsClasses } onClick={this._onClickAllNotifs} >
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute-off.svg" width="16" height="12" />
-                    All messages
+                    { counterpart.translate("All messages") }
                 </div>
                 <div className={ mentionsClasses } onClick={this._onClickMentions} >
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute-mentions.svg" width="16" height="12" />
-                    Mentions only
+                    { counterpart.translate("Mentions only") }
                 </div>
                 <div className={ muteNotifsClasses } onClick={this._onClickMute} >
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute.svg" width="16" height="12" />
-                    Mute
+                    { counterpart.translate("Mute") }
                 </div>
             </div>
         );
@@ -307,16 +307,16 @@ module.exports = React.createClass({
         switch (membership) {
             case "join":
                 leaveClickHandler = this._onClickLeave;
-                leaveText = "Leave";
+                leaveText = counterpart.translate("Leave");
                 break;
             case "leave":
             case "ban":
                 leaveClickHandler = this._onClickForget;
-                leaveText = "Forget";
+                leaveText = counterpart.translate("Forget");
                 break;
             case "invite":
                 leaveClickHandler = this._onClickReject;
-                leaveText = "Reject";
+                leaveText = counterpart.translate("Reject");
                 break;
         }
 
