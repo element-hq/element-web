@@ -1,4 +1,5 @@
 /*
+Copyright 2017 Vector Creations Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -83,6 +84,7 @@ var RoomSubList = React.createClass({
         onShowMoreRooms: React.PropTypes.func,
         searchFilter: React.PropTypes.string,
         emptyContent: React.PropTypes.node, // content shown if the list is empty
+        headerItems: React.PropTypes.node, // content shown in the sublist header
     },
 
     getInitialState: function() {
@@ -522,6 +524,7 @@ var RoomSubList = React.createClass({
                         roomNotificationCount={ this.roomNotificationCount() }
                         onClick={ this.onClick }
                         onHeaderClick={ this.props.onHeaderClick }
+                        headerItems={this.props.headerItems}
                     />
                     { subList }
                 </div>
@@ -543,6 +546,7 @@ var RoomSubList = React.createClass({
                             roomNotificationCount={ this.roomNotificationCount() }
                             onClick={ this.onClick }
                             onHeaderClick={ this.props.onHeaderClick }
+                            headerItems={this.props.headerItems}
                         />
                      : undefined }
                     { (this.props.showSpinner && !this.state.hidden) ? <Loader /> : undefined }
