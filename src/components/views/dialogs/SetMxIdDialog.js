@@ -122,7 +122,7 @@ export default React.createClass({
                 <div className="mx_Dialog_content">
                     <p>
                         Beyond this point you're going to need to pick a username - your
-                        unique identifire in Riot.
+                        unique identifier in Riot.
                     </p>
                     <p>
                         <small>
