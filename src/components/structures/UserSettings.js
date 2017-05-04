@@ -538,8 +538,6 @@ module.exports = React.createClass({
     },
 
     _renderUserInterfaceSettings: function() {
-        // const client = MatrixClientPeg.get();
-
         return (
             <div>
                 <h3>User Interface</h3>
