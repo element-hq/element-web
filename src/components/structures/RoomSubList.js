@@ -29,6 +29,7 @@ var FormattingUtils = require('matrix-react-sdk/lib/utils/FormattingUtils');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 var ConstantTimeDispatcher = require('matrix-react-sdk/lib/ConstantTimeDispatcher');
 var RoomSubListHeader = require('./RoomSubListHeader.js');
+import Modal from 'matrix-react-sdk/lib/Modal';
 
 // turn this on for drag & drop console debugging galore
 var debug = false;
