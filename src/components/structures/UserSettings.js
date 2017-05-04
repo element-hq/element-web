@@ -35,10 +35,10 @@ import AccessibleButton from '../views/elements/AccessibleButton';
 const REACT_SDK_VERSION = 'dist' in packageJson ? packageJson.version : packageJson.gitHead || '<local>';
 
 // Simple method to help prettify GH Release Tags and Commit Hashes.
-const semVerRegex = /^v?(\d+\.\d+\.\d+)(?:-(?:\d+-g)?(.+))?|$/i;
+const semVerRegex = /^v?(\d+\.\d+\.\d+(?:-rc.+)?)(?:-(?:\d+-g)?([0-9a-fA-F]+))?(?:-dirty)?$/i;
 const gHVersionLabel = function(repo, token) {
     const match = token.match(semVerRegex);
-    let url; // assume commit hash
+    let url;
     if (match && match[1]) { // basic semVer string possibly with commit hash
         url = (match.length > 1 && match[2])
             ? `https://github.com/${repo}/commit/${match[2]}`
