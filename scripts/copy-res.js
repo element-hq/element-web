@@ -131,6 +131,9 @@ next(0);
 
 const testFolder = 'src/i18n/';
 let languages = {};
+if (!fs.existsSync('webapp/i18n/')){
+  fs.mkdirSync('webapp/i18n/');
+}
 fs.readdir(testFolder, (err, files) => {
   files.forEach(file => {
     if (file == 'pt_BR.json') {
