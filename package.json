@@ -56,7 +56,7 @@
     "draft-js": "^0.8.1",
     "extract-text-webpack-plugin": "^0.9.1",
     "favico.js": "^0.3.10",
-    "filesize": "^3.1.2",
+    "filesize": "3.5.6",
     "flux": "~2.0.3",
     "gfm.css": "^1.1.1",
     "highlight.js": "^9.0.0",
