@@ -503,7 +503,9 @@ var TimelinePanel = React.createClass({
         // This happens on user_activity_end which is delayed, and it's
         // very possible have logged out within that timeframe, so check
         // we still have a client.
-        if (!MatrixClientPeg.get()) return;
+        const cli = MatrixClientPeg.get();
+        // if no client or client is guest don't send RR
+        if (!cli || cli.isGuest()) return;
 
         var currentReadUpToEventId = this._getCurrentReadReceipt(true);
         var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
