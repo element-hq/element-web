@@ -32,8 +32,8 @@
   },
   "scripts": {
     "reskindex": "scripts/reskindex.js -h header",
-    "build": "node scripts/babelcheck.js && babel src -d lib --source-maps",
-    "start": "node scripts/babelcheck.js && babel src -w -d lib --source-maps",
+    "build": "babel src -d lib --source-maps",
+    "start": "babel src -w -d lib --source-maps",
     "lint": "eslint src/",
     "lintall": "eslint src/ test/",
     "clean": "rimraf lib",
