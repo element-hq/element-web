@@ -125,6 +125,8 @@ import views$elements$PowerSelector from './components/views/elements/PowerSelec
 views$elements$PowerSelector && (module.exports.components['views.elements.PowerSelector'] = views$elements$PowerSelector);
 import views$elements$ProgressBar from './components/views/elements/ProgressBar';
 views$elements$ProgressBar && (module.exports.components['views.elements.ProgressBar'] = views$elements$ProgressBar);
+import views$elements$RoleButton from './components/views/elements/RoleButton';
+views$elements$RoleButton && (module.exports.components['views.elements.RoleButton'] = views$elements$RoleButton);
 import views$elements$TintableSvg from './components/views/elements/TintableSvg';
 views$elements$TintableSvg && (module.exports.components['views.elements.TintableSvg'] = views$elements$TintableSvg);
 import views$elements$TruncatedList from './components/views/elements/TruncatedList';

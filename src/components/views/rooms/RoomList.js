@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,6 +29,7 @@ var Rooms = require('../../../Rooms');
 import DMRoomMap from '../../../utils/DMRoomMap';
 var Receipt = require('../../../utils/Receipt');
 var constantTimeDispatcher = require('../../../ConstantTimeDispatcher');
+import AccessibleButton from '../elements/AccessibleButton';
 
 const HIDE_CONFERENCE_CHANS = true;
 
@@ -617,27 +619,23 @@ module.exports = React.createClass({
     },
 
     _getEmptyContent: function(section) {
+        const RoleButton = sdk.getComponent('elements.RoleButton');
         if (this.state.totalRoomCount === 0) {
             const TintableSvg = sdk.getComponent('elements.TintableSvg');
             switch (section) {
                 case 'im.vector.fake.direct':
                     return <div className="mx_RoomList_emptySubListTip">
-                        <div className="mx_RoomList_butonPreview">
-                            <TintableSvg src="img/icons-people.svg" width="25" height="25" />
-                        </div>
-                        Use the button below to chat with someone!
+                        Press
+                        <RoleButton role='start_chat' size="16" />
+                        to start a chat with someone
                     </div>;
                 case 'im.vector.fake.recent':
                     return <div className="mx_RoomList_emptySubListTip">
-                        <div className="mx_RoomList_butonPreview">
-                            <TintableSvg src="img/icons-directory.svg" width="25" height="25" />
-                        </div>
-                        Use the button below to browse the room directory
-                        <br /><br />
-                        <div className="mx_RoomList_butonPreview">
-                            <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
-                        </div>
-                        or this button to start a new one!
+                        You're not in any rooms yet! Press
+                        <RoleButton role='create_room' size="16" />
+                        to make a room or
+                        <RoleButton role='room_directory' size="16" />
+                        to browse the directory
                     </div>;
             }
         }
@@ -646,6 +644,21 @@ module.exports = React.createClass({
         const labelText = 'Drop here to ' + (VERBS[section] || 'tag ' + section);
 
         return <RoomDropTarget label={labelText} />;
+    },
+
+    _getHeaderItems: function(section) {
+        const RoleButton = sdk.getComponent('elements.RoleButton');
+        switch (section) {
+            case 'im.vector.fake.direct':
+                return <span className="mx_RoomList_headerButtons">
+                    <RoleButton role='start_chat' size="16" />
+                </span>;
+            case 'im.vector.fake.recent':
+                return <span className="mx_RoomList_headerButtons">
+                    <RoleButton role='room_directory' size="16" />
+                    <RoleButton role='create_room' size="16" />
+                </span>;
+        }
     },
 
     render: function() {
@@ -685,6 +698,7 @@ module.exports = React.createClass({
                              label="People"
                              tagName="im.vector.fake.direct"
                              emptyContent={this._getEmptyContent('im.vector.fake.direct')}
+                             headerItems={this._getHeaderItems('im.vector.fake.direct')}
                              editable={ true }
                              order="recent"
                              incomingCall={ self.state.incomingCall }
@@ -700,6 +714,7 @@ module.exports = React.createClass({
                              tagName="im.vector.fake.recent"
                              editable={ true }
                              emptyContent={this._getEmptyContent('im.vector.fake.recent')}
+                             headerItems={this._getHeaderItems('im.vector.fake.recent')}
                              order="recent"
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
