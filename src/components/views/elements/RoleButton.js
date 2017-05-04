@@ -31,6 +31,13 @@ export default React.createClass({
     getDefaultProps: function() {
         return {
             size: 25,
+            tooltip: false,
+        };
+    },
+
+    getInitialState: function() {
+        return {
+            showTooltip: false,
         };
     },
 
@@ -48,8 +55,37 @@ export default React.createClass({
             case 'create_room':
                 action = 'view_create_room';
                 break;
+            case 'home_page':
+                action = 'view_home_page';
+                break;
+            case 'settings':
+                action = 'view_user_settings';
+                break;
         }
         if (action) dis.dispatch({action: action});
+    },
+
+    _onMouseEnter: function() {
+        if (this.props.tooltip) this.setState({showTooltip: true});
+    },
+
+    _onMouseLeave: function() {
+        this.setState({showTooltip: false});
+    },
+
+    _getLabel() {
+        switch(this.props.role) {
+            case 'start_chat':
+                return 'Start chat';
+            case 'room_directory':
+                return 'Room directory';
+            case 'create_room':
+                return 'Create new room';
+            case 'home_page':
+                return 'Welcome page';
+            case 'settings':
+                return 'Settings';
+        }
     },
 
     _getIconPath() {
@@ -60,15 +96,30 @@ export default React.createClass({
                 return 'img/icons-directory.svg';
             case 'create_room':
                 return 'img/icons-create-room.svg';
+            case 'home_page':
+                return 'img/icons-home.svg';
+            case 'settings':
+                return 'img/icons-settings.svg';
         }
     },
 
     render: function() {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
+        let tooltip;
+        if (this.state.showTooltip) {
+            const RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
+            tooltip = <RoomTooltip className="mx_RoleButton_tooltip" label={this._getLabel()} />;
+        }
+
         return (
-            <AccessibleButton className="mx_RoleButton" onClick={ this._onClick }>
+            <AccessibleButton className="mx_RoleButton"
+                onClick={this._onClick}
+                onMouseEnter={this._onMouseEnter}
+                onMouseLeave={this._onMouseLeave}
+            >
                 <TintableSvg src={this._getIconPath()} width={this.props.size} height={this.props.size} />
+                {tooltip}
             </AccessibleButton>
         );
     }
