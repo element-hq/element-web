@@ -33,6 +33,8 @@ Head to the explanations under Steb 2b
 2. Click the ``Start new language`` button at the bottom
 3. Select our language
 4. Start translating like in 2a.3
+5. Repeat these steps for the other projects which are listed at the link of step 2b.1
+6. Add your language to the array at https://github.com/MTRNord/matrix-react-sdk/blob/translations/src/components/views/elements/LanguageDropdown.js#L23
 
 ### What means the green button under the text field?
 
