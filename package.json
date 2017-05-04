@@ -53,7 +53,7 @@
     "draft-js-export-markdown": "^0.2.0",
     "emojione": "2.2.3",
     "file-saver": "^1.3.3",
-    "filesize": "^3.1.2",
+    "filesize": "3.5.6",
     "flux": "^2.0.3",
     "fuse.js": "^2.2.0",
     "glob": "^5.0.14",
