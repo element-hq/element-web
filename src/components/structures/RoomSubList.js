@@ -530,7 +530,6 @@ var RoomSubList = React.createClass({
 
         let content;
         if (this.state.sortedList.length == 0) {
-            //content = <RoomDropTarget label={ 'Drop here to ' + this.props.verb }/>;
             content = this.props.emptyContent;
         } else {
             content = this.makeRoomTiles();
