@@ -24,3 +24,10 @@ limitations under the License.
 .mx_RoleButton object {
     pointer-events: none;
 }
+
+.mx_RoleButton_tooltip {
+    display: inline-block;
+    position: relative;
+    top: -25px;
+    left: 6px;
+}
