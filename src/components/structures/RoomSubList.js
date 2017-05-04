@@ -1,4 +1,5 @@
 /*
+Copyright 2017 Vector Creations Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,6 +85,7 @@ var RoomSubList = React.createClass({
         onShowMoreRooms: React.PropTypes.func,
         searchFilter: React.PropTypes.string,
         emptyContent: React.PropTypes.node, // content shown if the list is empty
+        headerItems: React.PropTypes.node, // content shown in the sublist header
     },
 
     getInitialState: function() {
@@ -553,7 +555,20 @@ var RoomSubList = React.createClass({
 
             return connectDropTarget(
                 <div>
-                    { this._getHeaderJsx() }
+                    <RoomSubListHeader
+                        ref='header'
+                        label={ this.props.label }
+                        tagName={ this.props.tagName }
+                        roomCount={ roomCount }
+                        collapsed={ this.props.collapsed }
+                        hidden={ this.state.hidden }
+                        incomingCall={ this.props.incomingCall }
+                        isIncomingCallRoom={ isIncomingCallRoom }
+                        roomNotificationCount={ this.roomNotificationCount() }
+                        onClick={ this.onClick }
+                        onHeaderClick={ this.props.onHeaderClick }
+                        headerItems={this.props.headerItems}
+                    />
                     { subList }
                 </div>
             );
@@ -562,7 +577,21 @@ var RoomSubList = React.createClass({
             var Loader = sdk.getComponent("elements.Spinner");
             return (
                 <div className="mx_RoomSubList">
-                    { this.props.alwaysShowHeader ? this._getHeaderJsx() : undefined }
+                    { this.props.alwaysShowHeader ?
+                        <RoomSubListHeader
+                            ref='header'
+                            label={ this.props.label }
+                            tagName={ this.props.tagName }
+                            roomCount={ roomCount }
+                            collapsed={ this.props.collapsed }
+                            hidden={ this.state.hidden }
+                            isIncomingCallRoom={ isIncomingCallRoom }
+                            roomNotificationCount={ this.roomNotificationCount() }
+                            onClick={ this.onClick }
+                            onHeaderClick={ this.props.onHeaderClick }
+                            headerItems={this.props.headerItems}
+                        />
+                     : undefined }
                     { (this.props.showSpinner && !this.state.hidden) ? <Loader /> : undefined }
                 </div>
             );
