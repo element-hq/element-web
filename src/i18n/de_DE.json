@@ -65,7 +65,7 @@
     "Notify for all other messages/rooms": "Benachrichtigung für alle anderen Mitteilungen/ Räume",
     "Operation failed": "Ausführung fehlgeschlagen",
     "Reject": "ablehnen",
-    "Remove": "entfernen",
+    "Remove": "Entferne",
     "remove": "Entferner",
     "Remove from Directory": "Vom Raum Verzeichnis entfernen",
     "Riot does not know how to join a room on this network": "Riot weiß nicht, wie es einem Raum auf diesem Netzwerk beitreten soll",
@@ -75,11 +75,12 @@
     "This room is inaccessible to guests. You may be able to join if you register": "Dieser Raum ist nicht verfügbar für Gäste. Vermutlich klappt es wenn du dich anmeldest",
     "Unable to fetch notification target list": "Nicht möglich die Zielliste für Benachrichtigungen zu erhalten",
     "Unable to join network": "Nicht möglich Netzwerk beizutreten",
-    "unknown error code": "unbekannte Fehlernummer",
+    "unknown error code": "Unbekannter Fehlercode",
     "Unnamed room": "Unbenannter Raum",
     "Notify me for anything else": "Benachrichtige mich für alles andere",
     "Off": "Aus",
     "On": "An",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Du hast sie eventuell auf einem anderen Client als Riot konfiguriert. Sie sind in Riot nicht anpassbar gelten aber trotzdem",
-    " to room": ""
+    " to room": " an Raum",
+    "Drop here to %(verb)s": "Ziehen hier für %(verb)s"
 }
