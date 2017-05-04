@@ -628,8 +628,8 @@ module.exports = React.createClass({
                 <h3>Cryptography</h3>
                 <div className="mx_UserSettings_section mx_UserSettings_cryptoSection">
                     <ul>
-                        <li><label>Device ID:</label>                       <span><code>{deviceId}</code></span></li>
-                        <li><label>Device key:</label>                      <span><code><b>{identityKey}</b></code></span></li>
+                        <li><label>Device ID:</label>             <span><code>{deviceId}</code></span></li>
+                        <li><label>Device key:</label>            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
                     { importExportButtons }
                 </div>
