@@ -369,7 +369,7 @@ module.exports = React.createClass({
 
     render: function() {
         const eventsToRender = this.props.events;
-        const eventIds = eventsToRender.map(e => e.getId());
+        const eventIds = eventsToRender.map(e => e.getId()).join(',');
         const fewEvents = eventsToRender.length < this.props.threshold;
         const expanded = this.state.expanded || fewEvents;
 
@@ -380,7 +380,7 @@ module.exports = React.createClass({
 
         if (fewEvents) {
             return (
-                <div className="mx_MemberEventListSummary" data-contained-scroll-tokens={eventIds}>
+                <div className="mx_MemberEventListSummary" data-scroll-tokens={eventIds}>
                     {expandedEvents}
                 </div>
             );
@@ -438,7 +438,7 @@ module.exports = React.createClass({
         );
 
         return (
-            <div className="mx_MemberEventListSummary" data-contained-scroll-tokens={eventIds}>
+            <div className="mx_MemberEventListSummary" data-scroll-tokens={eventIds}>
                 {toggleButton}
                 {summaryContainer}
                 {expanded ? <div className="mx_MemberEventListSummary_line">&nbsp;</div> : null}

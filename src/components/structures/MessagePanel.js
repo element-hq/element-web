@@ -472,7 +472,7 @@ module.exports = React.createClass({
         ret.push(
                 <li key={eventId}
                         ref={this._collectEventNode.bind(this, eventId)}
-                        data-scroll-token={scrollToken}>
+                        data-scroll-tokens={scrollToken}>
                     <EventTile mxEvent={mxEv} continuation={continuation}
                         isRedacted={mxEv.isRedacted()}
                         onWidgetLoad={this._onWidgetLoad}
