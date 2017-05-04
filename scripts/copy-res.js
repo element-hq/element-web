@@ -117,7 +117,12 @@ function next(i, err) {
             cpx.on("watch-error", cb);
             cpx.watch();
         }
-    } else if (!opts.languages) {
+    } else if (opts.languages) {
+      if (verbose) {
+        console.log('don\'t copy language file');
+      }
+      next(i+1, err);
+    } else {
       cpx.copy(cb);
     }
 }
