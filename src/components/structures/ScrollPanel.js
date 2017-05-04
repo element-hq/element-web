@@ -423,7 +423,7 @@ module.exports = React.createClass({
      *   scroll. false if we are tracking a particular child.
      *
      * string trackedScrollToken: undefined if stuckAtBottom is true; if it is
-     *   false, the fist token in data-scroll-tokens of the child which we are
+     *   false, the first token in data-scroll-tokens of the child which we are
      *   tracking.
      *
      * number pixelOffset: undefined if stuckAtBottom is true; if it is false,
