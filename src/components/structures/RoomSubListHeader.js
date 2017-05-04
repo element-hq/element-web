@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import sdk from 'matrix-react-sdk';
-import FormattingUtils from 'matrix-react-sdk/lib/utils/FormattingUtils';
+import { formatCount } from 'matrix-react-sdk/lib/utils/FormattingUtils';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
 module.exports = React.createClass({
@@ -78,7 +78,7 @@ module.exports = React.createClass({
 
         let badge;
         if (subListNotifCount > 0) {
-            badge = <div className={badgeClasses}>{ FormattingUtils.formatCount(subListNotifCount) }</div>;
+            badge = <div className={badgeClasses}>{ formatCount(subListNotifCount) }</div>;
         } else if (subListNotifHighlight) {
             badge = <div className={badgeClasses}>!</div>;   
         }
