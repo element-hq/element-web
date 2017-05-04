@@ -504,7 +504,7 @@ var TimelinePanel = React.createClass({
         // very possible have logged out within that timeframe, so check
         // we still have a client.
         const cli = MatrixClientPeg.get();
-        // if no client or client is guest don't send RR (vector-im/riot-web#3758)
+        // if no client or client is guest don't send RR
         if (!cli || cli.isGuest()) return;
 
         var currentReadUpToEventId = this._getCurrentReadReceipt(true);
