@@ -12,7 +12,7 @@
   "Direct Chat": "Direct Chat",
   "Directory": "Directory",
   "Dismiss": "Dismiss",
-  "Drop here to": "Drop here to",
+  "Drop here to %(verb)s": "Drop here to %(verb)s",
   "Enable audible notifications in web client": "Enable audible notifications in web client",
   "Enable desktop notifications": "Enable desktop notifications",
   "Enable email notifications": "Enable email notifications",
