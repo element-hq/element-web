@@ -52,6 +52,10 @@ limitations under the License.
     border-radius: 4px;
 }
 
+.mx_RoomList_emptySubListTip .mx_RoleButton {
+    vertical-align: -3px;
+}
+
 .mx_RoomList_headerButtons {
     position: absolute;
     right: 60px;
