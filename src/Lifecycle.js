@@ -274,9 +274,13 @@ export function initRtsClient(url) {
  */
 export function setLoggedIn(credentials) {
     credentials.guest = Boolean(credentials.guest);
-    console.log("setLoggedIn => %s (guest=%s) hs=%s",
-                credentials.userId, credentials.guest,
-                credentials.homeserverUrl);
+
+    console.log(
+        "setLoggedIn: mxid:", credentials.userId,
+        "deviceId:", credentials.deviceId,
+        "guest:", credentials.guest,
+        "hs:", credentials.homeserverUrl,
+    );
     // This is dispatched to indicate that the user is still in the process of logging in
     // because `teamPromise` may take some time to resolve, breaking the assumption that
     // `setLoggedIn` takes an "instant" to complete, and dispatch `on_logged_in` a few ms
