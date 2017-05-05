@@ -175,7 +175,8 @@ limitations under the License.
 }
 
 .mx_Login_type_dropdown {
-    // width: 125px;
+    display: inline-block;
+    min-width: 125px;
     align-self: flex-end;
 }
 
