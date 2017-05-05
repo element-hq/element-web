@@ -49,7 +49,7 @@ import sdk from './index';
  * If any of steps 1-4 are successful, it will call {setLoggedIn}, which in
  * turn will raise on_logged_in and will_start_client events.
  *
- * It returns a promise which resolves when the above process completes.
+ * @param {object} opts
  *
  * @param {object} opts.realQueryParams: string->string map of the
  *     query-parameters extracted from the real query-string of the starting
@@ -67,6 +67,7 @@ import sdk from './index';
  * @params {string} opts.guestIsUrl: homeserver URL. Only used if enableGuest is
  *     true; defines the IS to use.
  *
+ * @returns {Promise} a promise which resolves when the above process completes.
  */
 export function loadSession(opts) {
     const realQueryParams = opts.realQueryParams || {};
@@ -127,7 +128,7 @@ export function loadSession(opts) {
 
 function _loginWithToken(queryParams, defaultDeviceDisplayName) {
     // create a temporary MatrixClient to do the login
-    var client = Matrix.createClient({
+    const client = Matrix.createClient({
         baseUrl: queryParams.homeserver,
     });
 
@@ -159,7 +160,7 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
     // Not really sure where the right home for it is.
 
     // create a temporary MatrixClient to do the login
-    var client = Matrix.createClient({
+    const client = Matrix.createClient({
         baseUrl: hsUrl,
     });
 
@@ -188,30 +189,30 @@ function _restoreFromLocalStorage() {
     if (!localStorage) {
         return q(false);
     }
-    const hs_url = localStorage.getItem("mx_hs_url");
-    const is_url = localStorage.getItem("mx_is_url") || 'https://matrix.org';
-    const access_token = localStorage.getItem("mx_access_token");
-    const user_id = localStorage.getItem("mx_user_id");
-    const device_id = localStorage.getItem("mx_device_id");
+    const hsUrl = localStorage.getItem("mx_hs_url");
+    const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
+    const accessToken = localStorage.getItem("mx_access_token");
+    const userId = localStorage.getItem("mx_user_id");
+    const deviceId = localStorage.getItem("mx_device_id");
 
-    let is_guest;
+    let isGuest;
     if (localStorage.getItem("mx_is_guest") !== null) {
-        is_guest = localStorage.getItem("mx_is_guest") === "true";
+        isGuest = localStorage.getItem("mx_is_guest") === "true";
     } else {
         // legacy key name
-        is_guest = localStorage.getItem("matrix-is-guest") === "true";
+        isGuest = localStorage.getItem("matrix-is-guest") === "true";
     }
 
-    if (access_token && user_id && hs_url) {
-        console.log("Restoring session for %s", user_id);
+    if (accessToken && userId && hsUrl) {
+        console.log("Restoring session for %s", userId);
         try {
             setLoggedIn({
-                userId: user_id,
-                deviceId: device_id,
-                accessToken: access_token,
-                homeserverUrl: hs_url,
-                identityServerUrl: is_url,
-                guest: is_guest,
+                userId: userId,
+                deviceId: deviceId,
+                accessToken: accessToken,
+                homeserverUrl: hsUrl,
+                identityServerUrl: isUrl,
+                guest: isGuest,
             });
             return q(true);
         } catch (e) {
@@ -273,9 +274,13 @@ export function initRtsClient(url) {
  */
 export function setLoggedIn(credentials) {
     credentials.guest = Boolean(credentials.guest);
-    console.log("setLoggedIn => %s (guest=%s) hs=%s",
-                credentials.userId, credentials.guest,
-                credentials.homeserverUrl);
+
+    console.log(
+        "setLoggedIn: mxid:", credentials.userId,
+        "deviceId:", credentials.deviceId,
+        "guest:", credentials.guest,
+        "hs:", credentials.homeserverUrl,
+    );
     // This is dispatched to indicate that the user is still in the process of logging in
     // because `teamPromise` may take some time to resolve, breaking the assumption that
     // `setLoggedIn` takes an "instant" to complete, and dispatch `on_logged_in` a few ms
@@ -352,7 +357,7 @@ export function logout() {
         return;
     }
 
-    return MatrixClientPeg.get().logout().then(onLoggedOut,
+    MatrixClientPeg.get().logout().then(onLoggedOut,
         (err) => {
             // Just throwing an error here is going to be very unhelpful
             // if you're trying to log out because your server's down and
@@ -363,8 +368,8 @@ export function logout() {
             // change your password).
             console.log("Failed to call logout API: token will not be invalidated");
             onLoggedOut();
-        }
-    );
+        },
+    ).done();
 }
 
 /**
@@ -420,7 +425,7 @@ export function stopMatrixClient() {
     UserActivity.stop();
     Presence.stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
-    var cli = MatrixClientPeg.get();
+    const cli = MatrixClientPeg.get();
     if (cli) {
         cli.stopClient();
         cli.removeAllListeners();
