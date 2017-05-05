@@ -517,22 +517,24 @@ module.exports = React.createClass({
             return <RoomDropTarget label="" />;
         }
 
-        const RoleButton = sdk.getComponent('elements.RoleButton');
+        const StartChatButton = sdk.getComponent('elements.StartChatButton');
+        const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
+        const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
         if (this.state.totalRoomCount === 0) {
             const TintableSvg = sdk.getComponent('elements.TintableSvg');
             switch (section) {
                 case 'im.vector.fake.direct':
                     return <div className="mx_RoomList_emptySubListTip">
                         Press
-                        <RoleButton role='start_chat' size="16" />
+                        <StartChatButton size="16" />
                         to start a chat with someone
                     </div>;
                 case 'im.vector.fake.recent':
                     return <div className="mx_RoomList_emptySubListTip">
                         You're not in any rooms yet! Press
-                        <RoleButton role='create_room' size="16" />
+                        <CreateRoomButton size="16" />
                         to make a room or
-                        <RoleButton role='room_directory' size="16" />
+                        <RoomDirectoryButton size="16" />
                         to browse the directory
                     </div>;
             }
@@ -544,16 +546,18 @@ module.exports = React.createClass({
     },
 
     _getHeaderItems: function(section) {
-        const RoleButton = sdk.getComponent('elements.RoleButton');
+        const StartChatButton = sdk.getComponent('elements.StartChatButton');
+        const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
+        const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
         switch (section) {
             case 'im.vector.fake.direct':
                 return <span className="mx_RoomList_headerButtons">
-                    <RoleButton role='start_chat' size="16" />
+                    <StartChatButton role='start_chat' size="16" />
                 </span>;
             case 'im.vector.fake.recent':
                 return <span className="mx_RoomList_headerButtons">
-                    <RoleButton role='room_directory' size="16" />
-                    <RoleButton role='create_room' size="16" />
+                    <RoomDirectoryButton role='room_directory' size="16" />
+                    <CreateRoomButton role='create_room' size="16" />
                 </span>;
         }
     },
