@@ -204,7 +204,7 @@ module.exports = React.createClass({
                 }).done(() => {
                     modal.close();
                     this.refreshRoomList();
-                }, function(err) {
+                }, (err) => {
                     modal.close();
                     this.refreshRoomList();
                     console.error("Failed to " + step + ": " + err);
