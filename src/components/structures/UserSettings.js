@@ -24,6 +24,7 @@ const dis = require("../../dispatcher");
 const q = require('q');
 const packageJson = require('../../../package.json');
 const UserSettingsStore = require('../../UserSettingsStore');
+const CallMediaHandler = require('../../CallMediaHandler');
 const GeminiScrollbar = require('react-gemini-scrollbar');
 const Email = require('../../email');
 const AddThreepid = require('../../AddThreepid');
