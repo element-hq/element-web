@@ -170,7 +170,7 @@ var TimelinePanel = React.createClass({
             forwardPaginating: false,
 
             // cache of matrixClient.getSyncState() (but from the 'sync' event)
-            clientSyncState: null,
+            clientSyncState: MatrixClientPeg.get().getSyncState(),
         };
     },
 
