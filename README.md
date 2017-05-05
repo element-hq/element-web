@@ -1,4 +1,4 @@
-[![Translationsstatus](https://translate.nordgedanken.de/widgets/riot-web/-/svg-badge.svg)](https://translate.nordgedanken.de/engage/riot-web/?utm_source=widget)
+[![Translationsstatus](https://translate.nordgedanken.de/widgets/riot-web/-/multi-auto.svg)](https://translate.nordgedanken.de/engage/riot-web/?utm_source=widget)
 
 Riot
 ====
@@ -299,7 +299,7 @@ bug or feature:
 * feature
 
 bug severity:
-  
+
 * cosmetic - feature works functionally but UI/UX is broken
 * critical - whole app doesn't work
 * major - entire feature doesn't work
