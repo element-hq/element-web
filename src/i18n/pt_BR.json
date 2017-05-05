@@ -98,5 +98,14 @@
   "You cannot delete this image. (%(code)s)": "Você não pode apagar esta imagem. (%(code)s)",
   "You cannot delete this message. (%(code)s)": "Você não pode apagar esta mensagem. (%(code)s)",
   "You are not receiving desktop notifications": "Você não está recebendo notificações desktop",
-  "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Você pode te-las configurado em outro cliente além do Riot. Você não pode ajustá-las no Riot, mas ainda assim elas se aplicam aqui"
+  "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Você pode te-las configurado em outro cliente além do Riot. Você não pode ajustá-las no Riot, mas ainda assim elas se aplicam aqui",
+  "Sunday": "Domingo",
+  "Monday": "Segunda",
+  "Tuesday": "Terça",
+  "Wednesday": "Quarta",
+  "Thursday": "Quinta",
+  "Friday": "Sexta",
+  "Saturday": "Sábado",
+  "Today": "Hoje",
+  "Yesterday": "Ontem"
 }

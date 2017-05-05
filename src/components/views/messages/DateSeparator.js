@@ -17,15 +17,16 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+import counterpart from 'counterpart';
 
 var days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday"
+    counterpart.translate("Sunday"),
+    counterpart.translate("Monday"),
+    counterpart.translate("Tuesday"),
+    counterpart.translate("Wednesday"),
+    counterpart.translate("Thursday"),
+    counterpart.translate("Friday"),
+    counterpart.translate("Saturday")
 ];
 
 module.exports = React.createClass({
@@ -37,10 +38,10 @@ module.exports = React.createClass({
         yesterday.setDate(today.getDate() - 1);
         var label;
         if (date.toDateString() === today.toDateString()) {
-            label = "Today";
+            label = counterpart.translate("Today");
         }
         else if (date.toDateString() === yesterday.toDateString()) {
-            label = "Yesterday";
+            label = counterpart.translate("Yesterday");
         }
         else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
             label = days[date.getDay()];
