@@ -552,12 +552,12 @@ module.exports = React.createClass({
         switch (section) {
             case 'im.vector.fake.direct':
                 return <span className="mx_RoomList_headerButtons">
-                    <StartChatButton role='start_chat' size="16" />
+                    <StartChatButton size="16" />
                 </span>;
             case 'im.vector.fake.recent':
                 return <span className="mx_RoomList_headerButtons">
-                    <RoomDirectoryButton role='room_directory' size="16" />
-                    <CreateRoomButton role='create_room' size="16" />
+                    <RoomDirectoryButton size="16" />
+                    <CreateRoomButton size="16" />
                 </span>;
         }
     },
