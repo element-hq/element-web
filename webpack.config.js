@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ReskindexPlugin = require('matrix-react-sdk/lib/utils/ReskindexPlugin');
 
 module.exports = {
     entry: {
@@ -124,6 +125,8 @@ module.exports = {
             // about moving them.
             inject: false,
         }),
+
+        new ReskindexPlugin('./node_modules/matrix-react-sdk/header'),
     ],
     devtool: 'source-map',
 
