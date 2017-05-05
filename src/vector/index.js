@@ -260,7 +260,7 @@ function onAction(payload) {
                         }
                         const resp = {err: err, response: resp_raw};
                         err = resp['err'];
-                        response_cb = resp['response'];
+                        const response_cb = resp['response'];
                         callback(err, response_cb, langCode);
                         return;
                     }
