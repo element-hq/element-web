@@ -68,10 +68,14 @@ import url from 'url';
 import {parseQs, parseQsFromFragment} from './url_utils';
 import Platform from './platform';
 
+import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+
 var lastLocationHashSet = null;
 
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 CallHandler.setConferenceHandler(VectorConferenceHandler);
+
+MatrixClientPeg.setIndexedDbWorkerScript(window.vector_indexeddb_worker_script);
 
 function checkBrowserFeatures(featureList) {
     if (!window.Modernizr) {
@@ -255,9 +259,13 @@ async function loadApp() {
     let configError;
     try {
         configJson = await getConfig();
-        rageshake.setBugReportEndpoint(configJson.bug_report_endpoint_url);
     } catch (e) {
         configError = e;
+    }
+
+    if (window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser')) {
+        console.log('User has previously accepted risks in using an unsupported browser');
+        validBrowser = true;
     }
 
     console.log("Vector starting at "+window.location);
@@ -291,6 +299,7 @@ async function loadApp() {
         var CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
         window.matrixChat = ReactDOM.render(
             <CompatibilityPage onAccept={function() {
+                if (window.localStorage) window.localStorage.setItem('mx_accepts_unsupported_browser', true);
                 validBrowser = true;
                 console.log("User accepts the compatibility risks.");
                 loadApp();

@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,21 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+import {IndexedDBStoreWorker} from 'matrix-js-sdk/lib/indexeddb-worker.js';
 
-var React = require('react');
-var DateUtils = require('matrix-react-sdk/lib/DateUtils');
+const remoteWorker = new IndexedDBStoreWorker(postMessage);
 
-module.exports = React.createClass({
-    displayName: 'MessageTimestamp',
-
-    render: function() {
-        var date = new Date(this.props.ts);
-        return (
-            <span className="mx_MessageTimestamp" title={ DateUtils.formatDate(date) }>
-                { DateUtils.formatTime(date) }
-            </span>
-        );
-    },
-});
-
+onmessage = remoteWorker.onMessage;

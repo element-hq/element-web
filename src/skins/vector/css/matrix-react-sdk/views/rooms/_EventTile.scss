@@ -133,10 +133,18 @@ limitations under the License.
 .mx_EventTile_redacted .mx_EventTile_line .mx_UnknownBody {
     display: block;
     width: 100%;
-    max-width: 300px;
-    height: 24px;
-    border-radius: 4px;
-    background-color: black;
+    height: 36px;
+    background-image: $event-redacted-img;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.mx_EventTile.mx_EventTile_redacted .mx_EventTile_line {
+    /*
+       Prevent changing colour of the background because
+       $event-redacted-img matches $primary-bg-color
+    */
+    background-color: initial !important;
 }
 
 .mx_EventTile_highlight,
@@ -210,8 +218,8 @@ limitations under the License.
 }
 
 .mx_EventTile_continuation .mx_EventTile_readAvatars,
-.mx_EventTile_info .mx_EventTile_readAvatars
-{
+.mx_EventTile_info .mx_EventTile_readAvatars,
+.mx_EventTile_emote .mx_EventTile_readAvatars {
     top: 7px;
 }
 
@@ -321,6 +329,14 @@ limitations under the License.
 .mx_EventTile_content .markdown-body h6
 {
     font-family: inherit ! important;
+}
+
+
+/* Make h1 and h2 the same size as h3. */
+.mx_EventTile_content .markdown-body h1,
+.mx_EventTile_content .markdown-body h2
+{
+    font-size: 1.5em;
 }
 
 .mx_EventTile_content .markdown-body a {

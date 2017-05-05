@@ -72,14 +72,13 @@ describe('joining a room', function () {
             var ROOM_ALIAS = '#alias:localhost';
             var ROOM_ID = '!id:localhost';
 
-            httpBackend.when('PUT', '/presence/'+encodeURIComponent(USER_ID)+'/status')
-                .respond(200, {});
             httpBackend.when('GET', '/pushrules').respond(200, {});
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
             httpBackend.when('GET', '/sync').respond(200, {});
-            httpBackend.when('POST', '/publicRooms').respond(200, {chunk: []});
-            httpBackend.when('GET', '/thirdparty/protocols').respond(200, {});
-            httpBackend.when('GET', '/directory/room/'+encodeURIComponent(ROOM_ALIAS)).respond(200, { room_id: ROOM_ID });
+
+            // note that we deliberately do *not* set an expectation for a
+            // presence update - setting one makes the first httpBackend.flush
+            // return before the first /sync arrives.
 
             // start with a logged-in client
             localStorage.setItem("mx_hs_url", HS_URL );
@@ -94,9 +93,18 @@ describe('joining a room', function () {
             matrixChat._setPage(PageTypes.RoomDirectory);
 
             var roomView;
+
             // wait for /sync to happen
             return q.delay(1).then(() => {
                 return httpBackend.flush();
+            }).then(() => {
+                // wait for the directory requests
+                httpBackend.when('POST', '/publicRooms').respond(200, {chunk: []});
+                httpBackend.when('GET', '/thirdparty/protocols').respond(200, {});
+                return q.all([
+                    httpBackend.flush('/publicRooms'),
+                    httpBackend.flush('/thirdparty/protocols'),
+                ]);
             }).then(() => {
                 var roomDir = ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, RoomDirectory);
@@ -110,6 +118,7 @@ describe('joining a room', function () {
 
                 // that should create a roomview which will start a peek; wait
                 // for the peek.
+                httpBackend.when('GET', '/directory/room/'+encodeURIComponent(ROOM_ALIAS)).respond(200, { room_id: ROOM_ID });
                 httpBackend.when('GET', '/rooms/'+encodeURIComponent(ROOM_ID)+"/initialSync")
                     .respond(401, {errcode: 'M_GUEST_ACCESS_FORBIDDEN'});
                 return httpBackend.flush();

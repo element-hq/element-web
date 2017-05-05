@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
-import request from "browser-request";
 import q from "q";
 
 // This module contains all the code needed to log the console, persist it to
@@ -205,9 +203,6 @@ class IndexedDBLogStore {
             }
             let txn = this.db.transaction(["logs", "logslastmod"], "readwrite");
             let objStore = txn.objectStore("logs");
-            objStore.add(this._generateLogEntry(lines));
-            let lastModStore = txn.objectStore("logslastmod");
-            lastModStore.put(this._generateLastModifiedTime());
             txn.oncomplete = (event) => {
                 resolve();
             };
@@ -219,6 +214,9 @@ class IndexedDBLogStore {
                     new Error("Failed to write logs: " + event.target.errorCode)
                 );
             }
+            objStore.add(this._generateLogEntry(lines));
+            let lastModStore = txn.objectStore("logslastmod");
+            lastModStore.put(this._generateLastModifiedTime());
         });
         return this.flushPromise;
     }
@@ -396,7 +394,6 @@ function selectQuery(store, keyRange, resultMapper) {
 let store = null;
 let logger = null;
 let initPromise = null;
-let bugReportEndpoint = null;
 module.exports = {
 
     /**
@@ -430,80 +427,29 @@ module.exports = {
         await store.consume();
     },
 
-    setBugReportEndpoint: function(url) {
-        bugReportEndpoint = url;
-    },
-
     /**
-     * Send a bug report.
-     * @param {string} userText Any additional user input.
-     * @param {boolean} sendLogs True to send logs
-     * @return {Promise} Resolved when the bug report is sent.
+     * Get a recent snapshot of the logs, ready for attaching to a bug report
+     *
+     * @return {Array<{lines: string, id, string}>}  list of log data
      */
-    sendBugReport: async function(userText, sendLogs) {
+    getLogsForReport: async function() {
         if (!logger) {
             throw new Error(
                 "No console logger, did you forget to call init()?"
             );
         }
-        if (!bugReportEndpoint) {
-            throw new Error("No bug report endpoint has been set.");
-        }
-
-        let version = "UNKNOWN";
-        try {
-            version = await PlatformPeg.get().getAppVersion();
-        }
-        catch (err) {} // PlatformPeg already logs this.
-
-        let userAgent = "UNKNOWN";
-        if (window.navigator && window.navigator.userAgent) {
-            userAgent = window.navigator.userAgent;
-        }
-
         // If in incognito mode, store is null, but we still want bug report
         // sending to work going off the in-memory console logs.
-        console.log("Sending bug report.");
-        let logs = [];
-        if (sendLogs) {
-            if (store) {
-                // flush most recent logs
-                await store.flush();
-                logs = await store.consume();
-            }
-            else {
-                logs.push({
-                    lines: logger.flush(true),
-                    id: "-",
-                });
-            }
+        if (store) {
+            // flush most recent logs
+            await store.flush();
+            return await store.consume();
         }
-
-        await q.Promise((resolve, reject) => {
-            request({
-                method: "POST",
-                url: bugReportEndpoint,
-                body: {
-                    logs: logs,
-                    text: (
-                        userText || "User did not supply any additional text."
-                    ),
-                    version: version,
-                    user_agent: userAgent,
-                },
-                json: true,
-                timeout: 5 * 60 * 1000,
-            }, (err, res) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                if (res.status < 200 || res.status >= 400) {
-                    reject(new Error(`HTTP ${res.status}`));
-                    return;
-                }
-                resolve();
-            })
-        });
-    }
+        else {
+            return [{
+                lines: logger.flush(true),
+                id: "-",
+            }];
+        }
+    },
 };

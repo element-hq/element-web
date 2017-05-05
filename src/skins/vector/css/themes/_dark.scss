@@ -15,6 +15,8 @@ $accent-color: #76CFA6;
 
 $selection-fg-color: $primary-fg-color;
 
+$focus-brightness: 200%;
+
 // red warning colour
 $warning-color: #ff0064;
 
@@ -92,6 +94,9 @@ $roomsublist-label-bg-color: #454545;
 $event-encrypting-color: rgba(171, 221, 188, 0.4);
 $event-sending-color: #888;
 $event-notsent-color: #f44;
+
+// event redaction
+$event-redacted-img: url('../../img/redacted-dark.jpg');
 
 // event timestamp
 $event-timestamp-color: #acacac;

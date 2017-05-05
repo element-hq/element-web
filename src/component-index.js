@@ -40,6 +40,8 @@ import structures$RoomDirectory from './components/structures/RoomDirectory';
 structures$RoomDirectory && (module.exports.components['structures.RoomDirectory'] = structures$RoomDirectory);
 import structures$RoomSubList from './components/structures/RoomSubList';
 structures$RoomSubList && (module.exports.components['structures.RoomSubList'] = structures$RoomSubList);
+import structures$RoomSubListHeader from './components/structures/RoomSubListHeader';
+structures$RoomSubListHeader && (module.exports.components['structures.RoomSubListHeader'] = structures$RoomSubListHeader);
 import structures$SearchBox from './components/structures/SearchBox';
 structures$SearchBox && (module.exports.components['structures.SearchBox'] = structures$SearchBox);
 import structures$ViewSource from './components/structures/ViewSource';
