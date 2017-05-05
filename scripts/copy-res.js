@@ -20,6 +20,10 @@ const parseArgs = require('minimist');
 const Cpx = require('cpx');
 const chokidar = require('chokidar');
 const fs = require('fs');
+const rimraf = require('rimraf');
+
+// cleanup language files before copying them.
+rimraf("webapp/i18n/", function () { console.log('cleanup language files'); });
 
 //From http://stackoverflow.com/a/20525865/4929236
 function generateFileArray(dir, files_) {
@@ -150,7 +154,7 @@ fs.readdir(testFolder, (err, files) => {
     } else if (file.indexOf("_") > -1) {
       languages[file.split('_')[0]] = file;
     } else {
-      languages[file] = file;
+      languages[file.split('.json')[0]] = file;
     }
   });
   fs.writeFile('webapp/i18n/languages.json', JSON.stringify(languages, null, 4), 'utf8');
