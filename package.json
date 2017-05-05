@@ -146,11 +146,12 @@
     "dereference": true,
     "//files": "We bundle everything, so we only need to include webapp/",
     "files": [
-      "electron/node_modules/**",
-      "electron/src/**",
-      "electron/img/**",
-      "webapp/**",
-      "package.json"
+      "node_modules/**",
+      "src/**",
+      "img/**"
+    ],
+    "extraResources": [
+      "webapp/**/*"
     ],
     "linux": {
       "target": "deb",
@@ -164,7 +165,8 @@
     },
     "directories": {
       "buildResources": "electron/build",
-      "output": "electron/dist"
+      "output": "electron/dist",
+      "app": "electron"
     }
   }
 }
