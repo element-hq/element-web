@@ -154,7 +154,7 @@ fs.readdir(testFolder, (err, files) => {
     } else if (file.indexOf("_") > -1) {
       languages[file.split('_')[0]] = file;
     } else {
-      languages[file] = file;
+      languages[file.split('.json')[0]] = file;
     }
   });
   fs.writeFile('webapp/i18n/languages.json', JSON.stringify(languages, null, 4), 'utf8');
