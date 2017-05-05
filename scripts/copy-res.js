@@ -20,6 +20,10 @@ const parseArgs = require('minimist');
 const Cpx = require('cpx');
 const chokidar = require('chokidar');
 const fs = require('fs');
+const rimraf = require('rimraf');
+
+// cleanup language files before copying them.
+rimraf("webapp/i18n/", function () { console.log('cleanup language files'); });
 
 //From http://stackoverflow.com/a/20525865/4929236
 function generateFileArray(dir, files_) {
