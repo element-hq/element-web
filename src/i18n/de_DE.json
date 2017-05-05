@@ -108,5 +108,14 @@
     "View Decrypted Source": "Entschlüsselten Quellcode ansehen",
     "View Source": "Quellcode ansehen",
     "You cannot delete this image. (%(code)s)": "Das Bild kann nicht gelöscht werden. (%(code)s)",
-    "You cannot delete this message. (%(code)s)": "Die Nachricht kann nicht gelöscht werden. (%(code)s)"
+    "You cannot delete this message. (%(code)s)": "Die Nachricht kann nicht gelöscht werden. (%(code)s)",
+    "Today": "Heute",
+    "Wednesday": "Mittwoch",
+    "Thursday": "Donnerstag",
+    "Friday": "Freitag",
+    "Saturday": "Samstag",
+    "Tuesday": "Dienstag",
+    "Sunday": "Sonntag",
+    "Monday": "Montag",
+    "Yesterday": "gestern"
 }
