@@ -189,7 +189,6 @@ var LeftPanel = React.createClass({
         var RoomList = sdk.getComponent('rooms.RoomList');
         var BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
         var SearchBox = sdk.getComponent('structures.SearchBox');
-        var props = this.props;
 
         var collapseButton;
         var classes = "mx_LeftPanel mx_fadable";

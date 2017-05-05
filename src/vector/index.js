@@ -55,6 +55,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var ReactDOM = require("react-dom");
+import counterpart from 'counterpart';
 var sdk = require("matrix-react-sdk");
 var PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
@@ -62,7 +63,7 @@ var VectorConferenceHandler = require('../VectorConferenceHandler');
 var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
-var dis = require('matrix-react-sdk/lib/dispatcher');
+import dis from 'matrix-react-sdk/lib/dispatcher';
 import Modal from 'matrix-react-sdk/lib/Modal';
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 
@@ -77,8 +78,6 @@ var lastLocationHashSet = null;
 
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
 CallHandler.setConferenceHandler(VectorConferenceHandler);
-
-import counterpart from 'counterpart';
 
 MatrixClientPeg.setIndexedDbWorkerScript(window.vector_indexeddb_worker_script);
 

@@ -233,7 +233,7 @@ module.exports = React.createClass({
                 panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.props.userId} />
             }
             else if (this.state.phase == this.Phase.NotificationPanel) {
-                panel = <NotificationPanel lang={counterpart.getLocale()} />
+                panel = <NotificationPanel />
             }
             else if (this.state.phase == this.Phase.FilePanel) {
                 panel = <FilePanel roomId={this.props.roomId} />
