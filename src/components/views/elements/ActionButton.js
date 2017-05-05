@@ -24,8 +24,11 @@ export default React.createClass({
     displayName: 'RoleButton',
 
     propTypes: {
-        role: PropTypes.string.isRequired,
         size: PropTypes.string,
+        tooltip: PropTypes.bool,
+        action: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired,
+        iconPath: PropTypes.string.isRequired,
     },
 
     getDefaultProps: function() {
@@ -43,26 +46,7 @@ export default React.createClass({
 
     _onClick: function(ev) {
         ev.stopPropagation();
-
-        let action;
-        switch(this.props.role) {
-            case 'start_chat':
-                action = 'view_create_chat';
-                break;
-            case 'room_directory':
-                action = 'view_room_directory';
-                break;
-            case 'create_room':
-                action = 'view_create_room';
-                break;
-            case 'home_page':
-                action = 'view_home_page';
-                break;
-            case 'settings':
-                action = 'view_user_settings';
-                break;
-        }
-        if (action) dis.dispatch({action: action});
+        dis.dispatch({action: this.props.action});
     },
 
     _onMouseEnter: function() {
@@ -73,43 +57,13 @@ export default React.createClass({
         this.setState({showTooltip: false});
     },
 
-    _getLabel() {
-        switch(this.props.role) {
-            case 'start_chat':
-                return 'Start chat';
-            case 'room_directory':
-                return 'Room directory';
-            case 'create_room':
-                return 'Create new room';
-            case 'home_page':
-                return 'Welcome page';
-            case 'settings':
-                return 'Settings';
-        }
-    },
-
-    _getIconPath() {
-        switch(this.props.role) {
-            case 'start_chat':
-                return 'img/icons-people.svg';
-            case 'room_directory':
-                return 'img/icons-directory.svg';
-            case 'create_room':
-                return 'img/icons-create-room.svg';
-            case 'home_page':
-                return 'img/icons-home.svg';
-            case 'settings':
-                return 'img/icons-settings.svg';
-        }
-    },
-
     render: function() {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         let tooltip;
         if (this.state.showTooltip) {
             const RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            tooltip = <RoomTooltip className="mx_RoleButton_tooltip" label={this._getLabel()} />;
+            tooltip = <RoomTooltip className="mx_RoleButton_tooltip" label={this.props.label} />;
         }
 
         return (
@@ -118,7 +72,7 @@ export default React.createClass({
                 onMouseEnter={this._onMouseEnter}
                 onMouseLeave={this._onMouseLeave}
             >
-                <TintableSvg src={this._getIconPath()} width={this.props.size} height={this.props.size} />
+                <TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />
                 {tooltip}
             </AccessibleButton>
         );
