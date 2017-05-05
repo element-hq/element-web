@@ -99,7 +99,7 @@
     "Quote": "Zitat",
     "Redact": "Redaktionell entfernen",
     "Remove %(name)s from the directory?": "Soll der Raum %(name)s  aus dem Verzeichnis entfernt werden?",
-    "remove %(name)s from the directory": "entferne %(name)s  aus dem Verzeichnis",
+    "remove %(name)s from the directory": "entferne %(name)s aus dem Verzeichnis",
     "Resend": "Erneut Senden",
     "Source URL": "Quell-URL",
     "Unable to look up room ID from server": "Es ist nicht möglich, die Raum-ID auf dem Server nachzuschlagen",
