@@ -36,7 +36,7 @@
     "build": "node scripts/babelcheck.js && npm run build:res && npm run build:bundle",
     "build:dev": "node scripts/babelcheck.js && npm run build:res && npm run build:bundle:dev",
     "dist": "scripts/package.sh",
-    "install:electron": "cd electron && npm i",
+    "install:electron": "install-app-deps",
     "electron": "npm run install:electron && electron .",
     "start:res": "node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --output-filename=bundles/_dev_/[name].js --output-chunk-file=bundles/_dev_/[name].js -w --progress",
