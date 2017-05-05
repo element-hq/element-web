@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,9 +20,6 @@ limitations under the License.
  * You can edit it you like, but your changes will be overwritten,
  * so you'd just be trying to swim upstream like a salmon.
  * You are not a salmon.
- *
- * To update it, run:
- *    ./reskindex.js -h header
  */
 
 module.exports.components = require('matrix-react-sdk/lib/component-index').components;
@@ -66,6 +64,8 @@ import views$globals$MatrixToolbar from './components/views/globals/MatrixToolba
 views$globals$MatrixToolbar && (module.exports.components['views.globals.MatrixToolbar'] = views$globals$MatrixToolbar);
 import views$globals$NewVersionBar from './components/views/globals/NewVersionBar';
 views$globals$NewVersionBar && (module.exports.components['views.globals.NewVersionBar'] = views$globals$NewVersionBar);
+import views$globals$PasswordNagBar from './components/views/globals/PasswordNagBar';
+views$globals$PasswordNagBar && (module.exports.components['views.globals.PasswordNagBar'] = views$globals$PasswordNagBar);
 import views$login$VectorCustomServerDialog from './components/views/login/VectorCustomServerDialog';
 views$login$VectorCustomServerDialog && (module.exports.components['views.login.VectorCustomServerDialog'] = views$login$VectorCustomServerDialog);
 import views$login$VectorLoginFooter from './components/views/login/VectorLoginFooter';
