@@ -85,5 +85,6 @@
     "Cancel Sending": "Отмена отправки",
     "Close": "Закрыть",
     "Download this file": "Скачать этот файл",
-    "Drop here to %(verb)s": "Вставить сюда для %(verb)s"
+    "Drop here to %(verb)s": "Вставить сюда для %(verb)s",
+    "Delete the room alias %(alias)s and remove %(name)s from the directory?": "Удалить этот алиас %(alias)s и очистить %(name)s из каталога"
 }
