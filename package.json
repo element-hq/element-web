@@ -32,7 +32,7 @@
     "build:compile": "babel --source-maps -d lib src",
     "build:bundle": "cross-env NODE_ENV=production webpack -p --progress",
     "build:bundle:dev": "webpack --optimize-occurence-order --progress",
-    "build:electron": "npm run clean && npm run build && npm run install:electron && build -wml --ia32 --x64",
+    "build:electron": "npm run clean && npm run build && build -wml --ia32 --x64",
     "build": "npm run build:res && npm run build:bundle",
     "build:dev": "npm run build:res && npm run build:bundle:dev",
     "dist": "scripts/package.sh",
