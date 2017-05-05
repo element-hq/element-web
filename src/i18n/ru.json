@@ -79,5 +79,11 @@
     "Unnamed room": "Комната без названия",
     "World readable": "Читаем мир",
     "You are not receiving desktop notifications": "Вы не получаете уведомления на рабочем столе",
-    "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Вы могли настроить их в клиенте, отличном от Riot. Вы не можете настроить их в Riot, но они все еще применяются"
+    "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Вы могли настроить их в клиенте, отличном от Riot. Вы не можете настроить их в Riot, но они все еще применяются",
+    "All messages": "Все сообщения",
+    "All messages (loud)": "Все сообщения (громко)",
+    "Cancel Sending": "Отмена отправки",
+    "Close": "Закрыть",
+    "Download this file": "Скачать этот файл",
+    "Drop here to %(verb)s": "Вставить сюда для %(verb)s"
 }
