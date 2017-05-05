@@ -47,7 +47,7 @@ class ConstantTimeDispatcher {
 
     dispatch(type, arg, params) {
         if (!this.listeners[type] || !this.listeners[type][arg]) {
-            console.warn("No registered listeners for dispatch (type=" + type + ", arg=" + arg + ")");
+            //console.warn("No registered listeners for dispatch (type=" + type + ", arg=" + arg + ")");
             return;
         }
         this.listeners[type][arg].forEach(listener=>{

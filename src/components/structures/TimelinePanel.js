@@ -170,7 +170,7 @@ var TimelinePanel = React.createClass({
             forwardPaginating: false,
 
             // cache of matrixClient.getSyncState() (but from the 'sync' event)
-            clientSyncState: null,
+            clientSyncState: MatrixClientPeg.get().getSyncState(),
         };
     },
 
@@ -503,7 +503,9 @@ var TimelinePanel = React.createClass({
         // This happens on user_activity_end which is delayed, and it's
         // very possible have logged out within that timeframe, so check
         // we still have a client.
-        if (!MatrixClientPeg.get()) return;
+        const cli = MatrixClientPeg.get();
+        // if no client or client is guest don't send RR
+        if (!cli || cli.isGuest()) return;
 
         var currentReadUpToEventId = this._getCurrentReadReceipt(true);
         var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
@@ -764,6 +766,19 @@ var TimelinePanel = React.createClass({
         }
 
         return null;
+    },
+
+    canJumpToReadMarker: function() {
+        // 1. Do not show jump bar if neither the RM nor the RR are set.
+        // 2. Only show jump bar if RR !== RM. If they are the same, there are only fully
+        // read messages and unread messages. We already have a badge count and the bottom
+        // bar to jump to "live" when we have unread messages.
+        // 3. We want to show the bar if the read-marker is off the top of the screen.
+        // 4. Also, if pos === null, the event might not be paginated - show the unread bar
+        const pos = this.getReadMarkerPosition();
+        return this.state.readMarkerEventId !== null && // 1.
+            this.state.readMarkerEventId !== this._getCurrentReadReceipt() &&  // 2.
+            (pos < 0 || pos === null); // 3., 4.
     },
 
     /**
