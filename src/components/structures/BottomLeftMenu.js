@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,22 +26,26 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const RoleButton = sdk.getComponent('elements.RoleButton');
+        const HomeButton = sdk.getComponent('elements.HomeButton');
+        const StartChatButton = sdk.getComponent('elements.StartChatButton');
+        const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
+        const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
+        const SettingsButton = sdk.getComponent('elements.SettingsButton');
 
         var homeButton;
         if (this.props.teamToken) {
-            homeButton = <RoleButton role='home_page' tooltip={true} />;
+            homeButton = <HomeButton tooltip={true} />;
         }
 
         return (
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
                     { homeButton }
-                    <RoleButton role='start_chat' tooltip={true} />
-                    <RoleButton role='room_directory' tooltip={true} />
-                    <RoleButton role='create_room' tooltip={true} />
+                    <StartChatButton tooltip={true} />
+                    <RoomDirectoryButton tooltip={true} />
+                    <CreateRoomButton tooltip={true} />
                     <span className="mx_BottomLeftMenu_settings">
-                        <RoleButton role='settings' tooltip={true} />
+                        <SettingsButton tooltip={true} />
                     </span>
                 </div>
             </div>
