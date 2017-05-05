@@ -284,6 +284,7 @@ export function setLoggedIn(credentials) {
 
     // Resolves by default
     let teamPromise = Promise.resolve(null);
+    let isPasswordStored = false;
 
     // persist the session
     if (localStorage) {
@@ -307,6 +308,7 @@ export function setLoggedIn(credentials) {
             // is cached here such that the user can change it at a later time.
             if (credentials.password) {
                 localStorage.setItem("mx_pass", credentials.password);
+                isPasswordStored = true;
             }
 
             console.log("Session persisted for %s", credentials.userId);
@@ -332,10 +334,10 @@ export function setLoggedIn(credentials) {
     MatrixClientPeg.replaceUsingCreds(credentials);
 
     teamPromise.then((teamToken) => {
-        dis.dispatch({action: 'on_logged_in', teamToken: teamToken});
+        dis.dispatch({action: 'on_logged_in', teamToken: teamToken, isPasswordStored});
     }, (err) => {
         console.warn("Failed to get team token on login", err);
-        dis.dispatch({action: 'on_logged_in', teamToken: null});
+        dis.dispatch({action: 'on_logged_in', teamToken: null, isPasswordStored});
     });
 
     startMatrixClient();
