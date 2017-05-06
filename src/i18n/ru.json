@@ -86,7 +86,7 @@
     "Close": "Закрыть",
     "Download this file": "Скачать этот файл",
     "Drop here to %(verb)s": "Вставить сюда для %(verb)s",
-    "Delete the room alias %(alias)s and remove %(name)s from the directory?": "Удалить этот алиас %(alias)s и очистить %(name)s из каталога",
+    "Delete the room alias %(alias)s and remove %(name)s from the directory?": "Удалить псевдоним комнаты %(alias)s и очистить %(name)s из каталога?",
     "Failed to add tag %(tagName)s to room": "Не удалось добавить тег %(tagName)s в комнату",
     "Failed to forget room %(errCode)s": "Не удалось забыть комнату %(errCode)s",
     "Failed to remove tag %(prevTag)s from room": "Не удалось удалить тег %(prevTag)s из комнаты",
