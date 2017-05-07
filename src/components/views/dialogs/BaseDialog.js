@@ -57,6 +57,12 @@ export default React.createClass({
         }
     },
 
+    // Don't let key down events get any further, so they only trigger this and nothing more
+    _onKeyDown: function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+    },
+    
     // Must be when the key is released (and not pressed) otherwise componentWillUnmount
     // will focus another element which will receive future key events
     _onKeyUp: function(e) {
@@ -81,7 +87,7 @@ export default React.createClass({
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         return (
-            <div onKeyUp={this._onKeyUp} className={this.props.className}>
+            <div onKeyDown={this._onKeyDown} onKeyUp={this._onKeyUp} className={this.props.className}>
                 <AccessibleButton onClick={this._onCancelClick}
                     className="mx_Dialog_cancelButton"
                 >
