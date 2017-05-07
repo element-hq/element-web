@@ -234,6 +234,31 @@ electron.app.on('ready', () => {
         }
     });
 
+
+    if (process.platform === 'win32') {
+        // Handle forward/backward mouse buttons in Windows
+        mainWindow.on('app-command', (e, cmd) => {
+            if (cmd === 'browser-backward' && mainWindow.webContents.canGoBack()) {
+                mainWindow.webContents.goBack();
+            } else if (cmd === 'browser-forward' && mainWindow.webContents.canGoForward()) {
+                mainWindow.webContents.goForward();
+            }
+        });
+    } else {
+        // try to handle forward/backward mouse buttons if installed (Linux)
+        try {
+            const mouseForwardBackRegister = require('mouse-forward-back');
+            mouseForwardBackRegister(function(dir) {
+                if (dir === 'back' && mainWindow.webContents.canGoBack()) {
+                    mainWindow.webContents.goBack();
+                } else if (dir === 'forward' && mainWindow.webContents.canGoForward()) {
+                    mainWindow.webContents.goForward();
+                }
+            }, mainWindow.getNativeWindowHandle());
+        } catch(e) {}
+    }
+
+
     mainWindow.webContents.on('new-window', onWindowOrNavigate);
     mainWindow.webContents.on('will-navigate', onWindowOrNavigate);
 

@@ -7,5 +7,8 @@
   "author": "Vector Creations Ltd.",
   "dependencies": {
     "electron-window-state": "^4.1.0"
+  },
+  "optionalDependencies": {
+      "mouse-forward-back": "^1.0.1"
   }
 }
