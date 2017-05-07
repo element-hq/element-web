@@ -155,7 +155,7 @@ function startAutoUpdate(update_base_url) {
 // no other way to catch this error).
 // Assuming we generally run from the console when developing,
 // this is far preferable.
-process.on('uncaughtException', function (error) {
+process.on('uncaughtException', function(error) {
     console.log("Unhandled exception", error);
 });
 
@@ -174,7 +174,7 @@ const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirector
 
 if (shouldQuit) {
     console.log("Other instance detected: exiting");
-    electron.app.quit()
+    electron.app.quit();
 }
 
 electron.app.on('ready', () => {

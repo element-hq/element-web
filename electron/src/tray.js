@@ -15,21 +15,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const path = require('path');
 const electron = require('electron');
 
 const app = electron.app;
 const Tray = electron.Tray;
 const ipcMain = electron.ipcMain;
-const MenuItem = electron.MenuItem;
 
 let trayIcon = null;
 
 exports.hasTray = function hasTray() {
     return (trayIcon !== null);
-}
+};
 
-exports.create = function (win, config) {
+exports.create = function(win, config) {
     // no trays on darwin
     if (process.platform === 'darwin' || trayIcon) {
         return;
@@ -48,17 +46,17 @@ exports.create = function (win, config) {
     const contextMenu = electron.Menu.buildFromTemplate([
         {
             label: 'Show/Hide ' + config.brand,
-            click: toggleWin
+            click: toggleWin,
         },
         {
-            type: 'separator'
+            type: 'separator',
         },
         {
             label: 'Quit',
-            click: function () {
+            click: function() {
                 app.quit();
-            }
-        }
+            },
+        },
     ]);
 
     trayIcon = new Tray(config.icon_path);
