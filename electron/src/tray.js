@@ -65,8 +65,12 @@ exports.create = function(win, config) {
     trayIcon.on('click', toggleWin);
 
     ipcMain.on('set_badge', function(event, count) {
-        console.log("set_badge", count);
-		trayIcon.setImage(count ? config.icon_path_unread : config.icon_path);
-		trayIcon.setToolTip(`${config.brand} — ${count} unread`);
+        if (count) {
+            trayIcon.setImage(config.icon_path_unread);
+            trayIcon.setToolTip(`${config.brand} — ${count} unread`);
+        } else {
+            trayIcon.setImage(config.icon_path);
+            trayIcon.setToolTip(config.brand);
+        }
 	});
 };
