@@ -57,7 +57,7 @@ export default React.createClass({
         }
     },
 
-    // Don't let key down events get any further, so they only trigger this and nothing more
+    // Don't let esc keydown events get any further, so they only trigger this and nothing more
     _onKeyDown: function(e) {
         if (e.keyCode === KeyCode.ESCAPE) {
             e.stopPropagation();
