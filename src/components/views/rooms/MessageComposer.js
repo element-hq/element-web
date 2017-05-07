@@ -43,7 +43,6 @@ export default class MessageComposer extends React.Component {
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
         this.onInputStateChanged = this.onInputStateChanged.bind(this);
         this.onEvent = this.onEvent.bind(this);
-        this.onPageUnload = this.onPageUnload.bind(this);
 
         this.state = {
             autocompleteQuery: '',
@@ -65,21 +64,11 @@ export default class MessageComposer extends React.Component {
         // marked as encrypted.
         // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
         MatrixClientPeg.get().on("event", this.onEvent);
-
-        window.addEventListener('beforeunload', this.onPageUnload);
     }
 
     componentWillUnmount() {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("event", this.onEvent);
-        }
-        window.removeEventListener('beforeunload', this.onPageUnload);
-    }
-
-    onPageUnload(event) {
-        if (this.messageComposerInput && this.messageComposerInput.isTyping) {
-            return event.returnValue =
-                'You seem to be typing a message, are you sure you want to quit?';
         }
     }
 
