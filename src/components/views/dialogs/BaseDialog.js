@@ -59,8 +59,10 @@ export default React.createClass({
 
     // Don't let key down events get any further, so they only trigger this and nothing more
     _onKeyDown: function(e) {
-        e.stopPropagation();
-        e.preventDefault();
+        if (e.keyCode === KeyCode.ESCAPE) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
     },
     
     // Must be when the key is released (and not pressed) otherwise componentWillUnmount
