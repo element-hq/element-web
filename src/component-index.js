@@ -99,6 +99,8 @@ import views$dialogs$SetDisplayNameDialog from './components/views/dialogs/SetDi
 views$dialogs$SetDisplayNameDialog && (module.exports.components['views.dialogs.SetDisplayNameDialog'] = views$dialogs$SetDisplayNameDialog);
 import views$dialogs$TextInputDialog from './components/views/dialogs/TextInputDialog';
 views$dialogs$TextInputDialog && (module.exports.components['views.dialogs.TextInputDialog'] = views$dialogs$TextInputDialog);
+import views$dialogs$TextInputWithCheckboxDialog from './components/views/dialogs/TextInputWithCheckboxDialog';
+views$dialogs$TextInputWithCheckboxDialog && (module.exports.components['views.dialogs.TextInputWithCheckboxDialog'] = views$dialogs$TextInputWithCheckboxDialog);
 import views$dialogs$UnknownDeviceDialog from './components/views/dialogs/UnknownDeviceDialog';
 views$dialogs$UnknownDeviceDialog && (module.exports.components['views.dialogs.UnknownDeviceDialog'] = views$dialogs$UnknownDeviceDialog);
 import views$elements$AccessibleButton from './components/views/elements/AccessibleButton';

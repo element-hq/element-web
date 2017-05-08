@@ -191,6 +191,10 @@ module.exports = React.createClass({
         return this.props.config.default_is_url || "https://vector.im";
     },
 
+    getDefaultFederate() {
+        return this.props.config.default_federate && true;
+    },
+
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
 
@@ -501,15 +505,20 @@ module.exports = React.createClass({
                 //this._setPage(PageTypes.CreateRoom);
                 //this.notifyNewScreen('new');
 
-                var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
-                Modal.createDialog(TextInputDialog, {
+                var TextInputWithCheckboxDialog = sdk.getComponent("dialogs.TextInputWithCheckboxDialog");
+                Modal.createDialog(TextInputWithCheckboxDialog, {
                     title: "Create Room",
                     description: "Room name (optional)",
                     button: "Create Room",
-                    onFinished: (should_create, name) => {
+                    check: this.getDefaultFederate(),
+                    checkLabel: "Federate room in domain " + MatrixClientPeg.get().getDomain(),
+                    onFinished: (should_create, name, isFederate) => {
                         if (should_create) {
                             const createOpts = {};
                             if (name) createOpts.name = name;
+                            if (isFederate) {
+                                createOpts.creation_content = {"m.federate": isFederate}
+                            }
                             createRoom({createOpts}).done();
                         }
                     }
