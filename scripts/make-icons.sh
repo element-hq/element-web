@@ -79,10 +79,12 @@ cp "$tmpdir/144.png" "res/vector-icons/mstile-144x144.png"
 cp "$tmpdir/150.png" "res/vector-icons/mstile-150x150.png"
 cp "$tmpdir/310.png" "res/vector-icons/mstile-310x310.png"
 cp "$tmpdir/310x150.png" "res/vector-icons/mstile-310x150.png"
+cp "$tmpdir/180.png" "electron/img/riot.png"
 
 convert "$tmpdir/16.png" "$tmpdir/32.png" "$tmpdir/64.png" "$tmpdir/128.png"  "$tmpdir/256.png" "res/vector-icons/favicon.ico"
 
 cp "res/vector-icons/favicon.ico" "electron/build/icon.ico"
+cp "res/vector-icons/favicon.ico" "electron/img/riot.ico"
 
 # https://github.com/electron-userland/electron-builder/blob/3f97b86993d4ea5172e562b182230a194de0f621/src/targets/LinuxTargetHelper.ts#L127
 for i in 24 96 16 48 64 128 256 512
