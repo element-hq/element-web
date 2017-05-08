@@ -191,6 +191,7 @@ module.exports = React.createClass({
         this.queryChangedDebouncer = setTimeout(() => {
             // Only do search if there is something to search
             if (query.length > 0 && query != '@') {
+                performance.mark('start');
                 // Weighted keys prefer to match userIds when first char is @
                 this._fuse.options.keys = [{
                     name: 'displayName',
@@ -199,6 +200,7 @@ module.exports = React.createClass({
                     name: 'userId',
                     weight: query[0] === '@' ? 0.9 : 0.1,
                 }];
+                performance.mark('middle');
                 queryList = this._fuse.search(query).map((user) => {
                     // Return objects, structure of which is defined
                     // by InviteAddressType
@@ -210,6 +212,9 @@ module.exports = React.createClass({
                         isKnown: true,
                     }
                 });
+                performance.mark('end');
+                performance.measure('setopts', 'start', 'middle');
+                performance.measure('search', 'middle', 'end');
 
                 // If the query is a valid address, add an entry for that
                 // This is important, otherwise there's no way to invite
