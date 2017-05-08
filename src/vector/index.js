@@ -410,31 +410,6 @@ async function loadApp() {
             />,
             document.getElementById('matrixchat')
         );
-        const _localSettings = this.getLocalSettings();
-        dis.register(onAction);
-        if (!_localSettings.hasOwnProperty('language')) {
-          const language = navigator.languages[0] || navigator.language || navigator.userLanguage;
-          if (language.indexOf("-") > -1) {
-            dis.dispatch({
-                action: 'set_language',
-                value: language.split('-')[0],
-            });
-            counterpart.setLocale(language.split('-')[0]);
-            this.setLocalSetting('language', language.split('-')[0]);
-          } else {
-            dis.dispatch({
-                action: 'set_language',
-                value: language,
-            });
-            counterpart.setLocale(language);
-            this.setLocalSetting('language', language);
-          }
-        }else {
-          dis.dispatch({
-              action: 'set_language',
-              value: _localSettings.language,
-          });
-        }
     }
     else {
         console.error("Browser is missing required features.");
@@ -450,6 +425,32 @@ async function loadApp() {
             document.getElementById('matrixchat')
         );
     }
+}
+
+const _localSettings = this.getLocalSettings();
+dis.register(onAction);
+if (!_localSettings.hasOwnProperty('language')) {
+  const language = navigator.languages[0] || navigator.language || navigator.userLanguage;
+  if (language.indexOf("-") > -1) {
+    dis.dispatch({
+        action: 'set_language',
+        value: language.split('-')[0],
+    });
+    counterpart.setLocale(language.split('-')[0]);
+    this.setLocalSetting('language', language.split('-')[0]);
+  } else {
+    dis.dispatch({
+        action: 'set_language',
+        value: language,
+    });
+    counterpart.setLocale(language);
+    this.setLocalSetting('language', language);
+  }
+}else {
+  dis.dispatch({
+      action: 'set_language',
+      value: _localSettings.language,
+  });
 }
 
 loadApp();
