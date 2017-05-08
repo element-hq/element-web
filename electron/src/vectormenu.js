@@ -151,7 +151,7 @@ if (process.platform === 'darwin') {
                     role: 'stopspeaking',
                 },
             ],
-        },
+        }
     );
     // Window menu.
     // This also has specific functionality on macOS
