@@ -7,6 +7,7 @@ var chokidar = require('chokidar');
 
 var componentIndex = path.join('src', 'component-index.js');
 var componentsDir = path.join('src', 'components');
+var componentGlob = '**/*.js';
 
 function reskindex() {
     var header = args.h || args.header;
@@ -36,7 +37,7 @@ function reskindex() {
         strm.write("module.exports.components = {};\n");
     }
 
-    var files = glob.sync('**/*.js', {cwd: componentsDir}).sort();
+    var files = glob.sync(componentGlob, {cwd: componentsDir}).sort();
     for (var i = 0; i < files.length; ++i) {
         var file = files[i].replace('.js', '');
 
@@ -60,7 +61,7 @@ if (!args.w) {
 }
 
 var watchDebouncer = null;
-chokidar.watch('./src').on('all', (event, path) => {
+chokidar.watch(path.join(componentsDir, componentGlob)).on('all', (event, path) => {
     if (path === componentIndex) return;
     if (watchDebouncer) clearTimeout(watchDebouncer);
     watchDebouncer = setTimeout(reskindex, 1000);
