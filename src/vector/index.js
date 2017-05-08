@@ -225,7 +225,7 @@ function getLocalSettings() {
 }
 // This is needed to not load the UserSettingsStore before languages are laoded
 function setLocalSetting(type, value) {
-    const settings = this.getLocalSettings();
+    const settings = getLocalSettings();
     settings[type] = value;
     // FIXME: handle errors
     localStorage.setItem('mx_local_settings', JSON.stringify(settings));
@@ -316,13 +316,13 @@ function onAction(payload) {
             getLanguage(i18nFolder + languages[language], language, callbackLanguage);
             if (language.indexOf("-") > -1) {
               counterpart.setLocale(language.split('-')[0]);
-              this.setLocalSetting('language', language.split('-')[0]);
+              setLocalSetting('language', language.split('-')[0]);
             } else if (language == 'pt-br') {
               counterpart.setLocale('pt-br');
-              this.setLocalSetting('language', 'pt-br');
+              setLocalSetting('language', 'pt-br');
             } else {
               counterpart.setLocale(language);
-              this.setLocalSetting('language', language);
+              setLocalSetting('language', language);
             }
           }
           getLanguage(i18nFolder + languages['en'], 'en', callbackLanguage);
@@ -332,10 +332,10 @@ function onAction(payload) {
             getLanguage(i18nFolder + languages[language], language, callbackLanguage);
             if (language.indexOf("-") > -1) {
               counterpart.setLocale(language.split('-')[0]);
-              this.setLocalSetting('language', language.split('-')[0]);
+              setLocalSetting('language', language.split('-')[0]);
             } else {
               counterpart.setLocale(language);
-              this.setLocalSetting('language', language);
+              setLocalSetting('language', language);
             }
           }
           getLanguage(i18nFolder + languages['en'], 'en', callbackLanguage);
@@ -427,7 +427,7 @@ async function loadApp() {
     }
 }
 
-const _localSettings = this.getLocalSettings();
+const _localSettings = getLocalSettings();
 dis.register(onAction);
 if (!_localSettings.hasOwnProperty('language')) {
   const language = navigator.languages[0] || navigator.language || navigator.userLanguage;
@@ -437,14 +437,14 @@ if (!_localSettings.hasOwnProperty('language')) {
         value: language.split('-')[0],
     });
     counterpart.setLocale(language.split('-')[0]);
-    this.setLocalSetting('language', language.split('-')[0]);
+    setLocalSetting('language', language.split('-')[0]);
   } else {
     dis.dispatch({
         action: 'set_language',
         value: language,
     });
     counterpart.setLocale(language);
-    this.setLocalSetting('language', language);
+    setLocalSetting('language', language);
   }
 }else {
   dis.dispatch({
