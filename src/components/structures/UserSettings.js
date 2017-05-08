@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,27 +14,40 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react');
-var ReactDOM = require('react-dom');
-var sdk = require('../../index');
-var MatrixClientPeg = require("../../MatrixClientPeg");
-var PlatformPeg = require("../../PlatformPeg");
-var Modal = require('../../Modal');
-var dis = require("../../dispatcher");
-var q = require('q');
-var package_json = require('../../../package.json');
-var UserSettingsStore = require('../../UserSettingsStore');
-var GeminiScrollbar = require('react-gemini-scrollbar');
-var Email = require('../../email');
-var AddThreepid = require('../../AddThreepid');
-var SdkConfig = require('../../SdkConfig');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const sdk = require('../../index');
+const MatrixClientPeg = require("../../MatrixClientPeg");
+const PlatformPeg = require("../../PlatformPeg");
+const Modal = require('../../Modal');
+const dis = require("../../dispatcher");
+const q = require('q');
+const packageJson = require('../../../package.json');
+const UserSettingsStore = require('../../UserSettingsStore');
+const GeminiScrollbar = require('react-gemini-scrollbar');
+const Email = require('../../email');
+const AddThreepid = require('../../AddThreepid');
+const SdkConfig = require('../../SdkConfig');
 import AccessibleButton from '../views/elements/AccessibleButton';
 
 // if this looks like a release, use the 'version' from package.json; else use
-// the git sha.
-const REACT_SDK_VERSION =
-      'dist' in package_json ? package_json.version : package_json.gitHead || "<local>";
+// the git sha. Prepend version with v, to look like riot-web version
+const REACT_SDK_VERSION = 'dist' in packageJson ? packageJson.version : packageJson.gitHead || '<local>';
 
+// Simple method to help prettify GH Release Tags and Commit Hashes.
+const semVerRegex = /^v?(\d+\.\d+\.\d+(?:-rc.+)?)(?:-(?:\d+-g)?([0-9a-fA-F]+))?(?:-dirty)?$/i;
+const gHVersionLabel = function(repo, token) {
+    const match = token.match(semVerRegex);
+    let url;
+    if (match && match[1]) { // basic semVer string possibly with commit hash
+        url = (match.length > 1 && match[2])
+            ? `https://github.com/${repo}/commit/${match[2]}`
+            : `https://github.com/${repo}/releases/tag/v${match[1]}`;
+    } else {
+        url = `https://github.com/${repo}/commit/${token.split('-')[0]}`;
+    }
+    return <a href={url}>{token}</a>;
+};
 
 // Enumerate some simple 'flip a bit' UI settings (if any).
 // 'id' gives the key name in the im.vector.web.settings account data event
@@ -42,6 +56,14 @@ const SETTINGS_LABELS = [
     {
         id: 'autoplayGifsAndVideos',
         label: 'Autoplay GIFs and videos',
+    },
+    {
+        id: 'hideReadReceipts',
+        label: 'Hide read receipts',
+    },
+    {
+        id: 'dontSendTypingNotifications',
+        label: "Don't send typing notifications",
     },
 /*
     {
@@ -93,7 +115,7 @@ const THEMES = [
         id: 'theme',
         label: 'Dark theme',
         value: 'dark',
-    }
+    },
 ];
 
 
@@ -139,6 +161,7 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         this._unmounted = false;
+        this._addThreepid = null;
 
         if (PlatformPeg.get()) {
             q().then(() => {
@@ -166,7 +189,7 @@ module.exports = React.createClass({
         });
         this._refreshFromServer();
 
-        var syncedSettings = UserSettingsStore.getSyncedSettings();
+        const syncedSettings = UserSettingsStore.getSyncedSettings();
         if (!syncedSettings.theme) {
             syncedSettings.theme = 'light';
         }
@@ -188,16 +211,16 @@ module.exports = React.createClass({
             middleOpacity: 1.0,
         });
         dis.unregister(this.dispatcherRef);
-        let cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.get();
         if (cli) {
             cli.removeListener("RoomMember.membership", this._onInviteStateChange);
         }
     },
 
     _refreshFromServer: function() {
-        var self = this;
+        const self = this;
         q.all([
-            UserSettingsStore.loadProfileInfo(), UserSettingsStore.loadThreePids()
+            UserSettingsStore.loadProfileInfo(), UserSettingsStore.loadThreePids(),
         ]).done(function(resps) {
             self.setState({
                 avatarUrl: resps[0].avatar_url,
@@ -205,10 +228,11 @@ module.exports = React.createClass({
                 phase: "UserSettings.DISPLAY",
             });
         }, function(error) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Failed to load user settings: " + error);
             Modal.createDialog(ErrorDialog, {
                 title: "Can't load user settings",
-                description: error.toString()
+                description: ((error && error.message) ? error.message : "Server may be unavailable or overloaded"),
             });
         });
     },
@@ -221,7 +245,7 @@ module.exports = React.createClass({
 
     onAvatarPickerClick: function(ev) {
         if (MatrixClientPeg.get().isGuest()) {
-            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+            const NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
                 title: "Please Register",
                 description: "Guests can't set avatars. Please register.",
@@ -235,8 +259,8 @@ module.exports = React.createClass({
     },
 
     onAvatarSelected: function(ev) {
-        var self = this;
-        var changeAvatar = this.refs.changeAvatar;
+        const self = this;
+        const changeAvatar = this.refs.changeAvatar;
         if (!changeAvatar) {
             console.error("No ChangeAvatar found to upload image to!");
             return;
@@ -245,27 +269,34 @@ module.exports = React.createClass({
             // dunno if the avatar changed, re-check it.
             self._refreshFromServer();
         }, function(err) {
-            var errMsg = (typeof err === "string") ? err : (err.error || "");
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            // const errMsg = (typeof err === "string") ? err : (err.error || "");
+            console.error("Failed to set avatar: " + err);
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Error",
-                description: "Failed to set avatar. " + errMsg
+                title: "Failed to set avatar",
+                description: ((err && err.message) ? err.message : "Operation failed"),
             });
         });
     },
 
     onLogoutClicked: function(ev) {
-        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createDialog(QuestionDialog, {
             title: "Sign out?",
             description:
                 <div>
-                    For security, logging out will delete any end-to-end encryption keys from this browser,
-                    making previous encrypted chat history unreadable if you log back in.
-                    In future this <a href="https://github.com/vector-im/riot-web/issues/2108">will be improved</a>,
-                    but for now be warned.
+                    For security, logging out will delete any end-to-end encryption keys from this browser.
+
+                    If you want to be able to decrypt your conversation history from future Riot sessions,
+                    please export your room keys for safe-keeping.
                 </div>,
             button: "Sign out",
+            extraButtons: [
+                <button key="export" className="mx_Dialog_primary"
+                        onClick={this._onExportE2eKeysClicked}>
+                    Export E2E room keys
+                </button>,
+            ],
             onFinished: (confirmed) => {
                 if (confirmed) {
                     dis.dispatch({action: 'logout'});
@@ -278,33 +309,33 @@ module.exports = React.createClass({
     },
 
     onPasswordChangeError: function(err) {
-        var errMsg = err.error || "";
+        let errMsg = err.error || "";
         if (err.httpStatus === 403) {
             errMsg = "Failed to change password. Is your password correct?";
-        }
-        else if (err.httpStatus) {
+        } else if (err.httpStatus) {
             errMsg += ` (HTTP status ${err.httpStatus})`;
         }
-        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        console.error("Failed to change password: " + errMsg);
         Modal.createDialog(ErrorDialog, {
             title: "Error",
-            description: errMsg
+            description: errMsg,
         });
     },
 
     onPasswordChanged: function() {
-        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createDialog(ErrorDialog, {
             title: "Success",
             description: `Your password was successfully changed. You will not
                           receive push notifications on other devices until you
-                          log back in to them.`
+                          log back in to them.`,
         });
     },
 
     onUpgradeClicked: function() {
         dis.dispatch({
-            action: "start_upgrade_registration"
+            action: "start_upgrade_registration",
         });
     },
 
@@ -312,23 +343,27 @@ module.exports = React.createClass({
         UserSettingsStore.setEnableNotifications(event.target.checked);
     },
 
-    onAddThreepidClicked: function(value, shouldSubmit) {
+    _onAddEmailEditFinished: function(value, shouldSubmit) {
         if (!shouldSubmit) return;
-        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        this._addEmail();
+    },
 
-        var email_address = this.refs.add_threepid_input.value;
-        if (!Email.looksValid(email_address)) {
+    _addEmail: function() {
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+
+        const emailAddress = this.refs.add_email_input.value;
+        if (!Email.looksValid(emailAddress)) {
             Modal.createDialog(ErrorDialog, {
                 title: "Invalid Email Address",
                 description: "This doesn't appear to be a valid email address",
             });
             return;
         }
-        this.add_threepid = new AddThreepid();
+        this._addThreepid = new AddThreepid();
         // we always bind emails when registering, so let's do the
         // same here.
-        this.add_threepid.addEmailAddress(email_address, true).done(() => {
+        this._addThreepid.addEmailAddress(emailAddress, true).done(() => {
             Modal.createDialog(QuestionDialog, {
                 title: "Verification Pending",
                 description: "Please check your email and click on the link it contains. Once this is done, click continue.",
@@ -337,12 +372,13 @@ module.exports = React.createClass({
             });
         }, (err) => {
             this.setState({email_add_pending: false});
+            console.error("Unable to add email address " + emailAddress + " " + err);
             Modal.createDialog(ErrorDialog, {
                 title: "Unable to add email address",
-                description: err.message
+                description: ((err && err.message) ? err.message : "Operation failed"),
             });
         });
-        ReactDOM.findDOMNode(this.refs.add_threepid_input).blur();
+        ReactDOM.findDOMNode(this.refs.add_email_input).blur();
         this.setState({email_add_pending: true});
     },
 
@@ -361,9 +397,10 @@ module.exports = React.createClass({
                         return this._refreshFromServer();
                     }).catch((err) => {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        console.error("Unable to remove contact information: " + err);
                         Modal.createDialog(ErrorDialog, {
                             title: "Unable to remove contact information",
-                            description: err.toString(),
+                            description: ((err && err.message) ? err.message : "Operation failed"),
                         });
                     }).done();
                 }
@@ -380,8 +417,8 @@ module.exports = React.createClass({
     },
 
     verifyEmailAddress: function() {
-        this.add_threepid.checkEmailLinkClicked().done(() => {
-            this.add_threepid = undefined;
+        this._addThreepid.checkEmailLinkClicked().done(() => {
+            this._addThreepid = null;
             this.setState({
                 phase: "UserSettings.LOADING",
             });
@@ -389,9 +426,9 @@ module.exports = React.createClass({
             this.setState({email_add_pending: false});
         }, (err) => {
             this.setState({email_add_pending: false});
-            if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
-                var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                var message = "Unable to verify email address. ";
+            if (err.errcode === 'M_THREEPID_AUTH_FAILED') {
+                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                let message = "Unable to verify email address. ";
                 message += "Please check your email and click on the link it contains. Once this is done, click continue.";
                 Modal.createDialog(QuestionDialog, {
                     title: "Verification Pending",
@@ -400,10 +437,11 @@ module.exports = React.createClass({
                     onFinished: this.onEmailDialogFinished,
                 });
             } else {
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                console.error("Unable to verify email address: " + err);
                 Modal.createDialog(ErrorDialog, {
                     title: "Unable to verify email address",
-                    description: err.toString(),
+                    description: ((err && err.message) ? err.message : "Operation failed"),
                 });
             }
         });
@@ -423,10 +461,11 @@ module.exports = React.createClass({
     },
 
     _onClearCacheClicked: function() {
+        if (!PlatformPeg.get()) return;
+
+        MatrixClientPeg.get().stopClient();
         MatrixClientPeg.get().store.deleteAllData().done(() => {
-            // forceReload=false since we don't really need new HTML/JS files
-            // we just need to restart the JS runtime.
-            window.location.reload(false);
+            PlatformPeg.get().reload();
         });
     },
 
@@ -438,17 +477,17 @@ module.exports = React.createClass({
 
     _onRejectAllInvitesClicked: function(rooms, ev) {
         this.setState({
-            rejectingInvites: true
+            rejectingInvites: true,
         });
         // reject the invites
-        let promises = rooms.map((room) => {
+        const promises = rooms.map((room) => {
             return MatrixClientPeg.get().leave(room.roomId);
         });
         // purposefully drop errors to the floor: we'll just have a non-zero number on the UI
         // after trying to reject all the invites.
         q.allSettled(promises).then(() => {
             this.setState({
-                rejectingInvites: false
+                rejectingInvites: false,
             });
         }).done();
     },
@@ -461,7 +500,7 @@ module.exports = React.createClass({
                 }, "e2e-export");
             }, {
                 matrixClient: MatrixClientPeg.get(),
-            }
+            },
         );
     },
 
@@ -473,7 +512,7 @@ module.exports = React.createClass({
                 }, "e2e-export");
             }, {
                 matrixClient: MatrixClientPeg.get(),
-            }
+            },
         );
     },
 
@@ -499,8 +538,6 @@ module.exports = React.createClass({
     },
 
     _renderUserInterfaceSettings: function() {
-        var client = MatrixClientPeg.get();
-
         return (
             <div>
                 <h3>User Interface</h3>
@@ -527,7 +564,7 @@ module.exports = React.createClass({
             <input id="urlPreviewsDisabled"
                    type="checkbox"
                    defaultChecked={ UserSettingsStore.getUrlPreviewsDisabled() }
-                   onChange={ e => UserSettingsStore.setUrlPreviewsDisabled(e.target.checked) }
+                   onChange={ (e) => UserSettingsStore.setUrlPreviewsDisabled(e.target.checked) }
             />
             <label htmlFor="urlPreviewsDisabled">
                 Disable inline URL previews by default
@@ -540,7 +577,7 @@ module.exports = React.createClass({
             <input id={ setting.id }
                    type="checkbox"
                    defaultChecked={ this._syncedSettings[setting.id] }
-                   onChange={ e => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
+                   onChange={ (e) => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
             />
             <label htmlFor={ setting.id }>
                 { setting.label }
@@ -555,7 +592,7 @@ module.exports = React.createClass({
                    name={ setting.id }
                    value={ setting.value }
                    defaultChecked={ this._syncedSettings[setting.id] === setting.value }
-                   onChange={ e => {
+                   onChange={ (e) => {
                             if (e.target.checked) {
                                 UserSettingsStore.setSyncedSetting(setting.id, setting.value);
                             }
@@ -617,8 +654,8 @@ module.exports = React.createClass({
                    type="checkbox"
                    defaultChecked={ this._localSettings[setting.id] }
                    onChange={
-                        e => {
-                            UserSettingsStore.setLocalSetting(setting.id, e.target.checked)
+                        (e) => {
+                            UserSettingsStore.setLocalSetting(setting.id, e.target.checked);
                             if (setting.id === 'blacklistUnverifiedDevices') { // XXX: this is a bit ugly
                                 client.setGlobalBlacklistUnverifiedDevices(e.target.checked);
                             }
@@ -632,7 +669,7 @@ module.exports = React.createClass({
     },
 
     _renderDevicesPanel: function() {
-        var DevicesPanel = sdk.getComponent('settings.DevicesPanel');
+        const DevicesPanel = sdk.getComponent('settings.DevicesPanel');
         return (
             <div>
                 <h3>Devices</h3>
@@ -643,7 +680,7 @@ module.exports = React.createClass({
 
     _renderBugReport: function() {
         if (!SdkConfig.get().bug_report_endpoint_url) {
-            return <div />
+            return <div />;
         }
         return (
             <div>
@@ -662,17 +699,17 @@ module.exports = React.createClass({
         // default to enabled if undefined
         if (this.props.enableLabs === false) return null;
 
-        let features = UserSettingsStore.LABS_FEATURES.map(feature => (
+        const features = UserSettingsStore.LABS_FEATURES.map((feature) => (
             <div key={feature.id} className="mx_UserSettings_toggle">
                 <input
                     type="checkbox"
                     id={feature.id}
                     name={feature.id}
                     defaultChecked={ UserSettingsStore.isFeatureEnabled(feature.id) }
-                    onChange={e => {
+                    onChange={(e) => {
                         if (MatrixClientPeg.get().isGuest()) {
                             e.target.checked = false;
-                            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+                            const NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
                             Modal.createDialog(NeedToRegisterDialog, {
                                 title: "Please Register",
                                 description: "Guests can't use labs features. Please register.",
@@ -724,14 +761,14 @@ module.exports = React.createClass({
     },
 
     _renderBulkOptions: function() {
-        let invitedRooms = MatrixClientPeg.get().getRooms().filter((r) => {
+        const invitedRooms = MatrixClientPeg.get().getRooms().filter((r) => {
             return r.hasMembershipState(this._me, "invite");
         });
         if (invitedRooms.length === 0) {
             return null;
         }
 
-        let Spinner = sdk.getComponent("elements.Spinner");
+        const Spinner = sdk.getComponent("elements.Spinner");
 
         let reject = <Spinner />;
         if (!this.state.rejectingInvites) {
@@ -753,13 +790,33 @@ module.exports = React.createClass({
         </div>;
     },
 
+    _showSpoiler: function(event) {
+        const target = event.target;
+        target.innerHTML = target.getAttribute('data-spoiler');
+
+        const range = document.createRange();
+        range.selectNodeContents(target);
+
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+    },
+
     nameForMedium: function(medium) {
-        if (medium == 'msisdn') return 'Phone';
+        if (medium === 'msisdn') return 'Phone';
         return medium[0].toUpperCase() + medium.slice(1);
     },
 
+    presentableTextForThreepid: function(threepid) {
+        if (threepid.medium === 'msisdn') {
+            return '+' + threepid.address;
+        } else {
+            return threepid.address;
+        }
+    },
+
     render: function() {
-        var Loader = sdk.getComponent("elements.Spinner");
+        const Loader = sdk.getComponent("elements.Spinner");
         switch (this.state.phase) {
             case "UserSettings.LOADING":
                 return (
@@ -771,18 +828,18 @@ module.exports = React.createClass({
                 throw new Error("Unknown state.phase => " + this.state.phase);
         }
         // can only get here if phase is UserSettings.DISPLAY
-        var SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
-        var ChangeDisplayName = sdk.getComponent("views.settings.ChangeDisplayName");
-        var ChangePassword = sdk.getComponent("views.settings.ChangePassword");
-        var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
-        var Notifications = sdk.getComponent("settings.Notifications");
-        var EditableText = sdk.getComponent('elements.EditableText');
+        const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
+        const ChangeDisplayName = sdk.getComponent("views.settings.ChangeDisplayName");
+        const ChangePassword = sdk.getComponent("views.settings.ChangePassword");
+        const ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
+        const Notifications = sdk.getComponent("settings.Notifications");
+        const EditableText = sdk.getComponent('elements.EditableText');
 
-        var avatarUrl = (
+        const avatarUrl = (
             this.state.avatarUrl ? MatrixClientPeg.get().mxcUrlToHttp(this.state.avatarUrl) : null
         );
 
-        var threepidsSection = this.state.threepids.map((val, pidIndex) => {
+        const threepidsSection = this.state.threepids.map((val, pidIndex) => {
             const id = "3pid-" + val.address;
             return (
                 <div className="mx_UserSettings_profileTableRow" key={pidIndex}>
@@ -790,7 +847,9 @@ module.exports = React.createClass({
                         <label htmlFor={id}>{this.nameForMedium(val.medium)}</label>
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
-                        <input type="text" key={val.address} id={id} value={val.address} disabled />
+                        <input type="text" key={val.address} id={id}
+                            value={this.presentableTextForThreepid(val)} disabled
+                        />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
                         <img src="img/cancel-small.svg" width="14" height="14" alt="Remove" onClick={this.onRemoveThreepidClicked.bind(this, val)} />
@@ -798,32 +857,37 @@ module.exports = React.createClass({
                 </div>
             );
         });
-        var addThreepidSection;
+        let addEmailSection;
         if (this.state.email_add_pending) {
-            addThreepidSection = <Loader />;
+            addEmailSection = <Loader key="_email_add_spinner" />;
         } else if (!MatrixClientPeg.get().isGuest()) {
-            addThreepidSection = (
-                <div className="mx_UserSettings_profileTableRow" key="new">
+            addEmailSection = (
+                <div className="mx_UserSettings_profileTableRow" key="_newEmail">
                     <div className="mx_UserSettings_profileLabelCell">
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
                         <EditableText
-                            ref="add_threepid_input"
+                            ref="add_email_input"
                             className="mx_UserSettings_editable"
                             placeholderClassName="mx_UserSettings_threepidPlaceholder"
                             placeholder={ "Add email address" }
                             blurToCancel={ false }
-                            onValueChanged={ this.onAddThreepidClicked } />
+                            onValueChanged={ this._onAddEmailEditFinished } />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={ this.onAddThreepidClicked.bind(this, undefined, true) }/>
+                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={this._addEmail} />
                     </div>
                 </div>
             );
         }
-        threepidsSection.push(addThreepidSection);
+        const AddPhoneNumber = sdk.getComponent('views.settings.AddPhoneNumber');
+        const addMsisdnSection = (
+            <AddPhoneNumber key="_addMsisdn" onThreepidAdded={this._refreshFromServer} />
+        );
+        threepidsSection.push(addEmailSection);
+        threepidsSection.push(addMsisdnSection);
 
-        var accountJsx;
+        let accountJsx;
 
         if (MatrixClientPeg.get().isGuest()) {
             accountJsx = (
@@ -831,8 +895,7 @@ module.exports = React.createClass({
                     Create an account
                 </div>
             );
-        }
-        else {
+        } else {
             accountJsx = (
                 <ChangePassword
                         className="mx_UserSettings_accountTable"
@@ -844,9 +907,9 @@ module.exports = React.createClass({
                         onFinished={this.onPasswordChanged} />
             );
         }
-        var notification_area;
+        let notificationArea;
         if (!MatrixClientPeg.get().isGuest() && this.state.threepids !== undefined) {
-            notification_area = (<div>
+            notificationArea = (<div>
                 <h3>Notifications</h3>
 
                 <div className="mx_UserSettings_section">
@@ -855,12 +918,12 @@ module.exports = React.createClass({
             </div>);
         }
 
-        var olmVersion = MatrixClientPeg.get().olmVersion;
+        const olmVersion = MatrixClientPeg.get().olmVersion;
         // If the olmVersion is not defined then either crypto is disabled, or
         // we are using a version old version of olm. We assume the former.
-        var olmVersionString = "<not-enabled>";
+        let olmVersionString = "<not-enabled>";
         if (olmVersion !== undefined) {
-            olmVersionString = olmVersion[0] + "." + olmVersion[1] + "." + olmVersion[2];
+            olmVersionString = `${olmVersion[0]}.${olmVersion[1]}.${olmVersion[2]}`;
         }
 
         return (
@@ -918,7 +981,7 @@ module.exports = React.createClass({
 
                 {this._renderReferral()}
 
-                {notification_area}
+                {notificationArea}
 
                 {this._renderUserInterfaceSettings()}
                 {this._renderLabs()}
@@ -934,14 +997,26 @@ module.exports = React.createClass({
                         Logged in as {this._me}
                     </div>
                     <div className="mx_UserSettings_advanced">
+                        Access Token: <span className="mx_UserSettings_advanced_spoiler"
+                                            onClick={this._showSpoiler}
+                                            data-spoiler={ MatrixClientPeg.get().getAccessToken() }
+                        >&lt;click to reveal&gt;</span>
+                    </div>
+                    <div className="mx_UserSettings_advanced">
                         Homeserver is { MatrixClientPeg.get().getHomeserverUrl() }
                     </div>
                     <div className="mx_UserSettings_advanced">
                         Identity Server is { MatrixClientPeg.get().getIdentityServerUrl() }
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        matrix-react-sdk version: {REACT_SDK_VERSION}<br/>
-                        riot-web version: {this.state.vectorVersion !== null ? this.state.vectorVersion : 'unknown'}<br/>
+                        matrix-react-sdk version: {(REACT_SDK_VERSION !== '<local>')
+                            ? gHVersionLabel('matrix-org/matrix-react-sdk', REACT_SDK_VERSION)
+                            : REACT_SDK_VERSION
+                        }<br/>
+                        riot-web version: {(this.state.vectorVersion !== null)
+                            ? gHVersionLabel('vector-im/riot-web', this.state.vectorVersion)
+                            : 'unknown'
+                        }<br/>
                         olm version: {olmVersionString}<br/>
                     </div>
                 </div>
@@ -953,5 +1028,5 @@ module.exports = React.createClass({
                 </GeminiScrollbar>
             </div>
         );
-    }
+    },
 });

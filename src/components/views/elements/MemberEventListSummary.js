@@ -221,6 +221,8 @@ module.exports = React.createClass({
             "banned": beConjugated + " banned",
             "unbanned": beConjugated + " unbanned",
             "kicked": beConjugated + " kicked",
+            "changed_name": "changed name",
+            "changed_avatar": "changed avatar",
         };
 
         if (Object.keys(map).includes(t)) {
@@ -289,7 +291,24 @@ module.exports = React.createClass({
         switch (e.mxEvent.getContent().membership) {
             case 'invite': return 'invited';
             case 'ban': return 'banned';
-            case 'join': return 'joined';
+            case 'join':
+                if (e.mxEvent.getPrevContent().membership === 'join') {
+                    if (e.mxEvent.getContent().displayname !==
+                        e.mxEvent.getPrevContent().displayname)
+                    {
+                        return 'changed_name';
+                    }
+                    else if (e.mxEvent.getContent().avatar_url !==
+                        e.mxEvent.getPrevContent().avatar_url)
+                    {
+                        return 'changed_avatar';
+                    }
+                    // console.log("MELS ignoring duplicate membership join event");
+                    return null;
+                }
+                else {
+                    return 'joined';
+                }
             case 'leave':
                 if (e.mxEvent.getSender() === e.mxEvent.getStateKey()) {
                     switch (e.mxEvent.getPrevContent().membership) {
@@ -350,6 +369,7 @@ module.exports = React.createClass({
 
     render: function() {
         const eventsToRender = this.props.events;
+        const eventIds = eventsToRender.map(e => e.getId()).join(',');
         const fewEvents = eventsToRender.length < this.props.threshold;
         const expanded = this.state.expanded || fewEvents;
 
@@ -360,7 +380,7 @@ module.exports = React.createClass({
 
         if (fewEvents) {
             return (
-                <div className="mx_MemberEventListSummary">
+                <div className="mx_MemberEventListSummary" data-scroll-tokens={eventIds}>
                     {expandedEvents}
                 </div>
             );
@@ -418,7 +438,7 @@ module.exports = React.createClass({
         );
 
         return (
-            <div className="mx_MemberEventListSummary">
+            <div className="mx_MemberEventListSummary" data-scroll-tokens={eventIds}>
                 {toggleButton}
                 {summaryContainer}
                 {expanded ? <div className="mx_MemberEventListSummary_line">&nbsp;</div> : null}

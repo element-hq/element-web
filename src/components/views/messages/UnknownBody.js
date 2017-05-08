@@ -22,10 +22,10 @@ module.exports = React.createClass({
     displayName: 'UnknownBody',
 
     render: function() {
-        var content = this.props.mxEvent.getContent();
+        const text = this.props.mxEvent.getContent().body;
         return (
-            <span className="mx_UnknownBody">
-                {content.body}
+            <span className="mx_UnknownBody" title="Redacted or unknown message type">
+                {text}
             </span>
         );
     },

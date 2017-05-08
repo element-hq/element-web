@@ -279,23 +279,25 @@ module.exports = React.createClass({
             this.currentGhostEventId = null;
         }
 
-        var isMembershipChange = (e) =>
-            e.getType() === 'm.room.member'
-            && (!e.getPrevContent() || e.getContent().membership !== e.getPrevContent().membership);
+        var isMembershipChange = (e) => e.getType() === 'm.room.member';
 
         for (i = 0; i < this.props.events.length; i++) {
-            var mxEv = this.props.events[i];
-            var wantTile = true;
-            var eventId = mxEv.getId();
+            let mxEv = this.props.events[i];
+            let wantTile = true;
+            let eventId = mxEv.getId();
+            let readMarkerInMels = false;
 
             if (!EventTile.haveTileForEvent(mxEv)) {
                 wantTile = false;
             }
 
-            var last = (i == lastShownEventIndex);
+            let last = (i == lastShownEventIndex);
 
             // Wrap consecutive member events in a ListSummary, ignore if redacted
-            if (isMembershipChange(mxEv) && EventTile.haveTileForEvent(mxEv)) {
+            if (isMembershipChange(mxEv) &&
+                EventTile.haveTileForEvent(mxEv) &&
+                !mxEv.isRedacted()
+            ) {
                 let ts1 = mxEv.getTs();
                 // Ensure that the key of the MemberEventListSummary does not change with new
                 // member events. This will prevent it from being re-created unnecessarily, and
@@ -331,6 +333,9 @@ module.exports = React.createClass({
 
                 let eventTiles = summarisedEvents.map(
                     (e) => {
+                        if (e.getId() === this.props.readMarkerEventId) {
+                            readMarkerInMels = true;
+                        }
                         // In order to prevent DateSeparators from appearing in the expanded form
                         // of MemberEventListSummary, render each member event as if the previous
                         // one was itself. This way, the timestamp of the previous event === the
@@ -349,12 +354,16 @@ module.exports = React.createClass({
                     <MemberEventListSummary
                         key={key}
                         events={summarisedEvents}
-                        data-scroll-token={eventId}
                         onToggle={this._onWidgetLoad} // Update scroll state
                     >
                             {eventTiles}
                     </MemberEventListSummary>
                 );
+
+                if (readMarkerInMels) {
+                    ret.push(this._getReadMarkerTile(visible));
+                }
+
                 continue;
             }
 
@@ -385,6 +394,8 @@ module.exports = React.createClass({
                 isVisibleReadMarker = visible;
             }
 
+            // XXX: there should be no need for a ghost tile - we should just use a
+            // a dispatch (user_activity_end) to start the RM animation.
             if (eventId == this.currentGhostEventId) {
                 // if we're showing an animation, continue to show it.
                 ret.push(this._getReadMarkerGhostTile());
@@ -408,7 +419,9 @@ module.exports = React.createClass({
 
         // is this a continuation of the previous message?
         var continuation = false;
-        if (prevEvent !== null && prevEvent.sender && mxEv.sender
+
+        if (prevEvent !== null
+                && prevEvent.sender && mxEv.sender
                 && mxEv.sender.userId === prevEvent.sender.userId
                 && mxEv.getType() == prevEvent.getType()) {
             continuation = true;
@@ -459,8 +472,9 @@ module.exports = React.createClass({
         ret.push(
                 <li key={eventId}
                         ref={this._collectEventNode.bind(this, eventId)}
-                        data-scroll-token={scrollToken}>
+                        data-scroll-tokens={scrollToken}>
                     <EventTile mxEvent={mxEv} continuation={continuation}
+                        isRedacted={mxEv.isRedacted()}
                         onWidgetLoad={this._onWidgetLoad}
                         readReceipts={readReceipts}
                         readReceiptMap={this._readReceiptMap}
@@ -481,13 +495,17 @@ module.exports = React.createClass({
             // here.
             return !this.props.suppressFirstDateSeparator;
         }
+        const prevEventDate = prevEvent.getDate();
+        if (!nextEventDate || !prevEventDate) {
+            return false;
+        }
         // Return early for events that are > 24h apart
         if (Math.abs(prevEvent.getTs() - nextEventDate.getTime()) > MILLIS_IN_DAY) {
             return true;
         }
 
         // Compare weekdays
-        return prevEvent.getDate().getDay() !== nextEventDate.getDay();
+        return prevEventDate.getDay() !== nextEventDate.getDay();
     },
 
     // get a list of read receipts that should be shown next to this event

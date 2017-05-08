@@ -16,17 +16,18 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var highlight = require('highlight.js');
-var HtmlUtils = require('../../../HtmlUtils');
-var linkify = require('linkifyjs');
-var linkifyElement = require('linkifyjs/element');
-var linkifyMatrix = require('../../../linkify-matrix');
-var sdk = require('../../../index');
-var ScalarAuthClient = require("../../../ScalarAuthClient");
-var Modal = require("../../../Modal");
-var SdkConfig = require('../../../SdkConfig');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import highlight from 'highlight.js';
+import * as HtmlUtils from '../../../HtmlUtils';
+import * as linkify from 'linkifyjs';
+import linkifyElement from 'linkifyjs/element';
+import linkifyMatrix from '../../../linkify-matrix';
+import sdk from '../../../index';
+import ScalarAuthClient from '../../../ScalarAuthClient';
+import Modal from '../../../Modal';
+import SdkConfig from '../../../SdkConfig';
+import dis from '../../../dispatcher';
 
 linkifyMatrix(linkify);
 
@@ -131,7 +132,8 @@ module.exports = React.createClass({
                     links.push(node);
                 }
             }
-            else if (node.tagName === "PRE" || node.tagName === "CODE") {
+            else if (node.tagName === "PRE" || node.tagName === "CODE" ||
+                    node.tagName === "BLOCKQUOTE") {
                 continue;
             }
             else if (node.children && node.children.length) {
@@ -185,6 +187,15 @@ module.exports = React.createClass({
             global.localStorage.setItem("hide_preview_" + this.props.mxEvent.getId(), "1");
         }
         this.forceUpdate();
+    },
+
+    onEmoteSenderClick: function(event) {
+        const mxEvent = this.props.mxEvent;
+        const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
+        dis.dispatch({
+            action: 'insert_displayname',
+            displayname: name.replace(' (IRC)', ''),
+        });
     },
 
     getEventTileOps: function() {
@@ -273,7 +284,15 @@ module.exports = React.createClass({
                 const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
                 return (
                     <span ref="content" className="mx_MEmoteBody mx_EventTile_content">
-                        * <EmojiText>{name}</EmojiText> { body }
+                        *&nbsp;
+                        <EmojiText
+                            className="mx_MEmoteBody_sender"
+                            onClick={this.onEmoteSenderClick}
+                        >
+                            {name}
+                        </EmojiText>
+                        &nbsp;
+                        { body }
                         { widgets }
                     </span>
                 );

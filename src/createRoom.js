@@ -102,9 +102,10 @@ function createRoom(opts) {
         });
         return roomId;
     }, function(err) {
+        console.error("Failed to create room " + roomId + " " + err);
         Modal.createDialog(ErrorDialog, {
             title: "Failure to create room",
-            description: err.toString()
+            description: "Server may be unavailable, overloaded, or you hit a bug.",
         });
         return null;
     });

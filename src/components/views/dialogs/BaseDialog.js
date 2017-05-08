@@ -18,6 +18,7 @@ import React from 'react';
 
 import * as KeyCode from '../../../KeyCode';
 import AccessibleButton from '../elements/AccessibleButton';
+import sdk from '../../../index';
 
 /**
  * Basic container for modal dialogs.
@@ -46,7 +47,19 @@ export default React.createClass({
         children: React.PropTypes.node,
     },
 
-    _onKeyDown: function(e) {
+    componentWillMount: function() {
+        this.priorActiveElement = document.activeElement;
+    },
+
+    componentWillUnmount: function() {
+        if (this.priorActiveElement !== null) {
+            this.priorActiveElement.focus();
+        }
+    },
+
+    // Must be when the key is released (and not pressed) otherwise componentWillUnmount
+    // will focus another element which will receive future key events
+    _onKeyUp: function(e) {
         if (e.keyCode === KeyCode.ESCAPE) {
             e.stopPropagation();
             e.preventDefault();
@@ -65,15 +78,14 @@ export default React.createClass({
     },
 
     render: function() {
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+
         return (
-            <div onKeyDown={this._onKeyDown} className={this.props.className}>
+            <div onKeyUp={this._onKeyUp} className={this.props.className}>
                 <AccessibleButton onClick={this._onCancelClick}
                     className="mx_Dialog_cancelButton"
                 >
-                    <img
-                        src="img/cancel.svg" width="18" height="18"
-                        alt="Cancel" title="Cancel"
-                    />
+                    <TintableSvg src="img/icons-close-button.svg" width="35" height="35" />
                 </AccessibleButton>
                 <div className='mx_Dialog_title'>
                     { this.props.title }

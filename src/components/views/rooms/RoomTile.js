@@ -19,7 +19,6 @@ limitations under the License.
 var React = require('react');
 var ReactDOM = require("react-dom");
 var classNames = require('classnames');
-var dis = require("../../../dispatcher");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 import DMRoomMap from '../../../utils/DMRoomMap';
 var sdk = require('../../../index');
@@ -28,6 +27,8 @@ var RoomNotifs = require('../../../RoomNotifs');
 var FormattingUtils = require('../../../utils/FormattingUtils');
 import AccessibleButton from '../elements/AccessibleButton';
 var UserSettingsStore = require('../../../UserSettingsStore');
+var constantTimeDispatcher = require('../../../ConstantTimeDispatcher');
+var Unread = require('../../../Unread');
 
 module.exports = React.createClass({
     displayName: 'RoomTile',
@@ -35,13 +36,12 @@ module.exports = React.createClass({
     propTypes: {
         connectDragSource: React.PropTypes.func,
         connectDropTarget: React.PropTypes.func,
+        onClick: React.PropTypes.func,
         isDragging: React.PropTypes.bool,
+        selectedRoom: React.PropTypes.string,
 
         room: React.PropTypes.object.isRequired,
         collapsed: React.PropTypes.bool.isRequired,
-        selected: React.PropTypes.bool.isRequired,
-        unread: React.PropTypes.bool.isRequired,
-        highlight: React.PropTypes.bool.isRequired,
         isInvite: React.PropTypes.bool.isRequired,
         incomingCall: React.PropTypes.object,
     },
@@ -54,11 +54,11 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return({
-            hover : false,
-            badgeHover : false,
-            notificationTagMenu: false,
-            roomTagMenu: false,
+            hover: false,
+            badgeHover: false,
+            menuDisplayed: false,
             notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
+            selected: this.props.room ? (this.props.selectedRoom === this.props.room.roomId) : false,
         });
     },
 
@@ -80,30 +80,38 @@ module.exports = React.createClass({
         }
     },
 
-    onAccountData: function(accountDataEvent) {
-        if (accountDataEvent.getType() == 'm.push_rules') {
-            this.setState({
-                notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
-            });
-        }
-    },
-
     componentWillMount: function() {
-        MatrixClientPeg.get().on("accountData", this.onAccountData);
+        constantTimeDispatcher.register("RoomTile.refresh", this.props.room.roomId, this.onRefresh);
+        constantTimeDispatcher.register("RoomTile.select", this.props.room.roomId, this.onSelect);
+        this.onRefresh();
     },
 
     componentWillUnmount: function() {
-        var cli = MatrixClientPeg.get();
-        if (cli) {
-            MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
-        }
+        constantTimeDispatcher.unregister("RoomTile.refresh", this.props.room.roomId, this.onRefresh);
+        constantTimeDispatcher.unregister("RoomTile.select", this.props.room.roomId, this.onSelect);
     },
 
-    onClick: function() {
-        dis.dispatch({
-            action: 'view_room',
-            room_id: this.props.room.roomId,
+    componentWillReceiveProps: function(nextProps) {
+        this.onRefresh();
+    },
+
+    onRefresh: function(params) {
+        this.setState({
+            unread: Unread.doesRoomHaveUnreadMessages(this.props.room),
+            highlight: this.props.room.getUnreadNotificationCount('highlight') > 0 || this.props.isInvite,
         });
+    },
+
+    onSelect: function(params) {
+        this.setState({
+            selected: params.selected,
+        });
+    },
+
+    onClick: function(ev) {
+        if (this.props.onClick) {
+            this.props.onClick(this.props.room.roomId, ev);
+        }
     },
 
     onMouseEnter: function() {
@@ -137,60 +145,30 @@ module.exports = React.createClass({
                 this.setState({ hover: false });
             }
 
-            var NotificationStateMenu = sdk.getComponent('context_menus.NotificationStateContextMenu');
+            var RoomTileContextMenu = sdk.getComponent('context_menus.RoomTileContextMenu');
             var elementRect = e.target.getBoundingClientRect();
+
             // The window X and Y offsets are to adjust position when zoomed in to page
-            var x = elementRect.right + window.pageXOffset + 3;
-            var y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset) - 53;
+            const x = elementRect.right + window.pageXOffset + 3;
+            const chevronOffset = 12;
+            let y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset);
+            y = y - (chevronOffset + 8); // where 8 is half the height of the chevron
+
             var self = this;
-            ContextualMenu.createMenu(NotificationStateMenu, {
-                menuWidth: 188,
-                menuHeight: 126,
-                chevronOffset: 45,
+            ContextualMenu.createMenu(RoomTileContextMenu, {
+                chevronOffset: chevronOffset,
                 left: x,
                 top: y,
                 room: this.props.room,
                 onFinished: function() {
-                    self.setState({ notificationTagMenu: false });
+                    self.setState({ menuDisplayed: false });
                     self.props.refreshSubList();
                 }
             });
-            this.setState({ notificationTagMenu: true });
+            this.setState({ menuDisplayed: true });
         }
         // Prevent the RoomTile onClick event firing as well
         e.stopPropagation();
-    },
-
-    onAvatarClicked: function(e) {
-        // Only allow none guests to access the context menu
-        if (!MatrixClientPeg.get().isGuest() && !this.props.collapsed) {
-
-            // If the badge is clicked, then no longer show tooltip
-            if (this.props.collapsed) {
-                this.setState({ hover: false });
-            }
-
-            var RoomTagMenu = sdk.getComponent('context_menus.RoomTagContextMenu');
-            var elementRect = e.target.getBoundingClientRect();
-            // The window X and Y offsets are to adjust position when zoomed in to page
-            var x = elementRect.right + window.pageXOffset + 3;
-            var y = (elementRect.top + (elementRect.height / 2) + window.pageYOffset) - 19;
-            var self = this;
-            ContextualMenu.createMenu(RoomTagMenu, {
-                chevronOffset: 10,
-                // XXX: fix horrid hardcoding
-                menuColour: UserSettingsStore.getSyncedSettings().theme === 'dark' ? "#2d2d2d" : "#FFFFFF",
-                left: x,
-                top: y,
-                room: this.props.room,
-                onFinished: function() {
-                    self.setState({ roomTagMenu: false });
-                }
-            });
-            this.setState({ roomTagMenu: true });
-            // Prevent the RoomTile onClick event firing as well
-            e.stopPropagation();
-        }
     },
 
     render: function() {
@@ -201,17 +179,17 @@ module.exports = React.createClass({
         // var highlightCount = this.props.room.getUnreadNotificationCount("highlight");
 
         const notifBadges = notificationCount > 0 && this._shouldShowNotifBadge();
-        const mentionBadges = this.props.highlight && this._shouldShowMentionBadge();
+        const mentionBadges = this.state.highlight && this._shouldShowMentionBadge();
         const badges = notifBadges || mentionBadges;
 
         var classes = classNames({
             'mx_RoomTile': true,
-            'mx_RoomTile_selected': this.props.selected,
-            'mx_RoomTile_unread': this.props.unread,
+            'mx_RoomTile_selected': this.state.selected,
+            'mx_RoomTile_unread': this.state.unread,
             'mx_RoomTile_unreadNotify': notifBadges,
             'mx_RoomTile_highlight': mentionBadges,
             'mx_RoomTile_invited': (me && me.membership == 'invite'),
-            'mx_RoomTile_notificationTagMenu': this.state.notificationTagMenu,
+            'mx_RoomTile_menuDisplayed': this.state.menuDisplayed,
             'mx_RoomTile_noBadges': !badges,
         });
 
@@ -219,14 +197,9 @@ module.exports = React.createClass({
             'mx_RoomTile_avatar': true,
         });
 
-        var avatarContainerClasses = classNames({
-            'mx_RoomTile_avatar_container': true,
-            'mx_RoomTile_avatar_roomTagMenu': this.state.roomTagMenu,
-        });
-
         var badgeClasses = classNames({
             'mx_RoomTile_badge': true,
-            'mx_RoomTile_badgeButton': this.state.badgeHover || this.state.notificationTagMenu,
+            'mx_RoomTile_badgeButton': this.state.badgeHover || this.state.menuDisplayed,
         });
 
         // XXX: We should never display raw room IDs, but sometimes the
@@ -237,7 +210,7 @@ module.exports = React.createClass({
         var badge;
         var badgeContent;
 
-        if (this.state.badgeHover || this.state.notificationTagMenu) {
+        if (this.state.badgeHover || this.state.menuDisplayed) {
             badgeContent = "\u00B7\u00B7\u00B7";
         } else if (badges) {
             var limitedCount = FormattingUtils.formatCount(notificationCount);
@@ -255,10 +228,10 @@ module.exports = React.createClass({
             var nameClasses = classNames({
                 'mx_RoomTile_name': true,
                 'mx_RoomTile_invite': this.props.isInvite,
-                'mx_RoomTile_badgeShown': badges || this.state.badgeHover || this.state.notificationTagMenu,
+                'mx_RoomTile_badgeShown': badges || this.state.badgeHover || this.state.menuDisplayed,
             });
 
-            if (this.props.selected) {
+            if (this.state.selected) {
                 let nameSelected = <EmojiText>{name}</EmojiText>;
 
                 label = <div title={ name } className={ nameClasses }>{ nameSelected }</div>;
@@ -292,13 +265,12 @@ module.exports = React.createClass({
 
         let ret = (
             <div> { /* Only native elements can be wrapped in a DnD object. */}
-            <AccessibleButton className={classes} tabIndex="0" onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <AccessibleButton className={classes} tabIndex="0" onClick={this.onClick}
+                              onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className={avatarClasses}>
-                    <div className="mx_RoomTile_avatar_menu" onClick={this.onAvatarClicked}>
-                        <div className={avatarContainerClasses}>
-                            <RoomAvatar room={this.props.room} width={24} height={24} />
-                            {directMessageIndicator}
-                        </div>
+                    <div className="mx_RoomTile_avatar_container">
+                        <RoomAvatar room={this.props.room} width={24} height={24} />
+                        {directMessageIndicator}
                     </div>
                 </div>
                 <div className="mx_RoomTile_nameContainer">

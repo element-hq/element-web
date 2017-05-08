@@ -59,7 +59,7 @@ export default class DirectorySearchBox extends React.Component {
     }
 
     _onKeyUp(ev) {
-        if (ev.key == 'Enter') {
+        if (ev.key == 'Enter' && this.props.showJoinButton) {
             if (this.props.onJoinClick) {
                 this.props.onJoinClick(this.state.value);
             }

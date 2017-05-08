@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,10 +33,10 @@ module.exports = React.createClass({
             <div className="mx_TopUnreadMessagesBar">
                 <div className="mx_TopUnreadMessagesBar_scrollUp"
                         onClick={this.props.onScrollUpClick}>
-                    <img src="img/scrollup.svg" width="24" height="24"
+                    <img src="img/scrollto.svg" width="24" height="24"
                         alt="Scroll to unread messages"
                         title="Scroll to unread messages"/>
-                    Unread messages. <span style={{ textDecoration: 'underline' }} onClick={this.props.onCloseClick}>Mark all read</span>
+                    Jump to first unread message.
                 </div>
                 <img className="mx_TopUnreadMessagesBar_close"
                     src="img/cancel.svg" width="18" height="18"

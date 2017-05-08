@@ -30,15 +30,6 @@ import Fuse from 'fuse.js';
 
 const TRUNCATE_QUERY_LIST = 40;
 
-/*
- * Escapes a string so it can be used in a RegExp
- * Basically just replaces: \ ^ $ * + ? . ( ) | { } [ ]
- * From http://stackoverflow.com/a/6969486
- */
-function escapeRegExp(str) {
-    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-}
-
 module.exports = React.createClass({
     displayName: "ChatInviteDialog",
     propTypes: {
@@ -111,18 +102,27 @@ module.exports = React.createClass({
             if (inviteList === null) return;
         }
 
+        const addrTexts = inviteList.map(addr => addr.address);
         if (inviteList.length > 0) {
-            if (this._isDmChat(inviteList)) {
+            if (this._isDmChat(addrTexts)) {
+                const userId = inviteList[0].address;
                 // Direct Message chat
-                var room = this._getDirectMessageRoom(inviteList[0]);
-                if (room) {
-                    // A Direct Message room already exists for this user and you
-                    // so go straight to that room
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: room.roomId,
+                const rooms = this._getDirectMessageRooms(userId);
+                if (rooms.length > 0) {
+                    // A Direct Message room already exists for this user, so select a
+                    // room from a list that is similar to the one in MemberInfo panel
+                    const ChatCreateOrReuseDialog = sdk.getComponent(
+                        "views.dialogs.ChatCreateOrReuseDialog"
+                    );
+                    Modal.createDialog(ChatCreateOrReuseDialog, {
+                        userId: userId,
+                        onFinished: (success) => {
+                            if (success) {
+                                this.props.onFinished(true, inviteList[0]);
+                            }
+                            // else show this ChatInviteDialog again
+                        }
                     });
-                    this.props.onFinished(true, inviteList[0]);
                 } else {
                     this._startChat(inviteList);
                 }
@@ -211,20 +211,19 @@ module.exports = React.createClass({
                     }
                 });
 
-                // If the query isn't a user we know about, but is a
-                // valid address, add an entry for that
-                if (queryList.length == 0) {
-                    const addrType = getAddressType(query);
-                    if (addrType !== null) {
-                        queryList[0] = {
-                            addressType: addrType,
-                            address: query,
-                            isKnown: false,
-                        };
-                        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
-                        if (addrType == 'email') {
-                            this._lookupThreepid(addrType, query).done();
-                        }
+                // If the query is a valid address, add an entry for that
+                // This is important, otherwise there's no way to invite
+                // a perfectly valid address if there are close matches.
+                const addrType = getAddressType(query);
+                if (addrType !== null) {
+                    queryList.unshift({
+                        addressType: addrType,
+                        address: query,
+                        isKnown: false,
+                    });
+                    if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+                    if (addrType == 'email') {
+                        this._lookupThreepid(addrType, query).done();
                     }
                 }
             }
@@ -267,22 +266,20 @@ module.exports = React.createClass({
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
     },
 
-    _getDirectMessageRoom: function(addr) {
+    _getDirectMessageRooms: function(addr) {
         const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
-        var dmRooms = dmRoomMap.getDMRoomsForUserId(addr);
-        if (dmRooms.length > 0) {
-            // Cycle through all the DM rooms and find the first non forgotten or parted room
-            for (let i = 0; i < dmRooms.length; i++) {
-                let room = MatrixClientPeg.get().getRoom(dmRooms[i]);
-                if (room) {
-                    const me = room.getMember(MatrixClientPeg.get().credentials.userId);
-                    if (me.membership == 'join') {
-                        return room;
-                    }
+        const dmRooms = dmRoomMap.getDMRoomsForUserId(addr);
+        const rooms = [];
+        dmRooms.forEach(dmRoom => {
+            let room = MatrixClientPeg.get().getRoom(dmRoom);
+            if (room) {
+                const me = room.getMember(MatrixClientPeg.get().credentials.userId);
+                if (me.membership == 'join') {
+                    rooms.push(room);
                 }
             }
-        }
-        return null;
+        });
+        return rooms;
     },
 
     _startChat: function(addrs) {
@@ -311,8 +308,8 @@ module.exports = React.createClass({
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failure to invite",
-                    description: err.toString()
+                    title: "Failed to invite",
+                    description: ((err && err.message) ? err.message : "Operation failed"),
                 });
                 return null;
             })
@@ -324,8 +321,8 @@ module.exports = React.createClass({
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failure to invite user",
-                    description: err.toString()
+                    title: "Failed to invite user",
+                    description: ((err && err.message) ? err.message : "Operation failed"),
                 });
                 return null;
             })
@@ -345,8 +342,8 @@ module.exports = React.createClass({
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failure to invite",
-                    description: err.toString()
+                    title: "Failed to invite",
+                    description: ((err && err.message) ? err.message : "Operation failed"),
                 });
                 return null;
             })
@@ -381,8 +378,11 @@ module.exports = React.createClass({
         return false;
     },
 
-    _isDmChat: function(addrs) {
-        if (addrs.length === 1 && getAddressType(addrs[0]) === "mx" && !this.props.roomId) {
+    _isDmChat: function(addrTexts) {
+        if (addrTexts.length === 1 &&
+            getAddressType(addrTexts[0]) === "mx" &&
+            !this.props.roomId
+        ) {
             return true;
         } else {
             return false;

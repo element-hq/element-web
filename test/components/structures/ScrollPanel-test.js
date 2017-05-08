@@ -115,7 +115,7 @@ var Tester = React.createClass({
         //
         // there is an extra 50 pixels of margin at the bottom.
         return (
-            <li key={key} data-scroll-token={key}>
+            <li key={key} data-scroll-tokens={key}>
                 <div style={{height: '98px', margin: '50px', border: '1px solid black',
                              backgroundColor: '#fff8dc' }}>
                    {key}

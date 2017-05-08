@@ -25,12 +25,13 @@ module.exports = React.createClass({displayName: 'UploadBar',
     },
 
     componentDidMount: function() {
-        dis.register(this.onAction);
+        this.dispatcherRef = dis.register(this.onAction);
         this.mounted = true;
     },
 
     componentWillUnmount: function() {
         this.mounted = false;
+        dis.unregister(this.dispatcherRef);
     },
 
     onAction: function(payload) {

@@ -25,6 +25,9 @@ import emojione from 'emojione';
 import classNames from 'classnames';
 
 emojione.imagePathSVG = 'emojione/svg/';
+// Store PNG path for displaying many flags at once (for increased performance over SVG)
+emojione.imagePathPNG = 'emojione/png/';
+// Use SVGs for emojis
 emojione.imageType = 'svg';
 
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
@@ -58,6 +61,29 @@ export function unicodeToImage(str) {
     return str;
 }
 
+/**
+ * Given one or more unicode characters (represented by unicode
+ * character number), return an image node with the corresponding
+ * emoji.
+ *
+ * @param alt {string} String to use for the image alt text
+ * @param useSvg {boolean} Whether to use SVG image src. If False, PNG will be used.
+ * @param unicode {integer} One or more integers representing unicode characters
+ * @returns A img node with the corresponding emoji
+ */
+export function charactersToImageNode(alt, useSvg, ...unicode) {
+    const fileName = unicode.map((u) => {
+        return u.toString(16);
+    }).join('-');
+    const path = useSvg ? emojione.imagePathSVG : emojione.imagePathPNG;
+    const fileType = useSvg ? 'svg' : 'png';
+    return <img
+        alt={alt}
+        src={`${path}${fileName}.${fileType}${emojione.cacheBustParam}`}
+    />;
+}
+
+
 export function stripParagraphs(html: string): string {
     const contentDiv = document.createElement('div');
     contentDiv.innerHTML = html;
@@ -85,8 +111,7 @@ var sanitizeHtmlParams = {
     allowedTags: [
         'font', // custom to matrix for IRC-style font coloring
         'del', // for markdown
-        // deliberately no h1/h2 to stop people shouting.
-        'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
         'nl', 'li', 'b', 'i', 'u', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
         'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'span',
     ],
@@ -98,6 +123,7 @@ var sanitizeHtmlParams = {
         // We don't currently allow img itself by default, but this
         // would make sense if we did
         img: ['src'],
+        ol: ['start'],
     },
     // Lots of these won't come up by default because we don't allow them
     selfClosing: ['img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],

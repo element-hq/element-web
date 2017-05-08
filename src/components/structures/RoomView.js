@@ -26,6 +26,7 @@ var q = require("q");
 var classNames = require("classnames");
 var Matrix = require("matrix-js-sdk");
 
+var UserSettingsStore = require('../../UserSettingsStore');
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var ContentMessages = require("../../ContentMessages");
 var Modal = require("../../Modal");
@@ -270,6 +271,7 @@ module.exports = React.createClass({
 
         this._updateConfCallNotification();
 
+        window.addEventListener('beforeunload', this.onPageUnload);
         window.addEventListener('resize', this.onResize);
         this.onResize();
 
@@ -352,6 +354,7 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
         }
 
+        window.removeEventListener('beforeunload', this.onPageUnload);
         window.removeEventListener('resize', this.onResize);
 
         document.removeEventListener("keydown", this.onKeyDown);
@@ -363,6 +366,17 @@ module.exports = React.createClass({
         // console.log("Tinter.tint from RoomView.unmount");
         // Tinter.tint(); // reset colourscheme
     },
+
+    onPageUnload(event) {
+        if (ContentMessages.getCurrentUploads().length > 0) {
+            return event.returnValue =
+                'You seem to be uploading files, are you sure you want to quit?';
+        } else if (this._getCallForRoom() && this.state.callState !== 'ended') {
+            return event.returnValue =
+                'You seem to be in a call, are you sure you want to quit?';
+        }
+    },
+
 
     onKeyDown: function(ev) {
         let handled = false;
@@ -487,6 +501,13 @@ module.exports = React.createClass({
         if (this.state.room && room.roomId == this.state.room.roomId) {
             this.forceUpdate();
         }
+    },
+
+    canResetTimeline: function() {
+        if (!this.refs.messagePanel) {
+            return true;
+        }
+        return this.refs.messagePanel.canResetTimeline();
     },
 
     // called when state.room is first initialised (either at initial load,
@@ -914,8 +935,6 @@ module.exports = React.createClass({
     },
 
     uploadFile: function(file) {
-        var self = this;
-
         if (MatrixClientPeg.get().isGuest()) {
             var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
@@ -927,11 +946,20 @@ module.exports = React.createClass({
 
         ContentMessages.sendContentToRoom(
             file, this.state.room.roomId, MatrixClientPeg.get()
-        ).done(undefined, function(error) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        ).done(undefined, (error) => {
+            if (error.name === "UnknownDeviceError") {
+                dis.dispatch({
+                    action: 'unknown_device_error',
+                    err: error,
+                    room: this.state.room,
+                });
+                return;
+            }
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Failed to upload file " + file + " " + error);
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to upload file",
-                description: error.toString()
+                description: ((error && error.message) ? error.message : "Server may be unavailable, overloaded, or the file too big"),
             });
         });
     },
@@ -1015,9 +1043,10 @@ module.exports = React.createClass({
             });
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Search failed: " + error);
             Modal.createDialog(ErrorDialog, {
                 title: "Search failed",
-                description: error.toString()
+                description: ((error && error.message) ? error.message : "Server may be unavailable, overloaded, or search timed out :("),
             });
         }).finally(function() {
             self.setState({
@@ -1165,6 +1194,7 @@ module.exports = React.createClass({
         console.log("updateTint from onCancelClick");
         this.updateTint();
         this.setState({editingRoomSettings: false});
+        dis.dispatch({action: 'focus_composer'});
     },
 
     onLeaveClick: function() {
@@ -1238,6 +1268,7 @@ module.exports = React.createClass({
     // jump down to the bottom of this room, where new events are arriving
     jumpToLiveTimeline: function() {
         this.refs.messagePanel.jumpToLiveTimeline();
+        dis.dispatch({action: 'focus_composer'});
     },
 
     // jump up to wherever our read marker is
@@ -1257,12 +1288,7 @@ module.exports = React.createClass({
             return;
         }
 
-        var pos = this.refs.messagePanel.getReadMarkerPosition();
-
-        // we want to show the bar if the read-marker is off the top of the
-        // screen.
-        var showBar = (pos < 0);
-
+        const showBar = this.refs.messagePanel.canJumpToReadMarker();
         if (this.state.showTopUnreadMessagesBar != showBar) {
             this.setState({showTopUnreadMessagesBar: showBar},
                           this.onChildResize);
@@ -1701,7 +1727,7 @@ module.exports = React.createClass({
         var messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
                 timelineSet={this.state.room.getUnfilteredTimelineSet()}
-                manageReadReceipts={true}
+                manageReadReceipts={!UserSettingsStore.getSyncedSetting('hideReadReceipts', false)}
                 manageReadMarkers={true}
                 hidden={hideMessagePanel}
                 highlightedEventId={this.props.highlightedEventId}
