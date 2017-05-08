@@ -162,7 +162,9 @@
       }
     },
     "win": {
-      "target": "squirrel"
+      "target": "squirrel",
+      "authors": "Riot",
+      "owners": "Vector Creations Ltd."
     },
     "directories": {
       "buildResources": "electron/build",
