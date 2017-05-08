@@ -101,7 +101,6 @@ export default class MessageComposerInput extends React.Component {
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
         this.handlePastedFiles = this.handlePastedFiles.bind(this);
         this.onEditorContentChanged = this.onEditorContentChanged.bind(this);
-        this.setEditorState = this.setEditorState.bind(this);
         this.onUpArrow = this.onUpArrow.bind(this);
         this.onDownArrow = this.onDownArrow.bind(this);
         this.onTab = this.onTab.bind(this);
