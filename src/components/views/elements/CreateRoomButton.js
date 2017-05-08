@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 const CreateRoomButton = function(props) {
     const ActionButton = sdk.getComponent('elements.ActionButton');
     return (
-        <ActionButton action="view_create_chat"
+        <ActionButton action="view_create_room"
             label="Create new room"
             iconPath="img/icons-create-room.svg"
             size={props.size}
