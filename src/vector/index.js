@@ -65,7 +65,6 @@ var q = require('q');
 var request = require('browser-request');
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import Modal from 'matrix-react-sdk/lib/Modal';
-import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 
 import url from 'url';
 
@@ -218,6 +217,20 @@ function getConfig() {
     return deferred.promise;
 }
 
+
+// This is needed to not load the UserSettingsStore before languages are laoded
+function getLocalSettings() {
+    const localSettingsString = localStorage.getItem('mx_local_settings') || '{}';
+    return JSON.parse(localSettingsString);
+}
+// This is needed to not load the UserSettingsStore before languages are laoded
+function setLocalSetting(type, value) {
+    const settings = this.getLocalSettings();
+    settings[type] = value;
+    // FIXME: handle errors
+    localStorage.setItem('mx_local_settings', JSON.stringify(settings));
+}
+
 function onLoadCompleted() {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
@@ -303,13 +316,13 @@ function onAction(payload) {
             getLanguage(i18nFolder + languages[language], language, callbackLanguage);
             if (language.indexOf("-") > -1) {
               counterpart.setLocale(language.split('-')[0]);
-              UserSettingsStore.setLocalSetting('language', language.split('-')[0]);
+              this.setLocalSetting('language', language.split('-')[0]);
             } else if (language == 'pt-br') {
               counterpart.setLocale('pt-br');
-              UserSettingsStore.setLocalSetting('language', 'pt-br');
+              this.setLocalSetting('language', 'pt-br');
             } else {
               counterpart.setLocale(language);
-              UserSettingsStore.setLocalSetting('language', language);
+              this.setLocalSetting('language', language);
             }
           }
           getLanguage(i18nFolder + languages['en'], 'en', callbackLanguage);
@@ -319,10 +332,10 @@ function onAction(payload) {
             getLanguage(i18nFolder + languages[language], language, callbackLanguage);
             if (language.indexOf("-") > -1) {
               counterpart.setLocale(language.split('-')[0]);
-              UserSettingsStore.setLocalSetting('language', language.split('-')[0]);
+              this.setLocalSetting('language', language.split('-')[0]);
             } else {
               counterpart.setLocale(language);
-              UserSettingsStore.setLocalSetting('language', language);
+              this.setLocalSetting('language', language);
             }
           }
           getLanguage(i18nFolder + languages['en'], 'en', callbackLanguage);
@@ -397,7 +410,7 @@ async function loadApp() {
             />,
             document.getElementById('matrixchat')
         );
-        const _localSettings = UserSettingsStore.getLocalSettings();
+        const _localSettings = this.getLocalSettings();
         dis.register(onAction);
         if (!_localSettings.hasOwnProperty('language')) {
           const language = navigator.languages[0] || navigator.language || navigator.userLanguage;
@@ -407,14 +420,14 @@ async function loadApp() {
                 value: language.split('-')[0],
             });
             counterpart.setLocale(language.split('-')[0]);
-            UserSettingsStore.setLocalSetting('language', language.split('-')[0]);
+            this.setLocalSetting('language', language.split('-')[0]);
           } else {
             dis.dispatch({
                 action: 'set_language',
                 value: language,
             });
             counterpart.setLocale(language);
-            UserSettingsStore.setLocalSetting('language', language);
+            this.setLocalSetting('language', language);
           }
         }else {
           dis.dispatch({
