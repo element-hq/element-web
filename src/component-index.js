@@ -66,6 +66,8 @@ import views$globals$MatrixToolbar from './components/views/globals/MatrixToolba
 views$globals$MatrixToolbar && (module.exports.components['views.globals.MatrixToolbar'] = views$globals$MatrixToolbar);
 import views$globals$NewVersionBar from './components/views/globals/NewVersionBar';
 views$globals$NewVersionBar && (module.exports.components['views.globals.NewVersionBar'] = views$globals$NewVersionBar);
+import views$globals$PasswordNagBar from './components/views/globals/PasswordNagBar';
+views$globals$PasswordNagBar && (module.exports.components['views.globals.PasswordNagBar'] = views$globals$PasswordNagBar);
 import views$login$VectorCustomServerDialog from './components/views/login/VectorCustomServerDialog';
 views$login$VectorCustomServerDialog && (module.exports.components['views.login.VectorCustomServerDialog'] = views$login$VectorCustomServerDialog);
 import views$login$VectorLoginFooter from './components/views/login/VectorLoginFooter';
