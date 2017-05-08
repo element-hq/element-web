@@ -34,7 +34,12 @@ export default React.createClass({
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <div className="mx_MatrixToolbar">
-                <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
+                <img className="mx_MatrixToolbar_warning"
+                    src="img/warning.svg"
+                    width="24"
+                    height="23"
+                    alt="Warning"
+                />
                 <div className="mx_MatrixToolbar_content">
                     To be able to return to your account, you need to set a password.
                 </div>
