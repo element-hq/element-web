@@ -46,6 +46,7 @@
     "blueimp-canvas-to-blob": "^3.5.0",
     "browser-encrypt-attachment": "^0.3.0",
     "browser-request": "^0.3.3",
+    "chokidar": "^1.6.1",
     "classnames": "^2.1.2",
     "commonmark": "^0.27.0",
     "draft-js": "^0.8.1",
