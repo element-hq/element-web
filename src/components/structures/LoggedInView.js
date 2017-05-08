@@ -49,6 +49,10 @@ export default React.createClass({
 
         teamToken: React.PropTypes.string,
 
+        // Has the user generated a password that is stored in local storage?
+        // (are they a PWLU?)
+        userHasGeneratedPassword: React.PropTypes.boolean,
+
         // and lots and lots of other stuff.
     },
 
@@ -177,6 +181,7 @@ export default React.createClass({
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         const GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
+        const PasswordNagBar = sdk.getComponent('globals.PasswordNagBar');
 
         let page_element;
         let right_panel = '';
@@ -250,11 +255,11 @@ export default React.createClass({
             topBar = <NewVersionBar version={this.props.version} newVersion={this.props.newVersion}
                 releaseNotes={this.props.newVersionReleaseNotes}
             />;
-        }
-        else if (this.props.matrixClient.isGuest()) {
+        } else if (this.props.matrixClient.isGuest()) {
             topBar = <GuestWarningBar />;
-        }
-        else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
+        } else if (this.props.userHasGeneratedPassword) {
+            topBar = <PasswordNagBar />;
+        } else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
             topBar = <MatrixToolbar />;
         }
 

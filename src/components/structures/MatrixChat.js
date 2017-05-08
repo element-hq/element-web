@@ -138,6 +138,9 @@ module.exports = React.createClass({
             register_hs_url: null,
             register_is_url: null,
             register_id_sid: null,
+
+            // Initially, use localStorage as source of truth
+            userHasGeneratedPassword: localStorage && localStorage.getItem('mx_pass'),
         };
         return s;
     },
@@ -569,7 +572,7 @@ module.exports = React.createClass({
                 this.setState({loggingIn: true});
                 break;
             case 'on_logged_in':
-                this._onLoggedIn(payload.teamToken);
+                this._onLoggedIn(payload.teamToken, payload.isPasswordStored);
                 break;
             case 'on_logged_out':
                 this._onLoggedOut();
@@ -755,11 +758,15 @@ module.exports = React.createClass({
     /**
      * Called when a new logged in session has started
      */
-    _onLoggedIn: function(teamToken) {
+    _onLoggedIn: function(teamToken, isPasswordStored) {
         this.setState({
             guestCreds: null,
             loggedIn: true,
             loggingIn: false,
+            // isPasswordStored only true when ROU sets a username and becomes PWLU.
+            // (the password was randomly generated and stored in localStorage).
+            userHasGeneratedPassword:
+                this.state.userHasGeneratedPassword || isPasswordStored,
         });
 
         if (teamToken) {
@@ -1168,6 +1175,7 @@ module.exports = React.createClass({
                     onUserSettingsClose={this.onUserSettingsClose}
                     onRegistered={this.onRegistered}
                     teamToken={this._teamToken}
+                    userHasGeneratedPassword={this.state.userHasGeneratedPassword}
                     {...this.props}
                     {...this.state}
                 />
