@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import sdk from 'matrix-react-sdk';
+import dis from 'matrix-react-sdk/lib/dispatcher';
+import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
+import Velocity from 'velocity-vector';
+import 'velocity-vector/velocity.ui';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var sdk = require('matrix-react-sdk')
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+const CALLOUT_ANIM_DURATION = 1000;
 
 module.exports = React.createClass({
     displayName: 'BottomLeftMenu',
@@ -38,6 +40,18 @@ module.exports = React.createClass({
             peopleHover : false,
             settingsHover : false,
         });
+    },
+
+    componentWillMount: function() {
+        this._dispatcherRef = dis.register(this.onAction);
+        this._peopleButton = null;
+        this._directoryButton = null;
+        this._createRoomButton = null;
+        this._lastCallouts = {};
+    },
+
+    componentWillUnmount: function() {
+        dis.unregister(this._dispatcherRef);
     },
 
     // Room events
@@ -104,12 +118,48 @@ module.exports = React.createClass({
         this.setState({ settingsHover: false });
     },
 
+    onAction: function(payload) {
+        let calloutElement;
+        switch (payload.action) {
+            // Incoming instruction: dance!
+            case 'callout_start_chat':
+                calloutElement = this._peopleButton;
+                break;
+            case 'callout_room_directory':
+                calloutElement = this._directoryButton;
+                break;
+            case 'callout_create_room':
+                calloutElement = this._createRoomButton;
+                break;
+        }
+        if (calloutElement) {
+            const lastCallout = this._lastCallouts[payload.action];
+            const now = Date.now();
+            if (lastCallout == undefined || lastCallout < now - CALLOUT_ANIM_DURATION) {
+                this._lastCallouts[payload.action] = now;
+                Velocity(ReactDOM.findDOMNode(calloutElement), "callout.bounce", CALLOUT_ANIM_DURATION);
+            }
+        }
+    },
+
     // Get the label/tooltip to show
     getLabel: function(label, show) {
         if (show) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
             return <RoomTooltip className="mx_BottomLeftMenu_tooltip" label={label} />;
         }
+    },
+
+    _collectPeopleButton: function(e) {
+        this._peopleButton = e;
+    },
+
+    _collectDirectoryButton: function(e) {
+        this._directoryButton = e;
+    },
+
+    _collectCreateRoomButton: function(e) {
+        this._createRoomButton = e;
     },
 
     render: function() {
@@ -130,15 +180,15 @@ module.exports = React.createClass({
                 <div className="mx_BottomLeftMenu_options">
                     { homeButton }
                     <AccessibleButton className="mx_BottomLeftMenu_people" onClick={ this.onPeopleClick } onMouseEnter={ this.onPeopleMouseEnter } onMouseLeave={ this.onPeopleMouseLeave } >
-                        <TintableSvg src="img/icons-people.svg" width="25" height="25" />
+                        <TintableSvg ref={this._collectPeopleButton} src="img/icons-people.svg" width="25" height="25" />
                         { this.getLabel("Start chat", this.state.peopleHover) }
                     </AccessibleButton>
                     <AccessibleButton className="mx_BottomLeftMenu_directory" onClick={ this.onDirectoryClick } onMouseEnter={ this.onDirectoryMouseEnter } onMouseLeave={ this.onDirectoryMouseLeave } >
-                        <TintableSvg src="img/icons-directory.svg" width="25" height="25"/>
+                        <TintableSvg ref={this._collectDirectoryButton} src="img/icons-directory.svg" width="25" height="25"/>
                         { this.getLabel("Room directory", this.state.directoryHover) }
                     </AccessibleButton>
                     <AccessibleButton className="mx_BottomLeftMenu_createRoom" onClick={ this.onRoomsClick } onMouseEnter={ this.onRoomsMouseEnter } onMouseLeave={ this.onRoomsMouseLeave } >
-                        <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
+                        <TintableSvg ref={this._collectCreateRoomButton} src="img/icons-create-room.svg" width="25" height="25" />
                         { this.getLabel("Create new room", this.state.roomsHover) }
                     </AccessibleButton>
                     <AccessibleButton className="mx_BottomLeftMenu_settings" onClick={ this.onSettingsClick } onMouseEnter={ this.onSettingsMouseEnter } onMouseLeave={ this.onSettingsMouseLeave } >
