@@ -317,9 +317,6 @@ function onAction(payload) {
             if (language.indexOf("-") > -1) {
               counterpart.setLocale(language.split('-')[0]);
               setLocalSetting('language', language.split('-')[0]);
-            } else if (language == 'pt-br') {
-              counterpart.setLocale('pt-br');
-              setLocalSetting('language', 'pt-br');
             } else {
               counterpart.setLocale(language);
               setLocalSetting('language', language);
