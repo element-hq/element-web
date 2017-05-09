@@ -510,8 +510,10 @@ var TimelinePanel = React.createClass({
         var currentReadUpToEventId = this._getCurrentReadReceipt(true);
         var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
 
+        currentReadUpToEventIndex = currentReadUpToEventIndex ||
+            this._indexForEventId(this.state.readMarkerEventId);
         // We want to avoid sending out read receipts when we are looking at
-        // events in the past which are before the latest RR.
+        // events in the past which are before the latest RR/RM.
         //
         // For now, let's apply a heuristic: if (a) the event corresponding to
         // the latest RR (either from the server, or sent by ourselves) doesn't
@@ -523,6 +525,7 @@ var TimelinePanel = React.createClass({
         // RRs) - but that is a bit of a niche case. It will sort itself out when
         // the user eventually hits the live timeline.
         //
+        console.log(currentReadUpToEventId, currentReadUpToEventIndex, this._timelineWindow.canPaginate(EventTimeline.FORWARDS));
         if (currentReadUpToEventId && currentReadUpToEventIndex === null &&
                 this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
             return;
@@ -544,6 +547,11 @@ var TimelinePanel = React.createClass({
             this.last_rr_sent_event_id = lastReadEvent.getId();
             this.last_rm_sent_event_id = this.state.readMarkerEventId;
 
+            console.log('TimelinePanel: Sending Read Markers for ',
+                this.props.timelineSet.room.roomId,
+                'rm', this.state.readMarkerEventId,
+                'rr', lastReadEvent.getId(),
+            );
             MatrixClientPeg.get().setRoomReadMarkers(
                 this.props.timelineSet.room.roomId,
                 this.state.readMarkerEventId,
