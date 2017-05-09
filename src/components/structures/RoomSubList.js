@@ -26,7 +26,7 @@ import counterpart from 'counterpart';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import Unread from 'matrix-react-sdk/lib/Unread';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import RoomNotifs from 'matrix-react-sdk/lib/RoomNotifs';
+import * as RoomNotifs from 'matrix-react-sdk/lib/RoomNotifs';
 import FormattingUtils from 'matrix-react-sdk/lib/utils/FormattingUtils';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 import ConstantTimeDispatcher from 'matrix-react-sdk/lib/ConstantTimeDispatcher';
@@ -533,7 +533,7 @@ var RoomSubList = React.createClass({
             var Loader = sdk.getComponent("elements.Spinner");
             return (
                 <div className="mx_RoomSubList">
-                    { this.props.alwaysShowHeader ? 
+                    { this.props.alwaysShowHeader ?
                         <RoomSubListHeader
                             ref='header'
                             label={ this.props.label }
