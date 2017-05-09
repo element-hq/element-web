@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,13 +16,12 @@ limitations under the License.
 */
 
 'use strict';
-
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 import counterpart from 'counterpart';
-var sdk = require('matrix-react-sdk')
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+import sdk from 'matrix-react-sdk';
+import dis from 'matrix-react-sdk/lib/dispatcher';
+import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'BottomLeftMenu',
@@ -31,121 +31,28 @@ module.exports = React.createClass({
         teamToken: React.PropTypes.string,
     },
 
-    getInitialState: function() {
-        return({
-            directoryHover : false,
-            roomsHover : false,
-            homeHover: false,
-            peopleHover : false,
-            settingsHover : false,
-        });
-    },
-
-    // Room events
-    onDirectoryClick: function() {
-        dis.dispatch({ action: 'view_room_directory' });
-    },
-
-    onDirectoryMouseEnter: function() {
-        this.setState({ directoryHover: true });
-    },
-
-    onDirectoryMouseLeave: function() {
-        this.setState({ directoryHover: false });
-    },
-
-    onRoomsClick: function() {
-        dis.dispatch({ action: 'view_create_room' });
-    },
-
-    onRoomsMouseEnter: function() {
-        this.setState({ roomsHover: true });
-    },
-
-    onRoomsMouseLeave: function() {
-        this.setState({ roomsHover: false });
-    },
-
-    // Home button events
-    onHomeClick: function() {
-        dis.dispatch({ action: 'view_home_page' });
-    },
-
-    onHomeMouseEnter: function() {
-        this.setState({ homeHover: true });
-    },
-
-    onHomeMouseLeave: function() {
-        this.setState({ homeHover: false });
-    },
-
-    // People events
-    onPeopleClick: function() {
-        dis.dispatch({ action: 'view_create_chat' });
-    },
-
-    onPeopleMouseEnter: function() {
-        this.setState({ peopleHover: true });
-    },
-
-    onPeopleMouseLeave: function() {
-        this.setState({ peopleHover: false });
-    },
-
-    // Settings events
-    onSettingsClick: function() {
-        dis.dispatch({ action: 'view_user_settings' });
-    },
-
-    onSettingsMouseEnter: function() {
-        this.setState({ settingsHover: true });
-    },
-
-    onSettingsMouseLeave: function() {
-        this.setState({ settingsHover: false });
-    },
-
-    // Get the label/tooltip to show
-    getLabel: function(label, show) {
-        if (show) {
-            var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            return <RoomTooltip className="mx_BottomLeftMenu_tooltip" label={label} />;
-        }
-    },
-
     render: function() {
-        var TintableSvg = sdk.getComponent('elements.TintableSvg');
+        const HomeButton = sdk.getComponent('elements.HomeButton');
+        const StartChatButton = sdk.getComponent('elements.StartChatButton');
+        const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
+        const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
+        const SettingsButton = sdk.getComponent('elements.SettingsButton');
 
         var homeButton;
         if (this.props.teamToken) {
-            homeButton = (
-                <AccessibleButton className="mx_BottomLeftMenu_homePage" onClick={ this.onHomeClick } onMouseEnter={ this.onHomeMouseEnter } onMouseLeave={ this.onHomeMouseLeave } >
-                    <TintableSvg src="img/icons-home.svg" width="25" height="25" />
-                    { this.getLabel("Welcome page", this.state.homeHover) }
-                </AccessibleButton>
-            );
+            homeButton = <HomeButton tooltip={true} />;
         }
 
         return (
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
                     { homeButton }
-                    <AccessibleButton className="mx_BottomLeftMenu_people" onClick={ this.onPeopleClick } onMouseEnter={ this.onPeopleMouseEnter } onMouseLeave={ this.onPeopleMouseLeave } >
-                        <TintableSvg src="img/icons-people.svg" width="25" height="25" />
-                        { this.getLabel(counterpart.translate('Start chat'), this.state.peopleHover) }
-                    </AccessibleButton>
-                    <AccessibleButton className="mx_BottomLeftMenu_directory" onClick={ this.onDirectoryClick } onMouseEnter={ this.onDirectoryMouseEnter } onMouseLeave={ this.onDirectoryMouseLeave } >
-                        <TintableSvg src="img/icons-directory.svg" width="25" height="25"/>
-                        { this.getLabel(counterpart.translate('Room directory'), this.state.directoryHover) }
-                    </AccessibleButton>
-                    <AccessibleButton className="mx_BottomLeftMenu_createRoom" onClick={ this.onRoomsClick } onMouseEnter={ this.onRoomsMouseEnter } onMouseLeave={ this.onRoomsMouseLeave } >
-                        <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
-                        { this.getLabel(counterpart.translate('Create new room'), this.state.roomsHover) }
-                    </AccessibleButton>
-                    <AccessibleButton className="mx_BottomLeftMenu_settings" onClick={ this.onSettingsClick } onMouseEnter={ this.onSettingsMouseEnter } onMouseLeave={ this.onSettingsMouseLeave } >
-                        <TintableSvg src="img/icons-settings.svg" width="25" height="25" />
-                        { this.getLabel(counterpart.translate('Settings'), this.state.settingsHover) }
-                    </AccessibleButton>
+                    <StartChatButton tooltip={true} />
+                    <RoomDirectoryButton tooltip={true} />
+                    <CreateRoomButton tooltip={true} />
+                    <span className="mx_BottomLeftMenu_settings">
+                        <SettingsButton tooltip={true} />
+                    </span>
                 </div>
             </div>
         );
