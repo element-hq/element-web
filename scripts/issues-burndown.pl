@@ -4,16 +4,24 @@ use warnings;
 use strict;
 
 use Net::GitHub;
-use DateTime;
-use DateTime::Format::ISO8601;
+use Time::Moment;
+use Term::ReadPassword;
+
+# This version of the script emits the cumulative number of bugs, split into open & closed
+# suitable for drawing the 'top' and 'bottom' of a burndown graph.
+#
+# N.B. this doesn't take into account issues changing priority over time, but only their most recent priority.
+#
+# If you want instead the number of open issues on a given day, then look at issues-no-state.pl
 
 my $gh = Net::GitHub->new(
-    login => 'ara4n', pass => 'secret'
+    login => 'ara4n', pass => read_password("github password: "),
 );
 
 $gh->set_default_user_repo('vector-im', 'vector-web'); 
 
-my @issues = $gh->issue->repos_issues({ state => 'all', milestone => 3 });
+#my @issues = $gh->issue->repos_issues({ state => 'all', milestone => 3 });
+my @issues = $gh->issue->repos_issues({ state => 'all' });
 while ($gh->issue->has_next_page) {
     push @issues, $gh->issue->next_page;
 }
@@ -30,11 +38,11 @@ while ($gh->issue->has_next_page) {
 
 my $days = {};
 my $schema = {};
-my $now = DateTime->now();
+my $now = Time::Moment->now;
 
 foreach my $issue (@issues) {
     next if ($issue->{pull_request});
-    
+
     # use Data::Dumper;
     # print STDERR Dumper($issue);
 
@@ -56,10 +64,10 @@ foreach my $issue (@issues) {
     my $priority = &$extract_labels(qw(p1 p2 p3 p4 p5)) || "unprioritised";
     my $severity = &$extract_labels(qw(minor major critical cosmetic network)) || "no-severity";
 
-    my $start = DateTime::Format::ISO8601->parse_datetime($issue->{created_at});
+    my $start = Time::Moment->from_string($issue->{created_at});
 
     do {
-        my $ymd = $start->ymd();
+        my $ymd = $start->strftime('%F');
 
         $days->{ $ymd }->{ 'created' }->{ $type }->{ $priority }->{ $severity }->{ total }++;
         $schema->{ 'created' }->{ $type }->{ $priority }->{ $severity }->{ total }++;
@@ -68,13 +76,14 @@ foreach my $issue (@issues) {
             $schema->{ 'created' }->{ $type }->{ $priority }->{ $severity }->{ $_ }++;
         }
 
-        $start = $start->add(days => 1);
-    } while (DateTime->compare($start, $now) < 0);
+        $start = $start->plus_days(1);
+        # print STDERR "^";
+    } while ($start->compare($now) < 0);
 
     if ($state eq 'closed') {
-        my $end = DateTime::Format::ISO8601->parse_datetime($issue->{closed_at});
+        my $end = Time::Moment->from_string($issue->{closed_at});
         do {
-            my $ymd = $end->ymd();
+            my $ymd = $end->strftime('%F');
 
             $days->{ $ymd }->{ 'resolved' }->{ $type }->{ $priority }->{ $severity }->{ total }++;
             $schema->{ 'resolved' }->{ $type }->{ $priority }->{ $severity }->{ total }++;
@@ -83,9 +92,12 @@ foreach my $issue (@issues) {
                 $schema->{ 'resolved' }->{ $type }->{ $priority }->{ $severity }->{ $_ }++;
             }
 
-            $end = $end->add(days => 1);
-        } while (DateTime->compare($end, $now) < 0);
+            $end = $end->plus_days(1);
+        } while ($end->compare($now) < 0);
+        # print STDERR "v";
     }
+
+    # print STDERR "\n";
 }
 
 print "day,";

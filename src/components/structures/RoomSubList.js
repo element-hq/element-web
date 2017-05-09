@@ -1,4 +1,5 @@
 /*
+Copyright 2017 Vector Creations Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,20 +17,21 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var classNames = require('classnames');
-var DropTarget = require('react-dnd').DropTarget;
-var sdk = require('matrix-react-sdk');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import classNames from 'classnames';
+import { DropTarget } from 'react-dnd';
+import sdk from 'matrix-react-sdk';
 import counterpart from 'counterpart';
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var Unread = require('matrix-react-sdk/lib/Unread');
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
-var FormattingUtils = require('matrix-react-sdk/lib/utils/FormattingUtils');
-var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
-var ConstantTimeDispatcher = require('matrix-react-sdk/lib/ConstantTimeDispatcher');
-var RoomSubListHeader = require('./RoomSubListHeader.js');
+import dis from 'matrix-react-sdk/lib/dispatcher';
+import Unread from 'matrix-react-sdk/lib/Unread';
+import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import RoomNotifs from 'matrix-react-sdk/lib/RoomNotifs';
+import FormattingUtils from 'matrix-react-sdk/lib/utils/FormattingUtils';
+import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
+import ConstantTimeDispatcher from 'matrix-react-sdk/lib/ConstantTimeDispatcher';
+import RoomSubListHeader from './RoomSubListHeader.js';
+import Modal from 'matrix-react-sdk/lib/Modal';
 
 // turn this on for drag & drop console debugging galore
 var debug = false;
@@ -83,6 +85,8 @@ var RoomSubList = React.createClass({
         incomingCall: React.PropTypes.object,
         onShowMoreRooms: React.PropTypes.func,
         searchFilter: React.PropTypes.string,
+        emptyContent: React.PropTypes.node, // content shown if the list is empty
+        headerItems: React.PropTypes.node, // content shown in the sublist header
     },
 
     getInitialState: function() {
@@ -469,16 +473,15 @@ var RoomSubList = React.createClass({
 
     render: function() {
         var connectDropTarget = this.props.connectDropTarget;
-        var RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
         var TruncatedList = sdk.getComponent('elements.TruncatedList');
 
         var label = this.props.collapsed ? null : this.props.label;
 
-        //console.log("render: " + JSON.stringify(this.state.sortedList));
-
-        var target;
-        if (this.state.sortedList.length == 0 && this.props.editable) {
-            target = <RoomDropTarget label={ counterpart.translate("Drop here to %(verb)s", {verb: this.props.verb}) }/>;
+        let content;
+        if (this.state.sortedList.length == 0) {
+            content = this.props.emptyContent;
+        } else {
+            content = this.makeRoomTiles();
         }
 
         var roomCount = this.props.list.length > 0 ? this.props.list.length : '';
@@ -498,8 +501,7 @@ var RoomSubList = React.createClass({
             if (!this.state.hidden) {
                 subList = <TruncatedList className={ classes } truncateAt={this.state.truncateAt}
                                          createOverflowElement={this._createOverflowTile} >
-                                { target }
-                                { this.makeRoomTiles() }
+                                { content }
                           </TruncatedList>;
             }
             else {
@@ -521,6 +523,7 @@ var RoomSubList = React.createClass({
                         roomNotificationCount={ this.roomNotificationCount() }
                         onClick={ this.onClick }
                         onHeaderClick={ this.props.onHeaderClick }
+                        headerItems={this.props.headerItems}
                     />
                     { subList }
                 </div>
@@ -542,6 +545,7 @@ var RoomSubList = React.createClass({
                             roomNotificationCount={ this.roomNotificationCount() }
                             onClick={ this.onClick }
                             onHeaderClick={ this.props.onHeaderClick }
+                            headerItems={this.props.headerItems}
                         />
                      : undefined }
                     { (this.props.showSpinner && !this.state.hidden) ? <Loader /> : undefined }
