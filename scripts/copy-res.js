@@ -23,7 +23,7 @@ const fs = require('fs');
 const rimraf = require('rimraf');
 
 // cleanup language files before copying them.
-rimraf("webapp/i18n/", function () { console.log('cleanup language files'); });
+//rimraf("webapp/", function () { console.log('cleanup language files'); });
 
 //From http://stackoverflow.com/a/20525865/4929236
 function generateFileArray(dir, files_) {
@@ -131,8 +131,6 @@ function next(i, err) {
     }
 }
 
-next(0);
-
 // Generate Language List
 
 const testFolder = 'src/i18n/';
@@ -145,11 +143,17 @@ if (!fs.existsSync('webapp')){
 if (!fs.existsSync('webapp/i18n/')){
   fs.mkdirSync('webapp/i18n/');
 }
-fs.readdir(testFolder, (err, files) => {
-  files.forEach(file => {
-    if (file == 'pt_BR.json') {
-      languages['pt_br'] = file;
-    } else if (file.indexOf("-") > -1) {
+
+if (!fs.existsSync('webapp/i18n/languages.json')){
+  rimraf("webapp/i18n/languages.json", function () { console.log('cleanup languages.json file'); });
+}
+
+fs.readdir(testFolder, function(err, files) {
+  if (err) {
+    throw err;
+  }
+  files.forEach(function(file) {
+    if (file.indexOf("-") > -1) {
       languages[file.split('-')[0]] = file;
     } else if (file.indexOf("_") > -1) {
       languages[file.split('_')[0]] = file;
@@ -157,5 +161,7 @@ fs.readdir(testFolder, (err, files) => {
       languages[file.split('.json')[0]] = file;
     }
   });
-  fs.writeFile('webapp/i18n/languages.json', JSON.stringify(languages, null, 4), 'utf8');
+  fs.writeFile('webapp/i18n/languages.json', JSON.stringify(languages, null, 4));
 })
+
+next(0);
