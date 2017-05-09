@@ -31,8 +31,8 @@
     "reskindex": "scripts/reskindex.js"
   },
   "scripts": {
-    "reskindex": "scripts/reskindex.js -h header",
-    "reskindex:watch": "scripts/reskindex.js -h header -w",
+    "reskindex": "node scripts/reskindex.js -h header",
+    "reskindex:watch": "node scripts/reskindex.js -h header -w",
     "build": "npm run reskindex && babel src -d lib --source-maps",
     "build:watch": "babel src -w -d lib --source-maps",
     "start": "parallelshell \"npm run build:watch\" \"npm run reskindex:watch\"",
