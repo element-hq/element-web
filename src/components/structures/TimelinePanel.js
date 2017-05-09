@@ -504,16 +504,15 @@ var TimelinePanel = React.createClass({
         // very possible have logged out within that timeframe, so check
         // we still have a client.
         const cli = MatrixClientPeg.get();
-        // if no client or client is guest don't send RR
+        // if no client or client is guest don't send RR or RM
         if (!cli || cli.isGuest()) return;
+
+        let shouldSendRR = true;
 
         var currentReadUpToEventId = this._getCurrentReadReceipt(true);
         var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
-
-        currentReadUpToEventIndex = currentReadUpToEventIndex ||
-            this._indexForEventId(this.state.readMarkerEventId);
         // We want to avoid sending out read receipts when we are looking at
-        // events in the past which are before the latest RR/RM.
+        // events in the past which are before the latest RR.
         //
         // For now, let's apply a heuristic: if (a) the event corresponding to
         // the latest RR (either from the server, or sent by ourselves) doesn't
@@ -527,26 +526,30 @@ var TimelinePanel = React.createClass({
         //
         if (currentReadUpToEventId && currentReadUpToEventIndex === null &&
                 this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
-            return;
+            shouldSendRR = false;
         }
 
         var lastReadEventIndex = this._getLastDisplayedEventIndex({
             ignoreOwn: true
         });
-        if (lastReadEventIndex === null) return;
+        if (lastReadEventIndex === null) {
+            shouldSendRR = false;
+        }
 
         var lastReadEvent = this.state.events[lastReadEventIndex];
+        shouldSendRR = shouldSendRR &&
+            (lastReadEventIndex > currentReadUpToEventIndex &&
+            this.last_rr_sent_event_id != lastReadEvent.getId());
+
+        const shouldSendRM = this.last_rm_sent_event_id != this.state.readMarkerEventId;
 
         // we also remember the last read receipt we sent to avoid spamming the
         // same one at the server repeatedly
-        if ((lastReadEventIndex > currentReadUpToEventIndex &&
-            this.last_rr_sent_event_id != lastReadEvent.getId()) ||
-                this.last_rm_sent_event_id != this.state.readMarkerEventId) {
-
+        if (shouldSendRR || shouldSendRM) {
             this.last_rr_sent_event_id = lastReadEvent.getId();
             this.last_rm_sent_event_id = this.state.readMarkerEventId;
 
-            console.log('TimelinePanel: Sending Read Markers for ',
+            debuglog('TimelinePanel: Sending Read Markers for ',
                 this.props.timelineSet.room.roomId,
                 'rm', this.state.readMarkerEventId,
                 'rr', lastReadEvent.getId(),

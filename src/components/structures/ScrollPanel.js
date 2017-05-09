@@ -575,7 +575,7 @@ module.exports = React.createClass({
         var boundingRect = node.getBoundingClientRect();
         var scrollDelta = boundingRect.bottom + pixelOffset - wrapperRect.bottom;
 
-        console.log("ScrollPanel: scrolling to token '" + scrollToken + "'+" +
+        debuglog("ScrollPanel: scrolling to token '" + scrollToken + "'+" +
                  pixelOffset + " (delta: "+scrollDelta+")");
 
         if(scrollDelta != 0) {
