@@ -525,7 +525,6 @@ var TimelinePanel = React.createClass({
         // RRs) - but that is a bit of a niche case. It will sort itself out when
         // the user eventually hits the live timeline.
         //
-        console.log(currentReadUpToEventId, currentReadUpToEventIndex, this._timelineWindow.canPaginate(EventTimeline.FORWARDS));
         if (currentReadUpToEventId && currentReadUpToEventIndex === null &&
                 this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
             return;
