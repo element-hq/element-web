@@ -15,20 +15,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const path = require('path');
 const electron = require('electron');
 
 const app = electron.app;
 const Tray = electron.Tray;
-const MenuItem = electron.MenuItem;
+const ipcMain = electron.ipcMain;
 
 let trayIcon = null;
 
 exports.hasTray = function hasTray() {
     return (trayIcon !== null);
-}
+};
 
-exports.create = function (win, config) {
+exports.create = function(win, config) {
     // no trays on darwin
     if (process.platform === 'darwin' || trayIcon) {
         return;
@@ -47,21 +46,31 @@ exports.create = function (win, config) {
     const contextMenu = electron.Menu.buildFromTemplate([
         {
             label: 'Show/Hide ' + config.brand,
-            click: toggleWin
+            click: toggleWin,
         },
         {
-            type: 'separator'
+            type: 'separator',
         },
         {
             label: 'Quit',
-            click: function () {
+            click: function() {
                 app.quit();
-            }
-        }
+            },
+        },
     ]);
 
     trayIcon = new Tray(config.icon_path);
     trayIcon.setToolTip(config.brand);
     trayIcon.setContextMenu(contextMenu);
     trayIcon.on('click', toggleWin);
+
+    ipcMain.on('set_badge', function(event, count) {
+        if (count) {
+            trayIcon.setImage(config.icon_path_unread);
+            trayIcon.setToolTip(`${config.brand} — ${count} unread`);
+        } else {
+            trayIcon.setImage(config.icon_path);
+            trayIcon.setToolTip(config.brand);
+        }
+	});
 };

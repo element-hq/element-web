@@ -26,9 +26,9 @@ function run_update_exe(args, done) {
     const updateExe = path.resolve(path.dirname(process.execPath), '..', 'Update.exe');
     console.log('Spawning `%s` with args `%s`', updateExe, args);
     spawn(updateExe, args, {
-      detached: true
+      detached: true,
     }).on('close', done);
-};
+}
 
 function check_squirrel_hooks() {
     if (process.platform != 'win32') return false;

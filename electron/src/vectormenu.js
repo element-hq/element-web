@@ -22,162 +22,162 @@ const template = [
         label: 'Edit',
         submenu: [
             {
-                role: 'undo'
+                role: 'undo',
             },
             {
-                role: 'redo'
+                role: 'redo',
             },
             {
-                type: 'separator'
+                type: 'separator',
             },
             {
-                role: 'cut'
+                role: 'cut',
             },
             {
-                role: 'copy'
+                role: 'copy',
             },
             {
-                role: 'paste'
+                role: 'paste',
             },
             {
-                role: 'pasteandmatchstyle'
+                role: 'pasteandmatchstyle',
             },
             {
-                role: 'delete'
+                role: 'delete',
             },
             {
-                role: 'selectall'
-            }
-        ]
+                role: 'selectall',
+            },
+        ],
     },
     {
         label: 'View',
         submenu: [
             {
-                type: 'separator'
+                type: 'separator',
             },
             {
-                role: 'resetzoom'
+                role: 'resetzoom',
             },
             {
-                role: 'zoomin'
+                role: 'zoomin',
             },
             {
-                role: 'zoomout'
+                role: 'zoomout',
             },
             {
-                type: 'separator'
+                type: 'separator',
             },
             {
-                role: 'togglefullscreen'
+                role: 'togglefullscreen',
             },
             {
-                role: 'toggledevtools'
-            }
-        ]
+                role: 'toggledevtools',
+            },
+        ],
     },
     {
         role: 'window',
         submenu: [
             {
-                role: 'minimize'
+                role: 'minimize',
             },
             {
-                role: 'close'
-            }
-        ]
+                role: 'close',
+            },
+        ],
     },
     {
         role: 'help',
         submenu: [
             {
                 label: 'riot.im',
-                click () { electron.shell.openExternal('https://riot.im/') }
-            }
-        ]
-    }
+                click() { electron.shell.openExternal('https://riot.im/'); },
+            },
+        ],
+    },
 ];
 
 // macOS has specific menu conventions...
 if (process.platform === 'darwin') {
     // first macOS menu is the name of the app
-    const name = electron.app.getName()
+    const name = electron.app.getName();
     template.unshift({
         label: name,
         submenu: [
             {
-                role: 'about'
+                role: 'about',
             },
             {
-                type: 'separator'
+                type: 'separator',
             },
             {
                 role: 'services',
-                submenu: []
+                submenu: [],
             },
             {
-                type: 'separator'
+                type: 'separator',
             },
             {
-                role: 'hide'
+                role: 'hide',
             },
             {
-                role: 'hideothers'
+                role: 'hideothers',
             },
             {
-                role: 'unhide'
+                role: 'unhide',
             },
             {
-                type: 'separator'
+                type: 'separator',
             },
             {
-                role: 'quit'
-            }
-        ]
-    })
+                role: 'quit',
+            },
+        ],
+    });
     // Edit menu.
     // This has a 'speech' section on macOS
     template[1].submenu.push(
         {
-            type: 'separator'
+            type: 'separator',
         },
         {
             label: 'Speech',
             submenu: [
                 {
-                    role: 'startspeaking'
+                    role: 'startspeaking',
                 },
                 {
-                    role: 'stopspeaking'
-                }
-            ]
+                    role: 'stopspeaking',
+                },
+            ],
         }
-    )
+    );
     // Window menu.
     // This also has specific functionality on macOS
     template[3].submenu = [
         {
             label: 'Close',
             accelerator: 'CmdOrCtrl+W',
-            role: 'close'
+            role: 'close',
         },
         {
             label: 'Minimize',
             accelerator: 'CmdOrCtrl+M',
-            role: 'minimize'
+            role: 'minimize',
         },
         {
             label: 'Zoom',
-            role: 'zoom'
+            role: 'zoom',
         },
         {
-            type: 'separator'
+            type: 'separator',
         },
         {
             label: 'Bring All to Front',
-            role: 'front'
-        }
-    ]
+            role: 'front',
+        },
+    ];
 } else {
     template.unshift({
         label: 'File',
@@ -187,11 +187,11 @@ if (process.platform === 'darwin') {
                 role: 'about'
             },*/
             {
-                role: 'quit'
-            }
-        ]
+                role: 'quit',
+            },
+        ],
     });
 }
 
-module.exports = electron.Menu.buildFromTemplate(template)
+module.exports = electron.Menu.buildFromTemplate(template);
 
