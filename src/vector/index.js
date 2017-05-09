@@ -317,9 +317,6 @@ function onAction(payload) {
             if (language.indexOf("-") > -1) {
               counterpart.setLocale(language.split('-')[0]);
               setLocalSetting('language', language.split('-')[0]);
-            } else if (language == 'pt-br') {
-              counterpart.setLocale('pt-br');
-              setLocalSetting('language', 'pt-br');
             } else {
               counterpart.setLocale(language);
               setLocalSetting('language', language);
@@ -427,30 +424,34 @@ async function loadApp() {
     }
 }
 
-const _localSettings = getLocalSettings();
-dis.register(onAction);
-if (!_localSettings.hasOwnProperty('language')) {
-  const language = navigator.languages[0] || navigator.language || navigator.userLanguage;
-  if (language.indexOf("-") > -1) {
-    dis.dispatch({
+function loadLanguage(callback) {
+  const _localSettings = getLocalSettings();
+  dis.register(onAction);
+  if (!_localSettings.hasOwnProperty('language')) {
+    const language = navigator.languages[0] || navigator.language || navigator.userLanguage;
+    if (language.indexOf("-") > -1) {
+      onAction({
+          action: 'set_language',
+          value: language.split('-')[0],
+      });
+      sdk.setLanguage(language.split('-')[0]);
+      setLocalSetting('language', language.split('-')[0]);
+    } else {
+      onAction({
+          action: 'set_language',
+          value: language,
+      });
+      sdk.setLanguage(language);
+      setLocalSetting('language', language);
+    }
+  }else {
+    sdk.setLanguage(_localSettings.language);
+    onAction({
         action: 'set_language',
-        value: language.split('-')[0],
+        value: _localSettings.language,
     });
-    counterpart.setLocale(language.split('-')[0]);
-    setLocalSetting('language', language.split('-')[0]);
-  } else {
-    dis.dispatch({
-        action: 'set_language',
-        value: language,
-    });
-    counterpart.setLocale(language);
-    setLocalSetting('language', language);
   }
-}else {
-  dis.dispatch({
-      action: 'set_language',
-      value: _localSettings.language,
-  });
+  callback();
 }
 
-loadApp();
+loadLanguage(loadApp);
