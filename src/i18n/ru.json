@@ -111,7 +111,7 @@
     "Permalink": "Пстоянная ссылка",
     "Quote": "Цитата",
     "Redact": "Удалить",
-    "Remove %(name)s from the directory?": "Удалить %(name)s из каталога",
+    "Remove %(name)s from the directory?": "Удалить %(name)s из каталога?",
     "remove %(name)s from the directory": "удалить %(name)s из каталога",
     "Resend": "Переслать снова",
     "Source URL": "Источник URL"
