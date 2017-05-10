@@ -52,7 +52,7 @@ cp "$tmpdir/256.png" "$tmpdir/Riot.iconset/icon_256x256.png"
 cp "$tmpdir/512.png" "$tmpdir/Riot.iconset/icon_256x256@2x.png"
 cp "$tmpdir/512.png" "$tmpdir/Riot.iconset/icon_512x512.png"
 cp "$tmpdir/1024.png" "$tmpdir/Riot.iconset/icon_512x512@2x.png"
-iconutil -c icns -o electron/build/icon.icns "$tmpdir/Riot.iconset"
+iconutil -c icns -o electron_app/build/icon.icns "$tmpdir/Riot.iconset"
 
 cp "$tmpdir/36.png" "res/vector-icons/android-chrome-36x36.png"
 cp "$tmpdir/48.png" "res/vector-icons/android-chrome-48x48.png"
@@ -79,17 +79,17 @@ cp "$tmpdir/144.png" "res/vector-icons/mstile-144x144.png"
 cp "$tmpdir/150.png" "res/vector-icons/mstile-150x150.png"
 cp "$tmpdir/310.png" "res/vector-icons/mstile-310x310.png"
 cp "$tmpdir/310x150.png" "res/vector-icons/mstile-310x150.png"
-cp "$tmpdir/180.png" "electron/img/riot.png"
+cp "$tmpdir/180.png" "electron_app/img/riot.png"
 
 convert "$tmpdir/16.png" "$tmpdir/32.png" "$tmpdir/64.png" "$tmpdir/128.png"  "$tmpdir/256.png" "res/vector-icons/favicon.ico"
 
-cp "res/vector-icons/favicon.ico" "electron/build/icon.ico"
-cp "res/vector-icons/favicon.ico" "electron/img/riot.ico"
+cp "res/vector-icons/favicon.ico" "electron_app/build/icon.ico"
+cp "res/vector-icons/favicon.ico" "electron_app/img/riot.ico"
 
 # https://github.com/electron-userland/electron-builder/blob/3f97b86993d4ea5172e562b182230a194de0f621/src/targets/LinuxTargetHelper.ts#L127
 for i in 24 96 16 48 64 128 256 512
 do
-    cp "$tmpdir/$i.png" "electron/build/icons/${i}x${i}.png"
+    cp "$tmpdir/$i.png" "electron_app/build/icons/${i}x${i}.png"
 done
 
 rm -r "$tmpdir"
