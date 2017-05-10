@@ -34,6 +34,8 @@ export default React.createClass({
     displayName: 'SetMxIdDialog',
     propTypes: {
         onFinished: React.PropTypes.func.isRequired,
+        // Called when the user requests to register with a different homeserver
+        onDifferentServerClicked: React.PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
