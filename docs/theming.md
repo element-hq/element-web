@@ -4,7 +4,7 @@ Theming Riot
 Themes are a very basic way of providing simple alternative look & feels to the
 riot-web app via CSS & custom imagery.
 
-They are *NOT* co be confused with 'skins', which describe apps which sit on top
+They are *NOT* to be confused with 'skins', which describe apps which sit on top
 of matrix-react-sdk - e.g. in theory Riot itself is a react-sdk skin.
 As of Jan 2017, skins are not fully supported; riot is the only available skin.
 
@@ -18,7 +18,7 @@ To define a theme for Riot:
     overridden. If every single colour is being changed (as per _dark.scss)
     then you might as well keep them all.
  5. Add the theme to the list of entrypoints in webpack.config.js
- 6. Add the theme to the list of themes in matrix-react-sdk's UserSettings.js
+ 6. Add the theme to config.json. Note that the *first* declared theme is going to be the default theme for users who didn't set their themes. 
  7. Sit back and admire your handywork.
 
 In future, the assets for a theme will probably be gathered together into a

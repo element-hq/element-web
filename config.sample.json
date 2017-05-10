@@ -10,5 +10,15 @@
         "servers": [
             "matrix.org"
         ]
-    }
+    },
+    "themes": [
+    	{
+    		"label": "Light theme",
+    		"value": "light"
+    	},
+    	{
+    		"label": "Dark theme",
+    		"value": "dark"
+    	}
+    ]
 }
