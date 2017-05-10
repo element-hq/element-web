@@ -533,7 +533,7 @@ module.exports = React.createClass({
 
         let placeholder = counterpart.translate('Search for a room');
         if (!this.state.instanceId) {
-            placeholder = counterpart.translate('#example:') + this.state.roomServer;
+            placeholder = counterpart.translate('#example') + ":" + this.state.roomServer;
         } else if (instance_expected_field_type) {
             placeholder = instance_expected_field_type.placeholder;
         }

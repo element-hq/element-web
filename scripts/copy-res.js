@@ -153,13 +153,13 @@ fs.readdir(testFolder, function(err, files) {
     throw err;
   }
   files.forEach(function(file) {
-    if (file.indexOf("-") > -1) {
-      languages[file.split('-')[0]] = file;
-    } else if (file.indexOf("_") > -1) {
-      languages[file.split('_')[0]] = file;
-    } else {
-      languages[file.split('.json')[0]] = file;
-    }
+  	var normalizedLanguage = file.toLowerCase().replace("_","-").split('.json')[0];
+  	var languageParts = normalizedLanguage.split('-');
+	if (languageParts.length==2 && languageParts[0]==languageParts[1]) {
+		languages[languageParts[0]] = file;
+	} else {
+		languages[normalizedLanguage] = file;
+	}
   });
   fs.writeFile('webapp/i18n/languages.json', JSON.stringify(languages, null, 4));
 })
