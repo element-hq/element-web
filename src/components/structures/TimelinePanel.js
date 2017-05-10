@@ -550,23 +550,27 @@ var TimelinePanel = React.createClass({
         // we also remember the last read receipt we sent to avoid spamming the
         // same one at the server repeatedly
         if (shouldSendReadReceipt || shouldSendReadMarker) {
-            this.last_rr_sent_event_id = lastReadEvent.getId();
+            if (shouldSendReadReceipt) {
+                this.last_rr_sent_event_id = lastReadEvent.getId();
+            } else {
+                lastReadEvent = null;
+            }
             this.last_rm_sent_event_id = this.state.readMarkerEventId;
 
             debuglog('TimelinePanel: Sending Read Markers for ',
                 this.props.timelineSet.room.roomId,
                 'rm', this.state.readMarkerEventId,
-                'rr', lastReadEvent.getId(),
+                lastReadEvent ? 'rr ' + lastReadEvent.getId() : '',
             );
             MatrixClientPeg.get().setRoomReadMarkers(
                 this.props.timelineSet.room.roomId,
                 this.state.readMarkerEventId,
-                lastReadEvent
+                lastReadEvent, // Could be null, in which case no RR is sent
             ).catch((e) => {
                 // /read_markers API is not implemented on this HS, fallback to just RR
-                if (e.errcode === 'M_UNRECOGNIZED') {
+                if (e.errcode === 'M_UNRECOGNIZED' && lastReadEvent) {
                     return MatrixClientPeg.get().sendReadReceipt(
-                        lastReadEvent
+                        lastReadEvent,
                     ).catch(() => {
                         this.last_rr_sent_event_id = undefined;
                     });
