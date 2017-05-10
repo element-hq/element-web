@@ -537,7 +537,7 @@ var TimelinePanel = React.createClass({
         }
         let lastReadEvent = this.state.events[lastReadEventIndex];
         shouldSendReadReceipt = shouldSendReadReceipt &&
-            // Only send a RR if the last read Event is ahead in the timeline relative to
+            // Only send a RR if the last read event is ahead in the timeline relative to
             // the current RR event.
             lastReadEventIndex > currentReadUpToEventIndex &&
             // Only send a RR if the last RR set != the one we would send
