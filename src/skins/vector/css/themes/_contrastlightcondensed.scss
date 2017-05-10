@@ -118,11 +118,26 @@ $progressbar-color: #000;
 .mx_EventTile_line {
     color: #333 !important;
     font-weight:200;
+    padding-top: 2px !important;
+    padding-bottom:0px !important;
+    line-height: 18px !important;
+    min-height: 18px !important;
+}
+
+.mx_TextualEvent {
+    padding-top: 4px !important;
+    padding-bottom: 0px !important;
+}
+
+.mx_UnknownBody{
+    line-height: 26px !important;
+    min-height: 26px !important;
 }
 
 .mx_EventTile_avatar {
     color: #000 !important;
 }
+
 
 .linkified {
 	color: #156d4d !important;
@@ -137,8 +152,12 @@ $progressbar-color: #000;
 
 .mx_LinkPreviewWidget {
     background-color: #f7f7f7;
+    padding:10px;
 }
 
+.mx_MTextBody {
+    line-height:18px !important;
+}
 
 .mx_SearchBox_search {
     color: rgba(0, 0, 0, 1) !important;
