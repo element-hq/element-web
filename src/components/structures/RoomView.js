@@ -775,7 +775,8 @@ module.exports = React.createClass({
             const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
             const defered = q.defer();
             mxIdPromise = defered.promise;
-            Modal.createDialog(SetMxIdDialog, {
+            const close = Modal.createDialog(SetMxIdDialog, {
+                homeserverUrl: cli.getHomeserverUrl(),
                 onFinished: (submitted, credentials) => {
                     if (!submitted) {
                         defered.reject();
@@ -783,8 +784,12 @@ module.exports = React.createClass({
                     }
                     this.props.onRegistered(credentials);
                     defered.resolve();
-                }
-            });
+                },
+                onDifferentServerClicked: (ev) => {
+                    dis.dispatch({action: 'start_registration'});
+                    close();
+                },
+            }).close;
         }
 
         mxIdPromise.then(() => {

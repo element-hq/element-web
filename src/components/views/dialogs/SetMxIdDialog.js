@@ -19,6 +19,11 @@ import q from 'q';
 import React from 'react';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import classnames from 'classnames';
+
+// The amount of time to wait for further changes to the input username before
+// sending a request to the server
+const USERNAME_CHECK_DEBOUNCE_MS = 2000;
 
 /**
  * Prompt the user to set a display name.
@@ -33,9 +38,20 @@ export default React.createClass({
 
     getInitialState: function() {
         return {
-            username : '',
+            // The entered username
+            username: '',
+            // Indicate ongoing work on the username
+            usernameBusy: false,
+            // Indicate error with username
+            usernameError: '',
+            // Assume the homeserver supports username checking until "M_UNRECOGNIZED"
+            usernameCheckSupport: true,
+
+            // Whether the auth UI is currently being used
             doingUIAuth: false,
-        }
+            // Indicate error with auth
+            authError: '',
+        };
     },
 
     componentDidMount: function() {
@@ -46,7 +62,28 @@ export default React.createClass({
 
     onValueChange: function(ev) {
         this.setState({
-            username: ev.target.value
+            username: ev.target.value,
+            usernameBusy: true,
+            usernameError: '',
+        }, () => {
+            if (!this.state.username || !this.state.usernameCheckSupport) {
+                this.setState({
+                    usernameBusy: false,
+                });
+                return;
+            }
+
+            // Debounce the username check to limit number of requests sent
+            if (this._usernameCheckTimeout) {
+                clearTimeout(this._usernameCheckTimeout);
+            }
+            this._usernameCheckTimeout = setTimeout(() => {
+                this._doUsernameCheck().finally(() => {
+                    this.setState({
+                        usernameBusy: false,
+                    });
+                });
+            }, USERNAME_CHECK_DEBOUNCE_MS);
         });
     },
 
@@ -56,6 +93,40 @@ export default React.createClass({
         });
     },
 
+    _doUsernameCheck: function() {
+        // Check if username is available
+        return this._matrixClient.isUsernameAvailable(this.state.username).then(
+            (isAvailable) => {
+                if (isAvailable) {
+                    this.setState({usernameError: ''});
+                }
+            },
+            (err) => {
+                // Indicate whether the homeserver supports username checking
+                const newState = {
+                    usernameCheckSupport: err.errcode !== "M_UNRECOGNIZED",
+                };
+                switch (err.errcode) {
+                    case "M_USER_IN_USE":
+                        newState.usernameError = 'Username not available';
+                        break;
+                    case "M_INVALID_USERNAME":
+                        newState.usernameError = 'Username invalid: ' + err.message;
+                        break;
+                    case "M_UNRECOGNIZED":
+                        // This homeserver doesn't support username checking, assume it's
+                        // fine and rely on the error appearing in registration step.
+                        newState.usernameError = '';
+                        break;
+                    default:
+                        newState.usernameError = 'An error occurred' + err.message;
+                        break;
+                }
+                this.setState(newState);
+            },
+        );
+    },
+
     _generatePassword: function() {
         return Math.random().toString(36).slice(2);
     },
@@ -63,8 +134,9 @@ export default React.createClass({
     _makeRegisterRequest: function(auth) {
         // Not upgrading - changing mxids
         const guestAccessToken = null;
-        this._generatedPassword = this._generatePassword();
-
+        if (!this._generatedPassword) {
+            this._generatedPassword = this._generatePassword();
+        }
         return this._matrixClient.register(
             this.state.username,
             this._generatedPassword,
@@ -79,10 +151,9 @@ export default React.createClass({
         this.setState({
             doingUIAuth: false,
         });
-        console.info('Auth Finsihed', arguments);
 
         if (!success) {
-            this.setState({ errorText : response.message });
+            this.setState({ authError: response.message });
             return;
         }
 
@@ -104,6 +175,7 @@ export default React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
         const Spinner = sdk.getComponent('elements.Spinner');
+
         let auth;
         if (this.state.doingUIAuth) {
             auth = <InteractiveAuth
@@ -114,36 +186,68 @@ export default React.createClass({
                 poll={true}
             />;
         }
+        const inputClasses = classnames({
+            "mx_SetMxIdDialog_input": true,
+            "error": Boolean(this.state.usernameError),
+        });
+
+        let usernameIndicator = null;
+        let usernameBusyIndicator = null;
+        if (this.state.usernameBusy) {
+            usernameBusyIndicator = <Spinner w="24" h="24"/>;
+        } else {
+            const usernameAvailable = this.state.username &&
+                this.state.usernameCheckSupport && !this.state.usernameError;
+            const usernameIndicatorClasses = classnames({
+                "error": Boolean(this.state.usernameError),
+                "success": usernameAvailable,
+            });
+            usernameIndicator = <div className={usernameIndicatorClasses}>
+                { usernameAvailable ? 'Username available' : this.state.usernameError }
+            </div>;
+        }
+
+        let authErrorIndicator = null;
+        if (this.state.authError) {
+            authErrorIndicator = <div className="error">
+                { this.state.authError }
+            </div>;
+        }
+        const canContinue = this.state.username &&
+            !this.state.usernameError &&
+            !this.state.usernameBusy;
+
         return (
             <BaseDialog className="mx_SetMxIdDialog"
                 onFinished={this.props.onFinished}
-                title="Choose a Username"
+                title="To get started, please pick a username!"
             >
                 <div className="mx_Dialog_content">
-                    <p>
-                        Beyond this point you're going to need to pick a username - your
-                        unique identifier in Riot.
-                    </p>
-                    <p>
-                        <small>
-                            You can't change your username, but you can always choose how you
-                            appear to other people in Riot by changing your display name.
-                        </small>
-                    </p>
-                    <input type="text" ref="input_value" value={this.state.username}
-                        autoFocus={true} onChange={this.onValueChange} size="30"
-                        className="mx_SetMxIdDialog_input"
-                    />
-                    { auth }
-                    <div>
-                        { this.state.errorText }
+                    <div className="mx_SetMxIdDialog_input_group">
+                        <input type="text" ref="input_value" value={this.state.username}
+                            autoFocus={true} onChange={this.onValueChange} size="30"
+                            className={inputClasses}
+                        />
+                        { usernameBusyIndicator }
                     </div>
+                    { usernameIndicator }
+                    <p>
+                        This will be your account name on
+                        the {this.props.homeserverUrl} homeserver,
+                        or you can pick a&nbsp;
+                        <a href="#" onClick={this.props.onDifferentServerClicked}>
+                            different server
+                        </a>.
+                    </p>
+                    { auth }
+                    { authErrorIndicator }
                 </div>
                 <div className="mx_Dialog_buttons">
                     <input className="mx_Dialog_primary"
                         type="submit"
                         value="Continue"
                         onClick={this.onSubmit}
+                        disabled={!canContinue}
                     />
                 </div>
             </BaseDialog>
