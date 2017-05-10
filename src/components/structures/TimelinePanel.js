@@ -177,8 +177,8 @@ var TimelinePanel = React.createClass({
     componentWillMount: function() {
         debuglog("TimelinePanel: mounting");
 
-        this.last_rr_sent_event_id = undefined;
-        this.last_rm_sent_event_id = undefined;
+        this.lastRRSentSentId = undefined;
+        this.lastRMSentEventId = undefined;
 
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
@@ -509,8 +509,8 @@ var TimelinePanel = React.createClass({
 
         let shouldSendReadReceipt = true;
 
-        var currentReadUpToEventId = this._getCurrentReadReceipt(true);
-        var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
+        const currentReadUpToEventId = this._getCurrentReadReceipt(true);
+        const currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
         // We want to avoid sending out read receipts when we are looking at
         // events in the past which are before the latest RR.
         //
@@ -529,33 +529,33 @@ var TimelinePanel = React.createClass({
             shouldSendReadReceipt = false;
         }
 
-        var lastReadEventIndex = this._getLastDisplayedEventIndex({
-            ignoreOwn: true
+        const lastReadEventIndex = this._getLastDisplayedEventIndex({
+            ignoreOwn: true,
         });
         if (lastReadEventIndex === null) {
             shouldSendReadReceipt = false;
         }
-
-        var lastReadEvent = this.state.events[lastReadEventIndex];
+        let lastReadEvent = this.state.events[lastReadEventIndex];
         shouldSendReadReceipt = shouldSendReadReceipt &&
             // Only send a RR if the last read Event is ahead in the timeline relative to
             // the current RR event.
             lastReadEventIndex > currentReadUpToEventIndex &&
             // Only send a RR if the last RR set != the one we would send
-            this.last_rr_sent_event_id != lastReadEvent.getId();
+            this.lastRRSentSentId != lastReadEvent.getId();
 
         // Only send a RM if the last RM sent != the one we would send
-        const shouldSendReadMarker = this.last_rm_sent_event_id != this.state.readMarkerEventId;
+        const shouldSendReadMarker =
+            this.lastRMSentEventId != this.state.readMarkerEventId;
 
         // we also remember the last read receipt we sent to avoid spamming the
         // same one at the server repeatedly
         if (shouldSendReadReceipt || shouldSendReadMarker) {
             if (shouldSendReadReceipt) {
-                this.last_rr_sent_event_id = lastReadEvent.getId();
+                this.lastRRSentSentId = lastReadEvent.getId();
             } else {
                 lastReadEvent = null;
             }
-            this.last_rm_sent_event_id = this.state.readMarkerEventId;
+            this.lastRMSentEventId = this.state.readMarkerEventId;
 
             debuglog('TimelinePanel: Sending Read Markers for ',
                 this.props.timelineSet.room.roomId,
@@ -572,12 +572,12 @@ var TimelinePanel = React.createClass({
                     return MatrixClientPeg.get().sendReadReceipt(
                         lastReadEvent,
                     ).catch(() => {
-                        this.last_rr_sent_event_id = undefined;
+                        this.lastRRSentSentId = undefined;
                     });
                 }
                 // it failed, so allow retries next time the user is active
-                this.last_rr_sent_event_id = undefined;
-                this.last_rm_sent_event_id = undefined;
+                this.lastRRSentSentId = undefined;
+                this.lastRMSentEventId = undefined;
             });
 
             // do a quick-reset of our unreadNotificationCount to avoid having
