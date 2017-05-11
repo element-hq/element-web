@@ -132,8 +132,8 @@ module.exports = React.createClass({
         }, (error) => {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: _t("Error saving email notification preferences"),
-                description: _t("An error occurred whilst saving your email notification preferences") + ".",
+                title: _t('Error saving email notification preferences'),
+                description: _t('An error occurred whilst saving your email notification preferences') + '.',
             });
         });
     },
@@ -176,8 +176,8 @@ module.exports = React.createClass({
 
         var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
         Modal.createDialog(TextInputDialog, {
-            title: _t("Keywords"),
-            description: _t("Enter keywords separated by a comma") + ":",
+            title: _t('Keywords'),
+            description: _t('Enter keywords separated by a comma') + ':',
             value: keywords,
             onFinished: function onFinished(should_leave, newValue) {
 
@@ -241,8 +241,8 @@ module.exports = React.createClass({
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Failed to change settings: " + error);
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Failed to change settings"),
-                    description: ((error && error.message) ? error.message : _t("Operation failed")),
+                    title: _t('Failed to change settings'),
+                    description: ((error && error.message) ? error.message : _t('Operation failed')),
                     onFinished: self._refreshFromServer
                 });
             });
@@ -311,8 +311,8 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Can't update user notification settings: " + error);
             Modal.createDialog(ErrorDialog, {
-                title: _t("Can't update user notification settings"),
-                description: ((error && error.message) ? error.message : _t("Operation failed")),
+                title: _t('Can\'t update user notification settings'),
+                description: ((error && error.message) ? error.message : _t('Operation failed')),
                 onFinished: self._refreshFromServer
             });
         });
@@ -353,8 +353,8 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to update keywords: " + error);
             Modal.createDialog(ErrorDialog, {
-                title: _t("Failed to update keywords"),
-                description: ((error && error.message) ? error.message : _t("Operation failed")),
+                title: _t('Failed to update keywords'),
+                description: ((error && error.message) ? error.message : _t('Operation failed')),
                 onFinished: self._refreshFromServer
             });
         }
@@ -563,8 +563,8 @@ module.exports = React.createClass({
 
             // Build the rules not managed by Vector UI
             var otherRulesDescriptions = {
-                '.m.rule.message': _t("Notify for all other messages/rooms"),
-                '.m.rule.fallback': _t("Notify me for anything else"),
+                '.m.rule.message': _t('Notify for all other messages/rooms'),
+                '.m.rule.fallback': _t('Notify me for anything else'),
             };
 
             for (var i in defaultRules.others) {
@@ -730,7 +730,7 @@ module.exports = React.createClass({
             // This only supports the first email address in your profile for now
             emailNotificationsRow = this.emailNotificationsRow(
                 emailThreepids[0].address,
-                _t("Enable email notifications")+" ("+emailThreepids[0].address+")"
+                _t('Enable email notifications') + ' (' + emailThreepids[0].address + ')'
             );
         }
 
@@ -775,7 +775,7 @@ module.exports = React.createClass({
         }
         if (devicesSection) {
             devicesSection = (<div>
-                <h3>{ _t("Notification targets") }</h3>
+                <h3>{ _t('Notification targets') }</h3>
                 { devicesSection }
             </div>);
         }
@@ -843,9 +843,9 @@ module.exports = React.createClass({
                             <thead>
                                 <tr>
                                     <th width="55%"></th>
-                                    <th width="15%">{ _t("Off") }</th>
-                                    <th width="15%">{ _t("On") }</th>
-                                    <th width="15%">{ _t("Noisy") }</th>
+                                    <th width="15%">{ _t('Off') }</th>
+                                    <th width="15%">{ _t('On') }</th>
+                                    <th width="15%">{ _t('Noisy') }</th>
                                 </tr>
                             </thead>
                             <tbody>

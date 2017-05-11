@@ -16,15 +16,15 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 import _t from 'counterpart';
-var sdk = require('matrix-react-sdk');
-var Matrix = require("matrix-js-sdk");
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var MatrixClientPeg = require("matrix-react-sdk/lib/MatrixClientPeg");
-var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
-var Modal = require('matrix-react-sdk/lib/Modal');
-var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+import sdk from 'matrix-react-sdk';
+import Matrix from "matrix-js-sdk";
+import dis from 'matrix-react-sdk/lib/dispatcher';
+import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
+import Modal from 'matrix-react-sdk/lib/Modal';
+import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'RightPanel',
@@ -35,7 +35,7 @@ module.exports = React.createClass({
         collapsed: React.PropTypes.bool, // currently unused property to request for a minimized view of the panel
     },
 
-    Phase : {
+    Phase: {
         MemberList: 'MemberList',
         FilePanel: 'FilePanel',
         NotificationPanel: 'NotificationPanel',
@@ -93,7 +93,7 @@ module.exports = React.createClass({
             var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
                 title: _t('Please Register'),
-                description: _t("Guest users can't invite users. Please register to invite") + "."
+                description: _t('Guest users can\'t invite users. Please register to invite') + '.'
             });
             return;
         }

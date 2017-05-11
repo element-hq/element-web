@@ -19,23 +19,14 @@ limitations under the License.
 import React from 'react';
 import _t from 'counterpart';
 
-// let days = [];
-// days.push(_t("Sunday"));
-// days.push(_t("Monday"));
-// days.push(_t("Tuesday"));
-// days.push(_t("Wednesday"));
-// days.push(_t("Thursday"));
-// days.push(_t("Friday"));
-// days.push(_t("Saturday"));
-
 const days = [
-    _t("Sunday"),
-    _t("Monday"),
-    _t("Tuesday"),
-    _t("Wednesday"),
-    _t("Thursday"),
-    _t("Friday"),
-    _t("Saturday")
+    _t('Sunday'),
+    _t('Monday'),
+    _t('Tuesday'),
+    _t('Wednesday'),
+    _t('Thursday'),
+    _t('Friday'),
+    _t('Saturday')
 ];
 
 module.exports = React.createClass({
@@ -47,10 +38,10 @@ module.exports = React.createClass({
         yesterday.setDate(today.getDate() - 1);
         var label;
         if (date.toDateString() === today.toDateString()) {
-            label = _t("Today");
+            label = _t('Today');
         }
         else if (date.toDateString() === yesterday.toDateString()) {
-            label = _t("Yesterday");
+            label = _t('Yesterday');
         }
         else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
             label = days[date.getDay()];
