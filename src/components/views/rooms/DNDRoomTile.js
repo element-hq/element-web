@@ -23,7 +23,7 @@ import {DropTarget} from 'react-dnd';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import sdk from 'matrix-react-sdk';
-import counterpart from 'counterpart';
+import _t from 'counterpart';
 import RoomTile from 'matrix-react-sdk/lib/components/views/rooms/RoomTile';
 import * as Rooms from 'matrix-react-sdk/lib/Rooms';
 import Modal from 'matrix-react-sdk/lib/Modal';
@@ -91,8 +91,8 @@ var roomTileSource = {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to set direct chat tag " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: counterpart.translate("Failed to set direct chat tag"),
-                        description: ((err && err.message) ? err.message : counterpart.translate("Operation failed")),
+                        title: _t("Failed to set direct chat tag"),
+                        description: ((err && err.message) ? err.message : _t("Operation failed")),
                     });
                 });
                 return;
@@ -116,8 +116,8 @@ var roomTileSource = {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to remove tag " + prevTag + " from room: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: counterpart.translate("Failed to remove tag %(tagName)s from room", {tagName: prevTag}),
-                        description: ((err && err.message) ? err.message : counterpart.translate("Operation failed")),
+                        title: _t("Failed to remove tag %(tagName)s from room", {tagName: prevTag}),
+                        description: ((err && err.message) ? err.message : _t("Operation failed")),
                     });
                 });
             }
@@ -138,8 +138,8 @@ var roomTileSource = {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to add tag " + newTag + " to room: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: counterpart.translate("Failed to add tag %(tagName)s to room", {tagName: newTag}),
-                        description: ((err && err.message) ? err.message : counterpart.translate("Operation failed")),
+                        title: _t("Failed to add tag %(tagName)s to room", {tagName: newTag}),
+                        description: ((err && err.message) ? err.message : _t("Operation failed")),
                     });
                 });
             }
@@ -242,4 +242,3 @@ DragSource('RoomTile', roomTileSource, function(connect, monitor) {
         isDragging: monitor.isDragging()
     };
 })(RoomTile));
-

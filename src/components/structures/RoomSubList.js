@@ -22,7 +22,7 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import { DropTarget } from 'react-dnd';
 import sdk from 'matrix-react-sdk';
-import counterpart from 'counterpart';
+import _t from 'counterpart';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import Unread from 'matrix-react-sdk/lib/Unread';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
@@ -461,8 +461,8 @@ var RoomSubList = React.createClass({
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Failed to add tag " + self.props.tagName + " to room" + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: counterpart.translate("Failed to add tag %(tagName)s to room", {tagName: self.props.tagName}),
-                            description: ((err && err.message) ? err.message : counterpart.translate("Operation failed")),
+                            title: _t("Failed to add tag %(tagName)s to room", {tagName: self.props.tagName}),
+                            description: ((err && err.message) ? err.message : _t("Operation failed")),
                         });
                     });
                     break;

@@ -18,7 +18,6 @@ limitations under the License.
 'use strict';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import counterpart from 'counterpart';
 import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';

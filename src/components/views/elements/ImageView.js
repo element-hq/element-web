@@ -25,7 +25,7 @@ var filesize = require('filesize');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 const Modal = require('matrix-react-sdk/lib/Modal');
 const sdk = require('matrix-react-sdk');
-import counterpart from 'counterpart';
+import _t from 'counterpart';
 
 module.exports = React.createClass({
     displayName: 'ImageView',
@@ -77,8 +77,8 @@ module.exports = React.createClass({
                     // display error message stating you couldn't delete this.
                     var code = e.errcode || e.statusCode;
                     Modal.createDialog(ErrorDialog, {
-                        title: counterpart.translate("Error"),
-                        description: counterpart.translate("You cannot delete this image. (%(code)s)", {code: code})
+                        title: _t("Error"),
+                        description: _t("You cannot delete this image. (%(code)s)", {code: code})
                     });
                 }).done();
             }
@@ -151,14 +151,14 @@ module.exports = React.createClass({
         var eventMeta;
         if(showEventMeta) {
             eventMeta = (<div className="mx_ImageView_metadata">
-                { counterpart.translate("Uploaded on %(date)s by %(user)s", {date: DateUtils.formatDate(new Date(this.props.mxEvent.getTs())), user: this.props.mxEvent.getSender()}) }
+                { _t("Uploaded on %(date)s by %(user)s", {date: DateUtils.formatDate(new Date(this.props.mxEvent.getTs())), user: this.props.mxEvent.getSender()}) }
             </div>);
         }
 
         var eventRedact;
         if(showEventMeta) {
             eventRedact = (<div className="mx_ImageView_button" onClick={this.onRedactClick}>
-                { counterpart.translate("Redact") }
+                { _t("Redact") }
             </div>);
         }
 
@@ -170,7 +170,7 @@ module.exports = React.createClass({
                     <img src={this.props.src} style={style}/>
                     <div className="mx_ImageView_labelWrapper">
                         <div className="mx_ImageView_label">
-                            <AccessibleButton className="mx_ImageView_cancel" onClick={ this.props.onFinished }><img src="img/cancel-white.svg" width="18" height="18" alt={ counterpart.translate("Close") }/></AccessibleButton>
+                            <AccessibleButton className="mx_ImageView_cancel" onClick={ this.props.onFinished }><img src="img/cancel-white.svg" width="18" height="18" alt={ _t("Close") }/></AccessibleButton>
                             <div className="mx_ImageView_shim">
                             </div>
                             <div className="mx_ImageView_name">
@@ -179,7 +179,7 @@ module.exports = React.createClass({
                             { eventMeta }
                             <a className="mx_ImageView_link" href={ this.props.src } download={ this.props.name } target="_blank" rel="noopener">
                                 <div className="mx_ImageView_download">
-                                        { counterpart.translate("Download this file") }<br/>
+                                        { _t("Download this file") }<br/>
                                          <span className="mx_ImageView_size">{ size_res }</span>
                                 </div>
                             </a>

@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-import counterpart from 'counterpart';
+import _t from 'counterpart';
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
@@ -166,7 +166,7 @@ module.exports = React.createClass({
                         className="mx_SearchBox_search"
                         value={ this.state.searchTerm }
                         onChange={ this.onChange }
-                        placeholder={ counterpart.translate('Filter room names') }
+                        placeholder={ _t('Filter room names') }
                     />
                 ];
         }
