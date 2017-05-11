@@ -31,7 +31,10 @@ module.exports = React.createClass({
         rowClassName: React.PropTypes.string,
         rowLabelClassName: React.PropTypes.string,
         rowInputClassName: React.PropTypes.string,
-        buttonClassName: React.PropTypes.string
+        buttonClassName: React.PropTypes.string,
+
+        // user is a PWLU (/w password stashed in localStorage 'mx_pass')
+        cachedPassword: React.PropTypes.string,
     },
 
     Phases: {
@@ -121,10 +124,10 @@ module.exports = React.createClass({
                 matrixClient: MatrixClientPeg.get(),
             }
         );
-    },    
+    },
 
     onClickChange: function() {
-        var old_password = this.refs.old_input.value;
+        var old_password = this.props.cachedPassword || this.refs.old_input.value;
         var new_password = this.refs.new_input.value;
         var confirm_password = this.refs.confirm_input.value;
         var err = this.props.onCheckPassword(
@@ -139,23 +142,28 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var rowClassName = this.props.rowClassName;
-        var rowLabelClassName = this.props.rowLabelClassName;
-        var rowInputClassName = this.props.rowInputClassName;
-        var buttonClassName = this.props.buttonClassName;
+        const rowClassName = this.props.rowClassName;
+        const rowLabelClassName = this.props.rowLabelClassName;
+        const rowInputClassName = this.props.rowInputClassName;
+        const buttonClassName = this.props.buttonClassName;
+
+        let currentPassword = null;
+        if (!this.props.cachedPassword) {
+            currentPassword = <div className={rowClassName}>
+                <div className={rowLabelClassName}>
+                    <label htmlFor="passwordold">Current password</label>
+                </div>
+                <div className={rowInputClassName}>
+                    <input id="passwordold" type="password" ref="old_input" />
+                </div>
+            </div>;
+        }
 
         switch (this.state.phase) {
             case this.Phases.Edit:
                 return (
                     <div className={this.props.className}>
-                        <div className={rowClassName}>
-                            <div className={rowLabelClassName}>
-                                <label htmlFor="passwordold">Current password</label>
-                            </div>
-                            <div className={rowInputClassName}>
-                                <input id="passwordold" type="password" ref="old_input" />
-                            </div>
-                        </div>
+                        { currentPassword }
                         <div className={rowClassName}>
                             <div className={rowLabelClassName}>
                                 <label htmlFor="password1">New password</label>

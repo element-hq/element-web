@@ -139,6 +139,9 @@ module.exports = React.createClass({
         // Team token for the referral link. If falsy, the referral section will
         // not appear
         teamToken: React.PropTypes.string,
+
+        // the user is a PWLU (/w password stashed in localStorage 'mx_pass')
+        cachedPassword: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -331,6 +334,7 @@ module.exports = React.createClass({
                           receive push notifications on other devices until you
                           log back in to them.`,
         });
+        dis.dispatch({action: 'password_changed'});
     },
 
     onUpgradeClicked: function() {
@@ -894,6 +898,7 @@ module.exports = React.createClass({
                         rowLabelClassName="mx_UserSettings_profileLabelCell"
                         rowInputClassName="mx_UserSettings_profileInputCell"
                         buttonClassName="mx_UserSettings_button mx_UserSettings_changePasswordButton"
+                        cachedPassword={this.props.cachedPassword}
                         onError={this.onPasswordChangeError}
                         onFinished={this.onPasswordChanged} />
             );

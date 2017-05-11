@@ -590,6 +590,12 @@ module.exports = React.createClass({
                     payload.releaseNotes
                 );
                 break;
+            case 'password_changed':
+                this.setState({
+                    userHasGeneratedPassword: false,
+                });
+                localStorage.removeItem("mx_pass");
+                break;
         }
     },
 
@@ -1176,7 +1182,8 @@ module.exports = React.createClass({
                     onUserSettingsClose={this.onUserSettingsClose}
                     onRegistered={this.onRegistered}
                     teamToken={this._teamToken}
-                    userHasGeneratedPassword={this.state.userHasGeneratedPassword}
+                    cachedPassword={this.state.userHasGeneratedPassword ?
+                        localStorage.getItem('mx_pass') : null}
                     {...this.props}
                     {...this.state}
                 />

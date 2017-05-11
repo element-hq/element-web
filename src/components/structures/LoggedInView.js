@@ -216,6 +216,7 @@ export default React.createClass({
                     enableLabs={this.props.config.enableLabs}
                     referralBaseUrl={this.props.config.referralBaseUrl}
                     teamToken={this.props.teamToken}
+                    cachedPassword={this.props.cachedPassword}
                 />;
                 if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>;
                 break;
