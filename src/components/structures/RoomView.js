@@ -1772,6 +1772,7 @@ module.exports = React.createClass({
                     oobData={this.props.oobData}
                     editing={this.state.editingRoomSettings}
                     saving={this.state.uploadingRoomSettings}
+                    inRoom={myMember && myMember.membership === 'join'}
                     collapsedRhs={ this.props.collapsedRhs }
                     onSearchClick={this.onSearchClick}
                     onSettingsClick={this.onSettingsClick}
