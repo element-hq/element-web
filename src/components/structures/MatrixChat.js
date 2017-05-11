@@ -703,7 +703,7 @@ module.exports = React.createClass({
 
     _createChat: function() {
         if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'view_set_mxid'});
+            this._setMxId();
             return;
         }
         const ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
