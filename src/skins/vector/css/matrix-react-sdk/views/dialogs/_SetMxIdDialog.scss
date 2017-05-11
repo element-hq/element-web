@@ -15,6 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_SetMxIdDialog .mx_Dialog_title {
+    padding-right: 40px;
+}
+
+.mx_SetMxIdDialog_input_group {
+    display: flex;
+}
+
 .mx_SetMxIdDialog_input {
     border-radius: 3px;
     border: 1px solid $input-border-color;
@@ -22,4 +30,21 @@ limitations under the License.
     color: $primary-fg-color;
     background-color: $primary-bg-color;
     font-size: 15px;
+    width: 100%;
+    max-width: 280px;
+}
+
+.mx_SetMxIdDialog_input.error,
+.mx_SetMxIdDialog_input.error:focus {
+    border: 1px solid $warning-color;
+}
+
+.mx_SetMxIdDialog_input_group .mx_Spinner {
+    height: 37px;
+    padding-left: 10px;
+    justify-content: flex-start;
+}
+
+.mx_SetMxIdDialog .success {
+    color: $accent-color;
 }
