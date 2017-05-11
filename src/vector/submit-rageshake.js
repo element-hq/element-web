@@ -17,6 +17,7 @@ limitations under the License.
 import pako from 'pako';
 import q from "q";
 
+import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
 
 import rageshake from './rageshake'
@@ -64,6 +65,8 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
         userAgent = window.navigator.userAgent;
     }
 
+    const client = MatrixClientPeg.get();
+
     console.log("Sending bug report.");
 
     const body = new FormData();
@@ -71,6 +74,11 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
     body.append('app', 'riot-web');
     body.append('version', version);
     body.append('user_agent', userAgent);
+
+    if (client) {
+        body.append('user_id', client.credentials.userId);
+        body.append('device_id', client.deviceId);
+    }
 
     if (opts.sendLogs) {
         progressCallback("Collecting logs");

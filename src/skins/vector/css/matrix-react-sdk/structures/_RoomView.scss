@@ -160,7 +160,8 @@ hr.mx_RoomView_myReadMarker {
     border-bottom: solid 1px $accent-color;
     margin-top: 0px;
     position: relative;
-    top: 5px;
+    top: -1px;
+    z-index: 1;
 }
 
 .mx_RoomView_statusArea {
