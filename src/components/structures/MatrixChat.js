@@ -395,9 +395,10 @@ module.exports = React.createClass({
                 this.notifyNewScreen('forgot_password');
                 break;
             case 'leave_room':
+                const roomToLeave = MatrixClientPeg.get().getRoom(payload.room_id);
                 Modal.createDialog(QuestionDialog, {
                     title: "Leave room",
-                    description: "Are you sure you want to leave the room?",
+                    description: <span>Are you sure you want to leave the room <i>{roomToLeave.name}</i>?</span>,
                     onFinished: (should_leave) => {
                         if (should_leave) {
                             const d = MatrixClientPeg.get().leave(payload.room_id);

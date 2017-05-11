@@ -46,9 +46,13 @@ if (DEBUG_SCROLL) {
  * It also provides a hook which allows parents to provide more list elements
  * when we get close to the start or end of the list.
  *
- * Each child element should have a 'data-scroll-token'. This token is used to
- * serialise the scroll state, and returned as the 'trackedScrollToken'
- * attribute by getScrollState().
+ * Each child element should have a 'data-scroll-tokens'. This string of
+ * comma-separated tokens may contain a single token or many, where many indicates
+ * that the element contains elements that have scroll tokens themselves. The first
+ * token in 'data-scroll-tokens' is used to serialise the scroll state, and returned
+ * as the 'trackedScrollToken' attribute by getScrollState().
+ *
+ * IMPORTANT: INDIVIDUAL TOKENS WITHIN 'data-scroll-tokens' MUST NOT CONTAIN COMMAS.
  *
  * Some notes about the implementation:
  *
@@ -349,8 +353,8 @@ module.exports = React.createClass({
             // Subtract height of tile as if it were unpaginated
             excessHeight -= tile.clientHeight;
             // The tile may not have a scroll token, so guard it
-            if (tile.dataset.scrollToken) {
-                markerScrollToken = tile.dataset.scrollToken;
+            if (tile.dataset.scrollTokens) {
+                markerScrollToken = tile.dataset.scrollTokens.split(',')[0];
             }
             if (tile.clientHeight > excessHeight) {
                 break;
@@ -419,7 +423,8 @@ module.exports = React.createClass({
      *   scroll. false if we are tracking a particular child.
      *
      * string trackedScrollToken: undefined if stuckAtBottom is true; if it is
-     *   false, the data-scroll-token of the child which we are tracking.
+     *   false, the first token in data-scroll-tokens of the child which we are
+     *   tracking.
      *
      * number pixelOffset: undefined if stuckAtBottom is true; if it is false,
      *   the number of pixels the bottom of the tracked child is above the
@@ -551,8 +556,10 @@ module.exports = React.createClass({
         var messages = this.refs.itemlist.children;
         for (var i = messages.length-1; i >= 0; --i) {
             var m = messages[i];
-            if (!m.dataset.scrollToken) continue;
-            if (m.dataset.scrollToken == scrollToken) {
+            // 'data-scroll-tokens' is a DOMString of comma-separated scroll tokens
+            // There might only be one scroll token
+            if (m.dataset.scrollTokens &&
+                m.dataset.scrollTokens.split(',').indexOf(scrollToken) !== -1) {
                 node = m;
                 break;
             }
@@ -568,7 +575,7 @@ module.exports = React.createClass({
         var boundingRect = node.getBoundingClientRect();
         var scrollDelta = boundingRect.bottom + pixelOffset - wrapperRect.bottom;
 
-        debuglog("ScrollPanel: scrolling to token '" + node.dataset.scrollToken + "'+" +
+        debuglog("ScrollPanel: scrolling to token '" + scrollToken + "'+" +
                  pixelOffset + " (delta: "+scrollDelta+")");
 
         if(scrollDelta != 0) {
@@ -591,12 +598,12 @@ module.exports = React.createClass({
 
         for (var i = messages.length-1; i >= 0; --i) {
             var node = messages[i];
-            if (!node.dataset.scrollToken) continue;
+            if (!node.dataset.scrollTokens) continue;
 
             var boundingRect = node.getBoundingClientRect();
             newScrollState = {
                 stuckAtBottom: false,
-                trackedScrollToken: node.dataset.scrollToken,
+                trackedScrollToken: node.dataset.scrollTokens.split(',')[0],
                 pixelOffset: wrapperRect.bottom - boundingRect.bottom,
             };
             // If the bottom of the panel intersects the ClientRect of node, use this node
@@ -608,7 +615,7 @@ module.exports = React.createClass({
                 break;
             }
         }
-        // This is only false if there were no nodes with `node.dataset.scrollToken` set.
+        // This is only false if there were no nodes with `node.dataset.scrollTokens` set.
         if (newScrollState) {
             this.scrollState = newScrollState;
             debuglog("ScrollPanel: saved scroll state", this.scrollState);

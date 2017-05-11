@@ -1,5 +1,4 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,3 +13,26 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+import React from 'react';
+import sdk from '../../../index';
+import PropTypes from 'prop-types';
+
+const SettingsButton = function(props) {
+    const ActionButton = sdk.getComponent('elements.ActionButton');
+    return (
+        <ActionButton action="view_user_settings"
+            label="Settings"
+            iconPath="img/icons-settings.svg"
+            size={props.size}
+            tooltip={props.tooltip}
+        />
+    );
+};
+
+SettingsButton.propTypes = {
+    size: PropTypes.string,
+    tooltip: PropTypes.bool,
+};
+
+export default SettingsButton;

@@ -275,6 +275,7 @@ module.exports = React.createClass({
 
         this._updateConfCallNotification();
 
+        window.addEventListener('beforeunload', this.onPageUnload);
         window.addEventListener('resize', this.onResize);
         this.onResize();
 
@@ -357,6 +358,7 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
         }
 
+        window.removeEventListener('beforeunload', this.onPageUnload);
         window.removeEventListener('resize', this.onResize);
 
         document.removeEventListener("keydown", this.onKeyDown);
@@ -368,6 +370,17 @@ module.exports = React.createClass({
         // console.log("Tinter.tint from RoomView.unmount");
         // Tinter.tint(); // reset colourscheme
     },
+
+    onPageUnload(event) {
+        if (ContentMessages.getCurrentUploads().length > 0) {
+            return event.returnValue =
+                'You seem to be uploading files, are you sure you want to quit?';
+        } else if (this._getCallForRoom() && this.state.callState !== 'ended') {
+            return event.returnValue =
+                'You seem to be in a call, are you sure you want to quit?';
+        }
+    },
+
 
     onKeyDown: function(ev) {
         let handled = false;
