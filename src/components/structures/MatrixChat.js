@@ -502,21 +502,23 @@ module.exports = React.createClass({
                 this.notifyNewScreen('settings');
                 break;
             case 'view_create_room':
-                //this._setPage(PageTypes.CreateRoom);
-                //this.notifyNewScreen('new');
+                if (MatrixClientPeg.get().isGuest()) {
+                    dis.dispatch({action: 'view_set_mxid'});
+                    break;
+                }
 
                 var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
                 Modal.createDialog(TextInputDialog, {
                     title: "Create Room",
                     description: "Room name (optional)",
                     button: "Create Room",
-                    onFinished: (should_create, name) => {
-                        if (should_create) {
+                    onFinished: (shouldCreate, name) => {
+                        if (shouldCreate) {
                             const createOpts = {};
                             if (name) createOpts.name = name;
                             createRoom({createOpts}).done();
                         }
-                    }
+                    },
                 });
                 break;
             case 'view_room_directory':
@@ -530,6 +532,9 @@ module.exports = React.createClass({
                 }
                 this._setPage(PageTypes.HomePage);
                 this.notifyNewScreen('home');
+                break;
+            case 'view_set_mxid':
+                this._setMxId();
                 break;
             case 'view_create_chat':
                 this._createChat();
@@ -679,8 +684,29 @@ module.exports = React.createClass({
         });
     },
 
+    _setMxId: function() {
+        const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
+        const close = Modal.createDialog(SetMxIdDialog, {
+            homeserverUrl: MatrixClientPeg.get().getHomeserverUrl(),
+            onFinished: (submitted, credentials) => {
+                if (!submitted) {
+                    return;
+                }
+                this.onRegistered(credentials);
+            },
+            onDifferentServerClicked: (ev) => {
+                dis.dispatch({action: 'start_registration'});
+                close();
+            },
+        }).close;
+    },
+
     _createChat: function() {
-        var ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
+        if (MatrixClientPeg.get().isGuest()) {
+            this._setMxId();
+            return;
+        }
+        const ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
         Modal.createDialog(ChatInviteDialog, {
             title: "Start a new chat",
         });
