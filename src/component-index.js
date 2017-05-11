@@ -19,6 +19,9 @@ limitations under the License.
  * You can edit it you like, but your changes will be overwritten,
  * so you'd just be trying to swim upstream like a salmon.
  * You are not a salmon.
+ *
+ * To update it, run:
+ *    ./reskindex.js -h header
  */
 
 module.exports.components = require('matrix-react-sdk/lib/component-index').components;
