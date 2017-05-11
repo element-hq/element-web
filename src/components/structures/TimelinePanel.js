@@ -507,10 +507,10 @@ var TimelinePanel = React.createClass({
         // if no client or client is guest don't send RR or RM
         if (!cli || cli.isGuest()) return;
 
-        let shouldSendReadReceipt = true;
+        let shouldSendRR = true;
 
-        const currentReadUpToEventId = this._getCurrentReadReceipt(true);
-        const currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
+        const currentRREventId = this._getCurrentReadReceipt(true);
+        const currentRREventIndex = this._indexForEventId(currentRREventId);
         // We want to avoid sending out read receipts when we are looking at
         // events in the past which are before the latest RR.
         //
@@ -524,33 +524,33 @@ var TimelinePanel = React.createClass({
         // RRs) - but that is a bit of a niche case. It will sort itself out when
         // the user eventually hits the live timeline.
         //
-        if (currentReadUpToEventId && currentReadUpToEventIndex === null &&
+        if (currentRREventId && currentRREventIndex === null &&
                 this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
-            shouldSendReadReceipt = false;
+            shouldSendRR = false;
         }
 
         const lastReadEventIndex = this._getLastDisplayedEventIndex({
             ignoreOwn: true,
         });
         if (lastReadEventIndex === null) {
-            shouldSendReadReceipt = false;
+            shouldSendRR = false;
         }
         let lastReadEvent = this.state.events[lastReadEventIndex];
-        shouldSendReadReceipt = shouldSendReadReceipt &&
+        shouldSendRR = shouldSendRR &&
             // Only send a RR if the last read event is ahead in the timeline relative to
             // the current RR event.
-            lastReadEventIndex > currentReadUpToEventIndex &&
+            lastReadEventIndex > currentRREventIndex &&
             // Only send a RR if the last RR set != the one we would send
             this.lastRRSentEventId != lastReadEvent.getId();
 
         // Only send a RM if the last RM sent != the one we would send
-        const shouldSendReadMarker =
+        const shouldSendRM =
             this.lastRMSentEventId != this.state.readMarkerEventId;
 
         // we also remember the last read receipt we sent to avoid spamming the
         // same one at the server repeatedly
-        if (shouldSendReadReceipt || shouldSendReadMarker) {
-            if (shouldSendReadReceipt) {
+        if (shouldSendRR || shouldSendRM) {
+            if (shouldSendRR) {
                 this.lastRRSentEventId = lastReadEvent.getId();
             } else {
                 lastReadEvent = null;
