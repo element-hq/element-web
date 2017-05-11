@@ -20,13 +20,11 @@ limitations under the License.
 import VectorBasePlatform from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import q from 'q';
-
-const electron = require('electron');
-const remote = electron.remote;
+import electron, {remote} from 'electron';
 
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
 
-function onUpdateDownloaded(ev, releaseNotes, ver, date, updateURL) {
+function onUpdateDownloaded(ev: Event, releaseNotes: string, ver: string, date: Date, updateURL: string) {
     dis.dispatch({
         action: 'new_version',
         currentVersion: remote.app.getVersion(),
@@ -35,7 +33,7 @@ function onUpdateDownloaded(ev, releaseNotes, ver, date, updateURL) {
     });
 }
 
-function platformFriendlyName() {
+function platformFriendlyName(): string {
     console.log(window.process);
     switch (window.process.platform) {
         case 'darwin':
@@ -72,11 +70,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
     }
 
-    supportsNotifications() : boolean {
+    supportsNotifications(): boolean {
         return true;
     }
 
-    maySendNotifications() : boolean {
+    maySendNotifications(): boolean {
         return true;
     }
 
@@ -100,7 +98,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
                 icon: avatarUrl,
                 tag: 'vector',
                 silent: true, // we play our own sounds
-            }
+            },
         );
 
         notification.onclick = function() {
@@ -123,7 +121,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         notif.close();
     }
 
-    getAppVersion() {
+    getAppVersion(): Promise<string> {
         return q(remote.app.getVersion());
     }
 
@@ -140,15 +138,15 @@ export default class ElectronPlatform extends VectorBasePlatform {
         electron.ipcRenderer.send('install_update');
     }
 
-    getDefaultDeviceDisplayName() {
+    getDefaultDeviceDisplayName(): string {
         return 'Riot Desktop on ' + platformFriendlyName();
     }
 
-    screenCaptureErrorString() {
+    screenCaptureErrorString(): ?string {
         return null;
     }
 
-    requestNotificationPermission() : Promise {
+    requestNotificationPermission(): Promise<string> {
         return q('granted');
     }
 

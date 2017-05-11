@@ -90,8 +90,8 @@ npm run build:electron
 
 popd
 
-distdir="$builddir/electron/dist"
-pubdir="$projdir/electron/pub"
+distdir="$builddir/electron_app/dist"
+pubdir="$projdir/electron_app/pub"
 rm -r "$pubdir" || true
 mkdir -p "$pubdir"
 
@@ -120,11 +120,11 @@ cp $distdir/win/*.nupkg "$pubdir/update/win32/x64/"
 cp $distdir/win/RELEASES "$pubdir/update/win32/x64/"
 
 # Move the debs to the main project dir's dist folder
-rm -r "$projdir/electron/dist" || true
-mkdir -p "$projdir/electron/dist"
-cp $distdir/*.deb "$projdir/electron/dist/"
+rm -r "$projdir/electron_app/dist" || true
+mkdir -p "$projdir/electron_app/dist"
+cp $distdir/*.deb "$projdir/electron_app/dist/"
 
 rm -rf "$builddir"
 
 echo "Riot Desktop is ready to go in $pubdir: this directory can be hosted on your web server."
-echo "deb archives are in electron/dist/ - these should be added into your debian repository"
+echo "deb archives are in electron_app/dist/ - these should be added into your debian repository"

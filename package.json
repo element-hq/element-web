@@ -1,8 +1,8 @@
 {
   "name": "riot-web",
   "productName": "Riot",
-  "main": "electron/src/electron-main.js",
-  "version": "0.9.8",
+  "main": "electron_app/src/electron-main.js",
+  "version": "0.9.9",
   "description": "A feature-rich client for Matrix.org",
   "author": "Vector Creations Ltd.",
   "repository": {
@@ -33,13 +33,15 @@
     "build:bundle": "cross-env NODE_ENV=production webpack -p --progress",
     "build:bundle:dev": "webpack --optimize-occurence-order --progress",
     "build:electron": "npm run clean && npm run build && build -wml --ia32 --x64",
-    "build": "node scripts/babelcheck.js && npm run build:res && npm run build:bundle",
-    "build:dev": "node scripts/babelcheck.js && npm run build:res && npm run build:bundle:dev",
+    "build": "npm run build:res && npm run build:bundle",
+    "build:dev": "npm run build:res && npm run build:bundle:dev",
     "dist": "scripts/package.sh",
+    "install:electron": "install-app-deps",
+    "electron": "npm run install:electron && electron .",
     "start:res": "node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --output-filename=bundles/_dev_/[name].js --output-chunk-file=bundles/_dev_/[name].js -w --progress",
     "start:js:prod": "cross-env NODE_ENV=production webpack-dev-server -w --progress",
-    "start": "node scripts/babelcheck.js && parallelshell \"npm run start:res\" \"npm run start:js\"",
+    "start": "parallelshell \"npm run start:res\" \"npm run start:js\"",
     "start:prod": "parallelshell \"npm run start:res\" \"npm run start:js:prod\"",
     "lint": "eslint src/",
     "lintall": "eslint src/ test/",
@@ -145,10 +147,12 @@
     "dereference": true,
     "//files": "We bundle everything, so we only need to include webapp/",
     "files": [
-      "electron/src/**",
-      "electron/img/**",
-      "webapp/**",
-      "package.json"
+      "node_modules/**",
+      "src/**",
+      "img/**"
+    ],
+    "extraResources": [
+      "webapp/**/*"
     ],
     "linux": {
       "target": "deb",
@@ -159,10 +163,11 @@
     },
     "win": {
       "target": "squirrel"
+    },
+    "directories": {
+      "buildResources": "electron_app/build",
+      "output": "electron_app/dist",
+      "app": "electron_app"
     }
-  },
-  "directories": {
-    "buildResources": "electron/build",
-    "output": "electron/dist"
   }
 }
