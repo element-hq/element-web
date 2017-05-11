@@ -6,14 +6,22 @@ use strict;
 use Net::GitHub;
 use DateTime;
 use DateTime::Format::ISO8601;
+use Term::ReadPassword;
+
+# This version of the script emits the total number of bugs open on a given day,
+# split by various tags.
+#
+# If you want instead the cumulative number of open & closed issues on a given day,
+# then look at issues-burndown.pl
 
 my $gh = Net::GitHub->new(
-    login => 'ara4n', pass => 'secret'
+    login => 'ara4n', pass => read_password("github password: "),
 );
 
 $gh->set_default_user_repo('vector-im', 'vector-web'); 
 
-my @issues = $gh->issue->repos_issues({ state => 'all', milestone => 3 });
+#my @issues = $gh->issue->repos_issues({ state => 'all', milestone => 3 });
+my @issues = $gh->issue->repos_issues({ state => 'all' });
 while ($gh->issue->has_next_page) {
     push @issues, $gh->issue->next_page;
 }
