@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 var React = require("react");
-import counterpart from 'counterpart';
+import _t from 'counterpart';
 
 module.exports = React.createClass({
     displayName: 'VectorCustomServerDialog',
@@ -27,14 +27,14 @@ module.exports = React.createClass({
         return (
             <div className="mx_ErrorDialog">
                 <div className="mx_Dialog_title">
-                    { counterpart.translate('Custom Server Options') }
+                    { _t('Custom Server Options') }
                 </div>
                 <div className="mx_Dialog_content">
-                    <span dangerouslySetInnerHTML={{__html: counterpart.translate('customServer_text')}} />
+                    <span dangerouslySetInnerHTML={{__html: _t('customServer_text')}} />
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.props.onFinished} autoFocus={true}>
-                        { counterpart.translate('Dismiss') }
+                        { _t('Dismiss') }
                     </button>
                 </div>
             </div>

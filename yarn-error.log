@@ -1,0 +1,200 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js install
+
+PATH: 
+  C:\Users\marce\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\marce\bin;C:\ProgramData\Oracle\Java\javapath;C:\Python27;C:\Python27\Scripts;C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\PuTTY;C:\Program Files (x86)\QuickTime\QTSystem;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_131\bin;C:\Android\android-sdk\tools;C:\Android\android-sdk\platform-tools;C:\Program Files\nodejs;C:\Program Files (x86)\Yarn\bin;C:\Ruby23\bin;C:\Users\marce\.cargo\bin;C:\Users\marce\AppData\Local\Microsoft\WindowsApps;C:\Users\marce\AppData\Local\atom\bin;C:\Program Files\Docker Toolbox;C:\Users\marce\AppData\Roaming\npm;C:\Users\marce\AppData\Local\Yarn\.bin;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+
+Yarn version: 
+  0.23.4
+
+Node version: 
+  7.10.0
+
+Platform: 
+  win32 x64
+
+npm manifest: 
+  {
+    "name": "riot-web",
+    "productName": "Riot",
+    "main": "electron/src/electron-main.js",
+    "version": "0.9.9",
+    "description": "A feature-rich client for Matrix.org",
+    "author": "Vector Creations Ltd.",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/vector-im/riot-web"
+    },
+    "license": "Apache-2.0",
+    "files": [
+      "AUTHORS.rst",
+      "CONTRIBUTING.rst",
+      "deploy",
+      "docs",
+      "karma.conf.js",
+      "lib",
+      "release.sh",
+      "scripts",
+      "src",
+      "test",
+      "webpack.config.js"
+    ],
+    "style": "bundle.css",
+    "matrix-react-parent": "matrix-react-sdk",
+    "scripts": {
+      "reskindex": "reskindex -h src/header",
+      "build:res": "node scripts/copy-res.js",
+      "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
+      "build:compile": "babel --source-maps -d lib src",
+      "build:bundle": "cross-env NODE_ENV=production webpack -p --progress",
+      "build:bundle:dev": "webpack --optimize-occurence-order --progress",
+      "build:electron": "npm run clean && npm run build && build -wml --ia32 --x64",
+      "build": "npm run build:res && npm run build:bundle",
+      "build:dev": "npm run build:res && npm run build:bundle:dev",
+      "dist": "scripts/package.sh",
+      "install:electron": "install-app-deps",
+      "electron": "npm run install:electron && electron .",
+      "start:res": "node scripts/copy-res.js -w",
+      "start:js": "webpack-dev-server --output-filename=bundles/_dev_/[name].js --output-chunk-file=bundles/_dev_/[name].js -w --progress",
+      "start:js:prod": "cross-env NODE_ENV=production webpack-dev-server -w --progress",
+      "start": "parallelshell \"npm run start:res\" \"npm run start:js\"",
+      "start:prod": "parallelshell \"npm run start:res\" \"npm run start:js:prod\"",
+      "lint": "eslint src/",
+      "lintall": "eslint src/ test/",
+      "clean": "rimraf lib webapp electron/dist",
+      "prepublish": "npm run build:compile",
+      "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
+      "test-multi": "karma start"
+    },
+    "dependencies": {
+      "babel-polyfill": "^6.5.0",
+      "babel-runtime": "^6.11.6",
+      "browser-request": "^0.3.3",
+      "classnames": "^2.1.2",
+      "counterpart": "Nordgedanken/counterpart#develop",
+      "draft-js": "^0.8.1",
+      "extract-text-webpack-plugin": "^0.9.1",
+      "favico.js": "^0.3.10",
+      "filesize": "3.5.6",
+      "flux": "~2.0.3",
+      "gfm.css": "^1.1.1",
+      "highlight.js": "^9.0.0",
+      "linkifyjs": "^2.1.3",
+      "matrix-js-sdk": "matrix-org/matrix-js-sdk#develop",
+      "matrix-react-sdk": "matrix-org/matrix-react-sdk#develop",
+      "modernizr": "^3.1.0",
+      "pako": "^1.0.5",
+      "q": "^1.4.1",
+      "react": "^15.4.0",
+      "react-dnd": "^2.1.4",
+      "react-dnd-html5-backend": "^2.1.2",
+      "react-dom": "^15.4.0",
+      "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#39d858c",
+      "sanitize-html": "^1.11.1",
+      "ua-parser-js": "^0.7.10",
+      "url": "^0.11.0"
+    },
+    "devDependencies": {
+      "autoprefixer": "^6.6.0",
+      "babel-cli": "^6.5.2",
+      "babel-core": "^6.14.0",
+      "babel-eslint": "^6.1.0",
+      "babel-loader": "^6.2.5",
+      "babel-plugin-add-module-exports": "^0.2.1",
+      "babel-plugin-transform-async-to-generator": "^6.16.0",
+      "babel-plugin-transform-class-properties": "^6.16.0",
+      "babel-plugin-transform-object-rest-spread": "^6.16.0",
+      "babel-plugin-transform-runtime": "^6.15.0",
+      "babel-preset-es2015": "^6.16.0",
+      "babel-preset-es2016": "^6.16.0",
+      "babel-preset-es2017": "^6.16.0",
+      "babel-preset-react": "^6.16.0",
+      "babel-preset-stage-2": "^6.17.0",
+      "chokidar": "^1.6.1",
+      "cpx": "^1.3.2",
+      "cross-env": "^4.0.0",
+      "css-raw-loader": "^0.1.1",
+      "electron-builder": "^11.2.4",
+      "electron-builder-squirrel-windows": "^11.2.1",
+      "emojione": "^2.2.7",
+      "eslint": "^3.14.0",
+      "eslint-config-google": "^0.7.1",
+      "eslint-plugin-flowtype": "^2.30.0",
+      "eslint-plugin-react": "^6.9.0",
+      "expect": "^1.16.0",
+      "fs-extra": "^0.30.0",
+      "html-webpack-plugin": "^2.24.0",
+      "json-loader": "^0.5.3",
+      "karma": "^0.13.22",
+      "karma-chrome-launcher": "^0.2.3",
+      "karma-cli": "^0.1.2",
+      "karma-junit-reporter": "^0.4.1",
+      "karma-mocha": "^0.2.2",
+      "karma-phantomjs-launcher": "^1.0.0",
+      "karma-webpack": "^1.7.0",
+      "minimist": "^1.2.0",
+      "mkdirp": "^0.5.1",
+      "mocha": "^2.4.5",
+      "parallelshell": "^1.2.0",
+      "phantomjs-prebuilt": "^2.1.7",
+      "postcss-extend": "^1.0.5",
+      "postcss-import": "^9.0.0",
+      "postcss-loader": "^1.2.2",
+      "postcss-mixins": "^5.4.1",
+      "postcss-nested": "^1.0.0",
+      "postcss-scss": "^0.4.0",
+      "postcss-simple-vars": "^3.0.0",
+      "postcss-strip-inline-comments": "^0.1.5",
+      "react-addons-perf": "^15.4.0",
+      "react-addons-test-utils": "^15.4.0",
+      "rimraf": "^2.4.3",
+      "source-map-loader": "^0.1.5",
+      "webpack": "^1.12.14",
+      "webpack-dev-server": "^1.16.2"
+    },
+    "optionalDependencies": {
+      "olm": "https://matrix.org/packages/npm/olm/olm-2.2.1.tgz"
+    },
+    "build": {
+      "appId": "im.riot.app",
+      "category": "Network",
+      "electronVersion": "1.6.2",
+      "//asar=false": "https://github.com/electron-userland/electron-builder/issues/675",
+      "asar": false,
+      "dereference": true,
+      "//files": "We bundle everything, so we only need to include webapp/",
+      "files": [
+        "node_modules/**",
+        "src/**",
+        "img/**"
+      ],
+      "extraResources": [
+        "webapp/**/*"
+      ],
+      "linux": {
+        "target": "deb",
+        "maintainer": "support@riot.im",
+        "desktop": {
+          "StartupWMClass": "riot-web"
+        }
+      },
+      "win": {
+        "target": "squirrel"
+      },
+      "directories": {
+        "buildResources": "electron/build",
+        "output": "electron/dist",
+        "app": "electron"
+      }
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: https://registry.yarnpkg.com/emojione/-/emojione-2.2.7.tgz: unexpected end of file
+      at Zlib._handle.onerror (zlib.js:355:17)

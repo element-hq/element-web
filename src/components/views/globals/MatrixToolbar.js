@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-import counterpart from 'counterpart';
+import _t from 'counterpart';
 var Notifier = require("matrix-react-sdk/lib/Notifier");
 var sdk = require('matrix-react-sdk')
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
@@ -38,7 +38,7 @@ module.exports = React.createClass({
             <div className="mx_MatrixToolbar">
                 <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
                 <div className="mx_MatrixToolbar_content">
-                   { counterpart.translate("You are not receiving desktop notifications") } <a className="mx_MatrixToolbar_link" onClick={ this.onClick }> { counterpart.translate("Enable them now") }</a>
+                   { _t("You are not receiving desktop notifications") } <a className="mx_MatrixToolbar_link" onClick={ this.onClick }> { _t("Enable them now") }</a>
                 </div>
                 <AccessibleButton className="mx_MatrixToolbar_close" onClick={ this.hideToolbar } ><img src="img/cancel.svg" width="18" height="18" /></AccessibleButton>
             </div>
