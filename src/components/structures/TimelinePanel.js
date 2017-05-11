@@ -177,7 +177,7 @@ var TimelinePanel = React.createClass({
     componentWillMount: function() {
         debuglog("TimelinePanel: mounting");
 
-        this.lastRRSentSentId = undefined;
+        this.lastRRSentEventId = undefined;
         this.lastRMSentEventId = undefined;
 
         this.dispatcherRef = dis.register(this.onAction);
@@ -541,7 +541,7 @@ var TimelinePanel = React.createClass({
             // the current RR event.
             lastReadEventIndex > currentReadUpToEventIndex &&
             // Only send a RR if the last RR set != the one we would send
-            this.lastRRSentSentId != lastReadEvent.getId();
+            this.lastRRSentEventId != lastReadEvent.getId();
 
         // Only send a RM if the last RM sent != the one we would send
         const shouldSendReadMarker =
@@ -551,7 +551,7 @@ var TimelinePanel = React.createClass({
         // same one at the server repeatedly
         if (shouldSendReadReceipt || shouldSendReadMarker) {
             if (shouldSendReadReceipt) {
-                this.lastRRSentSentId = lastReadEvent.getId();
+                this.lastRRSentEventId = lastReadEvent.getId();
             } else {
                 lastReadEvent = null;
             }
@@ -572,11 +572,11 @@ var TimelinePanel = React.createClass({
                     return MatrixClientPeg.get().sendReadReceipt(
                         lastReadEvent,
                     ).catch(() => {
-                        this.lastRRSentSentId = undefined;
+                        this.lastRRSentEventId = undefined;
                     });
                 }
                 // it failed, so allow retries next time the user is active
-                this.lastRRSentSentId = undefined;
+                this.lastRRSentEventId = undefined;
                 this.lastRMSentEventId = undefined;
             });
 
