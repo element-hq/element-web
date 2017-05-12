@@ -18,17 +18,19 @@ limitations under the License.
 
 import React from 'react';
 
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import {ContentRepo} from "matrix-js-sdk";
-import Modal from 'matrix-react-sdk/lib/Modal';
-import sdk from 'matrix-react-sdk';
-import dis from 'matrix-react-sdk/lib/dispatcher';
+var React = require('react');
 
-import linkify from 'linkifyjs';
-import linkifyString from 'linkifyjs/string';
-import linkifyMatrix from 'matrix-react-sdk/lib/linkify-matrix';
-import sanitizeHtml from 'sanitize-html';
-import q from 'q';
+var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+var ContentRepo = require("matrix-js-sdk").ContentRepo;
+var Modal = require('matrix-react-sdk/lib/Modal');
+var sdk = require('matrix-react-sdk');
+var dis = require('matrix-react-sdk/lib/dispatcher');
+
+var linkify = require('linkifyjs');
+var linkifyString = require('linkifyjs/string');
+var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
+var sanitizeHtml = require('sanitize-html');
+var q = require('q');
 
 import _t from 'counterpart';
 
