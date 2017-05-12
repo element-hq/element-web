@@ -40,7 +40,7 @@ var PageTypes = require('../../PageTypes');
 var createRoom = require("../../createRoom");
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
 
-import getSessionStore from '../../stores/SessionStore';
+import sessionStore from '../../stores/SessionStore';
 
 module.exports = React.createClass({
     displayName: 'MatrixChat',
@@ -251,7 +251,7 @@ module.exports = React.createClass({
             });
         }
 
-        this._sessionStore = getSessionStore();
+        this._sessionStore = sessionStore;
         this._sessionStore.on('update', this._setStateFromSessionStore);
         this._setStateFromSessionStore();
     },

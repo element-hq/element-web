@@ -22,7 +22,7 @@ var Modal = require("../../../Modal");
 var sdk = require("../../../index");
 import AccessibleButton from '../elements/AccessibleButton';
 
-import getSessionStore from '../../../stores/SessionStore';
+import sessionStore from '../../../stores/SessionStore';
 
 module.exports = React.createClass({
     displayName: 'ChangePassword',
@@ -68,7 +68,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        this.sessionStore = getSessionStore();
+        this.sessionStore = sessionStore;
         this.sessionStore.on('update', this.setStateFromSessionStore);
 
         this.setStateFromSessionStore();
