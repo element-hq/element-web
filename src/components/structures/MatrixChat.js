@@ -40,6 +40,8 @@ var PageTypes = require('../../PageTypes');
 var createRoom = require("../../createRoom");
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
 
+import getSessionStore from '../../stores/SessionStore';
+
 module.exports = React.createClass({
     displayName: 'MatrixChat',
 
@@ -139,8 +141,7 @@ module.exports = React.createClass({
             register_is_url: null,
             register_id_sid: null,
 
-            // Initially, use localStorage as source of truth
-            userHasGeneratedPassword: localStorage && localStorage.getItem('mx_pass'),
+            userHasGeneratedPassword: false,
         };
         return s;
     },
@@ -249,6 +250,10 @@ module.exports = React.createClass({
                 register_hs_url: paramHs,
             });
         }
+
+        this._sessionStore = getSessionStore();
+        this._sessionStore.on('update', this._setStateFromSessionStore);
+        this._setStateFromSessionStore();
     },
 
     componentDidMount: function() {
@@ -590,12 +595,6 @@ module.exports = React.createClass({
                     payload.releaseNotes
                 );
                 break;
-            case 'password_changed':
-                this.setState({
-                    userHasGeneratedPassword: false,
-                });
-                localStorage.removeItem("mx_pass");
-                break;
         }
     },
 
@@ -765,15 +764,11 @@ module.exports = React.createClass({
     /**
      * Called when a new logged in session has started
      */
-    _onLoggedIn: function(teamToken, isPasswordStored) {
+    _onLoggedIn: function(teamToken) {
         this.setState({
             guestCreds: null,
             loggedIn: true,
             loggingIn: false,
-            // isPasswordStored only true when ROU sets a username and becomes PWLU.
-            // (the password was randomly generated and stored in localStorage).
-            userHasGeneratedPassword:
-                this.state.userHasGeneratedPassword || isPasswordStored,
         });
 
         if (teamToken) {
@@ -899,6 +894,12 @@ module.exports = React.createClass({
                     });
                 }
             }
+        });
+    },
+
+    _setStateFromSessionStore() {
+        this.setState({
+            userHasGeneratedPassword: Boolean(this._sessionStore.getCachedPassword()),
         });
     },
 
@@ -1182,8 +1183,6 @@ module.exports = React.createClass({
                     onUserSettingsClose={this.onUserSettingsClose}
                     onRegistered={this.onRegistered}
                     teamToken={this._teamToken}
-                    cachedPassword={this.state.userHasGeneratedPassword ?
-                        localStorage.getItem('mx_pass') : null}
                     {...this.props}
                     {...this.state}
                 />

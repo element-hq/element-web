@@ -22,6 +22,8 @@ var Modal = require("../../../Modal");
 var sdk = require("../../../index");
 import AccessibleButton from '../elements/AccessibleButton';
 
+import getSessionStore from '../../../stores/SessionStore';
+
 module.exports = React.createClass({
     displayName: 'ChangePassword',
     propTypes: {
@@ -32,9 +34,6 @@ module.exports = React.createClass({
         rowLabelClassName: React.PropTypes.string,
         rowInputClassName: React.PropTypes.string,
         buttonClassName: React.PropTypes.string,
-
-        // user is a PWLU (/w password stashed in localStorage 'mx_pass')
-        cachedPassword: React.PropTypes.string,
     },
 
     Phases: {
@@ -63,8 +62,22 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            phase: this.Phases.Edit
+            phase: this.Phases.Edit,
+            cachedPassword: null,
         };
+    },
+
+    componentWillMount: function() {
+        this.sessionStore = getSessionStore();
+        this.sessionStore.on('update', this.setStateFromSessionStore);
+
+        this.setStateFromSessionStore();
+    },
+
+    setStateFromSessionStore: function() {
+        this.setState({
+            cachedPassword: this.sessionStore.getCachedPassword(),
+        });
     },
 
     changePassword: function(old_password, new_password) {
@@ -127,7 +140,7 @@ module.exports = React.createClass({
     },
 
     onClickChange: function() {
-        var old_password = this.props.cachedPassword || this.refs.old_input.value;
+        var old_password = this.state.cachedPassword || this.refs.old_input.value;
         var new_password = this.refs.new_input.value;
         var confirm_password = this.refs.confirm_input.value;
         var err = this.props.onCheckPassword(
@@ -148,7 +161,7 @@ module.exports = React.createClass({
         const buttonClassName = this.props.buttonClassName;
 
         let currentPassword = null;
-        if (!this.props.cachedPassword) {
+        if (!this.state.cachedPassword) {
             currentPassword = <div className={rowClassName}>
                 <div className={rowLabelClassName}>
                     <label htmlFor="passwordold">Current password</label>

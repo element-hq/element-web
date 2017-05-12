@@ -51,7 +51,7 @@ export default React.createClass({
 
         // Has the user generated a password that is stored in local storage?
         // (are they a PWLU?)
-        userHasGeneratedPassword: React.PropTypes.boolean,
+        userHasGeneratedPassword: React.PropTypes.bool,
 
         // and lots and lots of other stuff.
     },
@@ -216,7 +216,6 @@ export default React.createClass({
                     enableLabs={this.props.config.enableLabs}
                     referralBaseUrl={this.props.config.referralBaseUrl}
                     teamToken={this.props.teamToken}
-                    cachedPassword={this.props.cachedPassword}
                 />;
                 if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>;
                 break;
