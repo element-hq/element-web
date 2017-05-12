@@ -228,7 +228,7 @@ module.exports = React.createClass({
 
             name =
                 <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
-                    <EmojiText element="div" className={ "mx_RoomHeader_nametext " + (settingsHint ? "mx_RoomHeader_settingsHint" : "") } title={ roomName }>{roomName}</EmojiText>
+                    <EmojiText element="div" className={"mx_RoomHeader_nametext " + (settingsHint ? "mx_RoomHeader_settingsHint" : "")} title={roomName}>{ roomName }</EmojiText>
                     { searchStatus }
                 </div>;
         }
