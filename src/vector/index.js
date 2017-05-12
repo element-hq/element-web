@@ -65,7 +65,6 @@ var VectorConferenceHandler = require('../VectorConferenceHandler');
 var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
-import dis from 'matrix-react-sdk/lib/dispatcher';
 import Modal from 'matrix-react-sdk/lib/Modal';
 
 import url from 'url';
@@ -247,15 +246,6 @@ function onLoadCompleted() {
     }
 }
 
-function onAction(payload) {
-	switch (payload.action) {
-    	case 'set_language':
-			const language = payload.value;
-			languageHandler.setLanguage(language, counterpart);
-		break;
-	}
-}
-
 async function loadApp() {
 
     const fragparts = parseQsFromFragment(window.location);
@@ -350,7 +340,6 @@ async function loadApp() {
 
 function loadLanguage(callback) {
 	const _localSettings = getLocalSettings();
-	//dis.register(onAction);
 	var languages = [];
 	if (!_localSettings.hasOwnProperty('language')) {
 	    languages = languageHandler.getNormalizedLanguageKeys(languageHandler.getLanguageFromBrowser());
