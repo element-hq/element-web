@@ -1183,6 +1183,7 @@ module.exports = React.createClass({
                     onUserSettingsClose={this.onUserSettingsClose}
                     onRegistered={this.onRegistered}
                     teamToken={this._teamToken}
+                    userHasGeneratedPassword={this.state.userHasGeneratedPassword}
                     {...this.props}
                     {...this.state}
                 />
