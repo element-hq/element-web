@@ -226,17 +226,11 @@ module.exports = React.createClass({
                 roomName = this.props.room.name;
             }
 
-            const innerName =
-                <EmojiText element="div"
-                           className={ "mx_RoomHeader_nametext " + (settingsHint ? "mx_RoomHeader_settingsHint" : "") }
-                           title={ roomName }>{roomName}</EmojiText>;
-
-            if (this.props.onSettingsClick) {
-                name = <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>{ innerName }{ searchStatus }</div>;
-            } else {
-                name = <div className="mx_RoomHeader_name">{ innerName }{ searchStatus }</div>;
-            }
-
+            name =
+                <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
+                    <EmojiText element="div" className={ "mx_RoomHeader_nametext " + (settingsHint ? "mx_RoomHeader_settingsHint" : "") } title={ roomName }>{roomName}</EmojiText>
+                    { searchStatus }
+                </div>;
         }
 
         if (can_set_room_topic) {
