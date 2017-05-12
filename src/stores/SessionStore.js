@@ -54,7 +54,6 @@ class SessionStore extends EventEmitter {
     }
 }
 
-// Export singleton getter
 let singletonSessionStore = null;
 if (!singletonSessionStore) {
     singletonSessionStore = new SessionStore();
