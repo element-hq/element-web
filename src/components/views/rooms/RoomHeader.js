@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var classNames = require('classnames');
 var sdk = require('../../../index');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Modal = require("../../../Modal");
@@ -226,9 +227,10 @@ module.exports = React.createClass({
                 roomName = this.props.room.name;
             }
 
+            const emojiTextClasses = classNames('mx_RoomHeader_nametext', { mx_RoomHeader_settingsHint: settingsHint });
             name =
                 <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
-                    <EmojiText element="div" className={"mx_RoomHeader_nametext " + (settingsHint ? "mx_RoomHeader_settingsHint" : "")} title={roomName}>{ roomName }</EmojiText>
+                    <EmojiText element="div" className={emojiTextClasses} title={roomName}>{ roomName }</EmojiText>
                     { searchStatus }
                 </div>;
         }
