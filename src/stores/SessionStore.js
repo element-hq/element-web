@@ -55,9 +55,7 @@ SessionStore.prototype.getCachedPassword = function() {
 
 // Export singleton getter
 let singletonSessionStore = null;
-export default function getSessionStore() {
-    if (!singletonSessionStore) {
-        singletonSessionStore = new SessionStore();
-    }
-    return singletonSessionStore;
+if (!singletonSessionStore) {
+    singletonSessionStore = new SessionStore();
 }
+module.exports = singletonSessionStore;
