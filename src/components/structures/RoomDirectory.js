@@ -16,8 +16,6 @@ limitations under the License.
 
 'use strict';
 
-import React from 'react';
-
 var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
