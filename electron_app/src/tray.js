@@ -66,4 +66,8 @@ exports.create = function (win, config) {
             trayIcon.setImage(img);
         } catch (e) {console.error(e);}
     });
+
+    win.webContents.on('page-title-updated', function(ev, title) {
+        trayIcon.setToolTip(title);
+    });
 };
