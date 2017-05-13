@@ -21,15 +21,15 @@ let trayIcon = null;
 
 exports.hasTray = function hasTray() {
     return (trayIcon !== null);
-}
+};
 
-exports.create = function (win, config) {
+exports.create = function(win, config) {
     // no trays on darwin
     if (process.platform === 'darwin' || trayIcon) {
         return;
     }
 
-    const toggleWin = function () {
+    const toggleWin = function() {
         if (win.isVisible() && !win.isMinimized()) {
             win.hide();
         } else {
@@ -42,17 +42,17 @@ exports.create = function (win, config) {
     const contextMenu = Menu.buildFromTemplate([
         {
             label: 'Show/Hide ' + config.brand,
-            click: toggleWin
+            click: toggleWin,
         },
         {
-            type: 'separator'
+            type: 'separator',
         },
         {
             label: 'Quit',
-            click: function () {
+            click: function() {
                 app.quit();
-            }
-        }
+            },
+        },
     ]);
 
     trayIcon = new Tray(config.icon_path);
