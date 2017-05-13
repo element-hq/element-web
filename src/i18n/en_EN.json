@@ -48,7 +48,7 @@
   "Invite to this room": "Invite to this room",
   "Keywords": "Keywords",
   "Leave": "Leave",
-  "Low Priority": "Low Priority", 
+  "Low Priority": "Low Priority",
   "Members": "Members",
   "Mentions only": "Mentions only",
   "Mute": "Mute",
@@ -107,5 +107,6 @@
   "Friday": "Friday",
   "Saturday": "Saturday",
   "Today": "Today",
-  "Yesterday": "Yesterday"
+  "Yesterday": "Yesterday",
+  "Welcome page": "Welcome page"
 }
