@@ -5,7 +5,7 @@
 /key.pem
 /lib
 /node_modules
-/electron/node_modules
+/electron_app/node_modules
 /packages/
 /webapp
 /.npmrc
