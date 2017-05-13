@@ -36,7 +36,7 @@ const REACT_SDK_VERSION = 'dist' in packageJson ? packageJson.version : packageJ
 
 // Simple method to help prettify GH Release Tags and Commit Hashes.
 const semVerRegex = /^v?(\d+\.\d+\.\d+(?:-rc.+)?)(?:-(?:\d+-g)?([0-9a-fA-F]+))?(?:-dirty)?$/i;
-const gHVersionLabel = function(repo, token) {
+const gHVersionLabel = function(repo, token='') {
     const match = token.match(semVerRegex);
     let url;
     if (match && match[1]) { // basic semVer string possibly with commit hash
@@ -151,10 +151,10 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             avatarUrl: null,
-            threePids: [],
+            threepids: [],
             phase: "UserSettings.LOADING", // LOADING, DISPLAY
             email_add_pending: false,
-            vectorVersion: null,
+            vectorVersion: undefined,
             rejectingInvites: false,
         };
     },
@@ -1004,7 +1004,7 @@ module.exports = React.createClass({
                             ? gHVersionLabel('matrix-org/matrix-react-sdk', REACT_SDK_VERSION)
                             : REACT_SDK_VERSION
                         }<br/>
-                        riot-web version: {(this.state.vectorVersion !== null)
+                        riot-web version: {(this.state.vectorVersion !== undefined)
                             ? gHVersionLabel('vector-im/riot-web', this.state.vectorVersion)
                             : 'unknown'
                         }<br/>
