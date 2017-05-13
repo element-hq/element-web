@@ -61,10 +61,7 @@ exports.create = function (win, config) {
     trayIcon.on('click', toggleWin);
 
     win.webContents.on('page-favicon-updated', function(ev, favicons) {
-        try {
-            const img = nativeImage.createFromDataURL(favicons[0]);
-            trayIcon.setImage(img);
-        } catch (e) {console.error(e);}
+        trayIcon.setImage(nativeImage.createFromDataURL(favicons[0]));
     });
 
     win.webContents.on('page-title-updated', function(ev, title) {
