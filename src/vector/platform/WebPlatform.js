@@ -18,7 +18,6 @@ limitations under the License.
 */
 
 import VectorBasePlatform from './VectorBasePlatform';
-import Favico from 'favico.js';
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/lib/dispatcher.js';
 import q from 'q';
@@ -27,49 +26,6 @@ import url from 'url';
 import UAParser from 'ua-parser-js';
 
 export default class WebPlatform extends VectorBasePlatform {
-    constructor() {
-        super();
-        this.runningVersion = null;
-        // The 'animations' are really low framerate and look terrible.
-        // Also it re-starts the animationb every time you set the badge,
-        // and we set the state each time, even if the value hasn't changed,
-        // so we'd need to fix that if enabling the animation.
-        this.favicon = new Favico({animation: 'none'});
-        this._updateFavicon();
-    }
-
-    _updateFavicon() {
-        try {
-            // This needs to be in in a try block as it will throw
-            // if there are more than 100 badge count changes in
-            // its internal queue
-            let bgColor = "#d00",
-                notif = this.notificationCount;
-
-            if (this.errorDidOccur) {
-                notif = notif || "×";
-                bgColor = "#f00";
-            }
-
-            this.favicon.badge(notif, {
-                bgColor: bgColor,
-            });
-        } catch (e) {
-            console.warn(`Failed to set badge count: ${e.message}`);
-        }
-    }
-
-    setNotificationCount(count: number) {
-        if (this.notificationCount === count) return;
-        super.setNotificationCount(count);
-        this._updateFavicon();
-    }
-
-    setErrorStatus(errorDidOccur: boolean) {
-        if (this.errorDidOccur === errorDidOccur) return;
-        super.setErrorStatus(errorDidOccur);
-        this._updateFavicon();
-    }
 
     /**
      * Returns true if the platform supports displaying

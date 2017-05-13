@@ -15,12 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const path = require('path');
-const electron = require('electron');
-
-const app = electron.app;
-const Tray = electron.Tray;
-const MenuItem = electron.MenuItem;
+const {app, Tray, Menu, nativeImage} = require('electron');
 
 let trayIcon = null;
 
@@ -44,7 +39,7 @@ exports.create = function (win, config) {
         }
     };
 
-    const contextMenu = electron.Menu.buildFromTemplate([
+    const contextMenu = Menu.buildFromTemplate([
         {
             label: 'Show/Hide ' + config.brand,
             click: toggleWin
@@ -64,4 +59,11 @@ exports.create = function (win, config) {
     trayIcon.setToolTip(config.brand);
     trayIcon.setContextMenu(contextMenu);
     trayIcon.on('click', toggleWin);
+
+    win.webContents.on('page-favicon-updated', function(ev, favicons) {
+        try {
+            const img = nativeImage.createFromDataURL(favicons[0]);
+            trayIcon.setImage(img);
+        } catch (e) {console.error(e);}
+    });
 };
