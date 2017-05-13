@@ -79,5 +79,6 @@
     "Unnamed room": "Unnamed rum",
     "World readable": "Læselig til alle",
     "You are not receiving desktop notifications": "Du modtager ikke desktop meddelelser",
-    "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Du har muligvis konfigureret dem i en anden klient end Riot. Du kan ikke tune dem i Riot, men de gælder stadig"
+    "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Du har muligvis konfigureret dem i en anden klient end Riot. Du kan ikke tune dem i Riot, men de gælder stadig",
+    "Close": "Luk"
 }
