@@ -38,11 +38,19 @@ Head to the explanations under Steb 2b
 
 ### What means the green button under the text field?
 
-The green button let you save our translations directly. Please only use it if you are 100% sure about that translation.
+The green button let you save our translations directly. Please only use it if you are 100% sure about that translation. If you do not know a translation please DO NOT click that button. Use the arrows above the translations field and click to the right.
 
 ### What means the yellow button under the text field?
 
 The yellow button has to be used if you are unsure about the translation but you have a rough idea. It ads a new suggestion to the string which can than be reviewed by others.
+
+### What are "%(something)s"?
+
+These things are variables that are filled inside the code. They can be room names, usernames or similiar. If you find one use it for changing the word order but do not delete it as thing are missing if you do so.
+
+### "I want to come back to this string. How?"
+
+You can use inside the translation field "Review needed" checkbox. It will be shown as Strings that need to be reviewed.
 
 ### Further reading
 
