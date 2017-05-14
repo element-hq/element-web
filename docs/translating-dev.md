@@ -9,7 +9,7 @@
 ## Adding new strings
 
 1. Check if the import ``import _t from 'counterpart'`` is present. If not add it to the other import statements.
-2. Add ``_t()`` to your string. (Don't forget that reactjs sometimes need ``{}`` around functions called in the render)
+2. Add ``_t()`` to your string. (Don't forget curly braces when you assign an expression to JSX attributes in the render method)
 3. Add the String to the ``en_EN.json`` file in ``src/i18n`` or if you are working in matrix-react-sdk you can find the json file in ``src/i18n/strings``
 
 ## Adding variables inside a string.
