@@ -33,7 +33,7 @@
     "Failed to update keywords": "Falha ao alterar as palavras-chave",
     "Failed to get protocol list from Home Server": "Falha em acessar a lista de protocolos do servidor padrão",
     "Failed to get public room list": "Falha ao acessar a lista pública de salas",
-    "Failed to join the room": "Falha ao entrar na sala",
+    "Failed to join the room": "Falhou ao entrar na sala",
     "Failed to remove tag %(tag)s from room": "Falha ao remover a palavra-chave %(tag)s da sala",
     "Failed to set direct chat tag": "Falha ao definir conversa como pessoal",
     "Failed to set Direct Message status of room": "Falha em definr a mensagem de status da sala",
