@@ -111,5 +111,6 @@
     "All notifications are currently disabled for all targets.": "Todas as notificações estão atualmente desabilitadas para todos os recipientes.",
     "#example": "#exemplo",
     "Failed to remove tag %(prevTag)s from room": "Não foi possível remover a marcação %(prevTag)s desta sala",
-    "Notifications on the following keywords follow rules which can’t be displayed here": "As notificações sobre as palavras-chave abaixo seguem regras que não podem ser mostradas aqui"
+    "Notifications on the following keywords follow rules which can’t be displayed here": "As notificações sobre as palavras-chave abaixo seguem regras que não podem ser mostradas aqui",
+    "Welcome page": "Página de boas vindas"
 }
