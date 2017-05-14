@@ -19,15 +19,17 @@ limitations under the License.
 import React from 'react';
 import _t from 'counterpart';
 
-const days = [
-    _t('Sunday'),
-    _t('Monday'),
-    _t('Tuesday'),
-    _t('Wednesday'),
-    _t('Thursday'),
-    _t('Friday'),
-    _t('Saturday')
-];
+function getdaysArray() {
+	var days = [];
+	days.push(_t('Sunday'));
+	days.push(_t('Monday'));
+	days.push(_t('Tuesday'));
+	days.push(_t('Wednesday'));
+	days.push(_t('Thursday'));
+	days.push(_t('Friday'));
+	days.push(_t('Saturday'));
+	return days;
+}
 
 module.exports = React.createClass({
     displayName: 'DateSeparator',
@@ -35,6 +37,7 @@ module.exports = React.createClass({
         var date = new Date(this.props.ts);
         var today = new Date();
         var yesterday = new Date();
+        var days = getdaysArray();
         yesterday.setDate(today.getDate() - 1);
         var label;
         if (date.toDateString() === today.toDateString()) {

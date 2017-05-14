@@ -7,7 +7,7 @@
     "Invite to this room": "In diesen Raum einladen",
     "Filter room names": "Raum Namen filtern",
     "Start chat": "Neuen Chat starten",
-    "Room directory": "Räume Verzeichnis",
+    "Room directory": "Raum Verzeichnis",
     "Create new room": "Neuen Raum erstellen",
     "Settings": "Einstellungen",
     "powered by Matrix": "gebaut mit Matrix",
@@ -117,5 +117,6 @@
     "Tuesday": "Dienstag",
     "Sunday": "Sonntag",
     "Monday": "Montag",
-    "Yesterday": "Gestern"
+    "Yesterday": "Gestern",
+    "Welcome page": "Willkommensseite"
 }

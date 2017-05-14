@@ -1,10 +1,10 @@
-[![Translationsstatus](https://translate.nordgedanken.de/widgets/riot-web/-/multi-auto.svg)](https://translate.nordgedanken.de/engage/riot-web/?utm_source=widget)
-
 Riot
 ====
 
 Riot (formerly known as Vector) is a Matrix web client built using the Matrix
 React SDK (https://github.com/matrix-org/matrix-react-sdk).
+
+[<img src="https://translate.nordgedanken.de/widgets/riot-web/-/multi-auto.svg" alt="Translationsstatus" width="340">](https://translate.nordgedanken.de/engage/riot-web/?utm_source=widget)
 
 Getting Started
 ===============
@@ -279,6 +279,11 @@ How to add a new translation?
 =============================
 
 Head to the [translating doc](docs/translating.md)
+
+Adding Strings to the translations (Developer Guide)
+====================================================
+
+Head to the [translating dev doc](docs/translating-dev.md)
 
 Triaging issues
 ===============
