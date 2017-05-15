@@ -92,7 +92,7 @@ var FilePanel = React.createClass({
     render: function() {
         if (MatrixClientPeg.get().isGuest()) {
             return <div className="mx_FilePanel mx_RoomView_messageListWrapper">
-                <div className="mx_RoomView_empty">You must register to use this functionality</div>
+                <div className="mx_RoomView_empty">You must <a href="#/register">register</a> to use this functionality</div>
             </div>;
         } else if (this.noRoom) {
             return <div className="mx_FilePanel mx_RoomView_messageListWrapper">
