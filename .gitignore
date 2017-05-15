@@ -14,3 +14,4 @@ npm-debug.log
 electron/dist
 electron/pub
 /config.json
+/src/component-index.js
