@@ -245,11 +245,7 @@ module.exports = React.createClass({
 
     onAvatarPickerClick: function(ev) {
         if (MatrixClientPeg.get().isGuest()) {
-            const NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: "Please Register",
-                description: "Guests can't set avatars. Please register.",
-            });
+            dis.dispatch({action: 'view_set_mxid'});
             return;
         }
 
@@ -700,11 +696,7 @@ module.exports = React.createClass({
                     onChange={(e) => {
                         if (MatrixClientPeg.get().isGuest()) {
                             e.target.checked = false;
-                            const NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                            Modal.createDialog(NeedToRegisterDialog, {
-                                title: "Please Register",
-                                description: "Guests can't use labs features. Please register.",
-                            });
+                            dis.dispatch({action: 'view_set_mxid'});
                             return;
                         }
 

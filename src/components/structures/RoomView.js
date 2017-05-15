@@ -869,11 +869,7 @@ module.exports = React.createClass({
                     MatrixClientPeg.get().isGuest()
                 )
             ) {
-                var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                Modal.createDialog(NeedToRegisterDialog, {
-                    title: "Failed to join the room",
-                    description: "This room is private or inaccessible to guests. You may be able to join if you register."
-                });
+                dis.dispatch({action: 'view_set_mxid'});
             } else {
                 var msg = error.message ? error.message : JSON.stringify(error);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -933,11 +929,7 @@ module.exports = React.createClass({
 
     uploadFile: function(file) {
         if (MatrixClientPeg.get().isGuest()) {
-            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: "Please Register",
-                description: "Guest users can't upload files. Please register to upload."
-            });
+            dis.dispatch({action: 'view_set_mxid'});
             return;
         }
 
