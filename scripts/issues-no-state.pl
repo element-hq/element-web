@@ -18,7 +18,7 @@ my $gh = Net::GitHub->new(
     login => 'ara4n', pass => read_password("github password: "),
 );
 
-$gh->set_default_user_repo('vector-im', 'vector-web'); 
+$gh->set_default_user_repo('vector-im', 'riot-web');
 
 #my @issues = $gh->issue->repos_issues({ state => 'all', milestone => 3 });
 my @issues = $gh->issue->repos_issues({ state => 'all' });
@@ -42,7 +42,7 @@ my $now = DateTime->now();
 
 foreach my $issue (@issues) {
     next if ($issue->{pull_request});
-    
+
     use Data::Dumper;
     print STDERR Dumper($issue);
 
