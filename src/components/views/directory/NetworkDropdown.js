@@ -131,8 +131,8 @@ export default class NetworkDropdown extends React.Component {
         const options = [];
 
         let servers = [];
-        if (this.props.config.servers) {
-            servers = servers.concat(this.props.config.servers);
+        if (this.props.serverList) {
+            servers = servers.concat(this.props.serverList);
         }
 
         if (servers.indexOf(MatrixClientPeg.getHomeServerName()) == -1) {
@@ -230,11 +230,12 @@ export default class NetworkDropdown extends React.Component {
 NetworkDropdown.propTypes = {
     onOptionChange: React.PropTypes.func.isRequired,
     protocols: React.PropTypes.object,
-    // The room directory config. May have a 'servers' key that is a list of server names to include in the dropdown
+    serverList: React.PropTypes.array,
     config: React.PropTypes.object,
 };
 
 NetworkDropdown.defaultProps = {
+    serverList: [],
     protocols: {},
     config: {},
 };

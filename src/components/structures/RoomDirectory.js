@@ -50,6 +50,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             publicRooms: [],
+            serverList: [],
             loading: true,
             protocolsLoading: true,
             instanceId: null,
@@ -143,6 +144,9 @@ module.exports = React.createClass({
             this.setState((s) => {
                 s.publicRooms.push(...data.chunk);
                 s.loading = false;
+                if (s.serverList.indexOf(my_server) === -1) {
+                    s.serverList.push(my_server);
+                }
                 return s;
             });
             return Boolean(data.next_batch);
@@ -556,7 +560,11 @@ module.exports = React.createClass({
                             onChange={this.onFilterChange} onClear={this.onFilterClear} onJoinClick={this.onJoinClick}
                             placeholder={placeholder} showJoinButton={showJoinButton}
                         />
-                        <NetworkDropdown config={this.props.config} protocols={this.protocols} onOptionChange={this.onOptionChange} />
+                        <NetworkDropdown
+                            config={this.props.config}
+                            protocols={this.protocols}
+                            serverList={this.state.serverList}
+                            onOptionChange={this.onOptionChange} />
                     </div>
                     {content}
                 </div>
