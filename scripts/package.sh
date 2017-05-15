@@ -21,7 +21,7 @@ npm run build$dev
 cp config.sample.json webapp/
 
 mkdir -p dist
-cp -r webapp vector-$version
+cp -r webapp riot-$version
 
 # if $version looks like semver with leading v, strip it before writing to file
 if [[ ${version} =~ ^v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+(-.+)?$ ]]; then
