@@ -41,12 +41,7 @@ function createRoom(opts) {
 
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
-        setTimeout(()=>{
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: "Please Register",
-                description: "Guest users can't create new rooms. Please register to create room and start a chat."
-            });
-        }, 0);
+        dis.dispatch({action: 'view_set_mxid'});
         return q(null);
     }
 
