@@ -269,7 +269,7 @@ module.exports = React.createClass({
             );
         });
         return (
-            <span className="mx_MemberEventListSummary_avatars">
+            <span className="mx_MemberEventListSummary_avatars" onClick={ this._toggleSummary }>
                 {avatars}
             </span>
         );
