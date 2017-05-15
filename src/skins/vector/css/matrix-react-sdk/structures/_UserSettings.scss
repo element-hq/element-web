@@ -219,6 +219,10 @@ input.mx_UserSettings_phoneNumberField {
     margin-top: 10px;
 }
 
+.mx_UserSettings_avatarPicker_edit img {
+    cursor: pointer;
+}
+
 .mx_UserSettings_avatarPicker_edit > input {
     display: none;
 }

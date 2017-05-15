@@ -107,7 +107,7 @@ function checkBrowserFeatures(featureList) {
 
 var validBrowser = checkBrowserFeatures([
     "displaytable", "flexbox", "es5object", "es5function", "localstorage",
-    "objectfit"
+    "objectfit", "indexeddb", "webworkers",
 ]);
 
 // Parse the given window.location and return parameters that can be used when calling
