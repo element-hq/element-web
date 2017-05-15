@@ -138,8 +138,6 @@ module.exports = React.createClass({
             register_hs_url: null,
             register_is_url: null,
             register_id_sid: null,
-
-            userHasGeneratedPassword: false,
         };
         return s;
     },
@@ -1171,7 +1169,6 @@ module.exports = React.createClass({
                     onUserSettingsClose={this.onUserSettingsClose}
                     onRegistered={this.onRegistered}
                     teamToken={this._teamToken}
-                    userHasGeneratedPassword={this.state.userHasGeneratedPassword}
                     {...this.props}
                     {...this.state}
                 />
