@@ -47,7 +47,7 @@ module.exports = React.createClass({
         // The alias that was used to access this room, if appropriate
         // If given, this will be how the room is referred to (eg.
         // in error messages).
-        roomAlias: React.PropTypes.object,
+        roomAlias: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
