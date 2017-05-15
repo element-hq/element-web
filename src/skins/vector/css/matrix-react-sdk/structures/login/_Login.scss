@@ -184,7 +184,7 @@ limitations under the License.
 }
 
 .mx_Login_field_prefix {
-    height: 33px;
+    height: 34px;
     padding: 0px 5px;
     line-height: 33px;
 
@@ -197,7 +197,7 @@ limitations under the License.
 }
 
 .mx_Login_field_suffix {
-    height: 33px;
+    height: 34px;
     padding: 0px 5px;
     line-height: 33px;
 
@@ -211,9 +211,14 @@ limitations under the License.
 }
 
 .mx_Login_username {
+    height: 16px;
     flex-shrink: 1;
     min-width: 0px;
     border-radius: 3px;
+}
+
+.mx_Login_phoneNumberField {
+    height: 16px;
 }
 
 .mx_Login_field_has_prefix {
