@@ -69,9 +69,17 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         this._sessionStore = sessionStore;
-        this._sessionStore.addListener(this._setStateFromSessionStore);
+        this._removeSSListener = this._sessionStore.addListener(
+            this._setStateFromSessionStore,
+        ).remove;
 
         this._setStateFromSessionStore();
+    },
+
+    componentWillUnmount: function() {
+        if (this._removeSSListener) {
+            this._removeSSListener();
+        }
     },
 
     _setStateFromSessionStore: function() {

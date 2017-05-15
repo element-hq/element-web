@@ -79,12 +79,17 @@ export default React.createClass({
         document.addEventListener('keydown', this._onKeyDown);
 
         this._sessionStore = sessionStore;
-        this._sessionStore.addListener(this._setStateFromSessionStore);
+        this._removeSSListener = this._sessionStore.addListener(
+            this._setStateFromSessionStore,
+        ).remove;
         this._setStateFromSessionStore();
     },
 
     componentWillUnmount: function() {
         document.removeEventListener('keydown', this._onKeyDown);
+        if (this._removeSSListener) {
+            this._removeSSListener();
+        }
     },
 
     getScrollStateForRoom: function(roomId) {
