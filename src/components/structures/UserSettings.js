@@ -855,6 +855,7 @@ module.exports = React.createClass({
             addEmailSection = (
                 <div className="mx_UserSettings_profileTableRow" key="_newEmail">
                     <div className="mx_UserSettings_profileLabelCell">
+                        <label>Email</label>
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
                         <EditableText
