@@ -578,7 +578,7 @@ module.exports = React.createClass({
                 this.setState({loggingIn: true});
                 break;
             case 'on_logged_in':
-                this._onLoggedIn(payload.teamToken, payload.isPasswordStored);
+                this._onLoggedIn(payload.teamToken);
                 break;
             case 'on_logged_out':
                 this._onLoggedOut();
@@ -801,8 +801,12 @@ module.exports = React.createClass({
             this._teamToken = teamToken;
             dis.dispatch({action: 'view_home_page'});
         } else if (this._is_registered) {
+            if (this.props.config.welcomeUserId) {
+                createRoom({dmUserId: this.props.config.welcomeUserId});
+                return;
+            }
             // The user has just logged in after registering
-            dis.dispatch({action: 'view_user_settings'});
+            dis.dispatch({action: 'view_room_directory'});
         } else {
             this._showScreenAfterLogin();
         }
