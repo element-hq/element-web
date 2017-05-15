@@ -40,8 +40,6 @@ var PageTypes = require('../../PageTypes');
 var createRoom = require("../../createRoom");
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
 
-import sessionStore from '../../stores/SessionStore';
-
 module.exports = React.createClass({
     displayName: 'MatrixChat',
 
@@ -250,10 +248,6 @@ module.exports = React.createClass({
                 register_hs_url: paramHs,
             });
         }
-
-        this._sessionStore = sessionStore;
-        this._sessionStore.addListener(this._setStateFromSessionStore);
-        this._setStateFromSessionStore();
     },
 
     componentDidMount: function() {
@@ -894,12 +888,6 @@ module.exports = React.createClass({
                     });
                 }
             }
-        });
-    },
-
-    _setStateFromSessionStore() {
-        this.setState({
-            userHasGeneratedPassword: Boolean(this._sessionStore.getCachedPassword()),
         });
     },
 
