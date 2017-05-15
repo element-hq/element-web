@@ -38,7 +38,7 @@ module.exports = React.createClass({
                         title="Scroll to unread messages"/>
                     Jump to first unread message.
                 </div>
-                <img className="mx_TopUnreadMessagesBar_close"
+                <img className="mx_TopUnreadMessagesBar_close mx_filterFlipColor"
                     src="img/cancel.svg" width="18" height="18"
                     alt="Close" title="Close"
                     onClick={this.props.onCloseClick} />
