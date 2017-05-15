@@ -114,5 +114,6 @@
     "Remove %(name)s from the directory?": "Удалить %(name)s из каталога?",
     "remove %(name)s from the directory": "удалить %(name)s из каталога",
     "Resend": "Переслать снова",
-    "Source URL": "Источник URL"
+    "Source URL": "Источник URL",
+    "Welcome page": "Домашняя страница"
 }
