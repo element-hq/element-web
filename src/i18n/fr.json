@@ -97,7 +97,7 @@
     "World readable": "World readable",
     "You cannot delete this image. (%(code)s)": "Vous ne pouvez pas supprimer cette image. (%(code)s)",
     "You cannot delete this message. (%(code)s)": "Vous ne pouvez pas supprimer ce message. (%(code)s)",
-    "You are not receiving desktop notifications": "You are not receiving desktop notifications",
+    "You are not receiving desktop notifications": "Vous ne recevez pas les notifications sur votre burreau",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply",
     "Sunday": "Dimanche",
     "Monday": "Lundi",
