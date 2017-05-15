@@ -1,21 +1,26 @@
 import dis from '../dispatcher';
-import EventEmitter from 'events';
+import {Store} from 'flux/utils';
 
 /**
  * A class for storing application state to do with the session. This is a simple flux
  * store that listens for actions and updates its state accordingly, informing any
- * listeners (views) of state changes via the 'update' event.
+ * listeners (views) of state changes.
+ *
+ * Usage:
+ *  ```
+ *  sessionStore.addListener(() => {
+ *   this.setState({ cachedPassword: sessionStore.getCachedPassword() })
+ *  })
+ *  ```
  */
-class SessionStore extends EventEmitter {
+class SessionStore extends Store {
     constructor() {
-        super();
+        super(dis);
 
         // Initialise state
         this._state = {
             cachedPassword: localStorage.getItem('mx_pass'),
         };
-
-        dis.register(this._onAction.bind(this));
     }
 
     _update() {
@@ -26,7 +31,7 @@ class SessionStore extends EventEmitter {
             localStorage.removeItem('mx_pass', this._state.cachedPassword);
         }
 
-        this.emit('update');
+        this.__emitChange();
     }
 
     _setState(newState) {
@@ -34,7 +39,7 @@ class SessionStore extends EventEmitter {
         this._update();
     }
 
-    _onAction(payload) {
+    __onDispatch(payload) {
         switch (payload.action) {
             case 'cached_password':
                 this._setState({

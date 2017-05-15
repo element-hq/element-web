@@ -252,7 +252,7 @@ module.exports = React.createClass({
         }
 
         this._sessionStore = sessionStore;
-        this._sessionStore.on('update', this._setStateFromSessionStore);
+        this._sessionStore.addListener(this._setStateFromSessionStore);
         this._setStateFromSessionStore();
     },
 

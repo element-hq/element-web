@@ -68,15 +68,15 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        this.sessionStore = sessionStore;
-        this.sessionStore.on('update', this.setStateFromSessionStore);
+        this._sessionStore = sessionStore;
+        this._sessionStore.addListener(this._setStateFromSessionStore);
 
-        this.setStateFromSessionStore();
+        this._setStateFromSessionStore();
     },
 
-    setStateFromSessionStore: function() {
+    _setStateFromSessionStore: function() {
         this.setState({
-            cachedPassword: this.sessionStore.getCachedPassword(),
+            cachedPassword: this._sessionStore.getCachedPassword(),
         });
     },
 
