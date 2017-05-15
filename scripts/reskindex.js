@@ -8,8 +8,15 @@ var chokidar = require('chokidar');
 var componentIndex = path.join('src', 'component-index.js');
 var componentsDir = path.join('src', 'components');
 var componentGlob = '**/*.js';
+var prevFiles = [];
 
 function reskindex() {
+    var files = glob.sync(componentGlob, {cwd: componentsDir}).sort();
+    if (!filesHaveChanged(files, prevFiles)) {
+        return;
+    }
+    prevFiles = files;
+
     var header = args.h || args.header;
     var packageJson = JSON.parse(fs.readFileSync('./package.json'));
 
@@ -37,7 +44,6 @@ function reskindex() {
         strm.write("module.exports.components = {};\n");
     }
 
-    var files = glob.sync(componentGlob, {cwd: componentsDir}).sort();
     for (var i = 0; i < files.length; ++i) {
         var file = files[i].replace('.js', '');
 
@@ -52,6 +58,20 @@ function reskindex() {
 
     strm.end();
     console.log('Reskindex: completed');
+}
+
+// Expects both arrays of file names to be sorted
+function filesHaveChanged(files, prevFiles) {
+    if (files.length !== prevFiles.length) {
+        return true;
+    }
+    // Check for name changes
+    for (var i = 0; i < files.length; i++) {
+        if (prevFiles[i] !== files[i]) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // -w indicates watch mode where any FS events will trigger reskindex
