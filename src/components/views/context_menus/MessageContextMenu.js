@@ -129,7 +129,7 @@ module.exports = React.createClass({
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
 
-        if (!eventStatus && room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId)) {
+        if (room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId)) {
             redactButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
                     Redact
