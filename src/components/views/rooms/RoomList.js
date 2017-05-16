@@ -1,6 +1,5 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,16 +28,8 @@ var Rooms = require('../../../Rooms');
 import DMRoomMap from '../../../utils/DMRoomMap';
 var Receipt = require('../../../utils/Receipt');
 var constantTimeDispatcher = require('../../../ConstantTimeDispatcher');
-import AccessibleButton from '../elements/AccessibleButton';
 
-const HIDE_CONFERENCE_CHANS = true;
-
-const VERBS = {
-    'm.favourite': 'favourite',
-    'im.vector.fake.direct': 'tag direct chat',
-    'im.vector.fake.recent': 'restore',
-    'm.lowpriority': 'demote',
-};
+var HIDE_CONFERENCE_CHANS = true;
 
 module.exports = React.createClass({
     displayName: 'RoomList',
@@ -62,7 +53,6 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             isLoadingLeftRooms: false,
-            totalRoomCount: null,
             lists: {},
             incomingCall: null,
         };
@@ -83,7 +73,8 @@ module.exports = React.createClass({
         // lookup for which lists a given roomId is currently in.
         this.listsForRoomId = {};
 
-        this.refreshRoomList();
+        var s = this.getRoomLists();
+        this.setState(s);
 
         // order of the sublists
         //this.listOrder = [];
@@ -326,29 +317,21 @@ module.exports = React.createClass({
         // any changes to it incrementally, updating the appropriate sublists
         // as needed.
         // Alternatively we'd do something magical with Immutable.js or similar.
-        const lists = this.getRoomLists();
-        let totalRooms = 0;
-        for (const l of Object.values(lists)) {
-            totalRooms += l.length;
-        }
-        this.setState({
-            lists: this.getRoomLists(),
-            totalRoomCount: totalRooms,
-        });
-        
+        this.setState(this.getRoomLists());
+
         // this._lastRefreshRoomListTs = Date.now();
     },
 
     getRoomLists: function() {
         var self = this;
-        const lists = {};
+        var s = { lists: {} };
 
-        lists["im.vector.fake.invite"] = [];
-        lists["m.favourite"] = [];
-        lists["im.vector.fake.recent"] = [];
-        lists["im.vector.fake.direct"] = [];
-        lists["m.lowpriority"] = [];
-        lists["im.vector.fake.archived"] = [];
+        s.lists["im.vector.fake.invite"] = [];
+        s.lists["m.favourite"] = [];
+        s.lists["im.vector.fake.recent"] = [];
+        s.lists["im.vector.fake.direct"] = [];
+        s.lists["m.lowpriority"] = [];
+        s.lists["im.vector.fake.archived"] = [];
 
         this.listsForRoomId = {};
         var otherTagNames = {};
@@ -370,7 +353,7 @@ module.exports = React.createClass({
 
             if (me.membership == "invite") {
                 self.listsForRoomId[room.roomId].push("im.vector.fake.invite");
-                lists["im.vector.fake.invite"].push(room);
+                s.lists["im.vector.fake.invite"].push(room);
             }
             else if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(room, me, self.props.ConferenceHandler)) {
                 // skip past this room & don't put it in any lists
@@ -383,8 +366,8 @@ module.exports = React.createClass({
                 if (tagNames.length) {
                     for (var i = 0; i < tagNames.length; i++) {
                         var tagName = tagNames[i];
-                        lists[tagName] = lists[tagName] || [];
-                        lists[tagName].push(room);
+                        s.lists[tagName] = s.lists[tagName] || [];
+                        s.lists[tagName].push(room);
                         self.listsForRoomId[room.roomId].push(tagName);
                         otherTagNames[tagName] = 1;
                     }
@@ -392,16 +375,16 @@ module.exports = React.createClass({
                 else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
                     // "Direct Message" rooms (that we're still in and that aren't otherwise tagged)
                     self.listsForRoomId[room.roomId].push("im.vector.fake.direct");
-                    lists["im.vector.fake.direct"].push(room);
+                    s.lists["im.vector.fake.direct"].push(room);
                 }
                 else {
                     self.listsForRoomId[room.roomId].push("im.vector.fake.recent");
-                    lists["im.vector.fake.recent"].push(room);
+                    s.lists["im.vector.fake.recent"].push(room);
                 }
             }
             else if (me.membership === "leave") {
                 self.listsForRoomId[room.roomId].push("im.vector.fake.archived");
-                lists["im.vector.fake.archived"].push(room);
+                s.lists["im.vector.fake.archived"].push(room);
             }
             else {
                 console.error("unrecognised membership: " + me.membership + " - this should never happen");
@@ -425,7 +408,7 @@ module.exports = React.createClass({
         ];
 */
 
-        return lists;
+        return s;
     },
 
     _getScrollNode: function() {
@@ -455,7 +438,6 @@ module.exports = React.createClass({
         var incomingCallBox = document.getElementById("incomingCallBox");
         if (incomingCallBox && incomingCallBox.parentElement) {
             var scrollArea = this._getScrollNode();
-            if (!scrollArea) return;
             // Use the offset of the top of the scroll area from the window
             // as this is used to calculate the CSS fixed top position for the stickies
             var scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
@@ -479,7 +461,6 @@ module.exports = React.createClass({
     // properly through React
     _initAndPositionStickyHeaders: function(initialise, scrollToPosition) {
         var scrollArea = this._getScrollNode();
-        if (!scrollArea) return;
         // Use the offset of the top of the scroll area from the window
         // as this is used to calculate the CSS fixed top position for the stickies
         var scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
@@ -577,58 +558,6 @@ module.exports = React.createClass({
         this.refs.gemscroll.forceUpdate();
     },
 
-    _getEmptyContent: function(section) {
-        const RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
-
-        if (this.props.collapsed) {
-            return <RoomDropTarget label="" />;
-        }
-
-        const StartChatButton = sdk.getComponent('elements.StartChatButton');
-        const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
-        const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
-        if (this.state.totalRoomCount === 0) {
-            const TintableSvg = sdk.getComponent('elements.TintableSvg');
-            switch (section) {
-                case 'im.vector.fake.direct':
-                    return <div className="mx_RoomList_emptySubListTip">
-                        Press
-                        <StartChatButton size="16" />
-                        to start a chat with someone
-                    </div>;
-                case 'im.vector.fake.recent':
-                    return <div className="mx_RoomList_emptySubListTip">
-                        You're not in any rooms yet! Press
-                        <CreateRoomButton size="16" />
-                        to make a room or
-                        <RoomDirectoryButton size="16" />
-                        to browse the directory
-                    </div>;
-            }
-        }
-
-        const labelText = 'Drop here to ' + (VERBS[section] || 'tag ' + section);
-
-        return <RoomDropTarget label={labelText} />;
-    },
-
-    _getHeaderItems: function(section) {
-        const StartChatButton = sdk.getComponent('elements.StartChatButton');
-        const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
-        const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
-        switch (section) {
-            case 'im.vector.fake.direct':
-                return <span className="mx_RoomList_headerButtons">
-                    <StartChatButton size="16" />
-                </span>;
-            case 'im.vector.fake.recent':
-                return <span className="mx_RoomList_headerButtons">
-                    <RoomDirectoryButton size="16" />
-                    <CreateRoomButton size="16" />
-                </span>;
-        }
-    },
-
     render: function() {
         var RoomSubList = sdk.getComponent('structures.RoomSubList');
         var self = this;
@@ -652,7 +581,7 @@ module.exports = React.createClass({
                 <RoomSubList list={ self.state.lists['m.favourite'] }
                              label="Favourites"
                              tagName="m.favourite"
-                             emptyContent={self._getEmptyContent('m.favourite')}
+                             verb="favourite"
                              editable={ true }
                              order="manual"
                              incomingCall={ self.state.incomingCall }
@@ -665,8 +594,7 @@ module.exports = React.createClass({
                 <RoomSubList list={ self.state.lists['im.vector.fake.direct'] }
                              label="People"
                              tagName="im.vector.fake.direct"
-                             emptyContent={self._getEmptyContent('im.vector.fake.direct')}
-                             headerItems={self._getHeaderItems('im.vector.fake.direct')}
+                             verb="tag direct chat"
                              editable={ true }
                              order="recent"
                              incomingCall={ self.state.incomingCall }
@@ -681,8 +609,7 @@ module.exports = React.createClass({
                              label="Rooms"
                              tagName="im.vector.fake.recent"
                              editable={ true }
-                             emptyContent={self._getEmptyContent('im.vector.fake.recent')}
-                             headerItems={self._getHeaderItems('im.vector.fake.recent')}
+                             verb="restore"
                              order="recent"
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
@@ -697,7 +624,7 @@ module.exports = React.createClass({
                              key={ tagName }
                              label={ tagName }
                              tagName={ tagName }
-                             emptyContent={self._getEmptyContent(tagName)}
+                             verb={ "tag as " + tagName }
                              editable={ true }
                              order="manual"
                              incomingCall={ self.state.incomingCall }
@@ -713,7 +640,7 @@ module.exports = React.createClass({
                 <RoomSubList list={ self.state.lists['m.lowpriority'] }
                              label="Low priority"
                              tagName="m.lowpriority"
-                             emptyContent={self._getEmptyContent('m.lowpriority')}
+                             verb="demote"
                              editable={ true }
                              order="recent"
                              incomingCall={ self.state.incomingCall }

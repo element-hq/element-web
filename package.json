@@ -65,7 +65,6 @@
     "lodash": "^4.13.1",
     "matrix-js-sdk": "matrix-org/matrix-js-sdk#develop",
     "optimist": "^0.6.1",
-    "prop-types": "^15.5.8",
     "q": "^1.4.1",
     "react": "^15.4.0",
     "react-addons-css-transition-group": "15.3.2",
