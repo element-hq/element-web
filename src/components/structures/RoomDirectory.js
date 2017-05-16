@@ -335,11 +335,7 @@ module.exports = React.createClass({
             // to the directory.
             if (MatrixClientPeg.get().isGuest()) {
                 if (!room.world_readable && !room.guest_can_join) {
-                    var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                    Modal.createDialog(NeedToRegisterDialog, {
-                        title: "Failed to join the room",
-                        description: "This room is inaccessible to guests. You may be able to join if you register."
-                    });
+                    dis.dispatch({action: 'view_set_mxid'});
                     return;
                 }
             }
