@@ -185,6 +185,14 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
 
 // returns a promise which resolves to true if a session is found in
 // localstorage
+//
+// N.B. Lifecycle.js should not maintain any further localStorage state, we
+//      are moving towards using SessionStore to keep track of state related
+//      to the current session (which is typically backed by localStorage).
+//
+//      The plan is to gradually move the localStorage access done here into
+//      SessionStore to avoid bugs where the view becomes out-of-sync with
+//      localStorage (e.g. teamToken, isGuest etc.)
 function _restoreFromLocalStorage() {
     if (!localStorage) {
         return q(false);
