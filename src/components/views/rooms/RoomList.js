@@ -44,9 +44,6 @@ module.exports = React.createClass({
     shouldComponentUpdate: function(nextProps, nextState) {
         if (nextProps.collapsed !== this.props.collapsed) return true;
         if (nextProps.searchFilter !== this.props.searchFilter) return true;
-        if (nextState.lists !== this.props.lists ||
-            nextState.isLoadingLeftRooms !== this.isLoadingLeftRooms ||
-            nextState.incomingCall !== this.incomingCall) return true;
         return false;
     },
 
