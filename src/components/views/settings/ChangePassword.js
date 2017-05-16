@@ -90,7 +90,7 @@ module.exports = React.createClass({
         });
     },
 
-    changePassword: function(old_password, new_password) {
+    changePassword: function(oldPassword, newPassword) {
         const cli = MatrixClientPeg.get();
 
         if (!this.props.confirm) {
@@ -158,7 +158,7 @@ module.exports = React.createClass({
     },
 
     onClickChange: function() {
-        const oldPassword = this.refs.old_input.value;
+        const oldPassword = this.state.cachedPassword || this.refs.old_input.value;
         const newPassword = this.refs.new_input.value;
         const confirmPassword = this.refs.confirm_input.value;
         const err = this.props.onCheckPassword(
