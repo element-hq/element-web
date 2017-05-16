@@ -172,7 +172,7 @@ hr.mx_RoomView_myReadMarker {
 
     max-height: 0px;
     background-color: $primary-bg-color;
-    z-index: 5;
+    z-index: 1000;
     overflow: hidden;
 
     -webkit-transition: all .2s ease-out;
