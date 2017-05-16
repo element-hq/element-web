@@ -14,11 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import classNames from 'classnames';
-import sdk from 'matrix-react-sdk';
-import { formatCount } from 'matrix-react-sdk/lib/utils/FormattingUtils';
-import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
+'use strict';
+
+var React = require('react');
+var ReactDOM = require('react-dom');
+var classNames = require('classnames');
+var sdk = require('matrix-react-sdk')
+var FormattingUtils = require('matrix-react-sdk/lib/utils/FormattingUtils');
+var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
+var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+var ConstantTimeDispatcher = require('matrix-react-sdk/lib/ConstantTimeDispatcher');
 
 module.exports = React.createClass({
     displayName: 'RoomSubListHeader',
@@ -37,7 +42,6 @@ module.exports = React.createClass({
         hidden: React.PropTypes.bool,
         onClick: React.PropTypes.func,
         onHeaderClick: React.PropTypes.func,
-        headerItems: React.PropTypes.node, // content shown in the sublist header
     },
 
     getDefaultProps: function() {
@@ -59,34 +63,35 @@ module.exports = React.createClass({
     // },
 
     render: function() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        var TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        const subListNotifications = this.props.roomNotificationCount;
-        const subListNotifCount = subListNotifications[0];
-        const subListNotifHighlight = subListNotifications[1];
+        var subListNotifications = this.props.roomNotificationCount;
+        var subListNotifCount = subListNotifications[0];
+        var subListNotifHighlight = subListNotifications[1];
 
-        const chevronClasses = classNames({
+        var chevronClasses = classNames({
             'mx_RoomSubList_chevron': true,
             'mx_RoomSubList_chevronRight': this.props.hidden,
             'mx_RoomSubList_chevronDown': !this.props.hidden,
         });
 
-        const badgeClasses = classNames({
+        var badgeClasses = classNames({
             'mx_RoomSubList_badge': true,
             'mx_RoomSubList_badgeHighlight': subListNotifHighlight,
         });
 
-        let badge;
+        var badge;
         if (subListNotifCount > 0) {
-            badge = <div className={badgeClasses}>{ formatCount(subListNotifCount) }</div>;
-        } else if (subListNotifHighlight) {
+            badge = <div className={badgeClasses}>{ FormattingUtils.formatCount(subListNotifCount) }</div>;
+        }
+        else if (subListNotifHighlight) {
             badge = <div className={badgeClasses}>!</div>;   
         }
 
         // When collapsed, allow a long hover on the header to show user
         // the full tag name and room count
-        let title;
-        const roomCount = this.props.roomCount;
+        var title;
+        var roomCount = this.props.roomCount;
         if (this.props.collapsed) {
             title = this.props.label;
             if (roomCount !== '') {
@@ -94,9 +99,9 @@ module.exports = React.createClass({
             }
         }
 
-        let incomingCall;
+        var incomingCall;
         if (this.props.isIncomingCallRoom) {
-            const IncomingCallBox = sdk.getComponent("voip.IncomingCallBox");
+            var IncomingCallBox = sdk.getComponent("voip.IncomingCallBox");
             incomingCall = <IncomingCallBox className="mx_RoomSubList_incomingCall" incomingCall={ this.props.incomingCall }/>;
         }
 
@@ -104,7 +109,6 @@ module.exports = React.createClass({
             <div className="mx_RoomSubList_labelContainer" title={ title } ref="header">
                 <AccessibleButton onClick={ this.props.onClick } className="mx_RoomSubList_label" tabIndex="0">
                     { this.props.collapsed ? '' : this.props.label }
-                    {this.props.headerItems}
                     <div className="mx_RoomSubList_roomCount">{ roomCount }</div>
                     <div className={chevronClasses}></div>
                     { badge }
