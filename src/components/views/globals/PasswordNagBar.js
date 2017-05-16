@@ -19,15 +19,19 @@ limitations under the License.
 import React from 'react';
 import sdk from 'matrix-react-sdk';
 import Modal from 'matrix-react-sdk/lib/Modal';
+import dis from 'matrix-react-sdk/lib/dispatcher';
 
 export default React.createClass({
     onUpdateClicked: function() {
-        // TODO: Implement dialog to set password
-        // const SetPasswordDialog = sdk.getComponent('dialogs.SetPasswordDialog');
-        // Modal.createDialog(SetPasswordDialog, {
-        //     onFinished: () => {
-        //     }
-        // });
+        const SetPasswordDialog = sdk.getComponent('dialogs.SetPasswordDialog');
+        Modal.createDialog(SetPasswordDialog, {
+            onFinished: () => {
+                // Notify SessionStore that the user's password was changed
+                dis.dispatch({
+                    action: 'password_changed',
+                });
+            }
+        });
     },
 
     render: function() {
