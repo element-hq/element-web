@@ -327,6 +327,7 @@ module.exports = React.createClass({
                           receive push notifications on other devices until you
                           log back in to them.`,
         });
+        dis.dispatch({action: 'password_changed'});
     },
 
     onUpgradeClicked: function() {
