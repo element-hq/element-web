@@ -165,11 +165,10 @@ var RoomSubList = React.createClass({
         }
     },
 
-    onRoomTileClick(roomId, ev) {
+    onRoomTileClick(roomId) {
         dis.dispatch({
             action: 'view_room',
             room_id: roomId,
-            clear_search: (ev && (ev.keyCode == 13 || ev.keyCode == 32)),
         });
     },
 
