@@ -265,16 +265,9 @@ module.exports = React.createClass({
     },
 
     onRoomStateMember: function(ev, state, member) {
-        if (ev.getStateKey() === MatrixClientPeg.get().credentials.userId &&
-            ev.getPrevContent() && ev.getPrevContent().membership === "invite")
-        {
-            this._delayedRefreshRoomList();
-        }
-        else {
-            constantTimeDispatcher.dispatch(
-                "RoomTile.refresh", member.roomId, {}
-            );
-        }
+        constantTimeDispatcher.dispatch(
+            "RoomTile.refresh", member.roomId, {}
+        );
     },
 
     onRoomMemberName: function(ev, member) {
