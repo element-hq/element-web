@@ -23,6 +23,7 @@ import Notifier from '../../Notifier';
 import PageTypes from '../../PageTypes';
 import sdk from '../../index';
 import dis from '../../dispatcher';
+import sessionStore from '../../stores/SessionStore';
 
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is
@@ -48,10 +49,6 @@ export default React.createClass({
         onRegistered: React.PropTypes.func,
 
         teamToken: React.PropTypes.string,
-
-        // Has the user generated a password that is stored in local storage?
-        // (are they a PWLU?)
-        userHasGeneratedPassword: React.PropTypes.boolean,
 
         // and lots and lots of other stuff.
     },
@@ -80,10 +77,19 @@ export default React.createClass({
         this._scrollStateMap = {};
 
         document.addEventListener('keydown', this._onKeyDown);
+
+        this._sessionStore = sessionStore;
+        this._sessionStoreToken = this._sessionStore.addListener(
+            this._setStateFromSessionStore,
+        );
+        this._setStateFromSessionStore();
     },
 
     componentWillUnmount: function() {
         document.removeEventListener('keydown', this._onKeyDown);
+        if (this._sessionStoreToken) {
+            this._sessionStoreToken.remove();
+        }
     },
 
     getScrollStateForRoom: function(roomId) {
@@ -95,6 +101,12 @@ export default React.createClass({
             return true;
         }
         return this.refs.roomView.canResetTimeline();
+    },
+
+    _setStateFromSessionStore() {
+        this.setState({
+            userHasGeneratedPassword: Boolean(this._sessionStore.getCachedPassword()),
+        });
     },
 
     _onKeyDown: function(ev) {
@@ -257,7 +269,7 @@ export default React.createClass({
             />;
         } else if (this.props.matrixClient.isGuest()) {
             topBar = <GuestWarningBar />;
-        } else if (this.props.userHasGeneratedPassword) {
+        } else if (this.state.userHasGeneratedPassword) {
             topBar = <PasswordNagBar />;
         } else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
             topBar = <MatrixToolbar />;

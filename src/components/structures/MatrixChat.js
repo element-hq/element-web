@@ -138,9 +138,6 @@ module.exports = React.createClass({
             register_hs_url: null,
             register_is_url: null,
             register_id_sid: null,
-
-            // Initially, use localStorage as source of truth
-            userHasGeneratedPassword: localStorage && localStorage.getItem('mx_pass'),
         };
         return s;
     },
@@ -578,7 +575,7 @@ module.exports = React.createClass({
                 this.setState({loggingIn: true});
                 break;
             case 'on_logged_in':
-                this._onLoggedIn(payload.teamToken, payload.isPasswordStored);
+                this._onLoggedIn(payload.teamToken);
                 break;
             case 'on_logged_out':
                 this._onLoggedOut();
@@ -785,15 +782,11 @@ module.exports = React.createClass({
     /**
      * Called when a new logged in session has started
      */
-    _onLoggedIn: function(teamToken, isPasswordStored) {
+    _onLoggedIn: function(teamToken) {
         this.setState({
             guestCreds: null,
             loggedIn: true,
             loggingIn: false,
-            // isPasswordStored only true when ROU sets a username and becomes PWLU.
-            // (the password was randomly generated and stored in localStorage).
-            userHasGeneratedPassword:
-                this.state.userHasGeneratedPassword || isPasswordStored,
         });
 
         if (teamToken) {
@@ -801,8 +794,12 @@ module.exports = React.createClass({
             this._teamToken = teamToken;
             dis.dispatch({action: 'view_home_page'});
         } else if (this._is_registered) {
+            if (this.props.config.welcomeUserId) {
+                createRoom({dmUserId: this.props.config.welcomeUserId});
+                return;
+            }
             // The user has just logged in after registering
-            dis.dispatch({action: 'view_user_settings'});
+            dis.dispatch({action: 'view_room_directory'});
         } else {
             this._showScreenAfterLogin();
         }
@@ -1202,7 +1199,6 @@ module.exports = React.createClass({
                     onUserSettingsClose={this.onUserSettingsClose}
                     onRegistered={this.onRegistered}
                     teamToken={this._teamToken}
-                    userHasGeneratedPassword={this.state.userHasGeneratedPassword}
                     {...this.props}
                     {...this.state}
                 />

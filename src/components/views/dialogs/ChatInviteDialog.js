@@ -284,11 +284,7 @@ module.exports = React.createClass({
 
     _startChat: function(addrs) {
         if (MatrixClientPeg.get().isGuest()) {
-            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: "Please Register",
-                description: "Guest users can't invite users. Please register."
-            });
+            dis.dispatch({action: 'view_set_mxid'});
             return;
         }
 
