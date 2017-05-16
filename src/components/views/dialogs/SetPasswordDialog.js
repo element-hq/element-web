@@ -38,7 +38,7 @@ export default React.createClass({
     },
 
     _onPasswordChanged: function() {
-        this.props.onFinished();
+        this.props.onFinished(true);
     },
 
     _onPasswordChangeError: function(err) {

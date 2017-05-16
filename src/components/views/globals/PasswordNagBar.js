@@ -25,7 +25,10 @@ export default React.createClass({
     onUpdateClicked: function() {
         const SetPasswordDialog = sdk.getComponent('dialogs.SetPasswordDialog');
         Modal.createDialog(SetPasswordDialog, {
-            onFinished: () => {
+            onFinished: (passwordChanged) => {
+                if (!passwordChanged) {
+                    return;
+                }
                 // Notify SessionStore that the user's password was changed
                 dis.dispatch({
                     action: 'password_changed',
