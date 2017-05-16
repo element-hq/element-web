@@ -590,7 +590,6 @@ var TimelinePanel = React.createClass({
                 this.props.timelineSet.room.setUnreadNotificationCount('highlight', 0);
                 dis.dispatch({
                     action: 'on_room_read',
-                    room: this.props.timelineSet.room,
                 });
             }
         }
