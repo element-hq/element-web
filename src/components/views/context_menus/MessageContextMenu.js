@@ -25,11 +25,6 @@ var Modal = require('matrix-react-sdk/lib/Modal');
 var Resend = require("matrix-react-sdk/lib/Resend");
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 
-function parseIntWithDefault(val, def) {
-    var res = parseInt(val);
-    return isNaN(res) ? def : res;
-}
-
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',
 
