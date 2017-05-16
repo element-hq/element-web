@@ -22,12 +22,12 @@ import Modal from 'matrix-react-sdk/lib/Modal';
 
 export default React.createClass({
     onUpdateClicked: function() {
-        // TODO: Implement dialog to set password
-        // const SetPasswordDialog = sdk.getComponent('dialogs.SetPasswordDialog');
-        // Modal.createDialog(SetPasswordDialog, {
-        //     onFinished: () => {
-        //     }
-        // });
+        const SetPasswordDialog = sdk.getComponent('dialogs.SetPasswordDialog');
+        Modal.createDialog(SetPasswordDialog, {
+            onFinished: () => {
+                //TODO: Notify SessionStore of changed password: dispatch password_changed
+            }
+        });
     },
 
     render: function() {
