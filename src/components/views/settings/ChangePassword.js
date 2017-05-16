@@ -31,7 +31,8 @@ module.exports = React.createClass({
         rowClassName: React.PropTypes.string,
         rowLabelClassName: React.PropTypes.string,
         rowInputClassName: React.PropTypes.string,
-        buttonClassName: React.PropTypes.string
+        buttonClassName: React.PropTypes.string,
+        disableConfirmation: React.PropTypes.bool,
     },
 
     Phases: {
