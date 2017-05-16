@@ -64,10 +64,15 @@ module.exports = React.createClass({
         };
     },
 
-    changePassword: function(old_password, new_password) {
-        var cli = MatrixClientPeg.get();
+    changePassword: function(oldPassword, newPassword) {
+        const cli = MatrixClientPeg.get();
 
-        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        if (this.props.disableConfirmation) {
+            this._changePassword(cli, oldPassword, newPassword);
+            return;
+        }
+
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createDialog(QuestionDialog, {
             title: "Warning",
             description:
@@ -86,29 +91,32 @@ module.exports = React.createClass({
             ],
             onFinished: (confirmed) => {
                 if (confirmed) {
-                    var authDict = {
-                        type: 'm.login.password',
-                        user: cli.credentials.userId,
-                        password: old_password
-                    };
-
-                    this.setState({
-                        phase: this.Phases.Uploading
-                    });
-
-                    var self = this;
-                    cli.setPassword(authDict, new_password).then(function() {
-                        self.props.onFinished();
-                    }, function(err) {
-                        self.props.onError(err);
-                    }).finally(function() {
-                        self.setState({
-                            phase: self.Phases.Edit
-                        });
-                    }).done();
+                    this._changePassword(cli, oldPassword, newPassword);
                 }
             },
         });
+    },
+
+    _changePassword: function(cli, oldPassword, newPassword) {
+        const authDict = {
+            type: 'm.login.password',
+            user: cli.credentials.userId,
+            password: oldPassword,
+        };
+
+        this.setState({
+            phase: this.Phases.Uploading,
+        });
+
+        cli.setPassword(authDict, newPassword).then(() => {
+            this.props.onFinished();
+        }, (err) => {
+            this.props.onError(err);
+        }).finally(() => {
+            this.setState({
+                phase: this.Phases.Edit,
+            });
+        }).done();
     },
 
     _onExportE2eKeysClicked: function() {
@@ -121,20 +129,19 @@ module.exports = React.createClass({
                 matrixClient: MatrixClientPeg.get(),
             }
         );
-    },    
+    },
 
     onClickChange: function() {
-        var old_password = this.refs.old_input.value;
-        var new_password = this.refs.new_input.value;
-        var confirm_password = this.refs.confirm_input.value;
-        var err = this.props.onCheckPassword(
-            old_password, new_password, confirm_password
+        const oldPassword = this.refs.old_input.value;
+        const newPassword = this.refs.new_input.value;
+        const confirmPassword = this.refs.confirm_input.value;
+        const err = this.props.onCheckPassword(
+            oldPassword, newPassword, confirmPassword,
         );
         if (err) {
             this.props.onError(err);
-        }
-        else {
-            this.changePassword(old_password, new_password);
+        } else {
+            this.changePassword(oldPassword, newPassword);
         }
     },
 
@@ -173,7 +180,8 @@ module.exports = React.createClass({
                             </div>
                         </div>
                         <AccessibleButton className={buttonClassName}
-                                onClick={this.onClickChange}>
+                                onClick={this.onClickChange}
+                                element="button">
                             Change Password
                         </AccessibleButton>
                     </div>
