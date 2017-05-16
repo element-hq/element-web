@@ -25,6 +25,11 @@ var Modal = require('matrix-react-sdk/lib/Modal');
 var Resend = require("matrix-react-sdk/lib/Resend");
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 
+function parseIntWithDefault(val, def) {
+    var res = parseInt(val);
+    return isNaN(res) ? def : res;
+}
+
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',
 
@@ -126,7 +131,19 @@ module.exports = React.createClass({
             );
         }
 
-        if (!eventStatus && !this.props.mxEvent.isRedacted()) { // sent and not redacted
+        const cli = MatrixClientPeg.get();
+
+        const room = cli.getRoom(this.props.mxEvent.getRoomId());
+        const powerLevelEvents = room.currentState.getStateEvents('m.room.power_levels', '');
+        const powerLevels = powerLevelEvents ? powerLevelEvents.getContent() : {};
+        const userLevels = powerLevels.users || {};
+
+        const userLevel = userLevels[cli.credentials.userId] || parseIntWithDefault(powerLevels.users_default, 0);
+
+        if (!eventStatus && !this.props.mxEvent.isRedacted() && (// sent and not redacted
+            this.props.mxEvent.getSender() === cli.credentials.userId // own event
+            || userLevel >= parseIntWithDefault(powerLevels.redact, 50) // has PL to redact
+        )) {
             redactButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
                     Redact
