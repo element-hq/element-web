@@ -132,18 +132,9 @@ module.exports = React.createClass({
         }
 
         const cli = MatrixClientPeg.get();
-
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
-        const powerLevelEvents = room.currentState.getStateEvents('m.room.power_levels', '');
-        const powerLevels = powerLevelEvents ? powerLevelEvents.getContent() : {};
-        const userLevels = powerLevels.users || {};
 
-        const userLevel = userLevels[cli.credentials.userId] || parseIntWithDefault(powerLevels.users_default, 0);
-
-        if (!eventStatus && !this.props.mxEvent.isRedacted() && (// sent and not redacted
-            this.props.mxEvent.getSender() === cli.credentials.userId // own event
-            || userLevel >= parseIntWithDefault(powerLevels.redact, 50) // has PL to redact
-        )) {
+        if (!eventStatus && room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId)) {
             redactButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
                     Redact
