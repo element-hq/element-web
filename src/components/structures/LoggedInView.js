@@ -79,16 +79,16 @@ export default React.createClass({
         document.addEventListener('keydown', this._onKeyDown);
 
         this._sessionStore = sessionStore;
-        this._removeSSListener = this._sessionStore.addListener(
+        this._sessionStoreToken = this._sessionStore.addListener(
             this._setStateFromSessionStore,
-        ).remove;
+        );
         this._setStateFromSessionStore();
     },
 
     componentWillUnmount: function() {
         document.removeEventListener('keydown', this._onKeyDown);
-        if (this._removeSSListener) {
-            this._removeSSListener();
+        if (this._sessionStoreToken) {
+            this._sessionStoreToken.remove();
         }
     },
 

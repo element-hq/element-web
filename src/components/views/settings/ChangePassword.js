@@ -69,16 +69,16 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         this._sessionStore = sessionStore;
-        this._removeSSListener = this._sessionStore.addListener(
+        this._sessionStoreToken = this._sessionStore.addListener(
             this._setStateFromSessionStore,
-        ).remove;
+        );
 
         this._setStateFromSessionStore();
     },
 
     componentWillUnmount: function() {
-        if (this._removeSSListener) {
-            this._removeSSListener();
+        if (this._sessionStoreToken) {
+            this._sessionStoreToken.remove();
         }
     },
 
