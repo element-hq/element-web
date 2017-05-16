@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-import _t from 'counterpart';
+import _t from 'counterpart-riot';
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');

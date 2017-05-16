@@ -56,7 +56,7 @@ if (process.env.NODE_ENV !== 'production') {
 var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var ReactDOM = require("react-dom");
 // Workaround for broken export
-import * as counterpart from 'counterpart';
+import * as counterpart from 'counterpart-riot';
 var languageHandler = require("matrix-react-sdk/lib/languageHandler");
 var sdk = require("matrix-react-sdk");
 var PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");

@@ -22,7 +22,7 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import { DropTarget } from 'react-dnd';
 import sdk from 'matrix-react-sdk';
-import _t from 'counterpart';
+import _t from 'counterpart-riot';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import Unread from 'matrix-react-sdk/lib/Unread';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';

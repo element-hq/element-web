@@ -21,7 +21,7 @@ var React = require('react');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var sdk = require('matrix-react-sdk');
-import _t from 'counterpart';
+import _t from 'counterpart-riot';
 var Modal = require('matrix-react-sdk/lib/Modal');
 var Resend = require("matrix-react-sdk/lib/Resend");
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';

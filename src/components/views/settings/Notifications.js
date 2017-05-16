@@ -16,7 +16,7 @@ limitations under the License.
 
 'use strict';
 var React = require('react');
-import _t from 'counterpart';
+import _t from 'counterpart-riot';
 var q = require("q");
 var sdk = require('matrix-react-sdk');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');

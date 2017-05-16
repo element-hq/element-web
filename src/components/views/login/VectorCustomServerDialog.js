@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 var React = require("react");
-import _t from 'counterpart';
+import _t from 'counterpart-riot';
 
 module.exports = React.createClass({
     displayName: 'VectorCustomServerDialog',

@@ -30,7 +30,7 @@ var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
 var sanitizeHtml = require('sanitize-html');
 var q = require('q');
 
-import _t from 'counterpart';
+import _t from 'counterpart-riot';
 
 import {instanceForInstanceId, protocolNameForInstanceId} from '../../utils/DirectoryUtils';
 
