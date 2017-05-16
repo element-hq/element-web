@@ -32,7 +32,7 @@ module.exports = React.createClass({
         rowLabelClassName: React.PropTypes.string,
         rowInputClassName: React.PropTypes.string,
         buttonClassName: React.PropTypes.string,
-        disableConfirmation: React.PropTypes.bool,
+        confirm: React.PropTypes.bool,
     },
 
     Phases: {
@@ -55,7 +55,8 @@ module.exports = React.createClass({
                         error: "Passwords can't be empty"
                     };
                 }
-            }
+            },
+            confirm: true,
         };
     },
 
@@ -68,7 +69,7 @@ module.exports = React.createClass({
     changePassword: function(oldPassword, newPassword) {
         const cli = MatrixClientPeg.get();
 
-        if (this.props.disableConfirmation) {
+        if (!this.props.confirm) {
             this._changePassword(cli, oldPassword, newPassword);
             return;
         }
