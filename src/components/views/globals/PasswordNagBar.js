@@ -19,6 +19,7 @@ limitations under the License.
 import React from 'react';
 import sdk from 'matrix-react-sdk';
 import Modal from 'matrix-react-sdk/lib/Modal';
+import dis from 'matrix-react-sdk/lib/dispatcher';
 
 export default React.createClass({
     onUpdateClicked: function() {
