@@ -36,7 +36,6 @@ function createRoom(opts) {
     opts = opts || {};
 
     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-    const NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
     const Loader = sdk.getComponent("elements.Spinner");
 
     const client = MatrixClientPeg.get();
