@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 const StartChatButton = function(props) {
     const ActionButton = sdk.getComponent('elements.ActionButton');
     return (
-        <ActionButton action="view_create_chat"
+        <ActionButton action="start_chat"
             label="Start chat"
             iconPath="img/icons-people.svg"
             size={props.size}
