@@ -36,6 +36,7 @@ module.exports = React.createClass({
             React.PropTypes.number
         ]),
         collapsed: React.PropTypes.bool.isRequired, // is LeftPanel collapsed?
+        incomingCall: React.PropTypes.object,
         isIncomingCallRoom: React.PropTypes.bool,
         roomNotificationCount: React.PropTypes.array,
         hidden: React.PropTypes.bool,
