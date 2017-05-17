@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var MatrixClientPeg = require("../../../MatrixClientPeg");
-var sdk = require('../../../index');
-var dis = require("../../../dispatcher");
-var ObjectUtils = require('../../../ObjectUtils');
+const React = require('react');
+const MatrixClientPeg = require("../../../MatrixClientPeg");
+const sdk = require('../../../index');
+const dis = require("../../../dispatcher");
+const ObjectUtils = require('../../../ObjectUtils');
+const AppsDrawer = require('./AppsDrawer');
 
 module.exports = React.createClass({
     displayName: 'AuxPanel',
@@ -68,10 +69,10 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var CallView = sdk.getComponent("voip.CallView");
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const CallView = sdk.getComponent("voip.CallView");
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        var fileDropTarget = null;
+        let fileDropTarget = null;
         if (this.props.draggingFile) {
             fileDropTarget = (
                 <div className="mx_RoomView_fileDropTarget">
@@ -85,19 +86,18 @@ module.exports = React.createClass({
             );
         }
 
-        var conferenceCallNotification = null;
+        let conferenceCallNotification = null;
         if (this.props.displayConfCallNotification) {
-            var supportedText, joinText;
+            let supportedText;
+            let joinText;
             if (!MatrixClientPeg.get().supportsVoip()) {
                 supportedText = " (unsupported)";
-            }
-            else {
+            } else {
                 joinText = (<span>
                     Join as <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}}
                                href="#">voice</a> or <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video'); }}
                                href="#">video</a>.
                 </span>);
-
             }
             conferenceCallNotification = (
                 <div className="mx_RoomView_ongoingConfCallNotification">
@@ -106,7 +106,7 @@ module.exports = React.createClass({
             );
         }
 
-        var callView = (
+        const callView = (
             <CallView ref="callView" room={this.props.room}
                 ConferenceHandler={this.props.conferenceHandler}
                 onResize={this.props.onResize}
@@ -114,8 +114,14 @@ module.exports = React.createClass({
             />
         );
 
+        let appsDrawer = null;
+        if(this.props.showApps) {
+            appsDrawer = <AppsDrawer ref="appsDrawer" room={this.props.room} />;
+        }
+
         return (
             <div className="mx_RoomView_auxPanel" style={{maxHeight: this.props.maxHeight}} >
+                { appsDrawer }
                 { fileDropTarget }
                 { callView }
                 { conferenceCallNotification }

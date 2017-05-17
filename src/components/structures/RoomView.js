@@ -43,7 +43,7 @@ import KeyCode from '../../KeyCode';
 
 import UserProvider from '../../autocomplete/UserProvider';
 
-var DEBUG = false;
+const DEBUG = false;
 
 if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
@@ -133,6 +133,7 @@ module.exports = React.createClass({
             callState: null,
             guestsCanJoin: false,
             canPeek: false,
+            showApps: false,
 
             // error object, as from the matrix client/server API
             // If we failed to load information about the room,
@@ -168,7 +169,7 @@ module.exports = React.createClass({
             onClickCompletes: true,
             onStateChange: (isCompleting) => {
                 this.forceUpdate();
-            }
+            },
         });
 
         if (this.props.roomAddress[0] == '#') {
@@ -434,9 +435,14 @@ module.exports = React.createClass({
                 this._updateConfCallNotification();
 
                 this.setState({
-                    callState: callState
+                    callState: callState,
                 });
 
+                break;
+            case 'appsDrawer':
+                this.setState({
+                    showApps: payload.show ? true : false,
+                });
                 break;
         }
     },
@@ -1638,7 +1644,8 @@ module.exports = React.createClass({
               draggingFile={this.state.draggingFile}
               displayConfCallNotification={this.state.displayConfCallNotification}
               maxHeight={this.state.auxPanelMaxHeight}
-              onResize={this.onChildResize} >
+              onResize={this.onChildResize}
+              showApps={this.state.showApps} >
                 { aux }
             </AuxPanel>
         );
@@ -1651,8 +1658,14 @@ module.exports = React.createClass({
         if (canSpeak) {
             messageComposer =
                 <MessageComposer
-                    room={this.state.room} onResize={this.onChildResize} uploadFile={this.uploadFile}
-                    callState={this.state.callState} tabComplete={this.tabComplete} opacity={ this.props.opacity }/>;
+                    room={this.state.room}
+                    onResize={this.onChildResize}
+                    uploadFile={this.uploadFile}
+                    callState={this.state.callState}
+                    tabComplete={this.tabComplete}
+                    opacity={ this.props.opacity }
+                    showApps={ this.state.showApps }
+                />;
         }
 
         // TODO: Why aren't we storing the term/scope/count in this format

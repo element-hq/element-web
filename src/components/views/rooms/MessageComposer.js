@@ -164,18 +164,16 @@ export default class MessageComposer extends React.Component {
     }
 
     onShowAppsClick(ev) {
-        console.warn("Showing apps");
         dis.dispatch({
-            action: 'showApps',
-            room_id: this.props.room.roomId,
+            action: 'appsDrawer',
+            show: true,
         });
     }
 
     onHideAppsClick(ev) {
-        console.warn("Hiding apps");
         dis.dispatch({
-            action: 'hideApps',
-            room_id: this.props.room.roomId,
+            action: 'appsDrawer',
+            show: false,
         });
     }
 
@@ -278,7 +276,7 @@ export default class MessageComposer extends React.Component {
         }
 
         // Apps
-        if (this.props.showAppsState && this.props.showAppsState == 'visible') {
+        if (this.props.showApps) {
             hideAppsButton =
                 <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title="Hide Apps">
                     <TintableSvg src="img/icons-apps-active.svg" width="35" height="35"/>
@@ -431,5 +429,5 @@ MessageComposer.propTypes = {
     opacity: React.PropTypes.number,
 
     // string representing the current room app drawer state
-    showAppsState: React.PropTypes.string,
+    showApps: React.PropTypes.bool,
 };
