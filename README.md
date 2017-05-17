@@ -119,6 +119,7 @@ You can configure the app by copying `config.sample.json` to
    anything else since it is used to isolate the privileges of file attachments to this
    domain. Default: `usercontent.riot.im`. This needs to contain v1.html from
    https://github.com/matrix-org/usercontent/blob/master/v1.html
+1. `themes`: List of the themes available to the user. The first one will be default for new users and for those that haven't expicitly chosen their theme. Learn how to create your own Riot themes at https://github.com/vector-im/riot-web/blob/master/docs/theming.md
 
 Running as a Desktop app
 ========================
