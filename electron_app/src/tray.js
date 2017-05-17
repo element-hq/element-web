@@ -60,15 +60,24 @@ exports.create = function(win, config) {
     trayIcon.setContextMenu(contextMenu);
     trayIcon.on('click', toggleWin);
 
+    let lastFavicon = null;
     win.webContents.on('page-favicon-updated', function(ev, favicons) {
+        let newFavicon = config.icon_path;
         if (favicons && favicons.length > 0 && favicons[0].startsWith('data:')) {
-            const image = nativeImage.createFromDataURL(favicons[0]);
-            trayIcon.setImage(image);
-            win.setIcon(image);
-        } else {
-            trayIcon.setImage(config.icon_path);
-            win.setIcon(config.icon_path);
+            newFavicon = favicons[0];
         }
+
+        // No need to change, shortcut
+        if (newFavicon === lastFavicon) return;
+        lastFavicon = newFavicon;
+
+        // if its not default we have to construct into nativeImage
+        if (newFavicon !== config.icon_path) {
+            newFavicon = nativeImage.createFromDataURL(favicons[0]);
+        }
+
+        trayIcon.setImage(newFavicon);
+        win.setIcon(newFavicon);
     });
 
     win.webContents.on('page-title-updated', function(ev, title) {
