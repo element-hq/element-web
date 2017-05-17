@@ -32,6 +32,8 @@ export default class MessageComposer extends React.Component {
         this.onCallClick = this.onCallClick.bind(this);
         this.onHangupClick = this.onHangupClick.bind(this);
         this.onUploadClick = this.onUploadClick.bind(this);
+        this.onShowAppsClick = this.onShowAppsClick.bind(this);
+        this.onHideAppsClick = this.onHideAppsClick.bind(this);
         this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
         this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
         this.onInputContentChanged = this.onInputContentChanged.bind(this);
@@ -145,6 +147,7 @@ export default class MessageComposer extends React.Component {
     }
 
     onCallClick(ev) {
+        console.warn("Call but clicked!");
         dis.dispatch({
             action: 'place_call',
             type: ev.shiftKey ? "screensharing" : "video",
@@ -158,6 +161,22 @@ export default class MessageComposer extends React.Component {
             type: 'voice',
             room_id: this.props.room.roomId,
         });
+    }
+
+    onShowAppsClick(ev) {
+        console.warn("Showing apps");
+        dis.dispatch({
+            action: 'showApps',
+            room_id: this.props.room.roomId,
+        });
+    }
+
+    onHideAppsClick(ev) {
+        dis.dispatch({
+            action: 'hideApps',
+            room_id: this.props.room.roomId,
+        });
+        console.warn("Hiding apps");
     }
 
     onInputContentChanged(content: string, selection: {start: number, end: number}) {
@@ -241,14 +260,13 @@ export default class MessageComposer extends React.Component {
                 alt={e2eTitle} title={e2eTitle}
             />
         );
-        var callButton, videoCallButton, hangupButton;
+        var callButton, videoCallButton, hangupButton, showAppsButton, hideAppsButton;
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
                 <div key="controls_hangup" className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
                     <img src="img/hangup.svg" alt="Hangup" title="Hangup" width="25" height="26"/>
                 </div>;
-        }
-        else {
+        } else {
             callButton =
                 <div key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title="Voice call">
                     <TintableSvg src="img/icon-call.svg" width="35" height="35"/>
@@ -256,6 +274,19 @@ export default class MessageComposer extends React.Component {
             videoCallButton =
                 <div key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title="Video call">
                     <TintableSvg src="img/icons-video.svg" width="35" height="35"/>
+                </div>;
+        }
+
+        // Apps
+        if (this.props.showAppsState && this.props.showAppsState == 'visible') {
+            hideAppsButton =
+                <div key="hide_apps" className="mx_MessageComposer_hideApps" onClick={this.onCallClick} title="Hide Apps">
+                    <TintableSvg src="img/icons-apps-active.svg" width="35" height="35"/>
+                </div>;
+        } else {
+            showAppsButton =
+                <div key="show_apps" className="mx_MessageComposer_showApps" onClick={this.onCallClick} title="Show Apps">
+                    <TintableSvg src="img/icons-apps.svg" width="35" height="35"/>
                 </div>;
         }
 
@@ -308,7 +339,9 @@ export default class MessageComposer extends React.Component {
                 uploadButton,
                 hangupButton,
                 callButton,
-                videoCallButton
+                videoCallButton,
+                showAppsButton,
+                hideAppsButton,
             );
         } else {
             controls.push(
