@@ -6,12 +6,11 @@
 /lib
 /node_modules
 /electron_app/node_modules
+/electron_app/dist
 /packages/
 /webapp
 /.npmrc
 .DS_Store
 npm-debug.log
-electron/dist
-electron/pub
 /config.json
 /src/component-index.js
