@@ -119,6 +119,7 @@ You can configure the app by copying `config.sample.json` to
    anything else since it is used to isolate the privileges of file attachments to this
    domain. Default: `usercontent.riot.im`. This needs to contain v1.html from
    https://github.com/matrix-org/usercontent/blob/master/v1.html
+1. `allowedPostMessageOrigins`: External hostnames that are allowed to send postMessages to riot-web to login/logout remotely
 
 Running as a Desktop app
 ========================
