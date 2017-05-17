@@ -8,6 +8,7 @@
 
 curbranch=`git rev-parse --abbrev-ref HEAD`
 
+mkdir -p node_modules
 cd node_modules
 
 function dodep() {
