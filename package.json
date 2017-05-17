@@ -1,7 +1,7 @@
 {
   "name": "riot-web",
   "productName": "Riot",
-  "main": "electron/src/electron-main.js",
+  "main": "electron_app/src/electron-main.js",
   "version": "0.9.9",
   "description": "A feature-rich client for Matrix.org",
   "author": "Vector Creations Ltd.",
@@ -27,22 +27,23 @@
   "matrix-react-parent": "matrix-react-sdk",
   "scripts": {
     "reskindex": "reskindex -h src/header",
+    "reskindex:watch": "reskindex -h src/header -w",
     "build:res": "node scripts/copy-res.js",
     "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
-    "build:compile": "babel --source-maps -d lib src",
+    "build:compile": "npm run reskindex && babel --source-maps -d lib src",
     "build:bundle": "cross-env NODE_ENV=production webpack -p --progress",
     "build:bundle:dev": "webpack --optimize-occurence-order --progress",
     "build:electron": "npm run clean && npm run build && build -wml --ia32 --x64",
-    "build": "npm run build:res && npm run build:bundle",
-    "build:dev": "npm run build:res && npm run build:bundle:dev",
+    "build": "npm run reskindex && npm run build:res && npm run build:bundle",
+    "build:dev": "npm run reskindex && npm run build:res && npm run build:bundle:dev",
     "dist": "scripts/package.sh",
     "install:electron": "install-app-deps",
     "electron": "npm run install:electron && electron .",
     "start:res": "node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --output-filename=bundles/_dev_/[name].js --output-chunk-file=bundles/_dev_/[name].js -w --progress",
     "start:js:prod": "cross-env NODE_ENV=production webpack-dev-server -w --progress",
-    "start": "parallelshell \"npm run start:res\" \"npm run start:js\"",
-    "start:prod": "parallelshell \"npm run start:res\" \"npm run start:js:prod\"",
+    "start": "parallelshell \"npm run reskindex:watch\" \"npm run start:res\" \"npm run start:js\"",
+    "start:prod": "parallelshell \"npm run reskindex:watch\" \"npm run start:res\" \"npm run start:js:prod\"",
     "lint": "eslint src/",
     "lintall": "eslint src/ test/",
     "clean": "rimraf lib webapp electron/dist",
@@ -60,6 +61,7 @@
     "favico.js": "^0.3.10",
     "filesize": "3.5.6",
     "flux": "~2.0.3",
+    "gemini-scrollbar": "matrix-org/gemini-scrollbar#b302279",
     "gfm.css": "^1.1.1",
     "highlight.js": "^9.0.0",
     "linkifyjs": "^2.1.3",
@@ -72,7 +74,7 @@
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.4.0",
-    "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#39d858c",
+    "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
     "sanitize-html": "^1.11.1",
     "ua-parser-js": "^0.7.10",
     "url": "^0.11.0"
@@ -165,9 +167,9 @@
       "target": "squirrel"
     },
     "directories": {
-      "buildResources": "electron/build",
-      "output": "electron/dist",
-      "app": "electron"
+      "buildResources": "electron_app/build",
+      "output": "electron_app/dist",
+      "app": "electron_app"
     }
   }
 }
