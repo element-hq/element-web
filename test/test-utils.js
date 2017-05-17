@@ -137,6 +137,20 @@ export function createTestClient() {
     };
 }
 
+export function createTestRtsClient(teamMap, sidMap) {
+    return {
+        getTeamsConfig() {
+            return q(Object.keys(teamMap).map((token) => teamMap[token]));
+        },
+        trackReferral(referrer, emailSid, clientSecret) {
+            return q({team_token: sidMap[emailSid]});
+        },
+        getTeam(teamToken) {
+            return q(teamMap[teamToken]);
+        },
+    };
+}
+
 /**
  * Create an Event.
  * @param {Object} opts Values for the event.
