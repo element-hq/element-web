@@ -17,6 +17,7 @@ function dodep() {
     git clone https://github.com/$org/$repo.git $repo
     pushd $repo
     git checkout $curbranch || git checkout develop
+    npm install
     echo "$repo set to branch "`git rev-parse --abbrev-ref HEAD`
     popd
 }
