@@ -13,14 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react');
+const React = require('react');
 
-var CallHandler = require('../../../CallHandler');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var Modal = require('../../../Modal');
-var sdk = require('../../../index');
-var dis = require('../../../dispatcher');
-import Autocomplete from './Autocomplete';
+const CallHandler = require('../../../CallHandler');
+const MatrixClientPeg = require('../../../MatrixClientPeg');
+const Modal = require('../../../Modal');
+const sdk = require('../../../index');
+const dis = require('../../../dispatcher');
+// import Autocomplete from './Autocomplete';
 import classNames from 'classnames';
 
 import UserSettingsStore from '../../../UserSettingsStore';
@@ -57,7 +57,6 @@ export default class MessageComposer extends React.Component {
             },
             showFormatting: UserSettingsStore.getSyncedSetting('MessageComposer.showFormatting', false),
         };
-
     }
 
     componentDidMount() {
@@ -82,7 +81,7 @@ export default class MessageComposer extends React.Component {
 
     onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
-            let NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
+            const NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
                 title: "Please Register",
                 description: "Guest users can't upload files. Please register to upload.",
@@ -94,13 +93,14 @@ export default class MessageComposer extends React.Component {
     }
 
     onUploadFileSelected(files, isPasted) {
-        if (!isPasted)
+        if (!isPasted) {
             files = files.target.files;
+        }
 
-        let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        let TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        let fileList = [];
+        const fileList = [];
         for (let i=0; i<files.length; i++) {
             fileList.push(<li key={i}>
                 <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> {files[i].name || 'Attachment'}
@@ -121,7 +121,7 @@ export default class MessageComposer extends React.Component {
                 if(shouldUpload) {
                     // MessageComposer shouldn't have to rely on its parent passing in a callback to upload a file
                     if (files) {
-                        for(var i=0; i<files.length; i++) {
+                        for(let i=0; i<files.length; i++) {
                             this.props.uploadFile(files[i]);
                         }
                     }
@@ -133,7 +133,7 @@ export default class MessageComposer extends React.Component {
     }
 
     onHangupClick() {
-        var call = CallHandler.getCallForRoom(this.props.room.roomId);
+        const call = CallHandler.getCallForRoom(this.props.room.roomId);
         //var call = CallHandler.getAnyActiveCall();
         if (!call) {
             return;
@@ -164,19 +164,21 @@ export default class MessageComposer extends React.Component {
     }
 
     onShowAppsClick(ev) {
+        alert("Showing apps");
         console.warn("Showing apps");
-        dis.dispatch({
-            action: 'showApps',
-            room_id: this.props.room.roomId,
-        });
+        // dis.dispatch({
+        //     action: 'showApps',
+        //     room_id: this.props.room.roomId,
+        // });
     }
 
     onHideAppsClick(ev) {
-        dis.dispatch({
-            action: 'hideApps',
-            room_id: this.props.room.roomId,
-        });
+        alert("Hiding apps");
         console.warn("Hiding apps");
+        // dis.dispatch({
+        //     action: 'hideApps',
+        //     room_id: this.props.room.roomId,
+        // });
     }
 
     onInputContentChanged(content: string, selection: {start: number, end: number}) {
@@ -227,19 +229,19 @@ export default class MessageComposer extends React.Component {
     }
 
     render() {
-        var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
-        var uploadInputStyle = {display: 'none'};
-        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        var MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput" +
+        const me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
+        const uploadInputStyle = {display: 'none'};
+        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput" +
             (UserSettingsStore.isFeatureEnabled('rich_text_editor') ? "" : "Old"));
 
-        var controls = [];
+        const controls = [];
 
         controls.push(
             <div key="controls_avatar" className="mx_MessageComposer_avatar">
                 <MemberAvatar member={me} width={24} height={24} />
-            </div>
+            </div>,
         );
 
         let e2eImg, e2eTitle, e2eClass;
@@ -258,9 +260,9 @@ export default class MessageComposer extends React.Component {
         controls.push(
             <img key="e2eIcon" className={e2eClass} src={e2eImg} width="12" height="12"
                 alt={e2eTitle} title={e2eTitle}
-            />
+            />,
         );
-        var callButton, videoCallButton, hangupButton, showAppsButton, hideAppsButton;
+        let callButton, videoCallButton, hangupButton, showAppsButton, hideAppsButton;
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
                 <div key="controls_hangup" className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
@@ -290,14 +292,14 @@ export default class MessageComposer extends React.Component {
                 </div>;
         }
 
-        var canSendMessages = this.props.room.currentState.maySendMessage(
+        const canSendMessages = this.props.room.currentState.maySendMessage(
             MatrixClientPeg.get().credentials.userId);
 
         if (canSendMessages) {
             // This also currently includes the call buttons. Really we should
             // check separately for whether we can call, but this is slightly
             // complex because of conference calls.
-            var uploadButton = (
+            const uploadButton = (
                 <div key="controls_upload" className="mx_MessageComposer_upload"
                         onClick={this.onUploadClick} title="Upload file">
                     <TintableSvg src="img/icons-upload.svg" width="35" height="35"/>
@@ -323,7 +325,7 @@ export default class MessageComposer extends React.Component {
 
             controls.push(
                 <MessageComposerInput
-                    ref={c => this.messageComposerInput = c}
+                    ref={(c) => this.messageComposerInput = c}
                     key="controls_input"
                     onResize={this.props.onResize}
                     room={this.props.room}
@@ -347,25 +349,25 @@ export default class MessageComposer extends React.Component {
             controls.push(
                 <div key="controls_error" className="mx_MessageComposer_noperm_error">
                     You do not have permission to post to this room
-                </div>
+                </div>,
             );
         }
 
-        let autoComplete;
-        if (UserSettingsStore.isFeatureEnabled('rich_text_editor')) {
-            autoComplete = <div className="mx_MessageComposer_autocomplete_wrapper">
-                <Autocomplete
-                    ref="autocomplete"
-                    onConfirm={this._onAutocompleteConfirm}
-                    query={this.state.autocompleteQuery}
-                    selection={this.state.selection} />
-            </div>;
-        }
+        // let autoComplete;
+        // if (UserSettingsStore.isFeatureEnabled('rich_text_editor')) {
+        //     autoComplete = <div className="mx_MessageComposer_autocomplete_wrapper">
+        //         <Autocomplete
+        //             ref="autocomplete"
+        //             onConfirm={this._onAutocompleteConfirm}
+        //             query={this.state.autocompleteQuery}
+        //             selection={this.state.selection} />
+        //     </div>;
+        // }
 
 
         const {style, blockType} = this.state.inputState;
         const formatButtons = ["bold", "italic", "strike", "underline", "code", "quote", "bullet", "numbullet"].map(
-            name => {
+            (name) => {
                 const active = style.includes(name) || blockType === name;
                 const suffix = active ? '-o-n' : '';
                 const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
@@ -428,5 +430,8 @@ MessageComposer.propTypes = {
     uploadFile: React.PropTypes.func.isRequired,
 
     // opacity for dynamic UI fading effects
-    opacity: React.PropTypes.number
+    opacity: React.PropTypes.number,
+
+    // string representing the current room app drawer state
+    showAppsState: React.PropTypes.string,
 };
