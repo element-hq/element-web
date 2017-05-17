@@ -164,21 +164,19 @@ export default class MessageComposer extends React.Component {
     }
 
     onShowAppsClick(ev) {
-        alert("Showing apps");
         console.warn("Showing apps");
-        // dis.dispatch({
-        //     action: 'showApps',
-        //     room_id: this.props.room.roomId,
-        // });
+        dis.dispatch({
+            action: 'showApps',
+            room_id: this.props.room.roomId,
+        });
     }
 
     onHideAppsClick(ev) {
-        alert("Hiding apps");
         console.warn("Hiding apps");
-        // dis.dispatch({
-        //     action: 'hideApps',
-        //     room_id: this.props.room.roomId,
-        // });
+        dis.dispatch({
+            action: 'hideApps',
+            room_id: this.props.room.roomId,
+        });
     }
 
     onInputContentChanged(content: string, selection: {start: number, end: number}) {
@@ -282,12 +280,12 @@ export default class MessageComposer extends React.Component {
         // Apps
         if (this.props.showAppsState && this.props.showAppsState == 'visible') {
             hideAppsButton =
-                <div key="hide_apps" className="mx_MessageComposer_hideApps" onClick={this.onCallClick} title="Hide Apps">
+                <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title="Hide Apps">
                     <TintableSvg src="img/icons-apps-active.svg" width="35" height="35"/>
                 </div>;
         } else {
             showAppsButton =
-                <div key="show_apps" className="mx_MessageComposer_showApps" onClick={this.onCallClick} title="Show Apps">
+                <div key="show_apps" className="mx_MessageComposer_apps" onClick={this.onShowAppsClick} title="Show Apps">
                     <TintableSvg src="img/icons-apps.svg" width="35" height="35"/>
                 </div>;
         }
