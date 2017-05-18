@@ -55,9 +55,15 @@ limitations under the License.
     padding-right: 8px;
 }
 
+.mx_Dropdown_option div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .mx_Dropdown_option img {
     margin: 5px;
-    width: 25px;
+    width: 27px;
     vertical-align: middle;
 }
 
