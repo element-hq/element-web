@@ -262,6 +262,11 @@ async function loadApp() {
     } catch (e) {
         configError = e;
     }
+    
+    if (!configJson.themes) {
+        configJson.themes = [{"label":"Light theme", "value": "light"}];
+    }
+    configJson.themes = [{"label":"Light theme", "value": "dark"}, {"label":"Light themeeee", "value": "lightttt"}];
 
     if (window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser')) {
         console.log('User has previously accepted risks in using an unsupported browser');
