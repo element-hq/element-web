@@ -254,7 +254,7 @@ export default class Dropdown extends React.Component {
             );
         });
         if (options.length === 0) {
-            return [<div className="mx_Dropdown_option">
+            return [<div key="0" className="mx_Dropdown_option">
                 No results
             </div>];
         }
