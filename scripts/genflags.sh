@@ -61,6 +61,6 @@ for f in region-flags/svg/*.svg; do
     # Replace .svg with .png
     newname=${newname%.svg}.png
     # Move the file to flags directory
-    mv $f.png flags/$newname
-    echo "Generated flags/"$newname
+    mv $f.png res/flags/$newname
+    echo "Generated res/flags/"$newname
 done
