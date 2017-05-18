@@ -60,7 +60,7 @@ module.exports = React.createClass({
             }
         }
         return (
-            <li data-scroll-token={eventId+"+"+j}>
+            <li data-scroll-tokens={eventId+"+"+j}>
                 {ret}
             </li>);
     },

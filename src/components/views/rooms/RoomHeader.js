@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+var classNames = require('classnames');
 var sdk = require('../../../index');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Modal = require("../../../Modal");
@@ -39,6 +40,7 @@ module.exports = React.createClass({
         oobData: React.PropTypes.object,
         editing: React.PropTypes.bool,
         saving: React.PropTypes.bool,
+        inRoom: React.PropTypes.bool,
         collapsedRhs: React.PropTypes.bool,
         onSettingsClick: React.PropTypes.func,
         onSaveClick: React.PropTypes.func,
@@ -49,7 +51,7 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             editing: false,
-            onSettingsClick: function() {},
+            inRoom: false,
             onSaveClick: function() {},
         };
     },
@@ -228,10 +230,10 @@ module.exports = React.createClass({
                 roomName = this.props.room.name;
             }
 
-
+            const emojiTextClasses = classNames('mx_RoomHeader_nametext', { mx_RoomHeader_settingsHint: settingsHint });
             name =
                 <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
-                    <EmojiText element="div" className={ "mx_RoomHeader_nametext " + (settingsHint ? "mx_RoomHeader_settingsHint" : "") } title={ roomName }>{roomName}</EmojiText>
+                    <EmojiText element="div" className={emojiTextClasses} title={roomName}>{ roomName }</EmojiText>
                     { searchStatus }
                 </div>;
         }
@@ -302,6 +304,14 @@ module.exports = React.createClass({
                 </AccessibleButton>;
         }
 
+        let search_button;
+        if (this.props.onSearchClick && this.props.inRoom) {
+            search_button =
+                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
+                    <TintableSvg src="img/icons-search.svg" width="35" height="35"/>
+                </AccessibleButton>;
+        }
+
         var rightPanel_buttons;
         if (this.props.collapsedRhs) {
             rightPanel_buttons =
@@ -316,9 +326,7 @@ module.exports = React.createClass({
                 <div className="mx_RoomHeader_rightRow">
                     { settings_button }
                     { forget_button }
-                    <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
-                        <TintableSvg src="img/icons-search.svg" width="35" height="35"/>
-                    </AccessibleButton>
+                    { search_button }
                     { rightPanel_buttons }
                 </div>;
         }

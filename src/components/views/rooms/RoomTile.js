@@ -27,8 +27,6 @@ var RoomNotifs = require('../../../RoomNotifs');
 var FormattingUtils = require('../../../utils/FormattingUtils');
 import AccessibleButton from '../elements/AccessibleButton';
 var UserSettingsStore = require('../../../UserSettingsStore');
-var constantTimeDispatcher = require('../../../ConstantTimeDispatcher');
-var Unread = require('../../../Unread');
 
 module.exports = React.createClass({
     displayName: 'RoomTile',
@@ -38,10 +36,12 @@ module.exports = React.createClass({
         connectDropTarget: React.PropTypes.func,
         onClick: React.PropTypes.func,
         isDragging: React.PropTypes.bool,
-        selectedRoom: React.PropTypes.string,
 
         room: React.PropTypes.object.isRequired,
         collapsed: React.PropTypes.bool.isRequired,
+        selected: React.PropTypes.bool.isRequired,
+        unread: React.PropTypes.bool.isRequired,
+        highlight: React.PropTypes.bool.isRequired,
         isInvite: React.PropTypes.bool.isRequired,
         incomingCall: React.PropTypes.object,
     },
@@ -54,11 +54,10 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return({
-            hover: false,
-            badgeHover: false,
+            hover : false,
+            badgeHover : false,
             menuDisplayed: false,
             notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
-            selected: this.props.room ? (this.props.selectedRoom === this.props.room.roomId) : false,
         });
     },
 
@@ -80,32 +79,23 @@ module.exports = React.createClass({
         }
     },
 
+    onAccountData: function(accountDataEvent) {
+        if (accountDataEvent.getType() == 'm.push_rules') {
+            this.setState({
+                notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
+            });
+        }
+    },
+
     componentWillMount: function() {
-        constantTimeDispatcher.register("RoomTile.refresh", this.props.room.roomId, this.onRefresh);
-        constantTimeDispatcher.register("RoomTile.select", this.props.room.roomId, this.onSelect);
-        this.onRefresh();
+        MatrixClientPeg.get().on("accountData", this.onAccountData);
     },
 
     componentWillUnmount: function() {
-        constantTimeDispatcher.unregister("RoomTile.refresh", this.props.room.roomId, this.onRefresh);
-        constantTimeDispatcher.unregister("RoomTile.select", this.props.room.roomId, this.onSelect);
-    },
-
-    componentWillReceiveProps: function(nextProps) {
-        this.onRefresh();
-    },
-
-    onRefresh: function(params) {
-        this.setState({
-            unread: Unread.doesRoomHaveUnreadMessages(this.props.room),
-            highlight: this.props.room.getUnreadNotificationCount('highlight') > 0 || this.props.isInvite,
-        });
-    },
-
-    onSelect: function(params) {
-        this.setState({
-            selected: params.selected,
-        });
+        var cli = MatrixClientPeg.get();
+        if (cli) {
+            MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
+        }
     },
 
     onClick: function(ev) {
@@ -179,13 +169,13 @@ module.exports = React.createClass({
         // var highlightCount = this.props.room.getUnreadNotificationCount("highlight");
 
         const notifBadges = notificationCount > 0 && this._shouldShowNotifBadge();
-        const mentionBadges = this.state.highlight && this._shouldShowMentionBadge();
+        const mentionBadges = this.props.highlight && this._shouldShowMentionBadge();
         const badges = notifBadges || mentionBadges;
 
         var classes = classNames({
             'mx_RoomTile': true,
-            'mx_RoomTile_selected': this.state.selected,
-            'mx_RoomTile_unread': this.state.unread,
+            'mx_RoomTile_selected': this.props.selected,
+            'mx_RoomTile_unread': this.props.unread,
             'mx_RoomTile_unreadNotify': notifBadges,
             'mx_RoomTile_highlight': mentionBadges,
             'mx_RoomTile_invited': (me && me.membership == 'invite'),
@@ -231,7 +221,7 @@ module.exports = React.createClass({
                 'mx_RoomTile_badgeShown': badges || this.state.badgeHover || this.state.menuDisplayed,
             });
 
-            if (this.state.selected) {
+            if (this.props.selected) {
                 let nameSelected = <EmojiText>{name}</EmojiText>;
 
                 label = <div title={ name } className={ nameClasses }>{ nameSelected }</div>;
@@ -265,8 +255,7 @@ module.exports = React.createClass({
 
         let ret = (
             <div> { /* Only native elements can be wrapped in a DnD object. */}
-            <AccessibleButton className={classes} tabIndex="0" onClick={this.onClick}
-                              onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <AccessibleButton className={classes} tabIndex="0" onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className={avatarClasses}>
                     <div className="mx_RoomTile_avatar_container">
                         <RoomAvatar room={this.props.room} width={24} height={24} />

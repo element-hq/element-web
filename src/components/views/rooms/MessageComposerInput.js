@@ -84,7 +84,6 @@ export default class MessageComposerInput extends React.Component {
         this.onAction = this.onAction.bind(this);
         this.handleReturn = this.handleReturn.bind(this);
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
-        this.handlePastedFiles = this.handlePastedFiles.bind(this);
         this.onEditorContentChanged = this.onEditorContentChanged.bind(this);
         this.setEditorState = this.setEditorState.bind(this);
         this.onUpArrow = this.onUpArrow.bind(this);
@@ -94,7 +93,7 @@ export default class MessageComposerInput extends React.Component {
         this.setDisplayedCompletion = this.setDisplayedCompletion.bind(this);
         this.onMarkdownToggleClicked = this.onMarkdownToggleClicked.bind(this);
 
-        const isRichtextEnabled = UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', true);
+        const isRichtextEnabled = UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false);
 
         this.state = {
             // whether we're in rich text or markdown mode
@@ -477,10 +476,6 @@ export default class MessageComposerInput extends React.Component {
         return false;
     }
 
-    handlePastedFiles(files) {
-        this.props.onUploadFileSelected(files, true);
-    }
-
     handleReturn(ev) {
         if (ev.shiftKey) {
             this.onEditorContentChanged(RichUtils.insertSoftNewline(this.state.editorState));
@@ -542,9 +537,9 @@ export default class MessageComposerInput extends React.Component {
         let sendTextFn = this.client.sendTextMessage;
 
         if (contentText.startsWith('/me')) {
-            contentText = contentText.replace('/me ', '');
+            contentText = contentText.substring(4);
             // bit of a hack, but the alternative would be quite complicated
-            if (contentHTML) contentHTML = contentHTML.replace('/me ', '');
+            if (contentHTML) contentHTML = contentHTML.replace(/\/me ?/, '');
             sendHtmlFn = this.client.sendHtmlEmote;
             sendTextFn = this.client.sendEmoteMessage;
         }
@@ -734,7 +729,7 @@ export default class MessageComposerInput extends React.Component {
                             keyBindingFn={MessageComposerInput.getKeyBinding}
                             handleKeyCommand={this.handleKeyCommand}
                             handleReturn={this.handleReturn}
-                            handlePastedFiles={this.handlePastedFiles}
+                            handlePastedFiles={this.props.onFilesPasted}
                             stripPastedStyles={!this.state.isRichtextEnabled}
                             onTab={this.onTab}
                             onUpArrow={this.onUpArrow}
@@ -764,7 +759,7 @@ MessageComposerInput.propTypes = {
 
     onDownArrow: React.PropTypes.func,
 
-    onUploadFileSelected: React.PropTypes.func,
+    onFilesPasted: React.PropTypes.func,
 
     // attempts to confirm currently selected completion, returns whether actually confirmed
     tryComplete: React.PropTypes.func,

@@ -279,20 +279,19 @@ module.exports = React.createClass({
             this.currentGhostEventId = null;
         }
 
-        var isMembershipChange = (e) =>
-            e.getType() === 'm.room.member'
-            && (!e.getPrevContent() || e.getContent().membership !== e.getPrevContent().membership);
+        var isMembershipChange = (e) => e.getType() === 'm.room.member';
 
         for (i = 0; i < this.props.events.length; i++) {
-            var mxEv = this.props.events[i];
-            var wantTile = true;
-            var eventId = mxEv.getId();
+            let mxEv = this.props.events[i];
+            let wantTile = true;
+            let eventId = mxEv.getId();
+            let readMarkerInMels = false;
 
             if (!EventTile.haveTileForEvent(mxEv)) {
                 wantTile = false;
             }
 
-            var last = (i == lastShownEventIndex);
+            let last = (i == lastShownEventIndex);
 
             // Wrap consecutive member events in a ListSummary, ignore if redacted
             if (isMembershipChange(mxEv) &&
@@ -334,6 +333,9 @@ module.exports = React.createClass({
 
                 let eventTiles = summarisedEvents.map(
                     (e) => {
+                        if (e.getId() === this.props.readMarkerEventId) {
+                            readMarkerInMels = true;
+                        }
                         // In order to prevent DateSeparators from appearing in the expanded form
                         // of MemberEventListSummary, render each member event as if the previous
                         // one was itself. This way, the timestamp of the previous event === the
@@ -352,12 +354,16 @@ module.exports = React.createClass({
                     <MemberEventListSummary
                         key={key}
                         events={summarisedEvents}
-                        data-scroll-token={eventId}
                         onToggle={this._onWidgetLoad} // Update scroll state
                     >
                             {eventTiles}
                     </MemberEventListSummary>
                 );
+
+                if (readMarkerInMels) {
+                    ret.push(this._getReadMarkerTile(visible));
+                }
+
                 continue;
             }
 
@@ -466,7 +472,7 @@ module.exports = React.createClass({
         ret.push(
                 <li key={eventId}
                         ref={this._collectEventNode.bind(this, eventId)}
-                        data-scroll-token={scrollToken}>
+                        data-scroll-tokens={scrollToken}>
                     <EventTile mxEvent={mxEv} continuation={continuation}
                         isRedacted={mxEv.isRedacted()}
                         onWidgetLoad={this._onWidgetLoad}

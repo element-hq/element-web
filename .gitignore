@@ -11,3 +11,4 @@ npm-debug.log
 /karma-reports
 
 /.idea
+/src/component-index.js

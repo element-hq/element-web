@@ -50,7 +50,7 @@ export default WithMatrixClient(React.createClass({
     },
 
     _onPhoneCountryChange: function(phoneCountry) {
-        this.setState({ phoneCountry: phoneCountry });
+        this.setState({ phoneCountry: phoneCountry.iso2 });
     },
 
     _onPhoneNumberChange: function(ev) {
@@ -147,12 +147,14 @@ export default WithMatrixClient(React.createClass({
         return (
             <form className="mx_UserSettings_profileTableRow" onSubmit={this._onAddMsisdnSubmit}>
                 <div className="mx_UserSettings_profileLabelCell">
+                    <label>Phone</label>
                 </div>
                 <div className="mx_UserSettings_profileInputCell">
-                    <div className="mx_Login_phoneSection">
+                    <div className="mx_UserSettings_phoneSection">
                         <CountryDropdown onOptionChange={this._onPhoneCountryChange}
-                            className="mx_Login_phoneCountry"
+                            className="mx_UserSettings_phoneCountry"
                             value={this.state.phoneCountry}
+                            isSmall={true}
                         />
                         <input type="text"
                             ref={this._collectAddMsisdnInput}

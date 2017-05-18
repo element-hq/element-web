@@ -69,6 +69,9 @@ export default React.createClass({
 
         // The text to use a placeholder in the input box
         placeholder: React.PropTypes.string.isRequired,
+
+        // callback to handle files pasted into the composer
+        onFilesPasted: React.PropTypes.func,
     },
 
     componentWillMount: function() {
@@ -439,10 +442,27 @@ export default React.createClass({
         this.refs.textarea.focus();
     },
 
+    _onPaste: function(ev) {
+        const items = ev.clipboardData.items;
+        const files = [];
+        for (const item of items) {
+            if (item.kind === 'file') {
+                files.push(item.getAsFile());
+            }
+        }
+        if (files.length && this.props.onFilesPasted) {
+            this.props.onFilesPasted(files);
+            return true;
+        }
+        return false;
+    },
+
     render: function() {
         return (
             <div className="mx_MessageComposer_input" onClick={ this.onInputClick }>
-                <textarea autoFocus ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder={this.props.placeholder} />
+                <textarea autoFocus ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder={this.props.placeholder}
+                    onPaste={this._onPaste}
+                />
             </div>
         );
     }

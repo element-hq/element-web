@@ -19,7 +19,6 @@ import React from 'react';
 import sdk from '../../../index';
 
 import { COUNTRIES } from '../../../phonenumber';
-import { charactersToImageNode } from '../../../HtmlUtils';
 
 const COUNTRIES_BY_ISO2 = new Object(null);
 for (const c of COUNTRIES) {
@@ -27,9 +26,14 @@ for (const c of COUNTRIES) {
 }
 
 function countryMatchesSearchQuery(query, country) {
+    // Remove '+' if present (when searching for a prefix)
+    if (query[0] === '+') {
+        query = query.slice(1);
+    }
+
     if (country.name.toUpperCase().indexOf(query.toUpperCase()) == 0) return true;
     if (country.iso2 == query.toUpperCase()) return true;
-    if (country.prefix == query) return true;
+    if (country.prefix.indexOf(query) !== -1) return true;
     return false;
 }
 
@@ -37,10 +41,12 @@ export default class CountryDropdown extends React.Component {
     constructor(props) {
         super(props);
         this._onSearchChange = this._onSearchChange.bind(this);
+        this._onOptionChange = this._onOptionChange.bind(this);
+        this._getShortOption = this._getShortOption.bind(this);
 
         this.state = {
             searchQuery: '',
-        }
+        };
     }
 
     componentWillMount() {
@@ -48,7 +54,7 @@ export default class CountryDropdown extends React.Component {
             // If no value is given, we start with the first
             // country selected, but our parent component
             // doesn't know this, therefore we do this.
-            this.props.onOptionChange(COUNTRIES[0].iso2);
+            this.props.onOptionChange(COUNTRIES[0]);
         }
     }
 
@@ -58,14 +64,26 @@ export default class CountryDropdown extends React.Component {
         });
     }
 
+    _onOptionChange(iso2) {
+        this.props.onOptionChange(COUNTRIES_BY_ISO2[iso2]);
+    }
+
     _flagImgForIso2(iso2) {
-        // Unicode Regional Indicator Symbol letter 'A'
-        const RIS_A = 0x1F1E6;
-        const ASCII_A = 65;
-        return charactersToImageNode(iso2, true,
-            RIS_A + (iso2.charCodeAt(0) - ASCII_A),
-            RIS_A + (iso2.charCodeAt(1) - ASCII_A),
-        );
+        return <img src={`flags/${iso2}.png`}/>;
+    }
+
+    _getShortOption(iso2) {
+        if (!this.props.isSmall) {
+            return undefined;
+        }
+        let countryPrefix;
+        if (this.props.showPrefix) {
+            countryPrefix = '+' + COUNTRIES_BY_ISO2[iso2].prefix;
+        }
+        return <span>
+            { this._flagImgForIso2(iso2) }
+            { countryPrefix }
+        </span>;
     }
 
     render() {
@@ -94,7 +112,7 @@ export default class CountryDropdown extends React.Component {
         const options = displayedCountries.map((country) => {
             return <div key={country.iso2}>
                 {this._flagImgForIso2(country.iso2)}
-                {country.name}
+                {country.name} <span>(+{country.prefix})</span>
             </div>;
         });
 
@@ -102,18 +120,21 @@ export default class CountryDropdown extends React.Component {
         // values between mounting and the initial value propgating
         const value = this.props.value || COUNTRIES[0].iso2;
 
-        return <Dropdown className={this.props.className}
-            onOptionChange={this.props.onOptionChange} onSearchChange={this._onSearchChange}
-            menuWidth={298} getShortOption={this._flagImgForIso2}
+        return <Dropdown className={this.props.className + " left_aligned"}
+            onOptionChange={this._onOptionChange} onSearchChange={this._onSearchChange}
+            menuWidth={298} getShortOption={this._getShortOption}
             value={value} searchEnabled={true}
         >
             {options}
-        </Dropdown>
+        </Dropdown>;
     }
 }
 
 CountryDropdown.propTypes = {
     className: React.PropTypes.string,
+    isSmall: React.PropTypes.bool,
+    // if isSmall, show +44 in the selected value
+    showPrefix: React.PropTypes.bool,
     onOptionChange: React.PropTypes.func.isRequired,
     value: React.PropTypes.string,
 };

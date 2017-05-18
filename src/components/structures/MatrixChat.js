@@ -393,9 +393,10 @@ module.exports = React.createClass({
                 this.notifyNewScreen('forgot_password');
                 break;
             case 'leave_room':
+                const roomToLeave = MatrixClientPeg.get().getRoom(payload.room_id);
                 Modal.createDialog(QuestionDialog, {
                     title: "Leave room",
-                    description: "Are you sure you want to leave the room?",
+                    description: <span>Are you sure you want to leave the room <i>{roomToLeave.name}</i>?</span>,
                     onFinished: (should_leave) => {
                         if (should_leave) {
                             const d = MatrixClientPeg.get().leave(payload.room_id);
@@ -770,8 +771,12 @@ module.exports = React.createClass({
             this._teamToken = teamToken;
             dis.dispatch({action: 'view_home_page'});
         } else if (this._is_registered) {
+            if (this.props.config.welcomeUserId) {
+                createRoom({dmUserId: this.props.config.welcomeUserId});
+                return;
+            }
             // The user has just logged in after registering
-            dis.dispatch({action: 'view_user_settings'});
+            dis.dispatch({action: 'view_room_directory'});
         } else {
             this._showScreenAfterLogin();
         }

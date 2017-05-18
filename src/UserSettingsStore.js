@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 'use strict';
-var q = require("q");
-var MatrixClientPeg = require("./MatrixClientPeg");
-var Notifier = require("./Notifier");
+import q from 'q';
+import MatrixClientPeg from './MatrixClientPeg';
+import Notifier from './Notifier';
 
 /*
  * TODO: Make things use this. This is all WIP - see UserSettings.js for usage.
@@ -33,7 +33,7 @@ module.exports = {
     ],
 
     loadProfileInfo: function() {
-        var cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.get();
         return cli.getProfileInfo(cli.credentials.userId);
     },
 
@@ -44,7 +44,7 @@ module.exports = {
     loadThreePids: function() {
         if (MatrixClientPeg.get().isGuest()) {
             return q({
-                threepids: []
+                threepids: [],
             }); // guests can't poke 3pid endpoint
         }
         return MatrixClientPeg.get().getThreePids();
@@ -73,19 +73,19 @@ module.exports = {
         Notifier.setAudioEnabled(enable);
     },
 
-    changePassword: function(old_password, new_password) {
-        var cli = MatrixClientPeg.get();
+    changePassword: function(oldPassword, newPassword) {
+        const cli = MatrixClientPeg.get();
 
-        var authDict = {
+        const authDict = {
             type: 'm.login.password',
             user: cli.credentials.userId,
-            password: old_password
+            password: oldPassword,
         };
 
-        return cli.setPassword(authDict, new_password);
+        return cli.setPassword(authDict, newPassword);
     },
 
-    /**
+    /*
      * Returns the email pusher (pusher of type 'email') for a given
      * email address. Email pushers all have the same app ID, so since
      * pushers are unique over (app ID, pushkey), there will be at most
@@ -95,8 +95,8 @@ module.exports = {
         if (pushers === undefined) {
             return undefined;
         }
-        for (var i = 0; i < pushers.length; ++i) {
-            if (pushers[i].kind == 'email' && pushers[i].pushkey == address) {
+        for (let i = 0; i < pushers.length; ++i) {
+            if (pushers[i].kind === 'email' && pushers[i].pushkey === address) {
                 return pushers[i];
             }
         }
@@ -110,7 +110,7 @@ module.exports = {
     addEmailPusher: function(address, data) {
         return MatrixClientPeg.get().setPusher({
             kind: 'email',
-            app_id: "m.email",
+            app_id: 'm.email',
             pushkey: address,
             app_display_name: 'Email Notifications',
             device_display_name: address,
@@ -121,46 +121,46 @@ module.exports = {
     },
 
     getUrlPreviewsDisabled: function() {
-        var event = MatrixClientPeg.get().getAccountData("org.matrix.preview_urls");
+        const event = MatrixClientPeg.get().getAccountData('org.matrix.preview_urls');
         return (event && event.getContent().disable);
     },
 
     setUrlPreviewsDisabled: function(disabled) {
         // FIXME: handle errors
-        return MatrixClientPeg.get().setAccountData("org.matrix.preview_urls", {
-            disable: disabled
+        return MatrixClientPeg.get().setAccountData('org.matrix.preview_urls', {
+            disable: disabled,
         });
     },
 
     getSyncedSettings: function() {
-        var event = MatrixClientPeg.get().getAccountData("im.vector.web.settings");
+        const event = MatrixClientPeg.get().getAccountData('im.vector.web.settings');
         return event ? event.getContent() : {};
     },
 
     getSyncedSetting: function(type, defaultValue = null) {
-        var settings = this.getSyncedSettings();
-        return settings.hasOwnProperty(type) ? settings[type] : null;
+        const settings = this.getSyncedSettings();
+        return settings.hasOwnProperty(type) ? settings[type] : defaultValue;
     },
 
     setSyncedSetting: function(type, value) {
-        var settings = this.getSyncedSettings();
+        const settings = this.getSyncedSettings();
         settings[type] = value;
         // FIXME: handle errors
-        return MatrixClientPeg.get().setAccountData("im.vector.web.settings", settings);
+        return MatrixClientPeg.get().setAccountData('im.vector.web.settings', settings);
     },
 
     getLocalSettings: function() {
-        var localSettingsString = localStorage.getItem('mx_local_settings') || '{}';
+        const localSettingsString = localStorage.getItem('mx_local_settings') || '{}';
         return JSON.parse(localSettingsString);
     },
 
     getLocalSetting: function(type, defaultValue = null) {
-        var settings = this.getLocalSettings();
-        return settings.hasOwnProperty(type) ? settings[type] : null;
+        const settings = this.getLocalSettings();
+        return settings.hasOwnProperty(type) ? settings[type] : defaultValue;
     },
 
     setLocalSetting: function(type, value) {
-        var settings = this.getLocalSettings();
+        const settings = this.getLocalSettings();
         settings[type] = value;
         // FIXME: handle errors
         localStorage.setItem('mx_local_settings', JSON.stringify(settings));
@@ -171,8 +171,8 @@ module.exports = {
         if (MatrixClientPeg.get().isGuest()) return false;
 
         if (localStorage.getItem(`mx_labs_feature_${feature}`) === null) {
-            for (var i = 0; i < this.LABS_FEATURES.length; i++) {
-                var f = this.LABS_FEATURES[i];
+            for (let i = 0; i < this.LABS_FEATURES.length; i++) {
+                const f = this.LABS_FEATURES[i];
                 if (f.id === feature) {
                     return f.default;
                 }
@@ -183,5 +183,5 @@ module.exports = {
 
     setFeatureEnabled: function(feature: string, enabled: boolean) {
         localStorage.setItem(`mx_labs_feature_${feature}`, enabled);
-    }
+    },
 };
