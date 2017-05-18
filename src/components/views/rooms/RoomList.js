@@ -75,8 +75,7 @@ module.exports = React.createClass({
         this.mounted = true;
     },
 
-    componentDidUpdate: function(prevp, nextp) {
-        console.log(prevp, nextp);
+    componentDidUpdate: function() {
         // Reinitialise the stickyHeaders when the component is updated
         this._updateStickyHeaders(true);
         this._repositionIncomingCallBox(undefined, false);
