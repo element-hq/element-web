@@ -19,7 +19,6 @@ import React from 'react';
 import sdk from '../../../index';
 
 import { COUNTRIES } from '../../../phonenumber';
-import { charactersToImageNode } from '../../../HtmlUtils';
 
 const COUNTRIES_BY_ISO2 = new Object(null);
 for (const c of COUNTRIES) {
@@ -41,7 +40,7 @@ export default class CountryDropdown extends React.Component {
 
         this.state = {
             searchQuery: '',
-        }
+        };
     }
 
     componentWillMount() {
@@ -64,13 +63,7 @@ export default class CountryDropdown extends React.Component {
     }
 
     _flagImgForIso2(iso2) {
-        // Unicode Regional Indicator Symbol letter 'A'
-        const RIS_A = 0x1F1E6;
-        const ASCII_A = 65;
-        return charactersToImageNode(iso2, true,
-            RIS_A + (iso2.charCodeAt(0) - ASCII_A),
-            RIS_A + (iso2.charCodeAt(1) - ASCII_A),
-        );
+        return <img src={`flags/${iso2}.png`}/>;
     }
 
     render() {
@@ -115,7 +108,7 @@ export default class CountryDropdown extends React.Component {
             value={value} searchEnabled={true}
         >
             {options}
-        </Dropdown>
+        </Dropdown>;
     }
 }
 
