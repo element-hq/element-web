@@ -152,10 +152,12 @@ export default class Dropdown extends React.Component {
     }
 
     _onInputClick(ev) {
-        this.setState({
-            expanded: !this.state.expanded,
-        });
-        ev.preventDefault();
+        if (!this.state.expanded) {
+            this.setState({
+                expanded: !this.state.expanded,
+            });
+            ev.preventDefault();
+        }
     }
 
     _onMenuOptionClick(dropdownKey) {
