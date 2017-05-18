@@ -6,7 +6,22 @@
 # the branch the current checkout is on, use that branch. Otherwise,
 # use develop.
 
-curbranch=`git rev-parse --abbrev-ref HEAD`
+# Look in the many different CI env vars for which branch we're
+# building
+if [[ "$TRAVIS" == true ]]; then
+    curbranch="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
+else
+    # ghprbSourceBranch for jenkins github pull request builder
+    # GIT_BRANCH for other jenkins builds
+    curbranch="${ghprbSourceBranch:-$GIT_BRANCH}"
+    # Otherwise look at the actual branch we're on
+    if [ -z "$curbranch" ]
+    then
+        curbranch=`git rev-parse --abbrev-ref HEAD`
+    fi
+fi
+
+echo "Determined branch to be $curbranch"
 
 function dodep() {
     org=$1
