@@ -50,6 +50,8 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this.mounted = false;
+
         var cli = MatrixClientPeg.get();
         cli.on("Room", this.onRoom);
         cli.on("deleteRoom", this.onDeleteRoom);
@@ -69,6 +71,8 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         // Initialise the stickyHeaders when the component is created
         this._updateStickyHeaders(true);
+
+        this.mounted = true;
     },
 
     componentDidUpdate: function() {
@@ -106,6 +110,8 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        this.mounted = false;
+
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
@@ -311,6 +317,7 @@ module.exports = React.createClass({
     },
 
     _getScrollNode: function() {
+        if (!this.mounted) return null;
         var panel = ReactDOM.findDOMNode(this);
         if (!panel) return null;
 
@@ -337,6 +344,7 @@ module.exports = React.createClass({
         var incomingCallBox = document.getElementById("incomingCallBox");
         if (incomingCallBox && incomingCallBox.parentElement) {
             var scrollArea = this._getScrollNode();
+            if (!scrollArea) return;
             // Use the offset of the top of the scroll area from the window
             // as this is used to calculate the CSS fixed top position for the stickies
             var scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
@@ -360,6 +368,7 @@ module.exports = React.createClass({
     // properly through React
     _initAndPositionStickyHeaders: function(initialise, scrollToPosition) {
         var scrollArea = this._getScrollNode();
+        if (!scrollArea) return;
         // Use the offset of the top of the scroll area from the window
         // as this is used to calculate the CSS fixed top position for the stickies
         var scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
