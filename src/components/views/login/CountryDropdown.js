@@ -112,7 +112,7 @@ export default class CountryDropdown extends React.Component {
         const options = displayedCountries.map((country) => {
             return <div key={country.iso2}>
                 {this._flagImgForIso2(country.iso2)}
-                {country.name}
+                {country.name} <span>(+{country.prefix})</span>
             </div>;
         });
 
