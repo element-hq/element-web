@@ -115,7 +115,7 @@ export default class CountryDropdown extends React.Component {
         // values between mounting and the initial value propgating
         const value = this.props.value || COUNTRIES[0].iso2;
 
-        return <Dropdown className={this.props.className}
+        return <Dropdown className={this.props.className + " left_aligned"}
             onOptionChange={this._onOptionChange} onSearchChange={this._onSearchChange}
             menuWidth={298} getShortOption={this._getShortOption}
             value={value} searchEnabled={true}
