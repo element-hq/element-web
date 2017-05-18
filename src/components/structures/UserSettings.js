@@ -65,7 +65,6 @@ const SETTINGS_LABELS = [
         id: 'dontSendTypingNotifications',
         label: "Don't send typing notifications",
     },
-/*
     {
         id: 'alwaysShowTimestamps',
         label: 'Always show message timestamps',
@@ -74,6 +73,7 @@ const SETTINGS_LABELS = [
         id: 'showTwelveHourTimestamps',
         label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
     },
+/*
     {
         id: 'useCompactLayout',
         label: 'Use compact timeline layout',

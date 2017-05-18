@@ -16,27 +16,37 @@ limitations under the License.
 
 'use strict';
 
-var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+import UserSettingsStore from './UserSettingsStore';
+const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+let time;
 
 function pad(n) {
     return (n < 10 ? '0' : '') + n;
 }
 
+function twentyfourhour(date) {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
+}
+
 module.exports = {
     formatDate: function(date) {
-        // date.toLocaleTimeString is completely system dependent.
-        // just go 24h for now
-
         var now = new Date();
         if (date.toDateString() === now.toDateString()) {
-            return pad(date.getHours()) + ':' + pad(date.getMinutes());
+            return this.formatTime(date);
         }
         else if (now.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
-            return days[date.getDay()] + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+            return days[date.getDay()] + " " + this.formatTime(date);
         }
         else if (now.getFullYear() === date.getFullYear()) {
-            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + this.formatTime(date);
         }
         else {
             return this.formatFullDate(date);
@@ -44,11 +54,13 @@ module.exports = {
     },
 
     formatFullDate: function(date) {
-        return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+        return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " " + this.formatTime(date);
     },
 
     formatTime: function(date) {
+        if (UserSettingsStore.getSyncedSetting('showTwelveHourTimestamps')) {
+          return twentyfourhour(date);
+        }
         return pad(date.getHours()) + ':' + pad(date.getMinutes());
-    }
+    },
 };
-

@@ -16,6 +16,8 @@ limitations under the License.
 
 'use strict';
 
+import UserSettingsStore from '../../../UserSettingsStore';
+
 var React = require('react');
 var classNames = require("classnames");
 var Modal = require('../../../Modal');
@@ -479,24 +481,31 @@ module.exports = WithMatrixClient(React.createClass({
         );
 
         var e2e;
+        let e2e_style;
         // cosmetic padlocks:
+        if (UserSettingsStore.getSyncedSetting('showTwelveHourTimestamps')) {
+            e2e_style = "mx_EventTile_e2eIcon mx_EventTile_e2eIcon_12hr";
+        }
+        else {
+            e2e_style = "mx_EventTile_e2eIcon";
+        }
         if ((e2eEnabled && this.props.eventSendStatus) || this.props.mxEvent.getType() === 'm.room.encryption') {
-            e2e = <img style={{ cursor: 'initial', marginLeft: '-1px' }} className="mx_EventTile_e2eIcon" alt="Encrypted by verified device" src="img/e2e-verified.svg" width="10" height="12" />;
+            e2e = <img style={{ cursor: 'initial', marginLeft: '-1px' }} className={e2e_style} alt="Encrypted by verified device" src="img/e2e-verified.svg" width="10" height="12" />;
         }
         // real padlocks
         else if (this.props.mxEvent.isEncrypted() || (e2eEnabled && this.props.eventSendStatus)) {
             if (this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted') {
-                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt="Undecryptable" src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} />;
+                e2e = <img onClick={ this.onCryptoClicked } className={e2e_style} alt="Undecryptable" src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} />;
             }
             else if (this.state.verified == true || (e2eEnabled && this.props.eventSendStatus)) {
-                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon"  alt="Encrypted by verified device" src="img/e2e-verified.svg" width="10" height="12"/>;
+                e2e = <img onClick={ this.onCryptoClicked } className={e2e_style}  alt="Encrypted by verified device" src="img/e2e-verified.svg" width="10" height="12"/>;
             }
             else {
-                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt="Encrypted by unverified device" src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }}/>;
+                e2e = <img onClick={ this.onCryptoClicked } className={e2e_style} alt="Encrypted by unverified device" src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }}/>;
             }
         }
         else if (e2eEnabled) {
-            e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt="Unencrypted message" src="img/e2e-unencrypted.svg" width="12" height="12"/>;
+            e2e = <img onClick={ this.onCryptoClicked } className={e2e_style} alt="Unencrypted message" src="img/e2e-unencrypted.svg" width="12" height="12"/>;
         }
         const timestamp = this.props.mxEvent.getTs() ?
             <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
