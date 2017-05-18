@@ -34,11 +34,11 @@ module.exports = React.createClass({
     componentWillMount: function() {
         this._unmounted = false;
 
-        dis.dispatch({action: 'hide_right_panel'});
         dis.dispatch({
             action: 'ui_opacity',
-            sideOpacity: 1.0,
-            middleOpacity: 0.3,
+            leftOpacity: 1.0,
+            rightOpacity: 0.3,
+            middleOpacity: 0.5,
         });
     },
 
@@ -50,7 +50,6 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         this._unmounted = true;
 
-        dis.dispatch({action: 'restore_right_panel'});
         dis.dispatch({
             action: 'ui_opacity',
             sideOpacity: 1.0,

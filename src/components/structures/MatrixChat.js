@@ -119,8 +119,9 @@ module.exports = React.createClass({
             collapse_rhs: false,
             ready: false,
             width: 10000,
-            sideOpacity: 1.0,
+            leftOpacity: 1.0,
             middleOpacity: 1.0,
+            rightOpacity: 1.0,
 
             version: null,
             newVersion: null,
@@ -547,29 +548,23 @@ module.exports = React.createClass({
                 });
                 break;
             case 'hide_right_panel':
-                this.was_rhs_collapsed = this.state.collapse_rhs;
                 this.setState({
                     collapse_rhs: true,
                 });
                 break;
             case 'show_right_panel':
-                this.was_rhs_collapsed = this.state.collapse_rhs;
                 this.setState({
                     collapse_rhs: false,
                 });
                 break;
-            // sets the panel to its state before last show/hide event
-            case 'restore_right_panel':
+            case 'ui_opacity': {
+                const sideDefault = payload.sideOpacity >= 0.0 ? payload.sideOpacity : 1.0;
                 this.setState({
-                    collapse_rhs: this.was_rhs_collapsed,
+                    leftOpacity: payload.leftOpacity >= 0.0 ? payload.leftOpacity : sideDefault,
+                    middleOpacity: payload.middleOpacity || 1.0,
+                    rightOpacity: payload.rightOpacity >= 0.0 ? payload.rightOpacity : sideDefault,
                 });
-                break;
-            case 'ui_opacity':
-                this.setState({
-                    sideOpacity: payload.sideOpacity,
-                    middleOpacity: payload.middleOpacity,
-                });
-                break;
+                break; }
             case 'set_theme':
                 this._onSetTheme(payload.value);
                 break;
