@@ -48,6 +48,14 @@ limitations under the License.
     width: 0
 }
 
+.mx_Dropdown.left_aligned .mx_Dropdown_arrow {
+    left: 10px;
+}
+
+.mx_Dropdown.left_aligned .mx_Dropdown_input > .mx_Dropdown_option {
+    padding-left: 25px;
+}
+
 .mx_Dropdown_option {
     height: 35px;
     line-height: 35px;
