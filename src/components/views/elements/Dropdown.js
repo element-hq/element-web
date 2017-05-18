@@ -154,7 +154,7 @@ export default class Dropdown extends React.Component {
     _onInputClick(ev) {
         if (!this.state.expanded) {
             this.setState({
-                expanded: !this.state.expanded,
+                expanded: true,
             });
             ev.preventDefault();
         }
