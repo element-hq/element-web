@@ -32,8 +32,6 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        this._unmounted = false;
-
         dis.dispatch({
             action: 'ui_opacity',
             leftOpacity: 1.0,
@@ -48,8 +46,6 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        this._unmounted = true;
-
         dis.dispatch({
             action: 'ui_opacity',
             sideOpacity: 1.0,
