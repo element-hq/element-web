@@ -26,9 +26,14 @@ for (const c of COUNTRIES) {
 }
 
 function countryMatchesSearchQuery(query, country) {
+    // Remove '+' if present (when searching for a prefix)
+    if (query[0] === '+') {
+        query = query.slice(1);
+    }
+
     if (country.name.toUpperCase().indexOf(query.toUpperCase()) == 0) return true;
     if (country.iso2 == query.toUpperCase()) return true;
-    if (country.prefix == query) return true;
+    if (country.prefix.indexOf(query) !== -1) return true;
     return false;
 }
 
