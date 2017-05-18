@@ -85,10 +85,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_ForwardMessage">
-
-                <h1>Select a room to send the message to</h1>
-                <h2>Use the left sidebar Room List to select forwarding target</h2>
-
+                <h1>Please select the destination room for this message</h1>
             </div>
         );
     },
