@@ -44,7 +44,7 @@ export default class VectorBasePlatform extends BasePlatform {
      * Get a sensible default display name for the
      * device Vector is running on
      */
-    getDefaultDeviceDisplayName() {
+    getDefaultDeviceDisplayName(): string {
         return "Unknown device";
     }
 }
