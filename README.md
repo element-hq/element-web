@@ -177,6 +177,14 @@ sudo npm install nativefier -g
 nativefier https://riot.im/app/
 ```
 
+Logging in or out remotely
+==========================
+
+Authorized sender URLs can do login or logout of any user, which allows for
+integration of Riot-Web with other platforms using the same user database.
+To learn more about how to remotely log out or in in Riot, take a look at
+https://github.com/vector-im/riot-web/blob/master/docs/send_postmessage.md
+
 Development
 ===========
 
