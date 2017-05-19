@@ -1171,7 +1171,12 @@ module.exports = React.createClass({
                 <PostRegistration
                     onComplete={this.onFinishPostRegistration} />
             );
-        } else if (this.state.loggedIn && this.state.ready) {
+        }
+
+        // `ready` and `loggedIn` may be set before `page_type` (because the
+        // latter is set via the dispatcher). If we don't yet have a `page_type`,
+        // keep showing the spinner for now.
+        if (this.state.loggedIn && this.state.ready && this.state.page_type) {
             /* for now, we stuff the entirety of our props and state into the LoggedInView.
              * we should go through and figure out what we actually need to pass down, as well
              * as using something like redux to avoid having a billion bits of state kicking around.
