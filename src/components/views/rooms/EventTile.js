@@ -16,7 +16,6 @@ limitations under the License.
 
 'use strict';
 
-import UserSettingsStore from '../../../UserSettingsStore';
 
 var React = require('react');
 var classNames = require("classnames");
@@ -131,6 +130,9 @@ module.exports = WithMatrixClient(React.createClass({
          * for now.
          */
         tileShape: React.PropTypes.string,
+
+        // show twelve hour timestamps
+        isTwelveHour: React.PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -406,12 +408,10 @@ module.exports = WithMatrixClient(React.createClass({
         var isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
         const isRedacted = (eventType === 'm.room.message') && this.props.isRedacted;
 
-        const isTwelveHour = UserSettingsStore.getSyncedSetting('showTwelveHourTimestamps');
-
         const classes = classNames({
             mx_EventTile: true,
             mx_EventTile_info: isInfoMessage,
-            mx_EventTile_12hr: isTwelveHour,
+            mx_EventTile_12hr: this.props.isTwelveHour,
             mx_EventTile_encrypting: this.props.eventSendStatus == 'encrypting',
             mx_EventTile_sending: isSending,
             mx_EventTile_notSent: this.props.eventSendStatus == 'not_sent',
@@ -503,7 +503,7 @@ module.exports = WithMatrixClient(React.createClass({
             e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt="Unencrypted message" src="img/e2e-unencrypted.svg" width="12" height="12"/>;
         }
         const timestamp = this.props.mxEvent.getTs() ?
-            <MessageTimestamp showTwelveHour={isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
+            <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
 
         if (this.props.tileShape === "notif") {
             const room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());

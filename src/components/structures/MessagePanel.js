@@ -84,6 +84,9 @@ module.exports = React.createClass({
 
         // shape parameter to be passed to EventTiles
         tileShape: React.PropTypes.string,
+
+        // show twelve hour timestamps
+        isTwelveHour: React.PropTypes.bool,
     },
 
     componentWillMount: function() {
@@ -230,8 +233,8 @@ module.exports = React.createClass({
     },
 
     _getEventTiles: function() {
-        var EventTile = sdk.getComponent('rooms.EventTile');
-        var DateSeparator = sdk.getComponent('messages.DateSeparator');
+        const EventTile = sdk.getComponent('rooms.EventTile');
+        const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
 
         this.eventNodes = {};
@@ -413,8 +416,8 @@ module.exports = React.createClass({
     },
 
     _getTilesForEvent: function(prevEvent, mxEv, last) {
-        var EventTile = sdk.getComponent('rooms.EventTile');
-        var DateSeparator = sdk.getComponent('messages.DateSeparator');
+        const EventTile = sdk.getComponent('rooms.EventTile');
+        const DateSeparator = sdk.getComponent('messages.DateSeparator');
         var ret = [];
 
         // is this a continuation of the previous message?
@@ -468,7 +471,6 @@ module.exports = React.createClass({
         if (this.props.manageReadReceipts) {
             readReceipts = this._getReadReceiptsForEvent(mxEv);
         }
-
         ret.push(
                 <li key={eventId}
                         ref={this._collectEventNode.bind(this, eventId)}
@@ -482,6 +484,7 @@ module.exports = React.createClass({
                         checkUnmounting={this._isUnmounting}
                         eventSendStatus={mxEv.status}
                         tileShape={this.props.tileShape}
+                        isTwelveHour={this.props.isTwelveHour}
                         last={last} isSelectedEvent={highlight}/>
                 </li>
         );
