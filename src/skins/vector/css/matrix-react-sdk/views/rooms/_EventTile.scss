@@ -94,7 +94,7 @@ limitations under the License.
  */
 .mx_EventTile_selected .mx_EventTile_line {
     border-left: $accent-color 5px solid;
-    padding-left: 60px;
+    padding-left: px;
     background-color: $event-selected-color;
 }
 
@@ -263,8 +263,12 @@ limitations under the License.
     cursor: pointer;
 }
 
-.mx_EventTile_e2eIcon_12hr {
-  padding-left: 5px;
+.mx_EventTile_12hr .mx_EventTile_e2eIcon {
+    padding-left: 5px;
+}
+
+.mx_EventTile_12hr .mx_MessageTimestamp {
+    text-align: center;
 }
 
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line,

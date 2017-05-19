@@ -23,21 +23,16 @@ const DateUtils = require('matrix-react-sdk/lib/DateUtils');
 module.exports = React.createClass({
     displayName: 'MessageTimestamp',
 
+    propTypes: {
+        showTwelveHour: React.PropTypes.bool,
+    },
+
     render: function() {
-        var date = new Date(this.props.ts);
-        if (UserSettingsStore.getSyncedSetting('showTwelveHourTimestamps')) {
-          return (
-              <span style={{ textAlign: 'center' }} className="mx_MessageTimestamp" title={ DateUtils.formatFullDate(date) }>
-                  { DateUtils.formatTime(date) }
-              </span>
-            );
-          }
-        else {
-          return (
-              <span className="mx_MessageTimestamp" title={ DateUtils.formatFullDate(date) }>
-                  { DateUtils.formatTime(date) }
-              </span>
-            );
-          }
+        const date = new Date(this.props.ts);
+        return (
+            <span className="mx_MessageTimestamp" title={ DateUtils.formatFullDate(date) }>
+                { DateUtils.formatTime(date, this.props.showTwelveHour) }
+            </span>
+        );
     },
 });
