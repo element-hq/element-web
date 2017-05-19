@@ -62,6 +62,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._unmounted = false;
         this.nextBatch = null;
         this.filterTimeout = null;
         this.scrollPanel = null;
@@ -99,6 +100,10 @@ module.exports = React.createClass({
         //     sideOpacity: 1.0,
         //     middleOpacity: 1.0,
         // });
+        if (this.filterTimeout) {
+            clearTimeout(this.filterTimeout);
+        }
+        this._unmounted = true;
     },
 
     refreshRoomList: function() {
@@ -141,6 +146,11 @@ module.exports = React.createClass({
                 return;
             }
 
+            if (this._unmounted) {
+                // if we've been unmounted, we don't care either.
+                return;
+            }
+
             this.nextBatch = data.next_batch;
             this.setState((s) => {
                 s.publicRooms.push(...data.chunk);
@@ -158,6 +168,12 @@ module.exports = React.createClass({
                 // requests either
                 return;
             }
+
+            if (this._unmounted) {
+                // if we've been unmounted, we don't care either.
+                return;
+            }
+
             this.setState({ loading: false });
             console.error("Failed to get publicRooms: %s", JSON.stringify(err));
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
