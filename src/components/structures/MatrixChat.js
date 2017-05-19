@@ -38,6 +38,7 @@ import PageTypes from '../../PageTypes';
 
 import createRoom from "../../createRoom";
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
+import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t } from '../../languageHandler';
 
 module.exports = React.createClass({
@@ -913,6 +914,11 @@ module.exports = React.createClass({
                     });
                 }
             }
+        });
+
+        const krh = new KeyRequestHandler(cli);
+        cli.on("crypto.roomKeyRequest", (req) => {
+            krh.handleKeyRequest(req);
         });
     },
 
