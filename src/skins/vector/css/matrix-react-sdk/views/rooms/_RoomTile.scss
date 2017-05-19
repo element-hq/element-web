@@ -59,41 +59,6 @@ limitations under the License.
     z-index: 2;
 }
 
-.mx_RoomTile:hover .mx_RoomTile_avatar_container:before,
-.mx_RoomTile_avatar_container.mx_RoomTile_avatar_roomTagMenu:before {
-    display: block;
-    position: absolute;
-    content: "";
-    border-radius: 40px;
-    background-image: url("../../img/icons_ellipsis.svg");
-    background-size: 25px;
-    width: 24px;
-    height: 24px;
-    z-index: 4;
-}
-
-.mx_RoomTile:hover .mx_RoomTile_avatar_container:after,
-.mx_RoomTile_avatar_container.mx_RoomTile_avatar_roomTagMenu:after {
-    display: block;
-    position: absolute;
-    content: "";
-    border-radius: 40px;
-    background: $primary-fg-color;
-    bottom: 0;
-    width: 24px;
-    height: 24px;
-    opacity: 0.6;
-    z-index: 1;
-}
-
-.collapsed .mx_RoomTile:hover .mx_RoomTile_avatar_container:before {
-    display: none;
-}
-
-.collapsed .mx_RoomTile:hover .mx_RoomTile_avatar_container:after {
-    display: none;
-}
-
 .mx_RoomTile_name {
     display: inline-block;
     position: relative;
@@ -164,13 +129,13 @@ limitations under the License.
 }
 
 .mx_RoomTile .mx_RoomTile_badge.mx_RoomTile_badgeButton,
-.mx_RoomTile.mx_RoomTile_notificationStateMenu .mx_RoomTile_badge {
+.mx_RoomTile.mx_RoomTile_menuDisplayed .mx_RoomTile_badge {
     letter-spacing: 0.1em;
     opacity: 1;
 }
 
 .mx_RoomTile.mx_RoomTile_noBadges .mx_RoomTile_badge.mx_RoomTile_badgeButton,
-.mx_RoomTile.mx_RoomTile_notificationStateMenu.mx_RoomTile_noBadges .mx_RoomTile_badge {
+.mx_RoomTile.mx_RoomTile_menuDisplayed.mx_RoomTile_noBadges .mx_RoomTile_badge {
     background-color: $neutral-badge-color;
 }
 
@@ -191,7 +156,7 @@ limitations under the License.
 }
 
 .mx_RoomTile:focus {
-    outline: 0;
+    filter: none ! important;
     background-color: $roomtile-focused-bg-color;
 }
 

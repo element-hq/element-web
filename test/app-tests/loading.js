@@ -104,6 +104,23 @@ describe('loading:', function () {
             }
         }
 
+        // Parse the given window.location and return parameters that can be used when calling
+        // MatrixChat.showScreen(screen, params)
+        function getScreenFromLocation(location) {
+            const fragparts = parseQsFromFragment(location);
+            return {
+                screen: fragparts.location.substring(1),
+                params: fragparts.params,
+            }
+        }
+
+        function routeUrl(location, matrixChat) {
+            console.log(Date.now() + ` routing URL '${location}'`);
+            const s = getScreenFromLocation(location);
+            console.log("Showing screen "+ s);
+            matrixChat.showScreen(s.screen, s.params);
+        }
+
         const MatrixChat = sdk.getComponent('structures.MatrixChat');
         const fragParts = parseQsFromFragment(windowLocation);
         var params = parseQs(windowLocation);
@@ -118,15 +135,10 @@ describe('loading:', function () {
                 startingFragmentQueryParams={fragParts.params}
                 enableGuest={true}
                 onLoadCompleted={loadCompleteDefer.resolve}
+                initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
+                makeRegistrationUrl={() => {throw new Error('Not implemented');}}
             />, parentDiv
         );
-
-        function routeUrl(location, matrixChat) {
-            console.log(Date.now() + " Routing URL "+location);
-            var fragparts = parseQsFromFragment(location);
-            matrixChat.showScreen(fragparts.location.substring(1),
-                                  fragparts.params);
-        }
 
         // pause for a cycle, then simulate the window.onload handler
         window.setTimeout(() => {
@@ -138,6 +150,27 @@ describe('loading:', function () {
                 lastLoadedScreen = null;
             }
         }, 0);
+    }
+
+    // set an expectation that we will get a call to /sync, then flush
+    // http requests until we do.
+    //
+    // returns a promise resolving to the received request
+    async function expectAndAwaitSync(response) {
+        response = response || {};
+        let syncRequest = null;
+        httpBackend.when('GET', '/sync')
+            .check((r) => {syncRequest = r;})
+            .respond(200, response);
+
+        console.log("waiting for /sync");
+        for (let attempts = 10; attempts > 0; attempts--) {
+            if (syncRequest) {
+                return syncRequest;
+            }
+            await httpBackend.flush();
+        }
+        throw new Error("Gave up waiting for /sync");
     }
 
     describe("Clean load with no stored credentials:", function() {
@@ -188,15 +221,17 @@ describe('loading:', function () {
                 let login = ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.login.Login'));
                 httpBackend.when('POST', '/login').check(function(req) {
+                    console.log(req);
                     expect(req.data.type).toEqual('m.login.password');
-                    expect(req.data.user).toEqual('user');
+                    expect(req.data.identifier.type).toEqual('m.id.user');
+                    expect(req.data.identifier.user).toEqual('user');
                     expect(req.data.password).toEqual('pass');
                 }).respond(200, {
                     user_id: '@user:id',
                     device_id: 'DEVICE_ID',
                     access_token: 'access_token',
                 });
-                login.onPasswordLogin("user", "pass")
+                login.onPasswordLogin("user", undefined, undefined, "pass")
                 return httpBackend.flush();
             }).then(() => {
                 // Wait for another trip around the event loop for the UI to update
@@ -208,8 +243,7 @@ describe('loading:', function () {
 
                 httpBackend.when('GET', '/pushrules').respond(200, {});
                 httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
-                httpBackend.when('GET', '/sync').respond(200, {});
-                return httpBackend.flush();
+                return expectAndAwaitSync();
             }).then(() => {
                 // once the sync completes, we should have a room view
                 return awaitRoomView(matrixChat);
@@ -237,13 +271,12 @@ describe('loading:', function () {
         it('shows a directory by default if we have no joined rooms', function(done) {
             httpBackend.when('GET', '/pushrules').respond(200, {});
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
-            httpBackend.when('GET', '/sync').respond(200, {});
 
             loadApp();
 
             return awaitSyncingSpinner(matrixChat).then(() => {
                 // we got a sync spinner - let the sync complete
-                return httpBackend.flush();
+                return expectAndAwaitSync();
             }).then(() => {
                 // once the sync completes, we should have a directory
                 httpBackend.verifyNoOutstandingExpectation();
@@ -256,7 +289,6 @@ describe('loading:', function () {
         it('shows a room view if we followed a room link', function(done) {
             httpBackend.when('GET', '/pushrules').respond(200, {});
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
-            httpBackend.when('GET', '/sync').respond(200, {});
 
             loadApp({
                 uriFragment: "#/room/!room:id",
@@ -264,7 +296,7 @@ describe('loading:', function () {
 
             return awaitSyncingSpinner(matrixChat).then(() => {
                 // we got a sync spinner - let the sync complete
-                return httpBackend.flush();
+                return expectAndAwaitSync();
             }).then(() => {
                 // once the sync completes, we should have a room view
                 return awaitRoomView(matrixChat);
@@ -297,8 +329,7 @@ describe('loading:', function () {
                 return awaitSyncingSpinner(matrixChat);
             }).then(() => {
                 // we got a sync spinner - let the sync complete
-                httpBackend.when('GET', '/sync').respond(200, {});
-                return httpBackend.flush();
+                return expectAndAwaitSync();
             }).then(() => {
                 // once the sync completes, we should have a directory
                 httpBackend.verifyNoOutstandingExpectation();
@@ -331,11 +362,10 @@ describe('loading:', function () {
             }).then(() => {
                 return awaitSyncingSpinner(matrixChat);
             }).then(() => {
-                httpBackend.when('GET', '/sync').check(function(req) {
-                    expect(req.path).toMatch(new RegExp("^https://homeserver/"));
-                }).respond(200, {});
-                return httpBackend.flush();
-            }).then(() => {
+                return expectAndAwaitSync();
+            }).then((req) => {
+                expect(req.path).toMatch(new RegExp("^https://homeserver/"));
+
                 // once the sync completes, we should have a directory
                 httpBackend.verifyNoOutstandingExpectation();
                 ReactTestUtils.findRenderedComponentWithType(
@@ -366,8 +396,7 @@ describe('loading:', function () {
             }).then(() => {
                 return awaitSyncingSpinner(matrixChat);
             }).then(() => {
-                httpBackend.when('GET', '/sync').respond(200, {});
-                return httpBackend.flush();
+                return expectAndAwaitSync();
             }).then(() => {
                 // once the sync completes, we should have a room view
                 return awaitRoomView(matrixChat);
@@ -437,7 +466,7 @@ function awaitSyncingSpinner(matrixChat, retryLimit, retryCount) {
         retryCount = 0;
     }
 
-    if (matrixChat.state.loading) {
+    if (matrixChat.state.loading || matrixChat.state.loggingIn) {
         console.log(Date.now() + " Awaiting sync spinner: still loading.");
         if (retryCount >= retryLimit) {
             throw new Error("MatrixChat still not loaded after " +
@@ -474,7 +503,8 @@ function awaitRoomView(matrixChat, retryLimit, retryCount) {
         retryCount = 0;
     }
 
-    if (!matrixChat.state.ready) {
+    if (matrixChat.state.loading ||
+        !(matrixChat.state.loggedIn && matrixChat.state.ready)) {
         console.log(Date.now() + " Awaiting room view: not ready yet.");
         if (retryCount >= retryLimit) {
             throw new Error("MatrixChat still not ready after " +

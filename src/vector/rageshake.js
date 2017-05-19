@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
-import request from "browser-request";
 import q from "q";
 
 // This module contains all the code needed to log the console, persist it to
@@ -39,7 +37,11 @@ import q from "q";
 //    actually timestamps. We then purge the remaining logs. We also do this
 //    purge on startup to prevent logs from accumulating.
 
+// the frequency with which we flush to indexeddb
 const FLUSH_RATE_MS = 30 * 1000;
+
+// the length of log data we keep in indexeddb (and include in the reports)
+const MAX_LOG_SIZE = 1024 * 1024 * 1; // 1 MB
 
 // A class which monkey-patches the global console and stores log lines.
 class ConsoleLogger {
@@ -205,9 +207,6 @@ class IndexedDBLogStore {
             }
             let txn = this.db.transaction(["logs", "logslastmod"], "readwrite");
             let objStore = txn.objectStore("logs");
-            objStore.add(this._generateLogEntry(lines));
-            let lastModStore = txn.objectStore("logslastmod");
-            lastModStore.put(this._generateLastModifiedTime());
             txn.oncomplete = (event) => {
                 resolve();
             };
@@ -219,6 +218,9 @@ class IndexedDBLogStore {
                     new Error("Failed to write logs: " + event.target.errorCode)
                 );
             }
+            objStore.add(this._generateLogEntry(lines));
+            let lastModStore = txn.objectStore("logslastmod");
+            lastModStore.put(this._generateLastModifiedTime());
         });
         return this.flushPromise;
     }
@@ -234,7 +236,6 @@ class IndexedDBLogStore {
      * is a big string with all the new-line delimited logs.
      */
     async consume() {
-        const MAX_LOG_SIZE = 1024 * 1024 * 50; // 50 MB
         const db = this.db;
 
         // Returns: a string representing the concatenated logs for this ID.
@@ -314,17 +315,24 @@ class IndexedDBLogStore {
         let size = 0;
         for (let i = 0; i < allLogIds.length; i++) {
             let lines = await fetchLogs(allLogIds[i]);
+
+            // always include at least one log file, but only include
+            // subsequent ones if they won't take us over the MAX_LOG_SIZE
+            if (i > 0 && size + lines.length > MAX_LOG_SIZE) {
+                // the remaining log IDs should be removed. If we go out of
+                // bounds this is just []
+                //
+                // XXX: there's nothing stopping the current session exceeding
+                // MAX_LOG_SIZE. We ought to think about culling it.
+                removeLogIds = allLogIds.slice(i + 1);
+                break;
+            }
+
             logs.push({
                 lines: lines,
                 id: allLogIds[i],
             });
             size += lines.length;
-            if (size > MAX_LOG_SIZE) {
-                // the remaining log IDs should be removed. If we go out of
-                // bounds this is just []
-                removeLogIds = allLogIds.slice(i + 1);
-                break;
-            }
         }
         if (removeLogIds.length > 0) {
             console.log("Removing logs: ", removeLogIds);
@@ -389,7 +397,6 @@ function selectQuery(store, keyRange, resultMapper) {
 let store = null;
 let logger = null;
 let initPromise = null;
-let bugReportEndpoint = null;
 module.exports = {
 
     /**
@@ -423,79 +430,29 @@ module.exports = {
         await store.consume();
     },
 
-    setBugReportEndpoint: function(url) {
-        bugReportEndpoint = url;
-    },
-
     /**
-     * Send a bug report.
-     * @param {string} userText Any additional user input.
-     * @param {boolean} sendLogs True to send logs
-     * @return {Promise} Resolved when the bug report is sent.
+     * Get a recent snapshot of the logs, ready for attaching to a bug report
+     *
+     * @return {Array<{lines: string, id, string}>}  list of log data
      */
-    sendBugReport: async function(userText, sendLogs) {
+    getLogsForReport: async function() {
         if (!logger) {
             throw new Error(
                 "No console logger, did you forget to call init()?"
             );
         }
-        if (!bugReportEndpoint) {
-            throw new Error("No bug report endpoint has been set.");
-        }
-
-        let version = "UNKNOWN";
-        try {
-            version = await PlatformPeg.get().getAppVersion();
-        }
-        catch (err) {} // PlatformPeg already logs this.
-
-        let userAgent = "UNKNOWN";
-        if (window.navigator && window.navigator.userAgent) {
-            userAgent = window.navigator.userAgent;
-        }
-
         // If in incognito mode, store is null, but we still want bug report
         // sending to work going off the in-memory console logs.
-        console.log("Sending bug report.");
-        let logs = [];
-        if (sendLogs) {
-            if (store) {
-                // flush most recent logs
-                await store.flush();
-                logs = await store.consume();
-            }
-            else {
-                logs.push({
-                    lines: logger.flush(true),
-                    id: "-",
-                });
-            }
+        if (store) {
+            // flush most recent logs
+            await store.flush();
+            return await store.consume();
         }
-
-        await q.Promise((resolve, reject) => {
-            request({
-                method: "POST",
-                url: bugReportEndpoint,
-                body: {
-                    logs: logs,
-                    text: (
-                        userText || "User did not supply any additional text."
-                    ),
-                    version: version,
-                    user_agent: userAgent,
-                },
-                json: true,
-            }, (err, res) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                if (res.status < 200 || res.status >= 400) {
-                    reject(new Error(`HTTP ${res.status}`));
-                    return;
-                }
-                resolve();
-            })
-        });
-    }
+        else {
+            return [{
+                lines: logger.flush(true),
+                id: "-",
+            }];
+        }
+    },
 };

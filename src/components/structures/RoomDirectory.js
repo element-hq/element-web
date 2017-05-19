@@ -23,7 +23,6 @@ var ContentRepo = require("matrix-js-sdk").ContentRepo;
 var Modal = require('matrix-react-sdk/lib/Modal');
 var sdk = require('matrix-react-sdk');
 var dis = require('matrix-react-sdk/lib/dispatcher');
-var GeminiScrollbar = require('react-gemini-scrollbar');
 
 var linkify = require('linkifyjs');
 var linkifyString = require('linkifyjs/string');
@@ -61,6 +60,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._unmounted = false;
         this.nextBatch = null;
         this.filterTimeout = null;
         this.scrollPanel = null;
@@ -98,6 +98,10 @@ module.exports = React.createClass({
         //     sideOpacity: 1.0,
         //     middleOpacity: 1.0,
         // });
+        if (this.filterTimeout) {
+            clearTimeout(this.filterTimeout);
+        }
+        this._unmounted = true;
     },
 
     refreshRoomList: function() {
@@ -140,6 +144,11 @@ module.exports = React.createClass({
                 return;
             }
 
+            if (this._unmounted) {
+                // if we've been unmounted, we don't care either.
+                return;
+            }
+
             this.nextBatch = data.next_batch;
             this.setState((s) => {
                 s.publicRooms.push(...data.chunk);
@@ -157,12 +166,18 @@ module.exports = React.createClass({
                 // requests either
                 return;
             }
+
+            if (this._unmounted) {
+                // if we've been unmounted, we don't care either.
+                return;
+            }
+
             this.setState({ loading: false });
             console.error("Failed to get publicRooms: %s", JSON.stringify(err));
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to get public room list",
-                description: err.message
+                description: ((err && err.message) ? err.message : "The server may be unavailable or overloaded"),
             });
         });
     },
@@ -205,12 +220,13 @@ module.exports = React.createClass({
                 }).done(() => {
                     modal.close();
                     this.refreshRoomList();
-                }, function(err) {
+                }, (err) => {
                     modal.close();
                     this.refreshRoomList();
+                    console.error("Failed to " + step + ": " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Failed to "+step,
-                        description: err.toString()
+                        title: "Failed to " + step,
+                        description: ((err && err.message) ? err.message : "The server may be unavailable or overloaded"),
                     });
                 });
             }
@@ -459,6 +475,17 @@ module.exports = React.createClass({
         return fields;
     },
 
+    /**
+     * called by the parent component when PageUp/Down/etc is pressed.
+     *
+     * We pass it down to the scroll panel.
+     */
+    handleScrollKey: function(ev) {
+        if (this.scrollPanel) {
+            this.scrollPanel.handleScrollKey(ev);
+        }
+    },
+
     render: function() {
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         const Loader = sdk.getComponent("elements.Spinner");
@@ -537,7 +564,7 @@ module.exports = React.createClass({
         const DirectorySearchBox = sdk.getComponent('elements.DirectorySearchBox');
         return (
             <div className="mx_RoomDirectory">
-                <SimpleRoomHeader title="Directory" />
+                <SimpleRoomHeader title="Directory" icon="img/icons-directory.svg"/>
                 <div className="mx_RoomDirectory_list">
                     <div className="mx_RoomDirectory_listheader">
                         <DirectorySearchBox
