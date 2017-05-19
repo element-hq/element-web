@@ -18,7 +18,8 @@ limitations under the License.
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var sdk = require('matrix-react-sdk')
+var sdk = require('matrix-react-sdk');
+import _t from 'counterpart';
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 
@@ -120,7 +121,7 @@ module.exports = React.createClass({
             homeButton = (
                 <AccessibleButton className="mx_BottomLeftMenu_homePage" onClick={ this.onHomeClick } onMouseEnter={ this.onHomeMouseEnter } onMouseLeave={ this.onHomeMouseLeave } >
                     <TintableSvg src="img/icons-home.svg" width="25" height="25" />
-                    { this.getLabel("Welcome page", this.state.homeHover) }
+                    { this.getLabel(_t("Welcome page"), this.state.homeHover) }
                 </AccessibleButton>
             );
         }
@@ -131,19 +132,19 @@ module.exports = React.createClass({
                     { homeButton }
                     <AccessibleButton className="mx_BottomLeftMenu_people" onClick={ this.onPeopleClick } onMouseEnter={ this.onPeopleMouseEnter } onMouseLeave={ this.onPeopleMouseLeave } >
                         <TintableSvg src="img/icons-people.svg" width="25" height="25" />
-                        { this.getLabel("Start chat", this.state.peopleHover) }
+                        { this.getLabel(_t("Start chat"), this.state.peopleHover) }
                     </AccessibleButton>
                     <AccessibleButton className="mx_BottomLeftMenu_directory" onClick={ this.onDirectoryClick } onMouseEnter={ this.onDirectoryMouseEnter } onMouseLeave={ this.onDirectoryMouseLeave } >
                         <TintableSvg src="img/icons-directory.svg" width="25" height="25"/>
-                        { this.getLabel("Room directory", this.state.directoryHover) }
+                        { this.getLabel(_t("Room directory"), this.state.directoryHover) }
                     </AccessibleButton>
                     <AccessibleButton className="mx_BottomLeftMenu_createRoom" onClick={ this.onRoomsClick } onMouseEnter={ this.onRoomsMouseEnter } onMouseLeave={ this.onRoomsMouseLeave } >
                         <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
-                        { this.getLabel("Create new room", this.state.roomsHover) }
+                        { this.getLabel(_t("Create new room"), this.state.roomsHover) }
                     </AccessibleButton>
                     <AccessibleButton className="mx_BottomLeftMenu_settings" onClick={ this.onSettingsClick } onMouseEnter={ this.onSettingsMouseEnter } onMouseLeave={ this.onSettingsMouseLeave } >
                         <TintableSvg src="img/icons-settings.svg" width="25" height="25" />
-                        { this.getLabel("Settings", this.state.settingsHover) }
+                        { this.getLabel(_t("Settings"), this.state.settingsHover) }
                     </AccessibleButton>
                 </div>
             </div>
