@@ -14,9 +14,53 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_AppsDrawer {
+}
+
+.mx_AppsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .mx_AddWidget_button {
     order: 2;
     cursor: pointer;
     padding-left: 12px;
     padding-right: 12px;
+    margin: 0 20px 20px 20px;
+    color: $accent-color;
+}
+
+.mx_SetAppURLDialog_input {
+    border-radius: 3px;
+    border: 1px solid $input-border-color;
+    padding: 9px;
+    color: $primary-fg-color;
+    background-color: $primary-bg-color;
+    font-size: 15px;
+}
+
+.mx_AppTile {
+    width: 48%;
+    margin: 2px 5px;
+    border: 1px solid $greyed-fg-color;
+    border-radius: 2px;
+    height: 200px;
+    // display: inline-block;
+}
+
+.mx_AppTileMenuBar {
+    // height: 15px;
+    margin: 0;
+    padding: 2px 10px;
+    // background-color: $e2e-verified-color;
+    border-bottom: 1px solid $greyed-fg-color;
+}
+
+.mx_AppTileBody iframe {
+    width: 100%;
+    height: 175px;
+    overflow: hidden;
+    border: none;
 }
