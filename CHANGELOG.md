@@ -1,3 +1,104 @@
+Changes in [0.9.10-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.10-rc.1) (2017-05-19)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.9...v0.9.10-rc.1)
+
+ * CSS for left_aligned Dropdowns, and adjustments for Country dd in Login
+   [\#3959](https://github.com/vector-im/riot-web/pull/3959)
+ * Add square flag pngs /w genflags.sh script
+   [\#3953](https://github.com/vector-im/riot-web/pull/3953)
+ * Add config for riot-bot on desktop app build
+   [\#3954](https://github.com/vector-im/riot-web/pull/3954)
+ * Desktop: 'copy link address'
+   [\#3952](https://github.com/vector-im/riot-web/pull/3952)
+ * Reduce rageshake log size to 1MB
+   [\#3943](https://github.com/vector-im/riot-web/pull/3943)
+ * CSS for putting country dd on same line as phone input
+   [\#3942](https://github.com/vector-im/riot-web/pull/3942)
+ * fix #3894
+   [\#3919](https://github.com/vector-im/riot-web/pull/3919)
+ * change vector->riot on the surface
+   [\#3894](https://github.com/vector-im/riot-web/pull/3894)
+ * move manifest.json outward so it is scoped properly
+   [\#3888](https://github.com/vector-im/riot-web/pull/3888)
+ * add to manifest
+   [\#3799](https://github.com/vector-im/riot-web/pull/3799)
+ * Automatically update component-index
+   [\#3886](https://github.com/vector-im/riot-web/pull/3886)
+ * move electron -> electron_app because npm smart
+   [\#3877](https://github.com/vector-im/riot-web/pull/3877)
+ * Fix bug report endpoint in config.sample.json.
+   [\#3863](https://github.com/vector-im/riot-web/pull/3863)
+ * Update 2 missed icons to the new icon
+   [\#3851](https://github.com/vector-im/riot-web/pull/3851)
+ * Make left panel better for new users (mk II)
+   [\#3804](https://github.com/vector-im/riot-web/pull/3804)
+ * match primary package.json
+   [\#3839](https://github.com/vector-im/riot-web/pull/3839)
+ * Re-add productName
+   [\#3829](https://github.com/vector-im/riot-web/pull/3829)
+ * Remove leading v in /version file, for SemVer and to match Electron ver
+   [\#3683](https://github.com/vector-im/riot-web/pull/3683)
+ * Fix scope of callback
+   [\#3790](https://github.com/vector-im/riot-web/pull/3790)
+ * Remember and Recall window layout/position state
+   [\#3622](https://github.com/vector-im/riot-web/pull/3622)
+ * Remove babelcheck
+   [\#3808](https://github.com/vector-im/riot-web/pull/3808)
+ * Include MXID and device id in rageshakes
+   [\#3809](https://github.com/vector-im/riot-web/pull/3809)
+ * import Modal
+   [\#3791](https://github.com/vector-im/riot-web/pull/3791)
+ * Pin filesize ver to fix break upstream
+   [\#3775](https://github.com/vector-im/riot-web/pull/3775)
+ * Improve Room Directory Look & Feel
+   [\#3751](https://github.com/vector-im/riot-web/pull/3751)
+ * Fix emote RRs alignment
+   [\#3742](https://github.com/vector-im/riot-web/pull/3742)
+ * Remove unused `placeholder` prop on RoomDropTarget
+   [\#3741](https://github.com/vector-im/riot-web/pull/3741)
+ * Modify CSS for matrix-org/matrix-react-sdk#833
+   [\#3732](https://github.com/vector-im/riot-web/pull/3732)
+ * Warn when exiting due to single-instance
+   [\#3727](https://github.com/vector-im/riot-web/pull/3727)
+ * Electron forgets it was maximized when you click on a notification
+   [\#3709](https://github.com/vector-im/riot-web/pull/3709)
+ * CSS to make h1 and h2 the same size as h1.
+   [\#3719](https://github.com/vector-im/riot-web/pull/3719)
+ * Prevent long room names/topics from pushing UI of the screen
+   [\#3721](https://github.com/vector-im/riot-web/pull/3721)
+ * Disable dropdown highlight on focus
+   [\#3717](https://github.com/vector-im/riot-web/pull/3717)
+ * Escape HTML Tags from Linux Notifications (electron)
+   [\#3564](https://github.com/vector-im/riot-web/pull/3564)
+ * styling for spoilerized access token view in Settings
+   [\#3651](https://github.com/vector-im/riot-web/pull/3651)
+ * Fix Webpack conf
+   [\#3690](https://github.com/vector-im/riot-web/pull/3690)
+ * Add config.json to .gitignore
+   [\#3599](https://github.com/vector-im/riot-web/pull/3599)
+ * add command line arg (--hidden) for electron app
+   [\#3641](https://github.com/vector-im/riot-web/pull/3641)
+ * fix ImageView Download functionality
+   [\#3640](https://github.com/vector-im/riot-web/pull/3640)
+ * Add cross-env into the mix
+   [\#3693](https://github.com/vector-im/riot-web/pull/3693)
+ * Remember acceptance for unsupported browsers.
+   [\#3694](https://github.com/vector-im/riot-web/pull/3694)
+ * Cosmetics to go with matrix-org/matrix-react-sdk#811
+   [\#3692](https://github.com/vector-im/riot-web/pull/3692)
+ * Cancel quicksearch on ESC
+   [\#3680](https://github.com/vector-im/riot-web/pull/3680)
+ * Optimise RoomList and implement quick-search functionality on it.
+   [\#3654](https://github.com/vector-im/riot-web/pull/3654)
+ * Progress updates for rageshake uploads
+   [\#3648](https://github.com/vector-im/riot-web/pull/3648)
+ * Factor out rageshake upload to a separate file
+   [\#3645](https://github.com/vector-im/riot-web/pull/3645)
+ * rageshake: fix race when collecting logs
+   [\#3644](https://github.com/vector-im/riot-web/pull/3644)
+ * Fix a flaky test
+   [\#3649](https://github.com/vector-im/riot-web/pull/3649)
+
 Changes in [0.9.9](https://github.com/vector-im/riot-web/releases/tag/v0.9.9) (2017-04-25)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.9-rc.2...v0.9.9)
