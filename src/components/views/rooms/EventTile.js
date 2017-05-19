@@ -406,9 +406,12 @@ module.exports = WithMatrixClient(React.createClass({
         var isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
         const isRedacted = (eventType === 'm.room.message') && this.props.isRedacted;
 
-        var classes = classNames({
+        const isTwelveHour = UserSettingsStore.getSyncedSetting('showTwelveHourTimestamps');
+
+        const classes = classNames({
             mx_EventTile: true,
             mx_EventTile_info: isInfoMessage,
+            mx_EventTile_12hr: isTwelveHour,
             mx_EventTile_encrypting: this.props.eventSendStatus == 'encrypting',
             mx_EventTile_sending: isSending,
             mx_EventTile_notSent: this.props.eventSendStatus == 'not_sent',
@@ -476,43 +479,34 @@ module.exports = WithMatrixClient(React.createClass({
             }
         }
 
-        var editButton = (
+        const editButton = (
             <span className="mx_EventTile_editButton" title="Options" onClick={this.onEditClicked} />
         );
-
-        var e2e;
-        let e2e_style;
+        let e2e;
         // cosmetic padlocks:
-        if (UserSettingsStore.getSyncedSetting('showTwelveHourTimestamps')) {
-            e2e_style = "mx_EventTile_e2eIcon mx_EventTile_e2eIcon_12hr";
-        }
-        else {
-            e2e_style = "mx_EventTile_e2eIcon";
-        }
         if ((e2eEnabled && this.props.eventSendStatus) || this.props.mxEvent.getType() === 'm.room.encryption') {
-            e2e = <img style={{ cursor: 'initial', marginLeft: '-1px' }} className={e2e_style} alt="Encrypted by verified device" src="img/e2e-verified.svg" width="10" height="12" />;
+            e2e = <img style={{ cursor: 'initial', marginLeft: '-1px' }} className="mx_EventTile_e2eIcon" alt="Encrypted by verified device" src="img/e2e-verified.svg" width="10" height="12" />;
         }
         // real padlocks
         else if (this.props.mxEvent.isEncrypted() || (e2eEnabled && this.props.eventSendStatus)) {
             if (this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted') {
-                e2e = <img onClick={ this.onCryptoClicked } className={e2e_style} alt="Undecryptable" src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} />;
+                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt="Undecryptable" src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} />;
             }
             else if (this.state.verified == true || (e2eEnabled && this.props.eventSendStatus)) {
-                e2e = <img onClick={ this.onCryptoClicked } className={e2e_style}  alt="Encrypted by verified device" src="img/e2e-verified.svg" width="10" height="12"/>;
+                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt="Encrypted by verified device" src="img/e2e-verified.svg" width="10" height="12"/>;
             }
             else {
-                e2e = <img onClick={ this.onCryptoClicked } className={e2e_style} alt="Encrypted by unverified device" src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }}/>;
+                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt="Encrypted by unverified device" src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }}/>;
             }
         }
         else if (e2eEnabled) {
-            e2e = <img onClick={ this.onCryptoClicked } className={e2e_style} alt="Unencrypted message" src="img/e2e-unencrypted.svg" width="12" height="12"/>;
+            e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt="Unencrypted message" src="img/e2e-unencrypted.svg" width="12" height="12"/>;
         }
         const timestamp = this.props.mxEvent.getTs() ?
-            <MessageTimestamp ts={this.props.mxEvent.getTs()} /> : null;
+            <MessageTimestamp showTwelveHour={isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
 
         if (this.props.tileShape === "notif") {
-            var room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());
-
+            const room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());
             return (
                 <div className={classes}>
                     <div className="mx_EventTile_roomName">

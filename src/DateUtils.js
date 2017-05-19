@@ -25,10 +25,9 @@ function pad(n) {
 
 function twelveHourTime(date) {
     let hours = date.getHours() % 12;
-    let minutes = pad(date.getMinutes());
+    const minutes = pad(date.getMinutes());
     const ampm = hours >= 12 ? 'PM' : 'AM';
     hours = pad(hours ? hours : 12);
-    minutes = pad(minutes);
     return `${hours}:${minutes} ${ampm}`;
 }
 
@@ -44,9 +43,7 @@ module.exports = {
         else if (now.getFullYear() === date.getFullYear()) {
             return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + this.formatTime(date);
         }
-        else {
-            return this.formatFullDate(date);
-        }
+        return this.formatFullDate(date);
     },
 
     formatFullDate: function(date) {
