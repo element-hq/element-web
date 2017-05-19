@@ -232,8 +232,23 @@ limitations under the License.
     border-bottom-right-radius: 0px;
 }
 
+.mx_Login_phoneSection {
+    display:flex;
+}
+
 .mx_Login_phoneCountry {
     margin-bottom: 14px;
+    width: 150px;
+
+    /* To override mx_Login_field_prefix */
+    text-align: left;
+    padding: 0px;
+    background-color: $primary-bg-color;
+}
+
+.mx_Login_field_prefix .mx_Dropdown_input {
+    /* To use prefix border instead of dropdown border */
+    border: 0;
 }
 
 .mx_Login_phoneCountry .mx_Dropdown_option {
@@ -246,6 +261,6 @@ limitations under the License.
 }
 
 .mx_Login_phoneCountry .mx_Dropdown_option img {
-    margin: 4px;
+    margin: 3px;
     vertical-align: top;
 }
