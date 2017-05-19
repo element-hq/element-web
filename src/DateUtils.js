@@ -16,7 +16,6 @@ limitations under the License.
 
 'use strict';
 
-import UserSettingsStore from './UserSettingsStore';
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -24,13 +23,13 @@ function pad(n) {
     return (n < 10 ? '0' : '') + n;
 }
 
-function twentyFourHour(date) {
+function twelveHourTime(date) {
     let hours = date.getHours() % 12;
     let minutes = pad(date.getMinutes());
     const ampm = hours >= 12 ? 'PM' : 'AM';
     hours = pad(hours ? hours : 12);
     minutes = pad(minutes);
-    return hours + ':' + minutes + ' ' + ampm;
+    return `${hours}:${minutes} ${ampm}`;
 }
 
 module.exports = {
@@ -54,9 +53,9 @@ module.exports = {
         return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " " + this.formatTime(date);
     },
 
-    formatTime: function(date) {
-        if (UserSettingsStore.getSyncedSetting('showTwelveHourTimestamps')) {
-          return twentyFourHour(date);
+    formatTime: function(date, showTwelveHour=false) {
+        if (showTwelveHour) {
+          return twelveHourTime(date);
         }
         return pad(date.getHours()) + ':' + pad(date.getMinutes());
     },
