@@ -19,21 +19,18 @@ limitations under the License.
 import UserSettingsStore from './UserSettingsStore';
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-let time;
 
 function pad(n) {
     return (n < 10 ? '0' : '') + n;
 }
 
-function twentyfourhour(date) {
-  let hours = date.getHours();
-  let minutes = date.getMinutes();
-  let ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-  minutes = minutes < 10 ? '0'+minutes : minutes;
-  var strTime = hours + ':' + minutes + ' ' + ampm;
-  return strTime;
+function twentyFourHour(date) {
+    let hours = date.getHours() % 12;
+    let minutes = pad(date.getMinutes());
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = pad(hours ? hours : 12);
+    minutes = pad(minutes);
+    return hours + ':' + minutes + ' ' + ampm;
 }
 
 module.exports = {
@@ -59,7 +56,7 @@ module.exports = {
 
     formatTime: function(date) {
         if (UserSettingsStore.getSyncedSetting('showTwelveHourTimestamps')) {
-          return twentyfourhour(date);
+          return twentyFourHour(date);
         }
         return pad(date.getHours()) + ':' + pad(date.getMinutes());
     },
