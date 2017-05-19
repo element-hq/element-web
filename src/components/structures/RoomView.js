@@ -125,7 +125,7 @@ module.exports = React.createClass({
             roomId: null,
             roomLoading: true,
 
-            forwardingMessage: null,
+            forwardingEvent: null,
             editingRoomSettings: false,
             uploadingRoomSettings: false,
             numUnreadMessages: 0,
@@ -454,9 +454,9 @@ module.exports = React.createClass({
                 });
 
                 break;
-            case 'forward_message':
+            case 'forward_event':
                 this.setState({
-                    forwardingMessage: payload.content,
+                    forwardingEvent: payload.content,
                 });
                 break;
         }
@@ -1203,7 +1203,7 @@ module.exports = React.createClass({
         this.updateTint();
         this.setState({
             editingRoomSettings: false,
-            forwardingMessage: null,
+            forwardingEvent: null,
         });
         dis.dispatch({action: 'focus_composer'});
     },
@@ -1621,8 +1621,8 @@ module.exports = React.createClass({
         }
 
         let aux = null;
-        if (this.state.forwardingMessage !== null) {
-            aux = <ForwardMessage onCancelClick={this.onCancelClick} currentRoomId={this.state.room.roomId} content={this.state.forwardingMessage} />;
+        if (this.state.forwardingEvent !== null) {
+            aux = <ForwardMessage onCancelClick={this.onCancelClick} currentRoomId={this.state.room.roomId} mxEvent={this.state.forwardingEvent} />;
         } else if (this.state.editingRoomSettings) {
             aux = <RoomSettings ref="room_settings" onSaveClick={this.onSettingsSaveClick} onCancelClick={this.onCancelClick} room={this.state.room} />;
         } else if (this.state.uploadingRoomSettings) {
@@ -1742,14 +1742,13 @@ module.exports = React.createClass({
         }
 
         // console.log("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
-
         var messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
                 timelineSet={this.state.room.getUnfilteredTimelineSet()}
                 manageReadReceipts={!UserSettingsStore.getSyncedSetting('hideReadReceipts', false)}
                 manageReadMarkers={true}
                 hidden={hideMessagePanel}
-                highlightedEventId={this.props.highlightedEventId}
+                highlightedEventId={this.state.forwardingEvent ? this.state.forwardingEvent.getId() : this.props.highlightedEventId}
                 eventId={this.props.eventId}
                 eventPixelOffset={this.props.eventPixelOffset}
                 onScroll={ this.onMessageListScroll }

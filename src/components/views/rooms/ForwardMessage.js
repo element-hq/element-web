@@ -26,7 +26,9 @@ module.exports = React.createClass({
 
     propTypes: {
         currentRoomId: React.PropTypes.string.isRequired,
-        content: React.PropTypes.object.isRequired,
+
+        /* the MatrixEvent to be forwarded */
+        mxEvent: React.PropTypes.object.isRequired,
 
         onCancelClick: React.PropTypes.func.isRequired,
     },
@@ -57,8 +59,9 @@ module.exports = React.createClass({
 
     onAction: function(payload) {
         if (payload.action === 'view_room') {
+            const event = this.props.mxEvent;
             const Client = MatrixClientPeg.get();
-            Client.sendMessage(payload.room_id, this.props.content).done(() => {
+            Client.sendEvent(payload.room_id, event.getType(), event.getContent()).done(() => {
                 dis.dispatch({action: 'message_sent'});
             }, (err) => {
                 if (err.name === "UnknownDeviceError") {
