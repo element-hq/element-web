@@ -1,4 +1,4 @@
-Riot 
+Riot
 ====
 
 Riot (formerly known as Vector) is a Matrix web client built using the Matrix
