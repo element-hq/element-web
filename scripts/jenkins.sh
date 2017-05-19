@@ -8,10 +8,13 @@ nvm use 6
 
 set -x
 
+# check out corresponding branches of dependencies
+`dirname $0`/fetch-develop.deps.sh
+
 npm install
 
 # apparently npm 3.10.3 on node 6.4.0 doesn't upgrade #develop target with npm install unless explicitly asked.
-npm install matrix-react-sdk matrix-js-sdk olm
+npm install olm
 
 # install olm. A naive 'npm i ./olm/olm-*.tgz' fails because it uses the url
 # from our package.json (or even matrix-js-sdk's) in preference.
@@ -22,11 +25,6 @@ npm install matrix-react-sdk matrix-js-sdk olm
 #tar -C olm -xz < olm/olm-*.tgz
 #rm -r node_modules/olm
 #cp -r olm/package node_modules/olm
-
-
-# we may be using dev branches of js-sdk and react-sdk, in which case we need to build them
-(cd node_modules/matrix-js-sdk && npm install)
-(cd node_modules/matrix-react-sdk && npm install)
 
 # run the mocha tests
 npm run test
