@@ -12,19 +12,19 @@ to be allowed to effectively interfere in the user's session.
 
 The parameters that are obligatory are the following:
 
- 1. `action`: If the origin wants to 'login' or 'logout' Riot.
+ 1. `action`: If the origin wants to login (value _im.vector.login_) or logout (value _im.vector.logout_) Riot.
  2. `homeserverUrl`: The Home Server where the user is registered
  3. `identityServerUrl`: The Identity Server where her/his user is stored
  4. `accessToken`: a valid Access Token of the user session
  5. `userId`: the complete user ID
 
 Besides these obligatory credentials, the postMessage might have the following
-options:
+optional parameters:
 
  1. `deviceId`: The device ID where user is logged in. This is important if
  E2E is being used by this user.
- 2. `forceLogout`: Boolean option to define if the user must see a dialog
- before logging out to have the option to export her/his E2E keys and therefore
+ 2. `forceLogout`: Boolean option. When false, the user will see a dialog
+ before logging out with the option to export her/his E2E keys and therefore
  be able to recover encrypted messages' history. Default is *false*
 
 Example:
