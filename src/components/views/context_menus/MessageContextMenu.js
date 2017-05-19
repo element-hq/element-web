@@ -90,8 +90,8 @@ module.exports = React.createClass({
 
     onForwardClick: function() {
         dis.dispatch({
-            action: 'forward_message',
-            content: this.props.mxEvent.getContent(),
+            action: 'forward_event',
+            content: this.props.mxEvent,
         });
         this.closeMenu();
     },
