@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -64,7 +65,7 @@ input[type=text].error, input[type=password].error {
     border: 1px solid $warning-color;
 }
 
-input[type=text]:focus, textarea:focus {
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
     border: 1px solid $accent-color;
     outline: none;
     box-shadow: none;
@@ -134,7 +135,7 @@ textarea {
 .mx_Dialog_wrapper.mx_Dialog_spinner .mx_Dialog {
     width: auto;
     border-radius: 8px;
-    padding-left: 0px;
+    padding: 0px;
     box-shadow: none;
 }
 
@@ -152,6 +153,7 @@ textarea {
     font-size: 15px;
     position: relative;
     padding-left: 58px;
+    padding-bottom: 36px;
     width: 60%;
     max-width: 704px;
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.2);
@@ -184,15 +186,22 @@ textarea {
     pointer-events: none;
 }
 
+.mx_Dialog_cancelButton {
+    position: absolute;
+    right: 11px;
+    top: 13px;
+    cursor: pointer;
+}
+
+.mx_Dialog_cancelButton object {
+    pointer-events: none;
+}
+
 .mx_Dialog_content {
     margin: 24px 58px 68px 0;
     font-size: 14px;
     color: $primary-fg-color;
     word-wrap: break-word;
-}
-
-.mx_Dialog_buttons {
-    padding-bottom: 36px;
 }
 
 .mx_Dialog button, .mx_Dialog input[type="submit"] {
@@ -214,6 +223,10 @@ textarea {
 
     /* align images in buttons (eg spinners) */
     vertical-align: middle;
+}
+
+.mx_Dialog button:focus, .mx_Dialog input[type="submit"]:focus {
+    filter: brightness($focus-brightness);
 }
 
 .mx_Dialog button.mx_Dialog_primary, .mx_Dialog  input[type="submit"].mx_Dialog_primary {
@@ -284,6 +297,10 @@ textarea {
     padding-right: 1em;
     cursor: pointer;
     display: inline;
+}
+
+.mx_button_row {
+    margin-top: 69px;
 }
 
 .changelog_text {

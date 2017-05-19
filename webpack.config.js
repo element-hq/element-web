@@ -1,11 +1,12 @@
-var path = require('path');
-var webpack = require('webpack');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
         "bundle": "./src/vector/index.js",
+        "indexeddb-worker": "./src/vector/indexedbd-worker.js",
 
         // We ship olm.js as a separate lump of javascript. This makes it get
         // loaded via a separate <script/> tag in index.html (which loads it
@@ -18,11 +19,11 @@ module.exports = {
 
         // CSS themes
         "theme-light": "./src/skins/vector/css/themes/light.scss",
-        "theme-dark": "./src/skins/vector/css/themes/dark.scss"
+        "theme-dark": "./src/skins/vector/css/themes/dark.scss",
     },
     module: {
         preLoaders: [
-            { test: /\.js$/, loader: "source-map-loader" }
+            { test: /\.js$/, loader: "source-map-loader" },
         ],
         loaders: [
             { test: /\.json$/, loader: "json" },
@@ -37,9 +38,7 @@ module.exports = {
                 //    would also drag in the imgs and fonts that our CSS refers to
                 //    as webpack inputs.)
                 // 3. ExtractTextPlugin turns that string into a separate asset.
-                loader: ExtractTextPlugin.extract(
-                    "css-raw-loader!postcss-loader?config=postcss.config.js"
-                ),
+                loader: ExtractTextPlugin.extract("css-raw-loader!postcss-loader?config=postcss.config.js"),
             },
             {
                 // this works similarly to the scss case, without postcss.
@@ -48,15 +47,18 @@ module.exports = {
             },
         ],
         noParse: [
+            // for cross platform compatibility use [\\\/] as the path separator
+            // this ensures that the regex trips on both Windows and *nix
+
             // don't parse the languages within highlight.js. They cause stack
             // overflows (https://github.com/webpack/webpack/issues/1721), and
             // there is no need for webpack to parse them - they can just be
             // included as-is.
-            /highlight\.js\/lib\/languages/,
+            /highlight\.js[\\\/]lib[\\\/]languages/,
 
             // olm takes ages for webpack to process, and it's already heavily
             // optimised, so there is little to gain by us uglifying it.
-            /olm\/(javascript\/)?olm\.js$/,
+            /olm[\\\/](javascript[\\\/])?olm\.js$/,
         ],
     },
     output: {
@@ -82,7 +84,7 @@ module.exports = {
             // various levels of '.' and '..'
             // Also, sometimes the resource path is absolute.
             return path.relative(process.cwd(), info.resourcePath).replace(/^[\/\.]*/, '');
-        }
+        },
     },
     resolve: {
         alias: {
@@ -105,16 +107,13 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-            }
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+            },
         }),
 
-        new ExtractTextPlugin(
-            "bundles/[hash]/[name].css",
-            {
-                allChunks: true
-            }
-        ),
+        new ExtractTextPlugin("bundles/[hash]/[name].css", {
+            allChunks: true,
+        }),
 
         new HtmlWebpackPlugin({
             template: './src/vector/index.html',

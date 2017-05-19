@@ -21,6 +21,9 @@ released version of Riot:
    as desired. See below for details.
 1. Enter the URL into your browser and log into Riot!
 
+Releases are signed by PGP, and can be checked against the public key
+at https://riot.im/packages/keys/riot-master.asc
+
 Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
 over https.
@@ -55,15 +58,35 @@ to build.
 1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
 1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`
 1. Switch to the riot-web directory: `cd riot-web`
+1. If you're using the `develop` branch, install the develop versions of the
+   dependencies, as the released ones will be too old:
+   ```
+   scripts/fetch-develop-deps.sh
+   ```
+   Whenever you git pull on riot-web you will also probably need to force an update
+   to these dependencies - the simplest way is to re-run the script, but you can also
+   manually update and reuild them:
+   ```
+   cd matrix-js-sdk
+   git pull
+   npm install # re-run to pull in any new dependencies
+   # Depending on your version of npm, npm run build may happen as part of
+   # the npm install above (https://docs.npmjs.com/misc/scripts#prepublish-and-prepare)
+   # If in doubt, run it anyway:
+   npm run build
+   cd ../matrix-react-sdk
+   git pull
+   npm install
+   npm run build
+   ```
+   However, we recommend setting up a proper development environment (see "Setting
+   up a development environment" below) if you want to run your own copy of the
+   `develop` branch, as it makes it much easier to keep these dependencies
+   up-to-date.  Or just use https://riot.im/develop - the continuous integration
+   release of the develop branch.
+   (Note that we don't reference the develop versions in git directly due to
+   https://github.com/npm/npm/issues/3055)
 1. Install the prerequisites: `npm install`
-1. If you are using the `develop` branch of vector-web, you will probably need
-   to rebuild some of the dependencies, due to
-   https://github.com/npm/npm/issues/3055:
-
-   ```
-   (cd node_modules/matrix-js-sdk && npm install)
-   (cd node_modules/matrix-react-sdk && npm install)
-   ```
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it (see below for details)
 1. `npm run dist` to build a tarball to deploy. Untaring this file will give
@@ -114,12 +137,13 @@ built it yourself.
 
 To run as a desktop app:
 
-1. Follow the instructions in 'Building From Source' above
+1. Follow the instructions in 'Building From Source' above, but run
+   `npm run build` instead of `npm run dist` (since we don't need the tarball).
 2. Install electron and run it:
 
    ```
    npm install electron
-   node_modules/.bin/electron .
+   npm run electron
    ```
 
 To build packages, use electron-builder. This is configured to output:
@@ -263,21 +287,28 @@ Triaging issues
 Issues will be triaged by the core team using the following primary set of tags:
 
 priority:
-    P1: top priority; typically blocks releases.
-    P2: one below that
-    P3: non-urgent
-    P4/P5: bluesky some day, who knows.
+
+* P1: top priority; typically blocks releases
+* P2: still need to fix, but lower than P1
+* P3: non-urgent
+* P4: intereseting idea - bluesky some day
+* P5: recorded for posterity/to avoid duplicates. No intention to resolves right now.
 
 bug or feature:
-  bug severity:
-     * cosmetic - feature works functionally but UI/UX is broken.
-     * critical - whole app doesn't work
-     * major - entire feature doesn't work
-     * minor - partially broken feature (but still usable)
 
-     * release blocker
+* bug
+* feature
 
-     * ui/ux (think of this as cosmetic)
+bug severity:
+  
+* cosmetic - feature works functionally but UI/UX is broken
+* critical - whole app doesn't work
+* major - entire feature doesn't work
+* minor - partially broken feature (but still usable)
 
-     * network (specific to network conditions)
-     * platform (platform specific)
+additional categories:
+
+* release blocker
+* ui/ux (think of this as cosmetic)
+* network (specific to network conditions)
+* platform (platform specific)

@@ -14,8 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_MemberEventListSummary {
+    position: relative;
+}
+
 .mx_TextualEvent.mx_MemberEventListSummary_summary {
     font-size: 14px;
+    display: inline-flex;
 }
 
 .mx_MemberEventListSummary_avatars {
@@ -31,6 +36,15 @@ limitations under the License.
 }
 
 .mx_MemberEventListSummary_toggle {
-    color:$accent-color;
-    cursor:pointer;
+    color: $accent-color;
+    cursor: pointer;
+    float: right;
+    margin-right: 10px;
+    margin-top: 8px;
+}
+
+.mx_MemberEventListSummary_line {
+    border-bottom: 1px solid $primary-hairline-color;
+    margin-left: 63px;
+    line-height: 30px;
 }

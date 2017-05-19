@@ -7,9 +7,12 @@
 // common parents. Hence, "res/{a,b}/**": the output will be "dest/a/..." and
 // "dest/b/...".
 const COPY_LIST = [
+    ["res/manifest.json", "webapp"],
     ["res/{media,vector-icons}/**", "webapp"],
+    ["res/flags/*", "webapp/flags/"],
     ["src/skins/vector/{fonts,img}/**", "webapp"],
     ["node_modules/emojione/assets/svg/*", "webapp/emojione/svg/"],
+    ["node_modules/emojione/assets/png/*", "webapp/emojione/png/"],
     ["./config.json", "webapp", {directwatch: 1}],
 ];
 

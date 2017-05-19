@@ -44,6 +44,9 @@ limitations under the License.
     line-height: 35px;
     padding-left: 8px;
     padding-right: 8px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .mx_NetworkDropdown_networkoption img {

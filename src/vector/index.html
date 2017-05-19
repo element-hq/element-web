@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="vector-icons/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="vector-icons/apple-touch-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="vector-icons/apple-touch-icon-180x180.png">
-    <link rel="manifest" href="vector-icons/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <link rel="shortcut icon" href="vector-icons/favicon.ico">
     <meta name="apple-mobile-web-app-title" content="Riot">
     <meta name="application-name" content="Riot">
@@ -37,8 +37,19 @@
   <body style="height: 100%;">
     <section id="matrixchat" style="height: 100%;"></section>
     <noscript>Sorry, Riot requires JavaScript to be enabled.</noscript>
-    <% for (var i=0; i < htmlWebpackPlugin.files.js.length; i++) {%>
-       <script src="<%= htmlWebpackPlugin.files.js[i] %>"></script>
+    <% for (var i=0; i < htmlWebpackPlugin.files.js.length; i++) {
+        // Not a particularly graceful way of not putting the indexeddb worker script
+        // into the main page
+        if (_.endsWith(htmlWebpackPlugin.files.js[i], 'indexeddb-worker.js')) {
+            %>
+            <script>
+                window.vector_indexeddb_worker_script = '<%= htmlWebpackPlugin.files.js[i] %>';
+            </script>
+            <%
+            continue;
+        }
+        %>
+        <script src="<%= htmlWebpackPlugin.files.js[i] %>"></script>
     <% } %>
     <img src="img/warning.svg" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
     <audio id="messageAudio">
@@ -62,24 +73,5 @@
         <source src="media/busy.mp3" type="audio/mpeg" />
     </audio>
     <audio id="remoteAudio"/>
-    <script>
-        if (
-                window.location.host === 'www.vector.im' ||
-                window.location.host === 'vector.im' ||
-                window.location.host === 'www.riot.im' ||
-                window.location.host === 'riot.im'
-            ) {
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-            ga('create', 'UA-54779209-2', 'auto');
-            ga('send', 'pageview', window.location.pathname + window.location.search + window.location.hash);
-        }
-        else {
-            var ga = null;
-        }
-    </script>
   </body>
 </html>

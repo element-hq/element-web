@@ -17,14 +17,15 @@ limitations under the License.
 .mx_TopUnreadMessagesBar {
     margin: auto;  /* centre horizontally */
     max-width: 960px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     border-bottom: 1px solid $primary-hairline-color;
 }
 
 .mx_TopUnreadMessagesBar_scrollUp {
     display: inline;
     cursor: pointer;
+    text-decoration: underline;
 }
 
 .mx_TopUnreadMessagesBar_scrollUp img {

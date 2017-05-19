@@ -23,6 +23,8 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var DateUtils = require('matrix-react-sdk/lib/DateUtils');
 var filesize = require('filesize');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+const Modal = require('matrix-react-sdk/lib/Modal');
+const sdk = require('matrix-react-sdk');
 
 module.exports = React.createClass({
     displayName: 'ImageView',
@@ -62,19 +64,23 @@ module.exports = React.createClass({
     },
 
     onRedactClick: function() {
-        var self = this;
-        MatrixClientPeg.get().redactEvent(
-            this.props.mxEvent.getRoomId(), this.props.mxEvent.getId()
-        ).done(function() {
-            if (self.props.onFinished) self.props.onFinished();
-        }, function(e) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            // display error message stating you couldn't delete this.
-            var code = e.errcode || e.statusCode;
-            Modal.createDialog(ErrorDialog, {
-                title: "Error",
-                description: "You cannot delete this image. (" + code + ")"
-            });
+        const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
+        Modal.createDialog(ConfirmRedactDialog, {
+            onFinished: (proceed) => {
+                if (!proceed) return;
+                var self = this;
+                MatrixClientPeg.get().redactEvent(
+                    this.props.mxEvent.getRoomId(), this.props.mxEvent.getId()
+                ).catch(function(e) {
+                    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    // display error message stating you couldn't delete this.
+                    var code = e.errcode || e.statusCode;
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Error",
+                        description: "You cannot delete this image. (" + code + ")"
+                    });
+                }).done();
+            }
         });
     },
 
@@ -170,7 +176,7 @@ module.exports = React.createClass({
                                 { this.getName() }
                             </div>
                             { eventMeta }
-                            <a className="mx_ImageView_link" href={ this.props.src } target="_blank" rel="noopener">
+                            <a className="mx_ImageView_link" href={ this.props.src } download={ this.props.name } target="_blank" rel="noopener">
                                 <div className="mx_ImageView_download">
                                         Download this file<br/>
                                          <span className="mx_ImageView_size">{ size_res }</span>

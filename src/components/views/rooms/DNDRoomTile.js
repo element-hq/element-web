@@ -16,14 +16,16 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var DragSource = require('react-dnd').DragSource;
-var DropTarget = require('react-dnd').DropTarget;
+import React from 'react';
+import {DragSource} from 'react-dnd';
+import {DropTarget} from 'react-dnd';
 
-var dis = require("matrix-react-sdk/lib/dispatcher");
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-var sdk = require('matrix-react-sdk');
-var RoomTile = require('matrix-react-sdk/lib/components/views/rooms/RoomTile');
+import dis from 'matrix-react-sdk/lib/dispatcher';
+import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import sdk from 'matrix-react-sdk';
+import RoomTile from 'matrix-react-sdk/lib/components/views/rooms/RoomTile';
+import * as Rooms from 'matrix-react-sdk/lib/Rooms';
+import Modal from 'matrix-react-sdk/lib/Modal';
 
 /**
  * Defines a new Component, DNDRoomTile that wraps RoomTile, making it draggable.
@@ -72,21 +74,49 @@ var roomTileSource = {
             item.targetList.forceUpdate(); // as we're not using state
         }
 
+        const prevTag = item.originalList.props.tagName;
+        const newTag = item.targetList.props.tagName;
+
         if (monitor.didDrop() && item.targetList.props.editable) {
+            // Evil hack to get DMs behaving
+            if ((prevTag === undefined && newTag === 'im.vector.fake.direct') ||
+                (prevTag === 'im.vector.fake.direct' && newTag === undefined)
+            ) {
+                Rooms.guessAndSetDMRoom(
+                    item.room, newTag === 'im.vector.fake.direct',
+                ).done(() => {
+                    item.originalList.removeRoomTile(item.room);
+                }, (err) => {
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    console.error("Failed to set direct chat tag " + err);
+                    Modal.createDialog(ErrorDialog, {
+                        title: "Failed to set direct chat tag",
+                        description: ((err && err.message) ? err.message : "Operation failed"),
+                    });
+                });
+                return;
+            }
+
+            // More evilness: We will still be dealing with moving to favourites/low prio,
+            // but we avoid ever doing a request with 'im.vector.fake.direct`.
+
             // if we moved lists, remove the old tag
-            if (item.targetList !== item.originalList && item.originalList.props.tagName) {
+            if (prevTag && prevTag !== 'im.vector.fake.direct' &&
+                item.targetList !== item.originalList
+            ) {
                 // commented out attempts to set a spinner on our target component as component is actually
                 // the original source component being dragged, not our target.  To fix we just need to
                 // move all of this to endDrop in the target instead.  FIXME later.
 
                 //component.state.set({ spinner: component.state.spinner ? component.state.spinner++ : 1 });
-                MatrixClientPeg.get().deleteRoomTag(item.room.roomId, item.originalList.props.tagName).finally(function() {
+                MatrixClientPeg.get().deleteRoomTag(item.room.roomId, prevTag).finally(function() {
                     //component.state.set({ spinner: component.state.spinner-- });
                 }).fail(function(err) {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    console.error("Failed to remove tag " + prevTag + " from room: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Failed to remove tag " + item.originalList.props.tagName + " from room",
-                        description: err.toString()
+                        title: "Failed to remove tag " + prevTag + " from room",
+                        description: ((err && err.message) ? err.message : "Operation failed"),
                     });
                 });
             }
@@ -97,15 +127,18 @@ var roomTileSource = {
             }
 
             // if we moved lists or the ordering changed, add the new tag
-            if (item.targetList.props.tagName && (item.targetList !== item.originalList || newOrder)) {
+            if (newTag && newTag !== 'im.vector.fake.direct' &&
+                (item.targetList !== item.originalList || newOrder)
+            ) {
                 //component.state.set({ spinner: component.state.spinner ? component.state.spinner++ : 1 });
-                MatrixClientPeg.get().setRoomTag(item.room.roomId, item.targetList.props.tagName, newOrder).finally(function() {
+                MatrixClientPeg.get().setRoomTag(item.room.roomId, newTag, newOrder).finally(function() {
                     //component.state.set({ spinner: component.state.spinner-- });
                 }).fail(function(err) {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    console.error("Failed to add tag " + newTag + " to room: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Failed to add tag " + item.targetList.props.tagName + " to room",
-                        description: err.toString()
+                        title: "Failed to add tag " + newTag + " to room",
+                        description: ((err && err.message) ? err.message : "Operation failed"),
                     });
                 });
             }

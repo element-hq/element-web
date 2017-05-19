@@ -42,7 +42,8 @@ limitations under the License.
 
 .mx_Login_logo {
     text-align: center;
-    height: 195px;
+    height: 150px;
+    margin-bottom: 45px;
 }
 
 .mx_Login_logo img {
@@ -163,3 +164,102 @@ limitations under the License.
     margin-bottom: 12px;
 }
 
+.mx_Login_type_container {
+    display: flex;
+    margin-bottom: 14px;
+}
+
+.mx_Login_type_label {
+    flex-grow: 1;
+    line-height: 35px;
+}
+
+.mx_Login_type_dropdown {
+    width: 125px;
+    align-self: flex-end;
+}
+
+.mx_Login_field_group {
+    display: flex;
+}
+
+.mx_Login_field_prefix {
+    height: 34px;
+    padding: 0px 5px;
+    line-height: 33px;
+
+    background-color: #eee;
+    border: 1px solid #c7c7c7;
+    border-right: 0px;
+    border-radius: 3px 0px 0px 3px;
+
+    text-align: center;
+}
+
+.mx_Login_field_suffix {
+    height: 34px;
+    padding: 0px 5px;
+    line-height: 33px;
+
+    background-color: #eee;
+    border: 1px solid #c7c7c7;
+    border-left: 0px;
+    border-radius: 0px 3px 3px 0px;
+
+    text-align: center;
+    flex-grow: 1;
+}
+
+.mx_Login_username {
+    height: 16px;
+    flex-shrink: 1;
+    min-width: 0px;
+    border-radius: 3px;
+}
+
+.mx_Login_phoneNumberField {
+    height: 16px;
+}
+
+.mx_Login_field_has_prefix {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.mx_Login_field_has_suffix {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.mx_Login_phoneSection {
+    display:flex;
+}
+
+.mx_Login_phoneCountry {
+    margin-bottom: 14px;
+    width: 150px;
+
+    /* To override mx_Login_field_prefix */
+    text-align: left;
+    padding: 0px;
+    background-color: $primary-bg-color;
+}
+
+.mx_Login_field_prefix .mx_Dropdown_input {
+    /* To use prefix border instead of dropdown border */
+    border: 0;
+}
+
+.mx_Login_phoneCountry .mx_Dropdown_option {
+    /*
+        To match height of mx_Login_field
+        33px + 2px border from mx_Dropdown_option = 35px
+    */
+    height: 33px;
+    line-height: 33px;
+}
+
+.mx_Login_phoneCountry .mx_Dropdown_option img {
+    margin: 3px;
+    vertical-align: top;
+}

@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -175,6 +176,21 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_UserSettings_phoneSection {
+    display:table;
+}
+
+.mx_UserSettings_phoneCountry {
+    width: 70px;
+    display: table-cell;
+}
+
+input.mx_UserSettings_phoneNumberField {
+    margin-left: 3px;
+    width: 172px;
+    border: 1px solid transparent;
+}
+
 .mx_UserSettings_changePasswordButton {
     float: right;
     margin-right: 32px;
@@ -203,6 +219,16 @@ limitations under the License.
     margin-top: 10px;
 }
 
+.mx_UserSettings_avatarPicker_edit img {
+    cursor: pointer;
+}
+
 .mx_UserSettings_avatarPicker_edit > input {
     display: none;
+}
+
+.mx_UserSettings_advanced_spoiler {
+    cursor: pointer;
+    color: $accent-color;
+    word-break: break-all;
 }
