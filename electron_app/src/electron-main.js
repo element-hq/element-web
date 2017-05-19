@@ -86,6 +86,12 @@ function onLinkContextMenu(ev, params) {
             safeOpenURL(params.linkURL);
         },
     }));
+    popup_menu.append(new electron.MenuItem({
+        label: 'Copy Link Address',
+        click() {
+            electron.clipboard.writeText(params.linkURL);
+        },
+    }));
     popup_menu.popup();
     ev.preventDefault();
 }

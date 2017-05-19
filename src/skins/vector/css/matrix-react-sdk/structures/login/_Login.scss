@@ -237,11 +237,12 @@ limitations under the License.
 
 .mx_Login_phoneCountry {
     margin-bottom: 14px;
-    width: 145px;
+    width: 150px;
 
     /* To override mx_Login_field_prefix */
     text-align: left;
     padding: 0px;
+    background-color: $primary-bg-color;
 }
 
 .mx_Login_field_prefix .mx_Dropdown_input {
@@ -259,6 +260,6 @@ limitations under the License.
 }
 
 .mx_Login_phoneCountry .mx_Dropdown_option img {
-    margin: 4px;
+    margin: 3px;
     vertical-align: top;
 }
