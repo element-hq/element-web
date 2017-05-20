@@ -158,6 +158,7 @@
     ],
     "linux": {
       "target": "deb",
+      "category": "Network;InstantMessaging;P2P;",
       "maintainer": "support@riot.im",
       "desktop": {
         "StartupWMClass": "riot-web"
