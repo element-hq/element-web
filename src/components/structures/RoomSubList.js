@@ -438,8 +438,8 @@ var RoomSubList = React.createClass({
                     <div className="mx_RoomSubList_roomCount">{ roomCount }</div>
                     <div className={chevronClasses}></div>
                     { badge }
-                    { incomingCall }
                 </AccessibleButton>
+                { incomingCall }
             </div>
         );
     },
