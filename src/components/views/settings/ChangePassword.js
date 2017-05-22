@@ -35,6 +35,8 @@ module.exports = React.createClass({
         rowInputClassName: React.PropTypes.string,
         buttonClassName: React.PropTypes.string,
         confirm: React.PropTypes.bool,
+        // Whether to autoFocus the new password input
+        autoFocusNewPasswordInput: React.PropTypes.bool,
     },
 
     Phases: {
@@ -199,7 +201,7 @@ module.exports = React.createClass({
                                 <label htmlFor="password1">New password</label>
                             </div>
                             <div className={rowInputClassName}>
-                                <input id="password1" type="password" ref="new_input" />
+                                <input id="password1" type="password" ref="new_input" autoFocus={this.props.autoFocusNewPasswordInput} />
                             </div>
                         </div>
                         <div className={rowClassName}>
