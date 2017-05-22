@@ -55,7 +55,7 @@ Building From Source
 Riot is a modular webapp built with modern ES6 and requires a npm build system
 to build.
 
-1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
+1. Install or update `node.js` so that your `npm` is at least at version `2.0.0` (for example install Node.js v7.x from [deb.nodesource.com](https://github.com/nodesource/distributions#installation-instructions))
 1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`
 1. Switch to the riot-web directory: `cd riot-web`
 1. Install the prerequisites: `npm install`
