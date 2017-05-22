@@ -1,5 +1,3 @@
-// @flow
-
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
@@ -165,7 +163,7 @@ process.on('uncaughtException', function(error) {
 electron.ipcMain.on('install_update', installUpdate);
 
 let focusHandlerAttached = false;
-electron.ipcMain.on('setBadgeCount', function(ev, count: number) {
+electron.ipcMain.on('setBadgeCount', function(ev, count) {
     electron.app.setBadgeCount(count);
     if (process.platform === 'win32' && mainWindow && !mainWindow.isFocused()) {
         if (count > 0) {
