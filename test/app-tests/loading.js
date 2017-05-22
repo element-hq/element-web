@@ -115,9 +115,9 @@ describe('loading:', function () {
         }
 
         function routeUrl(location, matrixChat) {
-            console.log(Date.now() + "Routing URL " + location);
+            console.log(Date.now() + ` routing URL '${location}'`);
             const s = getScreenFromLocation(location);
-            console.log("Showing screen", s);
+            console.log("Showing screen "+ s);
             matrixChat.showScreen(s.screen, s.params);
         }
 
@@ -136,6 +136,7 @@ describe('loading:', function () {
                 enableGuest={true}
                 onLoadCompleted={loadCompleteDefer.resolve}
                 initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
+                makeRegistrationUrl={() => {throw new Error('Not implemented');}}
             />, parentDiv
         );
 
@@ -149,6 +150,27 @@ describe('loading:', function () {
                 lastLoadedScreen = null;
             }
         }, 0);
+    }
+
+    // set an expectation that we will get a call to /sync, then flush
+    // http requests until we do.
+    //
+    // returns a promise resolving to the received request
+    async function expectAndAwaitSync(response) {
+        response = response || {};
+        let syncRequest = null;
+        httpBackend.when('GET', '/sync')
+            .check((r) => {syncRequest = r;})
+            .respond(200, response);
+
+        console.log("waiting for /sync");
+        for (let attempts = 10; attempts > 0; attempts--) {
+            if (syncRequest) {
+                return syncRequest;
+            }
+            await httpBackend.flush();
+        }
+        throw new Error("Gave up waiting for /sync");
     }
 
     describe("Clean load with no stored credentials:", function() {
@@ -221,8 +243,7 @@ describe('loading:', function () {
 
                 httpBackend.when('GET', '/pushrules').respond(200, {});
                 httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
-                httpBackend.when('GET', '/sync').respond(200, {});
-                return httpBackend.flush();
+                return expectAndAwaitSync();
             }).then(() => {
                 // once the sync completes, we should have a room view
                 return awaitRoomView(matrixChat);
@@ -250,13 +271,12 @@ describe('loading:', function () {
         it('shows a directory by default if we have no joined rooms', function(done) {
             httpBackend.when('GET', '/pushrules').respond(200, {});
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
-            httpBackend.when('GET', '/sync').respond(200, {});
 
             loadApp();
 
             return awaitSyncingSpinner(matrixChat).then(() => {
                 // we got a sync spinner - let the sync complete
-                return httpBackend.flush();
+                return expectAndAwaitSync();
             }).then(() => {
                 // once the sync completes, we should have a directory
                 httpBackend.verifyNoOutstandingExpectation();
@@ -269,7 +289,6 @@ describe('loading:', function () {
         it('shows a room view if we followed a room link', function(done) {
             httpBackend.when('GET', '/pushrules').respond(200, {});
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
-            httpBackend.when('GET', '/sync').respond(200, {});
 
             loadApp({
                 uriFragment: "#/room/!room:id",
@@ -277,7 +296,7 @@ describe('loading:', function () {
 
             return awaitSyncingSpinner(matrixChat).then(() => {
                 // we got a sync spinner - let the sync complete
-                return httpBackend.flush();
+                return expectAndAwaitSync();
             }).then(() => {
                 // once the sync completes, we should have a room view
                 return awaitRoomView(matrixChat);
@@ -310,8 +329,7 @@ describe('loading:', function () {
                 return awaitSyncingSpinner(matrixChat);
             }).then(() => {
                 // we got a sync spinner - let the sync complete
-                httpBackend.when('GET', '/sync').respond(200, {});
-                return httpBackend.flush();
+                return expectAndAwaitSync();
             }).then(() => {
                 // once the sync completes, we should have a directory
                 httpBackend.verifyNoOutstandingExpectation();
@@ -344,11 +362,10 @@ describe('loading:', function () {
             }).then(() => {
                 return awaitSyncingSpinner(matrixChat);
             }).then(() => {
-                httpBackend.when('GET', '/sync').check(function(req) {
-                    expect(req.path).toMatch(new RegExp("^https://homeserver/"));
-                }).respond(200, {});
-                return httpBackend.flush();
-            }).then(() => {
+                return expectAndAwaitSync();
+            }).then((req) => {
+                expect(req.path).toMatch(new RegExp("^https://homeserver/"));
+
                 // once the sync completes, we should have a directory
                 httpBackend.verifyNoOutstandingExpectation();
                 ReactTestUtils.findRenderedComponentWithType(
@@ -379,8 +396,7 @@ describe('loading:', function () {
             }).then(() => {
                 return awaitSyncingSpinner(matrixChat);
             }).then(() => {
-                httpBackend.when('GET', '/sync').respond(200, {});
-                return httpBackend.flush();
+                return expectAndAwaitSync();
             }).then(() => {
                 // once the sync completes, we should have a room view
                 return awaitRoomView(matrixChat);
@@ -450,7 +466,7 @@ function awaitSyncingSpinner(matrixChat, retryLimit, retryCount) {
         retryCount = 0;
     }
 
-    if (matrixChat.state.loading) {
+    if (matrixChat.state.loading || matrixChat.state.loggingIn) {
         console.log(Date.now() + " Awaiting sync spinner: still loading.");
         if (retryCount >= retryLimit) {
             throw new Error("MatrixChat still not loaded after " +

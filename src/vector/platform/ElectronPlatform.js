@@ -20,7 +20,7 @@ limitations under the License.
 import VectorBasePlatform from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import q from 'q';
-import electron, {remote} from 'electron';
+import electron, {remote, ipcRenderer} from 'electron';
 
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
 
@@ -58,16 +58,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
     setNotificationCount(count: number) {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
-        // this sometimes throws because electron is made of fail:
-        // https://github.com/electron/electron/issues/7351
-        // For now, let's catch the error, but I suspect it may
-        // continue to fail and we might just have to accept that
-        // electron's remote RPC is a non-starter for now and use IPC
-        try {
-            remote.app.setBadgeCount(count);
-        } catch (e) {
-            console.error('Failed to set notification count', e);
-        }
+
+        ipcRenderer.send('setBadgeCount', count);
     }
 
     supportsNotifications(): boolean {
