@@ -29,6 +29,9 @@ export default React.createClass({
     },
 
     getInitialState: function() {
+        return {
+            value: "",
+        };
     },
 
     componentDidMount: function() {
@@ -36,9 +39,7 @@ export default React.createClass({
     },
 
     onValueChange: function(ev) {
-        this.setState({
-            value: ev.target.value,
-        });
+        this.setState({ value: ev.target.value});
     },
 
     onFormSubmit: function(ev) {
@@ -61,7 +62,7 @@ export default React.createClass({
                     <div className="mx_Dialog_content">
                         <input type="text" ref="input_value" value={this.state.value}
                             autoFocus={true} onChange={this.onValueChange} size="30"
-                            className="mx_SetDisplayNameDialog_input"
+                            className="mx_SetAppURLDialog_input"
                         />
                     </div>
                     <div className="mx_Dialog_buttons">
