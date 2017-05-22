@@ -18,10 +18,12 @@ limitations under the License.
 import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
+import * as FormattingUtils from '../../../utils/FormattingUtils';
 
 export default function DeviceVerifyDialog(props) {
     const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
+    const key = FormattingUtils.formatCryptoKey(props.device.getFingerprint());
     const body = (
         <div>
             <p>
@@ -34,7 +36,7 @@ export default function DeviceVerifyDialog(props) {
                 <ul>
                     <li><label>Device name:</label> <span>{ props.device.getDisplayName() }</span></li>
                     <li><label>Device ID:</label> <span><code>{ props.device.deviceId}</code></span></li>
-                    <li><label>Device key:</label> <span><code><b>{ props.device.getFingerprint() }</b></code></span></li>
+                    <li><label>Device key:</label> <span><code><b>{ key }</b></code></span></li>
                 </ul>
             </div>
             <p>
