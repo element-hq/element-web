@@ -128,7 +128,7 @@ function startAutoUpdate(updateBaseUrl) {
                 `${updateBaseUrl}macos/?localVersion=${encodeURIComponent(electron.app.getVersion())}`);
 
         } else if (process.platform === 'win32') {
-            electron.autoUpdater.setFeedURL(updateBaseUrl + 'win32/' + process.arch + '/');
+            electron.autoUpdater.setFeedURL(`${updateBaseUrl}win32/${process.arch}/`);
         } else {
             // Squirrel / electron only supports auto-update on these two platforms.
             // I'm not even going to try to guess which feed style they'd use if they
