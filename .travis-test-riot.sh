@@ -15,9 +15,9 @@ echo "Determined branch to be $curbranch"
 git clone https://github.com/vector-im/riot-web.git \
     "$RIOT_WEB_DIR"
 
-git checkout "$curbranch" || git checkout develop
-
 cd "$RIOT_WEB_DIR"
+
+git checkout "$curbranch" || git checkout develop
 
 mkdir node_modules
 npm install
