@@ -25,9 +25,9 @@
         var match = file.match(/^bundles\/.*?\/theme-(.*)\.css$/);
         if (match) {
             var title = match[1].charAt(0).toUpperCase() + match[1].slice(1);
-            var light = match[1] == 'light';
+            var defaultTheme = (i == 0);
         %>
-           <link rel="<%= light ? '' : 'alternate ' %>stylesheet" title="<%= title %>"
+           <link rel="<%= defaultTheme ? '' : 'alternate ' %>stylesheet" title="<%= title %>"
                href="<%= file %>">
         <% } else { %>
            <link rel="stylesheet" href="<%= file %>">
