@@ -80,7 +80,7 @@
     "Settings": "Configurações",
     "Source URL": "URL fonte",
     "Start chat": "Começar conversa",
-    "The Home Server may be too old to support third party networks": "O servidor pode ser muito antigo para suportar redes de terceiros.",
+    "The Home Server may be too old to support third party networks": "O servidor pode ser muito antigo para suportar redes de terceiros",
     "There are advanced notifications which are not shown here": "Existem opções avançadas que não são exibidas aqui",
     "The server may be unavailable or overloaded": "O servidor pode estar inacessível ou sobrecarregado",
     "This room is inaccessible to guests. You may be able to join if you register": "Esta sala é inacessível para convidados. Você poderá entrar caso se registre",
@@ -111,5 +111,6 @@
     "All notifications are currently disabled for all targets.": "Todas as notificações estão atualmente desabilitadas para todos os recipientes.",
     "#example": "#exemplo",
     "Failed to remove tag %(prevTag)s from room": "Não foi possível remover a marcação %(prevTag)s desta sala",
-    "Notifications on the following keywords follow rules which can’t be displayed here": "As notificações sobre as palavras-chave abaixo seguem regras que não podem ser mostradas aqui"
+    "Notifications on the following keywords follow rules which can’t be displayed here": "As notificações sobre as palavras-chave abaixo seguem regras que não podem ser mostradas aqui",
+    "Welcome page": "Página de boas vindas"
 }
