@@ -6,14 +6,22 @@ var args = require('optimist').argv;
 var chokidar = require('chokidar');
 
 var componentIndex = path.join('src', 'component-index.js');
+var componentIndexTmp = componentIndex+".tmp";
 var componentsDir = path.join('src', 'components');
 var componentGlob = '**/*.js';
+var prevFiles = [];
 
 function reskindex() {
+    var files = glob.sync(componentGlob, {cwd: componentsDir}).sort();
+    if (!filesHaveChanged(files, prevFiles)) {
+        return;
+    }
+    prevFiles = files;
+
     var header = args.h || args.header;
     var packageJson = JSON.parse(fs.readFileSync('./package.json'));
 
-    var strm = fs.createWriteStream(componentIndex);
+    var strm = fs.createWriteStream(componentIndexTmp);
 
     if (header) {
        strm.write(fs.readFileSync(header));
@@ -28,16 +36,18 @@ function reskindex() {
     strm.write(" */\n\n");
 
     if (packageJson['matrix-react-parent']) {
+        const parentIndex = packageJson['matrix-react-parent'] +
+              '/lib/component-index';
         strm.write(
-            "module.exports.components = require('"+
-            packageJson['matrix-react-parent']+
-            "/lib/component-index').components;\n\n"
-        );
+`let components = require('${parentIndex}').components;
+if (!components) {
+    throw new Error("'${parentIndex}' didn't export components");
+}
+`);
     } else {
-        strm.write("module.exports.components = {};\n");
+        strm.write("let components = {};\n");
     }
 
-    var files = glob.sync(componentGlob, {cwd: componentsDir}).sort();
     for (var i = 0; i < files.length; ++i) {
         var file = files[i].replace('.js', '');
 
@@ -45,13 +55,34 @@ function reskindex() {
         var importName = moduleName.replace(/\./g, "$");
 
         strm.write("import " + importName + " from './components/" + file + "';\n");
-        strm.write(importName + " && (module.exports.components['"+moduleName+"'] = " + importName + ");");
+        strm.write(importName + " && (components['"+moduleName+"'] = " + importName + ");");
         strm.write('\n');
         strm.uncork();
     }
 
+    strm.write("export {components};\n");
     strm.end();
-    console.log('Reskindex: completed');
+    fs.rename(componentIndexTmp, componentIndex, function(err) {
+        if(err) {
+            console.error("Error moving new index into place: " + err);
+        } else {
+            console.log('Reskindex: completed');
+        }
+    });
+}
+
+// Expects both arrays of file names to be sorted
+function filesHaveChanged(files, prevFiles) {
+    if (files.length !== prevFiles.length) {
+        return true;
+    }
+    // Check for name changes
+    for (var i = 0; i < files.length; i++) {
+        if (prevFiles[i] !== files[i]) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // -w indicates watch mode where any FS events will trigger reskindex

@@ -148,17 +148,18 @@ var sanitizeHtmlParams = {
                     attribs.href = m[1];
                     delete attribs.target;
                 }
-
-                m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
-                if (m) {
-                    var entity = m[1];
-                    if (entity[0] === '@') {
-                        attribs.href = '#/user/' + entity;
+                else {
+                    m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
+                    if (m) {
+                        var entity = m[1];
+                        if (entity[0] === '@') {
+                            attribs.href = '#/user/' + entity;
+                        }
+                        else if (entity[0] === '#' || entity[0] === '!') {
+                            attribs.href = '#/room/' + entity;
+                        }
+                        delete attribs.target;
                     }
-                    else if (entity[0] === '#' || entity[0] === '!') {
-                        attribs.href = '#/room/' + entity;
-                    }
-                    delete attribs.target;
                 }
             }
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/

@@ -33,6 +33,7 @@ export default class MessageComposer extends React.Component {
         this.onHangupClick = this.onHangupClick.bind(this);
         this.onUploadClick = this.onUploadClick.bind(this);
         this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
+        this.uploadFiles = this.uploadFiles.bind(this);
         this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
         this.onInputContentChanged = this.onInputContentChanged.bind(this);
         this.onUpArrow = this.onUpArrow.bind(this);
@@ -97,10 +98,11 @@ export default class MessageComposer extends React.Component {
         this.refs.uploadInput.click();
     }
 
-    onUploadFileSelected(files, isPasted) {
-        if (!isPasted)
-            files = files.target.files;
+    onUploadFileSelected(files) {
+        this.uploadFiles(files.target.files);
+    }
 
+    uploadFiles(files) {
         let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         let TintableSvg = sdk.getComponent("elements.TintableSvg");
 
@@ -306,7 +308,7 @@ export default class MessageComposer extends React.Component {
                     tryComplete={this._tryComplete}
                     onUpArrow={this.onUpArrow}
                     onDownArrow={this.onDownArrow}
-                    onUploadFileSelected={this.onUploadFileSelected}
+                    onFilesPasted={this.uploadFiles}
                     tabComplete={this.props.tabComplete} // used for old messagecomposerinput/tabcomplete
                     onContentChanged={this.onInputContentChanged}
                     onInputStateChanged={this.onInputStateChanged} />,

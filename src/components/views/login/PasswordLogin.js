@@ -149,28 +149,26 @@ class PasswordLogin extends React.Component {
                 </div>;
             case PasswordLogin.LOGIN_FIELD_PHONE:
                 const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
-                const prefix = this.state.phonePrefix;
                 return <div className="mx_Login_phoneSection">
                     <CountryDropdown
-                        className="mx_Login_phoneCountry"
+                        className="mx_Login_phoneCountry mx_Login_field_prefix"
                         ref="phone_country"
                         onOptionChange={this.onPhoneCountryChanged}
                         value={this.state.phoneCountry}
+                        isSmall={true}
+                        showPrefix={true}
                     />
-                    <div className="mx_Login_field_group">
-                        <div className="mx_Login_field_prefix">+{prefix}</div>
-                        <input
-                            className="mx_Login_phoneNumberField mx_Login_field mx_Login_field_has_prefix"
-                            ref="phoneNumber"
-                            key="phone_input"
-                            type="text"
-                            name="phoneNumber"
-                            onChange={this.onPhoneNumberChanged}
-                            placeholder="Mobile phone number"
-                            value={this.state.phoneNumber}
-                            autoFocus
-                        />
-                    </div>
+                    <input
+                        className="mx_Login_phoneNumberField mx_Login_field mx_Login_field_has_prefix"
+                        ref="phoneNumber"
+                        key="phone_input"
+                        type="text"
+                        name="phoneNumber"
+                        onChange={this.onPhoneNumberChanged}
+                        placeholder="Mobile phone number"
+                        value={this.state.phoneNumber}
+                        autoFocus
+                    />
                 </div>;
         }
     }

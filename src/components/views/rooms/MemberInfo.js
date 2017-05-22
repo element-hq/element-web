@@ -713,8 +713,16 @@ module.exports = WithMatrixClient(React.createClass({
 
         const memberName = this.props.member.name;
 
+        if (this.props.member.user) {
+            var presenceState = this.props.member.user.presence;
+            var presenceLastActiveAgo = this.props.member.user.lastActiveAgo;
+            var presenceLastTs = this.props.member.user.lastPresenceTs;
+            var presenceCurrentlyActive = this.props.member.user.currentlyActive;
+        }
+
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
+        var PresenceLabel = sdk.getComponent('rooms.PresenceLabel');
         const EmojiText = sdk.getComponent('elements.EmojiText');
         return (
             <div className="mx_MemberInfo">
@@ -731,6 +739,11 @@ module.exports = WithMatrixClient(React.createClass({
                     </div>
                     <div className="mx_MemberInfo_profileField">
                         Level: <b><PowerSelector controlled={true} value={ parseInt(this.props.member.powerLevel) } disabled={ !this.state.can.modifyLevel } onChange={ this.onPowerChange }/></b>
+                    </div>
+                    <div className="mx_MemberInfo_profileField">
+                        <PresenceLabel activeAgo={ presenceLastActiveAgo }
+                            currentlyActive={ presenceCurrentlyActive }
+                            presenceState={ presenceState } />
                     </div>
                 </div>
 
