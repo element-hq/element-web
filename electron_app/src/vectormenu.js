@@ -14,170 +14,112 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const electron = require('electron');
+const {app, shell, Menu} = require('electron');
 
 // Menu template from http://electron.atom.io/docs/api/menu/, edited
 const template = [
     {
         label: 'Edit',
         submenu: [
-            {
-                role: 'undo'
-            },
-            {
-                role: 'redo'
-            },
-            {
-                type: 'separator'
-            },
-            {
-                role: 'cut'
-            },
-            {
-                role: 'copy'
-            },
-            {
-                role: 'paste'
-            },
-            {
-                role: 'pasteandmatchstyle'
-            },
-            {
-                role: 'delete'
-            },
-            {
-                role: 'selectall'
-            }
-        ]
+            { role: 'undo' },
+            { role: 'redo' },
+            { type: 'separator' },
+            { role: 'cut' },
+            { role: 'copy' },
+            { role: 'paste' },
+            { role: 'pasteandmatchstyle' },
+            { role: 'delete' },
+            { role: 'selectall' },
+        ],
     },
     {
         label: 'View',
         submenu: [
-            {
-                type: 'separator'
-            },
-            {
-                role: 'resetzoom'
-            },
-            {
-                role: 'zoomin'
-            },
-            {
-                role: 'zoomout'
-            },
-            {
-                type: 'separator'
-            },
-            {
-                role: 'togglefullscreen'
-            },
-            {
-                role: 'toggledevtools'
-            }
-        ]
+            { type: 'separator' },
+            { role: 'resetzoom' },
+            { role: 'zoomin' },
+            { role: 'zoomout' },
+            { type: 'separator' },
+            { role: 'togglefullscreen' },
+            { role: 'toggledevtools' },
+        ],
     },
     {
         role: 'window',
         submenu: [
-            {
-                role: 'minimize'
-            },
-            {
-                role: 'close'
-            }
-        ]
+            { role: 'minimize' },
+            { role: 'close' },
+        ],
     },
     {
         role: 'help',
         submenu: [
             {
                 label: 'riot.im',
-                click () { electron.shell.openExternal('https://riot.im/') }
-            }
-        ]
-    }
+                click() { shell.openExternal('https://riot.im/'); },
+            },
+        ],
+    },
 ];
 
 // macOS has specific menu conventions...
 if (process.platform === 'darwin') {
     // first macOS menu is the name of the app
-    const name = electron.app.getName()
+    const name = app.getName();
     template.unshift({
         label: name,
         submenu: [
-            {
-                role: 'about'
-            },
-            {
-                type: 'separator'
-            },
+            { role: 'about' },
+            { type: 'separator' },
             {
                 role: 'services',
-                submenu: []
+                submenu: [],
             },
-            {
-                type: 'separator'
-            },
-            {
-                role: 'hide'
-            },
-            {
-                role: 'hideothers'
-            },
-            {
-                role: 'unhide'
-            },
-            {
-                type: 'separator'
-            },
-            {
-                role: 'quit'
-            }
-        ]
-    })
+            { type: 'separator' },
+            { role: 'hide' },
+            { role: 'hideothers' },
+            { role: 'unhide' },
+            { type: 'separator' },
+            { role: 'quit' },
+        ],
+    });
     // Edit menu.
     // This has a 'speech' section on macOS
     template[1].submenu.push(
-        {
-            type: 'separator'
-        },
+        { type: 'separator' },
         {
             label: 'Speech',
             submenu: [
-                {
-                    role: 'startspeaking'
-                },
-                {
-                    role: 'stopspeaking'
-                }
-            ]
-        }
-    )
+                { role: 'startspeaking' },
+                { role: 'stopspeaking' },
+            ],
+        },
+    );
     // Window menu.
     // This also has specific functionality on macOS
     template[3].submenu = [
         {
             label: 'Close',
             accelerator: 'CmdOrCtrl+W',
-            role: 'close'
+            role: 'close',
         },
         {
             label: 'Minimize',
             accelerator: 'CmdOrCtrl+M',
-            role: 'minimize'
+            role: 'minimize',
         },
         {
             label: 'Zoom',
-            role: 'zoom'
+            role: 'zoom',
         },
         {
-            type: 'separator'
+            type: 'separator',
         },
         {
             label: 'Bring All to Front',
-            role: 'front'
-        }
-    ]
+            role: 'front',
+        },
+    ];
 } else {
     template.unshift({
         label: 'File',
@@ -186,12 +128,10 @@ if (process.platform === 'darwin') {
             /*{
                 role: 'about'
             },*/
-            {
-                role: 'quit'
-            }
-        ]
+            { role: 'quit' },
+        ],
     });
 }
 
-module.exports = electron.Menu.buildFromTemplate(template)
+module.exports = Menu.buildFromTemplate(template);
 
