@@ -58,4 +58,4 @@ popd
 # to define the npm prefix somewhere so it could put the
 # intermediate symlinks there. Instead, we do it ourselves.
 mkdir -p .bin
-ln -s ../matrix-react-sdk/scripts/reskindex.js .bin/reskindex
+ln -sf ../matrix-react-sdk/scripts/reskindex.js .bin/reskindex
