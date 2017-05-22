@@ -50,42 +50,10 @@ export default React.createClass({
     },
 
     onVerifyClick: function() {
-        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        Modal.createDialog(QuestionDialog, {
-            title: "Verify device",
-            description: (
-                <div>
-                    <p>
-                        To verify that this device can be trusted, please contact its
-                        owner using some other means (e.g. in person or a phone call)
-                        and ask them whether the key they see in their User Settings
-                        for this device matches the key below:
-                    </p>
-                    <div className="mx_UserSettings_cryptoSection">
-                        <ul>
-                            <li><label>Device name:</label> <span>{ this.state.device.getDisplayName() }</span></li>
-                            <li><label>Device ID:</label>   <span><code>{ this.state.device.deviceId}</code></span></li>
-                            <li><label>Device key:</label>  <span><code><b>{ this.state.device.getFingerprint() }</b></code></span></li>
-                        </ul>
-                    </div>
-                    <p>
-                        If it matches, press the verify button below.
-                        If it doesnt, then someone else is intercepting this device
-                        and you probably want to press the blacklist button instead.
-                    </p>
-                    <p>
-                        In future this verification process will be more sophisticated.
-                    </p>
-                </div>
-            ),
-            button: "I verify that the keys match",
-            onFinished: confirm=>{
-                if (confirm) {
-                    MatrixClientPeg.get().setDeviceVerified(
-                        this.props.userId, this.state.device.deviceId, true
-                    );
-                }
-            },
+        const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
+        Modal.createDialog(DeviceVerifyDialog, {
+            userId: this.props.userId,
+            device: this.state.device,
         });
     },
 
