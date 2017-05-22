@@ -93,8 +93,8 @@ if (process.platform === 'darwin') {
                 { role: 'startspeaking' },
                 { role: 'stopspeaking' },
             ],
-        },
-    );
+        });
+
     // Window menu.
     // This also has specific functionality on macOS
     template[3].submenu = [
