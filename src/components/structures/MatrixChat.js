@@ -439,7 +439,6 @@ module.exports = React.createClass({
                     break;
                 }
 
-                var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
                 Modal.createDialog(TextInputDialog, {
                     title: "Create Room",
                     description: "Room name (optional)",
