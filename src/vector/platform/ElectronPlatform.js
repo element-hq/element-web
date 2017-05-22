@@ -54,7 +54,19 @@ function platformFriendlyName(): string {
     }
 }
 
+function _onAction(payload: Object) {
+    // Whitelist payload actions, no point sending most across
+    if (['call_state'].includes(payload.action)) {
+        ipcRenderer.send('app_onAction', payload);
+    }
+}
+
 export default class ElectronPlatform extends VectorBasePlatform {
+    constructor() {
+        super();
+        dis.register(_onAction);
+    }
+
     setNotificationCount(count: number) {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
