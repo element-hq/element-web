@@ -531,7 +531,7 @@ var RoomSubList = React.createClass({
 
         var target;
         if (this.state.sortedList.length == 0 && this.props.editable) {
-            target = <RoomDropTarget label={ 'Drop here to ' + this.props.verb }/>;
+            target = <RoomDropTarget label={ _t("Drop here %(toAction)s", {toAction: this.props.verb}) }/>;
         }
 
         if (this.state.sortedList.length > 0 || this.props.editable) {

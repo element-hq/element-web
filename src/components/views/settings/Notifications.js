@@ -179,6 +179,7 @@ module.exports = React.createClass({
             title: _t('Keywords'),
             description: _t('Enter keywords separated by a comma') + ':',
             value: keywords,
+            button: _t('OK'),
             onFinished: function onFinished(should_leave, newValue) {
 
                 if (should_leave && newValue !== keywords) {
@@ -738,7 +739,7 @@ module.exports = React.createClass({
         var externalRules = [];
         for (var i in this.state.externalPushRules) {
             var rule = this.state.externalPushRules[i];
-            externalRules.push(<li>{ rule.description }</li>);
+            externalRules.push(<li>{ _t(rule.description) }</li>);
         }
 
         // Show keywords not displayed by the vector UI as a single external push rule
