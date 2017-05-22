@@ -179,7 +179,8 @@ function _setCallState(call, roomId, status) {
     }
     dis.dispatch({
         action: 'call_state',
-        room_id: roomId
+        room_id: roomId,
+        state: status,
     });
 }
 
