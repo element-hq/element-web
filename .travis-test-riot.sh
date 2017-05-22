@@ -9,7 +9,10 @@ set -ev
 RIOT_WEB_DIR=riot-web
 REACT_SDK_DIR=`pwd`
 
-git clone --depth=1 --branch develop https://github.com/vector-im/riot-web.git \
+curbranch="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
+echo "Determined branch to be $curbranch"
+
+git clone --depth=1 --branch "$curbranch" https://github.com/vector-im/riot-web.git \
     "$RIOT_WEB_DIR"
 
 cd "$RIOT_WEB_DIR"
