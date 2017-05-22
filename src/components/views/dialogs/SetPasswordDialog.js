@@ -75,6 +75,7 @@ export default React.createClass({
                         rowInputClassName=""
                         buttonClassName="mx_Dialog_primary mx_SetPasswordDialog_change_password_button"
                         confirm={false}
+                        autoFocusNewPasswordInput={true}
                         onError={this._onPasswordChangeError}
                         onFinished={this._onPasswordChanged} />
                     <div className="error">
