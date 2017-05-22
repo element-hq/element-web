@@ -74,7 +74,6 @@ describe('joining a room', function () {
 
             httpBackend.when('GET', '/pushrules').respond(200, {});
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
-            httpBackend.when('GET', '/sync').respond(200, {});
 
             // note that we deliberately do *not* set an expectation for a
             // presence update - setting one makes the first httpBackend.flush
@@ -86,7 +85,11 @@ describe('joining a room', function () {
             localStorage.setItem("mx_access_token", ACCESS_TOKEN );
             localStorage.setItem("mx_user_id", USER_ID);
 
-            var mc = <MatrixChat config={{}}/>;
+            var mc = (
+                <MatrixChat config={{}}
+                    makeRegistrationUrl={()=>{throw new Error("unimplemented");}}
+                />
+            );
             matrixChat = ReactDOM.render(mc, parentDiv);
 
             // switch to the Directory
@@ -94,10 +97,24 @@ describe('joining a room', function () {
 
             var roomView;
 
-            // wait for /sync to happen
-            return q.delay(1).then(() => {
-                return httpBackend.flush();
-            }).then(() => {
+            // wait for /sync to happen. This may take some time, as the client
+            // has to initialise indexeddb.
+            console.log("waiting for /sync");
+            let syncDone = false;
+            httpBackend.when('GET', '/sync')
+                .check((r) => {syncDone = true;})
+                .respond(200, {});
+            function awaitSync(attempts) {
+                if (syncDone) {
+                    return q();
+                }
+                if (!attempts) {
+                    throw new Error("Gave up waiting for /sync")
+                }
+                return httpBackend.flush().then(() => awaitSync(attempts-1));
+            }
+
+            return awaitSync(10).then(() => {
                 // wait for the directory requests
                 httpBackend.when('POST', '/publicRooms').respond(200, {chunk: []});
                 httpBackend.when('GET', '/thirdparty/protocols').respond(200, {});

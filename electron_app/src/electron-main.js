@@ -86,6 +86,12 @@ function onLinkContextMenu(ev, params) {
             safeOpenURL(params.linkURL);
         },
     }));
+    popup_menu.append(new electron.MenuItem({
+        label: 'Copy Link Address',
+        click() {
+            electron.clipboard.writeText(params.linkURL);
+        },
+    }));
     popup_menu.popup();
     ev.preventDefault();
 }
@@ -155,11 +161,30 @@ function startAutoUpdate(update_base_url) {
 // no other way to catch this error).
 // Assuming we generally run from the console when developing,
 // this is far preferable.
-process.on('uncaughtException', function (error) {
+process.on('uncaughtException', function(error) {
     console.log("Unhandled exception", error);
 });
 
 electron.ipcMain.on('install_update', installUpdate);
+
+let focusHandlerAttached = false;
+electron.ipcMain.on('setBadgeCount', function(ev, count) {
+    electron.app.setBadgeCount(count);
+    if (process.platform === 'win32' && mainWindow && !mainWindow.isFocused()) {
+        if (count > 0) {
+            if (!focusHandlerAttached) {
+                mainWindow.once('focus', () => {
+                    mainWindow.flashFrame(false);
+                    focusHandlerAttached = false;
+                });
+                focusHandlerAttached = true;
+            }
+            mainWindow.flashFrame(true);
+        } else {
+            mainWindow.flashFrame(false);
+        }
+    }
+});
 
 electron.app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
 
