@@ -17,7 +17,7 @@ module.exports = {
         // problem)
         "olm": "./src/vector/olm-loader.js",
 
-        // CSS themes. In index.html the first theme is default, and the others are 'alternate'
+        // CSS themes
         "theme-light": "./src/skins/vector/css/themes/light.scss",
         "theme-dark": "./src/skins/vector/css/themes/dark.scss",
     },
