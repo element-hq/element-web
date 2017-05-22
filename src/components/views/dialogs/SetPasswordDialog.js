@@ -34,10 +34,17 @@ export default React.createClass({
     getInitialState: function() {
         return {
             error: null,
+            success: false,
         };
     },
 
     _onPasswordChanged: function() {
+        this.setState({
+            success: true,
+        });
+    },
+
+    _onContinueClicked: function() {
         this.props.onFinished(true);
     },
 
@@ -57,6 +64,30 @@ export default React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const ChangePassword = sdk.getComponent('views.settings.ChangePassword');
         const Spinner = sdk.getComponent('elements.Spinner');
+
+        if (this.state.success) {
+            return (
+                <BaseDialog className="mx_SetPasswordDialog"
+                    onFinished={this.props.onFinished}
+                    title="You have successfully set a new password!"
+                >
+                    <div className="mx_Dialog_content">
+                        <p>
+                            You can now return to your account after signing out,
+                            and sign in on other devices.
+                        </p>
+                    </div>
+                    <div className="mx_Dialog_buttons">
+                        <button
+                            className="mx_Dialog_primary"
+                            autoFocus={true}
+                            onClick={this._onContinueClicked}>
+                                Continue
+                        </button>
+                    </div>
+                </BaseDialog>
+            );
+        }
 
         return (
             <BaseDialog className="mx_SetPasswordDialog"
