@@ -83,7 +83,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     displayNotification(title: string, msg: string, avatarUrl: string, room: Object): Notification {
-
         // GNOME notification spec parses HTML tags for styling...
         // Electron Docs state all supported linux notification systems follow this markup spec
         // https://github.com/electron/electron/blob/master/docs/tutorial/desktop-environment-integration.md#linux
