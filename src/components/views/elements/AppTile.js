@@ -33,19 +33,38 @@ export default React.createClass({
         };
     },
 
+    _onEditClick: function() {
+        console.log("Edit widget %s", this.props.id);
+    },
+
+    _onDeleteClick: function() {
+        console.log("Delete widget %s", this.props.id);
+    },
+
     render: function() {
         return (
             <div className="mx_AppTile" id={this.props.id}>
                 <div className="mx_AppTileMenuBar">
                     {this.props.name}
                     <span className="mx_AppTileMenuBarWidgets">
-                        <img src="img/edit.svg" className="mx_filterFlipColor mx_AppTileMenuBarWidgetPadding" width="8" height="8" alt="Edit"/>
-                        <img src="img/cancel.svg" className="mx_filterFlipColor" width="8" height="8" alt="Cancel"/>
-                        {/* <span className="mx_CloseAppWidget">x</span> */}
+                        {/* Edit widget */}
+                        <img
+                            src="img/edit.svg"
+                            className="mx_filterFlipColor mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
+                            width="8" height="8" alt="Edit"
+                            onClick={this._onEditClick}
+                        />
+
+                        {/* Delete widget */}
+                        <img src="img/cancel.svg"
+                        className="mx_filterFlipColor mx_AppTileMenuBarWidget"
+                        width="8" height="8" alt="Cancel"
+                        onClick={this._onDeleteClick}
+                        />
                     </span>
                 </div>
                 <div className="mx_AppTileBody">
-                    <iframe sandbox seamless="seamless" src={this.props.url}></iframe>
+                    <iframe sandbox="sandbox" seamless="seamless" src={this.props.url}></iframe>
                 </div>
             </div>
         );

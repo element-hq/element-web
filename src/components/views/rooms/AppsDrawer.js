@@ -40,9 +40,9 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             apps: [{
-                id: "googleApp",
-                url: "http://matrix.org/grafana/dashboard/db/golang-metrics?panelId=2&fullscreen&edit&var-bucket_size=1m&var-job=riot-bot&var-handler=All&from=1495188444653&to=1495210044654",
-                name: "Google",
+                id: "riot-bot",
+                url: "https://matrix.org/_matrix/media/v1/thumbnail/matrix.org/LvHiqFMHWxAjFUMVCvaPbRYs?width=150&height=150",
+                name: "Riot-bot",
             }],
         };
     },
