@@ -12,7 +12,7 @@ REACT_SDK_DIR=`pwd`
 curbranch="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
 echo "Determined branch to be $curbranch"
 
-git clone --depth=1 https://github.com/vector-im/riot-web.git \
+git clone https://github.com/vector-im/riot-web.git \
     "$RIOT_WEB_DIR"
 
 git checkout "$curbranch" || git checkout develop
