@@ -464,7 +464,7 @@ var RoomSubList = React.createClass({
         return (
             <AccessibleButton className="mx_RoomSubList_ellipsis" onClick={this._showFullMemberList}>
                 <div className="mx_RoomSubList_line"></div>
-                <div className="mx_RoomSubList_more">more</div>
+                <div className="mx_RoomSubList_more">{ _t("more") }</div>
                 <div className={ badgeClasses }>{ content }</div>
             </AccessibleButton>
         );
