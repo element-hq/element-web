@@ -57,7 +57,6 @@ var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var ReactDOM = require("react-dom");
 // Workaround for broken export
 import * as counterpart from 'counterpart-riot';
-var languageHandler = require("matrix-react-sdk/lib/languageHandler");
 var sdk = require("matrix-react-sdk");
 var PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
@@ -66,6 +65,8 @@ var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
 import Modal from 'matrix-react-sdk/lib/Modal';
+import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
+import languageHandler from 'matrix-react-sdk/lib/languageHandler';
 
 import url from 'url';
 
@@ -218,20 +219,6 @@ function getConfig() {
     return deferred.promise;
 }
 
-
-// This is needed to not load the UserSettingsStore before languages are laoded
-function getLocalSettings() {
-    const localSettingsString = localStorage.getItem('mx_local_settings') || '{}';
-    return JSON.parse(localSettingsString);
-}
-// This is needed to not load the UserSettingsStore before languages are laoded
-function setLocalSetting(type, value) {
-    const settings = getLocalSettings();
-    settings[type] = value;
-    // FIXME: handle errors
-    localStorage.setItem('mx_local_settings', JSON.stringify(settings));
-}
-
 function onLoadCompleted() {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
@@ -340,13 +327,8 @@ async function loadApp() {
 }
 
 async function loadLanguage() {
-    const _localSettings = getLocalSettings();
-    let languages = [];
-    if (!_localSettings.hasOwnProperty('language')) {
-        languages = languageHandler.getNormalizedLanguageKeys(languageHandler.getLanguageFromBrowser());
-    } else {
-        languages = languageHandler.getNormalizedLanguageKeys(_localSettings.language);
-    }
+    const lang = UserSettingsStore.getLocalSetting('language', languageHandler.getLanguageFromBrowser());
+    const languages = languageHandler.getNormalizedLanguageKeys(lang);
     languageHandler.setLanguage(languages, counterpart);
     setLocalSetting('language', languages[0]);
 }
