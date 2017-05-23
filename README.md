@@ -1,5 +1,3 @@
-[![Translationsstatus](https://translate.nordgedanken.de/widgets/riot-web/-/multi-auto.svg)](https://translate.nordgedanken.de/engage/riot-web/?utm_source=widget)
-
 matrix-react-sdk
 ================
 
@@ -25,6 +23,11 @@ matrix-react-sdk until the layers are clearly separated again.
 In the interim, `vector-im/riot-web` and `matrix-org/matrix-react-sdk` should
 be considered as a single project (for instance, matrix-react-sdk bugs
 are currently filed against vector-im/riot-web rather than this project).
+
+Translation Status
+==================
+[![translationsstatus](https://translate.nordgedanken.de/widgets/riot-web/-/multi-auto.svg)](https://translate.nordgedanken.de/engage/riot-web/?utm_source=widget)
+
 
 Developer Guide
 ===============
