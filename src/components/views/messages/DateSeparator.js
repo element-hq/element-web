@@ -21,14 +21,7 @@ import _t from 'counterpart-riot';
 import DateUtils from 'matrix-react-sdk/lib/DateUtils';
 
 function getdaysArray() {
-	var days = [];
-	days.push(_t('Sunday'));
-	days.push(_t('Monday'));
-	days.push(_t('Tuesday'));
-	days.push(_t('Wednesday'));
-	days.push(_t('Thursday'));
-	days.push(_t('Friday'));
-	days.push(_t('Saturday'));
+	var days = [_t('Sunday'), _t('Monday'), _t('Tuesday'), _t('Wednesday'), _t('Thursday'), _t('Friday'), _t('Saturday')];
 	return days;
 }
 
