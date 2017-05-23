@@ -282,14 +282,14 @@ async function loadApp() {
     }
 
     if (!configJson.languages) {
-    	let languages;
-		try {
-			languages = await languageHandler.getAllLanguageKeysFromJson();
-		} catch (e) {
-			console.log("couldn't load languages from languages.json: error = "+e);
-			languages = ['en'];
-		}
-		configJson.languages = languages;
+        let languages;
+        try {
+            languages = await languageHandler.getAllLanguageKeysFromJson();
+        } catch (e) {
+            console.log("couldn't load languages from languages.json: error = "+e);
+            languages = ['en'];
+        }
+        configJson.languages = languages;
     }
 
     if (window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser')) {
@@ -339,16 +339,16 @@ async function loadApp() {
 }
 
 function loadLanguage(callback) {
-	const _localSettings = getLocalSettings();
-	var languages = [];
-	if (!_localSettings.hasOwnProperty('language')) {
-	    languages = languageHandler.getNormalizedLanguageKeys(languageHandler.getLanguageFromBrowser());
-	}else {
-	  	languages = languageHandler.getNormalizedLanguageKeys(_localSettings.language);
-	}
-	languageHandler.setLanguage(languages, counterpart);
-	setLocalSetting('language', languages[0]);
-	callback();
+    const _localSettings = getLocalSettings();
+    var languages = [];
+    if (!_localSettings.hasOwnProperty('language')) {
+        languages = languageHandler.getNormalizedLanguageKeys(languageHandler.getLanguageFromBrowser());
+    }else {
+          languages = languageHandler.getNormalizedLanguageKeys(_localSettings.language);
+    }
+    languageHandler.setLanguage(languages, counterpart);
+    setLocalSetting('language', languages[0]);
+    callback();
 }
 
 loadLanguage(loadApp);
