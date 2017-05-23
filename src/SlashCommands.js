@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var MatrixClientPeg = require("./MatrixClientPeg");
-var dis = require("./dispatcher");
-var Tinter = require("./Tinter");
+import MatrixClientPeg from "./MatrixClientPeg";
+import dis from "./dispatcher";
+import Tinter from "./Tinter";
 import sdk from './index';
 import Modal from './Modal';
 
@@ -45,19 +45,25 @@ class Command {
     }
 }
 
-var reject = function(msg) {
+function reject(msg) {
     return {
-        error: msg
+        error: msg,
     };
-};
+}
 
-var success = function(promise) {
+function success(promise) {
     return {
-        promise: promise
+        promise: promise,
     };
-};
+}
 
-var commands = {
+/* Disable the "unexpected this" error for these commands - all of the run
+ * functions are called with `this` bound to the Command instance.
+ */
+
+/* eslint-disable babel/no-invalid-this */
+
+const commands = {
     ddg: new Command("ddg", "<query>", function(roomId, args) {
         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
         // TODO Don't explain this away, actually show a search UI here.
@@ -69,30 +75,30 @@ var commands = {
     }),
 
     // Change your nickname
-    nick: new Command("nick", "<display_name>", function(room_id, args) {
+    nick: new Command("nick", "<display_name>", function(roomId, args) {
         if (args) {
             return success(
-                MatrixClientPeg.get().setDisplayName(args)
+                MatrixClientPeg.get().setDisplayName(args),
             );
         }
         return reject(this.getUsage());
     }),
 
     // Changes the colorscheme of your current room
-    tint: new Command("tint", "<color1> [<color2>]", function(room_id, args) {
+    tint: new Command("tint", "<color1> [<color2>]", function(roomId, args) {
         if (args) {
-            var matches = args.match(/^(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}))( +(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})))?$/);
+            const matches = args.match(/^(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}))( +(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})))?$/);
             if (matches) {
                 Tinter.tint(matches[1], matches[4]);
-                var colorScheme = {};
+                const colorScheme = {};
                 colorScheme.primary_color = matches[1];
                 if (matches[4]) {
                     colorScheme.secondary_color = matches[4];
                 }
                 return success(
                     MatrixClientPeg.get().setRoomAccountData(
-                        room_id, "org.matrix.room.color_scheme", colorScheme
-                    )
+                        roomId, "org.matrix.room.color_scheme", colorScheme,
+                    ),
                 );
             }
         }
@@ -100,22 +106,22 @@ var commands = {
     }),
 
     // Change the room topic
-    topic: new Command("topic", "<topic>", function(room_id, args) {
+    topic: new Command("topic", "<topic>", function(roomId, args) {
         if (args) {
             return success(
-                MatrixClientPeg.get().setRoomTopic(room_id, args)
+                MatrixClientPeg.get().setRoomTopic(roomId, args),
             );
         }
         return reject(this.getUsage());
     }),
 
     // Invite a user
-    invite: new Command("invite", "<userId>", function(room_id, args) {
+    invite: new Command("invite", "<userId>", function(roomId, args) {
         if (args) {
-            var matches = args.match(/^(\S+)$/);
+            const matches = args.match(/^(\S+)$/);
             if (matches) {
                 return success(
-                    MatrixClientPeg.get().invite(room_id, matches[1])
+                    MatrixClientPeg.get().invite(roomId, matches[1]),
                 );
             }
         }
@@ -123,21 +129,21 @@ var commands = {
     }),
 
     // Join a room
-    join: new Command("join", "#alias:domain", function(room_id, args) {
+    join: new Command("join", "#alias:domain", function(roomId, args) {
         if (args) {
-            var matches = args.match(/^(\S+)$/);
+            const matches = args.match(/^(\S+)$/);
             if (matches) {
-                var room_alias = matches[1];
-                if (room_alias[0] !== '#') {
+                let roomAlias = matches[1];
+                if (roomAlias[0] !== '#') {
                     return reject(this.getUsage());
                 }
-                if (!room_alias.match(/:/)) {
-                    room_alias += ':' + MatrixClientPeg.get().getDomain();
+                if (!roomAlias.match(/:/)) {
+                    roomAlias += ':' + MatrixClientPeg.get().getDomain();
                 }
 
                 dis.dispatch({
                     action: 'view_room',
-                    room_alias: room_alias,
+                    roomAlias: roomAlias,
                     auto_join: true,
                 });
 
@@ -147,29 +153,29 @@ var commands = {
         return reject(this.getUsage());
     }),
 
-    part: new Command("part", "[#alias:domain]", function(room_id, args) {
-        var targetRoomId;
+    part: new Command("part", "[#alias:domain]", function(roomId, args) {
+        let targetRoomId;
         if (args) {
-            var matches = args.match(/^(\S+)$/);
+            const matches = args.match(/^(\S+)$/);
             if (matches) {
-                var room_alias = matches[1];
-                if (room_alias[0] !== '#') {
+                let roomAlias = matches[1];
+                if (roomAlias[0] !== '#') {
                     return reject(this.getUsage());
                 }
-                if (!room_alias.match(/:/)) {
-                    room_alias += ':' + MatrixClientPeg.get().getDomain();
+                if (!roomAlias.match(/:/)) {
+                    roomAlias += ':' + MatrixClientPeg.get().getDomain();
                 }
 
                 // Try to find a room with this alias
-                var rooms = MatrixClientPeg.get().getRooms();
-                for (var i = 0; i < rooms.length; i++) {
-                    var aliasEvents = rooms[i].currentState.getStateEvents(
-                        "m.room.aliases"
+                const rooms = MatrixClientPeg.get().getRooms();
+                for (let i = 0; i < rooms.length; i++) {
+                    const aliasEvents = rooms[i].currentState.getStateEvents(
+                        "m.room.aliases",
                     );
-                    for (var j = 0; j < aliasEvents.length; j++) {
-                        var aliases = aliasEvents[j].getContent().aliases || [];
-                        for (var k = 0; k < aliases.length; k++) {
-                            if (aliases[k] === room_alias) {
+                    for (let j = 0; j < aliasEvents.length; j++) {
+                        const aliases = aliasEvents[j].getContent().aliases || [];
+                        for (let k = 0; k < aliases.length; k++) {
+                            if (aliases[k] === roomAlias) {
                                 targetRoomId = rooms[i].roomId;
                                 break;
                             }
@@ -178,27 +184,28 @@ var commands = {
                     }
                     if (targetRoomId) { break; }
                 }
-            }
-            if (!targetRoomId) {
-                return reject("Unrecognised room alias: " + room_alias);
+                if (!targetRoomId) {
+                    return reject("Unrecognised room alias: " + roomAlias);
+                }
             }
         }
-        if (!targetRoomId) targetRoomId = room_id;
+        if (!targetRoomId) targetRoomId = roomId;
         return success(
             MatrixClientPeg.get().leave(targetRoomId).then(
-            function() {
-                dis.dispatch({action: 'view_next_room'});
-            })
+                function() {
+                    dis.dispatch({action: 'view_next_room'});
+                },
+            ),
         );
     }),
 
     // Kick a user from the room with an optional reason
-    kick: new Command("kick", "<userId> [<reason>]", function(room_id, args) {
+    kick: new Command("kick", "<userId> [<reason>]", function(roomId, args) {
         if (args) {
-            var matches = args.match(/^(\S+?)( +(.*))?$/);
+            const matches = args.match(/^(\S+?)( +(.*))?$/);
             if (matches) {
                 return success(
-                    MatrixClientPeg.get().kick(room_id, matches[1], matches[3])
+                    MatrixClientPeg.get().kick(roomId, matches[1], matches[3]),
                 );
             }
         }
@@ -206,12 +213,12 @@ var commands = {
     }),
 
     // Ban a user from the room with an optional reason
-    ban: new Command("ban", "<userId> [<reason>]", function(room_id, args) {
+    ban: new Command("ban", "<userId> [<reason>]", function(roomId, args) {
         if (args) {
-            var matches = args.match(/^(\S+?)( +(.*))?$/);
+            const matches = args.match(/^(\S+?)( +(.*))?$/);
             if (matches) {
                 return success(
-                    MatrixClientPeg.get().ban(room_id, matches[1], matches[3])
+                    MatrixClientPeg.get().ban(roomId, matches[1], matches[3]),
                 );
             }
         }
@@ -219,13 +226,13 @@ var commands = {
     }),
 
     // Unban a user from the room
-    unban: new Command("unban", "<userId>", function(room_id, args) {
+    unban: new Command("unban", "<userId>", function(roomId, args) {
         if (args) {
-            var matches = args.match(/^(\S+)$/);
+            const matches = args.match(/^(\S+)$/);
             if (matches) {
                 // Reset the user membership to "leave" to unban him
                 return success(
-                    MatrixClientPeg.get().unban(room_id, matches[1])
+                    MatrixClientPeg.get().unban(roomId, matches[1]),
                 );
             }
         }
@@ -233,27 +240,27 @@ var commands = {
     }),
 
     // Define the power level of a user
-    op: new Command("op", "<userId> [<power level>]", function(room_id, args) {
+    op: new Command("op", "<userId> [<power level>]", function(roomId, args) {
         if (args) {
-            var matches = args.match(/^(\S+?)( +(\d+))?$/);
-            var powerLevel = 50; // default power level for op
+            const matches = args.match(/^(\S+?)( +(\d+))?$/);
+            let powerLevel = 50; // default power level for op
             if (matches) {
-                var user_id = matches[1];
+                const userId = matches[1];
                 if (matches.length === 4 && undefined !== matches[3]) {
                     powerLevel = parseInt(matches[3]);
                 }
-                if (powerLevel !== NaN) {
-                    var room = MatrixClientPeg.get().getRoom(room_id);
+                if (!isNaN(powerLevel)) {
+                    const room = MatrixClientPeg.get().getRoom(roomId);
                     if (!room) {
-                        return reject("Bad room ID: " + room_id);
+                        return reject("Bad room ID: " + roomId);
                     }
-                    var powerLevelEvent = room.currentState.getStateEvents(
-                        "m.room.power_levels", ""
+                    const powerLevelEvent = room.currentState.getStateEvents(
+                        "m.room.power_levels", "",
                     );
                     return success(
                         MatrixClientPeg.get().setPowerLevel(
-                            room_id, user_id, powerLevel, powerLevelEvent
-                        )
+                            roomId, userId, powerLevel, powerLevelEvent,
+                        ),
                     );
                 }
             }
@@ -262,22 +269,22 @@ var commands = {
     }),
 
     // Reset the power level of a user
-    deop: new Command("deop", "<userId>", function(room_id, args) {
+    deop: new Command("deop", "<userId>", function(roomId, args) {
         if (args) {
-            var matches = args.match(/^(\S+)$/);
+            const matches = args.match(/^(\S+)$/);
             if (matches) {
-                var room = MatrixClientPeg.get().getRoom(room_id);
+                const room = MatrixClientPeg.get().getRoom(roomId);
                 if (!room) {
-                    return reject("Bad room ID: " + room_id);
+                    return reject("Bad room ID: " + roomId);
                 }
 
-                var powerLevelEvent = room.currentState.getStateEvents(
-                    "m.room.power_levels", ""
+                const powerLevelEvent = room.currentState.getStateEvents(
+                    "m.room.power_levels", "",
                 );
                 return success(
                     MatrixClientPeg.get().setPowerLevel(
-                        room_id, args, undefined, powerLevelEvent
-                    )
+                        roomId, args, undefined, powerLevelEvent,
+                    ),
                 );
             }
         }
@@ -285,9 +292,9 @@ var commands = {
     }),
 
     // Verify a user, device, and pubkey tuple
-    verify: new Command("verify", "<userId> <deviceId> <deviceSigningKey>", function(room_id, args) {
+    verify: new Command("verify", "<userId> <deviceId> <deviceSigningKey>", function(roomId, args) {
         if (args) {
-            var matches = args.match(/^(\S+) +(\S+) +(\S+)$/);
+            const matches = args.match(/^(\S+) +(\S+) +(\S+)$/);
             if (matches) {
                 const userId = matches[1];
                 const deviceId = matches[2];
@@ -308,7 +315,7 @@ var commands = {
 
                 if (device.getFingerprint() === fingerprint) {
                     MatrixClientPeg.get().setDeviceVerified(
-                            userId, deviceId, true
+                        userId, deviceId, true,
                     );
 
                     // Tell the user we verified everything!
@@ -337,10 +344,12 @@ var commands = {
         return reject(this.getUsage());
     }),
 };
+/* eslint-enable babel/no-invalid-this */
+
 
 // helpful aliases
-var aliases = {
-    j: "join"
+const aliases = {
+    j: "join",
 };
 
 module.exports = {
@@ -357,13 +366,13 @@ module.exports = {
         // IRC-style commands
         input = input.replace(/\s+$/, "");
         if (input[0] === "/" && input[1] !== "/") {
-            var bits = input.match(/^(\S+?)( +((.|\n)*))?$/);
-            var cmd, args;
+            const bits = input.match(/^(\S+?)( +((.|\n)*))?$/);
+            let cmd;
+            let args;
             if (bits) {
                 cmd = bits[1].substring(1).toLowerCase();
                 args = bits[3];
-            }
-            else {
+            } else {
                 cmd = input;
             }
             if (cmd === "me") return null;
@@ -372,8 +381,7 @@ module.exports = {
             }
             if (commands[cmd]) {
                 return commands[cmd].run(roomId, args);
-            }
-            else {
+            } else {
                 return reject("Unrecognised command: " + input);
             }
         }
@@ -382,12 +390,12 @@ module.exports = {
 
     getCommandList: function() {
         // Return all the commands plus /me and /markdown which aren't handled like normal commands
-        var cmds = Object.keys(commands).sort().map(function(cmdKey) {
+        const cmds = Object.keys(commands).sort().map(function(cmdKey) {
             return commands[cmdKey];
         });
         cmds.push(new Command("me", "<action>", function() {}));
         cmds.push(new Command("markdown", "<on|off>", function() {}));
 
         return cmds;
-    }
+    },
 };
