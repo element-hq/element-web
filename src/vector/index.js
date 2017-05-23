@@ -330,7 +330,6 @@ async function loadLanguage() {
     const lang = UserSettingsStore.getLocalSetting('language', languageHandler.getLanguageFromBrowser());
     const languages = languageHandler.getNormalizedLanguageKeys(lang);
     languageHandler.setLanguage(languages, counterpart);
-    setLocalSetting('language', languages[0]);
 }
 
 loadApp();
