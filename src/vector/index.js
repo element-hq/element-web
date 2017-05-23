@@ -247,6 +247,7 @@ function onLoadCompleted() {
 }
 
 async function loadApp() {
+    await loadLanguage();
 
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
@@ -338,17 +339,16 @@ async function loadApp() {
     }
 }
 
-function loadLanguage(callback) {
+async function loadLanguage() {
     const _localSettings = getLocalSettings();
-    var languages = [];
+    let languages = [];
     if (!_localSettings.hasOwnProperty('language')) {
         languages = languageHandler.getNormalizedLanguageKeys(languageHandler.getLanguageFromBrowser());
-    }else {
-          languages = languageHandler.getNormalizedLanguageKeys(_localSettings.language);
+    } else {
+        languages = languageHandler.getNormalizedLanguageKeys(_localSettings.language);
     }
     languageHandler.setLanguage(languages, counterpart);
     setLocalSetting('language', languages[0]);
-    callback();
 }
 
-loadLanguage(loadApp);
+loadApp();
