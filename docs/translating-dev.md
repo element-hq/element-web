@@ -22,5 +22,4 @@
 ## Things to know/Style Guides
 
 - Do not use it inside ``getDefaultProps`` at the point where ``getDefaultProps`` is initialized the translations aren't loaded yet and it causes missing translations.
-- Do use ``Array.push()`` instead of directly defining it inside the array. Arrays are not able to access ``_t()`` at runtime.
-- Do not include full stops, Emoji or similiar miscellaneous Things to the strings. They are not required to be translated.
+- Do not include full stops, Emoji or similiar miscellaneous things to the strings. They are not required to be translated.
