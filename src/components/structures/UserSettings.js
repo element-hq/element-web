@@ -30,7 +30,7 @@ const AddThreepid = require('../../AddThreepid');
 const SdkConfig = require('../../SdkConfig');
 import AccessibleButton from '../views/elements/AccessibleButton';
 import _t from 'counterpart-riot';
-const languageHandler = require('../../languageHandler');
+import * as languageHandler from('../../languageHandler');
 import * as FormattingUtils from '../../utils/FormattingUtils';
 
 // if this looks like a release, use the 'version' from package.json; else use

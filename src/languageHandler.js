@@ -18,11 +18,11 @@ import request from 'browser-request';
 // Workaround for broken export
 import * as counterpart from 'counterpart-riot';
 import UserSettingsStore from './UserSettingsStore';
-var q = require('q');
+import q from 'q';
 
 const i18nFolder = 'i18n/';
 
-module.exports.setLanguage = function(languages, extCounterpart=null) {
+export function setLanguage(languages, extCounterpart=null) {
     if (!languages || !Array.isArray(languages)) {
     const languages = this.getNormalizedLanguageKeys(this.getLanguageFromBrowser());
     console.log("no language found. Got from browser: " + JSON.stringify(languages));
@@ -112,7 +112,7 @@ module.exports.setLanguage = function(languages, extCounterpart=null) {
     });
 };
 
-module.exports.getAllLanguageKeysFromJson = function() {
+export function getAllLanguageKeysFromJson() {
     let deferred = q.defer();
 
     request(
@@ -139,11 +139,11 @@ module.exports.getAllLanguageKeysFromJson = function() {
     return deferred.promise;
 }
 
-module.exports.getLanguageFromBrowser = function() {
+export function getLanguageFromBrowser() {
     return navigator.languages[0] || navigator.language || navigator.userLanguage;
 };
 
-module.exports.getNormalizedLanguageKeys = function(language) {
+export function getNormalizedLanguageKeys(language) {
     if (!language) {
         return;
     }
@@ -161,6 +161,6 @@ module.exports.getNormalizedLanguageKeys = function(language) {
     return languageKeys;
 };
 
-module.exports.normalizeLanguageKey = function(language) {
+export function normalizeLanguageKey(language) {
     return language.toLowerCase().replace("_","-");
 };

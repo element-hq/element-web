@@ -19,7 +19,7 @@ import React from 'react';
 import sdk from '../../../index';
 import UserSettingsStore from '../../../UserSettingsStore';
 import _t from 'counterpart-riot';
-import languageHandler from '../../../languageHandler';
+import * as languageHandler from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 
 let LANGUAGES = [];
