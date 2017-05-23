@@ -64,7 +64,6 @@ var VectorConferenceHandler = require('../VectorConferenceHandler');
 var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
-import Modal from 'matrix-react-sdk/lib/Modal';
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 import languageHandler from 'matrix-react-sdk/lib/languageHandler';
 
