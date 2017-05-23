@@ -47,7 +47,7 @@ const gHVersionLabel = function(repo, token='') {
     } else {
         url = `https://github.com/${repo}/commit/${token.split('-')[0]}`;
     }
-    return <a href={url}>{token}</a>;
+    return <a target="_blank" rel="noopener" href={url}>{token}</a>;
 };
 
 // Enumerate some simple 'flip a bit' UI settings (if any).
