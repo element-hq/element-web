@@ -55,6 +55,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var ReactDOM = require("react-dom");
+// Workaround for broken export
+import * as counterpart from 'counterpart-riot';
+var languageHandler = require("matrix-react-sdk/lib/languageHandler");
 var sdk = require("matrix-react-sdk");
 var PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
@@ -62,6 +65,7 @@ var VectorConferenceHandler = require('../VectorConferenceHandler');
 var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
+import Modal from 'matrix-react-sdk/lib/Modal';
 
 import url from 'url';
 
@@ -214,6 +218,20 @@ function getConfig() {
     return deferred.promise;
 }
 
+
+// This is needed to not load the UserSettingsStore before languages are laoded
+function getLocalSettings() {
+    const localSettingsString = localStorage.getItem('mx_local_settings') || '{}';
+    return JSON.parse(localSettingsString);
+}
+// This is needed to not load the UserSettingsStore before languages are laoded
+function setLocalSetting(type, value) {
+    const settings = getLocalSettings();
+    settings[type] = value;
+    // FIXME: handle errors
+    localStorage.setItem('mx_local_settings', JSON.stringify(settings));
+}
+
 function onLoadCompleted() {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
@@ -228,8 +246,8 @@ function onLoadCompleted() {
     }
 }
 
-
 async function loadApp() {
+
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
 
@@ -261,6 +279,17 @@ async function loadApp() {
         configJson = await getConfig();
     } catch (e) {
         configError = e;
+    }
+
+    if (!configJson.languages) {
+    	let languages;
+		try {
+			languages = await languageHandler.getAllLanguageKeysFromJson();
+		} catch (e) {
+			console.log("couldn't load languages from languages.json: error = "+e);
+			languages = ['en'];
+		}
+		configJson.languages = languages;
     }
 
     if (window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser')) {
@@ -309,4 +338,17 @@ async function loadApp() {
     }
 }
 
-loadApp();
+function loadLanguage(callback) {
+	const _localSettings = getLocalSettings();
+	var languages = [];
+	if (!_localSettings.hasOwnProperty('language')) {
+	    languages = languageHandler.getNormalizedLanguageKeys(languageHandler.getLanguageFromBrowser());
+	}else {
+	  	languages = languageHandler.getNormalizedLanguageKeys(_localSettings.language);
+	}
+	languageHandler.setLanguage(languages, counterpart);
+	setLocalSetting('language', languages[0]);
+	callback();
+}
+
+loadLanguage(loadApp);

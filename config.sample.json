@@ -10,5 +10,6 @@
         "servers": [
             "matrix.org"
         ]
-    }
+    },
+    "languages": ["en", "de", "pt-br", "ru", "da"]
 }

@@ -21,6 +21,7 @@ import q from 'q';
 import React from 'react';
 import classNames from 'classnames';
 import sdk from 'matrix-react-sdk';
+import _t from 'counterpart-riot';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import DMRoomMap from 'matrix-react-sdk/lib/utils/DMRoomMap';
@@ -70,8 +71,8 @@ module.exports = React.createClass({
                     }).fail(function(err) {
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         Modal.createDialog(ErrorDialog, {
-                            title: "Failed to remove tag " + tagNameOff + " from room",
-                            description: ((err && err.message) ? err.message : "Operation failed"),
+                            title: _t('Failed to remove tag %(tagName)s from room', {tagName: tagNameOff}),
+                            description: ((err && err.message) ? err.message : _t('Operation failed')),
                         });
                     });
                 }
@@ -87,8 +88,8 @@ module.exports = React.createClass({
                     }).fail(function(err) {
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         Modal.createDialog(ErrorDialog, {
-                            title: "Failed to add tag " + tagNameOn + " to room",
-                            description: ((err && err.message) ? err.message : "Operation failed"),
+                            title: _t('Failed to remove tag %(tagName)s from room', {tagName: tagNameOn}),
+                            description: ((err && err.message) ? err.message : _t('Operation failed')),
                         });
                     });
                 }
@@ -148,8 +149,8 @@ module.exports = React.createClass({
         }, (err) => {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Failed to set Direct Message status of room",
-                description: ((err && err.message) ? err.message : "Operation failed"),
+                title: _t('Failed to set Direct Message status of room'),
+                description: ((err && err.message) ? err.message : _t('Operation failed')),
             });
         });
     },
@@ -187,8 +188,8 @@ module.exports = React.createClass({
             var errCode = err.errcode || "unknown error code";
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: `Failed to forget room (${errCode})`,
-                description: ((err && err.message) ? err.message : "Operation failed"),
+                title: _t('Failed to forget room %(errCode)s', {errCode: errCode}),
+                description: ((err && err.message) ? err.message : _t('Operation failed')),
             });
         });
 
@@ -274,22 +275,22 @@ module.exports = React.createClass({
                 <div className={ alertMeClasses } onClick={this._onClickAlertMe} >
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute-off-copy.svg" width="16" height="12" />
-                    All messages (loud)
+                    { _t('All messages (loud)') }
                 </div>
                 <div className={ allNotifsClasses } onClick={this._onClickAllNotifs} >
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute-off.svg" width="16" height="12" />
-                    All messages
+                    { _t('All messages') }
                 </div>
                 <div className={ mentionsClasses } onClick={this._onClickMentions} >
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute-mentions.svg" width="16" height="12" />
-                    Mentions only
+                    { _t('Mentions only') }
                 </div>
                 <div className={ muteNotifsClasses } onClick={this._onClickMute} >
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute.svg" width="16" height="12" />
-                    Mute
+                    { _t('Mute') }
                 </div>
             </div>
         );
@@ -306,16 +307,16 @@ module.exports = React.createClass({
         switch (membership) {
             case "join":
                 leaveClickHandler = this._onClickLeave;
-                leaveText = "Leave";
+                leaveText = _t('Leave');
                 break;
             case "leave":
             case "ban":
                 leaveClickHandler = this._onClickForget;
-                leaveText = "Forget";
+                leaveText = _t('Forget');
                 break;
             case "invite":
                 leaveClickHandler = this._onClickReject;
-                leaveText = "Reject";
+                leaveText = _t('Reject');
                 break;
         }
 
@@ -353,17 +354,17 @@ module.exports = React.createClass({
                 <div className={ favouriteClasses } onClick={this._onClickFavourite} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src="img/icon_context_fave.svg" width="15" height="15" />
                     <img className="mx_RoomTileContextMenu_tag_icon_set" src="img/icon_context_fave_on.svg" width="15" height="15" />
-                    Favourite
+                    { _t('Favourite') }
                 </div>
                 <div className={ lowPriorityClasses } onClick={this._onClickLowPriority} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src="img/icon_context_low.svg" width="15" height="15" />
                     <img className="mx_RoomTileContextMenu_tag_icon_set" src="img/icon_context_low_on.svg" width="15" height="15" />
-                    Low Priority
+                    { _t('Low Priority') }
                 </div>
                 <div className={ dmClasses } onClick={this._onClickDM} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src="img/icon_context_person.svg" width="15" height="15" />
                     <img className="mx_RoomTileContextMenu_tag_icon_set" src="img/icon_context_person_on.svg" width="15" height="15" />
-                    Direct Chat
+                    { _t('Direct Chat') }
                 </div>
             </div>
         );
