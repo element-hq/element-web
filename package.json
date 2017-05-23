@@ -56,7 +56,7 @@
     "babel-runtime": "^6.11.6",
     "browser-request": "^0.3.3",
     "classnames": "^2.1.2",
-    "counterpart-riot": "^0.18.1",
+    "counterpart-riot": "^0.18.3",
     "draft-js": "^0.8.1",
     "extract-text-webpack-plugin": "^0.9.1",
     "favico.js": "^0.3.10",
