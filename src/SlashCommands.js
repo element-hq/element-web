@@ -282,7 +282,60 @@ var commands = {
             }
         }
         return reject(this.getUsage());
-    })
+    }),
+
+    // Verify a user, device, and pubkey tuple
+    verify: new Command("verify", "<userId> <deviceId> <deviceSigningKey>", function(room_id, args) {
+        if (args) {
+            var matches = args.match(/^(\S+) +(\S+) +(\S+)$/);
+            if (matches) {
+                const userId = matches[1];
+                const deviceId = matches[2];
+                const fingerprint = matches[3];
+
+                const device = MatrixClientPeg.get().getStoredDevice(userId, deviceId);
+                if (!device) {
+                    return reject(`Unknown (user, device) pair: (${userId}, ${deviceId})`);
+                }
+
+                if (device.isVerified()) {
+                    if (device.getFingerprint() === fingerprint) {
+                        return reject(`Device already verified!`);
+                    } else {
+                        return reject(`WARNING: Device already verified, but keys do NOT MATCH!`);
+                    }
+                }
+
+                if (device.getFingerprint() === fingerprint) {
+                    MatrixClientPeg.get().setDeviceVerified(
+                            userId, deviceId, true
+                    );
+
+                    // Tell the user we verified everything!
+                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                    Modal.createDialog(QuestionDialog, {
+                        title: "Verified key",
+                        description: (
+                            <div>
+                                <p>
+                                    The signing key you provided matches the signing key you received
+                                    from { userId }'s device { deviceId }. Device marked as verified.
+                                </p>
+                            </div>
+                        ),
+                        hasCancelButton: false,
+                    });
+
+                    return success();
+                } else {
+                    return reject(`WARNING: KEY VERIFICATION FAILED! The signing key for ${userId} and device
+                            ${deviceId} is "${device.getFingerprint()}" which does not match the provided key
+                            "${fingerprint}". This could mean your communications are being intercepted!`);
+                }
+            }
+        }
+        return reject(this.getUsage());
+    }),
 };
 
 // helpful aliases
