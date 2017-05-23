@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import _t from 'counterpart-riot';
 import ReactDOM from 'react-dom';
 import url from 'url';
 import sdk from '../../../index';
@@ -222,15 +223,17 @@ module.exports = React.createClass({
                 (this.state.enteredHomeserverUrl.startsWith("http:") ||
                  !this.state.enteredHomeserverUrl.startsWith("http")))
             {
+                const urlStart = <a href='https://www.google.com/search?&q=enable%20unsafe%20scripts'>;
+                const urlEnd = </a>;
                 errorText = <span>
-                    Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar.
-                    Either use HTTPS or <a href='https://www.google.com/search?&q=enable%20unsafe%20scripts'>enable unsafe scripts</a>
+                    { _t('Can\'t connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or %(urlStart)s enable unsafe scripts %(urlEnd)s', {urlStart: urlStart, urlEnd: urlEnd})}
                 </span>;
             }
             else {
+                const urlStart = <a href={this.state.enteredHomeserverUrl}>;
+                const urlEnd = </a>;
                 errorText = <span>
-                    Can't connect to homeserver - please check your connectivity and ensure
-                    your <a href={ this.state.enteredHomeserverUrl }>homeserver's SSL certificate</a> is trusted.
+                    { _t('Can\'t connect to homeserver - please check your connectivity and ensure your %(urlStart)s homeserver\'s SSL certificate %(urlEnd)s is trusted', {urlStart: urlStart, urlEnd: urlEnd})}
                 </span>;
             }
         }
@@ -273,8 +276,7 @@ module.exports = React.createClass({
                 }
                 return (
                     <div>
-                    Sorry, this homeserver is using a login which is not
-                    recognised ({step})
+                    { _t('Sorry, this homeserver is using a login which is not recognised ')}({step})
                     </div>
                 );
         }
@@ -291,7 +293,7 @@ module.exports = React.createClass({
         if (this.props.enableGuest) {
             loginAsGuestJsx =
                 <a className="mx_Login_create" onClick={this._onLoginAsGuestClick} href="#">
-                    Login as guest
+                    { _t('Login as guest')}
                 </a>;
         }
 
@@ -299,7 +301,7 @@ module.exports = React.createClass({
         if (this.props.onCancelClick) {
             returnToAppJsx =
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
-                    Return to app
+                    { _t('Return to app')}
                 </a>;
         }
 
@@ -308,7 +310,7 @@ module.exports = React.createClass({
                 <div className="mx_Login_box">
                     <LoginHeader />
                     <div>
-                        <h2>Sign in
+                        <h2>{ _t('Sign in')}
                             { loader }
                         </h2>
                         { this.componentForStep(this.state.currentFlow) }
@@ -324,7 +326,7 @@ module.exports = React.createClass({
                                 { this.state.errorText }
                         </div>
                         <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
-                            Create a new account
+                            { _t('Create an account')}
                         </a>
                         { loginAsGuestJsx }
                         { returnToAppJsx }

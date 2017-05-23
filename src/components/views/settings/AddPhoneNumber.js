@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
+import _t from 'counterpart-riot';
 
 import sdk from '../../../index';
 import AddThreepid from '../../../AddThreepid';
 import WithMatrixClient from '../../../wrappers/WithMatrixClient';
 import Modal from '../../../Modal';
-
 
 export default WithMatrixClient(React.createClass({
     displayName: 'AddPhoneNumber',
@@ -83,8 +83,9 @@ export default WithMatrixClient(React.createClass({
             console.error("Unable to add phone number: " + err);
             let msg = err.message;
             Modal.createDialog(ErrorDialog, {
-                title: "Error",
+                title: _t("Error"),
                 description: msg,
+                button: _t("OK"),
             });
         }).finally(() => {
             if (this._unmounted) return;
@@ -98,20 +99,19 @@ export default WithMatrixClient(React.createClass({
         if (this._unmounted) return;
         const TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
         let msgElements = [
-            <div key="_static" >A text message has been sent to +{msisdn}.
-            Please enter the verification code it contains</div>
+            <div key="_static" >{ _t("A text message has been sent to +%(msisdn)s. Please enter the verification code it contains", { msisdn: msisdn} ) }</div>
         ];
         if (err) {
             let msg = err.error;
             if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
-                msg = "Incorrect verification code";
+                msg = _t("Incorrect verification code");
             }
             msgElements.push(<div key="_error" className="error">{msg}</div>);
         }
         Modal.createDialog(TextInputDialog, {
-            title: "Enter Code",
+            title: _t("Enter Code"),
             description: <div>{msgElements}</div>,
-            button: "Submit",
+            button: _t("Submit"),
             onFinished: (should_verify, token) => {
                 if (!should_verify) {
                     this._addThreepid = null;
@@ -159,7 +159,7 @@ export default WithMatrixClient(React.createClass({
                         <input type="text"
                             ref={this._collectAddMsisdnInput}
                             className="mx_UserSettings_phoneNumberField"
-                            placeholder="Add phone number"
+                            placeholder={ _t('Add phone number') }
                             value={this.state.phoneNumber}
                             onChange={this._onPhoneNumberChange}
                         />

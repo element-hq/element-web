@@ -23,6 +23,7 @@ var Matrix = require("matrix-js-sdk");
 var EventTimeline = Matrix.EventTimeline;
 
 var sdk = require('../../index');
+import _t from 'counterpart-riot';
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var dis = require("../../dispatcher");
 var ObjectUtils = require('../../ObjectUtils');
@@ -907,15 +908,13 @@ var TimelinePanel = React.createClass({
                     });
                 };
             }
-            var message = "Tried to load a specific point in this room's timeline, but ";
-            if (error.errcode == 'M_FORBIDDEN') {
-                message += "you do not have permission to view the message in question.";
-            } else {
-                message += "was unable to find it.";
-            }
+            var message = (error.errcode == 'M_FORBIDDEN') 
+            	? _t("Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question") + "."
+                : _t("Tried to load a specific point in this room's timeline, but was unable to find it") + ".";
             Modal.createDialog(ErrorDialog, {
-                title: "Failed to load timeline position",
+                title: _t("Failed to load timeline position"),
                 description: message,
+                button: _t("OK"),
                 onFinished: onFinished,
             });
         };

@@ -46,12 +46,6 @@ export default React.createClass({
         title: React.PropTypes.string,
     },
 
-    getDefaultProps: function() {
-        return {
-            title: "Authentication",
-        };
-    },
-
     getInitialState: function() {
         return {
             authError: null,

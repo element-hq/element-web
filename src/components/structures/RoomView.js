@@ -25,6 +25,7 @@ var ReactDOM = require("react-dom");
 var q = require("q");
 var classNames = require("classnames");
 var Matrix = require("matrix-js-sdk");
+import _t from 'counterpart-riot';
 
 var UserSettingsStore = require('../../UserSettingsStore');
 var MatrixClientPeg = require("../../MatrixClientPeg");
@@ -296,7 +297,7 @@ module.exports = React.createClass({
 
     componentWillReceiveProps: function(newProps) {
         if (newProps.roomAddress != this.props.roomAddress) {
-            throw new Error("changing room on a RoomView is not supported");
+            throw new Error(_t("changing room on a RoomView is not supported"));
         }
 
         if (newProps.eventId != this.props.eventId) {
@@ -370,10 +371,10 @@ module.exports = React.createClass({
     onPageUnload(event) {
         if (ContentMessages.getCurrentUploads().length > 0) {
             return event.returnValue =
-                'You seem to be uploading files, are you sure you want to quit?';
+                _t("You seem to be uploading files, are you sure you want to quit?");
         } else if (this._getCallForRoom() && this.state.callState !== 'ended') {
             return event.returnValue =
-                'You seem to be in a call, are you sure you want to quit?';
+                _t("You seem to be in a call, are you sure you want to quit?");
         }
     },
 
@@ -530,16 +531,17 @@ module.exports = React.createClass({
         if (!userHasUsedEncryption) {
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             Modal.createDialog(QuestionDialog, {
-                title: "Warning!",
+                title: _t("Warning") + "!",
                 hasCancelButton: false,
                 description: (
                     <div>
-                        <p>End-to-end encryption is in beta and may not be reliable.</p>
-                        <p>You should <b>not</b> yet trust it to secure data.</p>
-                        <p>Devices will <b>not</b> yet be able to decrypt history from before they joined the room.</p>
-                        <p>Encrypted messages will not be visible on clients that do not yet implement encryption.</p>
+                        <p>{ _t("End-to-end encryption is in beta and may not be reliable") }.</p>
+                        <p>{ _t("You should <b>not</b> yet trust it to secure data") }.</p>
+                        <p>{ _t("Devices will <b>not</b> yet be able to decrypt history from before they joined the room") }.</p>
+                        <p>{ _t("Encrypted messages will not be visible on clients that do not yet implement encryption") }.</p>
                     </div>
                 ),
+                button: "OK",
             });
         }
         if (localStorage) {
@@ -708,10 +710,10 @@ module.exports = React.createClass({
         if (!unsentMessages.length) return "";
         for (const event of unsentMessages) {
             if (!event.error || event.error.name !== "UnknownDeviceError") {
-                return "Some of your messages have not been sent.";
+                return _t("Some of your messages have not been sent") + ".";
             }
         }
-        return "Message not sent due to unknown devices being present";
+        return _t("Message not sent due to unknown devices being present");
     },
 
     _getUnsentMessages: function(room) {
@@ -871,15 +873,16 @@ module.exports = React.createClass({
             ) {
                 var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
                 Modal.createDialog(NeedToRegisterDialog, {
-                    title: "Failed to join the room",
-                    description: "This room is private or inaccessible to guests. You may be able to join if you register."
+                    title: _t("Failed to join the room"),
+                    description: _t("This room is private or inaccessible to guests. You may be able to join if you register") + "."
                 });
             } else {
                 var msg = error.message ? error.message : JSON.stringify(error);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failed to join room",
-                    description: msg
+                    title: _t("Failed to join room"),
+                    description: msg,
+                    button: _t("OK"),
                 });
             }
         }).done();
@@ -939,8 +942,8 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get().isGuest()) {
             var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
-                title: "Please Register",
-                description: "Guest users can't upload files. Please register to upload."
+                title: _t("Please Register"),
+                description: _t("Guest users can't upload files. Please register to upload") + "."
             });
             return;
         }
@@ -959,8 +962,9 @@ module.exports = React.createClass({
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to upload file " + file + " " + error);
             Modal.createDialog(ErrorDialog, {
-                title: "Failed to upload file",
-                description: ((error && error.message) ? error.message : "Server may be unavailable, overloaded, or the file too big"),
+                title: _t('Failed to upload file'),
+                description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or the file too big")),
+                button: _t("OK"),
             });
         });
     },
@@ -1046,8 +1050,9 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Search failed: " + error);
             Modal.createDialog(ErrorDialog, {
-                title: "Search failed",
-                description: ((error && error.message) ? error.message : "Server may be unavailable, overloaded, or search timed out :("),
+                title: _t("Search failed"),
+                description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or search timed out :(")),
+                button: _t("OK"),
             });
         }).finally(function() {
             self.setState({
@@ -1082,12 +1087,12 @@ module.exports = React.createClass({
         if (!this.state.searchResults.next_batch) {
             if (this.state.searchResults.results.length == 0) {
                 ret.push(<li key="search-top-marker">
-                         <h2 className="mx_RoomView_topMarker">No results</h2>
+                         <h2 className="mx_RoomView_topMarker">{ _t("No results") }</h2>
                          </li>
                         );
             } else {
                 ret.push(<li key="search-top-marker">
-                         <h2 className="mx_RoomView_topMarker">No more results</h2>
+                         <h2 className="mx_RoomView_topMarker">{ _t("No more results") }</h2>
                          </li>
                         );
             }
@@ -1124,10 +1129,10 @@ module.exports = React.createClass({
                     // it. We should tell the js sdk to go and find out about
                     // it. But that's not an issue currently, as synapse only
                     // returns results for rooms we're joined to.
-                    var roomName = room ? room.name : "Unknown room "+roomId;
+                    var roomName = room ? room.name : _t("Unknown room %(roomId)s", { roomId: roomId });
 
                     ret.push(<li key={mxEv.getId() + "-room"}>
-                                 <h1>Room: { roomName }</h1>
+                                 <h1>{ _t("Room") }: { roomName }</h1>
                              </li>);
                     lastRoomId = roomId;
                 }
@@ -1173,8 +1178,9 @@ module.exports = React.createClass({
                 });
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failed to save settings",
+                    title: _t("Failed to save settings"),
                     description: fails.map(function(result) { return result.reason; }).join("\n"),
+                    button: _t("OK"),
                 });
                 // still editing room settings
             }
@@ -1209,11 +1215,12 @@ module.exports = React.createClass({
         MatrixClientPeg.get().forget(this.state.room.roomId).done(function() {
             dis.dispatch({ action: 'view_next_room' });
         }, function(err) {
-            var errCode = err.errcode || "unknown error code";
+            var errCode = err.errcode || _t("unknown error code");
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Error",
-                description: `Failed to forget room (${errCode})`
+                title: _t("Error"),
+                description: _t("Failed to forget room %(errCode)s", { errCode: errCode }),
+                button: _t("OK"),
             });
         });
     },
@@ -1234,8 +1241,9 @@ module.exports = React.createClass({
             var msg = error.message ? error.message : JSON.stringify(error);
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Failed to reject invite",
-                description: msg
+                title: _t("Failed to reject invite"),
+                description: msg,
+                button: _t("OK"),
             });
 
             self.setState({
@@ -1681,7 +1689,7 @@ module.exports = React.createClass({
 
             if (call.type === "video") {
                 zoomButton = (
-                    <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick} title="Fill screen">
+                    <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick} title={ _t("Fill screen") }>
                         <TintableSvg src="img/fullscreen.svg" width="29" height="22" style={{ marginTop: 1, marginRight: 4 }}/>
                     </div>
                 );
@@ -1689,14 +1697,14 @@ module.exports = React.createClass({
                 videoMuteButton =
                     <div className="mx_RoomView_voipButton" onClick={this.onMuteVideoClick}>
                         <TintableSvg src={call.isLocalVideoMuted() ? "img/video-unmute.svg" : "img/video-mute.svg"}
-                             alt={call.isLocalVideoMuted() ? "Click to unmute video" : "Click to mute video"}
+                             alt={call.isLocalVideoMuted() ? _t("Click to unmute video") : _t("Click to mute video")}
                              width="31" height="27"/>
                     </div>;
             }
             voiceMuteButton =
                 <div className="mx_RoomView_voipButton" onClick={this.onMuteAudioClick}>
                     <TintableSvg src={call.isMicrophoneMuted() ? "img/voice-unmute.svg" : "img/voice-mute.svg"}
-                         alt={call.isMicrophoneMuted() ? "Click to unmute audio" : "Click to mute audio"}
+                         alt={call.isMicrophoneMuted() ? _t("Click to unmute audio") : _t("Click to mute audio")}
                          width="21" height="26"/>
                 </div>;
 

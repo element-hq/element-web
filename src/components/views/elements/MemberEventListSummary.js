@@ -15,6 +15,7 @@ limitations under the License.
 */
 import React from 'react';
 const MemberAvatar = require('../avatars/MemberAvatar.js');
+import _t from 'counterpart-riot';
 
 module.exports = React.createClass({
     displayName: 'MemberEventListSummary',
@@ -203,30 +204,146 @@ module.exports = React.createClass({
      * @param {boolean} plural whether there were multiple users undergoing the same
      * transition.
      * @param {number} repeats the number of times the transition was repeated in a row.
-     * @returns {string} the written English equivalent of the transition.
+     * @returns {string} the written Human Readable equivalent of the transition.
      */
     _getDescriptionForTransition(t, plural, repeats) {
-        const beConjugated = plural ? "were" : "was";
-        const invitation = "their invitation" + (plural || (repeats > 1) ? "s" : "");
-
+        // The empty interpolations 'severalUsers' and 'oneUser'
+        // are there only to show translators to non-English languages
+        // that the verb is conjugated to plural or singular Subject.
         let res = null;
-        const map = {
-            "joined": "joined",
-            "left": "left",
-            "joined_and_left": "joined and left",
-            "left_and_joined": "left and rejoined",
-            "invite_reject": "rejected " + invitation,
-            "invite_withdrawal": "had " + invitation + " withdrawn",
-            "invited": beConjugated + " invited",
-            "banned": beConjugated + " banned",
-            "unbanned": beConjugated + " unbanned",
-            "kicked": beConjugated + " kicked",
-            "changed_name": "changed name",
-            "changed_avatar": "changed avatar",
-        };
+        switch(t) {
+            case "joined":
+                if (repeats > 1) {
+                    res = (plural)
+                        ? _t("%(severalUsers)s joined %(repeats)s times", { severalUsers: "", repeats: repeats })
+                        : _t("%(oneUser)s joined %(repeats)s times", { oneUser: "", repeats: repeats });
+                } else {
+                    res = (plural)
+                        ? _t("%(severalUsers)s joined", { severalUsers: "" })
+                        : _t("%(oneUser)s joined", { oneUser: "" });
+                }
 
-        if (Object.keys(map).includes(t)) {
-            res = map[t] + (repeats > 1 ? " " + repeats + " times" : "" );
+            break;
+            case "left":
+                if (repeats > 1) {
+                    res = (plural)
+                        ? _t("%(severalUsers)s left %(repeats)s times", { severalUsers: "", repeats: repeats })
+                        : _t("%(oneUser)s left %(repeats)s times", { oneUser: "", repeats: repeats });
+                } else {
+                    res = (plural)
+                        ? _t("%(severalUsers)s left", { severalUsers: "" })
+                        : _t("%(oneUser)s left", { oneUser: "" });
+                }            break;
+            case "joined_and_left":
+                if (repeats > 1) {
+                    res = (plural)
+                        ? _t("%(severalUsers)s joined and left %(repeats)s times", { severalUsers: "", repeats: repeats })
+                        : _t("%(oneUser)s joined and left %(repeats)s times", { oneUser: "", repeats: repeats });
+                } else {
+                    res = (plural)
+                        ? _t("%(severalUsers)s joined and left", { severalUsers: "" })
+                        : _t("%(oneUser)s joined and left", { oneUser: "" });
+                }
+            break;
+            case "left_and_joined":
+                if (repeats > 1) {
+                    res = (plural)
+                        ? _t("%(severalUsers)s left and rejoined %(repeats)s times", { severalUsers: "", repeats: repeats })
+                        : _t("%(oneUser)s left and rejoined %(repeats)s times", { oneUser: "", repeats: repeats });
+                } else {
+                    res = (plural)
+                        ? _t("%(severalUsers)s left and rejoined", { severalUsers: "" })
+                        : _t("%(oneUser)s left and rejoined", { oneUser: "" });
+                }            break;
+            break;
+            case "invite_reject":
+                if (repeats > 1) {
+                    res = (plural)
+                        ? _t("%(severalUsers)s rejected their invitations %(repeats)s times", { severalUsers: "", repeats: repeats })
+                        : _t("%(oneUser)s rejected his/her invitation %(repeats)s times", { oneUser: "", repeats: repeats });
+                } else {
+                    res = (plural)
+                        ? _t("%(severalUsers)s rejected their invitations", { severalUsers: "" })
+                        : _t("%(oneUser)s rejected his/her invitation", { oneUser: "" });
+                }
+            break;
+            case "invite_withdrawal":
+                if (repeats > 1) {
+                    res = (plural)
+                        ? _t("%(severalUsers)s had their invitations withdrawn %(repeats)s times", { severalUsers: "", repeats: repeats })
+                        : _t("%(oneUser)s had his/her invitation withdrawn %(repeats)s times", { oneUser: "", repeats: repeats });
+                } else {
+                    res = (plural)
+                        ? _t("%(severalUsers)s had their invitations withdrawn", { severalUsers: "" })
+                        : _t("%(oneUser)s had his/her invitation withdrawn", { oneUser: "" });
+                }
+            break;
+            case "invited":
+                if (repeats > 1) {
+                    res = (plural)
+                        ? _t("were invited %(repeats)s times", { repeats: repeats })
+                        : _t("was invited %(repeats)s times", { repeats: repeats });
+                } else {
+                    res = (plural)
+                        ? _t("were invited")
+                        : _t("was invited");
+                }
+            break;
+            case "banned":
+                if (repeats > 1) {
+                    res = (plural)
+                        ? _t("were banned %(repeats)s times", { repeats: repeats })
+                        : _t("was banned %(repeats)s times", { repeats: repeats });
+                } else {
+                    res = (plural)
+                        ? _t("were banned")
+                        : _t("was banned");
+                }
+            break;
+            case "unbanned":
+                if (repeats > 1) {
+                    res = (plural)
+                        ? _t("were unbanned %(repeats)s times", { repeats: repeats })
+                        : _t("was unbanned %(repeats)s times", { repeats: repeats });
+                } else {
+                    res = (plural)
+                        ? _t("were unbanned")
+                        : _t("was unbanned");
+                }
+            break;
+            case "kicked":
+                if (repeats > 1) {
+                    res = (plural)
+                        ? _t("were kicked %(repeats)s times", { repeats: repeats })
+                        : _t("was kicked %(repeats)s times", { repeats: repeats });
+                } else {
+                    res = (plural)
+                        ? _t("were kicked")
+                        : _t("was kicked");
+                }
+            break;
+            case "changed_name":
+                if (repeats > 1) {
+                    res = (plural)
+                        ? _t("%(severalUsers)s changed their name %(repeats)s times", { severalUsers: "", repeats: repeats })
+                        : _t("%(oneUser)s changed his/her name %(repeats)s times", { oneUser: "", repeats: repeats });
+                } else {
+                    res = (plural)
+                        ? _t("%(severalUsers)s changed their name", { severalUsers: "" })
+                        : _t("%(oneUser)s changed his/her name", { oneUser: "" });
+                }
+            break;
+            case "changed_avatar":
+                if (repeats > 1) {
+                    res = (plural)
+                        ? _t("%(severalUsers)s changed their avatar %(repeats)s times", { severalUsers: "", repeats: repeats })
+                        : _t("%(oneUser)s changed his/her avatar %(repeats)s times", { oneUser: "", repeats: repeats });
+                } else {
+                    res = (plural)
+                        ? _t("%(severalUsers)s changed their avatar", { severalUsers: "" })
+                        : _t("%(oneUser)s changed his/her avatar", { oneUser: "" });
+                }
+            break;
         }
 
         return res;
@@ -254,11 +371,12 @@ module.exports = React.createClass({
             return items[0];
         } else if (remaining) {
             items = items.slice(0, itemLimit);
-            const other = " other" + (remaining > 1 ? "s" : "");
-            return items.join(', ') + ' and ' + remaining + other;
+            return (remaining > 1) 
+                ? _t("%(items)s and %(remaining)s others", { items: items.join(', '), remaining: remaining } )
+                : _t("%(items)s and one other", { items: items.join(', ') });
         } else {
             const lastItem = items.pop();
-            return items.join(', ') + ' and ' + lastItem;
+            return _t("%(items)s and %(lastItem)s", { items: items.join(', '), lastItem: lastItem });
         }
     },
 

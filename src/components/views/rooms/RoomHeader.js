@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var classNames = require('classnames');
 var sdk = require('../../../index');
+import _t from 'counterpart-riot';
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Modal = require("../../../Modal");
 var dis = require("../../../dispatcher");
@@ -119,8 +120,9 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to set avatar: " + errMsg);
             Modal.createDialog(ErrorDialog, {
-                title: "Error",
-                description: "Failed to set avatar.",
+                title: _t("Error"),
+                description: _t("Failed to set avatar") + ".",
+                button: _t("OK"),
             });
         }).done();
     },
@@ -205,7 +207,7 @@ module.exports = React.createClass({
             // don't display the search count until the search completes and
             // gives us a valid (possibly zero) searchCount.
             if (this.props.searchInfo && this.props.searchInfo.searchCount !== undefined && this.props.searchInfo.searchCount !== null) {
-                searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;(~{ this.props.searchInfo.searchCount } results)</div>;
+                searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;{ _t("(~%(searchCount)s results)", { searchCount: this.props.searchInfo.searchCount }) }</div>;
             }
 
             // XXX: this is a bit inefficient - we could just compare room.name for 'Empty room'...
@@ -220,7 +222,7 @@ module.exports = React.createClass({
                 }
             }
 
-            var roomName = 'Join Room';
+            var roomName = _t("Join Room");
             if (this.props.oobData && this.props.oobData.name) {
                 roomName = this.props.oobData.name;
             } else if (this.props.room) {
@@ -261,7 +263,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomHeader_avatarPicker_edit">
                         <label htmlFor="avatarInput" ref="file_label">
                             <img src="img/camera.svg"
-                                alt="Upload avatar" title="Upload avatar"
+                                alt={ _t("Upload avatar") } title={ _t("Upload avatar") }
                                 width="17" height="15" />
                         </label>
                         <input id="avatarInput" type="file" onChange={ this.onAvatarSelected }/>
@@ -296,7 +298,7 @@ module.exports = React.createClass({
         var forget_button;
         if (this.props.onForgetClick) {
             forget_button =
-                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onForgetClick} title="Forget room">
+                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onForgetClick} title={ _t("Forget room") }>
                     <TintableSvg src="img/leave.svg" width="26" height="20"/>
                 </AccessibleButton>;
         }
@@ -304,7 +306,7 @@ module.exports = React.createClass({
         let search_button;
         if (this.props.onSearchClick && this.props.inRoom) {
             search_button =
-                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title="Search">
+                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSearchClick} title={ _t("Search") }>
                     <TintableSvg src="img/icons-search.svg" width="35" height="35"/>
                 </AccessibleButton>;
         }
@@ -312,7 +314,7 @@ module.exports = React.createClass({
         var rightPanel_buttons;
         if (this.props.collapsedRhs) {
             rightPanel_buttons =
-                <AccessibleButton className="mx_RoomHeader_button" onClick={this.onShowRhsClick} title="Show panel">
+                <AccessibleButton className="mx_RoomHeader_button" onClick={this.onShowRhsClick} title={ _t('Show panel') }>
                     <TintableSvg src="img/maximise.svg" width="10" height="16"/>
                 </AccessibleButton>;
         }

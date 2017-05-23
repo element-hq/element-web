@@ -21,6 +21,7 @@ import TextForEvent from './TextForEvent';
 import Avatar from './Avatar';
 import dis from './dispatcher';
 import sdk from './index';
+import _t from 'counterpart-riot';
 import Modal from './Modal';
 
 /*
@@ -134,14 +135,13 @@ const Notifier = {
                 if (result !== 'granted') {
                     // The permission request was dismissed or denied
                     const description = result === 'denied'
-                        ? 'Riot does not have permission to send you notifications'
-                        + ' - please check your browser settings'
-                        : 'Riot was not given permission to send notifications'
-                        + ' - please try again';
+                        ? _t('Riot does not have permission to send you notifications - please check your browser settings')
+                        : _t('Riot was not given permission to send notifications - please try again');
                     const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
                     Modal.createDialog(ErrorDialog, {
-                        title: 'Unable to enable Notifications',
+                        title: _t('Unable to enable Notifications'),
                         description,
+                        button: _t("OK"),
                     });
                     return;
                 }

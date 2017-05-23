@@ -38,13 +38,6 @@ module.exports = React.createClass({
         onFinished: React.PropTypes.func.isRequired,
     },
 
-    getDefaultProps: function() {
-        return {
-            title: "Registration required",
-            description: "A registered account is required for this action",
-        };
-    },
-
     onRegisterClicked: function() {
         dis.dispatch({
             action: "start_upgrade_registration",

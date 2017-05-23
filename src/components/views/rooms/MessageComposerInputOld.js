@@ -20,6 +20,7 @@ var SlashCommands = require("../../../SlashCommands");
 var Modal = require("../../../Modal");
 var MemberEntry = require("../../../TabCompleteEntries").MemberEntry;
 var sdk = require('../../../index');
+import _t from 'counterpart-riot';
 import UserSettingsStore from "../../../UserSettingsStore";
 
 var dis = require("../../../dispatcher");
@@ -294,8 +295,9 @@ export default React.createClass({
             else {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Unknown command",
-                    description: "Usage: /markdown on|off"
+                    title: _t("Unknown command"),
+                    description: _t("Usage") + ": /markdown on|off",
+                    button: _t("OK"),
                 });
             }
             return;
@@ -314,8 +316,9 @@ export default React.createClass({
                     console.error("Command failure: %s", err);
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createDialog(ErrorDialog, {
-                        title: "Server error",
-                        description: ((err && err.message) ? err.message : "Server unavailable, overloaded, or something else went wrong."),
+                        title: _t("Server error"),
+                        description: ((err && err.message) ? err.message : _t("Server unavailable, overloaded, or something else went wrong") + "."),
+                        button: _t("OK"),
                     });
                 });
             }
@@ -323,8 +326,9 @@ export default React.createClass({
                 console.error(cmd.error);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Command error",
-                    description: cmd.error
+                    title: _t("Command error"),
+                    description: cmd.error,
+                    button: _t("OK"),
                 });
             }
             return;

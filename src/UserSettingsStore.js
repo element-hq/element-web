@@ -23,10 +23,14 @@ import Notifier from './Notifier';
  * TODO: Make things use this. This is all WIP - see UserSettings.js for usage.
  */
 
+/*
+ * TODO: Find a way to translate the names of LABS_FEATURES. In other words, guarantee that languages were already loaded before building this array.
+ */
+
 module.exports = {
     LABS_FEATURES: [
         {
-            name: 'New Composer & Autocomplete',
+            name: "New Composer & Autocomplete",
             id: 'rich_text_editor',
             default: false,
         },

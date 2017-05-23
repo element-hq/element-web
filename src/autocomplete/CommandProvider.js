@@ -1,8 +1,10 @@
 import React from 'react';
+import _t from 'counterpart-riot';
 import AutocompleteProvider from './AutocompleteProvider';
 import Fuse from 'fuse.js';
 import {TextualCompletion} from './Components';
 
+// Warning: Since the description string will be translated in _t(result.description), all these strings below must be in i18n/strings/en_EN.json file
 const COMMANDS = [
     {
         command: '/me',
@@ -68,7 +70,7 @@ export default class CommandProvider extends AutocompleteProvider {
                     component: (<TextualCompletion
                         title={result.command}
                         subtitle={result.args}
-                        description={result.description}
+                        description={ t_(result.description) }
                         />),
                     range,
                 };
@@ -78,7 +80,7 @@ export default class CommandProvider extends AutocompleteProvider {
     }
 
     getName() {
-        return '*️⃣ Commands';
+        return '*️⃣ ' + _t('Commands');
     }
 
     static getInstance(): CommandProvider {

@@ -13,14 +13,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-export const LEVEL_ROLE_MAP = {
-    undefined: 'Default',
-    0: 'User',
-    50: 'Moderator',
-    100: 'Admin',
-};
+import _t from 'counterpart-riot';
+
+export function levelRoleMap() {
+	const LEVEL_ROLE_MAP = {};
+	LEVEL_ROLE_MAP[undefined] = _t('Default');
+    LEVEL_ROLE_MAP[0] = _t('User');
+    LEVEL_ROLE_MAP[50] = _t('Moderator');
+    LEVEL_ROLE_MAP[100] = _t('Admin');
+    return LEVEL_ROLE_MAP;
+}
 
 export function textualPowerLevel(level, userDefault) {
+	const LEVEL_ROLE_MAP = this.levelRoleMap();
     if (LEVEL_ROLE_MAP[level]) {
         return LEVEL_ROLE_MAP[level] + (level !== undefined ? ` (${level})` : ` (${userDefault})`);
     } else {

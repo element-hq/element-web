@@ -17,6 +17,7 @@ var React = require('react');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
 var sdk = require("../../../index");
+import _t from 'counterpart-riot';
 var GeminiScrollbar = require('react-gemini-scrollbar');
 
 // A list capable of displaying entities which conform to the SearchableEntity
@@ -25,7 +26,6 @@ var SearchableEntityList = React.createClass({
     displayName: 'SearchableEntityList',
 
     propTypes: {
-        searchPlaceholderText: React.PropTypes.string,
         emptyQueryShowsAll: React.PropTypes.bool,
         showInputBox: React.PropTypes.bool,
         onQueryChanged: React.PropTypes.func, // fn(inputText)
@@ -37,7 +37,6 @@ var SearchableEntityList = React.createClass({
     getDefaultProps: function() {
         return {
             showInputBox: true,
-            searchPlaceholderText: "Search",
             entities: [],
             emptyQueryShowsAll: false,
             onSubmit: function() {},
@@ -118,7 +117,9 @@ var SearchableEntityList = React.createClass({
     _createOverflowEntity: function(overflowCount, totalCount) {
         var EntityTile = sdk.getComponent("rooms.EntityTile");
         var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
-        var text = "and " + overflowCount + " other" + (overflowCount > 1 ? "s" : "") + "...";
+        var text = (overflowCount > 1)
+        	? _t("and %(overflowCount)s others...", { overflowCount: overflowCount })
+        	: _t("and one other...");
         return (
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
                 <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
@@ -137,7 +138,7 @@ var SearchableEntityList = React.createClass({
                         onChange={this.onQueryChanged} value={this.state.query}
                         onFocus= {() => { this.setState({ focused: true }); }}
                         onBlur= {() => { this.setState({ focused: false }); }}
-                        placeholder={this.props.searchPlaceholderText} />
+                        placeholder={ _t("Search") } />
                 </form>
             );
         }

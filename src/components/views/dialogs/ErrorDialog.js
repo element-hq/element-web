@@ -43,9 +43,6 @@ export default React.createClass({
 
     getDefaultProps: function() {
         return {
-            title: "Error",
-            description: "An error has occurred.",
-            button: "OK",
             focus: true,
         };
     },

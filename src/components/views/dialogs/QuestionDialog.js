@@ -33,7 +33,6 @@ export default React.createClass({
             title: "",
             description: "",
             extraButtons: null,
-            button: "OK",
             focus: true,
             hasCancelButton: true,
         };

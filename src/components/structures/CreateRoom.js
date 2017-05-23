@@ -16,15 +16,16 @@ limitations under the License.
 
 'use strict';
 
-var React = require("react");
-var MatrixClientPeg = require("../../MatrixClientPeg");
-var PresetValues = {
+import React from 'react';
+import q from 'q';
+import _t from 'counterpart-riot';
+import sdk from '../../index';
+import MatrixClientPeg from '../../MatrixClientPeg';
+const PresetValues = {
     PrivateChat: "private_chat",
     PublicChat: "public_chat",
     Custom: "custom",
 };
-var q = require('q');
-var sdk = require('../../index');
 
 module.exports = React.createClass({
     displayName: 'CreateRoom',
@@ -231,7 +232,7 @@ module.exports = React.createClass({
             if (curr_phase == this.phases.ERROR) {
                 error_box = (
                     <div className="mx_Error">
-                        An error occured: {this.state.error_string}
+                        {_t('An error occured: %(error_string)s', {error_string: this.state.error_string})}
                     </div>
                 );
             }
@@ -248,27 +249,27 @@ module.exports = React.createClass({
             <div className="mx_CreateRoom">
                 <SimpleRoomHeader title="CreateRoom" collapsedRhs={ this.props.collapsedRhs }/>
                 <div className="mx_CreateRoom_body">
-                    <input type="text" ref="room_name" value={this.state.room_name} onChange={this.onNameChange} placeholder="Name"/> <br />
-                    <textarea className="mx_CreateRoom_description" ref="topic" value={this.state.topic} onChange={this.onTopicChange} placeholder="Topic"/> <br />
+                    <input type="text" ref="room_name" value={this.state.room_name} onChange={this.onNameChange} placeholder={_t('Name')}/> <br />
+                    <textarea className="mx_CreateRoom_description" ref="topic" value={this.state.topic} onChange={this.onTopicChange} placeholder={_t('Topic')}/> <br />
                     <RoomAlias ref="alias" alias={this.state.alias} homeserver={ domain } onChange={this.onAliasChanged}/> <br />
                     <UserSelector ref="user_selector" selected_users={this.state.invited_users} onChange={this.onInviteChanged}/> <br />
                     <Presets ref="presets" onChange={this.onPresetChanged} preset={this.state.preset}/> <br />
                     <div>
                         <label>
                             <input type="checkbox" ref="is_private" checked={this.state.is_private} onChange={this.onPrivateChanged}/>
-                            Make this room private
+                            {_t('Make this room private')}
                         </label>
                     </div>
                     <div>
                         <label>
                             <input type="checkbox" ref="share_history" checked={this.state.share_history} onChange={this.onShareHistoryChanged}/>
-                            Share message history with new users
+                            {_t('Share message history with new users')}
                         </label>
                     </div>
                     <div className="mx_CreateRoom_encrypt">
                         <label>
                             <input type="checkbox" ref="encrypt" checked={this.state.encrypt} onChange={this.onEncryptChanged}/>
-                            Encrypt room
+                            {_t('Encrypt room')}
                         </label>
                     </div>
                     <div>
