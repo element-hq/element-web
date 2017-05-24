@@ -27,7 +27,6 @@ module.exports = React.createClass({
 
     propTypes: {
         collapsed: React.PropTypes.bool.isRequired,
-        teamToken: React.PropTypes.string,
     },
 
     getInitialState: function() {
@@ -114,21 +113,13 @@ module.exports = React.createClass({
 
     render: function() {
         var TintableSvg = sdk.getComponent('elements.TintableSvg');
-
-        var homeButton;
-        if (this.props.teamToken) {
-            homeButton = (
-                <AccessibleButton className="mx_BottomLeftMenu_homePage" onClick={ this.onHomeClick } onMouseEnter={ this.onHomeMouseEnter } onMouseLeave={ this.onHomeMouseLeave } >
-                    <TintableSvg src="img/icons-home.svg" width="25" height="25" />
-                    { this.getLabel("Welcome page", this.state.homeHover) }
-                </AccessibleButton>
-            );
-        }
-
         return (
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
-                    { homeButton }
+                    <AccessibleButton className="mx_BottomLeftMenu_homePage" onClick={ this.onHomeClick } onMouseEnter={ this.onHomeMouseEnter } onMouseLeave={ this.onHomeMouseLeave } >
+                        <TintableSvg src="img/icons-home.svg" width="25" height="25" />
+                        { this.getLabel("Welcome page", this.state.homeHover) }
+                    </AccessibleButton>
                     <AccessibleButton className="mx_BottomLeftMenu_people" onClick={ this.onPeopleClick } onMouseEnter={ this.onPeopleMouseEnter } onMouseLeave={ this.onPeopleMouseLeave } >
                         <TintableSvg src="img/icons-people.svg" width="25" height="25" />
                         { this.getLabel("Start chat", this.state.peopleHover) }

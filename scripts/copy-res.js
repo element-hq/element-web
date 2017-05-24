@@ -8,6 +8,7 @@
 // "dest/b/...".
 const COPY_LIST = [
     ["res/manifest.json", "webapp"],
+    ["res/home.html", "webapp"],
     ["res/{media,vector-icons}/**", "webapp"],
     ["res/flags/*", "webapp/flags/"],
     ["src/skins/vector/{fonts,img}/**", "webapp"],

@@ -30,7 +30,6 @@ var LeftPanel = React.createClass({
 
     propTypes: {
         collapsed: React.PropTypes.bool.isRequired,
-        teamToken: React.PropTypes.string,
     },
 
     getInitialState: function() {
@@ -129,7 +128,7 @@ var LeftPanel = React.createClass({
                     collapsed={this.props.collapsed}
                     searchFilter={this.state.searchFilter}
                     ConferenceHandler={VectorConferenceHandler} />
-                <BottomLeftMenu collapsed={this.props.collapsed} teamToken={this.props.teamToken}/>
+                <BottomLeftMenu collapsed={this.props.collapsed}/>
             </aside>
         );
     }

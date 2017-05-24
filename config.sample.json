@@ -11,5 +11,6 @@
             "matrix.org"
         ]
     },
-    "welcomeUserId": "@RiotBot:matrix.org"
+    "welcomeUserId": "@RiotBot:matrix.org",
+    "welcomePageUrl": "https://about.riot.im"
 }
