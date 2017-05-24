@@ -17,65 +17,57 @@ import dis from '../dispatcher';
 import {Store} from 'flux/utils';
 
 /**
- * A class for storing application state to do with the session. This is a simple flux
- * store that listens for actions and updates its state accordingly, informing any
+ * A class for storing application state to do with login/registration. This is a simple
+ * flux store that listens for actions and updates its state accordingly, informing any
  * listeners (views) of state changes.
  *
  * Usage:
  *  ```
- *  sessionStore.addListener(() => {
- *   this.setState({ cachedPassword: sessionStore.getCachedPassword() })
+ *  lifecycleStore.addListener(() => {
+ *   this.setState({ cachedPassword: lifecycleStore.getCachedPassword() })
  *  })
  *  ```
  */
-class SessionStore extends Store {
+class LifecycleStore extends Store {
     constructor() {
         super(dis);
 
         // Initialise state
         this._state = {
-            cachedPassword: localStorage.getItem('mx_pass'),
+            deferred_action: null,
         };
-    }
-
-    _update() {
-        // Persist state to localStorage
-        if (this._state.cachedPassword) {
-            localStorage.setItem('mx_pass', this._state.cachedPassword);
-        } else {
-            localStorage.removeItem('mx_pass', this._state.cachedPassword);
-        }
-
-        this.__emitChange();
     }
 
     _setState(newState) {
         this._state = Object.assign(this._state, newState);
-        this._update();
+        this.__emitChange();
     }
 
     __onDispatch(payload) {
         switch (payload.action) {
-            case 'cached_password':
+            case 'do_after_sync_prepared':
                 this._setState({
-                    cachedPassword: payload.cachedPassword,
+                    deferred_action: payload.deferred_action,
                 });
                 break;
-            case 'password_changed':
+            case 'sync_state':
+                if (payload.state !== 'PREPARED') {
+                    break;
+                }
+                console.warn(this._state);
+                if (!this._state.deferred_action) break;
+                const deferredAction = Object.assign({}, this._state.deferred_action);
                 this._setState({
-                    cachedPassword: null,
+                    deferred_action: null,
                 });
+                dis.dispatch(deferredAction);
                 break;
         }
     }
-
-    getCachedPassword() {
-        return this._state.cachedPassword;
-    }
 }
 
-let singletonSessionStore = null;
-if (!singletonSessionStore) {
-    singletonSessionStore = new SessionStore();
+let singletonLifecycleStore = null;
+if (!singletonLifecycleStore) {
+    singletonLifecycleStore = new LifecycleStore();
 }
-module.exports = singletonSessionStore;
+module.exports = singletonLifecycleStore;

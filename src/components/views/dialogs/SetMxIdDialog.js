@@ -232,6 +232,7 @@ export default React.createClass({
             !this.state.usernameBusy;
 
         if (this.state.success) {
+            // XXX BaseDialog needs an onFinished
             return (
                 <BaseDialog className="mx_SetMxIdDialog"
                     title="You have successfully picked a username!"

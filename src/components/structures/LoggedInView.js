@@ -40,7 +40,6 @@ export default React.createClass({
     propTypes: {
         matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
         page_type: React.PropTypes.string.isRequired,
-        onRoomIdResolved: React.PropTypes.func,
         onRoomCreated: React.PropTypes.func,
         onUserSettingsClose: React.PropTypes.func,
 
@@ -190,16 +189,14 @@ export default React.createClass({
             case PageTypes.RoomView:
                 page_element = <RoomView
                         ref='roomView'
-                        roomAddress={this.props.currentRoomAlias || this.props.currentRoomId}
                         autoJoin={this.props.autoJoin}
-                        onRoomIdResolved={this.props.onRoomIdResolved}
                         onRegistered={this.props.onRegistered}
                         eventId={this.props.initialEventId}
                         thirdPartyInvite={this.props.thirdPartyInvite}
                         oobData={this.props.roomOobData}
                         highlightedEventId={this.props.highlightedEventId}
                         eventPixelOffset={this.props.initialEventPixelOffset}
-                        key={this.props.currentRoomAlias || this.props.currentRoomId}
+                        key={this.props.currentRoomId}
                         opacity={this.props.middleOpacity}
                         collapsedRhs={this.props.collapse_rhs}
                         ConferenceHandler={this.props.ConferenceHandler}

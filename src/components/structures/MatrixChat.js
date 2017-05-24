@@ -32,6 +32,8 @@ import sdk from '../../index';
 import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
+import LifecycleStore from '../../stores/LifecycleStore';
+import RoomViewStore from '../../stores/RoomViewStore';
 import PageTypes from '../../PageTypes';
 
 import createRoom from "../../createRoom";
@@ -98,9 +100,6 @@ module.exports = React.createClass({
 
             // What the LoggedInView would be showing if visible
             page_type: null,
-
-            // If we are viewing a room by alias, this contains the alias
-            currentRoomAlias: null,
 
             // The ID of the room we're viewing. This is either populated directly
             // in the case where we view a room by ID or by RoomView when it resolves
@@ -186,6 +185,9 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
+
+        RoomViewStore.addListener(this._onRoomViewStoreUpdated);
+        this._onRoomViewStoreUpdated();
 
         // Used by _viewRoom before getting state from sync
         this.firstSyncComplete = false;
@@ -529,6 +531,10 @@ module.exports = React.createClass({
         }
     },
 
+    _onRoomViewStoreUpdated: function() {
+        this.setState({ currentRoomId: RoomViewStore.getRoomId() });
+    },
+
     _setPage: function(pageType) {
         this.setState({
             page_type: pageType,
@@ -602,13 +608,8 @@ module.exports = React.createClass({
             page_type: PageTypes.RoomView,
             thirdPartyInvite: room_info.third_party_invite,
             roomOobData: room_info.oob_data,
-            currentRoomAlias: room_info.room_alias,
             autoJoin: room_info.auto_join,
         };
-
-        if (!room_info.room_alias) {
-            newState.currentRoomId = room_info.room_id;
-        }
 
         // if we aren't given an explicit event id, look for one in the
         // scrollStateMap.
@@ -712,7 +713,7 @@ module.exports = React.createClass({
 
                     d.then(() => {
                         modal.close();
-                        if (this.currentRoomId === roomId) {
+                        if (this.state.currentRoomId === roomId) {
                             dis.dispatch({action: 'view_next_room'});
                         }
                     }, (err) => {
@@ -807,8 +808,12 @@ module.exports = React.createClass({
             this._teamToken = teamToken;
             dis.dispatch({action: 'view_home_page'});
         } else if (this._is_registered) {
+            this._is_registered = false;
             if (this.props.config.welcomeUserId) {
-                createRoom({dmUserId: this.props.config.welcomeUserId});
+                createRoom({
+                    dmUserId: this.props.config.welcomeUserId,
+                    andView: false,
+                });
                 return;
             }
             // The user has just logged in after registering
@@ -853,7 +858,6 @@ module.exports = React.createClass({
             ready: false,
             collapse_lhs: false,
             collapse_rhs: false,
-            currentRoomAlias: null,
             currentRoomId: null,
             page_type: PageTypes.RoomDirectory,
         });
@@ -891,6 +895,7 @@ module.exports = React.createClass({
         });
 
         cli.on('sync', function(state, prevState) {
+            dis.dispatch({action: 'sync_state', prevState, state});
             self.updateStatusIndicator(state, prevState);
             if (state === "SYNCING" && prevState === "SYNCING") {
                 return;
@@ -1102,6 +1107,8 @@ module.exports = React.createClass({
     },
 
     onRegistered: function(credentials, teamToken) {
+        // XXX: These both should be in state or ideally store(s) because we risk not
+        //      rendering the most up-to-date view of state otherwise.
         // teamToken may not be truthy
         this._teamToken = teamToken;
         this._is_registered = true;
@@ -1163,13 +1170,6 @@ module.exports = React.createClass({
         }
     },
 
-    onRoomIdResolved: function(roomId) {
-        // It's the RoomView's resposibility to look up room aliases, but we need the
-        // ID to pass into things like the Member List, so the Room View tells us when
-        // its done that resolution so we can display things that take a room ID.
-        this.setState({currentRoomId: roomId});
-    },
-
     _makeRegistrationUrl: function(params) {
         if (this.props.startingFragmentQueryParams.referrer) {
             params.referrer = this.props.startingFragmentQueryParams.referrer;
@@ -1211,10 +1211,10 @@ module.exports = React.createClass({
             const LoggedInView = sdk.getComponent('structures.LoggedInView');
             return (
                <LoggedInView ref="loggedInView" matrixClient={MatrixClientPeg.get()}
-                    onRoomIdResolved={this.onRoomIdResolved}
                     onRoomCreated={this.onRoomCreated}
                     onUserSettingsClose={this.onUserSettingsClose}
                     onRegistered={this.onRegistered}
+                    currentRoomId={this.state.currentRoomId}
                     teamToken={this._teamToken}
                     {...this.props}
                     {...this.state}
