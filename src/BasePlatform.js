@@ -70,7 +70,7 @@ export default class BasePlatform {
      * Returns a promise that resolves to a string representing
      * the current version of the application.
      */
-    getAppVersion() {
+    getAppVersion(): Promise<string> {
         throw new Error("getAppVersion not implemented!");
     }
 
@@ -79,9 +79,11 @@ export default class BasePlatform {
      * with getUserMedia, return a string explaining why not.
      * Otherwise, return null.
      */
-    screenCaptureErrorString() {
+    screenCaptureErrorString(): string {
         return "Not implemented";
     }
+
+    isElectron(): boolean { return false; }
 
     /**
      * Restarts the application, without neccessarily reloading

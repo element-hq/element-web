@@ -197,6 +197,16 @@ module.exports = React.createClass({
         this._syncedSettings = syncedSettings;
 
         this._localSettings = UserSettingsStore.getLocalSettings();
+
+        if (PlatformPeg.get().isElectron()) {
+            const {ipcRenderer} = require('electron');
+
+            ipcRenderer.once('settings', (ev, settings) => {
+                this.setState({ electron_settings: settings });
+            });
+
+            ipcRenderer.send('settings_get');
+        }
     },
 
     componentDidMount: function() {
@@ -787,6 +797,29 @@ module.exports = React.createClass({
         </div>;
     },
 
+    _renderElectronSettings: function() {
+        const settings = this.state.electron_settings;
+        if (!settings) return;
+
+        const {ipcRenderer} = require('electron');
+
+        return <div>
+            <h3>Electron Settings</h3>
+            <div className="mx_UserSettings_section">
+                <div className="mx_UserSettings_toggle">
+                    <input type="checkbox"
+                           name="auto-launch"
+                           defaultChecked={settings['auto-launch']}
+                           onChange={(e) => {
+                               ipcRenderer.send('settings_set', 'auto-launch', e.target.checked);
+                           }}
+                    />
+                    <label htmlFor="auto-launch">Start automatically after system login</label>
+                </div>
+            </div>
+        </div>;
+    },
+
     _showSpoiler: function(event) {
         const target = event.target;
         target.innerHTML = target.getAttribute('data-spoiler');
@@ -987,6 +1020,8 @@ module.exports = React.createClass({
                 {this._renderCryptoInfo()}
                 {this._renderBulkOptions()}
                 {this._renderBugReport()}
+
+                {PlatformPeg.get().isElectron() && this._renderElectronSettings()}
 
                 <h3>Advanced</h3>
 
