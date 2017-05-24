@@ -65,7 +65,7 @@ var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
-import languageHandler from 'matrix-react-sdk/lib/languageHandler';
+import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 
 import url from 'url';
 
@@ -266,17 +266,6 @@ async function loadApp() {
         configJson = await getConfig();
     } catch (e) {
         configError = e;
-    }
-
-    if (!configJson.languages) {
-        let languages;
-        try {
-            languages = await languageHandler.getAllLanguageKeysFromJson();
-        } catch (e) {
-            console.log("couldn't load languages from languages.json: error = "+e);
-            languages = ['en'];
-        }
-        configJson.languages = languages;
     }
 
     if (window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser')) {
