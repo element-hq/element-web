@@ -30,7 +30,7 @@ const AddThreepid = require('../../AddThreepid');
 const SdkConfig = require('../../SdkConfig');
 import AccessibleButton from '../views/elements/AccessibleButton';
 import _t from 'counterpart-riot';
-import * as languageHandler from('../../languageHandler');
+import * as languageHandler from '../../languageHandler';
 import * as FormattingUtils from '../../utils/FormattingUtils';
 
 // if this looks like a release, use the 'version' from package.json; else use
@@ -566,9 +566,13 @@ module.exports = React.createClass({
 
     _renderLanguageSetting: function () {
         const LanguageDropdown = sdk.getComponent('views.elements.LanguageDropdown');
-        return <LanguageDropdown ref="language" onOptionChange={this.onLanguageChange}
-                          className="mx_UserSettings_Language"
-                          value={this.state.Language} />;
+        return <div>
+            <label htmlFor="languageSelector">Interface Language</label>
+            <LanguageDropdown ref="language" onOptionChange={this.onLanguageChange}
+                          className="mx_UserSettings_language"
+                          value={this.state.Language}
+            />
+        </div>;
     },
 
     _renderUserInterfaceSettings: function() {
