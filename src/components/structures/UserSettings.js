@@ -30,6 +30,7 @@ const Email = require('../../email');
 const AddThreepid = require('../../AddThreepid');
 const SdkConfig = require('../../SdkConfig');
 import AccessibleButton from '../views/elements/AccessibleButton';
+import * as FormattingUtils from '../../utils/FormattingUtils';
 
 // if this looks like a release, use the 'version' from package.json; else use
 // the git sha. Prepend version with v, to look like riot-web version
@@ -37,7 +38,7 @@ const REACT_SDK_VERSION = 'dist' in packageJson ? packageJson.version : packageJ
 
 // Simple method to help prettify GH Release Tags and Commit Hashes.
 const semVerRegex = /^v?(\d+\.\d+\.\d+(?:-rc.+)?)(?:-(?:\d+-g)?([0-9a-fA-F]+))?(?:-dirty)?$/i;
-const gHVersionLabel = function(repo, token) {
+const gHVersionLabel = function(repo, token='') {
     const match = token.match(semVerRegex);
     let url;
     if (match && match[1]) { // basic semVer string possibly with commit hash
@@ -47,7 +48,7 @@ const gHVersionLabel = function(repo, token) {
     } else {
         url = `https://github.com/${repo}/commit/${token.split('-')[0]}`;
     }
-    return <a href={url}>{token}</a>;
+    return <a target="_blank" rel="noopener" href={url}>{token}</a>;
 };
 
 // Enumerate some simple 'flip a bit' UI settings (if any).
@@ -151,10 +152,10 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             avatarUrl: null,
-            threePids: [],
+            threepids: [],
             phase: "UserSettings.LOADING", // LOADING, DISPLAY
             email_add_pending: false,
-            vectorVersion: null,
+            vectorVersion: undefined,
             rejectingInvites: false,
             mediaDevices: null,
         };
@@ -618,7 +619,12 @@ module.exports = React.createClass({
     _renderCryptoInfo: function() {
         const client = MatrixClientPeg.get();
         const deviceId = client.deviceId;
-        const identityKey = client.getDeviceEd25519Key() || "<not supported>";
+        let identityKey = client.getDeviceEd25519Key();
+        if (!identityKey) {
+             identityKey = "<not supported>";
+        } else {
+            identityKey = FormattingUtils.formatCryptoKey(identityKey);
+        }
 
         let importExportButtons = null;
 
@@ -930,6 +936,7 @@ module.exports = React.createClass({
             addEmailSection = (
                 <div className="mx_UserSettings_profileTableRow" key="_newEmail">
                     <div className="mx_UserSettings_profileLabelCell">
+                        <label>Email</label>
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
                         <EditableText
@@ -1080,7 +1087,7 @@ module.exports = React.createClass({
                             ? gHVersionLabel('matrix-org/matrix-react-sdk', REACT_SDK_VERSION)
                             : REACT_SDK_VERSION
                         }<br/>
-                        riot-web version: {(this.state.vectorVersion !== null)
+                        riot-web version: {(this.state.vectorVersion !== undefined)
                             ? gHVersionLabel('vector-im/riot-web', this.state.vectorVersion)
                             : 'unknown'
                         }<br/>

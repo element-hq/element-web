@@ -9,3 +9,6 @@ npm-debug.log
 
 # test reports created by karma
 /karma-reports
+
+# ignore auto-generated component index
+/src/component-index.js

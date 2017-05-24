@@ -314,24 +314,23 @@ module.exports = React.createClass({
         const phoneSection = (
             <div className="mx_Login_phoneSection">
                 <CountryDropdown ref="phone_country" onOptionChange={this._onPhoneCountryChange}
-                    className="mx_Login_phoneCountry"
+                    className="mx_Login_phoneCountry mx_Login_field_prefix"
                     value={this.state.phoneCountry}
+                    isSmall={true}
+                    showPrefix={true}
                 />
-                <div className="mx_Login_field_group">
-                    <div className="mx_Login_field_prefix">+{this.state.phonePrefix}</div>
-                    <input type="text" ref="phoneNumber"
-                        placeholder="Mobile phone number (optional)"
-                        defaultValue={this.props.defaultPhoneNumber}
-                        className={this._classForField(
-                            FIELD_PHONE_NUMBER,
-                            'mx_Login_phoneNumberField',
-                            'mx_Login_field',
-                            'mx_Login_field_has_prefix'
-                        )}
-                        onBlur={function() {self.validateField(FIELD_PHONE_NUMBER);}}
-                        value={self.state.phoneNumber}
-                    />
-                </div>
+                <input type="text" ref="phoneNumber"
+                    placeholder="Mobile phone number (optional)"
+                    defaultValue={this.props.defaultPhoneNumber}
+                    className={this._classForField(
+                        FIELD_PHONE_NUMBER,
+                        'mx_Login_phoneNumberField',
+                        'mx_Login_field',
+                        'mx_Login_field_has_prefix'
+                    )}
+                    onBlur={function() {self.validateField(FIELD_PHONE_NUMBER);}}
+                    value={self.state.phoneNumber}
+                />
             </div>
         );
 

@@ -25,7 +25,9 @@ module.exports = {
     eventTriggersUnreadCount: function(ev) {
         if (ev.sender && ev.sender.userId == MatrixClientPeg.get().credentials.userId) {
             return false;
-        } else if (ev.getType() == "m.room.member") {
+        } else if (ev.getType() == 'm.room.member') {
+            return false;
+        } else if (ev.getType() == 'm.call.answer' || ev.getType() == 'm.call.hangup') {
             return false;
         } else if (ev.getType == 'm.room.message' && ev.getContent().msgtype == 'm.notify') {
             return false;

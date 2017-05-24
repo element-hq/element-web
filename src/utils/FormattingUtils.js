@@ -26,3 +26,14 @@ export function formatCount(count) {
    if (count < 100000000) return (count / 1000000).toFixed(0) + "M";
    return (count / 1000000000).toFixed(1) + "B"; // 10B is enough for anyone, right? :S
 }
+
+/**
+ * format a key into groups of 4 characters, for easier visual inspection
+ *
+ * @param {string} key key to format
+ *
+ * @return {string}
+ */
+export function formatCryptoKey(key) {
+    return key.match(/.{1,4}/g).join(" ");
+}

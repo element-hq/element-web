@@ -147,6 +147,7 @@ export default WithMatrixClient(React.createClass({
         return (
             <form className="mx_UserSettings_profileTableRow" onSubmit={this._onAddMsisdnSubmit}>
                 <div className="mx_UserSettings_profileLabelCell">
+                    <label>Phone</label>
                 </div>
                 <div className="mx_UserSettings_profileInputCell">
                     <div className="mx_UserSettings_phoneSection">

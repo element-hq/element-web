@@ -59,6 +59,8 @@ var FilePanel = React.createClass({
         var client = MatrixClientPeg.get();
         var room = client.getRoom(roomId);
 
+        this.noRoom = !room;
+
         if (room) {
             var filter = new Matrix.Filter(client.credentials.userId);
             filter.setDefinition(
@@ -82,13 +84,22 @@ var FilePanel = React.createClass({
                     console.error("Failed to get or create file panel filter", error);
                 }
             );
-        }
-        else {
+        } else {
             console.error("Failed to add filtered timelineSet for FilePanel as no room!");
         }
     },
 
     render: function() {
+        if (MatrixClientPeg.get().isGuest()) {
+            return <div className="mx_FilePanel mx_RoomView_messageListWrapper">
+                <div className="mx_RoomView_empty">You must <a href="#/register">register</a> to use this functionality</div>
+            </div>;
+        } else if (this.noRoom) {
+            return <div className="mx_FilePanel mx_RoomView_messageListWrapper">
+                <div className="mx_RoomView_empty">You must join the room to see its files</div>
+            </div>;
+        }
+
         // wrap a TimelinePanel with the jump-to-event bits turned off.
         var TimelinePanel = sdk.getComponent("structures.TimelinePanel");
         var Loader = sdk.getComponent("elements.Spinner");

@@ -24,6 +24,8 @@ var sdk = require('../../../index');
 var Velociraptor = require('../../../Velociraptor');
 require('../../../VelocityBounce');
 
+import DateUtils from '../../../DateUtils';
+
 var bounce = false;
 try {
     if (global.localStorage) {
@@ -63,9 +65,6 @@ module.exports = React.createClass({
 
         // Timestamp when the receipt was read
         timestamp: React.PropTypes.number,
-
-        // True to show the full date/time rather than just the time
-        showFullTimestamp: React.PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -170,16 +169,8 @@ module.exports = React.createClass({
 
         let title;
         if (this.props.timestamp) {
-            const prefix = "Seen by " + this.props.member.userId + " at ";
-            let ts = new Date(this.props.timestamp);
-            if (this.props.showFullTimestamp) {
-                // "15/12/2016, 7:05:45 PM (@alice:matrix.org)"
-                title = prefix + ts.toLocaleString();
-            }
-            else {
-                // "7:05:45 PM (@alice:matrix.org)"
-                title = prefix + ts.toLocaleTimeString();
-            }
+            title = "Seen by " + this.props.member.userId + " at " + 
+                    DateUtils.formatDate(new Date(this.props.timestamp));
         }
 
         return (
