@@ -557,18 +557,18 @@ module.exports = React.createClass({
     },
 
     onLanguageChange: function(l) {
-      UserSettingsStore.setLocalSetting('language', l);
-      this.setState({
-        Language: l,
-      });
-      PlatformPeg.get().reload();
+        UserSettingsStore.setLocalSetting('language', l);
+        this.setState({
+          Language: l,
+        });
+        PlatformPeg.get().reload();
     },
 
     _renderLanguageSetting: function () {
-      const LanguageDropdown = sdk.getComponent('views.elements.LanguageDropdown');
-      return <LanguageDropdown ref="language" onOptionChange={this.onLanguageChange}
-                        className="mx_UserSettings_Language"
-                        value={this.state.Language} />;
+        const LanguageDropdown = sdk.getComponent('views.elements.LanguageDropdown');
+        return <LanguageDropdown ref="language" onOptionChange={this.onLanguageChange}
+                          className="mx_UserSettings_Language"
+                          value={this.state.Language} />;
     },
 
     _renderUserInterfaceSettings: function() {
