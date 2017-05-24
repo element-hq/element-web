@@ -29,6 +29,7 @@ const Email = require('../../email');
 const AddThreepid = require('../../AddThreepid');
 const SdkConfig = require('../../SdkConfig');
 import AccessibleButton from '../views/elements/AccessibleButton';
+import * as FormattingUtils from '../../utils/FormattingUtils';
 
 // if this looks like a release, use the 'version' from package.json; else use
 // the git sha. Prepend version with v, to look like riot-web version
@@ -46,7 +47,7 @@ const gHVersionLabel = function(repo, token='') {
     } else {
         url = `https://github.com/${repo}/commit/${token.split('-')[0]}`;
     }
-    return <a href={url}>{token}</a>;
+    return <a target="_blank" rel="noopener" href={url}>{token}</a>;
 };
 
 // Enumerate some simple 'flip a bit' UI settings (if any).
@@ -603,7 +604,12 @@ module.exports = React.createClass({
     _renderCryptoInfo: function() {
         const client = MatrixClientPeg.get();
         const deviceId = client.deviceId;
-        const identityKey = client.getDeviceEd25519Key() || "<not supported>";
+        let identityKey = client.getDeviceEd25519Key();
+        if (!identityKey) {
+             identityKey = "<not supported>";
+        } else {
+            identityKey = FormattingUtils.formatCryptoKey(identityKey);
+        }
 
         let importExportButtons = null;
 
