@@ -20,11 +20,6 @@ import sdk from '../../../index';
 import UserSettingsStore from '../../../UserSettingsStore';
 import _t from 'counterpart-riot';
 import * as languageHandler from '../../../languageHandler';
-import SdkConfig from '../../../SdkConfig';
-
-let LANGUAGES = [];
-
-const LANGUAGES_BY_VALUE = new Object(null);
 
 function languageMatchesSearchQuery(query, language) {
     if (language.label.toUpperCase().indexOf(query.toUpperCase()) == 0) return true;
@@ -39,31 +34,28 @@ export default class LanguageDropdown extends React.Component {
 
         this.state = {
             searchQuery: '',
+            langs: null,
         }
     }
 
     componentWillMount() {
-        const languageKeys = SdkConfig.get().languages;
-
-        // Build const LANGUAGES in a way that counterpart allows translation inside object:
-        languageKeys.forEach(function(languageKey) {
-            var l = {};
-            l.id = "language";
-            l.label = _t(languageKey);
-            l.value = languageKey;
-            LANGUAGES.push(l);
-        });
-
-      LANGUAGES = LANGUAGES.sort(function(a, b){
-                          if(a.label < b.label) return -1;
-                          if(a.label > b.label) return 1;
-                          return 0;
-                      })
-
-        for (const l of LANGUAGES) {
-            LANGUAGES_BY_VALUE[l.value] = l;
-        }
-
+        languageHandler.getAllLanguageKeysFromJson().then((langKeys) => {
+            const langs = [];
+            langKeys.forEach((languageKey) => {
+                langs.push({
+                    value: languageKey,
+                    label: _t(languageKey)
+                });
+            });
+            langs.sort(function(a, b){
+                if(a.label < b.label) return -1;
+                if(a.label > b.label) return 1;
+                return 0;
+            });
+            this.setState({langs});
+        }).catch(() => {
+            this.setState({langs: ['en']});
+        }).done();
 
         if (!this.props.value) {
             // If no value is given, we start with the first
@@ -86,25 +78,20 @@ export default class LanguageDropdown extends React.Component {
     }
 
     render() {
+        if (this.state.langs === null) {
+            const Spinner = sdk.getComponent('elements.Spinner');
+            return <Spinner />;
+        }
+
         const Dropdown = sdk.getComponent('elements.Dropdown');
 
         let displayedLanguages;
         if (this.state.searchQuery) {
-            displayedLanguages = LANGUAGES.filter(
-                languageMatchesSearchQuery.bind(this, this.state.searchQuery),
-            );
-            if (
-                this.state.searchQuery.length == 2 &&
-                LANGUAGES_BY_VALUE[this.state.searchQuery.toUpperCase()]
-            ) {
-                const matched = LANGUAGES_BY_VALUE[this.state.searchQuery.toUpperCase()];
-                displayedLanguages = displayedLanguages.filter((l) => {
-                    return l.id != matched.id;
-                });
-                displayedLanguages.unshift(matched);
-            }
+            displayedLanguages = this.state.langs.filter((lang) => {
+                return languageMatchesSearchQuery(this.state.searchQuery, lang);
+            });
         } else {
-            displayedLanguages = LANGUAGES;
+            displayedLanguages = this.state.langs;
         }
 
         const options = displayedLanguages.map((language) => {
@@ -126,7 +113,7 @@ export default class LanguageDropdown extends React.Component {
 
         return <Dropdown className={this.props.className}
             onOptionChange={this.props.onOptionChange} onSearchChange={this._onSearchChange}
-            value={value}
+            searchEnabled={true} value={value}
         >
             {options}
         </Dropdown>
