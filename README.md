@@ -4,8 +4,6 @@ Riot
 Riot (formerly known as Vector) is a Matrix web client built using the Matrix
 React SDK (https://github.com/matrix-org/matrix-react-sdk).
 
-[<img src="https://translate.nordgedanken.de/widgets/riot-web/-/multi-auto.svg" alt="Translationsstatus" width="340">](https://translate.nordgedanken.de/engage/riot-web/?utm_source=widget)
-
 Getting Started
 ===============
 
@@ -285,6 +283,9 @@ You'll need to do this in each new terminal you open before building Riot.
 
 How to add a new translation?
 =============================
+
+[<img src="https://translate.nordgedanken.de/widgets/riot-web/-/multi-auto.svg" alt="translationsstatus" width="340">](https://translate.nordgedanken.de/engage/riot-web/?utm_source=widget)
+
 
 Head to the [translating doc](docs/translating.md)
 
