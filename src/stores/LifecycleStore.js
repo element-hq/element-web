@@ -54,7 +54,6 @@ class LifecycleStore extends Store {
                 if (payload.state !== 'PREPARED') {
                     break;
                 }
-                console.warn(this._state);
                 if (!this._state.deferred_action) break;
                 const deferredAction = Object.assign({}, this._state.deferred_action);
                 this._setState({
