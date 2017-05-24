@@ -26,6 +26,10 @@ import url from 'url';
 import UAParser from 'ua-parser-js';
 
 export default class WebPlatform extends VectorBasePlatform {
+    constructor() {
+        super();
+        this.runningVersion = null;
+    }
 
     /**
      * Returns true if the platform supports displaying
