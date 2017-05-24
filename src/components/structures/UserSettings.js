@@ -201,9 +201,7 @@ module.exports = React.createClass({
         if (PlatformPeg.get().isElectron()) {
             const {ipcRenderer} = require('electron');
 
-            ipcRenderer.once('settings', (ev, settings) => {
-                this.setState({ electron_settings: settings });
-            });
+            ipcRenderer.on('settings', this._electronSettings);
 
             ipcRenderer.send('settings_get');
         }
@@ -226,6 +224,15 @@ module.exports = React.createClass({
         if (cli) {
             cli.removeListener("RoomMember.membership", this._onInviteStateChange);
         }
+
+        if (PlatformPeg.get().isElectron()) {
+            const {ipcRenderer} = require('electron');
+            ipcRenderer.removeListener('settings', this._electronSettings);
+        }
+    },
+
+    _electronSettings: function(ev, settings) {
+        this.setState({ electron_settings: settings });
     },
 
     _refreshFromServer: function() {
