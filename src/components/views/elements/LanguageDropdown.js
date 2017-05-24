@@ -43,16 +43,16 @@ export default class LanguageDropdown extends React.Component {
     }
 
     componentWillMount() {
-    	const languageKeys = SdkConfig.get().languages;
+        const languageKeys = SdkConfig.get().languages;
 
-		// Build const LANGUAGES in a way that counterpart allows translation inside object:
-    	languageKeys.forEach(function(languageKey) {
-    		var l = {};
-    		l.id = "language";
-    		l.label = _t(languageKey);
-    		l.value = languageKey;
-    		LANGUAGES.push(l);
-    	});
+        // Build const LANGUAGES in a way that counterpart allows translation inside object:
+        languageKeys.forEach(function(languageKey) {
+            var l = {};
+            l.id = "language";
+            l.label = _t(languageKey);
+            l.value = languageKey;
+            LANGUAGES.push(l);
+        });
 
       LANGUAGES = LANGUAGES.sort(function(a, b){
                           if(a.label < b.label) return -1;
@@ -60,9 +60,9 @@ export default class LanguageDropdown extends React.Component {
                           return 0;
                       })
 
-    	for (const l of LANGUAGES) {
-    		LANGUAGES_BY_VALUE[l.value] = l;
-	    }
+        for (const l of LANGUAGES) {
+            LANGUAGES_BY_VALUE[l.value] = l;
+        }
 
 
         if (!this.props.value) {
