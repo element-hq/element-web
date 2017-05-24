@@ -196,7 +196,7 @@ export default React.createClass({
                         oobData={this.props.roomOobData}
                         highlightedEventId={this.props.highlightedEventId}
                         eventPixelOffset={this.props.initialEventPixelOffset}
-                        key={this.props.currentRoomId}
+                        key={this.props.currentRoomId || 'roomview'}
                         opacity={this.props.middleOpacity}
                         collapsedRhs={this.props.collapse_rhs}
                         ConferenceHandler={this.props.ConferenceHandler}
