@@ -457,10 +457,6 @@ module.exports = React.createClass({
                 this.notifyNewScreen('directory');
                 break;
             case 'view_home_page':
-                if (!this._teamToken) {
-                    dis.dispatch({action: 'view_room_directory'});
-                    return;
-                }
                 this._setPage(PageTypes.HomePage);
                 this.notifyNewScreen('home');
                 break;
@@ -812,7 +808,7 @@ module.exports = React.createClass({
                 return;
             }
             // The user has just logged in after registering
-            dis.dispatch({action: 'view_room_directory'});
+            dis.dispatch({action: 'view_home_page'});
         } else {
             this._showScreenAfterLogin();
         }
@@ -834,12 +830,8 @@ module.exports = React.createClass({
                 action: 'view_room',
                 room_id: localStorage.getItem('mx_last_room_id'),
             });
-        } else if (this._teamToken) {
-            // Team token might be set if we're a guest.
-            // Guests do not call _onLoggedIn with a teamToken
-            dis.dispatch({action: 'view_home_page'});
         } else {
-            dis.dispatch({action: 'view_room_directory'});
+            dis.dispatch({action: 'view_home_page'});
         }
     },
 
