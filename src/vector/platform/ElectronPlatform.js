@@ -138,6 +138,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return null;
     }
 
+    isElectron(): boolean { return true; }
+
     requestNotificationPermission(): Promise<string> {
         return q('granted');
     }

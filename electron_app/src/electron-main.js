@@ -24,6 +24,7 @@ const check_squirrel_hooks = require('./squirrelhooks');
 if (check_squirrel_hooks()) return;
 
 const electron = require('electron');
+const AutoLaunch = require('auto-launch');
 const url = require('url');
 
 const tray = require('./tray');
@@ -201,6 +202,44 @@ if (shouldQuit) {
     console.log("Other instance detected: exiting");
     electron.app.quit()
 }
+
+
+const launcher = new AutoLaunch({
+    name: vectorConfig.brand || 'Riot',
+    isHidden: true,
+});
+
+const settings = {
+    'auto-launch': {
+        get: launcher.isEnabled,
+        set: function(bool) {
+            if (bool) {
+                return launcher.enable();
+            } else {
+                return launcher.disable();
+            }
+        },
+    },
+};
+
+electron.ipcMain.on('settings_get', async function(ev) {
+    const data = {};
+
+    try {
+        await Promise.all(Object.keys(settings).map(async function (setting) {
+            data[setting] = await settings[setting].get();
+        }));
+
+        ev.sender.send('settings', data);
+    } catch(e) { console.error(e); }
+});
+
+electron.ipcMain.on('settings_set', function(ev, key, value) {
+    console.log(key, value);
+    if (settings[key] && settings[key].set) {
+        settings[key].set(value);
+    }
+});
 
 electron.app.on('ready', () => {
     if (vectorConfig.update_base_url) {
