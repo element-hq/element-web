@@ -61,6 +61,11 @@ class LifecycleStore extends Store {
                 });
                 dis.dispatch(deferredAction);
                 break;
+            case 'on_logged_out':
+                this._state = {
+                    deferred_action: null,
+                };
+                break;
         }
     }
 }
