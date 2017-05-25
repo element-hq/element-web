@@ -37,131 +37,115 @@ export function _t(...args) {
     return counterpart.translate(...args);
 }
 
-export function setLanguage(languages) {
-    request(i18nFolder + 'languages.json', function(err, response, body) {
-        function getLanguage(langPath, langCode, callback) {
-            let response_return = {};
-            let resp_raw = {};
-            request(
-                { method: "GET", url: langPath },
-                (err, response, body) => {
-                    if (err || response.status < 200 || response.status >= 300) {
-                        if (response) {
-                            if (response.status == 404 || (response.status == 0 && body == '')) {
-                                resp_raw = {};
-                            }
-                        }
-                        const resp = {err: err, response: resp_raw};
-                        err = resp['err'];
-                        const response_cb = resp['response'];
-                        callback(err, response_cb, langCode);
-                        return;
-                    }
+export function setLanguage(preferredLangs) {
+    if (!Array.isArray(preferredLangs)) {
+        preferredLangs = [preferredLangs];
+    }
 
-                    response_return = JSON.parse(body);
-                    callback(null, response_return, langCode);
-                    return;
-                }
-            );
-            return;
-        }
+    let langToUse;
+    let availLangs;
+    return getLangsJson().then((result) => {
+        availLangs = result;
 
-        function registerTranslations(err, langJson, langCode){
-            if (err !== null) {
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: counterpart.translate('Error changing language'),
-                    description: counterpart.translate('Riot was unable to find the correct Data for the selected Language.'),
-                    button: counterpart.translate("OK"),
-                });
-                return;
-            } else {
-                counterpart.registerTranslations(langCode, langJson);
+        for (let i = 0; i < preferredLangs.length; ++i) {
+            if (availLangs.hasOwnProperty(preferredLangs[i])) {
+                langToUse = preferredLangs[i];
             }
         }
-
-        let languageFiles = {};
-        if(err){
-            console.error(err);
-            return;
-        } else {
-            if (body) {
-                languageFiles = JSON.parse(body);
-            } else {
-                languageFiles = JSON.parse('{"en": "en_EN.json"}');
-            }
+        if (!langToUse) {
+            throw new Error("Unable to find an appropriate language");
         }
 
+        return getLanguage(i18nFolder + availLangs[langToUse]);
+    }).then((langData) => {
+        counterpart.registerTranslations(langToUse, langData);
+        counterpart.setLocale(langToUse);
+        UserSettingsStore.setLocalSetting('language', langToUse);
+        console.log("set language to " + langToUse);
 
-        const isValidFirstLanguage = (languageFiles.hasOwnProperty(languages[0]));
-        var validLanguageKey = "";
-        if ((isValidFirstLanguage) || (languages.length==2 && languageFiles.hasOwnProperty(languages[1]))) {
-            validLanguageKey = (isValidFirstLanguage) ? languages[0] : languages[1];
-            getLanguage(i18nFolder + languageFiles[validLanguageKey], validLanguageKey, registerTranslations);
-            counterpart.setLocale(validLanguageKey);
-            UserSettingsStore.setLocalSetting('language', validLanguageKey);
-            console.log("set language to "+validLanguageKey);
-        } else {
-            console.log("didnt find any language file");
+        // Set 'en' as fallback language:
+        if (langToUse != "en") {
+            return getLanguage(i18nFolder + availLangs['en']);
         }
-
-        //Set 'en' as fallback language:
-        if (validLanguageKey!="en") {
-            getLanguage(i18nFolder + languageFiles['en'], 'en', registerTranslations);
-        }
-        counterpart.setFallbackLocale('en');
+    }).then((langData) => {
+        if (langData) counterpart.registerTranslations('en', langData);
     });
 };
 
 export function getAllLanguageKeysFromJson() {
-    let deferred = q.defer();
-
-    request(
-        { method: "GET", url: i18nFolder + 'languages.json' },
-        (err, response, body) => {
-            if (err || response.status < 200 || response.status >= 300) {
-                if (response) {
-                    if (response.status == 404 || (response.status == 0 && body == '')) {
-                        deferred.resolve({});
-                    }
-                }
-                deferred.reject({err: err, response: response});
-                return;
-            }
-            var languages = JSON.parse(body);
-            // If no language is found, fallback to 'en':
-            if (!languages) {
-                languages = [{"en": "en_EN.json"}];
-            }
-            const languageKeys = Object.keys(languages);
-            deferred.resolve(languageKeys);
-        }
-    );
-    return deferred.promise;
+    return getLangsJson().then((langs) => {
+        return Object.keys(langs);
+    });
 }
 
-export function getLanguageFromBrowser() {
-    return navigator.languages[0] || navigator.language || navigator.userLanguage;
+export function getLanguagesFromBrowser() {
+    if (navigator.languages) return navigator.languages;
+    if (navigator.language) return [navigator.language]
+    return [navigator.userLanguage];
 };
 
+/**
+ * Turns a language string, normalises it,
+ * (see normalizeLanguageKey) into an array of language strings
+ * with fallback to generic languages
+ * (eg. 'pt-BR' => ['pt-br', 'pt'])
+ *
+ * @param {string} language The input language string
+ * @return {string[]} List of normalised languages
+ */
 export function getNormalizedLanguageKeys(language) {
-    if (!language) {
-        return;
-    }
     const languageKeys = [];
     const normalizedLanguage = this.normalizeLanguageKey(language);
     const languageParts = normalizedLanguage.split('-');
-    if (languageParts.length==2 && languageParts[0]==languageParts[1]) {
+    if (languageParts.length == 2 && languageParts[0] == languageParts[1]) {
         languageKeys.push(languageParts[0]);
     } else {
         languageKeys.push(normalizedLanguage);
-        if (languageParts.length==2) {
+        if (languageParts.length == 2) {
             languageKeys.push(languageParts[0]);
         }
     }
     return languageKeys;
 };
 
+/**
+ * Returns a language string with underscores replaced with
+ * hyphens, and lowercased.
+ */
 export function normalizeLanguageKey(language) {
     return language.toLowerCase().replace("_","-");
 };
+
+function getLangsJson() {
+    const deferred = q.defer();
+
+    request(
+        { method: "GET", url: i18nFolder + 'languages.json' },
+        (err, response, body) => {
+            if (err || response.status < 200 || response.status >= 300) {
+                deferred.reject({err: err, response: response});
+                return;
+            }
+            deferred.resolve(JSON.parse(body));
+        }
+    );
+    return deferred.promise;
+}
+
+function getLanguage(langPath) {
+    const deferred = q.defer();
+
+    let response_return = {};
+    request(
+        { method: "GET", url: langPath },
+        (err, response, body) => {
+            if (err || response.status < 200 || response.status >= 300) {
+                deferred.reject({err: err, response: response});
+                return;
+            }
+
+            deferred.resolve(JSON.parse(body));
+        }
+    );
+    return deferred.promise;
+}
