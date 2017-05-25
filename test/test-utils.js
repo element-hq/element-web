@@ -4,7 +4,8 @@ import sinon from 'sinon';
 import q from 'q';
 import ReactTestUtils from 'react-addons-test-utils';
 
-import peg from '../src/MatrixClientPeg.js';
+import peg from '../src/MatrixClientPeg';
+import dis from '../src/dispatcher';
 import jssdk from 'matrix-js-sdk';
 const MatrixEvent = jssdk.MatrixEvent;
 
@@ -288,5 +289,15 @@ export function mkStubRoom(roomId = null) {
             getStateEvents: sinon.stub(),
             members: [],
         },
+    };
+}
+
+export function getDispatchForStore(store) {
+    // Mock the dispatcher by gut-wrenching. Stores can only __emitChange whilst a
+    // dispatcher `_isDispatching` is true.
+    return (payload) => {
+        dis._isDispatching = true;
+        dis._callbacks[store._dispatchToken](payload);
+        dis._isDispatching = false;
     };
 }
