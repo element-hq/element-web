@@ -15,7 +15,7 @@ limitations under the License.
 */
 import React from 'react';
 const MemberAvatar = require('../avatars/MemberAvatar.js');
-import _t from 'counterpart-riot';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'MemberEventListSummary',

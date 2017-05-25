@@ -16,7 +16,7 @@ limitations under the License.
 
 var MatrixClientPeg = require("./MatrixClientPeg");
 var CallHandler = require("./CallHandler");
-import _t from 'counterpart-riot';
+import { _t } from './languageHandler';
 import * as Roles from './Roles';
 
 function textForMemberEvent(ev) {

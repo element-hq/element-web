@@ -25,7 +25,7 @@ var ReactDOM = require("react-dom");
 var q = require("q");
 var classNames = require("classnames");
 var Matrix = require("matrix-js-sdk");
-import _t from 'counterpart-riot';
+import { _t } from '../../languageHandler';
 
 var UserSettingsStore = require('../../UserSettingsStore');
 var MatrixClientPeg = require("../../MatrixClientPeg");

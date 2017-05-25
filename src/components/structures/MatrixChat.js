@@ -36,7 +36,7 @@ import PageTypes from '../../PageTypes';
 
 import createRoom from "../../createRoom";
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
-import _t from 'counterpart-riot';
+import { _t } from '../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'MatrixChat',

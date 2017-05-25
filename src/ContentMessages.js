@@ -21,7 +21,7 @@ var extend = require('./extend');
 var dis = require('./dispatcher');
 var MatrixClientPeg = require('./MatrixClientPeg');
 var sdk = require('./index');
-import _t from 'counterpart-riot';
+import { _t } from './languageHandler';
 var Modal = require('./Modal');
 
 var encrypt = require("browser-encrypt-attachment");

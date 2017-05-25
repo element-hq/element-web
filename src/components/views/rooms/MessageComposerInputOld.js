@@ -20,7 +20,7 @@ var SlashCommands = require("../../../SlashCommands");
 var Modal = require("../../../Modal");
 var MemberEntry = require("../../../TabCompleteEntries").MemberEntry;
 var sdk = require('../../../index');
-import _t from 'counterpart-riot';
+import { _t } from '../../../languageHandler';
 import UserSettingsStore from "../../../UserSettingsStore";
 
 var dis = require("../../../dispatcher");

@@ -30,7 +30,7 @@ import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
 import SlashCommands from '../../../SlashCommands';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
-import _t from 'counterpart-riot';
+import { _t } from '../../../languageHandler';
 
 import dis from '../../../dispatcher';
 import KeyCode from '../../../KeyCode';

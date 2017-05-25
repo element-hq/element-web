@@ -19,7 +19,7 @@ var React = require('react');
 var ObjectUtils = require("../../../ObjectUtils");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require("../../../index");
-import _t from 'counterpart-riot';
+import { _t } from '../../../languageHandler';
 var Modal = require("../../../Modal");
 
 module.exports = React.createClass({

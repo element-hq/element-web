@@ -19,7 +19,7 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import _t from 'counterpart-riot';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'PostRegistration',

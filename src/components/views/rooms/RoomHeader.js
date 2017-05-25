@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 var classNames = require('classnames');
 var sdk = require('../../../index');
-import _t from 'counterpart-riot';
+import { _t } from '../../../languageHandler';
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Modal = require("../../../Modal");
 var dis = require("../../../dispatcher");

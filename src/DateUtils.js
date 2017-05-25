@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 'use strict';
-import _t from 'counterpart-riot';
+import { _t } from './languageHandler';
 
 function getDaysArray() {
     var days = [];

@@ -27,7 +27,7 @@ import DMRoomMap from './utils/DMRoomMap';
 import RtsClient from './RtsClient';
 import Modal from './Modal';
 import sdk from './index';
-import _t from 'counterpart-riot';
+import { _t } from './languageHandler';
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries

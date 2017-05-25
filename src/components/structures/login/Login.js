@@ -18,7 +18,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import _t from 'counterpart-riot';
+import { _t } from '../../../languageHandler';
 import ReactDOM from 'react-dom';
 import url from 'url';
 import sdk from '../../../index';

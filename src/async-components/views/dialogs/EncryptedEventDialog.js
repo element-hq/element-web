@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 var React = require("react");
-import _t from 'counterpart-riot';
+import { _t } from '../../../languageHandler';
 var sdk = require('../../../index');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 

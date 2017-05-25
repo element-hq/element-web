@@ -17,7 +17,7 @@ limitations under the License.
 
 import q from 'q';
 import React from 'react';
-import _t from 'counterpart-riot';
+import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import SdkConfig from '../../../SdkConfig';
 import sdk from '../../../index';

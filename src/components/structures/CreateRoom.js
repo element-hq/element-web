@@ -18,7 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import q from 'q';
-import _t from 'counterpart-riot';
+import { _t } from '../../languageHandler';
 import sdk from '../../index';
 import MatrixClientPeg from '../../MatrixClientPeg';
 const PresetValues = {

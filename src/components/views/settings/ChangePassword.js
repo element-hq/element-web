@@ -21,7 +21,7 @@ var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
 var sdk = require("../../../index");
 import AccessibleButton from '../elements/AccessibleButton';
-import _t from 'counterpart-riot';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'ChangePassword',

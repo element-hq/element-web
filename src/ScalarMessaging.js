@@ -125,7 +125,7 @@ const SdkConfig = require('./SdkConfig');
 const MatrixClientPeg = require("./MatrixClientPeg");
 const MatrixEvent = require("matrix-js-sdk").MatrixEvent;
 const dis = require("./dispatcher");
-import _t from 'counterpart-riot';
+import { _t } from './languageHandler';
 
 function sendResponse(event, res) {
     const data = JSON.parse(JSON.stringify(event.data));

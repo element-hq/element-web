@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 var React = require('react');
-import _t from 'counterpart-riot';
+import { _t } from '../../../languageHandler';
 var CallHandler = require('../../../CallHandler');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var Modal = require('../../../Modal');

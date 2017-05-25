@@ -27,7 +27,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import RegistrationForm from '../../views/login/RegistrationForm';
 import CaptchaForm from '../../views/login/CaptchaForm';
 import RtsClient from '../../../RtsClient';
-import _t from 'counterpart-riot';
+import { _t } from '../../../languageHandler';
 
 const MIN_PASSWORD_LENGTH = 6;
 

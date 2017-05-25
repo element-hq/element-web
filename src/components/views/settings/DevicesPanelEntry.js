@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 
 import sdk from '../../../index';
-import _t from 'counterpart-riot';
+import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import DateUtils from '../../../DateUtils';

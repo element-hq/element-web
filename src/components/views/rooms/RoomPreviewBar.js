@@ -21,7 +21,7 @@ var React = require('react');
 var sdk = require('../../../index');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 
-import _t from 'counterpart-riot';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'RoomPreviewBar',

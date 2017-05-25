@@ -17,7 +17,7 @@ limitations under the License.
 var MatrixClientPeg = require('./MatrixClientPeg');
 var Modal = require('./Modal');
 var sdk = require('./index');
-import _t from 'counterpart-riot';
+import { _t } from './languageHandler';
 var dis = require("./dispatcher");
 var Rooms = require("./Rooms");
 

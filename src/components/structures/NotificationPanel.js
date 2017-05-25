@@ -16,7 +16,7 @@ limitations under the License.
 
 var React = require('react');
 var ReactDOM = require("react-dom");
-import _t from 'counterpart-riot';
+import { _t } from '../../languageHandler';
 var Matrix = require("matrix-js-sdk");
 var sdk = require('../../index');
 var MatrixClientPeg = require("../../MatrixClientPeg");

@@ -18,7 +18,7 @@ import MatrixClientPeg from "./MatrixClientPeg";
 import dis from "./dispatcher";
 import Tinter from "./Tinter";
 import sdk from './index';
-import _t from 'counterpart-riot';
+import { _t } from './languageHandler';
 import Modal from './Modal';
 
 

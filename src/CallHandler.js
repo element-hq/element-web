@@ -55,7 +55,7 @@ var MatrixClientPeg = require('./MatrixClientPeg');
 var PlatformPeg = require("./PlatformPeg");
 var Modal = require('./Modal');
 var sdk = require('./index');
-import _t from 'counterpart-riot';
+import { _t } from './languageHandler';
 var Matrix = require("matrix-js-sdk");
 var dis = require("./dispatcher");
 
