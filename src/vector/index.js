@@ -313,9 +313,21 @@ async function loadApp() {
 }
 
 async function loadLanguage() {
-    const lang = UserSettingsStore.getLocalSetting('language', languageHandler.getLanguageFromBrowser());
-    const languages = languageHandler.getNormalizedLanguageKeys(lang);
-    languageHandler.setLanguage(languages);
+    const prefLang = UserSettingsStore.getLocalSetting('language');
+    let langs = [];
+
+    if (!prefLang) {
+        languageHandler.getLanguagesFromBrowser().forEach((l) => {
+            langs.push(...languageHandler.getNormalizedLanguageKeys(l));
+        });
+    } else {
+        langs = [prefLang];
+    }
+    try {
+        await languageHandler.setLanguage(langs);
+    } catch (e) {
+        console.error("Unable to set language", e);
+    }
 }
 
 loadApp();
