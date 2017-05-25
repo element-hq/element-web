@@ -1,8 +1,6 @@
 const {clipboard, nativeImage, Menu, MenuItem, shell} = require('electron');
 const url = require('url');
 
-let webContents;
-
 const PERMITTED_URL_SCHEMES = [
     'http:',
     'https:',
@@ -108,9 +106,7 @@ function onEditableContextMenu(ev, params) {
 }
 
 
-module.exports = (_webContents) => {
-    webContents = _webContents;
-
+module.exports = (webContents) => {
     webContents.on('new-window', onWindowOrNavigate);
     webContents.on('will-navigate', onWindowOrNavigate);
 
