@@ -307,7 +307,6 @@ module.exports = React.createClass({
                 Modal.createDialog(ErrorDialog, {
                     title: "Failed to invite",
                     description: ((err && err.message) ? err.message : "Operation failed"),
-                    button: _t("OK"),
                 });
                 return null;
             })
@@ -321,7 +320,6 @@ module.exports = React.createClass({
                 Modal.createDialog(ErrorDialog, {
                     title: "Failed to invite user",
                     description: ((err && err.message) ? err.message : "Operation failed"),
-                    button: _t("OK"),
                 });
                 return null;
             })
@@ -343,7 +341,6 @@ module.exports = React.createClass({
                 Modal.createDialog(ErrorDialog, {
                     title: "Failed to invite",
                     description: ((err && err.message) ? err.message : "Operation failed"),
-                    button: _t("OK"),
                 });
                 return null;
             })
@@ -403,7 +400,6 @@ module.exports = React.createClass({
             Modal.createDialog(ErrorDialog, {
                 title: "Failed to invite the following users to the " + room.name + " room:",
                 description: errorList.join(", "),
-                button: _t("OK"),
             });
         }
         return addrs;

@@ -26,6 +26,7 @@ limitations under the License.
 import React from 'react';
 import dis from '../../../dispatcher';
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'NeedToRegisterDialog',
@@ -52,10 +53,10 @@ module.exports = React.createClass({
         return (
             <BaseDialog className="mx_NeedToRegisterDialog"
                 onFinished={this.props.onFinished}
-                title={this.props.title}
+                title={this.props.title || _t('Registration required')}
             >
                 <div className="mx_Dialog_content">
-                    {this.props.description}
+                    {this.props.description || _t('A registered account is required for this action')}
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={this.props.onFinished} autoFocus={true}>

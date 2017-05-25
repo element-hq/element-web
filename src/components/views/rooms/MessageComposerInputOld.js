@@ -297,7 +297,6 @@ export default React.createClass({
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Unknown command"),
                     description: _t("Usage") + ": /markdown on|off",
-                    button: _t("OK"),
                 });
             }
             return;
@@ -318,7 +317,6 @@ export default React.createClass({
                     Modal.createDialog(ErrorDialog, {
                         title: _t("Server error"),
                         description: ((err && err.message) ? err.message : _t("Server unavailable, overloaded, or something else went wrong") + "."),
-                        button: _t("OK"),
                     });
                 });
             }
@@ -328,7 +326,6 @@ export default React.createClass({
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Command error"),
                     description: cmd.error,
-                    button: _t("OK"),
                 });
             }
             return;

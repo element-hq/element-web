@@ -59,7 +59,6 @@ const BannedUser = React.createClass({
                     Modal.createDialog(ErrorDialog, {
                         title: _t('Error'),
                         description: _t('Failed to unban'),
-                        button: _t("OK"),
                     });
                 }).done();
             },
@@ -530,7 +529,6 @@ module.exports = React.createClass({
             Modal.createDialog(ErrorDialog, {
                 title: _t('Error'),
                 description: _t("Failed to forget room %(errCode)s", { errCode: errCode }),
-                button: _t("OK"),
             });
         });
     },
@@ -540,7 +538,7 @@ module.exports = React.createClass({
 
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createDialog(QuestionDialog, {
-            title: _t('Warning') + '!',
+            title: _t('Warning!'),
             description: (
                 <div>
                     <p>{ _t('End-to-end encryption is in beta and may not be reliable') }.</p>
@@ -550,7 +548,6 @@ module.exports = React.createClass({
                     <p>{ _t('Encrypted messages will not be visible on clients that do not yet implement encryption') }.</p>
                 </div>
             ),
-            button: "OK",
             onFinished: confirm=>{
                 if (!confirm) {
                     this.refs.encrypt.checked = false;

@@ -100,7 +100,7 @@ module.exports = React.createClass({
             if (this.refs.email.value == '') {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 Modal.createDialog(QuestionDialog, {
-                    title: "Warning",
+                    title: "Warning!",
                     description:
                         <div>
                             If you don't specify an email address, you won't be able to reset your password.<br/>

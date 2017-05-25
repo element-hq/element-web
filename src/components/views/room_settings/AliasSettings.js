@@ -157,7 +157,6 @@ module.exports = React.createClass({
             Modal.createDialog(ErrorDialog, {
                 title: _t('Invalid alias format'),
                 description: _t('"%(alias)s" is not a valid format for an alias', { alias: alias }),
-                button: _t('OK'),
             });
         }
     },
@@ -174,7 +173,6 @@ module.exports = React.createClass({
             Modal.createDialog(ErrorDialog, {
                 title: _t('Invalid address format'),
                 description: _t('"%(alias)s" is not a valid format for an address', { alias: alias }),
-                button: _t('OK'),
             });
         }
     },

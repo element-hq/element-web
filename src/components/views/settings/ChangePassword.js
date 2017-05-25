@@ -70,7 +70,7 @@ module.exports = React.createClass({
 
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createDialog(QuestionDialog, {
-            title: _t("Warning"),
+            title: _t("Warning!"),
             description:
                 <div>
                     { _t(

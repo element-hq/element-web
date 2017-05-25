@@ -531,7 +531,7 @@ module.exports = React.createClass({
         if (!userHasUsedEncryption) {
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             Modal.createDialog(QuestionDialog, {
-                title: _t("Warning") + "!",
+                title: _t("Warning!"),
                 hasCancelButton: false,
                 description: (
                     <div>
@@ -541,7 +541,6 @@ module.exports = React.createClass({
                         <p>{ _t("Encrypted messages will not be visible on clients that do not yet implement encryption") }.</p>
                     </div>
                 ),
-                button: "OK",
             });
         }
         if (localStorage) {
@@ -882,7 +881,6 @@ module.exports = React.createClass({
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Failed to join room"),
                     description: msg,
-                    button: _t("OK"),
                 });
             }
         }).done();
@@ -964,7 +962,6 @@ module.exports = React.createClass({
             Modal.createDialog(ErrorDialog, {
                 title: _t('Failed to upload file'),
                 description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or the file too big")),
-                button: _t("OK"),
             });
         });
     },
@@ -1052,7 +1049,6 @@ module.exports = React.createClass({
             Modal.createDialog(ErrorDialog, {
                 title: _t("Search failed"),
                 description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or search timed out :(")),
-                button: _t("OK"),
             });
         }).finally(function() {
             self.setState({
@@ -1180,7 +1176,6 @@ module.exports = React.createClass({
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Failed to save settings"),
                     description: fails.map(function(result) { return result.reason; }).join("\n"),
-                    button: _t("OK"),
                 });
                 // still editing room settings
             }
@@ -1220,7 +1215,6 @@ module.exports = React.createClass({
             Modal.createDialog(ErrorDialog, {
                 title: _t("Error"),
                 description: _t("Failed to forget room %(errCode)s", { errCode: errCode }),
-                button: _t("OK"),
             });
         });
     },
@@ -1243,7 +1237,6 @@ module.exports = React.createClass({
             Modal.createDialog(ErrorDialog, {
                 title: _t("Failed to reject invite"),
                 description: msg,
-                button: _t("OK"),
             });
 
             self.setState({

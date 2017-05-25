@@ -122,7 +122,6 @@ module.exports = React.createClass({
             Modal.createDialog(ErrorDialog, {
                 title: _t("Error"),
                 description: _t("Failed to set avatar") + ".",
-                button: _t("OK"),
             });
         }).done();
     },

@@ -244,7 +244,6 @@ module.exports = WithMatrixClient(React.createClass({
                         Modal.createDialog(ErrorDialog, {
                             title: _t("Failed to kick"),
                             description: ((err && err.message) ? err.message : "Operation failed"),
-                            button: _t("OK"),
                         });
                     }
                 ).finally(()=>{
@@ -287,7 +286,6 @@ module.exports = WithMatrixClient(React.createClass({
                         Modal.createDialog(ErrorDialog, {
                             title: _t("Error"),
                             description: _t("Failed to ban user"),
-                            button: _t("OK"),
                         });
                     }
                 ).finally(()=>{
@@ -338,7 +336,6 @@ module.exports = WithMatrixClient(React.createClass({
                     Modal.createDialog(ErrorDialog, {
                         title: _t("Error"),
                         description: _t("Failed to mute user"),
-                        button: _t("OK"),
                     });
                 }
             ).finally(()=>{
@@ -388,7 +385,6 @@ module.exports = WithMatrixClient(React.createClass({
                     Modal.createDialog(ErrorDialog, {
                         title: _t("Error"),
                         description: _t("Failed to toggle moderator status"),
-                        button: _t("OK"),
                     });
                 }
             }
@@ -410,7 +406,6 @@ module.exports = WithMatrixClient(React.createClass({
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Error"),
                     description: _t("Failed to change power level"),
-                    button: _t("OK"),
                 });
             }
         ).finally(()=>{
@@ -438,7 +433,7 @@ module.exports = WithMatrixClient(React.createClass({
             if (parseInt(myPower) === parseInt(powerLevel)) {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 Modal.createDialog(QuestionDialog, {
-                    title: _t("Warning"),
+                    title: _t("Warning!"),
                     description:
                         <div>
                             { _t("You will not be able to undo this change as you are promoting the user to have the same power level as yourself") }.<br/>

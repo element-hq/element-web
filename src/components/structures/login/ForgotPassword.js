@@ -90,7 +90,7 @@ module.exports = React.createClass({
         else {
             var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             Modal.createDialog(QuestionDialog, {
-                title: _t('Warning'),
+                title: _t('Warning!'),
                 description:
                     <div>
                         { _t(
@@ -157,7 +157,6 @@ module.exports = React.createClass({
         Modal.createDialog(ErrorDialog, {
             title: title,
             description: body,
-            button: _t("OK"),
         });
     },
 

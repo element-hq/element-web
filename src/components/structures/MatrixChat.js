@@ -378,7 +378,6 @@ module.exports = React.createClass({
                 Modal.createDialog(QuestionDialog, {
                     title: _t('Reject invitation'),
                     description: _t('Are you sure you want to reject the invitation?'),
-                    button: "OK",
                     onFinished: (confirm) => {
                         if (confirm) {
                             // FIXME: controller shouldn't be loading a view :(
@@ -395,7 +394,6 @@ module.exports = React.createClass({
                                 Modal.createDialog(ErrorDialog, {
                                     title:  _t('Failed to reject invitation'),
                                     description: err.toString(),
-                                    button: _t("OK"),
                                 });
                             });
                         }
@@ -895,7 +893,6 @@ module.exports = React.createClass({
             Modal.createDialog(ErrorDialog, {
                 title: _t('Signed Out'),
                 description: _t('For security, this session has been signed out. Please sign in again.'),
-                button: _t("OK"),
             });
             dis.dispatch({
                 action: 'logout',

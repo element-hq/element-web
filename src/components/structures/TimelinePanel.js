@@ -914,7 +914,6 @@ var TimelinePanel = React.createClass({
             Modal.createDialog(ErrorDialog, {
                 title: _t("Failed to load timeline position"),
                 description: message,
-                button: _t("OK"),
                 onFinished: onFinished,
             });
         };
