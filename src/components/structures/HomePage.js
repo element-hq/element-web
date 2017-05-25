@@ -27,7 +27,8 @@ module.exports = React.createClass({
     propTypes: {
         // URL base of the team server.
         teamServerUrl: React.PropTypes.string.isRequired,
-        // Team token. Optional. If unset, the homePageUrl will be used
+        // Team token. Optional. If set, used as to get the static homepage of the team
+        //      associated. If unset, homePageUrl will be used.
         teamToken: React.PropTypes.string,
         // URL to use as the iFrame src. Defaults to /home.html.
         homePageUrl: React.PropTypes.string,
