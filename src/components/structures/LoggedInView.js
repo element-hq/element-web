@@ -232,9 +232,15 @@ export default React.createClass({
                 break;
 
             case PageTypes.HomePage:
+                // If team server config is present, pass the teamServerURL. props.teamToken
+                // must also be set for the team page to be displayed, otherwise the
+                // welcomePageUrl is used (which might be undefined).
+                const teamServerUrl = this.props.config.teamServerConfig ?
+                    this.props.config.teamServerConfig.teamServerURL : null;
+
                 page_element = <HomePage
                     collapsedRhs={this.props.collapse_rhs}
-                    teamServerUrl={this.props.config.teamServerConfig.teamServerURL}
+                    teamServerUrl={teamServerUrl}
                     teamToken={this.props.teamToken}
                     homePageUrl={this.props.config.welcomePageUrl}
                 />;
