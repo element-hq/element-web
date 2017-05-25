@@ -178,9 +178,15 @@ module.exports = React.createClass({
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
                     { homeButton }
-                    <StartChatButton ref={this._collectPeopleButton} tooltip={true} />
-                    <RoomDirectoryButton ref={this._collectDirectoryButton} tooltip={true} />
-                    <CreateRoomButton ref={this._collectCreateRoomButton} tooltip={true} />
+                    <div ref={this._collectPeopleButton}>
+                        <StartChatButton tooltip={true} />
+                    </div>
+                    <div ref={this._collectDirectoryButton}>
+                        <RoomDirectoryButton tooltip={true} />
+                    </div>
+                    <div ref={this._collectCreateRoomButton}>
+                        <CreateRoomButton tooltip={true} />
+                    </div>
                     <span className="mx_BottomLeftMenu_settings">
                         <SettingsButton tooltip={true} />
                     </span>

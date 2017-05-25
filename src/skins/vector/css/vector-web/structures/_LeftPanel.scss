@@ -70,6 +70,10 @@ limitations under the License.
     padding-bottom: 3px ! important;
 }
 
+.mx_BottomLeftMenu_options > div {
+    display: inline-block;
+}
+
 .mx_BottomLeftMenu_options .mx_RoleButton {
     margin-left: 0px;
     margin-right: 10px;
