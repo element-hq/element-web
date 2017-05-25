@@ -292,7 +292,7 @@ module.exports = React.createClass({
     onLogoutClicked: function(ev) {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createDialog(QuestionDialog, {
-            title: _t("Sign out") + "?",
+            title: _t("Sign out"),
             description:
                 <div>
              { _t("For security, logging out will delete any end-to-end encryption keys from this browser. If you want to be able to decrypt your conversation history from future Riot sessions, please export your room keys for safe-keeping") }.
