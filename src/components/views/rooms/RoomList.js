@@ -540,6 +540,10 @@ module.exports = React.createClass({
             }
         }
 
+        if (this.state.totalRoomCount === 0) {
+            return null;
+        }
+
         const labelText = 'Drop here to ' + (VERBS[section] || 'tag ' + section);
 
         return <RoomDropTarget label={labelText} />;
