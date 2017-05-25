@@ -895,6 +895,11 @@ module.exports = React.createClass({
         });
 
         cli.on('sync', function(state, prevState) {
+            // LifecycleStore and others cannot directly subscribe to matrix client for
+            // events because flux only allows store state changes during flux dispatches.
+            // So dispatch directly from here. Ideally we'd use a SyncStateStore that
+            // would do this dispatch and expose the sync state itself (by listening to
+            // its own dispatch).
             dis.dispatch({action: 'sync_state', prevState, state});
             self.updateStatusIndicator(state, prevState);
             if (state === "SYNCING" && prevState === "SYNCING") {
