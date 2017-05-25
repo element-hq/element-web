@@ -360,7 +360,7 @@
     "%(senderDisplayName)s changed the room name to %(roomName)s": "%(senderDisplayName)s änderte den Raumnamen zu %(roomName)s",
     "%(senderDisplayName)s changed the topic to %(topic)s": "%(senderDisplayName)s änderte das Thema zu %(topic)s",
     "/ddg is not a command": "/ddg ist kein Kommando",
-    "%(senderName)s ended the call.": "%(senderName)s beendete den Anruf.",
+    "%(senderName)s ended the call": "%(senderName)s beendete den Anruf",
     "Failed to lookup current room": "Aktuellen Raum nachzuschlagen schlug fehl",
     "Failed to send request.": "Anfrage zu senden schlug fehl.",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s von %(fromPowerLevel)s zu %(toPowerLevel)s",

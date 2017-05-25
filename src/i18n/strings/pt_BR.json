@@ -333,7 +333,7 @@
     "/ddg is not a command": "/ddg não é um comando",
     "Drop here %(toAction)s": "Arraste aqui %(toAction)s",
     "Drop here to tag %(section)s": "Arraste aqui para marcar como %(section)s",
-    "%(senderName)s ended the call.": "%(senderName)s finalizou a chamada.",
+    "%(senderName)s ended the call": "%(senderName)s finalizou a chamada",
     "Existing Call": "Chamada em andamento",
     "Failed to lookup current room": "Não foi possível buscar na sala atual",
     "Failed to send email": "Não foi possível enviar email",

@@ -47,9 +47,9 @@ function textForMemberEvent(ev) {
             }
         case 'ban':
             return _t(
-                '%(senderName)s banned %(targetName)s. %(reason)s.',
-                {senderName: senderName, targetName: targetName, reason: reason}
-            );
+                '%(senderName)s banned %(targetName)s.',
+                {senderName: senderName, targetName: targetName}
+            ) + ' ' + reason;
         case 'join':
             if (ev.getPrevContent() && ev.getPrevContent().membership == 'join') {
                 if (ev.getPrevContent().displayname && ev.getContent().displayname && ev.getPrevContent().displayname != ev.getContent().displayname) {
@@ -90,19 +90,19 @@ function textForMemberEvent(ev) {
                 }
             }
             else if (ev.getPrevContent().membership === "ban") {
-                return _t('%(senderName)s unbanned %(targetName)s.', {senderName: senderName, targetName: targetName}) + '.';
+                return _t('%(senderName)s unbanned %(targetName)s.', {senderName: senderName, targetName: targetName});
             }
             else if (ev.getPrevContent().membership === "join") {
                 return _t(
                     '%(senderName)s kicked %(targetName)s.',
                     {senderName: senderName, targetName: targetName}
-                ) + '. ' + reason;
+                ) + ' ' + reason;
             }
             else if (ev.getPrevContent().membership === "invite") {
                 return _t(
                     '%(senderName)s withdrew %(targetName)s\'s inivitation.',
                     {senderName: senderName, targetName: targetName}
-                ) + '. ' + reason;
+                ) + ' ' + reason;
             }
             else {
                 return _t('%(targetName)s left the room.', {targetName: targetName});
@@ -135,13 +135,13 @@ function textForMessageEvent(ev) {
 function textForCallAnswerEvent(event) {
     var senderName = event.sender ? event.sender.name : _t('Someone');
     var supported = MatrixClientPeg.get().supportsVoip() ? "" : _t('(not supported by this browser)');
-    return _t('%(senderName)s answered the call', {senderName: senderName}) + '. ' + supported;
+    return _t('%(senderName)s answered the call', {senderName: senderName}) + ' ' + supported;
 }
 
 function textForCallHangupEvent(event) {
     var senderName = event.sender ? event.sender.name : _t('Someone');
     var supported = MatrixClientPeg.get().supportsVoip() ? "" : _t('(not supported by this browser)');
-    return _t('%(senderName)s ended the call', {senderName: senderName}) + '. ' + supported;
+    return _t('%(senderName)s ended the call', {senderName: senderName}) + ' ' + supported;
 }
 
 function textForCallInviteEvent(event) {
@@ -153,7 +153,7 @@ function textForCallInviteEvent(event) {
         type = "video";
     }
     var supported = MatrixClientPeg.get().supportsVoip() ? "" : _t('(not supported by this browser)');
-    return _t('%(senderName)s placed a %(callType)s call.', {senderName: senderName, callType: type}) + '. ' + supported;
+    return _t('%(senderName)s placed a %(callType)s call.', {senderName: senderName, callType: type}) + ' ' + supported;
 }
 
 function textForThreePidInviteEvent(event) {

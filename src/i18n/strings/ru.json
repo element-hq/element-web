@@ -239,7 +239,7 @@
     "/ddg is not a command": "/ddg не команда",
     "Drop here %(toAction)s": "Вставить здесь %(toAction)s",
     "Drop here to tag %(section)s": "Вставить здесь для тега %(section)s",
-    "%(senderName)s ended the call.": "%(senderName)s прекратил звонок.",
+    "%(senderName)s ended the call": "%(senderName)s прекратил звонок",
     "Existing Call": "Существующий вызов",
     "Failed to lookup current room": "Не удалось выполнить поиск текущий комнаты",
     "Failed to send request.": "Не удалось выслать запрос.",

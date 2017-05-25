@@ -137,7 +137,7 @@
     "Enable encryption": "Enable encryption",
     "Encrypted messages will not be visible on clients that do not yet implement encryption": "Encrypted messages will not be visible on clients that do not yet implement encryption",
     "Encrypted room": "Encrypted room",
-    "%(senderName)s ended the call.": "%(senderName)s ended the call.",
+    "%(senderName)s ended the call": "%(senderName)s ended the call",
     "End-to-end encryption information": "End-to-end encryption information",
     "End-to-end encryption is in beta and may not be reliable": "End-to-end encryption is in beta and may not be reliable",
     "Enter Code": "Enter Code",
