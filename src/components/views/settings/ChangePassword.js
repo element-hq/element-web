@@ -193,12 +193,14 @@ module.exports = React.createClass({
 
         switch (this.state.phase) {
             case this.Phases.Edit:
+                const passwordLabel = this.state.cachedPassword ?
+                    'Password' : 'New Password';
                 return (
                     <div className={this.props.className}>
                         { currentPassword }
                         <div className={rowClassName}>
                             <div className={rowLabelClassName}>
-                                <label htmlFor="password1">New password</label>
+                                <label htmlFor="password1">{ passwordLabel }</label>
                             </div>
                             <div className={rowInputClassName}>
                                 <input id="password1" type="password" ref="new_input" autoFocus={this.props.autoFocusNewPasswordInput} />
