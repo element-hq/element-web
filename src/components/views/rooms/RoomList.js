@@ -72,9 +72,6 @@ module.exports = React.createClass({
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("accountData", this.onAccountData);
 
-        // lookup for which lists a given roomId is currently in.
-        this.listsForRoomId = {};
-
         this.refreshRoomList();
 
         // order of the sublists
@@ -260,7 +257,6 @@ module.exports = React.createClass({
             //             ", prevMembership = " + me.events.member.getPrevContent().membership);
 
             if (me.membership == "invite") {
-                self.listsForRoomId[room.roomId].push("im.vector.fake.invite");
                 lists["im.vector.fake.invite"].push(room);
             }
             else if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(room, me, self.props.ConferenceHandler)) {
@@ -277,22 +273,18 @@ module.exports = React.createClass({
                         var tagName = tagNames[i];
                         lists[tagName] = lists[tagName] || [];
                         lists[tagName].push(room);
-                        self.listsForRoomId[room.roomId].push(tagName);
                         otherTagNames[tagName] = 1;
                     }
                 }
                 else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
                     // "Direct Message" rooms (that we're still in and that aren't otherwise tagged)
-                    self.listsForRoomId[room.roomId].push("im.vector.fake.direct");
                     lists["im.vector.fake.direct"].push(room);
                 }
                 else {
-                    self.listsForRoomId[room.roomId].push("im.vector.fake.recent");
                     lists["im.vector.fake.recent"].push(room);
                 }
             }
             else if (me.membership === "leave") {
-                self.listsForRoomId[room.roomId].push("im.vector.fake.archived");
                 lists["im.vector.fake.archived"].push(room);
             }
             else {
@@ -313,10 +305,8 @@ module.exports = React.createClass({
                 const me = room.getMember(MatrixClientPeg.get().credentials.userId);
 
                 if (me && Rooms.looksLikeDirectMessageRoom(room, me)) {
-                    self.listsForRoomId[room.roomId].push("im.vector.fake.direct");
                     lists["im.vector.fake.direct"].push(room);
                 } else {
-                    self.listsForRoomId[room.roomId].push("im.vector.fake.recent");
                     lists["im.vector.fake.recent"].push(room);
                 }
             }
