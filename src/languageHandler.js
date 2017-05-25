@@ -116,6 +116,10 @@ export function normalizeLanguageKey(language) {
     return language.toLowerCase().replace("_","-");
 };
 
+export function getCurrentLanguage() {
+    return counterpart.getLocale();
+}
+
 function getLangsJson() {
     const deferred = q.defer();
 

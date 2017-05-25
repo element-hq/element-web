@@ -202,16 +202,10 @@ module.exports = React.createClass({
         this._syncedSettings = syncedSettings;
 
         this._localSettings = UserSettingsStore.getLocalSettings();
-        if (!this._localSettings.hasOwnProperty('language')) {
-            const language = languageHandler.normalizeLanguageKey(languageHandler.getLanguageFromBrowser());
-            this.setState({
-                Language: language
-            });
-        } else {
-            this.setState({
-                Language: this._localSettings.language
-            });
-        }
+
+        this.setState({
+            language: languageHandler.getCurrentLanguage(),
+        });
     },
 
     componentDidMount: function() {
@@ -551,7 +545,7 @@ module.exports = React.createClass({
     onLanguageChange: function(l) {
         UserSettingsStore.setLocalSetting('language', l);
         this.setState({
-          Language: l,
+            language: l,
         });
         PlatformPeg.get().reload();
     },
@@ -562,7 +556,7 @@ module.exports = React.createClass({
             <label htmlFor="languageSelector">{_t('Interface Language')}</label>
             <LanguageDropdown ref="language" onOptionChange={this.onLanguageChange}
                           className="mx_UserSettings_language"
-                          value={this.state.Language}
+                          value={this.state.language}
             />
         </div>;
     },
