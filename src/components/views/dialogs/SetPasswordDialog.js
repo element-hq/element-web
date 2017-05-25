@@ -69,7 +69,7 @@ export default React.createClass({
             return (
                 <BaseDialog className="mx_SetPasswordDialog"
                     onFinished={this.props.onFinished}
-                    title="You have successfully set a new password!"
+                    title="You have successfully set a password!"
                 >
                     <div className="mx_Dialog_content">
                         <p>
@@ -92,7 +92,7 @@ export default React.createClass({
         return (
             <BaseDialog className="mx_SetPasswordDialog"
                 onFinished={this.props.onFinished}
-                title="Please set a new password!"
+                title="Please set a password!"
             >
                 <div className="mx_Dialog_content">
                     <p>
