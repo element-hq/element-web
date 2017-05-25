@@ -567,7 +567,7 @@ module.exports = React.createClass({
     _renderLanguageSetting: function () {
         const LanguageDropdown = sdk.getComponent('views.elements.LanguageDropdown');
         return <div>
-            <label htmlFor="languageSelector">Interface Language</label>
+            <label htmlFor="languageSelector">{_t('Interface Language')}</label>
             <LanguageDropdown ref="language" onOptionChange={this.onLanguageChange}
                           className="mx_UserSettings_language"
                           value={this.state.Language}
