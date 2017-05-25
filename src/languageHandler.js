@@ -1,5 +1,6 @@
 /*
 Copyright 2017 MTRNord and Cooperative EITA
+Copyright 2017 Vector Creations Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,12 +16,26 @@ limitations under the License.
 */
 
 import request from 'browser-request';
-// Workaround for broken export
-import * as counterpart from 'counterpart-riot';
-import UserSettingsStore from './UserSettingsStore';
+import counterpart from 'counterpart';
 import q from 'q';
 
+import UserSettingsStore from './UserSettingsStore';
+
 const i18nFolder = 'i18n/';
+
+// We use english strings as keys, some of which contain full stops
+counterpart.setSeparator('|');
+// Fall back to English
+counterpart.setFallbackLocale('en');
+
+// The translation function. This is just a simple wrapper to counterpart,
+// but exists mostly because we must use the same counterpart instance
+// between modules (ie. here (react-sdk) and the app (riot-web), and if we
+// just import counterpart and use it directly, we end up using a different
+// instance.
+export function _t(...args) {
+    return counterpart.translate(...args);
+}
 
 export function setLanguage(languages, extCounterpart=null) {
     if (!languages || !Array.isArray(languages)) {
