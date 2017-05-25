@@ -38,11 +38,6 @@ export function _t(...args) {
 }
 
 export function setLanguage(languages) {
-    if (!languages || !Array.isArray(languages)) {
-    const languages = this.getNormalizedLanguageKeys(this.getLanguageFromBrowser());
-    console.log("no language found. Got from browser: " + JSON.stringify(languages));
-    }
-
     request(i18nFolder + 'languages.json', function(err, response, body) {
         function getLanguage(langPath, langCode, callback) {
             let response_return = {};
