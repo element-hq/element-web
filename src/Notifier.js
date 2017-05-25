@@ -141,7 +141,6 @@ const Notifier = {
                     Modal.createDialog(ErrorDialog, {
                         title: _t('Unable to enable Notifications'),
                         description,
-                        button: _t("OK"),
                     });
                     return;
                 }

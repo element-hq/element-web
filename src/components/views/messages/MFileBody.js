@@ -286,7 +286,6 @@ module.exports = React.createClass({
                         Modal.createDialog(ErrorDialog, {
                         	title: _t("Error"),
                             description: _t("Error decrypting attachment"),
-                            button: _t("OK"),
                         });
                     }).finally(() => {
                         decrypting = false;
