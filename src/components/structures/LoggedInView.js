@@ -178,7 +178,6 @@ export default React.createClass({
         const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         const HomePage = sdk.getComponent('structures.HomePage');
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
-        const GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         const PasswordNagBar = sdk.getComponent('globals.PasswordNagBar');
 
@@ -253,8 +252,6 @@ export default React.createClass({
             topBar = <NewVersionBar version={this.props.version} newVersion={this.props.newVersion}
                 releaseNotes={this.props.newVersionReleaseNotes}
             />;
-        } else if (this.props.matrixClient.isGuest()) {
-            topBar = <GuestWarningBar />;
         } else if (this.state.userHasGeneratedPassword) {
             topBar = <PasswordNagBar />;
         } else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
