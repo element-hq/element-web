@@ -24,11 +24,11 @@ const check_squirrel_hooks = require('./squirrelhooks');
 if (check_squirrel_hooks()) return;
 
 const electron = require('electron');
-const url = require('url');
 
 const tray = require('./tray');
 
 const VectorMenu = require('./vectormenu');
+const webContentsHandler = require('./webcontents-handler');
 
 const windowStateKeeper = require('electron-window-state');
 
@@ -42,59 +42,11 @@ try {
     // Continue with the defaults (ie. an empty config)
 }
 
-const PERMITTED_URL_SCHEMES = [
-    'http:',
-    'https:',
-    'mailto:',
-];
-
 const UPDATE_POLL_INTERVAL_MS = 60 * 60 * 1000;
 const INITIAL_UPDATE_DELAY_MS = 30 * 1000;
 
 let mainWindow = null;
 let appQuitting = false;
-
-function safeOpenURL(target) {
-    // openExternal passes the target to open/start/xdg-open,
-    // so put fairly stringent limits on what can be opened
-    // (for instance, open /bin/sh does indeed open a terminal
-    // with a shell, albeit with no arguments)
-    const parsed_url = url.parse(target);
-    if (PERMITTED_URL_SCHEMES.indexOf(parsed_url.protocol) > -1) {
-        // explicitly use the URL re-assembled by the url library,
-        // so we know the url parser has understood all the parts
-        // of the input string
-        const new_target = url.format(parsed_url);
-        electron.shell.openExternal(new_target);
-    }
-}
-
-function onWindowOrNavigate(ev, target) {
-    // always prevent the default: if something goes wrong,
-    // we don't want to end up opening it in the electron
-    // app, as we could end up opening any sort of random
-    // url in a window that has node scripting access.
-    ev.preventDefault();
-    safeOpenURL(target);
-}
-
-function onLinkContextMenu(ev, params) {
-    const popup_menu = new electron.Menu();
-    popup_menu.append(new electron.MenuItem({
-        label: params.linkURL,
-        click() {
-            safeOpenURL(params.linkURL);
-        },
-    }));
-    popup_menu.append(new electron.MenuItem({
-        label: 'Copy Link Address',
-        click() {
-            electron.clipboard.writeText(params.linkURL);
-        },
-    }));
-    popup_menu.popup();
-    ev.preventDefault();
-}
 
 function installUpdate() {
     // for some reason, quitAndInstall does not fire the
@@ -259,15 +211,7 @@ electron.app.on('ready', () => {
         }
     });
 
-    mainWindow.webContents.on('new-window', onWindowOrNavigate);
-    mainWindow.webContents.on('will-navigate', onWindowOrNavigate);
-
-    mainWindow.webContents.on('context-menu', function(ev, params) {
-        if (params.linkURL) {
-            onLinkContextMenu(ev, params);
-        }
-    });
-
+    webContentsHandler(mainWindow.webContents);
     mainWindowState.manage(mainWindow);
 });
 
