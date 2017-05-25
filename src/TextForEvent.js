@@ -32,9 +32,9 @@ function textForMemberEvent(ev) {
             var threePidContent = ev.getContent().third_party_invite;
             if (threePidContent) {
                 if (threePidContent.display_name) {
-                    return _t('%(targetName)s accepted the invitation for %(displayName)s', {targetName: targetName, displayName: threePidContent.display_name}) + ".";
+                    return _t('%(targetName)s accepted the invitation for %(displayName)s.', {targetName: targetName, displayName: threePidContent.display_name});
                 } else {
-                    return _t('%(targetName)s accepted an invitation', {targetName: targetName}) + '.';
+                    return _t('%(targetName)s accepted an invitation.', {targetName: targetName});
                 }
             }
             else {
@@ -42,11 +42,14 @@ function textForMemberEvent(ev) {
                     return _t('%(senderName)s requested a VoIP conference', {senderName: senderName});
                 }
                 else {
-                    return _t('%(senderName)s invited %(targetName)s', {senderName: senderName, targetName: targetName}) + '.';
+                    return _t('%(senderName)s invited %(targetName)s.', {senderName: senderName, targetName: targetName});
                 }
             }
         case 'ban':
-            return _t('%(senderName)s banned %(targetName)s', {senderName: senderName, targetName: targetName}) + '. ' + reason;
+            return _t(
+                '%(senderName)s banned %(targetName)s. %(reason)s.',
+                {senderName: senderName, targetName: targetName, reason: reason}
+            );
         case 'join':
             if (ev.getPrevContent() && ev.getPrevContent().membership == 'join') {
                 if (ev.getPrevContent().displayname && ev.getContent().displayname && ev.getPrevContent().displayname != ev.getContent().displayname) {
@@ -71,7 +74,7 @@ function textForMemberEvent(ev) {
                     return _t('VoIP conference started');
                 }
                 else {
-                    return _t('%(targetName)s joined the room', {targetName: targetName}) + '.';
+                    return _t('%(targetName)s joined the room.', {targetName: targetName});
                 }
             }
         case 'leave':
@@ -80,23 +83,29 @@ function textForMemberEvent(ev) {
                     return _t('VoIP conference finished');
                 }
                 else if (ev.getPrevContent().membership === "invite") {
-                    return _t('%(targetName)s rejected the invitation', {targetName: targetName}) + '.';
+                    return _t('%(targetName)s rejected the invitation.', {targetName: targetName});
                 }
                 else {
-                    return _t('%(targetName)s left the room', {targetName: targetName}) + '.';
+                    return _t('%(targetName)s left the room.', {targetName: targetName});
                 }
             }
             else if (ev.getPrevContent().membership === "ban") {
-                return _t('%(senderName)s unbanned %(targetName)s', {senderName: senderName, targetName: targetName}) + '.';
+                return _t('%(senderName)s unbanned %(targetName)s.', {senderName: senderName, targetName: targetName}) + '.';
             }
             else if (ev.getPrevContent().membership === "join") {
-                return _t('%(senderName)s kicked %(targetName)s', {senderName: senderName, targetName: targetName}) + '. ' + reason;
+                return _t(
+                    '%(senderName)s kicked %(targetName)s. %(reason)s',
+                    {senderName: senderName, targetName: targetName, reason}
+                );
             }
             else if (ev.getPrevContent().membership === "invite") {
-                return _t('%(senderName)s withdrew %(targetName)s\'s inivitation', {senderName: senderName, targetName: targetName}) + '. ' + reason;
+                return _t(
+                    '%(senderName)s withdrew %(targetName)s\'s inivitation. %(reason)s',
+                    {senderName: senderName, targetName: targetName, reason: reason}
+                );
             }
             else {
-                return _t('%(targetName)s left the room', {targetName: targetName}) + '.';
+                return _t('%(targetName)s left the room.', {targetName: targetName});
             }
     }
 }
@@ -118,7 +127,7 @@ function textForMessageEvent(ev) {
     if (ev.getContent().msgtype === "m.emote") {
         message = "* " + senderDisplayName + " " + message;
     } else if (ev.getContent().msgtype === "m.image") {
-        message = _t('%(senderDisplayName)s sent an image', {senderDisplayName: senderDisplayName}) + '.';
+        message = _t('%(senderDisplayName)s sent an image.', {senderDisplayName: senderDisplayName});
     }
     return message;
 }
@@ -144,17 +153,18 @@ function textForCallInviteEvent(event) {
         type = "video";
     }
     var supported = MatrixClientPeg.get().supportsVoip() ? "" : _t('(not supported by this browser)');
-    return _t('%(senderName)s placed a %(callType)s call', {senderName: senderName, callType: type}) + '. ' + supported;
+    return _t('%(senderName)s placed a %(callType)s call.', {senderName: senderName, callType: type}) + '. ' + supported;
 }
 
 function textForThreePidInviteEvent(event) {
     var senderName = event.sender ? event.sender.name : event.getSender();
-    return _t('%(senderName)s sent an invitation to %(targetDisplayName)s to join the room', {senderName: senderName, targetDisplayName: event.getContent().display_name}) + ".";
+    return _t('%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.', {senderName: senderName, targetDisplayName: event.getContent().display_name});
 }
 
 function textForHistoryVisibilityEvent(event) {
     var senderName = event.sender ? event.sender.name : event.getSender();
     var vis = event.getContent().history_visibility;
+    // XXX: This i18n just isn't going to work for languages with different sentence structure.
     var text = _t('%(senderName)s made future room history visible to', {senderName: senderName}) + ' ';
     if (vis === "invited") {
         text += _t('all room members, from the point they are invited') + '.';
@@ -199,6 +209,7 @@ function textForPowerEvent(event) {
         }
     );
     let diff = [];
+    // XXX: This is also surely broken for i18n
     users.forEach((userId) => {
         // Previous power level
         const from = event.getPrevContent().users[userId];

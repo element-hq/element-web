@@ -151,7 +151,7 @@ function inviteUser(event, roomId, userId) {
     console.log(`Received request to invite ${userId} into room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t('You need to be logged in') + '.');
+        sendError(event, _t('You need to be logged in.'));
         return;
     }
     const room = client.getRoom(roomId);
@@ -171,7 +171,7 @@ function inviteUser(event, roomId, userId) {
             success: true,
         });
     }, function(err) {
-        sendError(event, _t('You need to be able to invite users to do that') + '.', err);
+        sendError(event, _t('You need to be able to invite users to do that.'), err);
     });
 }
 
@@ -182,7 +182,7 @@ function setPlumbingState(event, roomId, status) {
     console.log(`Received request to set plumbing state to status "${status}" in room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t('You need to be logged in') + '.');
+        sendError(event, _t('You need to be logged in.'));
         return;
     }
     client.sendStateEvent(roomId, "m.room.plumbing", { status : status }).done(() => {
@@ -190,7 +190,7 @@ function setPlumbingState(event, roomId, status) {
             success: true,
         });
     }, (err) => {
-        sendError(event, err.message ? err.message : _t('Failed to send request') + '.', err);
+        sendError(event, err.message ? err.message : _t('Failed to send request.'), err);
     });
 }
 
@@ -198,7 +198,7 @@ function setBotOptions(event, roomId, userId) {
     console.log(`Received request to set options for bot ${userId} in room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t('You need to be logged in') + '.');
+        sendError(event, _t('You need to be logged in.'));
         return;
     }
     client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, "_" + userId).done(() => {
@@ -206,20 +206,20 @@ function setBotOptions(event, roomId, userId) {
             success: true,
         });
     }, (err) => {
-        sendError(event, err.message ? err.message : _t('Failed to send request') + '.', err);
+        sendError(event, err.message ? err.message : _t('Failed to send request.'), err);
     });
 }
 
 function setBotPower(event, roomId, userId, level) {
     if (!(Number.isInteger(level) && level >= 0)) {
-        sendError(event, _t('Power level must be positive integer') + '.');
+        sendError(event, _t('Power level must be positive integer.'));
         return;
     }
 
     console.log(`Received request to set power level to ${level} for bot ${userId} in room ${roomId}.`);
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t('You need to be logged in') + '.');
+        sendError(event, _t('You need to be logged in.'));
         return;
     }
 
@@ -236,7 +236,7 @@ function setBotPower(event, roomId, userId, level) {
                 success: true,
             });
         }, (err) => {
-            sendError(event, err.message ? err.message : _t('Failed to send request') + '.', err);
+            sendError(event, err.message ? err.message : _t('Failed to send request.'), err);
         });
     });
 }
@@ -259,12 +259,12 @@ function botOptions(event, roomId, userId) {
 function returnStateEvent(event, roomId, eventType, stateKey) {
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, _t('You need to be logged in') + '.');
+        sendError(event, _t('You need to be logged in.'));
         return;
     }
     const room = client.getRoom(roomId);
     if (!room) {
-        sendError(event, _t('This room is not recognised') + '.');
+        sendError(event, _t('This room is not recognised.'));
         return;
     }
     const stateEvent = room.currentState.getStateEvents(eventType, stateKey);
