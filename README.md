@@ -28,7 +28,6 @@ Translation Status
 ==================
 [![translationsstatus](https://translate.nordgedanken.de/widgets/riot-web/-/multi-auto.svg)](https://translate.nordgedanken.de/engage/riot-web/?utm_source=widget)
 
-
 Developer Guide
 ===============
 
