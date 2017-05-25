@@ -18,7 +18,7 @@ limitations under the License.
 
 var StandardActions = require('./StandardActions');
 var PushRuleVectorState = require('./PushRuleVectorState');
-import _t from 'counterpart-riot';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 class VectorPushRuleDefinition {
     constructor(opts) {

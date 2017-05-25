@@ -17,7 +17,7 @@ limitations under the License.
 // 'use strict';
 
 import React from 'react';
-import _t from 'counterpart-riot';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import DateUtils from 'matrix-react-sdk/lib/DateUtils';
 
 function getdaysArray() {

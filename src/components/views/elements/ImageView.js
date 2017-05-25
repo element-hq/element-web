@@ -25,7 +25,7 @@ var filesize = require('filesize');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 const Modal = require('matrix-react-sdk/lib/Modal');
 const sdk = require('matrix-react-sdk');
-import _t from 'counterpart-riot';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 module.exports = React.createClass({
     displayName: 'ImageView',

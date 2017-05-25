@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 var React = require("react");
-import _t from 'counterpart-riot';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 module.exports = React.createClass({
     displayName: 'VectorCustomServerDialog',

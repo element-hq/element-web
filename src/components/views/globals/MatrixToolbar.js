@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
-import _t from 'counterpart-riot';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 var Notifier = require("matrix-react-sdk/lib/Notifier");
 var sdk = require('matrix-react-sdk')
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');

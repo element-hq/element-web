@@ -23,7 +23,7 @@ import {DropTarget} from 'react-dnd';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import sdk from 'matrix-react-sdk';
-import _t from 'counterpart-riot';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import RoomTile from 'matrix-react-sdk/lib/components/views/rooms/RoomTile';
 import * as Rooms from 'matrix-react-sdk/lib/Rooms';
 import Modal from 'matrix-react-sdk/lib/Modal';

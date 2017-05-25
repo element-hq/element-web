@@ -21,7 +21,7 @@ import q from 'q';
 import React from 'react';
 import classNames from 'classnames';
 import sdk from 'matrix-react-sdk';
-import _t from 'counterpart-riot';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import DMRoomMap from 'matrix-react-sdk/lib/utils/DMRoomMap';
