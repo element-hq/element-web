@@ -16,8 +16,8 @@ limitations under the License.
 import { _t } from './languageHandler';
 
 export function levelRoleMap() {
-	const LEVEL_ROLE_MAP = {};
-	LEVEL_ROLE_MAP[undefined] = _t('Default');
+    const LEVEL_ROLE_MAP = {};
+    LEVEL_ROLE_MAP[undefined] = _t('Default');
     LEVEL_ROLE_MAP[0] = _t('User');
     LEVEL_ROLE_MAP[50] = _t('Moderator');
     LEVEL_ROLE_MAP[100] = _t('Admin');
@@ -25,7 +25,7 @@ export function levelRoleMap() {
 }
 
 export function textualPowerLevel(level, userDefault) {
-	const LEVEL_ROLE_MAP = this.levelRoleMap();
+    const LEVEL_ROLE_MAP = this.levelRoleMap();
     if (LEVEL_ROLE_MAP[level]) {
         return LEVEL_ROLE_MAP[level] + (level !== undefined ? ` (${level})` : ` (${userDefault})`);
     } else {
