@@ -526,15 +526,15 @@ module.exports = React.createClass({
                 case 'im.vector.fake.direct':
                     return <div className="mx_RoomList_emptySubListTip">
                         Press
-                        <StartChatButton size="16" />
+                        <StartChatButton size="16" callout={true}/>
                         to start a chat with someone
                     </div>;
                 case 'im.vector.fake.recent':
                     return <div className="mx_RoomList_emptySubListTip">
                         You're not in any rooms yet! Press
-                        <CreateRoomButton size="16" />
+                        <CreateRoomButton size="16" callout={true}/>
                         to make a room or
-                        <RoomDirectoryButton size="16" />
+                        <RoomDirectoryButton size="16" callout={true}/>
                         to browse the directory
                     </div>;
             }

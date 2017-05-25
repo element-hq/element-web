@@ -27,6 +27,7 @@ export default React.createClass({
         size: PropTypes.string,
         tooltip: PropTypes.bool,
         action: PropTypes.string.isRequired,
+        mouseOverAction: PropTypes.string,
         label: PropTypes.string.isRequired,
         iconPath: PropTypes.string.isRequired,
     },
@@ -51,6 +52,9 @@ export default React.createClass({
 
     _onMouseEnter: function() {
         if (this.props.tooltip) this.setState({showTooltip: true});
+        if (this.props.mouseOverAction) {
+            dis.dispatch({action: this.props.mouseOverAction});
+        }
     },
 
     _onMouseLeave: function() {

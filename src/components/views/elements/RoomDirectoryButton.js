@@ -22,6 +22,7 @@ const RoomDirectoryButton = function(props) {
     const ActionButton = sdk.getComponent('elements.ActionButton');
     return (
         <ActionButton action="view_room_directory"
+            mouseOverAction={props.callout ? "callout_room_directory" : null}
             label="Room directory"
             iconPath="img/icons-directory.svg"
             size={props.size}

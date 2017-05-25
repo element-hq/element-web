@@ -22,6 +22,7 @@ const CreateRoomButton = function(props) {
     const ActionButton = sdk.getComponent('elements.ActionButton');
     return (
         <ActionButton action="view_create_chat"
+            mouseOverAction={props.callout ? "callout_create_room" : null}
             label="Create new room"
             iconPath="img/icons-create-room.svg"
             size={props.size}
