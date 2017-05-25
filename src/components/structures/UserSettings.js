@@ -724,7 +724,7 @@ module.exports = React.createClass({
                 <div className="mx_UserSettings_section">
                     <p>{ _t("Found a bug?") }</p>
                     <button className="mx_UserSettings_button danger"
-                        onClick={this._onBugReportClicked}>Report it
+                        onClick={this._onBugReportClicked}>{_t('Report it')}
                     </button>
                 </div>
             </div>
@@ -1031,10 +1031,10 @@ module.exports = React.createClass({
 
                 <div className="mx_UserSettings_section">
                     <div className="mx_UserSettings_advanced">
-                        { _t("Logged in as") } {this._me}
+                        { _t("Logged in as:") } {this._me}
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        Access Token: <span className="mx_UserSettings_advanced_spoiler" onClick={this._showSpoiler} data-spoiler={ MatrixClientPeg.get().getAccessToken() }>&lt;{ _t("click to reveal") }&gt;</span>
+                        {_t('Access Token:')} <span className="mx_UserSettings_advanced_spoiler" onClick={this._showSpoiler} data-spoiler={ MatrixClientPeg.get().getAccessToken() }>&lt;{ _t("click to reveal") }&gt;</span>
                     </div>
                     <div className="mx_UserSettings_advanced">
                         { _t("Homeserver is") } { MatrixClientPeg.get().getHomeserverUrl() }
@@ -1043,15 +1043,15 @@ module.exports = React.createClass({
                         { _t("Identity Server is") } { MatrixClientPeg.get().getIdentityServerUrl() }
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        matrix-react-sdk version: {(REACT_SDK_VERSION !== '<local>')
+                        {_t('matrix-react-sdk version:')} {(REACT_SDK_VERSION !== '<local>')
                             ? gHVersionLabel('matrix-org/matrix-react-sdk', REACT_SDK_VERSION)
                             : REACT_SDK_VERSION
                         }<br/>
-                        riot-web version: {(this.state.vectorVersion !== undefined)
+                        {_t('riot-web version:')} {(this.state.vectorVersion !== undefined)
                             ? gHVersionLabel('vector-im/riot-web', this.state.vectorVersion)
                             : 'unknown'
                         }<br/>
-                        { _t("olm version: ") } {olmVersionString}<br/>
+                        { _t("olm version:") } {olmVersionString}<br/>
                     </div>
                 </div>
 
