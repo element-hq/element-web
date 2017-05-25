@@ -227,7 +227,8 @@ input.mx_UserSettings_phoneNumberField {
     display: none;
 }
 
-.mx_UserSettings_advanced_spoiler {
+.mx_UserSettings_advanced_spoiler,
+.mx_UserSettings_link {
     cursor: pointer;
     color: $accent-color;
     word-break: break-all;
