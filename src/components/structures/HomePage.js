@@ -25,15 +25,25 @@ module.exports = React.createClass({
     displayName: 'HomePage',
 
     propTypes: {
+        // URL base of the team server.
         teamServerUrl: React.PropTypes.string.isRequired,
-        teamToken: React.PropTypes.string.isRequired,
-        collapsedRhs: React.PropTypes.bool,
+        // Team token. Optional. If set, used as to get the static homepage of the team
+        //      associated. If unset, homePageUrl will be used.
+        teamToken: React.PropTypes.string,
+        // URL to use as the iFrame src. Defaults to /home.html.
+        homePageUrl: React.PropTypes.string,
     },
 
     render: function() {
+        let src = this.props.homePageUrl || '/home.html';
+
+        if (this.props.teamToken) {
+            src = `${this.props.teamServerUrl}/static/${this.props.teamToken}/home.html`;
+        }
+
         return (
         <div className="mx_HomePage">
-            <iframe src={`${this.props.teamServerUrl}/static/${this.props.teamToken}/home.html`}/>
+            <iframe src={src}/>
         </div>
         );
     }
