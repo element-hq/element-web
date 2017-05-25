@@ -94,15 +94,15 @@ function textForMemberEvent(ev) {
             }
             else if (ev.getPrevContent().membership === "join") {
                 return _t(
-                    '%(senderName)s kicked %(targetName)s. %(reason)s',
-                    {senderName: senderName, targetName: targetName, reason}
-                );
+                    '%(senderName)s kicked %(targetName)s.',
+                    {senderName: senderName, targetName: targetName}
+                ) + '. ' + reason;
             }
             else if (ev.getPrevContent().membership === "invite") {
                 return _t(
-                    '%(senderName)s withdrew %(targetName)s\'s inivitation. %(reason)s',
-                    {senderName: senderName, targetName: targetName, reason: reason}
-                );
+                    '%(senderName)s withdrew %(targetName)s\'s inivitation.',
+                    {senderName: senderName, targetName: targetName}
+                ) + '. ' + reason;
             }
             else {
                 return _t('%(targetName)s left the room.', {targetName: targetName});
