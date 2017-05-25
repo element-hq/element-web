@@ -820,8 +820,7 @@ module.exports = React.createClass({
         CallMediaHandler.setVideoInput(deviceId);
     },
 
-    _requestMediaPermissions: function() {
-        console.log("Request media perms");
+    _requestMediaPermissions: function(event) {
         const getUserMedia = (
             window.navigator.getUserMedia || window.navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia
         );
@@ -829,7 +828,13 @@ module.exports = React.createClass({
             return getUserMedia.apply(window.navigator, [
                 { video: true, audio: true },
                 this._refreshMediaDevices,
-                function() {},
+                function() {
+                    const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
+                    Modal.createDialog(ErrorDialog, {
+                        title: "No media permissions",
+                        description: "You may need to manually permit Riot to access your microphone/webcam",
+                    });
+                },
             ]);
         }
     },
@@ -839,15 +844,17 @@ module.exports = React.createClass({
             return <div>
                 <h3>WebRTC</h3>
                 <div className="mx_UserSettings_section">
-                    <h5 onClick={this._requestMediaPermissions}>Missing Media Permissions, click to request.</h5>
+                    <p className="mx_UserSettings_link" onClick={this._requestMediaPermissions}>
+                        Missing Media Permissions, click here to request.
+                    </p>
                 </div>
             </div>;
         } else if (!this.state.mediaDevices) return;
 
         const Dropdown = sdk.getComponent('elements.Dropdown');
 
-        let microphoneDropdown = <h5>No Microphones detected</h5>;
-        let webcamDropdown = <h5>No Webcams detected</h5>;
+        let microphoneDropdown = <p>No Microphones detected</p>;
+        let webcamDropdown = <p>No Webcams detected</p>;
 
         const audioInputs = this.state.mediaDevices.audioinput;
         if ('default' in audioInputs) {
