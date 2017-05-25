@@ -53,9 +53,6 @@ export default React.createClass({
             doingUIAuth: false,
             // Indicate error with auth
             authError: '',
-
-            // Indicate success of setting mxid
-            success: false,
         };
     },
 
@@ -96,10 +93,6 @@ export default React.createClass({
         this.setState({
             doingUIAuth: true,
         });
-    },
-
-    onSuccessContinue: function() {
-        this.props.onFinished(true, this._registeredCreds);
     },
 
     _doUsernameCheck: function() {
@@ -169,7 +162,7 @@ export default React.createClass({
         // XXX Implement RTS /register here
         const teamToken = null;
 
-        this._registeredCreds = {
+        this.props.onFinished(true, {
             userId: response.user_id,
             deviceId: response.device_id,
             homeserverUrl: this._matrixClient.getHomeserverUrl(),
@@ -177,11 +170,6 @@ export default React.createClass({
             accessToken: response.access_token,
             password: this._generatedPassword,
             teamToken: teamToken,
-        };
-
-        // Before continuing, show a warm-fuzzy success and only submit onSuccessContinue
-        this.setState({
-            success: true,
         });
     },
 
@@ -230,31 +218,6 @@ export default React.createClass({
         const canContinue = this.state.username &&
             !this.state.usernameError &&
             !this.state.usernameBusy;
-
-        if (this.state.success) {
-            // XXX BaseDialog needs an onFinished
-            return (
-                <BaseDialog className="mx_SetMxIdDialog"
-                    title="You have successfully picked a username!"
-                >
-                    <div className="mx_Dialog_content">
-                        <p>
-                            You have successfully
-                            picked <b>{ this.state.username }</b> as your
-                            username and you now have access to the full
-                            set of features on Riot.
-                        </p>
-                    </div>
-                    <div className="mx_Dialog_buttons">
-                        <input className="mx_Dialog_primary"
-                            type="submit"
-                            value="Continue"
-                            onClick={this.onSuccessContinue}
-                        />
-                    </div>
-                </BaseDialog>
-            );
-        }
 
         return (
             <BaseDialog className="mx_SetMxIdDialog"
