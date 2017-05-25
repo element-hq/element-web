@@ -26,6 +26,8 @@ export default {
             const audioIn = {};
             const videoIn = {};
 
+            if (devices.some((device) => !device.label)) return false;
+
             devices.forEach((device) => {
                 switch (device.kind) {
                     case 'audioinput': audioIn[device.deviceId] = device.label; break;

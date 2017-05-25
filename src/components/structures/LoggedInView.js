@@ -72,9 +72,7 @@ export default React.createClass({
         // RoomView.getScrollState()
         this._scrollStateMap = {};
 
-        // Only run these in electron, at least until a better mechanism for perms exists
-        // https://w3c.github.io/permissions/#dom-permissionname-device-info
-        if (window && window.process && window.process.type) CallMediaHandler.loadDevices();
+        CallMediaHandler.loadDevices();
 
         document.addEventListener('keydown', this._onKeyDown);
     },

@@ -178,17 +178,7 @@ module.exports = React.createClass({
             });
         }
 
-        q().then(() => {
-            return CallMediaHandler.getDevices();
-        }).then((mediaDevices) => {
-            console.log("got mediaDevices", mediaDevices, this._unmounted);
-            if (this._unmounted) return;
-            this.setState({
-                mediaDevices,
-                activeAudioInput: this._localSettings['webrtc_audioinput'] || 'default',
-                activeVideoInput: this._localSettings['webrtc_videoinput'] || 'default',
-            });
-        });
+        this._refreshMediaDevices();
 
         // Bulk rejecting invites:
         // /sync won't have had time to return when UserSettings re-renders from state changes, so getRooms()
@@ -210,8 +200,6 @@ module.exports = React.createClass({
         this._syncedSettings = syncedSettings;
 
         this._localSettings = UserSettingsStore.getLocalSettings();
-        this._setAudioInput = this._setAudioInput.bind(this);
-        this._setVideoInput = this._setVideoInput.bind(this);
     },
 
     componentDidMount: function() {
@@ -231,6 +219,20 @@ module.exports = React.createClass({
         if (cli) {
             cli.removeListener("RoomMember.membership", this._onInviteStateChange);
         }
+    },
+
+    _refreshMediaDevices: function() {
+        q().then(() => {
+            return CallMediaHandler.getDevices();
+        }).then((mediaDevices) => {
+            // console.log("got mediaDevices", mediaDevices, this._unmounted);
+            if (this._unmounted) return;
+            this.setState({
+                mediaDevices,
+                activeAudioInput: this._localSettings['webrtc_audioinput'] || 'default',
+                activeVideoInput: this._localSettings['webrtc_videoinput'] || 'default',
+            });
+        });
     },
 
     _refreshFromServer: function() {
@@ -818,9 +820,29 @@ module.exports = React.createClass({
         CallMediaHandler.setVideoInput(deviceId);
     },
 
+    _requestMediaPermissions: function() {
+        console.log("Request media perms");
+        const getUserMedia = (
+            window.navigator.getUserMedia || window.navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia
+        );
+        if (getUserMedia) {
+            return getUserMedia.apply(window.navigator, [
+                { video: true, audio: true },
+                this._refreshMediaDevices,
+                function() {},
+            ]);
+        }
+    },
+
     _renderWebRtcSettings: function() {
-        if (!(window && window.process && window.process.type)
-         || !this.state.mediaDevices) return;
+        if (this.state.mediaDevices === false) {
+            return <div>
+                <h3>WebRTC</h3>
+                <div className="mx_UserSettings_section">
+                    <h5 onClick={this._requestMediaPermissions}>Missing Media Permissions, click to request.</h5>
+                </div>
+            </div>;
+        } else if (!this.state.mediaDevices) return;
 
         const Dropdown = sdk.getComponent('elements.Dropdown');
 
