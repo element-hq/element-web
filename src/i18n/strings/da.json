@@ -100,7 +100,7 @@
     "decline": "nedgang",
     "Default": "Standard",
     "demote": "degradere",
-    "Devices will <b>not</b> yet be able to decrypt history from before they joined the room": "Enhederne vil <b>ikke</b> være i stand til at dekryptere historikken fra, før de kom til rummet",
+    "Devices will not yet be able to decrypt history from before they joined the room": "Enhederne vil ikke være i stand til at dekryptere historikken fra, før de kom til rummet",
     "Direct Chat": "Personligt Chat",
     "Disable inline URL previews by default": "Deaktiver forrige weblinks forhåndsvisninger som standard",
     "Display name": "Visningsnavn",

@@ -542,9 +542,9 @@ module.exports = React.createClass({
             description: (
                 <div>
                     <p>{ _t('End-to-end encryption is in beta and may not be reliable') }.</p>
-                    <p>{ _t('You should <b>not</b> yet trust it to secure data') }.</p>
-                    <p>{ _t('Devices will <b>not</b> yet be able to decrypt history from before they joined the room') }.</p>
-                    <p>{ _t('Once encryption is enabled for a room it <b>cannot</b> be turned off again (for now)') }.</p>
+                    <p>{ _t('You should not yet trust it to secure data') }.</p>
+                    <p>{ _t('Devices will not yet be able to decrypt history from before they joined the room') }.</p>
+                    <p>{ _t('Once encryption is enabled for a room it cannot be turned off again (for now)') }.</p>
                     <p>{ _t('Encrypted messages will not be visible on clients that do not yet implement encryption') }.</p>
                 </div>
             ),
