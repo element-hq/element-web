@@ -256,7 +256,7 @@ function _onAction(payload) {
                 Modal.createDialog(ErrorDialog, {
                     description: _t('You cannot place a call with yourself') + '.',
                     title: _t("Error"),
-					button: _t("OK"),
+                    button: _t("OK"),
                 });
                 return;
             }
@@ -284,7 +284,7 @@ function _onAction(payload) {
                 Modal.createDialog(ErrorDialog, {
                     description: _t('Conference calls are not supported in this client'),
                     title: _t("Error"),
-					button: _t("OK"),
+                    button: _t("OK"),
                 });
             }
             else if (!MatrixClientPeg.get().supportsVoip()) {
@@ -292,7 +292,7 @@ function _onAction(payload) {
                 Modal.createDialog(ErrorDialog, {
                     title: _t('VoIP is unsupported'),
                     description: _t('You cannot place VoIP calls in this browser') + '.',
-					button: _t("OK"),
+                    button: _t("OK"),
                 });
             }
             else if (MatrixClientPeg.get().isRoomEncrypted(payload.room_id)) {
@@ -304,8 +304,8 @@ function _onAction(payload) {
                 // Therefore we disable conference calling in E2E rooms.
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                	title: _t("Error"),
-					button: _t("OK"),
+                    title: _t("Error"),
+                    button: _t("OK"),
                     description: _t('Conference calls are not supported in encrypted rooms'),
                 });
             }
@@ -314,7 +314,7 @@ function _onAction(payload) {
                 Modal.createDialog(QuestionDialog, {
                     title: _t('Warning') + '!',
                     description: _t('Conference calling is in development and may not be reliable') + '.',
-					button: _t("OK"),
+                    button: _t("OK"),
                     onFinished: confirm=>{
                         if (confirm) {
                             ConferenceHandler.createNewMatrixCall(
@@ -327,7 +327,7 @@ function _onAction(payload) {
                                 Modal.createDialog(ErrorDialog, {
                                     title: _t('Failed to set up conference call'),
                                     description: _t('Conference call failed') + '. ' + ((err && err.message) ? err.message : ''),
-									button: _t("OK"),
+                                    button: _t("OK"),
                                 });
                             });
                         }
