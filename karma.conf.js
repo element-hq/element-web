@@ -166,7 +166,6 @@ module.exports = function (config) {
                     'sinon': 'sinon/pkg/sinon.js',
                 },
                 root: [
-                    path.resolve('./src'),
                     path.resolve('./test'),
                 ],
             },
