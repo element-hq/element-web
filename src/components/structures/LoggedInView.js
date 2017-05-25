@@ -237,7 +237,8 @@ export default React.createClass({
                     collapsedRhs={this.props.collapse_rhs}
                     teamServerUrl={this.props.config.teamServerConfig.teamServerURL}
                     teamToken={this.props.teamToken}
-                />
+                    homePageUrl={this.props.config.welcomePageUrl}
+                />;
                 if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>
                 break;
 
@@ -273,7 +274,6 @@ export default React.createClass({
                         selectedRoom={this.props.currentRoomId}
                         collapsed={this.props.collapse_lhs || false}
                         opacity={this.props.sideOpacity}
-                        teamToken={this.props.teamToken}
                     />
                     <main className='mx_MatrixChat_middlePanel'>
                         {page_element}
