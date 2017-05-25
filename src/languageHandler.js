@@ -37,7 +37,7 @@ export function _t(...args) {
     return counterpart.translate(...args);
 }
 
-export function setLanguage(languages, extCounterpart=null) {
+export function setLanguage(languages) {
     if (!languages || !Array.isArray(languages)) {
     const languages = this.getNormalizedLanguageKeys(this.getLanguageFromBrowser());
     console.log("no language found. Got from browser: " + JSON.stringify(languages));
@@ -81,9 +81,6 @@ export function setLanguage(languages, extCounterpart=null) {
                 });
                 return;
             } else {
-                if (extCounterpart) {
-                    extCounterpart.registerTranslations(langCode, langJson);
-                }
                 counterpart.registerTranslations(langCode, langJson);
             }
         }
@@ -106,9 +103,6 @@ export function setLanguage(languages, extCounterpart=null) {
         if ((isValidFirstLanguage) || (languages.length==2 && languageFiles.hasOwnProperty(languages[1]))) {
             validLanguageKey = (isValidFirstLanguage) ? languages[0] : languages[1];
             getLanguage(i18nFolder + languageFiles[validLanguageKey], validLanguageKey, registerTranslations);
-            if (extCounterpart) {
-                extCounterpart.setLocale(validLanguageKey);
-            }
             counterpart.setLocale(validLanguageKey);
             UserSettingsStore.setLocalSetting('language', validLanguageKey);
             console.log("set language to "+validLanguageKey);
@@ -119,9 +113,6 @@ export function setLanguage(languages, extCounterpart=null) {
         //Set 'en' as fallback language:
         if (validLanguageKey!="en") {
             getLanguage(i18nFolder + languageFiles['en'], 'en', registerTranslations);
-        }
-        if (extCounterpart) {
-            extCounterpart.setFallbackLocale('en');
         }
         counterpart.setFallbackLocale('en');
     });
