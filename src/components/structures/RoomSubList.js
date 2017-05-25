@@ -555,20 +555,7 @@ var RoomSubList = React.createClass({
 
             return connectDropTarget(
                 <div>
-                    <RoomSubListHeader
-                        ref='header'
-                        label={ this.props.label }
-                        tagName={ this.props.tagName }
-                        roomCount={ roomCount }
-                        collapsed={ this.props.collapsed }
-                        hidden={ this.state.hidden }
-                        incomingCall={ this.props.incomingCall }
-                        isIncomingCallRoom={ isIncomingCallRoom }
-                        roomNotificationCount={ this.roomNotificationCount() }
-                        onClick={ this.onClick }
-                        onHeaderClick={ this.props.onHeaderClick }
-                        headerItems={this.props.headerItems}
-                    />
+                    { this._getHeaderJsx() }
                     { subList }
                 </div>
             );
@@ -577,21 +564,7 @@ var RoomSubList = React.createClass({
             var Loader = sdk.getComponent("elements.Spinner");
             return (
                 <div className="mx_RoomSubList">
-                    { this.props.alwaysShowHeader ?
-                        <RoomSubListHeader
-                            ref='header'
-                            label={ this.props.label }
-                            tagName={ this.props.tagName }
-                            roomCount={ roomCount }
-                            collapsed={ this.props.collapsed }
-                            hidden={ this.state.hidden }
-                            isIncomingCallRoom={ isIncomingCallRoom }
-                            roomNotificationCount={ this.roomNotificationCount() }
-                            onClick={ this.onClick }
-                            onHeaderClick={ this.props.onHeaderClick }
-                            headerItems={this.props.headerItems}
-                        />
-                     : undefined }
+                    { this.props.alwaysShowHeader ? this._getHeaderJsx() : undefined }
                     { (this.props.showSpinner && !this.state.hidden) ? <Loader /> : undefined }
                 </div>
             );
