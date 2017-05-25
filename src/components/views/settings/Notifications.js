@@ -179,7 +179,6 @@ module.exports = React.createClass({
             title: _t('Keywords'),
             description: _t('Enter keywords separated by a comma') + ':',
             value: keywords,
-            button: _t('OK'),
             onFinished: function onFinished(should_leave, newValue) {
 
                 if (should_leave && newValue !== keywords) {
