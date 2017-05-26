@@ -18,6 +18,7 @@ limitations under the License.
 
 var StandardActions = require('./StandardActions');
 var PushRuleVectorState = require('./PushRuleVectorState');
+import _t from 'counterpart-riot';
 
 class VectorPushRuleDefinition {
     constructor(opts) {

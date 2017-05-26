@@ -14,19 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+// 'use strict';
 
-var React = require('react');
+import React from 'react';
+import _t from 'counterpart-riot';
+import DateUtils from 'matrix-react-sdk/lib/DateUtils';
 
-var days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday"
-];
+function getdaysArray() {
+	var days = [_t('Sunday'), _t('Monday'), _t('Tuesday'), _t('Wednesday'), _t('Thursday'), _t('Friday'), _t('Saturday')];
+	return days;
+}
 
 module.exports = React.createClass({
     displayName: 'DateSeparator',
@@ -34,19 +31,20 @@ module.exports = React.createClass({
         var date = new Date(this.props.ts);
         var today = new Date();
         var yesterday = new Date();
+        var days = getdaysArray();
         yesterday.setDate(today.getDate() - 1);
         var label;
         if (date.toDateString() === today.toDateString()) {
-            label = "Today";
+            label = _t('Today');
         }
         else if (date.toDateString() === yesterday.toDateString()) {
-            label = "Yesterday";
+            label = _t('Yesterday');
         }
         else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
             label = days[date.getDay()];
         }
         else {
-            label = date.toDateString();
+            label = DateUtils.formatFullDate(date);
         }
 
         return (
