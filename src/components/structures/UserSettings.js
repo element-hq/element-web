@@ -826,6 +826,7 @@ module.exports = React.createClass({
 
     nameForMedium: function(medium) {
         if (medium === 'msisdn') return _t('Phone');
+        if (medium === 'email') return _t('Email');
         return medium[0].toUpperCase() + medium.slice(1);
     },
 

@@ -227,6 +227,7 @@
   "Drop here %(toAction)s": "Drop here %(toAction)s",
   "Drop here to tag %(section)s": "Drop here to tag %(section)s",
   "Ed25519 fingerprint": "Ed25519 fingerprint",
+  "Email": "Email",
   "Email Address": "Email Address",
   "Email, name or matrix ID": "Email, name or matrix ID",
   "Emoji": "Emoji",
