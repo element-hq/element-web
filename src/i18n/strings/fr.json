@@ -167,5 +167,6 @@
     "italic": "italique",
     "strike": "barré",
     "underline": "souligné",
-    "A registered account is required for this action": "Il est nécessaire d’avoir un compte enregistré pour cette action"
+    "A registered account is required for this action": "Il est nécessaire d’avoir un compte enregistré pour cette action",
+    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Un message a été envoyé à +%(msisdn)s. Merci d’entrer le code de vérification qu’il contient"
 }
