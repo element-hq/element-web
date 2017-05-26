@@ -77,7 +77,7 @@
     "Unable to look up room ID from server": "Не возможно найти ID комнаты на сервере",
     "unknown error code": "неизвестная ошибка",
     "Unnamed room": "Комната без названия",
-    "World readable": "Читаем мир",
+    "World readable": "Доступно всем",
     "You are not receiving desktop notifications": "Вы не получаете уведомления на рабочем столе",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Вы могли настроить их в клиенте, отличном от Riot. Вы не можете настроить их в Riot, но они все еще применяются",
     "All messages": "Все сообщения",
