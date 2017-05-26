@@ -1,18 +1,27 @@
-.container-fluid {
+.container {
   background-color: #e7e7e7;
+}
+
+div.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 img.logo {
   margin-top: 26px;
   margin-left: 10px;
+  display: inline;
 }
 
 a.bigicon {
   cursor: pointer;
   display: inline;
   text-decoration: none;
-  padding-left: 30px;
-  padding-right: 30px;
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 120px;
 }
 
 a.bigicon .icon {
@@ -36,26 +45,22 @@ a.bigicon .roomname {
   vertical-align: top;
 }
 
-h1, h2 {
-  font-family: "Gotham-Medium";
+h1, h2, h3, h4 {
+  font-family: "Tahoma";
 }
 
 h2 {
   font-size: 26px;
 }
 
-h3, h4 {
-  font-family: "Gotham-Bold";
-}
-
 h4 {
   margin-top: 22px;
 }
 
-h4::after {
+h3::after, h4::after {
   content: ":";
 }
 
 p {
-  font-family: "Gotham-Book";
+  font-family: "Tahoma";
 }
