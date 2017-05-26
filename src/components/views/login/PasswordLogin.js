@@ -121,32 +121,16 @@ class PasswordLogin extends React.Component {
                     autoFocus
                 />;
             case PasswordLogin.LOGIN_FIELD_MXID:
-                const mxidInputClasses = classNames({
-                    "mx_Login_field": true,
-                    "mx_Login_username": true,
-                    "mx_Login_field_has_prefix": true,
-                    "mx_Login_field_has_suffix": Boolean(this.props.hsDomain),
-                });
-                let suffix = null;
-                if (this.props.hsDomain) {
-                    suffix = <div className="mx_Login_field_suffix">
-                        :{this.props.hsDomain}
-                    </div>;
-                }
-                return <div className="mx_Login_field_group">
-                    <div className="mx_Login_field_prefix">@</div>
-                    <input
-                        className={mxidInputClasses}
-                        key="username_input"
-                        type="text"
-                        name="username" // make it a little easier for browser's remember-password
-                        onChange={this.onUsernameChanged}
-                        placeholder="username"
-                        value={this.state.username}
-                        autoFocus
-                    />
-                    {suffix}
-                </div>;
+                return <input
+                    className="mx_Login_field mx_Login_username"
+                    key="username_input"
+                    type="text"
+                    name="username" // make it a little easier for browser's remember-password
+                    onChange={this.onUsernameChanged}
+                    placeholder="username"
+                    value={this.state.username}
+                    autoFocus
+                />;
             case PasswordLogin.LOGIN_FIELD_PHONE:
                 const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
                 return <div className="mx_Login_phoneSection">
@@ -237,7 +221,6 @@ PasswordLogin.propTypes = {
     onPhoneNumberChanged: React.PropTypes.func,
     onPasswordChanged: React.PropTypes.func,
     loginIncorrect: React.PropTypes.bool,
-    hsDomain: React.PropTypes.string,
 };
 
 module.exports = PasswordLogin;
