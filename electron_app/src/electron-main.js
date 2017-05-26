@@ -138,6 +138,24 @@ electron.ipcMain.on('setBadgeCount', function(ev, count) {
     }
 });
 
+let powerSaveBlockerId;
+electron.ipcMain.on('app_onAction', function(ev, payload) {
+    switch (payload.action) {
+        case 'call_state':
+            if (powerSaveBlockerId && powerSaveBlockerId.isStarted(powerSaveBlockerId)) {
+                if (payload.state === 'ended') {
+                    electron.powerSaveBlocker.stop(powerSaveBlockerId);
+                }
+            } else {
+                if (payload.state === 'connected') {
+                    powerSaveBlockerId = electron.powerSaveBlocker.start('prevent-display-sleep');
+                }
+            }
+            break;
+    }
+});
+
+
 electron.app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
 
 const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirectory) => {
@@ -151,7 +169,7 @@ const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirector
 
 if (shouldQuit) {
     console.log("Other instance detected: exiting");
-    electron.app.quit()
+    electron.app.quit();
 }
 
 electron.app.on('ready', () => {
