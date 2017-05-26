@@ -6,6 +6,11 @@
 - Be able to understand English
 - Be able to understand the language you want to translate riot-web into
 
+## Step 0: Join #riotweb-translations:matrix.org
+
+1. Come and join https://riot.im/develop/#/room/#riotweb-translations:matrix.org
+2. Read scrollback and/or ask if anyone else is working on your language, and co-ordinate if needed.  In general little-or-no coordination is needed though :)
+
 ## Step 1: Preparing your Weblate Profile
 
 1. Head to https://translate.nordgedanken.de and register either via Github or email
@@ -45,12 +50,15 @@ The yellow button has to be used if you are unsure about the translation but you
 
 ### What are "%(something)s"?
 
-These things are variables that are filled inside the code. They can be room names, usernames or similiar. If you find one use it for changing the word order but do not delete it as thing are missing if you do so.
+These things are variables that are expanded when displayed by Riot. They can be room names, usernames or similar. If you find one, you can move to the right place for your language, but not delete it as the variable will be missing if you do.
+
+A special case is `%(urlStart)s` and `%(urlEnd)s` which are used to mark the beginning of a hyperlink (i.e. `<a href="/somewhere">` and `</a>`.  You must keep these markers surrounding the equivalent string in your language that needs to be hyperlinked.
 
 ### "I want to come back to this string. How?"
 
 You can use inside the translation field "Review needed" checkbox. It will be shown as Strings that need to be reviewed.
 
+
 ### Further reading
 
-The official Doc provides some more in-deepth explanation on how to do translations and talks about do and don't's. You can find it at: https://docs.weblate.org/en/latest/user/translating.html
+The official Weblate doc provides some more in-deepth explanation on how to do translations and talks about do and don'ts. You can find it at: https://docs.weblate.org/en/latest/user/translating.html

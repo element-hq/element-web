@@ -183,6 +183,10 @@ limitations under the License.
     visibility: visible;
 }
 
+.mx_MessagePanel_alwaysShowTimestamps .mx_MessageTimestamp {
+    visibility: visible;
+}
+
 .mx_EventTile_selected .mx_MessageTimestamp {
     left: 3px;
 }
