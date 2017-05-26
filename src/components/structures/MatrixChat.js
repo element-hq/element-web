@@ -554,6 +554,7 @@ module.exports = React.createClass({
         this.notifyNewScreen('register');
     },
 
+    // TODO: Move to RoomViewStore
     _viewNextRoom: function(roomIndexDelta) {
         const allRooms = RoomListSorter.mostRecentActivityFirst(
             MatrixClientPeg.get().getRooms(),
@@ -567,15 +568,22 @@ module.exports = React.createClass({
         }
         roomIndex = (roomIndex + roomIndexDelta) % allRooms.length;
         if (roomIndex < 0) roomIndex = allRooms.length - 1;
-        this._viewRoom({ room_id: allRooms[roomIndex].roomId });
+        dis.dispatch({
+            action: 'view_room',
+            room_id: allRooms[roomIndex].roomId,
+        });
     },
 
+    // TODO: Move to RoomViewStore
     _viewIndexedRoom: function(roomIndex) {
         const allRooms = RoomListSorter.mostRecentActivityFirst(
             MatrixClientPeg.get().getRooms(),
         );
         if (allRooms[roomIndex]) {
-            this._viewRoom({ room_id: allRooms[roomIndex].roomId });
+            dis.dispatch({
+                action: 'view_room',
+                room_id: allRooms[roomIndex].roomId,
+            });
         }
     },
 
