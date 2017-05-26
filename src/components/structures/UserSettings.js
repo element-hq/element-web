@@ -295,7 +295,7 @@ module.exports = React.createClass({
             title: _t("Sign out"),
             description:
                 <div>
-             { _t("For security, logging out will delete any end-to-end encryption keys from this browser. If you want to be able to decrypt your conversation history from future Riot sessions, please export your room keys for safe-keeping") }.
+             { _t("For security, logging out will delete any end-to-end encryption keys from this browser. If you want to be able to decrypt your conversation history from future Riot sessions, please export your room keys for safe-keeping.") }.
                 </div>,
             button: _t("Sign out"),
             extraButtons: [
