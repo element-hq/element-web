@@ -58,7 +58,16 @@ class RoomViewStore extends Store {
             case 'view_room':
                 this._viewRoom(payload);
                 break;
-
+            case 'will_join':
+                this._setState({
+                    joining: true,
+                });
+                break;
+            case 'cancel_join':
+                this._setState({
+                    joining: false,
+                });
+                break;
             // join_room:
             //      - opts: options for joinRoom
             case 'join_room':

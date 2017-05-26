@@ -671,10 +671,6 @@ module.exports = React.createClass({
                 // compatability workaround, let's not bother.
                 Rooms.setDMRoom(this.state.room.roomId, me.events.member.getSender()).done();
             }
-
-            this.setState({
-                joining: false
-            });
         }
     }, 500),
 
@@ -762,12 +758,22 @@ module.exports = React.createClass({
                 },
             });
 
+            // Don't peek whilst registering otherwise getPendingEventList complains
+            // Do this by indicating our intention to join
+            dis.dispatch({
+                action: 'will_join',
+            });
+
             const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
             const close = Modal.createDialog(SetMxIdDialog, {
                 homeserverUrl: cli.getHomeserverUrl(),
                 onFinished: (submitted, credentials) => {
                     if (submitted) {
                         this.props.onRegistered(credentials);
+                    } else {
+                        dis.dispatch({
+                            action: 'cancel_join',
+                        });
                     }
                 },
                 onDifferentServerClicked: (ev) => {
