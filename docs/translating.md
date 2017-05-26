@@ -34,7 +34,6 @@ Head to the explanations under Steb 2b
 3. Select our language
 4. Start translating like in 2a.3
 5. Repeat these steps for the other projects which are listed at the link of step 2b.1
-6. Add your language to the array at the [config example](../../blob/develop/config.sample.json#L14)
 
 ### What means the green button under the text field?
 
