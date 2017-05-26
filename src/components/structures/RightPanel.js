@@ -100,6 +100,10 @@ module.exports = React.createClass({
         });
     },
 
+    onLoginClick: function() {
+        dis.dispatch({ action: 'start_login' });
+    },
+
     onRoomStateMember: function(ev, state, member) {
         // redraw the badge on the membership list
         if (this.state.phase == this.Phase.MemberList && member.roomId === this.props.roomId) {
@@ -217,6 +221,10 @@ module.exports = React.createClass({
                             <TintableSvg src="img/minimise.svg" width="10" height="16"/>
                         </div>
                     </div>;
+        } else if (MatrixClientPeg.get().isGuest()) {
+            buttonGroup = <AccessibleButton className="mx_RightPanel_loginButton" element="button" onClick={this.onLoginClick}>
+                Login
+            </AccessibleButton>;
         }
 
         if (!this.props.collapsed) {
