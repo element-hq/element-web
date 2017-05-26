@@ -697,7 +697,7 @@
     "%(severalUsers)schanged their avatar %(repeats)s times": "%(severalUsers)sänderten %(repeats)s mal ihren Avatar",
     "%(oneUser)schanged their avatar %(repeats)s times": "%(oneUser)sänderte %(repeats)s mal seinen/ihren Avatar",
     "%(severalUsers)schanged their avatar": "%(severalUsers)sänderten ihre Avatare",
-    "%(oneUser)schanged their avatar": "%(severalUsers)sänderte seinen/ihren Avatar",
+    "%(oneUser)schanged their avatar": "%(oneUser)sänderte seinen/ihren Avatar",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s. %(monthName)s %(fullYear)s %(time)s",
     "%(oneUser)sleft and rejoined": "%(oneUser)sging und trat erneut bei"
 }
