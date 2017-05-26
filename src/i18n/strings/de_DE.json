@@ -358,7 +358,7 @@
     "%(senderName)s changed their profile picture": "%(senderName)s änderte das Profilbild",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s": "%(senderName)s änderte das Berechtigungslevel von %(powerLevelDiffText)s",
     "%(senderDisplayName)s changed the room name to %(roomName)s": "%(senderDisplayName)s änderte den Raumnamen zu %(roomName)s",
-    "%(senderDisplayName)s changed the topic to %(topic)s": "%(senderDisplayName)s änderte das Thema zu %(topic)s",
+    "%(senderDisplayName)s changed the topic to \"%(topic)s\"": "%(senderDisplayName)s änderte das Thema zu \"%(topic)s\"",
     "/ddg is not a command": "/ddg ist kein Kommando",
     "%(senderName)s ended the call": "%(senderName)s beendete den Anruf",
     "Failed to lookup current room": "Aktuellen Raum nachzuschlagen schlug fehl",
