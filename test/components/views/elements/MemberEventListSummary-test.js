@@ -4,6 +4,7 @@ const ReactDOM = require("react-dom");
 const ReactTestUtils = require('react-addons-test-utils');
 const sdk = require('matrix-react-sdk');
 const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
+import * as languageHandler from '../../../../src/languageHandler';
 
 const testUtils = require('../../../test-utils');
 describe('MemberEventListSummary', function() {
@@ -82,9 +83,11 @@ describe('MemberEventListSummary', function() {
         return eventsForUsers;
     };
 
-    beforeEach(function() {
+    beforeEach(function(done) {
         testUtils.beforeEach(this);
         sandbox = testUtils.stubClient();
+        
+        languageHandler.setLanguage('en').done(done);
     });
 
     afterEach(function() {
@@ -356,7 +359,7 @@ describe('MemberEventListSummary', function() {
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
-            "user_1 and 1 other were unbanned, joined and left 2 times and were banned"
+            "user_1 and one other were unbanned, joined and left 2 times and were banned"
         );
     });
 
@@ -559,7 +562,7 @@ describe('MemberEventListSummary', function() {
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
-            "user_1 and 1 other rejected their invitations and " +
+            "user_1 and one other rejected their invitations and " +
             "had their invitations withdrawn"
         );
     });
@@ -595,7 +598,7 @@ describe('MemberEventListSummary', function() {
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
-            "user_1 rejected their invitations 2 times"
+            "user_1 rejected their invitation 2 times"
         );
     });
 
@@ -650,7 +653,7 @@ describe('MemberEventListSummary', function() {
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
-            "user_1, user_2 and 1 other joined"
+            "user_1, user_2 and one other joined"
         );
     });
 
