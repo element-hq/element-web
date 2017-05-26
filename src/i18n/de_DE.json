@@ -12,7 +12,6 @@
     "Settings": "Einstellungen",
     "powered by Matrix": "gebaut mit Matrix",
     "Custom Server Options": "Optionen für eigenen Server",
-    "customServer_text": "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.",
     "Dismiss": "ausblenden",
     "Failed to get protocol list from Home Server": "Fehler beim Abrufen der Protokollliste vom Home Server",
     "The Home Server may be too old to support third party networks": "Der Home Server kann zu alt sein, um Drittanbieter-Netzwerke zu unterstützen",
