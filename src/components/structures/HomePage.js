@@ -35,7 +35,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        let src = this.props.homePageUrl || '/home.html';
+        let src = this.props.homePageUrl || '/home/home.html';
 
         if (this.props.teamToken && this.props.teamServerUrl) {
             src = `${this.props.teamServerUrl}/static/${this.props.teamToken}/home.html`;
