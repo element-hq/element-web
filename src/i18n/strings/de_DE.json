@@ -720,5 +720,5 @@
     "riot-web version:": "Version von riot-web:",
     "Scroll to bottom of page": "Zum Ende der Seite springen",
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "Zeige Zeitstempel im 12-Stunden format",
-    "to tag as %(tagName)s": "um als"
+    "to tag as %(tagName)s": "um als \"%(tagName)s\" zu markieren"
 }
