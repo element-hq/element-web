@@ -62,6 +62,8 @@ function twelveHourTime(date) {
 module.exports = {
     formatDate: function(date) {
         var now = new Date();
+        const days = getDaysArray();
+        const months = getMonthsArray();
         if (date.toDateString() === now.toDateString()) {
             return this.formatTime(date);
         }
