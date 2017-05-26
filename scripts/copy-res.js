@@ -160,9 +160,9 @@ function genLangList() {
         const normalizedLanguage = lang.toLowerCase().replace("_", "-");
         const languageParts = normalizedLanguage.split('-');
         if (languageParts.length == 2 && languageParts[0] == languageParts[1]) {
-            languages[languageParts[0]] = lang;
+            languages[languageParts[0]] = lang + '.json';
         } else {
-            languages[normalizedLanguage] = lang;
+            languages[normalizedLanguage] = lang + '.json';
         }
     });
     fs.writeFile('webapp/i18n/languages.json', JSON.stringify(languages, null, 4));
