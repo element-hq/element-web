@@ -25,9 +25,7 @@ exports.hasTray = function hasTray() {
 
 exports.create = function(win, config) {
     // no trays on darwin
-    if (process.platform === 'darwin' || trayIcon) {
-        return;
-    }
+    if (process.platform === 'darwin' || trayIcon) return;
 
     const toggleWin = function() {
         if (win.isVisible() && !win.isMinimized()) {
@@ -41,12 +39,10 @@ exports.create = function(win, config) {
 
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: 'Show/Hide ' + config.brand,
+            label: `Show/Hide ${config.brand}`,
             click: toggleWin,
         },
-        {
-            type: 'separator',
-        },
+        { type: 'separator' },
         {
             label: 'Quit',
             click: function() {
