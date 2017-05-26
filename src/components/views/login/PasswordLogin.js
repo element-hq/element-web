@@ -128,7 +128,7 @@ class PasswordLogin extends React.Component {
                     type="text"
                     name="username" // make it a little easier for browser's remember-password
                     onChange={this.onUsernameChanged}
-                    placeholder=_t('username')
+                    placeholder={_t('username')}
                     value={this.state.username}
                     autoFocus
                 />;
