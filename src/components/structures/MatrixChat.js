@@ -32,6 +32,7 @@ import sdk from '../../index';
 import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
+// LifecycleStore is not used but does listen to and dispatch actions
 import LifecycleStore from '../../stores/LifecycleStore';
 import RoomViewStore from '../../stores/RoomViewStore';
 import PageTypes from '../../PageTypes';
