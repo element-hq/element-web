@@ -472,5 +472,6 @@
     "Failed to delete device": "Не удалось удалить устройство",
     "Failed to forget room %(errCode)s": "Не удалось забыть комнату %(errCode)s",
     "Failed to join room": "Не удалось присоединиться к комнате",
-    "Failed to join the room": "Не удалось присоединиться к комнате"
+    "Failed to join the room": "Не удалось присоединиться к комнате",
+    "A registered account is required for this action": "Необходима зарегистрированная учетная запись для этого действия"
 }
