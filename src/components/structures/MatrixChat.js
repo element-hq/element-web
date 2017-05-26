@@ -814,6 +814,12 @@ module.exports = React.createClass({
             dis.dispatch({action: 'view_home_page'});
         } else if (this._is_registered) {
             this._is_registered = false;
+
+            // Set the display name = user ID localpart
+            MatrixClientPeg.get().setDisplayName(
+                MatrixClientPeg.get().getUserIdLocalpart()
+            );
+
             if (this.props.config.welcomeUserId) {
                 createRoom({
                     dmUserId: this.props.config.welcomeUserId,
