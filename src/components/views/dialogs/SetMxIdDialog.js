@@ -108,6 +108,7 @@ export default React.createClass({
                 const newState = {
                     usernameCheckSupport: err.errcode !== "M_UNRECOGNIZED",
                 };
+                console.error('Error whilst checking username availability: ', err);
                 switch (err.errcode) {
                     case "M_USER_IN_USE":
                         newState.usernameError = 'Username not available';
@@ -120,8 +121,11 @@ export default React.createClass({
                         // fine and rely on the error appearing in registration step.
                         newState.usernameError = '';
                         break;
+                    case undefined:
+                        newState.usernameError = 'Something went wrong!';
+                        break;
                     default:
-                        newState.usernameError = 'An error occurred' + err.message;
+                        newState.usernameError = 'An error occurred: ' + err.message;
                         break;
                 }
                 this.setState(newState);
