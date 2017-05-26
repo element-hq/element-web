@@ -1,7 +1,7 @@
 {
     "Add an email address above to configure email notifications": "Добавьте email адресс для настройки оповещений",
     "All notifications are currently disabled for all targets.": "Все оповещения отключены.",
-    "An error occurred whilst saving your email notification preferences": "Возникла ошибка при сохранении настроек оповещения вашего email",
+    "An error occurred whilst saving your email notification preferences.": "Возникла ошибка при сохранении настроек оповещения вашего email.",
     "and remove": "и удалить",
     "Can't update user notification settings": "Не возможно обновить пользовательские настройки оповещения",
     "Create new room": "Создать комнату",
@@ -18,7 +18,7 @@
     "Enable email notifications": "Включить email оповещения",
     "Enable notifications for this account": "Включить оповещения для этого аккаунта",
     "Enable them now": "Включить сейчас",
-    "Enter keywords separated by a comma": "Введите ключевые слова, разделенные запятой",
+    "Enter keywords separated by a comma:": "Введите ключевые слова, разделенные запятой:",
     "Error": "Ошибка",
     "Error saving email notification preferences": "Ошибка сохранения настроек email оповещений",
     "#example": "#пример",

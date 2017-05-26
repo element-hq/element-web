@@ -1,7 +1,7 @@
 {
     "Add an email address above to configure email notifications": "Tilføj en emailadresse ovenfor for at konfigurere e-mail-underretninger",
     "All notifications are currently disabled for all targets.": "Alle meddelelser er for øjeblikket deaktiveret for alle mål.",
-    "An error occurred whilst saving your email notification preferences": "Der opstod en fejl under opbevaring af dine e-mail-underretningsindstillinger",
+    "An error occurred whilst saving your email notification preferences.": "Der opstod en fejl under opbevaring af dine e-mail-underretningsindstillinger.",
     "and remove": "Og fjern",
     "Can't update user notification settings": "Kan ikke opdatere brugermeddelelsesindstillinger",
     "Create new room": "Opret nyt rum",
@@ -18,7 +18,7 @@
     "Enable email notifications": "Aktivér e-mail-underretninger",
     "Enable notifications for this account": "Aktivér underretninger for dette brugernavn",
     "Enable them now": "Aktivér dem nu",
-    "Enter keywords separated by a comma": "Indtast søgeord adskilt af et komma",
+    "Enter keywords separated by a comma:": "Indtast søgeord adskilt af et komma:",
     "Error": "Fejl",
     "Error saving email notification preferences": "Fejl ved at gemme e-mail-underretningsindstillinger",
     "#example": "#eksempel",

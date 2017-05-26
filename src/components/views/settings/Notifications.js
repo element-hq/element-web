@@ -133,7 +133,7 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
                 title: _t('Error saving email notification preferences'),
-                description: _t('An error occurred whilst saving your email notification preferences') + '.',
+                description: _t('An error occurred whilst saving your email notification preferences.'),
             });
         });
     },
@@ -177,7 +177,7 @@ module.exports = React.createClass({
         var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
         Modal.createDialog(TextInputDialog, {
             title: _t('Keywords'),
-            description: _t('Enter keywords separated by a comma') + ':',
+            description: _t('Enter keywords separated by a comma:'),
             value: keywords,
             onFinished: function onFinished(should_leave, newValue) {
 
