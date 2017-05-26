@@ -147,6 +147,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        const cli = MatrixClientPeg.get();
+
         var MemberList = sdk.getComponent('rooms.MemberList');
         var NotificationPanel = sdk.getComponent('structures.NotificationPanel');
         var FilePanel = sdk.getComponent('structures.FilePanel');
@@ -172,7 +174,6 @@ module.exports = React.createClass({
 
         var membersBadge;
         if ((this.state.phase == this.Phase.MemberList || this.state.phase === this.Phase.MemberInfo) && this.props.roomId) {
-            var cli = MatrixClientPeg.get();
             var room = cli.getRoom(this.props.roomId);
             var user_is_in_room;
             if (room) {
@@ -194,6 +195,19 @@ module.exports = React.createClass({
 
         }
 
+        let filePanelButton;
+        if (!cli.isGuest()) {
+            filePanelButton =
+                <AccessibleButton
+                    className="mx_RightPanel_headerButton mx_RightPanel_filebutton"
+                    title="Files" onClick={this.onFileListButtonClick}
+                >
+                    <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
+                    <TintableSvg src="img/icons-files.svg" width="25" height="25"/>
+                    { filesHighlight }
+                </AccessibleButton>;
+        }
+
         if (this.props.roomId) {
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
@@ -203,13 +217,7 @@ module.exports = React.createClass({
                             <TintableSvg src="img/icons-people.svg" width="25" height="25"/>
                             { membersHighlight }
                         </AccessibleButton>
-                        <AccessibleButton
-                                className="mx_RightPanel_headerButton mx_RightPanel_filebutton"
-                                title="Files" onClick={ this.onFileListButtonClick }>
-                            <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
-                            <TintableSvg src="img/icons-files.svg" width="25" height="25"/>
-                            { filesHighlight }
-                        </AccessibleButton>
+                        { filePanelButton }
                         <AccessibleButton
                                 className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton"
                                 title="Notifications" onClick={ this.onNotificationListButtonClick }>
