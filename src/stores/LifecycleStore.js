@@ -16,6 +16,10 @@ limitations under the License.
 import dis from '../dispatcher';
 import {Store} from 'flux/utils';
 
+const INITIAL_STATE = {
+    deferred_action: null,
+};
+
 /**
  * A class for storing application state to do with login/registration. This is a simple
  * flux store that listens for actions and updates its state accordingly, informing any
@@ -33,9 +37,7 @@ class LifecycleStore extends Store {
         super(dis);
 
         // Initialise state
-        this._state = {
-            deferred_action: null,
-        };
+        this._state = INITIAL_STATE;
     }
 
     _setState(newState) {
@@ -62,11 +64,13 @@ class LifecycleStore extends Store {
                 dis.dispatch(deferredAction);
                 break;
             case 'on_logged_out':
-                this._state = {
-                    deferred_action: null,
-                };
+                this.reset();
                 break;
         }
+    }
+
+    reset() {
+        this._state = Object.assign({}, INITIAL_STATE);
     }
 }
 
