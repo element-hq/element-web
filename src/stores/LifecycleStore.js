@@ -20,13 +20,6 @@ import {Store} from 'flux/utils';
  * A class for storing application state to do with login/registration. This is a simple
  * flux store that listens for actions and updates its state accordingly, informing any
  * listeners (views) of state changes.
- *
- * Usage:
- *  ```
- *  lifecycleStore.addListener(() => {
- *   this.setState({ cachedPassword: lifecycleStore.getCachedPassword() })
- *  })
- *  ```
  */
 class LifecycleStore extends Store {
     constructor() {
