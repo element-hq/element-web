@@ -51,40 +51,52 @@ function pad(n) {
     return (n < 10 ? '0' : '') + n;
 }
 
+function twelveHourTime(date) {
+    let hours = date.getHours() % 12;
+    const minutes = pad(date.getMinutes());
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = pad(hours ? hours : 12);
+    return `${hours}:${minutes} ${ampm}`;
+}
+
 module.exports = {
     formatDate: function(date) {
-        // date.toLocaleTimeString is completely system dependent.
-        // just go 24h for now
-        const days = getDaysArray();
-        const months = getMonthsArray();
-
-        // TODO: use standard date localize function provided in counterpart
-        var hoursAndMinutes = pad(date.getHours()) + ':' + pad(date.getMinutes());
         var now = new Date();
         if (date.toDateString() === now.toDateString()) {
-            return hoursAndMinutes;
+            return this.formatTime(date);
         }
         else if (now.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
             // TODO: use standard date localize function provided in counterpart
-            return _t('%(weekDayName)s %(time)s', {weekDayName: days[date.getDay()], time: hoursAndMinutes});
+            return _t('%(weekDayName)s %(time)s', {weekDayName: days[date.getDay()], time: this.formatTime(date)});
         }
         else if (now.getFullYear() === date.getFullYear()) {
             // TODO: use standard date localize function provided in counterpart
-            return _t('%(weekDayName)s, %(monthName)s %(day)s %(time)s', {weekDayName: days[date.getDay()], monthName: months[date.getMonth()], day: date.getDate(), time: hoursAndMinutes});
+            return _t('%(weekDayName)s, %(monthName)s %(day)s %(time)s', {
+                weekDayName: days[date.getDay()],
+                monthName: months[date.getMonth()],
+                day: date.getDate(),
+                time: this.formatTime(date),
+            });
         }
-        else {
-            return this.formatFullDate(date);
-        }
+        return this.formatFullDate(date);
     },
 
     formatFullDate: function(date) {
         const days = getDaysArray();
         const months = getMonthsArray();
-        var hoursAndMinutes = pad(date.getHours()) + ':' + pad(date.getMinutes());
-        return _t('%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s', {weekDayName: days[date.getDay()], monthName: months[date.getMonth()], day: date.getDate(), fullYear: date.getFullYear(),time: hoursAndMinutes});
+        return _t('%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s', {
+            weekDayName: days[date.getDay()],
+            monthName: months[date.getMonth()],
+            day: date.getDate(),
+            fullYear: date.getFullYear(),
+            time: this.formatTime(date),
+        });
     },
 
-    formatTime: function(date) {
+    formatTime: function(date, showTwelveHour=false) {
+        if (showTwelveHour) {
+          return twelveHourTime(date);
+        }
         return pad(date.getHours()) + ':' + pad(date.getMinutes());
-    }
+    },
 };
