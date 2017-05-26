@@ -1,5 +1,5 @@
 {
-    "Add an email address above to configure email notifications": "Добавьте email адресс для настройки оповещений",
+    "Add an email address above to configure email notifications": "Добавьте email адрес для оповещений",
     "All notifications are currently disabled for all targets.": "Все оповещения отключены.",
     "An error occurred whilst saving your email notification preferences.": "Возникла ошибка при сохранении настроек оповещения вашего email.",
     "and remove": "и удалить",
@@ -81,7 +81,7 @@
     "You are not receiving desktop notifications": "Вы не получаете уведомления на рабочем столе",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Вы могли настроить их в клиенте, отличном от Riot. Вы не можете настроить их в Riot, но они все еще применяются",
     "All messages": "Все сообщения",
-    "All messages (loud)": "Все сообщения (громко)",
+    "All messages (loud)": "",
     "Cancel Sending": "Отмена отправки",
     "Close": "Закрыть",
     "Download this file": "Скачать этот файл",
@@ -115,5 +115,6 @@
     "remove %(name)s from the directory": "удалить %(name)s из каталога",
     "Resend": "Переслать снова",
     "Source URL": "Источник URL",
-    "Welcome page": "Домашняя страница"
+    "Welcome page": "Домашняя страница",
+    "Advanced notification settings": "Настройки уведомлений"
 }
