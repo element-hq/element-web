@@ -169,15 +169,10 @@ module.exports = React.createClass({
         const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
         const SettingsButton = sdk.getComponent('elements.SettingsButton');
 
-        var homeButton;
-        if (this.props.teamToken) {
-            homeButton = <HomeButton tooltip={true} />;
-        }
-
         return (
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
-                    { homeButton }
+                    <HomeButton tooltip={true} />
                     <div ref={this._collectPeopleButton}>
                         <StartChatButton tooltip={true} />
                     </div>
