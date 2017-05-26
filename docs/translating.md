@@ -9,21 +9,21 @@
 ## Step 1: Preparing your Weblate Profile
 
 1. Head to https://translate.nordgedanken.de and register either via Github or email
-2. After register check if you got a email to verify your account and click the link (if there is none head to step 1.4)
+2. After registering check if you got an email to verify your account and click the link (if there is none head to step 1.4)
 3. Log into weblate
 4. Head to https://translate.nordgedanken.de/accounts/profile/ and select the languages you know and maybe another language you know too.
 6. Head to https://translate.nordgedanken.de/accounts/profile/#subscriptions and select Riot Web as Project
 
 ## How to check if your language already is being translated
 
-Go to https://translate.nordgedanken.de/projects/riot-web/ and in all 3 sub projects if your language is listed.
-If it is listed go to Step 2a if not go to Step 2b
+Go to https://translate.nordgedanken.de/projects/riot-web/ and visit the 2 sub-projects.
+If your language is listed go to Step 2a and if not go to Step 2b
 
 ## Step 2a: Helping on existing languages.
 
 1. Head to one of the projects listed https://translate.nordgedanken.de/projects/riot-web/
 2. Click on the ``translate`` button on the right side of your language
-3. Fill in the translations in the writeable field. You will see the original English string and the String of your second language above.
+3. Fill in the translations in the writeable field. You will see the original English string and the string of your second language above.
 
 Head to the explanations under Steb 2b
 
@@ -31,7 +31,7 @@ Head to the explanations under Steb 2b
 
 1. Go to one of the projects listed https://translate.nordgedanken.de/projects/riot-web/
 2. Click the ``Start new language`` button at the bottom
-3. Select our language
+3. Select a language
 4. Start translating like in 2a.3
 5. Repeat these steps for the other projects which are listed at the link of step 2b.1
 
@@ -41,7 +41,7 @@ The green button let you save our translations directly. Please only use it if y
 
 ### What means the yellow button under the text field?
 
-The yellow button has to be used if you are unsure about the translation but you have a rough idea. It ads a new suggestion to the string which can than be reviewed by others.
+The yellow button has to be used if you are unsure about the translation but you have a rough idea. It adds a new suggestion to the string which can than be reviewed by others.
 
 ### What are "%(something)s"?
 
