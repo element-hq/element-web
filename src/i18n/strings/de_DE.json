@@ -117,5 +117,13 @@
     "Sunday": "Sonntag",
     "Monday": "Montag",
     "Yesterday": "Gestern",
-    "Welcome page": "Willkommensseite"
+    "Welcome page": "Willkommensseite",
+    "Advanced notification settings": "Erweiterte Benachrichtigungs-Einstellungen",
+    "Call invitation": "Anruf-Einladung",
+    "Enter keywords separated by a comma": "Trage Schlagworte, mit Komma getrennt, ein",
+    "Messages containing my display name": "Nachrichten, die meinen Anzeigenamen enthalten",
+    "Messages containing my user name": "Nachrichten, die meinen Nutzernamen enthalten",
+    "Messages in group chats": "Nachrichten in Chat-Gruppen",
+    "Messages in one-to-one chats": "Nachrichten in Eins-zu-Eins-Chats",
+    "Messages sent by bot": "Nachrichten von Bots"
 }
