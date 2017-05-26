@@ -87,6 +87,9 @@ module.exports = React.createClass({
 
         // show twelve hour timestamps
         isTwelveHour: React.PropTypes.bool,
+
+        // show timestamps always
+        alwaysShowTimestamps: React.PropTypes.bool,
     },
 
     componentWillMount: function() {
@@ -618,8 +621,13 @@ module.exports = React.createClass({
         var style = this.props.hidden ? { display: 'none' } : {};
         style.opacity = this.props.opacity;
 
+        var className = this.props.className + " mx_fadable";
+        if (this.props.alwaysShowTimestamps) {
+            className += " mx_MessagePanel_alwaysShowTimestamps";
+        }
+
         return (
-            <ScrollPanel ref="scrollPanel" className={ this.props.className + " mx_fadable" }
+            <ScrollPanel ref="scrollPanel" className={ className }
                     onScroll={ this.props.onScroll }
                     onResize={ this.onResize }
                     onFillRequest={ this.props.onFillRequest }
