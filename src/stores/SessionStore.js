@@ -72,10 +72,10 @@ class SessionStore extends Store {
                 this.reset();
                 break;
         }
+    }
 
-        reset() {
-            this._state = Object.assign({}, INITIAL_STATE);
-        }
+    reset() {
+        this._state = Object.assign({}, INITIAL_STATE);
     }
 
     getCachedPassword() {
