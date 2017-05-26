@@ -28,6 +28,7 @@ import jssdk from 'matrix-js-sdk';
 
 import sdk from 'matrix-react-sdk';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 
 import test_utils from '../test-utils';
 import MockHttpBackend from '../mock-request';
@@ -61,6 +62,10 @@ describe('loading:', function () {
 
         windowLocation = null;
         matrixChat = null;
+
+        languageHandler.setMissingEntryGenerator(function(key) {
+            return key.split('|', 2)[1];
+        });
     });
 
     afterEach(function() {

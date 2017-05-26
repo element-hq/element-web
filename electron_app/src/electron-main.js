@@ -22,10 +22,10 @@ const checkSquirrelHooks = require('./squirrelhooks');
 if (checkSquirrelHooks()) return;
 
 const electron = require('electron');
-const url = require('url');
 
 const tray = require('./tray');
 const vectorMenu = require('./vectormenu');
+const webContentsHandler = require('./webcontents-handler');
 
 const windowStateKeeper = require('electron-window-state');
 
@@ -38,12 +38,6 @@ try {
     // file or invalid json, so node is just very unhelpful.
     // Continue with the defaults (ie. an empty config)
 }
-
-const PERMITTED_URL_SCHEMES = [
-    'http:',
-    'https:',
-    'mailto:',
-];
 
 const UPDATE_POLL_INTERVAL_MS = 60 * 60 * 1000;
 const INITIAL_UPDATE_DELAY_MS = 30 * 1000;
@@ -181,6 +175,24 @@ electron.ipcMain.on('setBadgeCount', function(ev, count) {
     }
 });
 
+let powerSaveBlockerId;
+electron.ipcMain.on('app_onAction', function(ev, payload) {
+    switch (payload.action) {
+        case 'call_state':
+            if (powerSaveBlockerId && powerSaveBlockerId.isStarted(powerSaveBlockerId)) {
+                if (payload.state === 'ended') {
+                    electron.powerSaveBlocker.stop(powerSaveBlockerId);
+                }
+            } else {
+                if (payload.state === 'connected') {
+                    powerSaveBlockerId = electron.powerSaveBlocker.start('prevent-display-sleep');
+                }
+            }
+            break;
+    }
+});
+
+
 electron.app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
 
 const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirectory) => {
@@ -252,15 +264,7 @@ electron.app.on('ready', () => {
         }
     });
 
-    mainWindow.webContents.on('new-window', onWindowOrNavigate);
-    mainWindow.webContents.on('will-navigate', onWindowOrNavigate);
-
-    mainWindow.webContents.on('context-menu', function(ev, params) {
-        if (params.linkURL) {
-            onLinkContextMenu(ev, params);
-        }
-    });
-
+    webContentsHandler(mainWindow.webContents);
     mainWindowState.manage(mainWindow);
 });
 
