@@ -57,6 +57,7 @@ export function setLanguage(preferredLangs) {
         for (let i = 0; i < preferredLangs.length; ++i) {
             if (availLangs.hasOwnProperty(preferredLangs[i])) {
                 langToUse = preferredLangs[i];
+                break;
             }
         }
         if (!langToUse) {
