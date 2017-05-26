@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 import classnames from 'classnames';
 
 /*
@@ -69,7 +70,7 @@ export default React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
 
-        const title = this.props.action + " this person?";
+        const title = _t("%(actionVerb)s this person?", { actionVerb: this.props.action});
         const confirmButtonClass = classnames({
             'mx_Dialog_primary': true,
             'danger': this.props.danger,
@@ -82,7 +83,7 @@ export default React.createClass({
                     <form onSubmit={this.onOk}>
                         <input className="mx_ConfirmUserActionDialog_reasonField"
                             ref={this._collectReasonField}
-                            placeholder="Reason"
+                            placeholder={ _t("Reason") }
                             autoFocus={true}
                         />
                     </form>
@@ -111,7 +112,7 @@ export default React.createClass({
                     </button>
 
                     <button onClick={this.onCancel}>
-                        Cancel
+                        { _t("Cancel") }
                     </button>
                 </div>
             </BaseDialog>

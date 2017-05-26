@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 var MatrixClientPeg = require("./MatrixClientPeg");
+import { _t } from './languageHandler';
 
 module.exports = {
     usersTypingApartFromMe: function(room) {
@@ -56,18 +57,18 @@ module.exports = {
         if (whoIsTyping.length == 0) {
             return '';
         } else if (whoIsTyping.length == 1) {
-            return whoIsTyping[0].name + ' is typing';
+            return _t('%(displayName)s is typing', {displayName: whoIsTyping[0].name});
         }
         const names = whoIsTyping.map(function(m) {
             return m.name;
         });
-        if (othersCount) {
-            const other = ' other' + (othersCount > 1 ? 's' : '');
-            return names.slice(0, limit - 1).join(', ') + ' and ' +
-                othersCount + other + ' are typing';
+        if (othersCount==1) {
+            return _t('%(names)s and one other are typing', {names: names.slice(0, limit - 1).join(', ')});
+        } else if (othersCount>1) {
+        	return _t('%(names)s and %(count)s others are typing', {names: names.slice(0, limit - 1).join(', '), count: othersCount});
         } else {
             const lastPerson = names.pop();
-            return names.join(', ') + ' and ' + lastPerson + ' are typing';
+            return _t('%(names)s and %(lastPerson)s are typing', {names: names.join(', '), lastPerson: lastPerson});
         }
     }
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import {emojioneList, shortnameToImage, shortnameToUnicode} from 'emojione';
 import Fuse from 'fuse.js';
@@ -39,7 +40,7 @@ export default class EmojiProvider extends AutocompleteProvider {
     }
 
     getName() {
-        return '😃 Emoji';
+        return '😃 ' + _t('Emoji');
     }
 
     static getInstance() {

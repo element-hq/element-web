@@ -19,6 +19,7 @@ limitations under the License.
 
 var React = require('react');
 var classNames = require("classnames");
+import { _t } from '../../../languageHandler';
 var Modal = require('../../../Modal');
 
 var sdk = require('../../../index');
@@ -469,9 +470,9 @@ module.exports = WithMatrixClient(React.createClass({
         if (needsSenderProfile) {
             let aux = null;
             if (!this.props.tileShape) {
-                if (msgtype === 'm.image') aux = "sent an image";
-                else if (msgtype === 'm.video') aux = "sent a video";
-                else if (msgtype === 'm.file') aux = "uploaded a file";
+                if (msgtype === 'm.image') aux = _t('sent an image');
+                else if (msgtype === 'm.video') aux = _t('sent a video');
+                else if (msgtype === 'm.file') aux = _t('uploaded a file');
                 sender = <SenderProfile onClick={ this.onSenderProfileClick } mxEvent={this.props.mxEvent} aux={aux} />;
             }
             else {
