@@ -86,7 +86,7 @@ describe('MemberEventListSummary', function() {
     beforeEach(function(done) {
         testUtils.beforeEach(this);
         sandbox = testUtils.stubClient();
-        
+
         languageHandler.setLanguage('en').done(done);
     });
 
