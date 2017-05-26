@@ -37,6 +37,13 @@ export function _t(...args) {
     return counterpart.translate(...args);
 }
 
+// Allow overriding the text displayed when no translation exists
+// Currently only use din unit tests to avoid having to load
+// the translations in riot-web
+export function setMissingEntryGenerator(f) {
+    counterpart.setMissingEntryGenerator(f);
+}
+
 export function setLanguage(preferredLangs) {
     if (!Array.isArray(preferredLangs)) {
         preferredLangs = [preferredLangs];
