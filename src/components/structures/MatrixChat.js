@@ -433,6 +433,10 @@ module.exports = React.createClass({
                 this._viewIndexedRoom(payload.roomIndex);
                 break;
             case 'view_user_settings':
+                if (MatrixClientPeg.get().isGuest()) {
+                    dis.dispatch({action: 'view_set_mxid'});
+                    break;
+                }
                 this._setPage(PageTypes.UserSettings);
                 this.notifyNewScreen('settings');
                 break;
@@ -441,7 +445,6 @@ module.exports = React.createClass({
                     dis.dispatch({action: 'view_set_mxid'});
                     break;
                 }
-
                 Modal.createDialog(TextInputDialog, {
                     title: "Create Room",
                     description: "Room name (optional)",
