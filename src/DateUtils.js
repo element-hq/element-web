@@ -16,39 +16,44 @@ limitations under the License.
 
 'use strict';
 
-var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function pad(n) {
     return (n < 10 ? '0' : '') + n;
 }
 
+function twelveHourTime(date) {
+    let hours = date.getHours() % 12;
+    const minutes = pad(date.getMinutes());
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = pad(hours ? hours : 12);
+    return `${hours}:${minutes} ${ampm}`;
+}
+
 module.exports = {
     formatDate: function(date) {
-        // date.toLocaleTimeString is completely system dependent.
-        // just go 24h for now
-
         var now = new Date();
         if (date.toDateString() === now.toDateString()) {
-            return pad(date.getHours()) + ':' + pad(date.getMinutes());
+            return this.formatTime(date);
         }
         else if (now.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
-            return days[date.getDay()] + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+            return days[date.getDay()] + " " + this.formatTime(date);
         }
         else if (now.getFullYear() === date.getFullYear()) {
-            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + this.formatTime(date);
         }
-        else {
-            return this.formatFullDate(date);
-        }
+        return this.formatFullDate(date);
     },
 
     formatFullDate: function(date) {
-        return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+        return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " " + this.formatTime(date);
     },
 
-    formatTime: function(date) {
+    formatTime: function(date, showTwelveHour=false) {
+        if (showTwelveHour) {
+          return twelveHourTime(date);
+        }
         return pad(date.getHours()) + ':' + pad(date.getMinutes());
-    }
+    },
 };
-

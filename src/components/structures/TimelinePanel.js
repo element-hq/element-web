@@ -29,6 +29,7 @@ var ObjectUtils = require('../../ObjectUtils');
 var Modal = require("../../Modal");
 var UserActivity = require("../../UserActivity");
 var KeyCode = require('../../KeyCode');
+import UserSettingsStore from '../../UserSettingsStore';
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
@@ -122,7 +123,7 @@ var TimelinePanel = React.createClass({
         let initialReadMarker = null;
         if (this.props.manageReadMarkers) {
             const readmarker = this.props.timelineSet.room.getAccountData('m.fully_read');
-            if (readmarker){
+            if (readmarker) {
                 initialReadMarker = readmarker.getContent().event_id;
             } else {
                 initialReadMarker = this._getCurrentReadReceipt();
@@ -171,6 +172,9 @@ var TimelinePanel = React.createClass({
 
             // cache of matrixClient.getSyncState() (but from the 'sync' event)
             clientSyncState: MatrixClientPeg.get().getSyncState(),
+
+            // should the event tiles have twelve hour times
+            isTwelveHour: UserSettingsStore.getSyncedSetting('showTwelveHourTimestamps'),
         };
     },
 
@@ -1106,7 +1110,6 @@ var TimelinePanel = React.createClass({
         const forwardPaginating = (
             this.state.forwardPaginating || this.state.clientSyncState == 'PREPARED'
         );
-
         return (
             <MessagePanel ref="messagePanel"
                     hidden={ this.props.hidden }
@@ -1125,6 +1128,7 @@ var TimelinePanel = React.createClass({
                     onFillRequest={ this.onMessageListFillRequest }
                     onUnfillRequest={ this.onMessageListUnfillRequest }
                     opacity={ this.props.opacity }
+                    isTwelveHour={ this.state.isTwelveHour }
                     className={ this.props.className }
                     tileShape={ this.props.tileShape }
             />
