@@ -125,5 +125,8 @@
     "Messages containing my user name": "Nachrichten, die meinen Nutzernamen enthalten",
     "Messages in group chats": "Nachrichten in Chat-Gruppen",
     "Messages in one-to-one chats": "Nachrichten in Eins-zu-Eins-Chats",
-    "Messages sent by bot": "Nachrichten von Bots"
+    "Messages sent by bot": "Nachrichten von Bots",
+    "more": "mehr",
+    "When I'm invited to a room": "Wenn ich in einen Raum eingeladen werde",
+    "customServer_text": "Du kannst die erweiterten Server-Optioen nutzen um dich an anderen Matrix-Servern mittels anderer Heimserver-URL anzumelden. <br/>Dies erlaubt dir Riot mit einem existierendem Konto auf einem anderen Heimserver zu nutzen.<br/><br/>Du kannst auch einen benutzerdefinierten Identitäts-Server setzen, aber du wirst dann nicht in der Lage sein, Nutzer per E-Mail-Adresse einzuladen oder selbst mit E-Mail-Adresse eingeladen zu werden."
 }
