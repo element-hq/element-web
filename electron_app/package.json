@@ -6,6 +6,7 @@
   "description": "A feature-rich client for Matrix.org",
   "author": "Vector Creations Ltd.",
   "dependencies": {
-    "electron-window-state": "^4.1.0"
+    "electron-window-state": "^4.1.0",
+    "minimist": "^1.2.0"
   }
 }

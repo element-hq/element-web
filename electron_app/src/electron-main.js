@@ -23,6 +23,7 @@ limitations under the License.
 const check_squirrel_hooks = require('./squirrelhooks');
 if (check_squirrel_hooks()) return;
 
+const argv = require('minimist')(process.argv);
 const electron = require('electron');
 
 const tray = require('./tray');
@@ -31,6 +32,10 @@ const VectorMenu = require('./vectormenu');
 const webContentsHandler = require('./webcontents-handler');
 
 const windowStateKeeper = require('electron-window-state');
+
+if (argv.profile) {
+    electron.app.setPath('userData', `${electron.app.getPath('userData')}-${argv.profile}`);
+}
 
 let vectorConfig = {};
 try {
@@ -191,7 +196,7 @@ electron.app.on('ready', () => {
         brand: vectorConfig.brand || 'Riot'
     });
 
-    if (!process.argv.includes('--hidden')) {
+    if (!argv.hidden) {
         mainWindow.once('ready-to-show', () => {
             mainWindow.show();
         });
