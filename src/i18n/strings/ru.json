@@ -473,5 +473,8 @@
     "Failed to forget room %(errCode)s": "Не удалось забыть комнату %(errCode)s",
     "Failed to join room": "Не удалось присоединиться к комнате",
     "Failed to join the room": "Не удалось присоединиться к комнате",
-    "A registered account is required for this action": "Необходима зарегистрированная учетная запись для этого действия"
+    "A registered account is required for this action": "Необходима зарегистрированная учетная запись для этого действия",
+    "Access Token:": "Токен:",
+    "Always show message timestamps": "Всегда показывать время сообщения",
+    "Authentication": "Авторизация"
 }
