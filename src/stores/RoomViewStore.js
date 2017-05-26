@@ -73,6 +73,9 @@ class RoomViewStore extends Store {
             case 'join_room':
                 this._joinRoom(payload);
                 break;
+            case 'on_logged_out':
+                this.reset();
+                break;
         }
     }
 

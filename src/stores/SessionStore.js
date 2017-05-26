@@ -16,6 +16,10 @@ limitations under the License.
 import dis from '../dispatcher';
 import {Store} from 'flux/utils';
 
+const INITIAL_STATE = {
+    cachedPassword: localStorage.getItem('mx_pass'),
+};
+
 /**
  * A class for storing application state to do with the session. This is a simple flux
  * store that listens for actions and updates its state accordingly, informing any
@@ -33,9 +37,7 @@ class SessionStore extends Store {
         super(dis);
 
         // Initialise state
-        this._state = {
-            cachedPassword: localStorage.getItem('mx_pass'),
-        };
+        this._state = INITIAL_STATE;
     }
 
     _update() {
@@ -66,7 +68,14 @@ class SessionStore extends Store {
                     cachedPassword: null,
                 });
                 break;
+            case 'on_logged_out':
+                this.reset();
+                break;
         }
+    }
+
+    reset() {
+        this._state = Object.assign({}, INITIAL_STATE);
     }
 
     getCachedPassword() {
