@@ -253,6 +253,7 @@ export default React.createClass({
                 break;
         }
 
+        const isGuest = this.props.matrixClient.isGuest();
         var topBar;
         if (this.props.hasNewVersion) {
             topBar = <NewVersionBar version={this.props.version} newVersion={this.props.newVersion}
@@ -260,7 +261,7 @@ export default React.createClass({
             />;
         } else if (this.state.userHasGeneratedPassword) {
             topBar = <PasswordNagBar />;
-        } else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
+        } else if (!isGuest && Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
             topBar = <MatrixToolbar />;
         }
 
