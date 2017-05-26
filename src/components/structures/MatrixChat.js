@@ -806,7 +806,7 @@ module.exports = React.createClass({
         } else if (this._is_registered) {
             this._is_registered = false;
 
-            // Set the display name = entered username
+            // Set the display name = user ID localpart
             MatrixClientPeg.get().setDisplayName(
                 MatrixClientPeg.get().getUserIdLocalpart()
             );
