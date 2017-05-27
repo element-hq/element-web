@@ -43,6 +43,8 @@ foreach my $tuple (@$src_strings) {
 print "\nChecking en_EN\n";
 my $count = 0;
 foreach my $k (sort keys %$en) {
+    # crappy heuristic to ignore country codes for now...
+    next if ($k =~ /^(..|..-..)$/);
     if (!$src->{$k}) {
         if ($src->{$k. '.'}) {
             printf ("%50s %24s\t%s\n", $src->{$k. '.'}, "src has fullstop!", $k);
