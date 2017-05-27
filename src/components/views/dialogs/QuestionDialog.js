@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
 export default React.createClass({
     displayName: 'QuestionDialog',
@@ -33,7 +34,6 @@ export default React.createClass({
             title: "",
             description: "",
             extraButtons: null,
-            button: "OK",
             focus: true,
             hasCancelButton: true,
         };
@@ -64,7 +64,7 @@ export default React.createClass({
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={this.onOk} autoFocus={this.props.focus}>
-                        {this.props.button}
+                        {this.props.button || _t('OK')}
                     </button>
                     {this.props.extraButtons}
                     {cancelButton}

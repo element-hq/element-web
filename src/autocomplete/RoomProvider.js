@@ -1,4 +1,5 @@
 import React from 'react';
+import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import MatrixClientPeg from '../MatrixClientPeg';
 import Fuse from 'fuse.js';
@@ -50,7 +51,7 @@ export default class RoomProvider extends AutocompleteProvider {
     }
 
     getName() {
-        return '💬 Rooms';
+        return '💬 ' + _t('Rooms');
     }
 
     static getInstance() {

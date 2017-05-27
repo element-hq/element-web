@@ -19,6 +19,7 @@ var React = require('react');
 var ObjectUtils = require("../../../ObjectUtils");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require("../../../index");
+import { _t } from '../../../languageHandler';
 var Modal = require("../../../Modal");
 
 module.exports = React.createClass({
@@ -154,8 +155,8 @@ module.exports = React.createClass({
         else {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Invalid alias format",
-                description: "'" + alias + "' is not a valid format for an alias",
+                title: _t('Invalid alias format'),
+                description: _t('"%(alias)s" is not a valid format for an alias', { alias: alias }),
             });
         }
     },
@@ -170,8 +171,8 @@ module.exports = React.createClass({
         else {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Invalid address format",
-                description: "'" + alias + "' is not a valid format for an address",
+                title: _t('Invalid address format'),
+                description: _t('"%(alias)s" is not a valid format for an address', { alias: alias }),
             });
         }
     },
@@ -203,7 +204,7 @@ module.exports = React.createClass({
         if (this.props.canSetCanonicalAlias) {
             canonical_alias_section = (
                 <select onChange={this.onCanonicalAliasChange} defaultValue={ this.state.canonicalAlias }>
-                    <option value="" key="unset">not specified</option>
+                    <option value="" key="unset">{ _t('not specified') }</option>
                     {
                         Object.keys(self.state.domainToAliases).map(function(domain, i) {
                             return self.state.domainToAliases[domain].map(function(alias, j) {
@@ -220,7 +221,7 @@ module.exports = React.createClass({
         }
         else {
             canonical_alias_section = (
-                <b>{ this.state.canonicalAlias || "not set" }</b>
+                <b>{ this.state.canonicalAlias || _t('not set') }</b>
             );
         }
 
@@ -254,13 +255,13 @@ module.exports = React.createClass({
             <div>
                 <h3>Addresses</h3>
                 <div className="mx_RoomSettings_aliasLabel">
-                    The main address for this room is: { canonical_alias_section }
+                    { _t('The main address for this room is') }: { canonical_alias_section }
                 </div>
                 <div className="mx_RoomSettings_aliasLabel">
                     { (this.state.domainToAliases[localDomain] &&
                         this.state.domainToAliases[localDomain].length > 0)
-                      ? "Local addresses for this room:"
-                      : "This room has no local addresses" }
+                      ? _t('Local addresses for this room:')
+                      : _t('This room has no local addresses') }
                 </div>
                 <div className="mx_RoomSettings_aliasesTable">
                     { (this.state.domainToAliases[localDomain] || []).map((alias, i) => {
@@ -268,7 +269,7 @@ module.exports = React.createClass({
                         if (this.props.canSetAliases) {
                             deleteButton = (
                                 <img src="img/cancel-small.svg" width="14" height="14"
-                                    alt="Delete" onClick={ self.onAliasDeleted.bind(self, localDomain, i) } />
+                                    alt={ _t('Delete') } onClick={ self.onAliasDeleted.bind(self, localDomain, i) } />
                             );
                         }
                         return (
@@ -276,7 +277,7 @@ module.exports = React.createClass({
                                 <EditableText
                                     className="mx_RoomSettings_alias mx_RoomSettings_editable"
                                     placeholderClassName="mx_RoomSettings_aliasPlaceholder"
-                                    placeholder={ "New address (e.g. #foo:" + localDomain + ")" }
+                                    placeholder={ _t('New address (e.g. #foo:%(localDomain)s)', { localDomain: localDomain}) }
                                     blurToCancel={ false }
                                     onValueChanged={ self.onAliasChanged.bind(self, localDomain, i) }
                                     editable={ self.props.canSetAliases }
@@ -294,7 +295,7 @@ module.exports = React.createClass({
                                 ref="add_alias"
                                 className="mx_RoomSettings_alias mx_RoomSettings_editable"
                                 placeholderClassName="mx_RoomSettings_aliasPlaceholder"
-                                placeholder={ "New address (e.g. #foo:" + localDomain + ")" }
+                                placeholder={ _t('New address (e.g. #foo:%(localDomain)s)', { localDomain: localDomain}) }
                                 blurToCancel={ false }
                                 onValueChanged={ self.onAliasAdded } />
                             <div className="mx_RoomSettings_addAlias mx_filterFlipColor">

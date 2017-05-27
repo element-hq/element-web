@@ -23,12 +23,14 @@ var Matrix = require("matrix-js-sdk");
 var EventTimeline = Matrix.EventTimeline;
 
 var sdk = require('../../index');
+import { _t } from '../../languageHandler';
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var dis = require("../../dispatcher");
 var ObjectUtils = require('../../ObjectUtils');
 var Modal = require("../../Modal");
 var UserActivity = require("../../UserActivity");
 var KeyCode = require('../../KeyCode');
+import UserSettingsStore from '../../UserSettingsStore';
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
@@ -122,7 +124,7 @@ var TimelinePanel = React.createClass({
         let initialReadMarker = null;
         if (this.props.manageReadMarkers) {
             const readmarker = this.props.timelineSet.room.getAccountData('m.fully_read');
-            if (readmarker){
+            if (readmarker) {
                 initialReadMarker = readmarker.getContent().event_id;
             } else {
                 initialReadMarker = this._getCurrentReadReceipt();
@@ -171,6 +173,12 @@ var TimelinePanel = React.createClass({
 
             // cache of matrixClient.getSyncState() (but from the 'sync' event)
             clientSyncState: MatrixClientPeg.get().getSyncState(),
+
+            // should the event tiles have twelve hour times
+            isTwelveHour: UserSettingsStore.getSyncedSetting('showTwelveHourTimestamps'),
+
+            // always show timestamps on event tiles?
+            alwaysShowTimestamps: UserSettingsStore.getSyncedSetting('alwaysShowTimestamps'),
         };
     },
 
@@ -907,14 +915,11 @@ var TimelinePanel = React.createClass({
                     });
                 };
             }
-            var message = "Tried to load a specific point in this room's timeline, but ";
-            if (error.errcode == 'M_FORBIDDEN') {
-                message += "you do not have permission to view the message in question.";
-            } else {
-                message += "was unable to find it.";
-            }
+            var message = (error.errcode == 'M_FORBIDDEN') 
+            	? _t("Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question") + "."
+                : _t("Tried to load a specific point in this room's timeline, but was unable to find it") + ".";
             Modal.createDialog(ErrorDialog, {
-                title: "Failed to load timeline position",
+                title: _t("Failed to load timeline position"),
                 description: message,
                 onFinished: onFinished,
             });
@@ -1106,7 +1111,6 @@ var TimelinePanel = React.createClass({
         const forwardPaginating = (
             this.state.forwardPaginating || this.state.clientSyncState == 'PREPARED'
         );
-
         return (
             <MessagePanel ref="messagePanel"
                     hidden={ this.props.hidden }
@@ -1125,6 +1129,8 @@ var TimelinePanel = React.createClass({
                     onFillRequest={ this.onMessageListFillRequest }
                     onUnfillRequest={ this.onMessageListUnfillRequest }
                     opacity={ this.props.opacity }
+                    isTwelveHour={ this.state.isTwelveHour }
+                    alwaysShowTimestamps={ this.state.alwaysShowTimestamps }
                     className={ this.props.className }
                     tileShape={ this.props.tileShape }
             />
