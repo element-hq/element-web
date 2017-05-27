@@ -364,7 +364,7 @@
     "You're not in any rooms yet! Press": "Вы еще не находитесь ни в каких комнатах! Нажать",
     "You are trying to access %(roomName)s": "Вы пытаетесь получить доступ %(roomName)s",
     "You cannot place a call with yourself": "Вы не можете позвонить самим себе",
-    "%(senderName)s withdrew %(targetName)s's inivitation.": "%(senderName)s анулировал %(targetName)s's преглашение.",
+    "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s анулировал %(targetName)s's преглашение.",
     "Sep": "Сен.",
     "Jan": "Янв.",
     "Feb": "Фев.",

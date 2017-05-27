@@ -394,7 +394,7 @@
     "%(senderName)s unbanned %(targetName)s.": "%(senderName)s zog Bann für %(targetName)s zurück.",
     "Usage": "Verwendung",
     "Use with caution": "Mit Vorsicht benutzen",
-    "%(senderName)s withdrew %(targetName)s's inivitation.": "%(senderName)s zog die Einladung für %(targetName)s zurück.",
+    "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s zog die Einladung für %(targetName)s zurück.",
     "You need to be able to invite users to do that.": "Du musst in der Lage sein Nutzer einzuladen um dies zu tun.",
     "You need to be logged in.": "Du musst angemeldet sein.",
     "There are no visible files in this room": "Es gibt keine sichtbaren Dateien in diesem Raum",

@@ -100,7 +100,7 @@ function textForMemberEvent(ev) {
             }
             else if (ev.getPrevContent().membership === "invite") {
                 return _t(
-                    '%(senderName)s withdrew %(targetName)s\'s inivitation.',
+                    '%(senderName)s withdrew %(targetName)s\'s invitation.',
                     {senderName: senderName, targetName: targetName}
                 ) + ' ' + reason;
             }

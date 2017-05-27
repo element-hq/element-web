@@ -393,7 +393,7 @@
     "Usage": "Uso",
     "Use with caution": "Use com cautela",
     "VoIP is unsupported": "Chamada de voz não permitida",
-    "%(senderName)s withdrew %(targetName)s's inivitation.": "%(senderName)s desfez o convite a %(targetName)s's.",
+    "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s desfez o convite a %(targetName)s's.",
     "You are already in a call": "Você já está em  uma chamada",
     "You're not in any rooms yet! Press": "Você ainda não está em nenhuma sala! Pressione",
     "You are trying to access %(roomName)s": "Você está tentando acessar a sala %(roomName)s",
