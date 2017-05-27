@@ -38,6 +38,8 @@ foreach my $tuple (@$src_strings) {
     }
 }
 
+#exit;
+
 opendir(DIR, $i18ndir) || die $!;
 my @files = readdir(DIR);
 closedir(DIR);
@@ -81,7 +83,8 @@ sub read_i18n {
     while(<FILE>) {
         if ($_ =~ m/^(\s+)"(.*?)"(: *)"(.*?)"(,?)$/) {
             my ($indent, $src, $colon, $dst, $comma) = ($1, $2, $3, $4, $5);
-
+            $src =~ s/\\"/"/g;
+            $dst =~ s/\\"/"/g;
             $map->{$src} = $dst;
         }
     }

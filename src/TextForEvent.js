@@ -179,7 +179,7 @@ function textForHistoryVisibilityEvent(event) {
         text += _t('anyone') + '.';
     }
     else {
-        text += ' ' + _t('unknown') + ' (' + vis + ')';
+        text += ' ' + _t('unknown') + ' (' + vis + ').';
     }
     return text;
 }

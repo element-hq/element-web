@@ -51,6 +51,8 @@ EOT
 my $sub = 0;
 if ($_ =~ m/^(\s+)"(.*?)"(: *)"(.*?)"(,?)$/) {
     my ($indent, $src, $colon, $dst, $comma) = ($1, $2, $3, $4, $5);
+    $src =~ s/\\"/"/g;
+    $dst =~ s/\\"/"/g;
 
     foreach my $fixup (@{$::fixups}) {
         my $dotless_fixup = substr($fixup, 0, -1);
