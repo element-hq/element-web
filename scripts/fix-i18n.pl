@@ -70,6 +70,8 @@ if ($_ =~ m/^(\s+)"(.*?)"(: *)"(.*?)"(,?)$/) {
         }
 
         if ($sub) {
+            $src =~ s/"/\\"/g;
+            $dst =~ s/"/\\"/g;
             print qq($indent"$src"$colon"$dst"$comma\n);
             last;
         }        
