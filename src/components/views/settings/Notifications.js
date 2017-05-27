@@ -714,7 +714,7 @@ module.exports = React.createClass({
                     {masterPushRuleDiv}
 
                     <div className="mx_UserSettings_notifTable">
-                        { _t('All notifications are currently disabled for all targets') }.
+                        { _t('All notifications are currently disabled for all targets.') }.
                     </div>
                 </div>
             );

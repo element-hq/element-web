@@ -1,0 +1,16 @@
+{
+    "Add an email address above to configure email notifications": "E-mail értesítés beállításához írd be az e-mail címed",
+    "Advanced notification settings": "Haladó értesítési beállítások",
+    "All messages": "Minden üzenet",
+    "All messages (loud)": "Minden üzenet (hangos)",
+    "All notifications are currently disabled for all targets.": "Minden céleszközön minden értesítés tiltva van.",
+    "An error occurred whilst saving your email notification preferences.": "Hiba történt az e-mail értesítés beállításánál.",
+    "Call invitation": "Hívás meghívó",
+    "Cancel Sending": "Küldés megszakítása",
+    "Can't update user notification settings": "Nem sikerül frissíteni az értesítési beállításokat",
+    "Close": "Bezár",
+    "Create new room": "Új szoba készítés",
+    "Couldn't find a matching Matrix room": "Nem található a keresett Matrix szoba",
+    "Custom Server Options": "Egyedi szerver beállítások",
+    "delete the alias": "becenév törlése"
+}
