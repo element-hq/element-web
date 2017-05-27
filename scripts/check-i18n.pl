@@ -13,7 +13,29 @@ $|=1;
 
 $0 =~ /^(.*\/)/;
 my $i18ndir = abs_path($1."/../src/i18n/strings");
+my $srcdir = abs_path($1."/../src");
+
 my $en = read_i18n($i18ndir."/en_EN.json");
+
+my $src_strings = read_src_strings($srcdir);
+
+print "Checking strings in src\n";
+foreach my $s (@$src_strings) {
+    if (!$en->{$s}) {
+        if ($en->{$s . '.'}) {
+            printf ("%10s %24s\t%s\n", "src", "en_EN has fullstop!", "$s");
+        }
+        else {
+            $s =~ /^(.*)\.?$/;
+            if ($en->{$1}) {
+                printf ("%10s %24s\t%s\n", "src", "en_EN lacks fullstop!", "$s");
+            }
+            else {
+                printf ("%10s %24s\t%s\n", "src", "Translation missing!", "$s");
+            }
+        }
+    }
+}
 
 opendir(DIR, $i18ndir) || die $!;
 my @files = readdir(DIR);
@@ -65,4 +87,29 @@ sub read_i18n {
     close(FILE);
 
     return $map;
+}
+
+sub read_src_strings {
+    my $path = shift;
+
+    use File::Find;
+    use File::Slurp;
+
+    my $strings = [];
+
+    my @files;
+    find( sub { push @files, $File::Find::name if (-f $_ && /\.jsx?$/) }, $path );
+    foreach my $file (@files) {
+        my $src = read_file($file);
+        while ($src =~ /_t\(\s*'(.*?[^\\])'/sg) {
+            my $s = $1;
+            $s =~ s/\\'/'/g;
+            push @$strings, $s;
+        }
+        while ($src =~ /_t\(\s*"(.*?[^\\])"/sg) {
+            push @$strings, $1;
+        }
+    }
+
+    return $strings;
 }
