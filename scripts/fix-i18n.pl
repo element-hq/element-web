@@ -38,6 +38,7 @@ VoIP conference finished.
 %(senderName)s sent an invitation to %(targetDisplayName)s to join the room.
 %(senderName)s turned on end-to-end encryption (algorithm %(algorithm)s).
 %(senderName)s changed the power level of %(powerLevelDiffText)s.
+For security, this session has been signed out. Please sign in again.
 EOT
 )];
 }
