@@ -371,5 +371,15 @@
     "NOT verified": "NON vérifié",
     "No devices with registered encryption keys": "Pas d’appareil avec des clés d’encryption enregistrées",
     "No more results": "Fin des résultats",
-    "No results": "Pas de résultats"
+    "No results": "Pas de résultats",
+    "unknown error code": "Code erreur inconnu",
+    "OK": "OK",
+    "Once encryption is enabled for a room it cannot be turned off again (for now)": "Une fois le chiffrement activé dans un salon il ne peut pas être désactivé (pour le moment)",
+    "Only people who have been invited": "Seul les personnes ayant été invitées",
+    "or": "ou",
+    "Password": "Mot de passe",
+    "Passwords can't be empty": "Le mot de passe ne peut pas être vide",
+    "People": "Personne",
+    "Permissions": "Permissions",
+    "Phone": "Téléphone"
 }
