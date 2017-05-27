@@ -280,10 +280,7 @@ async function loadApp() {
     } else if (validBrowser) {
         UpdateChecker.start();
 
-        let doNotTrack = navigator.doNotTrack;
-        if (typeof navigator.doNotTrack === 'string') {
-            doNotTrack = navigator.doNotTrack === 'yes';
-        }
+        const doNotTrack = navigator.doNotTrack === 'yes' || navigator.doNotTrack === '1' || navigator.doNotTrack === 1;
         if (!doNotTrack && configJson.piwik && configJson.piwik.url && configJson.piwik.siteId) {
             (function() {
                 const g = document.createElement('script');
