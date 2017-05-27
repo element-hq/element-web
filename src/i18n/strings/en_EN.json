@@ -275,7 +275,7 @@
   "Filter room members": "Filter room members",
   "Forget room": "Forget room",
   "Forgot your password?": "Forgot your password?",
-  "For security, this session has been signed out. Please sign in again": "For security, this session has been signed out. Please sign in again",
+  "For security, this session has been signed out. Please sign in again.": "For security, this session has been signed out. Please sign in again.",
   "Found a bug?": "Found a bug?",
   "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s",
   "Guest users can't create new rooms. Please register to create room and start a chat": "Guest users can't create new rooms. Please register to create room and start a chat",

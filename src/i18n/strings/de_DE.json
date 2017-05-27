@@ -123,7 +123,7 @@
     "Forget room": "Raum vergessen",
     "Forgot your password?": "Passwort vergessen?",
     "For security, logging out will delete any end-to-end encryption keys from this browser. If you want to be able to decrypt your conversation history from future Riot sessions, please export your room keys for safe-keeping.": "Aus Sicherheitsgründen werden beim Ausloggen alle Ende-zu-Ende-Verschlüsselungsschlüssel von diesem Browser gelöscht. Wenn du in späteren Riot-Sitzungen die Konversationshistorie entschlüsseln möchtest, exportiere bitte deine Schlüssel zur sicheren Verwahrung.",
-    "For security, this session has been signed out. Please sign in again": "Zur Sicherheit wurde diese Sitzung abgemeldet. Bitte melde dich erneut an",
+    "For security, this session has been signed out. Please sign in again.": "Zur Sicherheit wurde diese Sitzung abgemeldet. Bitte melde dich erneut an.",
     "Found a bug?": "Fehler gefunden?",
     "Guests cannot join this room even if explicitly invited": "Gäste können diesem Raum nicht beitreten auch wenn sie explizit eingeladen werden",
     "Guests can't set avatars. Please register.": "Gäste können keine Avatare setzen. Bitte registriere dich.",

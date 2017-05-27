@@ -94,7 +94,7 @@
     "Forget room": "Esquecer sala",
     "Forgot your password?": "Esqueceu sua senha?",
     "For security, logging out will delete any end-to-end encryption keys from this browser. If you want to be able to decrypt your conversation history from future Riot sessions, please export your room keys for safe-keeping.": "Por segurança, deslogar irá remover qualquer chave de criptografia ponta-a-ponta deste navegador. Caso deseje descriptografar o histórico das suas conversas E2E em sessões Riot futuras, por favor exporte as chaves da sala para sua garantia.",
-    "For security, this session has been signed out. Please sign in again": "Por questões de segurança, esta sessão foi encerrada. Por gentileza conecte-se novamente",
+    "For security, this session has been signed out. Please sign in again.": "Por questões de segurança, esta sessão foi encerrada. Por gentileza conecte-se novamente.",
     "Found a bug?": "Encontrou um problema de funcionamento do sistema?",
     "Guests cannot join this room even if explicitly invited": "Visitantes não podem entrar nesta sala, mesmo se forem explicitamente convidadas/os",
     "Guests can't set avatars. Please register": "Convidados não podem definir uma foto do perfil. Por favor, registre-se",

@@ -294,7 +294,7 @@
     "Filter room members": "Filtrer les membres par nom",
     "Forget room": "Oublier le salon",
     "Forgot your password?": "Mot de passe perdu ?",
-    "For security, this session has been signed out. Please sign in again": "Par sécurité, la session a expiré. Merci de vous authentifer à nouveau",
+    "For security, this session has been signed out. Please sign in again.": "Par sécurité, la session a expiré. Merci de vous authentifer à nouveau.",
     "Found a bug?": "Trouvé un problème ?",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s de %(fromPowerLevel)s à %(toPowerLevel)s",
     "Guest users can't create new rooms. Please register to create room and start a chat": "Les utilisateurs invités ne peuvent créer de nouveaux salons. Merci de vous enregistrer pour commencer une discussion",
