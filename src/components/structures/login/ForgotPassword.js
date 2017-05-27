@@ -82,7 +82,7 @@ module.exports = React.createClass({
             this.showErrorDialog(_t('The email address linked to your account must be entered.'));
         }
         else if (!this.state.password || !this.state.password2) {
-            this.showErrorDialog(_t('A new password must be entered') + ".");
+            this.showErrorDialog(_t('A new password must be entered.'));
         }
         else if (this.state.password !== this.state.password2) {
             this.showErrorDialog(_t('New passwords must match each other.'));
@@ -98,10 +98,8 @@ module.exports = React.createClass({
                             'end-to-end encryption keys on all devices, ' +
                             'making encrypted chat history unreadable, ' + 
                             'unless you first export your room keys and re-import ' +
-                            'them afterwards. In future this ' +
-                            '<a href="https://github.com/vector-im/riot-web/issues/2671">' +
-                            'will be improved</a>'
-                        ) }.
+                            'them afterwards. In future this will be improved.'
+                        ) }
                     </div>,
                 button: _t('Continue'),
                 extraButtons: [
