@@ -2,7 +2,7 @@
     "Add an email address above to configure email notifications": "Insira um endereço de email no campo acima para configurar suas notificações por email",
     "All messages": "Todas as mensagens",
     "All messages (loud)": "Todas as mensagens (alto)",
-    "All notifications are currently disabled for all targets": "Todas as notificações estão atualmente desativadas para todos os destinos",
+    "All notifications are currently disabled for all targets.": "Todas as notificações estão atualmente desativadas para todos os destinos",
     "An error occurred whilst saving your email notification preferences.": "Um erro ocorreu enquanto o sistema estava salvando suas preferências de notificação por email.",
     "Call invitation": "Convite para chamada",
     "Cancel Sending": "Cancelar o envio",
@@ -17,7 +17,7 @@
     "Directory": "Diretório",
     "Dismiss": "Encerrar",
     "Download this file": "Baixar este arquivo",
-    "Drop here to %(verb)s": "Arraste aqui para %(verb)s",
+    "Drop here %(toAction)s": "Arraste aqui para %(verb)s",
     "Enable audible notifications in web client": "Ativar notificações de áudio no cliente web",
     "Enable desktop notifications": "Ativar notificações no desktop",
     "Enable email notifications": "Ativar notificações por email",
@@ -118,6 +118,6 @@
     "Yesterday": "Ontem",
     "All notifications are currently disabled for all targets.": "Todas as notificações estão atualmente desabilitadas para todos os destinatários.",
     "#example": "#exemplo",
-    "Failed to remove tag %(prevTag)s from room": "Não foi possível remover a marcação %(prevTag)s desta sala",
+    "Failed to remove tag %(tagName)s from room": "Não foi possível remover a marcação %(prevTag)s desta sala",
     "Welcome page": "Página de boas vindas"
 }
