@@ -68,7 +68,7 @@ printf ("$count/" . (scalar keys %$src) . " strings found in src are present in 
 opendir(DIR, $i18ndir) || die $!;
 my @files = readdir(DIR);
 closedir(DIR);
-foreach my $lang (grep { -f "$i18ndir/$_" && !/en_EN\.json/ } @files) {
+foreach my $lang (grep { -f "$i18ndir/$_" && !/(basefile|en_EN)\.json/ } @files) {
     print "\nChecking $lang\n";
 
     my $map = read_i18n($i18ndir."/".$lang);
