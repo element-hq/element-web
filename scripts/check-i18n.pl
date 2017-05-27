@@ -48,6 +48,11 @@ foreach (keys %$src) { $remaining_src->{$_}++ };
 foreach my $k (sort keys %$en) {
     # crappy heuristic to ignore country codes for now...
     next if ($k =~ /^(..|..-..)$/);
+
+    if ($en->{$k} ne $k) {
+        printf ("%50s %24s\t%s\n", "en_EN", "en_EN is not symmetrical", $k);
+    }
+
     if (!$src->{$k}) {
         if ($src->{$k. '.'}) {
             printf ("%50s %24s\t%s\n", $src->{$k. '.'}, "src has fullstop!", $k);
@@ -69,7 +74,7 @@ foreach my $k (sort keys %$en) {
 }
 printf ("$count/" . (scalar keys %$src) . " strings found in src are present in en_EN\n");
 foreach (keys %$remaining_src) {
-    printf "remaining: $_\n";
+    print "missing: $_\n";
 }
 
 opendir(DIR, $i18ndir) || die $!;
@@ -84,8 +89,23 @@ foreach my $lang (grep { -f "$i18ndir/$_" && !/(basefile|en_EN)\.json/ } @files)
     my $remaining_en = {};
     foreach (keys %$en) { $remaining_en->{$_}++ };
 
-
     foreach my $k (sort keys %$map) {
+        {
+            no warnings 'uninitialized';
+            my $vars = {};
+            while ($k =~ /%\((.*?)\)s/g) {
+                $vars->{$1}++;
+            }
+            while ($map->{$k} =~ /%\((.*?)\)s/g) {
+                $vars->{$1}--;
+            }
+            foreach my $var (keys %$vars) {
+                if ($vars->{$var} != 0) {
+                    printf ("%10s %24s\t%s\n", $lang, "Broken var ($var)s", $k);
+                }
+            }
+        }
+
         if ($en->{$k}) {
             if ($map->{$k} eq $k) {
                 printf ("%10s %24s\t%s\n", $lang, "Untranslated string?", $k);
