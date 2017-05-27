@@ -15,12 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import Matrix from 'matrix-js-sdk';
 import sdk from '../../index';
 import MatrixClientPeg from '../../MatrixClientPeg';
-import dis from '../../dispatcher';
+import { _t } from '../../languageHandler';
 
 /*
  * Component which shows the filtered file using a TimelinePanel
