@@ -247,7 +247,6 @@ module.exports = React.createClass({
         UDEHandler.startListening();
 
         this.focusComposer = false;
-        window.addEventListener("focus", this.onFocus);
 
         // this can technically be done anywhere but doing this here keeps all
         // the routing url path logic together.
@@ -908,12 +907,6 @@ module.exports = React.createClass({
                 }
             }
         });
-    },
-
-    onFocus: function(ev) {
-        if (document.activeElement.textLength === undefined) {
-            dis.dispatch({action: 'focus_composer'});
-        }
     },
 
     showScreen: function(screen, params) {
