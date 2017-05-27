@@ -56,7 +56,8 @@ if (process.env.NODE_ENV !== 'production') {
 var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
-var PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
+const PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
+const Analytics = require("matrix-react-sdk/lib/Analytics");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
 var UpdateChecker = require("./updater");
@@ -143,7 +144,7 @@ var onNewScreen = function(screen) {
     var hash = '#/' + screen;
     lastLocationHashSet = hash;
     window.location.hash = hash;
-}
+};
 
 // We use this to work out what URL the SDK should
 // pass through when registering to allow the user to
@@ -279,6 +280,26 @@ async function loadApp() {
     } else if (validBrowser) {
         UpdateChecker.start();
 
+        let doNotTrack = navigator.doNotTrack;
+        if (typeof navigator.doNotTrack === 'string') {
+            doNotTrack = navigator.doNotTrack === 'yes';
+        }
+        if (!doNotTrack && configJson.piwik && configJson.piwik.url && configJson.piwik.siteId) {
+            (function() {
+                const g = document.createElement('script');
+                const s = document.getElementsByTagName('script')[0];
+                g.type='text/javascript'; g.async=true; g.defer=true; g.src=configJson.piwik.url+'piwik.js';
+
+                g.onload = function() {
+                    const tracker = window.Piwik.getTracker(configJson.piwik.url+'piwik.php', configJson.piwik.siteId);
+                    console.log('Initialised anonymous analytics');
+                    Analytics.set(tracker);
+                };
+
+                s.parentNode.insertBefore(g, s);
+            })();
+        }
+
         const MatrixChat = sdk.getComponent('structures.MatrixChat');
         window.matrixChat = ReactDOM.render(
             <MatrixChat
@@ -295,8 +316,7 @@ async function loadApp() {
             />,
             document.getElementById('matrixchat')
         );
-    }
-    else {
+    } else {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
         var CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
