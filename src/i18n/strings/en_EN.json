@@ -541,7 +541,7 @@
   "you must be a": "you must be a",
   "You need to be able to invite users to do that.": "You need to be able to invite users to do that.",
   "You need to be logged in.": "You need to be logged in.",
-  "You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience": "You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience",
+  "You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience.": "You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience.",
   "Your email address does not appear to be associated with a Matrix ID on this Homeserver": "Your email address does not appear to be associated with a Matrix ID on this Homeserver",
   "Your password has been reset": "Your password has been reset",
   "Your password was successfully changed. You will not receive push notifications on other devices until you log back in to them": "Your password was successfully changed. You will not receive push notifications on other devices until you log back in to them",

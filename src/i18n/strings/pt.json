@@ -401,7 +401,7 @@
     "You cannot place VoIP calls in this browser": "Você não pode fazer chamadas de voz neste navegador",
     "You need to be able to invite users to do that.": "Para fazer isso, você tem que ter permissão para convidar outras pessoas.",
     "You need to be logged in.": "Você tem que estar logado.",
-    "You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience": "É necessário que você faça login novamente para poder gerar as chaves de criptografia ponta-a-ponta para este dispositivo e então enviar sua chave pública para o servidor. Pedimos desculpas pela inconveniência, é preciso fazer isso apenas única uma vez",
+    "You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience.": "É necessário que você faça login novamente para poder gerar as chaves de criptografia ponta-a-ponta para este dispositivo e então enviar sua chave pública para o servidor. Pedimos desculpas pela inconveniência, é preciso fazer isso apenas única uma vez.",
     "Your email address does not appear to be associated with a Matrix ID on this Homeserver": "O seu endereço de email não parece estar associado a uma conta de usuária/o Matrix neste servidor",
     "Set a display name:": "Defina um nome público para você:",
     "Upload an avatar:": "Envie uma imagem de perfil para identificar você:",

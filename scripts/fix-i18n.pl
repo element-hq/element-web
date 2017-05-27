@@ -39,6 +39,7 @@ VoIP conference finished.
 %(senderName)s turned on end-to-end encryption (algorithm %(algorithm)s).
 %(senderName)s changed the power level of %(powerLevelDiffText)s.
 For security, this session has been signed out. Please sign in again.
+You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience.
 EOT
 )];
 }

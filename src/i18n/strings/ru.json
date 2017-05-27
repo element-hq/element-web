@@ -385,7 +385,7 @@
     "Thu": "Чт",
     "Fri": "Пя",
     "Sat": "Сб",
-    "You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience": "Вам необходимо снова войти в генерировать сквозное шифрование (е2е) ключей для этого устройства и предоставить публичный ключ Вашему домашнему серверу. Это после выключения; приносим извинения за причиненные неудобства",
+    "You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience.": "Вам необходимо снова войти в генерировать сквозное шифрование (е2е) ключей для этого устройства и предоставить публичный ключ Вашему домашнему серверу. Это после выключения; приносим извинения за причиненные неудобства.",
     "Your email address does not appear to be associated with a Matrix ID on this Homeserver": "Ваш адрес электронной почты, кажется, не связан с Matrix ID на этом Homeserver",
     "to start a chat with someone": "Начать чат с кем-то",
     "to tag direct chat": "Пометить прямой чат",

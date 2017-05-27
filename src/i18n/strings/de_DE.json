@@ -307,7 +307,7 @@
     "You are already in a call": "Du bist bereits bei einem Anruf",
     "You cannot place a call with yourself": "Du kannst keinen Anruf mit dir selbst starten",
     "You cannot place VoIP calls in this browser": "Du kannst kein VoIP-Gespräch in diesem Browser starten",
-    "You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience": "Du musst dich erneut anmelden um Ende-zu-Ende-Verschlüsselungscodes für dieses Gerät zu generieren und den öffentl. Schlüssel an deinen Homeserver zu senden. Dies muss einmal gemacht werden. Entschuldige die Unannehmlichkeit",
+    "You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience.": "Du musst dich erneut anmelden um Ende-zu-Ende-Verschlüsselungscodes für dieses Gerät zu generieren und den öffentl. Schlüssel an deinen Homeserver zu senden. Dies muss einmal gemacht werden. Entschuldige die Unannehmlichkeit.",
     "Your email address does not appear to be associated with a Matrix ID on this Homeserver": "Deine E-Mail-Adresse scheint nicht mit einer Matrix-ID auf diesem Homeserver verknüpft zu sein",
     "Sun": "So",
     "Mon": "Mo",
