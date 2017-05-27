@@ -42,6 +42,9 @@ foreach my $tuple (@$src_strings) {
 
 print "\nChecking en_EN\n";
 my $count = 0;
+my $remaining_src = {};
+foreach (keys %$src) { $remaining_src->{$_}++ };
+
 foreach my $k (sort keys %$en) {
     # crappy heuristic to ignore country codes for now...
     next if ($k =~ /^(..|..-..)$/);
@@ -61,9 +64,13 @@ foreach my $k (sort keys %$en) {
     }
     else {
         $count++;
+        delete $remaining_src->{$k};
     }
 }
 printf ("$count/" . (scalar keys %$src) . " strings found in src are present in en_EN\n");
+foreach (keys %$remaining_src) {
+    printf "remaining: $_\n";
+}
 
 opendir(DIR, $i18ndir) || die $!;
 my @files = readdir(DIR);
@@ -74,12 +81,17 @@ foreach my $lang (grep { -f "$i18ndir/$_" && !/(basefile|en_EN)\.json/ } @files)
     my $map = read_i18n($i18ndir."/".$lang);
     my $count = 0;
 
+    my $remaining_en = {};
+    foreach (keys %$en) { $remaining_en->{$_}++ };
+
+
     foreach my $k (sort keys %$map) {
         if ($en->{$k}) {
             if ($map->{$k} eq $k) {
                 printf ("%10s %24s\t%s\n", $lang, "Untranslated string?", $k);
             }
             $count++;
+            delete $remaining_en->{$k};
         }
         else {
             if ($en->{$k . "."}) {
@@ -94,6 +106,12 @@ foreach my $lang (grep { -f "$i18ndir/$_" && !/(basefile|en_EN)\.json/ } @files)
             }
 
             printf ("%10s %24s\t%s\n", $lang, "Not present in en_EN", $k);
+        }
+    }
+
+    if (scalar keys %$remaining_en < 100) {
+        foreach (keys %$remaining_en) {
+            printf ("%10s %24s\t%s\n", $lang, "Not yet translated", $_);
         }
     }
 
