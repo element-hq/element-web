@@ -12,7 +12,7 @@
     "Couldn't find a matching Matrix room": "Não foi possível encontrar uma sala correspondente no servidor Matrix",
     "Custom Server Options": "Opções de personalização do servidor",
     "delete the alias": "apagar o apelido da sala",
-    "Delete the room alias %(alias)s and remove %(name)s from the directory?": "Apagar o apelido %(alias)s da sala e remover %(nome)s da lista pública?",
+    "Delete the room alias %(alias)s and remove %(name)s from the directory?": "Apagar o apelido %(alias)s da sala e remover %(name)s da lista pública?",
     "Direct Chat": "Conversa pessoal",
     "Directory": "Diretório",
     "Dismiss": "Encerrar",
