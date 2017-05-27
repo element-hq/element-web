@@ -18,10 +18,12 @@ my $srcdir = abs_path($1."/../src");
 my $en = read_i18n($i18ndir."/en_EN.json");
 
 my $src_strings = read_src_strings($srcdir);
+my $src = {};
 
 print "Checking strings in src\n";
 foreach my $tuple (@$src_strings) {
     my ($s, $file) = (@$tuple);
+    $src->{$s} = $file;
     if (!$en->{$s}) {
         if ($en->{$s . '.'}) {
             printf ("%50s %24s\t%s\n", $file, "en_EN has fullstop!", $s);
@@ -38,6 +40,29 @@ foreach my $tuple (@$src_strings) {
     }
 }
 
+print "\nChecking en_EN\n";
+my $count = 0;
+foreach my $k (sort keys %$en) {
+    if (!$src->{$k}) {
+        if ($src->{$k. '.'}) {
+            printf ("%50s %24s\t%s\n", $src->{$k. '.'}, "src has fullstop!", $k);
+        }
+        else {
+            $k =~ /^(.*)\.?$/;
+            if ($src->{$1}) {
+                printf ("%50s %24s\t%s\n", $src->{$1}, "src lacks fullstop!", $k);                
+            }
+            else {
+                printf ("%50s %24s\t%s\n", '???', "Not present in src?", $k);
+            }
+        }
+    }
+    else {
+        $count++;
+    }
+}
+printf ("$count/" . (scalar keys %$src) . " strings found in src are present in en_EN\n");
+
 opendir(DIR, $i18ndir) || die $!;
 my @files = readdir(DIR);
 closedir(DIR);
@@ -50,23 +75,23 @@ foreach my $lang (grep { -f "$i18ndir/$_" && !/en_EN\.json/ } @files) {
     foreach my $k (sort keys %$map) {
         if ($en->{$k}) {
             if ($map->{$k} eq $k) {
-                printf ("%10s %24s\t%s\n", $lang, "Untranslated string?", "$k");
+                printf ("%10s %24s\t%s\n", $lang, "Untranslated string?", $k);
             }
             $count++;
         }
         else {
             if ($en->{$k . "."}) {
-                printf ("%10s %24s\t%s\n", $lang, "en_EN has fullstop!", "$k");
+                printf ("%10s %24s\t%s\n", $lang, "en_EN has fullstop!", $k);
                 next;
             }
 
             $k =~ /^(.*)\.?$/;
             if ($en->{$1}) {
-                printf ("%10s %24s\t%s\n", $lang, "en_EN lacks fullstop!", "$k");
+                printf ("%10s %24s\t%s\n", $lang, "en_EN lacks fullstop!", $k);
                 next;
             }
 
-            printf ("%10s %24s\t%s\n", $lang, "Not present in en_EN", "$k");
+            printf ("%10s %24s\t%s\n", $lang, "Not present in en_EN", $k);
         }
     }
 
