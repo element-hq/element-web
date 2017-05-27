@@ -176,6 +176,9 @@ var TimelinePanel = React.createClass({
 
             // should the event tiles have twelve hour times
             isTwelveHour: UserSettingsStore.getSyncedSetting('showTwelveHourTimestamps'),
+
+            // always show timestamps on event tiles?
+            alwaysShowTimestamps: UserSettingsStore.getSyncedSetting('alwaysShowTimestamps'),
         };
     },
 
@@ -1127,6 +1130,7 @@ var TimelinePanel = React.createClass({
                     onUnfillRequest={ this.onMessageListUnfillRequest }
                     opacity={ this.props.opacity }
                     isTwelveHour={ this.state.isTwelveHour }
+                    alwaysShowTimestamps={ this.state.alwaysShowTimestamps }
                     className={ this.props.className }
                     tileShape={ this.props.tileShape }
             />
