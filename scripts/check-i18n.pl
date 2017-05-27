@@ -38,8 +38,6 @@ foreach my $tuple (@$src_strings) {
     }
 }
 
-#exit;
-
 opendir(DIR, $i18ndir) || die $!;
 my @files = readdir(DIR);
 closedir(DIR);
@@ -105,6 +103,9 @@ sub read_src_strings {
     find( sub { push @files, $File::Find::name if (-f $_ && /\.jsx?$/) }, $path );
     foreach my $file (@files) {
         my $src = read_file($file);
+        $src =~ s/'\s*\+\s*'//g;
+        $src =~ s/"\s*\+\s*"//g;
+
         $file =~ s/^.*\/src/src/;
         while ($src =~ /_t\(\s*'(.*?[^\\])'/sg) {
             my $s = $1;

@@ -258,7 +258,7 @@ module.exports = React.createClass({
             const NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
                 title: _t("Please Register"),
-                description: _t("Guests can't set avatars. Please register") + ".",
+                description: _t("Guests can't set avatars. Please register."),
             });
             return;
         }
@@ -283,7 +283,7 @@ module.exports = React.createClass({
             console.error("Failed to set avatar: " + err);
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: _t("Failed to set avatar"),
+                title: _t("Failed to set avatar."),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
         });
@@ -295,7 +295,10 @@ module.exports = React.createClass({
             title: _t("Sign out"),
             description:
                 <div>
-             { _t("For security, logging out will delete any end-to-end encryption keys from this browser. If you want to be able to decrypt your conversation history from future Riot sessions, please export your room keys for safe-keeping.") }.
+             { _t("For security, logging out will delete any end-to-end " +
+                  "encryption keys from this browser. If you want to be able " +
+                  "to decrypt your conversation history from future Riot sessions, " +
+                  "please export your room keys for safe-keeping.") }.
                 </div>,
             button: _t("Sign out"),
             extraButtons: [
@@ -391,7 +394,7 @@ module.exports = React.createClass({
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createDialog(QuestionDialog, {
             title: _t("Remove Contact Information?"),
-            description: _t("Remove ") + threepid.address + "?",
+            description: _t("Remove %(threePid)s?", { threePid : threepid.address }),
             button: _t('Remove'),
             onFinished: (submit) => {
                 if (submit) {
@@ -433,8 +436,8 @@ module.exports = React.createClass({
             this.setState({email_add_pending: false});
             if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
                 const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                let message = _t("Unable to verify email address. ");
-                message += _t("Please check your email and click on the link it contains. Once this is done, click continue.");
+                let message = _t("Unable to verify email address.") + " ";
+                              _t("Please check your email and click on the link it contains. Once this is done, click continue.");
                 Modal.createDialog(QuestionDialog, {
                     title: _t("Verification Pending"),
                     description: message,
@@ -445,7 +448,7 @@ module.exports = React.createClass({
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Unable to verify email address: " + err);
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Unable to verify email address"),
+                    title: _t("Unable to verify email address."),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });
             }
@@ -536,7 +539,7 @@ module.exports = React.createClass({
             <div>
                 <h3>Referral</h3>
                 <div className="mx_UserSettings_section">
-                    {_t("Refer a friend to Riot: ")} <a href={href}>{href}</a>
+                    {_t("Refer a friend to Riot:")} <a href={href}>{href}</a>
                 </div>
             </div>
         );
@@ -734,7 +737,7 @@ module.exports = React.createClass({
                             const NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
                             Modal.createDialog(NeedToRegisterDialog, {
                                 title: _t("Please Register"),
-                                description: _t("Guests can't use labs features. Please register") + ".",
+                                description: _t("Guests can't use labs features. Please register."),
                             });
                             return;
                         }

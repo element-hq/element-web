@@ -762,7 +762,7 @@ module.exports = React.createClass({
         if (this.state.join_rule !== "public" && this.state.guest_access === "forbidden") {
             inviteGuestWarning =
                 <div className="mx_RoomSettings_warning">
-                    { _t('Guests cannot join this room even if explicitly invited') }. <a href="#" onClick={ (e) => {
+                    { _t('Guests cannot join this room even if explicitly invited.') } <a href="#" onClick={ (e) => {
                         this.setState({ join_rule: "invite", guest_access: "can_join" });
                         e.preventDefault();
                     }}>{ _t('Click here to fix') }</a>.
