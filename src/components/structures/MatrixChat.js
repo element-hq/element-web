@@ -906,7 +906,9 @@ module.exports = React.createClass({
     },
 
     onFocus: function(ev) {
-        dis.dispatch({action: 'focus_composer'});
+        if (document.activeElement.textLength === undefined) {
+            dis.dispatch({action: 'focus_composer'});
+        }
     },
 
     showScreen: function(screen, params) {
