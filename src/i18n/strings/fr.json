@@ -219,7 +219,7 @@
     "%(senderName)s changed their profile picture.": "%(senderName)s a changé sa photo de profil.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s a changé le niveau de pouvoir de %(powerLevelDiffText)s.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s a changé le nom du salon en %(roomName)s.",
-    "%(senderDisplayName)s changed the topic to "%(topic)s".": "%(senderDisplayName)s a changé le sujet du salon en "%(topic)s".",
+    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s a changé le sujet du salon en \"%(topic)s\".",
     "Changes to who can read history will only apply to future messages in this room": "Les changements de visibilité de l’historique de ce salon ne s’appliquent qu’aux messages futurs",
     "Changes your display nickname": "Change votre nom d'affichage",
     "Claimed Ed25519 fingerprint key": "Clé empreinte Ed25519 revendiquée",

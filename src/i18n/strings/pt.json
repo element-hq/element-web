@@ -319,7 +319,7 @@
     "%(senderName)s changed their profile picture.": "%(senderName)s alterou sua imagem de perfil.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s alterou o nível de permissões de %(powerLevelDiffText)s.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s alterou o nome da sala para %(roomName)s.",
-    "%(senderDisplayName)s changed the topic to "%(topic)s".": "%(senderDisplayName)s alterou o tópico para "%(topic)s".",
+    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s alterou o tópico para \"%(topic)s\".",
     "click to reveal": "clique para ver",
     "Conference call failed": "Chamada de conferência falhou",
     "Conference calling is in development and may not be reliable": "Chamadas de conferência estão em desenvolvimento e portanto podem não funcionar",

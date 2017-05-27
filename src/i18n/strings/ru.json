@@ -231,7 +231,7 @@
     "%(senderName)s changed their profile picture.": "%(senderName)s измененное ихнее фото профиля.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s уровень мощности изменен на %(powerLevelDiffText)s.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s имя комнаты измененно на %(roomName)s.",
-    "%(senderDisplayName)s changed the topic to "%(topic)s".": "%(senderDisplayName)s измененная тема на %(topic)s.",
+    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s измененная тема на %(topic)s.",
     "Conference call failed": "Конференц-вызов прервался",
     "Conference calling is in development and may not be reliable": "Конференц-вызов находится в процессе и может не быть надежным",
     "Conference calls are not supported in encrypted rooms": "Конференц-вызовы не поддерживаются в зашифрованных комнатах",
