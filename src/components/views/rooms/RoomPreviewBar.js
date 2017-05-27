@@ -86,7 +86,7 @@ module.exports = React.createClass({
     _roomNameElement: function(fallback) {
         fallback = fallback || 'a room';
         const name = this.props.room ? this.props.room.name : (this.props.room_alias || "");
-        return name ? { name } : fallback;
+        return name ? name : fallback;
     },
 
     render: function() {
