@@ -436,7 +436,7 @@ module.exports = React.createClass({
             this.setState({email_add_pending: false});
             if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
                 const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                let message = _t("Unable to verify email address.") + " ";
+                let message = _t("Unable to verify email address.") + " " +
                               _t("Please check your email and click on the link it contains. Once this is done, click continue.");
                 Modal.createDialog(QuestionDialog, {
                     title: _t("Verification Pending"),
