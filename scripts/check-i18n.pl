@@ -20,18 +20,19 @@ my $en = read_i18n($i18ndir."/en_EN.json");
 my $src_strings = read_src_strings($srcdir);
 
 print "Checking strings in src\n";
-foreach my $s (@$src_strings) {
+foreach my $tuple (@$src_strings) {
+    my ($s, $file) = (@$tuple);
     if (!$en->{$s}) {
         if ($en->{$s . '.'}) {
-            printf ("%10s %24s\t%s\n", "src", "en_EN has fullstop!", "$s");
+            printf ("%50s %24s\t%s\n", $file, "en_EN has fullstop!", $s);
         }
         else {
             $s =~ /^(.*)\.?$/;
             if ($en->{$1}) {
-                printf ("%10s %24s\t%s\n", "src", "en_EN lacks fullstop!", "$s");
+                printf ("%50s %24s\t%s\n", $file, "en_EN lacks fullstop!", $s);
             }
             else {
-                printf ("%10s %24s\t%s\n", "src", "Translation missing!", "$s");
+                printf ("%50s %24s\t%s\n", $file, "Translation missing!", $s);
             }
         }
     }
@@ -101,13 +102,14 @@ sub read_src_strings {
     find( sub { push @files, $File::Find::name if (-f $_ && /\.jsx?$/) }, $path );
     foreach my $file (@files) {
         my $src = read_file($file);
+        $file =~ s/^.*\/src/src/;
         while ($src =~ /_t\(\s*'(.*?[^\\])'/sg) {
             my $s = $1;
             $s =~ s/\\'/'/g;
-            push @$strings, $s;
+            push @$strings, [$s, $file];
         }
         while ($src =~ /_t\(\s*"(.*?[^\\])"/sg) {
-            push @$strings, $1;
+            push @$strings, [$1, $file];
         }
     }
 
