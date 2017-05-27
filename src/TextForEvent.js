@@ -217,14 +217,21 @@ function textForPowerEvent(event) {
         const to = event.getContent().users[userId];
         if (to !== from) {
             diff.push(
-            	_t('%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s', {userId: userId, fromPowerLevel: Roles.textualPowerLevel(from, userDefault), toPowerLevel: Roles.textualPowerLevel(to, userDefault)})
+            	_t('%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s', {
+                    userId: userId,
+                    fromPowerLevel: Roles.textualPowerLevel(from, userDefault),
+                    toPowerLevel: Roles.textualPowerLevel(to, userDefault)
+                })
             );
         }
     });
     if (!diff.length) {
         return '';
     }
-    return _t('%(senderName)s changed the power level of %(powerLevelDiffText)s.', {senderName: senderName, powerLevelDiffText: diff.join(", ")});
+    return _t('%(senderName)s changed the power level of %(powerLevelDiffText)s.', {
+        senderName: senderName,
+        powerLevelDiffText: diff.join(", ")
+    });
 }
 
 var handlers = {
