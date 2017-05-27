@@ -17,7 +17,7 @@
     "Directory": "Diretório",
     "Dismiss": "Encerrar",
     "Download this file": "Baixar este arquivo",
-    "Drop here %(toAction)s": "Arraste aqui para %(verb)s",
+    "Drop here %(toAction)s": "Arraste aqui para %(toAction)s",
     "Enable audible notifications in web client": "Ativar notificações de áudio no cliente web",
     "Enable desktop notifications": "Ativar notificações no desktop",
     "Enable email notifications": "Ativar notificações por email",
@@ -118,6 +118,6 @@
     "Yesterday": "Ontem",
     "All notifications are currently disabled for all targets.": "Todas as notificações estão atualmente desabilitadas para todos os destinatários.",
     "#example": "#exemplo",
-    "Failed to remove tag %(tagName)s from room": "Não foi possível remover a marcação %(prevTag)s desta sala",
+    "Failed to remove tag %(tagName)s from room": "Não foi possível remover a marcação %(tagName)s desta sala",
     "Welcome page": "Página de boas vindas"
 }

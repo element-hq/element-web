@@ -18,7 +18,7 @@
     "Directory": "Katalog",
     "Dismiss": "Avvisa",
     "Download this file": "Ladda ner filen",
-    "Drop here %(toAction)s": "Dra hit för att %(verb)s",
+    "Drop here %(toAction)s": "Dra hit för att %(toAction)s",
     "Enable audible notifications in web client": "Sätt på högljudda aviseringar i webbklienten",
     "Enable desktop notifications": "Sätt på skrivbordsaviseringar",
     "Enable email notifications": "Sätt på epostaviseringar",
@@ -35,6 +35,6 @@
     "Failed to get protocol list from Home Server": "Det gick inte att hämta protokollistan från hemservern",
     "Failed to get public room list": "Det gick inte att hämta listan över offentliga rum",
     "Failed to join the room": "Det gick inte att ansluta till rummet",
-    "Failed to remove tag %(tagName)s from room": "Det gick inte att radera taggen %(prevTag)s från rummet",
+    "Failed to remove tag %(tagName)s from room": "Det gick inte att radera taggen %(tagName)s från rummet",
     "Failed to set direct chat tag": "Det gick inte att markera rummet som direkt chatt"
 }
