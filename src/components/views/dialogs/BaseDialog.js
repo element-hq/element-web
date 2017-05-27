@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 
+import Analytics from '../../../Analytics';
 import * as KeyCode from '../../../KeyCode';
 import AccessibleButton from '../elements/AccessibleButton';
 import sdk from '../../../index';
@@ -66,8 +67,9 @@ export default React.createClass({
     },
 
     render: function() {
+        Analytics.trackEvent('Dialog', 'mount', this.props.title);
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
-                
+
         return (
             <div onKeyDown={this._onKeyDown} className={this.props.className}>
                 <AccessibleButton onClick={this._onCancelClick}

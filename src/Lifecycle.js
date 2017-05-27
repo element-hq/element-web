@@ -19,6 +19,7 @@ import q from 'q';
 import Matrix from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
+import Analytics from './Analytics';
 import Notifier from './Notifier';
 import UserActivity from './UserActivity';
 import Presence from './Presence';
@@ -405,6 +406,7 @@ export function onLoggedOut() {
 }
 
 function _clearLocalStorage() {
+    Analytics.logout();
     if (!window.localStorage) {
         return;
     }
