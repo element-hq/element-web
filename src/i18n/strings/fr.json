@@ -116,5 +116,9 @@
     "World readable": "Visible par tout le monde",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Vous les avez probablement configurées dans un autre client que Riot. Vous ne pouvez pas les configurer dans Riot mais elles s'appliquent quand même",
     "Guests can join": "Ouvert aux invités",
-    " to room": " au salon"
+    " to room": " au salon",
+    "Advanced notification settings": "Paramètres de notifications avancés",
+    "An error occurred whilst saving your email notification preferences.": "Une erreur est survenue lors de la sauvegarde de vos préférences de notifications mail.",
+    "customServer_text": "Vous pouvez utiliser l'option de serveur personnalisé pour vous connectez à d'autres serveurs Matrix, en spécifiant une adresse différente pour Home serveur.<br/>Cela permet d'utiliser Riot avec un compte existant sur un Home serveur différent.<br/><br/>Vous pouvez aussi indiquer un serveur d'identité personnel mais vous ne pourrez plus inviter des utilisateurs par email, ou être invité par email.",
+    "Notifications on the following keywords follow rules which can’t be displayed here:": "Les notifications pour les mots clés suivant répondent à des critères qui ne peuvent pas être affichés ici :"
 }
