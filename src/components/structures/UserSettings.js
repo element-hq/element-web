@@ -545,11 +545,11 @@ module.exports = React.createClass({
         );
     },
 
-    onLanguageChange: function(l) {
-        if(this.state.language !== l) {
-            UserSettingsStore.setLocalSetting('language', l);
+    onLanguageChange: function(newLang) {
+        if(this.state.language !== newLang) {
+            UserSettingsStore.setLocalSetting('language', newLang);
             this.setState({
-                language: l,
+                language: newLang,
             });
             PlatformPeg.get().reload();
         }
