@@ -407,6 +407,7 @@
   "Sender device information": "Sender device information",
   "Send Invites": "Send Invites",
   "Send Reset Email": "Send Reset Email",
+  "sent an image": "sent an image",
   "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s sent an image.",
   "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.",
   "sent a video": "sent a video",
