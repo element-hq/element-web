@@ -100,7 +100,7 @@ module.exports = React.createClass({
             if (this.refs.email.value == '') {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 Modal.createDialog(QuestionDialog, {
-                    title: "Warning",
+                    title: "Warning!",
                     description:
                         <div>
                             If you don't specify an email address, you won't be able to reset your password.<br/>
@@ -270,7 +270,8 @@ module.exports = React.createClass({
 
     _onPhoneCountryChange(newVal) {
         this.setState({
-            phoneCountry: newVal,
+            phoneCountry: newVal.iso2,
+            phonePrefix: newVal.prefix,
         });
     },
 
@@ -313,14 +314,19 @@ module.exports = React.createClass({
         const phoneSection = (
             <div className="mx_Login_phoneSection">
                 <CountryDropdown ref="phone_country" onOptionChange={this._onPhoneCountryChange}
-                    className="mx_Login_phoneCountry"
+                    className="mx_Login_phoneCountry mx_Login_field_prefix"
                     value={this.state.phoneCountry}
+                    isSmall={true}
+                    showPrefix={true}
                 />
                 <input type="text" ref="phoneNumber"
                     placeholder="Mobile phone number (optional)"
                     defaultValue={this.props.defaultPhoneNumber}
                     className={this._classForField(
-                        FIELD_PHONE_NUMBER, 'mx_Login_phoneNumberField', 'mx_Login_field'
+                        FIELD_PHONE_NUMBER,
+                        'mx_Login_phoneNumberField',
+                        'mx_Login_field',
+                        'mx_Login_field_has_prefix'
                     )}
                     onBlur={function() {self.validateField(FIELD_PHONE_NUMBER);}}
                     value={self.state.phoneNumber}

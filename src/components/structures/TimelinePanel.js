@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,12 +23,14 @@ var Matrix = require("matrix-js-sdk");
 var EventTimeline = Matrix.EventTimeline;
 
 var sdk = require('../../index');
+import { _t } from '../../languageHandler';
 var MatrixClientPeg = require("../../MatrixClientPeg");
 var dis = require("../../dispatcher");
 var ObjectUtils = require('../../ObjectUtils');
 var Modal = require("../../Modal");
 var UserActivity = require("../../UserActivity");
 var KeyCode = require('../../KeyCode');
+import UserSettingsStore from '../../UserSettingsStore';
 
 var PAGINATE_SIZE = 20;
 var INITIAL_SIZE = 20;
@@ -121,7 +124,7 @@ var TimelinePanel = React.createClass({
         let initialReadMarker = null;
         if (this.props.manageReadMarkers) {
             const readmarker = this.props.timelineSet.room.getAccountData('m.fully_read');
-            if (readmarker){
+            if (readmarker) {
                 initialReadMarker = readmarker.getContent().event_id;
             } else {
                 initialReadMarker = this._getCurrentReadReceipt();
@@ -167,14 +170,23 @@ var TimelinePanel = React.createClass({
 
             backPaginating: false,
             forwardPaginating: false,
+
+            // cache of matrixClient.getSyncState() (but from the 'sync' event)
+            clientSyncState: MatrixClientPeg.get().getSyncState(),
+
+            // should the event tiles have twelve hour times
+            isTwelveHour: UserSettingsStore.getSyncedSetting('showTwelveHourTimestamps'),
+
+            // always show timestamps on event tiles?
+            alwaysShowTimestamps: UserSettingsStore.getSyncedSetting('alwaysShowTimestamps'),
         };
     },
 
     componentWillMount: function() {
         debuglog("TimelinePanel: mounting");
 
-        this.last_rr_sent_event_id = undefined;
-        this.last_rm_sent_event_id = undefined;
+        this.lastRRSentEventId = undefined;
+        this.lastRMSentEventId = undefined;
 
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
@@ -183,6 +195,7 @@ var TimelinePanel = React.createClass({
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("Room.localEchoUpdated", this.onLocalEchoUpdated);
         MatrixClientPeg.get().on("Room.accountData", this.onAccountData);
+        MatrixClientPeg.get().on("sync", this.onSync);
 
         this._initTimeline(this.props);
     },
@@ -251,6 +264,7 @@ var TimelinePanel = React.createClass({
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
             client.removeListener("Room.accountData", this.onAccountData);
+            client.removeListener("sync", this.onSync);
         }
     },
 
@@ -487,17 +501,24 @@ var TimelinePanel = React.createClass({
         }, this.props.onReadMarkerUpdated);
     },
 
+    onSync: function(state, prevState, data) {
+        this.setState({clientSyncState: state});
+    },
+
     sendReadReceipt: function() {
         if (!this.refs.messagePanel) return;
         if (!this.props.manageReadReceipts) return;
         // This happens on user_activity_end which is delayed, and it's
         // very possible have logged out within that timeframe, so check
         // we still have a client.
-        if (!MatrixClientPeg.get()) return;
+        const cli = MatrixClientPeg.get();
+        // if no client or client is guest don't send RR or RM
+        if (!cli || cli.isGuest()) return;
 
-        var currentReadUpToEventId = this._getCurrentReadReceipt(true);
-        var currentReadUpToEventIndex = this._indexForEventId(currentReadUpToEventId);
+        let shouldSendRR = true;
 
+        const currentRREventId = this._getCurrentReadReceipt(true);
+        const currentRREventIndex = this._indexForEventId(currentRREventId);
         // We want to avoid sending out read receipts when we are looking at
         // events in the past which are before the latest RR.
         //
@@ -511,43 +532,60 @@ var TimelinePanel = React.createClass({
         // RRs) - but that is a bit of a niche case. It will sort itself out when
         // the user eventually hits the live timeline.
         //
-        if (currentReadUpToEventId && currentReadUpToEventIndex === null &&
+        if (currentRREventId && currentRREventIndex === null &&
                 this._timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
-            return;
+            shouldSendRR = false;
         }
 
-        var lastReadEventIndex = this._getLastDisplayedEventIndex({
-            ignoreOwn: true
+        const lastReadEventIndex = this._getLastDisplayedEventIndex({
+            ignoreOwn: true,
         });
-        if (lastReadEventIndex === null) return;
+        if (lastReadEventIndex === null) {
+            shouldSendRR = false;
+        }
+        let lastReadEvent = this.state.events[lastReadEventIndex];
+        shouldSendRR = shouldSendRR &&
+            // Only send a RR if the last read event is ahead in the timeline relative to
+            // the current RR event.
+            lastReadEventIndex > currentRREventIndex &&
+            // Only send a RR if the last RR set != the one we would send
+            this.lastRRSentEventId != lastReadEvent.getId();
 
-        var lastReadEvent = this.state.events[lastReadEventIndex];
+        // Only send a RM if the last RM sent != the one we would send
+        const shouldSendRM =
+            this.lastRMSentEventId != this.state.readMarkerEventId;
 
         // we also remember the last read receipt we sent to avoid spamming the
         // same one at the server repeatedly
-        if ((lastReadEventIndex > currentReadUpToEventIndex &&
-            this.last_rr_sent_event_id != lastReadEvent.getId()) ||
-                this.last_rm_sent_event_id != this.state.readMarkerEventId) {
+        if (shouldSendRR || shouldSendRM) {
+            if (shouldSendRR) {
+                this.lastRRSentEventId = lastReadEvent.getId();
+            } else {
+                lastReadEvent = null;
+            }
+            this.lastRMSentEventId = this.state.readMarkerEventId;
 
-            this.last_rr_sent_event_id = lastReadEvent.getId();
-            this.last_rm_sent_event_id = this.state.readMarkerEventId;
-
+            debuglog('TimelinePanel: Sending Read Markers for ',
+                this.props.timelineSet.room.roomId,
+                'rm', this.state.readMarkerEventId,
+                lastReadEvent ? 'rr ' + lastReadEvent.getId() : '',
+            );
             MatrixClientPeg.get().setRoomReadMarkers(
                 this.props.timelineSet.room.roomId,
                 this.state.readMarkerEventId,
-                lastReadEvent
+                lastReadEvent, // Could be null, in which case no RR is sent
             ).catch((e) => {
                 // /read_markers API is not implemented on this HS, fallback to just RR
-                if (e.errcode === 'M_UNRECOGNIZED') {
+                if (e.errcode === 'M_UNRECOGNIZED' && lastReadEvent) {
                     return MatrixClientPeg.get().sendReadReceipt(
-                        lastReadEvent
+                        lastReadEvent,
                     ).catch(() => {
-                        this.last_rr_sent_event_id = undefined;
+                        this.lastRRSentEventId = undefined;
                     });
                 }
                 // it failed, so allow retries next time the user is active
-                this.last_rr_sent_event_id = undefined;
-                this.last_rm_sent_event_id = undefined;
+                this.lastRRSentEventId = undefined;
+                this.lastRMSentEventId = undefined;
             });
 
             // do a quick-reset of our unreadNotificationCount to avoid having
@@ -560,7 +598,6 @@ var TimelinePanel = React.createClass({
                 this.props.timelineSet.room.setUnreadNotificationCount('highlight', 0);
                 dis.dispatch({
                     action: 'on_room_read',
-                    room: this.props.timelineSet.room,
                 });
             }
         }
@@ -756,6 +793,19 @@ var TimelinePanel = React.createClass({
         return null;
     },
 
+    canJumpToReadMarker: function() {
+        // 1. Do not show jump bar if neither the RM nor the RR are set.
+        // 2. Only show jump bar if RR !== RM. If they are the same, there are only fully
+        // read messages and unread messages. We already have a badge count and the bottom
+        // bar to jump to "live" when we have unread messages.
+        // 3. We want to show the bar if the read-marker is off the top of the screen.
+        // 4. Also, if pos === null, the event might not be paginated - show the unread bar
+        const pos = this.getReadMarkerPosition();
+        return this.state.readMarkerEventId !== null && // 1.
+            this.state.readMarkerEventId !== this._getCurrentReadReceipt() &&  // 2.
+            (pos < 0 || pos === null); // 3., 4.
+    },
+
     /**
      * called by the parent component when PageUp/Down/etc is pressed.
      *
@@ -865,14 +915,11 @@ var TimelinePanel = React.createClass({
                     });
                 };
             }
-            var message = "Tried to load a specific point in this room's timeline, but ";
-            if (error.errcode == 'M_FORBIDDEN') {
-                message += "you do not have permission to view the message in question.";
-            } else {
-                message += "was unable to find it.";
-            }
+            var message = (error.errcode == 'M_FORBIDDEN') 
+            	? _t("Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question") + "."
+                : _t("Tried to load a specific point in this room's timeline, but was unable to find it") + ".";
             Modal.createDialog(ErrorDialog, {
-                title: "Failed to load timeline position",
+                title: _t("Failed to load timeline position"),
                 description: message,
                 onFinished: onFinished,
             });
@@ -1058,11 +1105,17 @@ var TimelinePanel = React.createClass({
         // events when viewing historical messages, we get stuck in a loop
         // of paginating our way through the entire history of the room.
         var stickyBottom = !this._timelineWindow.canPaginate(EventTimeline.FORWARDS);
+
+        // If the state is PREPARED, we're still waiting for the js-sdk to sync with
+        // the HS and fetch the latest events, so we are effectively forward paginating.
+        const forwardPaginating = (
+            this.state.forwardPaginating || this.state.clientSyncState == 'PREPARED'
+        );
         return (
             <MessagePanel ref="messagePanel"
                     hidden={ this.props.hidden }
                     backPaginating={ this.state.backPaginating }
-                    forwardPaginating={ this.state.forwardPaginating }
+                    forwardPaginating={ forwardPaginating }
                     events={ this.state.events }
                     highlightedEventId={ this.props.highlightedEventId }
                     readMarkerEventId={ this.state.readMarkerEventId }
@@ -1076,6 +1129,8 @@ var TimelinePanel = React.createClass({
                     onFillRequest={ this.onMessageListFillRequest }
                     onUnfillRequest={ this.onMessageListUnfillRequest }
                     opacity={ this.props.opacity }
+                    isTwelveHour={ this.state.isTwelveHour }
+                    alwaysShowTimestamps={ this.state.alwaysShowTimestamps }
                     className={ this.props.className }
                     tileShape={ this.props.tileShape }
             />

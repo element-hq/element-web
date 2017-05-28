@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,38 +16,89 @@ limitations under the License.
 */
 
 'use strict';
+import { _t } from './languageHandler';
 
-var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function getDaysArray() {
+    return [
+        _t('Sun'),
+        _t('Mon'),
+        _t('Tue'),
+        _t('Wed'),
+        _t('Thu'),
+        _t('Fri'),
+        _t('Sat'),
+    ];
+}
+
+function getMonthsArray() {
+    return [
+        _t('Jan'),
+        _t('Feb'),
+        _t('Mar'),
+        _t('Apr'),
+        _t('May'),
+        _t('Jun'),
+        _t('Jul'),
+        _t('Aug'),
+        _t('Sep'),
+        _t('Oct'),
+        _t('Nov'),
+        _t('Dec'),
+    ];
+}
+
+function pad(n) {
+    return (n < 10 ? '0' : '') + n;
+}
+
+function twelveHourTime(date) {
+    let hours = date.getHours() % 12;
+    const minutes = pad(date.getMinutes());
+    const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+    hours = pad(hours ? hours : 12);
+    return `${hours}:${minutes} ${ampm}`;
+}
 
 module.exports = {
     formatDate: function(date) {
-        // date.toLocaleTimeString is completely system dependent.
-        // just go 24h for now
-        function pad(n) {
-            return (n < 10 ? '0' : '') + n;
-        }
-
         var now = new Date();
+        const days = getDaysArray();
+        const months = getMonthsArray();
         if (date.toDateString() === now.toDateString()) {
-            return pad(date.getHours()) + ':' + pad(date.getMinutes());
+            return this.formatTime(date);
         }
         else if (now.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
-            return days[date.getDay()] + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+            // TODO: use standard date localize function provided in counterpart
+            return _t('%(weekDayName)s %(time)s', {weekDayName: days[date.getDay()], time: this.formatTime(date)});
         }
-        else /* if (now.getFullYear() === date.getFullYear()) */ {
-            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
+        else if (now.getFullYear() === date.getFullYear()) {
+            // TODO: use standard date localize function provided in counterpart
+            return _t('%(weekDayName)s, %(monthName)s %(day)s %(time)s', {
+                weekDayName: days[date.getDay()],
+                monthName: months[date.getMonth()],
+                day: date.getDate(),
+                time: this.formatTime(date),
+            });
         }
-        /*
-        else {
-            return days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate() + " " + date.getFullYear() + " " + pad(date.getHours()) + ':' + pad(date.getMinutes());
-        }
-        */
+        return this.formatFullDate(date);
     },
 
-    formatTime: function(date) {
-        //return pad(date.getHours()) + ':' + pad(date.getMinutes());
-        return ('00' + date.getHours()).slice(-2) + ':' + ('00' + date.getMinutes()).slice(-2);
-    }
-};
+    formatFullDate: function(date) {
+        const days = getDaysArray();
+        const months = getMonthsArray();
+        return _t('%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s', {
+            weekDayName: days[date.getDay()],
+            monthName: months[date.getMonth()],
+            day: date.getDate(),
+            fullYear: date.getFullYear(),
+            time: this.formatTime(date),
+        });
+    },
 
+    formatTime: function(date, showTwelveHour=false) {
+        if (showTwelveHour) {
+          return twelveHourTime(date);
+        }
+        return pad(date.getHours()) + ':' + pad(date.getMinutes());
+    },
+};

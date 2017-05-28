@@ -22,7 +22,7 @@ let isDialogOpen = false;
 
 const onAction = function(payload) {
     if (payload.action === 'unknown_device_error' && !isDialogOpen) {
-        var UnknownDeviceDialog = sdk.getComponent("dialogs.UnknownDeviceDialog");
+        const UnknownDeviceDialog = sdk.getComponent('dialogs.UnknownDeviceDialog');
         isDialogOpen = true;
         Modal.createDialog(UnknownDeviceDialog, {
             devices: payload.err.devices,
@@ -33,17 +33,17 @@ const onAction = function(payload) {
                 // https://github.com/vector-im/riot-web/issues/3148
                 console.log('UnknownDeviceDialog closed with '+r);
             },
-        }, "mx_Dialog_unknownDevice");
+        }, 'mx_Dialog_unknownDevice');
     }
-}
+};
 
 let ref = null;
 
-export function startListening () {
+export function startListening() {
     ref = dis.register(onAction);
 }
 
-export function stopListening () {
+export function stopListening() {
     if (ref) {
         dis.unregister(ref);
         ref = null;

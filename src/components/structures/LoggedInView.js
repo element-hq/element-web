@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -106,18 +107,6 @@ export default React.createClass({
         var handled = false;
 
         switch (ev.keyCode) {
-            case KeyCode.ESCAPE:
-
-                // Implemented this way so possible handling for other pages is neater
-                switch (this.props.page_type) {
-                    case PageTypes.UserSettings:
-                        this.props.onUserSettingsClose();
-                        handled = true;
-                        break;
-                }
-
-                break;
-
             case KeyCode.UP:
             case KeyCode.DOWN:
                 if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey) {
@@ -162,19 +151,19 @@ export default React.createClass({
     },
 
     render: function() {
-        var LeftPanel = sdk.getComponent('structures.LeftPanel');
-        var RightPanel = sdk.getComponent('structures.RightPanel');
-        var RoomView = sdk.getComponent('structures.RoomView');
-        var UserSettings = sdk.getComponent('structures.UserSettings');
-        var CreateRoom = sdk.getComponent('structures.CreateRoom');
-        var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
-        var HomePage = sdk.getComponent('structures.HomePage');
-        var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
-        var GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
-        var NewVersionBar = sdk.getComponent('globals.NewVersionBar');
+        const LeftPanel = sdk.getComponent('structures.LeftPanel');
+        const RightPanel = sdk.getComponent('structures.RightPanel');
+        const RoomView = sdk.getComponent('structures.RoomView');
+        const UserSettings = sdk.getComponent('structures.UserSettings');
+        const CreateRoom = sdk.getComponent('structures.CreateRoom');
+        const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
+        const HomePage = sdk.getComponent('structures.HomePage');
+        const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
+        const GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
+        const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
 
-        var page_element;
-        var right_panel = '';
+        let page_element;
+        let right_panel = '';
 
         switch (this.props.page_type) {
             case PageTypes.RoomView:
@@ -194,7 +183,7 @@ export default React.createClass({
                         ConferenceHandler={this.props.ConferenceHandler}
                         scrollStateMap={this._scrollStateMap}
                     />;
-                if (!this.props.collapse_rhs) right_panel = <RightPanel roomId={this.props.currentRoomId} opacity={this.props.sideOpacity} />;
+                if (!this.props.collapse_rhs) right_panel = <RightPanel roomId={this.props.currentRoomId} opacity={this.props.rightOpacity} />;
                 break;
 
             case PageTypes.UserSettings:
@@ -206,7 +195,7 @@ export default React.createClass({
                     referralBaseUrl={this.props.config.referralBaseUrl}
                     teamToken={this.props.teamToken}
                 />;
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>;
+                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.rightOpacity}/>;
                 break;
 
             case PageTypes.CreateRoom:
@@ -214,16 +203,14 @@ export default React.createClass({
                     onRoomCreated={this.props.onRoomCreated}
                     collapsedRhs={this.props.collapse_rhs}
                 />;
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>;
+                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.rightOpacity}/>;
                 break;
 
             case PageTypes.RoomDirectory:
                 page_element = <RoomDirectory
                     ref="roomDirectory"
-                    collapsedRhs={this.props.collapse_rhs}
                     config={this.props.config.roomDirectory}
                 />;
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>;
                 break;
 
             case PageTypes.HomePage:
@@ -232,12 +219,12 @@ export default React.createClass({
                     teamServerUrl={this.props.config.teamServerConfig.teamServerURL}
                     teamToken={this.props.teamToken}
                 />
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>
+                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.rightOpacity}/>
                 break;
 
             case PageTypes.UserView:
                 page_element = null; // deliberately null for now
-                right_panel = <RightPanel userId={this.props.viewUserId} opacity={this.props.sideOpacity} />;
+                right_panel = <RightPanel userId={this.props.viewUserId} opacity={this.props.rightOpacity} />;
                 break;
         }
 
@@ -266,7 +253,7 @@ export default React.createClass({
                     <LeftPanel
                         selectedRoom={this.props.currentRoomId}
                         collapsed={this.props.collapse_lhs || false}
-                        opacity={this.props.sideOpacity}
+                        opacity={this.props.leftOpacity}
                         teamToken={this.props.teamToken}
                     />
                     <main className='mx_MatrixChat_middlePanel'>

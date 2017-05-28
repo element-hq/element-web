@@ -19,6 +19,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 import {field_input_incorrect} from '../../../UiEffects';
 
 
@@ -90,8 +91,11 @@ class PasswordLogin extends React.Component {
     }
 
     onPhoneCountryChanged(country) {
-        this.setState({phoneCountry: country});
-        this.props.onPhoneCountryChanged(country);
+        this.setState({
+            phoneCountry: country.iso2,
+            phonePrefix: country.prefix,
+        });
+        this.props.onPhoneCountryChanged(country.iso2);
     }
 
     onPhoneNumberChanged(ev) {
@@ -118,42 +122,29 @@ class PasswordLogin extends React.Component {
                     autoFocus
                 />;
             case PasswordLogin.LOGIN_FIELD_MXID:
-                const mxidInputClasses = classNames({
-                    "mx_Login_field": true,
-                    "mx_Login_username": true,
-                    "mx_Login_field_has_suffix": Boolean(this.props.hsDomain),
-                });
-                let suffix = null;
-                if (this.props.hsDomain) {
-                    suffix = <div className="mx_Login_username_suffix">
-                        :{this.props.hsDomain}
-                    </div>;
-                }
-                return <div className="mx_Login_username_group">
-                    <div className="mx_Login_username_prefix">@</div>
-                    <input
-                        className={mxidInputClasses}
-                        key="username_input"
-                        type="text"
-                        name="username" // make it a little easier for browser's remember-password
-                        onChange={this.onUsernameChanged}
-                        placeholder="username"
-                        value={this.state.username}
-                        autoFocus
-                    />
-                    {suffix}
-                </div>;
+                return <input
+                    className="mx_Login_field mx_Login_username"
+                    key="username_input"
+                    type="text"
+                    name="username" // make it a little easier for browser's remember-password
+                    onChange={this.onUsernameChanged}
+                    placeholder={_t('User name')}
+                    value={this.state.username}
+                    autoFocus
+                />;
             case PasswordLogin.LOGIN_FIELD_PHONE:
                 const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
                 return <div className="mx_Login_phoneSection">
                     <CountryDropdown
-                        className="mx_Login_phoneCountry"
+                        className="mx_Login_phoneCountry mx_Login_field_prefix"
                         ref="phone_country"
                         onOptionChange={this.onPhoneCountryChanged}
                         value={this.state.phoneCountry}
+                        isSmall={true}
+                        showPrefix={true}
                     />
                     <input
-                        className="mx_Login_phoneNumberField mx_Login_field"
+                        className="mx_Login_phoneNumberField mx_Login_field mx_Login_field_has_prefix"
                         ref="phoneNumber"
                         key="phone_input"
                         type="text"
@@ -173,7 +164,7 @@ class PasswordLogin extends React.Component {
         if (this.props.onForgotPasswordClick) {
             forgotPasswordJsx = (
                 <a className="mx_Login_forgot" onClick={this.props.onForgotPasswordClick} href="#">
-                    Forgot your password?
+                    { _t('Forgot your password?') }
                 </a>
             );
         }
@@ -191,24 +182,24 @@ class PasswordLogin extends React.Component {
             <div>
                 <form onSubmit={this.onSubmitForm}>
                 <div className="mx_Login_type_container">
-                    <label className="mx_Login_type_label">I want to sign in with my</label>
+                    <label className="mx_Login_type_label">{ _t('I want to sign in with') }</label>
                     <Dropdown
                         className="mx_Login_type_dropdown"
                         value={this.state.loginType}
                         onOptionChange={this.onLoginTypeChange}>
-                            <span key={PasswordLogin.LOGIN_FIELD_MXID}>Matrix ID</span>
-                            <span key={PasswordLogin.LOGIN_FIELD_EMAIL}>Email Address</span>
-                            <span key={PasswordLogin.LOGIN_FIELD_PHONE}>Phone</span>
+                            <span key={PasswordLogin.LOGIN_FIELD_MXID}>{ _t('my Matrix ID') }</span>
+                            <span key={PasswordLogin.LOGIN_FIELD_EMAIL}>{ _t('Email address') }</span>
+                            <span key={PasswordLogin.LOGIN_FIELD_PHONE}>{ _t('Phone') }</span>
                     </Dropdown>
                 </div>
                 {loginField}
                 <input className={pwFieldClass} ref={(e) => {this._passwordField = e;}} type="password"
                     name="password"
                     value={this.state.password} onChange={this.onPasswordChanged}
-                    placeholder="Password" />
+                    placeholder={ _t('Password') } />
                 <br />
                 {forgotPasswordJsx}
-                <input className="mx_Login_submit" type="submit" value="Sign in" />
+                <input className="mx_Login_submit" type="submit" value={ _t('Sign in') } />
                 </form>
             </div>
         );
@@ -231,7 +222,6 @@ PasswordLogin.propTypes = {
     onPhoneNumberChanged: React.PropTypes.func,
     onPasswordChanged: React.PropTypes.func,
     loginIncorrect: React.PropTypes.bool,
-    hsDomain: React.PropTypes.string,
 };
 
 module.exports = PasswordLogin;

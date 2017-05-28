@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 var React = require('react');
+import { _t } from '../../../languageHandler';
 var classNames = require('classnames');
 var Matrix = require("matrix-js-sdk");
 var q = require('q');
@@ -207,7 +208,9 @@ module.exports = React.createClass({
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         var EntityTile = sdk.getComponent("rooms.EntityTile");
         var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
-        var text = "and " + overflowCount + " other" + (overflowCount > 1 ? "s" : "") + "...";
+        var text = (overflowCount > 1)
+        	? _t("and %(overflowCount)s others...", { overflowCount: overflowCount })
+        	: _t("and one other...");
         return (
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
                 <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
@@ -363,8 +366,8 @@ module.exports = React.createClass({
         var inputBox = (
             <form autoComplete="off">
                 <input className="mx_MemberList_query" id="mx_MemberList_query" type="text"
-                    onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                    placeholder="Filter room members" />
+                        onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
+                        placeholder={ _t('Filter room members') } />
             </form>
         );
 

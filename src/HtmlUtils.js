@@ -111,8 +111,7 @@ var sanitizeHtmlParams = {
     allowedTags: [
         'font', // custom to matrix for IRC-style font coloring
         'del', // for markdown
-        // deliberately no h1/h2 to stop people shouting.
-        'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
         'nl', 'li', 'b', 'i', 'u', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
         'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'span',
     ],
@@ -149,17 +148,18 @@ var sanitizeHtmlParams = {
                     attribs.href = m[1];
                     delete attribs.target;
                 }
-
-                m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
-                if (m) {
-                    var entity = m[1];
-                    if (entity[0] === '@') {
-                        attribs.href = '#/user/' + entity;
+                else {
+                    m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
+                    if (m) {
+                        var entity = m[1];
+                        if (entity[0] === '@') {
+                            attribs.href = '#/user/' + entity;
+                        }
+                        else if (entity[0] === '#' || entity[0] === '!') {
+                            attribs.href = '#/room/' + entity;
+                        }
+                        delete attribs.target;
                     }
-                    else if (entity[0] === '#' || entity[0] === '!') {
-                        attribs.href = '#/room/' + entity;
-                    }
-                    delete attribs.target;
                 }
             }
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/

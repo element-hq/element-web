@@ -32,7 +32,7 @@ class UserActivity {
     start() {
         document.onmousedown = this._onUserActivity.bind(this);
         document.onmousemove = this._onUserActivity.bind(this);
-        document.onkeypress = this._onUserActivity.bind(this);
+        document.onkeydown = this._onUserActivity.bind(this);
         // can't use document.scroll here because that's only the document
         // itself being scrolled. Need to use addEventListener's useCapture.
         // also this needs to be the wheel event, not scroll, as scroll is
@@ -50,7 +50,7 @@ class UserActivity {
     stop() {
         document.onmousedown = undefined;
         document.onmousemove = undefined;
-        document.onkeypress = undefined;
+        document.onkeydown = undefined;
         window.removeEventListener('wheel', this._onUserActivity.bind(this),
                                    { passive: true, capture: true });
     }
