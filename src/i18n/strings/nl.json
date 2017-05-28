@@ -2,5 +2,6 @@
     "Add an email address above to configure email notifications": "Voeg een email adres toe om email notificaties te ontvangen",
     "Advanced notification settings": "Geavanceerde notificatie instellingen",
     "All messages": "Alle berichten",
-    "All messages (loud)": "Alle berichten (luid)"
+    "All messages (loud)": "Alle berichten (luid)",
+    "All notifications are currently disabled for all targets.": "Alle notificaties zijn op het moment uitgeschakeld voor alle doelen."
 }
