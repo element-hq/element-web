@@ -15,7 +15,6 @@
  */
 
 import MatrixClientPeg from './MatrixClientPeg';
-// import dis from './dispatcher';
 
 function redact(str) {
     return str.replace(/#\/(room|user)\/(.+)/, "#/$1/<redacted>");
@@ -31,13 +30,7 @@ class Analytics {
 
         this.tracker.enableHeartBeatTimer();
         this.tracker.enableLinkTracking(true);
-
-        // dis.register(this._onAction.bind(this));
     }
-
-    // _onAction(payload) {
-    //     this.trackEvent('Dispatcher', payload.action);
-    // }
 
     async trackPageChange() {
         if (!this.tracker) return;
