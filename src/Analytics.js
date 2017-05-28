@@ -34,7 +34,8 @@ class Analytics {
 
     async trackPageChange() {
         if (!this.tracker) return;
-        this.tracker.trackPageView(redact(window.location.hash));
+        this.tracker.setCustomUrl(redact(window.location.href));
+        this.tracker.trackPageView();
     }
 
     async trackEvent(category, action, name) {
