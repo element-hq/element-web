@@ -71,17 +71,17 @@ module.exports = React.createClass({
     },
 
     onMemberListButtonClick: function() {
-        Analytics.trackEvent('RightPanel', 'memberListButtonClick');
+        Analytics.trackEvent('Right Panel', 'Member List Button', 'click');
         this.setState({ phase: this.Phase.MemberList });
     },
 
     onFileListButtonClick: function() {
-        Analytics.trackEvent('RightPanel', 'fileListButtonClick');
+        Analytics.trackEvent('Right Panel', 'File List Button', 'click');
         this.setState({ phase: this.Phase.FilePanel });
     },
 
     onNotificationListButtonClick: function() {
-        Analytics.trackEvent('RightPanel', 'notificationListButtonClick');
+        Analytics.trackEvent('Right Panel', 'Notification List Button', 'click');
         this.setState({ phase: this.Phase.NotificationPanel });
     },
 
