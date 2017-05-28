@@ -270,7 +270,7 @@
     "Failed to reject invitation": "Échec lors du rejet de l'invitation",
     "Failed to save settings": "Échec lors de la sauvegarde des paramètres",
     "Failed to send email": "Échec lors de l’envoi de l’e-mail",
-    "Failed to send request": "Échec lors de l’envoi de la requête",
+    "Failed to send request.": "Échec lors de l’envoi de la requête.",
     "Failed to set display name": "Échec lors de l'enregistrement du nom d'affichage",
     "Failed to set up conference call": "Échec lors de l’établissement de l’appel",
     "Failed to toggle moderator status": "Échec lors de l’établissement du statut de modérateur",

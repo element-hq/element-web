@@ -189,6 +189,9 @@ module.exports = React.createClass({
             );
 
             save_button = <AccessibleButton className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</AccessibleButton>;
+        }
+
+        if (this.props.onCancelClick) {
             cancel_button = <CancelButton onClick={this.props.onCancelClick}/>;
         }
 

@@ -449,7 +449,7 @@
     "sx": "Суту",
     "zh-hk": "Китайский (Гонконг)",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "На +%(msisdn)s было отправлено текстовое сообщение. Пожалуйста, введите проверочный код из него",
-    "and %(overflowCount)s others...": "и %(overflowCounts)s других...",
+    "and %(overflowCount)s others...": "и %(overflowCount)s других...",
     "Are you sure?": "Вы уверены?",
     "Autoplay GIFs and videos": "Проигрывать GIF и видео автоматически",
     "Can't connect to homeserver - please check your connectivity and ensure your %(urlStart)s homeserver's SSL certificate %(urlEnd)s is trusted": "Невозможно соединиться с домашним сервером - проверьте своё соединение и убедитесь, что %(urlStart)s SSL-сертификат вашего домашнего сервера %(urlEnd)s включён в доверяемые",
