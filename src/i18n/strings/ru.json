@@ -251,7 +251,7 @@
     "click to reveal": "нажать для открытия",
     "%(senderName)s invited %(targetName)s.": "%(senderName)s приглашает %(targetName)s.",
     "%(displayName)s is typing": "%(displayName)s вводит текст",
-    "%(targetName)s joined the room.": "%(targetName)s присоединенный к комнате.",
+    "%(targetName)s joined the room.": "%(targetName)s вошёл в комнату.",
     "%(senderName)s kicked %(targetName)s.": "%(senderName)s выкинул %(targetName)s.",
     "%(targetName)s left the room.": "%(targetName)s покинул комнату.",
     "%(senderName)s made future room history visible to": "%(senderName)s  история сделаной будущей комнаты, видимая для",
@@ -650,5 +650,6 @@
     "%(severalUsers)schanged their avatar %(repeats)s times": "%(severalUsers)sизменили своё изображение %(repeats)s раз",
     "%(oneUser)schanged their avatar %(repeats)s times": "%(oneUser)sизменил своё изображение %(repeats)s раз",
     "%(severalUsers)schanged their avatar": "%(severalUsers)sизменили своё изображение",
-    "%(oneUser)schanged their avatar": "%(oneUser)sизменил своё изображение"
+    "%(oneUser)schanged their avatar": "%(oneUser)sизменил своё изображение",
+    "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or %(urlStart)s enable unsafe scripts %(urlEnd)s": "Не возможно подключиться к серверу через HTTP, когда в строке браузера HTTPS. Используйте HTTPS или %(urlStart) включив небезопасные скрипты %(urlEnd)"
 }
