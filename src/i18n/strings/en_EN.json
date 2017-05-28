@@ -678,5 +678,6 @@
   "%(severalUsers)schanged their avatar %(repeats)s times": "%(severalUsers)schanged their avatar %(repeats)s times",
   "%(oneUser)schanged their avatar %(repeats)s times": "%(oneUser)schanged their avatar %(repeats)s times",
   "%(severalUsers)schanged their avatar": "%(severalUsers)schanged their avatar",
-  "%(oneUser)schanged their avatar": "%(oneUser)schanged their avatar"
+  "%(oneUser)schanged their avatar": "%(oneUser)schanged their avatar",
+  "Please select the destination room for this message": "Please select the destination room for this message"
 }
