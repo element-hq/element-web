@@ -21,6 +21,7 @@ var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
 var sdk = require("../../../index");
 import AccessibleButton from '../elements/AccessibleButton';
+import { _t } from '../../../languageHandler';
 
 import sessionStore from '../../../stores/SessionStore';
 
@@ -52,11 +53,11 @@ module.exports = React.createClass({
             onCheckPassword: function(oldPass, newPass, confirmPass) {
                 if (newPass !== confirmPass) {
                     return {
-                        error: "New passwords don't match."
+                        error: _t("New passwords don't match") + "."
                     };
                 } else if (!newPass || newPass.length === 0) {
                     return {
-                        error: "Passwords can't be empty"
+                        error: _t("Passwords can't be empty")
                     };
                 }
             },
@@ -102,19 +103,21 @@ module.exports = React.createClass({
 
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createDialog(QuestionDialog, {
-            title: "Warning",
+            title: _t("Warning!"),
             description:
                 <div>
-                    Changing password will currently reset any end-to-end encryption keys on all devices,
-                    making encrypted chat history unreadable, unless you first export your room keys
-                    and re-import them afterwards.
-                    In future this <a href="https://github.com/vector-im/riot-web/issues/2671">will be improved</a>.
+                    { _t(
+                        'Changing password will currently reset any end-to-end encryption keys on all devices, ' +
+                        'making encrypted chat history unreadable, unless you first export your room keys ' +
+                        'and re-import them afterwards. ' +
+                        'In future this will be improved.'
+                    ) } (<a href="https://github.com/vector-im/riot-web/issues/2671">https://github.com/vector-im/riot-web/issues/2671</a>)
                 </div>,
-            button: "Continue",
+            button: _t("Continue"),
             extraButtons: [
                 <button className="mx_Dialog_primary"
                         onClick={this._onExportE2eKeysClicked}>
-                    Export E2E room keys
+                    { _t('Export E2E room keys') }
                 </button>
             ],
             onFinished: (confirmed) => {
@@ -194,7 +197,7 @@ module.exports = React.createClass({
         switch (this.state.phase) {
             case this.Phases.Edit:
                 const passwordLabel = this.state.cachedPassword ?
-                    'Password' : 'New Password';
+                    _t('Password') : _t('New Password');
                 return (
                     <div className={this.props.className}>
                         { currentPassword }
@@ -208,7 +211,7 @@ module.exports = React.createClass({
                         </div>
                         <div className={rowClassName}>
                             <div className={rowLabelClassName}>
-                                <label htmlFor="password2">Confirm password</label>
+                                <label htmlFor="password2">{ _t('Confirm password') }</label>
                             </div>
                             <div className={rowInputClassName}>
                                 <input id="password2" type="password" ref="confirm_input" />
@@ -217,7 +220,7 @@ module.exports = React.createClass({
                         <AccessibleButton className={buttonClassName}
                                 onClick={this.onClickChange}
                                 element="button">
-                            Change Password
+                            { _t('Change Password') }
                         </AccessibleButton>
                     </div>
                 );

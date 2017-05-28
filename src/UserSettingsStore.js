@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
 import q from 'q';
 import MatrixClientPeg from './MatrixClientPeg';
 import Notifier from './Notifier';
@@ -23,10 +22,14 @@ import Notifier from './Notifier';
  * TODO: Make things use this. This is all WIP - see UserSettings.js for usage.
  */
 
-module.exports = {
+/*
+ * TODO: Find a way to translate the names of LABS_FEATURES. In other words, guarantee that languages were already loaded before building this array.
+ */
+
+export default {
     LABS_FEATURES: [
         {
-            name: 'New Composer & Autocomplete',
+            name: "New Composer & Autocomplete",
             id: 'rich_text_editor',
             default: false,
         },

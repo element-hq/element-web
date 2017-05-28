@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 var React = require("react");
 var ReactDOM = require("react-dom");
+import { _t } from '../../../languageHandler';
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var CallHandler = require('../../../CallHandler');
@@ -559,13 +560,12 @@ module.exports = React.createClass({
     render: function() {
         var RoomSubList = sdk.getComponent('structures.RoomSubList');
         var self = this;
-
         return (
             <GeminiScrollbar className="mx_RoomList_scrollbar"
                  autoshow={true} onScroll={ self._whenScrolling } ref="gemscroll">
             <div className="mx_RoomList">
                 <RoomSubList list={ self.state.lists['im.vector.fake.invite'] }
-                             label="Invites"
+                             label={ _t('Invites') }
                              editable={ false }
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }
@@ -576,7 +576,7 @@ module.exports = React.createClass({
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['m.favourite'] }
-                             label="Favourites"
+                             label={ _t('Favourites') }
                              tagName="m.favourite"
                              emptyContent={this._getEmptyContent('m.favourite')}
                              editable={ true }
@@ -589,7 +589,7 @@ module.exports = React.createClass({
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.direct'] }
-                             label="People"
+                             label={ _t('People') }
                              tagName="im.vector.fake.direct"
                              emptyContent={this._getEmptyContent('im.vector.fake.direct')}
                              headerItems={this._getHeaderItems('im.vector.fake.direct')}
@@ -604,7 +604,7 @@ module.exports = React.createClass({
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.recent'] }
-                             label="Rooms"
+                             label={ _t('Rooms') }
                              editable={ true }
                              emptyContent={this._getEmptyContent('im.vector.fake.recent')}
                              headerItems={this._getHeaderItems('im.vector.fake.recent')}
@@ -636,7 +636,7 @@ module.exports = React.createClass({
                 }) }
 
                 <RoomSubList list={ self.state.lists['m.lowpriority'] }
-                             label="Low priority"
+                             label={ _t('Low priority') }
                              tagName="m.lowpriority"
                              emptyContent={this._getEmptyContent('m.lowpriority')}
                              editable={ true }
@@ -649,7 +649,7 @@ module.exports = React.createClass({
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.archived'] }
-                             label="Historical"
+                             label={ _t('Historical') }
                              editable={ false }
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }

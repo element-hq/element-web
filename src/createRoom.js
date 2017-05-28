@@ -17,6 +17,7 @@ limitations under the License.
 var MatrixClientPeg = require('./MatrixClientPeg');
 var Modal = require('./Modal');
 var sdk = require('./index');
+import { _t } from './languageHandler';
 var dis = require("./dispatcher");
 var Rooms = require("./Rooms");
 
@@ -105,8 +106,8 @@ function createRoom(opts) {
     }, function(err) {
         console.error("Failed to create room " + roomId + " " + err);
         Modal.createDialog(ErrorDialog, {
-            title: "Failure to create room",
-            description: "Server may be unavailable, overloaded, or you hit a bug.",
+            title: _t("Failure to create room"),
+            description: _t("Server may be unavailable, overloaded, or you hit a bug") + ".",
         });
         return null;
     });

@@ -39,6 +39,7 @@ import PageTypes from '../../PageTypes';
 
 import createRoom from "../../createRoom";
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
+import { _t } from '../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'MatrixChat',
@@ -116,8 +117,9 @@ module.exports = React.createClass({
             collapse_rhs: false,
             ready: false,
             width: 10000,
-            sideOpacity: 1.0,
+            leftOpacity: 1.0,
             middleOpacity: 1.0,
+            rightOpacity: 1.0,
 
             version: null,
             newVersion: null,
@@ -249,7 +251,6 @@ module.exports = React.createClass({
         UDEHandler.startListening();
 
         this.focusComposer = false;
-        window.addEventListener("focus", this.onFocus);
 
         // this can technically be done anywhere but doing this here keeps all
         // the routing url path logic together.
@@ -378,8 +379,8 @@ module.exports = React.createClass({
                 break;
             case 'reject_invite':
                 Modal.createDialog(QuestionDialog, {
-                    title: "Reject invitation",
-                    description: "Are you sure you want to reject the invitation?",
+                    title: _t('Reject invitation'),
+                    description: _t('Are you sure you want to reject the invitation?'),
                     onFinished: (confirm) => {
                         if (confirm) {
                             // FIXME: controller shouldn't be loading a view :(
@@ -394,7 +395,7 @@ module.exports = React.createClass({
                             }, (err) => {
                                 modal.close();
                                 Modal.createDialog(ErrorDialog, {
-                                    title: "Failed to reject invitation",
+                                    title:  _t('Failed to reject invitation'),
                                     description: err.toString(),
                                 });
                             });
@@ -446,11 +447,11 @@ module.exports = React.createClass({
                     break;
                 }
                 Modal.createDialog(TextInputDialog, {
-                    title: "Create Room",
-                    description: "Room name (optional)",
-                    button: "Create Room",
-                    onFinished: (shouldCreate, name) => {
-                        if (shouldCreate) {
+                    title: _t('Create Room'),
+                    description: _t('Room name (optional)'),
+                    button: _t('Create Room'),
+                    onFinished: (should_create, name) => {
+                        if (should_create) {
                             const createOpts = {};
                             if (name) createOpts.name = name;
                             createRoom({createOpts}).done();
@@ -498,12 +499,14 @@ module.exports = React.createClass({
                     collapse_rhs: false,
                 });
                 break;
-            case 'ui_opacity':
+            case 'ui_opacity': {
+                const sideDefault = payload.sideOpacity >= 0.0 ? payload.sideOpacity : 1.0;
                 this.setState({
-                    sideOpacity: payload.sideOpacity,
-                    middleOpacity: payload.middleOpacity,
+                    leftOpacity: payload.leftOpacity >= 0.0 ? payload.leftOpacity : sideDefault,
+                    middleOpacity: payload.middleOpacity || 1.0,
+                    rightOpacity: payload.rightOpacity >= 0.0 ? payload.rightOpacity : sideDefault,
                 });
-                break;
+                break; }
             case 'set_theme':
                 this._onSetTheme(payload.value);
                 break;
@@ -689,16 +692,20 @@ module.exports = React.createClass({
         }
         const ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
         Modal.createDialog(ChatInviteDialog, {
-            title: "Start a new chat",
+            title: _t('Start a chat'),
+            description: _t("Who would you like to communicate with?"),
+            placeholder: _t("Email, name or matrix ID"),
+            button: _t("Start Chat")
         });
     },
 
     _invite: function(roomId) {
         const ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
         Modal.createDialog(ChatInviteDialog, {
-            title: "Invite new room members",
-            button: "Send Invites",
-            description: "Who would you like to add to this room?",
+            title: _t('Invite new room members'),
+            description: _t('Who would you like to add to this room?'),
+            button: _t('Send Invites'),
+            placeholder: _t("Email, name or matrix ID"),
             roomId: roomId,
         });
     },
@@ -933,8 +940,8 @@ module.exports = React.createClass({
         cli.on('Session.logged_out', function(call) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Signed Out",
-                description: "For security, this session has been signed out. Please sign in again.",
+                title: _t('Signed Out'),
+                description: _t('For security, this session has been signed out. Please sign in again.'),
             });
             dis.dispatch({
                 action: 'logout',
@@ -950,10 +957,6 @@ module.exports = React.createClass({
                 }
             }
         });
-    },
-
-    onFocus: function(ev) {
-        dis.dispatch({action: 'focus_composer'});
     },
 
     showScreen: function(screen, params) {
@@ -1242,7 +1245,7 @@ module.exports = React.createClass({
                 <div className="mx_MatrixChat_splash">
                     <Spinner />
                     <a href="#" className="mx_MatrixChat_splashButtons" onClick={ this.onLogoutClick }>
-                    Logout
+                    { _t('Logout') }
                     </a>
                 </div>
             );

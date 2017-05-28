@@ -24,6 +24,10 @@ In the interim, `vector-im/riot-web` and `matrix-org/matrix-react-sdk` should
 be considered as a single project (for instance, matrix-react-sdk bugs
 are currently filed against vector-im/riot-web rather than this project).
 
+Translation Status
+==================
+[![translationsstatus](https://translate.nordgedanken.de/widgets/riot-web/-/multi-auto.svg)](https://translate.nordgedanken.de/engage/riot-web/?utm_source=widget)
+
 Developer Guide
 ===============
 
@@ -190,4 +194,3 @@ Alternative instructions:
   * Create an index.html file pulling in your compiled javascript and the
     CSS bundle from the skin you use. For now, you'll also need to manually
     import CSS from any skins that your skin inherts from.
-
