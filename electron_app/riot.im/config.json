@@ -1,0 +1,16 @@
+{
+    "update_base_url": "https://riot.im/download/desktop/update/",
+    "default_hs_url": "https://matrix.org",
+    "default_is_url": "https://vector.im",
+    "brand": "Riot",
+    "integrations_ui_url": "https://scalar.vector.im/",
+    "integrations_rest_url": "https://scalar.vector.im/api",
+    "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
+    "welcomeUserId": "@riot-bot:matrix.org",
+    "enableLabs": true,
+    "roomDirectory": {
+        "servers": [
+            "matrix.org"
+        ]
+    }
+}

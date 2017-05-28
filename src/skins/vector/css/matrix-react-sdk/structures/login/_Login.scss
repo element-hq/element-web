@@ -175,16 +175,17 @@ limitations under the License.
 }
 
 .mx_Login_type_dropdown {
-    width: 125px;
+    display: inline-block;
+    min-width: 125px;
     align-self: flex-end;
 }
 
-.mx_Login_username_group {
+.mx_Login_field_group {
     display: flex;
 }
 
-.mx_Login_username_prefix {
-    height: 33px;
+.mx_Login_field_prefix {
+    height: 34px;
     padding: 0px 5px;
     line-height: 33px;
 
@@ -196,8 +197,8 @@ limitations under the License.
     text-align: center;
 }
 
-.mx_Login_username_suffix {
-    height: 33px;
+.mx_Login_field_suffix {
+    height: 34px;
     padding: 0px 5px;
     line-height: 33px;
 
@@ -211,10 +212,17 @@ limitations under the License.
 }
 
 .mx_Login_username {
+    height: 16px;
     flex-shrink: 1;
     min-width: 0px;
     border-radius: 3px;
-    /* The "@" is always prefixed, so no rounded corners */
+}
+
+.mx_Login_phoneNumberField {
+    height: 16px;
+}
+
+.mx_Login_field_has_prefix {
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
 }
@@ -225,12 +233,22 @@ limitations under the License.
 }
 
 .mx_Login_phoneSection {
-    display: table;
+    display:flex;
 }
 
 .mx_Login_phoneCountry {
-    display: table-cell;
-    width: 70px;
+    margin-bottom: 14px;
+    width: 150px;
+
+    /* To override mx_Login_field_prefix */
+    text-align: left;
+    padding: 0px;
+    background-color: $primary-bg-color;
+}
+
+.mx_Login_field_prefix .mx_Dropdown_input {
+    /* To use prefix border instead of dropdown border */
+    border: 0;
 }
 
 .mx_Login_phoneCountry .mx_Dropdown_option {
@@ -243,11 +261,6 @@ limitations under the License.
 }
 
 .mx_Login_phoneCountry .mx_Dropdown_option img {
-    margin: 4px;
+    margin: 3px;
     vertical-align: top;
-}
-
-.mx_Login_phoneNumberField {
-    width: 210px;
-    margin-left: 3px;
 }

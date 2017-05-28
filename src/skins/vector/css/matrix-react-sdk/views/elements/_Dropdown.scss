@@ -31,6 +31,11 @@ limitations under the License.
     border-color: $accent-color;
 }
 
+/* Disable dropdown highlight on focus */
+.mx_Dropdown_input.mx_AccessibleButton:focus {
+    filter: none;
+}
+
 .mx_Dropdown_arrow {
     border-color: $primary-fg-color transparent transparent;
     border-style: solid;
@@ -43,6 +48,14 @@ limitations under the License.
     width: 0
 }
 
+.mx_Dropdown.left_aligned .mx_Dropdown_arrow {
+    left: 10px;
+}
+
+.mx_Dropdown.left_aligned .mx_Dropdown_input > .mx_Dropdown_option {
+    padding-left: 25px;
+}
+
 .mx_Dropdown_option {
     height: 35px;
     line-height: 35px;
@@ -50,9 +63,15 @@ limitations under the License.
     padding-right: 8px;
 }
 
+.mx_Dropdown_option div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .mx_Dropdown_option img {
     margin: 5px;
-    width: 25px;
+    width: 27px;
     vertical-align: middle;
 }
 

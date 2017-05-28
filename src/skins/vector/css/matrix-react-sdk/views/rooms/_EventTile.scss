@@ -183,6 +183,10 @@ limitations under the License.
     visibility: visible;
 }
 
+.mx_MessagePanel_alwaysShowTimestamps .mx_MessageTimestamp {
+    visibility: visible;
+}
+
 .mx_EventTile_selected .mx_MessageTimestamp {
     left: 3px;
 }
@@ -218,8 +222,8 @@ limitations under the License.
 }
 
 .mx_EventTile_continuation .mx_EventTile_readAvatars,
-.mx_EventTile_info .mx_EventTile_readAvatars
-{
+.mx_EventTile_info .mx_EventTile_readAvatars,
+.mx_EventTile_emote .mx_EventTile_readAvatars {
     top: 7px;
 }
 
@@ -261,6 +265,14 @@ limitations under the License.
     left: 46px;
     z-index: 2;
     cursor: pointer;
+}
+
+.mx_EventTile_12hr .mx_EventTile_e2eIcon {
+    padding-left: 5px;
+}
+
+.mx_EventTile_12hr .mx_MessageTimestamp {
+    text-align: center;
 }
 
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line,
@@ -329,6 +341,14 @@ limitations under the License.
 .mx_EventTile_content .markdown-body h6
 {
     font-family: inherit ! important;
+}
+
+
+/* Make h1 and h2 the same size as h3. */
+.mx_EventTile_content .markdown-body h1,
+.mx_EventTile_content .markdown-body h2
+{
+    font-size: 1.5em;
 }
 
 .mx_EventTile_content .markdown-body a {

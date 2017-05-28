@@ -62,6 +62,8 @@ var VectorConferenceHandler = require('../VectorConferenceHandler');
 var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
+import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
+import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 
 import url from 'url';
 
@@ -103,7 +105,7 @@ function checkBrowserFeatures(featureList) {
 
 var validBrowser = checkBrowserFeatures([
     "displaytable", "flexbox", "es5object", "es5function", "localstorage",
-    "objectfit"
+    "objectfit", "indexeddb", "webworkers",
 ]);
 
 // Parse the given window.location and return parameters that can be used when calling
@@ -228,8 +230,9 @@ function onLoadCompleted() {
     }
 }
 
-
 async function loadApp() {
+    await loadLanguage();
+
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
 
@@ -306,6 +309,24 @@ async function loadApp() {
             }} />,
             document.getElementById('matrixchat')
         );
+    }
+}
+
+async function loadLanguage() {
+    const prefLang = UserSettingsStore.getLocalSetting('language');
+    let langs = [];
+
+    if (!prefLang) {
+        languageHandler.getLanguagesFromBrowser().forEach((l) => {
+            langs.push(...languageHandler.getNormalizedLanguageKeys(l));
+        });
+    } else {
+        langs = [prefLang];
+    }
+    try {
+        await languageHandler.setLanguage(langs);
+    } catch (e) {
+        console.error("Unable to set language", e);
     }
 }
 

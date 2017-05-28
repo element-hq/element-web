@@ -1,0 +1,11 @@
+{
+  "name": "riot-web",
+  "productName": "Riot",
+  "main": "src/electron-main.js",
+  "version": "0.9.10",
+  "description": "A feature-rich client for Matrix.org",
+  "author": "Vector Creations Ltd.",
+  "dependencies": {
+    "electron-window-state": "^4.1.0"
+  }
+}

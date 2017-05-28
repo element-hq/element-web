@@ -37,7 +37,11 @@ import q from "q";
 //    actually timestamps. We then purge the remaining logs. We also do this
 //    purge on startup to prevent logs from accumulating.
 
+// the frequency with which we flush to indexeddb
 const FLUSH_RATE_MS = 30 * 1000;
+
+// the length of log data we keep in indexeddb (and include in the reports)
+const MAX_LOG_SIZE = 1024 * 1024 * 1; // 1 MB
 
 // A class which monkey-patches the global console and stores log lines.
 class ConsoleLogger {
@@ -232,7 +236,6 @@ class IndexedDBLogStore {
      * is a big string with all the new-line delimited logs.
      */
     async consume() {
-        const MAX_LOG_SIZE = 1024 * 1024 * 50; // 50 MB
         const db = this.db;
 
         // Returns: a string representing the concatenated logs for this ID.

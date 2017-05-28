@@ -131,6 +131,10 @@ limitations under the License.
     position: absolute;
 }
 
+.mx_UserSettings_language {
+    width: 200px;
+}
+
 .mx_UserSettings_profileTable
 {
     display: table;
@@ -176,6 +180,15 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_UserSettings_phoneSection {
+    display:table;
+}
+
+.mx_UserSettings_phoneCountry {
+    width: 70px;
+    display: table-cell;
+}
+
 input.mx_UserSettings_phoneNumberField {
     margin-left: 3px;
     width: 172px;
@@ -208,6 +221,10 @@ input.mx_UserSettings_phoneNumberField {
 .mx_UserSettings_avatarPicker_edit {
     text-align: center;
     margin-top: 10px;
+}
+
+.mx_UserSettings_avatarPicker_edit img {
+    cursor: pointer;
 }
 
 .mx_UserSettings_avatarPicker_edit > input {
