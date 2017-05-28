@@ -14,7 +14,7 @@
         ]
     },
     "piwik": {
-        "url": "//piwik.riot.ovh/",
-        "siteId": 2
+        "url": "//piwik.riot.im/",
+        "siteId": 1
     }
 }
