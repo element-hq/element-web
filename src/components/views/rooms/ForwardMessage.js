@@ -16,6 +16,7 @@
  */
 
 import React from 'react';
+import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import KeyCode from '../../../KeyCode';
@@ -88,7 +89,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_ForwardMessage">
-                <h1>Please select the destination room for this message</h1>
+                <h1>{_t('Please select the destination room for this message')}</h1>
             </div>
         );
     },
