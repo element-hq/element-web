@@ -67,7 +67,7 @@ export default React.createClass({
     },
 
     render: function() {
-        Analytics.trackEvent('Dialog', 'mount', this.props.title);
+        Analytics.trackEvent('Dialog', this.props.title, 'mount');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         return (
