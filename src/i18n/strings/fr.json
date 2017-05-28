@@ -174,7 +174,6 @@
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Un message texte a été envoyé à +%(msisdn)s. Merci d'entrer le code de vérification qu'il contient",
     "accept": "Accepter",
     "%(targetName)s accepted an invitation.": "%(targetName)s a accepté une invitation.",
-    "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s a accepté une invitation de %(displayName)s.",
     "Account": "Compte",
     "Add email address": "Ajouter une adresse e-mail",
     "Add phone number": "Ajouter un numéro de téléphone",
