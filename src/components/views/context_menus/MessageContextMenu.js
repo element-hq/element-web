@@ -21,6 +21,7 @@ const React = require('react');
 const MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 const dis = require('matrix-react-sdk/lib/dispatcher');
 const sdk = require('matrix-react-sdk');
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 const Modal = require('matrix-react-sdk/lib/Modal');
 const Resend = require("matrix-react-sdk/lib/Resend");
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
@@ -74,8 +75,8 @@ module.exports = React.createClass({
                     // display error message stating you couldn't delete this.
                     const code = e.errcode || e.statusCode;
                     Modal.createDialog(ErrorDialog, {
-                        title: "Error",
-                        description: "You cannot delete this message. (" + code + ")",
+                        title: _t('Error'),
+                        description: _t('You cannot delete this message. (%(code)s)', {code: code})
                     });
                 }).done();
             },
@@ -130,7 +131,7 @@ module.exports = React.createClass({
         if (eventStatus === 'not_sent') {
             resendButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onResendClick}>
-                    Resend
+                    { _t('Resend') }
                 </div>
             );
         }
@@ -138,7 +139,7 @@ module.exports = React.createClass({
         if (!eventStatus && !this.props.mxEvent.isRedacted()) { // sent and not redacted
             redactButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
-                    Redact
+                    { _t('Redact') }
                 </div>
             );
         }
@@ -146,7 +147,7 @@ module.exports = React.createClass({
         if (eventStatus === "queued" || eventStatus === "not_sent") {
             cancelButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onCancelSendClick}>
-                    Cancel Sending
+                    { _t('Cancel Sending') }
                 </div>
             );
         }
@@ -164,14 +165,14 @@ module.exports = React.createClass({
 
         viewSourceButton = (
             <div className="mx_MessageContextMenu_field" onClick={this.onViewSourceClick}>
-                View Source
+                { _t('View Source') }
             </div>
         );
 
         if (this.props.mxEvent.getType() !== this.props.mxEvent.getWireType()) {
             viewClearSourceButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onViewClearSourceClick}>
-                    View Decrypted Source
+                    { _t('View Decrypted Source') }
                 </div>
             );
         }
@@ -180,7 +181,7 @@ module.exports = React.createClass({
             if (this.props.eventTileOps.isWidgetHidden()) {
                 unhidePreviewButton = (
                     <div className="mx_MessageContextMenu_field" onClick={this.onUnhidePreviewClick}>
-                        Unhide Preview
+                        { _t('Unhide Preview') }
                     </div>
                 );
             }
@@ -190,13 +191,13 @@ module.exports = React.createClass({
         permalinkButton = (
             <div className="mx_MessageContextMenu_field">
                 <a href={ "https://matrix.to/#/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId() }
-                  target="_blank" rel="noopener" onClick={ this.closeMenu }>Permalink</a>
+                  target="_blank" rel="noopener" onClick={ this.closeMenu }>{ _t('Permalink') }</a>
             </div>
         );
 
         const quoteButton = (
             <div className="mx_MessageContextMenu_field" onClick={this.onQuoteClick}>
-                Quote
+                { _t('Quote') }
             </div>
         );
 
@@ -205,7 +206,7 @@ module.exports = React.createClass({
           externalURLButton = (
               <div className="mx_MessageContextMenu_field">
                   <a href={ this.props.mxEvent.event.content.external_url }
-                    rel="noopener" target="_blank" onClick={ this.closeMenu }>Source URL</a>
+                    rel="noopener" target="_blank"  onClick={ this.closeMenu }>{ _t('Source URL') }</a>
               </div>
           );
         }

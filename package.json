@@ -2,7 +2,7 @@
   "name": "riot-web",
   "productName": "Riot",
   "main": "electron_app/src/electron-main.js",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "description": "A feature-rich client for Matrix.org",
   "author": "Vector Creations Ltd.",
   "repository": {
@@ -104,6 +104,7 @@
     "emojione": "^2.2.7",
     "eslint": "^3.14.0",
     "eslint-config-google": "^0.7.1",
+    "eslint-plugin-babel": "^4.1.1",
     "eslint-plugin-flowtype": "^2.30.0",
     "eslint-plugin-react": "^6.9.0",
     "expect": "^1.16.0",
@@ -158,6 +159,7 @@
     ],
     "linux": {
       "target": "deb",
+      "category": "Network;InstantMessaging;Chat",
       "maintainer": "support@riot.im",
       "desktop": {
         "StartupWMClass": "riot-web"
