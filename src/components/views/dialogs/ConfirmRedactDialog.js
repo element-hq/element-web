@@ -42,7 +42,7 @@ export default React.createClass({
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
-        const title = "Confirm Redaction";
+        const title = "Confirm Removal";
 
         const confirmButtonClass = classnames({
             'mx_Dialog_primary': true,
@@ -55,12 +55,12 @@ export default React.createClass({
                 title={title}
             >
                 <div className="mx_Dialog_content">
-                    Are you sure you wish to redact (delete) this event?
-                    Note that if you redact a room name or topic change, it could undo the change.
+                    Are you sure you wish to remove (delete) this event?
+                    Note that if you delete a room name or topic change, it could undo the change.
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className={confirmButtonClass} onClick={this.onOk}>
-                        Redact
+                        Remove
                     </button>
 
                     <button onClick={this.onCancel}>
