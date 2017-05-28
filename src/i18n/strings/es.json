@@ -18,5 +18,7 @@
     "Download this file": "Descargar este archivo",
     "Drop here %(toAction)s": "Soltar aquí %(toAction)s",
     "Enable audible notifications in web client": "Habilitar notificaciones audibles en el cliente web",
-    "Enable desktop notifications": "Habilitar notificaciones de escritorio"
+    "Enable desktop notifications": "Habilitar notificaciones de escritorio",
+    "Enable email notifications": "Habilitar notificaciones por email",
+    "Enable notifications for this account": "Habilitar notificaciones para esta cuenta"
 }
