@@ -10,5 +10,9 @@
         "servers": [
             "matrix.org"
         ]
+    },
+    "piwik": {
+        "url": "//piwik.riot.im/",
+        "siteId": 1
     }
 }
