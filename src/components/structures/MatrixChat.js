@@ -118,8 +118,9 @@ module.exports = React.createClass({
             collapse_rhs: false,
             ready: false,
             width: 10000,
-            sideOpacity: 1.0,
+            leftOpacity: 1.0,
             middleOpacity: 1.0,
+            rightOpacity: 1.0,
 
             version: null,
             newVersion: null,
@@ -248,7 +249,6 @@ module.exports = React.createClass({
         UDEHandler.startListening();
 
         this.focusComposer = false;
-        window.addEventListener("focus", this.onFocus);
 
         // this can technically be done anywhere but doing this here keeps all
         // the routing url path logic together.
@@ -492,12 +492,14 @@ module.exports = React.createClass({
                     collapse_rhs: false,
                 });
                 break;
-            case 'ui_opacity':
+            case 'ui_opacity': {
+                const sideDefault = payload.sideOpacity >= 0.0 ? payload.sideOpacity : 1.0;
                 this.setState({
-                    sideOpacity: payload.sideOpacity,
-                    middleOpacity: payload.middleOpacity,
+                    leftOpacity: payload.leftOpacity >= 0.0 ? payload.leftOpacity : sideDefault,
+                    middleOpacity: payload.middleOpacity || 1.0,
+                    rightOpacity: payload.rightOpacity >= 0.0 ? payload.rightOpacity : sideDefault,
                 });
-                break;
+                break; }
             case 'set_theme':
                 this._onSetTheme(payload.value);
                 break;
@@ -909,10 +911,6 @@ module.exports = React.createClass({
                 }
             }
         });
-    },
-
-    onFocus: function(ev) {
-        dis.dispatch({action: 'focus_composer'});
     },
 
     showScreen: function(screen, params) {
