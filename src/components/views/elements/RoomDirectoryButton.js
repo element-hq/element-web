@@ -17,13 +17,14 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../../index';
 import PropTypes from 'prop-types';
+import { _t } from '../../../languageHandler';
 
 const RoomDirectoryButton = function(props) {
     const ActionButton = sdk.getComponent('elements.ActionButton');
     return (
         <ActionButton action="view_room_directory"
             mouseOverAction={props.callout ? "callout_room_directory" : null}
-            label="Room directory"
+            label={ _t("Room directory") }
             iconPath="img/icons-directory.svg"
             size={props.size}
             tooltip={props.tooltip}

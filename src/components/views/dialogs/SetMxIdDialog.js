@@ -23,7 +23,7 @@ import classnames from 'classnames';
 
 // The amount of time to wait for further changes to the input username before
 // sending a request to the server
-const USERNAME_CHECK_DEBOUNCE_MS = 2000;
+const USERNAME_CHECK_DEBOUNCE_MS = 250;
 
 /**
  * Prompt the user to set a display name.

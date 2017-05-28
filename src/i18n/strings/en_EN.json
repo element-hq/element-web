@@ -673,5 +673,10 @@
   "%(oneUser)schanged their avatar %(repeats)s times": "%(oneUser)schanged their avatar %(repeats)s times",
   "%(severalUsers)schanged their avatar": "%(severalUsers)schanged their avatar",
   "%(oneUser)schanged their avatar": "%(oneUser)schanged their avatar",
-  "Please select the destination room for this message": "Please select the destination room for this message"
+  "Please select the destination room for this message": "Please select the destination room for this message",
+  "Create new room": "Create new room",
+  "Welcome page": "Welcome page",
+  "Room directory": "Room directory",
+  "Start chat": "Start chat",
+  "New Password": "New Password"
 }
