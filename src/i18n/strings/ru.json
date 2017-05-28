@@ -559,7 +559,7 @@
     "Sender device information": "Информация об устройстве отправителя",
     "Send Invites": "Отправить приглашения",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s отправил изображение.",
-    "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderDisplayName)s отправил приглашение для %(targetDisplayName)s войти в комнату.",
+    "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s отправил приглашение для %(targetDisplayName)s войти в комнату.",
     "sent a video": "отправил видео",
     "Show panel": "Показать панель",
     "Sign in": "Войти",

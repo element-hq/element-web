@@ -144,7 +144,7 @@ const commands = {
 
                 dis.dispatch({
                     action: 'view_room',
-                    roomAlias: roomAlias,
+                    room_alias: roomAlias,
                     auto_join: true,
                 });
 

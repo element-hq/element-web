@@ -141,6 +141,8 @@ foreach my $lang (grep { -f "$i18ndir/$_" && !/(basefile|en_EN)\.json/ } @files)
 sub read_i18n {
     my $path = shift;
     my $map = {};
+    $path =~ /.*\/(.*)$/;
+    my $lang = $1;
 
     open(FILE, "<", $path) || die $!;
     while(<FILE>) {
@@ -148,6 +150,10 @@ sub read_i18n {
             my ($indent, $src, $colon, $dst, $comma) = ($1, $2, $3, $4, $5);
             $src =~ s/\\"/"/g;
             $dst =~ s/\\"/"/g;
+
+            if ($map->{$src}) {
+                printf ("%10s %24s\t%s\n", $lang, "Duplicate translation!", $src);
+            }
             $map->{$src} = $dst;
         }
     }
