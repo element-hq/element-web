@@ -54,7 +54,19 @@ function platformFriendlyName(): string {
     }
 }
 
+function _onAction(payload: Object) {
+    // Whitelist payload actions, no point sending most across
+    if (['call_state'].includes(payload.action)) {
+        ipcRenderer.send('app_onAction', payload);
+    }
+}
+
 export default class ElectronPlatform extends VectorBasePlatform {
+    constructor() {
+        super();
+        dis.register(_onAction);
+    }
+
     setNotificationCount(count: number) {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
@@ -71,7 +83,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     displayNotification(title: string, msg: string, avatarUrl: string, room: Object): Notification {
-
         // GNOME notification spec parses HTML tags for styling...
         // Electron Docs state all supported linux notification systems follow this markup spec
         // https://github.com/electron/electron/blob/master/docs/tutorial/desktop-environment-integration.md#linux
