@@ -23,8 +23,9 @@ function redact(str) {
 
 class Analytics {
     constructor() {
-        this.tracker = null;
+        this._paq = null;
         this.disabled = true;
+        this.firstPage = true;
     }
 
     /**
@@ -32,7 +33,9 @@ class Analytics {
      * otherwise try and initalize, no-op if piwik config missing
      */
     enable() {
-        if (!this.tracker) this._init();
+        if (this._paq || this._init()) {
+            this.disabled = false;
+        }
     }
 
     /**
@@ -51,15 +54,23 @@ class Analytics {
         const siteId = config.piwik.siteId;
         const self = this;
 
+        window._paq = this._paq = window._paq || [];
+
+        this._paq.push(['setTrackerUrl', url+'piwik.php']);
+        this._paq.push(['setSiteId', siteId]);
+        this._paq.push(['trackAllContentImpressions']);
+        this._paq.push(['discardHashTag', false]);
+        this._paq.push(['enableHeartBeatTimer']);
+        this._paq.push(['enableLinkTracking', true]);
+
         (function() {
             const g = document.createElement('script');
             const s = document.getElementsByTagName('script')[0];
             g.type='text/javascript'; g.async=true; g.defer=true; g.src=url+'piwik.js';
 
             g.onload = function() {
-                const tracker = window.Piwik.getTracker(url+'piwik.php', siteId);
                 console.log('Initialised anonymous analytics');
-                self._set(tracker);
+                self._paq = window._paq;
             };
 
             s.parentNode.insertBefore(g, s);
@@ -68,35 +79,33 @@ class Analytics {
         return true;
     }
 
-    _set(tracker) {
-        this.disabled = false;
-        this.tracker = tracker;
-        this.tracker.discardHashTag(false);
-        this.tracker.enableHeartBeatTimer();
-        this.tracker.enableLinkTracking(true);
-    }
-
-    async trackPageChange() {
+    trackPageChange() {
         if (this.disabled) return;
-        this.tracker.setCustomUrl(redact(window.location.href));
-        this.tracker.trackPageView();
+        if (this.firstPage) {
+            // De-duplicate first page
+            // router seems to hit the fn twice
+            this.firstPage = false;
+            return;
+        }
+        this._paq.push(['setCustomUrl', redact(window.location.href)]);
+        this._paq.push(['trackPageView']);
     }
 
-    async trackEvent(category, action, name) {
+    trackEvent(category, action, name) {
         if (this.disabled) return;
-        this.tracker.trackEvent(category, action, name);
+        this._paq.push(['trackEvent', category, action, name]);
     }
 
-    async logout() {
+    logout() {
         if (this.disabled) return;
-        this.tracker.deleteCookies();
+        this._paq.push(['deleteCookies']);
     }
 
-    async login() { // not used currently
+    login() { // not used currently
         const cli = MatrixClientPeg.get();
         if (this.disabled || !cli) return;
 
-        this.tracker.setUserId(`@${cli.getUserIdLocalpart()}:${cli.getDomain()}`);
+        this._paq.push(['setUserId', `@${cli.getUserIdLocalpart()}:${cli.getDomain()}`]);
     }
 
 }
