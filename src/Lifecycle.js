@@ -277,6 +277,8 @@ export function initRtsClient(url) {
 export function setLoggedIn(credentials) {
     credentials.guest = Boolean(credentials.guest);
 
+    Analytics.setGuest(credentials.guest);
+
     console.log(
         "setLoggedIn: mxid:", credentials.userId,
         "deviceId:", credentials.deviceId,

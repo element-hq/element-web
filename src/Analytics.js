@@ -14,12 +14,22 @@
  limitations under the License.
  */
 
+import { getCurrentLanguage } from './languageHandler';
 import MatrixClientPeg from './MatrixClientPeg';
+import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 
 function redact(str) {
     return str.replace(/#\/(room|user)\/(.+)/, "#/$1/<redacted>");
 }
+
+const customVariables = {
+    'App Platform': 1,
+    'App Version': 2,
+    'User Type': 3,
+    'Chosen Language': 4,
+};
+
 
 class Analytics {
     constructor() {
@@ -58,10 +68,21 @@ class Analytics {
 
         this._paq.push(['setTrackerUrl', url+'piwik.php']);
         this._paq.push(['setSiteId', siteId]);
+
         this._paq.push(['trackAllContentImpressions']);
         this._paq.push(['discardHashTag', false]);
         this._paq.push(['enableHeartBeatTimer']);
         this._paq.push(['enableLinkTracking', true]);
+
+        const platform = PlatformPeg.get();
+        this._setVisitVariable('App Platform', platform.constructor.name);
+        platform.getAppVersion().then((version) => {
+            this._setVisitVariable('App Version', version);
+        }).catch(() => {
+            this._setVisitVariable('App Version', 'unknown');
+        });
+
+        this._setVisitVariable('Chosen Language', getCurrentLanguage());
 
         (function() {
             const g = document.createElement('script');
@@ -108,6 +129,14 @@ class Analytics {
         this._paq.push(['setUserId', `@${cli.getUserIdLocalpart()}:${cli.getDomain()}`]);
     }
 
+    _setVisitVariable(key, value) {
+        this._paq.push(['setCustomVariable', customVariables[key], key, value, 'visit']);
+    }
+
+    setGuest(guest) {
+        if (this.disabled) return;
+        this._setVisitVariable('User Type', guest ? 'Guest' : 'Logged In');
+    }
 }
 
 if (!global.mxAnalytics) {
