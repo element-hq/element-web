@@ -57,7 +57,6 @@ var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
 const PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
-const Analytics = require("matrix-react-sdk/lib/Analytics");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
 var UpdateChecker = require("./updater");
@@ -279,23 +278,6 @@ async function loadApp() {
         </div>, document.getElementById('matrixchat'));
     } else if (validBrowser) {
         UpdateChecker.start();
-
-        const analyticsEnabled = !UserSettingsStore.getLocalSetting('analyticsOptOut', false);
-        if (analyticsEnabled && configJson.piwik && configJson.piwik.url && configJson.piwik.siteId) {
-            (function() {
-                const g = document.createElement('script');
-                const s = document.getElementsByTagName('script')[0];
-                g.type='text/javascript'; g.async=true; g.defer=true; g.src=configJson.piwik.url+'piwik.js';
-
-                g.onload = function() {
-                    const tracker = window.Piwik.getTracker(configJson.piwik.url+'piwik.php', configJson.piwik.siteId);
-                    console.log('Initialised anonymous analytics');
-                    Analytics.set(tracker);
-                };
-
-                s.parentNode.insertBefore(g, s);
-            })();
-        }
 
         const MatrixChat = sdk.getComponent('structures.MatrixChat');
         window.matrixChat = ReactDOM.render(
