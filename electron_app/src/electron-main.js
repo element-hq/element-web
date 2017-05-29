@@ -46,47 +46,6 @@ const INITIAL_UPDATE_DELAY_MS = 30 * 1000;
 let mainWindow = null;
 let appQuitting = false;
 
-function safeOpenURL(target) {
-    // openExternal passes the target to open/start/xdg-open,
-    // so put fairly stringent limits on what can be opened
-    // (for instance, open /bin/sh does indeed open a terminal
-    // with a shell, albeit with no arguments)
-    const parsedUrl = url.parse(target);
-    if (PERMITTED_URL_SCHEMES.indexOf(parsedUrl.protocol) > -1) {
-        // explicitly use the URL re-assembled by the url library,
-        // so we know the url parser has understood all the parts
-        // of the input string
-        const newTarget = url.format(parsedUrl);
-        electron.shell.openExternal(newTarget);
-    }
-}
-
-function onWindowOrNavigate(ev, target) {
-    // always prevent the default: if something goes wrong,
-    // we don't want to end up opening it in the electron
-    // app, as we could end up opening any sort of random
-    // url in a window that has node scripting access.
-    ev.preventDefault();
-    safeOpenURL(target);
-}
-
-function onLinkContextMenu(ev, params) {
-    const popupMenu = new electron.Menu();
-
-    popupMenu.append(new electron.MenuItem({
-        label: params.linkURL,
-        click() { safeOpenURL(params.linkURL); },
-    }));
-
-    popupMenu.append(new electron.MenuItem({
-        label: 'Copy Link Address',
-        click() { electron.clipboard.writeText(params.linkURL); },
-    }));
-
-    popupMenu.popup();
-    ev.preventDefault();
-}
-
 function installUpdate() {
     // for some reason, quitAndInstall does not fire the
     // before-quit event, so we need to set the flag here.
