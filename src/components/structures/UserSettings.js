@@ -97,6 +97,9 @@ const CRYPTO_SETTINGS_LABELS = [
     {
         id: 'blacklistUnverifiedDevices',
         label: 'Never send encrypted messages to unverified devices from this device',
+        fn: function(checked) {
+            MatrixClientPeg.get().setGlobalBlacklistUnverifiedDevices(checked);
+        },
     },
     // XXX: this is here for documentation; the actual setting is managed via RoomSettings
     // {
@@ -600,7 +603,12 @@ module.exports = React.createClass({
             <input id={ setting.id }
                    type="checkbox"
                    defaultChecked={ this._syncedSettings[setting.id] }
-                   onChange={ (e) => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
+                   onChange={
+                       (e) => {
+                           UserSettingsStore.setSyncedSetting(setting.id, e.target.checked);
+                           if (setting.fn) setting.fn(e.target.checked);
+                       }
+                   }
             />
             <label htmlFor={ setting.id }>
                 { _t(setting.label) }
@@ -676,7 +684,6 @@ module.exports = React.createClass({
     },
 
     _renderLocalSetting: function(setting) {
-        const client = MatrixClientPeg.get();
         return <div className="mx_UserSettings_toggle" key={ setting.id }>
             <input id={ setting.id }
                    type="checkbox"
@@ -684,11 +691,9 @@ module.exports = React.createClass({
                    onChange={
                         (e) => {
                             UserSettingsStore.setLocalSetting(setting.id, e.target.checked);
-                            if (setting.id === 'blacklistUnverifiedDevices') { // XXX: this is a bit ugly
-                                client.setGlobalBlacklistUnverifiedDevices(e.target.checked);
-                            }
+                            if (setting.fn) setting.fn(e.target.checked);
                         }
-                    }
+                   }
             />
             <label htmlFor={ setting.id }>
                 { _t(setting.label) }
