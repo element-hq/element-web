@@ -851,7 +851,7 @@ module.exports = React.createClass({
                                ipcRenderer.send('settings_set', 'auto-launch', e.target.checked);
                            }}
                     />
-                    <label htmlFor="auto-launch">Start automatically after system login</label>
+                    <label htmlFor="auto-launch">{_t('Start automatically after system login')}</label>
                 </div>
             </div>
         </div>;
