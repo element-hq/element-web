@@ -87,10 +87,10 @@ export function getAllLanguageKeysFromJson() {
 }
 
 export function getLanguagesFromBrowser() {
-    if (navigator.languages) return navigator.languages;
-    if (navigator.language) return [navigator.language]
+    if (navigator.languages && navigator.languages.length) return navigator.languages;
+    if (navigator.language) return [navigator.language];
     return [navigator.userLanguage];
-};
+}
 
 /**
  * Turns a language string, normalises it,
