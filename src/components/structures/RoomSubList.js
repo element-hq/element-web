@@ -20,7 +20,8 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var classNames = require('classnames');
 var DropTarget = require('react-dnd').DropTarget;
-var sdk = require('matrix-react-sdk')
+var sdk = require('matrix-react-sdk');
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Unread = require('matrix-react-sdk/lib/Unread');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
@@ -463,7 +464,7 @@ var RoomSubList = React.createClass({
         return (
             <AccessibleButton className="mx_RoomSubList_ellipsis" onClick={this._showFullMemberList}>
                 <div className="mx_RoomSubList_line"></div>
-                <div className="mx_RoomSubList_more">more</div>
+                <div className="mx_RoomSubList_more">{ _t("more") }</div>
                 <div className={ badgeClasses }>{ content }</div>
             </AccessibleButton>
         );
@@ -509,8 +510,8 @@ var RoomSubList = React.createClass({
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Failed to add tag " + self.props.tagName + " to room" + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Failed to add tag " + self.props.tagName + " to room",
-                            description: ((err && err.message) ? err.message : "Operation failed"),
+                            title: _t('Failed to add tag %(tagName)s to room', {tagName: self.props.tagName}),
+                            description: ((err && err.message) ? err.message : _t('Operation failed')),
                         });
                     });
                     break;
@@ -530,7 +531,7 @@ var RoomSubList = React.createClass({
 
         var target;
         if (this.state.sortedList.length == 0 && this.props.editable) {
-            target = <RoomDropTarget label={ 'Drop here to ' + this.props.verb }/>;
+            target = <RoomDropTarget label={ _t("Drop here %(toAction)s", {toAction: this.props.verb}) }/>;
         }
 
         if (this.state.sortedList.length > 0 || this.props.editable) {
