@@ -91,6 +91,16 @@ const SETTINGS_LABELS = [
 */
 ];
 
+const ANALYTICS_SETTINGS_LABELS = [
+    {
+        id: 'analyticsOptOut',
+        label: 'Opt out of analytics',
+        fn: function(checked) {
+            Analytics[checked ? 'disable' : 'enable']();
+        },
+    },
+];
+
 // Warning: Each "label" string below must be added to i18n/strings/en_EN.json,
 // since they will be translated when rendered.
 const CRYPTO_SETTINGS_LABELS = [
@@ -728,26 +738,12 @@ module.exports = React.createClass({
         );
     },
 
-    _onAnalyticsOptOut: function(ev) {
-        UserSettingsStore.setSyncedSetting('analyticsOptOut', ev.target.checked);
-        Analytics[ev.target.checked ? 'disable' : 'enable']();
-    },
-
     _renderAnalyticsControl: function() {
         return <div>
             <h3>{ _t('Analytics') }</h3>
             <div className="mx_UserSettings_section">
                 {_t('Riot collects anonymous analytics to allow us to improve the application.')}
-                <div className="mx_UserSettings_toggle">
-                    <input id="analyticsOptOut"
-                           type="checkbox"
-                           defaultChecked={this._syncedSettings.analyticsOptOut}
-                           onChange={this._onAnalyticsOptOut}
-                    />
-                    <label htmlFor="analyticsOptOut">
-                        { _t('Opt out of analytics') }
-                    </label>
-                </div>
+                {ANALYTICS_SETTINGS_LABELS.map( this._renderLocalSetting )}
             </div>
         </div>;
     },
