@@ -1,66 +1,60 @@
 .container {
-  background-color: #e7e7e7;
 }
 
 div.row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 img.logo {
-  margin-top: 26px;
-  margin-left: 10px;
-  display: inline;
+    margin-top: 26px;
+    margin-left: 10px;
+    display: inline;
 }
 
 a.bigicon {
-  cursor: pointer;
-  display: inline;
-  text-decoration: none;
-  text-align: center;
-  padding-left: 10px;
-  padding-right: 10px;
-  width: 120px;
+    cursor: pointer;
+    display: inline;
+    text-decoration: none;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 120px;
 }
 
 a.bigicon .icon {
-  border-radius: 50%;
-  width: 65px;
-  height: 65px;
+    border-radius: 50%;
+    width: 65px;
+    height: 65px;
 }
 
 a.bigicon .title {
-  display: block;
+    display: block;
 }
 
 a.bigicon .roomname {
-  display: block;
-  white-space: nowrap;
-  font-size: 12px;
+    display: block;
+    white-space: nowrap;
+    font-size: 12px;
 }
 
 .description {
-  display: inline;
-  vertical-align: top;
-}
-
-h1, h2, h3, h4 {
-  font-family: "Tahoma";
+    display: inline;
+    vertical-align: top;
 }
 
 h2 {
-  font-size: 26px;
+    font-size: 26px;
 }
 
 h4 {
-  margin-top: 22px;
+    margin-top: 22px;
 }
 
 h3::after, h4::after {
-  content: ":";
+    content: ":";
 }
 
 p {
-  font-family: "Tahoma";
 }
