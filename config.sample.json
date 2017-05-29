@@ -12,7 +12,7 @@
         ]
     },
     "piwik": {
-        "url": "//piwik.riot.im/",
+        "url": "https://piwik.riot.im/",
         "siteId": 1
     }
 }
