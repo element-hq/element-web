@@ -28,6 +28,7 @@ const GeminiScrollbar = require('react-gemini-scrollbar');
 const Email = require('../../email');
 const AddThreepid = require('../../AddThreepid');
 const SdkConfig = require('../../SdkConfig');
+import Analytics from '../../Analytics';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import { _t } from '../../languageHandler';
 import * as languageHandler from '../../languageHandler';
@@ -55,7 +56,7 @@ const gHVersionLabel = function(repo, token='') {
 // Enumerate some simple 'flip a bit' UI settings (if any).
 // 'id' gives the key name in the im.vector.web.settings account data event
 // 'label' is how we describe it in the UI.
-// Warning: Each "label" string below must be added to i18n/strings/en_EN.json, 
+// Warning: Each "label" string below must be added to i18n/strings/en_EN.json,
 // since they will be translated when rendered.
 const SETTINGS_LABELS = [
     {
@@ -90,7 +91,7 @@ const SETTINGS_LABELS = [
 */
 ];
 
-// Warning: Each "label" string below must be added to i18n/strings/en_EN.json, 
+// Warning: Each "label" string below must be added to i18n/strings/en_EN.json,
 // since they will be translated when rendered.
 const CRYPTO_SETTINGS_LABELS = [
     {
@@ -722,6 +723,30 @@ module.exports = React.createClass({
         );
     },
 
+    _onAnalyticsOptOut: function(ev) {
+        UserSettingsStore.setSyncedSetting('analyticsOptOut', ev.target.checked);
+        Analytics[ev.target.checked ? 'disable' : 'enable']();
+    },
+
+    _renderAnalyticsControl: function() {
+        return <div>
+            <h3>{ _t('Analytics') }</h3>
+            <div className="mx_UserSettings_section">
+                {_t('Riot collects anonymous analytics to allow us to improve the application.')}
+                <div className="mx_UserSettings_toggle">
+                    <input id="analyticsOptOut"
+                           type="checkbox"
+                           defaultChecked={this._syncedSettings.analyticsOptOut}
+                           onChange={this._onAnalyticsOptOut}
+                    />
+                    <label htmlFor="analyticsOptOut">
+                        { _t('Opt out of analytics') }
+                    </label>
+                </div>
+            </div>
+        </div>;
+    },
+
     _renderLabs: function() {
         // default to enabled if undefined
         if (this.props.enableLabs === false) return null;
@@ -1018,6 +1043,8 @@ module.exports = React.createClass({
                 {this._renderCryptoInfo()}
                 {this._renderBulkOptions()}
                 {this._renderBugReport()}
+
+                {this._renderAnalyticsControl()}
 
                 <h3>{ _t("Advanced") }</h3>
 

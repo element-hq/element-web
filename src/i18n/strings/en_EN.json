@@ -678,5 +678,8 @@
   "%(severalUsers)schanged their avatar %(repeats)s times": "%(severalUsers)schanged their avatar %(repeats)s times",
   "%(oneUser)schanged their avatar %(repeats)s times": "%(oneUser)schanged their avatar %(repeats)s times",
   "%(severalUsers)schanged their avatar": "%(severalUsers)schanged their avatar",
-  "%(oneUser)schanged their avatar": "%(oneUser)schanged their avatar"
+  "%(oneUser)schanged their avatar": "%(oneUser)schanged their avatar",
+  "Analytics": "Analytics",
+  "Opt out of analytics": "Opt out of analytics",
+  "Riot collects anonymous analytics to allow us to improve the application.": "Riot collects anonymous analytics to allow us to improve the application."
 }
