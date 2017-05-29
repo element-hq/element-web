@@ -1,5 +1,3 @@
-// @flow
-
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
@@ -20,16 +18,15 @@ limitations under the License.
 // Squirrel on windows starts the app with various flags
 // as hooks to tell us when we've been installed/uninstalled
 // etc.
-const check_squirrel_hooks = require('./squirrelhooks');
-if (check_squirrel_hooks()) return;
+const checkSquirrelHooks = require('./squirrelhooks');
+if (checkSquirrelHooks()) return;
 
 const electron = require('electron');
 const AutoLaunch = require('auto-launch');
-const url = require('url');
 
 const tray = require('./tray');
-
-const VectorMenu = require('./vectormenu');
+const vectorMenu = require('./vectormenu');
+const webContentsHandler = require('./webcontents-handler');
 
 const windowStateKeeper = require('electron-window-state');
 
@@ -43,12 +40,6 @@ try {
     // Continue with the defaults (ie. an empty config)
 }
 
-const PERMITTED_URL_SCHEMES = [
-    'http:',
-    'https:',
-    'mailto:',
-];
-
 const UPDATE_POLL_INTERVAL_MS = 60 * 60 * 1000;
 const INITIAL_UPDATE_DELAY_MS = 30 * 1000;
 
@@ -60,13 +51,13 @@ function safeOpenURL(target) {
     // so put fairly stringent limits on what can be opened
     // (for instance, open /bin/sh does indeed open a terminal
     // with a shell, albeit with no arguments)
-    const parsed_url = url.parse(target);
-    if (PERMITTED_URL_SCHEMES.indexOf(parsed_url.protocol) > -1) {
+    const parsedUrl = url.parse(target);
+    if (PERMITTED_URL_SCHEMES.indexOf(parsedUrl.protocol) > -1) {
         // explicitly use the URL re-assembled by the url library,
         // so we know the url parser has understood all the parts
         // of the input string
-        const new_target = url.format(parsed_url);
-        electron.shell.openExternal(new_target);
+        const newTarget = url.format(parsedUrl);
+        electron.shell.openExternal(newTarget);
     }
 }
 
@@ -80,20 +71,19 @@ function onWindowOrNavigate(ev, target) {
 }
 
 function onLinkContextMenu(ev, params) {
-    const popup_menu = new electron.Menu();
-    popup_menu.append(new electron.MenuItem({
+    const popupMenu = new electron.Menu();
+
+    popupMenu.append(new electron.MenuItem({
         label: params.linkURL,
-        click() {
-            safeOpenURL(params.linkURL);
-        },
+        click() { safeOpenURL(params.linkURL); },
     }));
-    popup_menu.append(new electron.MenuItem({
+
+    popupMenu.append(new electron.MenuItem({
         label: 'Copy Link Address',
-        click() {
-            electron.clipboard.writeText(params.linkURL);
-        },
+        click() { electron.clipboard.writeText(params.linkURL); },
     }));
-    popup_menu.popup();
+
+    popupMenu.popup();
     ev.preventDefault();
 }
 
@@ -108,13 +98,13 @@ function pollForUpdates() {
     try {
         electron.autoUpdater.checkForUpdates();
     } catch (e) {
-        console.log("Couldn't check for update", e);
+        console.log('Couldn\'t check for update', e);
     }
 }
 
-function startAutoUpdate(update_base_url) {
-    if (update_base_url.slice(-1) !== '/') {
-        update_base_url = update_base_url + '/';
+function startAutoUpdate(updateBaseUrl) {
+    if (updateBaseUrl.slice(-1) !== '/') {
+        updateBaseUrl = updateBaseUrl + '/';
     }
     try {
         // For reasons best known to Squirrel, the way it checks for updates
@@ -122,7 +112,7 @@ function startAutoUpdate(update_base_url) {
         // hits a URL that either gives it a 200 with some json or
         // 204 No Content. On windows it takes a base path and looks for
         // files under that path.
-        if (process.platform == 'darwin') {
+        if (process.platform === 'darwin') {
             // include the current version in the URL we hit. Electron doesn't add
             // it anywhere (apart from the User-Agent) so it's up to us. We could
             // (and previously did) just use the User-Agent, but this doesn't
@@ -130,16 +120,15 @@ function startAutoUpdate(update_base_url) {
             // and also acts as a convenient cache-buster to ensure that when the
             // app updates it always gets a fresh value to avoid update-looping.
             electron.autoUpdater.setFeedURL(
-                update_base_url +
-                'macos/?localVersion=' + encodeURIComponent(electron.app.getVersion())
-            );
-        } else if (process.platform == 'win32') {
-            electron.autoUpdater.setFeedURL(update_base_url + 'win32/' + process.arch + '/');
+                `${updateBaseUrl}macos/?localVersion=${encodeURIComponent(electron.app.getVersion())}`);
+
+        } else if (process.platform === 'win32') {
+            electron.autoUpdater.setFeedURL(`${updateBaseUrl}win32/${process.arch}/`);
         } else {
             // Squirrel / electron only supports auto-update on these two platforms.
             // I'm not even going to try to guess which feed style they'd use if they
             // implemented it on Linux, or if it would be different again.
-            console.log("Auto update not supported on this platform");
+            console.log('Auto update not supported on this platform');
         }
         // We check for updates ourselves rather than using 'updater' because we need to
         // do it in the main process (and we don't really need to check every 10 minutes:
@@ -152,7 +141,7 @@ function startAutoUpdate(update_base_url) {
         setInterval(pollForUpdates, UPDATE_POLL_INTERVAL_MS);
     } catch (err) {
         // will fail if running in debug mode
-        console.log("Couldn't enable update checking", err);
+        console.log('Couldn\'t enable update checking', err);
     }
 }
 
@@ -163,7 +152,7 @@ function startAutoUpdate(update_base_url) {
 // Assuming we generally run from the console when developing,
 // this is far preferable.
 process.on('uncaughtException', function(error) {
-    console.log("Unhandled exception", error);
+    console.log('Unhandled exception', error);
 });
 
 electron.ipcMain.on('install_update', installUpdate);
@@ -187,6 +176,24 @@ electron.ipcMain.on('setBadgeCount', function(ev, count) {
     }
 });
 
+let powerSaveBlockerId;
+electron.ipcMain.on('app_onAction', function(ev, payload) {
+    switch (payload.action) {
+        case 'call_state':
+            if (powerSaveBlockerId && powerSaveBlockerId.isStarted(powerSaveBlockerId)) {
+                if (payload.state === 'ended') {
+                    electron.powerSaveBlocker.stop(powerSaveBlockerId);
+                }
+            } else {
+                if (payload.state === 'connected') {
+                    powerSaveBlockerId = electron.powerSaveBlocker.start('prevent-display-sleep');
+                }
+            }
+            break;
+    }
+});
+
+
 electron.app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
 
 const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirectory) => {
@@ -199,8 +206,8 @@ const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirector
 });
 
 if (shouldQuit) {
-    console.log("Other instance detected: exiting");
-    electron.app.quit()
+    console.log('Other instance detected: exiting');
+    electron.app.quit();
 }
 
 
@@ -243,24 +250,22 @@ electron.ipcMain.on('settings_set', function(ev, key, value) {
 
 electron.app.on('ready', () => {
     if (vectorConfig.update_base_url) {
-        console.log("Starting auto update with base URL: " + vectorConfig.update_base_url);
+        console.log(`Starting auto update with base URL: ${vectorConfig.update_base_url}`);
         startAutoUpdate(vectorConfig.update_base_url);
     } else {
-        console.log("No update_base_url is defined: auto update is disabled");
+        console.log('No update_base_url is defined: auto update is disabled');
     }
 
-    const icon_path = `${__dirname}/../img/riot.` + (
-        process.platform == 'win32' ? 'ico' : 'png'
-    );
+    const iconPath = `${__dirname}/../img/riot.${process.platform === 'win32' ? 'ico' : 'png'}`;
 
     // Load the previous window state with fallback to defaults
-    let mainWindowState = windowStateKeeper({
+    const mainWindowState = windowStateKeeper({
         defaultWidth: 1024,
         defaultHeight: 768,
     });
 
     mainWindow = new electron.BrowserWindow({
-        icon: icon_path,
+        icon: iconPath,
         show: false,
         autoHideMenuBar: true,
 
@@ -270,12 +275,12 @@ electron.app.on('ready', () => {
         height: mainWindowState.height,
     });
     mainWindow.loadURL(`file://${__dirname}/../../webapp/index.html`);
-    electron.Menu.setApplicationMenu(VectorMenu);
+    electron.Menu.setApplicationMenu(vectorMenu);
 
     // Create trayIcon icon
     tray.create(mainWindow, {
-        icon_path: icon_path,
-        brand: vectorConfig.brand || 'Riot'
+        icon_path: iconPath,
+        brand: vectorConfig.brand || 'Riot',
     });
 
     if (!process.argv.includes('--hidden')) {
@@ -288,7 +293,7 @@ electron.app.on('ready', () => {
         mainWindow = null;
     });
     mainWindow.on('close', (e) => {
-        if (!appQuitting && (tray.hasTray() || process.platform == 'darwin')) {
+        if (!appQuitting && (tray.hasTray() || process.platform === 'darwin')) {
             // On Mac, closing the window just hides it
             // (this is generally how single-window Mac apps
             // behave, eg. Mail.app)
@@ -298,15 +303,7 @@ electron.app.on('ready', () => {
         }
     });
 
-    mainWindow.webContents.on('new-window', onWindowOrNavigate);
-    mainWindow.webContents.on('will-navigate', onWindowOrNavigate);
-
-    mainWindow.webContents.on('context-menu', function(ev, params) {
-        if (params.linkURL) {
-            onLinkContextMenu(ev, params);
-        }
-    });
-
+    webContentsHandler(mainWindow.webContents);
     mainWindowState.manage(mainWindow);
 });
 
