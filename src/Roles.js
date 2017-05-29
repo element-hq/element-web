@@ -13,14 +13,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-export const LEVEL_ROLE_MAP = {
-    undefined: 'Default',
-    0: 'User',
-    50: 'Moderator',
-    100: 'Admin',
-};
+import { _t } from './languageHandler';
+
+export function levelRoleMap() {
+    return {
+        undefined: _t('Default'),
+        0: _t('User'),
+        50:  _t('Moderator'),
+        100: _t('Admin'),
+    };
+}
 
 export function textualPowerLevel(level, userDefault) {
+    const LEVEL_ROLE_MAP = this.levelRoleMap();
     if (LEVEL_ROLE_MAP[level]) {
         return LEVEL_ROLE_MAP[level] + (level !== undefined ? ` (${level})` : ` (${userDefault})`);
     } else {
