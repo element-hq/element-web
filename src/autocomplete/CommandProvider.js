@@ -45,10 +45,10 @@ const COMMANDS = [
         command: '/ddg',
         args: '<query>',
         description: 'Searches DuckDuckGo for results',
-    }
+    },
 ];
 
-let COMMAND_RE = /(^\/\w*)/g;
+const COMMAND_RE = /(^\/\w*)/g;
 
 let instance = null;
 
@@ -62,9 +62,9 @@ export default class CommandProvider extends AutocompleteProvider {
 
     async getCompletions(query: string, selection: {start: number, end: number}) {
         let completions = [];
-        let {command, range} = this.getCurrentCommand(query, selection);
+        const {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
-            completions = this.fuse.search(command[0]).map(result => {
+            completions = this.fuse.search(command[0]).map((result) => {
                 return {
                     completion: result.command + ' ',
                     component: (<TextualCompletion
@@ -84,8 +84,7 @@ export default class CommandProvider extends AutocompleteProvider {
     }
 
     static getInstance(): CommandProvider {
-        if (instance == null)
-            {instance = new CommandProvider();}
+        if (instance === null) instance = new CommandProvider();
 
         return instance;
     }
