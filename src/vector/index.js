@@ -280,8 +280,8 @@ async function loadApp() {
     } else if (validBrowser) {
         UpdateChecker.start();
 
-        const doNotTrack = navigator.doNotTrack === 'yes' || navigator.doNotTrack === '1' || navigator.doNotTrack === 1;
-        if (!doNotTrack && configJson.piwik && configJson.piwik.url && configJson.piwik.siteId) {
+        const analyticsEnabled = !UserSettingsStore.getLocalSetting('analyticsOptOut', false);
+        if (analyticsEnabled && configJson.piwik && configJson.piwik.url && configJson.piwik.siteId) {
             (function() {
                 const g = document.createElement('script');
                 const s = document.getElementsByTagName('script')[0];
