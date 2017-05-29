@@ -178,6 +178,7 @@ module.exports = React.createClass({
         Modal.createDialog(TextInputDialog, {
             title: _t('Keywords'),
             description: _t('Enter keywords separated by a comma:'),
+            button: _t('OK'),
             value: keywords,
             onFinished: function onFinished(should_leave, newValue) {
 
