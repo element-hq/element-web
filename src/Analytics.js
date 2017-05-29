@@ -32,9 +32,7 @@ class Analytics {
      * otherwise try and initalize, no-op if piwik config missing
      */
     enable() {
-        if (this.tracker || this._init()) {
-            this.disabled = false;
-        }
+        if (!this.tracker) this._init();
     }
 
     /**
@@ -71,6 +69,7 @@ class Analytics {
     }
 
     _set(tracker) {
+        this.disabled = false;
         this.tracker = tracker;
         this.tracker.discardHashTag(false);
         this.tracker.enableHeartBeatTimer();
