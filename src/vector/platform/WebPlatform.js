@@ -31,6 +31,10 @@ export default class WebPlatform extends VectorBasePlatform {
         this.runningVersion = null;
     }
 
+    getHumanReadableName() {
+        return 'Web Platform';
+    }
+
     /**
      * Returns true if the platform supports displaying
      * notifications, otherwise false.

@@ -35,6 +35,10 @@ export default class VectorBasePlatform extends BasePlatform {
         this._updateFavicon();
     }
 
+    getHumanReadableName() {
+        return 'Vector Base Platform';
+    }
+
     _updateFavicon() {
         try {
             // This needs to be in in a try block as it will throw
