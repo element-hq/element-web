@@ -16,13 +16,14 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
 
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var sdk = require('matrix-react-sdk');
-var Modal = require('matrix-react-sdk/lib/Modal');
-var Resend = require("matrix-react-sdk/lib/Resend");
+const MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+const dis = require('matrix-react-sdk/lib/dispatcher');
+const sdk = require('matrix-react-sdk');
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
+const Modal = require('matrix-react-sdk/lib/Modal');
+const Resend = require("matrix-react-sdk/lib/Resend");
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 
 module.exports = React.createClass({
@@ -45,7 +46,7 @@ module.exports = React.createClass({
     },
 
     onViewSourceClick: function() {
-        var ViewSource = sdk.getComponent('structures.ViewSource');
+        const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createDialog(ViewSource, {
             content: this.props.mxEvent.event,
         }, 'mx_Dialog_viewsource');
@@ -70,12 +71,12 @@ module.exports = React.createClass({
                 MatrixClientPeg.get().redactEvent(
                     this.props.mxEvent.getRoomId(), this.props.mxEvent.getId()
                 ).catch(function(e) {
-                    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     // display error message stating you couldn't delete this.
-                    var code = e.errcode || e.statusCode;
+                    const code = e.errcode || e.statusCode;
                     Modal.createDialog(ErrorDialog, {
-                        title: "Error",
-                        description: "You cannot delete this message. (" + code + ")"
+                        title: _t('Error'),
+                        description: _t('You cannot delete this message. (%(code)s)', {code: code})
                     });
                 }).done();
             },
@@ -86,6 +87,14 @@ module.exports = React.createClass({
     onCancelSendClick: function() {
         Resend.removeFromQueue(this.props.mxEvent);
         if (this.props.onFinished) this.props.onFinished();
+    },
+
+    onForwardClick: function() {
+        dis.dispatch({
+            action: 'forward_event',
+            content: this.props.mxEvent,
+        });
+        this.closeMenu();
     },
 
     closeMenu: function() {
@@ -99,7 +108,7 @@ module.exports = React.createClass({
         if (this.props.onFinished) this.props.onFinished();
     },
 
-    onQuoteClick: function () {
+    onQuoteClick: function() {
         console.log(this.props.mxEvent);
         dis.dispatch({
             action: 'quote',
@@ -108,20 +117,21 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var eventStatus = this.props.mxEvent.status;
-        var resendButton;
-        var viewSourceButton;
-        var viewClearSourceButton;
-        var redactButton;
-        var cancelButton;
-        var permalinkButton;
-        var unhidePreviewButton;
-        var externalURLButton;
+        const eventStatus = this.props.mxEvent.status;
+        let resendButton;
+        let redactButton;
+        let cancelButton;
+        let forwardButton;
+        let viewSourceButton;
+        let viewClearSourceButton;
+        let unhidePreviewButton;
+        let permalinkButton;
+        let externalURLButton;
 
         if (eventStatus === 'not_sent') {
             resendButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onResendClick}>
-                    Resend
+                    { _t('Resend') }
                 </div>
             );
         }
@@ -132,7 +142,7 @@ module.exports = React.createClass({
         if (room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId)) {
             redactButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
-                    Redact
+                    { _t('Remove') }
                 </div>
             );
         }
@@ -140,21 +150,32 @@ module.exports = React.createClass({
         if (eventStatus === "queued" || eventStatus === "not_sent") {
             cancelButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onCancelSendClick}>
-                    Cancel Sending
+                    { _t('Cancel Sending') }
                 </div>
             );
         }
 
+        if (!eventStatus && this.props.mxEvent.getType() === 'm.room.message') {
+            const content = this.props.mxEvent.getContent();
+            if (content.msgtype && content.msgtype !== 'm.bad.encrypted' && content.hasOwnProperty('body')) {
+                forwardButton = (
+                    <div className="mx_MessageContextMenu_field" onClick={this.onForwardClick}>
+                        Forward Message
+                    </div>
+                );
+            }
+        }
+
         viewSourceButton = (
             <div className="mx_MessageContextMenu_field" onClick={this.onViewSourceClick}>
-                View Source
+                { _t('View Source') }
             </div>
         );
 
         if (this.props.mxEvent.getType() !== this.props.mxEvent.getWireType()) {
             viewClearSourceButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onViewClearSourceClick}>
-                    View Decrypted Source
+                    { _t('View Decrypted Source') }
                 </div>
             );
         }
@@ -163,9 +184,9 @@ module.exports = React.createClass({
             if (this.props.eventTileOps.isWidgetHidden()) {
                 unhidePreviewButton = (
                     <div className="mx_MessageContextMenu_field" onClick={this.onUnhidePreviewClick}>
-                        Unhide Preview
+                        { _t('Unhide Preview') }
                     </div>
-                )
+                );
             }
         }
 
@@ -173,13 +194,13 @@ module.exports = React.createClass({
         permalinkButton = (
             <div className="mx_MessageContextMenu_field">
                 <a href={ "https://matrix.to/#/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId() }
-                  target="_blank" rel="noopener" onClick={ this.closeMenu }>Permalink</a>
+                  target="_blank" rel="noopener" onClick={ this.closeMenu }>{ _t('Permalink') }</a>
             </div>
         );
 
         const quoteButton = (
             <div className="mx_MessageContextMenu_field" onClick={this.onQuoteClick}>
-                Quote
+                { _t('Quote') }
             </div>
         );
 
@@ -188,7 +209,7 @@ module.exports = React.createClass({
           externalURLButton = (
               <div className="mx_MessageContextMenu_field">
                   <a href={ this.props.mxEvent.event.content.external_url }
-                    rel="noopener" target="_blank"  onClick={ this.closeMenu }>Source URL</a>
+                    rel="noopener" target="_blank"  onClick={ this.closeMenu }>{ _t('Source URL') }</a>
               </div>
           );
         }
@@ -199,6 +220,7 @@ module.exports = React.createClass({
                 {resendButton}
                 {redactButton}
                 {cancelButton}
+                {forwardButton}
                 {viewSourceButton}
                 {viewClearSourceButton}
                 {unhidePreviewButton}
@@ -207,5 +229,5 @@ module.exports = React.createClass({
                 {externalURLButton}
             </div>
         );
-    }
+    },
 });
