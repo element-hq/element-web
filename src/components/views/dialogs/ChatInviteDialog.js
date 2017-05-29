@@ -34,7 +34,7 @@ const TRUNCATE_QUERY_LIST = 40;
 module.exports = React.createClass({
     displayName: "ChatInviteDialog",
     propTypes: {
-        title: React.PropTypes.string,
+        title: React.PropTypes.string.isRequired,
         description: React.PropTypes.oneOfType([
             React.PropTypes.element,
             React.PropTypes.string,
