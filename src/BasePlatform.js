@@ -29,6 +29,11 @@ export default class BasePlatform {
         this.errorDidOccur = false;
     }
 
+    // Used primarily for Analytics
+    getHumanReadableName() {
+        return 'Base Platform';
+    }
+
     setNotificationCount(count: number) {
         this.notificationCount = count;
     }
