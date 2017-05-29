@@ -30,7 +30,7 @@ export default class BasePlatform {
     }
 
     // Used primarily for Analytics
-    getHumanReadableName() {
+    getHumanReadableName(): string {
         return 'Base Platform';
     }
 
