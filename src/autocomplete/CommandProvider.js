@@ -70,7 +70,7 @@ export default class CommandProvider extends AutocompleteProvider {
                     component: (<TextualCompletion
                         title={result.command}
                         subtitle={result.args}
-                        description={ t_(result.description) }
+                        description={ _t(result.description) }
                         />),
                     range,
                 };
