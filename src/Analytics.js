@@ -75,7 +75,7 @@ class Analytics {
         this._paq.push(['enableLinkTracking', true]);
 
         const platform = PlatformPeg.get();
-        this._setVisitVariable('App Platform', platform.constructor.name);
+        this._setVisitVariable('App Platform', platform.getHumanReadableName());
         platform.getAppVersion().then((version) => {
             this._setVisitVariable('App Version', version);
         }).catch(() => {
