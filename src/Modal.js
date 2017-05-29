@@ -105,7 +105,7 @@ class ModalManager {
     }
 
     createDialog(Element, props, className) {
-        Analytics.trackEvent('Modal', props.title, 'createDialog');
+        Analytics.trackEvent('Modal', props && props.title ? props.title : className, 'createDialog');
         return this.createDialogAsync((cb) => {cb(Element);}, props, className);
     }
 
