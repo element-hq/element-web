@@ -11,7 +11,7 @@
     "Create new room": "Neuen Raum erstellen",
     "Settings": "Einstellungen",
     "powered by Matrix": "basierend auf Matrix",
-    "Custom Server Options": "Optionen für eigenen Server",
+    "Custom Server Options": "Erweiterte Server-Optionen",
     "Dismiss": "ausblenden",
     "Failed to get protocol list from Home Server": "Fehler beim Abrufen der Protokoll-Liste vom Home-Server",
     "The Home Server may be too old to support third party networks": "Der Home-Server ist eventuell zu alt, um Drittanbieter-Netzwerke zu unterstützen",
