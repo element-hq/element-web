@@ -67,7 +67,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         dis.register(_onAction);
     }
 
-    getHumanReadableName() {
+    getHumanReadableName(): string {
         return 'Electron Platform';
     }
 

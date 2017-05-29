@@ -31,7 +31,7 @@ export default class WebPlatform extends VectorBasePlatform {
         this.runningVersion = null;
     }
 
-    getHumanReadableName() {
+    getHumanReadableName(): string {
         return 'Web Platform';
     }
 

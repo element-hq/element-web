@@ -35,7 +35,7 @@ export default class VectorBasePlatform extends BasePlatform {
         this._updateFavicon();
     }
 
-    getHumanReadableName() {
+    getHumanReadableName(): string {
         return 'Vector Base Platform';
     }
 
