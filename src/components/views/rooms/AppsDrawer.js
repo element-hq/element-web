@@ -21,6 +21,22 @@ const AddAppDialog = require('../dialogs/AddAppDialog');
 const AppTile = require('../elements/AppTile');
 const Modal = require("../../../Modal");
 
+// FIXME -- Hard coded widget config
+const roomWidgetConfig = {
+    '!IAkkwswSrOSzPRWksX:matrix.org': [
+        {
+            id: "youtube",
+            url: "https://www.youtube.com/embed/ZJy1ajvMU1k?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1",
+            name: "Live stream - Boeuf Bourguignon",
+        },
+        {
+            id: "recipie",
+            url: "http://localhost:8000/recepie.html",
+            name: "Ingredients - Boeuf Bourguignon",
+        },
+    ],
+};
+
 module.exports = React.createClass({
     displayName: 'AppsDrawer',
 
@@ -31,19 +47,15 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
+        for (const key in roomWidgetConfig) {
+            if(key == this.props.room.roomId) {
+                return {
+                    apps: roomWidgetConfig[key],
+                };
+            }
+        }
         return {
-            apps: [
-                {
-                    id: "youtube",
-                    url: "https://www.youtube.com/embed/ZJy1ajvMU1k?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1",
-                    name: "Live stream - Boeuf Bourguignon",
-                },
-                {
-                    id: "recipie",
-                    url: "http://localhost:8000/recepie.html",
-                    name: "Ingredients - Boeuf Bourguignon",
-                },
-            ],
+            apps: [],
         };
     },
 
