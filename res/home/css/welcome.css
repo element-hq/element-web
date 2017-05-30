@@ -1,6 +1,35 @@
+.mx_HomePage_header h1 {
+    margin-left: 0px;
+    margin-bottom: 0px;
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
+.mx_HomePage_header h2 {
+    margin-left: 0px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+.mx_HomePage h3 {
+    margin-top: 30px;
+}
+
+.mx_HomePage_header {
+    border: 1px solid #76CFA6;
+    background-color: #eaf5f0;
+    border-radius: 5px;
+    color: #454545;
+    align-items: center;
+}
+
 .mx_HomePage_col {
     display: flex;
     flex-direction: row;
+}
+
+.mx_HomePage_toprow {
     flex-wrap: wrap;
 }
 
@@ -31,10 +60,15 @@
     width: 120px;
 }
 
+.mx_HomePage_toprow .mx_HomePage_room {
+    width: 64px;
+}
+
+
 .mx_HomePage_room .mx_HomePage_icon {
     border-radius: 50%;
-    width: 65px;
-    height: 65px;
+    width: 64px;
+    height: 64px;
 }
 
 .mx_HomePage_room .mx_HomePage_name {
@@ -48,12 +82,14 @@
 }
 
 .mx_HomePage_comment {
-    display: block;
-    margin-left: 140px;
-    vertical-align: top;
+    display: flex;
+    align-items: center;
+    margin-left: 100px;
+    min-height: 64px;
 }
 
-h3::after, h4::after {
+.mx_HomePage_container h3::after,
+.mx_HomePage_container h4::after {
     content: ":";
 }
 
@@ -62,11 +98,9 @@ h3::after, h4::after {
     margin: 20px;
 }
 
-.mx_HomePage_container h1 {
-    margin: 0px;
-    margin-top: 35px;
-}
-
-.mx_HomePage_container h2 {
-    margin-top: 5px;
+.mx_HomePage_container h1, 
+.mx_HomePage_container h2, 
+.mx_HomePage_container h3, 
+.mx_HomePage_container h4 {
+    font-weight: 600;
 }
