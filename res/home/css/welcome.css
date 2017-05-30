@@ -1,21 +1,29 @@
-.container {
-}
-
-div.row {
+.mx_HomePage_col {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-img.logo {
-    margin-top: 26px;
-    margin-left: 10px;
-    display: inline;
+.mx_HomePage_row {
+    flex: 1 1 0;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
-a.bigicon {
-    cursor: pointer;
+.mx_HomePage_logo {
+    margin-top: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-bottom: 20px;
     display: inline;
+    height: 100px;
+}
+
+.mx_HomePage_room {
+    cursor: pointer;
+    float: left;
     text-decoration: none;
     text-align: center;
     padding-left: 10px;
@@ -23,38 +31,42 @@ a.bigicon {
     width: 120px;
 }
 
-a.bigicon .icon {
+.mx_HomePage_room .mx_HomePage_icon {
     border-radius: 50%;
     width: 65px;
     height: 65px;
 }
 
-a.bigicon .title {
+.mx_HomePage_room .mx_HomePage_name {
     display: block;
 }
 
-a.bigicon .roomname {
+.mx_HomePage_room .mx_HomePage_desc {
     display: block;
-    white-space: nowrap;
     font-size: 12px;
+    margin-top: 8px;
 }
 
-.description {
-    display: inline;
+.mx_HomePage_comment {
+    display: block;
+    margin-left: 140px;
     vertical-align: top;
-}
-
-h2 {
-    font-size: 26px;
-}
-
-h4 {
-    margin-top: 22px;
 }
 
 h3::after, h4::after {
     content: ":";
 }
 
-p {
+.mx_HomePage_container {
+    display: block ! important;
+    margin: 20px;
+}
+
+.mx_HomePage_container h1 {
+    margin: 0px;
+    margin-top: 35px;
+}
+
+.mx_HomePage_container h2 {
+    margin-top: 5px;
 }
