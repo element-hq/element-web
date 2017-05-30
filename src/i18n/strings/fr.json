@@ -268,7 +268,7 @@
     "Failed to reject invitation": "Échec lors du rejet de l'invitation",
     "Failed to save settings": "Échec lors de la sauvegarde des paramètres",
     "Failed to send email": "Échec lors de l’envoi de l’e-mail",
-    "Failed to send request.": "Échec lors de l’envoi de la requête.",
+    "Failed to send request.": "Erreur lors de l'envoi de la requête.",
     "Failed to set display name": "Échec lors de l'enregistrement du nom d'affichage",
     "Failed to set up conference call": "Échec lors de l’établissement de l’appel",
     "Failed to toggle moderator status": "Échec lors de l’établissement du statut de modérateur",
@@ -280,7 +280,6 @@
     "%(senderName)s answered the call.": "%(senderName)s a répondu à l’appel.",
     "An error has occurred.": "Une erreur est survenue.",
     "Email": "E-mail",
-    "Failed to send request.": "Erreur lors de l'envoi de la requête.",
     "Failed to unban": "Échec de l'amnistie",
     "Failed to upload file": "Échec du téléchargement",
     "Failed to verify email address: make sure you clicked the link in the email": "Échec de la vérification de l’adresse e-mail: vérifiez que vous avez bien cliqué sur le lien dans l’e-mail",
@@ -378,5 +377,7 @@
     "Passwords can't be empty": "Le mot de passe ne peut pas être vide",
     "People": "Personne",
     "Permissions": "Permissions",
-    "Phone": "Téléphone"
+    "Phone": "Téléphone",
+    "Operation failed": "L'opération a échoué",
+    "Bulk Options": "Option en vrac"
 }

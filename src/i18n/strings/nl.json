@@ -1,4 +1,20 @@
 {
     "af": "Afrikaans",
-    "ar-ae": "Arabisch (U.A.E.)"
+    "ar-ae": "Arabisch (U.A.E.)",
+    "Direct Chat": "Privé gesprek",
+    "ar-bh": "Arabisch (Bahrain)",
+    "ar-dz": "Arabisch (Algerije)",
+    "ar-eg": "Arabisch (Egypte)",
+    "ar-iq": "Arabisch (Irak)",
+    "ar-jo": "Arabisch (Jordanië)",
+    "ar-kw": "Arabisch (Koeweit)",
+    "ar-lb": "Arabisch (Libanon)",
+    "ar-ly": "Arabisch (Libië)",
+    "ar-ma": "Arabisch (Marokko)",
+    "ar-om": "Arabisch (Oman)",
+    "ar-qa": "Arabisch (Katar)",
+    "ar-sa": "Arabisch (Saoedi-Arabië)",
+    "ar-sy": "Arabisch (Syrië)",
+    "ar-tn": "Arabisch (Tunesië)",
+    "ar-ye": "Arabisch (Jemen)"
 }
