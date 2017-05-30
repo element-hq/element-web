@@ -782,5 +782,14 @@
     "Home server URL": "Heimserver-URL",
     "Identity server URL": "Identitätsserver-URL",
     "What does this mean?": "Was bedeutet es?",
-    "Error decrypting audio": "Audio-Entschlüsselung fehlgeschlagen"
+    "Error decrypting audio": "Audio-Entschlüsselung fehlgeschlagen",
+    "Error decrypting image": "Bild-Entschlüsselung fehlgeschlagen",
+    "Image '%(Body)s' cannot be displayed.": "Das Bild '%(Body)s' kann nicht angezeigt werden.",
+    "This image cannot be displayed.": "Dieses Bild kann nicht angezeigt werden.",
+    "Error decrypting video": "Video-Entschlüsselung fehlgeschlagen",
+    "Import room keys": "Importiere Raum-Schlüssel",
+    "File to import": "Datei zum Importieren",
+    "Failed to invite the following users to the %(roomName)s room:": "Einladen folgender Nutzer in den Raum \"%(roomName)s\" schlug fehl:",
+    "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.": "Bist du sicher, dass du dieses Ereignis löschen willst? Wenn du einen Raum-Namen- oder Themen-Änderung löscht, kann dies die Änderung rückgängig machen.",
+    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Dieser Prozess erlaubt dir die Schlüssel für in verschlüsselten Räumen empfangene Nachrichten in eine lokale Datei zu exportieren. In Zukunft wirst du diese Datei in einen anderen Matrix-Client importieren können, sodass dieser Client ebenfalls diese Nachrichten entschlüsseln kann."
 }
