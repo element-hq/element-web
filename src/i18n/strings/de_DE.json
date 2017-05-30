@@ -804,5 +804,6 @@
     "Enable URL previews for this room (affects only you)": "Aktiviere die URL-Vorschau in diesem Raum (betrifft nur dich)",
     "Offline": "Offline",
     "Online": "Online",
-    " (unsupported)": " (nicht unterstützt)"
+    " (unsupported)": " (nicht unterstützt)",
+    "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Dieser Prozess erlaubt dir die zuvor von einem anderen Matrix Clienten exportierten Verschlüsselungsschlüssel zu importieren. Danach kannst du alle Nachrichten entschlüsseln die auch auf dem anderen entschlüsselt werden konnten."
 }
