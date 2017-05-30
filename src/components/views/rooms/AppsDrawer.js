@@ -28,23 +28,11 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        // const as = this.state.apps;
-        // as.push({
-        //     id: "bbcApp",
-        //     url: "http://news.bbc.co.uk",
-        //     name: "BBC News",
-        // });
-        // this.setState({apps: as});
     },
 
     getInitialState: function() {
         return {
             apps: [
-                // {
-                //     id: "riot-bot",
-                //     url: "https://matrix.org/_matrix/media/v1/thumbnail/matrix.org/LvHiqFMHWxAjFUMVCvaPbRYs?width=150&height=150",
-                //     name: "Riot-bot",
-                // },
                 {
                     id: "youtube",
                     url: "https://www.youtube.com/embed/ZJy1ajvMU1k?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1",
@@ -52,7 +40,7 @@ module.exports = React.createClass({
                 },
                 {
                     id: "recipie",
-                    url: "https://www.bbcgoodfood.com/recipes/5032/beef-bourguignon",
+                    url: "http://localhost:8000/recepie.html",
                     name: "Ingredients - Boeuf Bourguignon",
                 },
             ],
