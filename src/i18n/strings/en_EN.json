@@ -59,6 +59,7 @@
   "Members": "Members",
   "Mentions only": "Mentions only",
   "Messages containing my display name": "Messages containing my display name",
+  "Messages containing <span>keywords</span>": "Messages containing <span>keywords</span>",
   "Messages containing my user name": "Messages containing my user name",
   "Messages in group chats": "Messages in group chats",
   "Messages in one-to-one chats": "Messages in one-to-one chats",
