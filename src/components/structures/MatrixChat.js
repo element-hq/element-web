@@ -20,6 +20,8 @@ import q from 'q';
 import React from 'react';
 import Matrix from "matrix-js-sdk";
 
+import Analytics from "../../Analytics";
+import UserSettingsStore from '../../UserSettingsStore';
 import MatrixClientPeg from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
@@ -188,6 +190,8 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
+
+        if (!UserSettingsStore.getLocalSetting('analyticsOptOut', false)) Analytics.enable();
 
         // Used by _viewRoom before getting state from sync
         this.firstSyncComplete = false;
@@ -1002,6 +1006,7 @@ module.exports = React.createClass({
         if (this.props.onNewScreen) {
             this.props.onNewScreen(screen);
         }
+        Analytics.trackPageChange();
     },
 
     onAliasClick: function(event, alias) {

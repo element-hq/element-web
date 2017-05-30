@@ -18,6 +18,7 @@ limitations under the License.
 import MatrixClientPeg from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
 import TextForEvent from './TextForEvent';
+import Analytics from './Analytics';
 import Avatar from './Avatar';
 import dis from './dispatcher';
 import sdk from './index';
@@ -121,6 +122,9 @@ const Notifier = {
     setEnabled: function(enable, callback) {
         const plaf = PlatformPeg.get();
         if (!plaf) return;
+
+        Analytics.trackEvent('Notifier', 'Set Enabled', enable);
+
         // make sure that we persist the current setting audio_enabled setting
         // before changing anything
         if (global.localStorage) {
@@ -198,6 +202,8 @@ const Notifier = {
 
     setToolbarHidden: function(hidden, persistent = true) {
         this.toolbarHidden = hidden;
+
+        Analytics.trackEvent('Notifier', 'Set Toolbar Hidden', hidden);
 
         // XXX: why are we dispatching this here?
         // this is nothing to do with notifier_enabled
