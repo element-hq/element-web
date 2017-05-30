@@ -805,5 +805,6 @@
     "Offline": "Offline",
     "Online": "Online",
     " (unsupported)": " (nicht unterstützt)",
-    "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Dieser Prozess erlaubt dir die zuvor von einem anderen Matrix Clienten exportierten Verschlüsselungsschlüssel zu importieren. Danach kannst du alle Nachrichten entschlüsseln die auch auf dem anderen entschlüsselt werden konnten."
+    "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Dieser Prozess erlaubt dir die zuvor von einem anderen Matrix Clienten exportierten Verschlüsselungsschlüssel zu importieren. Danach kannst du alle Nachrichten entschlüsseln die auch auf dem anderen entschlüsselt werden konnten.",
+    "This will make your account permanently unusable. You will not be able to re-register the same user ID.": "Dies wird dein Konto permanent unbenutzbar machen. Du wirst dich nicht mit derselben Nutzer-ID erneut registrieren können."
 }
