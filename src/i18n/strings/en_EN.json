@@ -583,7 +583,6 @@
   "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
   "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
   "Set a display name:": "Set a display name:",
-  "Set a Display Name": "Set a Display Name",
   "Upload an avatar:": "Upload an avatar:",
   "This server does not support authentication with a phone number.": "This server does not support authentication with a phone number.",
   "Missing password.": "Missing password.",
