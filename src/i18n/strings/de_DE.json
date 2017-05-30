@@ -91,7 +91,7 @@
     "Failed to add tag %(tagName)s to room": "Das Hinzufügen des Tags %(tagName)s für den Raum ist fehlgeschlagen",
     "Failed to forget room %(errCode)s": "Das Entfernen des Raums %(errCode)s aus deiner Liste ist fehlgeschlagen",
     "Failed to remove tag %(tagName)s from room": "Das Entfernen des Tags %(tagName)s für den Raum ist fehlgeschlagen",
-    "Failed to set direct chat tag": "Fehler beim setzen der Direct Chat Kennzeichnung",
+    "Failed to set direct chat tag": "Fehler beim Setzen der \"Direkter Chat\"-Kennzeichnung",
     "Mentions only": "Nur, wenn du erwähnt wirst",
     "Mute": "Stummschalten",
     "Permalink": "Permanenter Link",
