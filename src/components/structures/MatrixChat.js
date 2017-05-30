@@ -685,7 +685,7 @@ module.exports = React.createClass({
             onLoginClick: (ev) => {
                 dis.dispatch({action: 'start_login'});
                 close();
-            },            
+            },
         }).close;
     },
 
@@ -990,6 +990,11 @@ module.exports = React.createClass({
         } else if (screen == 'home') {
             dis.dispatch({
                 action: 'view_home_page',
+            });
+        } else if (screen == 'start') {
+            this.showScreen('home');
+            dis.dispatch({
+                action: 'view_set_mxid',
             });
         } else if (screen == 'directory') {
             dis.dispatch({
