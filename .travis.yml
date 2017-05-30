@@ -1,6 +1,17 @@
 language: node_js
 node_js:
-    - 6   # node v6, to match jenkins
+    # make sure we work with a range of node versions.
+    # As of the time of writing:
+    #  - 4.x is still in LTS (until April 2018), but some of our deps (notably
+    #    extract-zip) don't work with it
+    #  - 5.x has been EOLed for nearly a year.
+    #  - 6.x is the current 'LTS' version
+    #  - 7.x is the current 'current' version (until October 2017)
+    #
+    # see: https://github.com/nodejs/LTS/
+    - 6.0
+    - 6
+    - 7
 install:
     - scripts/fetch-develop.deps.sh
     - npm install

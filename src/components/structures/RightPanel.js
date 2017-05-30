@@ -22,6 +22,7 @@ import sdk from 'matrix-react-sdk';
 import Matrix from "matrix-js-sdk";
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import Analytics from 'matrix-react-sdk/lib/Analytics';
 import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
 import Modal from 'matrix-react-sdk/lib/Modal';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
@@ -61,24 +62,26 @@ module.exports = React.createClass({
             return {
                 phase: this.Phase.MemberInfo,
                 member: member,
-            }
-        }
-        else {
+            };
+        } else {
             return {
                 phase: this.Phase.MemberList
-            }
+            };
         }
     },
 
     onMemberListButtonClick: function() {
+        Analytics.trackEvent('Right Panel', 'Member List Button', 'click');
         this.setState({ phase: this.Phase.MemberList });
     },
 
     onFileListButtonClick: function() {
+        Analytics.trackEvent('Right Panel', 'File List Button', 'click');
         this.setState({ phase: this.Phase.FilePanel });
     },
 
     onNotificationListButtonClick: function() {
+        Analytics.trackEvent('Right Panel', 'Notification List Button', 'click');
         this.setState({ phase: this.Phase.NotificationPanel });
     },
 
