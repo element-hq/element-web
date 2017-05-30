@@ -841,7 +841,7 @@ module.exports = React.createClass({
         const {ipcRenderer} = require('electron');
 
         return <div>
-            <h3>Electron Settings</h3>
+            <h3>{ _t('Desktop specific') }</h3>
             <div className="mx_UserSettings_section">
                 <div className="mx_UserSettings_toggle">
                     <input type="checkbox"

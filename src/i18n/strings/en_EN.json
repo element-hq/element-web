@@ -674,5 +674,6 @@
   "%(severalUsers)schanged their avatar": "%(severalUsers)schanged their avatar",
   "%(oneUser)schanged their avatar": "%(oneUser)schanged their avatar",
   "Please select the destination room for this message": "Please select the destination room for this message",
-  "Start automatically after system login": "Start automatically after system login"
+  "Start automatically after system login": "Start automatically after system login",
+  "Desktop specific": "Desktop specific"
 }
