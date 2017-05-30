@@ -1,6 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
+Copyright 2017 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,20 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_HomePage {
-    max-width: 960px;
+.mx_LoginBox_loginButton_wrapper {
+    text-align: center;
     width: 100%;
-    height: 100%;
-    overflow-y: hidden;
-    margin-left: auto;
-    margin-right: auto;
-}
-.mx_HomePage iframe {
-	width: 100%;
-	height: 90%;
-	border: 0px;
 }
 
-.mx_HomePage_body {
-//  margin-left: 63px;
+.mx_LoginBox_loginButton {
+    margin-top: -8px;
+    height: 40px;
+    border: 0px;
+    border-radius: 40px;
+    padding-left: 1em;
+    padding-right: 1em;
+
+    background-color: $accent-color;
+    color: $primary-bg-color;
+
+    cursor: pointer;
+
+    font-size: 15px;
 }

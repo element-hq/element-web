@@ -30,21 +30,6 @@ limitations under the License.
     flex: 0 0 70px;
 }
 
-.mx_RightPanel_loginButton {
-    margin-top: 15px;
-    width: 100%;
-    height: 40px;
-    border: 0px;
-    border-radius: 40px;
-
-    background-color: $accent-color;
-    color: $primary-bg-color;
-
-    cursor: pointer;
-
-    font-size: 15px;
-}
-
 /** Fixme - factor this out with the main header **/
 
 .mx_RightPanel_headerButtonGroup {
