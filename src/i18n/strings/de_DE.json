@@ -806,5 +806,13 @@
     "Online": "Online",
     " (unsupported)": " (nicht unterstützt)",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Dieser Prozess erlaubt dir die zuvor von einem anderen Matrix Clienten exportierten Verschlüsselungsschlüssel zu importieren. Danach kannst du alle Nachrichten entschlüsseln die auch auf dem anderen entschlüsselt werden konnten.",
-    "This will make your account permanently unusable. You will not be able to re-register the same user ID.": "Dies wird dein Konto permanent unbenutzbar machen. Du wirst dich nicht mit derselben Nutzer-ID erneut registrieren können."
+    "This will make your account permanently unusable. You will not be able to re-register the same user ID.": "Dies wird dein Konto permanent unbenutzbar machen. Du wirst dich nicht mit derselben Nutzer-ID erneut registrieren können.",
+    "To verify that this device can be trusted, please contact its owner using some other means (e.g. in person or a phone call) and ask them whether the key they see in their User Settings for this device matches the key below:": "Um zu bestätigen, dass diesem Gerät vertraut werden kann, kontaktiere bitte den Eigentümer über einen anderen Weg (z.B. Telefon-Anruf) und frage, ob der Schlüssel, den sie in den Nutzer-Einstellungen für dieses Gerät sehen dem folgenden gleicht:",
+    "If it matches, press the verify button below. If it doesn't, then someone else is intercepting this device and you probably want to press the blacklist button instead.": "Wenn er passt, betätige den Bestätigen-Button unten. Wenn nicht, fängt jemand anderes dieses Gerät ab und du möchtest wahrscheinlich lieber den Blacklist-Button betätigen.",
+    "We encountered an error trying to restore your previous session. If you continue, you will need to log in again, and encrypted chat history will be unreadable.": "Wir sind auf einen Fehler gestoßen während wir deine vorherige Sitzung wiederherstellen wollten. Wenn du fortfährst, wirst du dich erneut anmelden müssen und die verschlüsselte Chat-Historie wir unlesbar sein.",
+    "If you have previously used a more recent version of Riot, your session may be incompatible with this version. Close this window and return to the more recent version.": "Wenn du vorher eine aktuellere Version von Riot verwendet hast, ist deine Sitzung wohlmöglich inkompatibel mit dieser Version. Schließe dieses Fenster und kehre zur aktuelleren Version zurück.",
+    "Blacklist": "Blockieren",
+    "Unblacklist": "Entblockieren",
+    "Unverify": "Entverifizieren",
+    "This Home Server would like to make sure you are not a robot": "Dieser Heimserver möchte sicherstellen, dass du kein Roboter bist"
 }
