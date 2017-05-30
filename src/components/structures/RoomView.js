@@ -1622,12 +1622,12 @@ module.exports = React.createClass({
 
         let aux = null;
         let hideCancel = false;
-        if (this.state.forwardingEvent !== null) {
-            aux = <ForwardMessage onCancelClick={this.onCancelClick} currentRoomId={this.state.room.roomId} mxEvent={this.state.forwardingEvent} />;
-        } else if (this.state.editingRoomSettings) {
+        if (this.state.editingRoomSettings) {
             aux = <RoomSettings ref="room_settings" onSaveClick={this.onSettingsSaveClick} onCancelClick={this.onCancelClick} room={this.state.room} />;
         } else if (this.state.uploadingRoomSettings) {
             aux = <Loader/>;
+        } else if (this.state.forwardingEvent !== null) {
+            aux = <ForwardMessage onCancelClick={this.onCancelClick} currentRoomId={this.state.room.roomId} mxEvent={this.state.forwardingEvent} />;
         } else if (this.state.searching) {
             hideCancel = true; // has own cancel
             aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;
