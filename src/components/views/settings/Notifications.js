@@ -16,7 +16,7 @@ limitations under the License.
 
 'use strict';
 var React = require('react');
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import { _t, _tJsx } from 'matrix-react-sdk/lib/languageHandler';
 var q = require("q");
 var sdk = require('matrix-react-sdk');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
@@ -535,7 +535,16 @@ module.exports = React.createClass({
                     // it corresponds to all content push rules (stored in self.state.vectorContentRule)
                     self.state.vectorPushRules.push({
                         "vectorRuleId": "_keywords",
-                        "description" : (<span>Messages containing <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>keywords</span></span>),
+                        "description" : (
+                            <span>
+                            { _tJsx('Messages containing <span>keywords</span>',
+                                /<span>(.*?)<\/span>/,
+                                (sub) => {
+                                    return <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>{sub}</span>;
+                                }
+                            )}
+                            </span>
+                        ),
                         "vectorState": self.state.vectorContentRules.vectorState
                     });
                 }
@@ -549,7 +558,7 @@ module.exports = React.createClass({
 
                     self.state.vectorPushRules.push({
                         "vectorRuleId": vectorRuleId,
-                        "description" : ruleDefinition.description,
+                        "description" : _t(ruleDefinition.description), // Text from VectorPushRulesDefinitions.js
                         "rule": rule,
                         "vectorState": vectorState,
                     });
@@ -590,6 +599,7 @@ module.exports = React.createClass({
                 phase: self.phases.DISPLAY
             });
         }, function(error) {
+            console.error(error);
             self.setState({
                 phase: self.phases.ERROR
             });
@@ -624,7 +634,7 @@ module.exports = React.createClass({
         return (
             <tr key={ className }>
                 <th>
-                    {title}
+                    { title }
                 </th>
 
                 <th>
