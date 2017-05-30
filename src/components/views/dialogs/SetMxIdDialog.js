@@ -36,6 +36,8 @@ export default React.createClass({
         onFinished: React.PropTypes.func.isRequired,
         // Called when the user requests to register with a different homeserver
         onDifferentServerClicked: React.PropTypes.func.isRequired,
+        // Called if the user wants to switch to login instead
+        onLoginClick: React.PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -244,6 +246,9 @@ export default React.createClass({
                         <a href="#" onClick={this.props.onDifferentServerClicked}>
                             different server
                         </a>.
+                    </p>
+                    <p>
+                        If you already have a Matrix account you can <a href="#" onClick={this.props.onLoginClick}>log in</a> instead.
                     </p>
                     { auth }
                     { authErrorIndicator }

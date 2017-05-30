@@ -682,6 +682,10 @@ module.exports = React.createClass({
                 dis.dispatch({action: 'start_registration'});
                 close();
             },
+            onLoginClick: (ev) => {
+                dis.dispatch({action: 'start_login'});
+                close();
+            },            
         }).close;
     },
 
