@@ -14,11 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var MatrixClientPeg = require("../../../MatrixClientPeg");
-var sdk = require('../../../index');
-var dis = require("../../../dispatcher");
-var ObjectUtils = require('../../../ObjectUtils');
+import React from 'react';
+import MatrixClientPeg from "../../../MatrixClientPeg";
+import sdk from '../../../index';
+import dis from "../../../dispatcher";
+import ObjectUtils from '../../../ObjectUtils';
+import  { _t } from '../../../languageHandler';
+
 
 module.exports = React.createClass({
     displayName: 'AuxPanel',
@@ -79,7 +81,7 @@ module.exports = React.createClass({
                       title="Drop File Here">
                         <TintableSvg src="img/upload-big.svg" width="45" height="59"/>
                         <br/>
-                        Drop file here to upload
+                        {_t("Drop file here to upload")}
                     </div>
                 </div>
             );
@@ -89,7 +91,7 @@ module.exports = React.createClass({
         if (this.props.displayConfCallNotification) {
             var supportedText, joinText;
             if (!MatrixClientPeg.get().supportsVoip()) {
-                supportedText = " (unsupported)";
+                supportedText = _t(" (unsupported)");
             }
             else {
                 joinText = (<span>
@@ -101,7 +103,7 @@ module.exports = React.createClass({
             }
             conferenceCallNotification = (
                 <div className="mx_RoomView_ongoingConfCallNotification">
-                    Ongoing conference call{ supportedText }. { joinText }
+                    {_t("Ongoing conference call%(supportedText)s. %(joinText)s", {supportedText: supportedText, joinText: joinText})}
                 </div>
             );
         }

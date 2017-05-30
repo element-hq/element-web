@@ -28,6 +28,7 @@ import ScalarAuthClient from '../../../ScalarAuthClient';
 import Modal from '../../../Modal';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
+import { _t } from '../../../languageHandler';
 
 linkifyMatrix(linkify);
 
@@ -230,14 +231,14 @@ module.exports = React.createClass({
             let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             let integrationsUrl = SdkConfig.get().integrations_ui_url;
             Modal.createDialog(QuestionDialog, {
-                title: "Add an Integration",
+                title: _t("Add an Integration"),
                 description:
                     <div>
-                        You are about to be taken to a third-party site so you can
-                        authenticate your account for use with {integrationsUrl}.<br/>
-                        Do you wish to continue?
+                        {_t("You are about to be taken to a third-party site so you can " +
+                            "authenticate your account for use with {integrationsUrl}. " +
+                            "Do you wish to continue?")}
                     </div>,
-                button: "Continue",
+                button: _t("Continue"),
                 onFinished: function(confirmed) {
                     if (!confirmed) {
                         return;

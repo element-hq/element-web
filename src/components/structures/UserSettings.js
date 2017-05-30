@@ -55,7 +55,7 @@ const gHVersionLabel = function(repo, token='') {
 // Enumerate some simple 'flip a bit' UI settings (if any).
 // 'id' gives the key name in the im.vector.web.settings account data event
 // 'label' is how we describe it in the UI.
-// Warning: Each "label" string below must be added to i18n/strings/en_EN.json, 
+// Warning: Each "label" string below must be added to i18n/strings/en_EN.json,
 // since they will be translated when rendered.
 const SETTINGS_LABELS = [
     {
@@ -90,7 +90,7 @@ const SETTINGS_LABELS = [
 */
 ];
 
-// Warning: Each "label" string below must be added to i18n/strings/en_EN.json, 
+// Warning: Each "label" string below must be added to i18n/strings/en_EN.json,
 // since they will be translated when rendered.
 const CRYPTO_SETTINGS_LABELS = [
     {
@@ -804,7 +804,7 @@ module.exports = React.createClass({
             reject = (
                 <AccessibleButton className="mx_UserSettings_button danger"
                 onClick={this._onRejectAllInvitesClicked.bind(this, invitedRooms)}>
-                    Reject all {invitedRooms.length} invites
+                    {_t("Reject all %(invitedRooms)s invites", {invitedRooms: invitedRooms.length})}
                 </AccessibleButton>
             );
         }

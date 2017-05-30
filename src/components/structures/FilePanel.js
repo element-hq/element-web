@@ -95,7 +95,7 @@ var FilePanel = React.createClass({
             </div>;
         } else if (this.noRoom) {
             return <div className="mx_FilePanel mx_RoomView_messageListWrapper">
-                <div className="mx_RoomView_empty">You must join the room to see its files</div>
+                <div className="mx_RoomView_empty">{_t("You must join the room to see its files")}</div>
             </div>;
         }
 

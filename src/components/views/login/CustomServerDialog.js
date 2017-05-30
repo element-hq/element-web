@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require("react");
+import React from 'react';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'CustomServerDialog',
@@ -23,24 +24,24 @@ module.exports = React.createClass({
         return (
             <div className="mx_ErrorDialog">
                 <div className="mx_Dialog_title">
-                    Custom Server Options
+                    {_t("Custom Server Options")}
                 </div>
                 <div className="mx_Dialog_content">
                     <span>
-                        You can use the custom server options to sign into other Matrix
-                        servers by specifying a different Home server URL.
+                        {_t("You can use the custom server options to sign into other Matrix " +
+                        "servers by specifying a different Home server URL.")}
                         <br/>
-                        This allows you to use this app with an existing Matrix account on
-                        a different home server.
+                        {_t("This allows you to use this app with an existing Matrix account on " +
+                            "a different home server.")}
                         <br/>
                         <br/>
-                        You can also set a custom identity server but this will typically prevent
-                        interaction with users based on email address.
+                        {_t("You can also set a custom identity server but this will typically prevent " +
+                            "interaction with users based on email address.")}
                     </span>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.props.onFinished} autoFocus={true}>
-                        Dismiss
+                        {_t("Dismiss")}
                     </button>
                 </div>
             </div>
