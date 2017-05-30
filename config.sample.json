@@ -11,5 +11,9 @@
             "matrix.org"
         ]
     },
-    "welcomeUserId": "@riot-bot:matrix.org"
+    "welcomeUserId": "@riot-bot:matrix.org",
+    "piwik": {
+        "url": "https://piwik.riot.im/",
+        "siteId": 1
+    }
 }

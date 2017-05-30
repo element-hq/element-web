@@ -56,7 +56,7 @@ if (process.env.NODE_ENV !== 'production') {
 var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
-var PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
+const PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
 var UpdateChecker = require("./updater");
@@ -143,7 +143,7 @@ var onNewScreen = function(screen) {
     var hash = '#/' + screen;
     lastLocationHashSet = hash;
     window.location.hash = hash;
-}
+};
 
 // We use this to work out what URL the SDK should
 // pass through when registering to allow the user to
@@ -295,8 +295,7 @@ async function loadApp() {
             />,
             document.getElementById('matrixchat')
         );
-    }
-    else {
+    } else {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
         var CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
