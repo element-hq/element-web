@@ -757,7 +757,7 @@
     "Unable to restore session": "Sitzungswiederherstellung fehlgeschlagen",
     "Continue anyway": "Fahre trotzdem fort",
     "Your display name is how you'll appear to others when you speak in rooms. What would you like it to be?": "Dein Anzeigename ist dein Name der anderen gezeigt wird, wenn du in Räumen sprichst. Wie möchtest du ihn haben?",
-    "You are currently blacklisting unverified devices; to send messages to these devices you must verify them.": "",
+    "You are currently blacklisting unverified devices; to send messages to these devices you must verify them.": "Do blockst aktuell unverifizierte Geräte. Um Nachrichten an diese Geräte zu senden must du sie verifizieren",
     "\"%(RoomName)s\" contains devices that you haven't seen before.": "\"%(RoomName)s\" enthält Geräte die du noch nicht gesehen hast.",
     "Unknown devices": "Unbekannte Geräte",
     "Unknown Address": "Unbekannte Adresse",
