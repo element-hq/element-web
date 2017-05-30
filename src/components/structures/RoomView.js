@@ -1496,49 +1496,48 @@ module.exports = React.createClass({
         const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
 
         if (!this.state.room) {
-                if (this.state.roomLoading) {
-                    return (
-                        <div className="mx_RoomView">
-                            <Loader />
-                        </div>
-                    );
+            if (this.state.roomLoading) {
+                return (
+                    <div className="mx_RoomView">
+                        <Loader />
+                    </div>
+                );
+            } else {
+                var inviterName = undefined;
+                if (this.props.oobData) {
+                    inviterName = this.props.oobData.inviterName;
                 }
-                else {
-                    var inviterName = undefined;
-                    if (this.props.oobData) {
-                        inviterName = this.props.oobData.inviterName;
-                    }
-                    var invitedEmail = undefined;
-                    if (this.props.thirdPartyInvite) {
-                        invitedEmail = this.props.thirdPartyInvite.invitedEmail;
-                    }
+                var invitedEmail = undefined;
+                if (this.props.thirdPartyInvite) {
+                    invitedEmail = this.props.thirdPartyInvite.invitedEmail;
+                }
 
-                    // We have no room object for this room, only the ID.
-                    // We've got to this room by following a link, possibly a third party invite.
-                    var room_alias = this.props.roomAddress[0] == '#' ? this.props.roomAddress : null;
-                    return (
-                        <div className="mx_RoomView">
-                            <RoomHeader ref="header"
-                                room={this.state.room}
-                                oobData={this.props.oobData}
-                                collapsedRhs={ this.props.collapsedRhs }
+                // We have no room object for this room, only the ID.
+                // We've got to this room by following a link, possibly a third party invite.
+                var room_alias = this.props.roomAddress[0] == '#' ? this.props.roomAddress : null;
+                return (
+                    <div className="mx_RoomView">
+                        <RoomHeader ref="header"
+                            room={this.state.room}
+                            oobData={this.props.oobData}
+                            collapsedRhs={ this.props.collapsedRhs }
+                        />
+                        <div className="mx_RoomView_auxPanel">
+                            <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked }
+                                            onForgetClick={ this.onForgetClick }
+                                            onRejectClick={ this.onRejectThreepidInviteButtonClicked }
+                                            canPreview={ false } error={ this.state.roomLoadError }
+                                            roomAlias={room_alias}
+                                            spinner={this.state.joining}
+                                            inviterName={inviterName}
+                                            invitedEmail={invitedEmail}
+                                            room={this.state.room}
                             />
-                            <div className="mx_RoomView_auxPanel">
-                                <RoomPreviewBar onJoinClick={ this.onJoinButtonClicked }
-                                                onForgetClick={ this.onForgetClick }
-                                                onRejectClick={ this.onRejectThreepidInviteButtonClicked }
-                                                canPreview={ false } error={ this.state.roomLoadError }
-                                                roomAlias={room_alias}
-                                                spinner={this.state.joining}
-                                                inviterName={inviterName}
-                                                invitedEmail={invitedEmail}
-                                                room={this.state.room}
-                                />
-                            </div>
-                            <div className="mx_RoomView_messagePanel"></div>
                         </div>
-                    );
-                }
+                        <div className="mx_RoomView_messagePanel"></div>
+                    </div>
+                );
+            }
         }
 
         var myUserId = MatrixClientPeg.get().credentials.userId;
