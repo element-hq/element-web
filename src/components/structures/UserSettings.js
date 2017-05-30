@@ -28,6 +28,7 @@ const GeminiScrollbar = require('react-gemini-scrollbar');
 const Email = require('../../email');
 const AddThreepid = require('../../AddThreepid');
 const SdkConfig = require('../../SdkConfig');
+import Analytics from '../../Analytics';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import { _t } from '../../languageHandler';
 import * as languageHandler from '../../languageHandler';
@@ -90,12 +91,25 @@ const SETTINGS_LABELS = [
 */
 ];
 
+const ANALYTICS_SETTINGS_LABELS = [
+    {
+        id: 'analyticsOptOut',
+        label: 'Opt out of analytics',
+        fn: function(checked) {
+            Analytics[checked ? 'disable' : 'enable']();
+        },
+    },
+];
+
 // Warning: Each "label" string below must be added to i18n/strings/en_EN.json,
 // since they will be translated when rendered.
 const CRYPTO_SETTINGS_LABELS = [
     {
         id: 'blacklistUnverifiedDevices',
         label: 'Never send encrypted messages to unverified devices from this device',
+        fn: function(checked) {
+            MatrixClientPeg.get().setGlobalBlacklistUnverifiedDevices(checked);
+        },
     },
     // XXX: this is here for documentation; the actual setting is managed via RoomSettings
     // {
@@ -599,7 +613,12 @@ module.exports = React.createClass({
             <input id={ setting.id }
                    type="checkbox"
                    defaultChecked={ this._syncedSettings[setting.id] }
-                   onChange={ (e) => UserSettingsStore.setSyncedSetting(setting.id, e.target.checked) }
+                   onChange={
+                       (e) => {
+                           UserSettingsStore.setSyncedSetting(setting.id, e.target.checked);
+                           if (setting.fn) setting.fn(e.target.checked);
+                       }
+                   }
             />
             <label htmlFor={ setting.id }>
                 { _t(setting.label) }
@@ -675,7 +694,6 @@ module.exports = React.createClass({
     },
 
     _renderLocalSetting: function(setting) {
-        const client = MatrixClientPeg.get();
         return <div className="mx_UserSettings_toggle" key={ setting.id }>
             <input id={ setting.id }
                    type="checkbox"
@@ -683,11 +701,9 @@ module.exports = React.createClass({
                    onChange={
                         (e) => {
                             UserSettingsStore.setLocalSetting(setting.id, e.target.checked);
-                            if (setting.id === 'blacklistUnverifiedDevices') { // XXX: this is a bit ugly
-                                client.setGlobalBlacklistUnverifiedDevices(e.target.checked);
-                            }
+                            if (setting.fn) setting.fn(e.target.checked);
                         }
-                    }
+                   }
             />
             <label htmlFor={ setting.id }>
                 { _t(setting.label) }
@@ -720,6 +736,16 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
+    },
+
+    _renderAnalyticsControl: function() {
+        return <div>
+            <h3>{ _t('Analytics') }</h3>
+            <div className="mx_UserSettings_section">
+                {_t('Riot collects anonymous analytics to allow us to improve the application.')}
+                {ANALYTICS_SETTINGS_LABELS.map( this._renderLocalSetting )}
+            </div>
+        </div>;
     },
 
     _renderLabs: function() {
@@ -1018,6 +1044,8 @@ module.exports = React.createClass({
                 {this._renderCryptoInfo()}
                 {this._renderBulkOptions()}
                 {this._renderBugReport()}
+
+                {this._renderAnalyticsControl()}
 
                 <h3>{ _t("Advanced") }</h3>
 
