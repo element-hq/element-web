@@ -86,7 +86,7 @@ export function _tJsx(jsxText, patterns, subs) {
     // tJsxText may be unsafe if malicious translators try to inject HTML.
     // Run this through sanitize-html and bail if the output isn't identical
     const tJsxText = _t(jsxText);
-    const sanitized = sanitizeHtml(tJsxText);
+    const sanitized = sanitizeHtml(tJsxText, { allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'span' ]) });
     if (tJsxText !== sanitized) {
         throw new Error(`_tJsx: translator error. untrusted HTML supplied. '${tJsxText}' != '${sanitized}'`);
     }
