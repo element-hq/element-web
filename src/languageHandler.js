@@ -49,22 +49,38 @@ export function _t(...args) {
  * @param {string} jsxText The untranslated stringified JSX e.g "click <a href=''>here</a> now".
  * This will be translated by passing the string through to _t(...)
  *
- * @param {RegExp} pattern A regexp to match against the translated text.
+ * @param {RegExp|RegExp[]} patterns A regexp to match against the translated text.
  * The captured groups from the regexp will be fed to 'sub'.
  * Only the captured groups will be included in the output, the match itself is discarded.
+ * If multiple RegExps are provided, the function at the same position will be called. The
+ * match will always be done from left to right, so the 2nd RegExp will be matched against the
+ * remaining text from the first RegExp.
  *
- * @param {Function} sub A function which will be called
+ * @param {Function|Function[]} subs A function which will be called
  * with multiple args, each arg representing a captured group of the matching regexp.
  * This function must return a JSX node.
  *
  * @return A list of strings/JSX nodes.
  */
-export function _tJsx(jsxText, pattern, sub) {
-    if (!pattern instanceof RegExp) {
-        throw new Error(`_tJsx: programmer error. expected RegExp for text: ${jsxText}`);
+export function _tJsx(jsxText, patterns, subs) {
+    // convert everything to arrays
+    if (patterns instanceof RegExp) {
+        patterns = [patterns];
     }
-    if (!sub instanceof Function) {
-        throw new Error(`_tJsx: programmer error. expected Function for text: ${jsxText}`);
+    if (subs instanceof Function) {
+        subs = [subs];
+    }
+    // sanity checks
+    if (subs.length !== patterns.length || subs.length < 1) {
+        throw new Error(`_tJsx: programmer error. expected number of RegExps == number of Functions: ${subs.length} != ${patterns.length}`);
+    }
+    for (let i = 0; i < subs.length; i++) {
+        if (!patterns[i] instanceof RegExp) {
+            throw new Error(`_tJsx: programmer error. expected RegExp for text: ${jsxText}`);
+        }
+        if (!subs[i] instanceof Function) {
+            throw new Error(`_tJsx: programmer error. expected Function for text: ${jsxText}`);
+        }
     }
 
     // tJsxText may be unsafe if malicious translators try to inject HTML.
@@ -74,18 +90,26 @@ export function _tJsx(jsxText, pattern, sub) {
     if (tJsxText !== sanitized) {
         throw new Error(`_tJsx: translator error. untrusted HTML supplied. '${tJsxText}' != '${sanitized}'`);
     }
-    let match = tJsxText.match(pattern);
-    if (!match) {
-        throw new Error(`_tJsx: translator error. expected translation to match regexp: ${pattern}`);
+
+    let output = [tJsxText];
+    for (let i = 0; i < patterns.length; i++) {
+        // convert the last element in 'output' into 3 elements (pre-text, sub function, post-text).
+        // Rinse and repeat for other patterns (using post-text).
+        let inputText = output.pop();
+        let match = inputText.match(patterns[i]);
+        if (!match) {
+            throw new Error(`_tJsx: translator error. expected translation to match regexp: ${patterns[i]}`);
+        }
+        let capturedGroups = match.slice(1);
+
+        // Return the raw translation before the *match* followed by the return value of sub() followed
+        // by the raw translation after the *match* (not captured group).
+        output.push(inputText.substr(0, match.index));
+        output.push(subs[i].apply(null, capturedGroups));
+        output.push(inputText.substr(match.index + match[0].length));
     }
-    let capturedGroups = match.slice(1);
-    // Return the raw translation before the *match* followed by the return value of sub() followed
-    // by the raw translation after the *match* (not captured group).
-    return [
-        tJsxText.substr(0, match.index),
-        sub.apply(null, capturedGroups),
-        tJsxText.substr(match.index + match[0].length),
-    ];
+
+    return output;
 }
 
 // Allow overriding the text displayed when no translation exists
