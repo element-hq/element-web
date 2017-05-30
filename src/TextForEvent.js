@@ -117,7 +117,10 @@ function textForTopicEvent(ev) {
 
 function textForRoomNameEvent(ev) {
     var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-
+    
+    if (!ev.getContent().name || ev.getContent().name.trim().length === 0) {
+        return _t('%(senderDisplayName)s removed the room name.', {senderDisplayName: senderDisplayName});
+    }
     return _t('%(senderDisplayName)s changed the room name to %(roomName)s.', {senderDisplayName: senderDisplayName, roomName: ev.getContent().name});
 }
 
