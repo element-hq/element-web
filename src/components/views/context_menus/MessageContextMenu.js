@@ -40,6 +40,31 @@ module.exports = React.createClass({
         onFinished: React.PropTypes.func,
     },
 
+    getInitialState: function() {
+        return {
+            canRedact: false,
+        };
+    },
+
+    componentWillMount: function() {
+        MatrixClientPeg.get().on('RoomMember.powerLevel', this._checkCanRedact);
+        this._checkCanRedact();
+    },
+
+    componentWillUnmount: function() {
+        const cli = MatrixClientPeg.get();
+        if (cli) {
+            cli.removeListener('RoomMember.powerLevel', this._checkCanRedact);
+        }
+    },
+
+    _checkCanRedact: function() {
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(this.props.mxEvent.getRoomId());
+        const canRedact = room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId);
+        this.setState({canRedact});
+    },
+
     onResendClick: function() {
         Resend.resend(this.props.mxEvent);
         if (this.props.onFinished) this.props.onFinished();
@@ -136,10 +161,10 @@ module.exports = React.createClass({
             );
         }
 
-        if (!eventStatus && !this.props.mxEvent.isRedacted()) { // sent and not redacted
+        if (this.state.canRedact) {
             redactButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
-                    { _t('Redact') }
+                    { _t('Remove') }
                 </div>
             );
         }
@@ -206,7 +231,7 @@ module.exports = React.createClass({
           externalURLButton = (
               <div className="mx_MessageContextMenu_field">
                   <a href={ this.props.mxEvent.event.content.external_url }
-                    rel="noopener" target="_blank"  onClick={ this.closeMenu }>{ _t('Source URL') }</a>
+                    rel="noopener" target="_blank" onClick={ this.closeMenu }>{ _t('Source URL') }</a>
               </div>
           );
         }
