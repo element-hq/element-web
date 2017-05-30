@@ -678,7 +678,7 @@
     "Please select the destination room for this message": "Merci de sélectionner un salon de destination pour ce message",
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s a supprimé le nom du salon.",
     "Analytics": "Outils d'analyse",
-    "Opt out of analytics": "Refus de participation",
+    "Opt out of analytics": "Refuser de participer",
     "Riot collects anonymous analytics to allow us to improve the application.": "Riot recueille des données anonymes qui nous permettent d’analyser et améliorer l’application.",
     "Passphrases must match": "Les phrases secrètes doivent être identiques",
     "Passphrase must not be empty": "La phrase secrète ne doit pas être vide",
