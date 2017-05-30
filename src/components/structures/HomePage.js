@@ -43,15 +43,15 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        if (this.props.teamToken && this.props.teamServerUrl) {
+            return;
+        }
+
         // we use request() to inline the homepage into the react component
         // so that it can inherit CSS and theming easily rather than mess around
         // with iframes and trying to synchronise document.stylesheets.
 
         let src = this.props.homePageUrl || '/home.html';
-
-        if (this.props.teamToken && this.props.teamServerUrl) {
-            src = `${this.props.teamServerUrl}/static/${this.props.teamToken}/home.html`;
-        }
 
         request(
             { method: "GET", url: src },
@@ -71,11 +71,21 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        return (
-            <GeminiScrollbar autoshow={true} className="mx_HomePage">
-                <div className="mx_HomePage_body" dangerouslySetInnerHTML={{ __html: this.state.page }}>
+        if (this.props.teamToken && this.props.teamServerUrl) {
+            src = `${this.props.teamServerUrl}/static/${this.props.teamToken}/home.html`;
+            return (
+                <div className="mx_HomePage">
+                    <iframe src={ src } />
                 </div>
-            </GeminiScrollbar>
-        );
+            );
+        }
+        else {
+            return (
+                <GeminiScrollbar autoshow={true} className="mx_HomePage">
+                    <div className="mx_HomePage_body" dangerouslySetInnerHTML={{ __html: this.state.page }}>
+                    </div>
+                </GeminiScrollbar>
+            );
+        }
     }
 });
