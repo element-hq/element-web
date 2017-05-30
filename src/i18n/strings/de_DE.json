@@ -818,5 +818,6 @@
     "Drop file here to upload": "Datei hier loslassen zum hochladen",
     "Idle": "inaktiv",
     "We recommend you go through the verification process for each device to confirm they belong to their legitimate owner, but you can resend the message without verifying if you prefer.": "Wir empfehlen dir für jedes Gerät durch den Verifizierungsprozess zu gehen um zu bestätigen, dass sie ihrem legitimierten Besitzer gehören, aber du kannst die Nachrichten ohne Verifizierung erneut senden, wenn du es vorziehst.",
-    "Ongoing conference call%(supportedText)s. %(joinText)s": "Laufendes Konferenzgespräch%(supportedText)s. %(joinText)s"
+    "Ongoing conference call%(supportedText)s. %(joinText)s": "Laufendes Konferenzgespräch%(supportedText)s. %(joinText)s",
+    "You are about to be taken to a third-party site so you can authenticate your account for use with {integrationsUrl}. Do you wish to continue?": "Du wirst jetzt auf eine Drittanbieter-Website weitergeleitet, damit du dein Konto authentifizieren kannst für die Verwendung mit {integrationsUrl}. Möchtest du fortfahren?"
 }
