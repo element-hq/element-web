@@ -236,7 +236,7 @@ module.exports = React.createClass({
                     <div>
                         {_t("You are about to be taken to a third-party site so you can " +
                             "authenticate your account for use with %(integrationsUrl)s. " +
-                            "Do you wish to continue?", {integrationsUrl: integrationsUrl})}
+                            "Do you wish to continue?", { integrationsUrl: integrationsUrl })}
                     </div>,
                 button: _t("Continue"),
                 onFinished: function(confirmed) {
