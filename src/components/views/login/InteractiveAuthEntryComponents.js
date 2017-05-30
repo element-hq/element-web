@@ -20,6 +20,7 @@ import url from 'url';
 import classnames from 'classnames';
 
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -255,8 +256,8 @@ export const EmailIdentityAuthEntry = React.createClass({
         } else {
             return (
                 <div>
-                    <p>An email has been sent to <i>{this.props.inputs.emailAddress}</i></p>
-                    <p>Please check your email to continue registration.</p>
+                    <p>{_t("An email has been sent to")} <i>{this.props.inputs.emailAddress}</i></p>
+                    <p>{_t("Please check your email to continue registration.")}</p>
                 </div>
             );
         }
@@ -348,7 +349,7 @@ export const MsisdnAuthEntry = React.createClass({
                 });
             } else {
                 this.setState({
-                    errorText: "Token incorrect",
+                    errorText: _t("Token incorrect"),
                 });
             }
         }).catch((e) => {
@@ -369,8 +370,8 @@ export const MsisdnAuthEntry = React.createClass({
             });
             return (
                 <div>
-                    <p>A text message has been sent to +<i>{this._msisdn}</i></p>
-                    <p>Please enter the code it contains:</p>
+                    <p>{_t("A text message has been sent to")} +<i>{this._msisdn}</i></p>
+                    <p>{_t("Please enter the code it contains:")}</p>
                     <div className="mx_InteractiveAuthEntryComponents_msisdnWrapper">
                         <form onSubmit={this._onFormSubmit}>
                             <input type="text"

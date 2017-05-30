@@ -56,7 +56,7 @@ function twelveHourTime(date) {
     const minutes = pad(date.getMinutes());
     const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
     hours = pad(hours ? hours : 12);
-    return `${hours}:${minutes} ${ampm}`;
+    return `${hours}:${minutes}${ampm}`;
 }
 
 module.exports = {
@@ -83,7 +83,7 @@ module.exports = {
         return this.formatFullDate(date);
     },
 
-    formatFullDate: function(date) {
+    formatFullDate: function(date, showTwelveHour=false) {
         const days = getDaysArray();
         const months = getMonthsArray();
         return _t('%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s', {
@@ -91,7 +91,7 @@ module.exports = {
             monthName: months[date.getMonth()],
             day: date.getDate(),
             fullYear: date.getFullYear(),
-            time: this.formatTime(date),
+            time: showTwelveHour ? twelveHourTime(date) : this.formatTime(date),
         });
     },
 

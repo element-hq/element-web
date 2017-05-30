@@ -86,7 +86,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
             <div className="mx_RoomTile_avatar">
                 <img src="img/create-big.svg" width="26" height="26" />
             </div>
-            <div className={labelClasses}><i>Start new chat</i></div>
+            <div className={labelClasses}><i>{_("Start new chat")}</i></div>
         </AccessibleButton>;
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');

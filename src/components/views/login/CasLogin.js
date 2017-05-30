@@ -16,7 +16,8 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'CasLogin',
@@ -28,7 +29,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div>
-                <button onClick={this.props.onSubmit}>Sign in with CAS</button>
+                <button onClick={this.props.onSubmit}>{_t("Sign in with CAS")}</button>
             </div>
         );
     }

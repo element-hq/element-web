@@ -19,6 +19,7 @@ import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
+import { _t } from '../../../languageHandler';
 
 export default function DeviceVerifyDialog(props) {
     const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
@@ -27,25 +28,25 @@ export default function DeviceVerifyDialog(props) {
     const body = (
         <div>
             <p>
-                To verify that this device can be trusted, please contact its
-                owner using some other means (e.g. in person or a phone call)
-                and ask them whether the key they see in their User Settings
-                for this device matches the key below:
+                {_t("To verify that this device can be trusted, please contact its " +
+                    "owner using some other means (e.g. in person or a phone call) " +
+                    "and ask them whether the key they see in their User Settings " +
+                    "for this device matches the key below:")}
             </p>
             <div className="mx_UserSettings_cryptoSection">
                 <ul>
-                    <li><label>Device name:</label> <span>{ props.device.getDisplayName() }</span></li>
-                    <li><label>Device ID:</label> <span><code>{ props.device.deviceId}</code></span></li>
-                    <li><label>Device key:</label> <span><code><b>{ key }</b></code></span></li>
+                    <li><label>{_t("Device name")}:</label> <span>{ props.device.getDisplayName() }</span></li>
+                    <li><label>{_t("Device ID")}:</label> <span><code>{ props.device.deviceId}</code></span></li>
+                    <li><label>{_t("Device key")}:</label> <span><code><b>{ key }</b></code></span></li>
                 </ul>
             </div>
             <p>
-                If it matches, press the verify button below.
-                If it doesnt, then someone else is intercepting this device
-                and you probably want to press the blacklist button instead.
+                {_t("If it matches, press the verify button below. " +
+                    "If it doesn't, then someone else is intercepting this device " +
+                    "and you probably want to press the blacklist button instead.")}
             </p>
             <p>
-                In future this verification process will be more sophisticated.
+                {_t("In future this verification process will be more sophisticated.")}
             </p>
         </div>
     );
@@ -61,9 +62,9 @@ export default function DeviceVerifyDialog(props) {
 
     return (
         <QuestionDialog
-            title="Verify device"
+            title={_t("Verify device")}
             description={body}
-            button="I verify that the keys match"
+            button={_t("I verify that the keys match")}
             onFinished={onFinished}
         />
     );

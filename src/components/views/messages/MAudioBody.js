@@ -22,6 +22,7 @@ import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
+import { _t } from '../../../languageHandler';
 
 export default class MAudioBody extends React.Component {
     constructor(props) {
@@ -77,7 +78,7 @@ export default class MAudioBody extends React.Component {
             return (
                 <span className="mx_MAudioBody" ref="body">
                     <img src="img/warning.svg" width="16" height="16"/>
-                    Error decrypting audio
+                    {_t("Error decrypting audio")}
                 </span>
             );
         }
