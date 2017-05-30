@@ -729,6 +729,7 @@
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s apagou o nome da sala.",
     "Analytics": "Análise",
     "Opt out of analytics": "Sair da ferramenta de análise",
+    "Options": "Opções",
     "Riot collects anonymous analytics to allow us to improve the application.": "Riot coleta informações anônimas de uso para nos permitir melhorar o sistema.",
     "Passphrases must match": "As senhas têm que ser iguais",
     "Passphrase must not be empty": "A senha não pode estar vazia",
