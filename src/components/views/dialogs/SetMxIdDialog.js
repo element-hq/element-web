@@ -20,6 +20,7 @@ import React from 'react';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import classnames from 'classnames';
+import KeyCode from '../../../KeyCode';
 
 // The amount of time to wait for further changes to the input username before
 // sending a request to the server
@@ -92,7 +93,7 @@ export default React.createClass({
     },
 
     onKeyUp: function(ev) {
-        if (ev.keyCode === 13) {
+        if (ev.keyCode === KeyCode.ENTER) {
             this.onSubmit();
         }
     },
