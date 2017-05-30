@@ -815,5 +815,6 @@
     "Unblacklist": "Entblockieren",
     "Unverify": "Entverifizieren",
     "This Home Server would like to make sure you are not a robot": "Dieser Heimserver möchte sicherstellen, dass du kein Roboter bist",
-    "Drop file here to upload": "Datei hier loslassen zum hochladen"
+    "Drop file here to upload": "Datei hier loslassen zum hochladen",
+    "Idle": "inaktiv"
 }
