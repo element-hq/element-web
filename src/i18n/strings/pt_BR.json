@@ -724,5 +724,18 @@
     "Unmute": "Tirar do mudo",
     "Warning!": "Atenção!",
     "You need to enter a user name.": "Você precisa inserir um nome de usuária(o).",
-    "Please select the destination room for this message": "Por favor, escolha a sala para onde quer encaminhar esta mensagem"
+    "Please select the destination room for this message": "Por favor, escolha a sala para onde quer encaminhar esta mensagem",
+    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s apagou o nome da sala.",
+    "Analytics": "Análise",
+    "Opt out of analytics": "Sair da ferramenta de análise",
+    "Riot collects anonymous analytics to allow us to improve the application.": "Riot coleta informações anônimas de uso para nos permitir melhorar o sistema.",
+    "Passphrases must match": "As senhas têm que ser iguais",
+    "Passphrase must not be empty": "A senha não pode estar vazia",
+    "Export room keys": "Exportar chaves de sala",
+    "Enter passphrase": "Entre com a senha",
+    "Confirm passphrase": "Confirme a senha",
+    "Import room keys": "Importar chaves de sala",
+    "File to import": "Arquivo para importar",
+    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Este processo permite que você exporte as chaves para mensagens que você recebeu em salas criptografadas para um arquivo local. Você poderá então importar o arquivo para outro cliente Matrix no futuro, de modo que este cliente também poderá descriptografar suas mensagens.",
+    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "O arquivo exportado será protegido com uma senha. Você deverá inserir a senha aqui para poder descriptografar o arquivo futuramente."
 }
