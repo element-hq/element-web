@@ -43,11 +43,6 @@ const roomWidgetConfig = {
             url: "http://localhost:8000/grafana.html",
             name: "Monitoring our Single-Point-Of-Failure DB",
         },
-        {
-            id: "recipie",
-            url: "http://localhost:8000/recepie.html",
-            name: "Ingredients - Boeuf Bourguignon",
-        },
     ],
     // Chat room - https://www.youtube.com/watch?v=ZfkwW4GgAiU
     '!wQqrqwOipOOWALxJNe:matrix.org': [
@@ -56,6 +51,11 @@ const roomWidgetConfig = {
             url: "https://www.youtube.com/embed/ZfkwW4GgAiU?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1&autoplay=1",
             name: "Live stream - ChatGirl86",
         },
+        {
+            id: "thermometer",
+            url: "http://localhost:8000/index.html",
+            name: "Tip Me!!! -- Send me cash $$$",
+        },
     ],
     // Game room - https://www.youtube.com/watch?v=Dm2Ma1dOFO4
     '!dYSCwtVljhTdBlgNxq:matrix.org': [
@@ -63,6 +63,11 @@ const roomWidgetConfig = {
             id: "youtube",
             url: "https://www.youtube.com/embed/Dm2Ma1dOFO4?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1&autoplay=1",
             name: "Live stream - Overwatch Balle Royale",
+        },
+        {
+            id: "thermometer",
+            url: "http://localhost:8000/index.html",
+            name: "Tip Me!!! -- Send me cash $$$",
         },
     ],
 };
