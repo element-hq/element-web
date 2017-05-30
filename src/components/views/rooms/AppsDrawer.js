@@ -23,16 +23,46 @@ const Modal = require("../../../Modal");
 
 // FIXME -- Hard coded widget config
 const roomWidgetConfig = {
+    // Cooking room
     '!IAkkwswSrOSzPRWksX:matrix.org': [
         {
             id: "youtube",
-            url: "https://www.youtube.com/embed/ZJy1ajvMU1k?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1",
+            url: "https://www.youtube.com/embed/ZJy1ajvMU1k?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1&autoplay=1",
             name: "Live stream - Boeuf Bourguignon",
         },
         {
             id: "recipie",
             url: "http://localhost:8000/recepie.html",
             name: "Ingredients - Boeuf Bourguignon",
+        },
+    ],
+    // Grafana room
+    '!JWeMRscvtWqfNuzmSf:matrix.org': [
+        {
+            id: "grafana",
+            url: "http://localhost:8000/grafana.html",
+            name: "Monitoring our Single-Point-Of-Failure DB",
+        },
+        {
+            id: "recipie",
+            url: "http://localhost:8000/recepie.html",
+            name: "Ingredients - Boeuf Bourguignon",
+        },
+    ],
+    // Chat room - https://www.youtube.com/watch?v=ZfkwW4GgAiU
+    '!wQqrqwOipOOWALxJNe:matrix.org': [
+        {
+            id: "youtube",
+            url: "https://www.youtube.com/embed/ZfkwW4GgAiU?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1&autoplay=1",
+            name: "Live stream - ChatGirl86",
+        },
+    ],
+    // Game room - https://www.youtube.com/watch?v=Dm2Ma1dOFO4
+    '!dYSCwtVljhTdBlgNxq:matrix.org': [
+        {
+            id: "youtube",
+            url: "https://www.youtube.com/embed/Dm2Ma1dOFO4?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1&autoplay=1",
+            name: "Live stream - Overwatch Balle Royale",
         },
     ],
 };
@@ -71,7 +101,7 @@ module.exports = React.createClass({
 
     render: function() {
         const apps = this.state.apps.map(
-            (app) => <AppTile key={app.id} url={app.url} name={app.name}/>);
+            (app) => <AppTile key={app.id} id={app.id} url={app.url} name={app.name}/>);
 
         return (
             <div className="mx_AppsDrawer">
