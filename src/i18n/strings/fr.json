@@ -703,5 +703,7 @@
     "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.": "Êtes vous sûr de vouloir supprimer cet événement ? Notez que si vous supprimez le changement de nom d’un salon ou la mise a jour du sujet d’un salon, il est possible que le changement soit annulé.",
     "Unknown error": "Erreur inconnue",
     "Incorrect password": "Mot de passe incorrect",
-    "This will make your account permanently unusable. You will not be able to re-register the same user ID.": "Ceci rendra votre compte inutilisable de manière permanente. Vous ne pourrez pas enregistrer à nouveau le même identifiant utilisateur."
+    "This will make your account permanently unusable. You will not be able to re-register the same user ID.": "Ceci rendra votre compte inutilisable de manière permanente. Vous ne pourrez pas enregistrer à nouveau le même identifiant utilisateur.",
+    "This action is irreversible.": "Cette action est irreversible.",
+    "To continue, please enter your password.": "Pour continuer, merci d'entrer votre mot de passe."
 }
