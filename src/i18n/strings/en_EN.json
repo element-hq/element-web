@@ -762,5 +762,6 @@
   "Ongoing conference call%(supportedText)s. %(joinText)s": "Ongoing conference call%(supportedText)s. %(joinText)s",
   "Online": "Online",
   "Idle": "Idle",
-  "Offline": "Offline"
+  "Offline": "Offline",
+  "Disable URL previews for this room (affects only you)": "Disable URL previews for this room (affects only you)"
 }
