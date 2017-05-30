@@ -173,6 +173,9 @@ if (shouldQuit) {
 const launcher = new AutoLaunch({
     name: vectorConfig.brand || 'Riot',
     isHidden: true,
+    mac: {
+        useLaunchAgent: true,
+    },
 });
 
 const settings = {
