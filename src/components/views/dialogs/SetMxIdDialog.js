@@ -20,6 +20,7 @@ import React from 'react';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import classnames from 'classnames';
+import KeyCode from '../../../KeyCode';
 
 // The amount of time to wait for further changes to the input username before
 // sending a request to the server
@@ -89,6 +90,12 @@ export default React.createClass({
                 });
             }, USERNAME_CHECK_DEBOUNCE_MS);
         });
+    },
+
+    onKeyUp: function(ev) {
+        if (ev.keyCode === KeyCode.ENTER) {
+            this.onSubmit();
+        }
     },
 
     onSubmit: function(ev) {
@@ -233,7 +240,10 @@ export default React.createClass({
                 <div className="mx_Dialog_content">
                     <div className="mx_SetMxIdDialog_input_group">
                         <input type="text" ref="input_value" value={this.state.username}
-                            autoFocus={true} onChange={this.onValueChange} size="30"
+                            autoFocus={true}
+                            onChange={this.onValueChange}
+                            onKeyUp={this.onKeyUp}
+                            size="30"
                             className={inputClasses}
                         />
                         { usernameBusyIndicator }
