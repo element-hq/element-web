@@ -153,6 +153,6 @@
     "%(actionVerb)s this person?": "%(actionVerb)s 这个用户？",
     "The email address linked to your account must be entered.": "必须输入和你账号关联的邮箱地址。",
     "The file '%(fileName)s' exceeds this home server's size limit for uploads": "文件 '%(fileName)s' 超过了此主服务器的上传大小限制",
-    "The file '%(fileName)s' failed to upload": "文件 '%(fileName)s' 上传失败"
+    "The file '%(fileName)s' failed to upload": "文件 '%(fileName)s' 上传失败",
     "Guests can't use labs features. Please register.": "游客不能使用实验性功能。请注册。"
 }
