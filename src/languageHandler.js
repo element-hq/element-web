@@ -18,6 +18,7 @@ limitations under the License.
 import request from 'browser-request';
 import counterpart from 'counterpart';
 import q from 'q';
+import sanitizeHtml from "sanitize-html";
 
 import UserSettingsStore from './UserSettingsStore';
 
@@ -35,6 +36,56 @@ counterpart.setFallbackLocale('en');
 // instance.
 export function _t(...args) {
     return counterpart.translate(...args);
+}
+
+/*
+ * Translates stringified JSX into translated JSX. E.g
+ *    _tJsx(
+ *        "click <a href=''>here</a> now",
+ *        /<a href=''>(.*?)<\/a>/,
+ *        (sub) => { return <a href=''>{ sub }</a>; }
+ *    );
+ *
+ * @param {string} jsxText The untranslated stringified JSX e.g "click <a href=''>here</a> now".
+ * This will be translated by passing the string through to _t(...)
+ *
+ * @param {RegExp} pattern A regexp to match against the translated text.
+ * The captured groups from the regexp will be fed to 'sub'.
+ * Only the captured groups will be included in the output, the match itself is discarded.
+ *
+ * @param {Function} sub A function which will be called
+ * with multiple args, each arg representing a captured group of the matching regexp.
+ * This function must return a JSX node.
+ *
+ * @return A list of strings/JSX nodes.
+ */
+export function _tJsx(jsxText, pattern, sub) {
+    if (!pattern instanceof RegExp) {
+        throw new Error(`_tJsx: programmer error. expected RegExp for text: ${jsxText}`);
+    }
+    if (!sub instanceof Function) {
+        throw new Error(`_tJsx: programmer error. expected Function for text: ${jsxText}`);
+    }
+
+    // tJsxText may be unsafe if malicious translators try to inject HTML.
+    // Run this through sanitize-html and bail if the output isn't identical
+    const tJsxText = _t(jsxText);
+    const sanitized = sanitizeHtml(tJsxText);
+    if (tJsxText !== sanitized) {
+        throw new Error(`_tJsx: translator error. untrusted HTML supplied. '${tJsxText}' != '${sanitized}'`);
+    }
+    let match = tJsxText.match(pattern);
+    if (!match) {
+        throw new Error(`_tJsx: translator error. expected translation to match regexp: ${pattern}`);
+    }
+    let capturedGroups = match.slice(1);
+    // Return the raw translation before the *match* followed by the return value of sub() followed
+    // by the raw translation after the *match* (not captured group).
+    return [
+        tJsxText.substr(0, match.index),
+        sub.apply(null, capturedGroups),
+        tJsxText.substr(match.index + match[0].length),
+    ];
 }
 
 // Allow overriding the text displayed when no translation exists
