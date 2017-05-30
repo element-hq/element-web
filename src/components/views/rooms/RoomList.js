@@ -274,7 +274,6 @@ module.exports = React.createClass({
                         var tagName = tagNames[i];
                         lists[tagName] = lists[tagName] || [];
                         lists[tagName].push(room);
-                        otherTagNames[tagName] = 1;
                     }
                 }
                 else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
