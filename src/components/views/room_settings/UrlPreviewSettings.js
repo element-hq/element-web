@@ -20,6 +20,7 @@ var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require("../../../index");
 var Modal = require("../../../Modal");
 var UserSettingsStore = require('../../../UserSettingsStore');
+import { _t } from '../../../languageHandler';
 
 
 module.exports = React.createClass({
@@ -120,19 +121,19 @@ module.exports = React.createClass({
                     <input type="checkbox" ref="globalDisableUrlPreview"
                            onChange={ this.onGlobalDisableUrlPreviewChange }
                            checked={ this.state.globalDisableUrlPreview } />
-                    Disable URL previews by default for participants in this room
+                    {_t("Disable URL previews by default for participants in this room")}
                 </label>;
         }
         else {
             disableRoomPreviewUrls =
                 <label>
-                    URL previews are { this.state.globalDisableUrlPreview ? "disabled" : "enabled" } by default for participants in this room.
+                    {_t("URL previews are %(globalDisableUrlPreview)s by default for participants in this room.", {globalDisableUrlPreview: this.state.globalDisableUrlPreview ? _t("disabled") : _t("enabled")})}
                 </label>;
         }
 
         return (
             <div className="mx_RoomSettings_toggles">
-                <h3>URL Previews</h3>
+                <h3>{_t("URL Previews")}</h3>
 
                 <label>
                     You have <a href="#/settings">{ UserSettingsStore.getUrlPreviewsDisabled() ? 'disabled' : 'enabled' }</a> URL previews by default.
@@ -142,13 +143,13 @@ module.exports = React.createClass({
                     <input type="checkbox" ref="userEnableUrlPreview"
                            onChange={ this.onUserEnableUrlPreviewChange }
                            checked={ this.state.userEnableUrlPreview } />
-                    Enable URL previews for this room (affects only you)
+                    {_t("Enable URL previews for this room (affects only you)")}
                 </label>
                 <label>
                     <input type="checkbox" ref="userDisableUrlPreview"
                            onChange={ this.onUserDisableUrlPreviewChange }
                            checked={ this.state.userDisableUrlPreview } />
-                    Disable URL previews for this room (affects only you)
+                    {_t("Disable URL previews for this room (affects only you)")}
                 </label>
             </div>
         );

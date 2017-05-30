@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var Modal = require('../../../Modal');
 var sdk = require('../../../index');
+import { _t } from '../../../languageHandler';
 
 /**
  * A pure UI component which displays the HS and IS to use.
@@ -136,14 +137,14 @@ module.exports = React.createClass({
                         checked={!this.state.configVisible}
                         onChange={this.onServerConfigVisibleChange.bind(this, false)} />
                     <label className="mx_Login_label" htmlFor="basic">
-                        Default server
+                        {_t("Default server")}
                     </label>
                     &nbsp;&nbsp;
                     <input className="mx_Login_radio" id="advanced" name="configVisible" type="radio"
                         checked={this.state.configVisible}
                         onChange={this.onServerConfigVisibleChange.bind(this, true)} />
                     <label className="mx_Login_label" htmlFor="advanced">
-                        Custom server
+                        {_t("Custom server")}
                     </label>
                 </div>
             );
@@ -155,7 +156,7 @@ module.exports = React.createClass({
             <div style={serverConfigStyle}>
                 <div className="mx_ServerConfig">
                     <label className="mx_Login_label mx_ServerConfig_hslabel" htmlFor="hsurl">
-                        Home server URL
+                        {_t("Home server URL")}
                     </label>
                     <input className="mx_Login_field" id="hsurl" type="text"
                         placeholder={this.props.defaultHsUrl}
@@ -163,7 +164,7 @@ module.exports = React.createClass({
                         value={this.state.hs_url}
                         onChange={this.onHomeserverChanged} />
                     <label className="mx_Login_label mx_ServerConfig_islabel" htmlFor="isurl">
-                        Identity server URL
+                        {_t("Identity server URL")}
                     </label>
                     <input className="mx_Login_field" id="isurl" type="text"
                         placeholder={this.props.defaultIsUrl}
@@ -171,7 +172,7 @@ module.exports = React.createClass({
                         value={this.state.is_url}
                         onChange={this.onIdentityServerChanged} />
                     <a className="mx_ServerConfig_help" href="#" onClick={this.showHelpPopup}>
-                        What does this mean?
+                        {_t("What does this mean?")}
                     </a>
                 </div>
             </div>

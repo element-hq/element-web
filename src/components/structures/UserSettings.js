@@ -830,7 +830,7 @@ module.exports = React.createClass({
             reject = (
                 <AccessibleButton className="mx_UserSettings_button danger"
                 onClick={this._onRejectAllInvitesClicked.bind(this, invitedRooms)}>
-                    Reject all {invitedRooms.length} invites
+                    {_t("Reject all %(invitedRooms)s invites", {invitedRooms: invitedRooms.length})}
                 </AccessibleButton>
             );
         }

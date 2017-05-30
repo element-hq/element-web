@@ -18,6 +18,7 @@ import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
+import { _t } from '../../../languageHandler';
 
 export default React.createClass({
     displayName: 'DeviceVerifyButtons',
@@ -82,14 +83,14 @@ export default React.createClass({
             blacklistButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unblacklist"
                   onClick={this.onUnblacklistClick}>
-                    Unblacklist
+                    {_t("Unblacklist")}
                 </button>
             );
         } else {
             blacklistButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_blacklist"
                   onClick={this.onBlacklistClick}>
-                    Blacklist
+                    {_t("Blacklist")}
                 </button>
             );
         }
@@ -98,14 +99,14 @@ export default React.createClass({
             verifyButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unverify"
                   onClick={this.onUnverifyClick}>
-                    Unverify
+                    {_t("Unverify")}
                 </button>
             );
         } else {
             verifyButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_verify"
                   onClick={this.onVerifyClick}>
-                    Verify...
+                    {_t("Verify...")}
                 </button>
             );
         }

@@ -16,7 +16,9 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import { _t } from '../../../languageHandler';
+
 var DIV_ID = 'mx_recaptcha';
 
 /**
@@ -117,7 +119,7 @@ module.exports = React.createClass({
 
         return (
             <div ref="recaptchaContainer">
-                This Home Server would like to make sure you are not a robot
+                {_t("This Home Server would like to make sure you are not a robot")}
                 <br/>
                 <div id={DIV_ID}></div>
                 {error}

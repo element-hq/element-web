@@ -27,7 +27,6 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
 import q from 'q';
-import Fuse from 'fuse.js';
 
 const TRUNCATE_QUERY_LIST = 40;
 
@@ -74,19 +73,6 @@ module.exports = React.createClass({
             // Set the cursor at the end of the text input
             this.refs.textinput.value = this.props.value;
         }
-        // Create a Fuse instance for fuzzy searching this._userList
-        this._fuse = new Fuse(
-            // Use an empty list at first that will later be populated
-            // (see this._updateUserList)
-            [],
-            {
-                shouldSort: true,
-                location: 0, // The index of the query in the test string
-                distance: 5, // The distance away from location the query can be
-                // 0.0 = exact match, 1.0 = match anything
-                threshold: 0.3,
-            }
-        );
         this._updateUserList();
     },
 
@@ -175,7 +161,7 @@ module.exports = React.createClass({
     },
 
     onQueryChanged: function(ev) {
-        const query = ev.target.value;
+        const query = ev.target.value.toLowerCase();
         let queryList = [];
 
         if (query.length < 2) {
@@ -188,24 +174,27 @@ module.exports = React.createClass({
         this.queryChangedDebouncer = setTimeout(() => {
             // Only do search if there is something to search
             if (query.length > 0 && query != '@') {
-                // Weighted keys prefer to match userIds when first char is @
-                this._fuse.options.keys = [{
-                    name: 'displayName',
-                    weight: query[0] === '@' ? 0.1 : 0.9,
-                },{
-                    name: 'userId',
-                    weight: query[0] === '@' ? 0.9 : 0.1,
-                }];
-                queryList = this._fuse.search(query).map((user) => {
+                this._userList.forEach((user) => {
+                    if (user.userId.toLowerCase().indexOf(query) === -1 &&
+                        user.displayName.toLowerCase().indexOf(query) === -1
+                    ) {
+                        return;
+                    }
+
                     // Return objects, structure of which is defined
                     // by InviteAddressType
-                    return {
+                    queryList.push({
                         addressType: 'mx',
                         address: user.userId,
                         displayName: user.displayName,
                         avatarMxc: user.avatarUrl,
                         isKnown: true,
-                    }
+                        order: user.getLastActiveTs(),
+                    });
+                });
+
+                queryList = queryList.sort((a,b) => {
+                    return a.order < b.order;
                 });
 
                 // If the query is a valid address, add an entry for that
@@ -283,8 +272,8 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get().isGuest()) {
             var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
-                title: "Please Register",
-                description: "Guest users can't invite users. Please register."
+                title: _t("Please Register"),
+                description: _t("Guest users can't invite users. Please register."),
             });
             return;
         }
@@ -305,8 +294,8 @@ module.exports = React.createClass({
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failed to invite",
-                    description: ((err && err.message) ? err.message : "Operation failed"),
+                    title: _t("Failed to invite"),
+                    description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });
                 return null;
             })
@@ -318,8 +307,8 @@ module.exports = React.createClass({
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failed to invite user",
-                    description: ((err && err.message) ? err.message : "Operation failed"),
+                    title: _t("Failed to invite user"),
+                    description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });
                 return null;
             })
@@ -339,8 +328,8 @@ module.exports = React.createClass({
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Failed to invite",
-                    description: ((err && err.message) ? err.message : "Operation failed"),
+                    title: _t("Failed to invite"),
+                    description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });
                 return null;
             })
@@ -351,7 +340,7 @@ module.exports = React.createClass({
         this.props.onFinished(true, addrTexts);
     },
 
-    _updateUserList: new rate_limited_func(function() {
+    _updateUserList: function() {
         // Get all the users
         this._userList = MatrixClientPeg.get().getUsers();
         // Remove current user
@@ -359,9 +348,7 @@ module.exports = React.createClass({
             return u.userId === MatrixClientPeg.get().credentials.userId;
         });
         this._userList.splice(meIx, 1);
-
-        this._fuse.set(this._userList);
-    }, 500),
+    },
 
     _isOnInviteList: function(uid) {
         for (let i = 0; i < this.state.inviteList.length; i++) {
@@ -398,7 +385,7 @@ module.exports = React.createClass({
         if (errorList.length > 0) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Failed to invite the following users to the " + room.name + " room:",
+                title: _t("Failed to invite the following users to the %(roomName)s room:", {roomName: room.name}),
                 description: errorList.join(", "),
             });
         }
