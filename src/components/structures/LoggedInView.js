@@ -244,7 +244,6 @@ export default React.createClass({
                     teamToken={this.props.teamToken}
                     homePageUrl={this.props.config.welcomePageUrl}
                 />;
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.rightOpacity}/>
                 break;
 
             case PageTypes.UserView:
