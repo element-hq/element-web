@@ -110,5 +110,16 @@
     "World readable": "Verden lesbar",
     "You cannot delete this image. (%(code)s)": "Du kan ikke slette dette bildet. (%(code)s)",
     "You cannot delete this message. (%(code)s)": "Du kan ikke slette denne meldingen. (%(code)s)",
-    "You are not receiving desktop notifications": "Du mottar ikke skrivebords varsler"
+    "You are not receiving desktop notifications": "Du mottar ikke skrivebords varsler",
+    "Messages containing <span>keywords</span>": "Meldinger som inneholder <span>nøkkelord</span>",
+    "Sunday": "Søndag",
+    "Monday": "Mandag",
+    "Tuesday": "Tirsdag",
+    "Wednesday": "Onsdag",
+    "Thursday": "Torsdag",
+    "Friday": "Fredag",
+    "Saturday": "Lørdag",
+    "Today": "I dag",
+    "Yesterday": "I går",
+    "Welcome page": "Velkomst side"
 }
