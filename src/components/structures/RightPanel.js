@@ -96,7 +96,7 @@ module.exports = React.createClass({
             var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
                 title: _t('Please Register'),
-                description: _t('Guest users can\'t invite users. Please register to invite') + '.'
+                description: _t('Guest users can\'t invite users. Please register to invite.')
             });
             return;
         }
@@ -221,7 +221,7 @@ module.exports = React.createClass({
                             <TintableSvg src="img/icons-notifications.svg" width="25" height="25"/>
                             { notificationsHighlight }
                         </AccessibleButton>
-                        <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" title="Hide panel" onClick={ this.onCollapseClick }>
+                        <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" title={ _t("Hide panel") } onClick={ this.onCollapseClick }>
                             <TintableSvg src="img/minimise.svg" width="10" height="16"/>
                         </div>
                   </div>;

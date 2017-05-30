@@ -213,11 +213,11 @@ module.exports = React.createClass({
 
                 var Loader = sdk.getComponent("elements.Spinner");
                 var modal = Modal.createDialog(Loader);
-                var step = _t('remove %(name)s from the directory', {name: name}) + '.';
+                var step = _t('remove %(name)s from the directory.', {name: name});
 
                 MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
                     if (!alias) return;
-                    step = _t('delete the alias') + '.';
+                    step = _t('delete the alias.');
                     return MatrixClientPeg.get().deleteAlias(alias);
                 }).done(() => {
                     modal.close();
@@ -356,7 +356,7 @@ module.exports = React.createClass({
                     var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
                     Modal.createDialog(NeedToRegisterDialog, {
                         title: _t('Failed to join the room'),
-                        description: _t('This room is inaccessible to guests. You may be able to join if you register') + '.'
+                        description: _t('This room is inaccessible to guests. You may be able to join if you register.')
                     });
                     return;
                 }
