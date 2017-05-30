@@ -16,7 +16,8 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'UnknownBody',
@@ -24,7 +25,7 @@ module.exports = React.createClass({
     render: function() {
         const text = this.props.mxEvent.getContent().body;
         return (
-            <span className="mx_UnknownBody" title="Redacted or unknown message type">
+            <span className="mx_UnknownBody" title={_t("Removed or unknown message type")}>
                 {text}
             </span>
         );

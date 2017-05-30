@@ -16,7 +16,7 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
 module.exports = React.createClass({
     displayName: 'LoginFooter',
@@ -24,7 +24,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_Login_links">
-                <a href="https://matrix.org">powered by Matrix</a>
+                <a href="https://matrix.org">{_t("powered by Matrix")}</a>
             </div>
         );
     }

@@ -16,10 +16,12 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var sdk = require('../../../index');
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
+
 
 module.exports = React.createClass({
     displayName: 'PresenceLabel',
@@ -67,9 +69,9 @@ module.exports = React.createClass({
     },
 
     getPrettyPresence: function(presence) {
-        if (presence === "online") return "Online";
-        if (presence === "unavailable") return "Idle"; // XXX: is this actually right?
-        if (presence === "offline") return "Offline";
+        if (presence === "online") return _t("Online");
+        if (presence === "unavailable") return _t("Idle"); // XXX: is this actually right?
+        if (presence === "offline") return _t("Offline");
         return "Unknown";
     },
 

@@ -117,7 +117,7 @@ export default class MessageComposer extends React.Component {
             title: _t('Upload Files'),
             description: (
                 <div>
-                    <p>{ _t('Are you sure you want upload the following files?') }</p>
+                    <p>{ _t('Are you sure you want to upload the following files?') }</p>
                     <ul style={{listStyle: 'none', textAlign: 'left'}}>
                         {fileList}
                     </ul>
