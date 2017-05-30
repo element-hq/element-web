@@ -236,6 +236,10 @@ electron.app.on('ready', () => {
     mainWindow.loadURL(`file://${__dirname}/../../webapp/index.html`);
     electron.Menu.setApplicationMenu(vectorMenu);
 
+    // explicitly hide because setApplicationMenu on Linux otherwise shows...
+    // https://github.com/electron/electron/issues/9621
+    mainWindow.hide();
+
     // Create trayIcon icon
     tray.create(mainWindow, {
         icon_path: iconPath,
