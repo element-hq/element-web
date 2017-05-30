@@ -315,6 +315,7 @@
   "joined": "joined",
   "%(targetName)s joined the room.": "%(targetName)s joined the room.",
   "Joins room with given alias": "Joins room with given alias",
+  "Jump to first unread message.": "Jump to first unread message.",
   "%(senderName)s kicked %(targetName)s.": "%(senderName)s kicked %(targetName)s.",
   "Kick": "Kick",
   "Kicks user with given id": "Kicks user with given id",
