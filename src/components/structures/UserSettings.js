@@ -217,6 +217,13 @@ module.exports = React.createClass({
 
         this._localSettings = UserSettingsStore.getLocalSettings();
 
+        if (PlatformPeg.get().isElectron()) {
+            const {ipcRenderer} = require('electron');
+
+            ipcRenderer.on('settings', this._electronSettings);
+            ipcRenderer.send('settings_get');
+        }
+
         this.setState({
             language: languageHandler.getCurrentLanguage(),
         });
@@ -239,6 +246,15 @@ module.exports = React.createClass({
         if (cli) {
             cli.removeListener("RoomMember.membership", this._onInviteStateChange);
         }
+
+        if (PlatformPeg.get().isElectron()) {
+            const {ipcRenderer} = require('electron');
+            ipcRenderer.removeListener('settings', this._electronSettings);
+        }
+    },
+
+    _electronSettings: function(ev, settings) {
+        this.setState({ electron_settings: settings });
     },
 
     _refreshFromServer: function() {
@@ -843,6 +859,29 @@ module.exports = React.createClass({
         </div>;
     },
 
+    _renderElectronSettings: function() {
+        const settings = this.state.electron_settings;
+        if (!settings) return;
+
+        const {ipcRenderer} = require('electron');
+
+        return <div>
+            <h3>{ _t('Desktop specific') }</h3>
+            <div className="mx_UserSettings_section">
+                <div className="mx_UserSettings_toggle">
+                    <input type="checkbox"
+                           name="auto-launch"
+                           defaultChecked={settings['auto-launch']}
+                           onChange={(e) => {
+                               ipcRenderer.send('settings_set', 'auto-launch', e.target.checked);
+                           }}
+                    />
+                    <label htmlFor="auto-launch">{_t('Start automatically after system login')}</label>
+                </div>
+            </div>
+        </div>;
+    },
+
     _showSpoiler: function(event) {
         const target = event.target;
         target.innerHTML = target.getAttribute('data-spoiler');
@@ -1044,6 +1083,8 @@ module.exports = React.createClass({
                 {this._renderCryptoInfo()}
                 {this._renderBulkOptions()}
                 {this._renderBugReport()}
+
+                {PlatformPeg.get().isElectron() && this._renderElectronSettings()}
 
                 {this._renderAnalyticsControl()}
 
