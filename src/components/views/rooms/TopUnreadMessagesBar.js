@@ -37,7 +37,7 @@ module.exports = React.createClass({
                     <img src="img/scrollto.svg" width="24" height="24"
                         alt={ _t('Scroll to unread messages') }
                         title={ _t('Scroll to unread messages') }/>
-                    Jump to first unread message.
+                    { _t("Jump to first unread message.") }
                 </div>
                 <img className="mx_TopUnreadMessagesBar_close mx_filterFlipColor"
                     src="img/cancel.svg" width="18" height="18"
