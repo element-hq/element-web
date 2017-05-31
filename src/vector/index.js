@@ -278,7 +278,6 @@ async function loadApp() {
         </div>, document.getElementById('matrixchat'));
     } else if (validBrowser) {
         UpdateChecker.start();
-
         const MatrixChat = sdk.getComponent('structures.MatrixChat');
         window.matrixChat = ReactDOM.render(
             <MatrixChat

@@ -1,4 +1,5 @@
 {
+  "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s on %(osName)s",
   "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.": "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.",
   "Add an email address above to configure email notifications": "Add an email address above to configure email notifications",
   "Advanced notification settings": "Advanced notification settings",
@@ -88,6 +89,7 @@
   "remove %(name)s from the directory": "remove %(name)s from the directory",
   "Remove from Directory": "Remove from Directory",
   "Resend": "Resend",
+  "Riot Desktop on %(platformName)": "Riot Desktop on %(platformName)",
   "Riot does not know how to join a room on this network": "Riot does not know how to join a room on this network",
   "Riot uses many advanced browser features, some of which are not available or experimental in your current browser.": "Riot uses many advanced browser features, some of which are not available or experimental in your current browser.",
   "Room directory": "Room directory",
@@ -106,6 +108,7 @@
   "Unable to join network": "Unable to join network",
   "Unable to look up room ID from server": "Unable to look up room ID from server",
   "Unhide Preview": "Unhide Preview",
+  "Unknown device": "Unknown device",
   "unknown error code": "unknown error code",
   "Unnamed room": "Unnamed room",
   "Uploaded on %(date)s by %(user)s": "Uploaded on %(date)s by %(user)s",
@@ -126,6 +129,7 @@
   "Saturday": "Saturday",
   "Today": "Today",
   "Yesterday": "Yesterday",
+  "You need to be using HTTPS to place a screen-sharing call.": "You need to be using HTTPS to place a screen-sharing call.",
   "Welcome page": "Welcome page",
   "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!"
 }
