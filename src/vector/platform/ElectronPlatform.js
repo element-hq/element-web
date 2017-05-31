@@ -67,6 +67,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         dis.register(_onAction);
     }
 
+    getHumanReadableName(): string {
+        return 'Electron Platform';
+    }
+
     setNotificationCount(count: number) {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
@@ -148,6 +152,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
     screenCaptureErrorString(): ?string {
         return null;
     }
+
+    isElectron(): boolean { return true; }
 
     requestNotificationPermission(): Promise<string> {
         return q('granted');

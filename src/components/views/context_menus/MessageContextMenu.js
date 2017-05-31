@@ -161,7 +161,7 @@ module.exports = React.createClass({
             );
         }
 
-        if (this.state.canRedact) {
+        if (!eventStatus && this.state.canRedact) {
             redactButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
                     { _t('Remove') }

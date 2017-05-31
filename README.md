@@ -55,9 +55,10 @@ Building From Source
 Riot is a modular webapp built with modern ES6 and requires a npm build system
 to build.
 
-1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
-1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`
-1. Switch to the riot-web directory: `cd riot-web`
+1. Install or update `node.js` so that your `node` is at least v6.0.0 (and `npm`
+   is at least v3.8.6).
+1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`.
+1. Switch to the riot-web directory: `cd riot-web`.
 1. If you're using the `develop` branch, install the develop versions of the
    dependencies, as the released ones will be too old:
    ```
@@ -65,7 +66,7 @@ to build.
    ```
    Whenever you git pull on riot-web you will also probably need to force an update
    to these dependencies - the simplest way is to re-run the script, but you can also
-   manually update and reuild them:
+   manually update and rebuild them:
    ```
    cd matrix-js-sdk
    git pull
@@ -85,10 +86,10 @@ to build.
    up-to-date.  Or just use https://riot.im/develop - the continuous integration
    release of the develop branch.
    (Note that we don't reference the develop versions in git directly due to
-   https://github.com/npm/npm/issues/3055)
-1. Install the prerequisites: `npm install`
+   https://github.com/npm/npm/issues/3055.)
+1. Install the prerequisites: `npm install`.
 1. Configure the app by copying `config.sample.json` to `config.json` and
-   modifying it (see below for details)
+   modifying it (see below for details).
 1. `npm run dist` to build a tarball to deploy. Untaring this file will give
    a version-specific directory containing all the files that need to go on your
    web server.

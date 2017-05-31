@@ -16,11 +16,10 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-var Notifier = require("matrix-react-sdk/lib/Notifier");
-var sdk = require('matrix-react-sdk')
-var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+import Notifier from 'matrix-react-sdk/lib/Notifier';
+import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'MatrixToolbar',
@@ -43,5 +42,5 @@ module.exports = React.createClass({
                 <AccessibleButton className="mx_MatrixToolbar_close" onClick={ this.hideToolbar } ><img src="img/cancel.svg" width="18" height="18" /></AccessibleButton>
             </div>
         );
-    }
+    },
 });
