@@ -51,6 +51,15 @@ limitations under the License.
     // display: inline-block;
 }
 
+.mx_AppTileFullWidth {
+    width: 100%;
+    margin: 0 5px 2px 0;
+    border: 1px solid $primary-hairline-color;
+    border-radius: 2px;
+    height: 350px;
+    // display: inline-block;
+}
+
 .mx_AppTileMenuBar {
     // height: 15px;
     margin: 0;
