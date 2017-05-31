@@ -481,7 +481,7 @@ module.exports = WithMatrixClient(React.createClass({
         }
 
         const editButton = (
-            <span className="mx_EventTile_editButton" title="Options" onClick={this.onEditClicked} />
+            <span className="mx_EventTile_editButton" title={ _t("Options") } onClick={this.onEditClicked} />
         );
         let e2e;
         // cosmetic padlocks:
