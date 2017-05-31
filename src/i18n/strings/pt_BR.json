@@ -119,5 +119,15 @@
     "Failed to remove tag %(tagName)s from room": "Não foi possível remover a marcação %(tagName)s desta sala",
     "Welcome page": "Página de boas vindas",
     "Advanced notification settings": "Configurações avançadas de notificação",
-    "customServer_text": "Você pode usar as opções de servidor personalizado para entrar em outros servidores Matrix, especificando uma URL de outro Servidor de Base. Isso permite que você use Riot com uma conta Matrix que exista em outro Servidor de Base. Você também pode configurar um servidor de Identidade personalizado, mas neste caso não poderá convidar usuárias(os) pelo endereço de e-mail, ou ser convidado(a) pelo seu endereço de e-mail."
+    "customServer_text": "Você pode usar as opções de servidor personalizado para entrar em outros servidores Matrix, especificando uma URL de outro Servidor de Base. Isso permite que você use Riot com uma conta Matrix que exista em outro Servidor de Base. Você também pode configurar um servidor de Identidade personalizado, mas neste caso não poderá convidar usuárias(os) pelo endereço de e-mail, ou ser convidado(a) pelo seu endereço de e-mail.",
+    "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.": "<a href=\"http://apple.com/safari\">Safari</a> e <a href=\"http://opera.com\">Opera</a> funcionam também.",
+    "All notifications are currently disabled for all targets.": "Todas as notificações estão atualmente desabilitadas para todos os casos.",
+    "Collapse panel": "Colapsar o painel",
+    "Expand panel": "Expandir o painel",
+    "I understand the risks and wish to continue": "Entendo os riscos e desejo continuar",
+    "Messages containing <span>keywords</span>": "Mensagens contendo <span>palavras-chave</span>",
+    "Please install <a href=\"https://www.google.com/chrome\">Chrome</a> or <a href=\"https://getfirefox.com\">Firefox</a> for the best experience.": "Por favor instale <a href=\"https://www.google.com/chrome\">Chrome</a> ou <a href=\"https://getfirefox.com\">Firefox</a> para ter a melhor experiência de uso.",
+    "Riot uses many advanced browser features, some of which are not available or experimental in your current browser.": "O Riot usa muitas funcionalidades avançadas do navegador, algumas das quais não estão disponíveis ou ainda são experimentais no seu navegador atual.",
+    "Sorry, your browser is <b>not</b> able to run Riot.": "Perdão. O seu navegador <b>não</b> é capaz de rodar o Riot.",
+    "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Com o seu navegador atual, a aparência e sensação de uso da aplicação podem estar completamente incorretas, e algumas das funcionalidades poderão não funcionar. Se você quiser tentar de qualquer maneira, pode continuar, mas aí vai ter que se virar sozinho(a) com os problemas que porventura encontrar!"
 }
