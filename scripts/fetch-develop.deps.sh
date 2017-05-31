@@ -6,6 +6,8 @@
 # the branch the current checkout is on, use that branch. Otherwise,
 # use develop.
 
+set -e
+
 # Look in the many different CI env vars for which branch we're
 # building
 if [[ "$TRAVIS" == true ]]; then
