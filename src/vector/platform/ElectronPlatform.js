@@ -124,6 +124,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return notification;
     }
 
+    loudNotification(ev: Event, room: Object) {
+        ipcRenderer.send('loudNotification');
+    }
+
     clearNotification(notif: Notification) {
         notif.close();
     }
