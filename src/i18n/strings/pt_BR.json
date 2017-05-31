@@ -605,7 +605,7 @@
     "'%(alias)s' is not a valid format for an address": "'%(alias)s' não é um formato válido para um endereço",
     "'%(alias)s' is not a valid format for an alias": "'%(alias)s' não é um formato válido para um alias",
     "Join Room": "Ingressar na sala",
-    "Jump to first unread message.": "Jump to first unread message.",
+    "Jump to first unread message.": "Ir diretamente para a primeira das mensagens não lidas.",
     "Kick": "Remover",
     "Level": "Nível",
     "Local addresses for this room:": "Endereço local desta sala:",
