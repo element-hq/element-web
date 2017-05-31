@@ -22,6 +22,8 @@ import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import sdk from 'matrix-react-sdk';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import request from 'browser-request';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import sanitizeHtml from 'sanitize-html';
 
 module.exports = React.createClass({
     displayName: 'HomePage',
@@ -61,7 +63,7 @@ module.exports = React.createClass({
                     this.setState({ page: "Couldn't load home page" });
                 }
 
-                body.replaceAll(/_t\(['"](.*?)['"]\)/, (match)=>{ return sanitizehtml_t(match[1]) });
+                body = body.replace(/_t\(['"]([\s\S]*?)['"]\)/mg, (match, g1)=>{ return sanitizeHtml(_t(g1)) });
                 this.setState({ page: body });
             }
         );
