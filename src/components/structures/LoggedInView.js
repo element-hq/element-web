@@ -24,6 +24,7 @@ import PageTypes from '../../PageTypes';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import sessionStore from '../../stores/SessionStore';
+import MatrixClientPeg from '../../MatrixClientPeg';
 
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is
@@ -89,6 +90,16 @@ export default React.createClass({
         if (this._sessionStoreToken) {
             this._sessionStoreToken.remove();
         }
+    },
+
+    // Child components assume that the client peg will not be null, so give them some
+    // sort of assurance here by only allowing a re-render if the client is truthy.
+    //
+    // This is required because `LoggedInView` maintains its own state and if this state
+    // updates after the client peg has been made null (during logout), then it will
+    // attempt to re-render and the children will throw errors.
+    shouldComponentUpdate: function() {
+        return Boolean(MatrixClientPeg.get());
     },
 
     getScrollStateForRoom: function(roomId) {
