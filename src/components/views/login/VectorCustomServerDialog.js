@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 var React = require("react");
+var sanitizeHtml = require("sanitize-html");
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 module.exports = React.createClass({
@@ -30,7 +31,7 @@ module.exports = React.createClass({
                     { _t('Custom Server Options') }
                 </div>
                 <div className="mx_Dialog_content">
-                    <span dangerouslySetInnerHTML={{__html: _t('customServer_text')}} />
+                    <span dangerouslySetInnerHTML={{__html: sanitizeHtml(_t('customServer_text'))}} />
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.props.onFinished} autoFocus={true}>
