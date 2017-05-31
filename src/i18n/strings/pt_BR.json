@@ -812,7 +812,11 @@
     "Online": "Online",
     "Idle": "Ocioso",
     "Offline": "Offline",
-    "The exported file will allow anyone who can read it to decrypt any encrypted messages that you can see, so you should be careful to keep it secure. To help with this, you should enter a passphrase below, which will be used to encrypt the exported data. It will only be possible to import the data by using the same passphrase.": "",
+    "The exported file will allow anyone who can read it to decrypt any encrypted messages that you can see, so you should be careful to keep it secure. To help with this, you should enter a passphrase below, which will be used to encrypt the exported data. It will only be possible to import the data by using the same passphrase.": "O arquivo exportado irá permitir a qualquer pessoa que o acesse a descriptografar qualquer uma das mensagens criptografadas que você veja, portanto seja bastante cuidadosa(o) em manter este arquivo seguro. Para deixar este arquivo mais protegido, recomendamos que você insira uma senha abaixo, que será usada para criptografar o arquivo. Só será possível importar os dados usando exatamente a mesma senha.",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Este processo faz com que você possa importar as chaves de criptografia que tinha previamente exportado de outro cliente Matrix. Você poderá então descriptografar todas as mensagens que o outro cliente pôde criptografar.",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with {integrationsUrl}. Do you wish to continue?": ""
+    "You are about to be taken to a third-party site so you can authenticate your account for use with {integrationsUrl}. Do you wish to continue?": "",
+    "Start automatically after system login": "Iniciar automaticamente ao iniciar o sistema",
+    "Desktop specific": "Específico para o app de computadores desktop",
+    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será levado agora a um site de terceiros para poder autenticar a sua conta para uso com o serviço %(integrationsUrl)s. Você quer continuar?",
+    "Disable URL previews for this room (affects only you)": "Desabilitar as pré-visualizações de sites para esta sala (afeta apenas a você)"
 }
