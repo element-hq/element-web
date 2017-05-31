@@ -119,7 +119,7 @@
     "zh-sg": "Chinese (Singapore)",
     "zh-tw": "Chinese (Taiwan)",
     "zu": "Zulu",
-    "anyone": "anyone",
+    "anyone": "n'importe qui",
     "Direct Chat": "Conversation Directe",
     "Direct chats": "Conversations directes",
     "Disable inline URL previews by default": "Désactiver l’aperçu des URLs",
@@ -764,5 +764,6 @@
     "Online": "En ligne",
     "Offline": "Hors ligne",
     "Disable URL previews for this room (affects only you)": "Désactiver les aperçus d'URL pour ce salon (n'affecte que vous)",
-    "Desktop specific": "Spécifique à la version bureau"
+    "Desktop specific": "Spécifique à la version bureau",
+    "Start automatically after system login": "Démarrer automatiquement après la phase d'authentification du système."
 }
