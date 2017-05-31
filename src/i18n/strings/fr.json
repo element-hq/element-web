@@ -753,5 +753,16 @@
     "Image '%(Body)s' cannot be displayed.": "L'image '%(Body)s' ne peut être affichée.",
     "This image cannot be displayed.": "Cette image ne peut être affichée.",
     "Error decrypting video": "Erreur lors de la décryption de la vidéo",
-    "Add an Integration": "Ajouter une intégration"
+    "Add an Integration": "Ajouter une intégration",
+    "URL Previews": "Aperçus d'URL",
+    "Disable URL previews by default for participants in this room": "Désactiver les aperçus d'URL par défaut pour les participants de ce salon",
+    "URL previews are %(globalDisableUrlPreview)s by default for participants in this room.": "Les aperçus d'URL sont %(globalDisableUrlPreview)s par défaut pour les participants de ce salon.",
+    "Enable URL previews for this room (affects only you)": "Activer les aperçus d'URL pour ce salon (n'affecte que vous)",
+    "Drop file here to upload": "Déposer le fichier ici pour téléchargement",
+    " (unsupported)": " (non supporté)",
+    "Ongoing conference call%(supportedText)s. %(joinText)s": "Appel conférence en cours%(supportedText)s. %(joinText)s",
+    "Online": "En ligne",
+    "Offline": "Hors ligne",
+    "Disable URL previews for this room (affects only you)": "Désactiver les aperçus d'URL pour ce salon (n'affecte que vous)",
+    "Desktop specific": "Spécifique à la version bureau"
 }
