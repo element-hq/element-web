@@ -119,19 +119,19 @@ electron.ipcMain.on('install_update', installUpdate);
 let focusHandlerAttached = false;
 electron.ipcMain.on('setBadgeCount', function(ev, count) {
     electron.app.setBadgeCount(count);
-    if (process.platform === 'win32' && mainWindow && !mainWindow.isFocused()) {
-        if (count > 0) {
-            if (!focusHandlerAttached) {
-                mainWindow.once('focus', () => {
-                    mainWindow.flashFrame(false);
-                    focusHandlerAttached = false;
-                });
-                focusHandlerAttached = true;
-            }
-            mainWindow.flashFrame(true);
-        } else {
+    if (count === 0) {
+        mainWindow.flashFrame(false);
+    }
+});
+
+electron.ipcMain.on('loudNotification', function() {
+    if (process.platform === 'win32' && mainWindow && !mainWindow.isFocused() && !focusHandlerAttached) {
+        mainWindow.flashFrame(true);
+        mainWindow.once('focus', () => {
             mainWindow.flashFrame(false);
-        }
+            focusHandlerAttached = false;
+        });
+        focusHandlerAttached = true;
     }
 });
 
