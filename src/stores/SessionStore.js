@@ -69,7 +69,9 @@ class SessionStore extends Store {
                 });
                 break;
             case 'on_logged_out':
-                this.reset();
+                this._setState({
+                    cachedPassword: null,
+                });
                 break;
         }
     }
