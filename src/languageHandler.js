@@ -83,14 +83,8 @@ export function _tJsx(jsxText, patterns, subs) {
         }
     }
 
-    // tJsxText may be unsafe if malicious translators try to inject HTML.
-    // Run this through sanitize-html and bail if the output isn't identical
+    // The translation returns text so there's no XSS vector here (no unsafe HTML, no code execution)
     const tJsxText = _t(jsxText);
-    const sanitized = sanitizeHtml(tJsxText, { allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'span' ]) });
-    if (tJsxText !== sanitized) {
-        throw new Error(`_tJsx: translator error. untrusted HTML supplied. '${tJsxText}' != '${sanitized}'`);
-    }
-
     let output = [tJsxText];
     for (let i = 0; i < patterns.length; i++) {
         // convert the last element in 'output' into 3 elements (pre-text, sub function, post-text).
