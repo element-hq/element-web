@@ -76,10 +76,6 @@ class SessionStore extends Store {
         }
     }
 
-    reset() {
-        this._state = Object.assign({}, INITIAL_STATE);
-    }
-
     getCachedPassword() {
         return this._state.cachedPassword;
     }
