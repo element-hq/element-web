@@ -119,5 +119,14 @@
     " to room": " au salon",
     "Advanced notification settings": "Paramètres de notifications avancés",
     "customServer_text": "Vous pouvez utiliser l'option de serveur personnalisé pour vous connectez à d'autres serveurs Matrix, en spécifiant une adresse de homerserver différente.<br/>Cela permet d'utiliser Riot avec un compte existant sur un homeserverdifférent.<br/><br/>Vous pouvez aussi indiquer un serveur d'identité personnel mais vous ne pourrez plus inviter des utilisateurs par email, ou être invité par email.",
-    "Notifications on the following keywords follow rules which can’t be displayed here:": "Les notifications pour les mots clés suivant répondent à des critères qui ne peuvent pas être affichés ici :"
+    "Notifications on the following keywords follow rules which can’t be displayed here:": "Les notifications pour les mots clés suivant répondent à des critères qui ne peuvent pas être affichés ici :",
+    "Collapse panel": "Déplier le panneau",
+    "Expand panel": "Etendre le panneau",
+    "I understand the risks and wish to continue": "Je comprends les risques et souhaite continuer",
+    "Riot uses many advanced browser features, some of which are not available or experimental in your current browser.": "Riot utilise de nombreuses fonctionnalités avancées du navigateur, certaines ne sont pas disponibles ou expérimentales sur votre navigateur actuel.",
+    "Sorry, your browser is <b>not</b> able to run Riot.": "Désolé, votre navigateur n'est <b>pas</b> capable de faire tourner Riot.",
+    "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Depuis votre navigateur actuel, le visuel et le ressenti de l'application pourrait être complètement incorrects, et certaines fonctionnalités pourraient ne pas être supportées. Vous pouvez continuer malgré tout, mais vous n'aurez pas de support si vous rencontrer des problèmes.",
+    "Please install <a href=\"https://www.google.com/chrome\">Chrome</a> or <a href=\"https://getfirefox.com\">Firefox</a> for the best experience.": "Veuillez installer <a href=\"https://www.google.com/chrome\">Chrome</a> ou <a href=\"https://getfirefox.com\">Firefox</a> pour une expérience optimale.",
+    "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.": "<a href=\"http://apple.com/safari\">Safari</a> et <a href=\"http://opera.com\">Opera</a> fonctionnent aussi.",
+    "Messages containing <span>keywords</span>": "Messages contenant <span>mots-clés</span>"
 }
