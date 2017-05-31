@@ -18,6 +18,8 @@ import React from 'react';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 
+import { _t } from '../../../languageHandler';
+
 /**
  * Prompt the user to set a display name.
  *
