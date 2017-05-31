@@ -237,7 +237,7 @@ function _handleRestoreFailure(e) {
             + ' This is a once off; sorry for the inconvenience.',
         );
 
-        _clearLocalStorage();
+        _clearStorage();
 
         return q.reject(new Error(
             _t('Unable to restore previous session') + ': ' + msg,
@@ -258,7 +258,7 @@ function _handleRestoreFailure(e) {
     return def.promise.then((success) => {
         if (success) {
             // user clicked continue.
-            _clearLocalStorage();
+            _clearStorage();
             return false;
         }
 
@@ -332,6 +332,10 @@ export function setLoggedIn(credentials) {
     }
 
     // stop any running clients before we create a new one with these new credentials
+    //
+    // XXX: why do we have any running clients here? Maybe on sign-in after
+    // initial use as a guest? but what about our persistent storage? we need to
+    // be careful not to leak e2e data created as one user into another session.
     stopMatrixClient();
 
     MatrixClientPeg.replaceUsingCreds(credentials);
@@ -402,13 +406,19 @@ export function startMatrixClient() {
  * a session has been logged out / ended.
  */
 export function onLoggedOut() {
-    _clearLocalStorage();
-    stopMatrixClient();
+    stopMatrixClient(true);
     dis.dispatch({action: 'on_logged_out'});
 }
 
-function _clearLocalStorage() {
+function _clearStorage() {
     Analytics.logout();
+
+    const cli = MatrixClientPeg.get();
+    if (cli) {
+        // TODO: *really* ought to wait for the promise to complete
+        cli.clearStores().done();
+    }
+
     if (!window.localStorage) {
         return;
     }
@@ -425,9 +435,13 @@ function _clearLocalStorage() {
 }
 
 /**
- * Stop all the background processes related to the current client
+ * Stop all the background processes related to the current client.
+ *
+ * Optionally clears persistent stores.
+ *
+ * @param {boolean} clearStores true to clear the persistent stores.
  */
-export function stopMatrixClient() {
+export function stopMatrixClient(clearStores) {
     Notifier.stop();
     UserActivity.stop();
     Presence.stop();
@@ -436,7 +450,13 @@ export function stopMatrixClient() {
     if (cli) {
         cli.stopClient();
         cli.removeAllListeners();
-        cli.store.deleteAllData();
-        MatrixClientPeg.unset();
     }
+
+    if (clearStores) {
+        // note that we have to do this *after* stopping the client, but
+        // *before* clearing the MatrixClientPeg.
+        _clearStorage();
+    }
+
+    MatrixClientPeg.unset();
 }
