@@ -245,13 +245,13 @@ async function loadApp() {
 
     if (!preventRedirect) {
         if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-            if (confirm("Riot is not supported on mobile web. Install the app?")) {
+            if (confirm(languageHandler._t("Riot is not supported on mobile web. Install the app?"))) {
                 window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
                 return;
             }
         }
         else if (/Android/.test(navigator.userAgent)) {
-            if (confirm("Riot is not supported on mobile web. Install the app?")) {
+            if (confirm(languageHandler._t("Riot is not supported on mobile web. Install the app?"))) {
                 window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
                 return;
             }
