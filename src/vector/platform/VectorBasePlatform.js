@@ -18,7 +18,7 @@ limitations under the License.
 */
 
 import BasePlatform from 'matrix-react-sdk/lib/BasePlatform';
-import _t from 'matrix-react-sdk/lib/languageHandler';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 import Favico from 'favico.js';
 

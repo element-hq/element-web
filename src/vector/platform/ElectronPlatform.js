@@ -19,7 +19,7 @@ limitations under the License.
 
 import VectorBasePlatform from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
-import _t from 'matrix-react-sdk/lib/languageHandler';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import q from 'q';
 import electron, {remote, ipcRenderer} from 'electron';
 
