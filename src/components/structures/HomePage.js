@@ -61,10 +61,7 @@ module.exports = React.createClass({
                     this.setState({ page: "Couldn't load home page" });
                 }
 
-                // We parse the JSON ourselves rather than use the JSON
-                // parameter, since this throws a parse error on empty
-                // which breaks if there's no config.json and we're
-                // loading from the filesystem (see above).
+                body.replaceAll(/_t\(['"](.*?)['"]\)/, (match)=>{ return sanitizehtml_t(match[1]) });
                 this.setState({ page: body });
             }
         );
