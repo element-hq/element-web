@@ -267,7 +267,7 @@ module.exports = React.createClass({
                 errMsg = _t('Passwords don\'t match.');
                 break;
             case "RegistrationForm.ERR_PASSWORD_LENGTH":
-                errMsg = _t('Password too short (min %(MIN_PASSWORD_LENGTH)s).', {MIN_PASSWORD_LENGTH: $MIN_PASSWORD_LENGTH})
+                errMsg = _t('Password too short (min %(MIN_PASSWORD_LENGTH)s).', {MIN_PASSWORD_LENGTH: MIN_PASSWORD_LENGTH});
                 break;
             case "RegistrationForm.ERR_EMAIL_INVALID":
                 errMsg = _t('This doesn\'t look like a valid email address.');
