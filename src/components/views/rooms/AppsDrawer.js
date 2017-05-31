@@ -106,7 +106,13 @@ module.exports = React.createClass({
 
     render: function() {
         const apps = this.state.apps.map(
-            (app) => <AppTile key={app.id} id={app.id} url={app.url} name={app.name}/>);
+            (app, index, arr) => <AppTile
+                key={app.id}
+                id={app.id}
+                url={app.url}
+                name={app.name}
+                fullWdith={arr.length<2 ? true : false}
+            />);
 
         return (
             <div className="mx_AppsDrawer">
