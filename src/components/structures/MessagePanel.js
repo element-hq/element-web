@@ -20,6 +20,7 @@ var dis = require("../../dispatcher");
 var sdk = require('../../index');
 
 var MatrixClientPeg = require('../../MatrixClientPeg');
+const UserSettingsStore = require('../../UserSettingsStore');
 
 const MILLIS_IN_DAY = 86400000;
 
@@ -235,6 +236,44 @@ module.exports = React.createClass({
         return !this._isMounted;
     },
 
+    // TODO: Implement granular (per-room) hide options
+    _shouldShowEvent: function(mxEv) {
+        console.log("_shouldShowEvent " + mxEv.getId());
+        const EventTile = sdk.getComponent('rooms.EventTile');
+        if (!EventTile.haveTileForEvent(mxEv)) {
+            return false; // no tile = no show
+        }
+
+        const isMemberEvent = mxEv.getType() === "m.room.member" && mxEv.getStateKey() !== undefined;
+        if (!isMemberEvent) {
+            return true; // bail early: all the checks below concern member events only
+        }
+
+        // TODO: These checks are done to make sure we're dealing with membership transitions not avatar changes / dupe joins
+        //       These checks are also being done in TextForEvent and should really reside in the JS SDK as a helper function
+        const membership = mxEv.getContent().membership;
+        const prevMembership = mxEv.getPrevContent().membership;
+        if (membership === prevMembership && membership === "join") {
+            // join -> join : This happens when display names change / avatars are set / genuine dupe joins with no changes.
+            //                Find out which we're dealing with.
+            if (mxEv.getPrevContent().displayname !== mxEv.getContent().displayname) {
+                return true; // display name changed
+            }
+            if (mxEv.getPrevContent().avatar_url !== mxEv.getContent().avatar_url) {
+                return true; // avatar url changed
+            }
+            // dupe join event, fall through to hide rules
+        }
+
+        // this only applies to joins/leaves not invites/kicks/bans
+        const isJoinOrLeave = membership === "join" || (membership === "leave" && mxEv.getStateKey() === mxEv.getSender());
+        const hideJoinLeavesGlobally = UserSettingsStore.getSyncedSetting("hideJoinLeaves", false);
+        if (isJoinOrLeave && hideJoinLeavesGlobally) {
+            return false;
+        }
+        return true;
+    },
+
     _getEventTiles: function() {
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
@@ -246,7 +285,7 @@ module.exports = React.createClass({
 
         // first figure out which is the last event in the list which we're
         // actually going to show; this allows us to behave slightly
-        // differently for the last event in the list.
+        // differently for the last event in the list. (eg show timestamps)
         //
         // we also need to figure out which is the last event we show which isn't
         // a local echo, to manage the read-marker.
@@ -254,7 +293,7 @@ module.exports = React.createClass({
         var lastShownNonLocalEchoIndex = -1;
         for (i = this.props.events.length-1; i >= 0; i--) {
             var mxEv = this.props.events[i];
-            if (!EventTile.haveTileForEvent(mxEv)) {
+            if (!this._shouldShowEvent(mxEv)) {
                 continue;
             }
 
@@ -289,15 +328,13 @@ module.exports = React.createClass({
 
         for (i = 0; i < this.props.events.length; i++) {
             let mxEv = this.props.events[i];
-            let wantTile = true;
             let eventId = mxEv.getId();
             let readMarkerInMels = false;
-
-            if (!EventTile.haveTileForEvent(mxEv)) {
-                wantTile = false;
-            }
-
             let last = (i == lastShownEventIndex);
+
+            if (!this._shouldShowEvent(mxEv)) {
+                continue;
+            }
 
             // Wrap consecutive member events in a ListSummary, ignore if redacted
             if (isMembershipChange(mxEv) &&
@@ -346,7 +383,7 @@ module.exports = React.createClass({
                         // of MemberEventListSummary, render each member event as if the previous
                         // one was itself. This way, the timestamp of the previous event === the
                         // timestamp of the current event, and no DateSeperator is inserted.
-                        let ret = this._getTilesForEvent(e, e);
+                        let ret = this._getTilesForEvent(e, e, last);
                         prevEvent = e;
                         return ret;
                     }
@@ -373,7 +410,7 @@ module.exports = React.createClass({
                 continue;
             }
 
-            if (wantTile) {
+            if (EventTile.haveTileForEvent(mxEv)) {
                 // make sure we unpack the array returned by _getTilesForEvent,
                 // otherwise react will auto-generate keys and we will end up
                 // replacing all of the DOM elements every time we paginate.

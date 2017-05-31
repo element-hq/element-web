@@ -288,6 +288,7 @@
   "Guests cannot join this room even if explicitly invited.": "Guests cannot join this room even if explicitly invited.",
   "had": "had",
   "Hangup": "Hangup",
+  "Hide join/leave messages (invites/kicks/bans unaffected)": "Hide join/leave messages (invites/kicks/bans unaffected)",
   "Hide read receipts": "Hide read receipts",
   "Hide Text Formatting Toolbar": "Hide Text Formatting Toolbar",
   "Historical": "Historical",

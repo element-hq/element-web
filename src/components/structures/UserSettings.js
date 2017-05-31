@@ -79,6 +79,10 @@ const SETTINGS_LABELS = [
         id: 'showTwelveHourTimestamps',
         label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
     },
+    {
+        id: 'hideJoinLeaves',
+        label: 'Hide join/leave messages (invites/kicks/bans unaffected)',
+    }
 /*
     {
         id: 'useCompactLayout',
