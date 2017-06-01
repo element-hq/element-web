@@ -130,7 +130,9 @@ export function setLanguage(preferredLangs) {
             }
         }
         if (!langToUse) {
-            throw new Error("Unable to find an appropriate language");
+            // Fallback to en_EN if none is found
+            langToUse = 'en_EN'
+            console.error("Unable to find an appropriate language");
         }
 
         return getLanguage(i18nFolder + availLangs[langToUse].fileName);
@@ -142,7 +144,7 @@ export function setLanguage(preferredLangs) {
 
         // Set 'en' as fallback language:
         if (langToUse != "en_EN") {
-            return getLanguage(i18nFolder + availLangs['en_EN'].fileName);
+            return getLanguage(i18nFolder + availLangs[langToUse].fileName);
         }
     }).then((langData) => {
         if (langData) counterpart.registerTranslations('en_EN', langData);
