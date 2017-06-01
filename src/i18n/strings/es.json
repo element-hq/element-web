@@ -308,7 +308,7 @@
     "'%(alias)s' is not a valid format for an address": "'%(alias)s' no es un formato válido para una dirección",
     "'%(alias)s' is not a valid format for an alias": "'%(alias)s' no es un formato válido para un alias",
     "%(displayName)s is typing": "%(displayName)s esta escribiendo",
-    "I want to sign in with": "Quiero iniciar sesión con",
+    "Sign in with": "Quiero iniciar sesión con",
     "Join Room": "Unirte a la sala",
     "joined and left": "unido y dejado",
     "joined": "unido",
