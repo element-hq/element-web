@@ -21,6 +21,7 @@ limitations under the License.
 const checkSquirrelHooks = require('./squirrelhooks');
 if (checkSquirrelHooks()) return;
 
+const argv = require('minimist')(process.argv);
 const electron = require('electron');
 const AutoLaunch = require('auto-launch');
 
@@ -29,6 +30,10 @@ const vectorMenu = require('./vectormenu');
 const webContentsHandler = require('./webcontents-handler');
 
 const windowStateKeeper = require('electron-window-state');
+
+if (argv.profile) {
+    electron.app.setPath('userData', `${electron.app.getPath('userData')}-${argv.profile}`);
+}
 
 let vectorConfig = {};
 try {
@@ -119,19 +124,19 @@ electron.ipcMain.on('install_update', installUpdate);
 let focusHandlerAttached = false;
 electron.ipcMain.on('setBadgeCount', function(ev, count) {
     electron.app.setBadgeCount(count);
-    if (process.platform === 'win32' && mainWindow && !mainWindow.isFocused()) {
-        if (count > 0) {
-            if (!focusHandlerAttached) {
-                mainWindow.once('focus', () => {
-                    mainWindow.flashFrame(false);
-                    focusHandlerAttached = false;
-                });
-                focusHandlerAttached = true;
-            }
-            mainWindow.flashFrame(true);
-        } else {
+    if (count === 0) {
+        mainWindow.flashFrame(false);
+    }
+});
+
+electron.ipcMain.on('loudNotification', function() {
+    if (process.platform === 'win32' && mainWindow && !mainWindow.isFocused() && !focusHandlerAttached) {
+        mainWindow.flashFrame(true);
+        mainWindow.once('focus', () => {
             mainWindow.flashFrame(false);
-        }
+            focusHandlerAttached = false;
+        });
+        focusHandlerAttached = true;
     }
 });
 
@@ -166,7 +171,7 @@ const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirector
 
 if (shouldQuit) {
     console.log('Other instance detected: exiting');
-    electron.app.quit();
+    electron.app.exit();
 }
 
 
@@ -249,7 +254,7 @@ electron.app.on('ready', () => {
         brand: vectorConfig.brand || 'Riot',
     });
 
-    if (!process.argv.includes('--hidden')) {
+    if (!argv.hidden) {
         mainWindow.once('ready-to-show', () => {
             mainWindow.show();
         });

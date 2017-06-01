@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 var React = require('react');
-var dis = require('matrix-react-sdk/lib/dispatcher')
+var dis = require('matrix-react-sdk/lib/dispatcher');
+import { _tJsx } from 'matrix-react-sdk/lib/languageHandler';
 
 module.exports = React.createClass({
     displayName: 'GuestWarningBar',
@@ -34,7 +35,17 @@ module.exports = React.createClass({
             <div className="mx_GuestWarningBar">
                 <img className="mx_GuestWarningBar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
                 <div>
-                    You are Rioting as a guest. <a onClick={this.onRegisterClicked}>Register</a> or <a onClick={this.onLoginClicked}>sign in</a> to access more rooms and features.
+                    { _tJsx(
+                        "You are Rioting as a guest. <a>Register</a> or <a>sign in</a> to access more rooms and features!",
+                        [
+                            /<a>(.*?)<\/a>/,
+                            /<a>(.*?)<\/a>/
+                        ],
+                        [
+                            (sub) => <a onClick={this.onRegisterClicked}>{sub}</a>,
+                            (sub) => <a onClick={this.onLoginClicked}>{sub}</a>
+                        ]
+                    ) }
                 </div>
             </div>
         );
