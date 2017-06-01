@@ -144,7 +144,7 @@ export function setLanguage(preferredLangs) {
 
         // Set 'en' as fallback language:
         if (langToUse != "en_EN") {
-            return getLanguage(i18nFolder + availLangs[langToUse].fileName);
+            return getLanguage(i18nFolder + availLangs['en_EN'].fileName);
         }
     }).then((langData) => {
         if (langData) counterpart.registerTranslations('en_EN', langData);
