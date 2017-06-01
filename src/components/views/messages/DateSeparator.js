@@ -49,7 +49,7 @@ module.exports = React.createClass({
             label = days[date.getDay()];
         }
         else {
-            label = DateUtils.formatFullDate(date);
+            label = DateUtils.formatFullDate(date, this.props.showTwelveHour);
         }
 
         return (
