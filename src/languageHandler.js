@@ -107,7 +107,7 @@ export function _tJsx(jsxText, patterns, subs) {
 }
 
 // Allow overriding the text displayed when no translation exists
-// Currently only use din unit tests to avoid having to load
+// Currently only used in unit tests to avoid having to load
 // the translations in riot-web
 export function setMissingEntryGenerator(f) {
     counterpart.setMissingEntryGenerator(f);

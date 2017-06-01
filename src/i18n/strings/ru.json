@@ -452,7 +452,7 @@
     "and %(overflowCount)s others...": "и %(overflowCount)s других...",
     "Are you sure?": "Вы уверены?",
     "Autoplay GIFs and videos": "Проигрывать GIF и видео автоматически",
-    "Can't connect to homeserver - please check your connectivity and ensure your %(urlStart)s homeserver's SSL certificate %(urlEnd)s is trusted": "Невозможно соединиться с домашним сервером - проверьте своё соединение и убедитесь, что %(urlStart)s SSL-сертификат вашего домашнего сервера %(urlEnd)s включён в доверяемые",
+    "Can't connect to homeserver - please check your connectivity and ensure your <a>homeserver's SSL certificate</a> is trusted.": "Невозможно соединиться с домашним сервером - проверьте своё соединение и убедитесь, что <a>SSL-сертификат вашего домашнего сервера</a> включён в доверяемые.",
     "changing room on a RoomView is not supported": "изменение комнаты в RoomView не поддерживается",
     "Click to mute audio": "Выключить звук",
     "Click to mute video": "Выключить звук у видео",
@@ -651,5 +651,5 @@
     "%(oneUser)schanged their avatar %(repeats)s times": "%(oneUser)sизменил своё изображение %(repeats)s раз",
     "%(severalUsers)schanged their avatar": "%(severalUsers)sизменили своё изображение",
     "%(oneUser)schanged their avatar": "%(oneUser)sизменил своё изображение",
-    "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or %(urlStart)s enable unsafe scripts %(urlEnd)s": "Не возможно подключиться к серверу через HTTP, когда в строке браузера HTTPS. Используйте HTTPS или %(urlStart) включив небезопасные скрипты %(urlEnd)"
+    "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Не возможно подключиться к серверу через HTTP, когда в строке браузера HTTPS. Используйте HTTPS или <a>включив небезопасные скрипты</a>."
 }
