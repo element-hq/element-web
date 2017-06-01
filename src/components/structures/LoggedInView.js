@@ -22,6 +22,7 @@ import UserSettingsStore from '../../UserSettingsStore';
 import KeyCode from '../../KeyCode';
 import Notifier from '../../Notifier';
 import PageTypes from '../../PageTypes';
+import CallMediaHandler from '../../CallMediaHandler';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 
@@ -78,6 +79,8 @@ export default React.createClass({
         // _scrollStateMap is a map from room id to the scroll state returned by
         // RoomView.getScrollState()
         this._scrollStateMap = {};
+
+        CallMediaHandler.loadDevices();
 
         document.addEventListener('keydown', this._onKeyDown);
         this._matrixClient.on("accountData", this.onAccountData);
