@@ -952,7 +952,7 @@ module.exports = React.createClass({
         let webcamDropdown = <p>{_t('No Webcams detected')}</p>;
 
         const audioInputs = this.state.mediaDevices.audioinput;
-        if (Object.keys(videoInputs).length > 0) {
+        if (Object.keys(audioInputs).length > 0) {
             microphoneDropdown = <div>
                 <h4>Microphone</h4>
                 <Dropdown
