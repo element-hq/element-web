@@ -19,6 +19,7 @@ import q from 'q';
 import Matrix from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
+import Analytics from './Analytics';
 import Notifier from './Notifier';
 import UserActivity from './UserActivity';
 import Presence from './Presence';
@@ -27,6 +28,7 @@ import DMRoomMap from './utils/DMRoomMap';
 import RtsClient from './RtsClient';
 import Modal from './Modal';
 import sdk from './index';
+import { _t } from './languageHandler';
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -229,14 +231,16 @@ function _handleRestoreFailure(e) {
 
     let msg = e.message;
     if (msg == "OLM.BAD_LEGACY_ACCOUNT_PICKLE") {
-        msg = "You need to log back in to generate end-to-end encryption keys "
-            + "for this device and submit the public key to your homeserver. "
-            + "This is a once off; sorry for the inconvenience.";
+        msg = _t(
+            'You need to log back in to generate end-to-end encryption keys'
+            + ' for this device and submit the public key to your homeserver.'
+            + ' This is a once off; sorry for the inconvenience.',
+        );
 
-        _clearLocalStorage();
+        _clearStorage();
 
         return q.reject(new Error(
-            "Unable to restore previous session: " + msg,
+            _t('Unable to restore previous session') + ': ' + msg,
         ));
     }
 
@@ -254,7 +258,7 @@ function _handleRestoreFailure(e) {
     return def.promise.then((success) => {
         if (success) {
             // user clicked continue.
-            _clearLocalStorage();
+            _clearStorage();
             return false;
         }
 
@@ -274,6 +278,8 @@ export function initRtsClient(url) {
  */
 export function setLoggedIn(credentials) {
     credentials.guest = Boolean(credentials.guest);
+
+    Analytics.setGuest(credentials.guest);
 
     console.log(
         "setLoggedIn: mxid:", credentials.userId,
@@ -326,6 +332,10 @@ export function setLoggedIn(credentials) {
     }
 
     // stop any running clients before we create a new one with these new credentials
+    //
+    // XXX: why do we have any running clients here? Maybe on sign-in after
+    // initial use as a guest? but what about our persistent storage? we need to
+    // be careful not to leak e2e data created as one user into another session.
     stopMatrixClient();
 
     MatrixClientPeg.replaceUsingCreds(credentials);
@@ -396,12 +406,19 @@ export function startMatrixClient() {
  * a session has been logged out / ended.
  */
 export function onLoggedOut() {
-    _clearLocalStorage();
-    stopMatrixClient();
+    stopMatrixClient(true);
     dis.dispatch({action: 'on_logged_out'});
 }
 
-function _clearLocalStorage() {
+function _clearStorage() {
+    Analytics.logout();
+
+    const cli = MatrixClientPeg.get();
+    if (cli) {
+        // TODO: *really* ought to wait for the promise to complete
+        cli.clearStores().done();
+    }
+
     if (!window.localStorage) {
         return;
     }
@@ -418,9 +435,13 @@ function _clearLocalStorage() {
 }
 
 /**
- * Stop all the background processes related to the current client
+ * Stop all the background processes related to the current client.
+ *
+ * Optionally clears persistent stores.
+ *
+ * @param {boolean} clearStores true to clear the persistent stores.
  */
-export function stopMatrixClient() {
+export function stopMatrixClient(clearStores) {
     Notifier.stop();
     UserActivity.stop();
     Presence.stop();
@@ -429,7 +450,13 @@ export function stopMatrixClient() {
     if (cli) {
         cli.stopClient();
         cli.removeAllListeners();
-        cli.store.deleteAllData();
-        MatrixClientPeg.unset();
     }
+
+    if (clearStores) {
+        // note that we have to do this *after* stopping the client, but
+        // *before* clearing the MatrixClientPeg.
+        _clearStorage();
+    }
+
+    MatrixClientPeg.unset();
 }

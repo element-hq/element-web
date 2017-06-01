@@ -19,10 +19,8 @@ limitations under the License.
 import React from 'react';
 import * as Roles from '../../../Roles';
 
+var LEVEL_ROLE_MAP = {};
 var reverseRoles = {};
-Object.keys(Roles.LEVEL_ROLE_MAP).forEach(function(key) {
-    reverseRoles[Roles.LEVEL_ROLE_MAP[key]] = key;
-});
 
 module.exports = React.createClass({
     displayName: 'PowerSelector',
@@ -44,8 +42,15 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            custom: (Roles.LEVEL_ROLE_MAP[this.props.value] === undefined),
+            custom: (LEVEL_ROLE_MAP[this.props.value] === undefined),
         };
+    },
+    
+    componentWillMount: function() {
+    	LEVEL_ROLE_MAP = Roles.levelRoleMap();
+    	Object.keys(LEVEL_ROLE_MAP).forEach(function(key) {
+			reverseRoles[LEVEL_ROLE_MAP[key]] = key;
+		});
     },
 
     onSelectChange: function(event) {
@@ -94,7 +99,7 @@ module.exports = React.createClass({
             selectValue = "Custom";
         }
         else {
-            selectValue = Roles.LEVEL_ROLE_MAP[this.props.value] || "Custom";
+            selectValue = LEVEL_ROLE_MAP[this.props.value] || "Custom";
         }
         var select;
         if (this.props.disabled) {
@@ -105,7 +110,7 @@ module.exports = React.createClass({
             const levels = [0, 50, 100];
             let options = levels.map((level) => {
                 return {
-                    value: Roles.LEVEL_ROLE_MAP[level],
+                    value: LEVEL_ROLE_MAP[level],
                     // Give a userDefault (users_default in the power event) of 0 but
                     // because level !== undefined, this should never be used.
                     text: Roles.textualPowerLevel(level, 0),
@@ -113,7 +118,7 @@ module.exports = React.createClass({
             });
             options.push({ value: "Custom", text: "Custom level" });
             options = options.map((op) => {
-                return <option value={op.value}>{op.text}</option>;
+                return <option value={op.value} key={op.value}>{op.text}</option>;
             });
 
             select =

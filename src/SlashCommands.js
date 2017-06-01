@@ -18,6 +18,7 @@ import MatrixClientPeg from "./MatrixClientPeg";
 import dis from "./dispatcher";
 import Tinter from "./Tinter";
 import sdk from './index';
+import { _t } from './languageHandler';
 import Modal from './Modal';
 
 
@@ -41,7 +42,7 @@ class Command {
     }
 
     getUsage() {
-        return "Usage: " + this.getCommandWithArgs();
+        return _t('Usage') + ': ' + this.getCommandWithArgs();
     }
 }
 
@@ -68,8 +69,8 @@ const commands = {
         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
         // TODO Don't explain this away, actually show a search UI here.
         Modal.createDialog(ErrorDialog, {
-            title: "/ddg is not a command",
-            description: "To use it, just wait for autocomplete results to load and tab through them.",
+            title: _t('/ddg is not a command'),
+            description: _t('To use it, just wait for autocomplete results to load and tab through them.'),
         });
         return success();
     }),
@@ -143,7 +144,7 @@ const commands = {
 
                 dis.dispatch({
                     action: 'view_room',
-                    roomAlias: roomAlias,
+                    room_alias: roomAlias,
                     auto_join: true,
                 });
 
@@ -185,7 +186,7 @@ const commands = {
                     if (targetRoomId) { break; }
                 }
                 if (!targetRoomId) {
-                    return reject("Unrecognised room alias: " + roomAlias);
+                    return reject(_t("Unrecognised room alias:") +  ' ' + roomAlias);
                 }
             }
         }
@@ -302,14 +303,14 @@ const commands = {
 
                 const device = MatrixClientPeg.get().getStoredDevice(userId, deviceId);
                 if (!device) {
-                    return reject(`Unknown (user, device) pair: (${userId}, ${deviceId})`);
+                    return reject(_t(`Unknown (user, device) pair:`) + ` (${userId}, ${deviceId})`);
                 }
 
                 if (device.isVerified()) {
                     if (device.getFingerprint() === fingerprint) {
-                        return reject(`Device already verified!`);
+                        return reject(_t(`Device already verified!`));
                     } else {
-                        return reject(`WARNING: Device already verified, but keys do NOT MATCH!`);
+                        return reject(_t(`WARNING: Device already verified, but keys do NOT MATCH!`));
                     }
                 }
 
@@ -321,12 +322,15 @@ const commands = {
                     // Tell the user we verified everything!
                     const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                     Modal.createDialog(QuestionDialog, {
-                        title: "Verified key",
+                        title: _t("Verified key"),
                         description: (
                             <div>
                                 <p>
-                                    The signing key you provided matches the signing key you received
-                                    from { userId }'s device { deviceId }. Device marked as verified.
+                                {
+                                    _t("The signing key you provided matches the signing key you received " +
+                                    "from %(userId)s's device %(deviceId)s. Device marked as verified.",
+                                    {userId: userId, deviceId: deviceId})
+                                }
                                 </p>
                             </div>
                         ),
@@ -335,9 +339,13 @@ const commands = {
 
                     return success();
                 } else {
-                    return reject(`WARNING: KEY VERIFICATION FAILED! The signing key for ${userId} and device
-                            ${deviceId} is "${device.getFingerprint()}" which does not match the provided key
-                            "${fingerprint}". This could mean your communications are being intercepted!`);
+                    const fprint = device.getFingerprint();
+                    return reject(
+                        _t('WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and device' +
+                           ' %(deviceId)s is "%(fprint)s" which does not match the provided key' +
+                           ' "%(fingerprint)s". This could mean your communications are being intercepted!',
+                            {deviceId: deviceId, fprint: fprint, userId: userId, fingerprint: fingerprint})
+                    );
                 }
             }
         }
@@ -382,7 +390,7 @@ module.exports = {
             if (commands[cmd]) {
                 return commands[cmd].run(roomId, args);
             } else {
-                return reject("Unrecognised command: " + input);
+                return reject(_t("Unrecognised command:") + ' ' + input);
             }
         }
         return null; // not a command

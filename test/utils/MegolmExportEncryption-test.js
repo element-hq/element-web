@@ -16,7 +16,7 @@ limitations under the License.
 
 "use strict";
 
-import * as MegolmExportEncryption from 'utils/MegolmExportEncryption';
+import * as MegolmExportEncryption from '../../src/utils/MegolmExportEncryption';
 
 import * as testUtils from '../test-utils';
 import expect from 'expect';

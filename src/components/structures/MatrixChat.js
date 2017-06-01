@@ -20,6 +20,8 @@ import q from 'q';
 import React from 'react';
 import Matrix from "matrix-js-sdk";
 
+import Analytics from "../../Analytics";
+import UserSettingsStore from '../../UserSettingsStore';
 import MatrixClientPeg from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
@@ -36,6 +38,7 @@ import PageTypes from '../../PageTypes';
 
 import createRoom from "../../createRoom";
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
+import { _t } from '../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'MatrixChat',
@@ -116,8 +119,9 @@ module.exports = React.createClass({
             collapse_rhs: false,
             ready: false,
             width: 10000,
-            sideOpacity: 1.0,
+            leftOpacity: 1.0,
             middleOpacity: 1.0,
+            rightOpacity: 1.0,
 
             version: null,
             newVersion: null,
@@ -187,6 +191,8 @@ module.exports = React.createClass({
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
 
+        if (!UserSettingsStore.getLocalSetting('analyticsOptOut', false)) Analytics.enable();
+
         // Used by _viewRoom before getting state from sync
         this.firstSyncComplete = false;
         this.firstSyncPromise = q.defer();
@@ -246,7 +252,6 @@ module.exports = React.createClass({
         UDEHandler.startListening();
 
         this.focusComposer = false;
-        window.addEventListener("focus", this.onFocus);
 
         // this can technically be done anywhere but doing this here keeps all
         // the routing url path logic together.
@@ -287,7 +292,7 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        Lifecycle.stopMatrixClient();
+        Lifecycle.stopMatrixClient(false);
         dis.unregister(this.dispatcherRef);
         UDEHandler.stopListening();
         window.removeEventListener("focus", this.onFocus);
@@ -359,7 +364,7 @@ module.exports = React.createClass({
                 // is completed in another browser, we'll be 401ed for using
                 // a guest access token for a non-guest account.
                 // It will be restarted in onReturnToGuestClick
-                Lifecycle.stopMatrixClient();
+                Lifecycle.stopMatrixClient(false);
 
                 this.notifyNewScreen('register');
                 break;
@@ -375,8 +380,8 @@ module.exports = React.createClass({
                 break;
             case 'reject_invite':
                 Modal.createDialog(QuestionDialog, {
-                    title: "Reject invitation",
-                    description: "Are you sure you want to reject the invitation?",
+                    title: _t('Reject invitation'),
+                    description: _t('Are you sure you want to reject the invitation?'),
                     onFinished: (confirm) => {
                         if (confirm) {
                             // FIXME: controller shouldn't be loading a view :(
@@ -391,7 +396,7 @@ module.exports = React.createClass({
                             }, (err) => {
                                 modal.close();
                                 Modal.createDialog(ErrorDialog, {
-                                    title: "Failed to reject invitation",
+                                    title: _t('Failed to reject invitation'),
                                     description: err.toString(),
                                 });
                             });
@@ -437,9 +442,9 @@ module.exports = React.createClass({
                 //this._setPage(PageTypes.CreateRoom);
                 //this.notifyNewScreen('new');
                 Modal.createDialog(TextInputDialog, {
-                    title: "Create Room",
-                    description: "Room name (optional)",
-                    button: "Create Room",
+                    title: _t('Create Room'),
+                    description: _t('Room name (optional)'),
+                    button: _t('Create Room'),
                     onFinished: (shouldCreate, name) => {
                         if (shouldCreate) {
                             const createOpts = {};
@@ -490,12 +495,14 @@ module.exports = React.createClass({
                     collapse_rhs: false,
                 });
                 break;
-            case 'ui_opacity':
+            case 'ui_opacity': {
+                const sideDefault = payload.sideOpacity >= 0.0 ? payload.sideOpacity : 1.0;
                 this.setState({
-                    sideOpacity: payload.sideOpacity,
-                    middleOpacity: payload.middleOpacity,
+                    leftOpacity: payload.leftOpacity >= 0.0 ? payload.leftOpacity : sideDefault,
+                    middleOpacity: payload.middleOpacity || 1.0,
+                    rightOpacity: payload.rightOpacity >= 0.0 ? payload.rightOpacity : sideDefault,
                 });
-                break;
+                break; }
             case 'set_theme':
                 this._onSetTheme(payload.value);
                 break;
@@ -572,44 +579,44 @@ module.exports = React.createClass({
 
     // switch view to the given room
     //
-    // @param {Object} room_info Object containing data about the room to be joined
-    // @param {string=} room_info.room_id ID of the room to join. One of room_id or room_alias must be given.
-    // @param {string=} room_info.room_alias Alias of the room to join. One of room_id or room_alias must be given.
-    // @param {boolean=} room_info.auto_join If true, automatically attempt to join the room if not already a member.
-    // @param {boolean=} room_info.show_settings Makes RoomView show the room settings dialog.
-    // @param {string=} room_info.event_id ID of the event in this room to show: this will cause a switch to the
+    // @param {Object} roomInfo Object containing data about the room to be joined
+    // @param {string=} roomInfo.room_id ID of the room to join. One of room_id or room_alias must be given.
+    // @param {string=} roomInfo.room_alias Alias of the room to join. One of room_id or room_alias must be given.
+    // @param {boolean=} roomInfo.auto_join If true, automatically attempt to join the room if not already a member.
+    // @param {boolean=} roomInfo.show_settings Makes RoomView show the room settings dialog.
+    // @param {string=} roomInfo.event_id ID of the event in this room to show: this will cause a switch to the
     //                                    context of that particular event.
-    // @param {Object=} room_info.third_party_invite Object containing data about the third party
+    // @param {Object=} roomInfo.third_party_invite Object containing data about the third party
     //                                    we received to join the room, if any.
-    // @param {string=} room_info.third_party_invite.inviteSignUrl 3pid invite sign URL
-    // @param {string=} room_info.third_party_invite.invitedEmail The email address the invite was sent to
-    // @param {Object=} room_info.oob_data Object of additional data about the room
+    // @param {string=} roomInfo.third_party_invite.inviteSignUrl 3pid invite sign URL
+    // @param {string=} roomInfo.third_party_invite.invitedEmail The email address the invite was sent to
+    // @param {Object=} roomInfo.oob_data Object of additional data about the room
     //                               that has been passed out-of-band (eg.
     //                               room name and avatar from an invite email)
-    _viewRoom: function(room_info) {
+    _viewRoom: function(roomInfo) {
         this.focusComposer = true;
 
         const newState = {
-            initialEventId: room_info.event_id,
-            highlightedEventId: room_info.event_id,
+            initialEventId: roomInfo.event_id,
+            highlightedEventId: roomInfo.event_id,
             initialEventPixelOffset: undefined,
             page_type: PageTypes.RoomView,
-            thirdPartyInvite: room_info.third_party_invite,
-            roomOobData: room_info.oob_data,
-            currentRoomAlias: room_info.room_alias,
-            autoJoin: room_info.auto_join,
+            thirdPartyInvite: roomInfo.third_party_invite,
+            roomOobData: roomInfo.oob_data,
+            currentRoomAlias: roomInfo.room_alias,
+            autoJoin: roomInfo.auto_join,
         };
 
-        if (!room_info.room_alias) {
-            newState.currentRoomId = room_info.room_id;
+        if (!roomInfo.room_alias) {
+            newState.currentRoomId = roomInfo.room_id;
         }
 
         // if we aren't given an explicit event id, look for one in the
         // scrollStateMap.
         //
         // TODO: do this in RoomView rather than here
-        if (!room_info.event_id && this.refs.loggedInView) {
-            const scrollState = this.refs.loggedInView.getScrollStateForRoom(room_info.room_id);
+        if (!roomInfo.event_id && this.refs.loggedInView) {
+            const scrollState = this.refs.loggedInView.getScrollStateForRoom(roomInfo.room_id);
             if (scrollState) {
                 newState.initialEventId = scrollState.focussedEvent;
                 newState.initialEventPixelOffset = scrollState.pixelOffset;
@@ -621,15 +628,15 @@ module.exports = React.createClass({
         let waitFor = q(null);
         if (!this.firstSyncComplete) {
             if (!this.firstSyncPromise) {
-                console.warn('Cannot view a room before first sync. room_id:', room_info.room_id);
+                console.warn('Cannot view a room before first sync. room_id:', roomInfo.room_id);
                 return;
             }
             waitFor = this.firstSyncPromise.promise;
         }
 
         waitFor.done(() => {
-            let presentedId = room_info.room_alias || room_info.room_id;
-            const room = MatrixClientPeg.get().getRoom(room_info.room_id);
+            let presentedId = roomInfo.room_alias || roomInfo.room_id;
+            const room = MatrixClientPeg.get().getRoom(roomInfo.room_id);
             if (room) {
                 const theAlias = Rooms.getDisplayAliasForRoom(room);
                 if (theAlias) presentedId = theAlias;
@@ -641,8 +648,8 @@ module.exports = React.createClass({
                 }
             }
 
-            if (room_info.event_id) {
-                presentedId += "/" + room_info.event_id;
+            if (roomInfo.event_id) {
+                presentedId += "/" + roomInfo.event_id;
             }
             this.notifyNewScreen('room/' + presentedId);
             newState.ready = true;
@@ -653,16 +660,20 @@ module.exports = React.createClass({
     _createChat: function() {
         const ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
         Modal.createDialog(ChatInviteDialog, {
-            title: "Start a new chat",
+            title: _t('Start a chat'),
+            description: _t("Who would you like to communicate with?"),
+            placeholder: _t("Email, name or matrix ID"),
+            button: _t("Start Chat"),
         });
     },
 
     _invite: function(roomId) {
         const ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
         Modal.createDialog(ChatInviteDialog, {
-            title: "Invite new room members",
-            button: "Send Invites",
-            description: "Who would you like to add to this room?",
+            title: _t('Invite new room members'),
+            description: _t('Who would you like to add to this room?'),
+            button: _t('Send Invites'),
+            placeholder: _t("Email, name or matrix ID"),
             roomId: roomId,
         });
     },
@@ -692,9 +703,9 @@ module.exports = React.createClass({
                         modal.close();
                         console.error("Failed to leave room " + roomId + " " + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Failed to leave room",
+                            title: _t("Failed to leave room"),
                             description: (err && err.message ? err.message :
-                                "Server may be unavailable, overloaded, or you hit a bug."),
+                                _t("Server may be unavailable, overloaded, or you hit a bug.")),
                         });
                     });
                 }
@@ -886,8 +897,8 @@ module.exports = React.createClass({
         cli.on('Session.logged_out', function(call) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Signed Out",
-                description: "For security, this session has been signed out. Please sign in again.",
+                title: _t('Signed Out'),
+                description: _t('For security, this session has been signed out. Please sign in again.'),
             });
             dis.dispatch({
                 action: 'logout',
@@ -903,10 +914,6 @@ module.exports = React.createClass({
                 }
             }
         });
-    },
-
-    onFocus: function(ev) {
-        dis.dispatch({action: 'focus_composer'});
     },
 
     showScreen: function(screen, params) {
@@ -999,6 +1006,7 @@ module.exports = React.createClass({
         if (this.props.onNewScreen) {
             this.props.onNewScreen(screen);
         }
+        Analytics.trackPageChange();
     },
 
     onAliasClick: function(event, alias) {
@@ -1199,7 +1207,7 @@ module.exports = React.createClass({
                 <div className="mx_MatrixChat_splash">
                     <Spinner />
                     <a href="#" className="mx_MatrixChat_splashButtons" onClick={ this.onLogoutClick }>
-                    Logout
+                    { _t('Logout') }
                     </a>
                 </div>
             );

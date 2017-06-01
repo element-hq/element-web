@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+import { _t } from '../../../languageHandler';
 var sdk = require('../../../index');
 
 module.exports = React.createClass({
@@ -34,9 +35,9 @@ module.exports = React.createClass({
                 <div className="mx_TopUnreadMessagesBar_scrollUp"
                         onClick={this.props.onScrollUpClick}>
                     <img src="img/scrollto.svg" width="24" height="24"
-                        alt="Scroll to unread messages"
-                        title="Scroll to unread messages"/>
-                    Jump to first unread message.
+                        alt={ _t('Scroll to unread messages') }
+                        title={ _t('Scroll to unread messages') }/>
+                    { _t("Jump to first unread message.") }
                 </div>
                 <img className="mx_TopUnreadMessagesBar_close mx_filterFlipColor"
                     src="img/cancel.svg" width="18" height="18"
@@ -46,4 +47,3 @@ module.exports = React.createClass({
         );
     },
 });
-

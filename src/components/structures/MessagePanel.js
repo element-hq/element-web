@@ -84,6 +84,12 @@ module.exports = React.createClass({
 
         // shape parameter to be passed to EventTiles
         tileShape: React.PropTypes.string,
+
+        // show twelve hour timestamps
+        isTwelveHour: React.PropTypes.bool,
+
+        // show timestamps always
+        alwaysShowTimestamps: React.PropTypes.bool,
     },
 
     componentWillMount: function() {
@@ -230,8 +236,8 @@ module.exports = React.createClass({
     },
 
     _getEventTiles: function() {
-        var EventTile = sdk.getComponent('rooms.EventTile');
-        var DateSeparator = sdk.getComponent('messages.DateSeparator');
+        const EventTile = sdk.getComponent('rooms.EventTile');
+        const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
 
         this.eventNodes = {};
@@ -310,7 +316,7 @@ module.exports = React.createClass({
                 const key = "membereventlistsummary-" + (prevEvent ? mxEv.getId() : "initial");
 
                 if (this._wantsDateSeparator(prevEvent, mxEv.getDate())) {
-                    let dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1}/></li>;
+                    let dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1} showTwelveHour={this.props.isTwelveHour}/></li>;
                     ret.push(dateSeparator);
                 }
 
@@ -413,8 +419,8 @@ module.exports = React.createClass({
     },
 
     _getTilesForEvent: function(prevEvent, mxEv, last) {
-        var EventTile = sdk.getComponent('rooms.EventTile');
-        var DateSeparator = sdk.getComponent('messages.DateSeparator');
+        const EventTile = sdk.getComponent('rooms.EventTile');
+        const DateSeparator = sdk.getComponent('messages.DateSeparator');
         var ret = [];
 
         // is this a continuation of the previous message?
@@ -452,7 +458,7 @@ module.exports = React.createClass({
 
         // do we need a date separator since the last event?
         if (this._wantsDateSeparator(prevEvent, eventDate)) {
-            var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1}/></li>;
+            var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} showTwelveHour={this.props.isTwelveHour}/></li>;
             ret.push(dateSeparator);
             continuation = false;
         }
@@ -468,7 +474,6 @@ module.exports = React.createClass({
         if (this.props.manageReadReceipts) {
             readReceipts = this._getReadReceiptsForEvent(mxEv);
         }
-
         ret.push(
                 <li key={eventId}
                         ref={this._collectEventNode.bind(this, eventId)}
@@ -482,6 +487,7 @@ module.exports = React.createClass({
                         checkUnmounting={this._isUnmounting}
                         eventSendStatus={mxEv.status}
                         tileShape={this.props.tileShape}
+                        isTwelveHour={this.props.isTwelveHour}
                         last={last} isSelectedEvent={highlight}/>
                 </li>
         );
@@ -615,8 +621,13 @@ module.exports = React.createClass({
         var style = this.props.hidden ? { display: 'none' } : {};
         style.opacity = this.props.opacity;
 
+        var className = this.props.className + " mx_fadable";
+        if (this.props.alwaysShowTimestamps) {
+            className += " mx_MessagePanel_alwaysShowTimestamps";
+        }
+
         return (
-            <ScrollPanel ref="scrollPanel" className={ this.props.className + " mx_fadable" }
+            <ScrollPanel ref="scrollPanel" className={ className }
                     onScroll={ this.props.onScroll }
                     onResize={ this.onResize }
                     onFillRequest={ this.props.onFillRequest }

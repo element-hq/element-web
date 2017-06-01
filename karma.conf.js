@@ -55,11 +55,18 @@ module.exports = function (config) {
             // some images to reduce noise from the tests
             {pattern: 'test/img/*', watched: false, included: false,
              served: true, nocache: false},
+            // translation files
+            {pattern: 'src/i18n/strings/*', watcheed: false, included: false, served: true},
+            {pattern: 'test/i18n/*', watched: false, included: false, served: true},
         ],
 
-        // redirect img links to the karma server
         proxies: {
+            // redirect img links to the karma server
             "/img/": "/base/test/img/",
+            // special languages.json file for the tests
+            "/i18n/languages.json": "/base/test/i18n/languages.json",
+            // and redirect i18n requests
+            "/i18n/": "/base/src/i18n/strings/",
         },
 
         // list of files to exclude
@@ -166,11 +173,15 @@ module.exports = function (config) {
                     'sinon': 'sinon/pkg/sinon.js',
                 },
                 root: [
-                    path.resolve('./src'),
                     path.resolve('./test'),
                 ],
             },
             devtool: 'inline-source-map',
+            externals: {
+                // Don't try to bundle electron: leave it as a commonjs dependency
+                // (the 'commonjs' here means it will output a 'require')
+                "electron": "commonjs electron",
+            },
         },
 
         webpackMiddleware: {

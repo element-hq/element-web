@@ -14,13 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var ReactDOM = require("react-dom");
+import React from 'react';
 
-var Matrix = require("matrix-js-sdk");
-var sdk = require('../../index');
-var MatrixClientPeg = require("../../MatrixClientPeg");
-var dis = require("../../dispatcher");
+import Matrix from 'matrix-js-sdk';
+import sdk from '../../index';
+import MatrixClientPeg from '../../MatrixClientPeg';
+import { _t } from '../../languageHandler';
 
 /*
  * Component which shows the filtered file using a TimelinePanel
@@ -96,7 +95,7 @@ var FilePanel = React.createClass({
             </div>;
         } else if (this.noRoom) {
             return <div className="mx_FilePanel mx_RoomView_messageListWrapper">
-                <div className="mx_RoomView_empty">You must join the room to see its files</div>
+                <div className="mx_RoomView_empty">{_t("You must join the room to see its files")}</div>
             </div>;
         }
 
@@ -116,7 +115,7 @@ var FilePanel = React.createClass({
                     showUrlPreview = { false }
                     tileShape="file_grid"
                     opacity={ this.props.opacity }
-                    empty="There are no visible files in this room"
+                    empty={_t('There are no visible files in this room')}
                 />
             );
         }

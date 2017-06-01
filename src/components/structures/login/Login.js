@@ -18,8 +18,8 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import { _t, _tJsx } from '../../../languageHandler';
 import ReactDOM from 'react-dom';
-import url from 'url';
 import sdk from '../../../index';
 import Login from '../../../Login';
 
@@ -223,14 +223,19 @@ module.exports = React.createClass({
                  !this.state.enteredHomeserverUrl.startsWith("http")))
             {
                 errorText = <span>
-                    Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar.
-                    Either use HTTPS or <a href='https://www.google.com/search?&q=enable%20unsafe%20scripts'>enable unsafe scripts</a>
+                    { _tJsx("Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. " +
+                            "Either use HTTPS or <a>enable unsafe scripts</a>.",
+                      /<a>(.*?)<\/a>/,
+                      (sub) => { return <a href="https://www.google.com/search?&q=enable%20unsafe%20scripts">{ sub }</a>; }
+                    )}
                 </span>;
             }
             else {
                 errorText = <span>
-                    Can't connect to homeserver - please check your connectivity and ensure
-                    your <a href={ this.state.enteredHomeserverUrl }>homeserver's SSL certificate</a> is trusted.
+                    { _tJsx("Can't connect to homeserver - please check your connectivity and ensure your <a>homeserver's SSL certificate</a> is trusted.",
+                      /<a>(.*?)<\/a>/,
+                      (sub) => { return <a href={this.state.enteredHomeserverUrl}>{ sub }</a>; }
+                    )}
                 </span>;
             }
         }
@@ -242,12 +247,6 @@ module.exports = React.createClass({
         switch (step) {
             case 'm.login.password':
                 const PasswordLogin = sdk.getComponent('login.PasswordLogin');
-                // HSs that are not matrix.org may not be configured to have their
-                // domain name === domain part.
-                let hsDomain = url.parse(this.state.enteredHomeserverUrl).hostname;
-                if (hsDomain !== 'matrix.org') {
-                    hsDomain = null;
-                }
                 return (
                     <PasswordLogin
                         onSubmit={this.onPasswordLogin}
@@ -259,7 +258,6 @@ module.exports = React.createClass({
                         onPhoneNumberChanged={this.onPhoneNumberChanged}
                         onForgotPasswordClick={this.props.onForgotPasswordClick}
                         loginIncorrect={this.state.loginIncorrect}
-                        hsDomain={hsDomain}
                     />
                 );
             case 'm.login.cas':
@@ -273,8 +271,7 @@ module.exports = React.createClass({
                 }
                 return (
                     <div>
-                    Sorry, this homeserver is using a login which is not
-                    recognised ({step})
+                    { _t('Sorry, this homeserver is using a login which is not recognised ')}({step})
                     </div>
                 );
         }
@@ -291,7 +288,7 @@ module.exports = React.createClass({
         if (this.props.enableGuest) {
             loginAsGuestJsx =
                 <a className="mx_Login_create" onClick={this._onLoginAsGuestClick} href="#">
-                    Login as guest
+                    { _t('Login as guest')}
                 </a>;
         }
 
@@ -299,7 +296,7 @@ module.exports = React.createClass({
         if (this.props.onCancelClick) {
             returnToAppJsx =
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
-                    Return to app
+                    { _t('Return to app')}
                 </a>;
         }
 
@@ -308,7 +305,7 @@ module.exports = React.createClass({
                 <div className="mx_Login_box">
                     <LoginHeader />
                     <div>
-                        <h2>Sign in
+                        <h2>{ _t('Sign in')}
                             { loader }
                         </h2>
                         { this.componentForStep(this.state.currentFlow) }
@@ -324,7 +321,7 @@ module.exports = React.createClass({
                                 { this.state.errorText }
                         </div>
                         <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
-                            Create a new account
+                            { _t('Create an account')}
                         </a>
                         { loginAsGuestJsx }
                         { returnToAppJsx }

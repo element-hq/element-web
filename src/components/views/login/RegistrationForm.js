@@ -21,6 +21,7 @@ import sdk from '../../../index';
 import Email from '../../../email';
 import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
 import Modal from '../../../Modal';
+import { _t } from '../../../languageHandler';
 
 const FIELD_EMAIL = 'field_email';
 const FIELD_PHONE_COUNTRY = 'field_phone_country';
@@ -100,13 +101,13 @@ module.exports = React.createClass({
             if (this.refs.email.value == '') {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 Modal.createDialog(QuestionDialog, {
-                    title: "Warning",
+                    title: "Warning!",
                     description:
                         <div>
-                            If you don't specify an email address, you won't be able to reset your password.<br/>
-                            Are you sure?
+                            {_t("If you don't specify an email address, you won't be able to reset your password. " +
+                                "Are you sure?")}
                         </div>,
-                    button: "Continue",
+                    button: _t("Continue"),
                     onFinished: function(confirmed) {
                         if (confirmed) {
                             self._doSubmit();
@@ -304,7 +305,7 @@ module.exports = React.createClass({
             } else if (this.state.selectedTeam) {
                 belowEmailSection = (
                     <p className="mx_Login_support">
-                        You are registering with {this.state.selectedTeam.name}
+                        {_t("You are registering with %(SelectedTeamName)s", {SelectedTeamName: this.state.selectedTeam.name})}
                     </p>
                 );
             }

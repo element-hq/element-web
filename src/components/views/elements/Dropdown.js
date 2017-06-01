@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import classnames from 'classnames';
 import AccessibleButton from './AccessibleButton';
+import { _t } from '../../../languageHandler';
 
 class MenuOption extends React.Component {
     constructor(props) {
@@ -255,7 +256,7 @@ export default class Dropdown extends React.Component {
         });
         if (options.length === 0) {
             return [<div key="0" className="mx_Dropdown_option">
-                No results
+                {_t("No results")}
             </div>];
         }
         return options;
