@@ -21,6 +21,7 @@ limitations under the License.
 const checkSquirrelHooks = require('./squirrelhooks');
 if (checkSquirrelHooks()) return;
 
+const argv = require('minimist')(process.argv);
 const electron = require('electron');
 const AutoLaunch = require('auto-launch');
 
@@ -29,6 +30,10 @@ const vectorMenu = require('./vectormenu');
 const webContentsHandler = require('./webcontents-handler');
 
 const windowStateKeeper = require('electron-window-state');
+
+if (argv.profile) {
+    electron.app.setPath('userData', `${electron.app.getPath('userData')}-${argv.profile}`);
+}
 
 let vectorConfig = {};
 try {
@@ -166,7 +171,7 @@ const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirector
 
 if (shouldQuit) {
     console.log('Other instance detected: exiting');
-    electron.app.quit();
+    electron.app.exit();
 }
 
 
@@ -249,7 +254,7 @@ electron.app.on('ready', () => {
         brand: vectorConfig.brand || 'Riot',
     });
 
-    if (!process.argv.includes('--hidden')) {
+    if (!argv.hidden) {
         mainWindow.once('ready-to-show', () => {
             mainWindow.show();
         });
