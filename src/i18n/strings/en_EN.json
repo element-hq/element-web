@@ -776,5 +776,8 @@
   "Online": "Online",
   "Idle": "Idle",
   "Offline": "Offline",
-  "Disable URL previews for this room (affects only you)": "Disable URL previews for this room (affects only you)"
+  "Disable URL previews for this room (affects only you)": "Disable URL previews for this room (affects only you)",
+  "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName changed the room avatar to <img/>",
+  "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s removed the room avatar.",
+  "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s changed the avatar for %(roomName)s"
 }

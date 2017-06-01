@@ -18,7 +18,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import { _t } from '../../../languageHandler';
+import { _t, _tJsx } from '../../../languageHandler';
 import ReactDOM from 'react-dom';
 import sdk from '../../../index';
 import Login from '../../../Login';
