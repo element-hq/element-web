@@ -48,6 +48,10 @@ Guests can't use labs features. Please register.
 A new password must be entered.
 Resetting password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.
 Guests cannot join this room even if explicitly invited.
+Guest users can't invite users. Please register to invite.
+This room is inaccessible to guests. You may be able to join if you register.
+delete the alias.
+remove %(name)s from the directory.
 EOT
 )];
 }

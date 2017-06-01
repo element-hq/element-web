@@ -40,7 +40,6 @@
     "Searches DuckDuckGo for results": "Søger DuckDuckGo for resultater",
     "Commands": "kommandoer",
     "Emoji": "Emoji",
-    "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar.": "Kan ikke oprette forbindelse til hjemmeserver via HTTP, når en HTTPS-URL er i din browserbjælke.",
     "Sorry, this homeserver is using a login which is not recognised ": "Beklager, denne homeerver bruger et login, der ikke kan genkendes ",
     "Login as guest": "Log ind som gæst",
     "Return to app": "Tilbage til app",

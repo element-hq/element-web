@@ -16,8 +16,8 @@
     "Blacklisted": "已列入黑名單",
     "Bug Report": "錯誤報告",
     "Call Timeout": "通話超時",
-    "Can't connect to homeserver - please check your connectivity and ensure your %(urlStart)s homeserver's SSL certificate %(urlEnd)s is trusted": "無法連結主伺服器 - 請檢查網路狀況並確保您的 %(urlStart)s 主伺服器 SSL 證書 %(urlEnd)s 得到信任",
-    "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or %(urlStart)s enable unsafe scripts %(urlEnd)s": "當瀏覽器網址列里有 HTTPS URL 時，不能使用 HTTP 連結主伺服器。請採用 HTTPS 或者%(urlStart)s 允許不安全的腳本 %(urlEnd)s",
+    "Can't connect to homeserver - please check your connectivity and ensure your <a>homeserver's SSL certificate</a> is trusted.": "無法連結主伺服器 - 請檢查網路狀況並確保您的 <a>主伺服器 SSL 證書</a> 得到信任",
+    "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "當瀏覽器網址列里有 HTTPS URL 時，不能使用 HTTP 連結主伺服器。請採用 HTTPS 或者 <a>允許不安全的腳本</a>",
     "Can't load user settings": "無法載入使用者設定",
     "Change Password": "變更密碼",
     "%(targetName)s left the room.": "%(targetName)s 離開了聊天室。"
