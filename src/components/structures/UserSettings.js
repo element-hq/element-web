@@ -952,7 +952,7 @@ module.exports = React.createClass({
         let webcamDropdown = <p>{_t('No Webcams detected')}</p>;
 
         const defaultOption = {
-            deviceId: undefined,
+            deviceId: '',
             label: _t('Default Device'),
         };
 
