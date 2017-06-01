@@ -902,7 +902,7 @@ module.exports = React.createClass({
     },
 
     _mapWebRtcDevicesToSpans: function(devices) {
-        return devices.map((device) => <span key={device.deviceId}>{devices[device.deviceId]}</span>);
+        return devices.map((device) => <span key={device.deviceId}>{device.label}</span>);
     },
 
     _setAudioInput: function(deviceId) {
