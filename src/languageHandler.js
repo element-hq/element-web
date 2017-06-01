@@ -131,7 +131,7 @@ export function setLanguage(preferredLangs) {
         }
         if (!langToUse) {
             // Fallback to en_EN if none is found
-            langToUse = 'en_EN'
+            langToUse = 'en'
             console.error("Unable to find an appropriate language");
         }
 
@@ -143,11 +143,11 @@ export function setLanguage(preferredLangs) {
         console.log("set language to " + langToUse);
 
         // Set 'en' as fallback language:
-        if (langToUse != "en_EN") {
-            return getLanguage(i18nFolder + availLangs['en_EN'].fileName);
+        if (langToUse != "en") {
+            return getLanguage(i18nFolder + availLangs['en'].fileName);
         }
     }).then((langData) => {
-        if (langData) counterpart.registerTranslations('en_EN', langData);
+        if (langData) counterpart.registerTranslations('en', langData);
     });
 };
 
