@@ -79,7 +79,7 @@ export default {
     },
 
     setVideoInput: function(deviceId) {
-        this[deviceId === 'default' ? 'setVideoInputDefault' : '_setVideoInput']();
+        this[deviceId === 'default' ? 'setVideoInputDefault' : '_setVideoInput'](deviceId);
     },
 
     _setVideoInput: function(deviceId) {
