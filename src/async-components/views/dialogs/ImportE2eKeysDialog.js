@@ -164,7 +164,7 @@ export default React.createClass({
                         </div>
                     </div>
                     <div className='mx_Dialog_buttons'>
-                        <input className='mx_Dialog_primary' type='submit' value='Import'
+                        <input className='mx_Dialog_primary' type='submit' value={_t('Import')}
                             disabled={!this.state.enableSubmit || disableForm}
                         />
                         <button onClick={this._onCancelClick} disabled={disableForm}>
