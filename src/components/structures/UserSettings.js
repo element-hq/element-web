@@ -902,9 +902,7 @@ module.exports = React.createClass({
     },
 
     _mapWebRtcDevicesToSpans: function(devices) {
-        return Object.keys(devices).map(
-            (deviceId) => <span key={deviceId}>{devices[deviceId]}</span>
-        );
+        return Object.keys(devices).map((deviceId) => <span key={deviceId}>{devices[deviceId]}</span>);
     },
 
     _setAudioInput: function(deviceId) {
@@ -928,8 +926,8 @@ module.exports = React.createClass({
                 function() {
                     const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
                     Modal.createDialog(ErrorDialog, {
-                        title: "No media permissions",
-                        description: "You may need to manually permit Riot to access your microphone/webcam",
+                        title: _t('No media permissions'),
+                        description: _t('You may need to manually permit Riot to access your microphone/webcam'),
                     });
                 },
             ]);
@@ -939,10 +937,10 @@ module.exports = React.createClass({
     _renderWebRtcSettings: function() {
         if (this.state.mediaDevices === false) {
             return <div>
-                <h3>WebRTC</h3>
+                <h3>{_t('VoIP')}</h3>
                 <div className="mx_UserSettings_section">
                     <p className="mx_UserSettings_link" onClick={this._requestMediaPermissions}>
-                        Missing Media Permissions, click here to request.
+                        {_t('Missing Media Permissions, click here to request.')}
                     </p>
                 </div>
             </div>;
@@ -950,11 +948,11 @@ module.exports = React.createClass({
 
         const Dropdown = sdk.getComponent('elements.Dropdown');
 
-        let microphoneDropdown = <p>No Microphones detected</p>;
-        let webcamDropdown = <p>No Webcams detected</p>;
+        let microphoneDropdown = <p>{_t('No Microphones detected')}</p>;
+        let webcamDropdown = <p>{_t('No Webcams detected')}</p>;
 
         const audioInputs = this.state.mediaDevices.audioinput;
-        if ('default' in audioInputs) {
+        if (Object.keys(videoInputs).length > 0) {
             microphoneDropdown = <div>
                 <h4>Microphone</h4>
                 <Dropdown
@@ -967,7 +965,7 @@ module.exports = React.createClass({
         }
 
         const videoInputs = this.state.mediaDevices.videoinput;
-        if ('default' in videoInputs) {
+        if (Object.keys(videoInputs).length > 0) {
             webcamDropdown = <div>
                 <h4>Cameras</h4>
                 <Dropdown
@@ -980,7 +978,7 @@ module.exports = React.createClass({
         }
 
         return <div>
-            <h3>WebRTC</h3>
+            <h3>{_t('VoIP')}</h3>
             <div className="mx_UserSettings_section">
                 {microphoneDropdown}
                 {webcamDropdown}
