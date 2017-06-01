@@ -366,32 +366,36 @@ limitations under the License.
         padding-top: 4px;
     }
 
+    .mx_EventTile .mx_SenderProfile {
+        font-size: 13px;
+    }
+
     .mx_EventTile.mx_EventTile_emote {
         padding-top: 8px;
         .mx_EventTile_avatar {
             top: 2px;
         }
         .mx_EventTile_line {
-            padding-top: 1px;
-            padding-bottom: 2px;
+            padding-top: 0px;
+            padding-bottom: 1px;
         }
     }
 
     .mx_EventTile.mx_EventTile_emote.mx_EventTile_continuation {
         padding-top: 0;
         .mx_EventTile_line {
-            padding-top: 1px;
-            padding-bottom: 1px;
+            padding-top: 0px;
+            padding-bottom: 0px;
         }
     }
 
     .mx_EventTile_line {
-        padding-top: 1px;
-        padding-bottom: 1px;
+        padding-top: 0px;
+        padding-bottom: 0px;
     }
 
     .mx_EventTile_avatar {
-        top: 0;
+        top: 2px;
     }
 
     .mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
