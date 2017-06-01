@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import Matrix from "matrix-js-sdk";
+import { _t } from "./languageHandler";
 
 import q from 'q';
 import url from 'url';
@@ -97,9 +98,9 @@ export default class Login {
             };
         }, (error) => {
             if (error.httpStatus === 403) {
-                error.friendlyText = "Guest access is disabled on this Home Server.";
+                error.friendlyText = _t("Guest access is disabled on this Home Server.");
             } else {
-                error.friendlyText = "Failed to register as guest: " + error.data;
+                error.friendlyText = _t("Failed to register as guest:") + ' ' + error.data;
             }
             throw error;
         });
@@ -158,12 +159,12 @@ export default class Login {
         }, function(error) {
             if (error.httpStatus == 400 && loginParams.medium) {
                 error.friendlyText = (
-                    'This Home Server does not support login using email address.'
+                    _t('This Home Server does not support login using email address.');
                 );
             }
             else if (error.httpStatus === 403) {
                 error.friendlyText = (
-                    'Incorrect username and/or password.'
+                    _t('Incorrect username and/or password.')
                 );
                 if (self._fallbackHsUrl) {
                     var fbClient = Matrix.createClient({
@@ -187,7 +188,7 @@ export default class Login {
             }
             else {
                 error.friendlyText = (
-                    'There was a problem logging in. (HTTP ' + error.httpStatus + ")"
+                    _t("There was a problem logging in.") + ' (HTTP ' + error.httpStatus + ")"
                 );
             }
             throw error;
