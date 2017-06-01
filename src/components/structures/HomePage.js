@@ -40,41 +40,44 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            page: ""
+            iframeSrc: '',
+            page: '',
         };
     },
 
     componentWillMount: function() {
         if (this.props.teamToken && this.props.teamServerUrl) {
-            return;
+            this.setState({
+                iframeSrc: `${this.props.teamServerUrl}/static/${this.props.teamToken}/home.html`
+            });
         }
+        else {
+            // we use request() to inline the homepage into the react component
+            // so that it can inherit CSS and theming easily rather than mess around
+            // with iframes and trying to synchronise document.stylesheets.
 
-        // we use request() to inline the homepage into the react component
-        // so that it can inherit CSS and theming easily rather than mess around
-        // with iframes and trying to synchronise document.stylesheets.
+            let src = this.props.homePageUrl || '/home.html';
 
-        let src = this.props.homePageUrl || '/home.html';
+            request(
+                { method: "GET", url: src },
+                (err, response, body) => {
+                    if (err || response.status < 200 || response.status >= 300) {
+                        console.log(error);
+                        this.setState({ page: "Couldn't load home page" });
+                    }
 
-        request(
-            { method: "GET", url: src },
-            (err, response, body) => {
-                if (err || response.status < 200 || response.status >= 300) {
-                    console.log(error);
-                    this.setState({ page: "Couldn't load home page" });
+                    body = body.replace(/_t\(['"]([\s\S]*?)['"]\)/mg, (match, g1)=>{ return sanitizeHtml(_t(g1)) });
+                    this.setState({ page: body });
                 }
-
-                body = body.replace(/_t\(['"]([\s\S]*?)['"]\)/mg, (match, g1)=>{ return sanitizeHtml(_t(g1)) });
-                this.setState({ page: body });
-            }
-        );
+            );
+        }
     },
 
     render: function() {
-        if (this.props.teamToken && this.props.teamServerUrl) {
-            src = `${this.props.teamServerUrl}/static/${this.props.teamToken}/home.html`;
+        if (this.state.iframeSrc) {
             return (
                 <div className="mx_HomePage">
-                    <iframe src={ src } />
+                    <iframe src={ this.state.iframeSrc } />
                 </div>
             );
         }
