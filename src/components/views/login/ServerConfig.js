@@ -132,7 +132,7 @@ module.exports = React.createClass({
         var toggleButton;
         if (this.props.withToggleButton) {
             toggleButton = (
-                <div style={{ textAlign: 'center' }}>
+                <div className="mx_ServerConfig_selector">
                     <input className="mx_Login_radio" id="basic" name="configVisible" type="radio"
                         checked={!this.state.configVisible}
                         onChange={this.onServerConfigVisibleChange.bind(this, false)} />
