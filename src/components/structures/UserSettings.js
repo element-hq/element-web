@@ -966,7 +966,7 @@ module.exports = React.createClass({
             }
 
             microphoneDropdown = <div>
-                <h4>Microphone</h4>
+                <h4>{_t('Microphone')}</h4>
                 <Dropdown
                     className="mx_UserSettings_webRtcDevices_dropdown"
                     value={this.state.activeAudioInput || defaultInput}
@@ -986,7 +986,7 @@ module.exports = React.createClass({
             }
 
             webcamDropdown = <div>
-                <h4>Cameras</h4>
+                <h4>{_t('Camera')}</h4>
                 <Dropdown
                     className="mx_UserSettings_webRtcDevices_dropdown"
                     value={this.state.activeVideoInput || defaultInput}
