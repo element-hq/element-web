@@ -771,5 +771,11 @@
   "Idle": "Idle",
   "Offline": "Offline",
   "disabled": "disabled",
-  "enabled": "enabled"
+  "enabled": "enabled",
+  "Start chatting": "Start chatting",
+  "Start Chatting": "Start Chatting",
+  "Click on the button below to start chatting!": "Click on the button below to start chatting!",
+  "Create a new chat or reuse an existing one": "Create a new chat or reuse an existing one",
+  "You already have existing direct chats with this user:": "You already have existing direct chats with this user:",
+  "Start new chat": "Start new chat"
 }
