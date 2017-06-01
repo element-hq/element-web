@@ -436,7 +436,7 @@
     "Sender device information": "Information de l'appareil de l'expéditeur",
     "Send Invites": "Envoyer les invitations",
     "Send Reset Email": "Envoyer l'e-mail de réinitialisation",
-    "sent an image": "envoyer une image",
+    "sent an image": "a envoyé une image",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s a envoyé une image.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s a invité %(targetDisplayName)s à rejoindre le salon.",
     "sent a video": "a envoyé une vidéo",
