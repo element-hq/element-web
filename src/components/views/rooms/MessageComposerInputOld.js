@@ -316,7 +316,7 @@ export default React.createClass({
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createDialog(ErrorDialog, {
                         title: _t("Server error"),
-                        description: ((err && err.message) ? err.message : _t("Server unavailable, overloaded, or something else went wrong") + "."),
+                        description: ((err && err.message) ? err.message : _t("Server unavailable, overloaded, or something else went wrong.")),
                     });
                 });
             }
