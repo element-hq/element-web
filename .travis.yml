@@ -17,5 +17,6 @@ node_js:
     - 6
     - 7
 install:
-    - scripts/fetch-develop.deps.sh
-    - npm install
+    # clone the deps with depth 1: we know we will only ever need that one
+    # commit.
+    - scripts/fetch-develop.deps.sh --depth 1 && npm install
