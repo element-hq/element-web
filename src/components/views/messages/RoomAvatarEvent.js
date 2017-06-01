@@ -14,12 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-var React = require('react');
-
-var MatrixClientPeg = require("../../../MatrixClientPeg");
-var ContentRepo = require("matrix-js-sdk").ContentRepo;
+import React from 'react';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import { ContentRepo } from 'matrix-js-sdk';
 import { _t, _tJsx } from '../../../languageHandler';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
