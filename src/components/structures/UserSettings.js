@@ -956,7 +956,7 @@ module.exports = React.createClass({
             label: _t('Default Device'),
         };
 
-        const audioInputs = this.state.mediaDevices.audioinput;
+        const audioInputs = this.state.mediaDevices.audioinput.slice(0);
         if (audioInputs.length > 0) {
             if (!audioInputs.some((input) => input.deviceId === 'default')) {
                 audioInputs.unshift(defaultOption);
@@ -972,7 +972,7 @@ module.exports = React.createClass({
             </div>;
         }
 
-        const videoInputs = this.state.mediaDevices.videoinput;
+        const videoInputs = this.state.mediaDevices.videoinput.slice(0);
         if (videoInputs.length > 0) {
             if (!videoInputs.some((input) => input.deviceId === 'default')) {
                 videoInputs.unshift(defaultOption);
