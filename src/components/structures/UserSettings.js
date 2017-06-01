@@ -79,11 +79,11 @@ const SETTINGS_LABELS = [
         id: 'showTwelveHourTimestamps',
         label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
     },
-/*
     {
         id: 'useCompactLayout',
         label: 'Use compact timeline layout',
     },
+/*
     {
         id: 'useFixedWidthFont',
         label: 'Use fixed width font',
