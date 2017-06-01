@@ -822,5 +822,7 @@
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Du wirst jetzt auf eine Drittanbieter-Website weitergeleitet, damit du dein Konto authentifizieren kannst für die Verwendung mit %(integrationsUrl)s. Möchtest du fortfahren?",
     "Disable URL previews for this room (affects only you)": "Deaktiviere die URL-Vorschau für diesen Raum (betrifft nur dich)",
     "Start automatically after system login": "Starte automatisch nach System-Login",
-    "Desktop specific": "Desktopspezifisch"
+    "Desktop specific": "Desktopspezifisch",
+    "Jump to first unread message.": "Springe zur ersten ungelesenen Nachricht.",
+    "Options": "Optionen"
 }
