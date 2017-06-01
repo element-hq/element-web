@@ -767,6 +767,7 @@ module.exports = React.createClass({
     _renderLabs: function() {
         // default to enabled if undefined
         if (this.props.enableLabs === false) return null;
+        UserSettingsStore.doTranslations();
 
         const features = UserSettingsStore.LABS_FEATURES.map((feature) => (
             <div key={feature.id} className="mx_UserSettings_toggle">
