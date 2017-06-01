@@ -159,7 +159,7 @@ export default class Login {
         }, function(error) {
             if (error.httpStatus == 400 && loginParams.medium) {
                 error.friendlyText = (
-                    _t('This Home Server does not support login using email address.');
+                    _t('This Home Server does not support login using email address.')
                 );
             }
             else if (error.httpStatus === 403) {
