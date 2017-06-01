@@ -53,12 +53,36 @@ export default {
         // });
     },
 
+    _findDefault: function(devices) {
+        return devices.some((device) => device.deviceId === 'default') ? 'default' : undefined;
+    },
+
+    setAudioInputDefault: async function() {
+        const devices = await this.getDevices();
+        const audioDefault = this._findDefault(devices.audioinput);
+        this._setAudioInput(audioDefault);
+    },
+
     setAudioInput: function(deviceId) {
+        this[deviceId === 'default' ? 'setAudioInputDefault' : '_setAudioInput'](deviceId);
+    },
+
+    _setAudioInput: function(deviceId) {
         UserSettingsStore.setLocalSetting('webrtc_audioinput', deviceId);
         Matrix.setMatrixCallAudioInput(deviceId);
     },
 
+    setVideoInputDefault: async function() {
+        const devices = await this.getDevices();
+        const videoDefault = this._findDefault(devices.videoinput);
+        this._setVideoInput(videoDefault);
+    },
+
     setVideoInput: function(deviceId) {
+        this[deviceId === 'default' ? 'setVideoInputDefault' : '_setVideoInput']();
+    },
+
+    _setVideoInput: function(deviceId) {
         UserSettingsStore.setLocalSetting('webrtc_videoinput', deviceId);
         Matrix.setMatrixCallVideoInput(deviceId);
     },
