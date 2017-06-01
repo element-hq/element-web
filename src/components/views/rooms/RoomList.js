@@ -529,6 +529,7 @@ module.exports = React.createClass({
                 </div>;
         }
 
+        // We don't want to display drop targets if there are no room tiles to drag'n'drop
         if (this.state.totalRoomCount === 0) {
             return null;
         }
