@@ -104,3 +104,17 @@ limitations under the License.
     top: -25px;
     left: 6px;
 }
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_LeftPanel .mx_BottomLeftMenu {
+        flex: 0 0 50px;
+    }
+
+    .mx_LeftPanel.collapsed .mx_BottomLeftMenu {
+        flex: 0 0 160px;
+    }
+
+    .mx_LeftPanel .mx_BottomLeftMenu_options {
+        margin-top: 12px;
+    }
+}
