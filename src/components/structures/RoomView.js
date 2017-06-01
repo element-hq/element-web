@@ -171,7 +171,7 @@ module.exports = React.createClass({
         });
 
         // Start listening for RoomViewStore updates
-        RoomViewStore.addListener(this._onRoomViewStoreUpdate);
+        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._onRoomViewStoreUpdate(true);
     },
 
@@ -182,6 +182,8 @@ module.exports = React.createClass({
         this.setState({
             roomId: RoomViewStore.getRoomId(),
             roomAlias: RoomViewStore.getRoomAlias(),
+            roomLoading: RoomViewStore.isRoomLoading(),
+            roomLoadError: RoomViewStore.getRoomLoadError(),
             joining: RoomViewStore.isJoining(),
             joinError: RoomViewStore.getJoinError(),
         }, () => {
@@ -342,6 +344,11 @@ module.exports = React.createClass({
         window.removeEventListener('resize', this.onResize);
 
         document.removeEventListener("keydown", this.onKeyDown);
+
+        // Remove RoomStore listener
+        if (this._roomStoreToken) {
+            this._roomStoreToken.remove();
+        }
 
         // cancel any pending calls to the rate_limited_funcs
         this._updateRoomMembers.cancelPendingCall();
