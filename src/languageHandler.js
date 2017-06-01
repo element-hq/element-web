@@ -133,7 +133,7 @@ export function setLanguage(preferredLangs) {
             throw new Error("Unable to find an appropriate language");
         }
 
-        return getLanguage(i18nFolder + availLangs[langToUse]);
+        return getLanguage(i18nFolder + availLangs[langToUse].fileName);
     }).then((langData) => {
         counterpart.registerTranslations(langToUse, langData);
         counterpart.setLocale(langToUse);
@@ -142,16 +142,25 @@ export function setLanguage(preferredLangs) {
 
         // Set 'en' as fallback language:
         if (langToUse != "en") {
-            return getLanguage(i18nFolder + availLangs['en']);
+            return getLanguage(i18nFolder + availLangs['en'].fileName);
         }
     }).then((langData) => {
         if (langData) counterpart.registerTranslations('en', langData);
     });
 };
 
-export function getAllLanguageKeysFromJson() {
-    return getLangsJson().then((langs) => {
-        return Object.keys(langs);
+export function getAllLanguagesFromJson() {
+    return getLangsJson().then((langsObject) => {
+        var langs = [];
+        for (var langKey in langsObject) {
+            if (langsObject.hasOwnProperty(langKey)) {
+                langs.push({
+                    'value': langKey,
+                    'label': langsObject[langKey].label
+                });
+            }
+        }
+        return langs;
     });
 }
 
