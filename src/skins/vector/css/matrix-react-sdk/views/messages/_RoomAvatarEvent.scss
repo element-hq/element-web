@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AccessibleButton:focus {
-    outline: 0;
-    filter: brightness($focus-brightness);
+.mx_RoomAvatarEvent {
+    opacity: 0.5;
+    overflow-y: hidden;
 }
 
-.mx_AccessibleButton {
-    cursor: pointer;
+.mx_RoomAvatarEvent_avatar {
+    display: inline;
 }
