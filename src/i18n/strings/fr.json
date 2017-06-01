@@ -128,7 +128,7 @@
     "Displays action": "Affiche l'action",
     "Don't send typing notifications": "Ne pas envoyer les notifications de saisie",
     "Download %(text)s": "Télécharger %(text)s",
-    "Drop here %(toAction)s": "Déposer ici pour %(toAction)s",
+    "Drop here %(toAction)s": "Déposer ici %(toAction)s",
     "Drop here to tag %(section)s": "Déposer ici pour marque comme %(section)s",
     "Ed25519 fingerprint": "Empreinte Ed25519",
     "Email Address": "Adresse e-mail",
