@@ -958,7 +958,9 @@ module.exports = React.createClass({
 
         const audioInputs = this.state.mediaDevices.audioinput;
         if (audioInputs.length > 0) {
-            audioInputs.unshift(defaultOption);
+            if (!audioInputs.some((input) => input.deviceId === 'default')) {
+                audioInputs.unshift(defaultOption);
+            }
             microphoneDropdown = <div>
                 <h4>Microphone</h4>
                 <Dropdown
@@ -972,7 +974,9 @@ module.exports = React.createClass({
 
         const videoInputs = this.state.mediaDevices.videoinput;
         if (videoInputs.length > 0) {
-            videoInputs.unshift(defaultOption);
+            if (!videoInputs.some((input) => input.deviceId === 'default')) {
+                videoInputs.unshift(defaultOption);
+            }
             webcamDropdown = <div>
                 <h4>Cameras</h4>
                 <Dropdown
