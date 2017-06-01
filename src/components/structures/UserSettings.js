@@ -269,8 +269,8 @@ module.exports = React.createClass({
             if (this._unmounted) return;
             this.setState({
                 mediaDevices,
-                activeAudioInput: this._localSettings['webrtc_audioinput'] || 'default',
-                activeVideoInput: this._localSettings['webrtc_videoinput'] || 'default',
+                activeAudioInput: this._localSettings['webrtc_audioinput'],
+                activeVideoInput: this._localSettings['webrtc_videoinput'],
             });
         });
     },
@@ -902,7 +902,7 @@ module.exports = React.createClass({
     },
 
     _mapWebRtcDevicesToSpans: function(devices) {
-        return Object.keys(devices).map((deviceId) => <span key={deviceId}>{devices[deviceId]}</span>);
+        return devices.map((device) => <span key={device.deviceId}>{devices[device.deviceId]}</span>);
     },
 
     _setAudioInput: function(deviceId) {
@@ -951,8 +951,14 @@ module.exports = React.createClass({
         let microphoneDropdown = <p>{_t('No Microphones detected')}</p>;
         let webcamDropdown = <p>{_t('No Webcams detected')}</p>;
 
+        const defaultOption = {
+            deviceId: undefined,
+            label: _t('Default Device'),
+        };
+
         const audioInputs = this.state.mediaDevices.audioinput;
-        if (Object.keys(audioInputs).length > 0) {
+        if (audioInputs.length > 0) {
+            audioInputs.unshift(defaultOption);
             microphoneDropdown = <div>
                 <h4>Microphone</h4>
                 <Dropdown
@@ -965,7 +971,8 @@ module.exports = React.createClass({
         }
 
         const videoInputs = this.state.mediaDevices.videoinput;
-        if (Object.keys(videoInputs).length > 0) {
+        if (videoInputs.length > 0) {
+            videoInputs.unshift(defaultOption);
             webcamDropdown = <div>
                 <h4>Cameras</h4>
                 <Dropdown

@@ -23,15 +23,15 @@ export default {
         // Only needed for Electron atm, though should work in modern browsers
         // once permission has been granted to the webapp
         return navigator.mediaDevices.enumerateDevices().then(function(devices) {
-            const audioIn = {};
-            const videoIn = {};
+            const audioIn = [];
+            const videoIn = [];
 
             if (devices.some((device) => !device.label)) return false;
 
             devices.forEach((device) => {
                 switch (device.kind) {
-                    case 'audioinput': audioIn[device.deviceId] = device.label; break;
-                    case 'videoinput': videoIn[device.deviceId] = device.label; break;
+                    case 'audioinput': audioIn.push(device); break;
+                    case 'videoinput': videoIn.push(device); break;
                 }
             });
 
