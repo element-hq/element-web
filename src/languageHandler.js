@@ -141,11 +141,11 @@ export function setLanguage(preferredLangs) {
         console.log("set language to " + langToUse);
 
         // Set 'en' as fallback language:
-        if (langToUse != "en") {
-            return getLanguage(i18nFolder + availLangs['en'].fileName);
+        if (langToUse != "en_EN") {
+            return getLanguage(i18nFolder + availLangs['en_EN'].fileName);
         }
     }).then((langData) => {
-        if (langData) counterpart.registerTranslations('en', langData);
+        if (langData) counterpart.registerTranslations('en_EN', langData);
     });
 };
 
