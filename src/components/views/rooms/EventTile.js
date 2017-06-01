@@ -38,6 +38,7 @@ var eventTileTypes = {
     'm.call.answer' : 'messages.TextualEvent',
     'm.call.hangup' : 'messages.TextualEvent',
     'm.room.name'   : 'messages.TextualEvent',
+    'm.room.avatar' : 'messages.RoomAvatarEvent',
     'm.room.topic'  : 'messages.TextualEvent',
     'm.room.third_party_invite' : 'messages.TextualEvent',
     'm.room.history_visibility' : 'messages.TextualEvent',

@@ -20,7 +20,7 @@ var React = require('react');
 
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var ContentRepo = require("matrix-js-sdk").ContentRepo;
-import { _tJsx } from '../../../languageHandler';
+import { _t, _tJsx } from '../../../languageHandler';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
@@ -33,7 +33,7 @@ module.exports = React.createClass({
         mxEvent: React.PropTypes.object.isRequired,
     },
 
-    onAvatarClick: function(name, e) {
+    onAvatarClick: function(name) {
         var httpUrl = MatrixClientPeg.get().mxcUrlToHttp(this.props.mxEvent.getContent().url);
         var ImageView = sdk.getComponent("elements.ImageView");
         var params = {
@@ -49,7 +49,10 @@ module.exports = React.createClass({
         var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
         var room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        var name = room ? room.name : '';
+        var name = _t('%(senderDisplayName)s changed the avatar for %(roomName)s', {
+                senderDisplayName: senderDisplayName,
+                roomName: room ? room.name : '',
+        });
 
         if (!ev.getContent().url || ev.getContent().url.trim().length === 0) {
             return (
@@ -78,9 +81,9 @@ module.exports = React.createClass({
                          [
                             (sub) => senderDisplayName,
                             (sub) =>
-                                <AccessibleButton className="mx_RoomAvatarEvent_avatar"
-                                                  onClick={ this.onAvatarClick.bind(name) }>
-                                    <BaseAvatar width="14" height="14" url={ url }
+                                <AccessibleButton key="avatar" className="mx_RoomAvatarEvent_avatar"
+                                                  onClick={ this.onAvatarClick.bind(this, name) }>
+                                    <BaseAvatar width={14} height={14} url={ url }
                                                 name={ name } />
                                 </AccessibleButton>,
                          ]

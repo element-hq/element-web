@@ -118,7 +118,7 @@ module.exports = React.createClass({
             });
             options.push({ value: "Custom", text: "Custom level" });
             options = options.map((op) => {
-                return <option value={op.value}>{op.text}</option>;
+                return <option value={op.value} key={op.value}>{op.text}</option>;
             });
 
             select =
