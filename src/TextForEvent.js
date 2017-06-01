@@ -17,7 +17,6 @@ limitations under the License.
 var MatrixClientPeg = require("./MatrixClientPeg");
 var CallHandler = require("./CallHandler");
 import { _t } from './languageHandler';
-import sdk from './index';
 import * as Roles from './Roles';
 
 function textForMemberEvent(ev) {
