@@ -1,3 +1,86 @@
+Changes in [0.10.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.10.0-rc.1) (2017-06-01)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.10...v0.10.0-rc.1)
+
+ * basic electron profile support
+   [\#4030](https://github.com/vector-im/riot-web/pull/4030)
+ * Finish translations for vector-im/riot-web
+   [\#4122](https://github.com/vector-im/riot-web/pull/4122)
+ * Translate src/vector
+   [\#4119](https://github.com/vector-im/riot-web/pull/4119)
+ * electron flashFrame was way too annoying
+   [\#4128](https://github.com/vector-im/riot-web/pull/4128)
+ * auto-launch support [Electron]
+   [\#4012](https://github.com/vector-im/riot-web/pull/4012)
+ * Show 12hr time on hover too
+   [\#4092](https://github.com/vector-im/riot-web/pull/4092)
+ * Translate src/notifications
+   [\#4087](https://github.com/vector-im/riot-web/pull/4087)
+ * Translate src/components/structures
+   [\#4084](https://github.com/vector-im/riot-web/pull/4084)
+ * Smaller font size on timestamp to better fit in the available space
+   [\#4085](https://github.com/vector-im/riot-web/pull/4085)
+ * Make travis run the build with several versions of node
+   [\#4079](https://github.com/vector-im/riot-web/pull/4079)
+ * Piwik Analytics
+   [\#4056](https://github.com/vector-im/riot-web/pull/4056)
+ * Update from Weblate.
+   [\#4077](https://github.com/vector-im/riot-web/pull/4077)
+ * managed to eat the eventStatus check, can't redact a local-echo etc
+   [\#4078](https://github.com/vector-im/riot-web/pull/4078)
+ * show redact in context menu only if has PL to/sent message
+   [\#3925](https://github.com/vector-im/riot-web/pull/3925)
+ * Update from Weblate.
+   [\#4064](https://github.com/vector-im/riot-web/pull/4064)
+ * Change redact -> remove to improve clarity
+   [\#3722](https://github.com/vector-im/riot-web/pull/3722)
+ * Update from Weblate.
+   [\#4058](https://github.com/vector-im/riot-web/pull/4058)
+ * Message Forwarding
+   [\#3688](https://github.com/vector-im/riot-web/pull/3688)
+ * Update from Weblate.
+   [\#4057](https://github.com/vector-im/riot-web/pull/4057)
+ * Fixed an input field's background color in dark theme
+   [\#4053](https://github.com/vector-im/riot-web/pull/4053)
+ * Update from Weblate.
+   [\#4051](https://github.com/vector-im/riot-web/pull/4051)
+ * Update from Weblate.
+   [\#4049](https://github.com/vector-im/riot-web/pull/4049)
+ * Update from Weblate.
+   [\#4048](https://github.com/vector-im/riot-web/pull/4048)
+ * Update from Weblate.
+   [\#4040](https://github.com/vector-im/riot-web/pull/4040)
+ * Update translating.md: Minor suggestions
+   [\#4041](https://github.com/vector-im/riot-web/pull/4041)
+ * tidy electron files, they weren't pwetty
+   [\#3993](https://github.com/vector-im/riot-web/pull/3993)
+ * Prevent Power Save when in call (Electron)
+   [\#3992](https://github.com/vector-im/riot-web/pull/3992)
+ * Translations!
+   [\#4035](https://github.com/vector-im/riot-web/pull/4035)
+ * Kieran gould/12hourtimestamp
+   [\#3961](https://github.com/vector-im/riot-web/pull/3961)
+ * Don't include src in the test resolve root
+   [\#4033](https://github.com/vector-im/riot-web/pull/4033)
+ * add moar context menus [Electron]
+   [\#4021](https://github.com/vector-im/riot-web/pull/4021)
+ * Add `Chat` to Linux app categories
+   [\#4022](https://github.com/vector-im/riot-web/pull/4022)
+ * add menu category for linux build of app
+   [\#3975](https://github.com/vector-im/riot-web/pull/3975)
+ * Electron Tray Improvements
+   [\#3909](https://github.com/vector-im/riot-web/pull/3909)
+ * More riot-web test deflakification
+   [\#3966](https://github.com/vector-im/riot-web/pull/3966)
+ * Script to fetch corresponding branches of dependent projects
+   [\#3945](https://github.com/vector-im/riot-web/pull/3945)
+ * Add type="text/css" to SVG logos
+   [\#3964](https://github.com/vector-im/riot-web/pull/3964)
+ * Fix some setState-after-unmount in roomdirectory
+   [\#3958](https://github.com/vector-im/riot-web/pull/3958)
+ * Attempt to deflakify joining test
+   [\#3956](https://github.com/vector-im/riot-web/pull/3956)
+
 Changes in [0.9.10](https://github.com/vector-im/riot-web/releases/tag/v0.9.10) (2017-05-22)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.10-rc.1...v0.9.10)
