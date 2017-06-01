@@ -42,13 +42,13 @@ dodep matrix-org matrix-react-sdk
 mkdir -p node_modules
 cd node_modules
 
-rm -r matrix-js-sdk 2> /dev/null
+rm -r matrix-js-sdk 2> /dev/null || true
 ln -s ../matrix-js-sdk ./
 pushd matrix-js-sdk
 npm install
 popd
 
-rm -r matrix-react-sdk 2> /dev/null
+rm -r matrix-react-sdk 2> /dev/null || true
 ln -s ../matrix-react-sdk ./
 pushd matrix-react-sdk
 mkdir -p node_modules
