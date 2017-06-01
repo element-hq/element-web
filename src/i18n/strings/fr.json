@@ -771,5 +771,15 @@
     "Jump to first unread message.": "Aller au premier message non-lu.",
     "Options": "Options",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Vous êtes sur le point d’accéder à un site tiers afin de pouvoir vous identifier pour utiliser %(integrationsUrl)s. Voulez vous continuer ?",
-    "Removed or unknown message type": "Type de message inconnu ou supprimé"
+    "Removed or unknown message type": "Type de message inconnu ou supprimé",
+    "disabled": "désactivé",
+    "enabled": "activé",
+    "Set a Display Name": "Définir un nom d’affichage",
+    "for %(amount)ss": "depuis %(amount)ss",
+    "for %(amount)sm": "depuis %(amount)sm",
+    "for %(amount)sh": "depuis %(amount)sh",
+    "for %(amount)sd": "depuis %(amount)sj",
+    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName a changé l’image de profil du salon en <img/>",
+    "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s a supprimé l’image de profil du salon.",
+    "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s a changé l’image de profil de %(roomName)s"
 }
