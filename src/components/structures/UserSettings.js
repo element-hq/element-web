@@ -79,11 +79,11 @@ const SETTINGS_LABELS = [
         id: 'showTwelveHourTimestamps',
         label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
     },
-/*
     {
         id: 'useCompactLayout',
         label: 'Use compact timeline layout',
     },
+/*
     {
         id: 'useFixedWidthFont',
         label: 'Use fixed width font',
@@ -767,6 +767,7 @@ module.exports = React.createClass({
     _renderLabs: function() {
         // default to enabled if undefined
         if (this.props.enableLabs === false) return null;
+        UserSettingsStore.doTranslations();
 
         const features = UserSettingsStore.LABS_FEATURES.map((feature) => (
             <div key={feature.id} className="mx_UserSettings_toggle">

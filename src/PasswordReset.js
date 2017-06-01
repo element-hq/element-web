@@ -82,7 +82,7 @@ class PasswordReset {
                 err.message = _t('Failed to verify email address: make sure you clicked the link in the email');
             }
             else if (err.httpStatus === 404) {
-                err.message = _t('Your email address does not appear to be associated with a Matrix ID on this Homeserver') + '.';
+                err.message = _t('Your email address does not appear to be associated with a Matrix ID on this Homeserver.');
             }
             else if (err.httpStatus) {
                 err.message += ` (Status ${err.httpStatus})`;

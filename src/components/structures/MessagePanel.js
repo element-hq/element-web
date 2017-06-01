@@ -316,7 +316,7 @@ module.exports = React.createClass({
                 const key = "membereventlistsummary-" + (prevEvent ? mxEv.getId() : "initial");
 
                 if (this._wantsDateSeparator(prevEvent, mxEv.getDate())) {
-                    let dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1}/></li>;
+                    let dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1} showTwelveHour={this.props.isTwelveHour}/></li>;
                     ret.push(dateSeparator);
                 }
 
@@ -458,7 +458,7 @@ module.exports = React.createClass({
 
         // do we need a date separator since the last event?
         if (this._wantsDateSeparator(prevEvent, eventDate)) {
-            var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1}/></li>;
+            var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} showTwelveHour={this.props.isTwelveHour}/></li>;
             ret.push(dateSeparator);
             continuation = false;
         }
