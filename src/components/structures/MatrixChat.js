@@ -920,6 +920,9 @@ module.exports = React.createClass({
         cli.on("crypto.roomKeyRequest", (req) => {
             krh.handleKeyRequest(req);
         });
+        cli.on("crypto.roomKeyRequestCancellation", (req) => {
+            krh.handleKeyRequestCancellation(req);
+        });
     },
 
     showScreen: function(screen, params) {

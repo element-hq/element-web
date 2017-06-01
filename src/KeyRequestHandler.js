@@ -21,16 +21,18 @@ export default class KeyRequestHandler {
     constructor(matrixClient) {
         this._matrixClient = matrixClient;
 
-        this._isDialogOpen = false;
+        // the user/device for which we currently have a dialog open
+        this._currentUser = null;
+        this._currentDevice = null;
 
         // userId -> deviceId -> [keyRequest]
         this._pendingKeyRequests = {};
     }
 
-
     handleKeyRequest(keyRequest) {
         const userId = keyRequest.userId;
         const deviceId = keyRequest.deviceId;
+        const requestId = keyRequest.requestId;
 
         if (!this._pendingKeyRequests[userId]) {
             this._pendingKeyRequests[userId] = {};
@@ -38,15 +40,54 @@ export default class KeyRequestHandler {
         if (!this._pendingKeyRequests[userId][deviceId]) {
             this._pendingKeyRequests[userId][deviceId] = [];
         }
-        this._pendingKeyRequests[userId][deviceId].push(keyRequest);
 
-        if (this._isDialogOpen) {
+        // check if we already have this request
+        const requests = this._pendingKeyRequests[userId][deviceId];
+        if (requests.find((r) => r.requestId === requestId)) {
+            console.log("Already have this key request, ignoring");
+            return;
+        }
+
+        requests.push(keyRequest);
+
+        if (this._currentUser) {
             // ignore for now
             console.log("Key request, but we already have a dialog open");
             return;
         }
 
         this._processNextRequest();
+    }
+
+    handleKeyRequestCancellation(cancellation) {
+        // see if we can find the request in the queue
+        const userId = cancellation.userId;
+        const deviceId = cancellation.deviceId;
+        const requestId = cancellation.requestId;
+
+        if (userId === this._currentUser && deviceId === this._currentDevice) {
+            console.log(
+                "room key request cancellation for the user we currently have a"
+                + " dialog open for",
+            );
+            // TODO: update the dialog. For now, we just ignore the
+            // cancellation.
+            return;
+        }
+
+        if (!this._pendingKeyRequests[userId]) {
+            return;
+        }
+        const requests = this._pendingKeyRequests[userId][deviceId];
+        if (!requests) {
+            return;
+        }
+        const idx = requests.findIndex((r) => r.requestId === requestId);
+        if (idx < 0) {
+            return;
+        }
+        console.log("Forgetting room key request");
+        requests.splice(idx, 1);
     }
 
     _processNextRequest() {
@@ -61,7 +102,8 @@ export default class KeyRequestHandler {
         console.log(`Starting KeyShareDialog for ${userId}:${deviceId}`);
 
         const finished = (r) => {
-            this._isDialogOpen = false;
+            this._currentUser = null;
+            this._currentDevice = null;
 
             if (r) {
                 for (const req of this._pendingKeyRequests[userId][deviceId]) {
@@ -83,7 +125,8 @@ export default class KeyRequestHandler {
             deviceId: deviceId,
             onFinished: finished,
         });
-        this._isDialogOpen = true;
+        this._currentUser = userId;
+        this._currentDevice = deviceId;
     }
 }
 
