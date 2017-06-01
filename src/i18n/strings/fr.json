@@ -311,6 +311,7 @@
     "Invalid Email Address": "Adresse e-mail invalide",
     "%(senderName)s invited %(targetName)s.": "%(senderName)s a invité %(targetName)s.",
     "Invite new room members": "Inviter de nouveaux membres",
+    "Invited": "Invités",
     "Invites": "Invitations",
     "Invites user with given id to current room": "Inviter l’utilisateur avec un ID donné dans le salon actuel",
     "is a": "est un",

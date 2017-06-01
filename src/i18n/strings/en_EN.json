@@ -305,6 +305,7 @@
   "Invalid file%(extra)s": "Invalid file%(extra)s",
   "%(senderName)s invited %(targetName)s.": "%(senderName)s invited %(targetName)s.",
   "Invite new room members": "Invite new room members",
+  "Invited": "Invited",
   "Invites": "Invites",
   "Invites user with given id to current room": "Invites user with given id to current room",
   "is a": "is a",
