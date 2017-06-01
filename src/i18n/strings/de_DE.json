@@ -822,5 +822,13 @@
     "Start automatically after system login": "Starte automatisch nach System-Login",
     "Desktop specific": "Desktopspezifisch",
     "Jump to first unread message.": "Springe zur ersten ungelesenen Nachricht.",
-    "Options": "Optionen"
+    "Options": "Optionen",
+    "disabled": "deaktiviert",
+    "enabled": "aktiviert",
+    "Invited": "Eingeladen",
+    "Set a Display Name": "Setze einen Anzeigenamen",
+    "for %(amount)ss": "für %(amount)ss",
+    "for %(amount)sm": "für %(amount)sm",
+    "for %(amount)sh": "für %(amount)sh",
+    "for %(amount)sd": "für %(amount)sd"
 }
