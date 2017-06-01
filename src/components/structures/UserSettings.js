@@ -952,21 +952,24 @@ module.exports = React.createClass({
         let webcamDropdown = <p>{_t('No Webcams detected')}</p>;
 
         const defaultOption = {
-            deviceId: 'default',
+            deviceId: undefined,
             label: _t('Default Device'),
         };
 
         const audioInputs = this.state.mediaDevices.audioinput.slice(0);
         if (audioInputs.length > 0) {
+            let defaultInput;
             if (!audioInputs.some((input) => input.deviceId === 'default')) {
                 audioInputs.unshift(defaultOption);
+            } else {
+                defaultInput = 'default';
             }
 
             microphoneDropdown = <div>
-                <h4>{_t('Microphone')}</h4>
+                <h4>Microphone</h4>
                 <Dropdown
                     className="mx_UserSettings_webRtcDevices_dropdown"
-                    value={this.state.activeAudioInput || 'default'}
+                    value={this.state.activeAudioInput || defaultInput}
                     onOptionChange={this._setAudioInput}>
                     {this._mapWebRtcDevicesToSpans(audioInputs)}
                 </Dropdown>
@@ -975,15 +978,18 @@ module.exports = React.createClass({
 
         const videoInputs = this.state.mediaDevices.videoinput.slice(0);
         if (videoInputs.length > 0) {
+            let defaultInput;
             if (!videoInputs.some((input) => input.deviceId === 'default')) {
                 videoInputs.unshift(defaultOption);
+            } else {
+                defaultInput = 'default';
             }
 
             webcamDropdown = <div>
-                <h4>{_t('Camera')}</h4>
+                <h4>Cameras</h4>
                 <Dropdown
                     className="mx_UserSettings_webRtcDevices_dropdown"
-                    value={this.state.activeVideoInput || 'default'}
+                    value={this.state.activeVideoInput || defaultInput}
                     onOptionChange={this._setVideoInput}>
                     {this._mapWebRtcDevicesToSpans(videoInputs)}
                 </Dropdown>
