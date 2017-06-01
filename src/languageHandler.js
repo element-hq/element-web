@@ -130,7 +130,9 @@ export function setLanguage(preferredLangs) {
             }
         }
         if (!langToUse) {
-            throw new Error("Unable to find an appropriate language");
+            // Fallback to en_EN if none is found
+            langToUse = 'en'
+            console.error("Unable to find an appropriate language");
         }
 
         return getLanguage(i18nFolder + availLangs[langToUse].fileName);
