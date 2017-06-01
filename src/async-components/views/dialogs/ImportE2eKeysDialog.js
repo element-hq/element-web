@@ -168,7 +168,7 @@ export default React.createClass({
                             disabled={!this.state.enableSubmit || disableForm}
                         />
                         <button onClick={this._onCancelClick} disabled={disableForm}>
-                            Cancel
+                            {_t("Cancel")}
                         </button>
                     </div>
                 </form>
