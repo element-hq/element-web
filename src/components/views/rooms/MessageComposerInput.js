@@ -33,7 +33,6 @@ import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 import dis from '../../../dispatcher';
-import KeyCode from '../../../KeyCode';
 import UserSettingsStore from '../../../UserSettingsStore';
 
 import * as RichText from '../../../RichText';

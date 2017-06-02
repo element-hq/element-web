@@ -18,7 +18,6 @@ limitations under the License.
 import request from 'browser-request';
 import counterpart from 'counterpart';
 import q from 'q';
-import sanitizeHtml from "sanitize-html";
 
 import UserSettingsStore from './UserSettingsStore';
 

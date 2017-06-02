@@ -17,7 +17,6 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import q from 'q';
 import { _t } from '../../languageHandler';
 import sdk from '../../index';
 import MatrixClientPeg from '../../MatrixClientPeg';
