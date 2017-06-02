@@ -28,6 +28,7 @@ import Q from 'q';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
 import SlashCommands from '../../../SlashCommands';
+import KeyCode from '../../../KeyCode';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -44,8 +45,6 @@ import {onSendMessageFailed} from './MessageComposerInputOld';
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
-const KEY_M = 77;
-
 const ZWS_CODE = 8203;
 const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
 function stateToMarkdown(state) {
@@ -61,7 +60,7 @@ function stateToMarkdown(state) {
 export default class MessageComposerInput extends React.Component {
     static getKeyBinding(e: SyntheticKeyboardEvent): string {
         // C-m => Toggles between rich text and markdown modes
-        if (e.keyCode === KEY_M && KeyBindingUtil.isCtrlKeyCommand(e)) {
+        if (e.keyCode === KeyCode.KEY_M && KeyBindingUtil.isCtrlKeyCommand(e)) {
             return 'toggle-mode';
         }
 
