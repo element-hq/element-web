@@ -684,8 +684,13 @@ module.exports = React.createClass({
 
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
         Modal.createDialog(QuestionDialog, {
-            title: "Leave room",
-            description: <span>Are you sure you want to leave the room <i>{roomToLeave.name}</i>?</span>,
+            title: _t("Leave room"),
+            description: (
+                <span>
+                {_t("Are you sure you want to leave the room ")}
+                <i>{roomToLeave.name}</i>?
+                </span>
+            ),
             onFinished: (shouldLeave) => {
                 if (shouldLeave) {
                     const d = MatrixClientPeg.get().leave(roomId);
