@@ -121,7 +121,7 @@ module.exports = React.createClass({
         }
     },
 
-    _doSubmit: function() {
+    _doSubmit: function(ev) {
         let email = this.refs.email.value.trim();
         var promise = this.props.onRegisterClick({
             username: this.refs.username.value.trim() || this.props.guestUsername,
