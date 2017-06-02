@@ -847,5 +847,13 @@
     "for %(amount)sd": "por %(amount)sd",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s removeu a imagem da sala.",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s alterou a imagem da sala %(roomName)s",
-    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName alterou a imagem da sala para <img/>"
+    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName alterou a imagem da sala para <img/>",
+    "Missing Media Permissions, click here to request.": "Faltam permissões para uso de mídia no seu computador. Clique aqui para solicitá-las.",
+    "No Microphones detected": "Não foi detectado nenhum microfone",
+    "No Webcams detected": "Não foi detectada nenhuma Webcam",
+    "No media permissions": "Não há permissões de uso de vídeo/áudio no seu navegador",
+    "You may need to manually permit Riot to access your microphone/webcam": "Você talvez precise autorizar manualmente que o Riot acesse seu microfone e webcam",
+    "Default Device": "Dispositivo padrão",
+    "Microphone": "Microfone",
+    "Camera": "Câmera de vídeo"
 }
