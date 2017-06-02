@@ -1,3 +1,9 @@
+Changes in [0.10.1](https://github.com/vector-im/riot-web/releases/tag/v0.10.1) (2017-06-02)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.0...v0.10.1)
+
+ * Update to matrix-react-sdk 0.9.1 to fix i18n error which broke start chat in some circumstances
+
 Changes in [0.10.0](https://github.com/vector-im/riot-web/releases/tag/v0.10.0) (2017-06-02)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.0-rc.2...v0.10.0)
