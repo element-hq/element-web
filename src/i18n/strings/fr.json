@@ -797,5 +797,14 @@
     "Use compact timeline layout": "Utiliser l'affichage compact",
     "Verified key": "Clé vérifiée",
     "WARNING: Device already verified, but keys do NOT MATCH!": "ATTENTION : Appareil déjà vérifié mais les clés NE CORRESPONDENT PAS !",
-    "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and device %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ATTENTION : ERREUR DE VÉRIFICATION DES CLÉS ! La clé de signature pour %(userId)s et l'appareil %(deviceId)s est “%(fprint)s” et ne correspond pas à la clé “%(fingerprint)s” qui a été fournie. Cela peut signifier que vos communications sont interceptées !"
+    "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and device %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ATTENTION : ERREUR DE VÉRIFICATION DES CLÉS ! La clé de signature pour %(userId)s et l'appareil %(deviceId)s est “%(fprint)s” et ne correspond pas à la clé “%(fingerprint)s” qui a été fournie. Cela peut signifier que vos communications sont interceptées !",
+    "VoIP": "Voix sur IP",
+    "Missing Media Permissions, click here to request.": "Manque de permission pour les médias, cliquer ici pour les demander.",
+    "No Microphones detected": "Aucun micro détecté",
+    "No Webcams detected": "Aucune webcam détectée",
+    "No media permissions": "Pas de permission pour les médias",
+    "You may need to manually permit Riot to access your microphone/webcam": "Il est possible que vous deviez manuellement permettre à Riot d’accéder à votre micro/webcam",
+    "Default Device": "Appareil par défaut",
+    "Microphone": "Micro",
+    "Camera": "Caméra"
 }
