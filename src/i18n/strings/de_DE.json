@@ -414,7 +414,7 @@
     "da": "Dänisch",
     "ru": "Russisch",
     "Drop here %(toAction)s": "Hierher ziehen: %(toAction)s",
-    "Drop here to tag %(section)s": "Hierher ziehen:  %(section)s taggen",
+    "Drop here to tag %(section)s": "Hierher ziehen: %(section)s taggen",
     "Press": "Drücke",
     "tag as %(tagName)s": "als %(tagName)s taggen",
     "to browse the directory": "um das Raum-Verzeichnis zu durchsuchen",
