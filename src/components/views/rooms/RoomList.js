@@ -510,26 +510,26 @@ module.exports = React.createClass({
         const StartChatButton = sdk.getComponent('elements.StartChatButton');
         const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
         const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
-        if (this.state.totalRoomCount === 0) {
-            const TintableSvg = sdk.getComponent('elements.TintableSvg');
-            switch (section) {
-                case 'im.vector.fake.direct':
-                    return <div className="mx_RoomList_emptySubListTip">
-                        Press
-                        <StartChatButton size="16" callout={true}/>
-                        to start a chat with someone
-                    </div>;
-                case 'im.vector.fake.recent':
-                    return <div className="mx_RoomList_emptySubListTip">
-                        You're not in any rooms yet! Press
-                        <CreateRoomButton size="16" callout={true}/>
-                        to make a room or
-                        <RoomDirectoryButton size="16" callout={true}/>
-                        to browse the directory
-                    </div>;
-            }
+
+        const TintableSvg = sdk.getComponent('elements.TintableSvg');
+        switch (section) {
+            case 'im.vector.fake.direct':
+                return <div className="mx_RoomList_emptySubListTip">
+                    Press
+                    <StartChatButton size="16" callout={true}/>
+                    to start a chat with someone
+                </div>;
+            case 'im.vector.fake.recent':
+                return <div className="mx_RoomList_emptySubListTip">
+                    You're not in any rooms yet! Press
+                    <CreateRoomButton size="16" callout={true}/>
+                    to make a room or
+                    <RoomDirectoryButton size="16" callout={true}/>
+                    to browse the directory
+                </div>;
         }
 
+        // We don't want to display drop targets if there are no room tiles to drag'n'drop
         if (this.state.totalRoomCount === 0) {
             return null;
         }
