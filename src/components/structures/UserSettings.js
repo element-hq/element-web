@@ -777,6 +777,8 @@ module.exports = React.createClass({
     },
 
     _renderAnalyticsControl: function() {
+        if (!SdkConfig.get().piwik) return <div/>;
+
         return <div>
             <h3>{ _t('Analytics') }</h3>
             <div className="mx_UserSettings_section">
