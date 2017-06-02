@@ -738,7 +738,7 @@
     "You must join the room to see its files": "Du musst dem Raum beitreten, um die Raum-Dateien sehen zu können",
     "Server may be unavailable, overloaded, or you hit a bug.": "Server ist nicht verfügbar, überlastet oder du bist auf einen Fehler gestoßen.",
     "Reject all %(invitedRooms)s invites": "Alle %(invitedRooms)s Einladungen ablehnen",
-    "Start new Chat": "Starte neuen Chat",
+    "Start new chat": "Starte neuen Chat",
     "Guest users can't invite users. Please register.": "Gäste können keine Nutzer einladen. Bitte registrieren.",
     "Failed to invite": "Einladen fehlgeschlagen",
     "Failed to invite user": "Einladen des Nutzers fehlgeschlagen",

@@ -694,7 +694,7 @@
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Le fichier exporté est protégé par une phrase secrète. Vous devez entrer cette phrase secrète ici pour décrypter le fichier.",
     "You must join the room to see its files": "Vous devez joindre le salon pour voir ses fichiers",
     "Reject all %(invitedRooms)s invites": "Rejeter la totalité des %(invitedRooms)s invitations",
-    "Start new Chat": "Démarrer une nouvelle conversation",
+    "Start new chat": "Démarrer une nouvelle conversation",
     "Guest users can't invite users. Please register.": "Les visiteurs ne peuvent inviter d’autres utilisateurs. Merci de vous enregistrer.",
     "Failed to invite": "Echec de l'invitation",
     "Failed to invite user": "Echec lors de l'invitation de l'utilisateur",
