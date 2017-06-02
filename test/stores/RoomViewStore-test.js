@@ -45,12 +45,15 @@ describe('RoomViewStore', function() {
             done();
         };
 
-        dispatch({ action: 'view_room', room_alias: '#somealias2:aser.ver' });
+        RoomViewStore.addListener(() => {
+            // Wait until the room alias has resolved and the room ID is
+            if (!RoomViewStore.isRoomLoading()) {
+                expect(RoomViewStore.getRoomId()).toBe("!randomcharacters:aser.ver");
+                dispatch({ action: 'join_room' });
+                expect(RoomViewStore.isJoining()).toBe(true);
+            }
+        });
 
-        // Wait for the next event loop to allow for room alias resolution
-        setTimeout(() => {
-            dispatch({ action: 'join_room' });
-            expect(RoomViewStore.isJoining()).toBe(true);
-        }, 0);
+        dispatch({ action: 'view_room', room_alias: '#somealias2:aser.ver' });
     });
 });

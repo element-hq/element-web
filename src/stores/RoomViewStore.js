@@ -58,6 +58,9 @@ class RoomViewStore extends Store {
             case 'view_room':
                 this._viewRoom(payload);
                 break;
+            case 'view_room_error':
+                this._viewRoomError(payload);
+                break;
             case 'will_join':
                 this._setState({
                     joining: true,
@@ -80,31 +83,45 @@ class RoomViewStore extends Store {
     }
 
     _viewRoom(payload) {
-        const address = payload.room_alias || payload.room_id;
-        if (address[0] == '#') {
+        // Always set the room ID if present
+        if (payload.room_id) {
             this._setState({
-                roomLoading: true,
+                roomId: payload.room_id,
+                roomLoading: false,
+                roomLoadError: null,
             });
-            MatrixClientPeg.get().getRoomIdForAlias(address).then(
+        } else if (payload.room_alias) {
+            this._setState({
+                roomId: null,
+                roomAlias: payload.room_alias,
+                roomLoading: true,
+                roomLoadError: null,
+            });
+            MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias).done(
             (result) => {
-                this._setState({
-                    roomId: result.room_id,
-                    roomAlias: address,
-                    roomLoading: false,
-                    roomLoadError: null,
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: result.room_id,
+                    room_alias: payload.room_alias,
                 });
             }, (err) => {
-                console.error(err);
-                this._setState({
-                    roomLoading: false,
-                    roomLoadError: err,
+                dis.dispatch({
+                    action: 'view_room_error',
+                    room_id: null,
+                    room_alias: payload.room_alias,
+                    err: err,
                 });
             });
-        } else {
-            this._setState({
-                roomId: address,
-            });
         }
+    }
+
+    _viewRoomError(payload) {
+        this._setState({
+            roomId: payload.room_id,
+            roomAlias: payload.room_alias,
+            roomLoading: false,
+            roomLoadError: payload.err,
+        });
     }
 
     _joinRoom(payload) {
@@ -138,6 +155,10 @@ class RoomViewStore extends Store {
 
     isRoomLoading() {
         return this._state.roomLoading;
+    }
+
+    getRoomLoadError() {
+        return this._state.roomLoadError;
     }
 
     isJoining() {
