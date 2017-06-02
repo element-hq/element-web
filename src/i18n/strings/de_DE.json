@@ -834,5 +834,6 @@
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s entfernte Raum-Bild.",
     "VoIP": "VoIP",
     "No Webcams detected": "Keine",
-    "Missing Media Permissions, click here to request.": "Fehlende Medienberechtigungen. klicke hier um anzufragen."
+    "Missing Media Permissions, click here to request.": "Fehlende Medienberechtigungen. klicke hier um anzufragen.",
+    "No Microphones detected": "Keine Mikrophone erkannt"
 }
