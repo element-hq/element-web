@@ -157,7 +157,7 @@ module.exports = React.createClass({
         var eventRedact;
         if(showEventMeta) {
             eventRedact = (<div className="mx_ImageView_button" onClick={this.onRedactClick}>
-                Redact
+                Delete
             </div>);
         }
 
