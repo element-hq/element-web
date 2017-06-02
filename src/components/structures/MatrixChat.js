@@ -687,8 +687,7 @@ module.exports = React.createClass({
             title: _t("Leave room"),
             description: (
                 <span>
-                {_t("Are you sure you want to leave the room ")}
-                <i>{roomToLeave.name}</i>?
+                {_t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name})}
                 </span>
             ),
             onFinished: (shouldLeave) => {

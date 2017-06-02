@@ -165,7 +165,7 @@
   "Anyone who knows the room's link, apart from guests": "Anyone who knows the room's link, apart from guests",
   "Anyone who knows the room's link, including guests": "Anyone who knows the room's link, including guests",
   "Are you sure?": "Are you sure?",
-  "Are you sure you want to leave the room ": "Are you sure you want to leave the room ",
+  "Are you sure you want to leave the room '%(roomName)s'?": "Are you sure you want to leave the room '%(roomName)s'?",
   "Are you sure you want to reject the invitation?": "Are you sure you want to reject the invitation?",
   "Are you sure you want to upload the following files?": "Are you sure you want to upload the following files?",
   "Attachment": "Attachment",
