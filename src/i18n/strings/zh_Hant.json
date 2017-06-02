@@ -1,1 +1,10 @@
-{}
+{
+    "Direct Chat": "私聊",
+    "Drop here %(toAction)s": "拖拽到這里 %(toAction)s",
+    "Error": "錯誤",
+    "Failed to forget room %(errCode)s": "無法忘記聊天室 %(errCode)s",
+    "Failed to join the room": "無法加入此聊天室",
+    "Favourite": "收藏",
+    "Search": "搜索",
+    "Settings": "設置"
+}
