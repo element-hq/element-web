@@ -9,9 +9,14 @@ node_js:
     #  - 7.x is the current 'current' version (until October 2017)
     #
     # see: https://github.com/nodejs/LTS/
-    - 6.0
+    #
+    # anything before 6.3 ships with npm 3.9 or earlier, which had problems
+    # with symlinks in node_modules (see
+    # https://github.com/npm/npm/releases/tag/v3.10.0 'FIXES AND REFACTORING').
+    - 6.3
     - 6
     - 7
 install:
-    - scripts/fetch-develop.deps.sh
-    - npm install
+    # clone the deps with depth 1: we know we will only ever need that one
+    # commit.
+    - scripts/fetch-develop.deps.sh --depth 1 && npm install

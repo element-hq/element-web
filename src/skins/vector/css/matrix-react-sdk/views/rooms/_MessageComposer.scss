@@ -200,3 +200,13 @@ limitations under the License.
     padding: 4px 4px 4px 0;
     opacity: 0.8;
 }
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_MessageComposer_input {
+        min-height: 50px;
+    }
+
+    .mx_MessageComposer_noperm_error {
+        height: 50px;
+    }
+}
