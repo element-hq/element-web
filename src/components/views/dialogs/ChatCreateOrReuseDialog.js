@@ -38,6 +38,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
                 displayName: null,
                 avatarUrl: null,
             },
+            profileError: null,
         };
     }
 
@@ -79,7 +80,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
             this.setState({
                 busyProfile: true,
             });
-            MatrixClientPeg.get().getProfileInfo(this.props.userId).then((resp) => {
+            MatrixClientPeg.get().getProfileInfo(this.props.userId).done((resp) => {
                 const profile = {
                     displayName: resp.displayname,
                     avatarUrl: null,
@@ -90,13 +91,17 @@ export default class ChatCreateOrReuseDialog extends React.Component {
                     );
                 }
                 this.setState({
+                    busyProfile: false,
                     profile: profile,
                 });
             }, (err) => {
-                console.error('Unable to get profile for user', this.props.userId, err);
-            }).finally(() => {
+                console.error(
+                    'Unable to get profile for user ' + this.props.userId + ':',
+                    err,
+                );
                 this.setState({
                     busyProfile: false,
+                    profileError: err,
                 });
             });
         }
@@ -141,6 +146,10 @@ export default class ChatCreateOrReuseDialog extends React.Component {
             let profile = null;
             if (this.state.busyProfile) {
                 profile = <Spinner />;
+            } else if (this.state.profileError) {
+                profile = <div className="error">
+                    Unable to load profile information for { this.props.userId }
+                </div>;
             } else {
                 profile = <div className="mx_ChatCreateOrReuseDialog_profile">
                     <BaseAvatar
