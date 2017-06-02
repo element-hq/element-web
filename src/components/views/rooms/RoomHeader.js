@@ -188,7 +188,11 @@ module.exports = React.createClass({
                 'm.room.name', user_id
             );
 
-            save_button = <AccessibleButton className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>Save</AccessibleButton>;
+            save_button = (
+                <AccessibleButton className="mx_RoomHeader_textButton" onClick={this.props.onSaveClick}>
+                    {_t("Save")}
+                </AccessibleButton>
+            );
         }
 
         if (this.props.onCancelClick) {
