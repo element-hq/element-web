@@ -45,7 +45,7 @@ function createRoom(opts) {
         setTimeout(()=>{
             Modal.createDialog(NeedToRegisterDialog, {
                 title: _t('Please Register'),
-                description: _t('Guest users can\'t create new rooms. Please register to create room and start a chat') + '.'
+                description: _t('Guest users can\'t create new rooms. Please register to create room and start a chat.')
             });
         }, 0);
         return q(null);
@@ -106,7 +106,7 @@ function createRoom(opts) {
         console.error("Failed to create room " + roomId + " " + err);
         Modal.createDialog(ErrorDialog, {
             title: _t("Failure to create room"),
-            description: _t("Server may be unavailable, overloaded, or you hit a bug") + ".",
+            description: _t("Server may be unavailable, overloaded, or you hit a bug."),
         });
         return null;
     });

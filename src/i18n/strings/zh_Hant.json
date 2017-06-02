@@ -1,6 +1,6 @@
 {
     "An email has been sent to": "電郵已經發送至",
-    "A new password must be entered.": "必須輸入新密碼。",
+    "A new password must be entered.": "必須輸入新密碼。.",
     "anyone": "任何人",
     "An error has occurred.": "發生了一個錯誤。",
     "Anyone who knows the room's link, apart from guests": "任何知道房間連結的人，但訪客除外",
@@ -10,7 +10,7 @@
     "Are you sure you want to upload the following files?": "您確認要上傳以下文件嗎？",
     "Attachment": "附件",
     "Autoplay GIFs and videos": "自動播放GIF和影片",
-    "%(senderName)s banned %(targetName)s.": "%(senderName)s 封禁了 %(targetName)s。",
+    "%(senderName)s banned %(targetName)s.": "%(senderName)s 封禁了 %(targetName)s。.",
     "Ban": "封禁",
     "Banned users": "已被封禁的使用者",
     "Blacklisted": "已列入黑名單",
@@ -20,5 +20,5 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "當瀏覽器網址列里有 HTTPS URL 時，不能使用 HTTP 連結主伺服器。請採用 HTTPS 或者 <a>允許不安全的腳本</a>",
     "Can't load user settings": "無法載入使用者設定",
     "Change Password": "變更密碼",
-    "%(targetName)s left the room.": "%(targetName)s 離開了聊天室。"
+    "%(targetName)s left the room.": "%(targetName)s 離開了聊天室。."
 }

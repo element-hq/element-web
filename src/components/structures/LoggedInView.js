@@ -18,9 +18,11 @@ limitations under the License.
 import * as Matrix from 'matrix-js-sdk';
 import React from 'react';
 
+import UserSettingsStore from '../../UserSettingsStore';
 import KeyCode from '../../KeyCode';
 import Notifier from '../../Notifier';
 import PageTypes from '../../PageTypes';
+import CallMediaHandler from '../../CallMediaHandler';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 
@@ -63,6 +65,13 @@ export default React.createClass({
         };
     },
 
+    getInitialState: function() {
+        return {
+            // use compact timeline view
+            useCompactLayout: UserSettingsStore.getSyncedSetting('useCompactLayout'),
+        };
+    },
+
     componentWillMount: function() {
         // stash the MatrixClient in case we log out before we are unmounted
         this._matrixClient = this.props.matrixClient;
@@ -71,11 +80,15 @@ export default React.createClass({
         // RoomView.getScrollState()
         this._scrollStateMap = {};
 
+        CallMediaHandler.loadDevices();
+
         document.addEventListener('keydown', this._onKeyDown);
+        this._matrixClient.on("accountData", this.onAccountData);
     },
 
     componentWillUnmount: function() {
         document.removeEventListener('keydown', this._onKeyDown);
+        this._matrixClient.removeListener("accountData", this.onAccountData);
     },
 
     getScrollStateForRoom: function(roomId) {
@@ -87,6 +100,14 @@ export default React.createClass({
             return true;
         }
         return this.refs.roomView.canResetTimeline();
+    },
+
+    onAccountData: function(event) {
+        if (event.getType() === "im.vector.web.settings") {
+            this.setState({
+                useCompactLayout: event.getContent().useCompactLayout
+            });
+        }
     },
 
     _onKeyDown: function(ev) {
@@ -244,6 +265,9 @@ export default React.createClass({
         var bodyClasses = 'mx_MatrixChat';
         if (topBar) {
             bodyClasses += ' mx_MatrixChat_toolbarShowing';
+        }
+        if (this.state.useCompactLayout) {
+            bodyClasses += ' mx_MatrixChat_useCompactLayout';
         }
 
         return (
