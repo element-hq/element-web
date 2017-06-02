@@ -140,12 +140,10 @@ class RoomViewStore extends Store {
         MatrixClientPeg.get().joinRoom(this._state.roomId, payload.opts).done(() => {
             dis.dispatch({
                 action: 'joined_room',
-                room_id: this._state.roomId,
             });
         }, (err) => {
             dis.dispatch({
                 action: 'join_room_error',
-                room_id: this._state.roomId,
                 err: err,
             });
             const msg = err.message ? err.message : JSON.stringify(err);
