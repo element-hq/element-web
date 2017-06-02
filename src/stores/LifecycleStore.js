@@ -41,6 +41,7 @@ class LifecycleStore extends Store {
     __onDispatch(payload) {
         switch (payload.action) {
             case 'do_after_sync_prepared':
+                console.info('Will do after sync', payload.deferred_action);
                 this._setState({
                     deferred_action: payload.deferred_action,
                 });
@@ -49,6 +50,7 @@ class LifecycleStore extends Store {
                 if (payload.state !== 'PREPARED') {
                     break;
                 }
+                console.info('Doing', payload.deferred_action);
                 if (!this._state.deferred_action) break;
                 const deferredAction = Object.assign({}, this._state.deferred_action);
                 this._setState({

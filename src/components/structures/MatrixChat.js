@@ -378,6 +378,11 @@ module.exports = React.createClass({
                 });
                 this.notifyNewScreen('forgot_password');
                 break;
+            case 'start_chat':
+                createRoom({
+                    dmUserId: payload.user_id,
+                });
+                break;
             case 'leave_room':
                 this._leaveRoom(payload.room_id);
                 break;
@@ -473,6 +478,9 @@ module.exports = React.createClass({
                 break;
             case 'view_set_mxid':
                 this._setMxId();
+                break;
+            case 'view_start_chat_or_reuse':
+                this._chatCreateOrReuse(payload.user_id);
                 break;
             case 'view_create_chat':
                 this._createChat();
@@ -705,6 +713,51 @@ module.exports = React.createClass({
             placeholder: _t("Email, name or matrix ID"),
             button: _t("Start Chat")
         });
+    },
+
+    _chatCreateOrReuse: function(userId) {
+        const ChatCreateOrReuseDialog = sdk.getComponent(
+            'views.dialogs.ChatCreateOrReuseDialog',
+        );
+        // Use a deferred action to reshow the dialog once the user has registered
+        if (MatrixClientPeg.get().isGuest()) {
+            dis.dispatch({
+                action: 'do_after_sync_prepared',
+                deferred_action: {
+                    action: 'view_start_chat_or_reuse',
+                    user_id: userId,
+                },
+            });
+            dis.dispatch({
+                action: 'view_set_mxid',
+            });
+            return;
+        }
+
+        const close = Modal.createDialog(ChatCreateOrReuseDialog, {
+            userId: userId,
+            onFinished: (success) => {
+                if (!success) {
+                    // Dialog cancelled, default to home
+                    dis.dispatch({ action: 'view_home_page' });
+                }
+            },
+            onNewDMClick: () => {
+                dis.dispatch({
+                    action: 'start_chat',
+                    user_id: userId,
+                });
+                // Close the dialog, indicate success (calls onFinished(true))
+                close(true);
+            },
+            onExistingRoomSelected: (roomId) => {
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: roomId,
+                });
+                close(true);
+            },
+        }).close;
     },
 
     _invite: function(roomId) {
@@ -1043,6 +1096,12 @@ module.exports = React.createClass({
             }
         } else if (screen.indexOf('user/') == 0) {
             const userId = screen.substring(5);
+
+            if (params.action === 'chat') {
+                this._chatCreateOrReuse(userId);
+                return;
+            }
+
             this.setState({ viewUserId: userId });
             this._setPage(PageTypes.UserView);
             this.notifyNewScreen('user/' + userId);
