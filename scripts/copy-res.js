@@ -17,6 +17,7 @@ const INCLUDE_LANGS = [
     {'value': 'pt', 'label': 'Português'},
     {'value': 'pt_BR', 'label': 'Português do Brasil'},
     {'value': 'ru', 'label': 'Русский'},
+    {'value': 'sv', 'label': 'Svenska'},
     {'value': 'es', 'label': 'Español'},
     {'value': 'zh_Hans', 'label': '中文'}
 ];
