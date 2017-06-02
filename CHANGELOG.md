@@ -1,3 +1,10 @@
+Changes in [0.10.0](https://github.com/vector-im/riot-web/releases/tag/v0.10.0) (2017-06-02)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.0-rc.2...v0.10.0)
+
+ * Update from Weblate.
+   [\#4152](https://github.com/vector-im/riot-web/pull/4152)
+
 Changes in [0.10.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.10.0-rc.2) (2017-06-02)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.0-rc.1...v0.10.0-rc.2)
