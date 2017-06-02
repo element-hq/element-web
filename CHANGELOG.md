@@ -1,3 +1,40 @@
+Changes in [0.9.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.0-rc.2) (2017-06-02)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.0-rc.1...v0.9.0-rc.2)
+
+ * Update from Weblate.
+   [\#1002](https://github.com/matrix-org/matrix-react-sdk/pull/1002)
+ * webrtc config electron
+   [\#850](https://github.com/matrix-org/matrix-react-sdk/pull/850)
+ * enable useCompactLayout user setting an add a class when it's enabled
+   [\#986](https://github.com/matrix-org/matrix-react-sdk/pull/986)
+ * Update from Weblate.
+   [\#987](https://github.com/matrix-org/matrix-react-sdk/pull/987)
+ * Translation fixes for everything but src/components
+   [\#990](https://github.com/matrix-org/matrix-react-sdk/pull/990)
+ * Fix tests
+   [\#1001](https://github.com/matrix-org/matrix-react-sdk/pull/1001)
+ * Fix tests for PR #989
+   [\#999](https://github.com/matrix-org/matrix-react-sdk/pull/999)
+ * Revert "Revert "add labels to language picker""
+   [\#1000](https://github.com/matrix-org/matrix-react-sdk/pull/1000)
+ * maybe fixxy [Electron] external thing?
+   [\#997](https://github.com/matrix-org/matrix-react-sdk/pull/997)
+ * travisci: Don't run the riot-web tests if the react-sdk tests fail
+   [\#992](https://github.com/matrix-org/matrix-react-sdk/pull/992)
+ * Support 12hr time on DateSeparator
+   [\#991](https://github.com/matrix-org/matrix-react-sdk/pull/991)
+ * Revert "add labels to language picker"
+   [\#994](https://github.com/matrix-org/matrix-react-sdk/pull/994)
+ * Call MatrixClient.clearStores on logout
+   [\#983](https://github.com/matrix-org/matrix-react-sdk/pull/983)
+ * Matthew/room avatar event
+   [\#988](https://github.com/matrix-org/matrix-react-sdk/pull/988)
+ * add labels to language picker
+   [\#989](https://github.com/matrix-org/matrix-react-sdk/pull/989)
+ * Update from Weblate.
+   [\#981](https://github.com/matrix-org/matrix-react-sdk/pull/981)
+
 Changes in [0.9.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.0-rc.1) (2017-06-01)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.9...v0.9.0-rc.1)
