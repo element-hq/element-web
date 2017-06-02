@@ -806,5 +806,22 @@
     "You may need to manually permit Riot to access your microphone/webcam": "Il est possible que vous deviez manuellement permettre à Riot d’accéder à votre micro/webcam",
     "Default Device": "Appareil par défaut",
     "Microphone": "Micro",
-    "Camera": "Caméra"
+    "Camera": "Caméra",
+    "Add a topic": "Ajouter un sujet",
+    "Anyone": "N'importe qui",
+    "Are you sure you want to leave the room '%(roomName)s'?": "Êtes-vous sûr de vouloir quitter le salon '%(roomName)s' ?",
+    "Custom level": "Niveau personnalisé",
+    "(default: %(userName)s)": "(défaut : %(userName)s)",
+    "Device ID:": "Identifiant de l'appareil :",
+    "device id: ": "Identifiant appareil : ",
+    "Device key:": "Clé de l’appareil :",
+    "Email address (optional)": "Adresse e-mail (facultatif)",
+    "List this room in %(domain)s's room directory?": "Lister ce salon dans le répertoire de %(domain)s ?",
+    "Mobile phone number (optional)": "Numéro de téléphone (facultatif)",
+    "Password:": "Mot de passe :",
+    "Register": "S'inscrire",
+    "Remote addresses for this room:": "Supprimer l'adresse pour ce salon :",
+    "Save": "Enregistrer",
+    "Setting a user name will create a fresh account": "Définir un nouveau nom d’utilisateur va créer un nouveau compte",
+    "Tagged as: ": "Étiquetter comme : "
 }
