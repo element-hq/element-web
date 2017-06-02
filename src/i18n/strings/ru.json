@@ -94,7 +94,7 @@
     "Hangup": "Отключение",
     "Historical": "Исторический",
     "Homeserver is": "Домашний сервер является",
-    "Identity Server is": "Регистрационный Сервер является",
+    "Identity Server is": "Регистрационный сервер",
     "I have verified my email address": "Я проверил мой адрес электронной почты",
     "Import E2E room keys": "Импортировать E2E ключ комнаты",
     "Invalid Email Address": "Недействительный адрес электронной почты",
@@ -665,5 +665,10 @@
     "Unknown devices": "Незнакомое устройство",
     "Camera": "Камера",
     "Microphone": "Микрофон",
-    "Desktop specific": "Специфический десктоп"
+    "Desktop specific": "Специфический десктоп",
+    "Start automatically after system login": "Автостарт после входа в систему",
+    "Analytics": "Аналитика",
+    "Riot collects anonymous analytics to allow us to improve the application.": "Riot собирет анонимные данные, чтобы улутшыть эту програму.",
+    "Opt out of analytics": "Подтвердить отказ передачи аналитических данных",
+    "Logged in as:": "Зарегестрирован как:"
 }
