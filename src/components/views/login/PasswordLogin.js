@@ -150,7 +150,7 @@ class PasswordLogin extends React.Component {
                         type="text"
                         name="phoneNumber"
                         onChange={this.onPhoneNumberChanged}
-                        placeholder="Mobile phone number"
+                        placeholder={_t("Mobile phone number")}
                         value={this.state.phoneNumber}
                         autoFocus
                     />

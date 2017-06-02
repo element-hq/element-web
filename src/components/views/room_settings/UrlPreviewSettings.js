@@ -20,7 +20,7 @@ var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require("../../../index");
 var Modal = require("../../../Modal");
 var UserSettingsStore = require('../../../UserSettingsStore');
-import { _t } from '../../../languageHandler';
+import { _t, _tJsx } from '../../../languageHandler';
 
 
 module.exports = React.createClass({
@@ -131,12 +131,24 @@ module.exports = React.createClass({
                 </label>;
         }
 
+        let urlPreviewText = null;
+        if (UserSettingsStore.getUrlPreviewsDisabled()) {
+            urlPreviewText = (
+                _tJsx("You have <a>disabled</a> URL previews by default.", /<a>(.*?)<\/a>/, (sub)=><a href="#/settings">{sub}</a>)
+            );
+        }
+        else {
+            urlPreviewText = (
+                _tJsx("You have <a>enabled</a> URL previews by default.", /<a>(.*?)<\/a>/, (sub)=><a href="#/settings">{sub}</a>)
+            );
+        }
+
         return (
             <div className="mx_RoomSettings_toggles">
                 <h3>{_t("URL Previews")}</h3>
 
                 <label>
-                    You have <a href="#/settings">{ UserSettingsStore.getUrlPreviewsDisabled() ? 'disabled' : 'enabled' }</a> URL previews by default.
+                {urlPreviewText}
                 </label>
                 { disableRoomPreviewUrls }
                 <label>
