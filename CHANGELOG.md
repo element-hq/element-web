@@ -1,3 +1,34 @@
+Changes in [0.10.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.10.0-rc.2) (2017-06-02)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.0-rc.1...v0.10.0-rc.2)
+
+ * Update from Weblate.
+   [\#4150](https://github.com/vector-im/riot-web/pull/4150)
+ * styling for webrtc settings
+   [\#4019](https://github.com/vector-im/riot-web/pull/4019)
+ * Update from Weblate.
+   [\#4140](https://github.com/vector-im/riot-web/pull/4140)
+ * add styles for compact layout
+   [\#4132](https://github.com/vector-im/riot-web/pull/4132)
+ * Various tweaks to fetch-develop-deps
+   [\#4147](https://github.com/vector-im/riot-web/pull/4147)
+ * Don't try to build with node 6.0
+   [\#4145](https://github.com/vector-im/riot-web/pull/4145)
+ * Support 12hr time on DateSeparator
+   [\#4143](https://github.com/vector-im/riot-web/pull/4143)
+ * Update from Weblate.
+   [\#4137](https://github.com/vector-im/riot-web/pull/4137)
+ * Update from Weblate.
+   [\#4105](https://github.com/vector-im/riot-web/pull/4105)
+ * Update from Weblate.
+   [\#4094](https://github.com/vector-im/riot-web/pull/4094)
+ * Update from Weblate.
+   [\#4091](https://github.com/vector-im/riot-web/pull/4091)
+ * Update from Weblate.
+   [\#4089](https://github.com/vector-im/riot-web/pull/4089)
+ * Update from Weblate.
+   [\#4083](https://github.com/vector-im/riot-web/pull/4083)
+
 Changes in [0.10.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.10.0-rc.1) (2017-06-01)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.10...v0.10.0-rc.1)
