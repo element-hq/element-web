@@ -38,7 +38,7 @@ import PageTypes from '../../PageTypes';
 
 import createRoom from "../../createRoom";
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
-import { _t } from '../../languageHandler';
+import { _t, getCurrentLanguage } from '../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'MatrixChat',
@@ -795,7 +795,7 @@ module.exports = React.createClass({
             this._teamToken = teamToken;
             dis.dispatch({action: 'view_home_page'});
         } else if (this._is_registered) {
-            if (this.props.config.welcomeUserId) {
+            if (this.props.config.welcomeUserId && getCurrentLanguage().startsWith("en")) {
                 createRoom({dmUserId: this.props.config.welcomeUserId});
                 return;
             }
