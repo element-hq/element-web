@@ -158,20 +158,16 @@ class RoomViewStore extends Store {
     }
 
     _joinedRoom(payload) {
-        if (payload.room_id === this._state.roomId) {
-            this._setState({
-                joining: false,
-            });
-        }
+        this._setState({
+            joining: false,
+        });
     }
 
     _joinRoomError(payload) {
-        if (payload.room_id === this._state.roomId) {
-            this._setState({
-                joining: false,
-                joinError: payload.err,
-            });
-        }
+        this._setState({
+            joining: false,
+            joinError: payload.err,
+        });
     }
 
     reset() {
