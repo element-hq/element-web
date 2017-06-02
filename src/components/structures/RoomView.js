@@ -764,11 +764,13 @@ module.exports = React.createClass({
         // If the user is a ROU, allow them to transition to a PWLU
         if (cli && cli.isGuest()) {
             // Join this room once the user has registered and logged in
+            const signUrl = this.props.thirdPartyInvite ?
+                this.props.thirdPartyInvite.inviteSignUrl : undefined;
             dis.dispatch({
                 action: 'do_after_sync_prepared',
                 deferred_action: {
                     action: 'join_room',
-                    room_id: this.state.roomId,
+                    opts: { inviteSignUrl: signUrl },
                 },
             });
 
