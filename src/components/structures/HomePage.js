@@ -18,8 +18,6 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import sdk from 'matrix-react-sdk';
 
 module.exports = React.createClass({
     displayName: 'HomePage',
