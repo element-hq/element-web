@@ -182,7 +182,7 @@ class PasswordLogin extends React.Component {
             <div>
                 <form onSubmit={this.onSubmitForm}>
                 <div className="mx_Login_type_container">
-                    <label className="mx_Login_type_label">{ _t('I want to sign in with') }</label>
+                    <label className="mx_Login_type_label">{ _t('Sign in with') }</label>
                     <Dropdown
                         className="mx_Login_type_dropdown"
                         value={this.state.loginType}

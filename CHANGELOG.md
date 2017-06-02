@@ -1,3 +1,152 @@
+Changes in [0.9.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.0-rc.2) (2017-06-02)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.0-rc.1...v0.9.0-rc.2)
+
+ * Update from Weblate.
+   [\#1002](https://github.com/matrix-org/matrix-react-sdk/pull/1002)
+ * webrtc config electron
+   [\#850](https://github.com/matrix-org/matrix-react-sdk/pull/850)
+ * enable useCompactLayout user setting an add a class when it's enabled
+   [\#986](https://github.com/matrix-org/matrix-react-sdk/pull/986)
+ * Update from Weblate.
+   [\#987](https://github.com/matrix-org/matrix-react-sdk/pull/987)
+ * Translation fixes for everything but src/components
+   [\#990](https://github.com/matrix-org/matrix-react-sdk/pull/990)
+ * Fix tests
+   [\#1001](https://github.com/matrix-org/matrix-react-sdk/pull/1001)
+ * Fix tests for PR #989
+   [\#999](https://github.com/matrix-org/matrix-react-sdk/pull/999)
+ * Revert "Revert "add labels to language picker""
+   [\#1000](https://github.com/matrix-org/matrix-react-sdk/pull/1000)
+ * maybe fixxy [Electron] external thing?
+   [\#997](https://github.com/matrix-org/matrix-react-sdk/pull/997)
+ * travisci: Don't run the riot-web tests if the react-sdk tests fail
+   [\#992](https://github.com/matrix-org/matrix-react-sdk/pull/992)
+ * Support 12hr time on DateSeparator
+   [\#991](https://github.com/matrix-org/matrix-react-sdk/pull/991)
+ * Revert "add labels to language picker"
+   [\#994](https://github.com/matrix-org/matrix-react-sdk/pull/994)
+ * Call MatrixClient.clearStores on logout
+   [\#983](https://github.com/matrix-org/matrix-react-sdk/pull/983)
+ * Matthew/room avatar event
+   [\#988](https://github.com/matrix-org/matrix-react-sdk/pull/988)
+ * add labels to language picker
+   [\#989](https://github.com/matrix-org/matrix-react-sdk/pull/989)
+ * Update from Weblate.
+   [\#981](https://github.com/matrix-org/matrix-react-sdk/pull/981)
+
+Changes in [0.9.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.0-rc.1) (2017-06-01)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.9...v0.9.0-rc.1)
+
+ * Fix rare case where presence duration is undefined
+   [\#982](https://github.com/matrix-org/matrix-react-sdk/pull/982)
+ * add concept of platform handling loudNotifications (bings/pings/whatHaveYou)
+   [\#985](https://github.com/matrix-org/matrix-react-sdk/pull/985)
+ * Fixes to i18n code
+   [\#984](https://github.com/matrix-org/matrix-react-sdk/pull/984)
+ * Update from Weblate.
+   [\#978](https://github.com/matrix-org/matrix-react-sdk/pull/978)
+ * Add partial support for RTL languages
+   [\#955](https://github.com/matrix-org/matrix-react-sdk/pull/955)
+ * Added two strings to translate
+   [\#975](https://github.com/matrix-org/matrix-react-sdk/pull/975)
+ * Update from Weblate.
+   [\#976](https://github.com/matrix-org/matrix-react-sdk/pull/976)
+ * Update from Weblate.
+   [\#974](https://github.com/matrix-org/matrix-react-sdk/pull/974)
+ * Initial Electron Settings - for Auto Launch
+   [\#920](https://github.com/matrix-org/matrix-react-sdk/pull/920)
+ * Fix missing string in the room settings
+   [\#973](https://github.com/matrix-org/matrix-react-sdk/pull/973)
+ * fix error in i18n string
+   [\#972](https://github.com/matrix-org/matrix-react-sdk/pull/972)
+ * Update from Weblate.
+   [\#970](https://github.com/matrix-org/matrix-react-sdk/pull/970)
+ * Support 12hr time in full date
+   [\#971](https://github.com/matrix-org/matrix-react-sdk/pull/971)
+ * Add _tJsx()
+   [\#968](https://github.com/matrix-org/matrix-react-sdk/pull/968)
+ * Update from Weblate.
+   [\#966](https://github.com/matrix-org/matrix-react-sdk/pull/966)
+ * Remove space between time and AM/PM
+   [\#969](https://github.com/matrix-org/matrix-react-sdk/pull/969)
+ * Piwik Analytics
+   [\#948](https://github.com/matrix-org/matrix-react-sdk/pull/948)
+ * Update from Weblate.
+   [\#965](https://github.com/matrix-org/matrix-react-sdk/pull/965)
+ * Improve ChatInviteDialog perf by ditching fuse, using indexOf and
+   lastActiveTs()
+   [\#960](https://github.com/matrix-org/matrix-react-sdk/pull/960)
+ * Say "X removed the room name" instead of showing nothing
+   [\#958](https://github.com/matrix-org/matrix-react-sdk/pull/958)
+ * roomview/roomheader fixes
+   [\#959](https://github.com/matrix-org/matrix-react-sdk/pull/959)
+ * Update from Weblate.
+   [\#953](https://github.com/matrix-org/matrix-react-sdk/pull/953)
+ * fix i18n in a situation where navigator.languages=[]
+   [\#956](https://github.com/matrix-org/matrix-react-sdk/pull/956)
+ * `t_` -> `_t` fix typo
+   [\#957](https://github.com/matrix-org/matrix-react-sdk/pull/957)
+ * Change redact -> remove for clarity
+   [\#831](https://github.com/matrix-org/matrix-react-sdk/pull/831)
+ * Update from Weblate.
+   [\#950](https://github.com/matrix-org/matrix-react-sdk/pull/950)
+ * fix mis-linting - missed it in code review :(
+   [\#952](https://github.com/matrix-org/matrix-react-sdk/pull/952)
+ * i18n fixes
+   [\#951](https://github.com/matrix-org/matrix-react-sdk/pull/951)
+ * Message Forwarding
+   [\#812](https://github.com/matrix-org/matrix-react-sdk/pull/812)
+ * don't focus_composer on window focus
+   [\#944](https://github.com/matrix-org/matrix-react-sdk/pull/944)
+ * Fix vector-im/riot-web#4042
+   [\#947](https://github.com/matrix-org/matrix-react-sdk/pull/947)
+ * import _t, drop two unused imports
+   [\#946](https://github.com/matrix-org/matrix-react-sdk/pull/946)
+ * Fix punctuation in TextForEvent to be i18n'd consistently
+   [\#945](https://github.com/matrix-org/matrix-react-sdk/pull/945)
+ * actually wire up alwaysShowTimestamps
+   [\#940](https://github.com/matrix-org/matrix-react-sdk/pull/940)
+ * Update from Weblate.
+   [\#943](https://github.com/matrix-org/matrix-react-sdk/pull/943)
+ * Update from Weblate.
+   [\#942](https://github.com/matrix-org/matrix-react-sdk/pull/942)
+ * Update from Weblate.
+   [\#941](https://github.com/matrix-org/matrix-react-sdk/pull/941)
+ * Update from Weblate.
+   [\#938](https://github.com/matrix-org/matrix-react-sdk/pull/938)
+ * Fix PM being AM
+   [\#939](https://github.com/matrix-org/matrix-react-sdk/pull/939)
+ * pass call state through dispatcher, for poor electron
+   [\#918](https://github.com/matrix-org/matrix-react-sdk/pull/918)
+ * Translations!
+   [\#934](https://github.com/matrix-org/matrix-react-sdk/pull/934)
+ * Remove suffix and prefix from login input username
+   [\#906](https://github.com/matrix-org/matrix-react-sdk/pull/906)
+ * Kierangould/12hourtimestamp
+   [\#903](https://github.com/matrix-org/matrix-react-sdk/pull/903)
+ * Don't include src in the test resolve root
+   [\#931](https://github.com/matrix-org/matrix-react-sdk/pull/931)
+ * Make the linked versions open a new tab, turt2live complained :P
+   [\#910](https://github.com/matrix-org/matrix-react-sdk/pull/910)
+ * Fix lint errors in SlashCommands
+   [\#919](https://github.com/matrix-org/matrix-react-sdk/pull/919)
+ * autoFocus input box
+   [\#911](https://github.com/matrix-org/matrix-react-sdk/pull/911)
+ * Make travis test against riot-web new-guest-access
+   [\#917](https://github.com/matrix-org/matrix-react-sdk/pull/917)
+ * Add right-branch logic to travis test script
+   [\#916](https://github.com/matrix-org/matrix-react-sdk/pull/916)
+ * Group e2e keys into blocks of 4 characters
+   [\#914](https://github.com/matrix-org/matrix-react-sdk/pull/914)
+ * Factor out DeviceVerifyDialog
+   [\#913](https://github.com/matrix-org/matrix-react-sdk/pull/913)
+ * Fix 'missing page_type' error
+   [\#909](https://github.com/matrix-org/matrix-react-sdk/pull/909)
+ * code style update
+   [\#904](https://github.com/matrix-org/matrix-react-sdk/pull/904)
+
 Changes in [0.8.9](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.8.9) (2017-05-22)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.8.9-rc.1...v0.8.9)
