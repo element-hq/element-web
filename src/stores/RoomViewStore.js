@@ -16,6 +16,9 @@ limitations under the License.
 import dis from '../dispatcher';
 import {Store} from 'flux/utils';
 import MatrixClientPeg from '../MatrixClientPeg';
+import sdk from '../index';
+import Modal from '../Modal';
+import { _t } from '../languageHandler';
 
 const INITIAL_STATE = {
     // Whether we're joining the currently viewed room
@@ -76,6 +79,12 @@ class RoomViewStore extends Store {
             case 'join_room':
                 this._joinRoom(payload);
                 break;
+            case 'joined_room':
+                this._joinedRoom(payload);
+                break;
+            case 'join_room_error':
+                this._joinRoomError(payload);
+                break;
             case 'on_logged_out':
                 this.reset();
                 break;
@@ -128,16 +137,34 @@ class RoomViewStore extends Store {
         this._setState({
             joining: true,
         });
-        MatrixClientPeg.get().joinRoom(this._state.roomId, payload.opts).then(
-        () => {
-            this._setState({
-                joining: false,
+        MatrixClientPeg.get().joinRoom(this._state.roomId, payload.opts).done(() => {
+            dis.dispatch({
+                action: 'joined_room',
             });
         }, (err) => {
-            this._setState({
-                joining: false,
-                joinError: err,
+            dis.dispatch({
+                action: 'join_room_error',
+                err: err,
             });
+            const msg = err.message ? err.message : JSON.stringify(err);
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createDialog(ErrorDialog, {
+                title: _t("Failed to join room"),
+                description: msg,
+            });
+        });
+    }
+
+    _joinedRoom(payload) {
+        this._setState({
+            joining: false,
+        });
+    }
+
+    _joinRoomError(payload) {
+        this._setState({
+            joining: false,
+            joinError: payload.err,
         });
     }
 

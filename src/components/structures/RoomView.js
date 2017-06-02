@@ -185,7 +185,6 @@ module.exports = React.createClass({
             roomLoading: RoomViewStore.isRoomLoading(),
             roomLoadError: RoomViewStore.getRoomLoadError(),
             joining: RoomViewStore.isJoining(),
-            joinError: RoomViewStore.getJoinError(),
         }, () => {
             this._onHaveRoom();
             this.onRoom(MatrixClientPeg.get().getRoom(this.state.roomId));
