@@ -422,8 +422,6 @@ module.exports = React.createClass({
     },
 
     _getTilesForEvent: function(prevEvent, mxEv, last) {
-        if (mxEv.isRedacted() && this.props.hideRedactions) return [];
-
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         var ret = [];
@@ -467,6 +465,8 @@ module.exports = React.createClass({
             ret.push(dateSeparator);
             continuation = false;
         }
+
+        if (mxEv.isRedacted() && this.props.hideRedactions) return ret;
 
         var eventId = mxEv.getId();
         var highlight = (eventId == this.props.highlightedEventId);
