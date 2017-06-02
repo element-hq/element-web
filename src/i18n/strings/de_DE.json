@@ -862,7 +862,7 @@
     "device id: ": "Geräte-ID: ",
     "Device key:": "Geräte-Schlüssel:",
     "Email address (optional)": "E-Mail-Adresse (optional)",
-    "List this room in %(domain)s's room directory?": "Liste diesen raum in %(domain)s's Raumverzeichnis?",
+    "List this room in %(domain)s's room directory?": "Liste diesen Raum in %(domain)s's Raumverzeichnis?",
     "Mobile phone number (optional)": "Handynummer (optional)",
     "Password:": "Passwort:",
     "Register": "Registrieren",
@@ -887,5 +887,6 @@
     "You have entered an invalid contact. Try using their Matrix ID or email address.": "Du hast einen invaliden Kontakt eingegeben. Versuche es mit der Matrix-ID oder E-Mail-Adresse.",
     "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Deine E-Mail-Adresse scheint nicht mit einer Matrix-ID auf diesem Heimserver verbunden zu sein.",
     "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName änderte das Raum-Bild zu <img/>",
-    "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s änderte das Bild für %(roomName)s"
+    "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s änderte das Bild für %(roomName)s",
+    "Hide removed messages": "Verberge gelöschte Nachrichten"
 }

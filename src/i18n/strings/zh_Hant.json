@@ -308,5 +308,22 @@
     "Disable URL previews for this room (affects only you)": "在這個房間禁止URL預覽（只影響你）",
     "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName 更改了聊天室的圖像為 <img/>",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s 移除了聊天室圖像",
-    "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s 更改了聊天室 %(roomName)s　圖像"
+    "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s 更改了聊天室 %(roomName)s　圖像",
+    "Cancel": "取消",
+    "Custom Server Options": "自定伺服器選項",
+    "Dismiss": "無視",
+    "Mute": "靜音",
+    "Notifications": "通知",
+    "Operation failed": "操作失敗",
+    "powered by Matrix": "由Matrix架設",
+    "Remove": "移除",
+    "unknown error code": "未知的錯誤代碼",
+    "Sunday": "星期日",
+    "Monday": "星期一",
+    "Tuesday": "星期二",
+    "Wednesday": "星期三",
+    "Thursday": "星期四",
+    "Friday": "星期五",
+    "Saturday": "星期六",
+    "OK": "OK"
 }
