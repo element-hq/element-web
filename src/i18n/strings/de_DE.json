@@ -832,5 +832,6 @@
     "for %(amount)sh": "für %(amount)sh",
     "for %(amount)sd": "für %(amount)sd",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s entfernte Raum-Bild.",
-    "VoIP": "VoIP"
+    "VoIP": "VoIP",
+    "No Webcams detected": "Keine Webcam erkann"
 }
