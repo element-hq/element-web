@@ -19,6 +19,7 @@ limitations under the License.
 
 import VectorBasePlatform from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import q from 'q';
 import electron, {remote, ipcRenderer} from 'electron';
 
@@ -65,6 +66,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
     constructor() {
         super();
         dis.register(_onAction);
+    }
+
+    getHumanReadableName(): string {
+        return 'Electron Platform'; // no translation required: only used for analytics
     }
 
     setNotificationCount(count: number) {
@@ -120,6 +125,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return notification;
     }
 
+    loudNotification(ev: Event, room: Object) {
+        ipcRenderer.send('loudNotification');
+    }
+
     clearNotification(notif: Notification) {
         notif.close();
     }
@@ -142,12 +151,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     getDefaultDeviceDisplayName(): string {
-        return 'Riot Desktop on ' + platformFriendlyName();
+        return _t('Riot Desktop on %(platformName)s', { platformName: platformFriendlyName() });
     }
 
     screenCaptureErrorString(): ?string {
         return null;
     }
+
+    isElectron(): boolean { return true; }
 
     requestNotificationPermission(): Promise<string> {
         return q('granted');

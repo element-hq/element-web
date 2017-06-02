@@ -6,6 +6,10 @@
 # the branch the current checkout is on, use that branch. Otherwise,
 # use develop.
 
+set -e
+
+GIT_CLONE_ARGS=("$@")
+
 # Look in the many different CI env vars for which branch we're
 # building
 if [[ "$TRAVIS" == true ]]; then
@@ -23,41 +27,62 @@ fi
 
 echo "Determined branch to be $curbranch"
 
+# clone a specific branch of a github repo
+function clone() {
+    org=$1
+    repo=$2
+    branch=$3
+    git clone https://github.com/$org/$repo.git $repo --branch $branch \
+        "${GIT_CLONE_ARGS[@]}"
+}
+
 function dodep() {
     org=$1
     repo=$2
-    rm -rf $repo || true
-    git clone https://github.com/$org/$repo.git $repo
-    pushd $repo
-    git checkout $curbranch || git checkout develop
-    echo "$repo set to branch "`git rev-parse --abbrev-ref HEAD`
-    popd
+    rm -rf $repo
+    clone $org $repo $curbranch || {
+        [ "$curbranch" != 'develop' ] && clone $org $repo develop
+    } || return $?
+
+    (
+        cd $repo
+        echo "$repo set to branch "`git rev-parse --abbrev-ref HEAD`
+    )
+
+    mkdir -p node_modules
+    rm -r "node_modules/$repo" 2>/dev/null || true
+    ln -sv "../$repo" node_modules/
 }
 
+echo -en 'travis_fold:start:matrix-js-sdk\r'
+echo 'Setting up matrix-js-sdk'
+
 dodep matrix-org matrix-js-sdk
+(
+    cd node_modules/matrix-js-sdk
+    npm install
+)
+
+echo -en 'travis_fold:end:matrix-js-sdk\r'
+
+echo -en 'travis_fold:start:matrix-react-sdk\r'
+echo 'Setting up matrix-react-sdk'
+
 dodep matrix-org matrix-react-sdk
 
-mkdir -p node_modules
-cd node_modules
+mkdir -p node_modules/matrix-react-sdk/node_modules
+ln -s ../../matrix-js-sdk node_modules/matrix-react-sdk/node_modules/
 
-rm -r matrix-js-sdk 2> /dev/null
-ln -s ../matrix-js-sdk ./
-pushd matrix-js-sdk
-npm install
-popd
+(
+    cd node_modules/matrix-react-sdk
+    npm install
+)
 
-rm -r matrix-react-sdk 2> /dev/null
-ln -s ../matrix-react-sdk ./
-pushd matrix-react-sdk
-mkdir -p node_modules
-cd node_modules
-ln -s ../../matrix-js-sdk matrix-js-sdk
-cd ..
-npm install
-popd
+echo -en 'travis_fold:end:matrix-react-sdk\r'
+
 # Link the reskindex binary in place: if we used npm link,
 # npm would do this for us, but we don't because we'd have
 # to define the npm prefix somewhere so it could put the
 # intermediate symlinks there. Instead, we do it ourselves.
-mkdir -p .bin
-ln -sf ../matrix-react-sdk/scripts/reskindex.js .bin/reskindex
+mkdir -p node_modules/.bin
+ln -sfv ../matrix-react-sdk/scripts/reskindex.js node_modules/.bin/reskindex

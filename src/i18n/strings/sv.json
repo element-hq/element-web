@@ -13,7 +13,7 @@
     "Couldn't find a matching Matrix room": "Kunde inte hitta ett matchande Matrix-rum",
     "Custom Server Options": "Egna serverinställningar",
     "customServer_text": "Du kan använda serverinställningarna för att logga in i en annan Matrix-server genom att specifiera en URL till en annan hemserver.<br/>Så här kan du använda Riot med ett existerande Matrix-konto på en annan hemserver.<br/><br/>Du kan också specifiera en egen identitetsserver, men du kommer inte att kunna bjuda in andra via epostadress, eller bli inbjuden via epostadress.",
-    "delete the alias": "radera adressen",
+    "delete the alias.": "radera adressen.",
     "Direct Chat": "Direkt chatt",
     "Directory": "Katalog",
     "Dismiss": "Avvisa",

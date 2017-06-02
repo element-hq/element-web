@@ -20,5 +20,9 @@
     		"label": "Dark theme",
     		"value": "dark"
     	}
-    ]
+    ],
+    "piwik": {
+        "url": "https://piwik.riot.im/",
+        "siteId": 1
+    }
 }

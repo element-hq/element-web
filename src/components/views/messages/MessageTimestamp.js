@@ -16,7 +16,6 @@ limitations under the License.
 
 'use strict';
 
-import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 const React = require('react');
 const DateUtils = require('matrix-react-sdk/lib/DateUtils');
 
@@ -30,7 +29,7 @@ module.exports = React.createClass({
     render: function() {
         const date = new Date(this.props.ts);
         return (
-            <span className="mx_MessageTimestamp" title={ DateUtils.formatFullDate(date) }>
+            <span className="mx_MessageTimestamp" title={ DateUtils.formatFullDate(date, this.props.showTwelveHour) }>
                 { DateUtils.formatTime(date, this.props.showTwelveHour) }
             </span>
         );

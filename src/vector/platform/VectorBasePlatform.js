@@ -18,6 +18,8 @@ limitations under the License.
 */
 
 import BasePlatform from 'matrix-react-sdk/lib/BasePlatform';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
+
 import Favico from 'favico.js';
 
 /**
@@ -33,6 +35,10 @@ export default class VectorBasePlatform extends BasePlatform {
         // so we'd need to fix that if enabling the animation.
         this.favicon = new Favico({animation: 'none'});
         this._updateFavicon();
+    }
+
+    getHumanReadableName(): string {
+        return 'Vector Base Platform'; // no translation required: only used for analytics
     }
 
     _updateFavicon() {
@@ -90,6 +96,6 @@ export default class VectorBasePlatform extends BasePlatform {
      * device Vector is running on
      */
     getDefaultDeviceDisplayName(): string {
-        return "Unknown device";
+        return _t("Unknown device");
     }
 }

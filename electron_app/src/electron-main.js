@@ -21,13 +21,19 @@ limitations under the License.
 const checkSquirrelHooks = require('./squirrelhooks');
 if (checkSquirrelHooks()) return;
 
+const argv = require('minimist')(process.argv);
 const electron = require('electron');
+const AutoLaunch = require('auto-launch');
 
 const tray = require('./tray');
 const vectorMenu = require('./vectormenu');
 const webContentsHandler = require('./webcontents-handler');
 
 const windowStateKeeper = require('electron-window-state');
+
+if (argv.profile) {
+    electron.app.setPath('userData', `${electron.app.getPath('userData')}-${argv.profile}`);
+}
 
 let vectorConfig = {};
 try {
@@ -44,47 +50,6 @@ const INITIAL_UPDATE_DELAY_MS = 30 * 1000;
 
 let mainWindow = null;
 let appQuitting = false;
-
-function safeOpenURL(target) {
-    // openExternal passes the target to open/start/xdg-open,
-    // so put fairly stringent limits on what can be opened
-    // (for instance, open /bin/sh does indeed open a terminal
-    // with a shell, albeit with no arguments)
-    const parsedUrl = url.parse(target);
-    if (PERMITTED_URL_SCHEMES.indexOf(parsedUrl.protocol) > -1) {
-        // explicitly use the URL re-assembled by the url library,
-        // so we know the url parser has understood all the parts
-        // of the input string
-        const newTarget = url.format(parsedUrl);
-        electron.shell.openExternal(newTarget);
-    }
-}
-
-function onWindowOrNavigate(ev, target) {
-    // always prevent the default: if something goes wrong,
-    // we don't want to end up opening it in the electron
-    // app, as we could end up opening any sort of random
-    // url in a window that has node scripting access.
-    ev.preventDefault();
-    safeOpenURL(target);
-}
-
-function onLinkContextMenu(ev, params) {
-    const popupMenu = new electron.Menu();
-
-    popupMenu.append(new electron.MenuItem({
-        label: params.linkURL,
-        click() { safeOpenURL(params.linkURL); },
-    }));
-
-    popupMenu.append(new electron.MenuItem({
-        label: 'Copy Link Address',
-        click() { electron.clipboard.writeText(params.linkURL); },
-    }));
-
-    popupMenu.popup();
-    ev.preventDefault();
-}
 
 function installUpdate() {
     // for some reason, quitAndInstall does not fire the
@@ -159,19 +124,19 @@ electron.ipcMain.on('install_update', installUpdate);
 let focusHandlerAttached = false;
 electron.ipcMain.on('setBadgeCount', function(ev, count) {
     electron.app.setBadgeCount(count);
-    if (process.platform === 'win32' && mainWindow && !mainWindow.isFocused()) {
-        if (count > 0) {
-            if (!focusHandlerAttached) {
-                mainWindow.once('focus', () => {
-                    mainWindow.flashFrame(false);
-                    focusHandlerAttached = false;
-                });
-                focusHandlerAttached = true;
-            }
-            mainWindow.flashFrame(true);
-        } else {
+    if (count === 0) {
+        mainWindow.flashFrame(false);
+    }
+});
+
+electron.ipcMain.on('loudNotification', function() {
+    if (process.platform === 'win32' && mainWindow && !mainWindow.isFocused() && !focusHandlerAttached) {
+        mainWindow.flashFrame(true);
+        mainWindow.once('focus', () => {
             mainWindow.flashFrame(false);
-        }
+            focusHandlerAttached = false;
+        });
+        focusHandlerAttached = true;
     }
 });
 
@@ -206,8 +171,49 @@ const shouldQuit = electron.app.makeSingleInstance((commandLine, workingDirector
 
 if (shouldQuit) {
     console.log('Other instance detected: exiting');
-    electron.app.quit();
+    electron.app.exit();
 }
+
+
+const launcher = new AutoLaunch({
+    name: vectorConfig.brand || 'Riot',
+    isHidden: true,
+    mac: {
+        useLaunchAgent: true,
+    },
+});
+
+const settings = {
+    'auto-launch': {
+        get: launcher.isEnabled,
+        set: function(bool) {
+            if (bool) {
+                return launcher.enable();
+            } else {
+                return launcher.disable();
+            }
+        },
+    },
+};
+
+electron.ipcMain.on('settings_get', async function(ev) {
+    const data = {};
+
+    try {
+        await Promise.all(Object.keys(settings).map(async function (setting) {
+            data[setting] = await settings[setting].get();
+        }));
+
+        ev.sender.send('settings', data);
+    } catch(e) { console.error(e); }
+});
+
+electron.ipcMain.on('settings_set', function(ev, key, value) {
+    console.log(key, value);
+    if (settings[key] && settings[key].set) {
+        settings[key].set(value);
+    }
+});
 
 electron.app.on('ready', () => {
     if (vectorConfig.update_base_url) {
@@ -238,13 +244,17 @@ electron.app.on('ready', () => {
     mainWindow.loadURL(`file://${__dirname}/../../webapp/index.html`);
     electron.Menu.setApplicationMenu(vectorMenu);
 
+    // explicitly hide because setApplicationMenu on Linux otherwise shows...
+    // https://github.com/electron/electron/issues/9621
+    mainWindow.hide();
+
     // Create trayIcon icon
     tray.create(mainWindow, {
         icon_path: iconPath,
         brand: vectorConfig.brand || 'Riot',
     });
 
-    if (!process.argv.includes('--hidden')) {
+    if (!argv.hidden) {
         mainWindow.once('ready-to-show', () => {
             mainWindow.show();
         });
