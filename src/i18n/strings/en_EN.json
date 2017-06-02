@@ -779,5 +779,10 @@
   "Disable URL previews for this room (affects only you)": "Disable URL previews for this room (affects only you)",
   "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName changed the room avatar to <img/>",
   "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s removed the room avatar.",
-  "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s changed the avatar for %(roomName)s"
+  "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s changed the avatar for %(roomName)s",
+  "Start verification": "Start verification",
+  "Share without verifying": "Share without verifying",
+  "Ignore request": "Ignore request",
+  "You added a new device '%(displayName)s', which is requesting encryption keys.": "You added a new device '%(displayName)s', which is requesting encryption keys.",
+  "Your unverified device '%(displayName)s' is requesting encryption keys.": "Your unverified device '%(displayName)s' is requesting encryption keys."
 }
