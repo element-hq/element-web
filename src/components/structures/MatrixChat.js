@@ -719,6 +719,7 @@ module.exports = React.createClass({
         const ChatCreateOrReuseDialog = sdk.getComponent(
             'views.dialogs.ChatCreateOrReuseDialog',
         );
+        // Use a deferred action to reshow the dialog once the user has registered
         if (MatrixClientPeg.get().isGuest()) {
             dis.dispatch({
                 action: 'do_after_sync_prepared',
