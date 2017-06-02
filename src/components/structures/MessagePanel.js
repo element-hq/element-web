@@ -90,6 +90,9 @@ module.exports = React.createClass({
 
         // show timestamps always
         alwaysShowTimestamps: React.PropTypes.bool,
+
+        // hide redacted events as per old behaviour
+        hideRedactions: React.PropTypes.bool,
     },
 
     componentWillMount: function() {
@@ -462,6 +465,8 @@ module.exports = React.createClass({
             ret.push(dateSeparator);
             continuation = false;
         }
+
+        if (mxEv.isRedacted() && this.props.hideRedactions) return ret;
 
         var eventId = mxEv.getId();
         var highlight = (eventId == this.props.highlightedEventId);
