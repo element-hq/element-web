@@ -746,7 +746,7 @@
   "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.",
   "You must join the room to see its files": "You must join the room to see its files",
   "Reject all %(invitedRooms)s invites": "Reject all %(invitedRooms)s invites",
-  "Start new Chat": "Start new Chat",
+  "Start new chat": "Start new chat",
   "Guest users can't invite users. Please register.": "Guest users can't invite users. Please register.",
   "Failed to invite": "Failed to invite",
   "Failed to invite user": "Failed to invite user",
