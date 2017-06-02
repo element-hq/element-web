@@ -90,6 +90,9 @@ module.exports = React.createClass({
 
         // show timestamps always
         alwaysShowTimestamps: React.PropTypes.bool,
+
+        // hide redacted events as per old behaviour
+        hideRedactions: React.PropTypes.bool,
     },
 
     componentWillMount: function() {
@@ -419,6 +422,8 @@ module.exports = React.createClass({
     },
 
     _getTilesForEvent: function(prevEvent, mxEv, last) {
+        if (mxEv.isRedacted() && this.props.hideRedactions) return [];
+
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         var ret = [];

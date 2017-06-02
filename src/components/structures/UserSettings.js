@@ -84,6 +84,10 @@ const SETTINGS_LABELS = [
         id: 'useCompactLayout',
         label: 'Use compact timeline layout',
     },
+    {
+        id: 'hideRedactions',
+        label: 'Hide removed messages',
+    },
 /*
     {
         id: 'useFixedWidthFont',
