@@ -862,7 +862,7 @@
     "device id: ": "Geräte-ID: ",
     "Device key:": "Geräte-Schlüssel:",
     "Email address (optional)": "E-Mail-Adresse (optional)",
-    "List this room in %(domain)s's room directory?": "Liste diesen raum in %(domain)s's Raumverzeichnis?",
+    "List this room in %(domain)s's room directory?": "Liste diesen Raum in %(domain)s's Raumverzeichnis?",
     "Mobile phone number (optional)": "Handynummer (optional)",
     "Password:": "Passwort:",
     "Register": "Registrieren",
