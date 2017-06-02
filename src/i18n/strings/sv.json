@@ -98,5 +98,22 @@
     "Report a bug": "Rapportera en bugg",
     "Resend": "Sänd igen",
     "Riot Desktop on %(platformName)s": "Riot Desktop på %(platformName)s",
-    "Riot does not know how to join a room on this network": "Riot kan inte gå med i ett rum på det här nätverket"
+    "Riot does not know how to join a room on this network": "Riot kan inte gå med i ett rum på det här nätverket",
+    "Riot is not supported on mobile web. Install the app?": "Riot stöds inte på mobil-webb. Installera appen?",
+    "Riot uses many advanced browser features, some of which are not available or experimental in your current browser.": "Riot använder flera avancerade webbläsaregenskaper, av vilka alla inte stöds eller är experimentella i din nuvarande webbläsare.",
+    "Room directory": "Rumskatalog",
+    "Room not found": "Rummet hittades inte",
+    "Search": "Sök",
+    "Search…": "Sök…",
+    "Search for a room": "Sök efter rum",
+    "Send": "Sänd",
+    "Send logs": "Sänd loggar",
+    "Settings": "Inställningar",
+    "Source URL": "Käll-URL",
+    "Sorry, your browser is <b>not</b> able to run Riot.": "Beklagar, din webbläsare kan <b>inte</b> köra Riot.",
+    "Start chat": "Starta chatt",
+    "The Home Server may be too old to support third party networks": "Hemservern kan vara för gammal för stöda tredje parters nätverk",
+    "There are advanced notifications which are not shown here": "Det finns avancerade aviseringar som inte visas här",
+    "The server may be unavailable or overloaded": "Servern kan vara överbelastad eller inte tillgänglig",
+    "This Room": "Det här rummet"
 }
