@@ -139,10 +139,6 @@ module.exports = React.createClass({
             register_hs_url: null,
             register_is_url: null,
             register_id_sid: null,
-
-            // Whether a DM should be created with welcomeUserId (prop) on registration
-            // see _onLoggedIn
-            shouldCreateWelcomeDm: true,
         };
         return s;
     },
@@ -894,7 +890,7 @@ module.exports = React.createClass({
                 MatrixClientPeg.get().getUserIdLocalpart()
             );
 
-            if (this.props.config.welcomeUserId && this.state.shouldCreateWelcomeDm) {
+            if (this.props.config.welcomeUserId) {
                 createRoom({
                     dmUserId: this.props.config.welcomeUserId,
                     andView: false,
