@@ -145,7 +145,7 @@
     "Collecting logs": "Protokolle werden abgerufen",
     "Describe your problem here.": "Beschreibe dein Problem hier.",
     "Failed to send report: ": "Senden des Reports fehlgeschlagen: ",
-    "Forward Message": "Leider Nachricht weiter",
+    "Forward Message": "Leite Nachricht weiter",
     "Hide panel": "Verberge Feld",
     "In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:": "Um Probleme zu diagnostizieren werden mit diesem Fehlerbericht Protokolle von diesem Client gesendet. Wenn du nur obigen text senden willst, deselektiere folgendes:",
     "Loading bug report module": "Lade Fehlerbericht-Modul",
