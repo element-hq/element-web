@@ -69,5 +69,11 @@
     "Messages containing my display name": "Meddelanden som innehåller mitt namn",
     "Messages containing <span>keywords</span>": "Meddelanden som innehåller <span>nyckelord</span>",
     "Messages containing my user name": "Meddelanden som innehåller mitt användarnamn",
-    "Messages in group chats": "Meddelanden i gruppchattar"
+    "Messages in group chats": "Meddelanden i gruppchattar",
+    "Messages in one-to-one chats": "Meddelanden i privata chattar",
+    "Messages sent by bot": "Meddelanden från bottar",
+    "more": "mera",
+    "Mute": "Dämpa",
+    "No rooms to show": "Inga fler rum att visa",
+    "Noisy": "Högljudd"
 }
