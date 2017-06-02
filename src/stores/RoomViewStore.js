@@ -87,10 +87,10 @@ class RoomViewStore extends Store {
         if (payload.room_id) {
             this._setState({
                 roomId: payload.room_id,
+                roomLoading: false,
+                roomLoadError: null,
             });
-        }
-
-        if (payload.room_alias && !payload.room_id) {
+        } else if (payload.room_alias) {
             this._setState({
                 roomId: null,
                 roomAlias: payload.room_alias,
