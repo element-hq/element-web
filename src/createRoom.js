@@ -97,7 +97,6 @@ function createRoom(opts) {
         // the room exists, causing things like
         // https://github.com/vector-im/vector-web/issues/1813
         if (opts.andView) {
-            console.info('And viewing');
             dis.dispatch({
                 action: 'view_room',
                 room_id: roomId,
