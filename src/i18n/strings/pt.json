@@ -16,7 +16,7 @@
     "Directory": "Diretório",
     "Dismiss": "Descartar",
     "Download this file": "Transferir este ficheiro",
-    "Drop here %(toAction)s": "Arraste aqui para %(toAction)s",
+    "Drop here %(toAction)s": "Arraste aqui %(toAction)s",
     "Enable audible notifications in web client": "Ativar notificações de áudio no cliente web",
     "Enable desktop notifications": "Ativar notificações no desktop",
     "Enable email notifications": "Ativar notificações por e-mail",
