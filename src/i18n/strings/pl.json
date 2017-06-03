@@ -67,5 +67,7 @@
     "I understand the risks and wish to continue": "Rozumiem ryzyko i chęć kontynuować",
     "In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:": "W celu zdiagnozowania problemów logi z tego klienta zostaną wysłane wraz z tym raportem o błędzie. Jeśli wolisz wysłać tylko tekst powyżej, proszę odznacz:",
     "Invite to this room": "Zaproś do tego pokoju",
-    "Keywords": "Słowa kluczowe"
+    "Keywords": "Słowa kluczowe",
+    "Loading bug report module": "Ładowanie modułu raportu błędów",
+    "Low Priority": "Niski priorytet"
 }
