@@ -162,7 +162,7 @@
       "category": "Network;InstantMessaging;Chat",
       "maintainer": "support@riot.im",
       "desktop": {
-        "StartupWMClass": "riot-web"
+        "StartupWMClass": "riot"
       }
     },
     "win": {
