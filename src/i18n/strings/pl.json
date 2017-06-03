@@ -31,5 +31,10 @@
     "Search…": "Szukaj…",
     "Search for a room": "Szukaj pokoju",
     "Send": "Wysłać",
-    "Settings": "Ustawienia"
+    "Settings": "Ustawienia",
+    "Collapse panel": "Ukryj panel",
+    "customServer_text": "Możesz używać opcji serwera niestandardowego do logowania się na inne serwery Matrix, określając inny adres URL serwera domowego.<br/>Pozwala to na wykorzystanie Riot z istniejącym kontem Matrix na innym serwerze domowym.<br/><br/>Można również ustawić niestandardowy serwer tożsamości, ale nie będzie można zapraszać użytkowników adresem e-mail, ani być zaproszony przez adres e-mailowy.",
+    "Delete the room alias %(alias)s and remove %(name)s from the directory?": "Usuń alias %(alias)s i usuń %(name)s z katalogu?",
+    "Dismiss": "Zdymisjonować",
+    "Drop here %(toAction)s": "Upuść tutaj %(toAction)s"
 }
