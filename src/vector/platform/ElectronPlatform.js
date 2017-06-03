@@ -142,22 +142,30 @@ export default class ElectronPlatform extends VectorBasePlatform {
         const deferred = q.defer();
 
         const _onUpdateAvailable = function() {
-            electron.autoUpdater.removeListener('update-not-available', _onUpdateNotAvailable);
+            remote.autoUpdater.removeListener('update-not-available', _onUpdateNotAvailable);
+            remote.autoUpdater.removeListener('error', _onError);
             deferred.resolve(updateStateEnum.DOWNLOADING);
         }
-
         const _onUpdateNotAvailable = function() {
-            electron.autoUpdater.removeListener('update-available', _onUpdateAvailable);
+            remote.autoUpdater.removeListener('update-available', _onUpdateAvailable);
+            remote.autoUpdater.removeListener('error', _onError);
             deferred.resolve(updateStateEnum.NOTAVAILABLE);
         }
+        const _onError = function() {
+            remote.autoUpdater.removeListener('update-not-available', _onUpdateNotAvailable);
+            remote.autoUpdater.removeListener('update-available', _onUpdateAvailable);
+            deferred.resolve(updateStateEnum.ERROR);
+        }
 
-        electron.autoUpdater.once('update-available', _onUpdateAvailable);
-        electron.autoUpdater.once('update-not-available', _onUpdateNotAvailable);
+        remote.autoUpdater.once('update-available', _onUpdateAvailable);
+        remote.autoUpdater.once('update-not-available', _onUpdateNotAvailable);
+        remote.autoUpdater.once('error', _onError);
 
-        electron.ipcRenderer.send('checkForUpdates');
+        remote.ipcRenderer.send('checkForUpdates');
         return deferred.promise.timeout(10000).catch(() => {
-            electron.autoUpdater.removeListener('update-not-available', _onUpdateNotAvailable);
-            electron.autoUpdater.removeListener('update-available', _onUpdateAvailable);
+            remote.autoUpdater.removeListener('update-not-available', _onUpdateNotAvailable);
+            remote.autoUpdater.removeListener('update-available', _onUpdateAvailable);
+            remote.autoUpdater.removeListener('error', _onError);
             return updateStateEnum.TIMEOUT;
         });
     }
