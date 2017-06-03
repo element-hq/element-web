@@ -329,7 +329,7 @@
     "Conference calls are not supported in encrypted rooms": "Chamadas de conferência não são possíveis em salas criptografadas",
     "Conference calls are not supported in this client": "Chamadas de conferência não são possíveis neste navegador",
     "/ddg is not a command": "/ddg não é um comando",
-    "Drop here %(toAction)s": "Arraste aqui %(toAction)s",
+    "Drop here %(toAction)s": "Arraste aqui para %(toAction)s",
     "Drop here to tag %(section)s": "Arraste aqui para marcar como %(section)s",
     "%(senderName)s ended the call.": "%(senderName)s finalizou a chamada.",
     "Existing Call": "Chamada em andamento",
