@@ -19,8 +19,10 @@ import MatrixClientPeg from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 
-function redact(str) {
-    return str.replace(/#\/(room|user)\/(.+)/, "#/$1/<redacted>");
+function getRedactedUrl() {
+    const base = window.location.pathname.split('/').slice(-2).join('/');
+    const redactedHash = window.location.hash.replace(/#\/(room|user)\/(.+)/, "#/$1/<redacted>");
+    return base + redactedHash;
 }
 
 const customVariables = {
@@ -108,7 +110,7 @@ class Analytics {
             this.firstPage = false;
             return;
         }
-        this._paq.push(['setCustomUrl', redact(window.location.href)]);
+        this._paq.push(['setCustomUrl', getRedactedUrl()]);
         this._paq.push(['trackPageView']);
     }
 
