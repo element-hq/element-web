@@ -145,5 +145,20 @@
     "Sorry, your browser is <b>not</b> able to run Riot.": "可惜你的瀏覽器 <b>無法</b> 執行 Riot.",
     "The Home Server may be too old to support third party networks": "主機伺服器可能太老舊無法支援第三方網路",
     "The server may be unavailable or overloaded": "伺服器可能過載或無法連取",
-    "Unable to fetch notification target list": "無法抓取通知的目標清單"
+    "Unable to fetch notification target list": "無法抓取通知的目標清單",
+    "customServer_text": "你可以使用自定伺服器選項來登入其它的 Matrix 伺服器，只要在在主機伺服器網址上指定其網址資料。<br/>這可讓你透過已有的 Matrix 帳號在不同的主機伺服器上使用  Riot。<br/><br/>你也可以設定自定的識別伺服器但你將無法透過電子郵件來邀請用戶或是以自己的電子郵件來接受別人的邀請。",
+    "In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:": "為了診斷問題，來自客戶的活動記錄會隨著這個程式臭蟲報告一起送出。如果你只想送出以上文字，請取消勾選：",
+    "Notification targets": "通知標的",
+    "Notifications on the following keywords follow rules which can’t be displayed here:": "以下關鍵字依照規則其通知將不會顯示在此：",
+    "Please describe the bug. What did you do? What did you expect to happen? What actually happened?": "請描述這個程式臭蟲，你作了什麼動作？你預期會發生什麼狀況？以及實際發生的狀況為何？",
+    "Please describe the bug and/or send logs.": "請描述這個程式臭蟲以及／或送出活動記錄。",
+    "Riot is not supported on mobile web. Install the app?": "Riot 不支援行動網頁，要下載應用程式嗎？",
+    "Riot uses many advanced browser features, some of which are not available or experimental in your current browser.": "Roit 使用了許多先進的瀏覽器功能，有些在你目前所用的瀏覽器上無法使用或僅為試驗效能。",
+    "There are advanced notifications which are not shown here": "有些進階的通知並未在此顯現",
+    "World readable": "全世界可讀",
+    "You cannot delete this image. (%(code)s)": "你不能刪除這個圖片(%(code)s)",
+    "You are not receiving desktop notifications": "你將不會收到桌面通知",
+    "You are Rioting as a guest. <a>Register</a> or <a>sign in</a> to access more rooms and features!": "你目前以訪客身份使用 Riot  <a>註冊</a> 或 <a>登錄</a> 來使用更多聊天室和功能！",
+    "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "你也許不曾在其它Riot之外的客戶端設定它們，在 Riot底下你無法調它們但其仍然可用",
+    "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "你目前的瀏覽器，其應用程式的外觀和感覺可能完全不正確，有些或全部功能可以無法使用。如果你仍想試，可以繼續但得自負後果。"
 }
