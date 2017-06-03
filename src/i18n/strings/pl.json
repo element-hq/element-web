@@ -69,5 +69,10 @@
     "Invite to this room": "Zaproś do tego pokoju",
     "Keywords": "Słowa kluczowe",
     "Loading bug report module": "Ładowanie modułu raportu błędów",
-    "Low Priority": "Niski priorytet"
+    "Low Priority": "Niski priorytet",
+    "Messages containing <span>keywords</span>": "Wiadomości zawierające słowa <span>kluczowe</span>",
+    "Messages containing my user name": "Wiadomości zawierające mój użytkownik",
+    "Messages in group chats": "Wiadomości w czatach grupowych",
+    "Messages sent by bot": "Wiadomości wysłane przez robota",
+    "more": "więcej"
 }
