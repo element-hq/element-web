@@ -225,7 +225,7 @@
     "Displays action": "Mostrar acción",
     "Don't send typing notifications": "No enviar notificaciones cuando se escribe",
     "Download %(text)s": "Descargar %(text)s",
-    "Drop here %(toAction)s": "Suelta aquí para %(toAction)s",
+    "Drop here %(toAction)s": "Suelta aquí %(toAction)s",
     "Drop here to tag %(section)s": "Suelta aquí para etiquetar %(section)s",
     "Ed25519 fingerprint": "Clave de cifrado Ed25519",
     "Email": "Correo electrónico",
