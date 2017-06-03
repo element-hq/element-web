@@ -865,10 +865,10 @@ module.exports = React.createClass({
         const platform = PlatformPeg.get();
         if ('canSelfUpdate' in platform && platform.canSelfUpdate()) {
             return <div>
-                <h3>Updates</h3>
+                <h3>{_t('Updates')}</h3>
                 <div className="mx_UserSettings_section">
-                    <AccessibleButton className="mx_UserSettings_button danger" onClick={this._onCheckUpdates}>
-                        Check for update
+                    <AccessibleButton className="mx_UserSettings_button" onClick={this._onCheckUpdates}>
+                        {_t('Check for update')}
                     </AccessibleButton>
                 </div>
             </div>;
