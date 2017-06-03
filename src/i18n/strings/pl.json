@@ -38,5 +38,15 @@
     "Dismiss": "Zdymisjonować",
     "Drop here %(toAction)s": "Upuść tutaj %(toAction)s",
     "Enable audible notifications in web client": "Włącz dźwiękowe powiadomienia w kliencie internetowym",
-    "Enable email notifications": "Włącz powiadomienia e-mailowe"
+    "Enable email notifications": "Włącz powiadomienia e-mailowe",
+    "Enable notifications for this account": "Włącz powiadomienia na tym koncie",
+    "Enable them now": "Włącz je teraz",
+    "Enter keywords separated by a comma:": "Wpisz słowa kluczowe oddzielone przecinkami:",
+    "Error": "Błąd",
+    "Error saving email notification preferences": "Wystąpił błąd podczas zapisywania ustawień powiadomień e-mailowych",
+    "#example": "#przykład",
+    "Expand panel": "Rozwiń panel",
+    "Failed to": "Nie udało się",
+    "Failed to add tag %(tagName)s to room": "Nie można dodać tagu %(tagName)s do pokoju",
+    "Failed to change settings": "Nie udało się zmienić ustawień"
 }
