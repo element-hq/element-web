@@ -75,11 +75,16 @@ export default React.createClass({
     },
 
     render: function() {
-        const imgSrc = this.state.done ? 'img/warning.svg' : 'img/spinner.gif';
+        let image;
+        if (this.state.done) {
+            image = <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>;
+        } else {
+            image = <img className="mx_MatrixToolbar_warning" src="'img/spinner.gif'" width="24" height="23" alt={this.state.message}/>;
+        }
 
         return (
             <div className="mx_MatrixToolbar">
-                <img className="mx_MatrixToolbar_warning" src={imgSrc} width="24" height="23" alt="/!\"/>
+                {image}
                 <div className="mx_MatrixToolbar_content">
                     {this.state.message}
                 </div>
