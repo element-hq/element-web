@@ -24,6 +24,7 @@ import Favico from 'favico.js';
 
 export const updateStateEnum = {
     ERROR: 'ERROR',
+    TIMEOUT: 'TIMEOUT',
     NOTAVAILABLE: 'NOTAVAILABLE',
     DOWNLOADING: 'DOWNLOADING',
     READY: 'READY',

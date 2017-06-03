@@ -45,13 +45,16 @@ export default React.createClass({
             let message;
             switch (state) {
                 case updateStateEnum.ERROR:
-                    message = 'Error encountered when checking for an update';
+                    message = 'Error encountered when checking for an update.';
+                    break;
+                case updateStateEnum.TIMEOUT:
+                    message = 'Update Check timed out, try again later.';
                     break;
                 case updateStateEnum.NOTAVAILABLE:
-                    message = 'No update found';
+                    message = 'No update found.';
                     break;
                 case updateStateEnum.DOWNLOADING:
-                    message = 'Update is being downloaded';
+                    message = 'Update is being downloaded.';
                     done = false;
                     break;
             }

@@ -158,7 +158,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return deferred.promise.timeout(10000).catch(() => {
             electron.autoUpdater.removeListener('update-not-available', _onUpdateNotAvailable);
             electron.autoUpdater.removeListener('update-available', _onUpdateAvailable);
-            return updateStateEnum.ERROR;
+            return updateStateEnum.TIMEOUT;
         });
     }
 
