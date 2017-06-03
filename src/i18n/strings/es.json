@@ -16,7 +16,7 @@
     "Direct Chat": "Conversación directa",
     "Directory": "Directorio",
     "Download this file": "Descargar este archivo",
-    "Drop here %(toAction)s": "Suelta aquí para %(toAction)s",
+    "Drop here %(toAction)s": "Suelta aquí %(toAction)s",
     "Enable audible notifications in web client": "Habilitar notificaciones audibles en el cliente web",
     "Enable desktop notifications": "Habilitar notificaciones de escritorio",
     "Enable email notifications": "Habilitar notificaciones por email",
