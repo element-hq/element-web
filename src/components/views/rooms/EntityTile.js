@@ -115,7 +115,7 @@ module.exports = React.createClass({
             nameEl = (
                 <div className="mx_EntityTile_details">
                     <img className="mx_EntityTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
-                    <EmojiText element="div" className="mx_EntityTile_name_hover">{name}</EmojiText>
+                    <EmojiText element="div" className="mx_EntityTile_name_hover" dir="auto">{name}</EmojiText>
                     <PresenceLabel activeAgo={ activeAgo }
                         currentlyActive={this.props.presenceCurrentlyActive}
                         presenceState={this.props.presenceState} />
@@ -124,7 +124,7 @@ module.exports = React.createClass({
         }
         else {
             nameEl = (
-                <EmojiText element="div" className="mx_EntityTile_name">{name}</EmojiText>
+                <EmojiText element="div" className="mx_EntityTile_name" dir="auto">{name}</EmojiText>
             );
         }
 

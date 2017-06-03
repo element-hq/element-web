@@ -723,6 +723,7 @@ export default class MessageComposerInput extends React.Component {
                          title={ this.state.isRichtextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
                          src={`img/button-md-${!this.state.isRichtextEnabled}.png`} />
                     <Editor ref="editor"
+                            dir="auto"
                             placeholder={this.props.placeholder}
                             editorState={this.state.editorState}
                             onChange={this.onEditorContentChanged}

@@ -55,9 +55,9 @@ module.exports = React.createClass({
                          placeholderClassName="mx_RoomHeader_placeholder"
                          placeholder={ this._placeholderName }
                          blurToCancel={ false }
-                         initialValue={ this._initialName }/>
+                         initialValue={ this._initialName }
+                         dir="auto" />
                 </div>
         );
     },
 });
-

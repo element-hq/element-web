@@ -238,7 +238,7 @@ module.exports = React.createClass({
             const emojiTextClasses = classNames('mx_RoomHeader_nametext', { mx_RoomHeader_settingsHint: settingsHint });
             name =
                 <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
-                    <EmojiText element="div" className={emojiTextClasses} title={roomName}>{ roomName }</EmojiText>
+                    <EmojiText dir="auto" element="div" className={emojiTextClasses} title={roomName}>{ roomName }</EmojiText>
                     { searchStatus }
                 </div>;
         }
@@ -255,7 +255,7 @@ module.exports = React.createClass({
                 }
             }
             if (topic) {
-                topic_el = <div className="mx_RoomHeader_topic" ref="topic" title={ topic }>{ topic }</div>;
+                topic_el = <div className="mx_RoomHeader_topic" ref="topic" title={ topic } dir="auto">{ topic }</div>;
             }
         }
 
