@@ -1,0 +1,89 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+'use strict';
+
+import React from 'react';
+import dis from 'matrix-react-sdk/lib/dispatcher';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+import {updateStateEnum} from '../../../vector/platform/VectorBasePlatform';
+import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
+
+export default React.createClass({
+
+    getInitialState: function() {
+        return {
+            message: 'Checking for an update...',
+            done: false,
+        };
+    },
+
+    componentWillMount: function() {
+        PlatformPeg.get().checkForUpdate().done((state) => {
+            if (this._unmounted) return;
+
+            console.log('checkForUpdate done, ', state);
+
+            // We will be replaced by NewVersionBar
+            if (state === updateStateEnum.Ready) return;
+
+            let done = true;
+            let message;
+            switch (state) {
+                case updateStateEnum.Error:
+                    message = 'Error encountered when checking for an update';
+                    break;
+                case updateStateEnum.NotAvailable:
+                    message = 'No update found';
+                    break;
+                case updateStateEnum.Downloading:
+                    message = 'Update is being downloaded';
+                    done = false;
+                    break;
+            }
+
+            this.setState({message, done});
+        });
+    },
+
+    componentWillUnmount: function() {
+        this._unmounted = true;
+    },
+
+    hideToolbar: function() {
+        dis.dispatch({
+            action: 'check_updates',
+            value: false,
+        });
+    },
+
+    render: function() {
+        const imgSrc = this.state.done ? 'img/warning.svg' : 'img/spinner.gif';
+
+        return (
+            <div className="mx_MatrixToolbar">
+                <img className="mx_MatrixToolbar_warning" src={imgSrc} width="24" height="23" alt="/!\"/>
+                <div className="mx_MatrixToolbar_content">
+                    {this.state.message}
+                </div>
+                <AccessibleButton className="mx_MatrixToolbar_close" onClick={this.hideToolbar}>
+                    <img src="img/cancel.svg" width="18" height="18" />
+                </AccessibleButton>
+            </div>
+        );
+    }
+});

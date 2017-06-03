@@ -120,6 +120,7 @@ process.on('uncaughtException', function(error) {
 });
 
 electron.ipcMain.on('install_update', installUpdate);
+electron.ipcMain.on('checkForUpdates', pollForUpdates);
 
 let focusHandlerAttached = false;
 electron.ipcMain.on('setBadgeCount', function(ev, count) {

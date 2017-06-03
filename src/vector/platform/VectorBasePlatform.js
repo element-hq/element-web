@@ -22,6 +22,13 @@ import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 import Favico from 'favico.js';
 
+export const updateStateEnum = {
+    Error: -1,
+    NotAvailable: 0,
+    Downloading: 1,
+    Ready: 2,
+};
+
 /**
  * Vector-specific extensions to the BasePlatform template
  */
@@ -35,6 +42,7 @@ export default class VectorBasePlatform extends BasePlatform {
         // so we'd need to fix that if enabling the animation.
         this.favicon = new Favico({animation: 'none'});
         this._updateFavicon();
+        this.updatable = true;
     }
 
     getHumanReadableName(): string {
@@ -81,12 +89,20 @@ export default class VectorBasePlatform extends BasePlatform {
     }
 
     /**
+     * Whether we can call checkForUpdate on this platform build
+     */
+    canSelfUpdate(): boolean {
+        return this.updatable;
+    }
+
+    /**
      * Check for the availability of an update to the version of the
      * app that's currently running.
      * If an update is available, this function should dispatch the
      * 'new_version' action.
+     * @returns Promise<updateStateEnum>
      */
-    pollForUpdate() {
+    checkForUpdate(): Promise<number> {
     }
 
     /**

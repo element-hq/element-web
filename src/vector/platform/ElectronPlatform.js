@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import VectorBasePlatform from './VectorBasePlatform';
+import VectorBasePlatform, {updateStateEnum} from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import q from 'q';
@@ -66,6 +66,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     constructor() {
         super();
         dis.register(_onAction);
+        this.updatable = Boolean(remote.autoUpdater.getFeedURL());
     }
 
     getHumanReadableName(): string {
@@ -137,10 +138,28 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return q(remote.app.getVersion());
     }
 
-    pollForUpdate() {
-        // In electron we control the update process ourselves, since
-        // it needs to run in the main process, so we just run the timer
-        // loop in the main electron process instead.
+    checkForUpdate() { // manual update check for this platform
+        const deferred = q.defer();
+
+        const _onUpdateAvailable = function() {
+            electron.autoUpdater.removeListener('update-not-available', _onUpdateNotAvailable);
+            deferred.resolve(updateStateEnum.Downloading);
+        }
+
+        const _onUpdateNotAvailable = function() {
+            electron.autoUpdater.removeListener('update-available', _onUpdateAvailable);
+            deferred.resolve(updateStateEnum.NotAvailable);
+        }
+
+        electron.autoUpdater.once('update-available', _onUpdateAvailable);
+        electron.autoUpdater.once('update-not-available', _onUpdateNotAvailable);
+
+        electron.ipcRenderer.send('checkForUpdates');
+        return deferred.promise.timeout(10000).catch(() => {
+            electron.autoUpdater.removeListener('update-not-available', _onUpdateNotAvailable);
+            electron.autoUpdater.removeListener('update-available', _onUpdateAvailable);
+            return updateStateEnum.Error;
+        });
     }
 
     installUpdate() {

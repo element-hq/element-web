@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import VectorBasePlatform from './VectorBasePlatform';
+import VectorBasePlatform, {updateStateEnum} from './VectorBasePlatform';
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/lib/dispatcher.js';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
@@ -135,12 +135,12 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     startUpdater() {
-        this.pollForUpdate();
-        setInterval(this.pollForUpdate, POKE_RATE_MS);
+        this.checkForUpdate();
+        setInterval(this.checkForUpdate, POKE_RATE_MS);
     }
 
-    pollForUpdate() {
-        this._getVersion().done((ver) => {
+    checkForUpdate() {
+        return this._getVersion().then((ver) => {
             if (this.runningVersion === null) {
                 this.runningVersion = ver;
             } else if (this.runningVersion !== ver) {
@@ -149,9 +149,12 @@ export default class WebPlatform extends VectorBasePlatform {
                     currentVersion: this.runningVersion,
                     newVersion: ver,
                 });
+                return updateStateEnum.Ready;
             }
+            return updateStateEnum.NotAvailable;
         }, (err) => {
             console.error("Failed to poll for update", err);
+            return updateStateEnum.Error;
         });
     }
 
