@@ -23,10 +23,10 @@ import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import Favico from 'favico.js';
 
 export const updateStateEnum = {
-    Error: -1,
-    NotAvailable: 0,
-    Downloading: 1,
-    Ready: 2,
+    ERROR: 'ERROR',
+    NOTAVAILABLE: 'NOTAVAILABLE',
+    DOWNLOADING: 'DOWNLOADING',
+    READY: 'READY',
 };
 
 /**

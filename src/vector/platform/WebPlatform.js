@@ -149,12 +149,12 @@ export default class WebPlatform extends VectorBasePlatform {
                     currentVersion: this.runningVersion,
                     newVersion: ver,
                 });
-                return updateStateEnum.Ready;
+                return updateStateEnum.READY;
             }
-            return updateStateEnum.NotAvailable;
+            return updateStateEnum.NOTAVAILABLE;
         }, (err) => {
             console.error("Failed to poll for update", err);
-            return updateStateEnum.Error;
+            return updateStateEnum.ERROR;
         });
     }
 

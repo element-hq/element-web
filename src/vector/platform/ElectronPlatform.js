@@ -143,12 +143,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         const _onUpdateAvailable = function() {
             electron.autoUpdater.removeListener('update-not-available', _onUpdateNotAvailable);
-            deferred.resolve(updateStateEnum.Downloading);
+            deferred.resolve(updateStateEnum.DOWNLOADING);
         }
 
         const _onUpdateNotAvailable = function() {
             electron.autoUpdater.removeListener('update-available', _onUpdateAvailable);
-            deferred.resolve(updateStateEnum.NotAvailable);
+            deferred.resolve(updateStateEnum.NOTAVAILABLE);
         }
 
         electron.autoUpdater.once('update-available', _onUpdateAvailable);
@@ -158,7 +158,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return deferred.promise.timeout(10000).catch(() => {
             electron.autoUpdater.removeListener('update-not-available', _onUpdateNotAvailable);
             electron.autoUpdater.removeListener('update-available', _onUpdateAvailable);
-            return updateStateEnum.Error;
+            return updateStateEnum.ERROR;
         });
     }
 

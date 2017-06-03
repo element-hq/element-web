@@ -39,18 +39,18 @@ export default React.createClass({
             console.log('checkForUpdate done, ', state);
 
             // We will be replaced by NewVersionBar
-            if (state === updateStateEnum.Ready) return;
+            if (state === updateStateEnum.READY) return;
 
             let done = true;
             let message;
             switch (state) {
-                case updateStateEnum.Error:
+                case updateStateEnum.ERROR:
                     message = 'Error encountered when checking for an update';
                     break;
-                case updateStateEnum.NotAvailable:
+                case updateStateEnum.NOTAVAILABLE:
                     message = 'No update found';
                     break;
-                case updateStateEnum.Downloading:
+                case updateStateEnum.DOWNLOADING:
                     message = 'Update is being downloaded';
                     done = false;
                     break;
