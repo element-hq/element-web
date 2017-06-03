@@ -115,7 +115,6 @@
     "The Home Server may be too old to support third party networks": "Hemservern kan vara för gammal för stöda tredje parters nätverk",
     "There are advanced notifications which are not shown here": "Det finns avancerade aviseringar som inte visas här",
     "The server may be unavailable or overloaded": "Servern kan vara överbelastad eller inte tillgänglig",
-<<<<<<< HEAD
     "This Room": "Det här rummet",
     "This room is inaccessible to guests. You may be able to join if you register.": "Det här rummet är inte tillgängligt till gäster. Du kan möjligtvis gå med i rummet om du registrerar dig.",
     " to room": " till rum",
@@ -159,7 +158,4 @@
     "Collecting logs": "Samlar in loggar",
     "Collecting app version information": "Samlar in appversionsinformation",
     "Notifications on the following keywords follow rules which can’t be displayed here:": "Aviseringar för följande nyckelord följer regler som inte kan visas här:"
-=======
-    "This Room": "Det här rummet"
->>>>>>> 85782f736cc765cf7cd177702683f486cdd709b7
 }
