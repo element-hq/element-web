@@ -75,6 +75,12 @@ export default class VectorBasePlatform extends BasePlatform {
     }
 
     /**
+     * Begin update polling, if applicable
+     */
+    startUpdater() {
+    }
+
+    /**
      * Check for the availability of an update to the version of the
      * app that's currently running.
      * If an update is available, this function should dispatch the
