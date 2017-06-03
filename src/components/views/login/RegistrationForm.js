@@ -110,13 +110,12 @@ module.exports = React.createClass({
                     button: _t("Continue"),
                     onFinished: function(confirmed) {
                         if (confirmed) {
-                            self._doSubmit();
+                            self._doSubmit(ev);
                         }
                     },
                 });
-            }
-            else {
-                self._doSubmit();
+            } else {
+                self._doSubmit(ev);
             }
         }
     },
