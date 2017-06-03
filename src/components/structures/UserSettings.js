@@ -854,6 +854,27 @@ module.exports = React.createClass({
         </div>;
     },
 
+    _onCheckUpdates: function() {
+        dis.dispatch({
+            action: 'check_updates',
+            value: true,
+        });
+    },
+
+    _renderCheckUpdate: function() {
+        const platform = PlatformPeg.get();
+        if ('canSelfUpdate' in platform && platform.canSelfUpdate()) {
+            return <div>
+                <h3>Updates</h3>
+                <div className="mx_UserSettings_section">
+                    <AccessibleButton className="mx_UserSettings_button danger" onClick={this._onCheckUpdates}>
+                        Check for update
+                    </AccessibleButton>
+                </div>
+            </div>;
+        }
+    },
+
     _renderBulkOptions: function() {
         const invitedRooms = MatrixClientPeg.get().getRooms().filter((r) => {
             return r.hasMembershipState(this._me, "invite");
@@ -1245,6 +1266,8 @@ module.exports = React.createClass({
                         { _t("olm version:") } {olmVersionString}<br/>
                     </div>
                 </div>
+
+                {this._renderCheckUpdate()}
 
                 {this._renderClearCache()}
 

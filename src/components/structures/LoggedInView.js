@@ -182,6 +182,7 @@ export default React.createClass({
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         const GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
+        const UpdateCheckBar = sdk.getComponent('globals.UpdateCheckBar');
 
         let page_element;
         let right_panel = '';
@@ -249,16 +250,16 @@ export default React.createClass({
                 break;
         }
 
-        var topBar;
+        let topBar;
         if (this.props.hasNewVersion) {
             topBar = <NewVersionBar version={this.props.version} newVersion={this.props.newVersion}
-                releaseNotes={this.props.newVersionReleaseNotes}
+                                    releaseNotes={this.props.newVersionReleaseNotes}
             />;
-        }
-        else if (this.props.matrixClient.isGuest()) {
+        } else if (this.props.checkingForUpdate) {
+            topBar = <UpdateCheckBar />;
+        } else if (this.props.matrixClient.isGuest()) {
             topBar = <GuestWarningBar />;
-        }
-        else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
+        } else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
             topBar = <MatrixToolbar />;
         }
 
