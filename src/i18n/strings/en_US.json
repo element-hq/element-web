@@ -33,5 +33,11 @@
     "Enable audible notifications in web client": "Enable audible notifications in web client",
     "Enable desktop notifications": "Enable desktop notifications",
     "Enable email notifications": "Enable email notifications",
-    "Enable notifications for this account": "Enable notifications for this account"
+    "Enable notifications for this account": "Enable notifications for this account",
+    "Enable them now": "Enable them now",
+    "Enter keywords separated by a comma:": "Enter keywords separated by a comma:",
+    "Error": "Error",
+    "Error saving email notification preferences": "Error saving email notification preferences",
+    "#example": "#example",
+    "Expand panel": "Expand panel"
 }
