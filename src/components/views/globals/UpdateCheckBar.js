@@ -27,7 +27,7 @@ export default React.createClass({
 
     getInitialState: function() {
         return {
-            message: 'Checking for an update...',
+            message: _t('Checking for an update...'),
             done: false,
         };
     },
@@ -45,16 +45,16 @@ export default React.createClass({
             let message;
             switch (state) {
                 case updateStateEnum.ERROR:
-                    message = 'Error encountered when checking for an update.';
+                    message = _t('Error encountered when checking for an update.');
                     break;
                 case updateStateEnum.TIMEOUT:
-                    message = 'Update Check timed out, try again later.';
+                    message = _t('Update Check timed out, try again later.');
                     break;
                 case updateStateEnum.NOTAVAILABLE:
-                    message = 'No update found.';
+                    message = _t('No update found.');
                     break;
                 case updateStateEnum.DOWNLOADING:
-                    message = 'Update is being downloaded.';
+                    message = _t('Update is being downloaded.');
                     done = false;
                     break;
             }
