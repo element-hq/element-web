@@ -70,10 +70,19 @@ exports.create = function(win, config) {
         // if its not default we have to construct into nativeImage
         if (newFavicon !== config.icon_path) {
             newFavicon = nativeImage.createFromDataURL(favicons[0]);
-        }
+            trayIcon.setImage(newFavicon);
 
-        trayIcon.setImage(newFavicon);
-        win.setIcon(newFavicon);
+            if (process.platform === 'win32') {
+                newFavicon = newFavicon.resize({
+                    height: 40,
+                    width: 40,
+                });
+            }
+            win.setIcon(newFavicon);
+        } else {
+            trayIcon.setImage(newFavicon);
+            win.setIcon(newFavicon);
+        }
     });
 
     win.webContents.on('page-title-updated', function(ev, title) {
