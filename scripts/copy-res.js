@@ -167,9 +167,14 @@ function genLangList() {
             languages[normalizedLanguage] = {'fileName': lang.value + '.json', 'label': lang.label};
         }
     });
-    fs.writeFile('webapp/i18n/languages.json', JSON.stringify(languages, null, 4));
+    fs.writeFile('webapp/i18n/languages.json', JSON.stringify(languages, null, 4), function(err) {
+        if (err) {
+            console.error("Copy Error occured: " + err);
+            throw new Error("Failed to generate languages.json");
+        }
+    });
     if (verbose) {
-        console.log("Generated language list");
+        console.log("Generated languages.json");
     }
 }
 
