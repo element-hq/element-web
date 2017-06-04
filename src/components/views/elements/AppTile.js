@@ -33,6 +33,16 @@ export default React.createClass({
         };
     },
 
+    componentDidMount: function() {
+        console.log("App component %s mounted", this.props.id);
+        setInterval(() => {
+            const msg = "Message from riot";
+            const domain = 'http://localhost:8000';
+            this.refs.appFrame.contentWindow.postMessage(msg, domain);
+            console.log("Sending message");
+        }, 3000);
+    },
+
     _onEditClick: function() {
         console.log("Edit widget %s", this.props.id);
     },
@@ -65,7 +75,7 @@ export default React.createClass({
                 </div>
                 <div className="mx_AppTileBody">
                     {/* <iframe sandbox="sandbox" seamless="seamless" src={this.props.url}></iframe> */}
-                    <iframe seamless="seamless" src={this.props.url}></iframe>
+                    <iframe ref="appFrame" seamless="seamless" src={this.props.url}></iframe>
                 </div>
             </div>
         );
