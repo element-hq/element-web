@@ -108,11 +108,53 @@ function matrixLinkify(linkify) {
     S_AT_NAME_COLON_DOMAIN.on(TT.DOT, S_AT_NAME_COLON_DOMAIN_DOT);
     S_AT_NAME_COLON_DOMAIN_DOT.on(TT.DOMAIN, S_AT_NAME_COLON_DOMAIN);
     S_AT_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_USERID);
+
+
+    var GROUPID = function(value) {
+        MultiToken.call(this, value);
+        this.type = 'groupid';
+        this.isLink = true;
+    };
+    GROUPID.prototype = new MultiToken();
+
+    var S_PLUS = new linkify.parser.State();
+    var S_PLUS_NAME = new linkify.parser.State();
+    var S_PLUS_NAME_COLON = new linkify.parser.State();
+    var S_PLUS_NAME_COLON_DOMAIN = new linkify.parser.State();
+    var S_PLUS_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
+    var S_GROUPID = new linkify.parser.State(GROUPID);
+
+    var groupid_tokens = [
+        TT.DOT,
+        TT.UNDERSCORE,
+        TT.PLUS,
+        TT.NUM,
+        TT.DOMAIN,
+        TT.TLD,
+
+        // as in roomname_tokens
+        TT.LOCALHOST,
+    ];
+
+    S_START.on(TT.PLUS, S_PLUS);
+
+    S_PLUS.on(groupid_tokens, S_PLUS_NAME);
+    S_PLUS_NAME.on(groupid_tokens, S_PLUS_NAME);
+    S_PLUS_NAME.on(TT.DOMAIN, S_PLUS_NAME);
+
+    S_PLUS_NAME.on(TT.COLON, S_PLUS_NAME_COLON);
+
+    S_PLUS_NAME_COLON.on(TT.DOMAIN, S_PLUS_NAME_COLON_DOMAIN);
+    S_PLUS_NAME_COLON.on(TT.LOCALHOST, S_GROUPID); // accept +foo:localhost
+    S_PLUS_NAME_COLON_DOMAIN.on(TT.DOT, S_PLUS_NAME_COLON_DOMAIN_DOT);
+    S_PLUS_NAME_COLON_DOMAIN_DOT.on(TT.DOMAIN, S_PLUS_NAME_COLON_DOMAIN);
+    S_PLUS_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_GROUPID);
 }
 
 // stubs, overwritten in MatrixChat's componentDidMount
 matrixLinkify.onUserClick = function(e, userId) { e.preventDefault(); };
 matrixLinkify.onAliasClick = function(e, roomAlias) { e.preventDefault(); };
+matrixLinkify.onGroupClick = function(e, groupId) { e.preventDefault(); };
 
 var escapeRegExp = function(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -143,6 +185,12 @@ matrixLinkify.options = {
                         matrixLinkify.onAliasClick(e, href);
                     }
                 };
+            case "groupid":
+                return {
+                    click: function(e) {
+                        matrixLinkify.onGroupClick(e, href);
+                    }
+                };
         }
     },
 
@@ -150,6 +198,7 @@ matrixLinkify.options = {
         switch (type) {
             case 'roomalias':
             case 'userid':
+            case "groupid":
                 return matrixLinkify.MATRIXTO_BASE_URL + '/#/' + href;
             default:
                 var m;

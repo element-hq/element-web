@@ -22,4 +22,5 @@ export default {
     CreateRoom: "create_room",
     RoomDirectory: "room_directory",
     UserView: "user_view",
+    GroupView: "group_view",
 };

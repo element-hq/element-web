@@ -179,6 +179,7 @@ export default React.createClass({
         const CreateRoom = sdk.getComponent('structures.CreateRoom');
         const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         const HomePage = sdk.getComponent('structures.HomePage');
+        const GroupView = sdk.getComponent('structures.GroupView');
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         const GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
@@ -246,6 +247,12 @@ export default React.createClass({
             case PageTypes.UserView:
                 page_element = null; // deliberately null for now
                 right_panel = <RightPanel userId={this.props.viewUserId} opacity={this.props.rightOpacity} />;
+                break;
+            case PageTypes.GroupView:
+                // TODO
+                page_element = <GroupView
+                    groupId={this.props.currentGroupId}
+                />
                 break;
         }
 
