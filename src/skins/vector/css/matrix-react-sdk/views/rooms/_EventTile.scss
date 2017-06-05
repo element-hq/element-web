@@ -332,6 +332,24 @@ limitations under the License.
 .mx_EventTile_content .markdown-body code {
     background-color: #f8f8f8;
 }
+.mx_EventTile_copyButton {
+    position: absolute;
+    display: inline-block;
+    visibility: hidden;
+    cursor: pointer;
+    top: 6px;
+    right: 6px;
+    width: 19px;
+    height: 19px;
+    background-image: url($edit-button-url);
+}
+.mx_EventTile_body pre {
+    position: relative;
+}
+.mx_EventTile_body pre:hover .mx_EventTile_copyButton
+{
+    visibility: visible;
+}
 
 .mx_EventTile_content .markdown-body h1,
 .mx_EventTile_content .markdown-body h2,
