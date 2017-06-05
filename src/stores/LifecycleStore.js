@@ -45,6 +45,11 @@ class LifecycleStore extends Store {
                     deferred_action: payload.deferred_action,
                 });
                 break;
+            case 'cancel_after_sync_prepared':
+                this._setState({
+                    deferred_action: null,
+                });
+                break;
             case 'sync_state':
                 if (payload.state !== 'PREPARED') {
                     break;
