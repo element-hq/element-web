@@ -88,6 +88,12 @@ export default class KeyRequestHandler {
         }
         console.log("Forgetting room key request");
         requests.splice(idx, 1);
+        if (requests.length === 0) {
+            delete this._pendingKeyRequests[userId][deviceId];
+            if (Object.keys(this._pendingKeyRequests[userId]).length === 0) {
+                delete this._pendingKeyRequests[userId];
+            }
+        }
     }
 
     _processNextRequest() {
