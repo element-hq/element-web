@@ -22,7 +22,7 @@ import { _t } from '../../../languageHandler';
 const CreateRoomButton = function(props) {
     const ActionButton = sdk.getComponent('elements.ActionButton');
     return (
-        <ActionButton action="view_create_chat"
+        <ActionButton action="view_create_room"
             mouseOverAction={props.callout ? "callout_create_room" : null}
             label={ _t("Create new room") }
             iconPath="img/icons-create-room.svg"
