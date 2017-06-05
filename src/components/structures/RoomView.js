@@ -120,6 +120,7 @@ module.exports = React.createClass({
             room: null,
             roomId: null,
             roomLoading: true,
+            peekLoading: false,
 
             forwardingEvent: null,
             editingRoomSettings: false,
@@ -222,10 +223,13 @@ module.exports = React.createClass({
             } else if (this.state.roomId) {
                 console.log("Attempting to peek into room %s", this.state.roomId);
 
+                this.setState({
+                    peekLoading: true,
+                });
                 MatrixClientPeg.get().peekInRoom(this.state.roomId).then((room) => {
                     this.setState({
                         room: room,
-                        roomLoading: false,
+                        peekLoading: false,
                     });
                     this._onRoomLoaded(room);
                 }, (err) => {
@@ -235,7 +239,7 @@ module.exports = React.createClass({
                     if (err.errcode == "M_GUEST_ACCESS_FORBIDDEN") {
                         // This is fine: the room just isn't peekable (we assume).
                         this.setState({
-                            roomLoading: false,
+                            peekLoading: false,
                         });
                     } else {
                         throw err;
@@ -1422,7 +1426,7 @@ module.exports = React.createClass({
         const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
 
         if (!this.state.room) {
-            if (this.state.roomLoading) {
+            if (this.state.roomLoading || this.state.peekLoading) {
                 return (
                     <div className="mx_RoomView">
                         <Loader />
