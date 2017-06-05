@@ -20,6 +20,14 @@ import sdk from '../../../index';
 
 import { _t } from '../../../languageHandler';
 
+/**
+ * Dialog which asks the user whether they want to share their keys with
+ * an unverified device.
+ *
+ * onFinished is called with `true` if the key should be shared, `false` if it
+ * should not, and `undefined` if the dialog is cancelled. (In other words:
+ * truthy: do the key share. falsy: don't share the keys).
+ */
 export default React.createClass({
     propTypes: {
         matrixClient: React.PropTypes.object.isRequired,
@@ -155,7 +163,7 @@ export default React.createClass({
         return (
             <BaseDialog className='mx_KeyShareRequestDialog'
                 onFinished={this.props.onFinished}
-                title='Encryption key request'
+                title={_t('Encryption key request')}
             >
                 {content}
             </BaseDialog>

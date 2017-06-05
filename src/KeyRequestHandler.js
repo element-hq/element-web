@@ -26,7 +26,7 @@ export default class KeyRequestHandler {
         this._currentDevice = null;
 
         // userId -> deviceId -> [keyRequest]
-        this._pendingKeyRequests = {};
+        this._pendingKeyRequests = Object.create(null);
     }
 
     handleKeyRequest(keyRequest) {
@@ -35,7 +35,7 @@ export default class KeyRequestHandler {
         const requestId = keyRequest.requestId;
 
         if (!this._pendingKeyRequests[userId]) {
-            this._pendingKeyRequests[userId] = {};
+            this._pendingKeyRequests[userId] = Object.create(null);
         }
         if (!this._pendingKeyRequests[userId][deviceId]) {
             this._pendingKeyRequests[userId][deviceId] = [];

@@ -809,5 +809,7 @@
   "Share without verifying": "Share without verifying",
   "Ignore request": "Ignore request",
   "You added a new device '%(displayName)s', which is requesting encryption keys.": "You added a new device '%(displayName)s', which is requesting encryption keys.",
-  "Your unverified device '%(displayName)s' is requesting encryption keys.": "Your unverified device '%(displayName)s' is requesting encryption keys."
+  "Your unverified device '%(displayName)s' is requesting encryption keys.": "Your unverified device '%(displayName)s' is requesting encryption keys.",
+  "Encryption key request": "Encryption key request"
+
 }
