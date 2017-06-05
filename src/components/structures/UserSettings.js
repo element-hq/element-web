@@ -24,6 +24,7 @@ const dis = require("../../dispatcher");
 const q = require('q');
 const packageJson = require('../../../package.json');
 const UserSettingsStore = require('../../UserSettingsStore');
+const CallMediaHandler = require('../../CallMediaHandler');
 const GeminiScrollbar = require('react-gemini-scrollbar');
 const Email = require('../../email');
 const AddThreepid = require('../../AddThreepid');
@@ -79,11 +80,15 @@ const SETTINGS_LABELS = [
         id: 'showTwelveHourTimestamps',
         label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
     },
-/*
     {
         id: 'useCompactLayout',
         label: 'Use compact timeline layout',
     },
+    {
+        id: 'hideRedactions',
+        label: 'Hide removed messages',
+    },
+/*
     {
         id: 'useFixedWidthFont',
         label: 'Use fixed width font',
@@ -176,6 +181,7 @@ module.exports = React.createClass({
             email_add_pending: false,
             vectorVersion: undefined,
             rejectingInvites: false,
+            mediaDevices: null,
         };
     },
 
@@ -195,6 +201,8 @@ module.exports = React.createClass({
                 console.log("Failed to fetch app version", e);
             });
         }
+
+        this._refreshMediaDevices();
 
         // Bulk rejecting invites:
         // /sync won't have had time to return when UserSettings re-renders from state changes, so getRooms()
@@ -216,6 +224,13 @@ module.exports = React.createClass({
         this._syncedSettings = syncedSettings;
 
         this._localSettings = UserSettingsStore.getLocalSettings();
+
+        if (PlatformPeg.get().isElectron()) {
+            const {ipcRenderer} = require('electron');
+
+            ipcRenderer.on('settings', this._electronSettings);
+            ipcRenderer.send('settings_get');
+        }
 
         this.setState({
             language: languageHandler.getCurrentLanguage(),
@@ -239,6 +254,29 @@ module.exports = React.createClass({
         if (cli) {
             cli.removeListener("RoomMember.membership", this._onInviteStateChange);
         }
+
+        if (PlatformPeg.get().isElectron()) {
+            const {ipcRenderer} = require('electron');
+            ipcRenderer.removeListener('settings', this._electronSettings);
+        }
+    },
+
+    _electronSettings: function(ev, settings) {
+        this.setState({ electron_settings: settings });
+    },
+
+    _refreshMediaDevices: function() {
+        q().then(() => {
+            return CallMediaHandler.getDevices();
+        }).then((mediaDevices) => {
+            // console.log("got mediaDevices", mediaDevices, this._unmounted);
+            if (this._unmounted) return;
+            this.setState({
+                mediaDevices,
+                activeAudioInput: this._localSettings['webrtc_audioinput'],
+                activeVideoInput: this._localSettings['webrtc_videoinput'],
+            });
+        });
     },
 
     _refreshFromServer: function() {
@@ -678,8 +716,8 @@ module.exports = React.createClass({
                 <h3>{ _t("Cryptography") }</h3>
                 <div className="mx_UserSettings_section mx_UserSettings_cryptoSection">
                     <ul>
-                        <li><label>Device ID:</label>             <span><code>{deviceId}</code></span></li>
-                        <li><label>Device key:</label>            <span><code><b>{identityKey}</b></code></span></li>
+                        <li><label>{_t("Device ID:")}</label>             <span><code>{deviceId}</code></span></li>
+                        <li><label>{_t("Device key:")}</label>            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
                     { importExportButtons }
                 </div>
@@ -736,6 +774,8 @@ module.exports = React.createClass({
     },
 
     _renderAnalyticsControl: function() {
+        if (!SdkConfig.get().piwik) return <div/>;
+
         return <div>
             <h3>{ _t('Analytics') }</h3>
             <div className="mx_UserSettings_section">
@@ -748,6 +788,7 @@ module.exports = React.createClass({
     _renderLabs: function() {
         // default to enabled if undefined
         if (this.props.enableLabs === false) return null;
+        UserSettingsStore.doTranslations();
 
         const features = UserSettingsStore.LABS_FEATURES.map((feature) => (
             <div key={feature.id} className="mx_UserSettings_toggle">
@@ -833,6 +874,133 @@ module.exports = React.createClass({
                 <div className="mx_UserSettings_section">
                     {reject}
                 </div>
+        </div>;
+    },
+
+    _renderElectronSettings: function() {
+        const settings = this.state.electron_settings;
+        if (!settings) return;
+
+        const {ipcRenderer} = require('electron');
+
+        return <div>
+            <h3>{ _t('Desktop specific') }</h3>
+            <div className="mx_UserSettings_section">
+                <div className="mx_UserSettings_toggle">
+                    <input type="checkbox"
+                           name="auto-launch"
+                           defaultChecked={settings['auto-launch']}
+                           onChange={(e) => {
+                               ipcRenderer.send('settings_set', 'auto-launch', e.target.checked);
+                           }}
+                    />
+                    <label htmlFor="auto-launch">{_t('Start automatically after system login')}</label>
+                </div>
+            </div>
+        </div>;
+    },
+
+    _mapWebRtcDevicesToSpans: function(devices) {
+        return devices.map((device) => <span key={device.deviceId}>{device.label}</span>);
+    },
+
+    _setAudioInput: function(deviceId) {
+        this.setState({activeAudioInput: deviceId});
+        CallMediaHandler.setAudioInput(deviceId);
+    },
+
+    _setVideoInput: function(deviceId) {
+        this.setState({activeVideoInput: deviceId});
+        CallMediaHandler.setVideoInput(deviceId);
+    },
+
+    _requestMediaPermissions: function(event) {
+        const getUserMedia = (
+            window.navigator.getUserMedia || window.navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia
+        );
+        if (getUserMedia) {
+            return getUserMedia.apply(window.navigator, [
+                { video: true, audio: true },
+                this._refreshMediaDevices,
+                function() {
+                    const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
+                    Modal.createDialog(ErrorDialog, {
+                        title: _t('No media permissions'),
+                        description: _t('You may need to manually permit Riot to access your microphone/webcam'),
+                    });
+                },
+            ]);
+        }
+    },
+
+    _renderWebRtcSettings: function() {
+        if (this.state.mediaDevices === false) {
+            return <div>
+                <h3>{_t('VoIP')}</h3>
+                <div className="mx_UserSettings_section">
+                    <p className="mx_UserSettings_link" onClick={this._requestMediaPermissions}>
+                        {_t('Missing Media Permissions, click here to request.')}
+                    </p>
+                </div>
+            </div>;
+        } else if (!this.state.mediaDevices) return;
+
+        const Dropdown = sdk.getComponent('elements.Dropdown');
+
+        let microphoneDropdown = <p>{_t('No Microphones detected')}</p>;
+        let webcamDropdown = <p>{_t('No Webcams detected')}</p>;
+
+        const defaultOption = {
+            deviceId: '',
+            label: _t('Default Device'),
+        };
+
+        const audioInputs = this.state.mediaDevices.audioinput.slice(0);
+        if (audioInputs.length > 0) {
+            let defaultInput = '';
+            if (!audioInputs.some((input) => input.deviceId === 'default')) {
+                audioInputs.unshift(defaultOption);
+            } else {
+                defaultInput = 'default';
+            }
+
+            microphoneDropdown = <div>
+                <h4>{_t('Microphone')}</h4>
+                <Dropdown
+                    className="mx_UserSettings_webRtcDevices_dropdown"
+                    value={this.state.activeAudioInput || defaultInput}
+                    onOptionChange={this._setAudioInput}>
+                    {this._mapWebRtcDevicesToSpans(audioInputs)}
+                </Dropdown>
+            </div>;
+        }
+
+        const videoInputs = this.state.mediaDevices.videoinput.slice(0);
+        if (videoInputs.length > 0) {
+            let defaultInput = '';
+            if (!videoInputs.some((input) => input.deviceId === 'default')) {
+                videoInputs.unshift(defaultOption);
+            } else {
+                defaultInput = 'default';
+            }
+
+            webcamDropdown = <div>
+                <h4>{_t('Camera')}</h4>
+                <Dropdown
+                    className="mx_UserSettings_webRtcDevices_dropdown"
+                    value={this.state.activeVideoInput || defaultInput}
+                    onOptionChange={this._setVideoInput}>
+                    {this._mapWebRtcDevicesToSpans(videoInputs)}
+                </Dropdown>
+            </div>;
+        }
+
+        return <div>
+            <h3>{_t('VoIP')}</h3>
+            <div className="mx_UserSettings_section">
+                {microphoneDropdown}
+                {webcamDropdown}
+            </div>
         </div>;
     },
 
@@ -1033,10 +1201,13 @@ module.exports = React.createClass({
 
                 {this._renderUserInterfaceSettings()}
                 {this._renderLabs()}
+                {this._renderWebRtcSettings()}
                 {this._renderDevicesPanel()}
                 {this._renderCryptoInfo()}
                 {this._renderBulkOptions()}
                 {this._renderBugReport()}
+
+                {PlatformPeg.get().isElectron() && this._renderElectronSettings()}
 
                 {this._renderAnalyticsControl()}
 

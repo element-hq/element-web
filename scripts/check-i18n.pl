@@ -178,12 +178,12 @@ sub read_src_strings {
         $src =~ s/"\s*\+\s*"//g;
 
         $file =~ s/^.*\/src/src/;
-        while ($src =~ /_t\(\s*'(.*?[^\\])'/sg) {
+        while ($src =~ /_t(?:Jsx)?\(\s*'(.*?[^\\])'/sg) {
             my $s = $1;
             $s =~ s/\\'/'/g;
             push @$strings, [$s, $file];
         }
-        while ($src =~ /_t\(\s*"(.*?[^\\])"/sg) {
+        while ($src =~ /_t(?:Jsx)?\(\s*"(.*?[^\\])"/sg) {
             push @$strings, [$1, $file];
         }
     }

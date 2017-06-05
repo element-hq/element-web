@@ -18,6 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import * as Roles from '../../../Roles';
+import { _t } from '../../../languageHandler';
 
 var LEVEL_ROLE_MAP = {};
 var reverseRoles = {};
@@ -116,9 +117,9 @@ module.exports = React.createClass({
                     text: Roles.textualPowerLevel(level, 0),
                 }
             });
-            options.push({ value: "Custom", text: "Custom level" });
+            options.push({ value: "Custom", text: _t("Custom level") });
             options = options.map((op) => {
-                return <option value={op.value}>{op.text}</option>;
+                return <option value={op.value} key={op.value}>{op.text}</option>;
             });
 
             select =

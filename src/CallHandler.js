@@ -226,7 +226,7 @@ function _onAction(payload) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: _t('Existing Call'),
-                    description: _t('You are already in a call') + '.',
+                    description: _t('You are already in a call.'),
                 });
                 return; // don't allow >1 call to be placed.
             }
@@ -236,7 +236,7 @@ function _onAction(payload) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: _t('VoIP is unsupported'),
-                    description: _t('You cannot place VoIP calls in this browser') + '.',
+                    description: _t('You cannot place VoIP calls in this browser.'),
                 });
                 return;
             }
@@ -251,7 +251,7 @@ function _onAction(payload) {
             if (members.length <= 1) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    description: _t('You cannot place a call with yourself') + '.',
+                    description: _t('You cannot place a call with yourself.'),
                 });
                 return;
             }
@@ -284,7 +284,7 @@ function _onAction(payload) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: _t('VoIP is unsupported'),
-                    description: _t('You cannot place VoIP calls in this browser') + '.',
+                    description: _t('You cannot place VoIP calls in this browser.'),
                 });
             }
             else if (MatrixClientPeg.get().isRoomEncrypted(payload.room_id)) {
@@ -303,7 +303,7 @@ function _onAction(payload) {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 Modal.createDialog(QuestionDialog, {
                     title: _t('Warning!'),
-                    description: _t('Conference calling is in development and may not be reliable') + '.',
+                    description: _t('Conference calling is in development and may not be reliable.'),
                     onFinished: confirm=>{
                         if (confirm) {
                             ConferenceHandler.createNewMatrixCall(
@@ -315,7 +315,7 @@ function _onAction(payload) {
                                 console.error("Conference call failed: " + err);
                                 Modal.createDialog(ErrorDialog, {
                                     title: _t('Failed to set up conference call'),
-                                    description: _t('Conference call failed') + '. ' + ((err && err.message) ? err.message : ''),
+                                    description: _t('Conference call failed.') + ' ' + ((err && err.message) ? err.message : ''),
                                 });
                             });
                         }

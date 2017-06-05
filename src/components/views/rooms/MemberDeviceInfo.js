@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
 export default class MemberDeviceInfo extends React.Component {
     render() {
@@ -49,7 +50,7 @@ export default class MemberDeviceInfo extends React.Component {
         // add the deviceId as a titletext to help with debugging
         return (
             <div className="mx_MemberDeviceInfo"
-                    title={"device id: " + this.props.device.deviceId} >
+                    title={_t("device id: ") + this.props.device.deviceId} >
                 <div className="mx_MemberDeviceInfo_deviceInfo">
                     <div className="mx_MemberDeviceInfo_deviceId">
                         {deviceName}

@@ -360,7 +360,7 @@ export function bodyToHtml(content, highlights, opts) {
         'mx_EventTile_bigEmoji': emojiBody,
         'markdown-body': isHtml,
     });
-    return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} />;
+    return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" />;
 }
 
 export function emojifyText(text) {

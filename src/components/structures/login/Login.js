@@ -18,7 +18,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import { _t } from '../../../languageHandler';
+import { _t, _tJsx } from '../../../languageHandler';
 import ReactDOM from 'react-dom';
 import sdk from '../../../index';
 import Login from '../../../Login';
@@ -222,17 +222,20 @@ module.exports = React.createClass({
                 (this.state.enteredHomeserverUrl.startsWith("http:") ||
                  !this.state.enteredHomeserverUrl.startsWith("http")))
             {
-                const urlStart = <a href='https://www.google.com/search?&q=enable%20unsafe%20scripts'>;
-                const urlEnd = </a>;
                 errorText = <span>
-                    { _t('Can\'t connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or %(urlStart)s enable unsafe scripts %(urlEnd)s', {urlStart: urlStart, urlEnd: urlEnd})}
+                    { _tJsx("Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. " +
+                            "Either use HTTPS or <a>enable unsafe scripts</a>.",
+                      /<a>(.*?)<\/a>/,
+                      (sub) => { return <a href="https://www.google.com/search?&q=enable%20unsafe%20scripts">{ sub }</a>; }
+                    )}
                 </span>;
             }
             else {
-                const urlStart = <a href={this.state.enteredHomeserverUrl}>;
-                const urlEnd = </a>;
                 errorText = <span>
-                    { _t('Can\'t connect to homeserver - please check your connectivity and ensure your %(urlStart)s homeserver\'s SSL certificate %(urlEnd)s is trusted', {urlStart: urlStart, urlEnd: urlEnd})}
+                    { _tJsx("Can't connect to homeserver - please check your connectivity and ensure your <a>homeserver's SSL certificate</a> is trusted.",
+                      /<a>(.*?)<\/a>/,
+                      (sub) => { return <a href={this.state.enteredHomeserverUrl}>{ sub }</a>; }
+                    )}
                 </span>;
             }
         }

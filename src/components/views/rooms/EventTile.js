@@ -38,6 +38,7 @@ var eventTileTypes = {
     'm.call.answer' : 'messages.TextualEvent',
     'm.call.hangup' : 'messages.TextualEvent',
     'm.room.name'   : 'messages.TextualEvent',
+    'm.room.avatar' : 'messages.RoomAvatarEvent',
     'm.room.topic'  : 'messages.TextualEvent',
     'm.room.third_party_invite' : 'messages.TextualEvent',
     'm.room.history_visibility' : 'messages.TextualEvent',
@@ -481,7 +482,7 @@ module.exports = WithMatrixClient(React.createClass({
         }
 
         const editButton = (
-            <span className="mx_EventTile_editButton" title="Options" onClick={this.onEditClicked} />
+            <span className="mx_EventTile_editButton" title={ _t("Options") } onClick={this.onEditClicked} />
         );
         let e2e;
         // cosmetic padlocks:

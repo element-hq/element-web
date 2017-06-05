@@ -229,7 +229,7 @@ module.exports = React.createClass({
                     <div className="mx_Login_error">
                     </div>
                     <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
-                        Return to login
+                        {_t('Return to login screen')}
                     </a>
                     <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
                         { _t('Create an account') }

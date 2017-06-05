@@ -48,6 +48,19 @@ Guests can't use labs features. Please register.
 A new password must be entered.
 Resetting password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.
 Guests cannot join this room even if explicitly invited.
+Guest users can't invite users. Please register to invite.
+This room is inaccessible to guests. You may be able to join if you register.
+delete the alias.
+remove %(name)s from the directory.
+Conference call failed.
+Conference calling is in development and may not be reliable.
+Guest users can't create new rooms. Please register to create room and start a chat.
+Server may be unavailable, overloaded, or you hit a bug.
+Server unavailable, overloaded, or something else went wrong.
+You are already in a call.
+You cannot place VoIP calls in this browser.
+You cannot place a call with yourself.
+Your email address does not appear to be associated with a Matrix ID on this Homeserver.
 EOT
 )];
 }

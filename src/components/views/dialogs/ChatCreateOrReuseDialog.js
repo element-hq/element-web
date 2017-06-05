@@ -16,15 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
-import dis from '../../../dispatcher';
-import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton from '../elements/AccessibleButton';
 import Unread from '../../../Unread';
 import classNames from 'classnames';
-import createRoom from '../../../createRoom';
-import { RoomMember } from "matrix-js-sdk";
 
 export default class ChatCreateOrReuseDialog extends React.Component {
 

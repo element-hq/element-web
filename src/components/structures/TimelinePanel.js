@@ -131,6 +131,8 @@ var TimelinePanel = React.createClass({
             }
         }
 
+        const syncedSettings = UserSettingsStore.getSyncedSettings();
+
         return {
             events: [],
             timelineLoading: true, // track whether our room timeline is loading
@@ -175,10 +177,13 @@ var TimelinePanel = React.createClass({
             clientSyncState: MatrixClientPeg.get().getSyncState(),
 
             // should the event tiles have twelve hour times
-            isTwelveHour: UserSettingsStore.getSyncedSetting('showTwelveHourTimestamps'),
+            isTwelveHour: syncedSettings.showTwelveHourTimestamps,
 
             // always show timestamps on event tiles?
-            alwaysShowTimestamps: UserSettingsStore.getSyncedSetting('alwaysShowTimestamps'),
+            alwaysShowTimestamps: syncedSettings.alwaysShowTimestamps,
+
+            // hide redacted events as per old behaviour
+            hideRedactions: syncedSettings.hideRedactions,
         };
     },
 
@@ -915,7 +920,7 @@ var TimelinePanel = React.createClass({
                     });
                 };
             }
-            var message = (error.errcode == 'M_FORBIDDEN') 
+            var message = (error.errcode == 'M_FORBIDDEN')
             	? _t("Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question") + "."
                 : _t("Tried to load a specific point in this room's timeline, but was unable to find it") + ".";
             Modal.createDialog(ErrorDialog, {
@@ -1113,26 +1118,27 @@ var TimelinePanel = React.createClass({
         );
         return (
             <MessagePanel ref="messagePanel"
-                    hidden={ this.props.hidden }
-                    backPaginating={ this.state.backPaginating }
-                    forwardPaginating={ forwardPaginating }
-                    events={ this.state.events }
-                    highlightedEventId={ this.props.highlightedEventId }
-                    readMarkerEventId={ this.state.readMarkerEventId }
-                    readMarkerVisible={ this.state.readMarkerVisible }
-                    suppressFirstDateSeparator={ this.state.canBackPaginate }
-                    showUrlPreview = { this.props.showUrlPreview }
-                    manageReadReceipts = { this.props.manageReadReceipts }
-                    ourUserId={ MatrixClientPeg.get().credentials.userId }
-                    stickyBottom={ stickyBottom }
-                    onScroll={ this.onMessageListScroll }
-                    onFillRequest={ this.onMessageListFillRequest }
-                    onUnfillRequest={ this.onMessageListUnfillRequest }
-                    opacity={ this.props.opacity }
-                    isTwelveHour={ this.state.isTwelveHour }
-                    alwaysShowTimestamps={ this.state.alwaysShowTimestamps }
-                    className={ this.props.className }
-                    tileShape={ this.props.tileShape }
+                          hidden={ this.props.hidden }
+                          hideRedactions={ this.state.hideRedactions }
+                          backPaginating={ this.state.backPaginating }
+                          forwardPaginating={ forwardPaginating }
+                          events={ this.state.events }
+                          highlightedEventId={ this.props.highlightedEventId }
+                          readMarkerEventId={ this.state.readMarkerEventId }
+                          readMarkerVisible={ this.state.readMarkerVisible }
+                          suppressFirstDateSeparator={ this.state.canBackPaginate }
+                          showUrlPreview = { this.props.showUrlPreview }
+                          manageReadReceipts = { this.props.manageReadReceipts }
+                          ourUserId={ MatrixClientPeg.get().credentials.userId }
+                          stickyBottom={ stickyBottom }
+                          onScroll={ this.onMessageListScroll }
+                          onFillRequest={ this.onMessageListFillRequest }
+                          onUnfillRequest={ this.onMessageListUnfillRequest }
+                          opacity={ this.props.opacity }
+                          isTwelveHour={ this.state.isTwelveHour }
+                          alwaysShowTimestamps={ this.state.alwaysShowTimestamps }
+                          className={ this.props.className }
+                          tileShape={ this.props.tileShape }
             />
         );
     },
