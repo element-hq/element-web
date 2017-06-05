@@ -122,7 +122,7 @@ describe('loading:', function () {
         function routeUrl(location, matrixChat) {
             console.log(Date.now() + ` routing URL '${location}'`);
             const s = getScreenFromLocation(location);
-            console.log("Showing screen "+ s);
+            console.log("Showing screen ", s);
             matrixChat.showScreen(s.screen, s.params);
         }
 
@@ -193,14 +193,12 @@ describe('loading:', function () {
 
                 return httpBackend.flush();
             }).then(() => {
-                // Wait for another trip around the event loop for the UI to update
-                return q.delay(1);
-            }).then(() => {
-                // we expect a single <Login> component
+                // we expect a single <Login> component following session load
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.login.Login'));
                 expect(windowLocation.hash).toEqual("");
-            }).done(done, done);
+                done();
+            });
         });
 
         it('should follow the original link after successful login', function(done) {
