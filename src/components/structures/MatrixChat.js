@@ -892,13 +892,14 @@ module.exports = React.createClass({
 
             // Set the display name = user ID localpart
             MatrixClientPeg.get().setDisplayName(
-                MatrixClientPeg.get().getUserIdLocalpart()
+                MatrixClientPeg.get().getUserIdLocalpart(),
             );
 
             if (this.props.config.welcomeUserId) {
                 createRoom({
                     dmUserId: this.props.config.welcomeUserId,
-                    andView: false,
+                    // Only view the welcome user if we're NOT looking at a room
+                    andView: !this.state.currentRoomId,
                 });
                 return;
             }
