@@ -47,16 +47,17 @@ limitations under the License.
     margin: 0 5px 2px 0;
     border: 1px solid $primary-hairline-color;
     border-radius: 2px;
-    height: 350px;
+    // height: 350px;
     // display: inline-block;
 }
 
 .mx_AppTileFullWidth {
     width: 100%;
-    margin: 0 5px 2px 0;
+    margin: 0;
+    padding: 0;
     border: 1px solid $primary-hairline-color;
     border-radius: 2px;
-    height: 350px;
+    // height: 350px;
     // display: inline-block;
 }
 
@@ -79,9 +80,12 @@ limitations under the License.
 
 .mx_AppTileBody iframe {
     width: 100%;
-    height: 331px;
+    height: 350px;
     overflow: hidden;
     border: none;
+    padding: 0;
+    margin: 0;
+    display: block;
 }
 
 .mx_CloseAppWidget {
