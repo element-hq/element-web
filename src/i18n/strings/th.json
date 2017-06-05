@@ -1,1 +1,11 @@
-{}
+{
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s ผ่านทาง %(browserName)s บน %(osName)s",
+    "All messages": "ข้อความทั้งหมด",
+    "Cancel": "ยกเลิก",
+    "Close": "ปิด",
+    "Error": "ข้อผิดพลาด",
+    "#example": "#ตัวอย่าง",
+    "Files": "ไฟล์",
+    "Forward Message": "ส่งต่อข้อความ",
+    " from room": " จากห้อง"
+}
