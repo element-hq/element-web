@@ -10,6 +10,7 @@
 // control when we languages are available.
 const INCLUDE_LANGS = [
     {'value': 'en_EN', 'label': 'English'},
+    {'value': 'en_US', 'label': 'English (US)'},
     {'value': 'da', 'label': 'Dansk'},
     {'value': 'nl', 'label': 'Nederlands'},
     {'value': 'de_DE', 'label': 'Deutsch'},
