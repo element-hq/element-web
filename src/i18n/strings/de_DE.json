@@ -888,5 +888,6 @@
     "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Deine E-Mail-Adresse scheint nicht mit einer Matrix-ID auf diesem Heimserver verbunden zu sein.",
     "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName hat das Raum-Bild geändert zu <img/>",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s hat das Raum-Bild für %(roomName)s geändert",
-    "Hide removed messages": "Gelöschte Nachrichten verbergen"
+    "Hide removed messages": "Gelöschte Nachrichten verbergen",
+    "Start new chat": "Starte neuen Chat"
 }
