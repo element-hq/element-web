@@ -507,7 +507,7 @@ module.exports = React.createClass({
                 this._onSetTheme(payload.value);
                 break;
             case 'on_logging_in':
-                this.setState({loggingIn: true});
+                this.setState({loggingIn: true, ready: false});
                 break;
             case 'on_logged_in':
                 this._onLoggedIn(payload.teamToken);
