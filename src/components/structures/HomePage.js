@@ -62,7 +62,7 @@ module.exports = React.createClass({
                 { method: "GET", url: src },
                 (err, response, body) => {
                     if (err || response.status < 200 || response.status >= 300) {
-                        console.log(error);
+                        console.log(err);
                         this.setState({ page: "Couldn't load home page" });
                     }
 
