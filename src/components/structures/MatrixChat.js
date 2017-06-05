@@ -325,7 +325,6 @@ module.exports = React.createClass({
     onAction: function(payload) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        const TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
 
         switch (payload.action) {
             case 'logout':
@@ -457,22 +456,7 @@ module.exports = React.createClass({
                 this.notifyNewScreen('settings');
                 break;
             case 'view_create_room':
-                if (MatrixClientPeg.get().isGuest()) {
-                    dis.dispatch({action: 'view_set_mxid'});
-                    break;
-                }
-                Modal.createDialog(TextInputDialog, {
-                    title: _t('Create Room'),
-                    description: _t('Room name (optional)'),
-                    button: _t('Create Room'),
-                    onFinished: (shouldCreate, name) => {
-                        if (shouldCreate) {
-                            const createOpts = {};
-                            if (name) createOpts.name = name;
-                            createRoom({createOpts}).done();
-                        }
-                    },
-                });
+                this._createRoom();
                 break;
             case 'view_room_directory':
                 this._setPage(PageTypes.RoomDirectory);
@@ -729,6 +713,32 @@ module.exports = React.createClass({
             description: _t("Who would you like to communicate with?"),
             placeholder: _t("Email, name or matrix ID"),
             button: _t("Start Chat"),
+        });
+    },
+
+    _createRoom: function() {
+        if (MatrixClientPeg.get().isGuest()) {
+            dis.dispatch({
+                action: 'do_after_sync_prepared',
+                deferred_action: {
+                    action: 'view_create_room',
+                },
+            });
+            dis.dispatch({action: 'view_set_mxid'});
+            return;
+        }
+        const TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
+        Modal.createDialog(TextInputDialog, {
+            title: _t('Create Room'),
+            description: _t('Room name (optional)'),
+            button: _t('Create Room'),
+            onFinished: (should_create, name) => {
+                if (should_create) {
+                    const createOpts = {};
+                    if (name) createOpts.name = name;
+                    createRoom({createOpts}).done();
+                }
+            },
         });
     },
 
