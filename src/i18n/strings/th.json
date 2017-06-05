@@ -1,6 +1,6 @@
 {
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s ผ่านทาง %(browserName)s บน %(osName)s",
-    "All messages": "ข้อความทั้งหมด",
+    "All messages": "ทุกข้อความ",
     "Cancel": "ยกเลิก",
     "Close": "ปิด",
     "Error": "ข้อผิดพลาด",
@@ -88,5 +88,7 @@
     "Start chat": "เริ่มแชท",
     "Riot Desktop on %(platformName)s": "Riot เดสก์ทอปบน %(platformName)s",
     "Riot is not supported on mobile web. Install the app?": "Riot ไม่รองรับเว็บบนอุปกรณ์พกพา ติดตั้งแอป?",
-    "Riot does not know how to join a room on this network": "Riot ไม่รู้วิธีเข้าร่วมห้องในเครือข่ายนี้"
+    "Riot does not know how to join a room on this network": "Riot ไม่รู้วิธีเข้าร่วมห้องในเครือข่ายนี้",
+    "Direct Chat": "แชทโดยตรง",
+    "All messages (loud)": "ทุกข้อความ (เสียงดัง)"
 }
