@@ -835,7 +835,7 @@
   "Click on the button below to start chatting!": "Click on the button below to start chatting!",
   "Create a new chat or reuse an existing one": "Create a new chat or reuse an existing one",
   "You already have existing direct chats with this user:": "You already have existing direct chats with this user:",
-  "Start new chat": "Start new chat"
+  "Start new chat": "Start new chat",
   "Disable URL previews for this room (affects only you)": "Disable URL previews for this room (affects only you)",
   "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName changed the room avatar to <img/>",
   "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s removed the room avatar.",
