@@ -73,5 +73,12 @@
     "Thursday": "วันพฤหัสบดี",
     "Friday": "วันศุกร์",
     "Saturday": "วันเสาร์",
-    "olm version:": "เวอร์ชัน olm:"
+    "olm version:": "เวอร์ชัน olm:",
+    "Report it": "รายงานเลย",
+    "Remove": "ลบ",
+    "Custom Server Options": "กำหนดเซิร์ฟเวอร์เอง",
+    "Failed to join the room": "การเข้าร่วมห้องล้มเหลว",
+    "Drop here %(toAction)s": "ปล่อยที่นี่ %(toAction)s",
+    "Favourite": "รายการโปรด",
+    "Failed to forget room %(errCode)s": "การลืมห้องล้มเหลว %(errCode)s"
 }
