@@ -721,13 +721,17 @@ module.exports = React.createClass({
         );
         // Use a deferred action to reshow the dialog once the user has registered
         if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({
-                action: 'do_after_sync_prepared',
-                deferred_action: {
-                    action: 'view_start_chat_or_reuse',
-                    user_id: userId,
-                },
-            });
+            // No point in making 2 DMs with welcome bot. This assumes view_set_mxid will
+            // result in a new DM with the welcome user.
+            if (userId !== this.props.config.welcomeUserId) {
+                dis.dispatch({
+                    action: 'do_after_sync_prepared',
+                    deferred_action: {
+                        action: 'view_start_chat_or_reuse',
+                        user_id: userId,
+                    },
+                });
+            }
             dis.dispatch({
                 action: 'view_set_mxid',
             });
