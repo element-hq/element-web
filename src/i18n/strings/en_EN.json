@@ -156,5 +156,11 @@
   "Dev chat for the Riot/Web dev team": "Dev chat for the Riot/Web dev team",
   "Dev chat for the Dendrite dev team": "Dev chat for the Dendrite dev team",
   "Co-ordination for Riot/Web translators": "Co-ordination for Riot/Web translators",
-  "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!"
+  "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!",
+  "Failed to change password. Is your password correct?": "Failed to change password. Is your password correct?",
+  "You have successfully set a password!": "You have successfully set a password!",
+  "You can now return to your account after signing out, and sign in on other devices.": "You can now return to your account after signing out, and sign in on other devices.",
+  "Continue": "Continue",
+  "Please set a password!": "Please set a password!",
+  "This will allow you to return to your account after signing out, and sign in on other devices.": "This will allow you to return to your account after signing out, and sign in on other devices."
 }

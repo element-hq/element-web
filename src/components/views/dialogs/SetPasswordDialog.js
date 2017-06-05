@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import q from 'q';
 import React from 'react';
 import sdk from 'matrix-react-sdk';
-import {MatrixClientPeg} from 'matrix-react-sdk';
-import classnames from 'classnames';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
+
 
 /**
  * Prompt the user to set a password
@@ -51,9 +50,12 @@ export default React.createClass({
     _onPasswordChangeError: function(err) {
         let errMsg = err.error || "";
         if (err.httpStatus === 403) {
-            errMsg = "Failed to change password. Is your password correct?";
+            errMsg = _t('Failed to change password. Is your password correct?');
         } else if (err.httpStatus) {
-            errMsg += ` (HTTP status ${err.httpStatus})`;
+            errMsg += _t(
+                ' (HTTP status %(httpStatus))',
+                { httpStatus: err.httpStatus },
+            );
         }
         this.setState({
             error: errMsg,
@@ -63,18 +65,16 @@ export default React.createClass({
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const ChangePassword = sdk.getComponent('views.settings.ChangePassword');
-        const Spinner = sdk.getComponent('elements.Spinner');
 
         if (this.state.success) {
             return (
                 <BaseDialog className="mx_SetPasswordDialog"
                     onFinished={this.props.onFinished}
-                    title="You have successfully set a password!"
+                    title={ _t('You have successfully set a password!') }
                 >
                     <div className="mx_Dialog_content">
                         <p>
-                            You can now return to your account after signing out,
-                            and sign in on other devices.
+                            { _t('You can now return to your account after signing out, and sign in on other devices.') }
                         </p>
                     </div>
                     <div className="mx_Dialog_buttons">
@@ -82,7 +82,7 @@ export default React.createClass({
                             className="mx_Dialog_primary"
                             autoFocus={true}
                             onClick={this._onContinueClicked}>
-                                Continue
+                                { _t('Continue') }
                         </button>
                     </div>
                 </BaseDialog>
@@ -92,12 +92,11 @@ export default React.createClass({
         return (
             <BaseDialog className="mx_SetPasswordDialog"
                 onFinished={this.props.onFinished}
-                title="Please set a password!"
+                title={ _t('Please set a password!') }
             >
                 <div className="mx_Dialog_content">
                     <p>
-                        This will allow you to return to your account after signing out,
-                        and sign in on other devices.
+                        { _t('This will allow you to return to your account after signing out, and sign in on other devices.') }
                     </p>
                     <ChangePassword
                         className="mx_SetPasswordDialog_change_password"
