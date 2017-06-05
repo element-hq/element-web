@@ -345,6 +345,7 @@ export function bodyToHtml(content, highlights, opts) {
         }
         safeBody = sanitizeHtml(body, sanitizeHtmlParams);
         safeBody = unicodeToImage(safeBody);
+        safeBody = addCodeCopyButton(safeBody);
     }
     finally {
         delete sanitizeHtmlParams.textFilter;
@@ -361,6 +362,18 @@ export function bodyToHtml(content, highlights, opts) {
         'markdown-body': isHtml,
     });
     return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} />;
+}
+
+function addCodeCopyButton(safeBody) {
+    var el = document.createElement("div");
+    el.innerHTML = safeBody;
+    var codeBlocks = Array.from(el.getElementsByTagName("pre"));
+    codeBlocks.forEach(p => {
+        var button = document.createElement("span");
+        button.className = "mx_EventTile_copyButton";
+        p.appendChild(button);
+    });
+    return el.innerHTML;
 }
 
 export function emojifyText(text) {
