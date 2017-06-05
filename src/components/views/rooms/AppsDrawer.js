@@ -44,7 +44,7 @@ const roomWidgetConfig = {
             name: "Monitoring our Single-Point-Of-Failure DB",
         },
     ],
-    // Chat room - https://www.youtube.com/watch?v=ZfkwW4GgAiU
+    // Camgirl room - https://www.youtube.com/watch?v=ZfkwW4GgAiU
     '!wQqrqwOipOOWALxJNe:matrix.org': [
         {
             id: "youtube",
@@ -70,6 +70,14 @@ const roomWidgetConfig = {
             name: "Tip Me!!! -- Send me cash $$$",
         },
     ],
+    // Game room - !BLQjREzUgbtIsgrvRn:matrix.org
+    '!BLQjREzUgbtIsgrvRn:matrix.org': [
+        {
+            id: "etherpad",
+            url: "http://localhost:8000/etherpad.html",
+            name: "Etherpad",
+        },
+    ],
 };
 
 module.exports = React.createClass({
@@ -81,11 +89,27 @@ module.exports = React.createClass({
     componentDidMount: function() {
     },
 
+    initAppConfig: function(appConfig) {
+        console.log("App props: ", this.props);
+        appConfig = appConfig.map(
+            (app, index, arr) => {
+                switch(app.id) {
+                    case 'etherpad':
+                        app.url = app.url + '?userName=' + this.props.userId +
+                            '&padId=' + this.props.room.roomId;
+                    break;
+                }
+
+                return app;
+            });
+        return appConfig;
+    },
+
     getInitialState: function() {
         for (const key in roomWidgetConfig) {
             if(key == this.props.room.roomId) {
                 return {
-                    apps: roomWidgetConfig[key],
+                    apps: this.initAppConfig(roomWidgetConfig[key]),
                 };
             }
         }
@@ -112,6 +136,8 @@ module.exports = React.createClass({
                 url={app.url}
                 name={app.name}
                 fullWdith={arr.length<2 ? true : false}
+                roomId={this.props.roomId}
+                userId={this.props.userId}
             />);
 
         return (

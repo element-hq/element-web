@@ -74,8 +74,7 @@ export default React.createClass({
                     </span>
                 </div>
                 <div className="mx_AppTileBody">
-                    {/* <iframe sandbox="sandbox" seamless="seamless" src={this.props.url}></iframe> */}
-                    <iframe ref="appFrame" seamless="seamless" src={this.props.url}></iframe>
+                    <iframe ref="appFrame" src={this.props.url}></iframe>
                 </div>
             </div>
         );

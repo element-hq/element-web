@@ -122,6 +122,7 @@ module.exports = React.createClass({
         return {
             room: null,
             roomId: null,
+            userId: null,
             roomLoading: true,
             editingRoomSettings: false,
             uploadingRoomSettings: false,
@@ -185,6 +186,7 @@ module.exports = React.createClass({
                 this.setState({
                     room: room,
                     roomId: result.room_id,
+                    userId: MatrixClientPeg.get().credentials.userId,
                     roomLoading: !room,
                     unsentMessageError: this._getUnsentMessageError(room),
                 }, this._onHaveRoom);
@@ -198,6 +200,7 @@ module.exports = React.createClass({
             var room = MatrixClientPeg.get().getRoom(this.props.roomAddress);
             this.setState({
                 roomId: this.props.roomAddress,
+                userId: MatrixClientPeg.get().credentials.userId,
                 room: room,
                 roomLoading: !room,
                 unsentMessageError: this._getUnsentMessageError(room),
@@ -1640,6 +1643,7 @@ module.exports = React.createClass({
 
         var auxPanel = (
             <AuxPanel ref="auxPanel" room={this.state.room}
+              userId={this.state.userId}
               conferenceHandler={this.props.ConferenceHandler}
               draggingFile={this.state.draggingFile}
               displayConfCallNotification={this.state.displayConfCallNotification}

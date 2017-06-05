@@ -116,7 +116,10 @@ module.exports = React.createClass({
 
         let appsDrawer = null;
         if(this.props.showApps) {
-            appsDrawer = <AppsDrawer ref="appsDrawer" room={this.props.room} />;
+            appsDrawer = <AppsDrawer ref="appsDrawer"
+                room={this.props.room}
+                userId={this.props.userId}
+                maxHeight={this.props.maxHeight}/>;
         }
 
         return (
