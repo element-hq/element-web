@@ -444,6 +444,12 @@ module.exports = React.createClass({
                 break;
             case 'view_user_settings':
                 if (MatrixClientPeg.get().isGuest()) {
+                    dis.dispatch({
+                        action: 'do_after_sync_prepared',
+                        deferred_action: {
+                            action: 'view_user_settings',
+                        },
+                    });
                     dis.dispatch({action: 'view_set_mxid'});
                     break;
                 }
@@ -703,7 +709,13 @@ module.exports = React.createClass({
 
     _createChat: function() {
         if (MatrixClientPeg.get().isGuest()) {
-            this._setMxId();
+            dis.dispatch({
+                action: 'do_after_sync_prepared',
+                deferred_action: {
+                    action: 'view_create_chat',
+                },
+            });
+            dis.dispatch({action: 'view_set_mxid'});
             return;
         }
         const ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
