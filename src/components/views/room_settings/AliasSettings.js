@@ -230,7 +230,7 @@ module.exports = React.createClass({
             remote_aliases_section = (
                 <div>
                     <div className="mx_RoomSettings_aliasLabel">
-                        Remote addresses for this room:
+                        {_t("Remote addresses for this room:")}
                     </div>
                     <div className="mx_RoomSettings_aliasesTable">
                         { this.state.remoteDomains.map((domain, i) => {

@@ -250,6 +250,7 @@ const Notifier = {
                 this._displayPopupNotification(ev, room);
             }
             if (actions.tweaks.sound && this.isAudioEnabled()) {
+                PlatformPeg.get().loudNotification(ev, room);
                 this._playAudioNotification(ev, room);
             }
         }

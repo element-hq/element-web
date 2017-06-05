@@ -28,12 +28,6 @@ var CallHandler = require("../../../CallHandler");
 var Invite = require("../../../Invite");
 
 var INITIAL_LOAD_NUM_MEMBERS = 30;
-var SHARE_HISTORY_WARNING =
-    <span>
-        Newly invited users will see the history of this room. <br/>
-        If you'd prefer invited users not to see messages that were sent before they joined, <br/>
-        turn off, 'Share message history with new users' in the settings for this room.
-    </span>;
 
 module.exports = React.createClass({
     displayName: 'MemberList',
@@ -355,7 +349,7 @@ module.exports = React.createClass({
         if (invitedMemberTiles.length > 0) {
             invitedSection = (
                 <div className="mx_MemberList_invited">
-                    <h2>Invited</h2>
+                    <h2>{ _t("Invited") }</h2>
                     <div className="mx_MemberList_wrapper">
                         {invitedMemberTiles}
                     </div>

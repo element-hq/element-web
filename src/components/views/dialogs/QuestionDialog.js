@@ -51,7 +51,7 @@ export default React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const cancelButton = this.props.hasCancelButton ? (
             <button onClick={this.onCancel}>
-                Cancel
+                {_t("Cancel")}
             </button>
         ) : null;
         return (

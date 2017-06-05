@@ -83,14 +83,8 @@ export function _tJsx(jsxText, patterns, subs) {
         }
     }
 
-    // tJsxText may be unsafe if malicious translators try to inject HTML.
-    // Run this through sanitize-html and bail if the output isn't identical
+    // The translation returns text so there's no XSS vector here (no unsafe HTML, no code execution)
     const tJsxText = _t(jsxText);
-    const sanitized = sanitizeHtml(tJsxText, { allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'span' ]) });
-    if (tJsxText !== sanitized) {
-        throw new Error(`_tJsx: translator error. untrusted HTML supplied. '${tJsxText}' != '${sanitized}'`);
-    }
-
     let output = [tJsxText];
     for (let i = 0; i < patterns.length; i++) {
         // convert the last element in 'output' into 3 elements (pre-text, sub function, post-text).
@@ -113,7 +107,7 @@ export function _tJsx(jsxText, patterns, subs) {
 }
 
 // Allow overriding the text displayed when no translation exists
-// Currently only use din unit tests to avoid having to load
+// Currently only used in unit tests to avoid having to load
 // the translations in riot-web
 export function setMissingEntryGenerator(f) {
     counterpart.setMissingEntryGenerator(f);
@@ -136,10 +130,12 @@ export function setLanguage(preferredLangs) {
             }
         }
         if (!langToUse) {
-            throw new Error("Unable to find an appropriate language");
+            // Fallback to en_EN if none is found
+            langToUse = 'en'
+            console.error("Unable to find an appropriate language");
         }
 
-        return getLanguage(i18nFolder + availLangs[langToUse]);
+        return getLanguage(i18nFolder + availLangs[langToUse].fileName);
     }).then((langData) => {
         counterpart.registerTranslations(langToUse, langData);
         counterpart.setLocale(langToUse);
@@ -148,16 +144,25 @@ export function setLanguage(preferredLangs) {
 
         // Set 'en' as fallback language:
         if (langToUse != "en") {
-            return getLanguage(i18nFolder + availLangs['en']);
+            return getLanguage(i18nFolder + availLangs['en'].fileName);
         }
     }).then((langData) => {
         if (langData) counterpart.registerTranslations('en', langData);
     });
 };
 
-export function getAllLanguageKeysFromJson() {
-    return getLangsJson().then((langs) => {
-        return Object.keys(langs);
+export function getAllLanguagesFromJson() {
+    return getLangsJson().then((langsObject) => {
+        var langs = [];
+        for (var langKey in langsObject) {
+            if (langsObject.hasOwnProperty(langKey)) {
+                langs.push({
+                    'value': langKey,
+                    'label': langsObject[langKey].label
+                });
+            }
+        }
+        return langs;
     });
 }
 

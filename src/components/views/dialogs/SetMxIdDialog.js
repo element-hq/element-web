@@ -21,6 +21,7 @@ import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import classnames from 'classnames';
 import KeyCode from '../../../KeyCode';
+import { _t, _tJsx } from '../../../languageHandler';
 
 // The amount of time to wait for further changes to the input username before
 // sending a request to the server
@@ -120,10 +121,13 @@ export default React.createClass({
                 console.error('Error whilst checking username availability: ', err);
                 switch (err.errcode) {
                     case "M_USER_IN_USE":
-                        newState.usernameError = 'Username not available';
+                        newState.usernameError = _t('Username not available');
                         break;
                     case "M_INVALID_USERNAME":
-                        newState.usernameError = 'Username invalid: ' + err.message;
+                        newState.usernameError = _t(
+                            'Username invalid: %(errMessage)',
+                            { errMessage: err.message},
+                        );
                         break;
                     case "M_UNRECOGNIZED":
                         // This homeserver doesn't support username checking, assume it's
@@ -131,10 +135,13 @@ export default React.createClass({
                         newState.usernameError = '';
                         break;
                     case undefined:
-                        newState.usernameError = 'Something went wrong!';
+                        newState.usernameError = _t('Something went wrong!');
                         break;
                     default:
-                        newState.usernameError = 'An error occurred: ' + err.message;
+                        newState.usernameError = _t(
+                            'An error occurred: %(errMessage)',
+                            { errMessage: err.message },
+                        );
                         break;
                 }
                 this.setState(newState);
@@ -218,7 +225,7 @@ export default React.createClass({
                 "success": usernameAvailable,
             });
             usernameIndicator = <div className={usernameIndicatorClasses}>
-                { usernameAvailable ? 'Username available' : this.state.usernameError }
+                { usernameAvailable ? _t('Username available') : this.state.usernameError }
             </div>;
         }
 
@@ -250,15 +257,25 @@ export default React.createClass({
                     </div>
                     { usernameIndicator }
                     <p>
-                        This will be your account name on
-                        the {this.props.homeserverUrl} homeserver,
-                        or you can pick a&nbsp;
-                        <a href="#" onClick={this.props.onDifferentServerClicked}>
-                            different server
-                        </a>.
+                        { _tJsx(
+                            'This will be your account name on the <span></span> ' +
+                            'homeserver, or you can pick a <a>different server</a>.',
+                            [
+                                /<span><\/span>/,
+                                /<a>(.*?)<\/a>/,
+                            ],
+                            [
+                                (sub) => <span>{this.props.homeserverUrl}</span>,
+                                (sub) => <a href="#" onClick={this.props.onDifferentServerClicked}>{sub}</a>,
+                            ],
+                        )}
                     </p>
                     <p>
-                        If you already have a Matrix account you can <a href="#" onClick={this.props.onLoginClick}>log in</a> instead.
+                        { _tJsx(
+                            'If you already have a Matrix account you can <a>log in</a> instead.',
+                            /<a>(.*?)<\/a>/,
+                            [(sub) => <a href="#" onClick={this.props.onLoginClick}>{sub}</a>],
+                        )}
                     </p>
                     { auth }
                     { authErrorIndicator }
@@ -266,7 +283,7 @@ export default React.createClass({
                 <div className="mx_Dialog_buttons">
                     <input className="mx_Dialog_primary"
                         type="submit"
-                        value="Continue"
+                        value={_t("Continue")}
                         onClick={this.onSubmit}
                         disabled={!canContinue}
                     />
