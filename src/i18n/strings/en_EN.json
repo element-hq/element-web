@@ -839,5 +839,10 @@
   "Disable URL previews for this room (affects only you)": "Disable URL previews for this room (affects only you)",
   "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName changed the room avatar to <img/>",
   "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s removed the room avatar.",
-  "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s changed the avatar for %(roomName)s"
+  "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s changed the avatar for %(roomName)s",
+  "Username available": "Username available",
+  "Username not available": "Username not available",
+  "Something went wrong!": "Something went wrong!",
+  "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.": "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.",
+  "If you already have a Matrix account you can <a>log in</a> instead.": "If you already have a Matrix account you can <a>log in</a> instead."
 }
