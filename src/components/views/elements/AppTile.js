@@ -35,12 +35,12 @@ export default React.createClass({
 
     componentDidMount: function() {
         console.log("App component %s mounted", this.props.id);
-        setInterval(() => {
-            const msg = "Message from riot";
-            const domain = 'http://localhost:8000';
-            this.refs.appFrame.contentWindow.postMessage(msg, domain);
-            console.log("Sending message");
-        }, 3000);
+        // setInterval(() => {
+        //     const msg = "Message from riot";
+        //     const domain = 'http://localhost:8000';
+        //     this.refs.appFrame.contentWindow.postMessage(msg, domain);
+        //     console.log("Sending message");
+        // }, 3000);
     },
 
     _onEditClick: function() {
