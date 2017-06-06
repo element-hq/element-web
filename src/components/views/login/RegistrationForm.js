@@ -110,18 +110,17 @@ module.exports = React.createClass({
                     button: _t("Continue"),
                     onFinished: function(confirmed) {
                         if (confirmed) {
-                            self._doSubmit();
+                            self._doSubmit(ev);
                         }
                     },
                 });
-            }
-            else {
-                self._doSubmit();
+            } else {
+                self._doSubmit(ev);
             }
         }
     },
 
-    _doSubmit: function() {
+    _doSubmit: function(ev) {
         let email = this.refs.email.value.trim();
         var promise = this.props.onRegisterClick({
             username: this.refs.username.value.trim() || this.props.guestUsername,

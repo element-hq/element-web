@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../languageHandler';
 import sdk from '../../index';
-import dis from '../../dispatcher';
 import WhoIsTyping from '../../WhoIsTyping';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import MemberAvatar from '../views/avatars/MemberAvatar';

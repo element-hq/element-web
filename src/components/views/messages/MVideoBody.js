@@ -19,8 +19,6 @@ limitations under the License.
 import React from 'react';
 import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import Model from '../../../Modal';
-import sdk from '../../../index';
 import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
 import q from 'q';
 import UserSettingsStore from '../../../UserSettingsStore';

@@ -19,7 +19,6 @@ limitations under the License.
 
 import React from 'react';
 import { _t, _tJsx } from '../../../languageHandler';
-import ReactDOM from 'react-dom';
 import sdk from '../../../index';
 import Login from '../../../Login';
 

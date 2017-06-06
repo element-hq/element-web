@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
-import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import Resend from '../../../Resend';

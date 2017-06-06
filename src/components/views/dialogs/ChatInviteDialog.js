@@ -15,15 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import { getAddressType, inviteMultipleToRoom } from '../../../Invite';
 import createRoom from '../../../createRoom';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
-import rate_limited_func from '../../../ratelimitedfunc';
-import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
 import q from 'q';
