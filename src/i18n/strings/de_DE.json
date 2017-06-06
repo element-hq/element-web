@@ -834,7 +834,7 @@
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s hat das Raum-Bild entfernt.",
     "VoIP": "VoIP",
     "No Webcams detected": "Keine Webcam erkannt",
-    "Missing Media Permissions, click here to request.": "Fehlende Medienberechtigungen. Klicke hier um anzufragen.",
+    "Missing Media Permissions, click here to request.": "Fehlende Medienberechtigungen. Hier klicken, um Berechtigungen zu beantragen.",
     "No Microphones detected": "Keine Mikrofone erkannt",
     "No media permissions": "Keine Medienberechtigungen",
     "You may need to manually permit Riot to access your microphone/webcam": "Gegebenenfalls kann es notwendig sein, dass du Riot manuell den Zugriff auf dein Mikrofon bzw. deine Webcam gewähren musst",
@@ -889,5 +889,5 @@
     "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName hat das Raum-Bild geändert zu <img/>",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s hat das Raum-Bild für %(roomName)s geändert",
     "Hide removed messages": "Gelöschte Nachrichten verbergen",
-    "Start new chat": "Starte neuen Chat"
+    "Start new chat": "Neuen Chat starten"
 }
