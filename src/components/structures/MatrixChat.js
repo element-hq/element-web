@@ -369,7 +369,6 @@ module.exports = React.createClass({
                 this.notifyNewScreen('register');
                 break;
             case 'start_password_recovery':
-                if (this.state.loggedIn) return;
                 this.setStateForNewScreen({
                     screen: 'forgot_password',
                 });
