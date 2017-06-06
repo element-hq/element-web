@@ -95,17 +95,12 @@ module.exports = React.createClass({
             }
             const buttons = ReactDOM.findDOMNode(this).getElementsByClassName("mx_EventTile_copyButton");
             if (buttons.length > 0) {
-                // Do this asynchronously: parsing code takes time and we don't
-                // need to block the DOM update on it.
-                setTimeout(() => {
-                    if (this._unmounted) return;
-                    for (let i = 0; i < buttons.length; i++) {
-                        buttons[i].onclick = (e) => {
-                            const copyCode = buttons[i].parentNode.getElementsByTagName("code")[0];
-                            this.copyToClipboard(copyCode.textContent);
-                        };
-                    }
-                }, 10);
+                for (let i = 0; i < buttons.length; i++) {
+                    buttons[i].onclick = (e) => {
+                        const copyCode = buttons[i].parentNode.getElementsByTagName("code")[0];
+                        this.copyToClipboard(copyCode.textContent);
+                    };
+                }
             }
         }
     },

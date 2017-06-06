@@ -365,11 +365,11 @@ export function bodyToHtml(content, highlights, opts) {
 }
 
 function addCodeCopyButton(safeBody) {
-    var el = document.createElement("div");
+    const el = document.createElement("div");
     el.innerHTML = safeBody;
-    var codeBlocks = Array.from(el.getElementsByTagName("pre"));
+    const codeBlocks = Array.from(el.getElementsByTagName("pre"));
     codeBlocks.forEach(p => {
-        var button = document.createElement("span");
+        const button = document.createElement("span");
         button.className = "mx_EventTile_copyButton";
         p.appendChild(button);
     });
