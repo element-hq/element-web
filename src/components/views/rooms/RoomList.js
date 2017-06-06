@@ -292,43 +292,6 @@ module.exports = React.createClass({
             }
         });
 
-        if (lists["im.vector.fake.direct"].length == 0 &&
-            MatrixClientPeg.get().getAccountData('m.direct') === undefined &&
-            !MatrixClientPeg.get().isGuest())
-        {
-            // scan through the 'recents' list for any rooms which look like DM rooms
-            // and make them DM rooms
-            const oldRecents = lists["im.vector.fake.recent"];
-            lists["im.vector.fake.recent"] = [];
-
-            for (const room of oldRecents) {
-                const me = room.getMember(MatrixClientPeg.get().credentials.userId);
-
-                if (me && Rooms.looksLikeDirectMessageRoom(room, me)) {
-                    lists["im.vector.fake.direct"].push(room);
-                } else {
-                    lists["im.vector.fake.recent"].push(room);
-                }
-            }
-
-            // save these new guessed DM rooms into the account data
-            const newMDirectEvent = {};
-            for (const room of lists["im.vector.fake.direct"]) {
-                const me = room.getMember(MatrixClientPeg.get().credentials.userId);
-                const otherPerson = Rooms.getOnlyOtherMember(room, me);
-                if (!otherPerson) continue;
-
-                const roomList = newMDirectEvent[otherPerson.userId] || [];
-                roomList.push(room.roomId);
-                newMDirectEvent[otherPerson.userId] = roomList;
-            }
-
-            // if this fails, fine, we'll just do the same thing next time we get the room lists
-            MatrixClientPeg.get().setAccountData('m.direct', newMDirectEvent).done();
-        }
-
-        //console.log("calculated new roomLists; im.vector.fake.recent = " + s.lists["im.vector.fake.recent"]);
-
         // we actually apply the sorting to this when receiving the prop in RoomSubLists.
 
         // we'll need this when we get to iterating through lists programatically - e.g. ctrl-shift-up/down
