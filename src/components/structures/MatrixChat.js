@@ -927,6 +927,10 @@ module.exports = React.createClass({
             dis.dispatch({action: 'view_home_page'});
         } else if (this._is_registered) {
             this._is_registered = false;
+            // reset the 'have completed first sync' flag,
+            // since we've just logged in and will be about to sync
+            this.firstSyncComplete = false;
+            this.firstSyncPromise = q.defer();
 
             // Set the display name = user ID localpart
             MatrixClientPeg.get().setDisplayName(
