@@ -927,6 +927,8 @@ module.exports = React.createClass({
             dis.dispatch({action: 'view_home_page'});
         } else if (this._is_registered) {
             this._is_registered = false;
+            this.firstSyncComplete = false;
+            this.firstSyncPromise = q.defer();
 
             // Set the display name = user ID localpart
             MatrixClientPeg.get().setDisplayName(
