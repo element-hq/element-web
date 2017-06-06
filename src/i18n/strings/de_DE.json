@@ -889,5 +889,6 @@
     "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName hat das Raum-Bild geändert zu <img/>",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s hat das Raum-Bild für %(roomName)s geändert",
     "Hide removed messages": "Gelöschte Nachrichten verbergen",
-    "Start new chat": "Neuen Chat starten"
+    "Start new chat": "Neuen Chat starten",
+    "Disable markdown formatting": "Deaktiviere Markdown-Formatierung"
 }
