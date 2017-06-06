@@ -25,7 +25,7 @@
     "(default: %(userName)s)": "(ค่าเริ่มต้น: %(userName)s)",
     "Default Device": "อุปกรณ์เริ่มต้น",
     "%(senderName)s banned %(targetName)s.": "%(senderName)s แบน %(targetName)s แล้ว",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s เปลี่ยนหัวข้อเป็น \"%(topic)s\" แล้ว",
+    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s เปลี่ยนหัวข้อเป็น \"%(topic)s\"",
     "Decrypt %(text)s": "ถอดรหัส %(text)s",
     "Device ID": "ID อุปกรณ์",
     "Device ID:": "ID อุปกรณ์:",
