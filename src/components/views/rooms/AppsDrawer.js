@@ -140,18 +140,21 @@ module.exports = React.createClass({
                 userId={this.props.userId}
             />);
 
+        const addWidget = this.state.apps && this.state.apps.length < 2 &&
+            (<div onClick={this.onClickAddWidget}
+                            role="button"
+                            tabIndex="0"
+                            className="mx_AddWidget_button"
+                            title="Add a widget">
+                            [+] Add a widget
+                        </div>);
+
         return (
             <div className="mx_AppsDrawer">
                 <div id="apps" className="mx_AppsContainer">
                     {apps}
                 </div>
-                <div onClick={this.onClickAddWidget}
-                    role="button"
-                    tabIndex="0"
-                    className="mx_AddWidget_button"
-                    title="Add a widget">
-                    [+] Add a widget
-                </div>
+                {addWidget}
             </div>
         );
     },
