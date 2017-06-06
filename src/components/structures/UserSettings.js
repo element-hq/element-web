@@ -88,6 +88,10 @@ const SETTINGS_LABELS = [
         id: 'hideRedactions',
         label: 'Hide removed messages',
     },
+    {
+        id: 'disableMarkdown',
+        label: 'Disable markdown formatting',
+    },
 /*
     {
         id: 'useFixedWidthFont',
