@@ -96,8 +96,8 @@
     "all room members, from the point they are invited": "สมาชิกทั้งหมด นับตั้งแต่เมื่อได้รับคำเชิญ",
     "all room members, from the point they joined": "สมาชิกทั้งหมด นับตั้งแต่เมื่อเข้าร่วมห้อง",
     "an address": "ที่อยู่",
-    "%(items)s and %(remaining)s others": "%(items)s และอีก %(remaining)s อย่าง",
-    "%(items)s and one other": "%(items)s และอีกหนึ่งอย่าง",
+    "%(items)s and %(remaining)s others": "%(items)s และอีก %(remaining)s ผู้ใช้",
+    "%(items)s and one other": "%(items)s และอีกหนึ่งผู้ใช้",
     "%(items)s and %(lastItem)s": "%(items)s และ %(lastItem)s",
     "and %(overflowCount)s others...": "และอีก %(overflowCount)s ผู้ใช้...",
     "and one other...": "และอีกหนึ่งผู้ใช้...",
@@ -323,5 +323,9 @@
     "This is a preview of this room. Room interactions have been disabled": "นี่คือตัวอย่างของห้อง การตอบสนองภายในห้องถูกปิดใช้งาน",
     "This phone number is already in use": "หมายเลขโทรศัพท์นี้ถูกใช้งานแล้ว",
     "This room's internal ID is": "ID ภายในของห้องนี้คือ",
-    "times": "เวลา"
+    "times": "เวลา",
+    "%(oneUser)schanged their name": "%(oneUser)sเปลี่ยนชื่อของเขาแล้ว",
+    "%(severalUsers)schanged their name %(repeats)s times": "%(severalUsers)sเปลี่ยนชื่อของพวกเขา %(repeats)s ครั้ง",
+    "%(oneUser)schanged their name %(repeats)s times": "%(oneUser)sเปลี่ยนชื่อของเขา %(repeats)s ครั้ง",
+    "%(severalUsers)schanged their name": "%(severalUsers)sเปลี่ยนชื่อของพวกเขาแล้ว"
 }
