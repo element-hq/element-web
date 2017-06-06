@@ -9,15 +9,18 @@
 // This could readily be automated, but it's nice to explicitly
 // control when we languages are available.
 const INCLUDE_LANGS = [
-    //'be' Omitted because no translations in react-sdk
-    'en_EN',
-    'da',
-    'de_DE',
-    'fr',
-    'be',
-    'pt',
-    'pt_BR',
-    'ru',
+    {'value': 'en_EN', 'label': 'English'},
+    {'value': 'en_US', 'label': 'English (US)'},
+    {'value': 'da', 'label': 'Dansk'},
+    {'value': 'nl', 'label': 'Nederlands'},
+    {'value': 'de_DE', 'label': 'Deutsch'},
+    {'value': 'fr', 'label': 'Français'},
+    {'value': 'pt', 'label': 'Português'},
+    {'value': 'pt_BR', 'label': 'Português do Brasil'},
+    {'value': 'ru', 'label': 'Русский'},
+    {'value': 'sv', 'label': 'Svenska'},
+    {'value': 'es', 'label': 'Español'},
+    {'value': 'zh_Hans', 'label': '中文'}
 ];
 
 // cpx includes globbed parts of the filename in the destination, but excludes
@@ -37,7 +40,7 @@ const COPY_LIST = [
 
 INCLUDE_LANGS.forEach(function(l) {
     COPY_LIST.push([
-        l, "webapp/i18n/", { lang: 1 },
+        l.value, "webapp/i18n/", { lang: 1 },
     ]);
 });
 
@@ -159,17 +162,22 @@ function genLangFile(lang, dest) {
 function genLangList() {
     const languages = {};
     INCLUDE_LANGS.forEach(function(lang) {
-        const normalizedLanguage = lang.toLowerCase().replace("_", "-");
+        const normalizedLanguage = lang.value.toLowerCase().replace("_", "-");
         const languageParts = normalizedLanguage.split('-');
         if (languageParts.length == 2 && languageParts[0] == languageParts[1]) {
-            languages[languageParts[0]] = lang + '.json';
+            languages[languageParts[0]] = {'fileName': lang.value + '.json', 'label': lang.label};
         } else {
-            languages[normalizedLanguage] = lang + '.json';
+            languages[normalizedLanguage] = {'fileName': lang.value + '.json', 'label': lang.label};
         }
     });
-    fs.writeFile('webapp/i18n/languages.json', JSON.stringify(languages, null, 4));
+    fs.writeFile('webapp/i18n/languages.json', JSON.stringify(languages, null, 4), function(err) {
+        if (err) {
+            console.error("Copy Error occured: " + err);
+            throw new Error("Failed to generate languages.json");
+        }
+    });
     if (verbose) {
-        console.log("Generated language list");
+        console.log("Generated languages.json");
     }
 }
 

@@ -8,7 +8,7 @@
 
 ## Step 0: Join #riotweb-translations:matrix.org
 
-1. Come and join https://riot.im/develop/#/room/#riotweb-translations:matrix.org
+1. Come and join https://matrix.to/#/#riotweb-translations:matrix.org
 2. Read scrollback and/or ask if anyone else is working on your language, and co-ordinate if needed.  In general little-or-no coordination is needed though :)
 
 ## Step 1: Preparing your Weblate Profile

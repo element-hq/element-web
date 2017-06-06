@@ -2,7 +2,7 @@
   "name": "riot-web",
   "productName": "Riot",
   "main": "electron_app/src/electron-main.js",
-  "version": "0.9.10",
+  "version": "0.10.1",
   "description": "A feature-rich client for Matrix.org",
   "author": "Vector Creations Ltd.",
   "repository": {
@@ -33,7 +33,7 @@
     "build:compile": "npm run reskindex && babel --source-maps -d lib src",
     "build:bundle": "cross-env NODE_ENV=production webpack -p --progress",
     "build:bundle:dev": "webpack --optimize-occurence-order --progress",
-    "build:electron": "npm run clean && npm run build && build -wml --ia32 --x64",
+    "build:electron": "npm run clean && npm run build && npm run install:electron && build -wml --ia32 --x64",
     "build": "npm run reskindex && npm run build:res && npm run build:bundle",
     "build:dev": "npm run reskindex && npm run build:res && npm run build:bundle:dev",
     "dist": "scripts/package.sh",
@@ -65,8 +65,8 @@
     "gfm.css": "^1.1.1",
     "highlight.js": "^9.0.0",
     "linkifyjs": "^2.1.3",
-    "matrix-js-sdk": "matrix-org/matrix-js-sdk#develop",
-    "matrix-react-sdk": "matrix-org/matrix-react-sdk#develop",
+    "matrix-js-sdk": "0.7.10",
+    "matrix-react-sdk": "0.9.1",
     "modernizr": "^3.1.0",
     "pako": "^1.0.5",
     "q": "^1.4.1",
@@ -101,6 +101,7 @@
     "css-raw-loader": "^0.1.1",
     "electron-builder": "^11.2.4",
     "electron-builder-squirrel-windows": "^11.2.1",
+    "electron-devtools-installer": "^2.2.0",
     "emojione": "^2.2.7",
     "eslint": "^3.14.0",
     "eslint-config-google": "^0.7.1",
@@ -162,7 +163,7 @@
       "category": "Network;InstantMessaging;Chat",
       "maintainer": "support@riot.im",
       "desktop": {
-        "StartupWMClass": "riot-web"
+        "StartupWMClass": "riot"
       }
     },
     "win": {

@@ -20,6 +20,7 @@ limitations under the License.
 import VectorBasePlatform from './VectorBasePlatform';
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/lib/dispatcher.js';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import q from 'q';
 
 import url from 'url';
@@ -32,7 +33,7 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     getHumanReadableName(): string {
-        return 'Web Platform';
+        return 'Web Platform'; // no translation required: only used for analytics
     }
 
     /**
@@ -159,13 +160,15 @@ export default class WebPlatform extends VectorBasePlatform {
         const appName = u.format();
 
         const ua = new UAParser();
-        return `${appName} via ${ua.getBrowser().name} on ${ua.getOS().name}`;
+        const browserName = ua.getBrowser().name;
+        const osName = ua.getOS().name;
+        return _t('%(appName)s via %(browserName)s on %(osName)s', {appName: appName, browserName: browserName, osName: osName});
     }
 
     screenCaptureErrorString(): ?string {
         // it won't work at all if you're not on HTTPS so whine whine whine
         if (!global.window || global.window.location.protocol !== "https:") {
-            return "You need to be using HTTPS to place a screen-sharing call.";
+            return _t("You need to be using HTTPS to place a screen-sharing call.");
         }
         return null;
     }

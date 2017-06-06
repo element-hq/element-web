@@ -20,6 +20,7 @@ import React from 'react';
 import sdk from 'matrix-react-sdk';
 import Modal from 'matrix-react-sdk/lib/Modal';
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 /**
  * Check a version string is compatible with the Changelog
@@ -40,9 +41,9 @@ export default React.createClass({
     displayReleaseNotes: function(releaseNotes) {
         const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
         Modal.createDialog(QuestionDialog, {
-            title: "What's New",
+            title: _t("What's New"),
             description: <pre className="changelog_text">{releaseNotes}</pre>,
-            button: "Update",
+            button: _t("Update"),
             onFinished: (update) => {
                 if(update && PlatformPeg.get()) {
                     PlatformPeg.get().installUpdate();
@@ -75,17 +76,29 @@ export default React.createClass({
         // automatically tells you what's changed (provided the versions
         // are in the right format)
         if (this.props.releaseNotes) {
-            action_button = <button className="mx_MatrixToolbar_action" onClick={this.displayReleaseNotes}>What's new?</button>;
+            action_button = (
+                <button className="mx_MatrixToolbar_action" onClick={this.displayReleaseNotes}>
+                    { _t("What's new?") }
+                </button>
+            );
         } else if (checkVersion(this.props.version) && checkVersion(this.props.newVersion)) {
-            action_button = <button className="mx_MatrixToolbar_action" onClick={this.displayChangelog}>What's new?</button>;
+            action_button = (
+                <button className="mx_MatrixToolbar_action" onClick={this.displayChangelog}>
+                    { _t("What's new?") }
+                </button>
+            );
         } else if (PlatformPeg.get()) {
-            action_button = <button className="mx_MatrixToolbar_action" onClick={this.onUpdateClicked}>Update</button>;
+            action_button = (
+                <button className="mx_MatrixToolbar_action" onClick={this.onUpdateClicked}>
+                    { _t("Update") }
+                </button>
+            );
         }
         return (
             <div className="mx_MatrixToolbar">
                 <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
                 <div className="mx_MatrixToolbar_content">
-                    A new version of Riot is available.
+                    {_t("A new version of Riot is available.")}
                 </div>
                 {action_button}
             </div>

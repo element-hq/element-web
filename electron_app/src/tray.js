@@ -16,6 +16,9 @@ limitations under the License.
 */
 
 const {app, Tray, Menu, nativeImage} = require('electron');
+const pngToIco = require('png-to-ico');
+const path = require('path');
+const fs = require('fs');
 
 let trayIcon = null;
 
@@ -57,7 +60,7 @@ exports.create = function(win, config) {
     trayIcon.on('click', toggleWin);
 
     let lastFavicon = null;
-    win.webContents.on('page-favicon-updated', function(ev, favicons) {
+    win.webContents.on('page-favicon-updated', async function(ev, favicons) {
         let newFavicon = config.icon_path;
         if (favicons && favicons.length > 0 && favicons[0].startsWith('data:')) {
             newFavicon = favicons[0];
@@ -70,6 +73,15 @@ exports.create = function(win, config) {
         // if its not default we have to construct into nativeImage
         if (newFavicon !== config.icon_path) {
             newFavicon = nativeImage.createFromDataURL(favicons[0]);
+
+            if (process.platform === 'win32') {
+                try {
+                    const icoPath = path.join(app.getPath('temp'), 'win32_riot_icon.ico')
+                    const icoBuf = await pngToIco(newFavicon.toPNG());
+                    fs.writeFileSync(icoPath, icoBuf);
+                    newFavicon = icoPath;
+                } catch (e) {console.error(e);}
+            }
         }
 
         trayIcon.setImage(newFavicon);
