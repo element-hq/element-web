@@ -292,7 +292,7 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        Lifecycle.stopMatrixClient(false);
+        Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
         UDEHandler.stopListening();
         window.removeEventListener("focus", this.onFocus);
@@ -364,7 +364,7 @@ module.exports = React.createClass({
                 // is completed in another browser, we'll be 401ed for using
                 // a guest access token for a non-guest account.
                 // It will be restarted in onReturnToGuestClick
-                Lifecycle.stopMatrixClient(false);
+                Lifecycle.stopMatrixClient();
 
                 this.notifyNewScreen('register');
                 break;
@@ -507,7 +507,11 @@ module.exports = React.createClass({
                 this._onSetTheme(payload.value);
                 break;
             case 'on_logging_in':
-                this.setState({loggingIn: true});
+                // We are now logging in, so set the state to reflect that
+                // and also that we're not ready (we'll be marked as logged
+                // in once the login completes, then ready once the sync
+                // completes).
+                this.setState({loggingIn: true, ready: false});
                 break;
             case 'on_logged_in':
                 this._onLoggedIn(payload.teamToken);
