@@ -53,22 +53,22 @@ export default React.createClass({
         return (
             <BaseDialog className="mx_AddAppDialog"
                 onFinished={this.props.onFinished}
-                title="App URL"
+                title="Add an app Widget"
             >
                 <div className="mx_Dialog_content">
-                    Please enter the URL of the app / widget to add.
-                </div>
-                <form onSubmit={this.onFormSubmit}>
-                    <div className="mx_Dialog_content">
+                    
+                    {/* <hr/>
+                    <form onSubmit={this.onFormSubmit}>
+                        <div>Or enter the URL of the widget to add.</div>
                         <input type="text" ref="input_value" value={this.state.value}
                             autoFocus={true} onChange={this.onValueChange} size="30"
                             className="mx_SetAppURLDialog_input"
                         />
-                    </div>
+                    </form>
                     <div className="mx_Dialog_buttons">
-                        <input className="mx_Dialog_primary" type="submit" value="Set" />
-                    </div>
-                </form>
+                        <input className="mx_Dialog_primary" type="submit" value="Add" />
+                    </div> */}
+                </div>
             </BaseDialog>
         );
     },

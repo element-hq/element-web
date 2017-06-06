@@ -32,7 +32,7 @@ const roomWidgetConfig = {
         },
         {
             id: "recipie",
-            url: "http://10.9.64.88:8000/recepie.html",
+            url: "http://10.9.64.55:8000/recepie.html",
             name: "Ingredients - Boeuf Bourguignon",
         },
     ],
@@ -40,7 +40,7 @@ const roomWidgetConfig = {
     '!JWeMRscvtWqfNuzmSf:matrix.org': [
         {
             id: "grafana",
-            url: "http://10.9.64.88:8000/grafana.html",
+            url: "http://10.9.64.55:8000/grafana.html",
             name: "Monitoring our Single-Point-Of-Failure DB",
         },
     ],
@@ -53,7 +53,7 @@ const roomWidgetConfig = {
         },
         {
             id: "thermometer",
-            url: "http://10.9.64.88:8000/index.html",
+            url: "http://10.9.64.55:8000/index.html",
             name: "Tip Me!!! -- Send me cash $$$",
         },
     ],
@@ -66,7 +66,7 @@ const roomWidgetConfig = {
         },
         {
             id: "thermometer",
-            url: "http://10.9.64.88:8000/index.html",
+            url: "http://10.9.64.55:8000/index.html",
             name: "Tip Me!!! -- Send me cash $$$",
         },
     ],
@@ -74,7 +74,7 @@ const roomWidgetConfig = {
     '!BLQjREzUgbtIsgrvRn:matrix.org': [
         {
             id: "etherpad",
-            url: "http://10.9.64.88:8000/etherpad.html",
+            url: "http://10.9.64.55:8000/etherpad.html",
             name: "Etherpad",
         },
     ],
