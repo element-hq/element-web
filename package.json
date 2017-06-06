@@ -77,7 +77,8 @@
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
     "sanitize-html": "^1.11.1",
     "ua-parser-js": "^0.7.10",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "velocity-vector": "vector-im/velocity#059e3b2"
   },
   "devDependencies": {
     "autoprefixer": "^6.6.0",
