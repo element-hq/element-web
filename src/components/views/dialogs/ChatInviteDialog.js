@@ -61,6 +61,8 @@ module.exports = React.createClass({
 
             // Whether a search is ongoing
             busy: false,
+            // An error message generated during the user directory search
+            searchError: null,
             // The query being searched for
             query: "",
             // List of AddressTile.InviteAddressType objects representing
@@ -181,6 +183,7 @@ module.exports = React.createClass({
                 this.setState({
                     busy: true,
                     query,
+                    searchError: null,
                 });
                 MatrixClientPeg.get().searchUserDirectory({
                     term: query,
@@ -222,7 +225,12 @@ module.exports = React.createClass({
                     }, () => {
                         this.addressSelector.moveSelectionTop();
                     });
-                }).finally(() => {
+                }).catch((err) => {
+                    console.error('Error whilst searching user directory: ', err);
+                    this.setState({
+                        searchError: err.errcode ? err.message : _t('Something went wrong!'),
+                    });
+                }).done(() => {
                     this.setState({
                         busy: false,
                     });
@@ -232,6 +240,7 @@ module.exports = React.createClass({
             this.setState({
                 queryList: [],
                 query: "",
+                searchError: null,
             });
         }
     },
@@ -494,6 +503,8 @@ module.exports = React.createClass({
         let addressSelector;
         if (this.state.error) {
             error = <div className="mx_ChatInviteDialog_error">{_t("You have entered an invalid contact. Try using their Matrix ID or email address.")}</div>;
+        } else if (this.state.searchError) {
+            error = <div className="mx_ChatInviteDialog_error">{this.state.searchError}</div>;
         } else if (
             this.state.query.length > 0 &&
             this.state.queryList.length === 0 &&
@@ -501,15 +512,11 @@ module.exports = React.createClass({
         ) {
             error = <div className="mx_ChatInviteDialog_error">{_t("No results")}</div>;
         } else {
-            const addressSelectorHeader = <div className="mx_ChatInviteDialog_addressSelectHeader">
-                { _t("Searching known users") }
-            </div>;
             addressSelector = (
                 <AddressSelector ref={(ref) => {this.addressSelector = ref;}}
                     addressList={ this.state.queryList }
                     onSelected={ this.onSelected }
                     truncateAt={ TRUNCATE_QUERY_LIST }
-                    header={ addressSelectorHeader }
                 />
             );
         }
