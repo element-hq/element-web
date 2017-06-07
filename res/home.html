@@ -1,0 +1,174 @@
+<link href="home/css/welcome.css" rel="stylesheet">
+<div style="display: none" class="mx_HomePage_container">
+    <div class="mx_HomePage_col mx_HomePage_header">
+        <a href="https://riot.im"><img src="home/images/logo.svg" class="mx_HomePage_logo"></a>
+        <div>
+            <h1>_t("Welcome to Riot.im")</h1>
+            <h2>_t("Decentralised, encrypted chat &amp; collaboration powered by") <a href="https://matrix.org"><img width="79" height="34" alt="[matrix]" style="padding-left: 1px;vertical-align: middle" src="home/images/matrix.svg"/></a></h2>
+        </div>
+    </div>
+    <div class="mx_HomePage_col mx_HomePage_toprow">
+        <div class="mx_HomePage_row">
+            <div>
+                <h3>_t("Search the room directory")</h3>
+                <a class="mx_HomePage_room" href="#/directory">
+                    <img class="mx_HomePage_icon" src="img/icons-directory.svg">
+                </a>
+                <span class="mx_HomePage_comment">
+                    _t("Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!")
+                 </span>
+            </div>
+        </div>
+        <div class="mx_HomePage_row">
+            <div>
+                <h3>_t("Chat with Riot Bot")</h3>
+                <a class="mx_HomePage_room" href="#/user/@riot-bot:matrix.org?action=chat">
+                    <img class="mx_HomePage_icon" src="home/rooms/riot-bot.png">
+                </a>
+                <span class="mx_HomePage_comment">
+                    _t("Get started with some tips from Riot Bot!")
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <h3>_t("General discussion about Matrix")</h3>
+
+    <div class="mx_HomePage_row">
+        <div class="mx_HomePage_room">
+            <a href="#/room/#matrix:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/matrix.png">
+                <span class="mx_HomePage_name">Matrix HQ</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Discussion of all things Matrix!")</span>
+        </div>
+        <div class="mx_HomePage_room">
+            <a href="#/room/#riot:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/riot.png">
+                <span class="mx_HomePage_name">Riot</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Riot/Web &amp; Desktop chat")</span>
+        </div>
+        <div class="mx_HomePage_room">
+            <a href="#/room/#riot-ios:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/riot-ios.png">
+                <span class="mx_HomePage_name">#riot-ios</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Riot/iOS &amp; matrix-ios-sdk chat")</span>
+        </div>
+        <div class="mx_HomePage_room">
+            <a href="#/room/#riot-android:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/riot-android.png">
+                <span class="mx_HomePage_name">#riot-android</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Riot/Android &amp; matrix-android-sdk chat")</span>
+        </div>
+    </div>
+
+    <h3>_t("Matrix technical discussions")</h3>
+    <h4>_t("Running Matrix services")</h4>
+
+    <div class="mx_HomePage_row">
+        <div class="mx_HomePage_room">
+            <a href="#/room/#synapse:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/matrix.png">
+                <span class="mx_HomePage_name">Synapse Support Community</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Community-run support for Synapse")</span>
+        </div>
+        <div class="mx_HomePage_room">
+            <a href="#/room/#dendrite:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/dendrite.png">
+                <span class="mx_HomePage_name">#dendrite:matrix.org</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Admin support for Dendrite")</span>
+        </div>
+        <div class="mx_HomePage_room">
+            <a href="#/room/#homeowners:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/homeowners.png">
+                <span class="mx_HomePage_name">Synapse Homeowners</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Announcements about Synapse releases")</span>
+        </div>
+        <div class="mx_HomePage_room">
+            <a href="#/room/#irc:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/irc.png">
+                <span class="mx_HomePage_name">IRC Matrix Bridges</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Support for those using and running matrix-appservice-irc")</span>
+        </div>
+    </div>
+
+    <h4>_t("Building services on Matrix")</h4>
+
+    <div class="mx_HomePage_row">
+        <div class="mx_HomePage_room">
+            <a href="#/room/#matrix-dev:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/matrix-dev.png">
+                <span class="mx_HomePage_name">#matrix-dev:matrix.org</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Support for those using the Matrix spec")</span>
+        </div>
+        <div class="mx_HomePage_room">
+            <a href="#/room/#e2e:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/e2e.png">
+                <span class="mx_HomePage_name">End-to-end crypto in Matrix</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Design and implementation of E2E in Matrix")</span>
+        </div>
+        <div class="mx_HomePage_room">
+            <a href="#/room/#vr:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/vr.png">
+                <span class="mx_HomePage_name">#vr:matrix.org</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Implementing VR services with Matrix")</span>
+        </div>
+        <div class="mx_HomePage_room">
+            <a href="#/room/#webrtc:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/webrtc.png">
+                <span class="mx_HomePage_name">#webrtc:matrix.org</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Implementing VoIP services with Matrix")</span>
+        </div>
+        <div class="mx_HomePage_room">
+            <a href="#/room/#identity:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/identity.jpg">
+                <span class="mx_HomePage_name">Matrix Identity</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Discussion of the Identity Service API")</span>
+        </div>
+        <div class="mx_HomePage_room">
+            <a href="#/room/#bridging:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/bridging.png">
+                <span class="mx_HomePage_name">Matrix Bridging</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Support for those using, running and writing other bridges")</span>
+        </div>
+    </div>
+
+    <h4>_t("Contributing code to Matrix and Riot")</h4>
+
+    <div class="mx_HomePage_row">
+        <div class="mx_HomePage_room">
+            <a href="#/room/#riot-dev:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/riot-dev.png">
+                <span class="mx_HomePage_name">#riot-dev</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Dev chat for the Riot/Web dev team")</span>
+        </div>
+        <div class="mx_HomePage_room">
+            <a href="#/room/#dendrite-dev:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/dendrite-dev.png">
+                <span class="mx_HomePage_name">#dendrite-dev</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Dev chat for the Dendrite dev team")</span>
+        </div>
+        <div class="mx_HomePage_room">
+            <a href="#/room/#riotweb-translations:matrix.org">
+                <img class="mx_HomePage_icon" src="home/rooms/riot-translations.png">
+                <span class="mx_HomePage_name">Riot-Web Translations</span>
+            </a>
+            <span class="mx_HomePage_desc">_t("Co-ordination for Riot/Web translators")</span>
+        </div>
+    </div>
+</div>

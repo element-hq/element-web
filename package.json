@@ -46,7 +46,7 @@
     "start:prod": "parallelshell \"npm run reskindex:watch\" \"npm run start:res\" \"npm run start:js:prod\"",
     "lint": "eslint src/",
     "lintall": "eslint src/ test/",
-    "clean": "rimraf lib webapp electron/dist",
+    "clean": "rimraf lib webapp electron_app/dist",
     "prepublish": "npm run build:compile",
     "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
     "test-multi": "karma start"
@@ -77,7 +77,8 @@
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
     "sanitize-html": "^1.11.1",
     "ua-parser-js": "^0.7.10",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "velocity-vector": "vector-im/velocity#059e3b2"
   },
   "devDependencies": {
     "autoprefixer": "^6.6.0",
