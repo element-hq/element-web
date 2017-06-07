@@ -19,7 +19,7 @@ import React from 'react';
 import Matrix from 'matrix-js-sdk';
 import sdk from '../../index';
 import MatrixClientPeg from '../../MatrixClientPeg';
-import { _t } from '../../languageHandler';
+import { _t, _tJsx } from '../../languageHandler';
 
 /*
  * Component which shows the filtered file using a TimelinePanel
@@ -91,7 +91,9 @@ var FilePanel = React.createClass({
     render: function() {
         if (MatrixClientPeg.get().isGuest()) {
             return <div className="mx_FilePanel mx_RoomView_messageListWrapper">
-                <div className="mx_RoomView_empty">You must <a href="#/register">register</a> to use this functionality</div>
+                <div className="mx_RoomView_empty">
+                {_tJsx("You must <a>register</a> to use this functionality", /<a>(.*?)<\/a>/, (sub) => <a href="#/register" key="sub">{sub}</a>)}
+                </div>
             </div>;
         } else if (this.noRoom) {
             return <div className="mx_FilePanel mx_RoomView_messageListWrapper">

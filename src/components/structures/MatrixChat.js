@@ -1133,7 +1133,15 @@ module.exports = React.createClass({
             PlatformPeg.get().setNotificationCount(notifCount);
         }
 
-        document.title = `Riot ${state === "ERROR" ? " [offline]" : ""}${notifCount > 0 ? ` [${notifCount}]` : ""}`;
+        let title = "Riot ";
+        if (state === "ERROR") {
+            title += `[${_t("Offline")}] `;
+        }
+        if (notifCount > 0) {
+            title += `[${notifCount}]`;
+        }
+
+        document.title = title;
     },
 
     onUserSettingsClose: function() {

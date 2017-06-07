@@ -757,7 +757,7 @@ module.exports = React.createClass({
         const DevicesPanel = sdk.getComponent('settings.DevicesPanel');
         return (
             <div>
-                <h3>Devices</h3>
+                <h3>{_t("Devices")}</h3>
                 <DevicesPanel className="mx_UserSettings_section"/>
             </div>
         );
@@ -1102,7 +1102,7 @@ module.exports = React.createClass({
                             onValueChanged={ this._onAddEmailEditFinished } />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={this._addEmail} />
+                         <img src="img/plus.svg" width="14" height="14" alt={_t("Add")} onClick={this._addEmail} />
                     </div>
                 </div>
             );
