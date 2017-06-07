@@ -168,5 +168,6 @@
     "Waiting for response from server": "Warte auf eine Antwort vom Server",
     "You are Rioting as a guest. <a>Register</a> or <a>sign in</a> to access more rooms and features!": "Du verwendest Riot als Gast. <a>Registriere</a> oder <a>melde dich an</a> um Zugang zu mehr Räumen und Funktionen zu bekommen!",
     "You need to be using HTTPS to place a screen-sharing call.": "Du musst HTTPS nutzen um einen Anruf mit Bildschirmfreigabe durchzuführen.",
-    "OK": "OK"
+    "OK": "OK",
+    "Login": "Anmeldung"
 }
