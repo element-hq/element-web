@@ -68,7 +68,7 @@ export default React.createClass({
             >
                 <div className="mx_Dialog_content">
                     {appCards}
-                    {/* <hr/>
+                    <hr/>
                     <form onSubmit={this.onFormSubmit}>
                         <div>Or enter the URL of the widget to add.</div>
                         <input type="text" ref="input_value" value={this.state.value}
@@ -78,7 +78,7 @@ export default React.createClass({
                     </form>
                     <div className="mx_Dialog_buttons">
                         <input className="mx_Dialog_primary" type="submit" value="Add" />
-                    </div> */}
+                    </div>
                 </div>
             </BaseDialog>
         );

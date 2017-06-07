@@ -18,9 +18,15 @@ limitations under the License.
 import React from 'react';
 
 class AppIconTile extends React.Component {
+
     render() {
+        const contentClasses = ['mx_AppIconTile'];
+        // if(this.props.type == 'custom') {
+        //     contentClasses.push('mx_AppIconTile_active');
+        // }
+
         return (
-            <div className="mx_AppIconTile">
+            <div className={contentClasses.join(' ')}>
                 <div className="mx_AppIconTile_imageContainer">
                     <img src={this.props.icon} alt={this.props.name} className="mx_AppIconTile_image"/>
                 </div>

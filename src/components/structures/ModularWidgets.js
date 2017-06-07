@@ -12,6 +12,12 @@ class ModularWidgets {
             name: 'Grafana',
             description: 'Graph and monitor all the things!',
         },
+        {
+            type: 'custom',
+            icon: 'http://localhost:8000/static/blocks.png',
+            name: 'Custom Widget',
+            description: 'Add your own custom widget',
+        },
     ];
 }
 export default ModularWidgets;
