@@ -96,18 +96,48 @@ limitations under the License.
 }
 
 .mx_AppIconTile {
+    background-color: #666;
+    border: 1px solid #666;
+    width: 200px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
+    border-radius: 3px;
+    margin: 5px;
+    display: inline-block;
 }
 
 .mx_AppIconTile:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    border: 1px solid $accent-color;
+    box-shadow: 0 0 10px 5px rgba(200,200,200,0.5);
 }
 
 .mx_AppIconTile_content {
     padding: 2px 16px;
+    height: 60px;
+    overflow: hidden;
+}
+
+.mx_AppIconTile_content h4 {
+    margin-top: 5px;
+    margin-bottom: 2px;
+}
+
+.mx_AppIconTile_content p {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: smaller;
 }
 
 .mx_AppIconTile_image {
+    width: 75%;
+    margin: 10px;
+    max-height: 100px;
+}
+
+.mx_AppIconTile_imageContainer {
+    text-align: center;
     width: 100%;
+    background-color: white;
+    border-radius: 3px 3px 0 0;
+    max-height: 155px;
 }
