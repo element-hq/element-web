@@ -633,7 +633,6 @@
     "This action cannot be performed by a guest user. Please register to be able to do this": "Esta ação não pode ser realizada por um/a usuário/a visitante. Por favor, registre-se para poder fazer isso",
     "%(actionVerb)s this person?": "%(actionVerb)s esta pessoa?",
     "This room has no local addresses": "Esta sala não tem endereços locais",
-    "This room is private or inaccessible to guests. You may be able to join if you register.": "Esta sala é privada ou inacessível para visitantes. Você poderá ingressar nela se registrar-se.",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Tentei carregar um ponto específico na linha do tempo desta sala, mas parece que você não tem permissões para ver a mensagem em questão.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Tentei carregar um ponto específico na linha do tempo desta sala, mas não o encontrei.",
     "Turn Markdown off": "Desabilitar a formatação 'Markdown'",

@@ -478,7 +478,6 @@
     "The remote side failed to pick up": "Le correspondant n’a pas décroché",
     "This room has no local addresses": "Ce salon n'a pas d'adresse locale",
     "This room is not recognised.": "Ce salon n'a pas été reconnu.",
-    "This room is private or inaccessible to guests. You may be able to join if you register.": "Ce salon est privé ou non autorisé aux visiteurs. Vous devriez pouvoir le rejoindre si vous vous enregistrez.",
     "These are experimental features that may break in unexpected ways": "Ces fonctionnalités sont expérimentales et risquent de mal fonctionner",
     "The visibility of existing history will be unchanged": "La visibilité de l’historique existant sera inchangée",
     "This doesn't appear to be a valid email address": "Cette adresse n’a pas l’air d’être valide",

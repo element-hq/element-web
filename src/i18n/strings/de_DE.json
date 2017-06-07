@@ -615,7 +615,6 @@
     "This action cannot be performed by a guest user. Please register to be able to do this": "Diese Aktion kann nicht von einem Gast ausgeführt werden. Bitte registriere dich um dies zu tun",
     "%(actionVerb)s this person?": "Diese Person %(actionVerb)s?",
     "This room has no local addresses": "Dieser Raum hat keine lokale Adresse",
-    "This room is private or inaccessible to guests. You may be able to join if you register.": "Dieser Raum ist privat oder für Gäste nicht zugänglich. Du kannst jedoch eventuell beitreten, wenn du dich registrierst.",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Versuchte einen spezifischen Punkt in der Raum-Chronik zu laden, aber du hast keine Berechtigung die angeforderte Nachricht anzuzeigen.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Der Versuch, einen spezifischen Punkt im Chatverlauf zu laden, ist fehlgeschlagen. Der Punkt konnte nicht gefunden werden.",
     "Turn Markdown off": "Markdown abschalten",
