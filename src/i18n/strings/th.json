@@ -229,7 +229,7 @@
     "Leave room": "ออกจากห้อง",
     "left and rejoined": "ออกแล้วกลับเข้าร่วมอีกครั้ง",
     "left": "ออกไปแล้ว",
-    "%(targetName)s left the room.": "%(targetName)s ออกจากห้องไปแล้ว",
+    "%(targetName)s left the room.": "%(targetName)s ออกจากห้องแล้ว",
     "List this room in %(domain)s's room directory?": "แสดงห้องนี้ในไดเรกทอรีห้องของ %(domain)s?",
     "Logged in as:": "เข้าสู่ระบบในชื่อ:",
     "Login as guest": "เข้าสู่ระบบในฐานะแขก",
@@ -474,5 +474,9 @@
     "Default server": "เซิร์ฟเวอร์เริ่มต้น",
     "Custom server": "เซิร์ฟเวอร์ที่กำหนดเอง",
     "Home server URL": "URL เซิร์ฟเวอร์บ้าน",
-    "Identity server URL": "URL เซิร์ฟเวอร์ระบุตัวตน"
+    "Identity server URL": "URL เซิร์ฟเวอร์ระบุตัวตน",
+    "%(severalUsers)sleft %(repeats)s times": "%(targetName)sออกจากห้อง %(repeats)s ครั้ง",
+    "%(oneUser)sleft %(repeats)s times": "%(oneUser)sออกจากห้อง %(repeats)s ครั้ง",
+    "%(severalUsers)sleft": "%(severalUsers)sออกจากห้องแล้ว",
+    "%(oneUser)sleft": "%(oneUser)sออกจากห้องแล้ว"
 }
