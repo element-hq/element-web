@@ -21,11 +21,9 @@ import q from 'q';
 import React from 'react';
 
 import sdk from '../../../index';
-import dis from '../../../dispatcher';
 import ServerConfig from '../../views/login/ServerConfig';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import RegistrationForm from '../../views/login/RegistrationForm';
-import CaptchaForm from '../../views/login/CaptchaForm';
 import RtsClient from '../../../RtsClient';
 import { _t } from '../../../languageHandler';
 

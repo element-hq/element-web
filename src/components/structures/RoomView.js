@@ -697,7 +697,7 @@ module.exports = React.createClass({
         if (!unsentMessages.length) return "";
         for (const event of unsentMessages) {
             if (!event.error || event.error.name !== "UnknownDeviceError") {
-                return _t("Some of your messages have not been sent") + ".";
+                return _t("Some of your messages have not been sent.");
             }
         }
         return _t("Message not sent due to unknown devices being present");

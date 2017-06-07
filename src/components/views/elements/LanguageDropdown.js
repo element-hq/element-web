@@ -19,7 +19,6 @@ import React from 'react';
 
 import sdk from '../../../index';
 import UserSettingsStore from '../../../UserSettingsStore';
-import { _t } from '../../../languageHandler';
 import * as languageHandler from '../../../languageHandler';
 
 function languageMatchesSearchQuery(query, language) {
