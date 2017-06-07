@@ -716,7 +716,7 @@ module.exports = React.createClass({
         if (!unsentMessages.length) return "";
         for (const event of unsentMessages) {
             if (!event.error || event.error.name !== "UnknownDeviceError") {
-                return _t("Some of your messages have not been sent") + ".";
+                return _t("Some of your messages have not been sent.");
             }
         }
         return _t("Message not sent due to unknown devices being present");
@@ -880,7 +880,7 @@ module.exports = React.createClass({
                 var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
                 Modal.createDialog(NeedToRegisterDialog, {
                     title: _t("Failed to join the room"),
-                    description: _t("This room is private or inaccessible to guests. You may be able to join if you register") + "."
+                    description: _t("This room is private or inaccessible to guests. You may be able to join if you register.")
                 });
             } else {
                 var msg = error.message ? error.message : JSON.stringify(error);
@@ -948,7 +948,7 @@ module.exports = React.createClass({
             var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
             Modal.createDialog(NeedToRegisterDialog, {
                 title: _t("Please Register"),
-                description: _t("Guest users can't upload files. Please register to upload") + "."
+                description: _t("Guest users can't upload files. Please register to upload.")
             });
             return;
         }

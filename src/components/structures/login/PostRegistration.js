@@ -50,7 +50,7 @@ module.exports = React.createClass({
             });
         }, function(error) {
             self.setState({
-                errorString: "Failed to fetch avatar URL",
+                errorString: _t("Failed to fetch avatar URL"),
                 busy: false
             });
         });
