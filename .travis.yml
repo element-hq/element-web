@@ -17,7 +17,7 @@ node_js:
     - 6
     - 7
 env:
-  - CXX=g++-4.8
+  - CXX=g++-4.8 DISPLAY=:99.0
 install:
     # clone the deps with depth 1: we know we will only ever need that one
     # commit.
@@ -28,3 +28,5 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
+      - libx11-dev
+      - libxkbfile-dev
