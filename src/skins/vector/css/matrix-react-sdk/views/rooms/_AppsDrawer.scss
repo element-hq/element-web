@@ -96,14 +96,19 @@ limitations under the License.
 }
 
 .mx_AppIconTile {
-    background-color: #666;
-    border: 1px solid #666;
+    background-color: $lightbox-bg-color;
+    border: 1px solid rgba(0, 0, 0, 0);
     width: 200px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     border-radius: 3px;
     margin: 5px;
     display: inline-block;
+}
+
+.mx_AppIconTile.mx_AppIconTile_active {
+    color: $accent-color;
+    border-color: $accent-color;
 }
 
 .mx_AppIconTile:hover {
@@ -129,9 +134,12 @@ limitations under the License.
 }
 
 .mx_AppIconTile_image {
+    padding: 10px;
     width: 75%;
-    margin: 10px;
-    max-height: 100px;
+    max-width:100px;
+    max-height:100px;
+    width: auto;
+    height: auto;
 }
 
 .mx_AppIconTile_imageContainer {
