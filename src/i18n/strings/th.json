@@ -189,7 +189,11 @@
     "Failed to change password. Is your password correct?": "การเปลี่ยนรหัสผ่านล้มเหลว รหัสผ่านของคุณถูกต้องหรือไม่?",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "มีห้องอยู่มากมายใน Matrix ทั้งห้องที่เชื่อมไปยังเคีือข่ายอื่น (Slack, IRC, Gitter ฯลฯ) และห้องที่อยู่ด้วยตัวเอง ลองดูไดเรกทอรีสิ!",
     "You have successfully set a password!": "การตั้งรหัสผ่านเสร็จสมบูรณ์!",
-    "You can now return to your account after signing out, and sign in on other devices.": "คุณสามารถกลับไปยังบัญชีของคุณหลังจากออกจากระบบ แล้วกลับเขาระบบอีกครั้งบนอุปกรณ์อื่น ๆ",
+    "You can now return to your account after signing out, and sign in on other devices.": "คุณสามารถกลับไปยังบัญชีของคุณหลังจากออกจากระบบ แล้วกลับเขาสู่ระบบบนอุปกรณ์อื่น ๆ",
     "Continue": "ดำเนินการต่อ",
-    "Please set a password!": "กรุณาตั้งรหัสผ่าน!"
+    "Please set a password!": "กรุณาตั้งรหัสผ่าน!",
+    "This will allow you to return to your account after signing out, and sign in on other devices.": "เพื่อคุณจะได้กลับมายังบัญชีเดิมของคุณได้ หลังจากออกจากระบบ แล้วกลับเข้าสู่ระบบในอุปกรณ์อื่น ๆ",
+    "Design and implementation of E2E in Matrix": "การออกแบบและใช้งาน E2E ใน Matrix",
+    "Discussion of the Identity Service API": "พูดคุยเกี่ยวกับ Identity Service API",
+    "Decentralised, encrypted chat &amp; collaboration powered by": "แชทและประสานงานบนระบบที่ทั้งเข้ารหัสได้และกระจายศูนย์กลาง โดยใช้เทคโนโลยีจาก"
 }
