@@ -909,5 +909,6 @@
     "Username not available": "Nutzername nicht verfügbar",
     "Something went wrong!": "Etwas ging schief!",
     "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.": "Dies wird dein Konto-Name auf dem <span></span> Heimserver, oder du kannst einen <a>anderen Server</a> auswählen.",
-    "If you already have a Matrix account you can <a>log in</a> instead.": "Wenn du bereits ein Matrix-Benutzerkonto hast, kannst du dich stattdessen auch direkt <a>anmelden</a>."
+    "If you already have a Matrix account you can <a>log in</a> instead.": "Wenn du bereits ein Matrix-Benutzerkonto hast, kannst du dich stattdessen auch direkt <a>anmelden</a>.",
+    "Home": "Start"
 }
