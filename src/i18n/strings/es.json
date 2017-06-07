@@ -282,7 +282,7 @@
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s de %(fromPowerLevel)s a %(toPowerLevel)s",
     "Guests can't set avatars. Please register.": "Invitados no puedes establecer avatares. Por favor regístrate.",
     "Guest users can't create new rooms. Please register to create room and start a chat.": "Usuarios invitados no pueden crear nuevas salas. Por favor regístrate para crear la sala y iniciar la conversación.",
-    "Guest users can't upload files. Please register to upload": "Usuarios invitados no puedes subir archivos. Por favor regístrate para subir tus archivos",
+    "Guest users can't upload files. Please register to upload.": "Usuarios invitados no puedes subir archivos. Por favor regístrate para subir tus archivos.",
     "Guests can't use labs features. Please register.": "Invitados no puedes usar las características en desarrollo. Por favor regístrate.",
     "Guests cannot join this room even if explicitly invited.": "Invitados no pueden unirse a esta sala aun cuando han sido invitados explícitamente.",
     "had": "tuvo",
