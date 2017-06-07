@@ -203,5 +203,6 @@
     "Continue": "Fortfahren",
     "Please set a password!": "Bitte ein Passwort einrichten!",
     "This will allow you to return to your account after signing out, and sign in on other devices.": "Dies erlaubt dir, dich wieder an deinem Konto anzumelden, nachdem du dich abgemeldet hast.",
-    "Dev chat for the Dendrite dev team": "Entwickler-Chat for das Dendrite-Entwickler-Team"
+    "Dev chat for the Dendrite dev team": "Entwickler-Chat for das Dendrite-Entwickler-Team",
+    "General discussion about Matrix and Riot": "Generelle Diskussion über Matrix und Riot"
 }
