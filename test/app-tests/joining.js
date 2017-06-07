@@ -164,6 +164,13 @@ describe('joining a room', function () {
                 // wait for the join request to be made
                 return q.delay(1);
             }).then(() => {
+                // and again, because the state update has to go to the store and
+                // then one dispatch within the store, then to the view
+                // XXX: This is *super flaky*: a better way would be to declare
+                // that we expect a certain state transition to happen, then wait
+                // for that transition to occur.
+                return q.delay(1);
+            }).then(() => {
                 // the roomview should now be loading
                 expect(roomView.state.room).toBe(null);
                 expect(roomView.state.joining).toBe(true);
@@ -177,6 +184,8 @@ describe('joining a room', function () {
             }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
 
+                return q.delay(1);
+            }).then(() => {
                 // We've joined, expect this to false
                 expect(roomView.state.joining).toBe(false);
 
