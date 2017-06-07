@@ -327,5 +327,9 @@
     "%(oneUser)schanged their name": "%(oneUser)sเปลี่ยนชื่อของเขาแล้ว",
     "%(severalUsers)schanged their name %(repeats)s times": "%(severalUsers)sเปลี่ยนชื่อของพวกเขา %(repeats)s ครั้ง",
     "%(oneUser)schanged their name %(repeats)s times": "%(oneUser)sเปลี่ยนชื่อของเขา %(repeats)s ครั้ง",
-    "%(severalUsers)schanged their name": "%(severalUsers)sเปลี่ยนชื่อของพวกเขาแล้ว"
+    "%(severalUsers)schanged their name": "%(severalUsers)sเปลี่ยนชื่อของพวกเขาแล้ว",
+    "Create new room": "สร้างห้องใหม่",
+    "Room directory": "ไดเรกทอรีห้อง",
+    "Start chat": "เริ่มแชท",
+    "Welcome page": "หน้าต้อนรับ"
 }
