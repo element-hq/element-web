@@ -28,7 +28,7 @@ fi
 # Chop 'origin' off the start as jenkins ends up using
 # branches on the origin, but this doesn't work if we
 # specify the branch when cloning.
-curbranch=`echo "$curbranch" | sed -e 's/^origin\///'`
+curbranch=${curbranch#origin/}
 
 echo "Determined branch to be $curbranch"
 
