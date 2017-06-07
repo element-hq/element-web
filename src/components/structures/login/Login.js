@@ -19,7 +19,6 @@ limitations under the License.
 
 import React from 'react';
 import { _t, _tJsx } from '../../../languageHandler';
-import ReactDOM from 'react-dom';
 import sdk from '../../../index';
 import Login from '../../../Login';
 
@@ -130,7 +129,7 @@ module.exports = React.createClass({
     onPhoneNumberChanged: function(phoneNumber) {
         // Validate the phone number entered
         if (!PHONE_NUMBER_REGEX.test(phoneNumber)) {
-            this.setState({ errorText: 'The phone number entered looks invalid' });
+            this.setState({ errorText: _t('The phone number entered looks invalid') });
             return;
         }
 
@@ -214,8 +213,8 @@ module.exports = React.createClass({
             errCode = "HTTP " + err.httpStatus;
         }
 
-        let errorText = "Error: Problem communicating with the given homeserver " +
-                (errCode ? "(" + errCode + ")" : "");
+        let errorText = _t("Error: Problem communicating with the given homeserver.") +
+                (errCode ? " (" + errCode + ")" : "");
 
         if (err.cors === 'rejected') {
             if (window.location.protocol === 'https:' &&

@@ -15,15 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import { getAddressType, inviteMultipleToRoom } from '../../../Invite';
 import createRoom from '../../../createRoom';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
-import rate_limited_func from '../../../ratelimitedfunc';
-import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
 import q from 'q';
@@ -95,16 +92,25 @@ module.exports = React.createClass({
                     // A Direct Message room already exists for this user, so select a
                     // room from a list that is similar to the one in MemberInfo panel
                     const ChatCreateOrReuseDialog = sdk.getComponent(
-                        "views.dialogs.ChatCreateOrReuseDialog"
+                        "views.dialogs.ChatCreateOrReuseDialog",
                     );
                     Modal.createDialog(ChatCreateOrReuseDialog, {
                         userId: userId,
                         onFinished: (success) => {
-                            if (success) {
-                                this.props.onFinished(true, inviteList[0]);
-                            }
-                            // else show this ChatInviteDialog again
-                        }
+                            this.props.onFinished(success);
+                        },
+                        onNewDMClick: () => {
+                            dis.dispatch({
+                                action: 'start_chat',
+                                user_id: userId,
+                            });
+                        },
+                        onExistingRoomSelected: (roomId) => {
+                            dis.dispatch({
+                                action: 'view_room',
+                                user_id: roomId,
+                            });
+                        },
                     });
                 } else {
                     this._startChat(inviteList);
@@ -270,11 +276,7 @@ module.exports = React.createClass({
 
     _startChat: function(addrs) {
         if (MatrixClientPeg.get().isGuest()) {
-            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: _t("Please Register"),
-                description: _t("Guest users can't invite users. Please register."),
-            });
+            dis.dispatch({action: 'view_set_mxid'});
             return;
         }
 

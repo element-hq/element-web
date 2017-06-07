@@ -375,11 +375,7 @@ module.exports = WithMatrixClient(React.createClass({
                 console.log("Mod toggle success");
             }, function(err) {
                 if (err.errcode == 'M_GUEST_ACCESS_FORBIDDEN') {
-                    var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                    Modal.createDialog(NeedToRegisterDialog, {
-                        title: _t("Please Register"),
-                        description: _t("This action cannot be performed by a guest user. Please register to be able to do this") + ".",
-                    });
+                    dis.dispatch({action: 'view_set_mxid'});
                 } else {
                     console.error("Toggle moderator error:" + err);
                     Modal.createDialog(ErrorDialog, {

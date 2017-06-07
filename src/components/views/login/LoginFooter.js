@@ -16,6 +16,7 @@ limitations under the License.
 
 'use strict';
 
+import { _t } from '../../../languageHandler';
 import React from 'react';
 
 module.exports = React.createClass({
@@ -27,5 +28,5 @@ module.exports = React.createClass({
                 <a href="https://matrix.org">{_t("powered by Matrix")}</a>
             </div>
         );
-    }
+    },
 });

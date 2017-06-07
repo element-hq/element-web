@@ -18,6 +18,7 @@ var React = require('react');
 var ContentMessages = require('../../ContentMessages');
 var dis = require('../../dispatcher');
 var filesize = require('filesize');
+import { _t } from '../../languageHandler';
 
 module.exports = React.createClass({displayName: 'UploadBar',
     propTypes: {
@@ -81,10 +82,8 @@ module.exports = React.createClass({displayName: 'UploadBar',
             uploadedSize = uploadedSize.replace(/ .*/, '');
         }
 
-        var others;
-        if (uploads.length > 1) {
-            others = ' and ' + (uploads.length - 1) + ' other' + (uploads.length > 2 ? 's' : '');
-        }
+        // MUST use var name 'count' for pluralization to kick in
+        var uploadText = _t("Uploading %(filename)s and %(count)s others", {filename: upload.fileName, count: (uploads.length - 1)});
 
         return (
             <div className="mx_UploadBar">
@@ -98,7 +97,7 @@ module.exports = React.createClass({displayName: 'UploadBar',
                 <div className="mx_UploadBar_uploadBytes">
                     { uploadedSize } / { totalSize }
                 </div>
-                <div className="mx_UploadBar_uploadFilename">Uploading {upload.fileName}{others}</div>
+                <div className="mx_UploadBar_uploadFilename">{uploadText}</div>
             </div>
         );
     }

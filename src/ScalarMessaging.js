@@ -94,6 +94,22 @@ Example:
     }
 }
 
+get_membership_count
+--------------------
+Get the number of joined users in the room.
+
+Request:
+ - room_id is the room to get the count in.
+Response:
+78
+Example:
+{
+    action: "get_membership_count",
+    room_id: "!foo:bar",
+    response: 78
+}
+
+
 membership_state AND bot_options
 --------------------------------
 Get the content of the "m.room.member" or "m.room.bot.options" state event respectively.
@@ -256,6 +272,21 @@ function botOptions(event, roomId, userId) {
     returnStateEvent(event, roomId, "m.room.bot.options", "_" + userId);
 }
 
+function getMembershipCount(event, roomId) {
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, _t('You need to be logged in.'));
+        return;
+    }
+    const room = client.getRoom(roomId);
+    if (!room) {
+        sendError(event, _t('This room is not recognised.'));
+        return;
+    }
+    const count = room.getJoinedMembers().length;
+    sendResponse(event, count);
+}
+
 function returnStateEvent(event, roomId, eventType, stateKey) {
     const client = MatrixClientPeg.get();
     if (!client) {
@@ -342,6 +373,9 @@ const onMessage = function(event) {
             return;
         } else if (event.data.action === "set_plumbing_state") {
             setPlumbingState(event, roomId, event.data.status);
+            return;
+        } else if (event.data.action === "get_membership_count") {
+            getMembershipCount(event, roomId);
             return;
         }
 

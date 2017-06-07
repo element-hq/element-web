@@ -16,7 +16,6 @@
 
 import UserSettingsStore from './UserSettingsStore';
 import * as Matrix from 'matrix-js-sdk';
-import q from 'q';
 
 export default {
     getDevices: function() {
