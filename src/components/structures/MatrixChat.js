@@ -39,7 +39,7 @@ import PageTypes from '../../PageTypes';
 import createRoom from "../../createRoom";
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
 import KeyRequestHandler from '../../KeyRequestHandler';
-import { _t } from '../../languageHandler';
+import { _t, getCurrentLanguage } from '../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'MatrixChat',
@@ -685,8 +685,12 @@ module.exports = React.createClass({
 
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
         Modal.createDialog(QuestionDialog, {
-            title: "Leave room",
-            description: <span>Are you sure you want to leave the room <i>{roomToLeave.name}</i>?</span>,
+            title: _t("Leave room"),
+            description: (
+                <span>
+                {_t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name})}
+                </span>
+            ),
             onFinished: (shouldLeave) => {
                 if (shouldLeave) {
                     const d = MatrixClientPeg.get().leave(roomId);
@@ -792,7 +796,7 @@ module.exports = React.createClass({
             this._teamToken = teamToken;
             dis.dispatch({action: 'view_home_page'});
         } else if (this._is_registered) {
-            if (this.props.config.welcomeUserId) {
+            if (this.props.config.welcomeUserId && getCurrentLanguage().startsWith("en")) {
                 createRoom({dmUserId: this.props.config.welcomeUserId});
                 return;
             }

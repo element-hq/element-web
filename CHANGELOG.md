@@ -1,3 +1,29 @@
+Changes in [0.9.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.1) (2017-06-02)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.0...v0.9.1)
+
+ * Update from Weblate.
+   [\#1012](https://github.com/matrix-org/matrix-react-sdk/pull/1012)
+ * typo, missing import and mis-casing
+   [\#1014](https://github.com/matrix-org/matrix-react-sdk/pull/1014)
+ * Update from Weblate.
+   [\#1010](https://github.com/matrix-org/matrix-react-sdk/pull/1010)
+
+Changes in [0.9.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.0) (2017-06-02)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.0-rc.2...v0.9.0)
+
+ * sync pt with pt_BR
+   [\#1009](https://github.com/matrix-org/matrix-react-sdk/pull/1009)
+ * Update from Weblate.
+   [\#1008](https://github.com/matrix-org/matrix-react-sdk/pull/1008)
+ * Update from Weblate.
+   [\#1003](https://github.com/matrix-org/matrix-react-sdk/pull/1003)
+ * allow hiding redactions, restoring old behaviour
+   [\#1004](https://github.com/matrix-org/matrix-react-sdk/pull/1004)
+ * Add missing translations
+   [\#1005](https://github.com/matrix-org/matrix-react-sdk/pull/1005)
+
 Changes in [0.9.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.0-rc.2) (2017-06-02)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.0-rc.1...v0.9.0-rc.2)

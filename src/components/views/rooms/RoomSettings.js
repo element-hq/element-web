@@ -726,7 +726,7 @@ module.exports = React.createClass({
         if (canSetTag || self.state.tags) {
             var tagsSection =
                 <div className="mx_RoomSettings_tags">
-                    Tagged as: { canSetTag ?
+                    {_t("Tagged as: ")}{ canSetTag ?
                         (tags.map(function(tag, i) {
                             return (<label key={ i }>
                                         <input type="checkbox"
@@ -844,7 +844,7 @@ module.exports = React.createClass({
                             <input type="checkbox" disabled={ !roomState.mayClientSendStateEvent("m.room.aliases", cli) }
                                    onChange={ this._onToggle.bind(this, "isRoomPublished", true, false)}
                                    checked={this.state.isRoomPublished}/>
-                            List this room in { MatrixClientPeg.get().getDomain() }'s room directory?
+                            {_t("List this room in %(domain)s's room directory?", { domain: MatrixClientPeg.get().getDomain() })}
                         </label>
                     </div>
                     <div className="mx_RoomSettings_settings">
@@ -854,7 +854,7 @@ module.exports = React.createClass({
                                     disabled={ !roomState.mayClientSendStateEvent("m.room.history_visibility", cli) }
                                     checked={historyVisibility === "world_readable"}
                                     onChange={this._onHistoryRadioToggle} />
-                            Anyone
+                            {_t("Anyone")}
                         </label>
                         <label>
                             <input type="radio" name="historyVis" value="shared"
