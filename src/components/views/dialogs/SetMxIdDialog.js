@@ -125,8 +125,8 @@ export default React.createClass({
                         break;
                     case "M_INVALID_USERNAME":
                         newState.usernameError = _t(
-                            'Username invalid: %(error_message)s',
-                            { error_message: err.message},
+                            'Username invalid: %(errMessage)s',
+                            { errMessage: err.message},
                         );
                         break;
                     case "M_UNRECOGNIZED":
@@ -139,8 +139,8 @@ export default React.createClass({
                         break;
                     default:
                         newState.usernameError = _t(
-                            'An error occurred: %(errMessage)s',
-                            { errMessage: err.message },
+                            'An error occurred: %(error_string)s',
+                            { error_string: err.message },
                         );
                         break;
                 }
