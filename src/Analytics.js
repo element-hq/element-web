@@ -30,6 +30,7 @@ const customVariables = {
     'App Version': 2,
     'User Type': 3,
     'Chosen Language': 4,
+    'Instance': 5,
 };
 
 
@@ -85,6 +86,10 @@ class Analytics {
         });
 
         this._setVisitVariable('Chosen Language', getCurrentLanguage());
+
+        if (window.location.hostname === 'riot.im') {
+            this._setVisitVariable('Instance', window.location.pathname);
+        }
 
         (function() {
             const g = document.createElement('script');
