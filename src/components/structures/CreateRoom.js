@@ -17,7 +17,6 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import q from 'q';
 import { _t } from '../../languageHandler';
 import sdk from '../../index';
 import MatrixClientPeg from '../../MatrixClientPeg';
@@ -247,7 +246,7 @@ module.exports = React.createClass({
 
             return (
             <div className="mx_CreateRoom">
-                <SimpleRoomHeader title="CreateRoom" collapsedRhs={ this.props.collapsedRhs }/>
+                <SimpleRoomHeader title={_t("Create Room")} collapsedRhs={ this.props.collapsedRhs }/>
                 <div className="mx_CreateRoom_body">
                     <input type="text" ref="room_name" value={this.state.room_name} onChange={this.onNameChange} placeholder={_t('Name')}/> <br />
                     <textarea className="mx_CreateRoom_description" ref="topic" value={this.state.topic} onChange={this.onTopicChange} placeholder={_t('Topic')}/> <br />

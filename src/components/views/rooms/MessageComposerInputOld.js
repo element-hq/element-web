@@ -29,7 +29,6 @@ var Markdown = require("../../../Markdown");
 
 var TYPING_USER_TIMEOUT = 10000;
 var TYPING_SERVER_TIMEOUT = 30000;
-var MARKDOWN_ENABLED = true;
 
 export function onSendMessageFailed(err, room) {
     // XXX: temporary logging to try to diagnose
@@ -77,7 +76,8 @@ export default React.createClass({
 
     componentWillMount: function() {
         this.oldScrollHeight = 0;
-        this.markdownEnabled = MARKDOWN_ENABLED;
+        this.markdownEnabled = !UserSettingsStore.getSyncedSetting('disableMarkdown', false);
+
         var self = this;
         this.sentHistory = {
             // The list of typed messages. Index 0 is more recent

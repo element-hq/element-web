@@ -88,6 +88,10 @@ const SETTINGS_LABELS = [
         id: 'hideRedactions',
         label: 'Hide removed messages',
     },
+    {
+        id: 'disableMarkdown',
+        label: 'Disable markdown formatting',
+    },
 /*
     {
         id: 'useFixedWidthFont',
@@ -307,11 +311,7 @@ module.exports = React.createClass({
 
     onAvatarPickerClick: function(ev) {
         if (MatrixClientPeg.get().isGuest()) {
-            const NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: _t("Please Register"),
-                description: _t("Guests can't set avatars. Please register."),
-            });
+            dis.dispatch({action: 'view_set_mxid'});
             return;
         }
 
@@ -391,6 +391,7 @@ module.exports = React.createClass({
             title: _t("Success"),
             description: _t("Your password was successfully changed. You will not receive push notifications on other devices until you log back in to them") + ".",
         });
+        dis.dispatch({action: 'password_changed'});
     },
 
     onUpgradeClicked: function() {
@@ -753,7 +754,7 @@ module.exports = React.createClass({
         const DevicesPanel = sdk.getComponent('settings.DevicesPanel');
         return (
             <div>
-                <h3>Devices</h3>
+                <h3>{_t("Devices")}</h3>
                 <DevicesPanel className="mx_UserSettings_section"/>
             </div>
         );
@@ -803,11 +804,7 @@ module.exports = React.createClass({
                     onChange={(e) => {
                         if (MatrixClientPeg.get().isGuest()) {
                             e.target.checked = false;
-                            const NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                            Modal.createDialog(NeedToRegisterDialog, {
-                                title: _t("Please Register"),
-                                description: _t("Guests can't use labs features. Please register."),
-                            });
+                            dis.dispatch({action: 'view_set_mxid'});
                             return;
                         }
 
@@ -1098,7 +1095,7 @@ module.exports = React.createClass({
                             onValueChanged={ this._onAddEmailEditFinished } />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={this._addEmail} />
+                         <img src="img/plus.svg" width="14" height="14" alt={_t("Add")} onClick={this._addEmail} />
                     </div>
                 </div>
             );

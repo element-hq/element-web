@@ -21,11 +21,9 @@ import q from 'q';
 import React from 'react';
 
 import sdk from '../../../index';
-import dis from '../../../dispatcher';
 import ServerConfig from '../../views/login/ServerConfig';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import RegistrationForm from '../../views/login/RegistrationForm';
-import CaptchaForm from '../../views/login/CaptchaForm';
 import RtsClient from '../../../RtsClient';
 import { _t } from '../../../languageHandler';
 
@@ -99,7 +97,7 @@ module.exports = React.createClass({
             this.props.teamServerConfig.teamServerURL &&
             !this._rtsClient
         ) {
-            this._rtsClient = new RtsClient(this.props.teamServerConfig.teamServerURL);
+            this._rtsClient = this.props.rtsClient || new RtsClient(this.props.teamServerConfig.teamServerURL);
 
             this.setState({
                 teamServerBusy: true,
@@ -222,7 +220,6 @@ module.exports = React.createClass({
         }
 
         trackPromise.then((teamToken) => {
-            console.info('Team token promise',teamToken);
             this.props.onLoggedIn({
                 userId: response.user_id,
                 deviceId: response.device_id,

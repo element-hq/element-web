@@ -187,6 +187,14 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
 
 // returns a promise which resolves to true if a session is found in
 // localstorage
+//
+// N.B. Lifecycle.js should not maintain any further localStorage state, we
+//      are moving towards using SessionStore to keep track of state related
+//      to the current session (which is typically backed by localStorage).
+//
+//      The plan is to gradually move the localStorage access done here into
+//      SessionStore to avoid bugs where the view becomes out-of-sync with
+//      localStorage (e.g. teamToken, isGuest etc.)
 function _restoreFromLocalStorage() {
     if (!localStorage) {
         return q(false);
@@ -237,7 +245,7 @@ function _handleRestoreFailure(e) {
             + ' This is a once off; sorry for the inconvenience.',
         );
 
-        _clearStorage();
+        _clearLocalStorage();
 
         return q.reject(new Error(
             _t('Unable to restore previous session') + ': ' + msg,
@@ -258,7 +266,7 @@ function _handleRestoreFailure(e) {
     return def.promise.then((success) => {
         if (success) {
             // user clicked continue.
-            _clearStorage();
+            _clearLocalStorage();
             return false;
         }
 
@@ -314,6 +322,16 @@ export function setLoggedIn(credentials) {
                 localStorage.setItem("mx_device_id", credentials.deviceId);
             }
 
+            // The user registered as a PWLU (PassWord-Less User), the generated password
+            // is cached here such that the user can change it at a later time.
+            if (credentials.password) {
+                // Update SessionStore
+                dis.dispatch({
+                    action: 'cached_password',
+                    cachedPassword: credentials.password,
+                });
+            }
+
             console.log("Session persisted for %s", credentials.userId);
         } catch (e) {
             console.warn("Error using local storage: can't persist session!", e);
@@ -332,10 +350,6 @@ export function setLoggedIn(credentials) {
     }
 
     // stop any running clients before we create a new one with these new credentials
-    //
-    // XXX: why do we have any running clients here? Maybe on sign-in after
-    // initial use as a guest? but what about our persistent storage? we need to
-    // be careful not to leak e2e data created as one user into another session.
     stopMatrixClient();
 
     MatrixClientPeg.replaceUsingCreds(credentials);
@@ -406,19 +420,13 @@ export function startMatrixClient() {
  * a session has been logged out / ended.
  */
 export function onLoggedOut() {
-    stopMatrixClient(true);
+    _clearLocalStorage();
+    stopMatrixClient();
     dis.dispatch({action: 'on_logged_out'});
 }
 
-function _clearStorage() {
+function _clearLocalStorage() {
     Analytics.logout();
-
-    const cli = MatrixClientPeg.get();
-    if (cli) {
-        // TODO: *really* ought to wait for the promise to complete
-        cli.clearStores().done();
-    }
-
     if (!window.localStorage) {
         return;
     }
@@ -435,13 +443,9 @@ function _clearStorage() {
 }
 
 /**
- * Stop all the background processes related to the current client.
- *
- * Optionally clears persistent stores.
- *
- * @param {boolean} clearStores true to clear the persistent stores.
+ * Stop all the background processes related to the current client
  */
-export function stopMatrixClient(clearStores) {
+export function stopMatrixClient() {
     Notifier.stop();
     UserActivity.stop();
     Presence.stop();
@@ -450,13 +454,7 @@ export function stopMatrixClient(clearStores) {
     if (cli) {
         cli.stopClient();
         cli.removeAllListeners();
+        cli.store.deleteAllData();
+        MatrixClientPeg.unset();
     }
-
-    if (clearStores) {
-        // note that we have to do this *after* stopping the client, but
-        // *before* clearing the MatrixClientPeg.
-        _clearStorage();
-    }
-
-    MatrixClientPeg.unset();
 }

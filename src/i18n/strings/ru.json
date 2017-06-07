@@ -670,5 +670,8 @@
     "Analytics": "Аналитика",
     "Riot collects anonymous analytics to allow us to improve the application.": "Riot собирет анонимные данные, чтобы улутшыть эту програму.",
     "Opt out of analytics": "Подтвердить отказ передачи аналитических данных",
-    "Logged in as:": "Зарегестрирован как:"
+    "Logged in as:": "Зарегестрирован как:",
+    "Default Device": "Стандартное устройство",
+    "No Webcams detected": "Веб-камера не обнаружена",
+    "VoIP": "VoIP"
 }

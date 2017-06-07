@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import flatMap from 'lodash/flatMap';
 import isEqual from 'lodash/isEqual';
 import sdk from '../../../index';
-import type {Completion, SelectionRange} from '../../../autocomplete/Autocompleter';
+import type {Completion} from '../../../autocomplete/Autocompleter';
 import Q from 'q';
 
 import {getCompletions} from '../../../autocomplete/Autocompleter';
