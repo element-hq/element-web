@@ -1,3 +1,11 @@
+Changes in [0.10.2](https://github.com/vector-im/riot-web/releases/tag/v0.10.2) (2017-06-06)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.1...v0.10.2)
+
+ * Hotfix for bugs where navigating straight to a URL like /#/login and
+   and /#/forgot_password
+
+
 Changes in [0.10.1](https://github.com/vector-im/riot-web/releases/tag/v0.10.1) (2017-06-02)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.0...v0.10.1)
