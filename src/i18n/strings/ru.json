@@ -254,7 +254,7 @@
     "%(targetName)s joined the room.": "%(targetName)s вошёл в комнату.",
     "%(senderName)s kicked %(targetName)s.": "%(senderName)s выкинул %(targetName)s.",
     "%(targetName)s left the room.": "%(targetName)s покинул комнату.",
-    "%(senderName)s made future room history visible to": "%(senderName)s  история сделаной будущей комнаты, видимая для",
+    "%(senderName)s made future room history visible to": "%(senderName)s сделал видимой для всех будущую историю комнаты",
     "Missing room_id in request": "Отсутствует room_id в запросе",
     "Missing user_id in request": "Отсутствует user_id в запросе",
     "Must be viewing a room": "Комната должна быть посищена",
