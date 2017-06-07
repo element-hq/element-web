@@ -318,6 +318,7 @@
     "The file '%(fileName)s' failed to upload": "การอัปโหลดไฟล์ '%(fileName)s' ล้มเหลว",
     "This Home Server does not support login using email address.": "เซิร์ฟเวอร์บ้านนี้ไม่รองรับการลงชื่อเข้าใช้ด้วยที่อยู่อีเมล",
     "There was a problem logging in.": "มีปัญหาในการลงชื่อเข้าใช้",
+    "This room is private or inaccessible to guests. You may be able to join if you register.": "ห้องนี้เป็นส่วนตัวหรือไม่อนุญาตให้แขกเข้าถึง คุณอาจเข้าร่วมได้หากคุณลงทะเบียน",
     "this invitation?": "คำเชิญนี้?",
     "This is a preview of this room. Room interactions have been disabled": "นี่คือตัวอย่างของห้อง การตอบสนองภายในห้องถูกปิดใช้งาน",
     "This phone number is already in use": "หมายเลขโทรศัพท์นี้ถูกใช้งานแล้ว",
