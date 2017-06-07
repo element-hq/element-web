@@ -21,7 +21,9 @@ class AppIconTile extends React.Component {
     render() {
         return (
             <div className="mx_AppIconTile">
-                <img src={this.props.icon} alt={this.props.name} className="mx_AppIconTile_image"/>
+                <div className="mx_AppIconTile_imageContainer">
+                    <img src={this.props.icon} alt={this.props.name} className="mx_AppIconTile_image"/>
+                </div>
                 <div className="mx_AppIconTile_content">
                   <h4><b>{this.props.name}</b></h4>
                   <p>{this.props.description}</p>

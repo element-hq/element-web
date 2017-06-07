@@ -16,6 +16,8 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
+import AppIconTile from '../elements/AppIconTile';
+import ModularWidgets from '../../structures/ModularWidgets';
 
 /**
  * Prompt the user for address of iframe widget
@@ -50,13 +52,22 @@ export default React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const appCards = ModularWidgets.widgetTypes.map((widgetType, index) =>
+            <AppIconTile
+                key={index}
+                type={widgetType.type}
+                icon={widgetType.icon}
+                name={widgetType.name}
+                description={widgetType.description}/>,
+            );
+
         return (
             <BaseDialog className="mx_AddAppDialog"
                 onFinished={this.props.onFinished}
                 title="Add an app Widget"
             >
                 <div className="mx_Dialog_content">
-                    
+                    {appCards}
                     {/* <hr/>
                     <form onSubmit={this.onFormSubmit}>
                         <div>Or enter the URL of the widget to add.</div>
