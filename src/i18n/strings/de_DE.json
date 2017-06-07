@@ -339,7 +339,7 @@
     "User names may only contain letters, numbers, dots, hyphens and underscores.": "Benutzernamen sollen nur Buchstaben, Nummern, Binde- und Unterstriche enthalten.",
     "An unknown error occurred.": "Ein unbekannter Fehler trat auf.",
     "I already have an account": "Ich habe bereits einen Account",
-    "An error occured: %(error_string)s": "Ein Fehler trat auf: %(error_string)s",
+    "An error occurred: %(error_string)s": "Ein Fehler trat auf: %(error_string)s",
     "Topic": "Thema",
     "Make this room private": "Mache diesen Raum privat",
     "Share message history with new users": "Bisherigen Chatverlauf mit neuen Nutzern teilen",

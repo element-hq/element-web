@@ -611,7 +611,7 @@
     "User names may only contain letters, numbers, dots, hyphens and underscores.": "Les noms d’utilisateurs ne peuvent contenir que des lettres, chiffres, points et tirets hauts ou bas.",
     "An unknown error occurred.": "Une erreur inconnue est survenue.",
     "I already have an account": "J’ai déjà un compte",
-    "An error occured: %(error_string)s": "Une erreur est survenue : %(error_string)s",
+    "An error occurred: %(error_string)s": "Une erreur est survenue : %(error_string)s",
     "Topic": "Sujet",
     "Make Moderator": "Nommer modérateur",
     "Make this room private": "Rendre ce salon privé",

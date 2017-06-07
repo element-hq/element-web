@@ -645,7 +645,7 @@
     "User names may only contain letters, numbers, dots, hyphens and underscores.": "User names may only contain letters, numbers, dots, hyphens and underscores.",
     "An unknown error occurred.": "An unknown error occurred.",
     "I already have an account": "I already have an account",
-    "An error occured: %(error_string)s": "An error occured: %(error_string)s",
+    "An error occurred: %(error_string)s": "An error occurred: %(error_string)s",
     "Topic": "Topic",
     "Make Moderator": "Make Moderator",
     "Make this room private": "Make this room private",

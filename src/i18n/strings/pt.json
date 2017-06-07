@@ -417,7 +417,7 @@
     "User names may only contain letters, numbers, dots, hyphens and underscores.": "Nomes de usuária/o podem conter apenas letras, números, pontos, hífens e linha inferior (_).",
     "An unknown error occurred.": "Um erro desconhecido ocorreu.",
     "I already have an account": "Eu já tenho uma conta",
-    "An error occured: %(error_string)s": "Um erro ocorreu: %(error_string)s",
+    "An error occurred: %(error_string)s": "Um erro ocorreu: %(error_string)s",
     "Topic": "Tópico",
     "Make this room private": "Tornar esta sala privada",
     "Share message history with new users": "Compartilhar histórico de mensagens com novas/os usuárias/os",

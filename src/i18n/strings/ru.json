@@ -336,7 +336,7 @@
     "User names may only contain letters, numbers, dots, hyphens and underscores.": "Имена пользователей могут только содержать буквы, числа, точки, дефисы и подчеркивания.",
     "An unknown error occurred.": "Произошла неизвестная ошибка.",
     "I already have an account": "У меня уже есть учетная запись",
-    "An error occured: %(error_string)s": "Произошла ошибка: %(error_string)s",
+    "An error occurred: %(error_string)s": "Произошла ошибка: %(error_string)s",
     "Topic": "Тема",
     "Make this room private": "Сделать эту комнату частной",
     "Share message history with new users": "Поделись историей сообщений с новыми учасниками",
