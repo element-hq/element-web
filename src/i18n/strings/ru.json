@@ -40,7 +40,7 @@
     " from room": " из комнаты",
     "Guests can join": "Гость может присоединиться",
     "Guest users can't invite users. Please register to invite.": "Гость не может приглашать пользователей. Зарегистрируйтесь для приглошений.",
-    "Invite to this room": "Пригласить в эту комнату",
+    "Invite to this room": "Пригласить",
     "Keywords": "Ключевые слова",
     "Leave": "Покинуть",
     "Low Priority": "Низкий приоритет",
@@ -129,7 +129,7 @@
     "A new version of Riot is available.": "Доступна новая версия Riot.",
     "All Rooms": "Все комнаты",
     "Cancel": "Отмена",
-    "Changelog": "Истоея изменений",
+    "Changelog": "История изменений",
     "Collapse panel": "Закрыпть панель",
     "Collecting app version information": "Сбор информации о версиях программы",
     "Collecting logs": "Сбор протоколов",
@@ -167,5 +167,10 @@
     "You are Rioting as a guest. <a>Register</a> or <a>sign in</a> to access more rooms and features!": "Вы пользуетесь Riot как гость.  <a>Зарегистрируйтесь</a> или <a>войдите в систему</a> и плучите доступ к огромному количеству комнат и функций!",
     "OK": "ОК",
     "You need to be using HTTPS to place a screen-sharing call.": "Вы должны пользоваться HTTPS чтобы пользоваться видиозвонком.",
-    "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Еали ваш браузер не корректно отображает информацию и все или некоторые фукции отключены, вы можете и дальше этим браузеом пользоваться но но ваши проблемы останутся с вами!"
+    "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Еали ваш браузер не корректно отображает информацию и все или некоторые фукции отключены, вы можете и дальше этим браузеом пользоваться но но ваши проблемы останутся с вами!",
+    "Login": "Войти",
+    "Welcome to Riot.im": "Добро пожаловать на Riot.im",
+    "Decentralised, encrypted chat &amp; collaboration powered by": "Децентрализованное, шифрованное общение и сотрудничество на основе",
+    "Search the room directory": "Поиск по директории комнат",
+    "Chat with Riot Bot": "Пообщаться с Riot Bot"
 }
