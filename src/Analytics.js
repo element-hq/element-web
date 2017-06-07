@@ -20,9 +20,9 @@ import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 
 function getRedactedUrl() {
-    const base = window.location.pathname.split('/').slice(-2).join('/');
     const redactedHash = window.location.hash.replace(/#\/(room|user)\/(.+)/, "#/$1/<redacted>");
-    return base + redactedHash;
+    // hardcoded url to make piwik happy
+    return 'https://riot.im/app/' + redactedHash;
 }
 
 const customVariables = {
