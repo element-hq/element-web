@@ -97,7 +97,7 @@ module.exports = React.createClass({
             this.props.teamServerConfig.teamServerURL &&
             !this._rtsClient
         ) {
-            this._rtsClient = new RtsClient(this.props.teamServerConfig.teamServerURL);
+            this._rtsClient = this.props.rtsClient || new RtsClient(this.props.teamServerConfig.teamServerURL);
 
             this.setState({
                 teamServerBusy: true,
@@ -220,7 +220,6 @@ module.exports = React.createClass({
         }
 
         trackPromise.then((teamToken) => {
-            console.info('Team token promise',teamToken);
             this.props.onLoggedIn({
                 userId: response.user_id,
                 deviceId: response.device_id,

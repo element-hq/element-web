@@ -91,11 +91,7 @@ export default class MessageComposer extends React.Component {
 
     onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
-            let NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: _t('Please Register'),
-                description: _t('Guest users can\'t upload files. Please register to upload') + '.',
-            });
+            dis.dispatch({action: 'view_set_mxid'});
             return;
         }
 
