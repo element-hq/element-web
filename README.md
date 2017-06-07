@@ -138,12 +138,13 @@ build it yourself. Requires Electron >=1.6.0
 
 To run as a desktop app:
 
-1. Follow the instructions in 'Building From Source' above, but run
-   `npm run build` instead of `npm run dist` (since we don't need the tarball).
+1. Follow the instructions in 'Building From Source' above, but do not run `npm run dist`
 2. Install electron and run it:
 
    ```
    npm install electron
+   npm run electron:rebuild
+   npm run build
    npm run electron
    ```
 

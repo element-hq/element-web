@@ -102,6 +102,9 @@ module.exports = {
         // Don't try to bundle electron: leave it as a commonjs dependency
         // (the 'commonjs' here means it will output a 'require')
         "electron": "commonjs electron",
+        
+        // Because of stupid electron
+        "electron-spellchecker": "commonjs ../../resources/app/node_modules/electron-spellchecker",
     },
     plugins: [
         new webpack.DefinePlugin({

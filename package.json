@@ -39,6 +39,7 @@
     "dist": "scripts/package.sh",
     "install:electron": "install-app-deps",
     "electron": "npm run install:electron && electron .",
+    "electron:rebuild": "cd electron_app && electron-rebuild -v 1.6.8 -w electron-spellchecker && cd ..",
     "start:res": "node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --output-filename=bundles/_dev_/[name].js --output-chunk-file=bundles/_dev_/[name].js -w --progress",
     "start:js:prod": "cross-env NODE_ENV=production webpack-dev-server -w --progress",
@@ -57,6 +58,7 @@
     "browser-request": "^0.3.3",
     "classnames": "^2.1.2",
     "draft-js": "^0.8.1",
+    "electron-rebuild": "^1.5.11",
     "extract-text-webpack-plugin": "^0.9.1",
     "favico.js": "^0.3.10",
     "filesize": "3.5.6",
@@ -78,6 +80,9 @@
     "sanitize-html": "^1.11.1",
     "ua-parser-js": "^0.7.10",
     "url": "^0.11.0"
+  },
+  "peerDependencies": {
+    "electron-spellchecker": "^1.0.8"
   },
   "devDependencies": {
     "autoprefixer": "^6.6.0",
@@ -137,7 +142,8 @@
     "rimraf": "^2.4.3",
     "source-map-loader": "^0.1.5",
     "webpack": "^1.12.14",
-    "webpack-dev-server": "^1.16.2"
+    "webpack-dev-server": "^1.16.2",
+    "electron-spellchecker": "^1.0.8"
   },
   "optionalDependencies": {
     "olm": "https://matrix.org/packages/npm/olm/olm-2.2.1.tgz"
@@ -148,6 +154,7 @@
     "electronVersion": "1.6.8",
     "//asar=false": "https://github.com/electron-userland/electron-builder/issues/675",
     "asar": false,
+    "npmRebuild": true,
     "dereference": true,
     "//files": "We bundle everything, so we only need to include webapp/",
     "files": [

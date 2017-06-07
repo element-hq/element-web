@@ -239,6 +239,16 @@ async function loadApp() {
     // set the platform for react sdk (our Platform object automatically picks the right one)
     PlatformPeg.set(new Platform());
 
+    if (PlatformPeg.get().isElectron()) {
+        try {
+            const lang = languageHandler.getCurrentLanguage();
+            PlatformPeg.get().initSpellCheckHandler(lang);
+            console.log("init SpellChecker worked");
+        } catch (e) {
+            console.error("Unable to init SpellChecker" + e);
+        }
+    }
+
     // don't try to redirect to the native apps if we're
     // verifying a 3pid
     const preventRedirect = Boolean(fragparts.params.client_secret);

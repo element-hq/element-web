@@ -22,6 +22,7 @@ import dis from 'matrix-react-sdk/lib/dispatcher';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import q from 'q';
 import electron, {remote, ipcRenderer} from 'electron';
+import {SpellCheckHandler, ContextMenuListener, ContextMenuBuilder} from 'electron-spellchecker';
 
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
 
@@ -127,6 +128,19 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     loudNotification(ev: Event, room: Object) {
         ipcRenderer.send('loudNotification');
+    }
+
+    initSpellCheckHandler(lang) {
+        window.spellCheckHandler = new SpellCheckHandler();
+        window.spellCheckHandler.attachToInput();
+         
+        window.spellCheckHandler.switchLanguage(lang);
+         
+        let contextMenuBuilder = new ContextMenuBuilder(window.spellCheckHandler);
+        let contextMenuListener = new ContextMenuListener((info) => {
+          contextMenuBuilder.showPopupMenu(info);
+        });
+        return true;
     }
 
     clearNotification(notif: Notification) {
