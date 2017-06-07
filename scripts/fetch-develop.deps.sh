@@ -25,6 +25,11 @@ else
     fi
 fi
 
+# Chop 'origin' off the start as jenkins ends up using
+# branches on the origin, but this doesn't work if we
+# specify the branch when cloning.
+curbranch=`echo "$curbranch" | sed -e 's/^origin\///'`
+
 echo "Determined branch to be $curbranch"
 
 # clone a specific branch of a github repo
