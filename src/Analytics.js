@@ -56,6 +56,7 @@ class Analytics {
      * but this is second best, Piwik should not pull anything implicitly.
      */
     disable() {
+        this.trackEvent('Analytics', 'opt-out');
         this.disabled = true;
     }
 
