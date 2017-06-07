@@ -26,6 +26,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import q from 'q';
 
 const TRUNCATE_QUERY_LIST = 40;
+const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
 
 module.exports = React.createClass({
     displayName: "ChatInviteDialog",
@@ -40,13 +41,13 @@ module.exports = React.createClass({
         roomId: React.PropTypes.string,
         button: React.PropTypes.string,
         focus: React.PropTypes.bool,
-        onFinished: React.PropTypes.func.isRequired
+        onFinished: React.PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {
         return {
             value: "",
-            focus: true
+            focus: true,
         };
     },
 
@@ -54,12 +55,16 @@ module.exports = React.createClass({
         return {
             error: false,
 
-            // List of AddressTile.InviteAddressType objects represeting
+            // List of AddressTile.InviteAddressType objects representing
             // the list of addresses we're going to invite
             inviteList: [],
 
-            // List of AddressTile.InviteAddressType objects represeting
-            // the set of autocompletion results for the current search
+            // Whether a search is ongoing
+            busy: false,
+            // The query being searched for
+            query: "",
+            // List of AddressTile.InviteAddressType objects representing
+            // the set of auto-completion results for the current search
             // query.
             queryList: [],
         };
@@ -70,7 +75,6 @@ module.exports = React.createClass({
             // Set the cursor at the end of the text input
             this.refs.textinput.value = this.props.value;
         }
-        this._updateUserList();
     },
 
     onButtonClick: function() {
@@ -137,15 +141,15 @@ module.exports = React.createClass({
         } else if (e.keyCode === 38) { // up arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.moveSelectionUp();
+            if (this.addressSelector) this.addressSelector.moveSelectionUp();
         } else if (e.keyCode === 40) { // down arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.moveSelectionDown();
+            if (this.addressSelector) this.addressSelector.moveSelectionDown();
         } else if (this.state.queryList.length > 0 && (e.keyCode === 188 || e.keyCode === 13 || e.keyCode === 9)) { // comma or enter or tab
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.chooseSelection();
+            if (this.addressSelector) this.addressSelector.chooseSelection();
         } else if (this.refs.textinput.value.length === 0 && this.state.inviteList.length && e.keyCode === 8) { // backspace
             e.stopPropagation();
             e.preventDefault();
@@ -168,74 +172,79 @@ module.exports = React.createClass({
 
     onQueryChanged: function(ev) {
         const query = ev.target.value.toLowerCase();
-        let queryList = [];
-
-        if (query.length < 2) {
-            return;
-        }
-
         if (this.queryChangedDebouncer) {
             clearTimeout(this.queryChangedDebouncer);
         }
-        this.queryChangedDebouncer = setTimeout(() => {
-            // Only do search if there is something to search
-            if (query.length > 0 && query != '@') {
-                this._userList.forEach((user) => {
-                    if (user.userId.toLowerCase().indexOf(query) === -1 &&
-                        user.displayName.toLowerCase().indexOf(query) === -1
-                    ) {
-                        return;
-                    }
+        // Only do search if there is something to search
+        if (query.length > 0 && query != '@' && query.length >= 2) {
+            this.queryChangedDebouncer = setTimeout(() => {
+                this.setState({
+                    busy: true,
+                    query,
+                });
+                MatrixClientPeg.get().searchUserDirectory({
+                    term: query,
+                }).then((resp) => {
+                    const queryList = [];
+                    resp.results.forEach((user) => {
+                        if (user.user_id === MatrixClientPeg.get().credentials.userId) {
+                            return;
+                        }
+                        // Return objects, structure of which is defined
+                        // by InviteAddressType
+                        queryList.push({
+                            addressType: 'mx',
+                            address: user.user_id,
+                            displayName: user.display_name,
+                            avatarMxc: user.avatar_url,
+                            isKnown: true,
+                        });
+                    });
 
-                    // Return objects, structure of which is defined
-                    // by InviteAddressType
-                    queryList.push({
-                        addressType: 'mx',
-                        address: user.userId,
-                        displayName: user.displayName,
-                        avatarMxc: user.avatarUrl,
-                        isKnown: true,
-                        order: user.getLastActiveTs(),
+                    // If the query is a valid address, add an entry for that
+                    // This is important, otherwise there's no way to invite
+                    // a perfectly valid address if there are close matches.
+                    const addrType = getAddressType(query);
+                    if (addrType !== null) {
+                        queryList.unshift({
+                            addressType: addrType,
+                            address: query,
+                            isKnown: false,
+                        });
+                        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+                        if (addrType == 'email') {
+                            this._lookupThreepid(addrType, query).done();
+                        }
+                    }
+                    this.setState({
+                        queryList,
+                        error: false,
+                    }, () => {
+                        this.addressSelector.moveSelectionTop();
+                    });
+                }).finally(() => {
+                    this.setState({
+                        busy: false,
                     });
                 });
-
-                queryList = queryList.sort((a,b) => {
-                    return a.order < b.order;
-                });
-
-                // If the query is a valid address, add an entry for that
-                // This is important, otherwise there's no way to invite
-                // a perfectly valid address if there are close matches.
-                const addrType = getAddressType(query);
-                if (addrType !== null) {
-                    queryList.unshift({
-                        addressType: addrType,
-                        address: query,
-                        isKnown: false,
-                    });
-                    if (this._cancelThreepidLookup) this._cancelThreepidLookup();
-                    if (addrType == 'email') {
-                        this._lookupThreepid(addrType, query).done();
-                    }
-                }
-            }
+            }, QUERY_USER_DIRECTORY_DEBOUNCE_MS);
+        } else {
             this.setState({
-                queryList: queryList,
-                error: false,
-            }, () => {
-                this.addressSelector.moveSelectionTop();
+                queryList: [],
+                query: "",
             });
-        }, 200);
+        }
     },
 
     onDismissed: function(index) {
         var self = this;
-        return function() {
+        return () => {
             var inviteList = self.state.inviteList.slice();
             inviteList.splice(index, 1);
             self.setState({
                 inviteList: inviteList,
                 queryList: [],
+                query: "",
             });
             if (this._cancelThreepidLookup) this._cancelThreepidLookup();
         };
@@ -254,6 +263,7 @@ module.exports = React.createClass({
         this.setState({
             inviteList: inviteList,
             queryList: [],
+            query: "",
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
     },
@@ -342,16 +352,6 @@ module.exports = React.createClass({
         this.props.onFinished(true, addrTexts);
     },
 
-    _updateUserList: function() {
-        // Get all the users
-        this._userList = MatrixClientPeg.get().getUsers();
-        // Remove current user
-        const meIx = this._userList.findIndex((u) => {
-            return u.userId === MatrixClientPeg.get().credentials.userId;
-        });
-        this._userList.splice(meIx, 1);
-    },
-
     _isOnInviteList: function(uid) {
         for (let i = 0; i < this.state.inviteList.length; i++) {
             if (
@@ -419,6 +419,7 @@ module.exports = React.createClass({
         this.setState({
             inviteList: inviteList,
             queryList: [],
+            query: "",
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
         return inviteList;
@@ -454,7 +455,7 @@ module.exports = React.createClass({
                     displayName: res.displayname,
                     avatarMxc: res.avatar_url,
                     isKnown: true,
-                }]
+                }],
             });
         });
     },
@@ -486,16 +487,22 @@ module.exports = React.createClass({
                 placeholder={this.props.placeholder}
                 defaultValue={this.props.value}
                 autoFocus={this.props.focus}>
-            </textarea>
+            </textarea>,
         );
 
-        var error;
-        var addressSelector;
+        let error;
+        let addressSelector;
         if (this.state.error) {
             error = <div className="mx_ChatInviteDialog_error">{_t("You have entered an invalid contact. Try using their Matrix ID or email address.")}</div>;
+        } else if (
+            this.state.query.length > 0 &&
+            this.state.queryList.length === 0 &&
+            !this.state.busy
+        ) {
+            error = <div className="mx_ChatInviteDialog_error">{_t("No results")}</div>;
         } else {
             const addressSelectorHeader = <div className="mx_ChatInviteDialog_addressSelectHeader">
-                Searching known users
+                { _t("Searching known users") }
             </div>;
             addressSelector = (
                 <AddressSelector ref={(ref) => {this.addressSelector = ref;}}
