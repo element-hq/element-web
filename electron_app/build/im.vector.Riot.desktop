@@ -6,4 +6,4 @@ Terminal=false
 Type=Application
 Icon=im.vector.Riot
 StartupWMClass="Riot"
-Categories=Network;InstantMessaging;Chat;IRCClient
+Categories=Network;InstantMessaging;Chat;
