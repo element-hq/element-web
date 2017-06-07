@@ -63,6 +63,8 @@ module.exports = React.createClass({
             busy: false,
             // An error message generated during the user directory search
             searchError: null,
+            // Whether the server supports the user_directory API
+            serverSupportsUserDirectory: true,
             // The query being searched for
             query: "",
             // List of AddressTile.InviteAddressType objects representing
@@ -180,61 +182,11 @@ module.exports = React.createClass({
         // Only do search if there is something to search
         if (query.length > 0 && query != '@' && query.length >= 2) {
             this.queryChangedDebouncer = setTimeout(() => {
-                this.setState({
-                    busy: true,
-                    query,
-                    searchError: null,
-                });
-                MatrixClientPeg.get().searchUserDirectory({
-                    term: query,
-                }).then((resp) => {
-                    const queryList = [];
-                    resp.results.forEach((user) => {
-                        if (user.user_id === MatrixClientPeg.get().credentials.userId) {
-                            return;
-                        }
-                        // Return objects, structure of which is defined
-                        // by InviteAddressType
-                        queryList.push({
-                            addressType: 'mx',
-                            address: user.user_id,
-                            displayName: user.display_name,
-                            avatarMxc: user.avatar_url,
-                            isKnown: true,
-                        });
-                    });
-
-                    // If the query is a valid address, add an entry for that
-                    // This is important, otherwise there's no way to invite
-                    // a perfectly valid address if there are close matches.
-                    const addrType = getAddressType(query);
-                    if (addrType !== null) {
-                        queryList.unshift({
-                            addressType: addrType,
-                            address: query,
-                            isKnown: false,
-                        });
-                        if (this._cancelThreepidLookup) this._cancelThreepidLookup();
-                        if (addrType == 'email') {
-                            this._lookupThreepid(addrType, query).done();
-                        }
-                    }
-                    this.setState({
-                        queryList,
-                        error: false,
-                    }, () => {
-                        this.addressSelector.moveSelectionTop();
-                    });
-                }).catch((err) => {
-                    console.error('Error whilst searching user directory: ', err);
-                    this.setState({
-                        searchError: err.errcode ? err.message : _t('Something went wrong!'),
-                    });
-                }).done(() => {
-                    this.setState({
-                        busy: false,
-                    });
-                });
+                if (this.state.serverSupportsUserDirectory) {
+                    this._doUserDirectorySearch(query);
+                } else {
+                    this._doLocalSearch(query);
+                }
             }, QUERY_USER_DIRECTORY_DEBOUNCE_MS);
         } else {
             this.setState({
@@ -275,6 +227,98 @@ module.exports = React.createClass({
             query: "",
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+    },
+
+    _doUserDirectorySearch: function(query) {
+        this.setState({
+            busy: true,
+            query,
+            searchError: null,
+        });
+        MatrixClientPeg.get().searchUserDirectory({
+            term: query,
+        }).then((resp) => {
+            this._processResults(resp.results, query);
+        }).catch((err) => {
+            console.error('Error whilst searching user directory: ', err);
+            this.setState({
+                searchError: err.errcode ? err.message : _t('Something went wrong!'),
+            });
+            if (err.errcode === 'M_UNRECOGNIZED') {
+                this.setState({
+                    serverSupportsUserDirectory: false,
+                });
+                // Do a local search immediately
+                this._doLocalSearch(query);
+            }
+        }).done(() => {
+            this.setState({
+                busy: false,
+            });
+        });
+    },
+
+    _doLocalSearch: function(query) {
+        this.setState({
+            query,
+            searchError: null,
+        });
+        const results = [];
+        MatrixClientPeg.get().getUsers().forEach((user) => {
+            if (user.userId.toLowerCase().indexOf(query) === -1 &&
+                user.displayName.toLowerCase().indexOf(query) === -1
+            ) {
+                return;
+            }
+
+            // Put results in the format of the new API
+            results.push({
+                user_id: user.userId,
+                display_name: user.displayName,
+                avatar_url: user.avatarUrl,
+            });
+        });
+        this._processResults(results, query);
+    },
+
+    _processResults: function(results, query) {
+        const queryList = [];
+        results.forEach((user) => {
+            if (user.user_id === MatrixClientPeg.get().credentials.userId) {
+                return;
+            }
+            // Return objects, structure of which is defined
+            // by InviteAddressType
+            queryList.push({
+                addressType: 'mx',
+                address: user.user_id,
+                displayName: user.display_name,
+                avatarMxc: user.avatar_url,
+                isKnown: true,
+            });
+        });
+
+        // If the query is a valid address, add an entry for that
+        // This is important, otherwise there's no way to invite
+        // a perfectly valid address if there are close matches.
+        const addrType = getAddressType(query);
+        if (addrType !== null) {
+            queryList.unshift({
+                addressType: addrType,
+                address: query,
+                isKnown: false,
+            });
+            if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+            if (addrType == 'email') {
+                this._lookupThreepid(addrType, query).done();
+            }
+        }
+        this.setState({
+            queryList,
+            error: false,
+        }, () => {
+            if (this.addressSelector) this.addressSelector.moveSelectionTop();
+        });
     },
 
     _getDirectMessageRooms: function(addr) {
