@@ -56,7 +56,7 @@ module.exports = React.createClass({
             // so that it can inherit CSS and theming easily rather than mess around
             // with iframes and trying to synchronise document.stylesheets.
 
-            let src = this.props.homePageUrl || '/home.html';
+            let src = this.props.homePageUrl || 'home.html';
 
             request(
                 { method: "GET", url: src },
