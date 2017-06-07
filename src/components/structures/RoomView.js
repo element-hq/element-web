@@ -792,6 +792,9 @@ module.exports = React.createClass({
                         this.props.onRegistered(credentials);
                     } else {
                         dis.dispatch({
+                            action: 'cancel_after_sync_prepared',
+                        });
+                        dis.dispatch({
                             action: 'cancel_join',
                         });
                     }
