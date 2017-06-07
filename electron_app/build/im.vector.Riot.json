@@ -42,8 +42,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/vector-im/riot-web/archive/v0.9.9.tar.gz",
-                    "sha256": "872210523062011d9b3c21433e1a0b5cb95cdf72850ba516f59ac281c70e90c4"
+                    "url": "https://github.com/vector-im/riot-web/archive/v0.10.2.tar.gz",
+                    "sha256": "2365669bc1ed1b9f588bb021b6a7565ce5f00726d3562f3375f583eacbd333ee"
                 },
                 {
                     "type": "file",
