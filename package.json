@@ -46,7 +46,7 @@
     "start:prod": "parallelshell \"npm run reskindex:watch\" \"npm run start:res\" \"npm run start:js:prod\"",
     "lint": "eslint src/",
     "lintall": "eslint src/ test/",
-    "clean": "rimraf lib webapp electron/dist",
+    "clean": "rimraf lib webapp electron_app/dist",
     "prepublish": "npm run build:compile",
     "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
     "test-multi": "karma start"
