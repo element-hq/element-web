@@ -578,7 +578,7 @@ module.exports = React.createClass({
                              onHeaderClick={ self.onSubListHeaderClick }
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
-                { Object.keys(self.state.lists).map(function(tagName) {
+                { Object.keys(self.state.lists).map((tagName) => {
                     if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
                         return <RoomSubList list={ self.state.lists[tagName] }
                              key={ tagName }
