@@ -122,7 +122,7 @@ describe('loading:', function () {
         function routeUrl(location, matrixChat) {
             console.log(Date.now() + ` routing URL '${location}'`);
             const s = getScreenFromLocation(location);
-            console.log("Showing screen "+ s);
+            console.log("Showing screen ", s);
             matrixChat.showScreen(s.screen, s.params);
         }
 
@@ -196,7 +196,7 @@ describe('loading:', function () {
                 // Wait for another trip around the event loop for the UI to update
                 return q.delay(1);
             }).then(() => {
-                // we expect a single <Login> component
+                // we expect a single <Login> component following session load
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.login.Login'));
                 expect(windowLocation.hash).toEqual("");
@@ -273,7 +273,7 @@ describe('loading:', function () {
             localStorage.setItem("mx_user_id", "@me:localhost");
         });
 
-        it('shows a directory by default if we have no joined rooms', function(done) {
+        it('shows a home page by default if we have no joined rooms', function(done) {
             httpBackend.when('GET', '/pushrules').respond(200, {});
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
 
@@ -283,11 +283,11 @@ describe('loading:', function () {
                 // we got a sync spinner - let the sync complete
                 return expectAndAwaitSync();
             }).then(() => {
-                // once the sync completes, we should have a directory
+                // once the sync completes, we should have a home page
                 httpBackend.verifyNoOutstandingExpectation();
                 ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.RoomDirectory'));
-                expect(windowLocation.hash).toEqual("#/directory");
+                    matrixChat, sdk.getComponent('structures.HomePage'));
+                expect(windowLocation.hash).toEqual("#/home");
             }).done(done, done);
         });
 
@@ -314,7 +314,7 @@ describe('loading:', function () {
     });
 
     describe('Guest auto-registration:', function() {
-        it('shows a directory by default', function (done) {
+        it('shows a home page by default', function (done) {
             loadApp();
 
             q.delay(1).then(() => {
@@ -336,11 +336,11 @@ describe('loading:', function () {
                 // we got a sync spinner - let the sync complete
                 return expectAndAwaitSync();
             }).then(() => {
-                // once the sync completes, we should have a directory
+                // once the sync completes, we should have a home page
                 httpBackend.verifyNoOutstandingExpectation();
                 ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.RoomDirectory'));
-                expect(windowLocation.hash).toEqual("#/directory");
+                    matrixChat, sdk.getComponent('structures.HomePage'));
+                expect(windowLocation.hash).toEqual("#/home");
             }).done(done, done);
         });
 
@@ -371,11 +371,11 @@ describe('loading:', function () {
             }).then((req) => {
                 expect(req.path).toMatch(new RegExp("^https://homeserver/"));
 
-                // once the sync completes, we should have a directory
+                // once the sync completes, we should have a home page
                 httpBackend.verifyNoOutstandingExpectation();
                 ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.RoomDirectory'));
-                expect(windowLocation.hash).toEqual("#/directory");
+                    matrixChat, sdk.getComponent('structures.HomePage'));
+                expect(windowLocation.hash).toEqual("#/home");
                 expect(MatrixClientPeg.get().baseUrl).toEqual("https://homeserver");
                 expect(MatrixClientPeg.get().idBaseUrl).toEqual("https://idserver");
             }).done(done, done);
