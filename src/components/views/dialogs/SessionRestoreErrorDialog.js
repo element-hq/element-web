@@ -47,7 +47,7 @@ export default React.createClass({
                 <p>
                 {_tJsx(
                     "Otherwise, <a>click here</a> to send a bug report.",
-                    /<a>(.*?)<\/a>/, (sub) => <a onClick={this._sendBugReport} key="bugreport" href='#'>{sub}</a>
+                    /<a>(.*?)<\/a>/, (sub) => <a onClick={this._sendBugReport} key="bugreport" href='#'>{sub}</a>,
                 )}
                 </p>
             );
