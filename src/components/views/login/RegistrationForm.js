@@ -101,7 +101,7 @@ module.exports = React.createClass({
             if (this.refs.email.value == '') {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 Modal.createDialog(QuestionDialog, {
-                    title: "Warning!",
+                    title: _t("Warning!"),
                     description:
                         <div>
                             {_t("If you don't specify an email address, you won't be able to reset your password. " +
@@ -335,7 +335,7 @@ module.exports = React.createClass({
         );
 
         const registerButton = (
-            <input className="mx_Login_submit" type="submit" value="Register" />
+            <input className="mx_Login_submit" type="submit" value={_t("Register")} />
         );
 
         let placeholderUserName = _t("User name");

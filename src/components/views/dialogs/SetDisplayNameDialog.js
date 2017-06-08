@@ -80,7 +80,7 @@ export default React.createClass({
                         />
                     </div>
                     <div className="mx_Dialog_buttons">
-                        <input className="mx_Dialog_primary" type="submit" value="Set" />
+                        <input className="mx_Dialog_primary" type="submit" value={_t("Set")} />
                     </div>
                 </form>
             </BaseDialog>

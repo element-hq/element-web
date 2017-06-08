@@ -48,7 +48,7 @@ module.exports = React.createClass({
             onCheckPassword: function(oldPass, newPass, confirmPass) {
                 if (newPass !== confirmPass) {
                     return {
-                        error: _t("New passwords don't match") + "."
+                        error: _t("New passwords don't match")
                     };
                 } else if (!newPass || newPass.length === 0) {
                     return {
