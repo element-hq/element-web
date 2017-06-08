@@ -170,7 +170,7 @@
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Еали ваш браузер не корректно отображает информацию и все или некоторые фукции отключены, вы можете и дальше этим браузеом пользоваться но но ваши проблемы останутся с вами!",
     "Login": "Войти",
     "Welcome to Riot.im": "Добро пожаловать на Riot.im",
-    "Decentralised, encrypted chat &amp; collaboration powered by": "Децентрализованное, шифрованное общение и сотрудничество на основе",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Децентрализованное, шифрованное общение и сотрудничество на основе [matrix]",
     "Search the room directory": "Поиск по директории комнат",
     "Chat with Riot Bot": "Пообщаться с Riot Bot"
 }
