@@ -90,7 +90,7 @@ module.exports = React.createClass({
             let errorText;
 
             // Some error strings only apply for logging in
-            const usingEmail = username.indexOf("@");
+            const usingEmail = username.indexOf("@") > 0;
             if (error.httpStatus == 400 && usingEmail) {
                 errorText = _t('This Home Server does not support login using email address.');
             } else if (error.httpStatus == 401 || error.httpStatus === 403) {
