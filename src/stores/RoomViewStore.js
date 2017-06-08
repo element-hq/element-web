@@ -234,7 +234,7 @@ class RoomViewStore extends Store {
         return this._state.roomId;
     }
 
-    // The event to scroll to initially
+    // The event to scroll to when the room is first viewed
     getInitialEventId() {
         return this._state.initialEventId;
     }
