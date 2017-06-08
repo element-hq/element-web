@@ -860,5 +860,8 @@
   "Username not available": "Username not available",
   "Something went wrong!": "Something went wrong!",
   "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.": "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.",
-  "If you already have a Matrix account you can <a>log in</a> instead.": "If you already have a Matrix account you can <a>log in</a> instead."
+  "If you already have a Matrix account you can <a>log in</a> instead.": "If you already have a Matrix account you can <a>log in</a> instead.",
+  "Your browser does not support the required cryptography extensions": "Your browser does not support the required cryptography extensions",
+  "Not a valid Riot keyfile": "Not a valid Riot keyfile",
+  "Authentication check failed: incorrect password?": "Authentication check failed: incorrect password?"
 }
