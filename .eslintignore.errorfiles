@@ -22,7 +22,6 @@ src/components/structures/login/ForgotPassword.js
 src/components/structures/login/Login.js
 src/components/structures/login/PostRegistration.js
 src/components/structures/login/Registration.js
-src/components/structures/MatrixChat.js
 src/components/structures/MessagePanel.js
 src/components/structures/NotificationPanel.js
 src/components/structures/RoomStatusBar.js
