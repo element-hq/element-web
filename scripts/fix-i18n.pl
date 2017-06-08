@@ -61,6 +61,11 @@ You are already in a call.
 You cannot place VoIP calls in this browser.
 You cannot place a call with yourself.
 Your email address does not appear to be associated with a Matrix ID on this Homeserver.
+Guest users can't upload files. Please register to upload.
+Some of your messages have not been sent.
+This room is private or inaccessible to guests. You may be able to join if you register.
+Tried to load a specific point in this room's timeline, but was unable to find it.
+Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.
 EOT
 )];
 }

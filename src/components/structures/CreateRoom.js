@@ -231,7 +231,7 @@ module.exports = React.createClass({
             if (curr_phase == this.phases.ERROR) {
                 error_box = (
                     <div className="mx_Error">
-                        {_t('An error occured: %(error_string)s', {error_string: this.state.error_string})}
+                        {_t('An error occurred: %(error_string)s', {error_string: this.state.error_string})}
                     </div>
                 );
             }

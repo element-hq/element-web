@@ -25,6 +25,8 @@ import PageTypes from '../../PageTypes';
 import CallMediaHandler from '../../CallMediaHandler';
 import sdk from '../../index';
 import dis from '../../dispatcher';
+import sessionStore from '../../stores/SessionStore';
+import MatrixClientPeg from '../../MatrixClientPeg';
 
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is
@@ -41,9 +43,12 @@ export default React.createClass({
     propTypes: {
         matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
         page_type: React.PropTypes.string.isRequired,
-        onRoomIdResolved: React.PropTypes.func,
         onRoomCreated: React.PropTypes.func,
         onUserSettingsClose: React.PropTypes.func,
+
+        // Called with the credentials of a registered user (if they were a ROU that
+        // transitioned to PWLU)
+        onRegistered: React.PropTypes.func,
 
         teamToken: React.PropTypes.string,
 
@@ -83,12 +88,32 @@ export default React.createClass({
         CallMediaHandler.loadDevices();
 
         document.addEventListener('keydown', this._onKeyDown);
+
+        this._sessionStore = sessionStore;
+        this._sessionStoreToken = this._sessionStore.addListener(
+            this._setStateFromSessionStore,
+        );
+        this._setStateFromSessionStore();
+
         this._matrixClient.on("accountData", this.onAccountData);
     },
 
     componentWillUnmount: function() {
         document.removeEventListener('keydown', this._onKeyDown);
         this._matrixClient.removeListener("accountData", this.onAccountData);
+        if (this._sessionStoreToken) {
+            this._sessionStoreToken.remove();
+        }
+    },
+
+    // Child components assume that the client peg will not be null, so give them some
+    // sort of assurance here by only allowing a re-render if the client is truthy.
+    //
+    // This is required because `LoggedInView` maintains its own state and if this state
+    // updates after the client peg has been made null (during logout), then it will
+    // attempt to re-render and the children will throw errors.
+    shouldComponentUpdate: function() {
+        return Boolean(MatrixClientPeg.get());
     },
 
     getScrollStateForRoom: function(roomId) {
@@ -102,10 +127,16 @@ export default React.createClass({
         return this.refs.roomView.canResetTimeline();
     },
 
+    _setStateFromSessionStore() {
+        this.setState({
+            userHasGeneratedPassword: Boolean(this._sessionStore.getCachedPassword()),
+        });
+    },
+
     onAccountData: function(event) {
         if (event.getType() === "im.vector.web.settings") {
             this.setState({
-                useCompactLayout: event.getContent().useCompactLayout
+                useCompactLayout: event.getContent().useCompactLayout,
             });
         }
     },
@@ -180,8 +211,8 @@ export default React.createClass({
         const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         const HomePage = sdk.getComponent('structures.HomePage');
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
-        const GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
+        const PasswordNagBar = sdk.getComponent('globals.PasswordNagBar');
 
         let page_element;
         let right_panel = '';
@@ -190,15 +221,14 @@ export default React.createClass({
             case PageTypes.RoomView:
                 page_element = <RoomView
                         ref='roomView'
-                        roomAddress={this.props.currentRoomAlias || this.props.currentRoomId}
                         autoJoin={this.props.autoJoin}
-                        onRoomIdResolved={this.props.onRoomIdResolved}
+                        onRegistered={this.props.onRegistered}
                         eventId={this.props.initialEventId}
                         thirdPartyInvite={this.props.thirdPartyInvite}
                         oobData={this.props.roomOobData}
                         highlightedEventId={this.props.highlightedEventId}
                         eventPixelOffset={this.props.initialEventPixelOffset}
-                        key={this.props.currentRoomAlias || this.props.currentRoomId}
+                        key={this.props.currentRoomId || 'roomview'}
                         opacity={this.props.middleOpacity}
                         collapsedRhs={this.props.collapse_rhs}
                         ConferenceHandler={this.props.ConferenceHandler}
@@ -235,12 +265,18 @@ export default React.createClass({
                 break;
 
             case PageTypes.HomePage:
+                // If team server config is present, pass the teamServerURL. props.teamToken
+                // must also be set for the team page to be displayed, otherwise the
+                // welcomePageUrl is used (which might be undefined).
+                const teamServerUrl = this.props.config.teamServerConfig ?
+                    this.props.config.teamServerConfig.teamServerURL : null;
+
                 page_element = <HomePage
                     collapsedRhs={this.props.collapse_rhs}
-                    teamServerUrl={this.props.config.teamServerConfig.teamServerURL}
+                    teamServerUrl={teamServerUrl}
                     teamToken={this.props.teamToken}
-                />
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.rightOpacity}/>
+                    homePageUrl={this.props.config.welcomePageUrl}
+                />;
                 break;
 
             case PageTypes.UserView:
@@ -249,16 +285,15 @@ export default React.createClass({
                 break;
         }
 
+        const isGuest = this.props.matrixClient.isGuest();
         var topBar;
         if (this.props.hasNewVersion) {
             topBar = <NewVersionBar version={this.props.version} newVersion={this.props.newVersion}
                 releaseNotes={this.props.newVersionReleaseNotes}
             />;
-        }
-        else if (this.props.matrixClient.isGuest()) {
-            topBar = <GuestWarningBar />;
-        }
-        else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
+        } else if (this.state.userHasGeneratedPassword) {
+            topBar = <PasswordNagBar />;
+        } else if (!isGuest && Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
             topBar = <MatrixToolbar />;
         }
 
@@ -278,7 +313,6 @@ export default React.createClass({
                         selectedRoom={this.props.currentRoomId}
                         collapsed={this.props.collapse_lhs || false}
                         opacity={this.props.leftOpacity}
-                        teamToken={this.props.teamToken}
                     />
                     <main className='mx_MatrixChat_middlePanel'>
                         {page_element}
