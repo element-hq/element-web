@@ -161,8 +161,7 @@ export default class Login {
                 error.friendlyText = (
                     _t('This Home Server does not support login using email address.')
                 );
-            }
-            else if (error.httpStatus === 403) {
+            } else if (error.httpStatus === 403) {
                 error.friendlyText = (
                     _t('Incorrect username and/or password.')
                 );
@@ -185,8 +184,7 @@ export default class Login {
                         throw error;
                     });
                 }
-            }
-            else {
+            } else {
                 error.friendlyText = (
                     _t("There was a problem logging in.") + ' (HTTP ' + error.httpStatus + ")"
                 );
