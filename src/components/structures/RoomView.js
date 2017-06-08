@@ -165,14 +165,14 @@ module.exports = React.createClass({
             roomLoading: RoomViewStore.isRoomLoading(),
             roomLoadError: RoomViewStore.getRoomLoadError(),
             joining: RoomViewStore.isJoining(),
-            eventId: RoomViewStore.getEventId(),
-            eventPixelOffset: RoomViewStore.getEventPixelOffset(),
-            isEventHighlighted: RoomViewStore.isEventHighlighted(),
+            initialEventId: RoomViewStore.getInitialEventId(),
+            initialEventPixelOffset: RoomViewStore.getInitialEventPixelOffset(),
+            isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
         };
 
         // Clear the search results when clicking a search result (which changes the
-        // currently scrolled to event, this.state.eventId).
-        if (this.state.eventId !== newState.eventId) {
+        // currently scrolled to event, this.state.initialEventId).
+        if (this.state.initialEventId !== newState.initialEventId) {
             newState.searchResults = null;
         }
 
@@ -1665,12 +1665,12 @@ module.exports = React.createClass({
             hideMessagePanel = true;
         }
 
-        const shouldHighlight = this.state.isEventHighlighted;
+        const shouldHighlight = this.state.isInitialEventHighlighted;
         let highlightedEventId = null;
         if (this.state.forwardingEvent) {
             highlightedEventId = this.state.forwardingEvent.getId();
         } else if (shouldHighlight) {
-            highlightedEventId = this.state.eventId;
+            highlightedEventId = this.state.initialEventId;
         }
 
         // console.log("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
@@ -1681,8 +1681,8 @@ module.exports = React.createClass({
                 manageReadMarkers={true}
                 hidden={hideMessagePanel}
                 highlightedEventId={highlightedEventId}
-                eventId={this.state.eventId}
-                eventPixelOffset={this.state.eventPixelOffset}
+                eventId={this.state.initialEventId}
+                eventPixelOffset={this.state.initialEventPixelOffset}
                 onScroll={ this.onMessageListScroll }
                 onReadMarkerUpdated={ this._updateTopUnreadMessagesBar }
                 showUrlPreview = { this.state.showUrlPreview }

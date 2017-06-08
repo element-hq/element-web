@@ -27,12 +27,14 @@ const INITIAL_STATE = {
     joinError: null,
     // The room ID of the room
     roomId: null,
-    // The event being viewed
-    eventId: null,
-    // The offset to display the event at (see scrollStateMap)
-    eventPixelOffset: null,
-    // Whether to highlight the event
-    isEventHighlighted: false,
+
+    // The event to scroll to initially
+    initialEventId: null,
+    // The offset to display the initial event at (see scrollStateMap)
+    initialEventPixelOffset: null,
+    // Whether to highlight the initial event
+    isInitialEventHighlighted: false,
+
     // The room alias of the room (or null if not originally specified in view_room)
     roomAlias: null,
     // Whether the current room is loading
@@ -131,9 +133,9 @@ class RoomViewStore extends Store {
 
             this._setState({
                 roomId: payload.room_id,
-                eventId: payload.event_id,
-                eventPixelOffset: payload.event_offset,
-                isEventHighlighted: payload.highlighted,
+                initialEventId: payload.event_id,
+                initialEventPixelOffset: payload.event_offset,
+                isInitialEventHighlighted: payload.highlighted,
                 roomLoading: false,
                 roomLoadError: null,
             });
@@ -141,9 +143,9 @@ class RoomViewStore extends Store {
             // Resolve the alias and then do a second dispatch with the room ID acquired
             this._setState({
                 roomId: null,
-                eventId: null,
-                eventPixelOffset: null,
-                isEventHighlighted: null,
+                initialEventId: null,
+                initialEventPixelOffset: null,
+                isInitialEventHighlighted: null,
                 roomAlias: payload.room_alias,
                 roomLoading: true,
                 roomLoadError: null,
@@ -229,16 +231,16 @@ class RoomViewStore extends Store {
         return this._state.roomId;
     }
 
-    getEventId() {
-        return this._state.eventId;
+    getInitialEventId() {
+        return this._state.initialEventId;
     }
 
-    getEventPixelOffset() {
-        return this._state.eventPixelOffset;
+    getInitialEventPixelOffset() {
+        return this._state.initialEventPixelOffset;
     }
 
-    isEventHighlighted() {
-        return this._state.isEventHighlighted;
+    isInitialEventHighlighted() {
+        return this._state.isInitialEventHighlighted;
     }
 
     getRoomAlias() {
