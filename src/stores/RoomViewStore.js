@@ -23,9 +23,9 @@ import { _t } from '../languageHandler';
 const INITIAL_STATE = {
     // Whether we're joining the currently viewed room
     joining: false,
-    // Any error occurred during joining
+    // Any error that has occurred during joining
     joinError: null,
-    // The room ID of the room
+    // The room ID of the room currently being viewed
     roomId: null,
 
     // The event to scroll to initially
@@ -229,38 +229,47 @@ class RoomViewStore extends Store {
         this._state = Object.assign({}, INITIAL_STATE);
     }
 
+    // The room ID of the room currently being viewed
     getRoomId() {
         return this._state.roomId;
     }
 
+    // The event to scroll to initially
     getInitialEventId() {
         return this._state.initialEventId;
     }
 
+    // The offset to display the initial event at (see scrollStateMap)
     getInitialEventPixelOffset() {
         return this._state.initialEventPixelOffset;
     }
 
+    // Whether to highlight the initial event
     isInitialEventHighlighted() {
         return this._state.isInitialEventHighlighted;
     }
 
+    // The room alias of the room (or null if not originally specified in view_room)
     getRoomAlias() {
         return this._state.roomAlias;
     }
 
+    // Whether the current room is loading (true whilst resolving an alias)
     isRoomLoading() {
         return this._state.roomLoading;
     }
 
+    // Any error that has occurred during loading
     getRoomLoadError() {
         return this._state.roomLoadError;
     }
 
+    // Whether we're joining the currently viewed room
     isJoining() {
         return this._state.joining;
     }
 
+    // Any error that has occurred during joining
     getJoinError() {
         return this._state.joinError;
     }
