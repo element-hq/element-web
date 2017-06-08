@@ -1109,7 +1109,6 @@ module.exports = React.createClass({
             };
 
             const payload = {
-                id: '#mylovelyid',
                 action: 'view_room',
                 event_id: eventId,
                 highlighted: Boolean(eventId),
