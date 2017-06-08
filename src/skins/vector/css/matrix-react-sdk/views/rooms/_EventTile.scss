@@ -63,7 +63,9 @@ limitations under the License.
     white-space: nowrap;
     color: $event-timestamp-color;
     font-size: 10px;
-    left: 8px;
+    left: 0px;
+    width: 46px; /* 8 + 30 (avatar) + 8 */
+    text-align: center;
     position: absolute;
 }
 
@@ -189,6 +191,7 @@ limitations under the License.
 
 .mx_EventTile_selected .mx_MessageTimestamp {
     left: 3px;
+    width: auto;
 }
 
 .mx_EventTile_editButton {
@@ -271,10 +274,6 @@ limitations under the License.
     padding-left: 5px;
 }
 
-.mx_EventTile_12hr .mx_MessageTimestamp {
-    text-align: center;
-}
-
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line,
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line {
     padding-left: 60px;
@@ -296,6 +295,7 @@ limitations under the License.
 .mx_EventTile:hover.mx_EventTile_verified .mx_MessageTimestamp,
 .mx_EventTile:hover.mx_EventTile_unverified .mx_MessageTimestamp {
     left: 3px;
+    width: auto;
 }
 
 /*
@@ -331,6 +331,24 @@ limitations under the License.
 
 .mx_EventTile_content .markdown-body code {
     background-color: #f8f8f8;
+}
+.mx_EventTile_copyButton {
+    position: absolute;
+    display: inline-block;
+    visibility: hidden;
+    cursor: pointer;
+    top: 6px;
+    right: 6px;
+    width: 19px;
+    height: 19px;
+    background-image: url($copy-button-url);
+}
+.mx_EventTile_body pre {
+    position: relative;
+}
+.mx_EventTile_body pre:hover .mx_EventTile_copyButton
+{
+    visibility: visible;
 }
 
 .mx_EventTile_content .markdown-body h1,
@@ -408,6 +426,10 @@ limitations under the License.
 
     .mx_EventTile_e2eIcon {
         top: 7px;
+    }
+
+    .mx_EventTile_editButton {
+        top: 3px;
     }
 
     .mx_EventTile_readAvatars {

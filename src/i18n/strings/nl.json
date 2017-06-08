@@ -118,5 +118,8 @@
     "Welcome page": "Welkom pagina",
     "Drop here %(toAction)s": "%(toAction)s hier naar toe verplaatsen",
     "Failed to set Direct Message status of room": "Het is mislukt om de directe berichten status van de kamer in te stellen",
-    "Redact": "Redigeren"
+    "Redact": "Redigeren",
+    "A new version of Riot is available.": "Nieuwe Riot versie is beschikbaar.",
+    "All Rooms": "Alle Kamers",
+    "Cancel": "Annuleer"
 }
