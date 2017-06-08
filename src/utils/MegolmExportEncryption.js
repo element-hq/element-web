@@ -36,7 +36,7 @@ const subtleCrypto = window.crypto.subtle || window.crypto.webkitSubtle;
  * @param {String} password
  * @return {Promise<String>} promise for decrypted output
  */
-export function decryptMegolmKeyFile(data, password) {
+export async function decryptMegolmKeyFile(data, password) {
     const body = unpackMegolmKeyFile(data);
 
     // check we have a version byte
@@ -60,33 +60,30 @@ export function decryptMegolmKeyFile(data, password) {
     const ciphertext = body.subarray(37, 37+ciphertextLength);
     const hmac = body.subarray(-32);
 
-    return deriveKeys(salt, iterations, password).then((keys) => {
-        const [aesKey, hmacKey] = keys;
+    const [aesKey, hmacKey] = await deriveKeys(salt, iterations, password);
 
-        const toVerify = body.subarray(0, -32);
-        return subtleCrypto.verify(
-            {name: 'HMAC'},
-            hmacKey,
-            hmac,
-            toVerify,
-        ).then((isValid) => {
-            if (!isValid) {
-                throw new Error('Authentication check failed: incorrect password?');
-            }
+    const toVerify = body.subarray(0, -32);
+    const isValid = await subtleCrypto.verify(
+        {name: 'HMAC'},
+        hmacKey,
+        hmac,
+        toVerify,
+    );
+    if (!isValid) {
+        throw new Error('Authentication check failed: incorrect password?');
+    }
 
-            return subtleCrypto.decrypt(
-                {
-                    name: "AES-CTR",
-                    counter: iv,
-                    length: 64,
-                },
-                aesKey,
-                ciphertext,
-            );
-        });
-    }).then((plaintext) => {
-        return new TextDecoder().decode(new Uint8Array(plaintext));
-    });
+    const plaintext = await subtleCrypto.decrypt(
+        {
+            name: "AES-CTR",
+            counter: iv,
+            length: 64,
+        },
+        aesKey,
+        ciphertext,
+    );
+
+    return new TextDecoder().decode(new Uint8Array(plaintext));
 }
 
 
@@ -100,7 +97,7 @@ export function decryptMegolmKeyFile(data, password) {
  *    key-derivation function.
  * @return {Promise<ArrayBuffer>} promise for encrypted output
  */
-export function encryptMegolmKeyFile(data, password, options) {
+export async function encryptMegolmKeyFile(data, password, options) {
     options = options || {};
     const kdfRounds = options.kdf_rounds || 500000;
 
@@ -115,44 +112,42 @@ export function encryptMegolmKeyFile(data, password, options) {
     // of a single bit of iv is a price we have to pay.
     iv[9] &= 0x7f;
 
-    return deriveKeys(salt, kdfRounds, password).then((keys) => {
-        const [aesKey, hmacKey] = keys;
+    const [aesKey, hmacKey] = await deriveKeys(salt, kdfRounds, password);
 
-        return subtleCrypto.encrypt(
-            {
-                name: "AES-CTR",
-                counter: iv,
-                length: 64,
-            },
-            aesKey,
-            new TextEncoder().encode(data),
-        ).then((ciphertext) => {
-            const cipherArray = new Uint8Array(ciphertext);
-            const bodyLength = (1+salt.length+iv.length+4+cipherArray.length+32);
-            const resultBuffer = new Uint8Array(bodyLength);
-            let idx = 0;
-            resultBuffer[idx++] = 1; // version
-            resultBuffer.set(salt, idx); idx += salt.length;
-            resultBuffer.set(iv, idx); idx += iv.length;
-            resultBuffer[idx++] = kdfRounds >> 24;
-            resultBuffer[idx++] = (kdfRounds >> 16) & 0xff;
-            resultBuffer[idx++] = (kdfRounds >> 8) & 0xff;
-            resultBuffer[idx++] = kdfRounds & 0xff;
-            resultBuffer.set(cipherArray, idx); idx += cipherArray.length;
+    const ciphertext = await subtleCrypto.encrypt(
+        {
+            name: "AES-CTR",
+            counter: iv,
+            length: 64,
+        },
+        aesKey,
+        new TextEncoder().encode(data),
+    );
 
-            const toSign = resultBuffer.subarray(0, idx);
+    const cipherArray = new Uint8Array(ciphertext);
+    const bodyLength = (1+salt.length+iv.length+4+cipherArray.length+32);
+    const resultBuffer = new Uint8Array(bodyLength);
+    let idx = 0;
+    resultBuffer[idx++] = 1; // version
+    resultBuffer.set(salt, idx); idx += salt.length;
+    resultBuffer.set(iv, idx); idx += iv.length;
+    resultBuffer[idx++] = kdfRounds >> 24;
+    resultBuffer[idx++] = (kdfRounds >> 16) & 0xff;
+    resultBuffer[idx++] = (kdfRounds >> 8) & 0xff;
+    resultBuffer[idx++] = kdfRounds & 0xff;
+    resultBuffer.set(cipherArray, idx); idx += cipherArray.length;
 
-            return subtleCrypto.sign(
-                {name: 'HMAC'},
-                hmacKey,
-                toSign,
-            ).then((hmac) => {
-                hmac = new Uint8Array(hmac);
-                resultBuffer.set(hmac, idx);
-                return packMegolmKeyFile(resultBuffer);
-            });
-        });
-    });
+    const toSign = resultBuffer.subarray(0, idx);
+
+    const hmac = await subtleCrypto.sign(
+        {name: 'HMAC'},
+        hmacKey,
+        toSign,
+    );
+
+    const hmacArray = new Uint8Array(hmac);
+    resultBuffer.set(hmacArray, idx);
+    return packMegolmKeyFile(resultBuffer);
 }
 
 /**
@@ -163,51 +158,51 @@ export function encryptMegolmKeyFile(data, password, options) {
  * @param {String} password  password
  * @return {Promise<[CryptoKey, CryptoKey]>} promise for [aes key, hmac key]
  */
-function deriveKeys(salt, iterations, password) {
+async function deriveKeys(salt, iterations, password) {
     const start = new Date();
-    return subtleCrypto.importKey(
+    const key = await subtleCrypto.importKey(
         'raw',
         new TextEncoder().encode(password),
         {name: 'PBKDF2'},
         false,
         ['deriveBits'],
-    ).then((key) => {
-        return subtleCrypto.deriveBits(
-            {
-                name: 'PBKDF2',
-                salt: salt,
-                iterations: iterations,
-                hash: 'SHA-512',
-            },
-            key,
-            512,
-        );
-    }).then((keybits) => {
-        const now = new Date();
-        console.log("E2e import/export: deriveKeys took " + (now - start) + "ms");
+    );
 
-        const aesKey = keybits.slice(0, 32);
-        const hmacKey = keybits.slice(32);
+    const keybits = await subtleCrypto.deriveBits(
+        {
+            name: 'PBKDF2',
+            salt: salt,
+            iterations: iterations,
+            hash: 'SHA-512',
+        },
+        key,
+        512,
+    );
 
-        const aesProm = subtleCrypto.importKey(
-            'raw',
-            aesKey,
-            {name: 'AES-CTR'},
-            false,
-            ['encrypt', 'decrypt'],
-        );
-        const hmacProm = subtleCrypto.importKey(
-            'raw',
-            hmacKey,
-            {
-                name: 'HMAC',
-                hash: {name: 'SHA-256'},
-            },
-            false,
-            ['sign', 'verify'],
-        );
-        return Promise.all([aesProm, hmacProm]);
-    });
+    const now = new Date();
+    console.log("E2e import/export: deriveKeys took " + (now - start) + "ms");
+
+    const aesKey = keybits.slice(0, 32);
+    const hmacKey = keybits.slice(32);
+
+    const aesProm = subtleCrypto.importKey(
+        'raw',
+        aesKey,
+        {name: 'AES-CTR'},
+        false,
+        ['encrypt', 'decrypt'],
+    );
+    const hmacProm = subtleCrypto.importKey(
+        'raw',
+        hmacKey,
+        {
+            name: 'HMAC',
+            hash: {name: 'SHA-256'},
+        },
+        false,
+        ['sign', 'verify'],
+    );
+    return await Promise.all([aesProm, hmacProm]);
 }
 
 const HEADER_LINE = '-----BEGIN MEGOLM SESSION DATA-----';
