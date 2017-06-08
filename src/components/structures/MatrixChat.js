@@ -621,7 +621,6 @@ module.exports = React.createClass({
             page_type: PageTypes.RoomView,
             thirdPartyInvite: roomInfo.third_party_invite,
             roomOobData: roomInfo.oob_data,
-            currentRoomAlias: roomInfo.room_alias,
             autoJoin: roomInfo.auto_join,
         };
 
