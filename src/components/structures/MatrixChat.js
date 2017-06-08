@@ -1119,7 +1119,9 @@ module.exports = React.createClass({
             const payload = {
                 action: 'view_room',
                 event_id: eventId,
-                // If an event ID is set (truthy), mark it as highlighted
+                // If an event ID is given in the URL hash, notify RoomViewStore to mark
+                // it as highlighted, which will propagate to RoomView and highlight the
+                // associated EventTile.
                 highlighted: Boolean(eventId),
                 third_party_invite: thirdPartyInvite,
                 oob_data: oobData,
