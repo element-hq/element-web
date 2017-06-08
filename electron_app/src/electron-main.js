@@ -288,6 +288,8 @@ electron.app.on('ready', () => {
             return false;
         }
     });
+    
+    tray.destroy();
 
     webContentsHandler(mainWindow.webContents);
     mainWindowState.manage(mainWindow);
