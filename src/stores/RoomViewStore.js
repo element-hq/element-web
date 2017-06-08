@@ -28,7 +28,7 @@ const INITIAL_STATE = {
     // The room ID of the room currently being viewed
     roomId: null,
 
-    // The event to scroll to initially
+    // The event to scroll to when the room is first viewed
     initialEventId: null,
     // The offset to display the initial event at (see scrollStateMap)
     initialEventPixelOffset: null,
