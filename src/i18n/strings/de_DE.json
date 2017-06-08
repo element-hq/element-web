@@ -911,5 +911,6 @@
     "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.": "Dies wird dein zukünftiger Benutzername auf dem <span></span> Heimserver. Alternativ kannst du auch einen <a>anderen Server</a> auswählen.",
     "If you already have a Matrix account you can <a>log in</a> instead.": "Wenn du bereits ein Matrix-Benutzerkonto hast, kannst du dich stattdessen auch direkt <a>anmelden</a>.",
     "Home": "Start",
-    "Username invalid: %(errMessage)s": "Ungültiger Benutzername: %(errMessage)s"
+    "Username invalid: %(errMessage)s": "Ungültiger Benutzername: %(errMessage)s",
+    "a room": "einen Raum"
 }
