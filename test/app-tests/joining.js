@@ -158,7 +158,7 @@ describe('joining a room', function () {
 
                 ReactTestUtils.Simulate.click(joinLink);
 
-                httpBackend.when('POST', '/join/'+encodeURIComponent(ROOM_ID))
+                httpBackend.when('POST', '/join/'+encodeURIComponent(ROOM_ALIAS))
                     .respond(200, {room_id: ROOM_ID});
             }).then(() => {
                 // wait for the join request to be made
@@ -180,7 +180,7 @@ describe('joining a room', function () {
                     roomView, "mx_Spinner");
 
                 // flush it through
-                return httpBackend.flush('/join/'+encodeURIComponent(ROOM_ID));
+                return httpBackend.flush('/join/'+encodeURIComponent(ROOM_ALIAS));
             }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
 

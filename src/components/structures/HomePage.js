@@ -18,8 +18,6 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import sdk from 'matrix-react-sdk';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import request from 'browser-request';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
