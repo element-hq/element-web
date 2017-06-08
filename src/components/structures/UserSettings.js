@@ -389,7 +389,10 @@ module.exports = React.createClass({
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createDialog(ErrorDialog, {
             title: _t("Success"),
-            description: _t("Your password was successfully changed. You will not receive push notifications on other devices until you log back in to them") + ".",
+            description: _t(
+                "Your password was successfully changed. You will not receive " +
+                "push notifications on other devices until you log back in to them",
+            ) + ".",
         });
         dis.dispatch({action: 'password_changed'});
     },
@@ -427,7 +430,10 @@ module.exports = React.createClass({
         this._addThreepid.addEmailAddress(emailAddress, true).done(() => {
             Modal.createDialog(QuestionDialog, {
                 title: _t("Verification Pending"),
-                description: _t("Please check your email and click on the link it contains. Once this is done, click continue."),
+                description: _t(
+                    "Please check your email and click on the link it contains. Once this " +
+                    "is done, click continue.",
+                ),
                 button: _t('Continue'),
                 onFinished: this.onEmailDialogFinished,
             });
@@ -447,7 +453,7 @@ module.exports = React.createClass({
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createDialog(QuestionDialog, {
             title: _t("Remove Contact Information?"),
-            description: _t("Remove %(threePid)s?", { threePid : threepid.address }),
+            description: _t("Remove %(threePid)s?", { threePid: threepid.address }),
             button: _t('Remove'),
             onFinished: (submit) => {
                 if (submit) {
@@ -489,8 +495,8 @@ module.exports = React.createClass({
             this.setState({email_add_pending: false});
             if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
                 const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                let message = _t("Unable to verify email address.") + " " +
-                              _t("Please check your email and click on the link it contains. Once this is done, click continue.");
+                const message = _t("Unable to verify email address.") + " " +
+                    _t("Please check your email and click on the link it contains. Once this is done, click continue.");
                 Modal.createDialog(QuestionDialog, {
                     title: _t("Verification Pending"),
                     description: message,
@@ -608,7 +614,7 @@ module.exports = React.createClass({
         }
     },
 
-    _renderLanguageSetting: function () {
+    _renderLanguageSetting: function() {
         const LanguageDropdown = sdk.getComponent('views.elements.LanguageDropdown');
         return <div>
             <label htmlFor="languageSelector">{_t('Interface Language')}</label>
@@ -639,7 +645,7 @@ module.exports = React.createClass({
             <input id="urlPreviewsDisabled"
                    type="checkbox"
                    defaultChecked={ UserSettingsStore.getUrlPreviewsDisabled() }
-                   onChange={ (e) => UserSettingsStore.setUrlPreviewsDisabled(e.target.checked) }
+                   onChange={ this._onPreviewsDisabledChanged }
             />
             <label htmlFor="urlPreviewsDisabled">
                 { _t("Disable inline URL previews by default") }
@@ -647,17 +653,24 @@ module.exports = React.createClass({
         </div>;
     },
 
+    _onPreviewsDisabledChanged: function(e) {
+         UserSettingsStore.setUrlPreviewsDisabled(e.target.checked);
+    },
+
     _renderSyncedSetting: function(setting) {
+        // TODO: this ought to be a separate component so that we don't need
+        // to rebind the onChange each time we render
+
+        const onChange = (e) => {
+            UserSettingsStore.setSyncedSetting(setting.id, e.target.checked);
+            if (setting.fn) setting.fn(e.target.checked);
+        };
+
         return <div className="mx_UserSettings_toggle" key={ setting.id }>
             <input id={ setting.id }
                    type="checkbox"
                    defaultChecked={ this._syncedSettings[setting.id] }
-                   onChange={
-                       (e) => {
-                           UserSettingsStore.setSyncedSetting(setting.id, e.target.checked);
-                           if (setting.fn) setting.fn(e.target.checked);
-                       }
-                   }
+                   onChange={ onChange }
             />
             <label htmlFor={ setting.id }>
                 { _t(setting.label) }
@@ -666,22 +679,24 @@ module.exports = React.createClass({
     },
 
     _renderThemeSelector: function(setting) {
+        // TODO: this ought to be a separate component so that we don't need
+        // to rebind the onChange each time we render
+        const onChange = (e) => {
+            if (e.target.checked) {
+                UserSettingsStore.setSyncedSetting(setting.id, setting.value);
+            }
+            dis.dispatch({
+                action: 'set_theme',
+                value: setting.value,
+            });
+        };
         return <div className="mx_UserSettings_toggle" key={ setting.id + "_" + setting.value }>
             <input id={ setting.id + "_" + setting.value }
                    type="radio"
                    name={ setting.id }
                    value={ setting.value }
                    defaultChecked={ this._syncedSettings[setting.id] === setting.value }
-                   onChange={ (e) => {
-                            if (e.target.checked) {
-                                UserSettingsStore.setSyncedSetting(setting.id, setting.value);
-                            }
-                            dis.dispatch({
-                                action: 'set_theme',
-                                value: setting.value,
-                            });
-                        }
-                   }
+                   onChange={ onChange }
             />
             <label htmlFor={ setting.id + "_" + setting.value }>
                 { setting.label }
@@ -720,8 +735,10 @@ module.exports = React.createClass({
                 <h3>{ _t("Cryptography") }</h3>
                 <div className="mx_UserSettings_section mx_UserSettings_cryptoSection">
                     <ul>
-                        <li><label>{_t("Device ID:")}</label>             <span><code>{deviceId}</code></span></li>
-                        <li><label>{_t("Device key:")}</label>            <span><code><b>{identityKey}</b></code></span></li>
+                        <li><label>{_t("Device ID:")}</label>
+                            <span><code>{deviceId}</code></span></li>
+                        <li><label>{_t("Device key:")}</label>
+                            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
                     { importExportButtons }
                 </div>
@@ -733,16 +750,18 @@ module.exports = React.createClass({
     },
 
     _renderLocalSetting: function(setting) {
+        // TODO: this ought to be a separate component so that we don't need
+        // to rebind the onChange each time we render
+        const onChange = (e) => {
+            UserSettingsStore.setLocalSetting(setting.id, e.target.checked);
+            if (setting.fn) setting.fn(e.target.checked);
+        };
+
         return <div className="mx_UserSettings_toggle" key={ setting.id }>
             <input id={ setting.id }
                    type="checkbox"
                    defaultChecked={ this._localSettings[setting.id] }
-                   onChange={
-                        (e) => {
-                            UserSettingsStore.setLocalSetting(setting.id, e.target.checked);
-                            if (setting.fn) setting.fn(e.target.checked);
-                        }
-                   }
+                   onChange={ onChange }
             />
             <label htmlFor={ setting.id }>
                 { _t(setting.label) }
@@ -794,26 +813,33 @@ module.exports = React.createClass({
         if (this.props.enableLabs === false) return null;
         UserSettingsStore.doTranslations();
 
-        const features = UserSettingsStore.LABS_FEATURES.map((feature) => (
-            <div key={feature.id} className="mx_UserSettings_toggle">
-                <input
-                    type="checkbox"
-                    id={feature.id}
-                    name={feature.id}
-                    defaultChecked={ UserSettingsStore.isFeatureEnabled(feature.id) }
-                    onChange={(e) => {
-                        if (MatrixClientPeg.get().isGuest()) {
-                            e.target.checked = false;
-                            dis.dispatch({action: 'view_set_mxid'});
-                            return;
-                        }
+        const features = UserSettingsStore.LABS_FEATURES.map((feature) => {
+            // TODO: this ought to be a separate component so that we don't need
+            // to rebind the onChange each time we render
+            const onChange = (e) => {
+                if (MatrixClientPeg.get().isGuest()) {
+                    e.target.checked = false;
+                    dis.dispatch({action: 'view_set_mxid'});
+                    return;
+                }
 
-                        UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked);
-                        this.forceUpdate();
-                    }}/>
-                <label htmlFor={feature.id}>{feature.name}</label>
-            </div>
-        ));
+                UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked);
+                this.forceUpdate();
+            };
+
+            return (
+                <div key={feature.id} className="mx_UserSettings_toggle">
+                    <input
+                        type="checkbox"
+                        id={feature.id}
+                        name={feature.id}
+                        defaultChecked={ UserSettingsStore.isFeatureEnabled(feature.id) }
+                        onChange={ onChange }
+                    />
+                    <label htmlFor={feature.id}>{feature.name}</label>
+                </div>
+            );
+        });
         return (
             <div>
                 <h3>{ _t("Labs") }</h3>
@@ -865,9 +891,10 @@ module.exports = React.createClass({
         if (!this.state.rejectingInvites) {
             // bind() the invited rooms so any new invites that may come in as this button is clicked
             // don't inadvertently get rejected as well.
+            const onClick = this._onRejectAllInvitesClicked.bind(this, invitedRooms);
             reject = (
                 <AccessibleButton className="mx_UserSettings_button danger"
-                onClick={this._onRejectAllInvitesClicked.bind(this, invitedRooms)}>
+                onClick={onClick}>
                     {_t("Reject all %(invitedRooms)s invites", {invitedRooms: invitedRooms.length})}
                 </AccessibleButton>
             );
@@ -885,8 +912,6 @@ module.exports = React.createClass({
         const settings = this.state.electron_settings;
         if (!settings) return;
 
-        const {ipcRenderer} = require('electron');
-
         return <div>
             <h3>{ _t('Desktop specific') }</h3>
             <div className="mx_UserSettings_section">
@@ -894,14 +919,17 @@ module.exports = React.createClass({
                     <input type="checkbox"
                            name="auto-launch"
                            defaultChecked={settings['auto-launch']}
-                           onChange={(e) => {
-                               ipcRenderer.send('settings_set', 'auto-launch', e.target.checked);
-                           }}
+                           onChange={this._onAutoLaunchChanged}
                     />
                     <label htmlFor="auto-launch">{_t('Start automatically after system login')}</label>
                 </div>
             </div>
         </div>;
+    },
+
+    _onAutoLaunchChanged: function(e) {
+        const {ipcRenderer} = require('electron');
+        ipcRenderer.send('settings_set', 'auto-launch', e.target.checked);
     },
 
     _mapWebRtcDevicesToSpans: function(devices) {
@@ -1060,6 +1088,9 @@ module.exports = React.createClass({
 
         const threepidsSection = this.state.threepids.map((val, pidIndex) => {
             const id = "3pid-" + val.address;
+            // TODO; make a separate component to avoid having to rebind onClick
+            // each time we render
+            const onRemoveClick = (e) => this.onRemoveThreepidClicked(val);
             return (
                 <div className="mx_UserSettings_profileTableRow" key={pidIndex}>
                     <div className="mx_UserSettings_profileLabelCell">
@@ -1071,7 +1102,8 @@ module.exports = React.createClass({
                         />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                        <img src="img/cancel-small.svg" width="14" height="14" alt={ _t("Remove") } onClick={this.onRemoveThreepidClicked.bind(this, val)} />
+                        <img src="img/cancel-small.svg" width="14" height="14" alt={ _t("Remove") }
+                            onClick={onRemoveClick} />
                     </div>
                 </div>
             );
@@ -1222,7 +1254,12 @@ module.exports = React.createClass({
                         { _t("Logged in as:") } {this._me}
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        {_t('Access Token:')} <span className="mx_UserSettings_advanced_spoiler" onClick={this._showSpoiler} data-spoiler={ MatrixClientPeg.get().getAccessToken() }>&lt;{ _t("click to reveal") }&gt;</span>
+                        {_t('Access Token:')}
+                        <span className="mx_UserSettings_advanced_spoiler"
+                                onClick={this._showSpoiler}
+                                data-spoiler={ MatrixClientPeg.get().getAccessToken() }>
+                            &lt;{ _t("click to reveal") }&gt;
+                        </span>
                     </div>
                     <div className="mx_UserSettings_advanced">
                         { _t("Homeserver is") } { MatrixClientPeg.get().getHomeserverUrl() }
