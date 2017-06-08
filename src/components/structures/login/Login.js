@@ -247,7 +247,7 @@ module.exports = React.createClass({
                 </span>;
             } else {
                 errorText = <span>
-                    { _tJsx("Can't connect to homeserver - please check your connectivity and ensure your <a>homeserver's SSL certificate</a> is trusted and that a browser extension is not blocking requests.",
+                    { _tJsx("Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
                       /<a>(.*?)<\/a>/,
                       (sub) => { return <a href={this.state.enteredHomeserverUrl}>{ sub }</a>; }
                     )}

@@ -180,7 +180,7 @@
   "Bug Report": "Bug Report",
   "Bulk Options": "Bulk Options",
   "Call Timeout": "Call Timeout",
-  "Can't connect to homeserver - please check your connectivity and ensure your <a>homeserver's SSL certificate</a> is trusted and that a browser extension is not blocking requests.": "Can't connect to homeserver - please check your connectivity and ensure your <a>homeserver's SSL certificate</a> is trusted and that a browser extension is not blocking requests.",
+  "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
   "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
   "Can't load user settings": "Can't load user settings",
   "Change Password": "Change Password",
