@@ -618,9 +618,6 @@ module.exports = React.createClass({
         this.focusComposer = true;
 
         const newState = {
-            initialEventId: roomInfo.event_id,
-            highlightedEventId: roomInfo.event_id,
-            initialEventPixelOffset: undefined,
             page_type: PageTypes.RoomView,
             thirdPartyInvite: roomInfo.third_party_invite,
             roomOobData: roomInfo.oob_data,
@@ -630,18 +627,6 @@ module.exports = React.createClass({
 
         if (!roomInfo.room_alias) {
             newState.currentRoomId = roomInfo.room_id;
-        }
-
-        // if we aren't given an explicit event id, look for one in the
-        // scrollStateMap.
-        //
-        // TODO: do this in RoomView rather than here
-        if (!roomInfo.event_id && this.refs.loggedInView) {
-            const scrollState = this.refs.loggedInView.getScrollStateForRoom(roomInfo.room_id);
-            if (scrollState) {
-                newState.initialEventId = scrollState.focussedEvent;
-                newState.initialEventPixelOffset = scrollState.pixelOffset;
-            }
         }
 
         // Wait for the first sync to complete so that if a room does have an alias,
@@ -669,7 +654,7 @@ module.exports = React.createClass({
                 }
             }
 
-            if (roomInfo.event_id) {
+            if (roomInfo.event_id && roomInfo.highlighted) {
                 presentedId += "/" + roomInfo.event_id;
             }
             this.notifyNewScreen('room/' + presentedId);
@@ -1124,8 +1109,10 @@ module.exports = React.createClass({
             };
 
             const payload = {
+                id: '#mylovelyid',
                 action: 'view_room',
                 event_id: eventId,
+                highlighted: Boolean(eventId),
                 third_party_invite: thirdPartyInvite,
                 oob_data: oobData,
             };

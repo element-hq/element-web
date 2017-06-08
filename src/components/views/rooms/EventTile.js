@@ -381,6 +381,7 @@ module.exports = WithMatrixClient(React.createClass({
         dis.dispatch({
             action: 'view_room',
             event_id: this.props.mxEvent.getId(),
+            highlighted: true,
             room_id: this.props.mxEvent.getRoomId(),
         });
     },

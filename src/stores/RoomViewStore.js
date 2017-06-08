@@ -27,12 +27,32 @@ const INITIAL_STATE = {
     joinError: null,
     // The room ID of the room
     roomId: null,
+    // The event being viewed
+    eventId: null,
+    // The offset to display the event at (see scrollStateMap)
+    eventPixelOffset: null,
+    // Whether to highlight the event
+    isEventHighlighted: false,
     // The room alias of the room (or null if not originally specified in view_room)
     roomAlias: null,
     // Whether the current room is loading
     roomLoading: false,
     // Any error that has occurred during loading
     roomLoadError: null,
+    // A map from room id to scroll state.
+    //
+    // If there is no special scroll state (ie, we are following the live
+    // timeline), the scroll state is null. Otherwise, it is an object with
+    // the following properties:
+    //
+    //    focussedEvent: the ID of the 'focussed' event. Typically this is
+    //        the last event fully visible in the viewport, though if we
+    //        have done an explicit scroll to an explicit event, it will be
+    //        that event.
+    //
+    //    pixelOffset: the number of pixels the window is scrolled down
+    //        from the focussedEvent.
+    scrollStateMap: {},
 };
 
 /**
@@ -56,8 +76,11 @@ class RoomViewStore extends Store {
     __onDispatch(payload) {
         switch (payload.action) {
             // view_room:
-            //      - room_alias: '#somealias:matrix.org'
-            //      - room_id:    '!roomid123:matrix.org'
+            //      - room_alias:   '#somealias:matrix.org'
+            //      - room_id:      '!roomid123:matrix.org'
+            //      - event_id:     '$213456782:matrix.org'
+            //      - event_offset: 100
+            //      - highlighted:  true
             case 'view_room':
                 this._viewRoom(payload);
                 break;
@@ -88,20 +111,39 @@ class RoomViewStore extends Store {
             case 'on_logged_out':
                 this.reset();
                 break;
+            case 'update_scroll_state':
+                this._updateScrollState(payload);
+                break;
         }
     }
 
     _viewRoom(payload) {
-        // Always set the room ID if present
         if (payload.room_id) {
+            // If an event ID wasn't specified, default to the one saved for this room
+            // via update_scroll_state. Also assume event_offset should be set.
+            if (!payload.event_id) {
+                const roomScrollState = this._state.scrollStateMap[payload.room_id];
+                if (roomScrollState) {
+                    payload.event_id = roomScrollState.focussedEvent;
+                    payload.event_offset = roomScrollState.pixelOffset;
+                }
+            }
+
             this._setState({
                 roomId: payload.room_id,
+                eventId: payload.event_id,
+                eventPixelOffset: payload.event_offset,
+                isEventHighlighted: payload.highlighted,
                 roomLoading: false,
                 roomLoadError: null,
             });
         } else if (payload.room_alias) {
+            // Resolve the alias and then do a second dispatch with the room ID acquired
             this._setState({
                 roomId: null,
+                eventId: null,
+                eventPixelOffset: null,
+                isEventHighlighted: null,
                 roomAlias: payload.room_alias,
                 roomLoading: true,
                 roomLoadError: null,
@@ -111,6 +153,8 @@ class RoomViewStore extends Store {
                 dis.dispatch({
                     action: 'view_room',
                     room_id: result.room_id,
+                    event_id: payload.event_id,
+                    highlighted: payload.highlighted,
                     room_alias: payload.room_alias,
                 });
             }, (err) => {
@@ -168,12 +212,33 @@ class RoomViewStore extends Store {
         });
     }
 
+    _updateScrollState(payload) {
+        // Clobber existing scroll state for the given room ID
+        const newScrollStateMap = this._state.scrollStateMap;
+        newScrollStateMap[payload.room_id] = payload.scroll_state;
+        this._setState({
+            scrollStateMap: newScrollStateMap,
+        });
+    }
+
     reset() {
         this._state = Object.assign({}, INITIAL_STATE);
     }
 
     getRoomId() {
         return this._state.roomId;
+    }
+
+    getEventId() {
+        return this._state.eventId;
+    }
+
+    getEventPixelOffset() {
+        return this._state.eventPixelOffset;
+    }
+
+    isEventHighlighted() {
+        return this._state.isEventHighlighted;
     }
 
     getRoomAlias() {
@@ -195,7 +260,6 @@ class RoomViewStore extends Store {
     getJoinError() {
         return this._state.joinError;
     }
-
 }
 
 let singletonRoomViewStore = null;

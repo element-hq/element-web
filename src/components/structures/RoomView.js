@@ -83,36 +83,8 @@ module.exports = React.createClass({
         //  *                      invited us tovthe room
         oobData: React.PropTypes.object,
 
-        // id of an event to jump to. If not given, will go to the end of the
-        // live timeline.
-        eventId: React.PropTypes.string,
-
-        // where to position the event given by eventId, in pixels from the
-        // bottom of the viewport. If not given, will try to put the event
-        // 1/3 of the way down the viewport.
-        eventPixelOffset: React.PropTypes.number,
-
-        // ID of an event to highlight. If undefined, no event will be highlighted.
-        // Typically this will either be the same as 'eventId', or undefined.
-        highlightedEventId: React.PropTypes.string,
-
         // is the RightPanel collapsed?
         collapsedRhs: React.PropTypes.bool,
-
-        // a map from room id to scroll state, which will be updated on unmount.
-        //
-        // If there is no special scroll state (ie, we are following the live
-        // timeline), the scroll state is null. Otherwise, it is an object with
-        // the following properties:
-        //
-        //    focussedEvent: the ID of the 'focussed' event. Typically this is
-        //        the last event fully visible in the viewport, though if we
-        //        have done an explicit scroll to an explicit event, it will be
-        //        that event.
-        //
-        //    pixelOffset: the number of pixels the window is scrolled down
-        //        from the focussedEvent.
-        scrollStateMap: React.PropTypes.object,
     },
 
     getInitialState: function() {
@@ -180,13 +152,28 @@ module.exports = React.createClass({
         if (this.unmounted) {
             return;
         }
-        this.setState({
+        const newState = {
             roomId: RoomViewStore.getRoomId(),
             roomAlias: RoomViewStore.getRoomAlias(),
             roomLoading: RoomViewStore.isRoomLoading(),
             roomLoadError: RoomViewStore.getRoomLoadError(),
             joining: RoomViewStore.isJoining(),
-        }, () => {
+            eventId: RoomViewStore.getEventId(),
+            eventPixelOffset: RoomViewStore.getEventPixelOffset(),
+            isEventHighlighted: RoomViewStore.isEventHighlighted(),
+        };
+
+        if (this.state.eventId !== newState.eventId) {
+            newState.searchResults = null;
+        }
+
+        // Store the scroll state for the previous room so that we can return to this
+        // position when viewing this room in future.
+        if (this.state.roomId !== newState.roomId) {
+            this._updateScrollMap(this.state.roomId);
+        }
+
+        this.setState(newState, () => {
             this._onHaveRoom();
             this.onRoom(MatrixClientPeg.get().getRoom(this.state.roomId));
         });
@@ -287,13 +274,6 @@ module.exports = React.createClass({
         }
     },
 
-    componentWillReceiveProps: function(newProps) {
-        if (newProps.eventId != this.props.eventId) {
-            // when we change focussed event id, hide the search results.
-            this.setState({searchResults: null});
-        }
-    },
-
     shouldComponentUpdate: function(nextProps, nextState) {
         return (!ObjectUtils.shallowEqual(this.props, nextProps) ||
                 !ObjectUtils.shallowEqual(this.state, nextState));
@@ -319,7 +299,7 @@ module.exports = React.createClass({
         this.unmounted = true;
 
         // update the scroll map before we get unmounted
-        this._updateScrollMap();
+        this._updateScrollMap(this.state.roomId);
 
         if (this.refs.roomView) {
             // disconnect the D&D event listeners from the room view. This
@@ -595,6 +575,14 @@ module.exports = React.createClass({
         // otherwise, we assume they're on.
         this.setState({
             showUrlPreview: true
+        });
+    },
+
+    _updateScrollMap(roomId) {
+        dis.dispatch({
+            action: 'update_scroll_state',
+            room_id: roomId,
+            scroll_state: this._getScrollState(),
         });
     },
 
@@ -1240,21 +1228,6 @@ module.exports = React.createClass({
         }
     },
 
-    // update scrollStateMap on unmount
-    _updateScrollMap: function() {
-        if (!this.state.room) {
-            // we were instantiated on a room alias and haven't yet joined the room.
-            return;
-        }
-        if (!this.props.scrollStateMap) return;
-
-        var roomId = this.state.room.roomId;
-
-        var state = this._getScrollState();
-        this.props.scrollStateMap[roomId] = state;
-    },
-
-
     // get the current scroll position of the room, so that it can be
     // restored when we switch back to it.
     //
@@ -1677,6 +1650,14 @@ module.exports = React.createClass({
             hideMessagePanel = true;
         }
 
+        const shouldHighlight = this.state.isEventHighlighted;
+        let highlightedEventId = null;
+        if (this.state.forwardingEvent) {
+            highlightedEventId = this.state.forwardingEvent.getId();
+        } else if (shouldHighlight) {
+            highlightedEventId = this.state.eventId;
+        }
+
         // console.log("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
         var messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
@@ -1684,9 +1665,9 @@ module.exports = React.createClass({
                 manageReadReceipts={!UserSettingsStore.getSyncedSetting('hideReadReceipts', false)}
                 manageReadMarkers={true}
                 hidden={hideMessagePanel}
-                highlightedEventId={this.state.forwardingEvent ? this.state.forwardingEvent.getId() : this.props.highlightedEventId}
-                eventId={this.props.eventId}
-                eventPixelOffset={this.props.eventPixelOffset}
+                highlightedEventId={highlightedEventId}
+                eventId={this.state.eventId}
+                eventPixelOffset={this.state.eventPixelOffset}
                 onScroll={ this.onMessageListScroll }
                 onReadMarkerUpdated={ this._updateTopUnreadMessagesBar }
                 showUrlPreview = { this.state.showUrlPreview }
