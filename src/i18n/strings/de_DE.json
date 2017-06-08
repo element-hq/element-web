@@ -912,5 +912,6 @@
     "If you already have a Matrix account you can <a>log in</a> instead.": "Wenn du bereits ein Matrix-Benutzerkonto hast, kannst du dich stattdessen auch direkt <a>anmelden</a>.",
     "Home": "Start",
     "Username invalid: %(errMessage)s": "Ungültiger Benutzername: %(errMessage)s",
-    "a room": "einen Raum"
+    "a room": "einen Raum",
+    "Accept": "Akzeptieren"
 }
