@@ -213,7 +213,7 @@ module.exports = React.createClass({
             // don't display the search count until the search completes and
             // gives us a valid (possibly zero) searchCount.
             if (this.props.searchInfo && this.props.searchInfo.searchCount !== undefined && this.props.searchInfo.searchCount !== null) {
-                searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;{ _t("(~%(searchCount)s results)", { searchCount: this.props.searchInfo.searchCount }) }</div>;
+                searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;{ _t("(~%(count)s results)", { count: this.props.searchInfo.searchCount }) }</div>;
             }
 
             // XXX: this is a bit inefficient - we could just compare room.name for 'Empty room'...
@@ -288,7 +288,7 @@ module.exports = React.createClass({
         var settings_button;
         if (this.props.onSettingsClick) {
             settings_button =
-                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSettingsClick} title="Settings">
+                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSettingsClick} title={_t("Settings")}>
                     <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
                 </AccessibleButton>;
         }

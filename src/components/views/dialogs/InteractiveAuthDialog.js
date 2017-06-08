@@ -78,7 +78,7 @@ export default React.createClass({
                     <AccessibleButton onClick={this._onDismissClick}
                         className="mx_UserSettings_button"
                     >
-                        Dismiss
+                        {_t("Dismiss")}
                     </AccessibleButton>
                 </div>
             );

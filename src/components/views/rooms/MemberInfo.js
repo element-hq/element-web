@@ -432,7 +432,7 @@ module.exports = WithMatrixClient(React.createClass({
                     title: _t("Warning!"),
                     description:
                         <div>
-                            { _t("You will not be able to undo this change as you are promoting the user to have the same power level as yourself") }.<br/>
+                            { _t("You will not be able to undo this change as you are promoting the user to have the same power level as yourself.") }<br/>
                             { _t("Are you sure?") }
                         </div>,
                     button: _t("Continue"),
@@ -701,7 +701,7 @@ module.exports = WithMatrixClient(React.createClass({
         if (kickButton || banButton || muteButton || giveModButton) {
             adminTools =
                 <div>
-                    <h3>Admin tools</h3>
+                    <h3>{_t("Admin tools")}</h3>
 
                     <div className="mx_MemberInfo_buttons">
                         {muteButton}
@@ -739,7 +739,7 @@ module.exports = WithMatrixClient(React.createClass({
                         { this.props.member.userId }
                     </div>
                     <div className="mx_MemberInfo_profileField">
-                        { _t("Level") }: <b><PowerSelector controlled={true} value={ parseInt(this.props.member.powerLevel) } disabled={ !this.state.can.modifyLevel } onChange={ this.onPowerChange }/></b>
+                        { _t("Level:") } <b><PowerSelector controlled={true} value={ parseInt(this.props.member.powerLevel) } disabled={ !this.state.can.modifyLevel } onChange={ this.onPowerChange }/></b>
                     </div>
                     <div className="mx_MemberInfo_profileField">
                         <PresenceLabel activeAgo={ presenceLastActiveAgo }

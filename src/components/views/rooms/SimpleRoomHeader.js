@@ -20,6 +20,7 @@ import React from 'react';
 import dis from '../../../dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
 // cancel button which is shared between room header and simple room header
 export function CancelButton(props) {
@@ -28,7 +29,7 @@ export function CancelButton(props) {
     return (
         <AccessibleButton className='mx_RoomHeader_cancelButton' onClick={onClick}>
             <img src="img/cancel.svg" className='mx_filterFlipColor'
-                width="18" height="18" alt="Cancel"/>
+                width="18" height="18" alt={_t("Cancel")}/>
         </AccessibleButton>
     );
 }
