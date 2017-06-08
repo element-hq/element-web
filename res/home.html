@@ -1,5 +1,118 @@
-<link href="home/css/welcome.css" rel="stylesheet">
-<div style="display: none" class="mx_HomePage_container">
+<style type="text/css">
+
+/* we deliberately inline style here to avoid flash-of-CSS problems, and to avoid
+ * voodoo where we have to set display: none by default
+ */
+
+.mx_HomePage_header h1 {
+    margin-left: 0px;
+    margin-bottom: 0px;
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
+.mx_HomePage_header h2 {
+    margin-left: 0px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+.mx_HomePage h3 {
+    margin-top: 30px;
+}
+
+.mx_HomePage_header {
+    border: 1px solid #76CFA6;
+    background-color: #eaf5f0;
+    border-radius: 5px;
+    color: #454545;
+    align-items: center;
+}
+
+.mx_HomePage_col {
+    display: flex;
+    flex-direction: row;
+}
+
+.mx_HomePage_toprow {
+    flex-wrap: wrap;
+}
+
+.mx_HomePage_row {
+    flex: 1 1 0;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.mx_HomePage_logo {
+    margin-top: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-bottom: 20px;
+    display: inline;
+    height: 100px;
+}
+
+.mx_HomePage_room {
+    cursor: pointer;
+    float: left;
+    text-decoration: none;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 120px;
+}
+
+.mx_HomePage_toprow .mx_HomePage_room {
+    width: 64px;
+}
+
+
+.mx_HomePage_room .mx_HomePage_icon {
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+}
+
+.mx_HomePage_room .mx_HomePage_name {
+    display: block;
+}
+
+.mx_HomePage_room .mx_HomePage_desc {
+    display: block;
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+.mx_HomePage_comment {
+    display: flex;
+    align-items: center;
+    margin-left: 100px;
+    min-height: 64px;
+}
+
+.mx_HomePage_container h3::after,
+.mx_HomePage_container h4::after {
+    content: ":";
+}
+
+.mx_HomePage_container {
+    display: block ! important;
+    margin: 20px;
+}
+
+.mx_HomePage_container h1, 
+.mx_HomePage_container h2, 
+.mx_HomePage_container h3, 
+.mx_HomePage_container h4 {
+    font-weight: 600;
+}
+</style>
+
+<div class="mx_HomePage_container">
     <div class="mx_HomePage_col mx_HomePage_header">
         <a href="https://riot.im"><img src="home/images/logo.svg" class="mx_HomePage_logo"></a>
         <div>
