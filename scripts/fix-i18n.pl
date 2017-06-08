@@ -66,6 +66,11 @@ Some of your messages have not been sent.
 This room is private or inaccessible to guests. You may be able to join if you register.
 Tried to load a specific point in this room's timeline, but was unable to find it.
 Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.
+This action cannot be performed by a guest user. Please register to be able to do this.
+Tried to load a specific point in this room's timeline, but was unable to find it.
+Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.
+You are trying to access %(roomName)s.
+You will not be able to undo this change as you are promoting the user to have the same power level as yourself.
 EOT
 )];
 }
@@ -89,7 +94,7 @@ if ($_ =~ m/^(\s+)"(.*?)"(: *)"(.*?)"(,?)$/) {
             $sub = 1;
         }
 
-        if ($src eq $fixup && $dst !~ /\.$/) {
+        if ($ARGV !~ /(zh_Hans|zh_Hant|th)\.json$/ && $src eq $fixup && $dst !~ /\.$/) {
             print STDERR "fixing up dst: $dst\n";
             $dst .= '.';
             $sub = 1;            

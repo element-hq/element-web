@@ -389,7 +389,7 @@
     "Who would you like to add to this room?": "คุณต้องการเพิ่มใครเข้าห้องนี้?",
     "Who would you like to communicate with?": "คุณต้องการสื่อสารกับใคร?",
     "You're not in any rooms yet! Press": "คุณยังไม่ได้อยู่ในห้องใดเลย! กด",
-    "You are trying to access %(roomName)s": "คุณกำลังพยายามเข้าสู่ %(roomName)s",
+    "You are trying to access %(roomName)s.": "คุณกำลังพยายามเข้าสู่ %(roomName)s",
     "You have <a>disabled</a> URL previews by default.": "ค่าเริ่มต้นของคุณ<a>ปิดใช้งาน</a>ตัวอย่าง URL เอาไว้",
     "You have <a>enabled</a> URL previews by default.": "ค่าเริ่มต้นของคุณ<a>เปิดใช้งาน</a>ตัวอย่าง URL เอาไว้",
     "you must be a": "คุณต้องเป็น",
