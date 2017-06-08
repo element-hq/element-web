@@ -124,7 +124,7 @@ class RoomViewStore extends Store {
             const newState = {
                 roomId: payload.room_id,
                 initialEventId: payload.event_id,
-                initialEventPixelOffset: payload.event_offset,
+                initialEventPixelOffset: undefined,
                 isInitialEventHighlighted: payload.highlighted,
                 roomLoading: false,
                 roomLoadError: null,
