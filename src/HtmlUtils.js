@@ -365,6 +365,11 @@ export function bodyToHtml(content, highlights, opts) {
 }
 
 function addCodeCopyButton(safeBody) {
+    // Adds 'copy' buttons to pre blocks
+    // Note that this only manipulates the markup to add the buttons:
+    // we need to add the event handlers once the nodes are in the DOM
+    // since we can't save functions in the markup.
+    // This is done in TextualBody
     const el = document.createElement("div");
     el.innerHTML = safeBody;
     const codeBlocks = Array.from(el.getElementsByTagName("pre"));

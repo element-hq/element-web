@@ -94,14 +94,13 @@ module.exports = React.createClass({
                     }
                 }, 10);
             }
+            // add event handlers to the 'copy code' buttons
             const buttons = ReactDOM.findDOMNode(this).getElementsByClassName("mx_EventTile_copyButton");
-            if (buttons.length > 0) {
-                for (let i = 0; i < buttons.length; i++) {
-                    buttons[i].onclick = (e) => {
-                        const copyCode = buttons[i].parentNode.getElementsByTagName("code")[0];
-                        this.copyToClipboard(copyCode.textContent);
-                    };
-                }
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].onclick = (e) => {
+                    const copyCode = buttons[i].parentNode.getElementsByTagName("code")[0];
+                    this.copyToClipboard(copyCode.textContent);
+                };
             }
         }
     },
