@@ -96,10 +96,10 @@ export default class ChatCreateOrReuseDialog extends React.Component {
                 onFinished={() => {
                     this.props.onFinished(false)
                 }}
-                title='Create a new chat or reuse an existing one'
+                title={_t('Create a new chat or reuse an existing one')}
             >
                 <div className="mx_Dialog_content">
-                    You already have existing direct chats with this user:
+                    {_t("You already have existing direct chats with this user:")}
                     <div className="mx_ChatCreateOrReuseDialog_tiles">
                         {tiles}
                         {startNewChat}
