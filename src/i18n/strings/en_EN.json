@@ -481,7 +481,6 @@
   "%(roomName)s is not accessible at this time.": "%(roomName)s is not accessible at this time.",
   "Rooms": "Rooms",
   "Save": "Save",
-  "Saving room color settings is only available to registered users": "Saving room color settings is only available to registered users",
   "Scroll to bottom of page": "Scroll to bottom of page",
   "Scroll to unread messages": "Scroll to unread messages",
   "Search": "Search",
@@ -648,7 +647,7 @@
   "Who would you like to communicate with?": "Who would you like to communicate with?",
   "Searching known users": "Searching known users",
   "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s withdrew %(targetName)s's invitation.",
-  "Would you like to <a>accept</a> or <a>decline</a> this invitation?": "Would you like to <a>accept</a> or <a>decline</a> this invitation?".
+  "Would you like to <a>accept</a> or <a>decline</a> this invitation?": "Would you like to <a>accept</a> or <a>decline</a> this invitation?",
   "You already have existing direct chats with this user:": "You already have existing direct chats with this user:",
   "You are already in a call.": "You are already in a call.",
   "You're not in any rooms yet! Press": "You're not in any rooms yet! Press",

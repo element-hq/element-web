@@ -20,7 +20,6 @@ var sdk = require('../../../index');
 var Tinter = require('../../../Tinter');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
-import { _t } from '../../../languageHandler';
 
 import dis from '../../../dispatcher';
 
