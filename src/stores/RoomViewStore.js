@@ -121,24 +121,26 @@ class RoomViewStore extends Store {
 
     _viewRoom(payload) {
         if (payload.room_id) {
-            // If an event ID wasn't specified, default to the one saved for this room
-            // via update_scroll_state. Also assume event_offset should be set.
-            if (!payload.event_id) {
-                const roomScrollState = this._state.scrollStateMap[payload.room_id];
-                if (roomScrollState) {
-                    payload.event_id = roomScrollState.focussedEvent;
-                    payload.event_offset = roomScrollState.pixelOffset;
-                }
-            }
-
-            this._setState({
+            const newState = {
                 roomId: payload.room_id,
                 initialEventId: payload.event_id,
                 initialEventPixelOffset: payload.event_offset,
                 isInitialEventHighlighted: payload.highlighted,
                 roomLoading: false,
                 roomLoadError: null,
-            });
+            };
+
+            // If an event ID wasn't specified, default to the one saved for this room
+            // via update_scroll_state. Assume initialEventPixelOffset should be set.
+            if (!newState.initialEventId) {
+                const roomScrollState = this._state.scrollStateMap[payload.room_id];
+                if (roomScrollState) {
+                    newState.initialEventId = roomScrollState.focussedEvent;
+                    newState.initialEventPixelOffset = roomScrollState.pixelOffset;
+                }
+            }
+
+            this._setState(newState);
         } else if (payload.room_alias) {
             // Resolve the alias and then do a second dispatch with the room ID acquired
             this._setState({
