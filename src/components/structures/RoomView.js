@@ -94,6 +94,13 @@ module.exports = React.createClass({
             roomLoading: true,
             peekLoading: false,
 
+            // The event to be scrolled to initially
+            eventId: null,
+            // The offset in pixels from the event with which to scroll vertically
+            eventPixelOffset: null,
+            // Whether to highlight the event scrolled to
+            isEventHighlighted: null,
+
             forwardingEvent: null,
             editingRoomSettings: false,
             uploadingRoomSettings: false,
