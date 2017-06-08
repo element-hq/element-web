@@ -84,14 +84,6 @@ function _CutCopyPasteSelectContextMenus(params) {
     }];
 }
 
-function onSelectedContextMenu(ev, params) {
-    const items = _CutCopyPasteSelectContextMenus(params);
-    const popupMenu = Menu.buildFromTemplate(items);
-
-    popupMenu.popup();
-    ev.preventDefault();
-}
-
 function onEditableContextMenu(ev, params) {
     const items = [
         { role: 'undo' },
@@ -114,7 +106,7 @@ module.exports = (webContents) => {
         if (params.linkURL || params.srcURL) {
             onLinkContextMenu(ev, params);
         } else if (params.selectionText) {
-            onSelectedContextMenu(ev, params);
+            // ContextMenu handled by electron-spellchecker in ElectronPlatform and electron-main.js because of electrons splitting of Main and renderer
         } else if (params.isEditable) {
             onEditableContextMenu(ev, params);
         }

@@ -22,8 +22,11 @@ limitations under the License.
 const checkSquirrelHooks = require('./squirrelhooks');
 if (checkSquirrelHooks()) return;
 
+process.setMaxListeners(0);
+
 const argv = require('minimist')(process.argv);
 const electron = require('electron');
+const Menu = electron.Menu;
 const AutoLaunch = require('auto-launch');
 
 const tray = require('./tray');
@@ -140,6 +143,27 @@ electron.ipcMain.on('loudNotification', function() {
         focusHandlerAttached = true;
     }
 });
+
+electron.ipcMain.on('SelectedContextMenu', function(event, params) {
+    const CutCopyPasteSelectContextMenus = [{
+        role: 'cut',
+        enabled: params.editFlags.canCut,
+    }, {
+        role: 'copy',
+        enabled: params.editFlags.canCopy,
+    }, {
+        role: 'paste',
+        enabled: params.editFlags.canPaste,
+    }, {
+        role: 'pasteandmatchstyle',
+        enabled: params.editFlags.canPaste,
+    }, {
+        role: 'selectall',
+        enabled: params.editFlags.canSelectAll,
+    }];
+    const popupMenu = Menu.buildFromTemplate(CutCopyPasteSelectContextMenus);
+    event.sender.send('SelectedContextMenu-reply', popupMenu);
+})
 
 let powerSaveBlockerId;
 electron.ipcMain.on('app_onAction', function(ev, payload) {
