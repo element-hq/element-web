@@ -185,7 +185,9 @@ class RoomViewStore extends Store {
         this._setState({
             joining: true,
         });
-        MatrixClientPeg.get().joinRoom(this._state.roomId, payload.opts).done(() => {
+        MatrixClientPeg.get().joinRoom(
+            this._state.roomAlias || this._state.roomId, payload.opts,
+        ).done(() => {
             dis.dispatch({
                 action: 'joined_room',
             });
