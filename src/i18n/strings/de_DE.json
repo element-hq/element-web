@@ -914,5 +914,6 @@
     "Username invalid: %(errMessage)s": "Ungültiger Benutzername: %(errMessage)s",
     "a room": "einen Raum",
     "Accept": "Akzeptieren",
-    "Active call (%(roomName)s)": "Aktiver Anruf (%(roomName)s)"
+    "Active call (%(roomName)s)": "Aktiver Anruf (%(roomName)s)",
+    "Admin tools": "Admin-Werkzeuge"
 }
