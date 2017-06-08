@@ -608,6 +608,7 @@ module.exports = React.createClass({
     // @param {string=} roomInfo.event_id ID of the event in this room to show: this will cause a switch to the
     //                                    context of that particular event.
     // @param {boolean=} roomInfo.highlighted If true, add event_id to the hash of the URL
+    //                                        and alter the EventTile to appear highlighted.
     // @param {Object=} roomInfo.third_party_invite Object containing data about the third party
     //                                    we received to join the room, if any.
     // @param {string=} roomInfo.third_party_invite.inviteSignUrl 3pid invite sign URL
