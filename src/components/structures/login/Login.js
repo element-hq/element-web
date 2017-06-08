@@ -219,8 +219,8 @@ module.exports = React.createClass({
         if (err.cors === 'rejected') {
             if (window.location.protocol === 'https:' &&
                 (this.state.enteredHomeserverUrl.startsWith("http:") ||
-                 !this.state.enteredHomeserverUrl.startsWith("http")))
-            {
+                 !this.state.enteredHomeserverUrl.startsWith("http"))
+            ) {
                 errorText = <span>
                     { _tJsx("Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. " +
                             "Either use HTTPS or <a>enable unsafe scripts</a>.",
@@ -228,8 +228,7 @@ module.exports = React.createClass({
                       (sub) => { return <a href="https://www.google.com/search?&q=enable%20unsafe%20scripts">{ sub }</a>; }
                     )}
                 </span>;
-            }
-            else {
+            } else {
                 errorText = <span>
                     { _tJsx("Can't connect to homeserver - please check your connectivity and ensure your <a>homeserver's SSL certificate</a> is trusted.",
                       /<a>(.*?)<\/a>/,
