@@ -87,7 +87,27 @@ module.exports = React.createClass({
         ).then((data) => {
             this.props.onLoggedIn(data);
         }, (error) => {
-            this._setStateFromError(error, true);
+            let errorText;
+
+            // Some error strings only apply for logging in
+            const usingEmail = username.indexOf("@") > 0;
+            if (error.httpStatus == 400 && usingEmail) {
+                errorText = _t('This Home Server does not support login using email address.');
+            } else if (error.httpStatus === 401 || error.httpStatus === 403) {
+                errorText = _t('Incorrect username and/or password.');
+            } else {
+                // other errors, not specific to doing a password login
+                errorText = this._errorTextFromError(error);
+            }
+
+            this.setState({
+                errorText: errorText,
+                // 401 would be the sensible status code for 'incorrect password'
+                // but the login API gives a 403 https://matrix.org/jira/browse/SYN-744
+                // mentions this (although the bug is for UI auth which is not this)
+                // We treat both as an incorrect password
+                loginIncorrect: error.httpStatus === 401 || error.httpStatus == 403,
+            });
         }).finally(() => {
             this.setState({
                 busy: false
@@ -110,7 +130,16 @@ module.exports = React.createClass({
         this._loginLogic.loginAsGuest().then(function(data) {
             self.props.onLoggedIn(data);
         }, function(error) {
-            self._setStateFromError(error, true);
+            let errorText;
+            if (error.httpStatus === 403) {
+                errorText = _t("Guest access is disabled on this Home Server.");
+            } else {
+                errorText = self._errorTextFromError(error);
+            }
+            self.setState({
+                errorText: errorText,
+                loginIncorrect: false,
+            });
         }).finally(function() {
             self.setState({
                 busy: false
@@ -183,31 +212,22 @@ module.exports = React.createClass({
                 currentFlow: self._getCurrentFlowStep(),
             });
         }, function(err) {
-            self._setStateFromError(err, false);
+            self.setState({
+                errorText: self._errorTextFromError(err),
+                loginIncorrect: false,
+            });
         }).finally(function() {
             self.setState({
                 busy: false,
             });
-        });
+        }).done();
     },
 
     _getCurrentFlowStep: function() {
         return this._loginLogic ? this._loginLogic.getCurrentFlowStep() : null;
     },
 
-    _setStateFromError: function(err, isLoginAttempt) {
-        this.setState({
-            errorText: this._errorTextFromError(err),
-            // https://matrix.org/jira/browse/SYN-744
-            loginIncorrect: isLoginAttempt && (err.httpStatus == 401 || err.httpStatus == 403)
-        });
-    },
-
     _errorTextFromError(err) {
-        if (err.friendlyText) {
-            return err.friendlyText;
-        }
-
         let errCode = err.errcode;
         if (!errCode && err.httpStatus) {
             errCode = "HTTP " + err.httpStatus;
@@ -219,8 +239,8 @@ module.exports = React.createClass({
         if (err.cors === 'rejected') {
             if (window.location.protocol === 'https:' &&
                 (this.state.enteredHomeserverUrl.startsWith("http:") ||
-                 !this.state.enteredHomeserverUrl.startsWith("http")))
-            {
+                 !this.state.enteredHomeserverUrl.startsWith("http"))
+            ) {
                 errorText = <span>
                     { _tJsx("Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. " +
                             "Either use HTTPS or <a>enable unsafe scripts</a>.",
@@ -228,10 +248,9 @@ module.exports = React.createClass({
                       (sub) => { return <a href="https://www.google.com/search?&q=enable%20unsafe%20scripts">{ sub }</a>; }
                     )}
                 </span>;
-            }
-            else {
+            } else {
                 errorText = <span>
-                    { _tJsx("Can't connect to homeserver - please check your connectivity and ensure your <a>homeserver's SSL certificate</a> is trusted.",
+                    { _tJsx("Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
                       /<a>(.*?)<\/a>/,
                       (sub) => { return <a href={this.state.enteredHomeserverUrl}>{ sub }</a>; }
                     )}

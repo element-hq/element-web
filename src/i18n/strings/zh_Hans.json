@@ -147,7 +147,7 @@
     "Success": "成功",
     "The default role for new room members is": "此聊天室新成员的默认角色是",
     "The main address for this room is": "此聊天室的主要地址是",
-    "This action cannot be performed by a guest user. Please register to be able to do this": "游客不能进行此操作。请注册",
+    "This action cannot be performed by a guest user. Please register to be able to do this.": "游客不能进行此操作。请注册",
     "This email address is already in use": "此邮箱地址已经被使用",
     "This email address was not found": "未找到此邮箱地址",
     "%(actionVerb)s this person?": "%(actionVerb)s 这个用户？",

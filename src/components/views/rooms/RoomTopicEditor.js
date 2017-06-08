@@ -46,7 +46,8 @@ module.exports = React.createClass({
                      placeholderClassName="mx_RoomHeader_placeholder"
                      placeholder={_t("Add a topic")}
                      blurToCancel={ false }
-                     initialValue={ this._initialTopic }/>
+                     initialValue={ this._initialTopic }
+                     dir="auto" />
         );
     },
 });

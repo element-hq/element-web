@@ -213,7 +213,7 @@ module.exports = React.createClass({
             // don't display the search count until the search completes and
             // gives us a valid (possibly zero) searchCount.
             if (this.props.searchInfo && this.props.searchInfo.searchCount !== undefined && this.props.searchInfo.searchCount !== null) {
-                searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;{ _t("(~%(searchCount)s results)", { searchCount: this.props.searchInfo.searchCount }) }</div>;
+                searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;{ _t("(~%(count)s results)", { count: this.props.searchInfo.searchCount }) }</div>;
             }
 
             // XXX: this is a bit inefficient - we could just compare room.name for 'Empty room'...
@@ -238,7 +238,7 @@ module.exports = React.createClass({
             const emojiTextClasses = classNames('mx_RoomHeader_nametext', { mx_RoomHeader_settingsHint: settingsHint });
             name =
                 <div className="mx_RoomHeader_name" onClick={this.props.onSettingsClick}>
-                    <EmojiText element="div" className={emojiTextClasses} title={roomName}>{ roomName }</EmojiText>
+                    <EmojiText dir="auto" element="div" className={emojiTextClasses} title={roomName}>{ roomName }</EmojiText>
                     { searchStatus }
                 </div>;
         }
@@ -255,7 +255,7 @@ module.exports = React.createClass({
                 }
             }
             if (topic) {
-                topic_el = <div className="mx_RoomHeader_topic" ref="topic" title={ topic }>{ topic }</div>;
+                topic_el = <div className="mx_RoomHeader_topic" ref="topic" title={ topic } dir="auto">{ topic }</div>;
             }
         }
 
@@ -288,7 +288,7 @@ module.exports = React.createClass({
         var settings_button;
         if (this.props.onSettingsClick) {
             settings_button =
-                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSettingsClick} title="Settings">
+                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSettingsClick} title={_t("Settings")}>
                     <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
                 </AccessibleButton>;
         }

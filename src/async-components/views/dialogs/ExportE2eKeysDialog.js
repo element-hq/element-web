@@ -120,7 +120,7 @@ export default React.createClass({
                                 'you have received in encrypted rooms to a local file. You ' +
                                 'will then be able to import the file into another Matrix ' +
                                 'client in the future, so that client will also be able to ' +
-                                'decrypt these messages.'
+                                'decrypt these messages.',
                             ) }
                         </p>
                         <p>
@@ -130,7 +130,7 @@ export default React.createClass({
                                 'careful to keep it secure. To help with this, you should enter ' +
                                 'a passphrase below, which will be used to encrypt the exported ' +
                                 'data. It will only be possible to import the data by using the ' +
-                                'same passphrase.'
+                                'same passphrase.',
                             ) }
                         </p>
                         <div className='error'>

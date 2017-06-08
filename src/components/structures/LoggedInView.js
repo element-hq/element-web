@@ -223,10 +223,8 @@ export default React.createClass({
                         ref='roomView'
                         autoJoin={this.props.autoJoin}
                         onRegistered={this.props.onRegistered}
-                        eventId={this.props.initialEventId}
                         thirdPartyInvite={this.props.thirdPartyInvite}
                         oobData={this.props.roomOobData}
-                        highlightedEventId={this.props.highlightedEventId}
                         eventPixelOffset={this.props.initialEventPixelOffset}
                         key={this.props.currentRoomId || 'roomview'}
                         opacity={this.props.middleOpacity}

@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import sdk from '../../../index';
 const MemberAvatar = require('../avatars/MemberAvatar.js');
 import { _t } from '../../../languageHandler';
 
@@ -111,9 +112,13 @@ module.exports = React.createClass({
             return null;
         }
 
+        const EmojiText = sdk.getComponent('elements.EmojiText');
+
         return (
             <span className="mx_TextualEvent mx_MemberEventListSummary_summary">
-                {summaries.join(", ")}
+                <EmojiText>
+                    {summaries.join(", ")}
+                </EmojiText>
             </span>
         );
     },
