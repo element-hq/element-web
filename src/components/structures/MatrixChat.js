@@ -644,6 +644,17 @@ module.exports = React.createClass({
             }
         }
 
+        if (roomInfo.room_alias) {
+            console.log(
+                `Switching to room alias ${roomInfo.room_alias} at event ` +
+                newState.initialEventId,
+            );
+        } else {
+            console.log(`Switching to room id ${roomInfo.room_id} at event ` +
+                newState.initialEventId,
+            );
+        }
+
         // Wait for the first sync to complete so that if a room does have an alias,
         // it would have been retrieved.
         let waitFor = q(null);
