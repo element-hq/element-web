@@ -2,8 +2,6 @@
 
 src/AddThreepid.js
 src/async-components/views/dialogs/EncryptedEventDialog.js
-src/async-components/views/dialogs/ExportE2eKeysDialog.js
-src/async-components/views/dialogs/ImportE2eKeysDialog.js
 src/autocomplete/AutocompleteProvider.js
 src/autocomplete/Autocompleter.js
 src/autocomplete/Components.js
@@ -167,7 +165,6 @@ src/UserActivity.js
 src/utils/DecryptFile.js
 src/utils/DMRoomMap.js
 src/utils/FormattingUtils.js
-src/utils/MegolmExportEncryption.js
 src/utils/MultiInviter.js
 src/utils/Receipt.js
 src/Velociraptor.js
@@ -188,4 +185,3 @@ test/mock-clock.js
 test/skinned-sdk.js
 test/stores/RoomViewStore-test.js
 test/test-utils.js
-test/utils/MegolmExportEncryption-test.js
