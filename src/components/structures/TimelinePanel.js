@@ -902,6 +902,9 @@ var TimelinePanel = React.createClass({
 
         var onError = (error) => {
             this.setState({timelineLoading: false});
+            console.error(
+                `Error loading timeline panel at ${eventId}: ${error}`,
+            );
             var msg = error.message ? error.message : JSON.stringify(error);
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 

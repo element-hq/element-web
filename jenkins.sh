@@ -21,6 +21,11 @@ npm run test
 # run eslint
 npm run lintall -- -f checkstyle -o eslint.xml || true
 
+# re-run the linter, excluding any files known to have errors or warnings.
+./node_modules/.bin/eslint --max-warnings 0 \
+    --ignore-path .eslintignore.errorfiles \
+    src test
+
 # delete the old tarball, if it exists
 rm -f matrix-react-sdk-*.tgz
 

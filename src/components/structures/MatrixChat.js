@@ -625,8 +625,15 @@ module.exports = React.createClass({
             autoJoin: roomInfo.auto_join,
         };
 
-        if (!roomInfo.room_alias) {
-            newState.currentRoomId = roomInfo.room_id;
+        if (roomInfo.room_alias) {
+            console.log(
+                `Switching to room alias ${roomInfo.room_alias} at event ` +
+                roomInfo.event_id,
+            );
+        } else {
+            console.log(`Switching to room id ${roomInfo.room_id} at event ` +
+                roomInfo.event_id,
+            );
         }
 
         // Wait for the first sync to complete so that if a room does have an alias,
