@@ -21,6 +21,7 @@ var React = require('react');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
 import AccessibleButton from '../elements/AccessibleButton';
+import { _t } from '../../../languageHandler';
 
 
 var PRESENCE_CLASS = {
@@ -140,10 +141,10 @@ module.exports = React.createClass({
         var power;
         var powerLevel = this.props.powerLevel;
         if (powerLevel >= 50 && powerLevel < 99) {
-            power = <img src="img/mod.svg" className="mx_EntityTile_power" width="16" height="17" alt="Mod"/>;
+            power = <img src="img/mod.svg" className="mx_EntityTile_power" width="16" height="17" alt={_t("Moderator")}/>;
         }
         if (powerLevel >= 99) {
-            power = <img src="img/admin.svg" className="mx_EntityTile_power" width="16" height="17" alt="Admin"/>;
+            power = <img src="img/admin.svg" className="mx_EntityTile_power" width="16" height="17" alt={_t("Admin")}/>;
         }
 
 

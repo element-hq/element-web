@@ -17,7 +17,7 @@ limitations under the License.
 
 import q from 'q';
 import React from 'react';
-import { _t } from '../../../languageHandler';
+import { _t, _tJsx } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import SdkConfig from '../../../SdkConfig';
 import sdk from '../../../index';
@@ -46,7 +46,7 @@ const BannedUser = React.createClass({
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
             member: this.props.member,
-            action: 'Unban',
+            action: _t('Unban'),
             danger: false,
             onFinished: (proceed) => {
                 if (!proceed) return;
@@ -597,7 +597,7 @@ module.exports = React.createClass({
                       ? <img className="mx_RoomSettings_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" />
                       : <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
                     }
-                    { isEncrypted ? "Encryption is enabled in this room" : "Encryption is not enabled in this room" }.
+                    { isEncrypted ? _t("Encryption is enabled in this room") : _t("Encryption is not enabled in this room") }.
                     </label>
                     { settings }
                 </div>
@@ -653,7 +653,7 @@ module.exports = React.createClass({
                         {Object.keys(user_levels).map(function(user, i) {
                             return (
                                 <li className="mx_RoomSettings_userLevel" key={user}>
-                                    { user } { _t('is a') } <PowerSelector value={ user_levels[user] } disabled={true}/>
+                                    { _t("%(user)s is a", {user: user}) } <PowerSelector value={ user_levels[user] } disabled={true}/>
                                 </li>
                             );
                         })}
@@ -754,7 +754,11 @@ module.exports = React.createClass({
         if (this.state.join_rule === "public" && aliasCount == 0) {
             addressWarning =
                 <div className="mx_RoomSettings_warning">
-                		{ _t('To link to a room it must have') } <a href="#addresses"> { _t('an address') }</a>.
+                		{ _tJsx(
+                            'To link to a room it must have <a>an address</a>.',
+                            /<a>(.*?)<\/a>/,
+                            (sub) => <a href="#addresses">{sub}</a>
+                        )}
                 </div>;
         }
 
