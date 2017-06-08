@@ -461,7 +461,7 @@ export default React.createClass({
     render: function() {
         return (
             <div className="mx_MessageComposer_input" onClick={ this.onInputClick }>
-                <textarea autoFocus ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder={this.props.placeholder}
+                <textarea dir="auto" autoFocus ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder={this.props.placeholder}
                     onPaste={this._onPaste}
                 />
             </div>
