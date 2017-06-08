@@ -45,6 +45,14 @@ module.exports = React.createClass({
         };
     },
 
+    translate: function(s) {
+        s = sanitizeHtml(_t(s));
+        // ugly fix for https://github.com/vector-im/riot-web/issues/4243
+        s = s.replace(/Riot\.im/, '<a href="https://riot.im target="_blank">Riot.im</a>');
+        s = s.replace(/\[matrix\]/, '<a href="https://matrix.org" target="_blank"><img width="79" height="34" alt="[matrix]" style="padding-left: 1px;vertical-align: middle" src="home/images/matrix.svg"/></a>');
+        return s;
+    },
+
     componentWillMount: function() {
         if (this.props.teamToken && this.props.teamServerUrl) {
             this.setState({
@@ -66,7 +74,7 @@ module.exports = React.createClass({
                         this.setState({ page: "Couldn't load home page" });
                     }
 
-                    body = body.replace(/_t\(['"]([\s\S]*?)['"]\)/mg, (match, g1)=>{ return sanitizeHtml(_t(g1)) });
+                    body = body.replace(/_t\(['"]([\s\S]*?)['"]\)/mg, (match, g1)=>this.translate(g1));
                     this.setState({ page: body });
                 }
             );
