@@ -170,6 +170,8 @@ module.exports = React.createClass({
             isEventHighlighted: RoomViewStore.isEventHighlighted(),
         };
 
+        // Clear the search results when clicking a search result (which changes the
+        // currently scrolled to event, this.state.eventId).
         if (this.state.eventId !== newState.eventId) {
             newState.searchResults = null;
         }
