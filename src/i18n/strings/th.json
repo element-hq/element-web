@@ -140,7 +140,7 @@
     "Couldn't find a matching Matrix room": "ไม่พบห้อง Matrix ที่ตรงกับคำค้นหา",
     "customServer_text": "คุณสามารถกำหนดเซิร์ฟเวอร์บ้านเองได้โดยใส่ URL ของเซิร์ฟเวอร์นั้น เพื่อเข้าสู่ระบบของเซิร์ฟเวอร์ Matrix อื่น<br/>ทั้งนี่เพื่อให้คุณสามารถใช้ Riot กับบัญชี Matrix ที่มีอยู่แล้วบนเซิร์ฟเวอร์บ้านอื่น ๆ ได้<br/><br/>คุณอาจเลือกเซิร์ฟเวอร์ระบุตัวตนเองด้วยก็ได้ แต่คุณจะไม่สามารถเชิญผู้ใช้อื่นด้วยที่อยู่อีเมล หรือรับคำเชิญจากผู้ใช้อื่นทางที่อยู่อีเมลได้",
     "delete the alias.": "ลบนามแฝง",
-    "Drop here %(toAction)s": "ปล่อยที่นี่ %(toAction)s",
+    "Drop here %(toAction)s": "ปล่อยที่นี่%(toAction)s",
     "Error saving email notification preferences": "การบันทึกการตั้งค่าการแจ้งเตือนทางอีเมลผิดพลาด",
     "Failed to add tag %(tagName)s to room": "การเพิ่มแท็ก %(tagName)s ของห้องนี้ล้มเหลว",
     "Failed to change settings": "การแก้ไขการตั้งค่าล้มเหลว",

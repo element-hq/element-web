@@ -6,9 +6,9 @@
     "Notifications": "Benachrichtigungen",
     "Invite to this room": "In diesen Raum einladen",
     "Filter room names": "Raum-Namen filtern",
-    "Start chat": "Starte Chat",
+    "Start chat": "Chat starten",
     "Room directory": "Raum-Verzeichnis",
-    "Create new room": "Erstelle neuen Raum",
+    "Create new room": "Neuen Raum erstellen",
     "Settings": "Einstellungen",
     "powered by Matrix": "betrieben mit Matrix",
     "Custom Server Options": "Erweiterte Server-Optionen",
@@ -172,7 +172,7 @@
     "Login": "Anmeldung",
     "Welcome to Riot.im": "Willkommen bei Riot.im",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Dezentralisierter, verschlüsselter Chat &amp; Zusammenarbeit unterstützt von [matrix]",
-    "Search the room directory": "Durchsuche Raum-Verzeichnis",
+    "Search the room directory": "Raum-Verzeichnis durchsuchen",
     "Chat with Riot Bot": "Chatte mit dem Riot-Bot",
     "Get started with some tips from Riot Bot!": "Beginne mit einigen Tipps vom Riot-Bot!",
     "General discussion about Matrix": "Allgemeine Diskussion über Matrix",
@@ -195,7 +195,7 @@
     "Support for those using, running and writing other bridges": "Unterstützung für die, die andere Brücken nutzen, betreiben oder schreiben",
     "Contributing code to Matrix and Riot": "Code zu Matrix und Riot beitragen",
     "Dev chat for the Riot/Web dev team": "Entwickler-Chat für das Riot-Web-Entwickler-Team",
-    "Co-ordination for Riot/Web translators": "Koordination für Riot-Web-Übersetzer",
+    "Co-ordination for Riot/Web translators": "Koordination für Riot/Web-Übersetzer",
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Im Matrix-Netzwerk gibt es bereits jetzt zahlreiche Räume, die entweder mit bekannten Netzwerken wie Slack, IRC, Gitter, usw. verknüpft sind oder auch komplett eigenständig betrieben werden. Einen genauen Überblick erhältst du im Raum-Verzeichnis!",
     "Failed to change password. Is your password correct?": "Passwortänderung fehlgeschlagen. Ist dein Passwort richtig?",
     "You have successfully set a password!": "Du hast erfolgreich ein Passwort gesetzt!",
@@ -203,6 +203,6 @@
     "Continue": "Fortfahren",
     "Please set a password!": "Bitte ein Passwort einrichten!",
     "This will allow you to return to your account after signing out, and sign in on other devices.": "Dies erlaubt dir, dich wieder an deinem Konto anzumelden, nachdem du dich abgemeldet hast.",
-    "Dev chat for the Dendrite dev team": "Entwickler-Chat for das Dendrite-Entwickler-Team",
-    "General discussion about Matrix and Riot": "Generelle Diskussion über Matrix und Riot"
+    "Dev chat for the Dendrite dev team": "Entwickler-Chat für das Dendrite-Entwickler-Team",
+    "General discussion about Matrix and Riot": "Allgemeine Diskussion über Matrix und Riot"
 }
