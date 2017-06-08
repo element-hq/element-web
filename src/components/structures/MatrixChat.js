@@ -1118,6 +1118,7 @@ module.exports = React.createClass({
             const payload = {
                 action: 'view_room',
                 event_id: eventId,
+                // If an event ID is set (truthy), mark it as highlighted
                 highlighted: Boolean(eventId),
                 third_party_invite: thirdPartyInvite,
                 oob_data: oobData,
