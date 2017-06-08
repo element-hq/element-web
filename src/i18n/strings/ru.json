@@ -667,7 +667,7 @@
     "Desktop specific": "Специфический десктоп",
     "Start automatically after system login": "Автостарт после входа в систему",
     "Analytics": "Аналитика",
-    "Riot collects anonymous analytics to allow us to improve the application.": "Riot собирет анонимные данные, чтобы улутшыть эту програму.",
+    "Riot collects anonymous analytics to allow us to improve the application.": "Riot собирает анонимные данные, чтобы улучшить эту программу.",
     "Opt out of analytics": "Подтвердить отказ передачи аналитических данных",
     "Logged in as:": "Зарегестрирован как:",
     "Default Device": "Стандартное устройство",
@@ -894,5 +894,6 @@
     "Username not available": "Имя пользователя недоступно",
     "Something went wrong!": "Что-то пошло не так!",
     "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.": "Это будет ваше имя пользователя на <span></span>, или вы можете выбрать <a>другой сервер</a>.",
-    "If you already have a Matrix account you can <a>log in</a> instead.": "Если вы уже имеете учетную запись Matrix, то вы можете <a>войти</a>."
+    "If you already have a Matrix account you can <a>log in</a> instead.": "Если вы уже имеете учетную запись Matrix, то вы можете <a>войти</a>.",
+    "Home": "Старт"
 }
