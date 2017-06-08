@@ -607,6 +607,7 @@ module.exports = React.createClass({
     // @param {boolean=} roomInfo.show_settings Makes RoomView show the room settings dialog.
     // @param {string=} roomInfo.event_id ID of the event in this room to show: this will cause a switch to the
     //                                    context of that particular event.
+    // @param {boolean=} roomInfo.highlighted If true, add event_id to the hash of the URL
     // @param {Object=} roomInfo.third_party_invite Object containing data about the third party
     //                                    we received to join the room, if any.
     // @param {string=} roomInfo.third_party_invite.inviteSignUrl 3pid invite sign URL
