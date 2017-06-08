@@ -221,7 +221,6 @@
     "decline": "avböj",
     "Decrypt %(text)s": "Dekryptera %(text)s",
     "Decryption error": "Dekrypteringsfel",
-    "(default: %(userName)s)": "(standard: %(userName)s)",
     "Delete": "Radera",
     "demote": "degradera",
     "Deops user with given id": "Degraderar användaren med givet id",

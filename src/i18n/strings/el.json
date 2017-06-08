@@ -212,7 +212,6 @@
     "decline": "απόρριψη",
     "Decrypt %(text)s": "Αποκρυπτογράφησε %(text)s",
     "Decryption error": "Σφάλμα αποκρυπτογράφησης",
-    "(default: %(userName)s)": "(προεπιλογή: %(userName)s)",
     "Delete": "Διαγραφή",
     "Default": "Προεπιλογή",
     "Device already verified!": "Η συσκευή έχει ήδη επαληθευτεί!",
