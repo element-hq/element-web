@@ -590,6 +590,10 @@ module.exports = React.createClass({
     },
 
     _updateScrollMap(roomId) {
+        // No point updating scroll state if the room ID hasn't been resolved yet
+        if (!roomId) {
+            return;
+        }
         dis.dispatch({
             action: 'update_scroll_state',
             room_id: roomId,
