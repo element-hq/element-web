@@ -754,7 +754,7 @@ module.exports = React.createClass({
         if (this.state.join_rule === "public" && aliasCount == 0) {
             addressWarning =
                 <div className="mx_RoomSettings_warning">
-                		{ _tJsx(
+                        { _tJsx(
                             'To link to a room it must have <a>an address</a>.',
                             /<a>(.*?)<\/a>/,
                             (sub) => <a href="#addresses">{sub}</a>

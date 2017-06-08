@@ -96,8 +96,8 @@ module.exports = React.createClass({
             else {
                 joinText = (<span>
                     {_tJsx(
-                        "Join as <a>voice</a> or <a>video</a>.",
-                        [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
+                        "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.",
+                        [/<voiceText>(.*?)<\/voiceText>/, /<videoText>(.*?)<\/videoText>/],
                         [
                             (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}} href="#">{sub}</a>,
                             (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video');}} href="#">{sub}</a>,

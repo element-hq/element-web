@@ -138,8 +138,8 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_RoomPreviewBar_join_text">
                         { _tJsx(
-                            'Would you like to <a>accept</a> or <a>decline</a> this invitation?',
-                            [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
+                            'Would you like to <acceptText>accept</acceptText> or <declineText>decline</declineText> this invitation?',
+                            [/<acceptText>(.*?)<\/acceptText>/, /<declineText>(.*?)<\/declineText>/],
                             [
                                 (sub) => <a onClick={ this.props.onJoinClick }>{sub}</a>,
                                 (sub) => <a onClick={ this.props.onRejectClick }>{sub}</a>
