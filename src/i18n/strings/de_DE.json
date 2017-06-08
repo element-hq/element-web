@@ -913,5 +913,6 @@
     "Home": "Start",
     "Username invalid: %(errMessage)s": "Ungültiger Benutzername: %(errMessage)s",
     "a room": "einen Raum",
-    "Accept": "Akzeptieren"
+    "Accept": "Akzeptieren",
+    "Active call (%(roomName)s)": "Aktiver Anruf (%(roomName)s)"
 }
