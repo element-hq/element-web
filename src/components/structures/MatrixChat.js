@@ -607,6 +607,8 @@ module.exports = React.createClass({
     // @param {boolean=} roomInfo.show_settings Makes RoomView show the room settings dialog.
     // @param {string=} roomInfo.event_id ID of the event in this room to show: this will cause a switch to the
     //                                    context of that particular event.
+    // @param {boolean=} roomInfo.highlighted If true, add event_id to the hash of the URL
+    //                                        and alter the EventTile to appear highlighted.
     // @param {Object=} roomInfo.third_party_invite Object containing data about the third party
     //                                    we received to join the room, if any.
     // @param {string=} roomInfo.third_party_invite.inviteSignUrl 3pid invite sign URL
@@ -618,40 +620,20 @@ module.exports = React.createClass({
         this.focusComposer = true;
 
         const newState = {
-            initialEventId: roomInfo.event_id,
-            highlightedEventId: roomInfo.event_id,
-            initialEventPixelOffset: undefined,
             page_type: PageTypes.RoomView,
             thirdPartyInvite: roomInfo.third_party_invite,
             roomOobData: roomInfo.oob_data,
-            currentRoomAlias: roomInfo.room_alias,
             autoJoin: roomInfo.auto_join,
         };
-
-        if (!roomInfo.room_alias) {
-            newState.currentRoomId = roomInfo.room_id;
-        }
-
-        // if we aren't given an explicit event id, look for one in the
-        // scrollStateMap.
-        //
-        // TODO: do this in RoomView rather than here
-        if (!roomInfo.event_id && this.refs.loggedInView) {
-            const scrollState = this.refs.loggedInView.getScrollStateForRoom(roomInfo.room_id);
-            if (scrollState) {
-                newState.initialEventId = scrollState.focussedEvent;
-                newState.initialEventPixelOffset = scrollState.pixelOffset;
-            }
-        }
 
         if (roomInfo.room_alias) {
             console.log(
                 `Switching to room alias ${roomInfo.room_alias} at event ` +
-                newState.initialEventId,
+                roomInfo.event_id,
             );
         } else {
             console.log(`Switching to room id ${roomInfo.room_id} at event ` +
-                newState.initialEventId,
+                roomInfo.event_id,
             );
         }
 
@@ -680,7 +662,7 @@ module.exports = React.createClass({
                 }
             }
 
-            if (roomInfo.event_id) {
+            if (roomInfo.event_id && roomInfo.highlighted) {
                 presentedId += "/" + roomInfo.event_id;
             }
             this.notifyNewScreen('room/' + presentedId);
@@ -1137,6 +1119,10 @@ module.exports = React.createClass({
             const payload = {
                 action: 'view_room',
                 event_id: eventId,
+                // If an event ID is given in the URL hash, notify RoomViewStore to mark
+                // it as highlighted, which will propagate to RoomView and highlight the
+                // associated EventTile.
+                highlighted: Boolean(eventId),
                 third_party_invite: thirdPartyInvite,
                 oob_data: oobData,
             };
