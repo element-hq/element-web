@@ -1,3 +1,12 @@
+Changes in [0.11.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.11.0-rc.2) (2017-06-09)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.0-rc.1...v0.11.0-rc.2)
+
+ * Update to matrix-react-sdk rc.2 which fixes the flux
+   dependency version and an issue with the conference
+   call bar translation.
+
+
 Changes in [0.11.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.11.0-rc.1) (2017-06-09)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.2...v0.11.0-rc.1)
