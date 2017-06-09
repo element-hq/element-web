@@ -131,7 +131,7 @@
     "You are Rioting as a guest. <a>Register</a> or <a>sign in</a> to access more rooms and features!": "Χρησιμοποιείς το Riot ως επισκέπτης. Κάνε <a>εγγραφή</a> ή <a>συνδέσου</a> για να αποκτήσεις πρόσβαση σε περισσότερα δωμάτια και επιλογές!",
     "Collecting logs": "Συγκέντρωση πληροφοριών",
     "Enable them now": "Ενεργοποίηση",
-    "Failed to forget room %(errCode)s": "Δεν ήταν δυνατή η διαγραφή του δωματίου",
+    "Failed to forget room %(errCode)s": "Δεν ήταν δυνατή η διαγραφή του δωματίου (%(errCode)s)",
     "Failed to update keywords": "Οι λέξεις κλειδιά δεν ενημερώθηκαν",
     "Failed to get protocol list from Home Server": "Δεν ήταν δυνατή η εύρεση των διαθέσιμων πρωτοκόλλων από το διακομιστή",
     "Failed to remove tag %(tagName)s from room": "Δεν ήταν δυνατή η διαγραφή του tag %(tagName)s από το δωμάτιο",
