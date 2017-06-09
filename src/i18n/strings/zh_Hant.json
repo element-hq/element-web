@@ -353,7 +353,7 @@
     "This image cannot be displayed.": "這張圖片無法顯示",
     "Error decrypting video": "解密影片出錯",
     "Add an Integration": "新增整合器",
-    "Ongoing conference call%(supportedText)s. %(joinText)s": "%(supportedText)s. %(joinText)s 正在進行電話會議",
+    "Ongoing conference call%(supportedText)s.": "%(supportedText)s. 正在進行電話會議",
     " (unsupported)": " (不支持)",
     "URL Previews": "網址預覽",
     "Enable URL previews for this room (affects only you)": "啟用此房間的網址預覽（僅影響您）",
