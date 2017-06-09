@@ -580,6 +580,7 @@
   "Turn Markdown on": "Turn Markdown on",
   "%(senderName)s turned on end-to-end encryption (algorithm %(algorithm)s).": "%(senderName)s turned on end-to-end encryption (algorithm %(algorithm)s).",
   "Unable to add email address": "Unable to add email address",
+  "Unable to create widget.": "Unable to create widget.",
   "Unable to remove contact information": "Unable to remove contact information",
   "Unable to restore previous session": "Unable to restore previous session",
   "Unable to verify email address.": "Unable to verify email address.",
