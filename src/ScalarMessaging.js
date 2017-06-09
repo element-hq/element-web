@@ -315,6 +315,18 @@ function setWidget(event, roomId) {
             };
         }
         return client.sendStateEvent(roomId, "im.vector.modular.widgets", widgets);
+    }, (err) => {
+        if (err.errcode === "M_NOT_FOUND") {
+            return client.sendStateEvent(roomId, "im.vector.modular.widgets", {
+                [widgetId]: {
+                    type: widgetType,
+                    url: widgetUrl,
+                    name: widgetName,
+                    data: widgetData,
+                }
+            });
+        }
+        throw err;
     }).done(() => {
         sendResponse(event, {
             success: true,
