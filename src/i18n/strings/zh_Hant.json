@@ -290,7 +290,7 @@
     "Would you like to": "你要",
     "You are already in a call.": "你已在電話通話中",
     "You're not in any rooms yet! Press": "你尚未加入任何聊天室！請按",
-    "You are trying to access %(roomName)s.": "你將進入 %(roomName)聊天室",
+    "You are trying to access %(roomName)s.": "你將進入 %(roomName)s聊天室",
     "You cannot place a call with yourself.": "你不能打電話給自已",
     "You cannot place VoIP calls in this browser.": "在此瀏覽器下無法置入網路電話通話",
     "Sun": "星期日",
