@@ -285,7 +285,7 @@ You'll need to do this in each new terminal you open before building Riot.
 How to add a new translation?
 =============================
 
-[<img src="https://translate.nordgedanken.de/widgets/riot-web/-/multi-auto.svg" alt="translationsstatus" width="340">](https://translate.nordgedanken.de/engage/riot-web/?utm_source=widget)
+[<img src="https://translate.riot.im/widgets/riot-web/-/multi-auto.svg" alt="translationsstatus" width="340">](https://translate.riot.im/engage/riot-web/?utm_source=widget)
 
 
 Head to the [translating doc](docs/translating.md)
