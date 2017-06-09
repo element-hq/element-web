@@ -466,7 +466,7 @@ module.exports = React.createClass({
                 this.notifyNewScreen('home');
                 break;
             case 'view_set_mxid':
-                this._setMxId();
+                this._setMxId(payload);
                 break;
             case 'view_start_chat_or_reuse':
                 this._chatCreateOrReuse(payload.user_id);
@@ -680,7 +680,7 @@ module.exports = React.createClass({
         });
     },
 
-    _setMxId: function() {
+    _setMxId: function(payload) {
         const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
         const close = Modal.createDialog(SetMxIdDialog, {
             homeserverUrl: MatrixClientPeg.get().getHomeserverUrl(),
@@ -689,6 +689,11 @@ module.exports = React.createClass({
                     dis.dispatch({
                         action: 'cancel_after_sync_prepared',
                     });
+                    if (payload.go_home_on_cancel) {
+                        dis.dispatch({
+                            action: 'view_home_page',
+                        });
+                    }
                     return;
                 }
                 this.onRegistered(credentials);
@@ -769,6 +774,11 @@ module.exports = React.createClass({
             }
             dis.dispatch({
                 action: 'view_set_mxid',
+                // If the set_mxid dialog is cancelled, view /home because if the browser
+                // was pointing at /user/@someone:domain?action=chat, the URL needs to be
+                // reset so that they can revisit /user/.. // (and trigger
+                // `_chatCreateOrReuse` again)
+                go_home_on_cancel: true,
             });
             return;
         }
