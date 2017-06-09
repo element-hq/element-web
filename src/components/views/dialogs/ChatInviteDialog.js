@@ -15,25 +15,23 @@ limitations under the License.
 */
 
 import React from 'react';
-import classNames from 'classnames';
+import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import { getAddressType, inviteMultipleToRoom } from '../../../Invite';
 import createRoom from '../../../createRoom';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
-import rate_limited_func from '../../../ratelimitedfunc';
-import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
 import q from 'q';
-import Fuse from 'fuse.js';
 
 const TRUNCATE_QUERY_LIST = 40;
+const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
 
 module.exports = React.createClass({
     displayName: "ChatInviteDialog",
     propTypes: {
-        title: React.PropTypes.string,
+        title: React.PropTypes.string.isRequired,
         description: React.PropTypes.oneOfType([
             React.PropTypes.element,
             React.PropTypes.string,
@@ -43,17 +41,13 @@ module.exports = React.createClass({
         roomId: React.PropTypes.string,
         button: React.PropTypes.string,
         focus: React.PropTypes.bool,
-        onFinished: React.PropTypes.func.isRequired
+        onFinished: React.PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {
         return {
-            title: "Start a chat",
-            description: "Who would you like to communicate with?",
             value: "",
-            placeholder: "Email, name or matrix ID",
-            button: "Start Chat",
-            focus: true
+            focus: true,
         };
     },
 
@@ -61,12 +55,20 @@ module.exports = React.createClass({
         return {
             error: false,
 
-            // List of AddressTile.InviteAddressType objects represeting
+            // List of AddressTile.InviteAddressType objects representing
             // the list of addresses we're going to invite
             inviteList: [],
 
-            // List of AddressTile.InviteAddressType objects represeting
-            // the set of autocompletion results for the current search
+            // Whether a search is ongoing
+            busy: false,
+            // An error message generated during the user directory search
+            searchError: null,
+            // Whether the server supports the user_directory API
+            serverSupportsUserDirectory: true,
+            // The query being searched for
+            query: "",
+            // List of AddressTile.InviteAddressType objects representing
+            // the set of auto-completion results for the current search
             // query.
             queryList: [],
         };
@@ -77,20 +79,6 @@ module.exports = React.createClass({
             // Set the cursor at the end of the text input
             this.refs.textinput.value = this.props.value;
         }
-        // Create a Fuse instance for fuzzy searching this._userList
-        this._fuse = new Fuse(
-            // Use an empty list at first that will later be populated
-            // (see this._updateUserList)
-            [],
-            {
-                shouldSort: true,
-                location: 0, // The index of the query in the test string
-                distance: 5, // The distance away from location the query can be
-                // 0.0 = exact match, 1.0 = match anything
-                threshold: 0.3,
-            }
-        );
-        this._updateUserList();
     },
 
     onButtonClick: function() {
@@ -112,16 +100,25 @@ module.exports = React.createClass({
                     // A Direct Message room already exists for this user, so select a
                     // room from a list that is similar to the one in MemberInfo panel
                     const ChatCreateOrReuseDialog = sdk.getComponent(
-                        "views.dialogs.ChatCreateOrReuseDialog"
+                        "views.dialogs.ChatCreateOrReuseDialog",
                     );
                     Modal.createDialog(ChatCreateOrReuseDialog, {
                         userId: userId,
                         onFinished: (success) => {
-                            if (success) {
-                                this.props.onFinished(true, inviteList[0]);
-                            }
-                            // else show this ChatInviteDialog again
-                        }
+                            this.props.onFinished(success);
+                        },
+                        onNewDMClick: () => {
+                            dis.dispatch({
+                                action: 'start_chat',
+                                user_id: userId,
+                            });
+                        },
+                        onExistingRoomSelected: (roomId) => {
+                            dis.dispatch({
+                                action: 'view_room',
+                                user_id: roomId,
+                            });
+                        },
                     });
                 } else {
                     this._startChat(inviteList);
@@ -148,15 +145,15 @@ module.exports = React.createClass({
         } else if (e.keyCode === 38) { // up arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.moveSelectionUp();
+            if (this.addressSelector) this.addressSelector.moveSelectionUp();
         } else if (e.keyCode === 40) { // down arrow
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.moveSelectionDown();
+            if (this.addressSelector) this.addressSelector.moveSelectionDown();
         } else if (this.state.queryList.length > 0 && (e.keyCode === 188 || e.keyCode === 13 || e.keyCode === 9)) { // comma or enter or tab
             e.stopPropagation();
             e.preventDefault();
-            this.addressSelector.chooseSelection();
+            if (this.addressSelector) this.addressSelector.chooseSelection();
         } else if (this.refs.textinput.value.length === 0 && this.state.inviteList.length && e.keyCode === 8) { // backspace
             e.stopPropagation();
             e.preventDefault();
@@ -178,72 +175,37 @@ module.exports = React.createClass({
     },
 
     onQueryChanged: function(ev) {
-        const query = ev.target.value;
-        let queryList = [];
-
-        if (query.length < 2) {
-            return;
-        }
-
+        const query = ev.target.value.toLowerCase();
         if (this.queryChangedDebouncer) {
             clearTimeout(this.queryChangedDebouncer);
         }
-        this.queryChangedDebouncer = setTimeout(() => {
-            // Only do search if there is something to search
-            if (query.length > 0 && query != '@') {
-                // Weighted keys prefer to match userIds when first char is @
-                this._fuse.options.keys = [{
-                    name: 'displayName',
-                    weight: query[0] === '@' ? 0.1 : 0.9,
-                },{
-                    name: 'userId',
-                    weight: query[0] === '@' ? 0.9 : 0.1,
-                }];
-                queryList = this._fuse.search(query).map((user) => {
-                    // Return objects, structure of which is defined
-                    // by InviteAddressType
-                    return {
-                        addressType: 'mx',
-                        address: user.userId,
-                        displayName: user.displayName,
-                        avatarMxc: user.avatarUrl,
-                        isKnown: true,
-                    }
-                });
-
-                // If the query is a valid address, add an entry for that
-                // This is important, otherwise there's no way to invite
-                // a perfectly valid address if there are close matches.
-                const addrType = getAddressType(query);
-                if (addrType !== null) {
-                    queryList.unshift({
-                        addressType: addrType,
-                        address: query,
-                        isKnown: false,
-                    });
-                    if (this._cancelThreepidLookup) this._cancelThreepidLookup();
-                    if (addrType == 'email') {
-                        this._lookupThreepid(addrType, query).done();
-                    }
+        // Only do search if there is something to search
+        if (query.length > 0 && query != '@' && query.length >= 2) {
+            this.queryChangedDebouncer = setTimeout(() => {
+                if (this.state.serverSupportsUserDirectory) {
+                    this._doUserDirectorySearch(query);
+                } else {
+                    this._doLocalSearch(query);
                 }
-            }
+            }, QUERY_USER_DIRECTORY_DEBOUNCE_MS);
+        } else {
             this.setState({
-                queryList: queryList,
-                error: false,
-            }, () => {
-                this.addressSelector.moveSelectionTop();
+                queryList: [],
+                query: "",
+                searchError: null,
             });
-        }, 200);
+        }
     },
 
     onDismissed: function(index) {
         var self = this;
-        return function() {
+        return () => {
             var inviteList = self.state.inviteList.slice();
             inviteList.splice(index, 1);
             self.setState({
                 inviteList: inviteList,
                 queryList: [],
+                query: "",
             });
             if (this._cancelThreepidLookup) this._cancelThreepidLookup();
         };
@@ -262,8 +224,101 @@ module.exports = React.createClass({
         this.setState({
             inviteList: inviteList,
             queryList: [],
+            query: "",
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+    },
+
+    _doUserDirectorySearch: function(query) {
+        this.setState({
+            busy: true,
+            query,
+            searchError: null,
+        });
+        MatrixClientPeg.get().searchUserDirectory({
+            term: query,
+        }).then((resp) => {
+            this._processResults(resp.results, query);
+        }).catch((err) => {
+            console.error('Error whilst searching user directory: ', err);
+            this.setState({
+                searchError: err.errcode ? err.message : _t('Something went wrong!'),
+            });
+            if (err.errcode === 'M_UNRECOGNIZED') {
+                this.setState({
+                    serverSupportsUserDirectory: false,
+                });
+                // Do a local search immediately
+                this._doLocalSearch(query);
+            }
+        }).done(() => {
+            this.setState({
+                busy: false,
+            });
+        });
+    },
+
+    _doLocalSearch: function(query) {
+        this.setState({
+            query,
+            searchError: null,
+        });
+        const results = [];
+        MatrixClientPeg.get().getUsers().forEach((user) => {
+            if (user.userId.toLowerCase().indexOf(query) === -1 &&
+                user.displayName.toLowerCase().indexOf(query) === -1
+            ) {
+                return;
+            }
+
+            // Put results in the format of the new API
+            results.push({
+                user_id: user.userId,
+                display_name: user.displayName,
+                avatar_url: user.avatarUrl,
+            });
+        });
+        this._processResults(results, query);
+    },
+
+    _processResults: function(results, query) {
+        const queryList = [];
+        results.forEach((user) => {
+            if (user.user_id === MatrixClientPeg.get().credentials.userId) {
+                return;
+            }
+            // Return objects, structure of which is defined
+            // by InviteAddressType
+            queryList.push({
+                addressType: 'mx',
+                address: user.user_id,
+                displayName: user.display_name,
+                avatarMxc: user.avatar_url,
+                isKnown: true,
+            });
+        });
+
+        // If the query is a valid address, add an entry for that
+        // This is important, otherwise there's no way to invite
+        // a perfectly valid address if there are close matches.
+        const addrType = getAddressType(query);
+        if (addrType !== null) {
+            queryList.unshift({
+                addressType: addrType,
+                address: query,
+                isKnown: false,
+            });
+            if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+            if (addrType == 'email') {
+                this._lookupThreepid(addrType, query).done();
+            }
+        }
+        this.setState({
+            queryList,
+            error: false,
+        }, () => {
+            if (this.addressSelector) this.addressSelector.moveSelectionTop();
+        });
     },
 
     _getDirectMessageRooms: function(addr) {
@@ -284,11 +339,7 @@ module.exports = React.createClass({
 
     _startChat: function(addrs) {
         if (MatrixClientPeg.get().isGuest()) {
-            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: "Please Register",
-                description: "Guest users can't invite users. Please register."
-            });
+            dis.dispatch({action: 'view_set_mxid'});
             return;
         }
 
@@ -308,8 +359,8 @@ module.exports = React.createClass({
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Error",
-                    description: "Failed to invite",
+                    title: _t("Failed to invite"),
+                    description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });
                 return null;
             })
@@ -321,8 +372,8 @@ module.exports = React.createClass({
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Error",
-                    description: "Failed to invite user",
+                    title: _t("Failed to invite user"),
+                    description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });
                 return null;
             })
@@ -342,8 +393,8 @@ module.exports = React.createClass({
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Error",
-                    description: "Failed to invite",
+                    title: _t("Failed to invite"),
+                    description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });
                 return null;
             })
@@ -353,18 +404,6 @@ module.exports = React.createClass({
         // Close - this will happen before the above, as that is async
         this.props.onFinished(true, addrTexts);
     },
-
-    _updateUserList: new rate_limited_func(function() {
-        // Get all the users
-        this._userList = MatrixClientPeg.get().getUsers();
-        // Remove current user
-        const meIx = this._userList.findIndex((u) => {
-            return u.userId === MatrixClientPeg.get().credentials.userId;
-        });
-        this._userList.splice(meIx, 1);
-
-        this._fuse.set(this._userList);
-    }, 500),
 
     _isOnInviteList: function(uid) {
         for (let i = 0; i < this.state.inviteList.length; i++) {
@@ -401,7 +440,7 @@ module.exports = React.createClass({
         if (errorList.length > 0) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Failed to invite the following users to the " + room.name + " room:",
+                title: _t("Failed to invite the following users to the %(roomName)s room:", {roomName: room.name}),
                 description: errorList.join(", "),
             });
         }
@@ -433,6 +472,7 @@ module.exports = React.createClass({
         this.setState({
             inviteList: inviteList,
             queryList: [],
+            query: "",
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
         return inviteList;
@@ -468,7 +508,7 @@ module.exports = React.createClass({
                     displayName: res.displayname,
                     avatarMxc: res.avatar_url,
                     isKnown: true,
-                }]
+                }],
             });
         });
     },
@@ -500,23 +540,27 @@ module.exports = React.createClass({
                 placeholder={this.props.placeholder}
                 defaultValue={this.props.value}
                 autoFocus={this.props.focus}>
-            </textarea>
+            </textarea>,
         );
 
-        var error;
-        var addressSelector;
+        let error;
+        let addressSelector;
         if (this.state.error) {
-            error = <div className="mx_ChatInviteDialog_error">You have entered an invalid contact. Try using their Matrix ID or email address.</div>;
+            error = <div className="mx_ChatInviteDialog_error">{_t("You have entered an invalid contact. Try using their Matrix ID or email address.")}</div>;
+        } else if (this.state.searchError) {
+            error = <div className="mx_ChatInviteDialog_error">{this.state.searchError}</div>;
+        } else if (
+            this.state.query.length > 0 &&
+            this.state.queryList.length === 0 &&
+            !this.state.busy
+        ) {
+            error = <div className="mx_ChatInviteDialog_error">{_t("No results")}</div>;
         } else {
-            const addressSelectorHeader = <div className="mx_ChatInviteDialog_addressSelectHeader">
-                Searching known users
-            </div>;
             addressSelector = (
                 <AddressSelector ref={(ref) => {this.addressSelector = ref;}}
                     addressList={ this.state.queryList }
                     onSelected={ this.onSelected }
                     truncateAt={ TRUNCATE_QUERY_LIST }
-                    header={ addressSelectorHeader }
                 />
             );
         }

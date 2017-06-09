@@ -19,6 +19,8 @@ limitations under the License.
 import React from 'react';
 import dis from '../../../dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
+import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
 // cancel button which is shared between room header and simple room header
 export function CancelButton(props) {
@@ -27,7 +29,7 @@ export function CancelButton(props) {
     return (
         <AccessibleButton className='mx_RoomHeader_cancelButton' onClick={onClick}>
             <img src="img/cancel.svg" className='mx_filterFlipColor'
-                width="18" height="18" alt="Cancel"/>
+                width="18" height="18" alt={_t("Cancel")}/>
         </AccessibleButton>
     );
 }
@@ -45,6 +47,9 @@ export default React.createClass({
 
         // is the RightPanel collapsed?
         collapsedRhs: React.PropTypes.bool,
+
+        // `src` to a TintableSvg. Optional.
+        icon: React.PropTypes.string,
     },
 
     onShowRhsClick: function(ev) {
@@ -53,8 +58,16 @@ export default React.createClass({
 
     render: function() {
         let cancelButton;
+        let icon;
         if (this.props.onCancelClick) {
             cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
+        }
+        if (this.props.icon) {
+            const TintableSvg = sdk.getComponent('elements.TintableSvg');
+            icon = <TintableSvg
+                className="mx_RoomHeader_icon" src={this.props.icon}
+                width="25" height="25"
+            />;
         }
 
         let showRhsButton;
@@ -73,6 +86,7 @@ export default React.createClass({
             <div className="mx_RoomHeader" >
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_simpleHeader">
+                        { icon }
                         { this.props.title }
                         { showRhsButton }
                         { cancelButton }

@@ -13,14 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-const React = require('react');
-
-const CallHandler = require('../../../CallHandler');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
-const Modal = require('../../../Modal');
-const sdk = require('../../../index');
-const dis = require('../../../dispatcher');
-// import Autocomplete from './Autocomplete';
+var React = require('react');
+import { _t } from '../../../languageHandler';
+var CallHandler = require('../../../CallHandler');
+var MatrixClientPeg = require('../../../MatrixClientPeg');
+var Modal = require('../../../Modal');
+var sdk = require('../../../index');
+var dis = require('../../../dispatcher');
+import Autocomplete from './Autocomplete';
 import classNames from 'classnames';
 
 import UserSettingsStore from '../../../UserSettingsStore';
@@ -35,6 +35,7 @@ export default class MessageComposer extends React.Component {
         this.onShowAppsClick = this.onShowAppsClick.bind(this);
         this.onHideAppsClick = this.onHideAppsClick.bind(this);
         this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
+        this.uploadFiles = this.uploadFiles.bind(this);
         this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
         this.onInputContentChanged = this.onInputContentChanged.bind(this);
         this.onUpArrow = this.onUpArrow.bind(this);
@@ -45,6 +46,7 @@ export default class MessageComposer extends React.Component {
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
         this.onInputStateChanged = this.onInputStateChanged.bind(this);
         this.onEvent = this.onEvent.bind(this);
+        this.onPageUnload = this.onPageUnload.bind(this);
 
         this.state = {
             autocompleteQuery: '',
@@ -52,7 +54,7 @@ export default class MessageComposer extends React.Component {
             inputState: {
                 style: [],
                 blockType: null,
-                isRichtextEnabled: UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', true),
+                isRichtextEnabled: UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false),
                 wordCount: 0,
             },
             showFormatting: UserSettingsStore.getSyncedSetting('MessageComposer.showFormatting', false),
@@ -65,11 +67,20 @@ export default class MessageComposer extends React.Component {
         // marked as encrypted.
         // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
         MatrixClientPeg.get().on("event", this.onEvent);
+
+        window.addEventListener('beforeunload', this.onPageUnload);
     }
 
     componentWillUnmount() {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("event", this.onEvent);
+        }
+        window.removeEventListener('beforeunload', this.onPageUnload);
+    }
+
+    onPageUnload(event) {
+        if (this.messageComposerInput) {
+            this.messageComposerInput.sentHistory.saveLastTextEntry();
         }
     }
 
@@ -81,37 +92,33 @@ export default class MessageComposer extends React.Component {
 
     onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
-            const NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: "Please Register",
-                description: "Guest users can't upload files. Please register to upload.",
-            });
+            dis.dispatch({action: 'view_set_mxid'});
             return;
         }
 
         this.refs.uploadInput.click();
     }
 
-    onUploadFileSelected(files, isPasted) {
-        if (!isPasted) {
-            files = files.target.files;
-        }
+    onUploadFileSelected(files) {
+        this.uploadFiles(files.target.files);
+    }
 
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+    uploadFiles(files) {
+        let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        let TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         const fileList = [];
         for (let i=0; i<files.length; i++) {
             fileList.push(<li key={i}>
-                <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> {files[i].name || 'Attachment'}
+                <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> {files[i].name || _t('Attachment')}
             </li>);
         }
 
         Modal.createDialog(QuestionDialog, {
-            title: "Upload Files",
+            title: _t('Upload Files'),
             description: (
                 <div>
-                    <p>Are you sure you want upload the following files?</p>
+                    <p>{ _t('Are you sure you want to upload the following files?') }</p>
                     <ul style={{listStyle: 'none', textAlign: 'left'}}>
                         {fileList}
                     </ul>
@@ -245,11 +252,11 @@ export default class MessageComposer extends React.Component {
         if (roomIsEncrypted) {
             // FIXME: show a /!\ if there are untrusted devices in the room...
             e2eImg = 'img/e2e-verified.svg';
-            e2eTitle = 'Encrypted room';
+            e2eTitle = _t('Encrypted room');
             e2eClass = 'mx_MessageComposer_e2eIcon';
         } else {
             e2eImg = 'img/e2e-unencrypted.svg';
-            e2eTitle = 'Unencrypted room';
+            e2eTitle = _t('Unencrypted room');
             e2eClass = 'mx_MessageComposer_e2eIcon mx_filterFlipColor';
         }
 
@@ -262,15 +269,15 @@ export default class MessageComposer extends React.Component {
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
                 <div key="controls_hangup" className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
-                    <img src="img/hangup.svg" alt="Hangup" title="Hangup" width="25" height="26"/>
+                    <img src="img/hangup.svg" alt={ _t('Hangup') } title={ _t('Hangup') } width="25" height="26"/>
                 </div>;
         } else {
             callButton =
-                <div key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title="Voice call">
+                <div key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title={ _t('Voice call') }>
                     <TintableSvg src="img/icon-call.svg" width="35" height="35"/>
                 </div>;
             videoCallButton =
-                <div key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title="Video call">
+                <div key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title={ _t('Video call') }>
                     <TintableSvg src="img/icons-video.svg" width="35" height="35"/>
                 </div>;
         }
@@ -297,7 +304,7 @@ export default class MessageComposer extends React.Component {
             // complex because of conference calls.
             const uploadButton = (
                 <div key="controls_upload" className="mx_MessageComposer_upload"
-                        onClick={this.onUploadClick} title="Upload file">
+                        onClick={this.onUploadClick} title={ _t('Upload file') }>
                     <TintableSvg src="img/icons-upload.svg" width="35" height="35"/>
                     <input ref="uploadInput" type="file"
                         style={uploadInputStyle}
@@ -308,7 +315,7 @@ export default class MessageComposer extends React.Component {
 
             const formattingButton = (
                 <img className="mx_MessageComposer_formatting"
-                     title="Show Text Formatting Toolbar"
+                     title={_t("Show Text Formatting Toolbar")}
                      src="img/button-text-formatting.svg"
                      onClick={this.onToggleFormattingClicked}
                      style={{visibility: this.state.showFormatting ||
@@ -317,7 +324,7 @@ export default class MessageComposer extends React.Component {
             );
 
             const placeholderText = roomIsEncrypted ?
-                "Send an encrypted message…" : "Send a message (unencrypted)…";
+                _t('Send an encrypted message') + '…' : _t('Send a message (unencrypted)') + '…';
 
             controls.push(
                 <MessageComposerInput
@@ -329,7 +336,7 @@ export default class MessageComposer extends React.Component {
                     tryComplete={this._tryComplete}
                     onUpArrow={this.onUpArrow}
                     onDownArrow={this.onDownArrow}
-                    onUploadFileSelected={this.onUploadFileSelected}
+                    onFilesPasted={this.uploadFiles}
                     tabComplete={this.props.tabComplete} // used for old messagecomposerinput/tabcomplete
                     onContentChanged={this.onInputContentChanged}
                     onInputStateChanged={this.onInputStateChanged} />,
@@ -344,8 +351,8 @@ export default class MessageComposer extends React.Component {
         } else {
             controls.push(
                 <div key="controls_error" className="mx_MessageComposer_noperm_error">
-                    You do not have permission to post to this room
-                </div>,
+                    { _t('You do not have permission to post to this room') }
+                </div>
             );
         }
 
@@ -373,7 +380,7 @@ export default class MessageComposer extends React.Component {
                     mx_filterFlipColor: true,
                 });
                 return <img className={className}
-                            title={name}
+                            title={ _t(name) }
                             onMouseDown={disabled ? null : onFormatButtonClicked}
                             key={name}
                             src={`img/button-text-${name}${suffix}.svg`}
@@ -393,11 +400,11 @@ export default class MessageComposer extends React.Component {
                         <div className="mx_MessageComposer_formatbar" style={this.state.showFormatting ? {} : {display: 'none'}}>
                             {formatButtons}
                             <div style={{flex: 1}}></div>
-                            <img title={`Turn Markdown ${this.state.inputState.isRichtextEnabled ? 'on' : 'off'}`}
+                            <img title={ this.state.inputState.isRichtextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off") }
                                  onMouseDown={this.onToggleMarkdownClicked}
                                 className="mx_MessageComposer_formatbar_markdown mx_filterFlipColor"
                                 src={`img/button-md-${!this.state.inputState.isRichtextEnabled}.png`} />
-                            <img title="Hide Text Formatting Toolbar"
+                            <img title={ _t("Hide Text Formatting Toolbar") }
                                  onClick={this.onToggleFormattingClicked}
                                  className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
                                  src="img/icon-text-cancel.svg" />

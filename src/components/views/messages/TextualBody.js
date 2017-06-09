@@ -28,6 +28,7 @@ import ScalarAuthClient from '../../../ScalarAuthClient';
 import Modal from '../../../Modal';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
+import { _t } from '../../../languageHandler';
 
 linkifyMatrix(linkify);
 
@@ -62,6 +63,19 @@ module.exports = React.createClass({
         };
     },
 
+    copyToClipboard: function(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            const successful = document.execCommand('copy');
+        } catch (err) {
+            console.log('Unable to copy');
+        }
+        document.body.removeChild(textArea);
+    },
+
     componentDidMount: function() {
         this._unmounted = false;
 
@@ -79,6 +93,14 @@ module.exports = React.createClass({
                         highlight.highlightBlock(blocks[i]);
                     }
                 }, 10);
+            }
+            // add event handlers to the 'copy code' buttons
+            const buttons = ReactDOM.findDOMNode(this).getElementsByClassName("mx_EventTile_copyButton");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].onclick = (e) => {
+                    const copyCode = buttons[i].parentNode.getElementsByTagName("code")[0];
+                    this.copyToClipboard(copyCode.textContent);
+                };
             }
         }
     },
@@ -132,7 +154,8 @@ module.exports = React.createClass({
                     links.push(node);
                 }
             }
-            else if (node.tagName === "PRE" || node.tagName === "CODE") {
+            else if (node.tagName === "PRE" || node.tagName === "CODE" ||
+                    node.tagName === "BLOCKQUOTE") {
                 continue;
             }
             else if (node.children && node.children.length) {
@@ -229,14 +252,14 @@ module.exports = React.createClass({
             let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             let integrationsUrl = SdkConfig.get().integrations_ui_url;
             Modal.createDialog(QuestionDialog, {
-                title: "Add an Integration",
+                title: _t("Add an Integration"),
                 description:
                     <div>
-                        You are about to be taken to a third-party site so you can
-                        authenticate your account for use with {integrationsUrl}.<br/>
-                        Do you wish to continue?
+                        {_t("You are about to be taken to a third-party site so you can " +
+                            "authenticate your account for use with %(integrationsUrl)s. " +
+                            "Do you wish to continue?", { integrationsUrl: integrationsUrl })}
                     </div>,
-                button: "Continue",
+                button: _t("Continue"),
                 onFinished: function(confirmed) {
                     if (!confirmed) {
                         return;

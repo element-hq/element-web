@@ -21,12 +21,11 @@ import q from 'q';
 import React from 'react';
 
 import sdk from '../../../index';
-import dis from '../../../dispatcher';
 import ServerConfig from '../../views/login/ServerConfig';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import RegistrationForm from '../../views/login/RegistrationForm';
-import CaptchaForm from '../../views/login/CaptchaForm';
 import RtsClient from '../../../RtsClient';
+import { _t } from '../../../languageHandler';
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -98,7 +97,7 @@ module.exports = React.createClass({
             this.props.teamServerConfig.teamServerURL &&
             !this._rtsClient
         ) {
-            this._rtsClient = new RtsClient(this.props.teamServerConfig.teamServerURL);
+            this._rtsClient = this.props.rtsClient || new RtsClient(this.props.teamServerConfig.teamServerURL);
 
             this.setState({
                 teamServerBusy: true,
@@ -123,18 +122,17 @@ module.exports = React.createClass({
         }
     },
 
-    onHsUrlChanged: function(newHsUrl) {
-        this.setState({
-            hsUrl: newHsUrl,
+    onServerConfigChange: function(config) {
+        let newState = {};
+        if (config.hsUrl !== undefined) {
+            newState.hsUrl = config.hsUrl;
+        }
+        if (config.isUrl !== undefined) {
+            newState.isUrl = config.isUrl;
+        }
+        this.setState(newState, function() {
+            this._replaceClient();
         });
-        this._replaceClient();
-    },
-
-    onIsUrlChanged: function(newIsUrl) {
-        this.setState({
-            isUrl: newIsUrl,
-        });
-        this._replaceClient();
     },
 
     _replaceClient: function() {
@@ -163,7 +161,7 @@ module.exports = React.createClass({
                     msisdn_available |= flow.stages.indexOf('m.login.msisdn') > -1;
                 }
                 if (!msisdn_available) {
-                    msg = "This server does not support authentication with a phone number";
+                    msg = _t('This server does not support authentication with a phone number.');
                 }
             }
             this.setState({
@@ -222,7 +220,6 @@ module.exports = React.createClass({
         }
 
         trackPromise.then((teamToken) => {
-            console.info('Team token promise',teamToken);
             this.props.onLoggedIn({
                 userId: response.user_id,
                 deviceId: response.device_id,
@@ -261,29 +258,29 @@ module.exports = React.createClass({
         var errMsg;
         switch (errCode) {
             case "RegistrationForm.ERR_PASSWORD_MISSING":
-                errMsg = "Missing password.";
+                errMsg = _t('Missing password.');
                 break;
             case "RegistrationForm.ERR_PASSWORD_MISMATCH":
-                errMsg = "Passwords don't match.";
+                errMsg = _t('Passwords don\'t match.');
                 break;
             case "RegistrationForm.ERR_PASSWORD_LENGTH":
-                errMsg = `Password too short (min ${MIN_PASSWORD_LENGTH}).`;
+                errMsg = _t('Password too short (min %(MIN_PASSWORD_LENGTH)s).', {MIN_PASSWORD_LENGTH: MIN_PASSWORD_LENGTH});
                 break;
             case "RegistrationForm.ERR_EMAIL_INVALID":
-                errMsg = "This doesn't look like a valid email address";
+                errMsg = _t('This doesn\'t look like a valid email address.');
                 break;
             case "RegistrationForm.ERR_PHONE_NUMBER_INVALID":
-                errMsg = "This doesn't look like a valid phone number";
+                errMsg = _t('This doesn\'t look like a valid phone number.');
                 break;
             case "RegistrationForm.ERR_USERNAME_INVALID":
-                errMsg = "User names may only contain letters, numbers, dots, hyphens and underscores.";
+                errMsg = _t('User names may only contain letters, numbers, dots, hyphens and underscores.');
                 break;
             case "RegistrationForm.ERR_USERNAME_BLANK":
-                errMsg = "You need to enter a user name";
+                errMsg = _t('You need to enter a user name.');
                 break;
             default:
                 console.error("Unknown error code: %s", errCode);
-                errMsg = "An unknown error occurred.";
+                errMsg = _t('An unknown error occurred.');
                 break;
         }
         this.setState({
@@ -390,8 +387,7 @@ module.exports = React.createClass({
                         customIsUrl={this.props.customIsUrl}
                         defaultHsUrl={this.props.defaultHsUrl}
                         defaultIsUrl={this.props.defaultIsUrl}
-                        onHsUrlChanged={this.onHsUrlChanged}
-                        onIsUrlChanged={this.onIsUrlChanged}
+                        onServerConfigChange={this.onServerConfigChange}
                         delayTimeMs={1000}
                     />
                 </div>
@@ -402,7 +398,7 @@ module.exports = React.createClass({
         if (this.props.onCancelClick) {
             returnToAppJsx = (
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
-                    Return to app
+                    {_t('Return to app')}
                 </a>
             );
         }
@@ -415,10 +411,10 @@ module.exports = React.createClass({
                             this.state.teamSelected.domain + "/icon.png" :
                             null}
                     />
-                    <h2>Create an account</h2>
+                    <h2>{_t('Create an account')}</h2>
                     {registerBody}
                     <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
-                        I already have an account
+                        {_t('I already have an account')}
                     </a>
                     {returnToAppJsx}
                     <LoginFooter />

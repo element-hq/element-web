@@ -21,6 +21,8 @@ var React = require('react');
 var sdk = require('../../../index');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
 
+import { _t, _tJsx } from '../../../languageHandler';
+
 module.exports = React.createClass({
     displayName: 'RoomPreviewBar',
 
@@ -47,7 +49,7 @@ module.exports = React.createClass({
         // The alias that was used to access this room, if appropriate
         // If given, this will be how the room is referred to (eg.
         // in error messages).
-        roomAlias: React.PropTypes.object,
+        roomAlias: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -82,9 +84,9 @@ module.exports = React.createClass({
     },
 
     _roomNameElement: function(fallback) {
-        fallback = fallback || 'a room';
+        fallback = fallback || _t('a room');
         const name = this.props.room ? this.props.room.name : (this.props.room_alias || "");
-        return name ? <b>{ name }</b> : fallback;
+        return name ? name : fallback;
     },
 
     render: function() {
@@ -112,8 +114,7 @@ module.exports = React.createClass({
             if (this.props.invitedEmail) {
                 if (this.state.threePidFetchError) {
                     emailMatchBlock = <div className="error">
-                        Unable to ascertain that the address this invite was
-                        sent to matches one associated with your account.
+                        {_t("Unable to ascertain that the address this invite was sent to matches one associated with your account.")}
                     </div>;
                 } else if (this.state.invitedEmailMxid != MatrixClientPeg.get().credentials.userId) {
                     emailMatchBlock =
@@ -122,8 +123,10 @@ module.exports = React.createClass({
                                 <img src="img/warning.svg" width="24" height="23" title= "/!\\" alt="/!\\" />
                             </div>
                             <div className="mx_RoomPreviewBar_warningText">
-                                This invitation was sent to <b><span className="email">{this.props.invitedEmail}</span></b>, which is not associated with this account.<br/>
-                                You may wish to login with a different account, or add this email to this account.
+                                {_t("This invitation was sent to an email address which is not associated with this account:")}
+                                <b><span className="email">{this.props.invitedEmail}</span></b>
+                                <br/>
+                                {_t("You may wish to login with a different account, or add this email to this account.")}
                             </div>
                         </div>;
                 }
@@ -131,18 +134,24 @@ module.exports = React.createClass({
             joinBlock = (
                 <div>
                     <div className="mx_RoomPreviewBar_invite_text">
-                        You have been invited to join this room by <b>{ this.props.inviterName }</b>
+                        { _t('You have been invited to join this room by %(inviterName)s', {inviterName: this.props.inviterName}) }
                     </div>
                     <div className="mx_RoomPreviewBar_join_text">
-                        Would you like to <a onClick={ this.props.onJoinClick }>accept</a> or <a onClick={ this.props.onRejectClick }>decline</a> this invitation?
+                        { _tJsx(
+                            'Would you like to <acceptText>accept</acceptText> or <declineText>decline</declineText> this invitation?',
+                            [/<acceptText>(.*?)<\/acceptText>/, /<declineText>(.*?)<\/declineText>/],
+                            [
+                                (sub) => <a onClick={ this.props.onJoinClick }>{sub}</a>,
+                                (sub) => <a onClick={ this.props.onRejectClick }>{sub}</a>
+                            ]
+                        )}
                     </div>
                     {emailMatchBlock}
                 </div>
             );
 
         } else if (kicked || banned) {
-            const verb = kicked ? 'kicked' : 'banned';
-            const roomName = this._roomNameElement('this room');
+            const roomName = this._roomNameElement(_t('This room'));
             const kickerMember = this.props.room.currentState.getMember(
                 myMember.events.member.getSender()
             );
@@ -150,29 +159,39 @@ module.exports = React.createClass({
                 kickerMember.name : myMember.events.member.getSender();
             let reason;
             if (myMember.events.member.getContent().reason) {
-                reason = <div>Reason: {myMember.events.member.getContent().reason}</div>
+                reason = <div>{_t("Reason: %(reasonText)s", {reasonText: myMember.events.member.getContent().reason})}</div>
             }
             let rejoinBlock;
             if (!banned) {
-                rejoinBlock = <div><a onClick={ this.props.onJoinClick }><b>Rejoin</b></a></div>;
+                rejoinBlock = <div><a onClick={ this.props.onJoinClick }><b>{_t("Rejoin")}</b></a></div>;
             }
+
+            let actionText;
+            if (kicked) {
+                actionText = _t("You have been kicked from %(roomName)s by %(userName)s.", {roomName: roomName, userName: kickerName});
+            }
+            else if (banned) {
+                actionText = _t("You have been banned from %(roomName)s by %(userName)s.", {roomName: roomName, userName: kickerName});
+            } // no other options possible due to the kicked || banned check above.
+
             joinBlock = (
                 <div>
                     <div className="mx_RoomPreviewBar_join_text">
-                        You have been {verb} from {roomName} by {kickerName}.<br />
+                        {actionText}
+                        <br />
                         {reason}
                         {rejoinBlock}
-                        <a onClick={ this.props.onForgetClick }><b>Forget</b></a>
+                        <a onClick={ this.props.onForgetClick }><b>{_t("Forget room")}</b></a>
                     </div>
                 </div>
             );
         } else if (this.props.error) {
-            var name = this.props.roomAlias || "This room";
+            var name = this.props.roomAlias || _t("This room");
             var error;
             if (this.props.error.errcode == 'M_NOT_FOUND') {
-                error = name + " does not exist";
+                error = _t("%(roomName)s does not exist.", {roomName: name});
             } else {
-                error = name + " is not accessible at this time";
+                error = _t("%(roomName)s is not accessible at this time.", {roomName: name});
             }
             joinBlock = (
                 <div>
@@ -186,8 +205,12 @@ module.exports = React.createClass({
             joinBlock = (
                 <div>
                     <div className="mx_RoomPreviewBar_join_text">
-                        You are trying to access { name }.<br/>
-                        <a onClick={ this.props.onJoinClick }><b>Click here</b></a> to join the discussion!
+                        { _t('You are trying to access %(roomName)s.', {roomName: name}) }
+                        <br/>
+                        { _tJsx("<a>Click here</a> to join the discussion!",
+                            /<a>(.*?)<\/a>/,
+                            (sub) => <a onClick={ this.props.onJoinClick }><b>{sub}</b></a>
+                        )}
                     </div>
                 </div>
             );
@@ -196,7 +219,7 @@ module.exports = React.createClass({
         if (this.props.canPreview) {
             previewBlock = (
                 <div className="mx_RoomPreviewBar_preview_text">
-                    This is a preview of this room. Room interactions have been disabled.
+                    { _t('This is a preview of this room. Room interactions have been disabled') }.
                 </div>
             );
         }

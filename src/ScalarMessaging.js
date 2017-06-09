@@ -94,6 +94,22 @@ Example:
     }
 }
 
+get_membership_count
+--------------------
+Get the number of joined users in the room.
+
+Request:
+ - room_id is the room to get the count in.
+Response:
+78
+Example:
+{
+    action: "get_membership_count",
+    room_id: "!foo:bar",
+    response: 78
+}
+
+
 membership_state AND bot_options
 --------------------------------
 Get the content of the "m.room.member" or "m.room.bot.options" state event respectively.
@@ -125,6 +141,7 @@ const SdkConfig = require('./SdkConfig');
 const MatrixClientPeg = require("./MatrixClientPeg");
 const MatrixEvent = require("matrix-js-sdk").MatrixEvent;
 const dis = require("./dispatcher");
+import { _t } from './languageHandler';
 
 function sendResponse(event, res) {
     const data = JSON.parse(JSON.stringify(event.data));
@@ -150,7 +167,7 @@ function inviteUser(event, roomId, userId) {
     console.log(`Received request to invite ${userId} into room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, "You need to be logged in.");
+        sendError(event, _t('You need to be logged in.'));
         return;
     }
     const room = client.getRoom(roomId);
@@ -170,7 +187,7 @@ function inviteUser(event, roomId, userId) {
             success: true,
         });
     }, function(err) {
-        sendError(event, "You need to be able to invite users to do that.", err);
+        sendError(event, _t('You need to be able to invite users to do that.'), err);
     });
 }
 
@@ -181,7 +198,7 @@ function setPlumbingState(event, roomId, status) {
     console.log(`Received request to set plumbing state to status "${status}" in room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, "You need to be logged in.");
+        sendError(event, _t('You need to be logged in.'));
         return;
     }
     client.sendStateEvent(roomId, "m.room.plumbing", { status : status }).done(() => {
@@ -189,7 +206,7 @@ function setPlumbingState(event, roomId, status) {
             success: true,
         });
     }, (err) => {
-        sendError(event, err.message ? err.message : "Failed to send request.", err);
+        sendError(event, err.message ? err.message : _t('Failed to send request.'), err);
     });
 }
 
@@ -197,7 +214,7 @@ function setBotOptions(event, roomId, userId) {
     console.log(`Received request to set options for bot ${userId} in room ${roomId}`);
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, "You need to be logged in.");
+        sendError(event, _t('You need to be logged in.'));
         return;
     }
     client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, "_" + userId).done(() => {
@@ -205,20 +222,20 @@ function setBotOptions(event, roomId, userId) {
             success: true,
         });
     }, (err) => {
-        sendError(event, err.message ? err.message : "Failed to send request.", err);
+        sendError(event, err.message ? err.message : _t('Failed to send request.'), err);
     });
 }
 
 function setBotPower(event, roomId, userId, level) {
     if (!(Number.isInteger(level) && level >= 0)) {
-        sendError(event, "Power level must be positive integer.");
+        sendError(event, _t('Power level must be positive integer.'));
         return;
     }
 
     console.log(`Received request to set power level to ${level} for bot ${userId} in room ${roomId}.`);
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, "You need to be logged in.");
+        sendError(event, _t('You need to be logged in.'));
         return;
     }
 
@@ -235,7 +252,7 @@ function setBotPower(event, roomId, userId, level) {
                 success: true,
             });
         }, (err) => {
-            sendError(event, err.message ? err.message : "Failed to send request.", err);
+            sendError(event, err.message ? err.message : _t('Failed to send request.'), err);
         });
     });
 }
@@ -255,15 +272,30 @@ function botOptions(event, roomId, userId) {
     returnStateEvent(event, roomId, "m.room.bot.options", "_" + userId);
 }
 
-function returnStateEvent(event, roomId, eventType, stateKey) {
+function getMembershipCount(event, roomId) {
     const client = MatrixClientPeg.get();
     if (!client) {
-        sendError(event, "You need to be logged in.");
+        sendError(event, _t('You need to be logged in.'));
         return;
     }
     const room = client.getRoom(roomId);
     if (!room) {
-        sendError(event, "This room is not recognised.");
+        sendError(event, _t('This room is not recognised.'));
+        return;
+    }
+    const count = room.getJoinedMembers().length;
+    sendResponse(event, count);
+}
+
+function returnStateEvent(event, roomId, eventType, stateKey) {
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, _t('You need to be logged in.'));
+        return;
+    }
+    const room = client.getRoom(roomId);
+    if (!room) {
+        sendError(event, _t('This room is not recognised.'));
         return;
     }
     const stateEvent = room.currentState.getStateEvents(eventType, stateKey);
@@ -313,13 +345,13 @@ const onMessage = function(event) {
     const roomId = event.data.room_id;
     const userId = event.data.user_id;
     if (!roomId) {
-        sendError(event, "Missing room_id in request");
+        sendError(event, _t('Missing room_id in request'));
         return;
     }
     let promise = Promise.resolve(currentRoomId);
     if (!currentRoomId) {
         if (!currentRoomAlias) {
-            sendError(event, "Must be viewing a room");
+            sendError(event, _t('Must be viewing a room'));
             return;
         }
         // no room ID but there is an alias, look it up.
@@ -331,7 +363,7 @@ const onMessage = function(event) {
 
     promise.then((viewingRoomId) => {
         if (roomId !== viewingRoomId) {
-            sendError(event, "Room " + roomId + " not visible");
+            sendError(event, _t('Room %(roomId)s not visible', {roomId: roomId}));
             return;
         }
 
@@ -342,10 +374,13 @@ const onMessage = function(event) {
         } else if (event.data.action === "set_plumbing_state") {
             setPlumbingState(event, roomId, event.data.status);
             return;
+        } else if (event.data.action === "get_membership_count") {
+            getMembershipCount(event, roomId);
+            return;
         }
 
         if (!userId) {
-            sendError(event, "Missing user_id in request");
+            sendError(event, _t('Missing user_id in request'));
             return;
         }
         switch (event.data.action) {
@@ -370,7 +405,7 @@ const onMessage = function(event) {
         }
     }, (err) => {
         console.error(err);
-        sendError(event, "Failed to lookup current room.");
+        sendError(event, _t('Failed to lookup current room') + '.');
     });
 };
 

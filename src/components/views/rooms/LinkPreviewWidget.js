@@ -100,7 +100,9 @@ module.exports = React.createClass({
 
     render: function() {
         var p = this.state.preview;
-        if (!p) return <div/>;
+        if (!p || Object.keys(p).length === 0) {
+            return <div/>;
+        }
 
         // FIXME: do we want to factor out all image displaying between this and MImageBody - especially for lightboxing?
         var image = p["og:image"];

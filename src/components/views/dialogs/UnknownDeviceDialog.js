@@ -16,10 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
-import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import Resend from '../../../Resend';
+import { _t } from '../../../languageHandler';
 
 function DeviceListEntry(props) {
     const {userId, device} = props;
@@ -120,17 +120,17 @@ export default React.createClass({
         if (blacklistUnverified) {
             warning = (
                 <h4>
-                    You are currently blacklisting unverified devices; to send
-                    messages to these devices you must verify them.
+                    {_t("You are currently blacklisting unverified devices; to send " +
+                    "messages to these devices you must verify them.")}
                 </h4>
             );
         } else {
             warning = (
                 <div>
                     <p>
-                        We recommend you go through the verification process
-                        for each device to confirm they belong to their legitimate owner,
-                        but you can resend the message without verifying if you prefer.
+                        {_t("We recommend you go through the verification process " +
+                            "for each device to confirm they belong to their legitimate owner, " +
+                            "but you can resend the message without verifying if you prefer.")}
                     </p>
                 </div>
             );
@@ -145,14 +145,14 @@ export default React.createClass({
                             console.log("UnknownDeviceDialog closed by escape");
                             this.props.onFinished();
                 }}
-                title='Room contains unknown devices'
+                title={_t('Room contains unknown devices')}
             >
                 <GeminiScrollbar autoshow={false} className="mx_Dialog_content">
                     <h4>
-                        This room contains devices that you haven't seen before.
+                        {_t('"%(RoomName)s" contains devices that you haven\'t seen before.', {RoomName: this.props.room.name})}
                     </h4>
                     { warning }
-                    Unknown devices:
+                    {_t("Unknown devices")}:
 
                     <UnknownDeviceList devices={this.props.devices} />
                 </GeminiScrollbar>
@@ -162,7 +162,7 @@ export default React.createClass({
                                 this.props.onFinished();
                                 Resend.resendUnsentEvents(this.props.room);
                             }}>
-                        Send anyway
+                        {_t("Send anyway")}
                     </button>
                     <button className="mx_Dialog_primary" autoFocus={ true }
                             onClick={() => {

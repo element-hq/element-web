@@ -16,6 +16,7 @@ limitations under the License.
 
 import FileSaver from 'file-saver';
 import React from 'react';
+import { _t } from '../../../languageHandler';
 
 import * as Matrix from 'matrix-js-sdk';
 import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
@@ -52,11 +53,11 @@ export default React.createClass({
 
         const passphrase = this.refs.passphrase1.value;
         if (passphrase !== this.refs.passphrase2.value) {
-            this.setState({errStr: 'Passphrases must match'});
+            this.setState({errStr: _t('Passphrases must match')});
             return false;
         }
         if (!passphrase) {
-            this.setState({errStr: 'Passphrase must not be empty'});
+            this.setState({errStr: _t('Passphrase must not be empty')});
             return false;
         }
 
@@ -109,24 +110,28 @@ export default React.createClass({
         return (
             <BaseDialog className='mx_exportE2eKeysDialog'
                 onFinished={this.props.onFinished}
-                title="Export room keys"
+                title={_t("Export room keys")}
             >
                 <form onSubmit={this._onPassphraseFormSubmit}>
                     <div className="mx_Dialog_content">
                         <p>
-                            This process allows you to export the keys for messages
-                            you have received in encrypted rooms to a local file. You
-                            will then be able to import the file into another Matrix
-                            client in the future, so that client will also be able to
-                            decrypt these messages.
+                            { _t(
+                                'This process allows you to export the keys for messages ' +
+                                'you have received in encrypted rooms to a local file. You ' +
+                                'will then be able to import the file into another Matrix ' +
+                                'client in the future, so that client will also be able to ' +
+                                'decrypt these messages.',
+                            ) }
                         </p>
                         <p>
-                            The exported file will allow anyone who can read it to decrypt
-                            any encrypted messages that you can see, so you should be
-                            careful to keep it secure. To help with this, you should enter
-                            a passphrase below, which will be used to encrypt the exported
-                            data. It will only be possible to import the data by using the
-                            same passphrase.
+                            { _t(
+                                'The exported file will allow anyone who can read it to decrypt ' +
+                                'any encrypted messages that you can see, so you should be ' +
+                                'careful to keep it secure. To help with this, you should enter ' +
+                                'a passphrase below, which will be used to encrypt the exported ' +
+                                'data. It will only be possible to import the data by using the ' +
+                                'same passphrase.',
+                            ) }
                         </p>
                         <div className='error'>
                             {this.state.errStr}
@@ -135,7 +140,7 @@ export default React.createClass({
                             <div className='mx_E2eKeysDialog_inputRow'>
                                 <div className='mx_E2eKeysDialog_inputLabel'>
                                     <label htmlFor='passphrase1'>
-                                        Enter passphrase
+                                        {_t("Enter passphrase")}
                                     </label>
                                 </div>
                                 <div className='mx_E2eKeysDialog_inputCell'>
@@ -148,7 +153,7 @@ export default React.createClass({
                             <div className='mx_E2eKeysDialog_inputRow'>
                                 <div className='mx_E2eKeysDialog_inputLabel'>
                                     <label htmlFor='passphrase2'>
-                                        Confirm passphrase
+                                        {_t("Confirm passphrase")}
                                     </label>
                                 </div>
                                 <div className='mx_E2eKeysDialog_inputCell'>
@@ -161,11 +166,11 @@ export default React.createClass({
                         </div>
                     </div>
                     <div className='mx_Dialog_buttons'>
-                        <input className='mx_Dialog_primary' type='submit' value='Export'
+                        <input className='mx_Dialog_primary' type='submit' value={_t('Export')}
                              disabled={disableForm}
                         />
                         <button onClick={this._onCancelClick} disabled={disableForm}>
-                            Cancel
+                            {_t("Cancel")}
                         </button>
                     </div>
                 </form>

@@ -32,6 +32,8 @@ export default function AccessibleButton(props) {
     };
     restProps.tabIndex = restProps.tabIndex || "0";
     restProps.role = "button";
+    restProps.className = (restProps.className ? restProps.className + " " : "") + 
+                          "mx_AccessibleButton";
     return React.createElement(element, restProps, children);
 }
 

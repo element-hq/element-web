@@ -15,11 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Matrix from 'matrix-js-sdk';
-
 import React from 'react';
 
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
 import AccessibleButton from '../elements/AccessibleButton';
 
@@ -44,12 +43,6 @@ export default React.createClass({
         onFinished: React.PropTypes.func.isRequired,
 
         title: React.PropTypes.string,
-    },
-
-    getDefaultProps: function() {
-        return {
-            title: "Authentication",
-        };
     },
 
     getInitialState: function() {
@@ -85,7 +78,7 @@ export default React.createClass({
                     <AccessibleButton onClick={this._onDismissClick}
                         className="mx_UserSettings_button"
                     >
-                        Dismiss
+                        {_t("Dismiss")}
                     </AccessibleButton>
                 </div>
             );
@@ -105,7 +98,7 @@ export default React.createClass({
         return (
             <BaseDialog className="mx_InteractiveAuthDialog"
                 onFinished={this.props.onFinished}
-                title={this.state.authError ? 'Error' : this.props.title}
+                title={this.state.authError ? 'Error' : (this.props.title || _t('Authentication'))}
             >
                 {content}
             </BaseDialog>

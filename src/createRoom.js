@@ -17,6 +17,7 @@ limitations under the License.
 var MatrixClientPeg = require('./MatrixClientPeg');
 var Modal = require('./Modal');
 var sdk = require('./index');
+import { _t } from './languageHandler';
 var dis = require("./dispatcher");
 var Rooms = require("./Rooms");
 
@@ -36,17 +37,11 @@ function createRoom(opts) {
     opts = opts || {};
 
     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-    const NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
     const Loader = sdk.getComponent("elements.Spinner");
 
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
-        setTimeout(()=>{
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: "Please Register",
-                description: "Guest users can't create new rooms. Please register to create room and start a chat."
-            });
-        }, 0);
+        dis.dispatch({action: 'view_set_mxid'});
         return q(null);
     }
 
@@ -61,6 +56,11 @@ function createRoom(opts) {
     }
     if (opts.dmUserId && createOpts.is_direct === undefined) {
         createOpts.is_direct = true;
+    }
+
+    // By default, view the room after creating it
+    if (opts.andView === undefined) {
+        opts.andView = true;
     }
 
     // Allow guests by default since the room is private and they'd
@@ -96,16 +96,18 @@ function createRoom(opts) {
         // room has been created, so we race here with the client knowing that
         // the room exists, causing things like
         // https://github.com/vector-im/vector-web/issues/1813
-        dis.dispatch({
-            action: 'view_room',
-            room_id: roomId
-        });
+        if (opts.andView) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: roomId,
+            });
+        }
         return roomId;
     }, function(err) {
         console.error("Failed to create room " + roomId + " " + err);
         Modal.createDialog(ErrorDialog, {
-            title: "Failure to create room",
-            description: "Server may be unavailable, overloaded, or you hit a bug.",
+            title: _t("Failure to create room"),
+            description: _t("Server may be unavailable, overloaded, or you hit a bug."),
         });
         return null;
     });

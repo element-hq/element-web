@@ -16,12 +16,11 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var classNames = require('classnames');
-var sdk = require("../../../index");
-var Invite = require("../../../Invite");
-var MatrixClientPeg = require("../../../MatrixClientPeg");
-var Avatar = require('../../../Avatar');
+import React from 'react';
+import classNames from 'classnames';
+import sdk from "../../../index";
+import MatrixClientPeg from "../../../MatrixClientPeg";
+import { _t } from '../../../languageHandler';
 
 // React PropType definition for an object describing
 // an address that can be invited to a room (which
@@ -142,7 +141,7 @@ export default React.createClass({
             });
 
             info = (
-                <div className={unknownClasses}>Unknown Address</div>
+                <div className={unknownClasses}>{_t("Unknown Address")}</div>
             );
         }
 

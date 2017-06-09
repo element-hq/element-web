@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var sdk = require('../../index');
-var dis = require("../../dispatcher");
-var WhoIsTyping = require("../../WhoIsTyping");
-var MatrixClientPeg = require("../../MatrixClientPeg");
-const MemberAvatar = require("../views/avatars/MemberAvatar");
+import React from 'react';
+import { _t, _tJsx } from '../../languageHandler';
+import sdk from '../../index';
+import WhoIsTyping from '../../WhoIsTyping';
+import MatrixClientPeg from '../../MatrixClientPeg';
+import MemberAvatar from '../views/avatars/MemberAvatar';
 
 const HIDE_DEBOUNCE_MS = 10000;
 const STATUS_BAR_HIDDEN = 0;
@@ -175,8 +175,8 @@ module.exports = React.createClass({
                 <div className="mx_RoomStatusBar_scrollDownIndicator"
                         onClick={ this.props.onScrollToBottomClick }>
                     <img src="img/scrolldown.svg" width="24" height="24"
-                        alt="Scroll to bottom of page"
-                        title="Scroll to bottom of page"/>
+                        alt={ _t("Scroll to bottom of page") }
+                        title={ _t("Scroll to bottom of page") }/>
                 </div>
             );
         }
@@ -250,10 +250,10 @@ module.exports = React.createClass({
                 <div className="mx_RoomStatusBar_connectionLostBar">
                     <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
                     <div className="mx_RoomStatusBar_connectionLostBar_title">
-                        Connectivity to the server has been lost.
+                        {_t('Connectivity to the server has been lost.')}
                     </div>
                     <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                        Sent messages will be stored until your connection has returned.
+                        {_t('Sent messages will be stored until your connection has returned.')}
                     </div>
                 </div>
             );
@@ -266,7 +266,7 @@ module.exports = React.createClass({
                         <TabCompleteBar tabComplete={this.props.tabComplete} />
                         <div className="mx_RoomStatusBar_tabCompleteEol" title="->|">
                             <TintableSvg src="img/eol.svg" width="22" height="16"/>
-                            Auto-complete
+                            {_t('Auto-complete')}
                         </div>
                     </div>
                 </div>
@@ -281,15 +281,13 @@ module.exports = React.createClass({
                         { this.props.unsentMessageError }
                     </div>
                     <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                        <a className="mx_RoomStatusBar_resend_link"
-                          onClick={ this.props.onResendAllClick }>
-                            Resend all
-                        </a> or <a
-                          className="mx_RoomStatusBar_resend_link"
-                          onClick={ this.props.onCancelAllClick }>
-                            cancel all
-                        </a> now. You can also select individual messages to
-                        resend or cancel.
+                    {_tJsx("<a>Resend all</a> or <a>cancel all</a> now. You can also select individual messages to resend or cancel.",
+                        [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
+                        [
+                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={ this.props.onResendAllClick }>{sub}</a>,
+                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={ this.props.onCancelAllClick }>{sub}</a>,
+                        ]
+                    )}
                     </div>
                 </div>
             );
@@ -298,8 +296,8 @@ module.exports = React.createClass({
         // unread count trumps who is typing since the unread count is only
         // set when you've scrolled up
         if (this.props.numUnreadMessages) {
-            var unreadMsgs = this.props.numUnreadMessages + " new message" +
-                (this.props.numUnreadMessages > 1 ? "s" : "");
+            // MUST use var name "count" for pluralization to kick in
+            var unreadMsgs = _t("%(count)s new messages", {count: this.props.numUnreadMessages});
 
             return (
                 <div className="mx_RoomStatusBar_unreadMessagesBar"
@@ -324,7 +322,7 @@ module.exports = React.createClass({
         if (this.props.hasActiveCall) {
             return (
                 <div className="mx_RoomStatusBar_callBar">
-                    <b>Active call</b>
+                    <b>{_t('Active call')}</b>
                 </div>
             );
         }

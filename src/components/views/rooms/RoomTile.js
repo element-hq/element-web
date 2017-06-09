@@ -98,9 +98,9 @@ module.exports = React.createClass({
         }
     },
 
-    onClick: function() {
+    onClick: function(ev) {
         if (this.props.onClick) {
-            this.props.onClick(this.props.room.roomId);
+            this.props.onClick(this.props.room.roomId, ev);
         }
     },
 
@@ -224,13 +224,13 @@ module.exports = React.createClass({
             if (this.props.selected) {
                 let nameSelected = <EmojiText>{name}</EmojiText>;
 
-                label = <div title={ name } className={ nameClasses }>{ nameSelected }</div>;
+                label = <div title={ name } className={ nameClasses } dir="auto">{ nameSelected }</div>;
             } else {
-                label = <EmojiText element="div" title={ name } className={ nameClasses }>{name}</EmojiText>;
+                label = <EmojiText element="div" title={ name } className={ nameClasses } dir="auto">{name}</EmojiText>;
             }
         } else if (this.state.hover) {
             var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
-            tooltip = <RoomTooltip className="mx_RoomTile_tooltip" room={this.props.room} />;
+            tooltip = <RoomTooltip className="mx_RoomTile_tooltip" room={this.props.room} dir="auto" />;
         }
 
         //var incomingCallBox;

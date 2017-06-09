@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var Skinner = require('./Skinner');
+import Skinner from './Skinner';
 
 module.exports.loadSkin = function(skinObject) {
     Skinner.load(skinObject);

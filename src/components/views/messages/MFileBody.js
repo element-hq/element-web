@@ -20,10 +20,10 @@ import React from 'react';
 import filesize from 'filesize';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 import {decryptFile} from '../../../utils/DecryptFile';
 import Tinter from '../../../Tinter';
 import request from 'browser-request';
-import q from 'q';
 import Modal from '../../../Modal';
 
 
@@ -202,7 +202,7 @@ module.exports = React.createClass({
      * @return {string} the human readable link text for the attachment.
      */
     presentableTextForFile: function(content) {
-        var linkText = 'Attachment';
+        var linkText = _t("Attachment");
         if (content.body && content.body.length > 0) {
             // The content body should be the name of the file including a
             // file extension.
@@ -261,7 +261,7 @@ module.exports = React.createClass({
         const content = this.props.mxEvent.getContent();
         const text = this.presentableTextForFile(content);
         const isEncrypted = content.file !== undefined;
-        const fileName = content.body && content.body.length > 0 ? content.body : "Attachment";
+        const fileName = content.body && content.body.length > 0 ? content.body : _t("Attachment");
         const contentUrl = this._getContentUrl();
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
@@ -283,7 +283,8 @@ module.exports = React.createClass({
                     }).catch((err) => {
                         console.warn("Unable to decrypt attachment: ", err);
                         Modal.createDialog(ErrorDialog, {
-                            description: "Error decrypting attachment"
+                        	title: _t("Error"),
+                            description: _t("Error decrypting attachment"),
                         });
                     }).finally(() => {
                         decrypting = false;
@@ -295,7 +296,7 @@ module.exports = React.createClass({
                     <span className="mx_MFileBody" ref="body">
                         <div className="mx_MImageBody_download">
                             <a href="javascript:void(0)" onClick={decrypt}>
-                                Decrypt {text}
+                                { _t("Decrypt %(text)s", { text: text }) }
                             </a>
                         </div>
                     </span>
@@ -314,7 +315,7 @@ module.exports = React.createClass({
                     // We can't provide a Content-Disposition header like we would for HTTP.
                     download: fileName,
                     target: "_blank",
-                    textContent: "Download " + text,
+                    textContent: _t("Download %(text)s", { text: text }),
                 }, "*");
             };
 
@@ -346,7 +347,7 @@ module.exports = React.createClass({
                 return (
                     <span className="mx_MFileBody">
                         <div className="mx_MImageBody_download">
-                            <a className="mx_ImageBody_downloadLink" href={contentUrl} target="_blank">
+                            <a className="mx_ImageBody_downloadLink" href={contentUrl} download={fileName} target="_blank">
                                 { fileName }
                             </a>
                             <div className="mx_MImageBody_size">
@@ -360,9 +361,9 @@ module.exports = React.createClass({
                 return (
                     <span className="mx_MFileBody">
                         <div className="mx_MImageBody_download">
-                            <a href={contentUrl} target="_blank" rel="noopener">
+                            <a href={contentUrl} download={fileName} target="_blank" rel="noopener">
                                 <img src={tintedDownloadImageURL} width="12" height="14" ref="downloadImage"/>
-                                Download {text}
+                                { _t("Download %(text)s", { text: text }) }
                             </a>
                         </div>
                     </span>
@@ -371,7 +372,7 @@ module.exports = React.createClass({
         } else {
             var extra = text ? (': ' + text) : '';
             return <span className="mx_MFileBody">
-                Invalid file{extra}
+                { _t("Invalid file%(extra)s", { extra: extra }) }
             </span>;
         }
     },

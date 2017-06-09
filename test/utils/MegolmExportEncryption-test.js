@@ -16,7 +16,7 @@ limitations under the License.
 
 "use strict";
 
-import * as MegolmExportEncryption from 'utils/MegolmExportEncryption';
+import * as MegolmExportEncryption from '../../src/utils/MegolmExportEncryption';
 
 import * as testUtils from '../test-utils';
 import expect from 'expect';
@@ -25,23 +25,40 @@ const TEST_VECTORS=[
     [
         "plain",
         "password",
-        "-----BEGIN MEGOLM SESSION DATA-----\nAXNhbHRzYWx0c2FsdHNhbHSIiIiIiIiIiIiIiIiIiIiIAAAACmIRUW2OjZ3L2l6j9h0lHlV3M2dx\ncissyYBxjsfsAndErh065A8=\n-----END MEGOLM SESSION DATA-----"
+        "-----BEGIN MEGOLM SESSION DATA-----\n" +
+        "AXNhbHRzYWx0c2FsdHNhbHSIiIiIiIiIiIiIiIiIiIiIAAAACmIRUW2OjZ3L2l6j9h0lHlV3M2dx\n" +
+        "cissyYBxjsfsAndErh065A8=\n" +
+        "-----END MEGOLM SESSION DATA-----",
     ],
     [
         "Hello, World",
         "betterpassword",
-        "-----BEGIN MEGOLM SESSION DATA-----\nAW1vcmVzYWx0bW9yZXNhbHT//////////wAAAAAAAAAAAAAD6KyBpe1Niv5M5NPm4ZATsJo5nghk\nKYu63a0YQ5DRhUWEKk7CcMkrKnAUiZny\n-----END MEGOLM SESSION DATA-----"
+        "-----BEGIN MEGOLM SESSION DATA-----\n" +
+        "AW1vcmVzYWx0bW9yZXNhbHT//////////wAAAAAAAAAAAAAD6KyBpe1Niv5M5NPm4ZATsJo5nghk\n" +
+        "KYu63a0YQ5DRhUWEKk7CcMkrKnAUiZny\n" +
+        "-----END MEGOLM SESSION DATA-----",
     ],
     [
         "alphanumericallyalphanumericallyalphanumericallyalphanumerically",
         "SWORDFISH",
-        "-----BEGIN MEGOLM SESSION DATA-----\nAXllc3NhbHR5Z29vZG5lc3P//////////wAAAAAAAAAAAAAD6OIW+Je7gwvjd4kYrb+49gKCfExw\nMgJBMD4mrhLkmgAngwR1pHjbWXaoGybtiAYr0moQ93GrBQsCzPbvl82rZhaXO3iH5uHo/RCEpOqp\nPgg29363BGR+/Ripq/VCLKGNbw==\n-----END MEGOLM SESSION DATA-----"
+        "-----BEGIN MEGOLM SESSION DATA-----\n" +
+        "AXllc3NhbHR5Z29vZG5lc3P//////////wAAAAAAAAAAAAAD6OIW+Je7gwvjd4kYrb+49gKCfExw\n" +
+        "MgJBMD4mrhLkmgAngwR1pHjbWXaoGybtiAYr0moQ93GrBQsCzPbvl82rZhaXO3iH5uHo/RCEpOqp\n" +
+        "Pgg29363BGR+/Ripq/VCLKGNbw==\n" +
+        "-----END MEGOLM SESSION DATA-----",
     ],
     [
         "alphanumericallyalphanumericallyalphanumericallyalphanumerically",
-        "passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword",
-        "-----BEGIN MEGOLM SESSION DATA-----\nAf//////////////////////////////////////////AAAD6IAZJy7IQ7Y0idqSw/bmpngEEVVh\ngsH+8ptgqxw6ZVWQnohr8JsuwH9SwGtiebZuBu5smPCO+RFVWH2cQYslZijXv/BEH/txvhUrrtCd\nbWnSXS9oymiqwUIGs08sXI33ZA==\n-----END MEGOLM SESSION DATA-----"
-    ]
+        "passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword" +
+        "passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword" +
+        "passwordpasswordpasswordpasswordpasswordpasswordpasswordpasswordpassword" +
+        "passwordpasswordpasswordpasswordpassword",
+        "-----BEGIN MEGOLM SESSION DATA-----\n" +
+        "Af//////////////////////////////////////////AAAD6IAZJy7IQ7Y0idqSw/bmpngEEVVh\n" +
+        "gsH+8ptgqxw6ZVWQnohr8JsuwH9SwGtiebZuBu5smPCO+RFVWH2cQYslZijXv/BEH/txvhUrrtCd\n" +
+        "bWnSXS9oymiqwUIGs08sXI33ZA==\n" +
+        "-----END MEGOLM SESSION DATA-----",
+    ],
 ]
 ;
 
@@ -55,7 +72,7 @@ describe('MegolmExportEncryption', function() {
         if (!window.crypto.subtle && !window.crypto.webkitSubtle) {
             this.skip();
         }
-    })
+    });
 
     beforeEach(function() {
         testUtils.beforeEach(this);
@@ -64,14 +81,14 @@ describe('MegolmExportEncryption', function() {
     describe('decrypt', function() {
         it('should handle missing header', function() {
             const input=stringToArray(`-----`);
-            expect(()=>{MegolmExportEncryption.decryptMegolmKeyFile(input, '')})
+            expect(()=>MegolmExportEncryption.decryptMegolmKeyFile(input, ''))
                 .toThrow('Header line not found');
         });
 
         it('should handle missing trailer', function() {
             const input=stringToArray(`-----BEGIN MEGOLM SESSION DATA-----
 -----`);
-            expect(()=>{MegolmExportEncryption.decryptMegolmKeyFile(input, '')})
+            expect(()=>MegolmExportEncryption.decryptMegolmKeyFile(input, ''))
                 .toThrow('Trailer line not found');
         });
 
@@ -81,7 +98,7 @@ AXNhbHRzYWx0c2FsdHNhbHSIiIiIiIiIiIiIiIiIiIiIAAAACmIRUW2OjZ3L2l6j9h0lHlV3M2dx
 cissyYBxjsfsAn
 -----END MEGOLM SESSION DATA-----
 `);
-            expect(()=>{MegolmExportEncryption.decryptMegolmKeyFile(input, '')})
+            expect(()=>MegolmExportEncryption.decryptMegolmKeyFile(input, ''))
                 .toThrow('Invalid file: too short');
         });
 
@@ -94,12 +111,12 @@ cissyYBxjsfsAn
 
                 const [plain, password, input] = TEST_VECTORS[i];
                 return MegolmExportEncryption.decryptMegolmKeyFile(
-                    stringToArray(input), password
+                    stringToArray(input), password,
                 ).then((decrypted) => {
                     expect(decrypted).toEqual(plain);
                     return next(i+1);
-                })
-            };
+                });
+            }
             return next(0).catch(done);
         });
     });
@@ -115,7 +132,7 @@ cissyYBxjsfsAn
                 input, password, {kdf_rounds: 1000},
             ).then((ciphertext) => {
                 return MegolmExportEncryption.decryptMegolmKeyFile(
-                    ciphertext, password
+                    ciphertext, password,
                 );
             }).then((plaintext) => {
                 expect(plaintext).toEqual(input);

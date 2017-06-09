@@ -29,6 +29,11 @@ export default class BasePlatform {
         this.errorDidOccur = false;
     }
 
+    // Used primarily for Analytics
+    getHumanReadableName(): string {
+        return 'Base Platform';
+    }
+
     setNotificationCount(count: number) {
         this.notificationCount = count;
     }
@@ -66,11 +71,14 @@ export default class BasePlatform {
     displayNotification(title: string, msg: string, avatarUrl: string, room: Object) {
     }
 
+    loudNotification(ev: Event, room: Object) {
+    }
+
     /**
      * Returns a promise that resolves to a string representing
      * the current version of the application.
      */
-    getAppVersion() {
+    getAppVersion(): Promise<string> {
         throw new Error("getAppVersion not implemented!");
     }
 
@@ -79,9 +87,11 @@ export default class BasePlatform {
      * with getUserMedia, return a string explaining why not.
      * Otherwise, return null.
      */
-    screenCaptureErrorString() {
+    screenCaptureErrorString(): string {
         return "Not implemented";
     }
+
+    isElectron(): boolean { return false; }
 
     /**
      * Restarts the application, without neccessarily reloading

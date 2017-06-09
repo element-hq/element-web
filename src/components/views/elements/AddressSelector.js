@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -138,7 +139,7 @@ export default React.createClass({
                         onClick={this.onClick.bind(this, i)}
                         onMouseEnter={this.onMouseEnter.bind(this, i)}
                         onMouseLeave={this.onMouseLeave}
-                        key={this.props.addressList[i].userId}
+                        key={this.props.addressList[i].addressType + "/" + this.props.addressList[i].address}
                         ref={(ref) => { this.addressListElement = ref; }}
                     >
                         <AddressTile address={this.props.addressList[i]} justified={true} networkName="vector" networkUrl="img/search-icon-vector.svg" />

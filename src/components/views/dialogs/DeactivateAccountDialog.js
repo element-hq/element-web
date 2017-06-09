@@ -20,6 +20,7 @@ import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import * as Lifecycle from '../../../Lifecycle';
 import Velocity from 'velocity-vector';
+import { _t } from '../../../languageHandler';
 
 export default class DeactivateAccountDialog extends React.Component {
     constructor(props, context) {
@@ -56,10 +57,10 @@ export default class DeactivateAccountDialog extends React.Component {
             Lifecycle.onLoggedOut();
             this.props.onFinished(false);
         }, (err) => {
-            let errStr = 'Unknown error';
+            let errStr = _t('Unknown error');
             // https://matrix.org/jira/browse/SYN-744
             if (err.httpStatus == 401 || err.httpStatus == 403) {
-                errStr = 'Incorrect password';
+                errStr = _t('Incorrect password');
                 Velocity(this._passwordField, "callout.shake", 300);
             }
             this.setState({
@@ -85,29 +86,29 @@ export default class DeactivateAccountDialog extends React.Component {
             passwordBoxClass = 'error';
         }
 
-        const okLabel = this.state.busy ? <Loader /> : 'Deactivate Account';
+        const okLabel = this.state.busy ? <Loader /> : _t('Deactivate Account');
         const okEnabled = this.state.confirmButtonEnabled && !this.state.busy;
 
         let cancelButton = null;
         if (!this.state.busy) {
             cancelButton = <button onClick={this._onCancel} autoFocus={true}>
-                Cancel
+                {_t("Cancel")}
             </button>;
         }
 
         return (
             <div className="mx_DeactivateAccountDialog">
                 <div className="mx_Dialog_title danger">
-                    Deactivate Account
+                    {_t("Deactivate Account")}
                 </div>
                 <div className="mx_Dialog_content">
-                    <p>This will make your account permanently unusable. You will not be able to re-register the same user ID.</p>
+                    <p>{_t("This will make your account permanently unusable. You will not be able to re-register the same user ID.")}</p>
 
-                    <p>This action is irreversible.</p>
+                    <p>{_t("This action is irreversible.")}</p>
 
-                    <p>To continue, please enter your password.</p>
+                    <p>{_t("To continue, please enter your password.")}</p>
 
-                    <p>Password:</p>
+                    <p>{_t("Password")}:</p>
                     <input
                         type="password"
                         onChange={this._onPasswordFieldChange}
