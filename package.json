@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "0.9.2",
+  "version": "0.9.3-rc.1",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
