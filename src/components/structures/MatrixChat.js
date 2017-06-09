@@ -570,6 +570,12 @@ module.exports = React.createClass({
         const allRooms = RoomListSorter.mostRecentActivityFirst(
             MatrixClientPeg.get().getRooms(),
         );
+        if (allRooms.length === 0) {
+            dis.dispatch({
+                action: 'view_home_page',
+            });
+            return;
+        }
         let roomIndex = -1;
         for (let i = 0; i < allRooms.length; ++i) {
             if (allRooms[i].roomId == this.state.currentRoomId) {
