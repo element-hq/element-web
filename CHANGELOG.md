@@ -1,3 +1,100 @@
+Changes in [0.11.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.11.0-rc.1) (2017-06-09)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.2...v0.11.0-rc.1)
+
+ * Update from Weblate.
+   [\#4258](https://github.com/vector-im/riot-web/pull/4258)
+ * Update from Weblate.
+   [\#4254](https://github.com/vector-im/riot-web/pull/4254)
+ * Update from Weblate.
+   [\#4253](https://github.com/vector-im/riot-web/pull/4253)
+ * Expect to see HTTP /join/#some:alias when we the view knows it
+   [\#4252](https://github.com/vector-im/riot-web/pull/4252)
+ * Update from Weblate.
+   [\#4250](https://github.com/vector-im/riot-web/pull/4250)
+ * add explicit import to utf8 polyfill and rip out unused imports
+   [\#4169](https://github.com/vector-im/riot-web/pull/4169)
+ * Added styling for copy to clipboard button
+   [\#4204](https://github.com/vector-im/riot-web/pull/4204)
+ * Update from Weblate.
+   [\#4231](https://github.com/vector-im/riot-web/pull/4231)
+ * Update from Weblate.
+   [\#4218](https://github.com/vector-im/riot-web/pull/4218)
+ * Update CSS for ChatInviteDialog
+   [\#4226](https://github.com/vector-im/riot-web/pull/4226)
+ * change electron -> electron_app which was previously missed
+   [\#4212](https://github.com/vector-im/riot-web/pull/4212)
+ * New guest access
+   [\#4039](https://github.com/vector-im/riot-web/pull/4039)
+ * Align message timestamp centrally about the avatar mid-point
+   [\#4219](https://github.com/vector-im/riot-web/pull/4219)
+ * Remove '/' from homepage URL
+   [\#4221](https://github.com/vector-im/riot-web/pull/4221)
+ * Chop off 'origin/'
+   [\#4220](https://github.com/vector-im/riot-web/pull/4220)
+ * Update from Weblate.
+   [\#4214](https://github.com/vector-im/riot-web/pull/4214)
+ * adjust alignment of message menu button in compact layout
+   [\#4211](https://github.com/vector-im/riot-web/pull/4211)
+ * Update from Weblate.
+   [\#4207](https://github.com/vector-im/riot-web/pull/4207)
+ * Fix Tests in ILAG
+   [\#4209](https://github.com/vector-im/riot-web/pull/4209)
+ * Update from Weblate.
+   [\#4197](https://github.com/vector-im/riot-web/pull/4197)
+ * Fix tests for new-guest-access
+   [\#4201](https://github.com/vector-im/riot-web/pull/4201)
+ * i18n for SetPasswordDialog
+   [\#4198](https://github.com/vector-im/riot-web/pull/4198)
+ * Update from Weblate.
+   [\#4193](https://github.com/vector-im/riot-web/pull/4193)
+ * to make the windows volume mixer not explode as it can't resize icons.
+   [\#4183](https://github.com/vector-im/riot-web/pull/4183)
+ * provide react devtools in electron dev runs
+   [\#4186](https://github.com/vector-im/riot-web/pull/4186)
+ * Fix DeprecationWarning
+   [\#4184](https://github.com/vector-im/riot-web/pull/4184)
+ * room link should be a matrix.to one
+   [\#4178](https://github.com/vector-im/riot-web/pull/4178)
+ * Update home.html
+   [\#4163](https://github.com/vector-im/riot-web/pull/4163)
+ * Add missing translation for room directory
+   [\#4160](https://github.com/vector-im/riot-web/pull/4160)
+ * i18n welcome
+   [\#4129](https://github.com/vector-im/riot-web/pull/4129)
+ * Tom welcome page
+   [\#4038](https://github.com/vector-im/riot-web/pull/4038)
+ * Fix some tests that expect Directory (they should expect HomePage)
+   [\#4076](https://github.com/vector-im/riot-web/pull/4076)
+ * Add "Login" button to RHS when user is a guest
+   [\#4037](https://github.com/vector-im/riot-web/pull/4037)
+ * Rejig the PaswordNagBar
+   [\#4026](https://github.com/vector-im/riot-web/pull/4026)
+ * Allow team server config to be missing
+   [\#4024](https://github.com/vector-im/riot-web/pull/4024)
+ * Remove GuestWarningBar
+   [\#4020](https://github.com/vector-im/riot-web/pull/4020)
+ * Make left panel better for new users (mk III)
+   [\#4023](https://github.com/vector-im/riot-web/pull/4023)
+ * Implement default welcome page and allow custom URL /w config
+   [\#4015](https://github.com/vector-im/riot-web/pull/4015)
+ * Add warm-fuzzy for successful password entry
+   [\#3989](https://github.com/vector-im/riot-web/pull/3989)
+ * autoFocus new password input in SetPasswordDialog
+   [\#3982](https://github.com/vector-im/riot-web/pull/3982)
+ * Implement dialog to set password
+   [\#3921](https://github.com/vector-im/riot-web/pull/3921)
+ * Replace NeedToRegister with SetMxId dialog
+   [\#3924](https://github.com/vector-im/riot-web/pull/3924)
+ * Add welcomeUserId to sample config
+   [\#3906](https://github.com/vector-im/riot-web/pull/3906)
+ * CSS for mxIdDialog redesign
+   [\#3885](https://github.com/vector-im/riot-web/pull/3885)
+ * Implement PasswordNagBar
+   [\#3817](https://github.com/vector-im/riot-web/pull/3817)
+ * CSS for new SetMxIdDialog
+   [\#3762](https://github.com/vector-im/riot-web/pull/3762)
+
 Changes in [0.10.2](https://github.com/vector-im/riot-web/releases/tag/v0.10.2) (2017-06-06)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.1...v0.10.2)
