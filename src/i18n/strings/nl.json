@@ -102,7 +102,7 @@
     "View Source": "Bekijk bron",
     "When I'm invited to a room": "Wanneer ik uitgenodigt wordt naar een kamer",
     "World readable": "Door iedereen leesbaar",
-    "You cannot delete this image. (%(code)s)": "Je kunt deze afbeelding niet verwijderen. (%code)s)",
+    "You cannot delete this image. (%(code)s)": "Je kunt deze afbeelding niet verwijderen. %(code)s)",
     "You cannot delete this message. (%(code)s)": "Je kunt dit bericht niet verwijderen. (%(code)s)",
     "You are not receiving desktop notifications": "Je ontvangt momenteel geen desktop notificaties",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Je hebt ze mogelijk ingesteld in een andere client dan Riot. Je kunt ze niet aanpassen in Riot maar ze zijn wel actief",
