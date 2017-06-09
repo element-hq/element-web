@@ -1,7 +1,7 @@
 {
     "af": "Αφρικάνικα",
     "Error": "Σφάλμα",
-    "Failed to forget room %(errCode)s": "Δεν ήταν δυνατή η διαγραφή του δωματίου",
+    "Failed to forget room %(errCode)s": "Δεν ήταν δυνατή η διαγραφή του δωματίου %(errCode)s",
     "Failed to join the room": "Δεν ήταν δυνατή η σύνδεση στο δωμάτιο",
     "Mute": "Σίγαση",
     "Notifications": "Ειδοποιήσεις",

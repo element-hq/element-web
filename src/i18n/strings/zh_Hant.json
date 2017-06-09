@@ -359,7 +359,7 @@
     "Enable URL previews for this room (affects only you)": "啟用此房間的網址預覽（僅影響您）",
     "Drop file here to upload": "把文件放在這裡上傳",
     "Disable URL previews by default for participants in this room": "默認情況下，此房間的參與者禁用網址預覽",
-    "URL previews are %(globalDisableUrlPreview)s by default for participants in this room.": "默認情況下，這個房間的參與者的網址預覽是%(globalDisableUrlPreview)。",
+    "URL previews are %(globalDisableUrlPreview)s by default for participants in this room.": "默認情況下，這個房間的參與者的網址預覽是%(globalDisableUrlPreview)s。",
     "Removed or unknown message type": "已刪除或未知的信息類型",
-    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "您即將被帶到第三方網站，以便您可以驗證您的帳戶以使用%(integrationsUrl)。你想繼續嗎？"
+    "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "您即將被帶到第三方網站，以便您可以驗證您的帳戶以使用%(integrationsUrl)s。你想繼續嗎？"
 }
