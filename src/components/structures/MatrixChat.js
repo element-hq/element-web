@@ -1307,7 +1307,7 @@ module.exports = React.createClass({
             });
         } else {
             dis.dispatch({
-                action: 'view_room_directory',
+                action: 'view_home_page',
             });
         }
     },
