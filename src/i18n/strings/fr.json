@@ -386,7 +386,7 @@
     "Email address": "Adresse e-mail",
     "Error decrypting attachment": "Erreur lors du déchiffrement de la pièce jointe",
     "Failed to set avatar.": "Erreur lors de la définition de la photo de profil.",
-    "For security, logging out will delete any end-to-end encryption keys from this browser. If you want to be able to decrypt your conversation history from future Riot sessions, please export your room keys for safe-keeping.": "Par sécurité une deconnexion supprimera toutes les clés d’encryption de cet explorateur. Si vous voulez être capable de décrypter l’historique de votre conversation lors de sessions futures de Riot, merci d’exporter les clés pour le salon.",
+    "For security, logging out will delete any end-to-end encryption keys from this browser. If you want to be able to decrypt your conversation history from future Riot sessions, please export your room keys for safe-keeping.": "Par sécurité une déconnexion supprimera toutes les clés d’encryption de ce navigateur. Si vous voulez être capable de décrypter l’historique de votre conversation lors de sessions futures de Riot, merci d’exporter les clés pour le salon.",
     "Guests can't set avatars. Please register.": "Les visiteurs ne peuvent définir de photo de profil. Merci de vous enregistrer.",
     "Guests can't use labs features. Please register.": "Les visiteurs ne peuvent utiliser les fonctionalités du laboratoire. Merci de vous enregistrer.",
     "Guests cannot join this room even if explicitly invited.": "Les visiteurs ne peuvent rejoindre ce salon, même si explicitement invités.",
