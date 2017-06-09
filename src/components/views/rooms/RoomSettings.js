@@ -576,26 +576,24 @@ module.exports = React.createClass({
                 { _t('Never send encrypted messages to unverified devices in this room from this device') }.
             </label>;
 
-        if (!isEncrypted &&
-                roomState.mayClientSendStateEvent("m.room.encryption", cli)) {
+        if (!isEncrypted && roomState.mayClientSendStateEvent("m.room.encryption", cli)) {
             return (
                 <div>
                     <label>
                         <input type="checkbox" ref="encrypt" onClick={ this.onEnableEncryptionClick }/>
-                        <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
+                        <img className="mx_RoomSettings_e2eIcon mx_filterFlipColor" src="img/e2e-unencrypted.svg" width="12" height="12" />
                         { _t('Enable encryption') } { _t('(warning: cannot be disabled again!)') }
                     </label>
                     { settings }
                 </div>
             );
-        }
-        else {
+        } else {
             return (
                 <div>
                     <label>
                     { isEncrypted
-                      ? <img className="mx_RoomSettings_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" />
-                      : <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
+                      ? <img className="mx_RoomSettings_e2eIcon mx_filterFlipColor" src="img/e2e-verified.svg" width="10" height="12" />
+                      : <img className="mx_RoomSettings_e2eIcon mx_filterFlipColor" src="img/e2e-unencrypted.svg" width="12" height="12" />
                     }
                     { isEncrypted ? _t("Encryption is enabled in this room") : _t("Encryption is not enabled in this room") }.
                     </label>
