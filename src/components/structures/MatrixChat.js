@@ -570,6 +570,15 @@ module.exports = React.createClass({
         const allRooms = RoomListSorter.mostRecentActivityFirst(
             MatrixClientPeg.get().getRooms(),
         );
+        // If there are 0 rooms or 1 room, view the home page because otherwise
+        // if there are 0, we end up trying to index into an empty array, and
+        // if there is 1, we end up viewing the same room.
+        if (allRooms.length < 2) {
+            dis.dispatch({
+                action: 'view_home_page',
+            });
+            return;
+        }
         let roomIndex = -1;
         for (let i = 0; i < allRooms.length; ++i) {
             if (allRooms[i].roomId == this.state.currentRoomId) {
@@ -1307,7 +1316,7 @@ module.exports = React.createClass({
             });
         } else {
             dis.dispatch({
-                action: 'view_room_directory',
+                action: 'view_home_page',
             });
         }
     },
