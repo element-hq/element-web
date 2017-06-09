@@ -43,6 +43,15 @@ import createRoom from "../../createRoom";
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
 
+/** constants for MatrixChat.state.view */
+const VIEWS = {
+    DEFAULT: 0,
+    LOGIN: 1,
+    REGISTER: 2,
+    POST_REGISTRATION: 3,
+    FORGOT_PASSWORD: 4,
+};
+
 module.exports = React.createClass({
     displayName: 'MatrixChat',
 
@@ -94,7 +103,11 @@ module.exports = React.createClass({
     getInitialState: function() {
         const s = {
             loading: true,
-            screen: undefined,
+
+            // the master view we are showing.
+            view: VIEWS.DEFAULT,
+
+            // a thing to call showScreen with once login completes.
             screenAfterLogin: this.props.initialScreenAfterLogin,
 
             // Stashed guest credentials if the user logs out
@@ -317,9 +330,9 @@ module.exports = React.createClass({
         }
     },
 
-    setStateForNewScreen: function(state) {
+    setStateForNewView: function(state) {
         const newState = {
-            screen: undefined,
+            view: VIEWS.DEFAULT,
             viewUserId: null,
             loggedIn: false,
             ready: false,
@@ -347,19 +360,19 @@ module.exports = React.createClass({
                         guestCreds: MatrixClientPeg.getCredentials(),
                     });
                 }
-                this.setStateForNewScreen({
-                    screen: 'login',
+                this.setStateForNewView({
+                    view: VIEWS.LOGIN,
                 });
                 this.notifyNewScreen('login');
                 break;
             case 'start_post_registration':
                 this.setState({ // don't clobber loggedIn status
-                    screen: 'post_registration',
+                    view: VIEWS.POST_REGISTRATION,
                 });
                 break;
             case 'start_password_recovery':
-                this.setStateForNewScreen({
-                    screen: 'forgot_password',
+                this.setStateForNewView({
+                    view: VIEWS.FORGOT_PASSWORD,
                 });
                 this.notifyNewScreen('forgot_password');
                 break;
@@ -537,8 +550,8 @@ module.exports = React.createClass({
     },
 
     _startRegistration: function(params) {
-        this.setStateForNewScreen({
-            screen: 'register',
+        this.setStateForNewView({
+            view: VIEWS.REGISTER,
             // these params may be undefined, but if they are,
             // unset them from our state: we don't want to
             // resume a previous registration session if the
@@ -969,7 +982,7 @@ module.exports = React.createClass({
      */
     _onLoggedOut: function() {
         this.notifyNewScreen('login');
-        this.setStateForNewScreen({
+        this.setStateForNewView({
             loggedIn: false,
             ready: false,
             collapse_lhs: false,
@@ -1253,7 +1266,7 @@ module.exports = React.createClass({
     onFinishPostRegistration: function() {
         // Don't confuse this with "PageType" which is the middle window to show
         this.setState({
-            screen: undefined,
+            view: VIEWS.DEFAULT,
         });
         this.showScreen("settings");
     },
@@ -1335,7 +1348,7 @@ module.exports = React.createClass({
         }
 
         // needs to be before normal PageTypes as you are logged in technically
-        if (this.state.screen == 'post_registration') {
+        if (this.state.view === VIEWS.POST_REGISTRATION) {
             const PostRegistration = sdk.getComponent('structures.login.PostRegistration');
             return (
                 <PostRegistration
@@ -1374,7 +1387,7 @@ module.exports = React.createClass({
                     </a>
                 </div>
             );
-        } else if (this.state.screen == 'register') {
+        } else if (this.state.view == VIEWS.REGISTER) {
             const Registration = sdk.getComponent('structures.login.Registration');
             return (
                 <Registration
@@ -1397,7 +1410,7 @@ module.exports = React.createClass({
                     onCancelClick={this.state.guestCreds ? this.onReturnToGuestClick : null}
                     />
             );
-        } else if (this.state.screen == 'forgot_password') {
+        } else if (this.state.view == VIEWS.FORGOT_PASSWORD) {
             const ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
             return (
                 <ForgotPassword
