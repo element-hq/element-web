@@ -263,38 +263,42 @@ function inviteUser(event, roomId, userId) {
 }
 
 function setWidget(event, roomId) {
-    // check required fields exist
     const widgetId = event.data.widget_id;
     const widgetType = event.data.type;
     const widgetUrl = event.data.url;
-    if (!widgetId || widgetUrl === undefined || !widgetType) {
-        sendError(event, _t("Unable to create widget."), new Error("Missing required widget fields."));
-        return;
-    }
+    const widgetName = event.data.name; // optional
+    const widgetData = event.data.data; // optional
+
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t('You need to be logged in.'));
         return;
     }
 
-    // check types of fields
-    const widgetName = event.data.name; // optional
-    const widgetData = event.data.data; // optional
-    if (widgetName !== undefined && typeof widgetName !== 'string') {
-        sendError(event, _t("Unable to create widget."), new Error("Optional field 'name' must be a string."));
+    // both adding/removing widgets need these checks
+    if (!widgetId || widgetUrl === undefined) {
+        sendError(event, _t("Unable to create widget."), new Error("Missing required widget fields."));
         return;
     }
-    if (widgetData !== undefined && !(widgetData instanceof Object)) {
-        sendError(event, _t("Unable to create widget."), new Error("Optional field 'data' must be an Object."));
-        return;
-    }
-    if (typeof widgetType !== 'string') {
-        sendError(event, _t("Unable to create widget."), new Error("Field 'type' must be a string."));
-        return;
-    }
-    if (widgetUrl !== null && typeof widgetUrl !== 'string') {
-        sendError(event, _t("Unable to create widget."), new Error("Field 'url' must be a string or null."));
-        return;
+
+    if (widgetUrl !== null) { // if url is null it is being deleted, don't need to check name/type/etc
+        // check types of fields
+        if (widgetName !== undefined && typeof widgetName !== 'string') {
+            sendError(event, _t("Unable to create widget."), new Error("Optional field 'name' must be a string."));
+            return;
+        }
+        if (widgetData !== undefined && !(widgetData instanceof Object)) {
+            sendError(event, _t("Unable to create widget."), new Error("Optional field 'data' must be an Object."));
+            return;
+        }
+        if (typeof widgetType !== 'string') {
+            sendError(event, _t("Unable to create widget."), new Error("Field 'type' must be a string."));
+            return;
+        }
+        if (typeof widgetUrl !== 'string') {
+            sendError(event, _t("Unable to create widget."), new Error("Field 'url' must be a string or null."));
+            return;
+        }
     }
 
     // TODO: same dance we do for power levels. It'd be nice if the JS SDK had helper methods to do this.
