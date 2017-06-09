@@ -197,5 +197,7 @@
     "You can now return to your account after signing out, and sign in on other devices.": "Você pode retornar agora para a sua conta depois de fazer logout, e então fazer login em outros dispositivos.",
     "Continue": "Continuar",
     "Please set a password!": "Por favor, defina uma senha!",
-    "This will allow you to return to your account after signing out, and sign in on other devices.": "Isso permitirá que você possa retornar à sua conta após fazer logout, e também fazer login em outros dispositivos."
+    "This will allow you to return to your account after signing out, and sign in on other devices.": "Isso permitirá que você possa retornar à sua conta após fazer logout, e também fazer login em outros dispositivos.",
+    " (HTTP status %(httpStatus))": "(Status HTTP %(httpStatus))",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Chat descentralizado, criptografado e colaborativo impulsionado por [matrix]"
 }
