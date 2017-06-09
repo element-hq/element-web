@@ -182,5 +182,13 @@
     "Community-run support for Synapse": "Поддержка Synapse от сообщества",
     "Admin support for Dendrite": "Админ. помощь для Dendrite",
     "Building services on Matrix": "Построить услуги для Matrix",
-    "Implementing VoIP services with Matrix": "Внедрение услуги VoIP с Matrix"
+    "Implementing VoIP services with Matrix": "Внедрение услуги VoIP с Matrix",
+    " (HTTP status %(httpStatus))": "(HTTP-Состояние %(httpStatus))",
+    "Riot/iOS &amp; matrix-ios-sdk chat": "Riot-iOS &amp; \"matrix-ios-sdk\"-Чат",
+    "Riot/Android &amp; matrix-android-sdk chat": "Riot-Android &amp; matrix-android-sdk-Чат",
+    "Announcements about Synapse releases": "Объявления релизов Synapse",
+    "Support for those using and running matrix-appservice-irc": "Поддержка тех, кто matrix-appservice-irc  эксплуатирует и использует",
+    "You have successfully set a password!": "Вы успешно установили пароль!",
+    "Continue": "Продолжить",
+    "Please set a password!": "Задайте пароль!"
 }
