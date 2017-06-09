@@ -205,5 +205,5 @@
     "This will allow you to return to your account after signing out, and sign in on other devices.": "Dies erlaubt dir, dich wieder an deinem Konto anzumelden, nachdem du dich abgemeldet hast.",
     "Dev chat for the Dendrite dev team": "Entwickler-Chat für das Dendrite-Entwickler-Team",
     "General discussion about Matrix and Riot": "Allgemeine Diskussion über Matrix und Riot",
-    " (HTTP status %(httpStatus))": "(HTTP-Status %(httpStatus))"
+    " (HTTP status %(httpStatus))": "(HTTP Status %(httpStatus))"
 }
