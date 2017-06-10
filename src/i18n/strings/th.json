@@ -195,7 +195,7 @@
     "This will allow you to return to your account after signing out, and sign in on other devices.": "เพื่อคุณจะได้กลับมายังบัญชีเดิมของคุณได้ หลังจากออกจากระบบ แล้วกลับเข้าสู่ระบบในอุปกรณ์อื่น ๆ",
     "Design and implementation of E2E in Matrix": "การออกแบบและใช้งาน E2E ใน Matrix",
     "Discussion of the Identity Service API": "พูดคุยเกี่ยวกับ Identity Service API",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "แชทและประสานงานบนระบบที่ทั้งเข้ารหัสได้และกระจายศูนย์กลาง โดยใช้เทคโนโลยีจาก [matrix]",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "ระบบแชทและประสานงาน ไร้ศูนย์กลางและเข้ารหัสได้ โดยใช้เทคโนโลยีจาก [matrix]",
     "General discussion about Matrix and Riot": "พูดคุยเรื่องทั่วไป ทั้ง Matrix และ Riot",
     " (HTTP status %(httpStatus))": "(สถานะ HTTP %(httpStatus))"
 }
