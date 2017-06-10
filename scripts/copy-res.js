@@ -21,7 +21,7 @@ const INCLUDE_LANGS = [
     {'value': 'ru', 'label': 'Русский'},
     {'value': 'sv', 'label': 'Svenska'},
     {'value': 'es', 'label': 'Español'},
-    {'value': 'th', 'label': 'Thai'},
+    {'value': 'th', 'label': 'ไทย'},
     {'value': 'zh_Hans', 'label': '简体中文'}, // simplified chinese
     {'value': 'zh_Hant', 'label': '繁體中文'}, // traditional chinese
 ];
