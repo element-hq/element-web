@@ -577,7 +577,7 @@
     "VoIP conference started.": "VoIP conference started.",
     "VoIP is unsupported": "VoIP is unsupported",
     "(call failed to connect)": "(call failed to connect)",
-    "(unknown failure)": "(unknown failure)",
+    "(unknown failure: %(reason)s)": "(unknown failure: %(reason)s)",
     "(warning: cannot be disabled again!)": "(warning: cannot be disabled again!)",
     "Warning!": "Warning!",
     "WARNING: Device already verified, but keys do NOT MATCH!": "WARNING: Device already verified, but keys do NOT MATCH!",
