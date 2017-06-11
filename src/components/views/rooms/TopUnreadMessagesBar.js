@@ -41,7 +41,7 @@ module.exports = React.createClass({
                 </div>
                 <img className="mx_TopUnreadMessagesBar_close mx_filterFlipColor"
                     src="img/cancel.svg" width="18" height="18"
-                    alt="Close" title="Close"
+                    alt={_t("Close")} title={_t("Close")}
                     onClick={this.props.onCloseClick} />
             </div>
         );

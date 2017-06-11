@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import sdk from '../../../index';
 const MemberAvatar = require('../avatars/MemberAvatar.js');
 import { _t } from '../../../languageHandler';
 
@@ -111,9 +112,13 @@ module.exports = React.createClass({
             return null;
         }
 
+        const EmojiText = sdk.getComponent('elements.EmojiText');
+
         return (
             <span className="mx_TextualEvent mx_MemberEventListSummary_summary">
-                {summaries.join(", ")}
+                <EmojiText>
+                    {summaries.join(", ")}
+                </EmojiText>
             </span>
         );
     },
@@ -222,8 +227,7 @@ module.exports = React.createClass({
                         ? _t("%(severalUsers)sjoined", { severalUsers: "" })
                         : _t("%(oneUser)sjoined", { oneUser: "" });
                 }
-
-            break;
+                break;
             case "left":
                 if (repeats > 1) {
                     res = (plural)
@@ -233,7 +237,8 @@ module.exports = React.createClass({
                     res = (plural)
                         ? _t("%(severalUsers)sleft", { severalUsers: "" })
                         : _t("%(oneUser)sleft", { oneUser: "" });
-                }            break;
+                }
+               break;
             case "joined_and_left":
                 if (repeats > 1) {
                     res = (plural)
@@ -244,7 +249,7 @@ module.exports = React.createClass({
                         ? _t("%(severalUsers)sjoined and left", { severalUsers: "" })
                         : _t("%(oneUser)sjoined and left", { oneUser: "" });
                 }
-            break;
+                break;
             case "left_and_joined":
                 if (repeats > 1) {
                     res = (plural)
@@ -254,8 +259,8 @@ module.exports = React.createClass({
                     res = (plural)
                         ? _t("%(severalUsers)sleft and rejoined", { severalUsers: "" })
                         : _t("%(oneUser)sleft and rejoined", { oneUser: "" });
-                }            break;
-            break;
+                }
+                break;
             case "invite_reject":
                 if (repeats > 1) {
                     res = (plural)
@@ -266,7 +271,7 @@ module.exports = React.createClass({
                         ? _t("%(severalUsers)srejected their invitations", { severalUsers: "" })
                         : _t("%(oneUser)srejected their invitation", { oneUser: "" });
                 }
-            break;
+                break;
             case "invite_withdrawal":
                 if (repeats > 1) {
                     res = (plural)
@@ -277,7 +282,7 @@ module.exports = React.createClass({
                         ? _t("%(severalUsers)shad their invitations withdrawn", { severalUsers: "" })
                         : _t("%(oneUser)shad their invitation withdrawn", { oneUser: "" });
                 }
-            break;
+                break;
             case "invited":
                 if (repeats > 1) {
                     res = (plural)
@@ -288,7 +293,7 @@ module.exports = React.createClass({
                         ? _t("were invited")
                         : _t("was invited");
                 }
-            break;
+                break;
             case "banned":
                 if (repeats > 1) {
                     res = (plural)
@@ -299,7 +304,7 @@ module.exports = React.createClass({
                         ? _t("were banned")
                         : _t("was banned");
                 }
-            break;
+                break;
             case "unbanned":
                 if (repeats > 1) {
                     res = (plural)
@@ -310,7 +315,7 @@ module.exports = React.createClass({
                         ? _t("were unbanned")
                         : _t("was unbanned");
                 }
-            break;
+                break;
             case "kicked":
                 if (repeats > 1) {
                     res = (plural)
@@ -321,7 +326,7 @@ module.exports = React.createClass({
                         ? _t("were kicked")
                         : _t("was kicked");
                 }
-            break;
+                break;
             case "changed_name":
                 if (repeats > 1) {
                     res = (plural)
@@ -332,7 +337,7 @@ module.exports = React.createClass({
                         ? _t("%(severalUsers)schanged their name", { severalUsers: "" })
                         : _t("%(oneUser)schanged their name", { oneUser: "" });
                 }
-            break;
+                break;
             case "changed_avatar":
                 if (repeats > 1) {
                     res = (plural)
@@ -343,7 +348,7 @@ module.exports = React.createClass({
                         ? _t("%(severalUsers)schanged their avatar", { severalUsers: "" })
                         : _t("%(oneUser)schanged their avatar", { oneUser: "" });
                 }
-            break;
+                break;
         }
 
         return res;

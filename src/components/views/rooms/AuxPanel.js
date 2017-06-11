@@ -19,7 +19,7 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import sdk from '../../../index';
 import dis from "../../../dispatcher";
 import ObjectUtils from '../../../ObjectUtils';
-import  { _t } from '../../../languageHandler';
+import  { _t, _tJsx} from '../../../languageHandler';
 
 
 module.exports = React.createClass({
@@ -78,7 +78,7 @@ module.exports = React.createClass({
             fileDropTarget = (
                 <div className="mx_RoomView_fileDropTarget">
                     <div className="mx_RoomView_fileDropTargetLabel"
-                      title="Drop File Here">
+                      title={_t("Drop File Here")}>
                         <TintableSvg src="img/upload-big.svg" width="45" height="59"/>
                         <br/>
                         {_t("Drop file here to upload")}
@@ -95,9 +95,14 @@ module.exports = React.createClass({
             }
             else {
                 joinText = (<span>
-                    Join as <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}}
-                               href="#">voice</a> or <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video'); }}
-                               href="#">video</a>.
+                    {_tJsx(
+                        "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.",
+                        [/<voiceText>(.*?)<\/voiceText>/, /<videoText>(.*?)<\/videoText>/],
+                        [
+                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}} href="#">{sub}</a>,
+                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video');}} href="#">{sub}</a>,
+                        ]
+                    )}
                 </span>);
 
             }

@@ -63,6 +63,19 @@ module.exports = React.createClass({
         };
     },
 
+    copyToClipboard: function(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            const successful = document.execCommand('copy');
+        } catch (err) {
+            console.log('Unable to copy');
+        }
+        document.body.removeChild(textArea);
+    },
+
     componentDidMount: function() {
         this._unmounted = false;
 
@@ -80,6 +93,14 @@ module.exports = React.createClass({
                         highlight.highlightBlock(blocks[i]);
                     }
                 }, 10);
+            }
+            // add event handlers to the 'copy code' buttons
+            const buttons = ReactDOM.findDOMNode(this).getElementsByClassName("mx_EventTile_copyButton");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].onclick = (e) => {
+                    const copyCode = buttons[i].parentNode.getElementsByTagName("code")[0];
+                    this.copyToClipboard(copyCode.textContent);
+                };
             }
         }
     },
