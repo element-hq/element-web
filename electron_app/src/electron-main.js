@@ -28,6 +28,7 @@ const AutoLaunch = require('auto-launch');
 const tray = require('./tray');
 const vectorMenu = require('./vectormenu');
 const webContentsHandler = require('./webcontents-handler');
+const updater = require('./updater');
 
 const windowStateKeeper = require('electron-window-state');
 
@@ -45,69 +46,9 @@ try {
     // Continue with the defaults (ie. an empty config)
 }
 
-const UPDATE_POLL_INTERVAL_MS = 60 * 60 * 1000;
-const INITIAL_UPDATE_DELAY_MS = 30 * 1000;
-
 let mainWindow = null;
-let appQuitting = false;
+global.appQuitting = false;
 
-function installUpdate() {
-    // for some reason, quitAndInstall does not fire the
-    // before-quit event, so we need to set the flag here.
-    appQuitting = true;
-    electron.autoUpdater.quitAndInstall();
-}
-
-function pollForUpdates() {
-    try {
-        electron.autoUpdater.checkForUpdates();
-    } catch (e) {
-        console.log('Couldn\'t check for update', e);
-    }
-}
-
-function startAutoUpdate(updateBaseUrl) {
-    if (updateBaseUrl.slice(-1) !== '/') {
-        updateBaseUrl = updateBaseUrl + '/';
-    }
-    try {
-        // For reasons best known to Squirrel, the way it checks for updates
-        // is completely different between macOS and windows. On macOS, it
-        // hits a URL that either gives it a 200 with some json or
-        // 204 No Content. On windows it takes a base path and looks for
-        // files under that path.
-        if (process.platform === 'darwin') {
-            // include the current version in the URL we hit. Electron doesn't add
-            // it anywhere (apart from the User-Agent) so it's up to us. We could
-            // (and previously did) just use the User-Agent, but this doesn't
-            // rely on NSURLConnection setting the User-Agent to what we expect,
-            // and also acts as a convenient cache-buster to ensure that when the
-            // app updates it always gets a fresh value to avoid update-looping.
-            electron.autoUpdater.setFeedURL(
-                `${updateBaseUrl}macos/?localVersion=${encodeURIComponent(electron.app.getVersion())}`);
-
-        } else if (process.platform === 'win32') {
-            electron.autoUpdater.setFeedURL(`${updateBaseUrl}win32/${process.arch}/`);
-        } else {
-            // Squirrel / electron only supports auto-update on these two platforms.
-            // I'm not even going to try to guess which feed style they'd use if they
-            // implemented it on Linux, or if it would be different again.
-            console.log('Auto update not supported on this platform');
-        }
-        // We check for updates ourselves rather than using 'updater' because we need to
-        // do it in the main process (and we don't really need to check every 10 minutes:
-        // every hour should be just fine for a desktop app)
-        // However, we still let the main window listen for the update events.
-        // We also wait a short time before checking for updates the first time because
-        // of squirrel on windows and it taking a small amount of time to release a
-        // lock file.
-        setTimeout(pollForUpdates, INITIAL_UPDATE_DELAY_MS);
-        setInterval(pollForUpdates, UPDATE_POLL_INTERVAL_MS);
-    } catch (err) {
-        // will fail if running in debug mode
-        console.log('Couldn\'t enable update checking', err);
-    }
-}
 
 // handle uncaught errors otherwise it displays
 // stack traces in popup dialogs, which is terrible (which
@@ -118,9 +59,6 @@ function startAutoUpdate(updateBaseUrl) {
 process.on('uncaughtException', function(error) {
     console.log('Unhandled exception', error);
 });
-
-electron.ipcMain.on('install_update', installUpdate);
-electron.ipcMain.on('checkForUpdates', pollForUpdates);
 
 let focusHandlerAttached = false;
 electron.ipcMain.on('setBadgeCount', function(ev, count) {
@@ -219,7 +157,7 @@ electron.ipcMain.on('settings_set', function(ev, key, value) {
 electron.app.on('ready', () => {
     if (vectorConfig.update_base_url) {
         console.log(`Starting auto update with base URL: ${vectorConfig.update_base_url}`);
-        startAutoUpdate(vectorConfig.update_base_url);
+        updater.start(vectorConfig.update_base_url)
     } else {
         console.log('No update_base_url is defined: auto update is disabled');
     }
@@ -265,7 +203,7 @@ electron.app.on('ready', () => {
         mainWindow = null;
     });
     mainWindow.on('close', (e) => {
-        if (!appQuitting && (tray.hasTray() || process.platform === 'darwin')) {
+        if (!global.appQuitting && (tray.hasTray() || process.platform === 'darwin')) {
             // On Mac, closing the window just hides it
             // (this is generally how single-window Mac apps
             // behave, eg. Mail.app)
@@ -288,7 +226,7 @@ electron.app.on('activate', () => {
 });
 
 electron.app.on('before-quit', () => {
-    appQuitting = true;
+    global.appQuitting = true;
 });
 
 // Set the App User Model ID to match what the squirrel
