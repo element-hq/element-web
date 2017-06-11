@@ -125,7 +125,7 @@
     "You need to be using HTTPS to place a screen-sharing call.": "Απαιτείται η χρήση HTTPS για το διαμοιρασμό της επιφάνειας εργασίας μέσω κλήσης.",
     "Welcome page": "Αρχική σελίδα",
     "Forget": "Παράλειψη",
-    "Riot is not supported on mobile web. Install the app?": "Το Riot δεν υποστηρίζεται από φυλλομετρητές κινητών. Θέλετε να εγκαταστήσετε την εφαρμογή;",
+    "Riot is not supported on mobile web. Install the app?": "Το Riot δεν υποστηρίζεται από περιηγητές κινητών. Θέλετε να εγκαταστήσετε την εφαρμογή;",
     "Unhide Preview": "Προεπισκόπηση",
     "Waiting for response from server": "Αναμονή απάντησης από τον διακομιστή",
     "You are Rioting as a guest. <a>Register</a> or <a>sign in</a> to access more rooms and features!": "Χρησιμοποιείτε το Riot ως επισκέπτης. <a>Εγγραφείτε</a> ή <a>συνδεθείτε</a> για να αποκτήσετε πρόσβαση σε περισσότερα δωμάτια και χαρακτηριστικά!",
@@ -192,5 +192,9 @@
     "You can now return to your account after signing out, and sign in on other devices.": "Μπορείτε να επιστρέψετε στον λογαριασμό σας αφού αποσυνδεθείτε και συνδεθείτε από άλλες συσκευές.",
     "Continue": "Συνέχεια",
     "Please set a password!": "Παρακαλούμε ορίστε έναν κωδικό πρόσβασης!",
-    "This will allow you to return to your account after signing out, and sign in on other devices.": "Αυτό θα σας επιτρέψει να επιστρέψετε στον λογαριασμό σας αφού αποσυνδεθείτε και συνδεθείτε από άλλες συσκευές"
+    "This will allow you to return to your account after signing out, and sign in on other devices.": "Αυτό θα σας επιτρέψει να επιστρέψετε στον λογαριασμό σας αφού αποσυνδεθείτε και συνδεθείτε από άλλες συσκευές.",
+    "In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:": "Προκειμένου να διαγνωστούν προβλήματα, τα αρχεία καταγραφής από αυτόν τον πελάτη θα σταλούν με αυτήν την αναφορά σφάλματος. Αν προτιμάτε να στείλετε μόνο το παραπάνω κείμενο, απενεργοποιήστε:",
+    "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "Με τον τρέχον περιηγητή, η εμφάνιση και η αίσθηση της εφαρμογής ενδέχεται να είναι εντελώς εσφαλμένη και ορισμένες ή όλες οι λειτουργίες ενδέχεται να μην λειτουργούν. Εάν θέλετε να το δοκιμάσετε ούτως ή άλλως μπορείτε να συνεχίσετε, αλλά είστε μόνοι σας σε ό, τι αφορά τα προβλήματα που μπορεί να αντιμετωπίσετε!",
+    "Failed to set Direct Message status of room": "Δεν ήταν δυνατός ο ορισμός της κατάστασης Direct Message του δωματίου",
+    "Support for those using, running and writing other bridges": "Υποστήριξη ηια τους χρήστες που χρησιμοποιούν ή αναπτύσσουν εφαρμογές ενσωμάτωσης για το Matrix"
 }
