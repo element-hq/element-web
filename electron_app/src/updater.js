@@ -24,6 +24,7 @@ module.exports.start = function startAutoUpdate(updateBaseUrl) {
         updateBaseUrl = updateBaseUrl + '/';
     }
     try {
+        let url;
         // For reasons best known to Squirrel, the way it checks for updates
         // is completely different between macOS and windows. On macOS, it
         // hits a URL that either gives it a 200 with some json or
@@ -36,25 +37,29 @@ module.exports.start = function startAutoUpdate(updateBaseUrl) {
             // rely on NSURLConnection setting the User-Agent to what we expect,
             // and also acts as a convenient cache-buster to ensure that when the
             // app updates it always gets a fresh value to avoid update-looping.
-            autoUpdater.setFeedURL(`${updateBaseUrl}macos/?localVersion=${encodeURIComponent(app.getVersion())}`);
+            url = `${updateBaseUrl}macos/?localVersion=${encodeURIComponent(app.getVersion())}`;
 
         } else if (process.platform === 'win32') {
-            autoUpdater.setFeedURL(`${updateBaseUrl}win32/${process.arch}/`);
+            url = `${updateBaseUrl}win32/${process.arch}/`;
         } else {
             // Squirrel / electron only supports auto-update on these two platforms.
             // I'm not even going to try to guess which feed style they'd use if they
             // implemented it on Linux, or if it would be different again.
             console.log('Auto update not supported on this platform');
         }
-        // We check for updates ourselves rather than using 'updater' because we need to
-        // do it in the main process (and we don't really need to check every 10 minutes:
-        // every hour should be just fine for a desktop app)
-        // However, we still let the main window listen for the update events.
-        // We also wait a short time before checking for updates the first time because
-        // of squirrel on windows and it taking a small amount of time to release a
-        // lock file.
-        setTimeout(pollForUpdates, INITIAL_UPDATE_DELAY_MS);
-        setInterval(pollForUpdates, UPDATE_POLL_INTERVAL_MS);
+
+        if (url) {
+            autoUpdater.setFeedURL(url);
+            // We check for updates ourselves rather than using 'updater' because we need to
+            // do it in the main process (and we don't really need to check every 10 minutes:
+            // every hour should be just fine for a desktop app)
+            // However, we still let the main window listen for the update events.
+            // We also wait a short time before checking for updates the first time because
+            // of squirrel on windows and it taking a small amount of time to release a
+            // lock file.
+            setTimeout(pollForUpdates, INITIAL_UPDATE_DELAY_MS);
+            setInterval(pollForUpdates, UPDATE_POLL_INTERVAL_MS);
+        }
     } catch (err) {
         // will fail if running in debug mode
         console.log('Couldn\'t enable update checking', err);
