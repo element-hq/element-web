@@ -145,13 +145,15 @@ function textForCallHangupEvent(event) {
     const eventContent = event.getContent();
     let reason = "";
     if(!MatrixClientPeg.get().supportsVoip()) {
-      reason = _t('(not supported by this browser)');
+        reason = _t('(not supported by this browser)');
     } else if(eventContent.reason) {
-      if (eventContent.reason === "ice_failed") {
-        reason = _t('(call failed to connect)');
-      } else {
-        reason = _t('(unknown failure: %(reason)s)', {reason: eventContent.reason});
-      }
+        if (eventContent.reason === "ice_failed") {
+            reason = _t('(could not connect media)');
+        } else if (eventContent.reason === "invite_timeout") {
+            reason = _t('(no answer)');
+        } else {
+            reason = _t('(unknown failure: %(reason)s)', {reason: eventContent.reason});
+        }
     }
     return _t('%(senderName)s ended the call.', {senderName}) + ' ' + reason;
 }
