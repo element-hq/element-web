@@ -173,5 +173,11 @@
     "Always show message timestamps": "Üzenet időbélyeg folyamatos megjelenítése",
     "Authentication": "Azonosítás",
     "Alias (optional)": "Becenév (opcionális)",
-    "all room members": "minden szoba tagság"
+    "all room members": "minden szoba tagság",
+    "Failed to change password. Is your password correct?": "Nem sikerült megváltoztatni a jelszót. Helyesen írtad be a jelszavadat?",
+    "Continue": "Folytatás",
+    "Create new room": "Új szoba létrehozása",
+    "sb": "Szorb",
+    "rm": "Rétoromán",
+    "tn": "Tswana"
 }
