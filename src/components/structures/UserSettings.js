@@ -863,6 +863,7 @@ module.exports = React.createClass({
                 </div>
             </div>;
         }
+        return <div />;
     },
 
     _renderBulkOptions: function() {
