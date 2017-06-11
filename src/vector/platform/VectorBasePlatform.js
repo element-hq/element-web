@@ -118,16 +118,6 @@ export default class VectorBasePlatform extends BasePlatform {
     }
 
     /**
-     * Check for the availability of an update to the version of the
-     * app that's currently running.
-     * If an update is available, this function should dispatch the
-     * 'new_version' action.
-     * @returns Promise<updateCheckStatusEnum>
-     */
-    pollForUpdate(): Promise<number> {
-    }
-
-    /**
      * Update the currently running app to the latest available
      * version and replace this instance of the app with the
      * new version.
