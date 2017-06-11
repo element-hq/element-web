@@ -40,6 +40,7 @@ function parseIntWithDefault(val, def) {
 const BannedUser = React.createClass({
     propTypes: {
         member: React.PropTypes.object.isRequired, // js-sdk RoomMember
+        reason: React.PropTypes.string,
     },
 
     _onUnbanClick: function() {
@@ -73,10 +74,11 @@ const BannedUser = React.createClass({
                 >
                     { _t('Unban') }
                 </AccessibleButton>
-                {this.props.member.userId}
+                <strong>{this.props.member.name}</strong> {this.props.member.userId}
+                {this.props.reason ? " " +_t('Reason') + ": " + this.props.reason : ""}
             </li>
         );
-    }
+    },
 });
 
 module.exports = React.createClass({
@@ -662,16 +664,17 @@ module.exports = React.createClass({
             userLevelsSection = <div>{ _t('No users have specific privileges in this room') }.</div>;
         }
 
-        var banned = this.props.room.getMembersWithMembership("ban");
-        var bannedUsersSection;
+        const banned = this.props.room.getMembersWithMembership("ban");
+        let bannedUsersSection;
         if (banned.length) {
             bannedUsersSection =
                 <div>
                     <h3>{ _t('Banned users') }</h3>
                     <ul className="mx_RoomSettings_banned">
                         {banned.map(function(member) {
+                            const banEvent = member.events.member.getContent();
                             return (
-                                <BannedUser key={member.userId} member={member} />
+                                <BannedUser key={member.userId} member={member} reason={banEvent.reason} />
                             );
                         })}
                     </ul>
