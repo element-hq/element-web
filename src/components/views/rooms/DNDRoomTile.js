@@ -20,7 +20,6 @@ import React from 'react';
 import {DragSource} from 'react-dnd';
 import {DropTarget} from 'react-dnd';
 
-import dis from 'matrix-react-sdk/lib/dispatcher';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import sdk from 'matrix-react-sdk';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';

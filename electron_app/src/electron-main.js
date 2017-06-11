@@ -1,6 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -155,6 +156,20 @@ electron.ipcMain.on('settings_set', function(ev, key, value) {
 });
 
 electron.app.on('ready', () => {
+
+    if (argv.devtools) {
+        try {
+            const { default: installExtension, REACT_DEVELOPER_TOOLS, REACT_PERF } = require('electron-devtools-installer');
+            installExtension(REACT_DEVELOPER_TOOLS)
+                .then((name) => console.log(`Added Extension: ${name}`))
+                .catch((err) => console.log('An error occurred: ', err));
+            installExtension(REACT_PERF)
+                .then((name) => console.log(`Added Extension: ${name}`))
+                .catch((err) => console.log('An error occurred: ', err));
+        } catch(e) {console.log(e);}
+    }
+
+
     if (vectorConfig.update_base_url) {
         console.log(`Starting auto update with base URL: ${vectorConfig.update_base_url}`);
         updater.start(vectorConfig.update_base_url)

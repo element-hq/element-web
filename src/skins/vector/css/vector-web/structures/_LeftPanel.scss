@@ -64,45 +64,31 @@ limitations under the License.
     pointer-events: none;
 }
 
-.mx_LeftPanel .mx_BottomLeftMenu_homePage,
-.mx_LeftPanel .mx_BottomLeftMenu_directory,
-.mx_LeftPanel .mx_BottomLeftMenu_createRoom,
-.mx_LeftPanel .mx_BottomLeftMenu_people,
-.mx_LeftPanel .mx_BottomLeftMenu_settings {
-    display: inline-block;
-    cursor: pointer;
-}
-
-.collapsed .mx_BottomLeftMenu_homePage,
-.collapsed .mx_BottomLeftMenu_directory,
-.collapsed .mx_BottomLeftMenu_createRoom,
-.collapsed .mx_BottomLeftMenu_people,
-.collapsed .mx_BottomLeftMenu_settings {
+.collapsed .mx_RoleButton {
     margin-right: 0px ! important;
     padding-top: 3px ! important;
     padding-bottom: 3px ! important;
 }
 
-.mx_LeftPanel .mx_BottomLeftMenu_homePage,
-.mx_LeftPanel .mx_BottomLeftMenu_directory,
-.mx_LeftPanel .mx_BottomLeftMenu_createRoom,
-.mx_LeftPanel .mx_BottomLeftMenu_people {
+.mx_BottomLeftMenu_options > div {
+    display: inline-block;
+}
+
+.mx_BottomLeftMenu_options .mx_RoleButton {
+    margin-left: 0px;
     margin-right: 10px;
 }
 
-.mx_LeftPanel .mx_BottomLeftMenu_settings {
+.mx_BottomLeftMenu_options .mx_BottomLeftMenu_settings {
     float: right;
+}
+
+.mx_BottomLeftMenu_options .mx_BottomLeftMenu_settings .mx_RoleButton {
+    margin-right: 0px;
 }
 
 .mx_LeftPanel.collapsed .mx_BottomLeftMenu_settings {
     float: none;
-}
-
-.mx_LeftPanel .mx_BottomLeftMenu_tooltip {
-    display: inline-block;
-    position: relative;
-    top: -25px;
-    left: 6px;
 }
 
 .mx_MatrixChat_useCompactLayout {

@@ -102,7 +102,7 @@
     "View Source": "Bekijk bron",
     "When I'm invited to a room": "Wanneer ik uitgenodigt wordt naar een kamer",
     "World readable": "Door iedereen leesbaar",
-    "You cannot delete this image. (%(code)s)": "Je kunt deze afbeelding niet verwijderen. (%code)s)",
+    "You cannot delete this image. (%(code)s)": "Je kunt deze afbeelding niet verwijderen. %(code)s)",
     "You cannot delete this message. (%(code)s)": "Je kunt dit bericht niet verwijderen. (%(code)s)",
     "You are not receiving desktop notifications": "Je ontvangt momenteel geen desktop notificaties",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Je hebt ze mogelijk ingesteld in een andere client dan Riot. Je kunt ze niet aanpassen in Riot maar ze zijn wel actief",
@@ -118,5 +118,8 @@
     "Welcome page": "Welkom pagina",
     "Drop here %(toAction)s": "%(toAction)s hier naar toe verplaatsen",
     "Failed to set Direct Message status of room": "Het is mislukt om de directe berichten status van de kamer in te stellen",
-    "Redact": "Redigeren"
+    "Redact": "Redigeren",
+    "A new version of Riot is available.": "Nieuwe Riot versie is beschikbaar.",
+    "All Rooms": "Alle Kamers",
+    "Cancel": "Annuleer"
 }

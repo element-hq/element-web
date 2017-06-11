@@ -190,8 +190,8 @@ export default class WebPlatform extends VectorBasePlatform {
         const appName = u.format();
 
         const ua = new UAParser();
-        const browserName = ua.getBrowser().name;
-        const osName = ua.getOS().name;
+        const browserName = ua.getBrowser().name || "unknown browser";
+        const osName = ua.getOS().name || "unknown os";
         return _t('%(appName)s via %(browserName)s on %(osName)s', {appName: appName, browserName: browserName, osName: osName});
     }
 
