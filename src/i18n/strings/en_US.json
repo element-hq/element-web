@@ -163,5 +163,9 @@
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!",
     "Login": "Login",
     "Continue": "Continue",
-    "Failed to change password. Is your password correct?": "Failed to change password. Is your password correct?"
+    "Failed to change password. Is your password correct?": "Failed to change password. Is your password correct?",
+    " (HTTP status %(httpStatus))": "(HTTP status %(httpStatus))",
+    "Welcome to Riot.im": "Welcome to Riot.im",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralised, encrypted chat &amp; collaboration powered by [matrix]",
+    "Chat with Riot Bot": "Chat with Riot Bot"
 }
