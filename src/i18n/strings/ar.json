@@ -1,3 +1,6 @@
 {
-    "All messages": "كل الرسائل"
+    "All messages": "كل الرسائل",
+    "Continue": "استمر",
+    "Please set a password!": "يرجى تعيين كلمة مرور!",
+    "This will allow you to return to your account after signing out, and sign in on other devices.": "سيسمح لك هذا بالعودة إلى حسابك بعد الخروج، وتسجيل الدخول على الأجهزة الأخرى."
 }
