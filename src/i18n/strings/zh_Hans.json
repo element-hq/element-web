@@ -1,3 +1,7 @@
 {
-    "Close": "关闭"
+    "Close": "关闭",
+    "Mute": "静音",
+    "Notifications": "通知",
+    "OK": "确定",
+    "Operation failed": "操作失败"
 }
