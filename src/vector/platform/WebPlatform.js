@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import VectorBasePlatform, {updateStateEnum} from './VectorBasePlatform';
+import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/lib/dispatcher.js';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
@@ -32,6 +32,9 @@ export default class WebPlatform extends VectorBasePlatform {
     constructor() {
         super();
         this.runningVersion = null;
+
+        this.startUpdateCheck = this.startUpdateCheck.bind(this);
+        this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
     }
 
     getHumanReadableName(): string {
@@ -135,11 +138,11 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     startUpdater() {
-        this.checkForUpdate();
-        setInterval(this.checkForUpdate, POKE_RATE_MS);
+        this.pollForUpdate();
+        setInterval(this.pollForUpdate.bind(this), POKE_RATE_MS);
     }
 
-    checkForUpdate() {
+    pollForUpdate() {
         return this._getVersion().then((ver) => {
             if (this.runningVersion === null) {
                 this.runningVersion = ver;
@@ -149,12 +152,29 @@ export default class WebPlatform extends VectorBasePlatform {
                     currentVersion: this.runningVersion,
                     newVersion: ver,
                 });
-                return updateStateEnum.READY;
+                // Return to skip a MatrixChat state update
+                return;
             }
-            return updateStateEnum.NOTAVAILABLE;
+            return { status: updateCheckStatusEnum.NOTAVAILABLE };
         }, (err) => {
             console.error("Failed to poll for update", err);
-            return updateStateEnum.ERROR;
+            return {
+                status: updateCheckStatusEnum.ERROR,
+                detail: err.message || err.status ? err.status.toString() : 'Unknown Error',
+            };
+        });
+    }
+
+    startUpdateCheck() {
+        if (this.showUpdateCheck) return;
+        super.startUpdateCheck();
+        this.pollForUpdate().then((updateState) => {
+            if (!this.showUpdateCheck) return;
+            if (!updateState) return;
+            dis.dispatch({
+                action: 'check_updates',
+                value: updateState,
+            });
         });
     }
 

@@ -17,76 +17,50 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import dis from 'matrix-react-sdk/lib/dispatcher';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
-import {updateStateEnum} from '../../../vector/platform/VectorBasePlatform';
+import {updateCheckStatusEnum} from '../../../vector/platform/VectorBasePlatform';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
+const statusText = {
+    CHECKING: 'Checking for an update...',
+    ERROR: 'Error encountered (%(errorDetail)s).',
+    NOTAVAILABLE: 'No update available.',
+    DOWNLOADING: 'Downloading update...',
+};
+
+const doneStatuses = [
+    updateCheckStatusEnum.ERROR,
+    updateCheckStatusEnum.NOTAVAILABLE,
+];
+
 export default React.createClass({
-
-    getInitialState: function() {
-        return {
-            message: _t('Checking for an update...'),
-            done: false,
-        };
-    },
-
-    componentWillMount: function() {
-        PlatformPeg.get().checkForUpdate().done((state) => {
-            if (this._unmounted) return;
-
-            console.log('checkForUpdate done, ', state);
-
-            // We will be replaced by NewVersionBar
-            if (state === updateStateEnum.READY) return;
-
-            let done = true;
-            let message;
-            switch (state) {
-                case updateStateEnum.ERROR:
-                    message = _t('Error encountered when checking for an update.');
-                    break;
-                case updateStateEnum.TIMEOUT:
-                    message = _t('Update Check timed out, try again later.');
-                    break;
-                case updateStateEnum.NOTAVAILABLE:
-                    message = _t('No update found.');
-                    break;
-                case updateStateEnum.DOWNLOADING:
-                    message = _t('Update is being downloaded.');
-                    done = false;
-                    break;
-            }
-
-            this.setState({message, done});
-        });
-    },
-
-    componentWillUnmount: function() {
-        this._unmounted = true;
+    propTypes: {
+        status: React.PropTypes.oneOf(Object.values(updateCheckStatusEnum)).isRequired,
+        // Currently for error detail but will be usable for download progress
+        // once that is a thing that squirrel passes through electron.
+        detail: React.PropTypes.string,
     },
 
     hideToolbar: function() {
-        dis.dispatch({
-            action: 'check_updates',
-            value: false,
-        });
+        PlatformPeg.get().stopUpdateCheck();
     },
 
     render: function() {
+        const message = _t(statusText[this.props.status], { errorDetail: this.props.detail });
+
         let image;
-        if (this.state.done) {
+        if (doneStatuses.includes(this.props.status)) {
             image = <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="Warning"/>;
         } else {
-            image = <img className="mx_MatrixToolbar_warning" src="'img/spinner.gif'" width="24" height="23" alt={this.state.message}/>;
+            image = <img className="mx_MatrixToolbar_warning" src="img/spinner.gif" width="24" height="23" alt={message}/>;
         }
 
         return (
             <div className="mx_MatrixToolbar">
                 {image}
                 <div className="mx_MatrixToolbar_content">
-                    {this.state.message}
+                    {message}
                 </div>
                 <AccessibleButton className="mx_MatrixToolbar_close" onClick={this.hideToolbar}>
                     <img src="img/cancel.svg" width="18" height="18" />

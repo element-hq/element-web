@@ -17,11 +17,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import VectorBasePlatform, {updateStateEnum} from './VectorBasePlatform';
+import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import q from 'q';
-import electron, {remote, ipcRenderer} from 'electron';
+import {remote, ipcRenderer} from 'electron';
 
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
 
@@ -62,11 +62,42 @@ function _onAction(payload: Object) {
     }
 }
 
+function getUpdateCheckStatus(status) {
+    if (status === true) {
+        return { status: updateCheckStatusEnum.DOWNLOADING };
+    } else if (status === false) {
+        return { status: updateCheckStatusEnum.NOTAVAILABLE };
+    } else {
+        return {
+            status: updateCheckStatusEnum.ERROR,
+            detail: status,
+        };
+    }
+}
+
 export default class ElectronPlatform extends VectorBasePlatform {
     constructor() {
         super();
         dis.register(_onAction);
         this.updatable = Boolean(remote.autoUpdater.getFeedURL());
+
+        /*
+            IPC Call `check_updates` returns:
+            true if there is an update available
+            false if there is not
+            or the error if one is encountered
+         */
+        ipcRenderer.on('check_updates', (event, status) => {
+            if (!this.showUpdateCheck) return;
+            dis.dispatch({
+                action: 'check_updates',
+                value: getUpdateCheckStatus(status),
+            });
+            this.showUpdateCheck = false;
+        });
+
+        this.startUpdateCheck = this.startUpdateCheck.bind(this);
+        this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
     }
 
     getHumanReadableName(): string {
@@ -138,43 +169,18 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return q(remote.app.getVersion());
     }
 
-    checkForUpdate() { // manual update check for this platform
-        const deferred = q.defer();
+    startUpdateCheck() {
+        if (this.showUpdateCheck) return;
+        super.startUpdateCheck();
 
-        const _onUpdateAvailable = function() {
-            remote.autoUpdater.removeListener('update-not-available', _onUpdateNotAvailable);
-            remote.autoUpdater.removeListener('error', _onError);
-            deferred.resolve(updateStateEnum.DOWNLOADING);
-        }
-        const _onUpdateNotAvailable = function() {
-            remote.autoUpdater.removeListener('update-available', _onUpdateAvailable);
-            remote.autoUpdater.removeListener('error', _onError);
-            deferred.resolve(updateStateEnum.NOTAVAILABLE);
-        }
-        const _onError = function() {
-            remote.autoUpdater.removeListener('update-not-available', _onUpdateNotAvailable);
-            remote.autoUpdater.removeListener('update-available', _onUpdateAvailable);
-            deferred.resolve(updateStateEnum.ERROR);
-        }
-
-        remote.autoUpdater.once('update-available', _onUpdateAvailable);
-        remote.autoUpdater.once('update-not-available', _onUpdateNotAvailable);
-        remote.autoUpdater.once('error', _onError);
-
-        remote.ipcRenderer.send('checkForUpdates');
-        return deferred.promise.timeout(10000).catch(() => {
-            remote.autoUpdater.removeListener('update-not-available', _onUpdateNotAvailable);
-            remote.autoUpdater.removeListener('update-available', _onUpdateAvailable);
-            remote.autoUpdater.removeListener('error', _onError);
-            return updateStateEnum.TIMEOUT;
-        });
+        ipcRenderer.send('check_updates');
     }
 
     installUpdate() {
         // IPC to the main process to install the update, since quitAndInstall
         // doesn't fire the before-quit event so the main process needs to know
         // it should exit.
-        electron.ipcRenderer.send('install_update');
+        ipcRenderer.send('install_update');
     }
 
     getDefaultDeviceDisplayName(): string {

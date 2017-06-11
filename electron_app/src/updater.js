@@ -67,4 +67,24 @@ module.exports.start = function startAutoUpdate(updateBaseUrl) {
 }
 
 ipcMain.on('install_update', installUpdate);
-ipcMain.on('checkForUpdates', pollForUpdates);
+
+let ipcChannel;
+ipcMain.on('check_updates', function(event) {
+    ipcChannel = event.sender;
+    pollForUpdates();
+    // event.sender.send('check_updates') // true/false/error = available(downloading)/notAvailable/error
+});
+
+function ipcChannelSendUpdateStatus(status) {
+    if (ipcChannel) {
+        ipcChannel.send('check_updates', status);
+    }
+}
+
+autoUpdater.on('update-available', function() {
+    ipcChannelSendUpdateStatus(true);
+}).on('update-not-available', function() {
+    ipcChannelSendUpdateStatus(false);
+}).on('error', function(error) {
+    ipcChannelSendUpdateStatus(error.message);
+});
