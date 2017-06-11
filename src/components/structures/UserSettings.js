@@ -854,20 +854,13 @@ module.exports = React.createClass({
         </div>;
     },
 
-    _onCheckUpdates: function() {
-        dis.dispatch({
-            action: 'check_updates',
-            value: true,
-        });
-    },
-
     _renderCheckUpdate: function() {
         const platform = PlatformPeg.get();
-        if ('canSelfUpdate' in platform && platform.canSelfUpdate()) {
+        if ('canSelfUpdate' in platform && platform.canSelfUpdate() && 'startUpdateCheck' in platform) {
             return <div>
                 <h3>{_t('Updates')}</h3>
                 <div className="mx_UserSettings_section">
-                    <AccessibleButton className="mx_UserSettings_button" onClick={this._onCheckUpdates}>
+                    <AccessibleButton className="mx_UserSettings_button" onClick={platform.startUpdateCheck}>
                         {_t('Check for update')}
                     </AccessibleButton>
                 </div>

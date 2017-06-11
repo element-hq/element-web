@@ -256,7 +256,7 @@ export default React.createClass({
                                     releaseNotes={this.props.newVersionReleaseNotes}
             />;
         } else if (this.props.checkingForUpdate) {
-            topBar = <UpdateCheckBar />;
+            topBar = <UpdateCheckBar {...this.props.checkingForUpdate} />;
         } else if (this.props.matrixClient.isGuest()) {
             topBar = <GuestWarningBar />;
         } else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {

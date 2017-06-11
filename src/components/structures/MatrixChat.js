@@ -127,7 +127,7 @@ module.exports = React.createClass({
             newVersion: null,
             hasNewVersion: false,
             newVersionReleaseNotes: null,
-            checkingForUpdate: false,
+            checkingForUpdate: null,
 
             // The username to default to when upgrading an account from a guest
             upgradeUsername: null,
@@ -1111,7 +1111,7 @@ module.exports = React.createClass({
             newVersion: latest,
             hasNewVersion: current !== latest,
             newVersionReleaseNotes: releaseNotes,
-            checkingForUpdate: false,
+            checkingForUpdate: null,
         });
     },
 
