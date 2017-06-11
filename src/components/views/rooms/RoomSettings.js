@@ -74,7 +74,7 @@ const BannedUser = React.createClass({
                 >
                     { _t('Unban') }
                 </AccessibleButton>
-                <strong>{this.props.member.name}</strong>
+                <strong>{this.props.member.name}</strong> {this.props.member.userId}
                 {this.props.reason ? " " +_t('Reason') + ": " + this.props.reason : ""}
             </li>
         );
