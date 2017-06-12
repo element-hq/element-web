@@ -310,11 +310,6 @@ module.exports = React.createClass({
     },
 
     onAvatarPickerClick: function(ev) {
-        if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'view_set_mxid'});
-            return;
-        }
-
         if (this.refs.file_label) {
             this.refs.file_label.click();
         }
@@ -395,12 +390,6 @@ module.exports = React.createClass({
             ) + ".",
         });
         dis.dispatch({action: 'password_changed'});
-    },
-
-    onUpgradeClicked: function() {
-        dis.dispatch({
-            action: "start_upgrade_registration",
-        });
     },
 
     onEnableNotificationsChange: function(event) {
@@ -817,12 +806,6 @@ module.exports = React.createClass({
             // TODO: this ought to be a separate component so that we don't need
             // to rebind the onChange each time we render
             const onChange = (e) => {
-                if (MatrixClientPeg.get().isGuest()) {
-                    e.target.checked = false;
-                    dis.dispatch({action: 'view_set_mxid'});
-                    return;
-                }
-
                 UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked);
                 this.forceUpdate();
             };
@@ -852,9 +835,6 @@ module.exports = React.createClass({
     },
 
     _renderDeactivateAccount: function() {
-        // We can't deactivate a guest account.
-        if (MatrixClientPeg.get().isGuest()) return null;
-
         return <div>
             <h3>{ _t("Deactivate Account") }</h3>
                 <div className="mx_UserSettings_section">
@@ -1111,7 +1091,7 @@ module.exports = React.createClass({
         let addEmailSection;
         if (this.state.email_add_pending) {
             addEmailSection = <Loader key="_email_add_spinner" />;
-        } else if (!MatrixClientPeg.get().isGuest()) {
+        } else {
             addEmailSection = (
                 <div className="mx_UserSettings_profileTableRow" key="_newEmail">
                     <div className="mx_UserSettings_profileLabelCell">
@@ -1139,16 +1119,7 @@ module.exports = React.createClass({
         threepidsSection.push(addEmailSection);
         threepidsSection.push(addMsisdnSection);
 
-        let accountJsx;
-
-        if (MatrixClientPeg.get().isGuest()) {
-            accountJsx = (
-                <div className="mx_UserSettings_button" onClick={this.onUpgradeClicked}>
-                    { _t("Create an account") }
-                </div>
-            );
-        } else {
-            accountJsx = (
+        const accountJsx = (
                 <ChangePassword
                         className="mx_UserSettings_accountTable"
                         rowClassName="mx_UserSettings_profileTableRow"
@@ -1157,10 +1128,10 @@ module.exports = React.createClass({
                         buttonClassName="mx_UserSettings_button mx_UserSettings_changePasswordButton"
                         onError={this.onPasswordChangeError}
                         onFinished={this.onPasswordChanged} />
-            );
-        }
+        );
+
         let notificationArea;
-        if (!MatrixClientPeg.get().isGuest() && this.state.threepids !== undefined) {
+        if (this.state.threepids !== undefined) {
             notificationArea = (<div>
                 <h3>{ _t("Notifications") }</h3>
 
