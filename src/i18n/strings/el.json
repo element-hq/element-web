@@ -875,5 +875,8 @@
     "URL previews are %(globalDisableUrlPreview)s by default for participants in this room.": "Η προεπισκόπηση συνδέσμων είναι %(globalDisableUrlPreview)s από προεπιλογή για τους συμμετέχοντες του δωματίου.",
     "Ongoing conference call%(supportedText)s. %(joinText)s": "Κλήση συνδιάσκεψης σε εξέλιξη %(supportedText)s. %(joinText)s",
     "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.": "Αυτό θα είναι το όνομα του λογαριασμού σας στον διακομιστή <span></span>, ή μπορείτε να επιλέξετε <a>διαφορετικό διακομιστή</a>.",
-    "If you already have a Matrix account you can <a>log in</a> instead.": "Αν έχετε ήδη λογαριασμό Matrix μπορείτε να <a>συνδεθείτε</a>."
+    "If you already have a Matrix account you can <a>log in</a> instead.": "Αν έχετε ήδη λογαριασμό Matrix μπορείτε να <a>συνδεθείτε</a>.",
+    "Failed to load timeline position": "Δεν ήταν δυνατή η φόρτωση της θέσης του χρονολόγιου",
+    "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Προσπαθήσατε να φορτώσετε ένα συγκεκριμένο σημείο στο χρονολόγιο του δωματίου, αλλά δεν έχετε δικαίωμα να δείτε το εν λόγω μήνυμα.",
+    "Tried to load a specific point in this room's timeline, but was unable to find it.": "Προσπαθήσατε να φορτώσετε ένα συγκεκριμένο σημείο στο χρονολόγιο του δωματίου, αλλά δεν καταφέρατε να το βρείτε."
 }
