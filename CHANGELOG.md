@@ -1,3 +1,9 @@
+Changes in [0.9.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.3) (2017-06-12)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.3-rc.2...v0.9.3)
+
+ * Add more translations & fix some existing ones
+
 Changes in [0.9.3-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.3-rc.2) (2017-06-09)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.3-rc.1...v0.9.3-rc.2)
