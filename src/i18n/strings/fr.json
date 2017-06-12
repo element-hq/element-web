@@ -325,8 +325,8 @@
     "%(targetName)s joined the room.": "%(targetName)s a joint le salon.",
     "Joins room with given alias": "Joint le salon avec l'alias défini",
     "%(senderName)s kicked %(targetName)s.": "%(senderName)s a expulsé %(targetName)s.",
-    "Kick": "Expluser",
-    "Kicks user with given id": "Expulse l'utilisateur and l'ID donné",
+    "Kick": "Expulser",
+    "Kicks user with given id": "Expulse l'utilisateur avec l'ID donné",
     "Labs": "Laboratoire",
     "Leave room": "Quitter le salon",
     "left and rejoined": "a quitté et rejoint",
@@ -901,5 +901,7 @@
     "You have been kicked from %(roomName)s by %(userName)s.": "Vous avez été expulsé de %(roomName)s by %(userName)s.",
     "You may wish to login with a different account, or add this email to this account.": "Vous souhaiteriez peut-être vous identifier avec un autre compte, ou ajouter cette e-mail à votre compte.",
     "Your home server does not support device management.": "Votre home server ne supporte pas la gestion d'appareils.",
-    "(~%(count)s results).one": "(~%(count)s résultat)"
+    "(~%(count)s results).one": "(~%(count)s résultat)",
+    "(~%(count)s results).other": "",
+    "Device Name": ""
 }
