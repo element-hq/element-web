@@ -18,6 +18,7 @@ limitations under the License.
 import request from 'browser-request';
 import counterpart from 'counterpart';
 import q from 'q';
+import React from 'react';
 
 import UserSettingsStore from './UserSettingsStore';
 
@@ -78,7 +79,7 @@ export function _t(...args) {
  * with multiple args, each arg representing a captured group of the matching regexp.
  * This function must return a JSX node.
  *
- * @return A list of strings/JSX nodes.
+ * @return a React <span> component containing the generated text
  */
 export function _tJsx(jsxText, patterns, subs) {
     // convert everything to arrays
@@ -121,7 +122,10 @@ export function _tJsx(jsxText, patterns, subs) {
         output.push(inputText.substr(match.index + match[0].length));
     }
 
-    return output;
+    // this is a bit of a fudge to avoid the 'Each child in an array or iterator
+    // should have a unique "key" prop' error: we explicitly pass the generated
+    // nodes into React.createElement as children of a <span>.
+    return React.createElement('span', null, ...output);
 }
 
 // Allow overriding the text displayed when no translation exists
