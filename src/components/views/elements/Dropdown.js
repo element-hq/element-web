@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import classnames from 'classnames';
 import AccessibleButton from './AccessibleButton';
+import { _t } from '../../../languageHandler';
 
 class MenuOption extends React.Component {
     constructor(props) {
@@ -114,8 +115,11 @@ export default class Dropdown extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        if (!nextProps.children || nextProps.children.length === 0) {
+            return;
+        }
         this._reindexChildren(nextProps.children);
-        const firstChild = React.Children.toArray(nextProps.children)[0];
+        const firstChild = nextProps.children[0];
         this.setState({
             highlightedOption: firstChild ? firstChild.key : null,
         });
@@ -149,10 +153,12 @@ export default class Dropdown extends React.Component {
     }
 
     _onInputClick(ev) {
-        this.setState({
-            expanded: !this.state.expanded,
-        });
-        ev.preventDefault();
+        if (!this.state.expanded) {
+            this.setState({
+                expanded: true,
+            });
+            ev.preventDefault();
+        }
     }
 
     _onMenuOptionClick(dropdownKey) {
@@ -248,13 +254,10 @@ export default class Dropdown extends React.Component {
                 </MenuOption>
             );
         });
-
-        if (!this.state.searchQuery) {
-            options.push(
-                <div key="_searchprompt" className="mx_Dropdown_searchPrompt">
-                    Type to search...
-                </div>
-            );
+        if (options.length === 0) {
+            return [<div key="0" className="mx_Dropdown_option">
+                {_t("No results")}
+            </div>];
         }
         return options;
     }
@@ -267,16 +270,20 @@ export default class Dropdown extends React.Component {
 
         let menu;
         if (this.state.expanded) {
-            currentValue = <input type="text" className="mx_Dropdown_option"
-                ref={this._collectInputTextBox} onKeyPress={this._onInputKeyPress}
-                onKeyUp={this._onInputKeyUp}
-                onChange={this._onInputChange}
-                value={this.state.searchQuery}
-            />;
+            if (this.props.searchEnabled) {
+                currentValue = <input type="text" className="mx_Dropdown_option"
+                    ref={this._collectInputTextBox} onKeyPress={this._onInputKeyPress}
+                    onKeyUp={this._onInputKeyUp}
+                    onChange={this._onInputChange}
+                    value={this.state.searchQuery}
+                />;
+            }
             menu = <div className="mx_Dropdown_menu" style={menuStyle}>
                 {this._getMenuOptions()}
             </div>;
-        } else {
+        }
+
+        if (!currentValue) {
             const selectedChild = this.props.getShortOption ?
                 this.props.getShortOption(this.props.value) :
                 this.childrenByKey[this.props.value];
@@ -313,6 +320,7 @@ Dropdown.propTypes = {
     onOptionChange: React.PropTypes.func.isRequired,
     // Called when the value of the search field changes
     onSearchChange: React.PropTypes.func,
+    searchEnabled: React.PropTypes.bool,
     // Function that, given the key of an option, returns
     // a node representing that option to be displayed in the
     // box itself as the currently-selected option (ie. as

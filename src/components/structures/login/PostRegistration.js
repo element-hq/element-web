@@ -16,9 +16,10 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sdk = require('../../../index');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
+import React from 'react';
+import sdk from '../../../index';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'PostRegistration',
@@ -64,12 +65,12 @@ module.exports = React.createClass({
                 <div className="mx_Login_box">
                     <LoginHeader />
                     <div className="mx_Login_profile">
-                        Set a display name:
+                        { _t('Set a display name:') }
                         <ChangeDisplayName />
-                        Upload an avatar:
+                        { _t('Upload an avatar:') }
                         <ChangeAvatar
                             initialAvatarUrl={this.state.avatarUrl} />
-                        <button onClick={this.props.onComplete}>Continue</button>
+                        <button onClick={this.props.onComplete}>{ _t('Continue') }</button>
                         {this.state.errorString}
                     </div>
                 </div>

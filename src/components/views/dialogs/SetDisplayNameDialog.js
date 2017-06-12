@@ -18,6 +18,8 @@ import React from 'react';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 
+import { _t } from '../../../languageHandler';
+
 /**
  * Prompt the user to set a display name.
  *
@@ -64,11 +66,11 @@ export default React.createClass({
         return (
             <BaseDialog className="mx_SetDisplayNameDialog"
                 onFinished={this.props.onFinished}
-                title="Set a Display Name"
+                title={_t("Set a Display Name")}
             >
                 <div className="mx_Dialog_content">
-                    Your display name is how you'll appear to others when you speak in rooms.<br/>
-                    What would you like it to be?
+                    {_t("Your display name is how you'll appear to others when you speak in rooms. " +
+                    "What would you like it to be?")}
                 </div>
                 <form onSubmit={this.onFormSubmit}>
                     <div className="mx_Dialog_content">

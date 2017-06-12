@@ -64,7 +64,7 @@ module.exports = {
             // to JSX.
             ignorePattern: '^\\s*<',
             ignoreComments: true,
-            code: 90,
+            code: 120,
         }],
         "valid-jsdoc": ["warn"],
         "new-cap": ["warn"],

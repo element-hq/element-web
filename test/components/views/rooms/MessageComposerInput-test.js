@@ -8,7 +8,7 @@ import * as testUtils from '../../../test-utils';
 import sdk from 'matrix-react-sdk';
 import UserSettingsStore from '../../../../src/UserSettingsStore';
 const MessageComposerInput = sdk.getComponent('views.rooms.MessageComposerInput');
-import MatrixClientPeg from 'MatrixClientPeg';
+import MatrixClientPeg from '../../../../src/MatrixClientPeg';
 
 function addTextToDraft(text) {
     const components = document.getElementsByClassName('public-DraftEditor-content');

@@ -17,6 +17,7 @@ limitations under the License.
 var MatrixClientPeg = require('./MatrixClientPeg');
 var Modal = require('./Modal');
 var sdk = require('./index');
+import { _t } from './languageHandler';
 var dis = require("./dispatcher");
 var Rooms = require("./Rooms");
 
@@ -43,8 +44,8 @@ function createRoom(opts) {
     if (client.isGuest()) {
         setTimeout(()=>{
             Modal.createDialog(NeedToRegisterDialog, {
-                title: "Please Register",
-                description: "Guest users can't create new rooms. Please register to create room and start a chat."
+                title: _t('Please Register'),
+                description: _t('Guest users can\'t create new rooms. Please register to create room and start a chat.')
             });
         }, 0);
         return q(null);
@@ -104,8 +105,8 @@ function createRoom(opts) {
     }, function(err) {
         console.error("Failed to create room " + roomId + " " + err);
         Modal.createDialog(ErrorDialog, {
-            title: "Failure to create room",
-            description: "Server may be unavailable, overloaded, or you hit a bug.",
+            title: _t("Failure to create room"),
+            description: _t("Server may be unavailable, overloaded, or you hit a bug."),
         });
         return null;
     });

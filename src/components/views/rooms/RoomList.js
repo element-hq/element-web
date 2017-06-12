@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 var React = require("react");
 var ReactDOM = require("react-dom");
+import { _t } from '../../../languageHandler';
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var CallHandler = require('../../../CallHandler');
@@ -50,6 +51,8 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this.mounted = false;
+
         var cli = MatrixClientPeg.get();
         cli.on("Room", this.onRoom);
         cli.on("deleteRoom", this.onDeleteRoom);
@@ -69,6 +72,8 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         // Initialise the stickyHeaders when the component is created
         this._updateStickyHeaders(true);
+
+        this.mounted = true;
     },
 
     componentDidUpdate: function() {
@@ -106,6 +111,8 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        this.mounted = false;
+
         dis.unregister(this.dispatcherRef);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room", this.onRoom);
@@ -207,7 +214,8 @@ module.exports = React.createClass({
         // us re-rendering all the sublists every time anything changes anywhere
         // in the state of the client.
         this.setState(this.getRoomLists());
-        this._lastRefreshRoomListTs = Date.now();
+
+        // this._lastRefreshRoomListTs = Date.now();
     },
 
     getRoomLists: function() {
@@ -310,6 +318,7 @@ module.exports = React.createClass({
     },
 
     _getScrollNode: function() {
+        if (!this.mounted) return null;
         var panel = ReactDOM.findDOMNode(this);
         if (!panel) return null;
 
@@ -337,10 +346,11 @@ module.exports = React.createClass({
         var incomingCallBox = document.getElementById("incomingCallBox");
         if (incomingCallBox && incomingCallBox.parentElement) {
             var scrollArea = this._getScrollNode();
+            if (!scrollArea) return;
             // Use the offset of the top of the scroll area from the window
             // as this is used to calculate the CSS fixed top position for the stickies
             var scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
-            // Use the offset of the top of the componet from the window
+            // Use the offset of the top of the component from the window
             // as this is used to calculate the CSS fixed top position for the stickies
             var scrollAreaHeight = ReactDOM.findDOMNode(this).getBoundingClientRect().height;
 
@@ -360,6 +370,7 @@ module.exports = React.createClass({
     // properly through React
     _initAndPositionStickyHeaders: function(initialise, scrollToPosition) {
         var scrollArea = this._getScrollNode();
+        if (!scrollArea) return;
         // Use the offset of the top of the scroll area from the window
         // as this is used to calculate the CSS fixed top position for the stickies
         var scrollAreaOffset = scrollArea.getBoundingClientRect().top + window.pageYOffset;
@@ -460,13 +471,12 @@ module.exports = React.createClass({
     render: function() {
         var RoomSubList = sdk.getComponent('structures.RoomSubList');
         var self = this;
-
         return (
             <GeminiScrollbar className="mx_RoomList_scrollbar"
                  autoshow={true} onScroll={ self._whenScrolling } ref="gemscroll">
             <div className="mx_RoomList">
                 <RoomSubList list={ self.state.lists['im.vector.fake.invite'] }
-                             label="Invites"
+                             label={ _t('Invites') }
                              editable={ false }
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }
@@ -477,9 +487,9 @@ module.exports = React.createClass({
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['m.favourite'] }
-                             label="Favourites"
+                             label={ _t('Favourites') }
                              tagName="m.favourite"
-                             verb="favourite"
+                             verb={ _t('to favourite') }
                              editable={ true }
                              order="manual"
                              selectedRoom={ self.props.selectedRoom }
@@ -490,9 +500,9 @@ module.exports = React.createClass({
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.direct'] }
-                             label="People"
+                             label={ _t('People') }
                              tagName="im.vector.fake.direct"
-                             verb="tag direct chat"
+                             verb={ _t('to tag direct chat') }
                              editable={ true }
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }
@@ -504,9 +514,9 @@ module.exports = React.createClass({
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.recent'] }
-                             label="Rooms"
+                             label={ _t('Rooms') }
                              editable={ true }
-                             verb="restore"
+                             verb={ _t('to restore') }
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
@@ -521,7 +531,7 @@ module.exports = React.createClass({
                              key={ tagName }
                              label={ tagName }
                              tagName={ tagName }
-                             verb={ "tag as " + tagName }
+                             verb={ _t('to tag as %(tagName)s', {tagName: tagName}) }
                              editable={ true }
                              order="manual"
                              selectedRoom={ self.props.selectedRoom }
@@ -535,9 +545,9 @@ module.exports = React.createClass({
                 }) }
 
                 <RoomSubList list={ self.state.lists['m.lowpriority'] }
-                             label="Low priority"
+                             label={ _t('Low priority') }
                              tagName="m.lowpriority"
-                             verb="demote"
+                             verb={ _t('to demote') }
                              editable={ true }
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }
@@ -548,7 +558,7 @@ module.exports = React.createClass({
                              onShowMoreRooms={ self.onShowMoreRooms } />
 
                 <RoomSubList list={ self.state.lists['im.vector.fake.archived'] }
-                             label="Historical"
+                             label={ _t('Historical') }
                              editable={ false }
                              order="recent"
                              selectedRoom={ self.props.selectedRoom }

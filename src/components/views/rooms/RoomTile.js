@@ -98,9 +98,9 @@ module.exports = React.createClass({
         }
     },
 
-    onClick: function() {
+    onClick: function(ev) {
         if (this.props.onClick) {
-            this.props.onClick(this.props.room.roomId);
+            this.props.onClick(this.props.room.roomId, ev);
         }
     },
 

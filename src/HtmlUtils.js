@@ -25,6 +25,9 @@ import emojione from 'emojione';
 import classNames from 'classnames';
 
 emojione.imagePathSVG = 'emojione/svg/';
+// Store PNG path for displaying many flags at once (for increased performance over SVG)
+emojione.imagePathPNG = 'emojione/png/';
+// Use SVGs for emojis
 emojione.imageType = 'svg';
 
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
@@ -64,15 +67,22 @@ export function unicodeToImage(str) {
  * emoji.
  *
  * @param alt {string} String to use for the image alt text
+ * @param useSvg {boolean} Whether to use SVG image src. If False, PNG will be used.
  * @param unicode {integer} One or more integers representing unicode characters
  * @returns A img node with the corresponding emoji
  */
-export function charactersToImageNode(alt, ...unicode) {
+export function charactersToImageNode(alt, useSvg, ...unicode) {
     const fileName = unicode.map((u) => {
         return u.toString(16);
     }).join('-');
-    return <img alt={alt} src={`${emojione.imagePathSVG}${fileName}.svg${emojione.cacheBustParam}`}/>;
+    const path = useSvg ? emojione.imagePathSVG : emojione.imagePathPNG;
+    const fileType = useSvg ? 'svg' : 'png';
+    return <img
+        alt={alt}
+        src={`${path}${fileName}.${fileType}${emojione.cacheBustParam}`}
+    />;
 }
+
 
 export function stripParagraphs(html: string): string {
     const contentDiv = document.createElement('div');
@@ -101,8 +111,7 @@ var sanitizeHtmlParams = {
     allowedTags: [
         'font', // custom to matrix for IRC-style font coloring
         'del', // for markdown
-        // deliberately no h1/h2 to stop people shouting.
-        'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
         'nl', 'li', 'b', 'i', 'u', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
         'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'span',
     ],
@@ -139,17 +148,18 @@ var sanitizeHtmlParams = {
                     attribs.href = m[1];
                     delete attribs.target;
                 }
-
-                m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
-                if (m) {
-                    var entity = m[1];
-                    if (entity[0] === '@') {
-                        attribs.href = '#/user/' + entity;
+                else {
+                    m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
+                    if (m) {
+                        var entity = m[1];
+                        if (entity[0] === '@') {
+                            attribs.href = '#/user/' + entity;
+                        }
+                        else if (entity[0] === '#' || entity[0] === '!') {
+                            attribs.href = '#/room/' + entity;
+                        }
+                        delete attribs.target;
                     }
-                    else if (entity[0] === '#' || entity[0] === '!') {
-                        attribs.href = '#/room/' + entity;
-                    }
-                    delete attribs.target;
                 }
             }
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
@@ -350,7 +360,7 @@ export function bodyToHtml(content, highlights, opts) {
         'mx_EventTile_bigEmoji': emojiBody,
         'markdown-body': isHtml,
     });
-    return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} />;
+    return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" />;
 }
 
 export function emojifyText(text) {
