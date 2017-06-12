@@ -907,5 +907,6 @@
   "If you already have a Matrix account you can <a>log in</a> instead.": "If you already have a Matrix account you can <a>log in</a> instead.",
   "Your browser does not support the required cryptography extensions": "Your browser does not support the required cryptography extensions",
   "Not a valid Riot keyfile": "Not a valid Riot keyfile",
-  "Authentication check failed: incorrect password?": "Authentication check failed: incorrect password?"
+  "Authentication check failed: incorrect password?": "Authentication check failed: incorrect password?",
+  "Disable Peer-to-Peer for 1:1 calls": "Disable Peer-to-Peer for 1:1 calls"
 }
