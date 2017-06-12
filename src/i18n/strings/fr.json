@@ -862,5 +862,16 @@
     "Alias (optional)": "Alias (optionnel)",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Impossible de se connecter au homeserver - veuillez vérifier votre connexion, assurez vous que vous faite confiance au <a>certificat SSL de votre homeserver</a>, et qu'aucune extension de navigateur ne bloque de requêtes.",
     "<a>Click here</a> to join the discussion!": "<a>Cliquer ici</a> pour joindre la discussion!",
-    "Close": "Fermer"
+    "Close": "Fermer",
+    "Custom": "Personnaliser",
+    "Decline": "Décliner",
+    "Disable Notifications": "Désactiver les Notifications",
+    "Drop File Here": "Déposer le Fichier Ici",
+    "Enable Notifications": "Activer les Notifications",
+    "Failed to upload profile picture!": "Échec du téléchargement de la photo de profil !",
+    "Incoming call from %(name)s": "Appel entrant de %(name)s",
+    "Incoming video call from %(name)s": "Appel vidéo entrant de %(name)s",
+    "Incoming voice call from %(name)s": "Appel audio entrant de %(name)s",
+    "No display name": "",
+    "Otherwise, <a>click here</a> to send a bug report.": "Sinon, <a>cliquer ici</a> pour envoyer un rapport d'erreur."
 }
