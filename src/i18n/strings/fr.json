@@ -10,7 +10,7 @@
     "Create new room": "Créer un nouveau salon",
     "Couldn't find a matching Matrix room": "Impossible de trouver un salon Matrix",
     "Custom Server Options": "Options de serveur personnalisées",
-    "delete the alias.": "Supprimer l'alias.",
+    "delete the alias.": "supprimer l'alias.",
     "Delete the room alias %(alias)s and remove %(name)s from the directory?": "Supprimer l'alias %(alias)s du salon et supprimer %(name)s du répertoire ?",
     "Direct Chat": "Conversation Directe",
     "Directory": "Répertoire",
@@ -118,7 +118,7 @@
     "Guests can join": "Ouvert aux visiteurs",
     " to room": " au salon",
     "Advanced notification settings": "Paramètres de notification avancés",
-    "customServer_text": "Vous pouvez utiliser l'option de serveur personnalisé pour vous connectez à d'autres serveurs Matrix, en spécifiant une adresse de homerserver différente.<br/>Cela permet d'utiliser Riot avec un compte existant sur un homeserverdifférent.<br/><br/>Vous pouvez aussi indiquer un serveur d'identité personnel mais vous ne pourrez plus inviter des utilisateurs par email, ou être invité par email.",
+    "customServer_text": "Vous pouvez utiliser l'option de serveur personnalisé pour vous connectez à d'autres serveurs Matrix, en spécifiant une adresse de homerserver différente.<br/>Cela permet d'utiliser Riot avec un compte existant sur un homeserver différent.<br/><br/>Vous pouvez aussi indiquer un serveur d'identité personnel mais vous ne pourrez plus inviter des utilisateurs par email, ou être invité par email.",
     "Notifications on the following keywords follow rules which can’t be displayed here:": "Les notifications pour les mots-clés suivant répondent à des critères qui ne peuvent pas être affichés ici :",
     "Collapse panel": "Cacher le panneau",
     "Expand panel": "Dévoiler le panneau",
@@ -161,5 +161,11 @@
     "Waiting for response from server": "En attente d’une réponse du serveur",
     "You are Rioting as a guest. <a>Register</a> or <a>sign in</a> to access more rooms and features!": "Vous utilisez Riot en tant que visiteur. <a>Enregistrez vous</a> ou <a>identifiez vous</a> pour accéder à plus de salons et de fonctionnalités !",
     "You need to be using HTTPS to place a screen-sharing call.": "Vous devez utiliser HTTPS pour effectuer un appel en partage d’écran.",
-    "OK": "OK"
+    "OK": "OK",
+    "Failed to change password. Is your password correct?": "Échec du changement de mot de passe. Votre mot de passe est-il correct ?",
+    "You have successfully set a password!": "Vous avez paramétré un mot de passe avec succès !",
+    "Continue": "Continuer",
+    "Please set a password!": "Veuillez paramétrer un mot de passe !",
+    "You can now return to your account after signing out, and sign in on other devices.": "Vous pouvez maintenant revenir sur votre compte après vous être déconnecté, et vous identifier sur d'autres appareils.",
+    "This will allow you to return to your account after signing out, and sign in on other devices.": "Cela vous permettra de retourner sur votre compte après vous être déconnecté, et de vous identifier sur d'autres appareils."
 }
