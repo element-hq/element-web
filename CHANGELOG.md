@@ -1,3 +1,9 @@
+Changes in [0.11.0](https://github.com/vector-im/riot-web/releases/tag/v0.11.0) (2017-06-12)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.0-rc.2...v0.11.0)
+
+ * More translations & minor fixes
+
 Changes in [0.11.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.11.0-rc.2) (2017-06-09)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.0-rc.1...v0.11.0-rc.2)
