@@ -886,5 +886,7 @@
     "Show Text Formatting Toolbar": "Afficher la Barre de Formatage de Texte",
     "Start authentication": "Démarrer une authentification",
     "This invitation was sent to an email address which is not associated with this account:": "Cette invitation a été envoyée à une adresse e-mail qui n'est pas associée avec ce compte :",
-    "This room": "Ce salon"
+    "This room": "Ce salon",
+    "Unable to ascertain that the address this invite was sent to matches one associated with your account.": "Impossible de vérifier que l'adresse à qui cette invitation a été envoyée correspond à celle associée à votre compte.",
+    "Undecryptable": "Indécryptable"
 }
