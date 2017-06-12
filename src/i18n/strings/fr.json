@@ -890,5 +890,7 @@
     "Unable to ascertain that the address this invite was sent to matches one associated with your account.": "Impossible de vérifier que l'adresse à qui cette invitation a été envoyée correspond à celle associée à votre compte.",
     "Undecryptable": "Indécryptable",
     "Unencrypted message": "Message non-encrypté",
-    "unknown caller": "appelant inconnu"
+    "unknown caller": "appelant inconnu",
+    "Unnamed Room": "Salon sans nom",
+    "Unverified": "Non-verifié"
 }
