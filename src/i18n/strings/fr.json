@@ -878,5 +878,6 @@
     "Public Chat": "Conversation Publique",
     "Reason: %(reasonText)s": "Raison: %(reasonText)s",
     "Rejoin": "Rejoindre",
-    "Room contains unknown devices": "Le salon contient des appareils inconnus"
+    "Room contains unknown devices": "Le salon contient des appareils inconnus",
+    "%(roomName)s does not exist.": "%(roomName)s n'existe pas"
 }
