@@ -854,5 +854,7 @@
     "Username not available": "Nom d'utilisateur indisponible",
     "Something went wrong!": "Quelque chose s’est mal passé !",
     "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.": "Cela sera le nom de votre compte sur le serveur  <span></span>, ou vous pouvez sélectionner un <a>autre serveur</a>.",
-    "If you already have a Matrix account you can <a>log in</a> instead.": "Si vous avez déjà un compte Matrix vous pouvez vous <a>identifier</a> à la place."
+    "If you already have a Matrix account you can <a>log in</a> instead.": "Si vous avez déjà un compte Matrix vous pouvez vous <a>identifier</a> à la place.",
+    "a room": "un salon",
+    "Accept": "Accepter"
 }
