@@ -298,7 +298,7 @@
     "had": "avait",
     "Hangup": "Raccrocher",
     "Hide read receipts": "Cacher les accusés de réception",
-    "Hide Text Formatting Toolbar": "Cacher la barre de formattage de texte",
+    "Hide Text Formatting Toolbar": "Cacher la barre de formatage de texte",
     "Historical": "Historique",
     "Homeserver is": "Le homeserver est",
     "Identity Server is": "Le serveur d'identité est",
@@ -879,5 +879,11 @@
     "Reason: %(reasonText)s": "Raison: %(reasonText)s",
     "Rejoin": "Rejoindre",
     "Room contains unknown devices": "Le salon contient des appareils inconnus",
-    "%(roomName)s does not exist.": "%(roomName)s n'existe pas"
+    "%(roomName)s does not exist.": "%(roomName)s n'existe pas.",
+    "%(roomName)s is not accessible at this time.": "%(roomName)s n'est pas accessible pour le moment.",
+    "Seen by %(userName)s at %(dateTime)s": "Vu par %(userName)s à %(dateTime)s",
+    "Send anyway": "Envoyer quand même",
+    "Show Text Formatting Toolbar": "Afficher la Barre de Formatage de Texte",
+    "Start authentication": "Démarrer une authentification",
+    "This invitation was sent to an email address which is not associated with this account:": "Cette invitation a été envoyée à une adresse e-mail qui n'est pas associée avec ce compte :"
 }
