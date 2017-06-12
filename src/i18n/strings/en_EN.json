@@ -886,7 +886,7 @@
   "Enable URL previews for this room (affects only you)": "Enable URL previews for this room (affects only you)",
   "Drop file here to upload": "Drop file here to upload",
   " (unsupported)": " (unsupported)",
-  "Ongoing conference call%(supportedText)s. %(joinText)s": "Ongoing conference call%(supportedText)s. %(joinText)s",
+  "Ongoing conference call%(supportedText)s.": "Ongoing conference call%(supportedText)s.",
   "for %(amount)ss": "for %(amount)ss",
   "for %(amount)sm": "for %(amount)sm",
   "for %(amount)sh": "for %(amount)sh",

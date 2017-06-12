@@ -757,7 +757,7 @@
     "Enable URL previews for this room (affects only you)": "Activer les aperçus d'URL pour ce salon (n'affecte que vous)",
     "Drop file here to upload": "Déposer le fichier ici pour le télécharger",
     " (unsupported)": " (non supporté)",
-    "Ongoing conference call%(supportedText)s. %(joinText)s": "Appel conférence en cours%(supportedText)s. %(joinText)s",
+    "Ongoing conference call%(supportedText)s.": "Appel conférence en cours%(supportedText)s.",
     "Online": "En ligne",
     "Offline": "Déconnecté",
     "Disable URL previews for this room (affects only you)": "Désactiver les aperçus d'URL pour ce salon (n'affecte que vous)",

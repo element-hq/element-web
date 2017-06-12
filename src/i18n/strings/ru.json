@@ -849,7 +849,7 @@
     "Enable URL previews for this room (affects only you)": "Включить предпросмотр URL в этой комнате (только для вас)",
     "Drop file here to upload": "Перетащите файл сюда для загрузки",
     " (unsupported)": " (не поддерживается)",
-    "Ongoing conference call%(supportedText)s. %(joinText)s": "Идет конференц-звонок%(supportedText)s. %(joinText)s",
+    "Ongoing conference call%(supportedText)s.": "Идет конференц-звонок%(supportedText)s.",
     "for %(amount)ss": "уже %(amount)sс",
     "for %(amount)sm": "уже %(amount)sм",
     "for %(amount)sh": "уже %(amount)sч",
