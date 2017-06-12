@@ -900,5 +900,6 @@
     "You have been banned from %(roomName)s by %(userName)s.": "Vous avez été bannis de %(roomName)s par %(userName)s.",
     "You have been kicked from %(roomName)s by %(userName)s.": "Vous avez été expulsé de %(roomName)s by %(userName)s.",
     "You may wish to login with a different account, or add this email to this account.": "Vous souhaiteriez peut-être vous identifier avec un autre compte, ou ajouter cette e-mail à votre compte.",
-    "Your home server does not support device management.": "Votre home server ne supporte pas la gestion d'appareils."
+    "Your home server does not support device management.": "Votre home server ne supporte pas la gestion d'appareils.",
+    "(~%(count)s results).one": "(~%(count)s résultat)"
 }
