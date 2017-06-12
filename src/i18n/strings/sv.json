@@ -291,5 +291,12 @@
     "Failed to upload file": "Det gick inte att ladda upp filen",
     "Failed to verify email address: make sure you clicked the link in the email": "Det gick inte att bekräfta epostadressen, klicka på länken i epostmeddelandet",
     "Favourite": "Favorit",
-    "favourite": "favorit"
+    "favourite": "favorit",
+    "a room": "ett rum",
+    "Accept": "Godkänn",
+    "Access Token:": "Åtkomsttoken:",
+    "Active call (%(roomName)s)": "Aktiv samtal (%(roomName)s)",
+    "Add": "Lägg till",
+    "Admin tools": "Admin verktyg",
+    "And %(count)s more...": "Och %(count) till..."
 }
