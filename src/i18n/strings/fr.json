@@ -856,5 +856,10 @@
     "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.": "Cela sera le nom de votre compte sur le serveur  <span></span>, ou vous pouvez sélectionner un <a>autre serveur</a>.",
     "If you already have a Matrix account you can <a>log in</a> instead.": "Si vous avez déjà un compte Matrix vous pouvez vous <a>identifier</a> à la place.",
     "a room": "un salon",
-    "Accept": "Accepter"
+    "Accept": "Accepter",
+    "Active call (%(roomName)s)": "Appel en cours (%(roomName)s)",
+    "Admin tools": "Outils d'administration",
+    "Alias (optional)": "Alias (optionnel)",
+    "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Impossible de se connecter au homeserver - veuillez vérifier votre connexion, assurez vous que vous faite confiance au <a>certificat SSL de votre homeserver</a>, et qu'aucune extension de navigateur ne bloque de requêtes.",
+    "<a>Click here</a> to join the discussion!": "<a>Cliquez ici</a> pour joindre la discussion !"
 }
