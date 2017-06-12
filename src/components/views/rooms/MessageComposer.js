@@ -354,26 +354,21 @@ export default class MessageComposer extends React.Component {
         } else {
             controls.push(
                 <div key="controls_error" className="mx_MessageComposer_noperm_error">
-<<<<<<< HEAD
-                    You do not have permission to post to this room
-                </div>,
-=======
                     { _t('You do not have permission to post to this room') }
-                </div>
->>>>>>> 31f1e421f226bd471b68cdf1f69a8e049a443e5d
+                </div>,
             );
         }
 
-        // let autoComplete;
-        // if (UserSettingsStore.isFeatureEnabled('rich_text_editor')) {
-        //     autoComplete = <div className="mx_MessageComposer_autocomplete_wrapper">
-        //         <Autocomplete
-        //             ref="autocomplete"
-        //             onConfirm={this._onAutocompleteConfirm}
-        //             query={this.state.autocompleteQuery}
-        //             selection={this.state.selection} />
-        //     </div>;
-        // }
+        let autoComplete;
+        if (UserSettingsStore.isFeatureEnabled('rich_text_editor')) {
+            autoComplete = <div className="mx_MessageComposer_autocomplete_wrapper">
+                <Autocomplete
+                    ref="autocomplete"
+                    onConfirm={this._onAutocompleteConfirm}
+                    query={this.state.autocompleteQuery}
+                    selection={this.state.selection} />
+            </div>;
+        }
 
 
         const {style, blockType} = this.state.inputState;
