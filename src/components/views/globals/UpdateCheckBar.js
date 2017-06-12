@@ -47,7 +47,7 @@ export default React.createClass({
     },
 
     render: function() {
-        const message = _t(statusText[this.props.status], { errorDetail: this.props.detail });
+        const message = _t(statusText[this.props.status], { errorDetail: this.props.detail || '' });
 
         let image;
         if (doneStatuses.includes(this.props.status)) {
