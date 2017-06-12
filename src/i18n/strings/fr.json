@@ -893,5 +893,6 @@
     "unknown caller": "appelant inconnu",
     "Unnamed Room": "Salon sans nom",
     "Unverified": "Non verifié",
-    "%(user)s is a": "%(user)s est un(e)"
+    "%(user)s is a": "%(user)s est un(e)",
+    "Username invalid: %(errMessage)s": "Nom d'utilisateur invalide : %(errMessage)s"
 }
