@@ -124,6 +124,7 @@ var sanitizeHtmlParams = {
         // would make sense if we did
         img: ['src'],
         ol: ['start'],
+        code: ['class'], // We don't actually allow all classes, we filter them in transformTags
     },
     // Lots of these won't come up by default because we don't allow them
     selfClosing: ['img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
@@ -164,6 +165,19 @@ var sanitizeHtmlParams = {
             }
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
             return { tagName: tagName, attribs : attribs };
+        },
+        'code': function(tagName, attribs) {
+            if (typeof attribs.class !== 'undefined') {
+                // Filter out all classes other than ones starting with language- for syntax highlighting.
+                let classes = attribs.class.split(/\s+/).filter(function(cl) {
+                    return cl.startsWith('language-');
+                });
+                attribs.class = classes.join(' ');
+            }
+            return {
+                tagName: tagName,
+                attribs: attribs,
+            };
         },
         '*': function(tagName, attribs) {
             // Delete any style previously assigned, style is an allowedTag for font and span
