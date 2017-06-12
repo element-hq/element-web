@@ -876,5 +876,6 @@
     "Otherwise, <a>click here</a> to send a bug report.": "Sinon, <a>cliquer ici</a> pour envoyer un rapport d'erreur.",
     "Private Chat": "Conversation Privée",
     "Public Chat": "Conversation Publique",
-    "Reason: %(reasonText)s": ""
+    "Reason: %(reasonText)s": "Raison: %(reasonText)s",
+    "Rejoin": "Rejoindre"
 }
