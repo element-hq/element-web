@@ -26,17 +26,17 @@ exports.hasTray = function hasTray() {
     return (trayIcon !== null);
 };
 
-exports.create = function(win, config) {
+exports.create = function(config) {
     // no trays on darwin
     if (process.platform === 'darwin' || trayIcon) return;
 
     const toggleWin = function() {
-        if (win.isVisible() && !win.isMinimized()) {
-            win.hide();
+        if (global.mainWindow.isVisible() && !global.mainWindow.isMinimized()) {
+            global.mainWindow.hide();
         } else {
-            if (win.isMinimized()) win.restore();
-            if (!win.isVisible()) win.show();
-            win.focus();
+            if (global.mainWindow.isMinimized()) global.mainWindow.restore();
+            if (!global.mainWindow.isVisible()) global.mainWindow.show();
+            global.mainWindow.focus();
         }
     };
 
@@ -60,7 +60,7 @@ exports.create = function(win, config) {
     trayIcon.on('click', toggleWin);
 
     let lastFavicon = null;
-    win.webContents.on('page-favicon-updated', async function(ev, favicons) {
+    global.mainWindow.webContents.on('page-favicon-updated', async function(ev, favicons) {
         let newFavicon = config.icon_path;
         if (favicons && favicons.length > 0 && favicons[0].startsWith('data:')) {
             newFavicon = favicons[0];
@@ -85,10 +85,10 @@ exports.create = function(win, config) {
         }
 
         trayIcon.setImage(newFavicon);
-        win.setIcon(newFavicon);
+        global.mainWindow.setIcon(newFavicon);
     });
 
-    win.webContents.on('page-title-updated', function(ev, title) {
+    global.mainWindow.webContents.on('page-title-updated', function(ev, title) {
         trayIcon.setToolTip(title);
     });
 };

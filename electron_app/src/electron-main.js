@@ -185,7 +185,7 @@ electron.app.on('ready', () => {
         defaultHeight: 768,
     });
 
-    mainWindow = new electron.BrowserWindow({
+    mainWindow = global.mainWindow = new electron.BrowserWindow({
         icon: iconPath,
         show: false,
         autoHideMenuBar: true,
@@ -203,7 +203,7 @@ electron.app.on('ready', () => {
     mainWindow.hide();
 
     // Create trayIcon icon
-    tray.create(mainWindow, {
+    tray.create({
         icon_path: iconPath,
         brand: vectorConfig.brand || 'Riot',
     });
@@ -215,7 +215,7 @@ electron.app.on('ready', () => {
     }
 
     mainWindow.on('closed', () => {
-        mainWindow = null;
+        mainWindow = global.mainWindow = null;
     });
     mainWindow.on('close', (e) => {
         if (!global.appQuitting && (tray.hasTray() || process.platform === 'darwin')) {
