@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -150,7 +149,7 @@ class PasswordLogin extends React.Component {
                         type="text"
                         name="phoneNumber"
                         onChange={this.onPhoneNumberChanged}
-                        placeholder="Mobile phone number"
+                        placeholder={_t("Mobile phone number")}
                         value={this.state.phoneNumber}
                         autoFocus
                     />
@@ -182,7 +181,7 @@ class PasswordLogin extends React.Component {
             <div>
                 <form onSubmit={this.onSubmitForm}>
                 <div className="mx_Login_type_container">
-                    <label className="mx_Login_type_label">{ _t('I want to sign in with') }</label>
+                    <label className="mx_Login_type_label">{ _t('Sign in with') }</label>
                     <Dropdown
                         className="mx_Login_type_dropdown"
                         value={this.state.loginType}

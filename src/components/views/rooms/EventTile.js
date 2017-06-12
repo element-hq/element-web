@@ -38,6 +38,7 @@ var eventTileTypes = {
     'm.call.answer' : 'messages.TextualEvent',
     'm.call.hangup' : 'messages.TextualEvent',
     'm.room.name'   : 'messages.TextualEvent',
+    'm.room.avatar' : 'messages.RoomAvatarEvent',
     'm.room.topic'  : 'messages.TextualEvent',
     'm.room.third_party_invite' : 'messages.TextualEvent',
     'm.room.history_visibility' : 'messages.TextualEvent',
@@ -380,6 +381,7 @@ module.exports = WithMatrixClient(React.createClass({
         dis.dispatch({
             action: 'view_room',
             event_id: this.props.mxEvent.getId(),
+            highlighted: true,
             room_id: this.props.mxEvent.getRoomId(),
         });
     },
@@ -481,27 +483,27 @@ module.exports = WithMatrixClient(React.createClass({
         }
 
         const editButton = (
-            <span className="mx_EventTile_editButton" title="Options" onClick={this.onEditClicked} />
+            <span className="mx_EventTile_editButton" title={ _t("Options") } onClick={this.onEditClicked} />
         );
         let e2e;
         // cosmetic padlocks:
         if ((e2eEnabled && this.props.eventSendStatus) || this.props.mxEvent.getType() === 'm.room.encryption') {
-            e2e = <img style={{ cursor: 'initial', marginLeft: '-1px' }} className="mx_EventTile_e2eIcon" alt="Encrypted by verified device" src="img/e2e-verified.svg" width="10" height="12" />;
+            e2e = <img style={{ cursor: 'initial', marginLeft: '-1px' }} className="mx_EventTile_e2eIcon" alt={_t("Encrypted by a verified device")} src="img/e2e-verified.svg" width="10" height="12" />;
         }
         // real padlocks
         else if (this.props.mxEvent.isEncrypted() || (e2eEnabled && this.props.eventSendStatus)) {
             if (this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted') {
-                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt="Undecryptable" src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} />;
+                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt={_t("Undecryptable")} src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} />;
             }
             else if (this.state.verified == true || (e2eEnabled && this.props.eventSendStatus)) {
-                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt="Encrypted by verified device" src="img/e2e-verified.svg" width="10" height="12"/>;
+                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt={_t("Encrypted by a verified device")} src="img/e2e-verified.svg" width="10" height="12"/>;
             }
             else {
-                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt="Encrypted by unverified device" src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }}/>;
+                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt={_t("Encrypted by an unverified device")} src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }}/>;
             }
         }
         else if (e2eEnabled) {
-            e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt="Unencrypted message" src="img/e2e-unencrypted.svg" width="12" height="12"/>;
+            e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt={_t("Unencrypted message")} src="img/e2e-unencrypted.svg" width="12" height="12"/>;
         }
         const timestamp = this.props.mxEvent.getTs() ?
             <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;

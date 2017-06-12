@@ -15,8 +15,6 @@ limitations under the License.
 */
 
 import Skinner from './Skinner';
-import request from 'browser-request';
-import UserSettingsStore from './UserSettingsStore';
 
 module.exports.loadSkin = function(skinObject) {
     Skinner.load(skinObject);

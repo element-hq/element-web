@@ -17,23 +17,25 @@ limitations under the License.
 import q from 'q';
 import MatrixClientPeg from './MatrixClientPeg';
 import Notifier from './Notifier';
+import { _t } from './languageHandler';
 
 /*
  * TODO: Make things use this. This is all WIP - see UserSettings.js for usage.
  */
 
-/*
- * TODO: Find a way to translate the names of LABS_FEATURES. In other words, guarantee that languages were already loaded before building this array.
- */
-
 export default {
     LABS_FEATURES: [
         {
-            name: "New Composer & Autocomplete",
+            name: "-",
             id: 'rich_text_editor',
             default: false,
         },
     ],
+
+    // horrible but it works. The locality makes this somewhat more palatable.
+    doTranslations: function() {
+        this.LABS_FEATURES[0].name = _t("New Composer & Autocomplete");
+    },
 
     loadProfileInfo: function() {
         const cli = MatrixClientPeg.get();

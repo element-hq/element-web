@@ -21,11 +21,9 @@ import q from 'q';
 import React from 'react';
 
 import sdk from '../../../index';
-import dis from '../../../dispatcher';
 import ServerConfig from '../../views/login/ServerConfig';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import RegistrationForm from '../../views/login/RegistrationForm';
-import CaptchaForm from '../../views/login/CaptchaForm';
 import RtsClient from '../../../RtsClient';
 import { _t } from '../../../languageHandler';
 
@@ -47,8 +45,6 @@ module.exports = React.createClass({
         brand: React.PropTypes.string,
         email: React.PropTypes.string,
         referrer: React.PropTypes.string,
-        username: React.PropTypes.string,
-        guestAccessToken: React.PropTypes.string,
         teamServerConfig: React.PropTypes.shape({
             // Email address to request new teams
             supportEmail: React.PropTypes.string.isRequired,
@@ -99,7 +95,7 @@ module.exports = React.createClass({
             this.props.teamServerConfig.teamServerURL &&
             !this._rtsClient
         ) {
-            this._rtsClient = new RtsClient(this.props.teamServerConfig.teamServerURL);
+            this._rtsClient = this.props.rtsClient || new RtsClient(this.props.teamServerConfig.teamServerURL);
 
             this.setState({
                 teamServerBusy: true,
@@ -222,7 +218,6 @@ module.exports = React.createClass({
         }
 
         trackPromise.then((teamToken) => {
-            console.info('Team token promise',teamToken);
             this.props.onLoggedIn({
                 userId: response.user_id,
                 deviceId: response.device_id,
@@ -267,7 +262,7 @@ module.exports = React.createClass({
                 errMsg = _t('Passwords don\'t match.');
                 break;
             case "RegistrationForm.ERR_PASSWORD_LENGTH":
-                errMsg = _t('Password too short (min %(MIN_PASSWORD_LENGTH)s).', {MIN_PASSWORD_LENGTH: $MIN_PASSWORD_LENGTH})
+                errMsg = _t('Password too short (min %(MIN_PASSWORD_LENGTH)s).', {MIN_PASSWORD_LENGTH: MIN_PASSWORD_LENGTH});
                 break;
             case "RegistrationForm.ERR_EMAIL_INVALID":
                 errMsg = _t('This doesn\'t look like a valid email address.');
@@ -298,17 +293,6 @@ module.exports = React.createClass({
     },
 
     _makeRegisterRequest: function(auth) {
-        let guestAccessToken = this.props.guestAccessToken;
-
-        if (
-            this.state.formVals.username !== this.props.username ||
-            this.state.hsUrl != this.props.defaultHsUrl
-        ) {
-            // don't try to upgrade if we changed our username
-            // or are registering on a different HS
-            guestAccessToken = null;
-        }
-
         // Only send the bind params if we're sending username / pw params
         // (Since we need to send no params at all to use the ones saved in the
         // session).
@@ -323,7 +307,7 @@ module.exports = React.createClass({
             undefined, // session id: included in the auth dict already
             auth,
             bindThreepids,
-            guestAccessToken,
+            null,
         );
     },
 
@@ -360,10 +344,6 @@ module.exports = React.createClass({
         } else if (this.state.busy || this.state.teamServerBusy) {
             registerBody = <Spinner />;
         } else {
-            let guestUsername = this.props.username;
-            if (this.state.hsUrl != this.props.defaultHsUrl) {
-                guestUsername = null;
-            }
             let errorSection;
             if (this.state.errorText) {
                 errorSection = <div className="mx_Login_error">{this.state.errorText}</div>;
@@ -377,7 +357,6 @@ module.exports = React.createClass({
                         defaultPhoneNumber={this.state.formVals.phoneNumber}
                         defaultPassword={this.state.formVals.password}
                         teamsConfig={this.state.teamsConfig}
-                        guestUsername={guestUsername}
                         minPasswordLength={MIN_PASSWORD_LENGTH}
                         onError={this.onFormValidationFailed}
                         onRegisterClick={this.onFormSubmit}

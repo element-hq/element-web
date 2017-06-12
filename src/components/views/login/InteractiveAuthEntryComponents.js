@@ -129,8 +129,8 @@ export const PasswordAuthEntry = React.createClass({
 
         return (
             <div>
-                <p>To continue, please enter your password.</p>
-                <p>Password:</p>
+                <p>{_t("To continue, please enter your password.")}</p>
+                <p>{_t("Password:")}</p>
                 <form onSubmit={this._onSubmit}>
                     <input
                         ref="passwordField"
@@ -380,7 +380,7 @@ export const MsisdnAuthEntry = React.createClass({
                                 onChange={this._onTokenChange}
                             />
                             <br />
-                            <input type="submit" value="Submit"
+                            <input type="submit" value={_t("Submit")}
                                 className={submitClasses}
                                 disabled={!enableSubmit}
                             />
@@ -440,7 +440,7 @@ export const FallbackAuthEntry = React.createClass({
     render: function() {
         return (
             <div>
-                <a onClick={this._onShowFallbackClick}>Start authentication</a>
+                <a onClick={this._onShowFallbackClick}>{_t("Start authentication")}</a>
                 <div className="error">
                     {this.props.errorText}
                 </div>

@@ -91,6 +91,9 @@ module.exports = React.createClass({
 
         // show timestamps always
         alwaysShowTimestamps: React.PropTypes.bool,
+
+        // hide redacted events as per old behaviour
+        hideRedactions: React.PropTypes.bool,
     },
 
     componentWillMount: function() {
@@ -353,7 +356,7 @@ module.exports = React.createClass({
                 const key = "membereventlistsummary-" + (prevEvent ? mxEv.getId() : "initial");
 
                 if (this._wantsDateSeparator(prevEvent, mxEv.getDate())) {
-                    let dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1}/></li>;
+                    let dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1} showTwelveHour={this.props.isTwelveHour}/></li>;
                     ret.push(dateSeparator);
                 }
 
@@ -495,10 +498,12 @@ module.exports = React.createClass({
 
         // do we need a date separator since the last event?
         if (this._wantsDateSeparator(prevEvent, eventDate)) {
-            var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1}/></li>;
+            var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} showTwelveHour={this.props.isTwelveHour}/></li>;
             ret.push(dateSeparator);
             continuation = false;
         }
+
+        if (mxEv.isRedacted() && this.props.hideRedactions) return ret;
 
         var eventId = mxEv.getId();
         var highlight = (eventId == this.props.highlightedEventId);

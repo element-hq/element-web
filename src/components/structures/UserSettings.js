@@ -24,6 +24,7 @@ const dis = require("../../dispatcher");
 const q = require('q');
 const packageJson = require('../../../package.json');
 const UserSettingsStore = require('../../UserSettingsStore');
+const CallMediaHandler = require('../../CallMediaHandler');
 const GeminiScrollbar = require('react-gemini-scrollbar');
 const Email = require('../../email');
 const AddThreepid = require('../../AddThreepid');
@@ -82,12 +83,20 @@ const SETTINGS_LABELS = [
     {
         id: 'hideJoinLeaves',
         label: 'Hide join/leave messages (invites/kicks/bans unaffected)',
-    }
-/*
+    },
     {
         id: 'useCompactLayout',
         label: 'Use compact timeline layout',
     },
+    {
+        id: 'hideRedactions',
+        label: 'Hide removed messages',
+    },
+    {
+        id: 'disableMarkdown',
+        label: 'Disable markdown formatting',
+    },
+/*
     {
         id: 'useFixedWidthFont',
         label: 'Use fixed width font',
@@ -180,6 +189,7 @@ module.exports = React.createClass({
             email_add_pending: false,
             vectorVersion: undefined,
             rejectingInvites: false,
+            mediaDevices: null,
         };
     },
 
@@ -199,6 +209,8 @@ module.exports = React.createClass({
                 console.log("Failed to fetch app version", e);
             });
         }
+
+        this._refreshMediaDevices();
 
         // Bulk rejecting invites:
         // /sync won't have had time to return when UserSettings re-renders from state changes, so getRooms()
@@ -261,6 +273,20 @@ module.exports = React.createClass({
         this.setState({ electron_settings: settings });
     },
 
+    _refreshMediaDevices: function() {
+        q().then(() => {
+            return CallMediaHandler.getDevices();
+        }).then((mediaDevices) => {
+            // console.log("got mediaDevices", mediaDevices, this._unmounted);
+            if (this._unmounted) return;
+            this.setState({
+                mediaDevices,
+                activeAudioInput: this._localSettings['webrtc_audioinput'],
+                activeVideoInput: this._localSettings['webrtc_videoinput'],
+            });
+        });
+    },
+
     _refreshFromServer: function() {
         const self = this;
         q.all([
@@ -288,15 +314,6 @@ module.exports = React.createClass({
     },
 
     onAvatarPickerClick: function(ev) {
-        if (MatrixClientPeg.get().isGuest()) {
-            const NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: _t("Please Register"),
-                description: _t("Guests can't set avatars. Please register."),
-            });
-            return;
-        }
-
         if (this.refs.file_label) {
             this.refs.file_label.click();
         }
@@ -371,14 +388,12 @@ module.exports = React.createClass({
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createDialog(ErrorDialog, {
             title: _t("Success"),
-            description: _t("Your password was successfully changed. You will not receive push notifications on other devices until you log back in to them") + ".",
+            description: _t(
+                "Your password was successfully changed. You will not receive " +
+                "push notifications on other devices until you log back in to them",
+            ) + ".",
         });
-    },
-
-    onUpgradeClicked: function() {
-        dis.dispatch({
-            action: "start_upgrade_registration",
-        });
+        dis.dispatch({action: 'password_changed'});
     },
 
     onEnableNotificationsChange: function(event) {
@@ -408,7 +423,10 @@ module.exports = React.createClass({
         this._addThreepid.addEmailAddress(emailAddress, true).done(() => {
             Modal.createDialog(QuestionDialog, {
                 title: _t("Verification Pending"),
-                description: _t("Please check your email and click on the link it contains. Once this is done, click continue."),
+                description: _t(
+                    "Please check your email and click on the link it contains. Once this " +
+                    "is done, click continue.",
+                ),
                 button: _t('Continue'),
                 onFinished: this.onEmailDialogFinished,
             });
@@ -428,7 +446,7 @@ module.exports = React.createClass({
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createDialog(QuestionDialog, {
             title: _t("Remove Contact Information?"),
-            description: _t("Remove %(threePid)s?", { threePid : threepid.address }),
+            description: _t("Remove %(threePid)s?", { threePid: threepid.address }),
             button: _t('Remove'),
             onFinished: (submit) => {
                 if (submit) {
@@ -470,8 +488,8 @@ module.exports = React.createClass({
             this.setState({email_add_pending: false});
             if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
                 const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                let message = _t("Unable to verify email address.") + " " +
-                              _t("Please check your email and click on the link it contains. Once this is done, click continue.");
+                const message = _t("Unable to verify email address.") + " " +
+                    _t("Please check your email and click on the link it contains. Once this is done, click continue.");
                 Modal.createDialog(QuestionDialog, {
                     title: _t("Verification Pending"),
                     description: message,
@@ -589,7 +607,7 @@ module.exports = React.createClass({
         }
     },
 
-    _renderLanguageSetting: function () {
+    _renderLanguageSetting: function() {
         const LanguageDropdown = sdk.getComponent('views.elements.LanguageDropdown');
         return <div>
             <label htmlFor="languageSelector">{_t('Interface Language')}</label>
@@ -620,7 +638,7 @@ module.exports = React.createClass({
             <input id="urlPreviewsDisabled"
                    type="checkbox"
                    defaultChecked={ UserSettingsStore.getUrlPreviewsDisabled() }
-                   onChange={ (e) => UserSettingsStore.setUrlPreviewsDisabled(e.target.checked) }
+                   onChange={ this._onPreviewsDisabledChanged }
             />
             <label htmlFor="urlPreviewsDisabled">
                 { _t("Disable inline URL previews by default") }
@@ -628,17 +646,24 @@ module.exports = React.createClass({
         </div>;
     },
 
+    _onPreviewsDisabledChanged: function(e) {
+         UserSettingsStore.setUrlPreviewsDisabled(e.target.checked);
+    },
+
     _renderSyncedSetting: function(setting) {
+        // TODO: this ought to be a separate component so that we don't need
+        // to rebind the onChange each time we render
+
+        const onChange = (e) => {
+            UserSettingsStore.setSyncedSetting(setting.id, e.target.checked);
+            if (setting.fn) setting.fn(e.target.checked);
+        };
+
         return <div className="mx_UserSettings_toggle" key={ setting.id }>
             <input id={ setting.id }
                    type="checkbox"
                    defaultChecked={ this._syncedSettings[setting.id] }
-                   onChange={
-                       (e) => {
-                           UserSettingsStore.setSyncedSetting(setting.id, e.target.checked);
-                           if (setting.fn) setting.fn(e.target.checked);
-                       }
-                   }
+                   onChange={ onChange }
             />
             <label htmlFor={ setting.id }>
                 { _t(setting.label) }
@@ -647,22 +672,24 @@ module.exports = React.createClass({
     },
 
     _renderThemeSelector: function(setting) {
+        // TODO: this ought to be a separate component so that we don't need
+        // to rebind the onChange each time we render
+        const onChange = (e) => {
+            if (e.target.checked) {
+                UserSettingsStore.setSyncedSetting(setting.id, setting.value);
+            }
+            dis.dispatch({
+                action: 'set_theme',
+                value: setting.value,
+            });
+        };
         return <div className="mx_UserSettings_toggle" key={ setting.id + "_" + setting.value }>
             <input id={ setting.id + "_" + setting.value }
                    type="radio"
                    name={ setting.id }
                    value={ setting.value }
                    defaultChecked={ this._syncedSettings[setting.id] === setting.value }
-                   onChange={ (e) => {
-                            if (e.target.checked) {
-                                UserSettingsStore.setSyncedSetting(setting.id, setting.value);
-                            }
-                            dis.dispatch({
-                                action: 'set_theme',
-                                value: setting.value,
-                            });
-                        }
-                   }
+                   onChange={ onChange }
             />
             <label htmlFor={ setting.id + "_" + setting.value }>
                 { setting.label }
@@ -701,8 +728,10 @@ module.exports = React.createClass({
                 <h3>{ _t("Cryptography") }</h3>
                 <div className="mx_UserSettings_section mx_UserSettings_cryptoSection">
                     <ul>
-                        <li><label>Device ID:</label>             <span><code>{deviceId}</code></span></li>
-                        <li><label>Device key:</label>            <span><code><b>{identityKey}</b></code></span></li>
+                        <li><label>{_t("Device ID:")}</label>
+                            <span><code>{deviceId}</code></span></li>
+                        <li><label>{_t("Device key:")}</label>
+                            <span><code><b>{identityKey}</b></code></span></li>
                     </ul>
                     { importExportButtons }
                 </div>
@@ -714,16 +743,18 @@ module.exports = React.createClass({
     },
 
     _renderLocalSetting: function(setting) {
+        // TODO: this ought to be a separate component so that we don't need
+        // to rebind the onChange each time we render
+        const onChange = (e) => {
+            UserSettingsStore.setLocalSetting(setting.id, e.target.checked);
+            if (setting.fn) setting.fn(e.target.checked);
+        };
+
         return <div className="mx_UserSettings_toggle" key={ setting.id }>
             <input id={ setting.id }
                    type="checkbox"
                    defaultChecked={ this._localSettings[setting.id] }
-                   onChange={
-                        (e) => {
-                            UserSettingsStore.setLocalSetting(setting.id, e.target.checked);
-                            if (setting.fn) setting.fn(e.target.checked);
-                        }
-                   }
+                   onChange={ onChange }
             />
             <label htmlFor={ setting.id }>
                 { _t(setting.label) }
@@ -735,7 +766,7 @@ module.exports = React.createClass({
         const DevicesPanel = sdk.getComponent('settings.DevicesPanel');
         return (
             <div>
-                <h3>Devices</h3>
+                <h3>{_t("Devices")}</h3>
                 <DevicesPanel className="mx_UserSettings_section"/>
             </div>
         );
@@ -759,6 +790,8 @@ module.exports = React.createClass({
     },
 
     _renderAnalyticsControl: function() {
+        if (!SdkConfig.get().piwik) return <div/>;
+
         return <div>
             <h3>{ _t('Analytics') }</h3>
             <div className="mx_UserSettings_section">
@@ -771,31 +804,29 @@ module.exports = React.createClass({
     _renderLabs: function() {
         // default to enabled if undefined
         if (this.props.enableLabs === false) return null;
+        UserSettingsStore.doTranslations();
 
-        const features = UserSettingsStore.LABS_FEATURES.map((feature) => (
-            <div key={feature.id} className="mx_UserSettings_toggle">
-                <input
-                    type="checkbox"
-                    id={feature.id}
-                    name={feature.id}
-                    defaultChecked={ UserSettingsStore.isFeatureEnabled(feature.id) }
-                    onChange={(e) => {
-                        if (MatrixClientPeg.get().isGuest()) {
-                            e.target.checked = false;
-                            const NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                            Modal.createDialog(NeedToRegisterDialog, {
-                                title: _t("Please Register"),
-                                description: _t("Guests can't use labs features. Please register."),
-                            });
-                            return;
-                        }
+        const features = UserSettingsStore.LABS_FEATURES.map((feature) => {
+            // TODO: this ought to be a separate component so that we don't need
+            // to rebind the onChange each time we render
+            const onChange = (e) => {
+                UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked);
+                this.forceUpdate();
+            };
 
-                        UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked);
-                        this.forceUpdate();
-                    }}/>
-                <label htmlFor={feature.id}>{feature.name}</label>
-            </div>
-        ));
+            return (
+                <div key={feature.id} className="mx_UserSettings_toggle">
+                    <input
+                        type="checkbox"
+                        id={feature.id}
+                        name={feature.id}
+                        defaultChecked={ UserSettingsStore.isFeatureEnabled(feature.id) }
+                        onChange={ onChange }
+                    />
+                    <label htmlFor={feature.id}>{feature.name}</label>
+                </div>
+            );
+        });
         return (
             <div>
                 <h3>{ _t("Labs") }</h3>
@@ -808,9 +839,6 @@ module.exports = React.createClass({
     },
 
     _renderDeactivateAccount: function() {
-        // We can't deactivate a guest account.
-        if (MatrixClientPeg.get().isGuest()) return null;
-
         return <div>
             <h3>{ _t("Deactivate Account") }</h3>
                 <div className="mx_UserSettings_section">
@@ -847,9 +875,10 @@ module.exports = React.createClass({
         if (!this.state.rejectingInvites) {
             // bind() the invited rooms so any new invites that may come in as this button is clicked
             // don't inadvertently get rejected as well.
+            const onClick = this._onRejectAllInvitesClicked.bind(this, invitedRooms);
             reject = (
                 <AccessibleButton className="mx_UserSettings_button danger"
-                onClick={this._onRejectAllInvitesClicked.bind(this, invitedRooms)}>
+                onClick={onClick}>
                     {_t("Reject all %(invitedRooms)s invites", {invitedRooms: invitedRooms.length})}
                 </AccessibleButton>
             );
@@ -867,8 +896,6 @@ module.exports = React.createClass({
         const settings = this.state.electron_settings;
         if (!settings) return;
 
-        const {ipcRenderer} = require('electron');
-
         return <div>
             <h3>{ _t('Desktop specific') }</h3>
             <div className="mx_UserSettings_section">
@@ -876,12 +903,119 @@ module.exports = React.createClass({
                     <input type="checkbox"
                            name="auto-launch"
                            defaultChecked={settings['auto-launch']}
-                           onChange={(e) => {
-                               ipcRenderer.send('settings_set', 'auto-launch', e.target.checked);
-                           }}
+                           onChange={this._onAutoLaunchChanged}
                     />
                     <label htmlFor="auto-launch">{_t('Start automatically after system login')}</label>
                 </div>
+            </div>
+        </div>;
+    },
+
+    _onAutoLaunchChanged: function(e) {
+        const {ipcRenderer} = require('electron');
+        ipcRenderer.send('settings_set', 'auto-launch', e.target.checked);
+    },
+
+    _mapWebRtcDevicesToSpans: function(devices) {
+        return devices.map((device) => <span key={device.deviceId}>{device.label}</span>);
+    },
+
+    _setAudioInput: function(deviceId) {
+        this.setState({activeAudioInput: deviceId});
+        CallMediaHandler.setAudioInput(deviceId);
+    },
+
+    _setVideoInput: function(deviceId) {
+        this.setState({activeVideoInput: deviceId});
+        CallMediaHandler.setVideoInput(deviceId);
+    },
+
+    _requestMediaPermissions: function(event) {
+        const getUserMedia = (
+            window.navigator.getUserMedia || window.navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia
+        );
+        if (getUserMedia) {
+            return getUserMedia.apply(window.navigator, [
+                { video: true, audio: true },
+                this._refreshMediaDevices,
+                function() {
+                    const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
+                    Modal.createDialog(ErrorDialog, {
+                        title: _t('No media permissions'),
+                        description: _t('You may need to manually permit Riot to access your microphone/webcam'),
+                    });
+                },
+            ]);
+        }
+    },
+
+    _renderWebRtcSettings: function() {
+        if (this.state.mediaDevices === false) {
+            return <div>
+                <h3>{_t('VoIP')}</h3>
+                <div className="mx_UserSettings_section">
+                    <p className="mx_UserSettings_link" onClick={this._requestMediaPermissions}>
+                        {_t('Missing Media Permissions, click here to request.')}
+                    </p>
+                </div>
+            </div>;
+        } else if (!this.state.mediaDevices) return;
+
+        const Dropdown = sdk.getComponent('elements.Dropdown');
+
+        let microphoneDropdown = <p>{_t('No Microphones detected')}</p>;
+        let webcamDropdown = <p>{_t('No Webcams detected')}</p>;
+
+        const defaultOption = {
+            deviceId: '',
+            label: _t('Default Device'),
+        };
+
+        const audioInputs = this.state.mediaDevices.audioinput.slice(0);
+        if (audioInputs.length > 0) {
+            let defaultInput = '';
+            if (!audioInputs.some((input) => input.deviceId === 'default')) {
+                audioInputs.unshift(defaultOption);
+            } else {
+                defaultInput = 'default';
+            }
+
+            microphoneDropdown = <div>
+                <h4>{_t('Microphone')}</h4>
+                <Dropdown
+                    className="mx_UserSettings_webRtcDevices_dropdown"
+                    value={this.state.activeAudioInput || defaultInput}
+                    onOptionChange={this._setAudioInput}>
+                    {this._mapWebRtcDevicesToSpans(audioInputs)}
+                </Dropdown>
+            </div>;
+        }
+
+        const videoInputs = this.state.mediaDevices.videoinput.slice(0);
+        if (videoInputs.length > 0) {
+            let defaultInput = '';
+            if (!videoInputs.some((input) => input.deviceId === 'default')) {
+                videoInputs.unshift(defaultOption);
+            } else {
+                defaultInput = 'default';
+            }
+
+            webcamDropdown = <div>
+                <h4>{_t('Camera')}</h4>
+                <Dropdown
+                    className="mx_UserSettings_webRtcDevices_dropdown"
+                    value={this.state.activeVideoInput || defaultInput}
+                    onOptionChange={this._setVideoInput}>
+                    {this._mapWebRtcDevicesToSpans(videoInputs)}
+                </Dropdown>
+            </div>;
+        }
+
+        return <div>
+            <h3>{_t('VoIP')}</h3>
+            <div className="mx_UserSettings_section">
+                {microphoneDropdown}
+                {webcamDropdown}
             </div>
         </div>;
     },
@@ -938,6 +1072,9 @@ module.exports = React.createClass({
 
         const threepidsSection = this.state.threepids.map((val, pidIndex) => {
             const id = "3pid-" + val.address;
+            // TODO: make a separate component to avoid having to rebind onClick
+            // each time we render
+            const onRemoveClick = (e) => this.onRemoveThreepidClicked(val);
             return (
                 <div className="mx_UserSettings_profileTableRow" key={pidIndex}>
                     <div className="mx_UserSettings_profileLabelCell">
@@ -949,7 +1086,8 @@ module.exports = React.createClass({
                         />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                        <img src="img/cancel-small.svg" width="14" height="14" alt={ _t("Remove") } onClick={this.onRemoveThreepidClicked.bind(this, val)} />
+                        <img src="img/cancel-small.svg" width="14" height="14" alt={ _t("Remove") }
+                            onClick={onRemoveClick} />
                     </div>
                 </div>
             );
@@ -957,7 +1095,7 @@ module.exports = React.createClass({
         let addEmailSection;
         if (this.state.email_add_pending) {
             addEmailSection = <Loader key="_email_add_spinner" />;
-        } else if (!MatrixClientPeg.get().isGuest()) {
+        } else {
             addEmailSection = (
                 <div className="mx_UserSettings_profileTableRow" key="_newEmail">
                     <div className="mx_UserSettings_profileLabelCell">
@@ -973,7 +1111,7 @@ module.exports = React.createClass({
                             onValueChanged={ this._onAddEmailEditFinished } />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                         <img src="img/plus.svg" width="14" height="14" alt="Add" onClick={this._addEmail} />
+                         <img src="img/plus.svg" width="14" height="14" alt={_t("Add")} onClick={this._addEmail} />
                     </div>
                 </div>
             );
@@ -985,16 +1123,7 @@ module.exports = React.createClass({
         threepidsSection.push(addEmailSection);
         threepidsSection.push(addMsisdnSection);
 
-        let accountJsx;
-
-        if (MatrixClientPeg.get().isGuest()) {
-            accountJsx = (
-                <div className="mx_UserSettings_button" onClick={this.onUpgradeClicked}>
-                    { _t("Create an account") }
-                </div>
-            );
-        } else {
-            accountJsx = (
+        const accountJsx = (
                 <ChangePassword
                         className="mx_UserSettings_accountTable"
                         rowClassName="mx_UserSettings_profileTableRow"
@@ -1003,10 +1132,10 @@ module.exports = React.createClass({
                         buttonClassName="mx_UserSettings_button mx_UserSettings_changePasswordButton"
                         onError={this.onPasswordChangeError}
                         onFinished={this.onPasswordChanged} />
-            );
-        }
+        );
+
         let notificationArea;
-        if (!MatrixClientPeg.get().isGuest() && this.state.threepids !== undefined) {
+        if (this.state.threepids !== undefined) {
             notificationArea = (<div>
                 <h3>{ _t("Notifications") }</h3>
 
@@ -1083,6 +1212,7 @@ module.exports = React.createClass({
 
                 {this._renderUserInterfaceSettings()}
                 {this._renderLabs()}
+                {this._renderWebRtcSettings()}
                 {this._renderDevicesPanel()}
                 {this._renderCryptoInfo()}
                 {this._renderBulkOptions()}
@@ -1099,7 +1229,12 @@ module.exports = React.createClass({
                         { _t("Logged in as:") } {this._me}
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        {_t('Access Token:')} <span className="mx_UserSettings_advanced_spoiler" onClick={this._showSpoiler} data-spoiler={ MatrixClientPeg.get().getAccessToken() }>&lt;{ _t("click to reveal") }&gt;</span>
+                        {_t('Access Token:')}
+                        <span className="mx_UserSettings_advanced_spoiler"
+                                onClick={this._showSpoiler}
+                                data-spoiler={ MatrixClientPeg.get().getAccessToken() }>
+                            &lt;{ _t("click to reveal") }&gt;
+                        </span>
                     </div>
                     <div className="mx_UserSettings_advanced">
                         { _t("Homeserver is") } { MatrixClientPeg.get().getHomeserverUrl() }

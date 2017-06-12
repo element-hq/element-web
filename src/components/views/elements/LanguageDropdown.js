@@ -19,7 +19,6 @@ import React from 'react';
 
 import sdk from '../../../index';
 import UserSettingsStore from '../../../UserSettingsStore';
-import { _t } from '../../../languageHandler';
 import * as languageHandler from '../../../languageHandler';
 
 function languageMatchesSearchQuery(query, language) {
@@ -40,14 +39,7 @@ export default class LanguageDropdown extends React.Component {
     }
 
     componentWillMount() {
-        languageHandler.getAllLanguageKeysFromJson().then((langKeys) => {
-            const langs = [];
-            langKeys.forEach((languageKey) => {
-                langs.push({
-                    value: languageKey,
-                    label: _t(languageKey)
-                });
-            });
+        languageHandler.getAllLanguagesFromJson().then((langs) => {
             langs.sort(function(a, b){
                 if(a.label < b.label) return -1;
                 if(a.label > b.label) return 1;

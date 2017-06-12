@@ -48,6 +48,29 @@ Guests can't use labs features. Please register.
 A new password must be entered.
 Resetting password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.
 Guests cannot join this room even if explicitly invited.
+Guest users can't invite users. Please register to invite.
+This room is inaccessible to guests. You may be able to join if you register.
+delete the alias.
+remove %(name)s from the directory.
+Conference call failed.
+Conference calling is in development and may not be reliable.
+Guest users can't create new rooms. Please register to create room and start a chat.
+Server may be unavailable, overloaded, or you hit a bug.
+Server unavailable, overloaded, or something else went wrong.
+You are already in a call.
+You cannot place VoIP calls in this browser.
+You cannot place a call with yourself.
+Your email address does not appear to be associated with a Matrix ID on this Homeserver.
+Guest users can't upload files. Please register to upload.
+Some of your messages have not been sent.
+This room is private or inaccessible to guests. You may be able to join if you register.
+Tried to load a specific point in this room's timeline, but was unable to find it.
+Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.
+This action cannot be performed by a guest user. Please register to be able to do this.
+Tried to load a specific point in this room's timeline, but was unable to find it.
+Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.
+You are trying to access %(roomName)s.
+You will not be able to undo this change as you are promoting the user to have the same power level as yourself.
 EOT
 )];
 }
@@ -71,7 +94,7 @@ if ($_ =~ m/^(\s+)"(.*?)"(: *)"(.*?)"(,?)$/) {
             $sub = 1;
         }
 
-        if ($src eq $fixup && $dst !~ /\.$/) {
+        if ($ARGV !~ /(zh_Hans|zh_Hant|th)\.json$/ && $src eq $fixup && $dst !~ /\.$/) {
             print STDERR "fixing up dst: $dst\n";
             $dst .= '.';
             $sub = 1;            

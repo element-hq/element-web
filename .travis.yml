@@ -5,5 +5,4 @@ install:
     - npm install
     - (cd node_modules/matrix-js-sdk && npm install)
 script:
-    - npm run test
-    - ./.travis-test-riot.sh
+    ./scripts/travis.sh

@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import MatrixClientPeg from './MatrixClientPeg';
-import DMRoomMap from './utils/DMRoomMap';
 import q from 'q';
 
 /**

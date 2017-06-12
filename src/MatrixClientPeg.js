@@ -16,7 +16,6 @@ limitations under the License.
 
 'use strict';
 
-import q from "q";
 import Matrix from 'matrix-js-sdk';
 import utils from 'matrix-js-sdk/lib/utils';
 import EventTimeline from 'matrix-js-sdk/lib/models/event-timeline';

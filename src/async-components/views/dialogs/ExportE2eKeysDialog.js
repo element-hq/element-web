@@ -81,11 +81,13 @@ export default React.createClass({
             FileSaver.saveAs(blob, 'riot-keys.txt');
             this.props.onFinished(true);
         }).catch((e) => {
+            console.error("Error exporting e2e keys:", e);
             if (this._unmounted) {
                 return;
             }
+            const msg = e.friendlyText || _t('Unknown error');
             this.setState({
-                errStr: e.message,
+                errStr: msg,
                 phase: PHASE_EDIT,
             });
         });
@@ -120,7 +122,7 @@ export default React.createClass({
                                 'you have received in encrypted rooms to a local file. You ' +
                                 'will then be able to import the file into another Matrix ' +
                                 'client in the future, so that client will also be able to ' +
-                                'decrypt these messages.'
+                                'decrypt these messages.',
                             ) }
                         </p>
                         <p>
@@ -130,7 +132,7 @@ export default React.createClass({
                                 'careful to keep it secure. To help with this, you should enter ' +
                                 'a passphrase below, which will be used to encrypt the exported ' +
                                 'data. It will only be possible to import the data by using the ' +
-                                'same passphrase.'
+                                'same passphrase.',
                             ) }
                         </p>
                         <div className='error'>
@@ -166,11 +168,11 @@ export default React.createClass({
                         </div>
                     </div>
                     <div className='mx_Dialog_buttons'>
-                        <input className='mx_Dialog_primary' type='submit' value='Export'
+                        <input className='mx_Dialog_primary' type='submit' value={_t('Export')}
                              disabled={disableForm}
                         />
                         <button onClick={this._onCancelClick} disabled={disableForm}>
-                            Cancel
+                            {_t("Cancel")}
                         </button>
                     </div>
                 </form>

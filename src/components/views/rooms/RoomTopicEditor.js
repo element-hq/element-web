@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 var sdk = require('../../../index');
+import { _t } from "../../../languageHandler";
 
 module.exports = React.createClass({
     displayName: 'RoomTopicEditor',
@@ -43,9 +44,10 @@ module.exports = React.createClass({
                 <EditableText ref="editor"
                      className="mx_RoomHeader_topic mx_RoomHeader_editable"
                      placeholderClassName="mx_RoomHeader_placeholder"
-                     placeholder="Add a topic"
+                     placeholder={_t("Add a topic")}
                      blurToCancel={ false }
-                     initialValue={ this._initialTopic }/>
+                     initialValue={ this._initialTopic }
+                     dir="auto" />
         );
     },
 });

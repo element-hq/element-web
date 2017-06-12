@@ -187,6 +187,14 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
 
 // returns a promise which resolves to true if a session is found in
 // localstorage
+//
+// N.B. Lifecycle.js should not maintain any further localStorage state, we
+//      are moving towards using SessionStore to keep track of state related
+//      to the current session (which is typically backed by localStorage).
+//
+//      The plan is to gradually move the localStorage access done here into
+//      SessionStore to avoid bugs where the view becomes out-of-sync with
+//      localStorage (e.g. teamToken, isGuest etc.)
 function _restoreFromLocalStorage() {
     if (!localStorage) {
         return q(false);
@@ -232,7 +240,9 @@ function _handleRestoreFailure(e) {
     let msg = e.message;
     if (msg == "OLM.BAD_LEGACY_ACCOUNT_PICKLE") {
         msg = _t(
-            'You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience.'
+            'You need to log back in to generate end-to-end encryption keys'
+            + ' for this device and submit the public key to your homeserver.'
+            + ' This is a once off; sorry for the inconvenience.',
         );
 
         _clearLocalStorage();
@@ -310,6 +320,16 @@ export function setLoggedIn(credentials) {
             // - that's fine for us).
             if (credentials.deviceId) {
                 localStorage.setItem("mx_device_id", credentials.deviceId);
+            }
+
+            // The user registered as a PWLU (PassWord-Less User), the generated password
+            // is cached here such that the user can change it at a later time.
+            if (credentials.password) {
+                // Update SessionStore
+                dis.dispatch({
+                    action: 'cached_password',
+                    cachedPassword: credentials.password,
+                });
             }
 
             console.log("Session persisted for %s", credentials.userId);

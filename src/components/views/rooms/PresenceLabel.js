@@ -18,8 +18,6 @@ limitations under the License.
 
 import React from 'react';
 
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 
@@ -55,17 +53,17 @@ module.exports = React.createClass({
         var d = parseInt(t / (60 * 60 * 24));
         if (t < 60) {
             if (t < 0) {
-                return "0s";
+                return _t("for %(amount)ss", {amount: 0});
             }
-            return s + "s";
+            return _t("for %(amount)ss", {amount: s});
         }
         if (t < 60 * 60) {
-            return m + "m";
+            return  _t("for %(amount)sm", {amount: m});
         }
         if (t < 24 * 60 * 60) {
-            return h + "h";
+            return  _t("for %(amount)sh", {amount: h});
         }
-        return d + "d ";
+        return  _t("for %(amount)sd", {amount: d});
     },
 
     getPrettyPresence: function(presence) {
@@ -77,9 +75,8 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.props.activeAgo >= 0) {
-            var ago = this.props.currentlyActive ? "" : "for " + (this.getDuration(this.props.activeAgo));
-            // var ago = this.getDuration(this.props.activeAgo) + " ago";
-            // if (this.props.currentlyActive) ago += " (now?)";
+            let duration = this.getDuration(this.props.activeAgo);
+            let ago = this.props.currentlyActive || !duration ? "" : duration;
             return (
                 <div className="mx_PresenceLabel">
                     { this.getPrettyPresence(this.props.presenceState) } { ago }
