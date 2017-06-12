@@ -895,5 +895,10 @@
     "Unverified": "Non verifié",
     "%(user)s is a": "%(user)s est un(e)",
     "Username invalid: %(errMessage)s": "Nom d'utilisateur invalide : %(errMessage)s",
-    "Verified": "Verifié"
+    "Verified": "Verifié",
+    "Would you like to <acceptText>accept</acceptText> or <declineText>decline</declineText> this invitation?": "Souhaitez-vous <acceptText>accepter</acceptText> ou <declineText>refuser</declineText> cette invitation ?",
+    "You have been banned from %(roomName)s by %(userName)s.": "Vous avez été bannis de %(roomName)s par %(userName)s.",
+    "You have been kicked from %(roomName)s by %(userName)s.": "Vous avez été expulsé de %(roomName)s by %(userName)s.",
+    "You may wish to login with a different account, or add this email to this account.": "Vous souhaiteriez peut-être vous identifier avec un autre compte, ou ajouter cette e-mail à votre compte.",
+    "Your home server does not support device management.": "Votre home server ne supporte pas la gestion d'appareils."
 }
