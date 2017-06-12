@@ -874,5 +874,7 @@
     "Incoming voice call from %(name)s": "Appel audio entrant de %(name)s",
     "No display name": "",
     "Otherwise, <a>click here</a> to send a bug report.": "Sinon, <a>cliquer ici</a> pour envoyer un rapport d'erreur.",
-    "Private Chat": "Conversation Privé"
+    "Private Chat": "Conversation Privée",
+    "Public Chat": "Conversation Publique",
+    "Reason: %(reasonText)s": ""
 }
