@@ -110,6 +110,13 @@ const ANALYTICS_SETTINGS_LABELS = [
     },
 ];
 
+const WEBRTC_SETTINGS_LABELS = [
+    {
+        id: 'webRtcForceTURN',
+        label: 'Disable Peer-to-Peer for 1:1 calls',
+    },
+];
+
 // Warning: Each "label" string below must be added to i18n/strings/en_EN.json,
 // since they will be translated when rendered.
 const CRYPTO_SETTINGS_LABELS = [
@@ -945,16 +952,13 @@ module.exports = React.createClass({
         }
     },
 
-    _renderWebRtcSettings: function() {
+    _renderWebRtcDeviceSettings: function() {
         if (this.state.mediaDevices === false) {
-            return <div>
-                <h3>{_t('VoIP')}</h3>
-                <div className="mx_UserSettings_section">
-                    <p className="mx_UserSettings_link" onClick={this._requestMediaPermissions}>
-                        {_t('Missing Media Permissions, click here to request.')}
-                    </p>
-                </div>
-            </div>;
+            return (
+                <p className="mx_UserSettings_link" onClick={this._requestMediaPermissions}>
+                    {_t('Missing Media Permissions, click here to request.')}
+                </p>
+            );
         } else if (!this.state.mediaDevices) return;
 
         const Dropdown = sdk.getComponent('elements.Dropdown');
@@ -1008,10 +1012,17 @@ module.exports = React.createClass({
         }
 
         return <div>
-            <h3>{_t('VoIP')}</h3>
-            <div className="mx_UserSettings_section">
                 {microphoneDropdown}
                 {webcamDropdown}
+        </div>;
+    },
+
+    _renderWebRtcSettings: function() {
+        return <div>
+            <h3>{_t('VoIP')}</h3>
+            <div className="mx_UserSettings_section">
+                { WEBRTC_SETTINGS_LABELS.map(this._renderLocalSetting) }
+                { this._renderWebRtcDeviceSettings() }
             </div>
         </div>;
     },
