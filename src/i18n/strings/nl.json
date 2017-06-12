@@ -15,7 +15,7 @@
     "customServer_text": "U kunt de aangepaste serverinstellingen gebruiken om in te loggen bij andere Matrix-servers door een andere homeserver-URL in te voeren.<br/>Dit maakt het mogelijk om Riot te gebruiken met een bestaand Matrix-account op een andere homeserver.<br/><br/>U kunt ook een aangepaste identiteitsserver instellen, maar het is dan niet mogelijk om gebruikers uit te nodigen met behulp van een e-mailadres of zelf uitgenodigd te worden met een e-mailadres.",
     "delete the alias.": "verwijder de alias.",
     "Delete the room alias %(alias)s and remove %(name)s from the directory?": "De alias %(alias)s verwijderen en %(name)s uit de kamerlijst verwijderen?",
-    "Direct Chat": "Direct chatten",
+    "Direct Chat": "Privégesprek",
     "Directory": "Kamerlijst",
     "Dismiss": "Afwijzen",
     "Download this file": "Download dit bestand",
