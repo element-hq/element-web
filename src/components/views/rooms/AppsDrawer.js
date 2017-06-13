@@ -17,105 +17,98 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+const MatrixClientPeg = require('../../../MatrixClientPeg');
 const AddAppDialog = require('../dialogs/AddAppDialog');
 const AppTile = require('../elements/AppTile');
 const Modal = require("../../../Modal");
-
-// FIXME -- Hard coded widget config
-const roomWidgetConfig = {
-    // Cooking room
-    '!IAkkwswSrOSzPRWksX:matrix.org': [
-        {
-            id: "youtube",
-            url: "https://www.youtube.com/embed/ZJy1ajvMU1k?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1&autoplay=1",
-            name: "Live stream - Boeuf Bourguignon",
-        },
-        {
-            id: "recipie",
-            url: "http://10.9.64.55:8000/recepie.html",
-            name: "Ingredients - Boeuf Bourguignon",
-        },
-    ],
-    // Grafana room
-    '!JWeMRscvtWqfNuzmSf:matrix.org': [
-        {
-            id: "grafana",
-            url: "http://10.9.64.55:8000/grafana.html",
-            name: "Monitoring our Single-Point-Of-Failure DB",
-        },
-    ],
-    // Camgirl room - https://www.youtube.com/watch?v=ZfkwW4GgAiU
-    '!wQqrqwOipOOWALxJNe:matrix.org': [
-        {
-            id: "youtube",
-            url: "https://www.youtube.com/embed/ZfkwW4GgAiU?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1&autoplay=1",
-            name: "Live stream - ChatGirl86",
-        },
-        {
-            id: "thermometer",
-            url: "http://10.9.64.55:8000/index.html",
-            name: "Tip Me!!! -- Send me cash $$$",
-        },
-    ],
-    // Game room - https://www.youtube.com/watch?v=Dm2Ma1dOFO4
-    '!dYSCwtVljhTdBlgNxq:matrix.org': [
-        {
-            id: "youtube",
-            url: "https://www.youtube.com/embed/Dm2Ma1dOFO4?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1&autoplay=1",
-            name: "Live stream - Overwatch Balle Royale",
-        },
-        {
-            id: "thermometer",
-            url: "http://10.9.64.55:8000/index.html",
-            name: "Tip Me!!! -- Send me cash $$$",
-        },
-    ],
-    // Game room - !BLQjREzUgbtIsgrvRn:matrix.org
-    '!BLQjREzUgbtIsgrvRn:matrix.org': [
-        {
-            id: "etherpad",
-            url: "http://10.9.64.55:8000/etherpad.html",
-            name: "Etherpad",
-        },
-    ],
-};
+const dis = require('../../../dispatcher');
 
 module.exports = React.createClass({
     displayName: 'AppsDrawer',
 
     propTypes: {
+        room: React.PropTypes.object.isRequired,
+    },
+
+    componentWillMount: function() {
+        MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
     },
 
     componentDidMount: function() {
     },
 
-    initAppConfig: function(appConfig) {
-        console.log("App props: ", this.props);
-        appConfig = appConfig.map(
-            (app, index, arr) => {
-                switch(app.id) {
-                    case 'etherpad':
-                        app.url = app.url + '?userName=' + this.props.userId +
-                            '&padId=' + this.props.room.roomId;
-                    break;
-                }
+    componentWillUnmount: function() {
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
+        }
+    },
 
-                return app;
-            });
-        return appConfig;
+    _initAppConfig: function(appId, app) {
+        console.log("App props: ", this.props);
+        app.id = appId;
+        app.name = app.type;
+
+        switch(app.type) {
+            case 'etherpad':
+                app.url = app.url + '?userName=' + this.props.userId +
+                    '&padId=' + this.props.room.roomId;
+                break;
+            case 'jitsi': {
+                const user = MatrixClientPeg.get().getUser(this.props.userId);
+                app.url = app.url +
+                    '?confId=' + app.data.confId +
+                    '&displayName=' + encodeURIComponent(user.displayName) +
+                    '&avatarUrl=' + encodeURIComponent(MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl)) +
+                    '&email=' + encodeURIComponent(this.props.userId) +
+                    '&isAudioConf=' + app.data.isAudioConf;
+
+                app.name += ' - ' + app.data.confId;
+                break;
+            }
+        }
+
+        return app;
     },
 
     getInitialState: function() {
-        for (const key in roomWidgetConfig) {
-            if(key == this.props.room.roomId) {
-                return {
-                    apps: this.initAppConfig(roomWidgetConfig[key]),
-                };
-            }
-        }
         return {
-            apps: [],
+            apps: this._getApps(),
         };
+    },
+
+    onRoomStateEvents: function(ev, state) {
+        if (ev.getRoomId() !== this.props.room.roomId || ev.getType() !== 'im.vector.modular.widgets') {
+            return;
+        }
+        this._updateApps();
+    },
+
+    _getApps: function() {
+        const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets', '');
+        if (!appsStateEvents) {
+            return [];
+        }
+        const appsStateEvent = appsStateEvents.getContent();
+        if (Object.keys(appsStateEvent).length < 1) {
+            return [];
+        }
+
+        return Object.keys(appsStateEvent).map((appId) => {
+            return this._initAppConfig(appId, appsStateEvent[appId]);
+        });
+    },
+
+    _updateApps: function() {
+        const apps = this._getApps();
+        if (apps.length < 1) {
+            dis.dispatch({
+                action: 'appsDrawer',
+                show: false,
+            });
+        }
+        this.setState({
+            apps: this._getApps(),
+        });
     },
 
     onClickAddWidget: function() {
@@ -131,7 +124,7 @@ module.exports = React.createClass({
     render: function() {
         const apps = this.state.apps.map(
             (app, index, arr) => <AppTile
-                key={app.id}
+                key={app.name}
                 id={app.id}
                 url={app.url}
                 name={app.name}
