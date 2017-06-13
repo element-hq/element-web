@@ -177,8 +177,8 @@ module.exports = React.createClass({
                 id={app.id}
                 url={app.url}
                 name={app.name}
-                fullWdith={arr.length<2 ? true : false}
                 roomId={this.props.roomId}
+                fullWidth={arr.length<2 ? true : false}
                 userId={this.props.userId}
             />);
 

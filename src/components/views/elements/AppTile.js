@@ -53,7 +53,7 @@ export default React.createClass({
 
     render: function() {
         return (
-            <div className={this.props.fullWdith ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
+            <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 <div className="mx_AppTileMenuBar">
                     {this.props.name}
                     <span className="mx_AppTileMenuBarWidgets">
