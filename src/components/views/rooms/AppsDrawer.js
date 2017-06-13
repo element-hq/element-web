@@ -113,10 +113,59 @@ module.exports = React.createClass({
 
     onClickAddWidget: function() {
         Modal.createDialog(AddAppDialog, {
-            onFinished: (proceed, reason) => {
-                if (!proceed) return;
+            onFinished: (proceed, type, value) => {
+                if (!proceed || !type) return;
+                if (type === 'custom' && !value) return;
 
-                this.state.apps.push();
+                const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets', '');
+                let appsStateEvent = {};
+                if (appsStateEvents) {
+                    appsStateEvent = appsStateEvents.getContent();
+                }
+
+                if (appsStateEvent[type]) {
+                    return;
+                }
+
+                switch (type) {
+                    case 'etherpad':
+                        appsStateEvent.etherpad = {
+                            type: type,
+                            url: 'http://localhost:8000/etherpad.html',
+                        };
+                        break;
+                    case 'grafana':
+                        appsStateEvent.grafana = {
+                            type: type,
+                            url: 'http://localhost:8000/grafana.html',
+                        };
+                        break;
+                    case 'jitsi':
+                        appsStateEvent.videoConf = {
+                            type: type,
+                            url: 'http://localhost:8000/jitsi.html',
+                            data: {
+                                confId: this.props.room.roomId.replace(/[^A-Za-z0-9]/g, '_') + Date.now(),
+                            },
+                        };
+                        break;
+                    case 'custom':
+                        appsStateEvent.custom = {
+                            type: type,
+                            url: value,
+                        };
+                        break;
+                    default:
+                        console.warn('Unsupported app type:', type);
+                        return;
+                }
+
+                MatrixClientPeg.get().sendStateEvent(
+                    this.props.room.roomId,
+                    'im.vector.modular.widgets',
+                    appsStateEvent,
+                    '',
+                );
             },
         });
     },
