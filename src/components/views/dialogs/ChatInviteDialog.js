@@ -241,6 +241,11 @@ module.exports = React.createClass({
         MatrixClientPeg.get().searchUserDirectory({
             term: query,
         }).then((resp) => {
+            // The query might have changed since we sent the request, so ignore
+            // responses for anything other than the latest query.
+            if (this.state.query !== query) {
+                return;
+            }
             this._processResults(resp.results, query);
         }).catch((err) => {
             console.error('Error whilst searching user directory: ', err);
