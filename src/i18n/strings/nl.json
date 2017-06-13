@@ -302,7 +302,7 @@
     "Success": "Gereed",
     "tag as %(tagName)s": "Met %(tagName)s labelen",
     "tag direct chat": "Privéchat labelen",
-    "Tagged as: ": "Gelabeld als:",
+    "Tagged as: ": "Gelabeld als: ",
     "Sun": "Zon",
     "Mon": "Maa",
     "Tue": "Din",
@@ -327,5 +327,5 @@
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "Set a display name:": "Weergavenaam instellen:",
     "Set a Display Name": "Weergavenaam instellen",
-    "Upload an avatar:": "Een avatar uploaden"
+    "Upload an avatar:": "Een avatar uploaden:"
 }
