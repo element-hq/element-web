@@ -910,5 +910,7 @@
     "Encryption is not enabled in this room": "L'encryption n'est pas activée sur ce salon",
     "Home": "Accueil",
     "To link to a room it must have <a>an address</a>.": "Pour ajouter un lien à un salon celui-ci doit avoir <a>une adresse</a>.",
-    "Upload new:": "Télécharger un nouveau :"
+    "Upload new:": "Télécharger un nouveau :",
+    "And %(count)s more...": "Et %(count)s autres...",
+    "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.": "Joindre avec <voiceText>audio</voiceText> ou <videoText>vidéo</videoText>."
 }
