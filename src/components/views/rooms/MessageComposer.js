@@ -13,16 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react');
+import React from 'react';
 import { _t } from '../../../languageHandler';
-var CallHandler = require('../../../CallHandler');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var Modal = require('../../../Modal');
-var sdk = require('../../../index');
-var dis = require('../../../dispatcher');
+import CallHandler from '../../../CallHandler';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import Modal from '../../../Modal';
+import sdk from '../../../index';
+import dis from '../../../dispatcher';
 import Autocomplete from './Autocomplete';
 import classNames from 'classnames';
-
 import UserSettingsStore from '../../../UserSettingsStore';
 
 
@@ -107,7 +106,7 @@ export default class MessageComposer extends React.Component {
         let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         let TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        const fileList = [];
+        let fileList = [];
         for (let i=0; i<files.length; i++) {
             fileList.push(<li key={i}>
                 <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> {files[i].name || _t('Attachment')}
@@ -372,20 +371,20 @@ export default class MessageComposer extends React.Component {
             controls.push(
                 <div key="controls_error" className="mx_MessageComposer_noperm_error">
                     { _t('You do not have permission to post to this room') }
-                </div>
+                </div>,
             );
         }
 
-        // let autoComplete;
-        // if (UserSettingsStore.isFeatureEnabled('rich_text_editor')) {
-        //     autoComplete = <div className="mx_MessageComposer_autocomplete_wrapper">
-        //         <Autocomplete
-        //             ref="autocomplete"
-        //             onConfirm={this._onAutocompleteConfirm}
-        //             query={this.state.autocompleteQuery}
-        //             selection={this.state.selection} />
-        //     </div>;
-        // }
+        let autoComplete;
+        if (UserSettingsStore.isFeatureEnabled('rich_text_editor')) {
+            autoComplete = <div className="mx_MessageComposer_autocomplete_wrapper">
+                <Autocomplete
+                    ref="autocomplete"
+                    onConfirm={this._onAutocompleteConfirm}
+                    query={this.state.autocompleteQuery}
+                    selection={this.state.selection} />
+            </div>;
+        }
 
 
         const {style, blockType} = this.state.inputState;

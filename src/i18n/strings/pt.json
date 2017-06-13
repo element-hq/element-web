@@ -808,7 +808,7 @@
     "Enable URL previews for this room (affects only you)": "Habilitar pré-visualizações de links para esta sala (afeta somente a você)",
     "Drop file here to upload": "Arraste um arquivo aqui para enviar",
     " (unsupported)": " (não suportado)",
-    "Ongoing conference call%(supportedText)s. %(joinText)s": "Conferência%(supportedText)s em andamento. %(joinText)s",
+    "Ongoing conference call%(supportedText)s.": "Conferência%(supportedText)s em andamento.",
     "Online": "Online",
     "Idle": "Ocioso",
     "Offline": "Offline",

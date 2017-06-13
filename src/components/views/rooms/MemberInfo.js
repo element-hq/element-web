@@ -38,6 +38,8 @@ import Unread from '../../../Unread';
 import { findReadReceiptFromUserId } from '../../../utils/Receipt';
 import WithMatrixClient from '../../../wrappers/WithMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
+import GeminiScrollbar from 'react-gemini-scrollbar';
+
 
 module.exports = WithMatrixClient(React.createClass({
     displayName: 'MemberInfo',
@@ -727,34 +729,36 @@ module.exports = WithMatrixClient(React.createClass({
         const EmojiText = sdk.getComponent('elements.EmojiText');
         return (
             <div className="mx_MemberInfo">
-                <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}> <img src="img/cancel.svg" width="18" height="18"/></AccessibleButton>
-                <div className="mx_MemberInfo_avatar">
-                    <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
-                </div>
-
-                <EmojiText element="h2">{memberName}</EmojiText>
-
-                <div className="mx_MemberInfo_profile">
-                    <div className="mx_MemberInfo_profileField">
-                        { this.props.member.userId }
+                <GeminiScrollbar autoshow={true}>
+                    <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}> <img src="img/cancel.svg" width="18" height="18"/></AccessibleButton>
+                    <div className="mx_MemberInfo_avatar">
+                        <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
                     </div>
-                    <div className="mx_MemberInfo_profileField">
-                        { _t("Level:") } <b><PowerSelector controlled={true} value={ parseInt(this.props.member.powerLevel) } disabled={ !this.state.can.modifyLevel } onChange={ this.onPowerChange }/></b>
+
+                    <EmojiText element="h2">{memberName}</EmojiText>
+
+                    <div className="mx_MemberInfo_profile">
+                        <div className="mx_MemberInfo_profileField">
+                            { this.props.member.userId }
+                        </div>
+                        <div className="mx_MemberInfo_profileField">
+                            { _t("Level:") } <b><PowerSelector controlled={true} value={ parseInt(this.props.member.powerLevel) } disabled={ !this.state.can.modifyLevel } onChange={ this.onPowerChange }/></b>
+                        </div>
+                        <div className="mx_MemberInfo_profileField">
+                            <PresenceLabel activeAgo={ presenceLastActiveAgo }
+                                currentlyActive={ presenceCurrentlyActive }
+                                presenceState={ presenceState } />
+                        </div>
                     </div>
-                    <div className="mx_MemberInfo_profileField">
-                        <PresenceLabel activeAgo={ presenceLastActiveAgo }
-                            currentlyActive={ presenceCurrentlyActive }
-                            presenceState={ presenceState } />
-                    </div>
-                </div>
 
-                { adminTools }
+                    { adminTools }
 
-                { startChat }
+                    { startChat }
 
-                { this._renderDevices() }
+                    { this._renderDevices() }
 
-                { spinner }
+                    { spinner }
+                </GeminiScrollbar>
             </div>
         );
     }

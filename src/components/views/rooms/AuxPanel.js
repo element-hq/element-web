@@ -22,7 +22,6 @@ import ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
 import  { _t, _tJsx} from '../../../languageHandler';
 
-
 module.exports = React.createClass({
     displayName: 'AuxPanel',
 
@@ -92,12 +91,12 @@ module.exports = React.createClass({
 
         let conferenceCallNotification = null;
         if (this.props.displayConfCallNotification) {
-            let supportedText;
-            let joinText;
+            let supportedText = '';
+            let joinNode;
             if (!MatrixClientPeg.get().supportsVoip()) {
                 supportedText = _t(" (unsupported)");
             } else {
-                joinText = (<span>
+                joinNode = (<span>
                     {_tJsx(
                         "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.",
                         [/<voiceText>(.*?)<\/voiceText>/, /<videoText>(.*?)<\/videoText>/],
@@ -108,9 +107,13 @@ module.exports = React.createClass({
                     )}
                 </span>);
             }
+            // XXX: the translation here isn't great: appending ' (unsupported)' is likely to not make sense in many languages,
+            // but there are translations for this in the languages we do have so I'm leaving it for now.
             conferenceCallNotification = (
                 <div className="mx_RoomView_ongoingConfCallNotification">
-                    {_t("Ongoing conference call%(supportedText)s. %(joinText)s", {supportedText: supportedText, joinText: joinText})}
+                    {_t("Ongoing conference call%(supportedText)s.", {supportedText: supportedText})}
+                    &nbsp;
+                    {joinNode}
                 </div>
             );
         }
