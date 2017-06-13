@@ -78,6 +78,14 @@ const roomWidgetConfig = {
             name: "Etherpad",
         },
     ],
+    // Insurance room - !nTUetaZELiqWcWYshy:matrix.org
+    '!nTUetaZELiqWcWYshy:matrix.org': [
+        {
+            id: "lg",
+            url: "http://localhost:8000/lg.html",
+            name: "L&G Insurance Policy",
+        },
+    ],
 };
 
 module.exports = React.createClass({
