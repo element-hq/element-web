@@ -914,5 +914,8 @@
     "And %(count)s more...": "Et %(count)s autres...",
     "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.": "Joindre avec <voiceText>audio</voiceText> ou <videoText>vidéo</videoText>.",
     "Last seen": "Dernier vu",
-    "Level:": "Niveau :"
+    "Level:": "Niveau :",
+    "Searching known users": "En recherche d'utilisateurs connus",
+    "Set": "Définit",
+    "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (pouvoir %(powerLevelNumber)s)"
 }
