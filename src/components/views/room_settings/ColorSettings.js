@@ -21,6 +21,8 @@ var Tinter = require('../../../Tinter');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
 
+import dis from '../../../dispatcher';
+
 var ROOM_COLORS = [
     // magic room default values courtesy of Ribot
     ["#76cfa6", "#eaf5f0"],
@@ -86,11 +88,7 @@ module.exports = React.createClass({
                 }
             ).catch(function(err) {
                 if (err.errcode == 'M_GUEST_ACCESS_FORBIDDEN') {
-                    var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                    Modal.createDialog(NeedToRegisterDialog, {
-                        title: "Please Register",
-                        description: "Saving room color settings is only available to registered users"
-                    });
+                    dis.dispatch({action: 'view_set_mxid'});
                 }
             });
         }

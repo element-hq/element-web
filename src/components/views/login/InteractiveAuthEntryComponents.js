@@ -440,7 +440,7 @@ export const FallbackAuthEntry = React.createClass({
     render: function() {
         return (
             <div>
-                <a onClick={this._onShowFallbackClick}>Start authentication</a>
+                <a onClick={this._onShowFallbackClick}>{_t("Start authentication")}</a>
                 <div className="error">
                     {this.props.errorText}
                 </div>

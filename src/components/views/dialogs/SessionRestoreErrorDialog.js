@@ -18,7 +18,7 @@ import React from 'react';
 import sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
-import { _t } from '../../../languageHandler';
+import { _t, _tJsx } from '../../../languageHandler';
 
 
 export default React.createClass({
@@ -44,8 +44,11 @@ export default React.createClass({
 
         if (SdkConfig.get().bug_report_endpoint_url) {
             bugreport = (
-                <p>Otherwise, <a onClick={this._sendBugReport} href='#'>
-                   click here</a> to send a bug report.
+                <p>
+                {_tJsx(
+                    "Otherwise, <a>click here</a> to send a bug report.",
+                    /<a>(.*?)<\/a>/, (sub) => <a onClick={this._sendBugReport} key="bugreport" href='#'>{sub}</a>,
+                )}
                 </p>
             );
         }

@@ -24,7 +24,6 @@ import { _t } from '../../../languageHandler';
 import {decryptFile} from '../../../utils/DecryptFile';
 import Tinter from '../../../Tinter';
 import request from 'browser-request';
-import q from 'q';
 import Modal from '../../../Modal';
 
 

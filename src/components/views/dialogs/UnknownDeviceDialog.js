@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
-import dis from '../../../dispatcher';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import Resend from '../../../Resend';
@@ -146,7 +145,7 @@ export default React.createClass({
                             console.log("UnknownDeviceDialog closed by escape");
                             this.props.onFinished();
                 }}
-                title='Room contains unknown devices'
+                title={_t('Room contains unknown devices')}
             >
                 <GeminiScrollbar autoshow={false} className="mx_Dialog_content">
                     <h4>
@@ -163,7 +162,7 @@ export default React.createClass({
                                 this.props.onFinished();
                                 Resend.resendUnsentEvents(this.props.room);
                             }}>
-                        Send anyway
+                        {_t("Send anyway")}
                     </button>
                     <button className="mx_Dialog_primary" autoFocus={ true }
                             onClick={() => {

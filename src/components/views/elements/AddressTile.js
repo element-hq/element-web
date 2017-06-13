@@ -19,9 +19,7 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import sdk from "../../../index";
-import Invite from "../../../Invite";
 import MatrixClientPeg from "../../../MatrixClientPeg";
-import Avatar from '../../../Avatar';
 import { _t } from '../../../languageHandler';
 
 // React PropType definition for an object describing

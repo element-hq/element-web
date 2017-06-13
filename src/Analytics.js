@@ -19,8 +19,10 @@ import MatrixClientPeg from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 
-function redact(str) {
-    return str.replace(/#\/(room|user)\/(.+)/, "#/$1/<redacted>");
+function getRedactedUrl() {
+    const redactedHash = window.location.hash.replace(/#\/(room|user)\/(.+)/, "#/$1/<redacted>");
+    // hardcoded url to make piwik happy
+    return 'https://riot.im/app/' + redactedHash;
 }
 
 const customVariables = {
@@ -28,6 +30,7 @@ const customVariables = {
     'App Version': 2,
     'User Type': 3,
     'Chosen Language': 4,
+    'Instance': 5,
 };
 
 
@@ -53,6 +56,7 @@ class Analytics {
      * but this is second best, Piwik should not pull anything implicitly.
      */
     disable() {
+        this.trackEvent('Analytics', 'opt-out');
         this.disabled = true;
     }
 
@@ -84,6 +88,10 @@ class Analytics {
 
         this._setVisitVariable('Chosen Language', getCurrentLanguage());
 
+        if (window.location.hostname === 'riot.im') {
+            this._setVisitVariable('Instance', window.location.pathname);
+        }
+
         (function() {
             const g = document.createElement('script');
             const s = document.getElementsByTagName('script')[0];
@@ -108,7 +116,7 @@ class Analytics {
             this.firstPage = false;
             return;
         }
-        this._paq.push(['setCustomUrl', redact(window.location.href)]);
+        this._paq.push(['setCustomUrl', getRedactedUrl()]);
         this._paq.push(['trackPageView']);
     }
 

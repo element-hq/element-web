@@ -198,5 +198,6 @@
     "Confirm password": "Bevestigen wachtwoord",
     "Confirm your new password": "Bevestig je nieuwe wachtwoord",
     "Continue": "Doorgaan",
-    "Could not connect to the integration server": "Mislukt om te verbinden met de integratie server"
+    "Could not connect to the integration server": "Mislukt om te verbinden met de integratie server",
+    "Cancel": "Annuleer"
 }
