@@ -189,7 +189,7 @@
     "Video call": "Видио вызов",
     "Voice call": "Голосовой вызов",
     "VoIP conference finished.": "VoIP конференция закончилась.",
-    "VoIP conference started.": "VoIP Конференция началась.",
+    "VoIP conference started.": "VoIP конференция началась.",
     "(warning: cannot be disabled again!)": "(предупреждение: не может быть отключено!)",
     "Warning!": "Предупреждение!",
     "was banned": "запрещен",
@@ -227,7 +227,7 @@
     "%(senderName)s answered the call.": "%(senderName)s ответил на звонок.",
     "%(senderName)s banned %(targetName)s.": "%(senderName)s запрещенный %(targetName)s.",
     "Call Timeout": "Время ожидания вызова",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s их имя измененное с %(oldDisplayName)s на %(displayName)s.",
+    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s изменено с %(oldDisplayName)s на %(displayName)s.",
     "%(senderName)s changed their profile picture.": "%(senderName)s изменил фото профиля.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s уровень мощности изменен на %(powerLevelDiffText)s.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s имя комнаты изменено на %(roomName)s.",
@@ -362,7 +362,7 @@
     "You cannot place VoIP calls in this browser.": "Вы не можете сделать вызовы VoIP с этим браузером.",
     "You are already in a call.": "Связь уже установлена.",
     "You're not in any rooms yet! Press": "Вы еще не находитесь ни в каких комнатах! Нажать",
-    "You are trying to access %(roomName)s.": "Вы пытаетесь получить доступ %(roomName)s.",
+    "You are trying to access %(roomName)s.": "Вы пытаетесь получить доступ к %(roomName)s.",
     "You cannot place a call with yourself.": "Вы не можете позвонить самим себе.",
     "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s отменил %(targetName)s's приглашение.",
     "Sep": "Сен.",
@@ -949,5 +949,10 @@
     "You have been banned from %(roomName)s by %(userName)s.": "%(userName) забанил Вас в % (roomName).",
     "You have been kicked from %(roomName)s by %(userName)s.": "%(userName) выгнал Вас из %(roomName).",
     "You may wish to login with a different account, or add this email to this account.": "Вы можете войти в систему с другой учетной записью или добавить этот адрес email в эту учетную запись.",
-    "Your home server does not support device management.": "Ваш домашний сервер не поддерживает управление устройствами."
+    "Your home server does not support device management.": "Ваш домашний сервер не поддерживает управление устройствами.",
+    "(could not connect media)": "(не удается подключиться к  медиа)",
+    "(no answer)": "(нет ответа)",
+    "(unknown failure: %(reason)s)": "(неизвестная ошибка: %(reason)s",
+    "Disable Peer-to-Peer for 1:1 calls": "Отключить Peer-to-Peer для 1:1 звонков",
+    "Not a valid Riot keyfile": "Не действительный Riot-файл ключа"
 }
