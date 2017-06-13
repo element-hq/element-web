@@ -38,9 +38,10 @@ with open(dstpath) as ifp:
             elif strippedline.endswith(','):
                 ofp.write(line)
             else:
-                ofp.write('    '+strippedline)
-                ofp.write(",\n")
-                toAddStr = json.dumps(toAdd, indent=4, separators=(',', ': '), ensure_ascii=False, encoding="utf8")[1:-1]
+                ofp.write('    '+strippedline+',')
+                toAddStr = json.dumps(toAdd, indent=4, separators=(',', ': '), ensure_ascii=False, encoding="utf8").strip("{}\n")
+                ofp.write("\n")
                 ofp.write(toAddStr.encode('utf8'))
+                ofp.write("\n")
 
 os.rename(tmppath, dstpath)
