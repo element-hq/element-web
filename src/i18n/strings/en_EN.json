@@ -196,5 +196,7 @@
   "You can now return to your account after signing out, and sign in on other devices.": "You can now return to your account after signing out, and sign in on other devices.",
   "Continue": "Continue",
   "Please set a password!": "Please set a password!",
-  "This will allow you to return to your account after signing out, and sign in on other devices.": "This will allow you to return to your account after signing out, and sign in on other devices."
+  "This will allow you to return to your account after signing out, and sign in on other devices.": "This will allow you to return to your account after signing out, and sign in on other devices.",
+  "You have successfully set a password and an email address!": "You have successfully set a password and an email address!",
+  "Remember, you can always set an email address in user settings if you change your mind.": "Remember, you can always set an email address in user settings if you change your mind."
 }
