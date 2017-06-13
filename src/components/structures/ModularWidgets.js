@@ -13,6 +13,12 @@ class ModularWidgets {
             description: 'Graph and monitor all the things!',
         },
         {
+            type: 'jitsi',
+            icon: 'http://localhost:8000/static/jitsi.png',
+            name: 'jitsi',
+            description: 'Jitsi video conference',
+        },
+        {
             type: 'custom',
             icon: 'http://localhost:8000/static/blocks.png',
             name: 'Custom Widget',

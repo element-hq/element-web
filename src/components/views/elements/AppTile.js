@@ -94,7 +94,7 @@ export default React.createClass({
                     </span>
                 </div>
                 <div className="mx_AppTileBody">
-                    <iframe ref="appFrame" src={this.props.url}></iframe>
+                    <iframe ref="appFrame" src={this.props.url} allowFullScreen="true"></iframe>
                 </div>
             </div>
         );

@@ -153,21 +153,41 @@ export default class MessageComposer extends React.Component {
         });
     }
 
-    onCallClick(ev) {
-        console.warn("Call but clicked!");
+    _startCallApp(isAudioConf) {
         dis.dispatch({
-            action: 'place_call',
-            type: ev.shiftKey ? "screensharing" : "video",
-            room_id: this.props.room.roomId,
+            action: 'appsDrawer',
+            show: true,
         });
+
+        const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets', '');
+        let appsStateEvent = {};
+        if (appsStateEvents) {
+            appsStateEvent = appsStateEvents.getContent();
+        }
+        if (!appsStateEvent.videoConf) {
+            appsStateEvent.videoConf = {
+                type: 'jitsi',
+                url: 'http://localhost:8000/jitsi.html',
+                data: {
+                    confId: this.props.room.roomId.replace(/[^A-Za-z0-9]/g, '_') + Date.now(),
+                    isAudioConf: isAudioConf,
+                },
+            };
+            MatrixClientPeg.get().sendStateEvent(
+                this.props.room.roomId,
+                'im.vector.modular.widgets',
+                appsStateEvent,
+                '',
+            ).then(() => console.log('Sent state'), (e) => console.error(e));
+        }
+    }
+
+    onCallClick(ev) {
+        this._startCallApp(false);
     }
 
     onVoiceCallClick(ev) {
-        dis.dispatch({
-            action: 'place_call',
-            type: 'voice',
-            room_id: this.props.room.roomId,
-        });
+        this._startCallApp(true);
     }
 
     onShowAppsClick(ev) {
