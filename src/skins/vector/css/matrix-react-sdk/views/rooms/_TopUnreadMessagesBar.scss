@@ -17,20 +17,15 @@ limitations under the License.
 .mx_TopUnreadMessagesBar {
     margin: auto;  /* centre horizontally */
     max-width: 960px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     border-bottom: 1px solid $primary-hairline-color;
-
-    /* in absence of img */
-    height: 24px;
 }
 
 .mx_TopUnreadMessagesBar_scrollUp {
     display: inline;
     cursor: pointer;
-
-    /* in absence of img */
-    padding-left: 65px;
+    text-decoration: underline;
 }
 
 .mx_TopUnreadMessagesBar_scrollUp img {
@@ -48,4 +43,11 @@ limitations under the License.
     padding-right: 14px;
     padding-top: 3px;
     cursor: pointer;
+}
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_TopUnreadMessagesBar {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
 }

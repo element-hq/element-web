@@ -5,4 +5,4 @@
  */
 
 var sdk = require('matrix-react-sdk');
-sdk.loadSkin(require('component-index'));
+sdk.loadSkin(require('../src/component-index'));

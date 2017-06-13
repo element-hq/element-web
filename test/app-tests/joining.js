@@ -72,14 +72,12 @@ describe('joining a room', function () {
             var ROOM_ALIAS = '#alias:localhost';
             var ROOM_ID = '!id:localhost';
 
-            httpBackend.when('PUT', '/presence/'+encodeURIComponent(USER_ID)+'/status')
-                .respond(200, {});
             httpBackend.when('GET', '/pushrules').respond(200, {});
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
-            httpBackend.when('GET', '/sync').respond(200, {});
-            httpBackend.when('POST', '/publicRooms').respond(200, {chunk: []});
-            httpBackend.when('GET', '/thirdparty/protocols').respond(200, {});
-            httpBackend.when('GET', '/directory/room/'+encodeURIComponent(ROOM_ALIAS)).respond(200, { room_id: ROOM_ID });
+
+            // note that we deliberately do *not* set an expectation for a
+            // presence update - setting one makes the first httpBackend.flush
+            // return before the first /sync arrives.
 
             // start with a logged-in client
             localStorage.setItem("mx_hs_url", HS_URL );
@@ -87,16 +85,43 @@ describe('joining a room', function () {
             localStorage.setItem("mx_access_token", ACCESS_TOKEN );
             localStorage.setItem("mx_user_id", USER_ID);
 
-            var mc = <MatrixChat config={{}}/>;
+            var mc = (
+                <MatrixChat config={{}}
+                    makeRegistrationUrl={()=>{throw new Error("unimplemented");}}
+                    initialScreenAfterLogin={{
+                        screen: 'directory',
+                    }}
+                />
+            );
             matrixChat = ReactDOM.render(mc, parentDiv);
 
-            // switch to the Directory
-            matrixChat._setPage(PageTypes.RoomDirectory);
-
             var roomView;
-            // wait for /sync to happen
-            return q.delay(1).then(() => {
-                return httpBackend.flush();
+
+            // wait for /sync to happen. This may take some time, as the client
+            // has to initialise indexeddb.
+            console.log("waiting for /sync");
+            let syncDone = false;
+            httpBackend.when('GET', '/sync')
+                .check((r) => {syncDone = true;})
+                .respond(200, {});
+            function awaitSync(attempts) {
+                if (syncDone) {
+                    return q();
+                }
+                if (!attempts) {
+                    throw new Error("Gave up waiting for /sync")
+                }
+                return httpBackend.flush().then(() => awaitSync(attempts-1));
+            }
+
+            return awaitSync(10).then(() => {
+                // wait for the directory requests
+                httpBackend.when('POST', '/publicRooms').respond(200, {chunk: []});
+                httpBackend.when('GET', '/thirdparty/protocols').respond(200, {});
+                return q.all([
+                    httpBackend.flush('/publicRooms'),
+                    httpBackend.flush('/thirdparty/protocols'),
+                ]);
             }).then(() => {
                 var roomDir = ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, RoomDirectory);
@@ -110,9 +135,14 @@ describe('joining a room', function () {
 
                 // that should create a roomview which will start a peek; wait
                 // for the peek.
+                httpBackend.when('GET', '/directory/room/'+encodeURIComponent(ROOM_ALIAS)).respond(200, { room_id: ROOM_ID });
                 httpBackend.when('GET', '/rooms/'+encodeURIComponent(ROOM_ID)+"/initialSync")
                     .respond(401, {errcode: 'M_GUEST_ACCESS_FORBIDDEN'});
-                return httpBackend.flush();
+
+                return q.all([
+                    httpBackend.flush('/directory/room/'+encodeURIComponent(ROOM_ALIAS)),
+                    httpBackend.flush('/rooms/'+encodeURIComponent(ROOM_ID)+"/initialSync"),
+                ]);
             }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
 
@@ -120,30 +150,27 @@ describe('joining a room', function () {
                 roomView = ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, RoomView);
 
-                var previewBar = ReactTestUtils.findRenderedComponentWithType(
+                const previewBar = ReactTestUtils.findRenderedComponentWithType(
                     roomView, RoomPreviewBar);
 
-                var joinLink = ReactTestUtils.findRenderedDOMComponentWithTag(
+                const joinLink = ReactTestUtils.findRenderedDOMComponentWithTag(
                     previewBar, 'a');
 
                 ReactTestUtils.Simulate.click(joinLink);
 
-                // that will fire off a request to check our displayname, followed by a
-                // join request
-                httpBackend.when('GET', '/profile/'+encodeURIComponent(USER_ID))
-                    .respond(200, {displayname: 'boris'});
                 httpBackend.when('POST', '/join/'+encodeURIComponent(ROOM_ALIAS))
                     .respond(200, {room_id: ROOM_ID});
-                return httpBackend.flush();
             }).then(() => {
                 // wait for the join request to be made
                 return q.delay(1);
             }).then(() => {
-                // flush it through
-                return httpBackend.flush();
+                // and again, because the state update has to go to the store and
+                // then one dispatch within the store, then to the view
+                // XXX: This is *super flaky*: a better way would be to declare
+                // that we expect a certain state transition to happen, then wait
+                // for that transition to occur.
+                return q.delay(1);
             }).then(() => {
-                httpBackend.verifyNoOutstandingExpectation();
-
                 // the roomview should now be loading
                 expect(roomView.state.room).toBe(null);
                 expect(roomView.state.joining).toBe(true);
@@ -151,6 +178,16 @@ describe('joining a room', function () {
                 // there should be a spinner
                 ReactTestUtils.findRenderedDOMComponentWithClass(
                     roomView, "mx_Spinner");
+
+                // flush it through
+                return httpBackend.flush('/join/'+encodeURIComponent(ROOM_ALIAS));
+            }).then(() => {
+                httpBackend.verifyNoOutstandingExpectation();
+
+                return q.delay(1);
+            }).then(() => {
+                // We've joined, expect this to false
+                expect(roomView.state.joining).toBe(false);
 
                 // now send the room down the /sync pipe
                 httpBackend.when('GET', '/sync').
@@ -171,7 +208,6 @@ describe('joining a room', function () {
             }).then(() => {
                 // now the room should have loaded
                 expect(roomView.state.room).toExist();
-                expect(roomView.state.joining).toBe(false);
             }).done(done, done);
         });
     });

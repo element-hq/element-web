@@ -1,0 +1,1 @@
+../../matrix-react-sdk/scripts/check-i18n.pl
