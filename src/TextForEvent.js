@@ -13,9 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-var MatrixClientPeg = require("./MatrixClientPeg");
-var CallHandler = require("./CallHandler");
+import MatrixClientPeg from "./MatrixClientPeg";
+import CallHandler from "./CallHandler";
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
 
@@ -117,7 +116,7 @@ function textForTopicEvent(ev) {
 
 function textForRoomNameEvent(ev) {
     var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-    
+
     if (!ev.getContent().name || ev.getContent().name.trim().length === 0) {
         return _t('%(senderDisplayName)s removed the room name.', {senderDisplayName: senderDisplayName});
     }
@@ -142,9 +141,21 @@ function textForCallAnswerEvent(event) {
 }
 
 function textForCallHangupEvent(event) {
-    var senderName = event.sender ? event.sender.name : _t('Someone');
-    var supported = MatrixClientPeg.get().supportsVoip() ? "" : _t('(not supported by this browser)');
-    return _t('%(senderName)s ended the call.', {senderName: senderName}) + ' ' + supported;
+    const senderName = event.sender ? event.sender.name : _t('Someone');
+    const eventContent = event.getContent();
+    let reason = "";
+    if(!MatrixClientPeg.get().supportsVoip()) {
+        reason = _t('(not supported by this browser)');
+    } else if(eventContent.reason) {
+        if (eventContent.reason === "ice_failed") {
+            reason = _t('(could not connect media)');
+        } else if (eventContent.reason === "invite_timeout") {
+            reason = _t('(no answer)');
+        } else {
+            reason = _t('(unknown failure: %(reason)s)', {reason: eventContent.reason});
+        }
+    }
+    return _t('%(senderName)s ended the call.', {senderName}) + ' ' + reason;
 }
 
 function textForCallInviteEvent(event) {

@@ -45,8 +45,6 @@ module.exports = React.createClass({
         brand: React.PropTypes.string,
         email: React.PropTypes.string,
         referrer: React.PropTypes.string,
-        username: React.PropTypes.string,
-        guestAccessToken: React.PropTypes.string,
         teamServerConfig: React.PropTypes.shape({
             // Email address to request new teams
             supportEmail: React.PropTypes.string.isRequired,
@@ -295,17 +293,6 @@ module.exports = React.createClass({
     },
 
     _makeRegisterRequest: function(auth) {
-        let guestAccessToken = this.props.guestAccessToken;
-
-        if (
-            this.state.formVals.username !== this.props.username ||
-            this.state.hsUrl != this.props.defaultHsUrl
-        ) {
-            // don't try to upgrade if we changed our username
-            // or are registering on a different HS
-            guestAccessToken = null;
-        }
-
         // Only send the bind params if we're sending username / pw params
         // (Since we need to send no params at all to use the ones saved in the
         // session).
@@ -320,7 +307,7 @@ module.exports = React.createClass({
             undefined, // session id: included in the auth dict already
             auth,
             bindThreepids,
-            guestAccessToken,
+            null,
         );
     },
 
@@ -357,10 +344,6 @@ module.exports = React.createClass({
         } else if (this.state.busy || this.state.teamServerBusy) {
             registerBody = <Spinner />;
         } else {
-            let guestUsername = this.props.username;
-            if (this.state.hsUrl != this.props.defaultHsUrl) {
-                guestUsername = null;
-            }
             let errorSection;
             if (this.state.errorText) {
                 errorSection = <div className="mx_Login_error">{this.state.errorText}</div>;
@@ -374,7 +357,6 @@ module.exports = React.createClass({
                         defaultPhoneNumber={this.state.formVals.phoneNumber}
                         defaultPassword={this.state.formVals.password}
                         teamsConfig={this.state.teamsConfig}
-                        guestUsername={guestUsername}
                         minPasswordLength={MIN_PASSWORD_LENGTH}
                         onError={this.onFormValidationFailed}
                         onRegisterClick={this.onFormSubmit}
