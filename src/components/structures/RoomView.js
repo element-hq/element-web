@@ -251,10 +251,16 @@ module.exports = React.createClass({
         } else if (isUserJoined) {
             MatrixClientPeg.get().stopPeeking();
             this.setState({
+                showApps: this._shouldShowApps(room),
                 unsentMessageError: this._getUnsentMessageError(room),
             });
             this._onRoomLoaded(room);
         }
+    },
+
+    _shouldShowApps: function(room) {
+        const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets', '');
+        return appsStateEvents && Object.keys(appsStateEvents.getContent()).length > 0;
     },
 
     componentDidMount: function() {
