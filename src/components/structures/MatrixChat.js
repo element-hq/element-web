@@ -133,11 +133,6 @@ module.exports = React.createClass({
             // a thing to call showScreen with once login completes.
             screenAfterLogin: this.props.initialScreenAfterLogin,
 
-            // Stashed guest credentials if the user logs out
-            // whilst logged in as a guest user (so they can change
-            // their mind & log back in)
-            guestCreds: null,
-
             // What the LoggedInView would be showing if visible
             page_type: null,
 
@@ -385,13 +380,6 @@ module.exports = React.createClass({
                 this._startRegistration(payload.params || {});
                 break;
             case 'start_login':
-                if (MatrixClientPeg.get() &&
-                    MatrixClientPeg.get().isGuest()
-                ) {
-                    this.setState({
-                        guestCreds: MatrixClientPeg.getCredentials(),
-                    });
-                }
                 this.setStateForNewView({
                     view: VIEWS.LOGIN,
                 });
@@ -947,7 +935,6 @@ module.exports = React.createClass({
     _onLoggedIn: function(teamToken) {
         this.setState({
             view: VIEWS.LOGGED_IN,
-            guestCreds: null,
         });
 
         if (teamToken) {
@@ -1270,14 +1257,9 @@ module.exports = React.createClass({
         this.showScreen("forgot_password");
     },
 
-    onReturnToGuestClick: function() {
-        // reanimate our guest login
-        if (this.state.guestCreds) {
-            // TODO: this is probably a bit broken - we don't want to be
-            // clearing storage when we reanimate the guest creds.
-            Lifecycle.setLoggedIn(this.state.guestCreds);
-            this.setState({guestCreds: null});
-        }
+    onReturnToAppClick: function() {
+        // treat it the same as if the user had completed the login
+        this._onLoggedIn(null);
     },
 
     onRegistered: function(credentials, teamToken) {
@@ -1456,7 +1438,7 @@ module.exports = React.createClass({
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick}
                     onRegisterClick={this.onRegisterClick}
-                    onCancelClick={this.state.guestCreds ? this.onReturnToGuestClick : null}
+                    onCancelClick={MatrixClientPeg.get() ? this.onReturnToAppClick : null}
                     />
             );
         }
@@ -1490,7 +1472,7 @@ module.exports = React.createClass({
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     onForgotPasswordClick={this.onForgotPasswordClick}
                     enableGuest={this.props.enableGuest}
-                    onCancelClick={this.state.guestCreds ? this.onReturnToGuestClick : null}
+                    onCancelClick={MatrixClientPeg.get() ? this.onReturnToAppClick : null}
                 />
             );
         }
