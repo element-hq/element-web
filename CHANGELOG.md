@@ -1,3 +1,11 @@
+Changes in [0.11.1](https://github.com/vector-im/riot-web/releases/tag/v0.11.1) (2017-06-14)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.0...v0.11.1)
+
+ * Update to react-sdk 0.9.4 to prompt to set an
+   email address when setting a password and make
+   DM guessing smarter.
+
 Changes in [0.11.0](https://github.com/vector-im/riot-web/releases/tag/v0.11.0) (2017-06-12)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.0-rc.2...v0.11.0)
