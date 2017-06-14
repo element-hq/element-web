@@ -617,7 +617,7 @@ module.exports = React.createClass({
     },
 
     onRoom: function(room) {
-        if (!room || room.roomId !== this.state.roomId || !this.state.joining) {
+        if (!room || room.roomId !== this.state.roomId) {
             return;
         }
         this.setState({
