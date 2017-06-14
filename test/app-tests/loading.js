@@ -356,6 +356,8 @@ describe('loading:', function () {
                     if (req.method === 'GET' && req.path.endsWith('/_matrix/client/r0/login')) {
                         continue;
                     }
+
+                    throw new Error(`Unexpected HTTP request to ${req}`);
                 }
             });
 
