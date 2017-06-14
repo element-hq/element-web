@@ -80,10 +80,10 @@ export default React.createClass({
                             autoFocus={true} onChange={this.onValueChange} size="30"
                             className="mx_SetAppURLDialog_input"
                         />
+                        <div className="mx_Dialog_buttons">
+                            <input className="mx_Dialog_primary" type="submit" value="Add" />
+                        </div>
                     </form>
-                    <div className="mx_Dialog_buttons">
-                        <input className="mx_Dialog_primary" type="submit" value="Add" />
-                    </div>
                 </div>
             </BaseDialog>
         );
