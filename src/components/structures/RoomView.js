@@ -191,7 +191,9 @@ module.exports = React.createClass({
         this.setState(newState, () => {
             // At this point, this.state.roomId could be null (e.g. the alias might not
             // have been resolved yet) so anything called here must handle this case.
-            this._onHaveRoom();
+            if (initial) {
+                this._onHaveRoom();
+            }
         });
     },
 
