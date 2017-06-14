@@ -1229,6 +1229,8 @@ module.exports = React.createClass({
     onReturnToGuestClick: function() {
         // reanimate our guest login
         if (this.state.guestCreds) {
+            // TODO: this is probably a bit broken - we don't want to be
+            // clearing storage when we reanimate the guest creds.
             Lifecycle.setLoggedIn(this.state.guestCreds);
             this.setState({guestCreds: null});
         }
