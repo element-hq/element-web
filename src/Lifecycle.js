@@ -35,9 +35,6 @@ import { _t } from './languageHandler';
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
  * a number of things:
  *
- * 0. if it looks like we are in the middle of a registration process, it does
- *    nothing.
- *
  * 1. if we have a loginToken in the (real) query params, it uses that to log
  *    in.
  *
@@ -79,14 +76,6 @@ export function loadSession(opts) {
     const guestHsUrl = opts.guestHsUrl;
     const guestIsUrl = opts.guestIsUrl;
     const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
-
-    if (fragmentQueryParams.client_secret && fragmentQueryParams.sid) {
-        // this happens during email validation: the email contains a link to the
-        // IS, which in turn redirects back to vector. We let MatrixChat create a
-        // Registration component which completes the next stage of registration.
-        console.log("Not registering as guest: registration already in progress.");
-        return q();
-    }
 
     if (!guestHsUrl) {
         console.warn("Cannot enable guest access: can't determine HS URL to use");
