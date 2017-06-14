@@ -155,7 +155,7 @@ export default React.createClass({
                     <input
                         type="submit"
                         value={_t("Cancel")}
-                        onClick={this.props.onFinished}
+                        onClick={this.onCancelled}
                     />
                 </div>
             </BaseDialog>
