@@ -19,6 +19,12 @@ class ModularWidgets {
             description: 'Jitsi video conference',
         },
         {
+            type: 'vrdemo',
+            icon: 'http://localhost:8000/static/jitsi.png',
+            name: 'vrdemo',
+            description: 'Matrix VR Demo',
+        },
+        {
             type: 'custom',
             icon: 'http://localhost:8000/static/blocks.png',
             name: 'Custom Widget',

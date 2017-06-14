@@ -65,6 +65,9 @@ module.exports = React.createClass({
                 app.name += ' - ' + app.data.confId;
                 break;
             }
+            case 'vrdemo':
+                app.name = 'Matrix VR Demo';
+                break;
         }
 
         return app;
@@ -147,6 +150,12 @@ module.exports = React.createClass({
                             data: {
                                 confId: this.props.room.roomId.replace(/[^A-Za-z0-9]/g, '_') + Date.now(),
                             },
+                        };
+                        break;
+                    case 'vrdemo':
+                        appsStateEvent.vrDemo = {
+                            type: type,
+                            url: 'http://localhost:8000/vrdemo.html',
                         };
                         break;
                     case 'custom':
