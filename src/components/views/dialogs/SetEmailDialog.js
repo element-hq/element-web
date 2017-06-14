@@ -14,15 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import q from 'q';
 import React from 'react';
 import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import classnames from 'classnames';
-import KeyCode from '../../../KeyCode';
 import Email from '../../../email';
 import AddThreepid from '../../../AddThreepid';
-import { _t, _tJsx } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 
 
