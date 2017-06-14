@@ -45,14 +45,38 @@ import { _t, getCurrentLanguage } from '../../languageHandler';
 
 /** constants for MatrixChat.state.view */
 const VIEWS = {
-    DEFAULT: 0,
+    // a special initial state which is only used at startup, while we are
+    // trying to re-animate a matrix client or register as a guest.
+    LOADING: 0,
+
+    // we are showing the login view
     LOGIN: 1,
+
+    // we are showing the registration view
     REGISTER: 2,
+
+    // completeing the registration flow
     POST_REGISTRATION: 3,
+
+    // showing the 'forgot password' view
     FORGOT_PASSWORD: 4,
+
+    // we have valid matrix credentials (either via an explicit login, via the
+    // initial re-animation/guest registration, or via a registration), and are
+    // now setting up a matrixclient to talk to it. This isn't an instant
+    // process because (a) we need to clear out indexeddb, and (b) we need to
+    LOGGING_IN: 5,
+
+    // we are logged in with an active matrix client.
+    LOGGED_IN: 6,
 };
 
 module.exports = React.createClass({
+    // we export this so that the integration tests can use it :-S
+    statics: {
+        VIEWS: VIEWS,
+    },
+
     displayName: 'MatrixChat',
 
     propTypes: {
@@ -102,10 +126,8 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         const s = {
-            loading: true,
-
             // the master view we are showing.
-            view: VIEWS.DEFAULT,
+            view: VIEWS.LOADING,
 
             // a thing to call showScreen with once login completes.
             screenAfterLogin: this.props.initialScreenAfterLogin,
@@ -126,8 +148,6 @@ module.exports = React.createClass({
             // If we're trying to just view a user ID (i.e. /user URL), this is it
             viewUserId: null,
 
-            loggedIn: false,
-            loggingIn: false,
             collapse_lhs: false,
             collapse_rhs: false,
             ready: false,
@@ -289,7 +309,6 @@ module.exports = React.createClass({
                 firstScreen === 'register' ||
                 firstScreen === 'forgot_password') {
             this.props.onLoadCompleted();
-            this.setState({loading: false});
             this._showScreenAfterLogin();
             return;
         }
@@ -331,17 +350,18 @@ module.exports = React.createClass({
     },
 
     setStateForNewView: function(state) {
+        if (state.view === undefined) {
+            throw new Error("setStateForNewView with no view!");
+        }
         const newState = {
-            view: VIEWS.DEFAULT,
             viewUserId: null,
-            loggedIn: false,
-            ready: false,
        };
        Object.assign(newState, state);
        this.setState(newState);
     },
 
     onAction: function(payload) {
+        // console.log(`MatrixClientPeg.onAction: ${payload.action}`);
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
@@ -366,7 +386,7 @@ module.exports = React.createClass({
                 this.notifyNewScreen('login');
                 break;
             case 'start_post_registration':
-                this.setState({ // don't clobber loggedIn status
+                this.setState({
                     view: VIEWS.POST_REGISTRATION,
                 });
                 break;
@@ -516,7 +536,10 @@ module.exports = React.createClass({
                 // and also that we're not ready (we'll be marked as logged
                 // in once the login completes, then ready once the sync
                 // completes).
-                this.setState({loggingIn: true, ready: false});
+                this.setStateForNewView({
+                    view: VIEWS.LOGGING_IN,
+                    ready: false,
+                });
                 break;
             case 'on_logged_in':
                 this._onLoggedIn(payload.teamToken);
@@ -864,7 +887,12 @@ module.exports = React.createClass({
      */
     _onLoadCompleted: function() {
         this.props.onLoadCompleted();
-        this.setState({loading: false});
+
+        // if we've got this far without leaving the 'loading' view, then
+        // login must have failed, so start the login process
+        if (this.state.view === VIEWS.LOADING) {
+            dis.dispatch({action: "start_login"});
+        }
     },
 
     /**
@@ -919,9 +947,8 @@ module.exports = React.createClass({
      */
     _onLoggedIn: function(teamToken) {
         this.setState({
+            view: VIEWS.LOGGED_IN,
             guestCreds: null,
-            loggedIn: true,
-            loggingIn: false,
         });
 
         if (teamToken) {
@@ -983,7 +1010,7 @@ module.exports = React.createClass({
     _onLoggedOut: function() {
         this.notifyNewScreen('login');
         this.setStateForNewView({
-            loggedIn: false,
+            view: VIEWS.LOGIN,
             ready: false,
             collapse_lhs: false,
             collapse_rhs: false,
@@ -1146,7 +1173,7 @@ module.exports = React.createClass({
 
             // we can't view a room unless we're logged in
             // (a guest account is fine)
-            if (this.state.loggedIn) {
+            if (this.state.view === VIEWS.LOGGED_IN) {
                 dis.dispatch(payload);
             }
         } else if (screen.indexOf('user/') == 0) {
@@ -1266,7 +1293,7 @@ module.exports = React.createClass({
     onFinishPostRegistration: function() {
         // Don't confuse this with "PageType" which is the middle window to show
         this.setState({
-            view: VIEWS.DEFAULT,
+            view: VIEWS.LOGGED_IN,
         });
         this.showScreen("settings");
     },
@@ -1334,11 +1361,9 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        // `loading` might be set to false before `loggedIn = true`, causing the default
-        // (`<Login>`) to be visible for a few MS (say, whilst a request is in-flight to
-        // the RTS). So in the meantime, use `loggingIn`, which is true between
-        // actions `on_logging_in` and `on_logged_in`.
-        if (this.state.loading || this.state.loggingIn) {
+        // console.log(`Rendering MatrixChat with view ${this.state.view}`);
+
+        if (this.state.view === VIEWS.LOADING || this.state.view === VIEWS.LOGGING_IN) {
             const Spinner = sdk.getComponent('elements.Spinner');
             return (
                 <div className="mx_MatrixChat_splash">
@@ -1356,10 +1381,10 @@ module.exports = React.createClass({
             );
         }
 
-        // `ready` and `loggedIn` may be set before `page_type` (because the
+        // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
         // latter is set via the dispatcher). If we don't yet have a `page_type`,
         // keep showing the spinner for now.
-        if (this.state.loggedIn && this.state.ready && this.state.page_type) {
+        if (this.state.view === VIEWS.LOGGED_IN && this.state.ready && this.state.page_type) {
             /* for now, we stuff the entirety of our props and state into the LoggedInView.
              * we should go through and figure out what we actually need to pass down, as well
              * as using something like redux to avoid having a billion bits of state kicking around.
@@ -1376,7 +1401,7 @@ module.exports = React.createClass({
                     {...this.state}
                 />
             );
-        } else if (this.state.loggedIn) {
+        } else if (this.state.view === VIEWS.LOGGED_IN) {
             // we think we are logged in, but are still waiting for the /sync to complete
             const Spinner = sdk.getComponent('elements.Spinner');
             return (
