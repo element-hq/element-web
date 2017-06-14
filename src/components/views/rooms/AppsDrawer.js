@@ -35,6 +35,9 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
+        if (this.state.apps && this.state.apps.length < 1) {
+            this.onClickAddWidget();
+        }
     },
 
     componentWillUnmount: function() {
