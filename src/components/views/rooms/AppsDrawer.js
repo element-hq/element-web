@@ -65,7 +65,8 @@ module.exports = React.createClass({
                 break;
             }
             case 'vrdemo':
-                app.name = 'Matrix VR Demo';
+                app.name = 'Matrix VR Demo - ' + app.data.roomAlias;
+                app.queryParams = '?roomAlias=' + encodeURIComponent(app.data.roomAlias);
                 break;
         }
 
@@ -155,6 +156,9 @@ module.exports = React.createClass({
                         appsStateEvent.vrDemo = {
                             type: type,
                             url: 'http://localhost:8000/vrdemo.html',
+                            data: {
+                                roomAlias: '#vrvc' + this.props.room.roomId.replace(/[^A-Za-z0-9]/g, '_') + Date.now(),
+                            },
                         };
                         break;
                     case 'custom':
