@@ -269,6 +269,21 @@ module.exports = React.createClass({
             Lifecycle.initRtsClient(this.props.config.teamServerConfig.teamServerURL);
         }
 
+        // if the user has followed a login or register link, don't reanimate
+        // the old creds, but rather go straight to the relevant page
+
+        const firstScreen = this.state.screenAfterLogin ?
+            this.state.screenAfterLogin.screen : null;
+
+        if (firstScreen === 'login' ||
+                firstScreen === 'register' ||
+                firstScreen === 'forgot_password') {
+            this.props.onLoadCompleted();
+            this.setState({loading: false});
+            this._showScreenAfterLogin();
+            return;
+        }
+
         // the extra q() ensures that synchronous exceptions hit the same codepath as
         // asynchronous ones.
         q().then(() => {
@@ -840,14 +855,6 @@ module.exports = React.createClass({
     _onLoadCompleted: function() {
         this.props.onLoadCompleted();
         this.setState({loading: false});
-
-        // Show screens (like 'register') that need to be shown without _onLoggedIn
-        // being called. 'register' needs to be routed here when the email confirmation
-        // link is clicked on.
-        if (this.state.screenAfterLogin &&
-            ['register'].indexOf(this.state.screenAfterLogin.screen) !== -1) {
-            this._showScreenAfterLogin();
-        }
     },
 
     /**
@@ -946,6 +953,7 @@ module.exports = React.createClass({
                 this.state.screenAfterLogin.screen,
                 this.state.screenAfterLogin.params,
             );
+            // XXX: is this necessary? `showScreen` should do it for us.
             this.notifyNewScreen(this.state.screenAfterLogin.screen);
             this.setState({screenAfterLogin: null});
         } else if (localStorage && localStorage.getItem('mx_last_room_id')) {
