@@ -30,7 +30,7 @@ import sdk from 'matrix-react-sdk';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 
-import test_utils from '../test-utils';
+import * as test_utils from '../test-utils';
 import MockHttpBackend from '../mock-request';
 import {parseQs, parseQsFromFragment} from '../../src/vector/url_utils';
 
@@ -68,12 +68,19 @@ describe('loading:', function () {
         });
     });
 
-    afterEach(function() {
+    afterEach(async function() {
         if (parentDiv) {
             ReactDOM.unmountComponentAtNode(parentDiv);
             parentDiv.remove();
             parentDiv = null;
         }
+
+        // unmounting should have cleared the MatrixClientPeg
+        expect(MatrixClientPeg.get()).toBe(null);
+
+        // clear the indexeddbs so we can start from a clean slate next time.
+        await test_utils.deleteIndexedDB('matrix-js-sdk:crypto');
+        await test_utils.deleteIndexedDB('matrix-js-sdk:riot-web-sync');
     });
 
     /* simulate the load process done by index.js
