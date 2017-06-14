@@ -51,13 +51,14 @@ limitations under the License.
  * }
  */
 
-var MatrixClientPeg = require('./MatrixClientPeg');
-var PlatformPeg = require("./PlatformPeg");
-var Modal = require('./Modal');
-var sdk = require('./index');
+import MatrixClientPeg from './MatrixClientPeg';
+import UserSettingsStore from './UserSettingsStore';
+import PlatformPeg from './PlatformPeg';
+import Modal from './Modal';
+import sdk from './index';
 import { _t } from './languageHandler';
-var Matrix = require("matrix-js-sdk");
-var dis = require("./dispatcher");
+import Matrix from 'matrix-js-sdk';
+import dis from './dispatcher';
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -257,9 +258,9 @@ function _onAction(payload) {
             }
             else if (members.length === 2) {
                 console.log("Place %s call in %s", payload.type, payload.room_id);
-                var call = Matrix.createNewMatrixCall(
-                    MatrixClientPeg.get(), payload.room_id
-                );
+                const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), payload.room_id, {
+                    forceTURN: UserSettingsStore.getLocalSetting('webRtcForceTURN', false),
+                });
                 placeCall(call);
             }
             else { // > 2

@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+const MatrixClientPeg = require('../../../MatrixClientPeg');
 
 export default React.createClass({
     displayName: 'AppTile',
@@ -25,6 +26,7 @@ export default React.createClass({
         id: React.PropTypes.string.isRequired,
         url: React.PropTypes.string.isRequired,
         name: React.PropTypes.string.isRequired,
+        room: React.PropTypes.object.isRequired,
     },
 
     getDefaultProps: function() {
@@ -49,11 +51,29 @@ export default React.createClass({
 
     _onDeleteClick: function() {
         console.log("Delete widget %s", this.props.id);
+        const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets', '');
+        if (!appsStateEvents) {
+            return;
+        }
+        const appsStateEvent = appsStateEvents.getContent();
+        if (appsStateEvent[this.props.id]) {
+            delete appsStateEvent[this.props.id];
+            MatrixClientPeg.get().sendStateEvent(
+                this.props.room.roomId,
+                'im.vector.modular.widgets',
+                appsStateEvent,
+                '',
+            ).then(() => {
+                console.log('Deleted widget');
+            }, (e) => {
+                console.error('Failed to delete widget', e);
+            });
+        }
     },
 
     render: function() {
         return (
-            <div className={this.props.fullWdith ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
+            <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 <div className="mx_AppTileMenuBar">
                     {this.props.name}
                     <span className="mx_AppTileMenuBarWidgets">
@@ -74,7 +94,7 @@ export default React.createClass({
                     </span>
                 </div>
                 <div className="mx_AppTileBody">
-                    <iframe ref="appFrame" src={this.props.url}></iframe>
+                    <iframe ref="appFrame" src={this.props.url} allowFullScreen="true"></iframe>
                 </div>
             </div>
         );

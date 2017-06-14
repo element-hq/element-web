@@ -249,10 +249,16 @@ module.exports = React.createClass({
         } else if (isUserJoined) {
             MatrixClientPeg.get().stopPeeking();
             this.setState({
+                showApps: this._shouldShowApps(room),
                 unsentMessageError: this._getUnsentMessageError(room),
             });
             this._onRoomLoaded(room);
         }
+    },
+
+    _shouldShowApps: function(room) {
+        const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets', '');
+        return appsStateEvents && Object.keys(appsStateEvents.getContent()).length > 0;
     },
 
     componentDidMount: function() {
@@ -1586,7 +1592,7 @@ module.exports = React.createClass({
 
         var auxPanel = (
             <AuxPanel ref="auxPanel" room={this.state.room}
-              userId={this.state.userId}
+              userId={MatrixClientPeg.get().credentials.userId}
               conferenceHandler={this.props.ConferenceHandler}
               draggingFile={this.state.draggingFile}
               displayConfCallNotification={this.state.displayConfCallNotification}

@@ -89,11 +89,13 @@ export default React.createClass({
             // TODO: it would probably be nice to give some feedback about what we've imported here.
             this.props.onFinished(true);
         }).catch((e) => {
+            console.error("Error importing e2e keys:", e);
             if (this._unmounted) {
                 return;
             }
+            const msg = e.friendlyText || _t('Unknown error');
             this.setState({
-                errStr: e.message,
+                errStr: msg,
                 phase: PHASE_EDIT,
             });
         });

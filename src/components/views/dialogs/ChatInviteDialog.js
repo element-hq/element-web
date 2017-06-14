@@ -24,6 +24,7 @@ import DMRoomMap from '../../../utils/DMRoomMap';
 import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
 import q from 'q';
+import dis from '../../../dispatcher';
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -102,7 +103,7 @@ module.exports = React.createClass({
                     const ChatCreateOrReuseDialog = sdk.getComponent(
                         "views.dialogs.ChatCreateOrReuseDialog",
                     );
-                    Modal.createDialog(ChatCreateOrReuseDialog, {
+                    const close = Modal.createDialog(ChatCreateOrReuseDialog, {
                         userId: userId,
                         onFinished: (success) => {
                             this.props.onFinished(success);
@@ -112,14 +113,16 @@ module.exports = React.createClass({
                                 action: 'start_chat',
                                 user_id: userId,
                             });
+                            close(true);
                         },
                         onExistingRoomSelected: (roomId) => {
                             dis.dispatch({
                                 action: 'view_room',
-                                user_id: roomId,
+                                room_id: roomId,
                             });
+                            close(true);
                         },
-                    });
+                    }).close;
                 } else {
                     this._startChat(inviteList);
                 }
@@ -238,6 +241,11 @@ module.exports = React.createClass({
         MatrixClientPeg.get().searchUserDirectory({
             term: query,
         }).then((resp) => {
+            // The query might have changed since we sent the request, so ignore
+            // responses for anything other than the latest query.
+            if (this.state.query !== query) {
+                return;
+            }
             this._processResults(resp.results, query);
         }).catch((err) => {
             console.error('Error whilst searching user directory: ', err);

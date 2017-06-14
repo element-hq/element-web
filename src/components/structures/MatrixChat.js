@@ -35,7 +35,7 @@ import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
 // LifecycleStore is not used but does listen to and dispatch actions
-import LifecycleStore from '../../stores/LifecycleStore';
+require('../../stores/LifecycleStore');
 import RoomViewStore from '../../stores/RoomViewStore';
 import PageTypes from '../../PageTypes';
 
@@ -128,11 +128,6 @@ module.exports = React.createClass({
             hasNewVersion: false,
             newVersionReleaseNotes: null,
 
-            // The username to default to when upgrading an account from a guest
-            upgradeUsername: null,
-            // The access token we had for our guest account, used when upgrading to a normal account
-            guestAccessToken: null,
-
             // Parameters used in the registration dance with the IS
             register_client_secret: null,
             register_session_id: null,
@@ -191,7 +186,7 @@ module.exports = React.createClass({
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
 
-        RoomViewStore.addListener(this._onRoomViewStoreUpdated);
+        this._roomViewStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdated);
         this._onRoomViewStoreUpdated();
 
         if (!UserSettingsStore.getLocalSetting('analyticsOptOut', false)) Analytics.enable();
@@ -300,6 +295,7 @@ module.exports = React.createClass({
         UDEHandler.stopListening();
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
+        this._roomViewStoreToken.remove();
     },
 
     componentDidUpdate: function() {
@@ -315,8 +311,6 @@ module.exports = React.createClass({
             viewUserId: null,
             loggedIn: false,
             ready: false,
-            upgradeUsername: null,
-            guestAccessToken: null,
        };
        Object.assign(newState, state);
        this.setState(newState);
@@ -350,25 +344,6 @@ module.exports = React.createClass({
                 this.setState({ // don't clobber loggedIn status
                     screen: 'post_registration',
                 });
-                break;
-            case 'start_upgrade_registration':
-                // also stash our credentials, then if we restore the session,
-                // we can just do it the same way whether we started upgrade
-                // registration or explicitly logged out
-                this.setStateForNewScreen({
-                    guestCreds: MatrixClientPeg.getCredentials(),
-                    screen: "register",
-                    upgradeUsername: MatrixClientPeg.get().getUserIdLocalpart(),
-                    guestAccessToken: MatrixClientPeg.get().getAccessToken(),
-                });
-
-                // stop the client: if we are syncing whilst the registration
-                // is completed in another browser, we'll be 401ed for using
-                // a guest access token for a non-guest account.
-                // It will be restarted in onReturnToGuestClick
-                Lifecycle.stopMatrixClient();
-
-                this.notifyNewScreen('register');
                 break;
             case 'start_password_recovery':
                 this.setStateForNewScreen({
@@ -745,8 +720,8 @@ module.exports = React.createClass({
             title: _t('Create Room'),
             description: _t('Room name (optional)'),
             button: _t('Create Room'),
-            onFinished: (should_create, name) => {
-                if (should_create) {
+            onFinished: (shouldCreate, name) => {
+                if (shouldCreate) {
                     const createOpts = {};
                     if (name) createOpts.name = name;
                     createRoom({createOpts}).done();
@@ -1401,8 +1376,6 @@ module.exports = React.createClass({
                     idSid={this.state.register_id_sid}
                     email={this.props.startingFragmentQueryParams.email}
                     referrer={this.props.startingFragmentQueryParams.referrer}
-                    username={this.state.upgradeUsername}
-                    guestAccessToken={this.state.guestAccessToken}
                     defaultHsUrl={this.getDefaultHsUrl()}
                     defaultIsUrl={this.getDefaultIsUrl()}
                     brand={this.props.config.brand}

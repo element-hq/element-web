@@ -62,8 +62,8 @@ module.exports = React.createClass({
         var url = ContentRepo.getHttpUriForMxc(
                     MatrixClientPeg.get().getHomeserverUrl(),
                     ev.getContent().url,
-                    14 * window.devicePixelRatio,
-                    14 * window.devicePixelRatio,
+                    Math.ceil(14 * window.devicePixelRatio),
+                    Math.ceil(14 * window.devicePixelRatio),
                     'crop'
                 );
 

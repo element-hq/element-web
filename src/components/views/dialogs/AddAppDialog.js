@@ -46,8 +46,12 @@ export default React.createClass({
 
     onFormSubmit: function(ev) {
         ev.preventDefault();
-        this.props.onFinished(true, this.state.value);
+        this.props.onFinished(true, 'custom', this.state.value);
         return false;
+    },
+
+    onTileClick: function(value) {
+        this.props.onFinished(true, value, null);
     },
 
     render: function() {
@@ -58,7 +62,8 @@ export default React.createClass({
                 type={widgetType.type}
                 icon={widgetType.icon}
                 name={widgetType.name}
-                description={widgetType.description}/>,
+                description={widgetType.description}
+                onClick={this.onTileClick}/>,
             );
 
         return (
@@ -75,10 +80,10 @@ export default React.createClass({
                             autoFocus={true} onChange={this.onValueChange} size="30"
                             className="mx_SetAppURLDialog_input"
                         />
+                        <div className="mx_Dialog_buttons">
+                            <input className="mx_Dialog_primary" type="submit" value="Add" />
+                        </div>
                     </form>
-                    <div className="mx_Dialog_buttons">
-                        <input className="mx_Dialog_primary" type="submit" value="Add" />
-                    </div>
                 </div>
             </BaseDialog>
         );

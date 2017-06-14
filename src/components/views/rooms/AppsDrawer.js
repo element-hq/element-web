@@ -17,136 +17,191 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+const MatrixClientPeg = require('../../../MatrixClientPeg');
 const AddAppDialog = require('../dialogs/AddAppDialog');
 const AppTile = require('../elements/AppTile');
 const Modal = require("../../../Modal");
-
-// FIXME -- Hard coded widget config
-const roomWidgetConfig = {
-    // Cooking room
-    '!IAkkwswSrOSzPRWksX:matrix.org': [
-        {
-            id: "youtube",
-            url: "https://www.youtube.com/embed/ZJy1ajvMU1k?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1&autoplay=1",
-            name: "Live stream - Boeuf Bourguignon",
-        },
-        {
-            id: "recipie",
-            url: "http://10.9.64.55:8000/recepie.html",
-            name: "Ingredients - Boeuf Bourguignon",
-        },
-    ],
-    // Grafana room
-    '!JWeMRscvtWqfNuzmSf:matrix.org': [
-        {
-            id: "grafana",
-            url: "http://10.9.64.55:8000/grafana.html",
-            name: "Monitoring our Single-Point-Of-Failure DB",
-        },
-    ],
-    // Camgirl room - https://www.youtube.com/watch?v=ZfkwW4GgAiU
-    '!wQqrqwOipOOWALxJNe:matrix.org': [
-        {
-            id: "youtube",
-            url: "https://www.youtube.com/embed/ZfkwW4GgAiU?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1&autoplay=1",
-            name: "Live stream - ChatGirl86",
-        },
-        {
-            id: "thermometer",
-            url: "http://10.9.64.55:8000/index.html",
-            name: "Tip Me!!! -- Send me cash $$$",
-        },
-    ],
-    // Game room - https://www.youtube.com/watch?v=Dm2Ma1dOFO4
-    '!dYSCwtVljhTdBlgNxq:matrix.org': [
-        {
-            id: "youtube",
-            url: "https://www.youtube.com/embed/Dm2Ma1dOFO4?controls=0&enablejsapi=1&iv_load_policy=3&modestbranding=1&playsinline=1&autoplay=1",
-            name: "Live stream - Overwatch Balle Royale",
-        },
-        {
-            id: "thermometer",
-            url: "http://10.9.64.55:8000/index.html",
-            name: "Tip Me!!! -- Send me cash $$$",
-        },
-    ],
-    // Game room - !BLQjREzUgbtIsgrvRn:matrix.org
-    '!BLQjREzUgbtIsgrvRn:matrix.org': [
-        {
-            id: "etherpad",
-            url: "http://10.9.64.55:8000/etherpad.html",
-            name: "Etherpad",
-        },
-    ],
-    // Insurance room - !nTUetaZELiqWcWYshy:matrix.org
-    '!nTUetaZELiqWcWYshy:matrix.org': [
-        {
-            id: "lg",
-            url: "http://localhost:8000/lg.html",
-            name: "L&G Insurance Policy",
-        },
-    ],
-};
+const dis = require('../../../dispatcher');
 
 module.exports = React.createClass({
     displayName: 'AppsDrawer',
 
     propTypes: {
+        room: React.PropTypes.object.isRequired,
+    },
+
+    componentWillMount: function() {
+        MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
     },
 
     componentDidMount: function() {
+        if (this.state.apps && this.state.apps.length < 1) {
+            this.onClickAddWidget();
+        }
     },
 
-    initAppConfig: function(appConfig) {
-        console.log("App props: ", this.props);
-        appConfig = appConfig.map(
-            (app, index, arr) => {
-                switch(app.id) {
-                    case 'etherpad':
-                        app.url = app.url + '?userName=' + this.props.userId +
-                            '&padId=' + this.props.room.roomId;
-                    break;
-                }
+    componentWillUnmount: function() {
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
+        }
+    },
 
-                return app;
-            });
-        return appConfig;
+    _initAppConfig: function(appId, app) {
+        console.log("App props: ", this.props);
+        app.id = appId;
+        app.name = app.type;
+
+        switch(app.type) {
+            case 'etherpad':
+                app.queryParams = '?userName=' + this.props.userId +
+                    '&padId=' + this.props.room.roomId;
+                break;
+            case 'jitsi': {
+                const user = MatrixClientPeg.get().getUser(this.props.userId);
+                app.queryParams = '?confId=' + app.data.confId +
+                    '&displayName=' + encodeURIComponent(user.displayName) +
+                    '&avatarUrl=' + encodeURIComponent(MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl)) +
+                    '&email=' + encodeURIComponent(this.props.userId) +
+                    '&isAudioConf=' + app.data.isAudioConf;
+
+                app.name += ' - ' + app.data.confId;
+                break;
+            }
+            case 'vrdemo':
+                app.name = 'Matrix VR Demo - ' + app.data.roomAlias;
+                app.queryParams = '?roomAlias=' + encodeURIComponent(app.data.roomAlias);
+                break;
+        }
+
+        return app;
     },
 
     getInitialState: function() {
-        for (const key in roomWidgetConfig) {
-            if(key == this.props.room.roomId) {
-                return {
-                    apps: this.initAppConfig(roomWidgetConfig[key]),
-                };
-            }
-        }
         return {
-            apps: [],
+            apps: this._getApps(),
         };
+    },
+
+    onRoomStateEvents: function(ev, state) {
+        if (ev.getRoomId() !== this.props.room.roomId || ev.getType() !== 'im.vector.modular.widgets') {
+            return;
+        }
+        this._updateApps();
+    },
+
+    _getApps: function() {
+        const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets', '');
+        if (!appsStateEvents) {
+            return [];
+        }
+        const appsStateEvent = appsStateEvents.getContent();
+        if (Object.keys(appsStateEvent).length < 1) {
+            return [];
+        }
+
+        return Object.keys(appsStateEvent).map((appId) => {
+            return this._initAppConfig(appId, appsStateEvent[appId]);
+        });
+    },
+
+    _updateApps: function() {
+        const apps = this._getApps();
+        if (apps.length < 1) {
+            dis.dispatch({
+                action: 'appsDrawer',
+                show: false,
+            });
+        }
+        this.setState({
+            apps: this._getApps(),
+        });
     },
 
     onClickAddWidget: function() {
         Modal.createDialog(AddAppDialog, {
-            onFinished: (proceed, reason) => {
-                if (!proceed) return;
+            onFinished: (proceed, type, value) => {
+                if (!proceed || !type) return;
+                if (type === 'custom' && !value) return;
 
-                this.state.apps.push();
+                const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets', '');
+                let appsStateEvent = {};
+                if (appsStateEvents) {
+                    appsStateEvent = appsStateEvents.getContent();
+                }
+
+                if (appsStateEvent[type]) {
+                    return;
+                }
+
+                switch (type) {
+                    case 'etherpad':
+                        appsStateEvent.etherpad = {
+                            type: type,
+                            url: 'http://localhost:8000/etherpad.html',
+                        };
+                        break;
+                    case 'grafana':
+                        appsStateEvent.grafana = {
+                            type: type,
+                            url: 'http://localhost:8000/grafana.html',
+                        };
+                        break;
+                    case 'jitsi':
+                        appsStateEvent.videoConf = {
+                            type: type,
+                            url: 'http://localhost:8000/jitsi.html',
+                            data: {
+                                confId: this.props.room.roomId.replace(/[^A-Za-z0-9]/g, '_') + Date.now(),
+                            },
+                        };
+                        break;
+                    case 'vrdemo':
+                        appsStateEvent.vrDemo = {
+                            type: type,
+                            url: 'http://localhost:8000/vrdemo.html',
+                            data: {
+                                roomAlias: '#vrvc' + this.props.room.roomId.replace(/[^A-Za-z0-9]/g, '_') + Date.now(),
+                            },
+                        };
+                        break;
+                    case 'custom':
+                        appsStateEvent.custom = {
+                            type: type,
+                            url: value,
+                        };
+                        break;
+                    default:
+                        console.warn('Unsupported app type:', type);
+                        return;
+                }
+
+                MatrixClientPeg.get().sendStateEvent(
+                    this.props.room.roomId,
+                    'im.vector.modular.widgets',
+                    appsStateEvent,
+                    '',
+                );
             },
         });
     },
 
     render: function() {
         const apps = this.state.apps.map(
-            (app, index, arr) => <AppTile
-                key={app.id}
-                id={app.id}
-                url={app.url}
-                name={app.name}
-                fullWdith={arr.length<2 ? true : false}
-                roomId={this.props.roomId}
-                userId={this.props.userId}
-            />);
+            (app, index, arr) => {
+                let appUrl = app.url;
+                if (app.queryParams) {
+                    appUrl += app.queryParams;
+                }
+                return <AppTile
+                    key={app.name}
+                    id={app.id}
+                    url={appUrl}
+                    name={app.name}
+                    fullWidth={arr.length<2 ? true : false}
+                    room={this.props.room}
+                    userId={this.props.userId}
+                />;
+            });
 
         const addWidget = this.state.apps && this.state.apps.length < 2 &&
             (<div onClick={this.onClickAddWidget}

@@ -18,6 +18,14 @@ limitations under the License.
 import React from 'react';
 
 class AppIconTile extends React.Component {
+    constructor(props) {
+        super(props);
+        this._onTileClick = this._onTileClick.bind(this);
+    }
+
+    _onTileClick(props) {
+        this.props.onClick(this.props.type);
+    }
 
     render() {
         const contentClasses = ['mx_AppIconTile'];
@@ -26,7 +34,7 @@ class AppIconTile extends React.Component {
         // }
 
         return (
-            <div className={contentClasses.join(' ')}>
+            <div className={contentClasses.join(' ')} onClick={this._onTileClick}>
                 <div className="mx_AppIconTile_imageContainer">
                     <img src={this.props.icon} alt={this.props.name} className="mx_AppIconTile_image"/>
                 </div>
@@ -44,6 +52,7 @@ AppIconTile.propTypes = {
     icon: React.PropTypes.string.isRequired,
     name: React.PropTypes.string.isRequired,
     description: React.PropTypes.string.isRequired,
+    onClick: React.PropTypes.func.isRequired,
 };
 
 export default AppIconTile;

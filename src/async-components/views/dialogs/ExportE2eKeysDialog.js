@@ -81,11 +81,13 @@ export default React.createClass({
             FileSaver.saveAs(blob, 'riot-keys.txt');
             this.props.onFinished(true);
         }).catch((e) => {
+            console.error("Error exporting e2e keys:", e);
             if (this._unmounted) {
                 return;
             }
+            const msg = e.friendlyText || _t('Unknown error');
             this.setState({
-                errStr: e.message,
+                errStr: msg,
                 phase: PHASE_EDIT,
             });
         });

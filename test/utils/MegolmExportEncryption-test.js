@@ -81,15 +81,23 @@ describe('MegolmExportEncryption', function() {
     describe('decrypt', function() {
         it('should handle missing header', function() {
             const input=stringToArray(`-----`);
-            expect(()=>MegolmExportEncryption.decryptMegolmKeyFile(input, ''))
-                .toThrow('Header line not found');
+            return MegolmExportEncryption.decryptMegolmKeyFile(input, '')
+            .then((res) => {
+                throw new Error('expected to throw');
+            }, (error) => {
+                expect(error.message).toEqual('Header line not found');
+            });
         });
 
         it('should handle missing trailer', function() {
             const input=stringToArray(`-----BEGIN MEGOLM SESSION DATA-----
 -----`);
-            expect(()=>MegolmExportEncryption.decryptMegolmKeyFile(input, ''))
-                .toThrow('Trailer line not found');
+            return MegolmExportEncryption.decryptMegolmKeyFile(input, '')
+            .then((res) => {
+                throw new Error('expected to throw');
+            }, (error) => {
+                expect(error.message).toEqual('Trailer line not found');
+            });
         });
 
         it('should handle a too-short body', function() {
@@ -98,8 +106,12 @@ AXNhbHRzYWx0c2FsdHNhbHSIiIiIiIiIiIiIiIiIiIiIAAAACmIRUW2OjZ3L2l6j9h0lHlV3M2dx
 cissyYBxjsfsAn
 -----END MEGOLM SESSION DATA-----
 `);
-            expect(()=>MegolmExportEncryption.decryptMegolmKeyFile(input, ''))
-                .toThrow('Invalid file: too short');
+            return MegolmExportEncryption.decryptMegolmKeyFile(input, '')
+            .then((res) => {
+                throw new Error('expected to throw');
+            }, (error) => {
+                expect(error.message).toEqual('Invalid file: too short');
+            });
         });
 
         it('should decrypt a range of inputs', function(done) {

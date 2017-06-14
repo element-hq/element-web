@@ -40,6 +40,7 @@ function parseIntWithDefault(val, def) {
 const BannedUser = React.createClass({
     propTypes: {
         member: React.PropTypes.object.isRequired, // js-sdk RoomMember
+        reason: React.PropTypes.string,
     },
 
     _onUnbanClick: function() {
@@ -73,10 +74,11 @@ const BannedUser = React.createClass({
                 >
                     { _t('Unban') }
                 </AccessibleButton>
-                {this.props.member.userId}
+                <strong>{this.props.member.name}</strong> {this.props.member.userId}
+                {this.props.reason ? " " +_t('Reason') + ": " + this.props.reason : ""}
             </li>
         );
-    }
+    },
 });
 
 module.exports = React.createClass({
@@ -576,26 +578,24 @@ module.exports = React.createClass({
                 { _t('Never send encrypted messages to unverified devices in this room from this device') }.
             </label>;
 
-        if (!isEncrypted &&
-                roomState.mayClientSendStateEvent("m.room.encryption", cli)) {
+        if (!isEncrypted && roomState.mayClientSendStateEvent("m.room.encryption", cli)) {
             return (
                 <div>
                     <label>
                         <input type="checkbox" ref="encrypt" onClick={ this.onEnableEncryptionClick }/>
-                        <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
+                        <img className="mx_RoomSettings_e2eIcon mx_filterFlipColor" src="img/e2e-unencrypted.svg" width="12" height="12" />
                         { _t('Enable encryption') } { _t('(warning: cannot be disabled again!)') }
                     </label>
                     { settings }
                 </div>
             );
-        }
-        else {
+        } else {
             return (
                 <div>
                     <label>
                     { isEncrypted
-                      ? <img className="mx_RoomSettings_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" />
-                      : <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
+                      ? <img className="mx_RoomSettings_e2eIcon mx_filterFlipColor" src="img/e2e-verified.svg" width="10" height="12" />
+                      : <img className="mx_RoomSettings_e2eIcon mx_filterFlipColor" src="img/e2e-unencrypted.svg" width="12" height="12" />
                     }
                     { isEncrypted ? _t("Encryption is enabled in this room") : _t("Encryption is not enabled in this room") }.
                     </label>
@@ -664,16 +664,17 @@ module.exports = React.createClass({
             userLevelsSection = <div>{ _t('No users have specific privileges in this room') }.</div>;
         }
 
-        var banned = this.props.room.getMembersWithMembership("ban");
-        var bannedUsersSection;
+        const banned = this.props.room.getMembersWithMembership("ban");
+        let bannedUsersSection;
         if (banned.length) {
             bannedUsersSection =
                 <div>
                     <h3>{ _t('Banned users') }</h3>
                     <ul className="mx_RoomSettings_banned">
                         {banned.map(function(member) {
+                            const banEvent = member.events.member.getContent();
                             return (
-                                <BannedUser key={member.userId} member={member} />
+                                <BannedUser key={member.userId} member={member} reason={banEvent.reason} />
                             );
                         })}
                     </ul>

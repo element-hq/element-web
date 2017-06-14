@@ -28,6 +28,8 @@ module.exports = React.createClass({
     propTypes: {
         // js-sdk room object
         room: React.PropTypes.object.isRequired,
+        userId: React.PropTypes.string.isRequired,
+        showApps: React.PropTypes.bool,
 
         // Conference Handler implementation
         conferenceHandler: React.PropTypes.object,
