@@ -85,6 +85,10 @@ export default React.createClass({
         this.setState({emailBusy: true});
     },
 
+    onCancelled: function() {
+        this.props.onFinished(false);
+    },
+
     onEmailDialogFinished: function(ok) {
         if (ok) {
             this.verifyEmailAddress();
@@ -133,7 +137,7 @@ export default React.createClass({
 
         return (
             <BaseDialog className="mx_SetEmailDialog"
-                onFinished={this.props.onFinished}
+                onFinished={this.onCancelled}
                 title={this.props.title}
             >
                 <div className="mx_Dialog_content">
