@@ -972,5 +972,7 @@
     "Your browser does not support the required cryptography extensions": "Dein Browser unterstützt die benötigten Kryptografie-Erweiterungen nicht",
     "Not a valid Riot keyfile": "Keine gültige Riot-Schlüsseldatei",
     "Authentication check failed: incorrect password?": "Authentifizierung fehlgeschlagen: Falsches Passwort?",
-    "Disable Peer-to-Peer for 1:1 calls": "Peer-to-Peer-Verbindung für 1-zu-1-Anrufe deaktivieren"
+    "Disable Peer-to-Peer for 1:1 calls": "Peer-to-Peer-Verbindung für 1-zu-1-Anrufe deaktivieren",
+    "Do you want to set an email address?": "Möchtest du eine E-Mail-Adresse setzen?",
+    "This will allow you to reset your password and receive notifications.": "Dies erlaubt dir dein Passwort zurückzusetzen und Benachrichtigungen zu empfangen."
 }
