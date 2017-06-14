@@ -50,13 +50,12 @@ module.exports = React.createClass({
 
         switch(app.type) {
             case 'etherpad':
-                app.url = app.url + '?userName=' + this.props.userId +
+                app.queryParams = '?userName=' + this.props.userId +
                     '&padId=' + this.props.room.roomId;
                 break;
             case 'jitsi': {
                 const user = MatrixClientPeg.get().getUser(this.props.userId);
-                app.url = app.url +
-                    '?confId=' + app.data.confId +
+                app.queryParams = '?confId=' + app.data.confId +
                     '&displayName=' + encodeURIComponent(user.displayName) +
                     '&avatarUrl=' + encodeURIComponent(MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl)) +
                     '&email=' + encodeURIComponent(this.props.userId) +
@@ -181,15 +180,21 @@ module.exports = React.createClass({
 
     render: function() {
         const apps = this.state.apps.map(
-            (app, index, arr) => <AppTile
-                key={app.name}
-                id={app.id}
-                url={app.url}
-                name={app.name}
-                fullWidth={arr.length<2 ? true : false}
-                room={this.props.room}
-                userId={this.props.userId}
-            />);
+            (app, index, arr) => {
+                let appUrl = app.url;
+                if (app.queryParams) {
+                    appUrl += app.queryParams;
+                }
+                return <AppTile
+                    key={app.name}
+                    id={app.id}
+                    url={appUrl}
+                    name={app.name}
+                    fullWidth={arr.length<2 ? true : false}
+                    room={this.props.room}
+                    userId={this.props.userId}
+                />;
+            });
 
         const addWidget = this.state.apps && this.state.apps.length < 2 &&
             (<div onClick={this.onClickAddWidget}
