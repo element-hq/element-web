@@ -20,6 +20,8 @@ var React = require('react');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
 var sdk = require("../../../index");
+
+import q from 'q';
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
 
@@ -140,7 +142,15 @@ module.exports = React.createClass({
         });
 
         cli.setPassword(authDict, newPassword).then(() => {
-            this.props.onFinished();
+            if (this.props.shouldAskForEmail) {
+                return this._optionallySetEmail().then((confirmed) => {
+                    this.props.onFinished({
+                        didSetEmail: confirmed,
+                    });
+                });
+            } else {
+                this.props.onFinished();
+            }
         }, (err) => {
             this.props.onError(err);
         }).finally(() => {
@@ -148,6 +158,20 @@ module.exports = React.createClass({
                 phase: this.Phases.Edit,
             });
         }).done();
+    },
+
+    _optionallySetEmail: function() {
+        const deferred = q.defer();
+        // Ask for an email otherwise the user has no way to reset their password
+        const SetEmailDialog = sdk.getComponent("dialogs.SetEmailDialog");
+        Modal.createDialog(SetEmailDialog, {
+            title: _t('Do you want to set an email address?'),
+            onFinished: (confirmed) => {
+                // ignore confirmed, setting an email is optional
+                deferred.resolve(confirmed);
+            },
+        });
+        return deferred.promise;
     },
 
     _onExportE2eKeysClicked: function() {
