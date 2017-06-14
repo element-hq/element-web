@@ -1,3 +1,13 @@
+Changes in [0.9.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.4) (2017-06-14)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.3...v0.9.4)
+
+ * Ask for email address after setting password for the first time
+   [\#1090](https://github.com/matrix-org/matrix-react-sdk/pull/1090)
+ * DM guessing: prefer oldest joined member
+   [\#1087](https://github.com/matrix-org/matrix-react-sdk/pull/1087)
+ * More translations
+
 Changes in [0.9.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.3) (2017-06-12)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.3-rc.2...v0.9.3)
