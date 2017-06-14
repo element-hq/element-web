@@ -17,7 +17,42 @@ limitations under the License.
 import React from 'react';
 import sdk from 'matrix-react-sdk';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import Modal from 'matrix-react-sdk/lib/Modal';
 
+const WarmFuzzy = function(props) {
+    const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+    let title = _t('You have successfully set a password!');
+    if (props.didSetEmail) {
+        title = _t('You have successfully set a password and an email address!');
+    }
+    const advice = _t('You can now return to your account after signing out, and sign in on other devices.');
+    let extraAdvice = null;
+    if (!props.didSetEmail) {
+        extraAdvice = _t('Remember, you can always set an email address in user settings if you change your mind.');
+    }
+
+    return <BaseDialog className="mx_SetPasswordDialog"
+        onFinished={props.onFinished}
+        title={ title }
+    >
+        <div className="mx_Dialog_content">
+            <p>
+                { advice }
+            </p>
+            <p>
+                { extraAdvice }
+            </p>
+        </div>
+        <div className="mx_Dialog_buttons">
+            <button
+                className="mx_Dialog_primary"
+                autoFocus={true}
+                onClick={props.onFinished}>
+                    { _t('Continue') }
+            </button>
+        </div>
+    </BaseDialog>;
+};
 
 /**
  * Prompt the user to set a password
@@ -33,13 +68,19 @@ export default React.createClass({
     getInitialState: function() {
         return {
             error: null,
-            success: false,
         };
     },
 
-    _onPasswordChanged: function() {
-        this.setState({
-            success: true,
+    componentWillMount: function() {
+        console.info('SetPasswordDialog component will mount');
+    },
+
+    _onPasswordChanged: function(res) {
+        Modal.createDialog(WarmFuzzy, {
+            didSetEmail: res.didSetEmail,
+            onFinished: () => {
+                this._onContinueClicked();
+            },
         });
     },
 
@@ -66,29 +107,6 @@ export default React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const ChangePassword = sdk.getComponent('views.settings.ChangePassword');
 
-        if (this.state.success) {
-            return (
-                <BaseDialog className="mx_SetPasswordDialog"
-                    onFinished={this.props.onFinished}
-                    title={ _t('You have successfully set a password!') }
-                >
-                    <div className="mx_Dialog_content">
-                        <p>
-                            { _t('You can now return to your account after signing out, and sign in on other devices.') }
-                        </p>
-                    </div>
-                    <div className="mx_Dialog_buttons">
-                        <button
-                            className="mx_Dialog_primary"
-                            autoFocus={true}
-                            onClick={this._onContinueClicked}>
-                                { _t('Continue') }
-                        </button>
-                    </div>
-                </BaseDialog>
-            );
-        }
-
         return (
             <BaseDialog className="mx_SetPasswordDialog"
                 onFinished={this.props.onFinished}
@@ -106,6 +124,7 @@ export default React.createClass({
                         buttonClassName="mx_Dialog_primary mx_SetPasswordDialog_change_password_button"
                         confirm={false}
                         autoFocusNewPasswordInput={true}
+                        shouldAskForEmail={true}
                         onError={this._onPasswordChangeError}
                         onFinished={this._onPasswordChanged} />
                     <div className="error">
