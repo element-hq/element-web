@@ -186,7 +186,7 @@ module.exports = React.createClass({
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
 
-        RoomViewStore.addListener(this._onRoomViewStoreUpdated);
+        this._roomViewStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdated);
         this._onRoomViewStoreUpdated();
 
         if (!UserSettingsStore.getLocalSetting('analyticsOptOut', false)) Analytics.enable();
@@ -295,6 +295,7 @@ module.exports = React.createClass({
         UDEHandler.stopListening();
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
+        this._roomViewStoreToken.remove();
     },
 
     componentDidUpdate: function() {
