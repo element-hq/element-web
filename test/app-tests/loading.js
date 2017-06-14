@@ -237,6 +237,36 @@ describe('loading:', function () {
                 expect(localStorage.getItem('mx_is_url')).toEqual(DEFAULT_IS_URL);
             }).done(done, done);
         });
+
+        it('should not register as a guest when using a #/login link', function() {
+            loadApp({
+                uriFragment: "#/login",
+            });
+
+            return q.delay(100).then(() => {
+                // we expect a single <Login> component
+                ReactTestUtils.findRenderedComponentWithType(
+                    matrixChat, sdk.getComponent('structures.login.Login'));
+
+                // the only outstanding request should be a GET /login
+                // (in particular there should be no /register request for
+                // guest registration).
+                for (const req of httpBackend.requests) {
+                    if (req.method === 'GET' && req.path.endsWith('/_matrix/client/r0/login')) {
+                        continue;
+                    }
+
+                    throw new Error(`Unexpected HTTP request to ${req}`);
+                }
+                return completeLogin(matrixChat);
+            }).then(() => {
+
+                // once the sync completes, we should have a room view
+                ReactTestUtils.findRenderedComponentWithType(
+                    matrixChat, sdk.getComponent('structures.HomePage'));
+                expect(windowLocation.hash).toEqual("#/home");
+            });
+        });
     });
 
     describe("MatrixClient rehydrated from stored credentials:", function() {
@@ -308,28 +338,33 @@ describe('loading:', function () {
 
         describe('/#/login link:', function() {
             beforeEach(function() {
-                httpBackend.when('GET', '/pushrules').respond(200, {});
-                httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
-
                 loadApp({
                     uriFragment: "#/login",
-                });
-
-                return expectAndAwaitSync().then(() => {
-                    return q.delay(1);
                 });
             });
 
             it('shows a login view', function() {
                 // we expect a single <Login> component
-                const login = ReactTestUtils.findRenderedComponentWithType(
+                ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.login.Login')
                 );
+
+                // the only outstanding request should be a GET /login
+                // (in particular there should be no /register request for
+                // guest registration, nor /sync, etc).
+                for (const req of httpBackend.requests) {
+                    if (req.method === 'GET' && req.path.endsWith('/_matrix/client/r0/login')) {
+                        continue;
+                    }
+
+                    throw new Error(`Unexpected HTTP request to ${req}`);
+                }
             });
 
             it('shows the homepage after login', function() {
                 return completeLogin(matrixChat).then(() => {
-                    // we should see a home page if we previously had no room
+                    // we should see a home page, even though we previously had
+                    // a stored mx_last_room_id
                     ReactTestUtils.findRenderedComponentWithType(
                         matrixChat, sdk.getComponent('structures.HomePage'));
                     expect(windowLocation.hash).toEqual("#/home");
