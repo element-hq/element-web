@@ -13,7 +13,7 @@ function HttpBackend() {
     // the request function dependency that the SDK needs.
     this.requestFn = function(opts, callback) {
         const req = new Request(opts, callback);
-        console.log("HTTP backend received request: " + req);
+        console.log(`${Date.now()} HTTP backend received request: ${req}`);
         self.requests.push(req);
 
         const abort = function() {
@@ -50,45 +50,42 @@ HttpBackend.prototype = {
         if (waitTime === undefined) {
             waitTime = 5;
         }
-        console.log(
-            "HTTP backend flushing... (path=" + path
+
+        function log(msg) {
+            console.log(`${Date.now()} flush[${path || ''}]: ${msg}`);
+        }
+
+        log("HTTP backend flushing... (path=" + path
             + " numToFlush=" + numToFlush
             + " waitTime=" + waitTime
             + ")",
         );
         const tryFlush = function() {
             // if there's more real requests and more expected requests, flush 'em.
-            console.log(
-                "  trying to flush queue => reqs=[" + self.requests
-                + "] expected=[" + self.expectedRequests
-                + "]",
+            log(`  trying to flush => reqs=[${self.requests}] ` +
+                `expected=[${self.expectedRequests}]`,
             );
             if (self._takeFromQueue(path)) {
                 // try again on the next tick.
                 flushed += 1;
                 if (numToFlush && flushed === numToFlush) {
-                    console.log("  Flushed assigned amount:", numToFlush);
+                    log(`Flushed assigned amount: ${numToFlush}`);
                     defer.resolve(flushed);
                 } else {
-                    console.log("  flushed. Trying for more.");
+                    log(`  flushed. Trying for more.`);
                     setTimeout(tryFlush, 0);
                 }
             } else if (flushed === 0 && !triedWaiting) {
                 // we may not have made the request yet, wait a generous amount of
                 // time before giving up.
-                console.log(
-                    "  nothing to flush yet; waiting " + waitTime +
-                    "ms for requests.")
+                log(`  nothing to flush yet; waiting for requests.`);
                 setTimeout(tryFlush, waitTime);
                 triedWaiting = true;
             } else {
                 if (flushed === 0) {
-                    console.log("  nothing to flush; giving up");
+                    log("nothing to flush; giving up");
                 } else {
-                    console.log(
-                        "  no more flushes after flushing", flushed,
-                        "requests",
-                    );
+                    log(`no more flushes after flushing ${flushed} requests`);
                 }
                 defer.resolve(flushed);
             }
@@ -138,7 +135,7 @@ HttpBackend.prototype = {
                     matchingReq.checks[j](req);
                 }
                 testResponse = matchingReq.response;
-                console.log("    responding to %s", matchingReq.path);
+                console.log(`${Date.now()}    responding to ${matchingReq.path}`);
                 let body = testResponse.body;
                 if (Object.prototype.toString.call(body) == "[object Function]") {
                     body = body(req.path, req.data);
