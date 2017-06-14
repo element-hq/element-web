@@ -170,6 +170,12 @@ module.exports = React.createClass({
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
         };
 
+        // NB: This does assume that the roomID will not change for the lifetime of
+        // the RoomView instance
+        if (initial) {
+            newState.room = MatrixClientPeg.get().getRoom(newState.roomId);
+        }
+
         // Clear the search results when clicking a search result (which changes the
         // currently scrolled to event, this.state.initialEventId).
         if (this.state.initialEventId !== newState.initialEventId) {
@@ -186,7 +192,6 @@ module.exports = React.createClass({
             // At this point, this.state.roomId could be null (e.g. the alias might not
             // have been resolved yet) so anything called here must handle this case.
             this._onHaveRoom();
-            this.onRoom(MatrixClientPeg.get().getRoom(this.state.roomId));
         });
     },
 
@@ -205,7 +210,7 @@ module.exports = React.createClass({
         // NB. We peek if we are not in the room, although if we try to peek into
         // a room in which we have a member event (ie. we've left) synapse will just
         // send us the same data as we get in the sync (ie. the last events we saw).
-        const room = MatrixClientPeg.get().getRoom(this.state.roomId);
+        const room = this.state.room;
         let isUserJoined = null;
         if (room) {
             isUserJoined = room.hasMembershipState(
@@ -220,7 +225,6 @@ module.exports = React.createClass({
                 this.onJoinButtonClicked();
             } else if (this.state.roomId) {
                 console.log("Attempting to peek into room %s", this.state.roomId);
-
                 this.setState({
                     peekLoading: true,
                 });
@@ -602,7 +606,7 @@ module.exports = React.createClass({
     },
 
     onRoom: function(room) {
-        if (!room || room.roomId !== this.state.roomId) {
+        if (!room || room.roomId !== this.state.roomId || !this.state.joining) {
             return;
         }
         this.setState({
