@@ -954,5 +954,9 @@
     "(no answer)": "(нет ответа)",
     "(unknown failure: %(reason)s)": "(неизвестная ошибка: %(reason)s",
     "Disable Peer-to-Peer for 1:1 calls": "Отключить Peer-to-Peer для 1:1 звонков",
-    "Not a valid Riot keyfile": "Не действительный Riot-файл ключа"
+    "Not a valid Riot keyfile": "Не действительный Riot-файл ключа",
+    "Your browser does not support the required cryptography extensions": "Ваш браузер не поддерживает требуемые расширения для криптографии",
+    "Authentication check failed: incorrect password?": "Ошибка авторизации: неверный пароль?",
+    "Do you want to set an email address?": "Вы хотите указать адрес электронной почты?",
+    "This will allow you to reset your password and receive notifications.": "Это позволит вам сбросить пароль и получить уведомления."
 }
