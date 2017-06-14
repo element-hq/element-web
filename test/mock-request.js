@@ -46,9 +46,8 @@ HttpBackend.prototype = {
         const defer = q.defer();
         const self = this;
         let flushed = 0;
-        let triedWaiting = false;
         if (waitTime === undefined) {
-            waitTime = 5;
+            waitTime = 10;
         }
 
         function log(msg) {
@@ -60,6 +59,8 @@ HttpBackend.prototype = {
             + " waitTime=" + waitTime
             + ")",
         );
+        const endTime =  waitTime + Date.now();
+
         const tryFlush = function() {
             // if there's more real requests and more expected requests, flush 'em.
             log(`  trying to flush => reqs=[${self.requests}] ` +
@@ -75,12 +76,11 @@ HttpBackend.prototype = {
                     log(`  flushed. Trying for more.`);
                     setTimeout(tryFlush, 0);
                 }
-            } else if (flushed === 0 && !triedWaiting) {
+            } else if (flushed === 0 && Date.now() < endTime) {
                 // we may not have made the request yet, wait a generous amount of
                 // time before giving up.
                 log(`  nothing to flush yet; waiting for requests.`);
-                setTimeout(tryFlush, waitTime);
-                triedWaiting = true;
+                setTimeout(tryFlush, 5);
             } else {
                 if (flushed === 0) {
                     log("nothing to flush; giving up");
