@@ -99,21 +99,14 @@ describe('loading:', function () {
             toString: function() { return this.search + this.hash; },
         };
 
-        let lastLoadedScreen = null;
-        let appLoaded = false;
-
         let loadCompleteDefer = q.defer();
         loadCompletePromise = loadCompleteDefer.promise;
 
         function onNewScreen(screen) {
             console.log(Date.now() + " newscreen "+screen);
-            if (!appLoaded) {
-                lastLoadedScreen = screen;
-            } else {
-                var hash = '#/' + screen;
-                windowLocation.hash = hash;
-                console.log(Date.now() + " browser URI now "+ windowLocation);
-            }
+            var hash = '#/' + screen;
+            windowLocation.hash = hash;
+            console.log(Date.now() + " browser URI now "+ windowLocation);
         }
 
         // Parse the given window.location and return parameters that can be used when calling
@@ -124,13 +117,6 @@ describe('loading:', function () {
                 screen: fragparts.location.substring(1),
                 params: fragparts.params,
             }
-        }
-
-        function routeUrl(location, matrixChat) {
-            console.log(Date.now() + ` routing URL '${location}'`);
-            const s = getScreenFromLocation(location);
-            console.log("Showing screen ", s);
-            matrixChat.showScreen(s.screen, s.params);
         }
 
         const MatrixChat = sdk.getComponent('structures.MatrixChat');
@@ -151,17 +137,6 @@ describe('loading:', function () {
                 makeRegistrationUrl={() => {throw new Error('Not implemented');}}
             />, parentDiv
         );
-
-        // pause for a cycle, then simulate the window.onload handler
-        window.setTimeout(() => {
-            console.log(Date.now() + " simulating window.onload");
-            routeUrl(windowLocation, matrixChat);
-            appLoaded = true;
-            if (lastLoadedScreen) {
-                onNewScreen(lastLoadedScreen);
-                lastLoadedScreen = null;
-            }
-        }, 0);
     }
 
     // set an expectation that we will get a call to /sync, then flush
