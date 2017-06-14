@@ -917,8 +917,10 @@
     "(could not connect media)": "(impossible de se connecter au média)",
     "(no answer)": "(pas de réponse)",
     "(unknown failure: %(reason)s)": "(erreur inconnue:  %(reason)s)",
-    "Your browser does not support the required cryptography extensions": "Votre explorateur ne supporte pas les extensions cryptographiques nécessaires",
+    "Your browser does not support the required cryptography extensions": "Votre navigateur ne supporte pas les extensions cryptographiques nécessaires",
     "Not a valid Riot keyfile": "Fichier de clé Riot non valide",
     "Authentication check failed: incorrect password?": "Erreur d’identification: mot de passe incorrect ?",
-    "Disable Peer-to-Peer for 1:1 calls": "Désactiver les appels 1:1 pair-à-pair"
+    "Disable Peer-to-Peer for 1:1 calls": "Désactiver les appels 1:1 pair-à-pair",
+    "Do you want to set an email address?": "Souhaitez-vous configurer une adresse e-mail ?",
+    "This will allow you to reset your password and receive notifications.": "Ceci va vous permettre de réinitialiser votre mot de passe et de recevoir des notifications."
 }
