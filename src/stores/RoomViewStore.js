@@ -123,6 +123,7 @@ class RoomViewStore extends Store {
         if (payload.room_id) {
             const newState = {
                 roomId: payload.room_id,
+                roomAlias: payload.room_alias,
                 initialEventId: payload.event_id,
                 initialEventPixelOffset: undefined,
                 isInitialEventHighlighted: payload.highlighted,
