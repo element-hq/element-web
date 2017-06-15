@@ -180,7 +180,7 @@ describe('loading:', function () {
                 return httpBackend.flush();
             }).then(() => {
                 // Wait for another trip around the event loop for the UI to update
-                return q.delay(1);
+                return q.delay(10);
             }).then(() => {
                 // we expect a single <Login> component following session load
                 ReactTestUtils.findRenderedComponentWithType(
@@ -206,7 +206,7 @@ describe('loading:', function () {
                 return httpBackend.flush();
             }).then(() => {
                 // Wait for another trip around the event loop for the UI to update
-                return q.delay(1);
+                return q.delay(10);
             }).then(() => {
                 return completeLogin(matrixChat);
             }).then(() => {
