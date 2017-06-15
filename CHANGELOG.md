@@ -1,3 +1,195 @@
+Changes in [0.9.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.4) (2017-06-14)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.3...v0.9.4)
+
+ * Ask for email address after setting password for the first time
+   [\#1090](https://github.com/matrix-org/matrix-react-sdk/pull/1090)
+ * DM guessing: prefer oldest joined member
+   [\#1087](https://github.com/matrix-org/matrix-react-sdk/pull/1087)
+ * More translations
+
+Changes in [0.9.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.3) (2017-06-12)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.3-rc.2...v0.9.3)
+
+ * Add more translations & fix some existing ones
+
+Changes in [0.9.3-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.3-rc.2) (2017-06-09)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.3-rc.1...v0.9.3-rc.2)
+
+ * Fix flux dependency
+ * Fix translations on conference call bar
+
+Changes in [0.9.3-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.3-rc.1) (2017-06-09)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.2...v0.9.3-rc.1)
+
+ * When ChatCreateOrReuseDialog is cancelled by a guest, go home
+   [\#1069](https://github.com/matrix-org/matrix-react-sdk/pull/1069)
+ * Update from Weblate.
+   [\#1065](https://github.com/matrix-org/matrix-react-sdk/pull/1065)
+ * Goto /home when forgetting the last room
+   [\#1067](https://github.com/matrix-org/matrix-react-sdk/pull/1067)
+ * Default to home page when settings is closed
+   [\#1066](https://github.com/matrix-org/matrix-react-sdk/pull/1066)
+ * Update from Weblate.
+   [\#1063](https://github.com/matrix-org/matrix-react-sdk/pull/1063)
+ * When joining, use a roomAlias if we have it
+   [\#1062](https://github.com/matrix-org/matrix-react-sdk/pull/1062)
+ * Control currently viewed event via RoomViewStore
+   [\#1058](https://github.com/matrix-org/matrix-react-sdk/pull/1058)
+ * Better error messages for login
+   [\#1060](https://github.com/matrix-org/matrix-react-sdk/pull/1060)
+ * Add remaining translations
+   [\#1056](https://github.com/matrix-org/matrix-react-sdk/pull/1056)
+ * Added button that copies code to clipboard
+   [\#1040](https://github.com/matrix-org/matrix-react-sdk/pull/1040)
+ * de-lint MegolmExportEncryption + test
+   [\#1059](https://github.com/matrix-org/matrix-react-sdk/pull/1059)
+ * Better RTL support
+   [\#1021](https://github.com/matrix-org/matrix-react-sdk/pull/1021)
+ * make mels emoji capable
+   [\#1057](https://github.com/matrix-org/matrix-react-sdk/pull/1057)
+ * Make travis check for lint on files which are clean to start with
+   [\#1055](https://github.com/matrix-org/matrix-react-sdk/pull/1055)
+ * Update from Weblate.
+   [\#1053](https://github.com/matrix-org/matrix-react-sdk/pull/1053)
+ * Add some logging around switching rooms
+   [\#1054](https://github.com/matrix-org/matrix-react-sdk/pull/1054)
+ * Update from Weblate.
+   [\#1052](https://github.com/matrix-org/matrix-react-sdk/pull/1052)
+ * Use user_directory endpoint to populate ChatInviteDialog
+   [\#1050](https://github.com/matrix-org/matrix-react-sdk/pull/1050)
+ * Various Analytics changes/fixes/improvements
+   [\#1046](https://github.com/matrix-org/matrix-react-sdk/pull/1046)
+ * Use an arrow function to allow `this`
+   [\#1051](https://github.com/matrix-org/matrix-react-sdk/pull/1051)
+ * New guest access
+   [\#937](https://github.com/matrix-org/matrix-react-sdk/pull/937)
+ * Translate src/components/structures
+   [\#1048](https://github.com/matrix-org/matrix-react-sdk/pull/1048)
+ * Cancel 'join room' action if 'log in' is clicked
+   [\#1049](https://github.com/matrix-org/matrix-react-sdk/pull/1049)
+ * fix copy and paste derp and rip out unused imports
+   [\#1015](https://github.com/matrix-org/matrix-react-sdk/pull/1015)
+ * Update from Weblate.
+   [\#1042](https://github.com/matrix-org/matrix-react-sdk/pull/1042)
+ * Reset 'first sync' flag / promise on log in
+   [\#1041](https://github.com/matrix-org/matrix-react-sdk/pull/1041)
+ * Remove DM-guessing code (again)
+   [\#1036](https://github.com/matrix-org/matrix-react-sdk/pull/1036)
+ * Cancel deferred actions
+   [\#1039](https://github.com/matrix-org/matrix-react-sdk/pull/1039)
+ * Merge develop, add i18n for SetMxIdDialog
+   [\#1034](https://github.com/matrix-org/matrix-react-sdk/pull/1034)
+ * Defer an intention for creating a room
+   [\#1038](https://github.com/matrix-org/matrix-react-sdk/pull/1038)
+ * Fix 'create room' button
+   [\#1037](https://github.com/matrix-org/matrix-react-sdk/pull/1037)
+ * Always show the spinner during the first sync
+   [\#1033](https://github.com/matrix-org/matrix-react-sdk/pull/1033)
+ * Only view welcome user if we are not looking at a room
+   [\#1032](https://github.com/matrix-org/matrix-react-sdk/pull/1032)
+ * Update from Weblate.
+   [\#1030](https://github.com/matrix-org/matrix-react-sdk/pull/1030)
+ * Keep deferred actions for view_user_settings and view_create_chat
+   [\#1031](https://github.com/matrix-org/matrix-react-sdk/pull/1031)
+ * Don't do a deferred start chat if user is welcome user
+   [\#1029](https://github.com/matrix-org/matrix-react-sdk/pull/1029)
+ * Introduce state `peekLoading` to avoid collision with `roomLoading`
+   [\#1028](https://github.com/matrix-org/matrix-react-sdk/pull/1028)
+ * Update from Weblate.
+   [\#1016](https://github.com/matrix-org/matrix-react-sdk/pull/1016)
+ * Fix accepting a 3pid invite
+   [\#1013](https://github.com/matrix-org/matrix-react-sdk/pull/1013)
+ * Propagate room join errors to the UI
+   [\#1007](https://github.com/matrix-org/matrix-react-sdk/pull/1007)
+ * Implement /user/@userid:domain?action=chat
+   [\#1006](https://github.com/matrix-org/matrix-react-sdk/pull/1006)
+ * Show People/Rooms emptySubListTip even when total rooms !== 0
+   [\#967](https://github.com/matrix-org/matrix-react-sdk/pull/967)
+ * Fix to show the correct room
+   [\#995](https://github.com/matrix-org/matrix-react-sdk/pull/995)
+ * Remove cachedPassword from localStorage on_logged_out
+   [\#977](https://github.com/matrix-org/matrix-react-sdk/pull/977)
+ * Add /start to show the setMxId above HomePage
+   [\#964](https://github.com/matrix-org/matrix-react-sdk/pull/964)
+ * Allow pressing Enter to submit setMxId
+   [\#961](https://github.com/matrix-org/matrix-react-sdk/pull/961)
+ * add login link to SetMxIdDialog
+   [\#954](https://github.com/matrix-org/matrix-react-sdk/pull/954)
+ * Block user settings with view_set_mxid
+   [\#936](https://github.com/matrix-org/matrix-react-sdk/pull/936)
+ * Show "Something went wrong!" when errcode undefined
+   [\#935](https://github.com/matrix-org/matrix-react-sdk/pull/935)
+ * Reset store state when logging out
+   [\#930](https://github.com/matrix-org/matrix-react-sdk/pull/930)
+ * Set the displayname to the mxid once PWLU
+   [\#933](https://github.com/matrix-org/matrix-react-sdk/pull/933)
+ * Fix view_next_room, view_previous_room and view_indexed_room
+   [\#929](https://github.com/matrix-org/matrix-react-sdk/pull/929)
+ * Use RVS to indicate "joining" when setting a mxid
+   [\#928](https://github.com/matrix-org/matrix-react-sdk/pull/928)
+ * Don't show notif nag bar if guest
+   [\#932](https://github.com/matrix-org/matrix-react-sdk/pull/932)
+ * Show "Password" instead of "New Password"
+   [\#927](https://github.com/matrix-org/matrix-react-sdk/pull/927)
+ * Remove warm-fuzzy after setting mxid
+   [\#926](https://github.com/matrix-org/matrix-react-sdk/pull/926)
+ * Allow teamServerConfig to be missing
+   [\#925](https://github.com/matrix-org/matrix-react-sdk/pull/925)
+ * Remove GuestWarningBar
+   [\#923](https://github.com/matrix-org/matrix-react-sdk/pull/923)
+ * Make left panel better for new users (mk III)
+   [\#924](https://github.com/matrix-org/matrix-react-sdk/pull/924)
+ * Implement default welcome page and allow custom URL /w config
+   [\#922](https://github.com/matrix-org/matrix-react-sdk/pull/922)
+ * Implement a store for RoomView
+   [\#921](https://github.com/matrix-org/matrix-react-sdk/pull/921)
+ * Add prop to toggle whether new password input is autoFocused
+   [\#915](https://github.com/matrix-org/matrix-react-sdk/pull/915)
+ * Implement warm-fuzzy success dialog for SetMxIdDialog
+   [\#905](https://github.com/matrix-org/matrix-react-sdk/pull/905)
+ * Write some tests for the RTS UI
+   [\#893](https://github.com/matrix-org/matrix-react-sdk/pull/893)
+ * Make confirmation optional on ChangePassword
+   [\#890](https://github.com/matrix-org/matrix-react-sdk/pull/890)
+ * Remove "Current Password" input if mx_pass exists
+   [\#881](https://github.com/matrix-org/matrix-react-sdk/pull/881)
+ * Replace NeedToRegisterDialog /w SetMxIdDialog
+   [\#889](https://github.com/matrix-org/matrix-react-sdk/pull/889)
+ * Invite the welcome user after registration if configured
+   [\#882](https://github.com/matrix-org/matrix-react-sdk/pull/882)
+ * Prevent ROUs from creating new chats/new rooms
+   [\#879](https://github.com/matrix-org/matrix-react-sdk/pull/879)
+ * Redesign mxID chooser, add availability checking
+   [\#877](https://github.com/matrix-org/matrix-react-sdk/pull/877)
+ * Show password nag bar when user is PWLU
+   [\#864](https://github.com/matrix-org/matrix-react-sdk/pull/864)
+ * fix typo
+   [\#858](https://github.com/matrix-org/matrix-react-sdk/pull/858)
+ * Initial implementation: SetDisplayName -> SetMxIdDialog
+   [\#849](https://github.com/matrix-org/matrix-react-sdk/pull/849)
+
+Changes in [0.9.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.2) (2017-06-06)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.1...v0.9.2)
+
+ * Hotfix: Allow password reset when logged in
+   [\#1044](https://github.com/matrix-org/matrix-react-sdk/pull/1044)
+
+Changes in [0.9.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.1) (2017-06-02)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.0...v0.9.1)
+
+ * Update from Weblate.
+   [\#1012](https://github.com/matrix-org/matrix-react-sdk/pull/1012)
+ * typo, missing import and mis-casing
+   [\#1014](https://github.com/matrix-org/matrix-react-sdk/pull/1014)
+ * Update from Weblate.
+   [\#1010](https://github.com/matrix-org/matrix-react-sdk/pull/1010)
+
 Changes in [0.9.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.0) (2017-06-02)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.0-rc.2...v0.9.0)

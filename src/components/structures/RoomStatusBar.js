@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import { _t } from '../../languageHandler';
+import { _t, _tJsx } from '../../languageHandler';
 import sdk from '../../index';
-import dis from '../../dispatcher';
 import WhoIsTyping from '../../WhoIsTyping';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import MemberAvatar from '../views/avatars/MemberAvatar';
@@ -282,14 +281,13 @@ module.exports = React.createClass({
                         { this.props.unsentMessageError }
                     </div>
                     <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                        <a className="mx_RoomStatusBar_resend_link"
-                          onClick={ this.props.onResendAllClick }>
-                            {_t('Resend all')}
-                        </a> {_t('or')} <a
-                          className="mx_RoomStatusBar_resend_link"
-                          onClick={ this.props.onCancelAllClick }>
-                            {_t('cancel all')}
-                        </a> {_t('now. You can also select individual messages to resend or cancel.')}
+                    {_tJsx("<a>Resend all</a> or <a>cancel all</a> now. You can also select individual messages to resend or cancel.",
+                        [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
+                        [
+                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={ this.props.onResendAllClick }>{sub}</a>,
+                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={ this.props.onCancelAllClick }>{sub}</a>,
+                        ]
+                    )}
                     </div>
                 </div>
             );
@@ -298,8 +296,8 @@ module.exports = React.createClass({
         // unread count trumps who is typing since the unread count is only
         // set when you've scrolled up
         if (this.props.numUnreadMessages) {
-            var unreadMsgs = this.props.numUnreadMessages + " new message" +
-                (this.props.numUnreadMessages > 1 ? "s" : "");
+            // MUST use var name "count" for pluralization to kick in
+            var unreadMsgs = _t("%(count)s new messages", {count: this.props.numUnreadMessages});
 
             return (
                 <div className="mx_RoomStatusBar_unreadMessagesBar"

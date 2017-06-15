@@ -18,7 +18,6 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import Q from 'q';
 import Fuse from 'fuse.js';
 import {PillCompletion} from './Components';
 import sdk from '../index';

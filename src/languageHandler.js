@@ -18,7 +18,7 @@ limitations under the License.
 import request from 'browser-request';
 import counterpart from 'counterpart';
 import q from 'q';
-import sanitizeHtml from "sanitize-html";
+import React from 'react';
 
 import UserSettingsStore from './UserSettingsStore';
 
@@ -35,6 +35,25 @@ counterpart.setFallbackLocale('en');
 // just import counterpart and use it directly, we end up using a different
 // instance.
 export function _t(...args) {
+    // Horrible hack to avoid https://github.com/vector-im/riot-web/issues/4191
+    // The interpolation library that counterpart uses does not support undefined/null
+    // values and instead will throw an error. This is a problem since everywhere else
+    // in JS land passing undefined/null will simply stringify instead, and when converting
+    // valid ES6 template strings to i18n strings it's extremely easy to pass undefined/null
+    // if there are no existing null guards. To avoid this making the app completely inoperable,
+    // we'll check all the values for undefined/null and stringify them here.
+    if (args[1] && typeof args[1] === 'object') {
+        Object.keys(args[1]).forEach((k) => {
+            if (args[1][k] === undefined) {
+                console.warn("_t called with undefined interpolation name: " + k);
+                args[1][k] = 'undefined';
+            }
+            if (args[1][k] === null) {
+                console.warn("_t called with null interpolation name: " + k);
+                args[1][k] = 'null';
+            }
+        });
+    }
     return counterpart.translate(...args);
 }
 
@@ -60,7 +79,7 @@ export function _t(...args) {
  * with multiple args, each arg representing a captured group of the matching regexp.
  * This function must return a JSX node.
  *
- * @return A list of strings/JSX nodes.
+ * @return a React <span> component containing the generated text
  */
 export function _tJsx(jsxText, patterns, subs) {
     // convert everything to arrays
@@ -103,7 +122,10 @@ export function _tJsx(jsxText, patterns, subs) {
         output.push(inputText.substr(match.index + match[0].length));
     }
 
-    return output;
+    // this is a bit of a fudge to avoid the 'Each child in an array or iterator
+    // should have a unique "key" prop' error: we explicitly pass the generated
+    // nodes into React.createElement as children of a <span>.
+    return React.createElement('span', null, ...output);
 }
 
 // Allow overriding the text displayed when no translation exists

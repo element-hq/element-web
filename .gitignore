@@ -12,3 +12,5 @@ npm-debug.log
 
 /.idea
 /src/component-index.js
+
+.DS_Store

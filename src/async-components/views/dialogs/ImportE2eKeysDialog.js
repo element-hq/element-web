@@ -89,11 +89,13 @@ export default React.createClass({
             // TODO: it would probably be nice to give some feedback about what we've imported here.
             this.props.onFinished(true);
         }).catch((e) => {
+            console.error("Error importing e2e keys:", e);
             if (this._unmounted) {
                 return;
             }
+            const msg = e.friendlyText || _t('Unknown error');
             this.setState({
-                errStr: e.message,
+                errStr: msg,
                 phase: PHASE_EDIT,
             });
         });
@@ -122,13 +124,13 @@ export default React.createClass({
                                 'This process allows you to import encryption keys ' +
                                 'that you had previously exported from another Matrix ' +
                                 'client. You will then be able to decrypt any ' +
-                                'messages that the other client could decrypt.'
+                                'messages that the other client could decrypt.',
                             ) }
                         </p>
                         <p>
                             { _t(
                                 'The export file will be protected with a passphrase. ' +
-                                'You should enter the passphrase here, to decrypt the file.'
+                                'You should enter the passphrase here, to decrypt the file.',
                             ) }
                         </p>
                         <div className='error'>

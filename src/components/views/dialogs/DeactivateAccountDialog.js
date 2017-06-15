@@ -86,7 +86,7 @@ export default class DeactivateAccountDialog extends React.Component {
             passwordBoxClass = 'error';
         }
 
-        const okLabel = this.state.busy ? <Loader /> : 'Deactivate Account';
+        const okLabel = this.state.busy ? <Loader /> : _t('Deactivate Account');
         const okEnabled = this.state.confirmButtonEnabled && !this.state.busy;
 
         let cancelButton = null;

@@ -902,6 +902,9 @@ var TimelinePanel = React.createClass({
 
         var onError = (error) => {
             this.setState({timelineLoading: false});
+            console.error(
+                `Error loading timeline panel at ${eventId}: ${error}`,
+            );
             var msg = error.message ? error.message : JSON.stringify(error);
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
@@ -921,8 +924,8 @@ var TimelinePanel = React.createClass({
                 };
             }
             var message = (error.errcode == 'M_FORBIDDEN')
-            	? _t("Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question") + "."
-                : _t("Tried to load a specific point in this room's timeline, but was unable to find it") + ".";
+            	? _t("Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.")
+                : _t("Tried to load a specific point in this room's timeline, but was unable to find it.");
             Modal.createDialog(ErrorDialog, {
                 title: _t("Failed to load timeline position"),
                 description: message,

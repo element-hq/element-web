@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import MatrixClientPeg from './MatrixClientPeg';
-import DMRoomMap from './utils/DMRoomMap';
 import q from 'q';
 
 /**
@@ -145,7 +144,18 @@ export function guessDMRoomTarget(room, me) {
     let oldestTs;
     let oldestUser;
 
-    // Pick the user who's been here longest (and isn't us)
+    // Pick the joined user who's been here longest (and isn't us),
+    for (const user of room.getJoinedMembers()) {
+        if (user.userId == me.userId) continue;
+
+        if (oldestTs === undefined || user.events.member.getTs() < oldestTs) {
+            oldestUser = user;
+            oldestTs = user.events.member.getTs();
+        }
+    }
+    if (oldestUser) return oldestUser;
+
+    // if there are no joined members other than us, use the oldest member
     for (const user of room.currentState.getMembers()) {
         if (user.userId == me.userId) continue;
 

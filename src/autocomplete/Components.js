@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
 /* These were earlier stateless functional components but had to be converted
