@@ -683,6 +683,8 @@ module.exports = React.createClass({
                 this.setState({
                     waitingForRoom: false,
                 });
+            } else {
+                this.forceUpdate();
             }
         }
     },
