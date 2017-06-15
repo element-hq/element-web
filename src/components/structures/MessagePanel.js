@@ -341,6 +341,9 @@ module.exports = React.createClass({
             let last = (i == lastShownEventIndex);
 
             if (!this._shouldShowEvent(mxEv)) {
+                if (mxEv.getId() === this.props.readMarkerEventId) {
+                    ret.push(this._getReadMarkerTile(this.props.readMarkerVisible));
+                }
                 continue;
             }
 
