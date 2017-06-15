@@ -252,6 +252,9 @@ module.exports = React.createClass({
         // Always show highlighted event
         if (this.props.highlightedEventId === mxEv.getId()) return true;
 
+        // Hide redactions if behaviour enabled
+        if (mxEv.isRedacted() && this.props.hideRedactions) return false;
+
         const isMemberEvent = mxEv.getType() === "m.room.member" && mxEv.getStateKey() !== undefined;
         if (!isMemberEvent) {
             return true; // bail early: all the checks below concern member events only
@@ -510,8 +513,6 @@ module.exports = React.createClass({
             ret.push(dateSeparator);
             continuation = false;
         }
-
-        if (mxEv.isRedacted() && this.props.hideRedactions) return ret;
 
         var eventId = mxEv.getId();
         var highlight = (eventId == this.props.highlightedEventId);
