@@ -265,7 +265,11 @@ function _handleRestoreFailure(e) {
 
 let rtsClient = null;
 export function initRtsClient(url) {
-    rtsClient = new RtsClient(url);
+    if (url) {
+        rtsClient = new RtsClient(url);
+    } else {
+        rtsClient = null;
+    }
 }
 
 /**

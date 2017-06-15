@@ -263,11 +263,8 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
 
-        if (this.props.config.teamServerConfig &&
-            this.props.config.teamServerConfig.teamServerURL
-        ) {
-            Lifecycle.initRtsClient(this.props.config.teamServerConfig.teamServerURL);
-        }
+        const teamServerConfig = this.props.config.teamServerConfig || {};
+        Lifecycle.initRtsClient(teamServerConfig.teamServerURL);
 
         // if the user has followed a login or register link, don't reanimate
         // the old creds, but rather go straight to the relevant page
