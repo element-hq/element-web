@@ -37,7 +37,7 @@ HttpBackend.prototype = {
      * @param {string} path The path to flush (optional) default: all.
      * @param {integer} numToFlush The number of things to flush (optional), default: all.
      * @param {integer=} waitTime  The time (in ms) to wait for a request to happen.
-     *    default: 5
+     *    default: 100
      *
      * @return {Promise} resolves when there is nothing left to flush, with the
      *    number of requests flushed
@@ -47,7 +47,7 @@ HttpBackend.prototype = {
         const self = this;
         let flushed = 0;
         if (waitTime === undefined) {
-            waitTime = 10;
+            waitTime = 100;
         }
 
         function log(msg) {

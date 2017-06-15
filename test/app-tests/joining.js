@@ -119,8 +119,8 @@ describe('joining a room', function () {
                 httpBackend.when('POST', '/publicRooms').respond(200, {chunk: []});
                 httpBackend.when('GET', '/thirdparty/protocols').respond(200, {});
                 return q.all([
-                    httpBackend.flush('/publicRooms'),
                     httpBackend.flush('/thirdparty/protocols'),
+                    httpBackend.flush('/publicRooms'),
                 ]);
             }).then(() => {
                 var roomDir = ReactTestUtils.findRenderedComponentWithType(
