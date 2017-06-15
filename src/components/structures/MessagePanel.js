@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var ReactDOM = require("react-dom");
-var dis = require("../../dispatcher");
-var sdk = require('../../index');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import dis from "../../dispatcher";
+import sdk from '../../index';
 
-var MatrixClientPeg = require('../../MatrixClientPeg');
-const UserSettingsStore = require('../../UserSettingsStore');
+import MatrixClientPeg from '../../MatrixClientPeg';
+import UserSettingsStore from '../../UserSettingsStore';
 
 const MILLIS_IN_DAY = 86400000;
 
