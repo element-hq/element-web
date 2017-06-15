@@ -20,7 +20,6 @@ import dis from "../../dispatcher";
 import sdk from '../../index';
 
 import MatrixClientPeg from '../../MatrixClientPeg';
-import UserSettingsStore from '../../UserSettingsStore';
 
 const MILLIS_IN_DAY = 86400000;
 
@@ -94,6 +93,9 @@ module.exports = React.createClass({
 
         // hide redacted events as per old behaviour
         hideRedactions: React.PropTypes.bool,
+
+        // hide membership joins and parts
+        hideJoinLeaves: React.PropTypes.bool,
     },
 
     componentWillMount: function() {
@@ -273,7 +275,7 @@ module.exports = React.createClass({
 
         // this only applies to joins/leaves not invites/kicks/bans
         const isJoinOrLeave = membership === "join" || (membership === "leave" && mxEv.getStateKey() === mxEv.getSender());
-        const hideJoinLeavesGlobally = UserSettingsStore.getSyncedSetting("hideJoinLeaves", false);
+        const hideJoinLeavesGlobally = this.props.hideJoinLeaves;
         if (isJoinOrLeave && hideJoinLeavesGlobally) {
             return false;
         }

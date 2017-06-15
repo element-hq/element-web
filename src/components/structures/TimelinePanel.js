@@ -184,6 +184,9 @@ var TimelinePanel = React.createClass({
 
             // hide redacted events as per old behaviour
             hideRedactions: syncedSettings.hideRedactions,
+
+            // hide membership joins and leaves
+            hideJoinLeaves: syncedSettings.hideJoinLeaves,
         };
     },
 
@@ -1122,6 +1125,7 @@ var TimelinePanel = React.createClass({
         return (
             <MessagePanel ref="messagePanel"
                           hidden={ this.props.hidden }
+                          hideJoinLeaves={ this.state.hideJoinLeaves }
                           hideRedactions={ this.state.hideRedactions }
                           backPaginating={ this.state.backPaginating }
                           forwardPaginating={ forwardPaginating }
