@@ -259,7 +259,8 @@ module.exports = React.createClass({
                     }
                 }).done();
             }
-        } else {
+        } else if (room) {
+            // Stop peeking because we have joined this room previously
             MatrixClientPeg.get().stopPeeking();
             this.setState({
                 unsentMessageError: this._getUnsentMessageError(room),
