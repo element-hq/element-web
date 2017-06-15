@@ -887,7 +887,7 @@
   "Enable URL previews for this room (affects only you)": "Enable URL previews for this room (affects only you)",
   "Drop file here to upload": "Drop file here to upload",
   " (unsupported)": " (unsupported)",
-  "Ongoing conference call%(supportedText)s. %(joinText)s": "Ongoing conference call%(supportedText)s. %(joinText)s",
+  "Ongoing conference call%(supportedText)s.": "Ongoing conference call%(supportedText)s.",
   "for %(amount)ss": "for %(amount)ss",
   "for %(amount)sm": "for %(amount)sm",
   "for %(amount)sh": "for %(amount)sh",
@@ -908,5 +908,8 @@
   "If you already have a Matrix account you can <a>log in</a> instead.": "If you already have a Matrix account you can <a>log in</a> instead.",
   "Your browser does not support the required cryptography extensions": "Your browser does not support the required cryptography extensions",
   "Not a valid Riot keyfile": "Not a valid Riot keyfile",
-  "Authentication check failed: incorrect password?": "Authentication check failed: incorrect password?"
+  "Authentication check failed: incorrect password?": "Authentication check failed: incorrect password?",
+  "Disable Peer-to-Peer for 1:1 calls": "Disable Peer-to-Peer for 1:1 calls",
+  "Do you want to set an email address?": "Do you want to set an email address?",
+  "This will allow you to reset your password and receive notifications.": "This will allow you to reset your password and receive notifications."
 }
