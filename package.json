@@ -47,7 +47,7 @@
     "lint": "eslint src/",
     "lintall": "eslint src/ test/",
     "clean": "rimraf lib webapp electron_app/dist",
-    "prepublish": "npm run build:compile",
+    "prepare": "npm run build:compile",
     "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
     "test-multi": "karma start"
   },
