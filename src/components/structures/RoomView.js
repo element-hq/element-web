@@ -1440,6 +1440,10 @@ module.exports = React.createClass({
         const Loader = sdk.getComponent("elements.Spinner");
         const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
 
+        // Whether the preview bar spinner should be shown. We do this when joining or
+        // when waiting for a room to be returned by js-sdk when joining
+        const previewBarSpinner = this.state.joining || this.state.waitingForRoom;
+
         if (!this.state.room) {
             if (this.state.roomLoading || this.state.peekLoading) {
                 return (
@@ -1473,7 +1477,7 @@ module.exports = React.createClass({
                                             onRejectClick={ this.onRejectThreepidInviteButtonClicked }
                                             canPreview={ false } error={ this.state.roomLoadError }
                                             roomAlias={room_alias}
-                                            spinner={this.state.joining || this.state.waitingForRoom}
+                                            spinner={previewBarSpinner}
                                             inviterName={inviterName}
                                             invitedEmail={invitedEmail}
                                             room={this.state.room}
@@ -1516,7 +1520,7 @@ module.exports = React.createClass({
                                             onRejectClick={ this.onRejectButtonClicked }
                                             inviterName={ inviterName }
                                             canPreview={ false }
-                                            spinner={this.state.joining}
+                                            spinner={previewBarSpinner}
                                             room={this.state.room}
                             />
                         </div>
@@ -1592,7 +1596,7 @@ module.exports = React.createClass({
                 <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
                                 onForgetClick={ this.onForgetClick }
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
-                                spinner={this.state.joining || this.state.waitingForRoom}
+                                spinner={previewBarSpinner}
                                 inviterName={inviterName}
                                 invitedEmail={invitedEmail}
                                 canPreview={this.state.canPeek}
