@@ -258,7 +258,7 @@ module.exports = React.createClass({
                     }
                 }).done();
             }
-        } else if (isUserJoined) {
+        } else {
             MatrixClientPeg.get().stopPeeking();
             this.setState({
                 unsentMessageError: this._getUnsentMessageError(room),
