@@ -5,7 +5,8 @@
 /key.pem
 /lib
 /node_modules
-/electron/node_modules
+/electron_app/node_modules
+/electron_app/dist
 /packages/
 /webapp
 /.npmrc
@@ -13,5 +14,6 @@
 npm-debug.log
 electron/dist
 electron/pub
+/.idea
 /config.json
 /src/component-index.js

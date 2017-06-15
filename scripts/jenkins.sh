@@ -34,11 +34,9 @@ npm run lintall -- -f checkstyle -o eslint.xml || true
 
 rm dist/riot-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
 
- # node_modules deps from 'npm install' don't have a .git dir so can't
- # rev-parse; but they do set the commit in package.json under 'gitHead' which
- # we're grabbing here.
-REACT_SHA=$(grep 'gitHead' node_modules/matrix-react-sdk/package.json | cut -d \" -f 4 | head -c 12)
-JSSDK_SHA=$(grep 'gitHead' node_modules/matrix-js-sdk/package.json | cut -d \" -f 4 | head -c 12)
+# Since the deps are fetched from git, we can rev-parse
+REACT_SHA=$(cd node_modules/matrix-react-sdk; git rev-parse --short=12 HEAD)
+JSSDK_SHA=$(cd node_modules/matrix-js-sdk; git rev-parse --short=12 HEAD)
 
 VECTOR_SHA=$(git rev-parse --short=12 HEAD) # use the ACTUAL SHA rather than assume develop
 

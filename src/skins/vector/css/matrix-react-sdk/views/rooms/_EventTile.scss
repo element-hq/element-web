@@ -62,8 +62,10 @@ limitations under the License.
     visibility: hidden;
     white-space: nowrap;
     color: $event-timestamp-color;
-    font-size: 11px;
-    left: 8px;
+    font-size: 10px;
+    left: 0px;
+    width: 46px; /* 8 + 30 (avatar) + 8 */
+    text-align: center;
     position: absolute;
 }
 
@@ -183,8 +185,13 @@ limitations under the License.
     visibility: visible;
 }
 
+.mx_MessagePanel_alwaysShowTimestamps .mx_MessageTimestamp {
+    visibility: visible;
+}
+
 .mx_EventTile_selected .mx_MessageTimestamp {
     left: 3px;
+    width: auto;
 }
 
 .mx_EventTile_editButton {
@@ -263,6 +270,10 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_EventTile_12hr .mx_EventTile_e2eIcon {
+    padding-left: 5px;
+}
+
 .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line,
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line {
     padding-left: 60px;
@@ -284,6 +295,7 @@ limitations under the License.
 .mx_EventTile:hover.mx_EventTile_verified .mx_MessageTimestamp,
 .mx_EventTile:hover.mx_EventTile_unverified .mx_MessageTimestamp {
     left: 3px;
+    width: auto;
 }
 
 /*
@@ -320,6 +332,24 @@ limitations under the License.
 .mx_EventTile_content .markdown-body code {
     background-color: #f8f8f8;
 }
+.mx_EventTile_copyButton {
+    position: absolute;
+    display: inline-block;
+    visibility: hidden;
+    cursor: pointer;
+    top: 6px;
+    right: 6px;
+    width: 19px;
+    height: 19px;
+    background-image: url($copy-button-url);
+}
+.mx_EventTile_body pre {
+    position: relative;
+}
+.mx_EventTile_body pre:hover .mx_EventTile_copyButton
+{
+    visibility: visible;
+}
 
 .mx_EventTile_content .markdown-body h1,
 .mx_EventTile_content .markdown-body h2,
@@ -348,3 +378,71 @@ limitations under the License.
 }
 
 /* end of overrides */
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_EventTile {
+        padding-top: 4px;
+    }
+
+    .mx_EventTile.mx_EventTile_info {
+        padding-top: 0px;
+    }
+
+    .mx_EventTile .mx_SenderProfile {
+        font-size: 13px;
+    }
+
+    .mx_EventTile.mx_EventTile_emote {
+        padding-top: 8px;
+        .mx_EventTile_avatar {
+            top: 2px;
+        }
+        .mx_EventTile_line {
+            padding-top: 0px;
+            padding-bottom: 1px;
+        }
+    }
+
+    .mx_EventTile.mx_EventTile_emote.mx_EventTile_continuation {
+        padding-top: 0;
+        .mx_EventTile_line {
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+    }
+
+    .mx_EventTile_line {
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .mx_EventTile_avatar {
+        top: 2px;
+    }
+
+    .mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
+        top: 5px;
+    }
+
+    .mx_EventTile_e2eIcon {
+        top: 7px;
+    }
+
+    .mx_EventTile_editButton {
+        top: 3px;
+    }
+
+    .mx_EventTile_readAvatars {
+        top: 27px;
+    }
+
+    .mx_EventTile_continuation .mx_EventTile_readAvatars,
+    .mx_EventTile_info .mx_EventTile_readAvatars,
+    .mx_EventTile_emote .mx_EventTile_readAvatars {
+        top: 5px;
+    }
+
+    .mx_RoomView_MessageList h2 {
+        margin-top: 6px;
+    }
+}

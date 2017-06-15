@@ -17,12 +17,63 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import BasePlatform from 'matrix-react-sdk/lib/BasePlatform'
+import BasePlatform from 'matrix-react-sdk/lib/BasePlatform';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
+
+import Favico from 'favico.js';
 
 /**
  * Vector-specific extensions to the BasePlatform template
  */
 export default class VectorBasePlatform extends BasePlatform {
+    constructor() {
+        super();
+
+        // The 'animations' are really low framerate and look terrible.
+        // Also it re-starts the animationb every time you set the badge,
+        // and we set the state each time, even if the value hasn't changed,
+        // so we'd need to fix that if enabling the animation.
+        this.favicon = new Favico({animation: 'none'});
+        this._updateFavicon();
+    }
+
+    getHumanReadableName(): string {
+        return 'Vector Base Platform'; // no translation required: only used for analytics
+    }
+
+    _updateFavicon() {
+        try {
+            // This needs to be in in a try block as it will throw
+            // if there are more than 100 badge count changes in
+            // its internal queue
+            let bgColor = "#d00",
+                notif = this.notificationCount;
+
+            if (this.errorDidOccur) {
+                notif = notif || "×";
+                bgColor = "#f00";
+            }
+
+            this.favicon.badge(notif, {
+                bgColor: bgColor,
+            });
+        } catch (e) {
+            console.warn(`Failed to set badge count: ${e.message}`);
+        }
+    }
+
+    setNotificationCount(count: number) {
+        if (this.notificationCount === count) return;
+        super.setNotificationCount(count);
+        this._updateFavicon();
+    }
+
+    setErrorStatus(errorDidOccur: boolean) {
+        if (this.errorDidOccur === errorDidOccur) return;
+        super.setErrorStatus(errorDidOccur);
+        this._updateFavicon();
+    }
+
     /**
      * Check for the availability of an update to the version of the
      * app that's currently running.
@@ -45,6 +96,6 @@ export default class VectorBasePlatform extends BasePlatform {
      * device Vector is running on
      */
     getDefaultDeviceDisplayName(): string {
-        return "Unknown device";
+        return _t("Unknown device");
     }
 }

@@ -131,6 +131,14 @@ limitations under the License.
     position: absolute;
 }
 
+.mx_UserSettings_language {
+    width: 200px;
+}
+
+.mx_UserSettings_webRtcDevices_dropdown{
+    width: 200px;
+}
+
 .mx_UserSettings_profileTable
 {
     display: table;
@@ -227,7 +235,8 @@ input.mx_UserSettings_phoneNumberField {
     display: none;
 }
 
-.mx_UserSettings_advanced_spoiler {
+.mx_UserSettings_advanced_spoiler,
+.mx_UserSettings_link {
     cursor: pointer;
     color: $accent-color;
     word-break: break-all;

@@ -15,26 +15,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+const {app, Tray, Menu, nativeImage} = require('electron');
+const pngToIco = require('png-to-ico');
 const path = require('path');
-const electron = require('electron');
-
-const app = electron.app;
-const Tray = electron.Tray;
-const MenuItem = electron.MenuItem;
+const fs = require('fs');
 
 let trayIcon = null;
 
 exports.hasTray = function hasTray() {
     return (trayIcon !== null);
-}
+};
 
-exports.create = function (win, config) {
+exports.create = function(win, config) {
     // no trays on darwin
-    if (process.platform === 'darwin' || trayIcon) {
-        return;
-    }
+    if (process.platform === 'darwin' || trayIcon) return;
 
-    const toggleWin = function () {
+    const toggleWin = function() {
         if (win.isVisible() && !win.isMinimized()) {
             win.hide();
         } else {
@@ -44,24 +40,55 @@ exports.create = function (win, config) {
         }
     };
 
-    const contextMenu = electron.Menu.buildFromTemplate([
+    const contextMenu = Menu.buildFromTemplate([
         {
-            label: 'Show/Hide ' + config.brand,
-            click: toggleWin
+            label: `Show/Hide ${config.brand}`,
+            click: toggleWin,
         },
-        {
-            type: 'separator'
-        },
+        { type: 'separator' },
         {
             label: 'Quit',
-            click: function () {
+            click: function() {
                 app.quit();
-            }
-        }
+            },
+        },
     ]);
 
     trayIcon = new Tray(config.icon_path);
     trayIcon.setToolTip(config.brand);
     trayIcon.setContextMenu(contextMenu);
     trayIcon.on('click', toggleWin);
+
+    let lastFavicon = null;
+    win.webContents.on('page-favicon-updated', async function(ev, favicons) {
+        let newFavicon = config.icon_path;
+        if (favicons && favicons.length > 0 && favicons[0].startsWith('data:')) {
+            newFavicon = favicons[0];
+        }
+
+        // No need to change, shortcut
+        if (newFavicon === lastFavicon) return;
+        lastFavicon = newFavicon;
+
+        // if its not default we have to construct into nativeImage
+        if (newFavicon !== config.icon_path) {
+            newFavicon = nativeImage.createFromDataURL(favicons[0]);
+
+            if (process.platform === 'win32') {
+                try {
+                    const icoPath = path.join(app.getPath('temp'), 'win32_riot_icon.ico')
+                    const icoBuf = await pngToIco(newFavicon.toPNG());
+                    fs.writeFileSync(icoPath, icoBuf);
+                    newFavicon = icoPath;
+                } catch (e) {console.error(e);}
+            }
+        }
+
+        trayIcon.setImage(newFavicon);
+        win.setIcon(newFavicon);
+    });
+
+    win.webContents.on('page-title-updated', function(ev, title) {
+        trayIcon.setToolTip(title);
+    });
 };

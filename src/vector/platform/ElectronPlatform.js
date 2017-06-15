@@ -19,8 +19,9 @@ limitations under the License.
 
 import VectorBasePlatform from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import q from 'q';
-import electron, {remote} from 'electron';
+import electron, {remote, ipcRenderer} from 'electron';
 
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
 
@@ -54,20 +55,28 @@ function platformFriendlyName(): string {
     }
 }
 
+function _onAction(payload: Object) {
+    // Whitelist payload actions, no point sending most across
+    if (['call_state'].includes(payload.action)) {
+        ipcRenderer.send('app_onAction', payload);
+    }
+}
+
 export default class ElectronPlatform extends VectorBasePlatform {
+    constructor() {
+        super();
+        dis.register(_onAction);
+    }
+
+    getHumanReadableName(): string {
+        return 'Electron Platform'; // no translation required: only used for analytics
+    }
+
     setNotificationCount(count: number) {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
-        // this sometimes throws because electron is made of fail:
-        // https://github.com/electron/electron/issues/7351
-        // For now, let's catch the error, but I suspect it may
-        // continue to fail and we might just have to accept that
-        // electron's remote RPC is a non-starter for now and use IPC
-        try {
-            remote.app.setBadgeCount(count);
-        } catch (e) {
-            console.error('Failed to set notification count', e);
-        }
+
+        ipcRenderer.send('setBadgeCount', count);
     }
 
     supportsNotifications(): boolean {
@@ -79,7 +88,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     displayNotification(title: string, msg: string, avatarUrl: string, room: Object): Notification {
-
         // GNOME notification spec parses HTML tags for styling...
         // Electron Docs state all supported linux notification systems follow this markup spec
         // https://github.com/electron/electron/blob/master/docs/tutorial/desktop-environment-integration.md#linux
@@ -117,6 +125,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return notification;
     }
 
+    loudNotification(ev: Event, room: Object) {
+        ipcRenderer.send('loudNotification');
+    }
+
     clearNotification(notif: Notification) {
         notif.close();
     }
@@ -139,12 +151,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     getDefaultDeviceDisplayName(): string {
-        return 'Riot Desktop on ' + platformFriendlyName();
+        return _t('Riot Desktop on %(platformName)s', { platformName: platformFriendlyName() });
     }
 
     screenCaptureErrorString(): ?string {
         return null;
     }
+
+    isElectron(): boolean { return true; }
 
     requestNotificationPermission(): Promise<string> {
         return q('granted');

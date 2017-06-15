@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 var React = require("react");
+var sanitizeHtml = require("sanitize-html");
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 module.exports = React.createClass({
     displayName: 'VectorCustomServerDialog',
@@ -26,24 +28,14 @@ module.exports = React.createClass({
         return (
             <div className="mx_ErrorDialog">
                 <div className="mx_Dialog_title">
-                    Custom Server Options
+                    { _t('Custom Server Options') }
                 </div>
                 <div className="mx_Dialog_content">
-                    <span>
-                        You can use the custom server options to sign into other Matrix
-                        servers by specifying a different Home server URL.
-                        <br/>
-                        This allows you to use Riot with an existing Matrix account on
-                        a different home server.
-                        <br/>
-                        <br/>
-                        You can also set a custom identity server but you won't be able to
-                        invite users by email address, or be invited by email address yourself.
-                    </span>
+                    <span dangerouslySetInnerHTML={{__html: sanitizeHtml(_t('customServer_text'))}} />
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.props.onFinished} autoFocus={true}>
-                        Dismiss
+                        { _t('Dismiss') }
                     </button>
                 </div>
             </div>

@@ -18,9 +18,9 @@ limitations under the License.
 */
 
 import VectorBasePlatform from './VectorBasePlatform';
-import Favico from 'favico.js';
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/lib/dispatcher.js';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import q from 'q';
 
 import url from 'url';
@@ -30,45 +30,10 @@ export default class WebPlatform extends VectorBasePlatform {
     constructor() {
         super();
         this.runningVersion = null;
-        // The 'animations' are really low framerate and look terrible.
-        // Also it re-starts the animationb every time you set the badge,
-        // and we set the state each time, even if the value hasn't changed,
-        // so we'd need to fix that if enabling the animation.
-        this.favicon = new Favico({animation: 'none'});
-        this._updateFavicon();
     }
 
-    _updateFavicon() {
-        try {
-            // This needs to be in in a try block as it will throw
-            // if there are more than 100 badge count changes in
-            // its internal queue
-            let bgColor = "#d00",
-                notif = this.notificationCount;
-
-            if (this.errorDidOccur) {
-                notif = notif || "×";
-                bgColor = "#f00";
-            }
-
-            this.favicon.badge(notif, {
-                bgColor: bgColor,
-            });
-        } catch (e) {
-            console.warn(`Failed to set badge count: ${e.message}`);
-        }
-    }
-
-    setNotificationCount(count: number) {
-        if (this.notificationCount === count) return;
-        super.setNotificationCount(count);
-        this._updateFavicon();
-    }
-
-    setErrorStatus(errorDidOccur: boolean) {
-        if (this.errorDidOccur === errorDidOccur) return;
-        super.setErrorStatus(errorDidOccur);
-        this._updateFavicon();
+    getHumanReadableName(): string {
+        return 'Web Platform'; // no translation required: only used for analytics
     }
 
     /**
@@ -195,13 +160,15 @@ export default class WebPlatform extends VectorBasePlatform {
         const appName = u.format();
 
         const ua = new UAParser();
-        return `${appName} via ${ua.getBrowser().name} on ${ua.getOS().name}`;
+        const browserName = ua.getBrowser().name || "unknown browser";
+        const osName = ua.getOS().name || "unknown os";
+        return _t('%(appName)s via %(browserName)s on %(osName)s', {appName: appName, browserName: browserName, osName: osName});
     }
 
     screenCaptureErrorString(): ?string {
         // it won't work at all if you're not on HTTPS so whine whine whine
         if (!global.window || global.window.location.protocol !== "https:") {
-            return "You need to be using HTTPS to place a screen-sharing call.";
+            return _t("You need to be using HTTPS to place a screen-sharing call.");
         }
         return null;
     }

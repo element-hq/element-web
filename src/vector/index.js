@@ -56,12 +56,14 @@ if (process.env.NODE_ENV !== 'production') {
 var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
-var PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
+const PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
 var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
+import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
+import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 
 import url from 'url';
 
@@ -141,7 +143,7 @@ var onNewScreen = function(screen) {
     var hash = '#/' + screen;
     lastLocationHashSet = hash;
     window.location.hash = hash;
-}
+};
 
 // We use this to work out what URL the SDK should
 // pass through when registering to allow the user to
@@ -228,8 +230,9 @@ function onLoadCompleted() {
     }
 }
 
-
 async function loadApp() {
+    await loadLanguage();
+
     const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
 
@@ -242,13 +245,13 @@ async function loadApp() {
 
     if (!preventRedirect) {
         if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-            if (confirm("Riot is not supported on mobile web. Install the app?")) {
+            if (confirm(languageHandler._t("Riot is not supported on mobile web. Install the app?"))) {
                 window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
                 return;
             }
         }
         else if (/Android/.test(navigator.userAgent)) {
-            if (confirm("Riot is not supported on mobile web. Install the app?")) {
+            if (confirm(languageHandler._t("Riot is not supported on mobile web. Install the app?"))) {
                 window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
                 return;
             }
@@ -275,7 +278,6 @@ async function loadApp() {
         </div>, document.getElementById('matrixchat'));
     } else if (validBrowser) {
         UpdateChecker.start();
-
         const MatrixChat = sdk.getComponent('structures.MatrixChat');
         window.matrixChat = ReactDOM.render(
             <MatrixChat
@@ -292,8 +294,7 @@ async function loadApp() {
             />,
             document.getElementById('matrixchat')
         );
-    }
-    else {
+    } else {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
         var CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
@@ -306,6 +307,24 @@ async function loadApp() {
             }} />,
             document.getElementById('matrixchat')
         );
+    }
+}
+
+async function loadLanguage() {
+    const prefLang = UserSettingsStore.getLocalSetting('language');
+    let langs = [];
+
+    if (!prefLang) {
+        languageHandler.getLanguagesFromBrowser().forEach((l) => {
+            langs.push(...languageHandler.getNormalizedLanguageKeys(l));
+        });
+    } else {
+        langs = [prefLang];
+    }
+    try {
+        await languageHandler.setLanguage(langs);
+    } catch (e) {
+        console.error("Unable to set language", e);
     }
 }
 

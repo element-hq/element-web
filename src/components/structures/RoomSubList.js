@@ -1,4 +1,5 @@
 /*
+Copyright 2017 Vector Creations Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +21,8 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var classNames = require('classnames');
 var DropTarget = require('react-dnd').DropTarget;
-var sdk = require('matrix-react-sdk')
+var sdk = require('matrix-react-sdk');
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Unread = require('matrix-react-sdk/lib/Unread');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
@@ -83,6 +85,8 @@ var RoomSubList = React.createClass({
         incomingCall: React.PropTypes.object,
         onShowMoreRooms: React.PropTypes.func,
         searchFilter: React.PropTypes.string,
+        emptyContent: React.PropTypes.node, // content shown if the list is empty
+        headerItems: React.PropTypes.node, // content shown in the sublist header
     },
 
     getInitialState: function() {
@@ -463,7 +467,7 @@ var RoomSubList = React.createClass({
         return (
             <AccessibleButton className="mx_RoomSubList_ellipsis" onClick={this._showFullMemberList}>
                 <div className="mx_RoomSubList_line"></div>
-                <div className="mx_RoomSubList_more">more</div>
+                <div className="mx_RoomSubList_more">{ _t("more") }</div>
                 <div className={ badgeClasses }>{ content }</div>
             </AccessibleButton>
         );
@@ -509,8 +513,8 @@ var RoomSubList = React.createClass({
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Failed to add tag " + self.props.tagName + " to room" + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Failed to add tag " + self.props.tagName + " to room",
-                            description: ((err && err.message) ? err.message : "Operation failed"),
+                            title: _t('Failed to add tag %(tagName)s to room', {tagName: self.props.tagName}),
+                            description: ((err && err.message) ? err.message : _t('Operation failed')),
                         });
                     });
                     break;
@@ -521,16 +525,15 @@ var RoomSubList = React.createClass({
 
     render: function() {
         var connectDropTarget = this.props.connectDropTarget;
-        var RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
         var TruncatedList = sdk.getComponent('elements.TruncatedList');
 
         var label = this.props.collapsed ? null : this.props.label;
 
-        //console.log("render: " + JSON.stringify(this.state.sortedList));
-
-        var target;
-        if (this.state.sortedList.length == 0 && this.props.editable) {
-            target = <RoomDropTarget label={ 'Drop here to ' + this.props.verb }/>;
+        let content;
+        if (this.state.sortedList.length == 0 && !this.props.searchFilter) {
+            content = this.props.emptyContent;
+        } else {
+            content = this.makeRoomTiles();
         }
 
         if (this.state.sortedList.length > 0 || this.props.editable) {
@@ -540,8 +543,7 @@ var RoomSubList = React.createClass({
             if (!this.state.hidden) {
                 subList = <TruncatedList className={ classes } truncateAt={this.state.truncateAt}
                                          createOverflowElement={this._createOverflowTile} >
-                                { target }
-                                { this.makeRoomTiles() }
+                                { content }
                           </TruncatedList>;
             }
             else {
