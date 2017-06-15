@@ -230,7 +230,8 @@ module.exports = React.createClass({
         if (room) {
             this._updateAutoComplete(room);
             this.tabComplete.loadEntries(room);
-        } else if (!this.state.joining && this.state.roomId) {
+        }
+        if (!room && !this.state.joining && this.state.roomId) {
             if (this.props.autoJoin) {
                 this.onJoinButtonClicked();
             } else {
