@@ -1381,38 +1381,42 @@ module.exports = React.createClass({
             );
         }
 
-        // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
-        // latter is set via the dispatcher). If we don't yet have a `page_type`,
-        // keep showing the spinner for now.
-        if (this.state.view === VIEWS.LOGGED_IN && this.state.ready && this.state.page_type) {
-            /* for now, we stuff the entirety of our props and state into the LoggedInView.
-             * we should go through and figure out what we actually need to pass down, as well
-             * as using something like redux to avoid having a billion bits of state kicking around.
-             */
-            const LoggedInView = sdk.getComponent('structures.LoggedInView');
-            return (
-               <LoggedInView ref="loggedInView" matrixClient={MatrixClientPeg.get()}
-                    onRoomCreated={this.onRoomCreated}
-                    onUserSettingsClose={this.onUserSettingsClose}
-                    onRegistered={this.onRegistered}
-                    currentRoomId={this.state.currentRoomId}
-                    teamToken={this._teamToken}
-                    {...this.props}
-                    {...this.state}
-                />
-            );
-        } else if (this.state.view === VIEWS.LOGGED_IN) {
-            // we think we are logged in, but are still waiting for the /sync to complete
-            const Spinner = sdk.getComponent('elements.Spinner');
-            return (
-                <div className="mx_MatrixChat_splash">
-                    <Spinner />
-                    <a href="#" className="mx_MatrixChat_splashButtons" onClick={ this.onLogoutClick }>
-                    { _t('Logout') }
-                    </a>
-                </div>
-            );
-        } else if (this.state.view == VIEWS.REGISTER) {
+        if (this.state.view === VIEWS.LOGGED_IN) {
+            // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
+            // latter is set via the dispatcher). If we don't yet have a `page_type`,
+            // keep showing the spinner for now.
+            if (this.state.ready && this.state.page_type) {
+                /* for now, we stuff the entirety of our props and state into the LoggedInView.
+                 * we should go through and figure out what we actually need to pass down, as well
+                 * as using something like redux to avoid having a billion bits of state kicking around.
+                 */
+                const LoggedInView = sdk.getComponent('structures.LoggedInView');
+                return (
+                   <LoggedInView ref="loggedInView" matrixClient={MatrixClientPeg.get()}
+                        onRoomCreated={this.onRoomCreated}
+                        onUserSettingsClose={this.onUserSettingsClose}
+                        onRegistered={this.onRegistered}
+                        currentRoomId={this.state.currentRoomId}
+                        teamToken={this._teamToken}
+                        {...this.props}
+                        {...this.state}
+                    />
+                );
+            } else {
+                // we think we are logged in, but are still waiting for the /sync to complete
+                const Spinner = sdk.getComponent('elements.Spinner');
+                return (
+                    <div className="mx_MatrixChat_splash">
+                        <Spinner />
+                        <a href="#" className="mx_MatrixChat_splashButtons" onClick={ this.onLogoutClick }>
+                        { _t('Logout') }
+                        </a>
+                    </div>
+                );
+            }
+        }
+
+        if (this.state.view === VIEWS.REGISTER) {
             const Registration = sdk.getComponent('structures.login.Registration');
             return (
                 <Registration
@@ -1435,7 +1439,10 @@ module.exports = React.createClass({
                     onCancelClick={this.state.guestCreds ? this.onReturnToGuestClick : null}
                     />
             );
-        } else if (this.state.view == VIEWS.FORGOT_PASSWORD) {
+        }
+
+
+        if (this.state.view === VIEWS.FORGOT_PASSWORD) {
             const ForgotPassword = sdk.getComponent('structures.login.ForgotPassword');
             return (
                 <ForgotPassword
@@ -1447,7 +1454,9 @@ module.exports = React.createClass({
                     onRegisterClick={this.onRegisterClick}
                     onLoginClick={this.onLoginClick} />
             );
-        } else {
+        }
+
+        if (this.state.view === VIEWS.LOGIN) {
             const Login = sdk.getComponent('structures.login.Login');
             return (
                 <Login
@@ -1465,5 +1474,7 @@ module.exports = React.createClass({
                 />
             );
         }
+
+        throw new Error(`Unknown view ${this.state.view}`);
     },
 });
