@@ -1,3 +1,64 @@
+Changes in [0.9.5-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.5-rc.1) (2017-06-15)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.4...v0.9.5-rc.1)
+
+ * Groundwork for tests including a teamserver login
+   [\#1098](https://github.com/matrix-org/matrix-react-sdk/pull/1098)
+ * Show a spinner when accepting an invite and waitingForRoom
+   [\#1100](https://github.com/matrix-org/matrix-react-sdk/pull/1100)
+ * Display a spinner until new room object after join success
+   [\#1099](https://github.com/matrix-org/matrix-react-sdk/pull/1099)
+ * Luke/attempt fix peeking regression
+   [\#1097](https://github.com/matrix-org/matrix-react-sdk/pull/1097)
+ * Show correct text in set email password dialog (2)
+   [\#1096](https://github.com/matrix-org/matrix-react-sdk/pull/1096)
+ * Don't create a guest login if user went to /login
+   [\#1092](https://github.com/matrix-org/matrix-react-sdk/pull/1092)
+ * Give password confirmation correct title, description
+   [\#1095](https://github.com/matrix-org/matrix-react-sdk/pull/1095)
+ * Make enter submit change password form
+   [\#1094](https://github.com/matrix-org/matrix-react-sdk/pull/1094)
+ * When not specified, remove roomAlias state in RoomViewStore
+   [\#1093](https://github.com/matrix-org/matrix-react-sdk/pull/1093)
+ * Update from Weblate.
+   [\#1091](https://github.com/matrix-org/matrix-react-sdk/pull/1091)
+ * Fixed pagination infinite loop caused by long messages
+   [\#1045](https://github.com/matrix-org/matrix-react-sdk/pull/1045)
+ * Clear persistent storage on login and logout
+   [\#1085](https://github.com/matrix-org/matrix-react-sdk/pull/1085)
+ * DM guessing: prefer oldest joined member
+   [\#1087](https://github.com/matrix-org/matrix-react-sdk/pull/1087)
+ * Ask for email address after setting password for the first time
+   [\#1090](https://github.com/matrix-org/matrix-react-sdk/pull/1090)
+ * i18n for setting password flow
+   [\#1089](https://github.com/matrix-org/matrix-react-sdk/pull/1089)
+ * remove mx_filterFlipColor from verified e2e icon so its not purple :/
+   [\#1088](https://github.com/matrix-org/matrix-react-sdk/pull/1088)
+ * width and height must be int otherwise synapse cries
+   [\#1083](https://github.com/matrix-org/matrix-react-sdk/pull/1083)
+ * remove RoomViewStore listener from MatrixChat on unmount
+   [\#1084](https://github.com/matrix-org/matrix-react-sdk/pull/1084)
+ * Add script to copy translations between files
+   [\#1082](https://github.com/matrix-org/matrix-react-sdk/pull/1082)
+ * Only process user_directory response if it's for the current query
+   [\#1081](https://github.com/matrix-org/matrix-react-sdk/pull/1081)
+ * Fix regressions with starting a 1-1.
+   [\#1080](https://github.com/matrix-org/matrix-react-sdk/pull/1080)
+ * allow forcing of TURN
+   [\#1079](https://github.com/matrix-org/matrix-react-sdk/pull/1079)
+ * Remove a bunch of dead code from react-sdk
+   [\#1077](https://github.com/matrix-org/matrix-react-sdk/pull/1077)
+ * Improve error logging/reporting in megolm import/export
+   [\#1061](https://github.com/matrix-org/matrix-react-sdk/pull/1061)
+ * Delinting
+   [\#1064](https://github.com/matrix-org/matrix-react-sdk/pull/1064)
+ * Show reason for a call hanging up unexpectedly.
+   [\#1071](https://github.com/matrix-org/matrix-react-sdk/pull/1071)
+ * Add reason for ban in room settings
+   [\#1072](https://github.com/matrix-org/matrix-react-sdk/pull/1072)
+ * adds mx_filterFlipColor so that the dark theme will invert this image
+   [\#1070](https://github.com/matrix-org/matrix-react-sdk/pull/1070)
+
 Changes in [0.9.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.4) (2017-06-14)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.3...v0.9.4)
