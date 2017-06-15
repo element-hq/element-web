@@ -231,10 +231,10 @@ module.exports = React.createClass({
             this._updateAutoComplete(room);
             this.tabComplete.loadEntries(room);
         }
-        if (!room && !this.state.joining && this.state.roomId) {
+        if (!this.state.joining && this.state.roomId) {
             if (this.props.autoJoin) {
                 this.onJoinButtonClicked();
-            } else {
+            } else if (!room) {
                 console.log("Attempting to peek into room %s", this.state.roomId);
                 this.setState({
                     peekLoading: true,
