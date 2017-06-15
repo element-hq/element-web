@@ -30,6 +30,33 @@ function HttpBackend() {
             abort: abort,
         };
     };
+
+    // very simplistic mapping from the whatwg fetch interface onto the request
+    // interface, so we can use the same mock backend for both.
+    this.fetchFn = function(input, init) {
+        init = init || {};
+        const requestOpts = {
+            uri: input,
+            method: init.method || 'GET',
+            body: init.body,
+        };
+
+        return new Promise((resolve, reject) => {
+            function callback(err, response, body) {
+                if (err) {
+                    reject(err);
+                }
+                resolve({
+                    ok: response.statusCode >= 200 && response.statusCode < 300,
+                    json: () => body,
+                });
+            };
+
+            const req = new Request(requestOpts, callback);
+            console.log(`HTTP backend received request: ${req}`);
+            self.requests.push(req);
+        });
+    };
 }
 HttpBackend.prototype = {
     /**
