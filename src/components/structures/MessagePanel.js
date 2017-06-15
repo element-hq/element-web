@@ -241,11 +241,14 @@ module.exports = React.createClass({
 
     // TODO: Implement granular (per-room) hide options
     _shouldShowEvent: function(mxEv) {
-        console.log("_shouldShowEvent " + mxEv.getId());
+        console.log("_shouldShowEvent ", mxEv.getId(), mxEv);
         const EventTile = sdk.getComponent('rooms.EventTile');
         if (!EventTile.haveTileForEvent(mxEv)) {
             return false; // no tile = no show
         }
+
+        // Always show highlighted event
+        if (this.props.highlightedEventId === mxEv.getId()) return true;
 
         const isMemberEvent = mxEv.getType() === "m.room.member" && mxEv.getStateKey() !== undefined;
         if (!isMemberEvent) {
@@ -365,7 +368,7 @@ module.exports = React.createClass({
                     let collapsedMxEv = this.props.events[i + 1];
 
                     // Ignore redacted member events
-                    if (!EventTile.haveTileForEvent(collapsedMxEv)) {
+                    if (!EventTile.haveTileForEvent(collapsedMxEv) || !this._shouldShowEvent(collapsedMxEv)) {
                         continue;
                     }
 
