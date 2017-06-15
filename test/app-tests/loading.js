@@ -346,7 +346,7 @@ describe('loading:', function () {
             }).done(done, done);
         });
 
-        it("registers correctly with a Riot Team Server", function() {
+        it("logs in correctly with a Riot Team Server", function() {
             sdk.setFetch(httpBackend.fetchFn); // XXX: ought to restore this!
 
             httpBackend.when('GET', '/pushrules').respond(200, {});
