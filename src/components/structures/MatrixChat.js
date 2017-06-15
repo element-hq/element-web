@@ -263,10 +263,22 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
 
-        if (this.props.config.teamServerConfig &&
-            this.props.config.teamServerConfig.teamServerURL
-        ) {
-            Lifecycle.initRtsClient(this.props.config.teamServerConfig.teamServerURL);
+        const teamServerConfig = this.props.config.teamServerConfig || {};
+        Lifecycle.initRtsClient(teamServerConfig.teamServerURL);
+
+        // if the user has followed a login or register link, don't reanimate
+        // the old creds, but rather go straight to the relevant page
+
+        const firstScreen = this.state.screenAfterLogin ?
+            this.state.screenAfterLogin.screen : null;
+
+        if (firstScreen === 'login' ||
+                firstScreen === 'register' ||
+                firstScreen === 'forgot_password') {
+            this.props.onLoadCompleted();
+            this.setState({loading: false});
+            this._showScreenAfterLogin();
+            return;
         }
 
         // the extra q() ensures that synchronous exceptions hit the same codepath as
@@ -840,14 +852,6 @@ module.exports = React.createClass({
     _onLoadCompleted: function() {
         this.props.onLoadCompleted();
         this.setState({loading: false});
-
-        // Show screens (like 'register') that need to be shown without _onLoggedIn
-        // being called. 'register' needs to be routed here when the email confirmation
-        // link is clicked on.
-        if (this.state.screenAfterLogin &&
-            ['register'].indexOf(this.state.screenAfterLogin.screen) !== -1) {
-            this._showScreenAfterLogin();
-        }
     },
 
     /**
@@ -946,6 +950,7 @@ module.exports = React.createClass({
                 this.state.screenAfterLogin.screen,
                 this.state.screenAfterLogin.params,
             );
+            // XXX: is this necessary? `showScreen` should do it for us.
             this.notifyNewScreen(this.state.screenAfterLogin.screen);
             this.setState({screenAfterLogin: null});
         } else if (localStorage && localStorage.getItem('mx_last_room_id')) {
@@ -1229,6 +1234,8 @@ module.exports = React.createClass({
     onReturnToGuestClick: function() {
         // reanimate our guest login
         if (this.state.guestCreds) {
+            // TODO: this is probably a bit broken - we don't want to be
+            // clearing storage when we reanimate the guest creds.
             Lifecycle.setLoggedIn(this.state.guestCreds);
             this.setState({guestCreds: null});
         }

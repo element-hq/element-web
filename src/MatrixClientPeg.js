@@ -16,12 +16,10 @@ limitations under the License.
 
 'use strict';
 
-import Matrix from 'matrix-js-sdk';
 import utils from 'matrix-js-sdk/lib/utils';
 import EventTimeline from 'matrix-js-sdk/lib/models/event-timeline';
 import EventTimelineSet from 'matrix-js-sdk/lib/models/event-timeline-set';
-
-const localStorage = window.localStorage;
+import createMatrixClient from './utils/createMatrixClient';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -129,22 +127,7 @@ class MatrixClientPeg {
             timelineSupport: true,
         };
 
-        if (localStorage) {
-            opts.sessionStore = new Matrix.WebStorageSessionStore(localStorage);
-        }
-        if (window.indexedDB && localStorage) {
-            // FIXME: bodge to remove old database. Remove this after a few weeks.
-            window.indexedDB.deleteDatabase("matrix-js-sdk:default");
-
-            opts.store = new Matrix.IndexedDBStore({
-                indexedDB: window.indexedDB,
-                dbName: "riot-web-sync",
-                localStorage: localStorage,
-                workerScript: this.indexedDbWorkerScript,
-            });
-        }
-
-        this.matrixClient = Matrix.createClient(opts);
+        this.matrixClient = createMatrixClient(opts);
 
         // we're going to add eventlisteners for each matrix event tile, so the
         // potential number of event listeners is quite high.

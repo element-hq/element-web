@@ -223,7 +223,7 @@ module.exports = React.createClass({
                 const passwordLabel = this.state.cachedPassword ?
                     _t('Password') : _t('New Password');
                 return (
-                    <div className={this.props.className}>
+                    <form className={this.props.className} onSubmit={this.onClickChange}>
                         { currentPassword }
                         <div className={rowClassName}>
                             <div className={rowLabelClassName}>
@@ -246,7 +246,7 @@ module.exports = React.createClass({
                                 element="button">
                             { _t('Change Password') }
                         </AccessibleButton>
-                    </div>
+                    </form>
                 );
             case this.Phases.Uploading:
                 var Loader = sdk.getComponent("elements.Spinner");

@@ -14,15 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import q from 'q';
 import React from 'react';
 import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import classnames from 'classnames';
-import KeyCode from '../../../KeyCode';
 import Email from '../../../email';
 import AddThreepid from '../../../AddThreepid';
-import { _t, _tJsx } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 
 
@@ -89,6 +85,10 @@ export default React.createClass({
         this.setState({emailBusy: true});
     },
 
+    onCancelled: function() {
+        this.props.onFinished(false);
+    },
+
     onEmailDialogFinished: function(ok) {
         if (ok) {
             this.verifyEmailAddress();
@@ -137,7 +137,7 @@ export default React.createClass({
 
         return (
             <BaseDialog className="mx_SetEmailDialog"
-                onFinished={this.props.onFinished}
+                onFinished={this.onCancelled}
                 title={this.props.title}
             >
                 <div className="mx_Dialog_content">
@@ -155,7 +155,7 @@ export default React.createClass({
                     <input
                         type="submit"
                         value={_t("Cancel")}
-                        onClick={this.props.onFinished}
+                        onClick={this.onCancelled}
                     />
                 </div>
             </BaseDialog>
