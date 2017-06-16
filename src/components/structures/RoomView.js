@@ -230,6 +230,10 @@ module.exports = React.createClass({
         if (room) {
             this._updateAutoComplete(room);
             this.tabComplete.loadEntries(room);
+            this.setState({
+                unsentMessageError: this._getUnsentMessageError(room),
+            });
+            this._onRoomLoaded(room);
         }
         if (!this.state.joining && this.state.roomId) {
             if (this.props.autoJoin) {
@@ -262,10 +266,6 @@ module.exports = React.createClass({
         } else if (room) {
             // Stop peeking because we have joined this room previously
             MatrixClientPeg.get().stopPeeking();
-            this.setState({
-                unsentMessageError: this._getUnsentMessageError(room),
-            });
-            this._onRoomLoaded(room);
         }
     },
 
