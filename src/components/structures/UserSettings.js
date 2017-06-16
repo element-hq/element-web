@@ -169,9 +169,6 @@ module.exports = React.createClass({
         // The base URL to use in the referral link. Defaults to window.location.origin.
         referralBaseUrl: React.PropTypes.string,
 
-        // true if RightPanel is collapsed
-        collapsedRhs: React.PropTypes.bool,
-
         // Team token for the referral link. If falsy, the referral section will
         // not appear
         teamToken: React.PropTypes.string,
@@ -1164,7 +1161,6 @@ module.exports = React.createClass({
             <div className="mx_UserSettings">
                 <SimpleRoomHeader
                     title={ _t("Settings") }
-                    collapsedRhs={ this.props.collapsedRhs }
                     onCancelClick={ this.props.onClose }
                 />
 
