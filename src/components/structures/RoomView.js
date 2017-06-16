@@ -1463,7 +1463,7 @@ module.exports = React.createClass({
 
                 // We have no room object for this room, only the ID.
                 // We've got to this room by following a link, possibly a third party invite.
-                var room_alias = this.state.room_alias;
+                const roomAlias = this.state.roomAlias;
                 return (
                     <div className="mx_RoomView">
                         <RoomHeader ref="header"
@@ -1476,7 +1476,7 @@ module.exports = React.createClass({
                                             onForgetClick={ this.onForgetClick }
                                             onRejectClick={ this.onRejectThreepidInviteButtonClicked }
                                             canPreview={ false } error={ this.state.roomLoadError }
-                                            roomAlias={room_alias}
+                                            roomAlias={roomAlias}
                                             spinner={previewBarSpinner}
                                             inviterName={inviterName}
                                             invitedEmail={invitedEmail}
