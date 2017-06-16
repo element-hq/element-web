@@ -137,6 +137,8 @@ class RoomViewStore extends Store {
                 forwardingEvent: null,
                 roomLoading: false,
                 roomLoadError: null,
+                // should peek by default
+                shouldPeek: payload.should_peek === undefined ? true : payload.should_peek,
             };
 
             // If an event ID wasn't specified, default to the one saved for this room
@@ -296,6 +298,10 @@ class RoomViewStore extends Store {
     // The mxEvent if one is about to be forwarded
     getForwardingEvent() {
         return this._state.forwardingEvent;
+    }
+
+    shouldPeek() {
+        return this._state.shouldPeek;
     }
 }
 
