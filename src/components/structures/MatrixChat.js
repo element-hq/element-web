@@ -1476,6 +1476,6 @@ module.exports = React.createClass({
             );
         }
 
-        throw new Error(`Unknown view ${this.state.view}`);
+        console.error(`Unknown view ${this.state.view}`);
     },
 });
