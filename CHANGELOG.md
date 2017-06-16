@@ -1,3 +1,20 @@
+Changes in [0.9.5-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.5-rc.2) (2017-06-16)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.5-rc.1...v0.9.5-rc.2)
+
+ * Avoid getting stuck in a loop in CAS login
+   [\#1109](https://github.com/matrix-org/matrix-react-sdk/pull/1109)
+ * Update from Weblate.
+   [\#1101](https://github.com/matrix-org/matrix-react-sdk/pull/1101)
+ * Correctly inspect state when rejecting invite
+   [\#1108](https://github.com/matrix-org/matrix-react-sdk/pull/1108)
+ * Make sure to pass the roomAlias to the preview header if we have it
+   [\#1107](https://github.com/matrix-org/matrix-react-sdk/pull/1107)
+ * Make sure captcha disappears when container does
+   [\#1106](https://github.com/matrix-org/matrix-react-sdk/pull/1106)
+ * Fix URL previews
+   [\#1105](https://github.com/matrix-org/matrix-react-sdk/pull/1105)
+
 Changes in [0.9.5-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.5-rc.1) (2017-06-15)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.4...v0.9.5-rc.1)
