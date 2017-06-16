@@ -142,7 +142,7 @@ export default class NetworkDropdown extends React.Component {
         // For our own HS, we can use the instance_ids given in the third party protocols
         // response to get the server to filter the room list by network for us.
         // We can't get thirdparty protocols for remote server yet though, so for those
-        // we can only show the default room list.=
+        // we can only show the default room list.
         for (const server of servers) {
             options.push(this._makeMenuOption(server, null, true));
             if (server == MatrixClientPeg.getHomeServerName()) {
