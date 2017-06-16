@@ -93,8 +93,8 @@ module.exports = React.createClass({
         // the initial queryParams extracted from the hash-fragment of the URI
         startingFragmentQueryParams: React.PropTypes.object,
 
-        // called when the session load completes
-        onLoadCompleted: React.PropTypes.func,
+        // called when we have completed a token login
+        onTokenLoginCompleted: React.PropTypes.func,
 
         // Represents the screen to display as a result of parsing the initial
         // window.location
@@ -177,7 +177,7 @@ module.exports = React.createClass({
             realQueryParams: {},
             startingFragmentQueryParams: {},
             config: {},
-            onLoadCompleted: () => {},
+            onTokenLoginCompleted: () => {},
         };
     },
 
@@ -300,38 +300,47 @@ module.exports = React.createClass({
         const teamServerConfig = this.props.config.teamServerConfig || {};
         Lifecycle.initRtsClient(teamServerConfig.teamServerURL);
 
-        // if the user has followed a login or register link, don't reanimate
-        // the old creds, but rather go straight to the relevant page
+        // the first thing to do is to try the token params in the query-string
+        Lifecycle.attemptTokenLogin(this.props.realQueryParams).then((loggedIn) => {
+            if(loggedIn) {
+                this.props.onTokenLoginCompleted();
 
-        const firstScreen = this.state.screenAfterLogin ?
-            this.state.screenAfterLogin.screen : null;
+                // don't do anything else until the page reloads - just stay in
+                // the 'loading' state.
+                return;
+            }
 
-        if (firstScreen === 'login' ||
-                firstScreen === 'register' ||
-                firstScreen === 'forgot_password') {
-            this.props.onLoadCompleted();
-            this._showScreenAfterLogin();
-            return;
-        }
+            // if the user has followed a login or register link, don't reanimate
+            // the old creds, but rather go straight to the relevant page
+            const firstScreen = this.state.screenAfterLogin ?
+                this.state.screenAfterLogin.screen : null;
 
-        // the extra q() ensures that synchronous exceptions hit the same codepath as
-        // asynchronous ones.
-        q().then(() => {
-            return Lifecycle.loadSession({
-                realQueryParams: this.props.realQueryParams,
-                fragmentQueryParams: this.props.startingFragmentQueryParams,
-                enableGuest: this.props.enableGuest,
-                guestHsUrl: this.getCurrentHsUrl(),
-                guestIsUrl: this.getCurrentIsUrl(),
-                defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
+            if (firstScreen === 'login' ||
+                    firstScreen === 'register' ||
+                    firstScreen === 'forgot_password') {
+                this.setState({loading: false});
+                this._showScreenAfterLogin();
+                return;
+            }
+
+            // the extra q() ensures that synchronous exceptions hit the same codepath as
+            // asynchronous ones.
+            return q().then(() => {
+                return Lifecycle.loadSession({
+                    fragmentQueryParams: this.props.startingFragmentQueryParams,
+                    enableGuest: this.props.enableGuest,
+                    guestHsUrl: this.getCurrentHsUrl(),
+                    guestIsUrl: this.getCurrentIsUrl(),
+                    defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
+                });
+            }).catch((e) => {
+                console.error("Unable to load session", e);
+            }).then(()=>{
+                // stuff this through the dispatcher so that it happens
+                // after the on_logged_in action.
+                dis.dispatch({action: 'load_completed'});
             });
-        }).catch((e) => {
-            console.error("Unable to load session", e);
-        }).done(()=>{
-            // stuff this through the dispatcher so that it happens
-            // after the on_logged_in action.
-            dis.dispatch({action: 'load_completed'});
-        });
+        }).done();
     },
 
     componentWillUnmount: function() {
@@ -417,7 +426,7 @@ module.exports = React.createClass({
 
                             MatrixClientPeg.get().leave(payload.room_id).done(() => {
                                 modal.close();
-                                if (this.currentRoomId === payload.room_id) {
+                                if (this.state.currentRoomId === payload.room_id) {
                                     dis.dispatch({action: 'view_next_room'});
                                 }
                             }, (err) => {
@@ -887,8 +896,6 @@ module.exports = React.createClass({
      * Called when the sessionloader has finished
      */
     _onLoadCompleted: function() {
-        this.props.onLoadCompleted();
-
         // if we've got this far without leaving the 'loading' view, then
         // login must have failed, so start the login process
         if (this.state.view === VIEWS.LOADING) {
