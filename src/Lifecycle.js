@@ -62,6 +62,8 @@ import { _t } from './languageHandler';
  *     true; defines the IS to use.
  *
  * @returns {Promise} a promise which resolves when the above process completes.
+ *     Resolves to `true` if we ended up starting a session, or `false` if we
+ *     failed.
  */
 export function loadSession(opts) {
     const fragmentQueryParams = opts.fragmentQueryParams || {};
@@ -86,12 +88,12 @@ export function loadSession(opts) {
             homeserverUrl: guestHsUrl,
             identityServerUrl: guestIsUrl,
             guest: true,
-        }, true);
+        }, true).then(() => true);
     }
 
     return _restoreFromLocalStorage().then((success) => {
         if (success) {
-            return;
+            return true;
         }
 
         if (enableGuest) {
@@ -99,6 +101,7 @@ export function loadSession(opts) {
         }
 
         // fall back to login screen
+        return false;
     });
 }
 
@@ -176,9 +179,10 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
             homeserverUrl: hsUrl,
             identityServerUrl: isUrl,
             guest: true,
-        }, true);
+        }, true).then(() => true);
     }, (err) => {
         console.error("Failed to register as guest: " + err + " " + err.data);
+        return false;
     });
 }
 

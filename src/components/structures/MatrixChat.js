@@ -335,10 +335,12 @@ module.exports = React.createClass({
                 });
             }).catch((e) => {
                 console.error("Unable to load session", e);
-            }).then(()=>{
-                // stuff this through the dispatcher so that it happens
-                // after the on_logged_in action.
-                dis.dispatch({action: 'load_completed'});
+                return false;
+            }).then((loadedSession) => {
+                if (!loadedSession) {
+                    // fall back to showing the login screen
+                    dis.dispatch({action: "start_login"});
+                }
             });
         }).done();
     },
@@ -559,9 +561,6 @@ module.exports = React.createClass({
                 break;
             case 'will_start_client':
                 this._onWillStartClient();
-                break;
-            case 'load_completed':
-                this._onLoadCompleted();
                 break;
             case 'new_version':
                 this.onVersion(
@@ -890,17 +889,6 @@ module.exports = React.createClass({
                 }
             },
         });
-    },
-
-    /**
-     * Called when the sessionloader has finished
-     */
-    _onLoadCompleted: function() {
-        // if we've got this far without leaving the 'loading' view, then
-        // login must have failed, so start the login process
-        if (this.state.view === VIEWS.LOADING) {
-            dis.dispatch({action: "start_login"});
-        }
     },
 
     /**
