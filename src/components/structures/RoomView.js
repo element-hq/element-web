@@ -168,6 +168,7 @@ module.exports = React.createClass({
             initialEventId: RoomViewStore.getInitialEventId(),
             initialEventPixelOffset: RoomViewStore.getInitialEventPixelOffset(),
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
+            forwardingEvent: RoomViewStore.getForwardingEvent(),
         };
 
         // Temporary logging to diagnose https://github.com/vector-im/riot-web/issues/4307
@@ -452,11 +453,6 @@ module.exports = React.createClass({
                     callState: callState
                 });
 
-                break;
-            case 'forward_event':
-                this.setState({
-                    forwardingEvent: payload.content,
-                });
                 break;
         }
     },
@@ -1164,8 +1160,13 @@ module.exports = React.createClass({
         this.updateTint();
         this.setState({
             editingRoomSettings: false,
-            forwardingEvent: null,
         });
+        if (this.state.forwardingEvent) {
+            dis.dispatch({
+                action: 'forward_event',
+                event: null,
+            });
+        }
         dis.dispatch({action: 'focus_composer'});
     },
 
@@ -1576,7 +1577,7 @@ module.exports = React.createClass({
         } else if (this.state.uploadingRoomSettings) {
             aux = <Loader/>;
         } else if (this.state.forwardingEvent !== null) {
-            aux = <ForwardMessage onCancelClick={this.onCancelClick} currentRoomId={this.state.room.roomId} mxEvent={this.state.forwardingEvent} />;
+            aux = <ForwardMessage onCancelClick={this.onCancelClick} />;
         } else if (this.state.searching) {
             hideCancel = true; // has own cancel
             aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;

@@ -523,6 +523,9 @@ module.exports = React.createClass({
                     payload.releaseNotes,
                 );
                 break;
+            case 'send_event':
+                this.onSendEvent(payload.room_id, payload.event);
+                break;
         }
     },
 
@@ -1264,6 +1267,27 @@ module.exports = React.createClass({
             newVersion: latest,
             hasNewVersion: current !== latest,
             newVersionReleaseNotes: releaseNotes,
+        });
+    },
+
+    onSendEvent: function(roomId, event) {
+        const cli = MatrixClientPeg.get();
+        if (!cli) {
+            dis.dispatch({action: 'message_send_failed'});
+            return;
+        }
+
+        cli.sendEvent(roomId, event.getType(), event.getContent()).done(() => {
+            dis.dispatch({action: 'message_sent'});
+        }, (err) => {
+            if (err.name === 'UnknownDeviceError') {
+                dis.dispatch({
+                    action: 'unknown_device_error',
+                    err: err,
+                    room: cli.getRoom(roomId),
+                });
+            }
+            dis.dispatch({action: 'message_send_failed'});
         });
     },
 
