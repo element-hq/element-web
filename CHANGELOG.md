@@ -1,3 +1,15 @@
+Changes in [0.11.2-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.11.2-rc.2) (2017-06-16)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.2-rc.1...v0.11.2-rc.2)
+
+ * Update react-sdk to pull in fixes for URL previews, CAS
+   login, h2 in markdown and CAPTCHA forms.
+ * Enable Korean translation
+ * Update from Weblate.
+   [\#4323](https://github.com/vector-im/riot-web/pull/4323)
+ * Fix h2 in markdown being weird
+   [\#4332](https://github.com/vector-im/riot-web/pull/4332)
+
 Changes in [0.11.2-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.11.2-rc.1) (2017-06-15)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.1...v0.11.2-rc.1)
