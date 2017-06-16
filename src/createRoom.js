@@ -100,6 +100,7 @@ function createRoom(opts) {
             dis.dispatch({
                 action: 'view_room',
                 room_id: roomId,
+                should_peek: false,
             });
         }
         return roomId;
