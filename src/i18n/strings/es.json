@@ -80,7 +80,7 @@
     "Room directory": "Directorio de salas",
     "Room not found": "Sala no encontrada",
     "Search for a room": "Buscar sala",
-    "Settings": "Ajustes",
+    "Settings": "Configuración",
     "Source URL": "URL de origen",
     "Start chat": "Comenzar chat",
     "The Home Server may be too old to support third party networks": "El Home Server puede ser demasiado antiguo para soportar redes de terceros",
@@ -112,5 +112,7 @@
     "Saturday": "Sábado",
     "Today": "Hoy",
     "Yesterday": "Ayer",
-    "Welcome page": "Página de bienvenida"
+    "Welcome page": "Página de bienvenida",
+    "Continue": "Continuar",
+    "Search": "Búsqueda"
 }
