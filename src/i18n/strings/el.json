@@ -149,7 +149,7 @@
     "View Source": "Προβολή κώδικα",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Ισως να έχετε κάνει τις ρυθμίσεις σε άλλη εφαρμογή εκτός του Riot. Δεν μπορείτε να τις αλλάξετε μέσω του Riot αλλά ισχύουν κανονικά",
     "Couldn't find a matching Matrix room": "Δεν βρέθηκε κάποιο δωμάτιο",
-    "Drop here %(toAction)s": "Απόθεση εδώ %(toAction)s",
+    "Drop here %(toAction)s": "Αποθέστε εδώ %(toAction)s",
     "Failed to": "Απέτυχε να",
     "Failed to get public room list": "Δεν ήταν δυνατή η λήψη της λίστας με τα δημόσια δωμάτια",
     "Failed to set direct chat tag": "Δεν ήταν δυνατός ο χαρακτηρισμός της συνομιλίας ως 1-προς-1",
