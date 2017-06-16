@@ -266,11 +266,8 @@ module.exports = React.createClass({
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
 
-        if (this.props.config.teamServerConfig &&
-            this.props.config.teamServerConfig.teamServerURL
-        ) {
-            Lifecycle.initRtsClient(this.props.config.teamServerConfig.teamServerURL);
-        }
+        const teamServerConfig = this.props.config.teamServerConfig || {};
+        Lifecycle.initRtsClient(teamServerConfig.teamServerURL);
 
         // if the user has followed a login or register link, don't reanimate
         // the old creds, but rather go straight to the relevant page
@@ -389,7 +386,7 @@ module.exports = React.createClass({
 
                             MatrixClientPeg.get().leave(payload.room_id).done(() => {
                                 modal.close();
-                                if (this.currentRoomId === payload.room_id) {
+                                if (this.state.currentRoomId === payload.room_id) {
                                     dis.dispatch({action: 'view_next_room'});
                                 }
                             }, (err) => {
