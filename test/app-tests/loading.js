@@ -47,7 +47,7 @@ describe('loading:', function () {
     // the mounted MatrixChat
     let matrixChat;
 
-    // a promise which resolves when the MatrixChat calls onLoadCompleted
+    // a promise which resolves when the MatrixChat calls onTokenLoginCompleted
     let loadCompletePromise;
 
     beforeEach(function() {
@@ -135,7 +135,7 @@ describe('loading:', function () {
                 realQueryParams={params}
                 startingFragmentQueryParams={fragParts.params}
                 enableGuest={true}
-                onLoadCompleted={loadCompleteDefer.resolve}
+                onTokenLoginCompleted={loadCompleteDefer.resolve}
                 initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
                 makeRegistrationUrl={() => {throw new Error('Not implemented');}}
             />, parentDiv
@@ -360,6 +360,8 @@ describe('loading:', function () {
                 loadApp({
                     uriFragment: "#/login",
                 });
+
+                return q.delay(1);
             });
 
             it('shows a login view', function() {
@@ -513,7 +515,7 @@ describe('loading:', function () {
 
                 return httpBackend.flush();
             }).then(() => {
-                // at this point, MatrixChat should fire onLoadCompleted, which
+                // at this point, MatrixChat should fire onTokenLoginCompleted, which
                 // makes index.js reload the app. We're not going to attempt to
                 // simulate the reload - just check that things are left in the
                 // right state for the reloaded app.
