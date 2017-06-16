@@ -65,6 +65,7 @@ const VIEWS = {
     // initial re-animation/guest registration, or via a registration), and are
     // now setting up a matrixclient to talk to it. This isn't an instant
     // process because (a) we need to clear out indexeddb, and (b) we need to
+    // talk to the team server; while it is going on we show a big spinner.
     LOGGING_IN: 5,
 
     // we are logged in with an active matrix client.
