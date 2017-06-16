@@ -129,6 +129,8 @@ class RoomViewStore extends Store {
                 isInitialEventHighlighted: payload.highlighted,
                 roomLoading: false,
                 roomLoadError: null,
+                // should peek by default
+                shouldPeek: payload.should_peek === undefined ? true : payload.should_peek,
             };
 
             // If an event ID wasn't specified, default to the one saved for this room
@@ -275,6 +277,10 @@ class RoomViewStore extends Store {
     // Any error that has occurred during joining
     getJoinError() {
         return this._state.joinError;
+    }
+
+    shouldPeek() {
+        return this._state.shouldPeek;
     }
 }
 
