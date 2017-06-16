@@ -383,7 +383,7 @@ module.exports = React.createClass({
 
                             MatrixClientPeg.get().leave(payload.room_id).done(() => {
                                 modal.close();
-                                if (this.currentRoomId === payload.room_id) {
+                                if (this.state.currentRoomId === payload.room_id) {
                                     dis.dispatch({action: 'view_next_room'});
                                 }
                             }, (err) => {

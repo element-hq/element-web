@@ -230,6 +230,10 @@ module.exports = React.createClass({
         if (room) {
             this._updateAutoComplete(room);
             this.tabComplete.loadEntries(room);
+            this.setState({
+                unsentMessageError: this._getUnsentMessageError(room),
+            });
+            this._onRoomLoaded(room);
         }
         if (!this.state.joining && this.state.roomId) {
             if (this.props.autoJoin) {
@@ -262,10 +266,6 @@ module.exports = React.createClass({
         } else if (room) {
             // Stop peeking because we have joined this room previously
             MatrixClientPeg.get().stopPeeking();
-            this.setState({
-                unsentMessageError: this._getUnsentMessageError(room),
-            });
-            this._onRoomLoaded(room);
         }
     },
 
@@ -1463,7 +1463,7 @@ module.exports = React.createClass({
 
                 // We have no room object for this room, only the ID.
                 // We've got to this room by following a link, possibly a third party invite.
-                var room_alias = this.state.room_alias;
+                const roomAlias = this.state.roomAlias;
                 return (
                     <div className="mx_RoomView">
                         <RoomHeader ref="header"
@@ -1476,7 +1476,7 @@ module.exports = React.createClass({
                                             onForgetClick={ this.onForgetClick }
                                             onRejectClick={ this.onRejectThreepidInviteButtonClicked }
                                             canPreview={ false } error={ this.state.roomLoadError }
-                                            roomAlias={room_alias}
+                                            roomAlias={roomAlias}
                                             spinner={previewBarSpinner}
                                             inviterName={inviterName}
                                             invitedEmail={invitedEmail}
