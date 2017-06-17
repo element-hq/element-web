@@ -56,7 +56,7 @@
     "Messages in one-to-one chats": "Mensajes en chats uno a uno",
     "Messages sent by bot": "Mensajes enviados por bot",
     "more": "más",
-    "Mute": "Mute",
+    "Mute": "Silenciar",
     "No rooms to show": "Sin salas para mostrar",
     "Noisy": "Ruidoso",
     "Notification targets": "Objetivos de notificación",
@@ -65,9 +65,9 @@
     "Notify me for anything else": "Notificarme para cualquier otra cosa",
     "Off": "Apagado",
     "On": "Encendido",
-    "Operation failed": "Operación fallida",
+    "Operation failed": "Falló la operación",
     "Permalink": "Enlace permanente",
-    "Please Register": "Por favor regístrate",
+    "Please Register": "Por favor, regístrese",
     "Quote": "Citar",
     "Redact": "Redactar",
     "Reject": "Rechazar",
@@ -114,5 +114,6 @@
     "Yesterday": "Ayer",
     "Welcome page": "Página de bienvenida",
     "Continue": "Continuar",
-    "Search": "Búsqueda"
+    "Search": "Búsqueda",
+    "OK": "Correcto"
 }
