@@ -115,5 +115,9 @@
     "Welcome page": "Página de bienvenida",
     "Continue": "Continuar",
     "Search": "Búsqueda",
-    "OK": "Correcto"
+    "OK": "Correcto",
+    "Failed to change password. Is your password correct?": "Falló al cambiar la clave, ¿Está correcta tu clave?",
+    "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.": "<a href=\"http://apple.com/safari\">Safari</a> y <a href=\"http://opera.com\">Opera</a> también funcionan.",
+    "A new version of Riot is available.": "Una nueva versión de Riot está disponible.",
+    "Cancel": "Cancelar"
 }
