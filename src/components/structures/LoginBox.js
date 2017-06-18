@@ -47,6 +47,10 @@ module.exports = React.createClass({
         dis.dispatch({ action: 'start_login' });
     },
 
+    onRegisterClick: function() {
+        dis.dispatch({ action: 'start_registration' });
+    },
+
     render: function() {
         var TintableSvg = sdk.getComponent('elements.TintableSvg');
 
@@ -70,6 +74,9 @@ module.exports = React.createClass({
                 <div className="mx_LoginBox_loginButton_wrapper">
                     <AccessibleButton className="mx_LoginBox_loginButton" element="button" onClick={this.onLoginClick}>
                         { _t("Login") }
+                    </AccessibleButton>
+                    <AccessibleButton className="mx_LoginBox_registerButton" element="button" onClick={this.onRegisterClick}>
+                        { _t("Register") }
                     </AccessibleButton>
                 </div>
             );

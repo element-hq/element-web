@@ -19,13 +19,15 @@ limitations under the License.
     width: 100%;
 }
 
-.mx_LoginBox_loginButton {
+.mx_LoginBox_loginButton,
+.mx_LoginBox_registerButton {
     margin-top: -8px;
     height: 40px;
     border: 0px;
     border-radius: 40px;
-    padding-left: 1em;
-    padding-right: 1em;
+    margin-left: 4px;
+    margin-right: 4px;
+    width: 80px;
 
     background-color: $accent-color;
     color: $primary-bg-color;
