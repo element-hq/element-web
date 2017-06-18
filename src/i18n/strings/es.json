@@ -619,5 +619,8 @@
     "To remove other users' messages": "Eliminar los mensajes de otros usuarios",
     "To reset your password, enter the email address linked to your account": "Para reiniciar su contraseña, introduzca el e-mail asociado a su cuenta",
     "to restore": "restaurar",
-    "Cancel": "Cancelar"
+    "Cancel": "Cancelar",
+    "Dismiss": "Omitir",
+    "powered by Matrix": "con el poder de Matrix",
+    "Room directory": "Directorio de salas"
 }
