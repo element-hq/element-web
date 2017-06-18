@@ -62,7 +62,7 @@
   "Guests can join": "Guests can join",
   "Guest users can't invite users. Please register to invite.": "Guest users can't invite users. Please register to invite.",
   "Hide panel": "Hide panel",
-  " (HTTP status %(httpStatus))": "(HTTP status %(httpStatus))",
+  "(HTTP status %(httpStatus)s)": "(HTTP status %(httpStatus)s)",
   "I understand the risks and wish to continue": "I understand the risks and wish to continue",
   "In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:": "In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:",
   "Invite to this room": "Invite to this room",

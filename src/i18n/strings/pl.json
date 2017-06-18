@@ -77,7 +77,7 @@
     "more": "więcej",
     "Enable desktop notifications": "Włącz powiadomienia",
     "Guest users can't invite users. Please register to invite.": "Gość nie ma uprawnień dow wysyłania zaproszeń. Proszę się zarejestrować.",
-    " (HTTP status %(httpStatus))": "(status HTTP %(httpStatus))",
+    "(HTTP status %(httpStatus)s)": "(status HTTP %(httpStatus)s)",
     "Leave": "Opuść",
     "Login": "Logowanie",
     "Members": "Członkowie",
