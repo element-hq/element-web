@@ -164,7 +164,7 @@
     "Login": "Login",
     "Continue": "Continue",
     "Failed to change password. Is your password correct?": "Failed to change password. Is your password correct?",
-    " (HTTP status %(httpStatus))": "(HTTP status %(httpStatus))",
+    "(HTTP status %(httpStatus)s)": "(HTTP status %(httpStatus)s)",
     "Welcome to Riot.im": "Welcome to Riot.im",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralised, encrypted chat &amp; collaboration powered by [matrix]",
     "Chat with Riot Bot": "Chat with Riot Bot",

@@ -123,7 +123,7 @@
     "Describe your problem here.": "Describa su problema aquí.",
     "Forward Message": "Reenviar mensaje",
     "Hide panel": "Ocultar panel",
-    " (HTTP status %(httpStatus))": "(estado HTTP %(httpStatus))",
+    "(HTTP status %(httpStatus)s)": "(estado HTTP %(httpStatus)s)",
     "I understand the risks and wish to continue": "Entiendo los riesgos y deseo continuar",
     "Changelog": "Bitácora de cambios",
     "Collapse panel": "Colapsar panel",

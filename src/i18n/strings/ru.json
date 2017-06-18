@@ -183,7 +183,7 @@
     "Admin support for Dendrite": "Админ. помощь для Dendrite",
     "Building services on Matrix": "Построить услуги для Matrix",
     "Implementing VoIP services with Matrix": "Внедрение услуги VoIP с Matrix",
-    " (HTTP status %(httpStatus))": "(HTTP-Состояние %(httpStatus))",
+    "(HTTP status %(httpStatus)s)": "(HTTP-Состояние %(httpStatus)s)",
     "Riot/iOS &amp; matrix-ios-sdk chat": "Riot-iOS &amp; \"matrix-ios-sdk\"-Чат",
     "Riot/Android &amp; matrix-android-sdk chat": "Riot-Android &amp; matrix-android-sdk-Чат",
     "Announcements about Synapse releases": "Объявления релизов Synapse",

@@ -81,7 +81,7 @@
     "Failed to set Direct Message status of room": "Malsukcesis agordi la staton de Rekta Mesaĝo de la ejo",
     "Forward Message": "Plusendi mesaĝon",
     "Hide panel": "Kaŝi panelon",
-    " (HTTP status %(httpStatus))": "(stato HTTP %(httpStatus))",
+    "(HTTP status %(httpStatus)s)": "(stato HTTP %(httpStatus)s)",
     "In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:": "Por diagnozi problemojn, protokoloj el tiu ĉi kliento sendiĝos kune kun tiu ĉi raporto de eraro. Se vi preferas sendi nur la supran tekston, bonvolu malŝalti:",
     "Login": "Ensaluti",
     "Loading bug report module": "Ŝarĝante modulon pri eraroraporto",

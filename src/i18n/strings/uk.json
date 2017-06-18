@@ -59,7 +59,7 @@
     "Guests can join": "Гості можуть приєднуватися",
     "Guest users can't invite users. Please register to invite.": "Гості не можуть запрошувати користувачів. Зареєструйтесь, будь ласка, для видачі запрошень.",
     "Hide panel": "Сховати панель",
-    " (HTTP status %(httpStatus))": "(статус HTTP %(httpStatus))",
+    "(HTTP status %(httpStatus)s)": "(статус HTTP %(httpStatus)s)",
     "I understand the risks and wish to continue": "Я ознайомлений з ризиками і хочу продовжити",
     "In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:": "З метою діагностики проблем журнали з цього застосунку будуть надіслані разом зі звітом про вади. Якщо ви бажаєте надіслати лише вищенаведений текст, відозначте, будь ласка:",
     "Invite to this room": "Запросити до цієї кімнати",
