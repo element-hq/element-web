@@ -132,7 +132,7 @@
     "Failed to send report: ": "Rapport verzenden mislukt: ",
     "Forward Message": "Bericht doorsturen",
     "Hide panel": "Paneel verbergen",
-    " (HTTP status %(httpStatus))": "(HTTP-status %(httpStatus))",
+    "(HTTP status %(httpStatus)s)": "(HTTP-status %(httpStatus)s)",
     "I understand the risks and wish to continue": "Ik begrijp de risico's en wil graag verder gaan",
     "Login": "Aanmelden",
     "Loading bug report module": "Bugrapporteermodule laden",

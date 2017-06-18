@@ -169,7 +169,7 @@
     "You can now return to your account after signing out, and sign in on other devices.": "Vous pouvez maintenant revenir sur votre compte après vous être déconnecté, et vous identifier sur d'autres appareils.",
     "This will allow you to return to your account after signing out, and sign in on other devices.": "Cela vous permettra de retourner sur votre compte après vous être déconnecté, et de vous identifier sur d'autres appareils.",
     "Welcome to Riot.im": "Bienvenue sur Riot.im",
-    " (HTTP status %(httpStatus))": "(statut HTTP %(httpStatus))",
+    "(HTTP status %(httpStatus)s)": "(statut HTTP %(httpStatus)s)",
     "Login": "S'identifier",
     "Chat with Riot Bot": "Discussion avec Riot Bot",
     "Search the room directory": "Rechercher dans le répertoire de salon",

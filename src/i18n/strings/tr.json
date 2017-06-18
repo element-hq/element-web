@@ -62,7 +62,7 @@
     "Guests can join": "Misafirler katılabilirler",
     "Guest users can't invite users. Please register to invite.": "Misafir kullanıcılar kullanıcıları davet edemezler . Davet etmek için lütfen kayıt olun.",
     "Hide panel": "Paneli gizle",
-    " (HTTP status %(httpStatus))": "(HTTP durumu &(httpStatus))",
+    "(HTTP status %(httpStatus)s)": "(HTTP durumu &(httpStatus))",
     "I understand the risks and wish to continue": "Riskleri anlıyorum ve devam etmek istiyorum",
     "In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:": "Sorunları teşhis etmek için , bu istemciden kayıtlar hata raporu ile beraber gönderilecek . Yalnızca yukarıdaki metni göndermek isterseniz , lütfen işareti kaldırın:",
     "Invite to this room": "Bu odaya davet et",

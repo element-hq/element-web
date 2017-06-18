@@ -131,7 +131,7 @@
     "Forward Message": "메시지 전달",
     " from room": " 방에서",
     "Guests can join": "손님이 들어올 수 있어요",
-    " (HTTP status %(httpStatus))": "(HTTP 상태 %(httpStatus))",
+    "(HTTP status %(httpStatus)s)": "(HTTP 상태 %(httpStatus)s)",
     "In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:": "문제를 진단하기 위해서, 이 클라이언트의 로그를 오류 보고서와 같이 보낼 거에요. 위 내용만 보내시려면, 체크를 해제하세요:",
     "Keywords": "키워드",
     "Mentions only": "답만 하기",
