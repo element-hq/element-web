@@ -327,5 +327,10 @@
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "Set a display name:": "Weergavenaam instellen:",
     "Set a Display Name": "Weergavenaam instellen",
-    "Upload an avatar:": "Een avatar uploaden:"
+    "Upload an avatar:": "Een avatar uploaden:",
+    "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Geen verbinding met de thuisserver - controleer je verbinding. Controleer het <a>SSL-certificaat van de thuisserver</a> en browser-extensies die verzoeken kunnen blokkeren.",
+    "%(count)s new messages.other": "%(count)s nieuwe berichten",
+    "Create an account": "Open een account",
+    "Cryptography": "Cryptografie",
+    "Current password": "Huidig wachtwoord"
 }
