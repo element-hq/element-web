@@ -166,5 +166,11 @@
     "Discussion of all things Matrix!": "Diskutado pri ĉio rilate al Matrix!",
     "Riot/Web &amp; Desktop chat": "Diskudato labortabla pri Riot/Web",
     "Riot/iOS &amp; matrix-ios-sdk chat": "Diskutado pri Riot/iOS &amp; matrix-ios-sdk",
-    "Riot/Android &amp; matrix-android-sdk chat": "Diskutado pri Riot/Android &amp; matrix-android-sdk"
+    "Riot/Android &amp; matrix-android-sdk chat": "Diskutado pri Riot/Android &amp; matrix-android-sdk",
+    "Matrix technical discussions": "Teknikaj diskutoj pri Matrix",
+    "Running Matrix services": "Funkciigado de servoj Matrix",
+    "Community-run support for Synapse": "Komunuma subtenado de Synapse",
+    "Admin support for Dendrite": "Administra subtenado por Dendrite",
+    "Announcements about Synapse releases": "Anoncoj pri eldonoj Synapse",
+    "Support for those using and running matrix-appservice-irc": "Subteno por tiuj, kiuj uzas kaj funkciigas matrix-appservice-irc"
 }
