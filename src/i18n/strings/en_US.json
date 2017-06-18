@@ -913,5 +913,11 @@
     "Username not available": "Username not available",
     "Something went wrong!": "Something went wrong!",
     "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.": "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.",
-    "If you already have a Matrix account you can <a>log in</a> instead.": "If you already have a Matrix account you can <a>log in</a> instead."
+    "If you already have a Matrix account you can <a>log in</a> instead.": "If you already have a Matrix account you can <a>log in</a> instead.",
+    "Your browser does not support the required cryptography extensions": "Your browser does not support the required cryptography extensions",
+    "Not a valid Riot keyfile": "Not a valid Riot keyfile",
+    "Authentication check failed: incorrect password?": "Authentication check failed: incorrect password?",
+    "Disable Peer-to-Peer for 1:1 calls": "Disable Peer-to-Peer for 1:1 calls",
+    "Do you want to set an email address?": "Do you want to set an email address?",
+    "This will allow you to reset your password and receive notifications.": "This will allow you to reset your password and receive notifications."
 }
