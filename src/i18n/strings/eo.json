@@ -172,5 +172,7 @@
     "Community-run support for Synapse": "Komunuma subtenado de Synapse",
     "Admin support for Dendrite": "Administra subtenado por Dendrite",
     "Announcements about Synapse releases": "Anoncoj pri eldonoj Synapse",
-    "Support for those using and running matrix-appservice-irc": "Subteno por tiuj, kiuj uzas kaj funkciigas matrix-appservice-irc"
+    "Support for those using and running matrix-appservice-irc": "Subteno por tiuj, kiuj uzas kaj funkciigas matrix-appservice-irc",
+    "Building services on Matrix": "Konstruante servojn per Matrix",
+    "Support for those using the Matrix spec": "Subteno por tiuj, kiuj uzas la specifon Matrix"
 }
