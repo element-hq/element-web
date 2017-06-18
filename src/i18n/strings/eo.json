@@ -174,5 +174,9 @@
     "Announcements about Synapse releases": "Anoncoj pri eldonoj Synapse",
     "Support for those using and running matrix-appservice-irc": "Subteno por tiuj, kiuj uzas kaj funkciigas matrix-appservice-irc",
     "Building services on Matrix": "Konstruante servojn per Matrix",
-    "Support for those using the Matrix spec": "Subteno por tiuj, kiuj uzas la specifon Matrix"
+    "Support for those using the Matrix spec": "Subteno por tiuj, kiuj uzas la specifon Matrix",
+    "Design and implementation of E2E in Matrix": "Dizajno kaj realigo de E2E en Matrix",
+    "Implementing VR services with Matrix": "Realigi VR-servojn per Matrix",
+    "Implementing VoIP services with Matrix": "Realigi VoIP-servojn per Matrix",
+    "Discussion of the Identity Service API": "Diskutado pri la API de Identiga Servo"
 }
