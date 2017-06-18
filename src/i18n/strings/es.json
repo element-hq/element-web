@@ -490,7 +490,7 @@
     "No media permissions": "Sin permisos para el medio",
     "You may need to manually permit Riot to access your microphone/webcam": "Probablemente necesite dar permisos manualmente a Riot para su micrófono/cámara",
     "Are you sure you want to leave the room '%(roomName)s'?": "¿Está seguro de que desea abandonar la sala '%(roomName)s'?",
-    "Are you sure you want to upload the following files?": "Confirme que desea enviar los siguientes ficheros.",
+    "Are you sure you want to upload the following files?": "¿Está seguro que desea enviar los siguientes archivos?",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "No se puede conectar al servidor - compruebe su conexión, asegúrese de que el <a>certificado SSL del servidor</a> es de confiaza, y compruebe que no hay extensiones del navegador bloqueando las peticiones.",
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s ha quitado el nombre de la sala.",
     "Device key:": "Clave del dispositivo:",
