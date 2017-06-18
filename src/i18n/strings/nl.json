@@ -333,7 +333,7 @@
     "Create an account": "Open een account",
     "Cryptography": "Cryptografie",
     "Current password": "Huidig wachtwoord",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName) heeft de naam van de kamer verwijderd.",
+    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s heeft de naam van de kamer verwijderd.",
     "Create a new chat or reuse an existing one": "Maak een nieuwe chat aan of gebruik een reeds bestaande",
     "Create Room": "Maak een kamer",
     "Curve25519 identity key": "Curve25519 identiteits sleutel",
