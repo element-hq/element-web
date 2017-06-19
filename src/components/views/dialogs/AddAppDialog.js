@@ -74,7 +74,7 @@ export default React.createClass({
                 <div className="mx_Dialog_content">
                     {appCards}
                     <hr/>
-                    <form onSubmit={this.onFormSubmit}>
+                    <form className="mx_Custom_Widget_Form" onSubmit={this.onFormSubmit}>
                         <div>Or enter the URL of the widget to add.</div>
                         <input type="text" ref="input_value" value={this.state.value}
                             autoFocus={true} onChange={this.onValueChange} size="30"
