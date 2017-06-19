@@ -1,3 +1,12 @@
+Changes in [0.9.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.5) (2017-06-19)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.5-rc.2...v0.9.5)
+
+ * Don't peek when creating a room
+   [\#1113](https://github.com/matrix-org/matrix-react-sdk/pull/1113)
+ * More translations & translation fixes
+
+
 Changes in [0.9.5-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.5-rc.2) (2017-06-16)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.5-rc.1...v0.9.5-rc.2)
