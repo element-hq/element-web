@@ -109,7 +109,7 @@ export default class MessageComposer extends React.Component {
         let fileList = [];
         for (let i=0; i<files.length; i++) {
             fileList.push(<li key={i}>
-                <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> {files[i].name || 'Attachment'}
+                <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> {files[i].name || _t('Attachment')}
             </li>);
         }
 
@@ -287,7 +287,7 @@ export default class MessageComposer extends React.Component {
 
             const formattingButton = (
                 <img className="mx_MessageComposer_formatting"
-                     title="Show Text Formatting Toolbar"
+                     title={_t("Show Text Formatting Toolbar")}
                      src="img/button-text-formatting.svg"
                      onClick={this.onToggleFormattingClicked}
                      style={{visibility: this.state.showFormatting ||

@@ -54,11 +54,6 @@ module.exports = React.createClass({
             })).required,
         }),
 
-        // A username that will be used if no username is entered.
-        // Specifying this param will also warn the user that entering
-        // a different username will cause a fresh account to be generated.
-        guestUsername: React.PropTypes.string,
-
         minPasswordLength: React.PropTypes.number,
         onError: React.PropTypes.func,
         onRegisterClick: React.PropTypes.func.isRequired, // onRegisterClick(Object) => ?Promise
@@ -101,7 +96,7 @@ module.exports = React.createClass({
             if (this.refs.email.value == '') {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 Modal.createDialog(QuestionDialog, {
-                    title: "Warning!",
+                    title: _t("Warning!"),
                     description:
                         <div>
                             {_t("If you don't specify an email address, you won't be able to reset your password. " +
@@ -123,7 +118,7 @@ module.exports = React.createClass({
     _doSubmit: function(ev) {
         let email = this.refs.email.value.trim();
         var promise = this.props.onRegisterClick({
-            username: this.refs.username.value.trim() || this.props.guestUsername,
+            username: this.refs.username.value.trim(),
             password: this.refs.password.value.trim(),
             email: email,
             phoneCountry: this.state.phoneCountry,
@@ -191,7 +186,7 @@ module.exports = React.createClass({
                 break;
             case FIELD_USERNAME:
                 // XXX: SPEC-1
-                var username = this.refs.username.value.trim() || this.props.guestUsername;
+                var username = this.refs.username.value.trim();
                 if (encodeURIComponent(username) != username) {
                     this.markFieldValid(
                         field_id,
@@ -335,13 +330,10 @@ module.exports = React.createClass({
         );
 
         const registerButton = (
-            <input className="mx_Login_submit" type="submit" value="Register" />
+            <input className="mx_Login_submit" type="submit" value={_t("Register")} />
         );
 
         let placeholderUserName = _t("User name");
-        if (this.props.guestUsername) {
-            placeholderUserName += " " + _t("(default: %(userName)s)", {userName: this.props.guestUsername});
-        }
 
         return (
             <div>
@@ -354,9 +346,6 @@ module.exports = React.createClass({
                         className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
                         onBlur={function() {self.validateField(FIELD_USERNAME);}} />
                     <br />
-                    { this.props.guestUsername ?
-                        <div className="mx_Login_fieldLabel">{_t("Setting a user name will create a fresh account")}</div> : null
-                    }
                     <input type="password" ref="password"
                         className={this._classForField(FIELD_PASSWORD, 'mx_Login_field')}
                         onBlur={function() {self.validateField(FIELD_PASSWORD);}}

@@ -28,8 +28,8 @@ describe('RoomViewStore', function() {
     });
 
     it('can be used to view a room by ID and join', function(done) {
-        peg.get().joinRoom = (roomId) => {
-            expect(roomId).toBe("!randomcharacters:aser.ver");
+        peg.get().joinRoom = (roomAddress) => {
+            expect(roomAddress).toBe("!randomcharacters:aser.ver");
             done();
         };
 
@@ -40,8 +40,8 @@ describe('RoomViewStore', function() {
 
     it('can be used to view a room by alias and join', function(done) {
         peg.get().getRoomIdForAlias.returns(q({room_id: "!randomcharacters:aser.ver"}));
-        peg.get().joinRoom = (roomId) => {
-            expect(roomId).toBe("!randomcharacters:aser.ver");
+        peg.get().joinRoom = (roomAddress) => {
+            expect(roomAddress).toBe("#somealias2:aser.ver");
             done();
         };
 

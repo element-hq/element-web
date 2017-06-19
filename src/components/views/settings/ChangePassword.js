@@ -20,6 +20,8 @@ var React = require('react');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
 var sdk = require("../../../index");
+
+import q from 'q';
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
 
@@ -53,7 +55,7 @@ module.exports = React.createClass({
             onCheckPassword: function(oldPass, newPass, confirmPass) {
                 if (newPass !== confirmPass) {
                     return {
-                        error: _t("New passwords don't match") + "."
+                        error: _t("New passwords don't match")
                     };
                 } else if (!newPass || newPass.length === 0) {
                     return {
@@ -140,7 +142,15 @@ module.exports = React.createClass({
         });
 
         cli.setPassword(authDict, newPassword).then(() => {
-            this.props.onFinished();
+            if (this.props.shouldAskForEmail) {
+                return this._optionallySetEmail().then((confirmed) => {
+                    this.props.onFinished({
+                        didSetEmail: confirmed,
+                    });
+                });
+            } else {
+                this.props.onFinished();
+            }
         }, (err) => {
             this.props.onError(err);
         }).finally(() => {
@@ -148,6 +158,20 @@ module.exports = React.createClass({
                 phase: this.Phases.Edit,
             });
         }).done();
+    },
+
+    _optionallySetEmail: function() {
+        const deferred = q.defer();
+        // Ask for an email otherwise the user has no way to reset their password
+        const SetEmailDialog = sdk.getComponent("dialogs.SetEmailDialog");
+        Modal.createDialog(SetEmailDialog, {
+            title: _t('Do you want to set an email address?'),
+            onFinished: (confirmed) => {
+                // ignore confirmed, setting an email is optional
+                deferred.resolve(confirmed);
+            },
+        });
+        return deferred.promise;
     },
 
     _onExportE2eKeysClicked: function() {
@@ -199,7 +223,7 @@ module.exports = React.createClass({
                 const passwordLabel = this.state.cachedPassword ?
                     _t('Password') : _t('New Password');
                 return (
-                    <div className={this.props.className}>
+                    <form className={this.props.className} onSubmit={this.onClickChange}>
                         { currentPassword }
                         <div className={rowClassName}>
                             <div className={rowLabelClassName}>
@@ -222,7 +246,7 @@ module.exports = React.createClass({
                                 element="button">
                             { _t('Change Password') }
                         </AccessibleButton>
-                    </div>
+                    </form>
                 );
             case this.Phases.Uploading:
                 var Loader = sdk.getComponent("elements.Spinner");
