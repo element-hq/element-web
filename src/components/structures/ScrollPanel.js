@@ -160,10 +160,6 @@ module.exports = React.createClass({
         this.checkFillState();
     },
 
-    componentWillUpdate: function(nextProps, nextState) {
-        this._saveScrollState();
-    },
-
     componentDidUpdate: function() {
         // after adding event tiles, we may need to tweak the scroll (either to
         // keep at the bottom of the timeline, or to maintain the view after
