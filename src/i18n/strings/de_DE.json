@@ -671,7 +671,7 @@
     "%(oneUser)srejected their invitation %(repeats)s times": "%(oneUser)shat die Einladung %(repeats)s mal abgelehnt",
     "%(severalUsers)srejected their invitations": "%(severalUsers)shaben ihre Einladung abgelehnt",
     "%(oneUser)srejected their invitation": "%(oneUser)shat die Einladung abgelehnt",
-    "%(severalUsers)shad their invitations withdrawn %(repeats)s times": "%(severalUsers)szogen ihre Einladungen %(repeats)s mal zurück",
+    "%(severalUsers)shad their invitations withdrawn %(repeats)s times": "%(severalUsers)swurden die ursprünglichen Einladungen %(repeats)s mal wieder entzogen",
     "%(oneUser)shad their invitation withdrawn %(repeats)s times": "%(oneUser)swurde die Einladung %(repeats)s mal wieder entzogen",
     "%(severalUsers)shad their invitations withdrawn": "%(severalUsers)szogen ihre Einladungen zurück",
     "%(oneUser)shad their invitation withdrawn": "%(oneUser)swurde die ursprüngliche Einladung wieder entzogen",
