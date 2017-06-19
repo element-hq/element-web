@@ -497,14 +497,6 @@ module.exports = React.createClass({
                             (sub) => <RoomDirectoryButton size="16" callout={true}/>
                         ]
                     )}
-                
-                
-                
-                    You're not in any rooms yet! Press
-                    <CreateRoomButton size="16" callout={true}/>
-                    to make a room or
-                    <RoomDirectoryButton size="16" callout={true}/>
-                    to browse the directory
                 </div>;
         }
 
