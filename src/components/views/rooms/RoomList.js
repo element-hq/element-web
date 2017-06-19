@@ -18,7 +18,7 @@ limitations under the License.
 'use strict';
 var React = require("react");
 var ReactDOM = require("react-dom");
-import { _t } from '../../../languageHandler';
+import { _t, _tJsx } from '../../../languageHandler';
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var CallHandler = require('../../../CallHandler');
@@ -478,17 +478,25 @@ module.exports = React.createClass({
         switch (section) {
             case 'im.vector.fake.direct':
                 return <div className="mx_RoomList_emptySubListTip">
-                    Press
-                    <StartChatButton size="16" callout={true}/>
-                    to start a chat with someone
+                    {_tJsx(
+                        "Press <StartChatButton> to start a chat with someone",
+                        [/<StartChatButton>/],
+                        [
+                            (sub) => <StartChatButton size="16" callout={true}/>
+                        ]
+                    )}
                 </div>;
             case 'im.vector.fake.recent':
                 return <div className="mx_RoomList_emptySubListTip">
-                    You're not in any rooms yet! Press
-                    <CreateRoomButton size="16" callout={true}/>
-                    to make a room or
-                    <RoomDirectoryButton size="16" callout={true}/>
-                    to browse the directory
+                    {_tJsx(
+                        "You're not in any rooms yet! Press <CreateRoomButton> to make a room or"+
+                        " <RoomDirectoryButton> to browse the directory",
+                        [/<CreateRoomButton>/, /<RoomDirectoryButton>/],
+                        [
+                            (sub) => <CreateRoomButton size="16" callout={true}/>,
+                            (sub) => <RoomDirectoryButton size="16" callout={true}/>
+                        ]
+                    )}
                 </div>;
         }
 
