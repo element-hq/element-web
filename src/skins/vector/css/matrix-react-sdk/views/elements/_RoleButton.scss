@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2107 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,11 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SetDisplayNameDialog_input {
-    border-radius: 3px;
-    border: 1px solid $input-border-color;
-    padding: 9px;
-    color: $primary-fg-color;
-    background-color: $primary-bg-color;
-    font-size: 15px;
+.mx_RoleButton {
+    margin-left: 4px;
+    margin-right: 4px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.mx_RoleButton object {
+    pointer-events: none;
+}
+
+.mx_RoleButton_tooltip {
+    display: inline-block;
+    position: relative;
+    top: -25px;
+    left: 6px;
 }

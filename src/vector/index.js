@@ -216,18 +216,16 @@ function getConfig() {
     return deferred.promise;
 }
 
-function onLoadCompleted() {
+function onTokenLoginCompleted() {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
     // clear them.
-    if (window.location.search) {
-        var parsedUrl = url.parse(window.location.href);
-        parsedUrl.search = "";
-        var formatted = url.format(parsedUrl);
-        console.log("Redirecting to " + formatted + " to drop loginToken " +
-                    "from queryparams");
-        window.location.href = formatted;
-    }
+    var parsedUrl = url.parse(window.location.href);
+    parsedUrl.search = "";
+    var formatted = url.format(parsedUrl);
+    console.log("Redirecting to " + formatted + " to drop loginToken " +
+                "from queryparams");
+    window.location.href = formatted;
 }
 
 function getThemeStyleElements() {
@@ -327,7 +325,7 @@ async function loadApp() {
                 realQueryParams={params}
                 startingFragmentQueryParams={fragparts.params}
                 enableGuest={true}
-                onLoadCompleted={onLoadCompleted}
+                onTokenLoginCompleted={onTokenLoginCompleted}
                 initialScreenAfterLogin={getScreenFromLocation(window.location)}
                 defaultDeviceDisplayName={PlatformPeg.get().getDefaultDeviceDisplayName()}
             />,

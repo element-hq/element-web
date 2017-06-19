@@ -2,7 +2,7 @@
   "name": "riot-web",
   "productName": "Riot",
   "main": "electron_app/src/electron-main.js",
-  "version": "0.10.0-rc.2",
+  "version": "0.11.2",
   "description": "A feature-rich client for Matrix.org",
   "author": "Vector Creations Ltd.",
   "repository": {
@@ -46,7 +46,7 @@
     "start:prod": "parallelshell \"npm run reskindex:watch\" \"npm run start:res\" \"npm run start:js:prod\"",
     "lint": "eslint src/",
     "lintall": "eslint src/ test/",
-    "clean": "rimraf lib webapp electron/dist",
+    "clean": "rimraf lib webapp electron_app/dist",
     "prepublish": "npm run build:compile",
     "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
     "test-multi": "karma start"
@@ -60,13 +60,13 @@
     "extract-text-webpack-plugin": "^0.9.1",
     "favico.js": "^0.3.10",
     "filesize": "3.5.6",
-    "flux": "~2.0.3",
+    "flux": "2.1.1",
     "gemini-scrollbar": "matrix-org/gemini-scrollbar#b302279",
     "gfm.css": "^1.1.1",
     "highlight.js": "^9.0.0",
     "linkifyjs": "^2.1.3",
-    "matrix-js-sdk": "0.7.10",
-    "matrix-react-sdk": "0.9.0-rc.2",
+    "matrix-js-sdk": "0.7.12",
+    "matrix-react-sdk": "0.9.5",
     "modernizr": "^3.1.0",
     "pako": "^1.0.5",
     "q": "^1.4.1",
@@ -76,8 +76,10 @@
     "react-dom": "^15.4.0",
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
     "sanitize-html": "^1.11.1",
+    "text-encoding-utf-8": "^1.0.1",
     "ua-parser-js": "^0.7.10",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "velocity-vector": "vector-im/velocity#059e3b2"
   },
   "devDependencies": {
     "autoprefixer": "^6.6.0",
@@ -101,6 +103,7 @@
     "css-raw-loader": "^0.1.1",
     "electron-builder": "^11.2.4",
     "electron-builder-squirrel-windows": "^11.2.1",
+    "electron-devtools-installer": "^2.2.0",
     "emojione": "^2.2.7",
     "eslint": "^3.14.0",
     "eslint-config-google": "^0.7.1",
@@ -162,7 +165,7 @@
       "category": "Network;InstantMessaging;Chat",
       "maintainer": "support@riot.im",
       "desktop": {
-        "StartupWMClass": "riot-web"
+        "StartupWMClass": "riot"
       }
     },
     "win": {
