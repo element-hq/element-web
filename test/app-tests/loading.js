@@ -29,6 +29,7 @@ import jssdk from 'matrix-js-sdk';
 import sdk from 'matrix-react-sdk';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
+import {VIEWS} from 'matrix-react-sdk/lib/components/structures/MatrixChat';
 
 import * as test_utils from '../test-utils';
 import MockHttpBackend from '../mock-request';
@@ -47,7 +48,7 @@ describe('loading:', function () {
     // the mounted MatrixChat
     let matrixChat;
 
-    // a promise which resolves when the MatrixChat calls onLoadCompleted
+    // a promise which resolves when the MatrixChat calls onTokenLoginCompleted
     let loadCompletePromise;
 
     beforeEach(function() {
@@ -135,7 +136,7 @@ describe('loading:', function () {
                 realQueryParams={params}
                 startingFragmentQueryParams={fragParts.params}
                 enableGuest={true}
-                onLoadCompleted={loadCompleteDefer.resolve}
+                onTokenLoginCompleted={loadCompleteDefer.resolve}
                 initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
                 makeRegistrationUrl={() => {throw new Error('Not implemented');}}
             />, parentDiv
@@ -153,8 +154,8 @@ describe('loading:', function () {
             .check((r) => {syncRequest = r;})
             .respond(200, response);
 
-        console.log("waiting for /sync");
         for (let attempts = 10; attempts > 0; attempts--) {
+            console.log(Date.now() + " waiting for /sync");
             if (syncRequest) {
                 return syncRequest;
             }
@@ -179,12 +180,12 @@ describe('loading:', function () {
                 return httpBackend.flush();
             }).then(() => {
                 // Wait for another trip around the event loop for the UI to update
-                return q.delay(1);
+                return q.delay(10);
             }).then(() => {
                 // we expect a single <Login> component following session load
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.login.Login'));
-                expect(windowLocation.hash).toEqual("");
+                expect(windowLocation.hash).toEqual("#/login");
             }).done(done, done);
         });
 
@@ -205,7 +206,7 @@ describe('loading:', function () {
                 return httpBackend.flush();
             }).then(() => {
                 // Wait for another trip around the event loop for the UI to update
-                return q.delay(1);
+                return q.delay(10);
             }).then(() => {
                 return completeLogin(matrixChat);
             }).then(() => {
@@ -360,6 +361,9 @@ describe('loading:', function () {
                 loadApp({
                     uriFragment: "#/login",
                 });
+
+                // give the UI a chance to display
+                return q.delay(50);
             });
 
             it('shows a login view', function() {
@@ -513,7 +517,7 @@ describe('loading:', function () {
 
                 return httpBackend.flush();
             }).then(() => {
-                // at this point, MatrixChat should fire onLoadCompleted, which
+                // at this point, MatrixChat should fire onTokenLoginCompleted, which
                 // makes index.js reload the app. We're not going to attempt to
                 // simulate the reload - just check that things are left in the
                 // right state for the reloaded app.
@@ -589,7 +593,8 @@ function awaitSyncingSpinner(matrixChat, retryLimit, retryCount) {
         retryCount = 0;
     }
 
-    if (matrixChat.state.loading || matrixChat.state.loggingIn) {
+    if (matrixChat.state.view === VIEWS.LOADING ||
+            matrixChat.state.view === VIEWS.LOGGING_IN) {
         console.log(Date.now() + " Awaiting sync spinner: still loading.");
         if (retryCount >= retryLimit) {
             throw new Error("MatrixChat still not loaded after " +
@@ -628,8 +633,7 @@ function awaitRoomView(matrixChat, retryLimit, retryCount) {
         retryCount = 0;
     }
 
-    if (matrixChat.state.loading ||
-        !(matrixChat.state.loggedIn && matrixChat.state.ready)) {
+    if (matrixChat.state.view !== VIEWS.LOGGED_IN || !matrixChat.state.ready) {
         console.log(Date.now() + " Awaiting room view: not ready yet.");
         if (retryCount >= retryLimit) {
             throw new Error("MatrixChat still not ready after " +
