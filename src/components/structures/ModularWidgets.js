@@ -20,7 +20,7 @@ class ModularWidgets {
         },
         {
             type: 'vrdemo',
-            icon: 'http://localhost:8000/static/jitsi.svg',
+            icon: 'http://localhost:8000/static/cardboard.png',
             name: 'vrdemo',
             description: 'Matrix VR Demo',
         },
