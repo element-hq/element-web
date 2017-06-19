@@ -93,8 +93,8 @@ export default React.createClass({
         if (err.httpStatus === 403) {
             errMsg = _t('Failed to change password. Is your password correct?');
         } else if (err.httpStatus) {
-            errMsg += _t(
-                ' (HTTP status %(httpStatus)s)',
+            errMsg += ' ' + _t(
+                '(HTTP status %(httpStatus)s)',
                 { httpStatus: err.httpStatus },
             );
         }
