@@ -14,13 +14,13 @@ class ModularWidgets {
         },
         {
             type: 'jitsi',
-            icon: 'http://localhost:8000/static/jitsi.png',
+            icon: 'http://localhost:8000/static/jitsi.svg',
             name: 'jitsi',
             description: 'Jitsi video conference',
         },
         {
             type: 'vrdemo',
-            icon: 'http://localhost:8000/static/jitsi.png',
+            icon: 'http://localhost:8000/static/jitsi.svg',
             name: 'vrdemo',
             description: 'Matrix VR Demo',
         },
