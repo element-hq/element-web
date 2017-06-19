@@ -557,5 +557,10 @@
     "There was a problem logging in.": "Hiba történt a bejelentkezésnél.",
     "This room has no local addresses": "Ennek a szobának nincs helyi címe",
     "This room is not recognised.": "Ez a szoba nem ismerős.",
-    "These are experimental features that may break in unexpected ways": "Ezek kísérleti funkciók amik kiszámíthatatlanok lehetnek"
+    "These are experimental features that may break in unexpected ways": "Ezek kísérleti funkciók amik kiszámíthatatlanok lehetnek",
+    "The visibility of existing history will be unchanged": "A már meglévő csevegés előzmények láthatósága nem változik",
+    "This doesn't appear to be a valid email address": "Ez nem tűnik helyes e-mail címnek",
+    "This is a preview of this room. Room interactions have been disabled": "Ez a szoba előnézete. Minden tevékenység ezzel a szobával ki van kapcsolva",
+    "This phone number is already in use": "Ez a telefonszám már használatban van",
+    "This room": "Ez a szoba"
 }
