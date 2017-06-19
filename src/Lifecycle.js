@@ -294,10 +294,12 @@ export function initRtsClient(url) {
  * storage before starting the new client.
  *
  * @param {MatrixClientCreds} credentials The credentials to use
+ *
+ * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
 export function setLoggedIn(credentials) {
     stopMatrixClient();
-    _doSetLoggedIn(credentials, true);
+    return _doSetLoggedIn(credentials, true);
 }
 
 /**
@@ -307,7 +309,7 @@ export function setLoggedIn(credentials) {
  * @param {MatrixClientCreds} credentials
  * @param {Boolean} clearStorage
  *
- * returns a Promise which resolves once the client has been started
+ * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
 async function _doSetLoggedIn(credentials, clearStorage) {
     credentials.guest = Boolean(credentials.guest);
@@ -374,6 +376,7 @@ async function _doSetLoggedIn(credentials, clearStorage) {
     });
 
     startMatrixClient();
+    return MatrixClientPeg.get();
 }
 
 function _persistCredentialsToLocalStorage(credentials) {

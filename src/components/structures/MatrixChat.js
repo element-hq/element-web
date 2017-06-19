@@ -1280,13 +1280,14 @@ module.exports = React.createClass({
         }
     },
 
+    // returns a promise which resolves to the new MatrixClient
     onRegistered: function(credentials, teamToken) {
         // XXX: These both should be in state or ideally store(s) because we risk not
         //      rendering the most up-to-date view of state otherwise.
         // teamToken may not be truthy
         this._teamToken = teamToken;
         this._is_registered = true;
-        Lifecycle.setLoggedIn(credentials);
+        return Lifecycle.setLoggedIn(credentials);
     },
 
     onFinishPostRegistration: function() {
