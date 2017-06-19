@@ -557,7 +557,7 @@
     "You're not in any rooms yet! Press": "Vous n’êtes dans aucun salon ! Cliquez",
     "You are trying to access %(roomName)s.": "Vous essayez d'accéder à %(roomName)s.",
     "You cannot place a call with yourself.": "Vous ne pouvez pas passer d'appel avec vous-même.",
-    "You cannot place VoIP calls in this browser.": "Vous ne pouvez pas passer d'appel voix dans cet explorateur.",
+    "You cannot place VoIP calls in this browser.": "Vous ne pouvez pas passer d'appel vocal dans ce navigateur.",
     "You do not have permission to post to this room": "Vous n’avez pas la permission de poster dans ce salon",
     "You have been invited to join this room by %(inviterName)s": "Vous avez été invité à joindre ce salon par %(inviterName)s",
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device": "Vous avez été déconnecté de tous vos appareils et ne recevrez plus de notifications. Pour réactiver les notifications, identifiez vous à nouveau sur tous les appareils",
