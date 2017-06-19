@@ -622,5 +622,14 @@
     "Cancel": "Cancelar",
     "Dismiss": "Omitir",
     "powered by Matrix": "con el poder de Matrix",
-    "Room directory": "Directorio de salas"
+    "Room directory": "Directorio de salas",
+    "Custom Server Options": "Opciones de Servidor Personalizado",
+    "unknown error code": "Código de error desconocido",
+    "Sunday": "Domingo",
+    "Monday": "Lunes",
+    "Tuesday": "Martes",
+    "Wednesday": "Miércoles",
+    "Thursday": "Jueves",
+    "Friday": "Viernes",
+    "Saturday": "Sábado"
 }
