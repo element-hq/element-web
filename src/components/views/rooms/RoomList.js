@@ -33,11 +33,28 @@ var Receipt = require('../../../utils/Receipt');
 
 const HIDE_CONFERENCE_CHANS = true;
 
-const VERBS = {
-    'm.favourite': 'favourite',
-    'im.vector.fake.direct': 'tag direct chat',
-    'im.vector.fake.recent': 'restore',
-    'm.lowpriority': 'demote',
+function phraseForSection(section) {
+    // These would probably be better as individual strings,
+    // but for some reason we have translations for these strings
+    // as-is, so keeping it like this for now.
+    let verb;
+    switch (section) {
+        case 'm.favourite':
+            verb = _t('to favourite');
+            break;
+        case 'im.vector.fake.direct':
+            verb = _t('to tag direct chat');
+            break;
+        case 'im.vector.fake.recent':
+            verb = _t('to restore');
+            break;
+        case 'm.lowpriority':
+            verb = _t('to demote');
+            break;
+        default:
+            return _t('Drop here to tag %(section)s', {section: section});
+    }
+    return _t('Drop here %(toAction)s', {toAction: verb});
 };
 
 module.exports = React.createClass({
@@ -505,7 +522,7 @@ module.exports = React.createClass({
             return null;
         }
 
-        const labelText = 'Drop here to ' + (VERBS[section] || 'tag ' + section);
+        const labelText = phraseForSection(section);
 
         return <RoomDropTarget label={labelText} />;
     },
