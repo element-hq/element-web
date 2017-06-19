@@ -490,7 +490,7 @@ module.exports = React.createClass({
                 return <div className="mx_RoomList_emptySubListTip">
                     {_tJsx(
                         "You're not in any rooms yet! Press <CreateRoomButton> to make a room or"+
-                        "<RoomDirectoryButton> to browse the directory",
+                        " <RoomDirectoryButton> to browse the directory",
                         [/<CreateRoomButton>/, /<RoomDirectoryButton>/],
                         [
                             (sub) => <CreateRoomButton size="16" callout={true}/>,
