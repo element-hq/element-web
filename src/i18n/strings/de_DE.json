@@ -974,5 +974,7 @@
     "Authentication check failed: incorrect password?": "Authentifizierung fehlgeschlagen: Falsches Passwort?",
     "Disable Peer-to-Peer for 1:1 calls": "Peer-to-Peer-Verbindung für 1-zu-1-Anrufe deaktivieren",
     "Do you want to set an email address?": "Möchtest du eine E-Mail-Adresse setzen?",
-    "This will allow you to reset your password and receive notifications.": "Dies erlaubt dir dein Passwort zurückzusetzen und Benachrichtigungen zu empfangen."
+    "This will allow you to reset your password and receive notifications.": "Dies erlaubt dir dein Passwort zurückzusetzen und Benachrichtigungen zu empfangen.",
+    "Press <StartChatButton> to start a chat with someone": "Klicke auf <StartChatButton> um einen Chat mit jemanden zu starten",
+    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Du bist bisher in keinem Raum! Klicke auf <CreateRoomButton> um einen Raum zu erstellen oder <RoomDirectoryButton> um das Verzeichnis zu durchsuchen"
 }
