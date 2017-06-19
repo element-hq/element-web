@@ -545,5 +545,17 @@
     "This action cannot be performed by a guest user. Please register to be able to do this.": "Ezt nem teheti vendég felhasználó. Kérlek regisztrálj, hogy megtehesd.",
     "This email address is already in use": "Ez az e-mail cím már használatban van",
     "This email address was not found": "Az e-mail cím nem található",
-    "%(actionVerb)s this person?": "Ezt a felhasználót %(actionVerb)s?"
+    "%(actionVerb)s this person?": "Ezt a felhasználót %(actionVerb)s?",
+    "The email address linked to your account must be entered.": "A fiókodhoz kötött e-mail címet add meg.",
+    "Press <StartChatButton> to start a chat with someone": "Nyomd meg a <StartChatButton> gombot  ha szeretnél csevegni valakivel",
+    "Privacy warning": "Magánéleti figyelmeztetés",
+    "The file '%(fileName)s' exceeds this home server's size limit for uploads": "'%(fileName)s' fájl túllépte az egyedi szerverben beállított feltöltési méret határt",
+    "The file '%(fileName)s' failed to upload": "'%(fileName)s' fájl feltöltése sikertelen",
+    "The remote side failed to pick up": "A hívott fél nem vette fel",
+    "This Home Server does not support login using email address.": "Az egyedi szerver nem támogatja a belépést e-mail címmel.",
+    "This invitation was sent to an email address which is not associated with this account:": "A meghívó olyan e-mail címre lett küldve ami nincs összekötve ezzel a fiókkal:",
+    "There was a problem logging in.": "Hiba történt a bejelentkezésnél.",
+    "This room has no local addresses": "Ennek a szobának nincs helyi címe",
+    "This room is not recognised.": "Ez a szoba nem ismerős.",
+    "These are experimental features that may break in unexpected ways": "Ezek kísérleti funkciók amik kiszámíthatatlanok lehetnek"
 }
