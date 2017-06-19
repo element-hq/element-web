@@ -80,7 +80,7 @@ function createRoom(opts) {
 
     let roomId;
     return client.createRoom(createOpts).finally(function() {
-        if (modal) modal.close();
+        modal.close();
     }).then(function(res) {
         roomId = res.room_id;
         if (opts.dmUserId) {
