@@ -76,10 +76,7 @@ function createRoom(opts) {
         }
     ];
 
-    let modal;
-    setTimeout(()=>{
-        modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
-    }, 0);
+    const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
     let roomId;
     return client.createRoom(createOpts).finally(function() {
