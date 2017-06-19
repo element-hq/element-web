@@ -524,7 +524,7 @@
     "OK": "ОК",
     "Only people who have been invited": "Только приглашённые люди",
     "Passwords can't be empty": "Поля паролей не могут быть пустыми",
-    "%(senderName)s placed a %(callType)s call.": "%(senderName) выполнил %(callType) вызов.",
+    "%(senderName)s placed a %(callType)s call.": "%(senderName)s выполнил %(callType)s вызов.",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Пожалуйста, проверьте вашу электронную почту и нажмите в ней ссылку. По завершении нажмите продолжить.",
     "Power level must be positive integer.": "Уровень силы должен быть положительным числом.",
     "Press": "Нажать",
