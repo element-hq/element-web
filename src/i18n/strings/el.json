@@ -914,5 +914,7 @@
     "were unbanned %(repeats)s times": "ξεμπλοκαρίστηκαν %(repeats)s φορές",
     "was unbanned %(repeats)s times": "ξεμπλοκαρίστηκε %(repeats)s φορές",
     "were unbanned": "ξεμπλοκαρίστηκαν",
-    "was unbanned": "ξεμπλοκαρίστηκε"
+    "was unbanned": "ξεμπλοκαρίστηκε",
+    "Press <StartChatButton> to start a chat with someone": "Πατήστε <StartChatButton> για να ξεκινήσετε μια συνομιλία",
+    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Δεν είστε σε κανένα δωμάτιο! Πατήστε <CreateRoomButton> για να δημιουργήσετε ένα δωμάτιο  ή <RoomDirectoryButton> για να δείτε το ευρετήριο"
 }
