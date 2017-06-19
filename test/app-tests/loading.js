@@ -48,7 +48,7 @@ describe('loading:', function () {
     let matrixChat;
 
     // a promise which resolves when the MatrixChat calls onTokenLoginCompleted
-    let loadCompletePromise;
+    let tokenLoginCompletePromise;
 
     beforeEach(function() {
         test_utils.beforeEach(this);
@@ -99,8 +99,8 @@ describe('loading:', function () {
             toString: function() { return this.search + this.hash; },
         };
 
-        let loadCompleteDefer = q.defer();
-        loadCompletePromise = loadCompleteDefer.promise;
+        let tokenLoginCompleteDefer = q.defer();
+        tokenLoginCompletePromise = tokenLoginCompleteDefer.promise;
 
         function onNewScreen(screen) {
             console.log(Date.now() + " newscreen "+screen);
@@ -135,7 +135,7 @@ describe('loading:', function () {
                 realQueryParams={params}
                 startingFragmentQueryParams={fragParts.params}
                 enableGuest={true}
-                onTokenLoginCompleted={loadCompleteDefer.resolve}
+                onTokenLoginCompleted={tokenLoginCompleteDefer.resolve}
                 initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
                 makeRegistrationUrl={() => {throw new Error('Not implemented');}}
             />, parentDiv
@@ -520,7 +520,7 @@ describe('loading:', function () {
                 // simulate the reload - just check that things are left in the
                 // right state for the reloaded app.
 
-                return loadCompletePromise;
+                return tokenLoginCompletePromise;
             }).then(() => {
                 // check that the localstorage has been set up in such a way that
                 // the reloaded app can pick up where we leave off.
