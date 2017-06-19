@@ -922,5 +922,7 @@
     "Authentication check failed: incorrect password?": "Erreur d’identification: mot de passe incorrect ?",
     "Disable Peer-to-Peer for 1:1 calls": "Désactiver les appels 1:1 pair-à-pair",
     "Do you want to set an email address?": "Souhaitez-vous configurer une adresse e-mail ?",
-    "This will allow you to reset your password and receive notifications.": "Ceci va vous permettre de réinitialiser votre mot de passe et de recevoir des notifications."
+    "This will allow you to reset your password and receive notifications.": "Ceci va vous permettre de réinitialiser votre mot de passe et de recevoir des notifications.",
+    "Press <StartChatButton> to start a chat with someone": "Cliquez sur <StartChatButton> pour entamer une discussion avec quelqu'un",
+    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Vous n'avez pas encore rejoint de salle ! Cliquez sur <CreateRoomButton> pour créer une salle ou sur <RoomDirectoryButton> pour explorer l'annuaire"
 }
