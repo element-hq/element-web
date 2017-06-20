@@ -34,25 +34,25 @@ export function deleteIndexedDB(dbName) {
             return;
         }
 
-        console.log(`Removing indexeddb instance: ${dbName}`);
+        console.log(`${Date.now()}: Removing indexeddb instance: ${dbName}`);
         const req = window.indexedDB.deleteDatabase(dbName);
 
         req.onblocked = () => {
-            console.log(`can't yet delete indexeddb ${dbName} because it is open elsewhere`);
+            console.log(`${Date.now()}: can't yet delete indexeddb ${dbName} because it is open elsewhere`);
         };
 
         req.onerror = (ev) => {
             reject(new Error(
-                `unable to delete indexeddb ${dbName}: ${ev.target.error}`,
+                `${Date.now()}: unable to delete indexeddb ${dbName}: ${ev.target.error}`,
             ));
         };
 
         req.onsuccess = () => {
-            console.log(`Removed indexeddb instance: ${dbName}`);
+            console.log(`${Date.now()}: Removed indexeddb instance: ${dbName}`);
             resolve();
         };
     }).catch((e) => {
-        console.error(`Error removing indexeddb instance ${dbName}: ${e}`);
+        console.error(`${Date.now()}: Error removing indexeddb instance ${dbName}: ${e}`);
         throw e;
     });
 }

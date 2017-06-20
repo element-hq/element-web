@@ -71,7 +71,7 @@ describe('loading:', function () {
     });
 
     afterEach(async function () {
-        console.log('loading: afterEach');
+        console.log(`${Date.now()}: loading: afterEach`);
         if (parentDiv) {
             ReactDOM.unmountComponentAtNode(parentDiv);
             parentDiv.remove();
@@ -84,6 +84,7 @@ describe('loading:', function () {
         // clear the indexeddbs so we can start from a clean slate next time.
         await test_utils.deleteIndexedDB('matrix-js-sdk:crypto');
         await test_utils.deleteIndexedDB('matrix-js-sdk:riot-web-sync');
+        console.log(`${Date.now()}: loading: afterEach complete`);
     });
 
     /* simulate the load process done by index.js
@@ -615,7 +616,6 @@ describe('loading:', function () {
             matrixChat, sdk.getComponent('structures.login.Login'));
 
         httpBackend.when('POST', '/login').check(function(req) {
-            console.log(req);
             expect(req.data.type).toEqual('m.login.password');
             expect(req.data.identifier.type).toEqual('m.id.user');
             expect(req.data.identifier.user).toEqual('user');
