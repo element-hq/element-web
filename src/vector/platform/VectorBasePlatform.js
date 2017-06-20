@@ -40,7 +40,7 @@ export default class VectorBasePlatform extends BasePlatform {
     }
 
     _onAction(payload) {
-        switch (payload) {
+        switch (payload.action) {
             case 'on_logged_out':
                 this.setNotificationCount(0);
                 break;
