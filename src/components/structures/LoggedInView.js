@@ -240,7 +240,6 @@ export default React.createClass({
                 page_element = <UserSettings
                     onClose={this.props.onUserSettingsClose}
                     brand={this.props.config.brand}
-                    collapsedRhs={this.props.collapse_rhs}
                     enableLabs={this.props.config.enableLabs}
                     referralBaseUrl={this.props.config.referralBaseUrl}
                     teamToken={this.props.teamToken}
@@ -271,7 +270,6 @@ export default React.createClass({
                     this.props.config.teamServerConfig.teamServerURL : null;
 
                 page_element = <HomePage
-                    collapsedRhs={this.props.collapse_rhs}
                     teamServerUrl={teamServerUrl}
                     teamToken={this.props.teamToken}
                     homePageUrl={this.props.config.welcomePageUrl}

@@ -55,6 +55,8 @@ const INITIAL_STATE = {
     //    pixelOffset: the number of pixels the window is scrolled down
     //        from the focussedEvent.
     scrollStateMap: {},
+
+    forwardingEvent: null,
 };
 
 /**
@@ -116,6 +118,11 @@ class RoomViewStore extends Store {
             case 'update_scroll_state':
                 this._updateScrollState(payload);
                 break;
+            case 'forward_event':
+                this._setState({
+                    forwardingEvent: payload.event,
+                });
+                break;
         }
     }
 
@@ -123,11 +130,15 @@ class RoomViewStore extends Store {
         if (payload.room_id) {
             const newState = {
                 roomId: payload.room_id,
+                roomAlias: payload.room_alias,
                 initialEventId: payload.event_id,
                 initialEventPixelOffset: undefined,
                 isInitialEventHighlighted: payload.highlighted,
+                forwardingEvent: null,
                 roomLoading: false,
                 roomLoadError: null,
+                // should peek by default
+                shouldPeek: payload.should_peek === undefined ? true : payload.should_peek,
             };
 
             // If an event ID wasn't specified, default to the one saved for this room
@@ -138,6 +149,14 @@ class RoomViewStore extends Store {
                     newState.initialEventId = roomScrollState.focussedEvent;
                     newState.initialEventPixelOffset = roomScrollState.pixelOffset;
                 }
+            }
+
+            if (this._state.forwardingEvent) {
+                dis.dispatch({
+                    action: 'send_event',
+                    room_id: newState.roomId,
+                    event: this._state.forwardingEvent,
+                });
             }
 
             this._setState(newState);
@@ -274,6 +293,15 @@ class RoomViewStore extends Store {
     // Any error that has occurred during joining
     getJoinError() {
         return this._state.joinError;
+    }
+
+    // The mxEvent if one is about to be forwarded
+    getForwardingEvent() {
+        return this._state.forwardingEvent;
+    }
+
+    shouldPeek() {
+        return this._state.shouldPeek;
     }
 }
 

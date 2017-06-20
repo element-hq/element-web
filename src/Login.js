@@ -178,11 +178,18 @@ export default class Login {
     }
 
     redirectToCas() {
-      var client = this._createTemporaryClient();
-      var parsedUrl = url.parse(window.location.href, true);
+      const client = this._createTemporaryClient();
+      const parsedUrl = url.parse(window.location.href, true);
+
+      // XXX: at this point, the fragment will always be #/login, which is no
+      // use to anyone. Ideally, we would get the intended fragment from
+      // MatrixChat.screenAfterLogin so that you could follow #/room links etc
+      // through a CAS login.
+      parsedUrl.hash = "";
+
       parsedUrl.query["homeserver"] = client.getHomeserverUrl();
       parsedUrl.query["identityServer"] = client.getIdentityServerUrl();
-      var casUrl = client.getCasLoginUrl(url.format(parsedUrl));
+      const casUrl = client.getCasLoginUrl(url.format(parsedUrl));
       window.location.href = casUrl;
     }
 }

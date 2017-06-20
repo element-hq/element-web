@@ -352,5 +352,9 @@
     "Password:": "密码:",
     "Passwords can't be empty": "密码不能为空",
     "Permissions": "权限",
-    "Phone": "电话"
+    "Phone": "电话",
+    "Cancel": "取消",
+    "Create new room": "创建新房间",
+    "Custom Server Options": "自定义服务器选项",
+    "Dismiss": "设为已读"
 }

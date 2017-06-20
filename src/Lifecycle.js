@@ -19,6 +19,7 @@ import q from 'q';
 import Matrix from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
+import createMatrixClient from './utils/createMatrixClient';
 import Analytics from './Analytics';
 import Notifier from './Notifier';
 import UserActivity from './UserActivity';
@@ -34,28 +35,19 @@ import { _t } from './languageHandler';
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
  * a number of things:
  *
- * 0. if it looks like we are in the middle of a registration process, it does
- *    nothing.
  *
- * 1. if we have a loginToken in the (real) query params, it uses that to log
- *    in.
- *
- * 2. if we have a guest access token in the fragment query params, it uses
+ * 1. if we have a guest access token in the fragment query params, it uses
  *    that.
  *
- * 3. if an access token is stored in local storage (from a previous session),
+ * 2. if an access token is stored in local storage (from a previous session),
  *    it uses that.
  *
- * 4. it attempts to auto-register as a guest user.
+ * 3. it attempts to auto-register as a guest user.
  *
- * If any of steps 1-4 are successful, it will call {setLoggedIn}, which in
+ * If any of steps 1-4 are successful, it will call {_doSetLoggedIn}, which in
  * turn will raise on_logged_in and will_start_client events.
  *
  * @param {object} opts
- *
- * @param {object} opts.realQueryParams: string->string map of the
- *     query-parameters extracted from the real query-string of the starting
- *     URI.
  *
  * @param {object} opts.fragmentQueryParams: string->string map of the
  *     query-parameters extracted from the #-fragment of the starting URI.
@@ -70,34 +62,19 @@ import { _t } from './languageHandler';
  *     true; defines the IS to use.
  *
  * @returns {Promise} a promise which resolves when the above process completes.
+ *     Resolves to `true` if we ended up starting a session, or `false` if we
+ *     failed.
  */
 export function loadSession(opts) {
-    const realQueryParams = opts.realQueryParams || {};
     const fragmentQueryParams = opts.fragmentQueryParams || {};
     let enableGuest = opts.enableGuest || false;
     const guestHsUrl = opts.guestHsUrl;
     const guestIsUrl = opts.guestIsUrl;
     const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
 
-    if (fragmentQueryParams.client_secret && fragmentQueryParams.sid) {
-        // this happens during email validation: the email contains a link to the
-        // IS, which in turn redirects back to vector. We let MatrixChat create a
-        // Registration component which completes the next stage of registration.
-        console.log("Not registering as guest: registration already in progress.");
-        return q();
-    }
-
     if (!guestHsUrl) {
         console.warn("Cannot enable guest access: can't determine HS URL to use");
         enableGuest = false;
-    }
-
-    if (realQueryParams.loginToken) {
-        if (!realQueryParams.homeserver) {
-            console.warn("Cannot log in with token: can't determine HS URL to use");
-        } else {
-            return _loginWithToken(realQueryParams, defaultDeviceDisplayName);
-        }
     }
 
     if (enableGuest &&
@@ -105,19 +82,18 @@ export function loadSession(opts) {
         fragmentQueryParams.guest_access_token
        ) {
         console.log("Using guest access credentials");
-        setLoggedIn({
+        return _doSetLoggedIn({
             userId: fragmentQueryParams.guest_user_id,
             accessToken: fragmentQueryParams.guest_access_token,
             homeserverUrl: guestHsUrl,
             identityServerUrl: guestIsUrl,
             guest: true,
-        });
-        return q();
+        }, true).then(() => true);
     }
 
     return _restoreFromLocalStorage().then((success) => {
         if (success) {
-            return;
+            return true;
         }
 
         if (enableGuest) {
@@ -125,10 +101,30 @@ export function loadSession(opts) {
         }
 
         // fall back to login screen
+        return false;
     });
 }
 
-function _loginWithToken(queryParams, defaultDeviceDisplayName) {
+/**
+ * @param {Object} queryParams    string->string map of the
+ *     query-parameters extracted from the real query-string of the starting
+ *     URI.
+ *
+ * @param {String} defaultDeviceDisplayName
+ *
+ * @returns {Promise} promise which resolves to true if we completed the token
+ *    login, else false
+ */
+export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
+    if (!queryParams.loginToken) {
+        return q(false);
+    }
+
+    if (!queryParams.homeserver) {
+        console.warn("Cannot log in with token: can't determine HS URL to use");
+        return q(false);
+    }
+
     // create a temporary MatrixClient to do the login
     const client = Matrix.createClient({
         baseUrl: queryParams.homeserver,
@@ -141,17 +137,21 @@ function _loginWithToken(queryParams, defaultDeviceDisplayName) {
         },
     ).then(function(data) {
         console.log("Logged in with token");
-        setLoggedIn({
-            userId: data.user_id,
-            deviceId: data.device_id,
-            accessToken: data.access_token,
-            homeserverUrl: queryParams.homeserver,
-            identityServerUrl: queryParams.identityServer,
-            guest: false,
+        return _clearStorage().then(() => {
+            _persistCredentialsToLocalStorage({
+                userId: data.user_id,
+                deviceId: data.device_id,
+                accessToken: data.access_token,
+                homeserverUrl: queryParams.homeserver,
+                identityServerUrl: queryParams.identityServer,
+                guest: false,
+            });
+            return true;
         });
-    }, (err) => {
+    }).catch((err) => {
         console.error("Failed to log in with login token: " + err + " " +
                       err.data);
+        return false;
     });
 }
 
@@ -172,16 +172,17 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
         },
     }).then((creds) => {
         console.log("Registered as guest: %s", creds.user_id);
-        setLoggedIn({
+        return _doSetLoggedIn({
             userId: creds.user_id,
             deviceId: creds.device_id,
             accessToken: creds.access_token,
             homeserverUrl: hsUrl,
             identityServerUrl: isUrl,
             guest: true,
-        });
+        }, true).then(() => true);
     }, (err) => {
         console.error("Failed to register as guest: " + err + " " + err.data);
+        return false;
     });
 }
 
@@ -216,15 +217,14 @@ function _restoreFromLocalStorage() {
     if (accessToken && userId && hsUrl) {
         console.log("Restoring session for %s", userId);
         try {
-            setLoggedIn({
+            return _doSetLoggedIn({
                 userId: userId,
                 deviceId: deviceId,
                 accessToken: accessToken,
                 homeserverUrl: hsUrl,
                 identityServerUrl: isUrl,
                 guest: isGuest,
-            });
-            return q(true);
+            }, false).then(() => true);
         } catch (e) {
             return _handleRestoreFailure(e);
         }
@@ -245,7 +245,7 @@ function _handleRestoreFailure(e) {
             + ' This is a once off; sorry for the inconvenience.',
         );
 
-        _clearLocalStorage();
+        _clearStorage();
 
         return q.reject(new Error(
             _t('Unable to restore previous session') + ': ' + msg,
@@ -266,7 +266,7 @@ function _handleRestoreFailure(e) {
     return def.promise.then((success) => {
         if (success) {
             // user clicked continue.
-            _clearLocalStorage();
+            _clearStorage();
             return false;
         }
 
@@ -277,17 +277,42 @@ function _handleRestoreFailure(e) {
 
 let rtsClient = null;
 export function initRtsClient(url) {
-    rtsClient = new RtsClient(url);
+    if (url) {
+        rtsClient = new RtsClient(url);
+    } else {
+        rtsClient = null;
+    }
 }
 
 /**
- * Transitions to a logged-in state using the given credentials
+ * Transitions to a logged-in state using the given credentials.
+ *
+ * Starts the matrix client and all other react-sdk services that
+ * listen for events while a session is logged in.
+ *
+ * Also stops the old MatrixClient and clears old credentials/etc out of
+ * storage before starting the new client.
+ *
  * @param {MatrixClientCreds} credentials The credentials to use
+ *
+ * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
 export function setLoggedIn(credentials) {
-    credentials.guest = Boolean(credentials.guest);
+    stopMatrixClient();
+    return _doSetLoggedIn(credentials, true);
+}
 
-    Analytics.setGuest(credentials.guest);
+/**
+ * fires on_logging_in, optionally clears localstorage, persists new credentials
+ * to localstorage, starts the new client.
+ *
+ * @param {MatrixClientCreds} credentials
+ * @param {Boolean} clearStorage
+ *
+ * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
+ */
+async function _doSetLoggedIn(credentials, clearStorage) {
+    credentials.guest = Boolean(credentials.guest);
 
     console.log(
         "setLoggedIn: mxid:", credentials.userId,
@@ -295,32 +320,26 @@ export function setLoggedIn(credentials) {
         "guest:", credentials.guest,
         "hs:", credentials.homeserverUrl,
     );
+
     // This is dispatched to indicate that the user is still in the process of logging in
     // because `teamPromise` may take some time to resolve, breaking the assumption that
     // `setLoggedIn` takes an "instant" to complete, and dispatch `on_logged_in` a few ms
     // later than MatrixChat might assume.
     dis.dispatch({action: 'on_logging_in'});
 
+    if (clearStorage) {
+        await _clearStorage();
+    }
+
+    Analytics.setGuest(credentials.guest);
+
     // Resolves by default
     let teamPromise = Promise.resolve(null);
 
-    // persist the session
+
     if (localStorage) {
         try {
-            localStorage.setItem("mx_hs_url", credentials.homeserverUrl);
-            localStorage.setItem("mx_is_url", credentials.identityServerUrl);
-            localStorage.setItem("mx_user_id", credentials.userId);
-            localStorage.setItem("mx_access_token", credentials.accessToken);
-            localStorage.setItem("mx_is_guest", JSON.stringify(credentials.guest));
-
-            // if we didn't get a deviceId from the login, leave mx_device_id unset,
-            // rather than setting it to "undefined".
-            //
-            // (in this case MatrixClient doesn't bother with the crypto stuff
-            // - that's fine for us).
-            if (credentials.deviceId) {
-                localStorage.setItem("mx_device_id", credentials.deviceId);
-            }
+            _persistCredentialsToLocalStorage(credentials);
 
             // The user registered as a PWLU (PassWord-Less User), the generated password
             // is cached here such that the user can change it at a later time.
@@ -331,8 +350,6 @@ export function setLoggedIn(credentials) {
                     cachedPassword: credentials.password,
                 });
             }
-
-            console.log("Session persisted for %s", credentials.userId);
         } catch (e) {
             console.warn("Error using local storage: can't persist session!", e);
         }
@@ -349,9 +366,6 @@ export function setLoggedIn(credentials) {
         console.warn("No local storage available: can't persist session!");
     }
 
-    // stop any running clients before we create a new one with these new credentials
-    stopMatrixClient();
-
     MatrixClientPeg.replaceUsingCreds(credentials);
 
     teamPromise.then((teamToken) => {
@@ -362,6 +376,26 @@ export function setLoggedIn(credentials) {
     });
 
     startMatrixClient();
+    return MatrixClientPeg.get();
+}
+
+function _persistCredentialsToLocalStorage(credentials) {
+    localStorage.setItem("mx_hs_url", credentials.homeserverUrl);
+    localStorage.setItem("mx_is_url", credentials.identityServerUrl);
+    localStorage.setItem("mx_user_id", credentials.userId);
+    localStorage.setItem("mx_access_token", credentials.accessToken);
+    localStorage.setItem("mx_is_guest", JSON.stringify(credentials.guest));
+
+    // if we didn't get a deviceId from the login, leave mx_device_id unset,
+    // rather than setting it to "undefined".
+    //
+    // (in this case MatrixClient doesn't bother with the crypto stuff
+    // - that's fine for us).
+    if (credentials.deviceId) {
+        localStorage.setItem("mx_device_id", credentials.deviceId);
+    }
+
+    console.log("Session persisted for %s", credentials.userId);
 }
 
 /**
@@ -400,7 +434,7 @@ export function logout() {
  * Starts the matrix client and all other react-sdk services that
  * listen for events while a session is logged in.
  */
-export function startMatrixClient() {
+function startMatrixClient() {
     // dispatch this before starting the matrix client: it's used
     // to add listeners for the 'sync' event so otherwise we'd have
     // a race condition (and we need to dispatch synchronously for this
@@ -416,34 +450,44 @@ export function startMatrixClient() {
 }
 
 /*
- * Stops a running client and all related services, used after
- * a session has been logged out / ended.
+ * Stops a running client and all related services, and clears persistent
+ * storage. Used after a session has been logged out.
  */
 export function onLoggedOut() {
-    _clearLocalStorage();
     stopMatrixClient();
+    _clearStorage().done();
     dis.dispatch({action: 'on_logged_out'});
 }
 
-function _clearLocalStorage() {
+/**
+ * @returns {Promise} promise which resolves once the stores have been cleared
+ */
+function _clearStorage() {
     Analytics.logout();
-    if (!window.localStorage) {
-        return;
-    }
-    const hsUrl = window.localStorage.getItem("mx_hs_url");
-    const isUrl = window.localStorage.getItem("mx_is_url");
-    window.localStorage.clear();
 
-    // preserve our HS & IS URLs for convenience
-    // N.B. we cache them in hsUrl/isUrl and can't really inline them
-    // as getCurrentHsUrl() may call through to localStorage.
-    // NB. We do clear the device ID (as well as all the settings)
-    if (hsUrl) window.localStorage.setItem("mx_hs_url", hsUrl);
-    if (isUrl) window.localStorage.setItem("mx_is_url", isUrl);
+    if (window.localStorage) {
+        const hsUrl = window.localStorage.getItem("mx_hs_url");
+        const isUrl = window.localStorage.getItem("mx_is_url");
+        window.localStorage.clear();
+
+        // preserve our HS & IS URLs for convenience
+        // N.B. we cache them in hsUrl/isUrl and can't really inline them
+        // as getCurrentHsUrl() may call through to localStorage.
+        // NB. We do clear the device ID (as well as all the settings)
+        if (hsUrl) window.localStorage.setItem("mx_hs_url", hsUrl);
+        if (isUrl) window.localStorage.setItem("mx_is_url", isUrl);
+    }
+
+    // create a temporary client to clear out the persistent stores.
+    const cli = createMatrixClient({
+        // we'll never make any requests, so can pass a bogus HS URL
+        baseUrl: "",
+    });
+    return cli.clearStores();
 }
 
 /**
- * Stop all the background processes related to the current client
+ * Stop all the background processes related to the current client.
  */
 export function stopMatrixClient() {
     Notifier.stop();
@@ -454,7 +498,6 @@ export function stopMatrixClient() {
     if (cli) {
         cli.stopClient();
         cli.removeAllListeners();
-        cli.store.deleteAllData();
         MatrixClientPeg.unset();
     }
 }

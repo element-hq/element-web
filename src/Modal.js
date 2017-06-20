@@ -64,7 +64,6 @@ const AsyncWrapper = React.createClass({
 
     render: function() {
         const {loader, ...otherProps} = this.props;
-
         if (this.state.component) {
             const Component = this.state.component;
             return <Component {...otherProps} />;
@@ -199,4 +198,7 @@ class ModalManager {
     }
 }
 
-export default new ModalManager();
+if (!global.singletonModalManager) {
+    global.singletonModalManager = new ModalManager();
+}
+export default global.singletonModalManager;
