@@ -509,5 +509,10 @@
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Bekijk je e-mail en klik op de link die het bevat. Zodra dit klaar is, klik op verder gaan.",
     "Power level must be positive integer.": "Machtsniveau moet een positief heel getal zijn.",
     "%(senderName)s removed their display name (%(oldDisplayName)s).": "%(senderName)s heeft zijn of haar weergavenaam (%(oldDisplayName)s) verwijderd.",
-    "%(senderName)s removed their profile picture.": "%(senderName)s heeft zijn of haar profielfoto verwijderd."
+    "%(senderName)s removed their profile picture.": "%(senderName)s heeft zijn of haar profielfoto verwijderd.",
+    "Failed to kick": "Niet gelukt om te kicken",
+    "Press <StartChatButton> to start a chat with someone": "Druk op <StartChatButton> om een gesprek met iemand te starten",
+    "Remove %(threePid)s?": "%(threePid)s verwijderen?",
+    "%(senderName)s requested a VoIP conference.": "%(senderName)s heeft een VoIP gesprek aangevraagd.",
+    "Report it": "Melden"
 }
