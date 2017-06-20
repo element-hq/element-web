@@ -172,7 +172,7 @@ electron.app.on('ready', () => {
 
     if (vectorConfig.update_base_url) {
         console.log(`Starting auto update with base URL: ${vectorConfig.update_base_url}`);
-        updater.start(vectorConfig.update_base_url)
+        updater.start(vectorConfig.update_base_url);
     } else {
         console.log('No update_base_url is defined: auto update is disabled');
     }
