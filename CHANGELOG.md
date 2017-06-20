@@ -1,3 +1,10 @@
+Changes in [0.11.3](https://github.com/vector-im/riot-web/releases/tag/v0.11.3) (2017-06-20)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.2...v0.11.3)
+
+ * Update to matrix-react-sdk 0.9.6 to fix infinite spinner bugs
+   and some parts of the app that had missed translation.
+
 Changes in [0.11.2](https://github.com/vector-im/riot-web/releases/tag/v0.11.2) (2017-06-19)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.2-rc.2...v0.11.2)
