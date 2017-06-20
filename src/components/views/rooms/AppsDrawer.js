@@ -24,6 +24,7 @@ import dis from '../../../dispatcher';
 import sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
+import ScalarMessaging from '../../../ScalarMessaging';
 
 module.exports = React.createClass({
     displayName: 'AppsDrawer',
@@ -33,6 +34,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        ScalarMessaging.startListening();
         MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
     },
 
@@ -55,6 +57,7 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
+        ScalarMessaging.startListening();
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
         }
@@ -214,10 +217,8 @@ module.exports = React.createClass({
         Modal.createDialog(IntegrationsManager, {
             src: src,
             onFinished: ()=>{
-                if (this._calcSavePromises().length === 0) {
-                    if (e) {
-                        this.props.onCancelClick(e);
-                    }
+                if (e) {
+                    this.props.onCancelClick(e);
                 }
             },
         }, "mx_IntegrationsManager");
