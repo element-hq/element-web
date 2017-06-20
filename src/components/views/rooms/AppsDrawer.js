@@ -16,12 +16,14 @@ limitations under the License.
 
 'use strict';
 
-const React = require('react');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
-const AddAppDialog = require('../dialogs/AddAppDialog');
-const AppTile = require('../elements/AppTile');
-const Modal = require("../../../Modal");
-const dis = require('../../../dispatcher');
+import React from 'react';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import AppTile from '../elements/AppTile';
+import Modal from '../../../Modal';
+import dis from '../../../dispatcher';
+import sdk from '../../../index';
+import SdkConfig from '../../../SdkConfig';
+import ScalarAuthClient from '../../../ScalarAuthClient';
 
 module.exports = React.createClass({
     displayName: 'AppsDrawer',
@@ -35,8 +37,20 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        if (this.state.apps && this.state.apps.length < 1) {
-            this.onClickAddWidget();
+        this.scalarClient = null;
+        const appsDrawer = this;
+        if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
+            this.scalarClient = new ScalarAuthClient();
+            this.scalarClient.connect().done(() => {
+                this.forceUpdate();
+                if (appsDrawer.state.apps && appsDrawer.state.apps.length < 1) {
+                    appsDrawer.onClickAddWidget();
+                }
+            }, (err) => {
+                this.setState({
+                    scalar_error: err,
+                });
+            });
         }
     },
 
@@ -117,72 +131,96 @@ module.exports = React.createClass({
         });
     },
 
-    onClickAddWidget: function() {
-        Modal.createDialog(AddAppDialog, {
-            onFinished: (proceed, type, value) => {
-                if (!proceed || !type) return;
-                if (type === 'custom' && !value) return;
+    onClickAddWidget: function(e) {
+        // Modal.createDialog(AddAppDialog, {
+        //     onFinished: (proceed, type, value) => {
+        //         if (!proceed || !type) return;
+        //         if (type === 'custom' && !value) return;
+        //
+        //         const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets', '');
+        //         let appsStateEvent = {};
+        //         if (appsStateEvents) {
+        //             appsStateEvent = appsStateEvents.getContent();
+        //         }
+        //
+        //         if (appsStateEvent[type]) {
+        //             return;
+        //         }
+        //
+        //         switch (type) {
+        //             case 'etherpad':
+        //                 appsStateEvent.etherpad = {
+        //                     type: type,
+        //                     url: 'http://localhost:8000/etherpad.html',
+        //                 };
+        //                 break;
+        //             case 'grafana':
+        //                 appsStateEvent.grafana = {
+        //                     type: type,
+        //                     url: 'http://localhost:8000/grafana.html',
+        //                 };
+        //                 break;
+        //             case 'jitsi':
+        //                 appsStateEvent.videoConf = {
+        //                     type: type,
+        //                     url: 'http://localhost:8000/jitsi.html',
+        //                     data: {
+        //                         confId: this.props.room.roomId.replace(/[^A-Za-z0-9]/g, '_') + Date.now(),
+        //                     },
+        //                 };
+        //                 break;
+        //             case 'vrdemo':
+        //                 appsStateEvent.vrDemo = {
+        //                     type: type,
+        //                     url: 'http://localhost:8000/vrdemo.html',
+        //                     data: {
+        //                         roomAlias: '#vrvc' + this.props.room.roomId.replace(/[^A-Za-z0-9]/g, '_') + Date.now(),
+        //                     },
+        //                 };
+        //                 break;
+        //             case 'custom':
+        //                 appsStateEvent.custom = {
+        //                     type: type,
+        //                     url: value,
+        //                 };
+        //                 break;
+        //             default:
+        //                 console.warn('Unsupported app type:', type);
+        //                 return;
+        //         }
+        //
+        //         MatrixClientPeg.get().sendStateEvent(
+        //             this.props.room.roomId,
+        //             'im.vector.modular.widgets',
+        //             appsStateEvent,
+        //             '',
+        //         );
+        //     },
+        // });
 
-                const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets', '');
-                let appsStateEvent = {};
-                if (appsStateEvents) {
-                    appsStateEvent = appsStateEvents.getContent();
+        if (e) {
+            e.preventDefault();
+        }
+
+        const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+        console.warn("scalarClient: ", this.scalarClient);
+        console.warn("hasCredentials: ", this.scalarClient.hasCredentials());
+        console.warn("roomId: ", this.props.room.roomId);
+        console.warn("Scalar interface: ", this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId));
+        const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
+                this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId) :
+                null;
+        console.warn("src: ", src);
+        Modal.createDialog(IntegrationsManager, {
+            src: src,
+            onFinished: ()=>{
+                if (this._calcSavePromises().length === 0) {
+                    if (e) {
+                        this.props.onCancelClick(e);
+                    }
                 }
-
-                if (appsStateEvent[type]) {
-                    return;
-                }
-
-                switch (type) {
-                    case 'etherpad':
-                        appsStateEvent.etherpad = {
-                            type: type,
-                            url: 'http://localhost:8000/etherpad.html',
-                        };
-                        break;
-                    case 'grafana':
-                        appsStateEvent.grafana = {
-                            type: type,
-                            url: 'http://localhost:8000/grafana.html',
-                        };
-                        break;
-                    case 'jitsi':
-                        appsStateEvent.videoConf = {
-                            type: type,
-                            url: 'http://localhost:8000/jitsi.html',
-                            data: {
-                                confId: this.props.room.roomId.replace(/[^A-Za-z0-9]/g, '_') + Date.now(),
-                            },
-                        };
-                        break;
-                    case 'vrdemo':
-                        appsStateEvent.vrDemo = {
-                            type: type,
-                            url: 'http://localhost:8000/vrdemo.html',
-                            data: {
-                                roomAlias: '#vrvc' + this.props.room.roomId.replace(/[^A-Za-z0-9]/g, '_') + Date.now(),
-                            },
-                        };
-                        break;
-                    case 'custom':
-                        appsStateEvent.custom = {
-                            type: type,
-                            url: value,
-                        };
-                        break;
-                    default:
-                        console.warn('Unsupported app type:', type);
-                        return;
-                }
-
-                MatrixClientPeg.get().sendStateEvent(
-                    this.props.room.roomId,
-                    'im.vector.modular.widgets',
-                    appsStateEvent,
-                    '',
-                );
             },
-        });
+        }, "mx_IntegrationsManager");
     },
 
     render: function() {
