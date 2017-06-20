@@ -961,5 +961,14 @@
     "Your home server does not support device management.": "O seu Servidor de Base não suporta o gerenciamento de dispositivos.",
     "(~%(count)s results).one": "(~%(count)s resultado)",
     "(~%(count)s results).other": "(~%(count)s resultados)",
-    "Device Name": "Nome do dispositivo"
+    "Device Name": "Nome do dispositivo",
+    "(could not connect media)": "(não foi possível conectar-se à mídia)",
+    "(no answer)": "(sem resposta)",
+    "(unknown failure: %(reason)s)": "(falha desconhecida: %(reason)s)",
+    "Your browser does not support the required cryptography extensions": "O seu navegador não suporta as extensões de criptografia necessárias",
+    "Not a valid Riot keyfile": "Não é um arquivo de chaves Riot válido",
+    "Authentication check failed: incorrect password?": "Falha ao checar a autenticação: senha incorreta?",
+    "Disable Peer-to-Peer for 1:1 calls": "Desabilitar as chamadas 1:1 par-a-par",
+    "Do you want to set an email address?": "Você deseja definir um endereço de e-mail?",
+    "This will allow you to reset your password and receive notifications.": "Isso permitirá que você redefina sua senha e receba notificações."
 }
