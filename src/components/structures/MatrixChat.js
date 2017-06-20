@@ -993,7 +993,6 @@ module.exports = React.createClass({
      * Called when the session is logged out
      */
     _onLoggedOut: function() {
-        this._setPageSubtitle();
         this.notifyNewScreen('login');
         this.setStateForNewView({
             view: VIEWS.LOGIN,
@@ -1004,6 +1003,7 @@ module.exports = React.createClass({
             page_type: PageTypes.RoomDirectory,
         });
         this._teamToken = null;
+        this._setPageSubtitle();
     },
 
     /**
