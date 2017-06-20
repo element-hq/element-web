@@ -19,6 +19,7 @@ limitations under the License.
 
 import BasePlatform from 'matrix-react-sdk/lib/BasePlatform';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import dis from 'matrix-react-sdk/lib/dispatcher';
 
 import Favico from 'favico.js';
 
@@ -35,6 +36,15 @@ export default class VectorBasePlatform extends BasePlatform {
         // so we'd need to fix that if enabling the animation.
         this.favicon = new Favico({animation: 'none'});
         this._updateFavicon();
+        dis.register(this._onAction.bind(this));
+    }
+
+    _onAction(payload) {
+        switch (payload) {
+            case 'on_logged_out':
+                this.setNotificationCount(0);
+                break;
+        }
     }
 
     getHumanReadableName(): string {
