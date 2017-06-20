@@ -206,14 +206,9 @@ module.exports = React.createClass({
         }
 
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        console.warn("scalarClient: ", this.scalarClient);
-        console.warn("hasCredentials: ", this.scalarClient.hasCredentials());
-        console.warn("roomId: ", this.props.room.roomId);
-        console.warn("Scalar interface: ", this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId));
         const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                 this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId) :
                 null;
-        console.warn("src: ", src);
         Modal.createDialog(IntegrationsManager, {
             src: src,
             onFinished: ()=>{
