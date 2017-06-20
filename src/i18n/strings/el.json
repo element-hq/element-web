@@ -916,5 +916,13 @@
     "were unbanned": "ξεμπλοκαρίστηκαν",
     "was unbanned": "ξεμπλοκαρίστηκε",
     "Press <StartChatButton> to start a chat with someone": "Πατήστε <StartChatButton> για να ξεκινήσετε μια συνομιλία",
-    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Δεν είστε σε κανένα δωμάτιο! Πατήστε <CreateRoomButton> για να δημιουργήσετε ένα δωμάτιο  ή <RoomDirectoryButton> για να δείτε το ευρετήριο"
+    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Δεν είστε σε κανένα δωμάτιο! Πατήστε <CreateRoomButton> για να δημιουργήσετε ένα δωμάτιο  ή <RoomDirectoryButton> για να δείτε το ευρετήριο",
+    "To return to your account in future you need to set a password": "Για να επιστρέψετε στον λογαριασμό σας μελλοντικα πρέπει να ορίσετε έναν κωδικό πρόσβασης",
+    "Skip": "Παράβλεψη",
+    "Start verification": "Έναρξη επιβεβαίωσης",
+    "Share without verifying": "Κοινή χρήση χωρίς επιβεβαίωση",
+    "Ignore request": "Παράβλεψη αιτήματος",
+    "You added a new device '%(displayName)s', which is requesting encryption keys.": "Έχετε προσθέσει μια νέα συσκευή '%(displayName)s', η οποία ζητά κλειδιά κρυπτογράφησης.",
+    "Your unverified device '%(displayName)s' is requesting encryption keys.": "Η ανεπιβεβαίωτη συσκευή σας '%(displayName)s' ζητά κλειδιά κρυπτογράφησης.",
+    "Encryption key request": "Αίτημα κλειδιού κρυπτογράφησης"
 }
