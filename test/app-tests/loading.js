@@ -70,7 +70,8 @@ describe('loading:', function () {
         });
     });
 
-    afterEach(async function() {
+    afterEach(async function () {
+        console.log('loading: afterEach');
         if (parentDiv) {
             ReactDOM.unmountComponentAtNode(parentDiv);
             parentDiv.remove();
