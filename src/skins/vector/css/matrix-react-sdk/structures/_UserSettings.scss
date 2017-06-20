@@ -103,16 +103,10 @@ limitations under the License.
 }
 
 .mx_UserSettings_passwordWarning {
-    padding: 6px;
-    background-color: #76cfa6;
-    border-radius: 3px;
-    color: #fff;
+    /* To move the "Sign out" button out of the way */
+    clear: both;
+    color: $warning-color;
     margin-bottom: 5px;
-}
-
-.mx_UserSettings_passwordWarning_icon {
-    vertical-align: -6px;
-    margin-right: 3px;
 }
 
 .mx_UserSettings_importExportButtons {
