@@ -41,6 +41,7 @@ import PageTypes from '../../PageTypes';
 
 import createRoom from "../../createRoom";
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
+import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
 
 /** constants for MatrixChat.state.view */
@@ -132,11 +133,6 @@ module.exports = React.createClass({
 
             // a thing to call showScreen with once login completes.
             screenAfterLogin: this.props.initialScreenAfterLogin,
-
-            // Stashed guest credentials if the user logs out
-            // whilst logged in as a guest user (so they can change
-            // their mind & log back in)
-            guestCreds: null,
 
             // What the LoggedInView would be showing if visible
             page_type: null,
@@ -385,13 +381,6 @@ module.exports = React.createClass({
                 this._startRegistration(payload.params || {});
                 break;
             case 'start_login':
-                if (MatrixClientPeg.get() &&
-                    MatrixClientPeg.get().isGuest()
-                ) {
-                    this.setState({
-                        guestCreds: MatrixClientPeg.getCredentials(),
-                    });
-                }
                 this.setStateForNewView({
                     view: VIEWS.LOGIN,
                 });
@@ -545,12 +534,10 @@ module.exports = React.createClass({
                 break;
             case 'on_logging_in':
                 // We are now logging in, so set the state to reflect that
-                // and also that we're not ready (we'll be marked as logged
-                // in once the login completes, then ready once the sync
-                // completes).
+                // NB. This does not touch 'ready' since if our dispatches
+                // are delayed, the sync could already have completed
                 this.setStateForNewView({
                     view: VIEWS.LOGGING_IN,
-                    ready: false,
                 });
                 break;
             case 'on_logged_in':
@@ -947,7 +934,6 @@ module.exports = React.createClass({
     _onLoggedIn: function(teamToken) {
         this.setState({
             view: VIEWS.LOGGED_IN,
-            guestCreds: null,
         });
 
         if (teamToken) {
@@ -1025,6 +1011,10 @@ module.exports = React.createClass({
      */
     _onWillStartClient() {
         const self = this;
+        // if the client is about to start, we are, by definition, not ready.
+        // Set ready to false now, then it'll be set to true when the sync
+        // listener we set below fires.
+        this.setState({ready: false});
         const cli = MatrixClientPeg.get();
 
         // Allow the JS SDK to reap timeline events. This reduces the amount of
@@ -1094,6 +1084,14 @@ module.exports = React.createClass({
                     });
                 }
             }
+        });
+
+        const krh = new KeyRequestHandler(cli);
+        cli.on("crypto.roomKeyRequest", (req) => {
+            krh.handleKeyRequest(req);
+        });
+        cli.on("crypto.roomKeyRequestCancellation", (req) => {
+            krh.handleKeyRequestCancellation(req);
         });
     },
 
@@ -1270,14 +1268,9 @@ module.exports = React.createClass({
         this.showScreen("forgot_password");
     },
 
-    onReturnToGuestClick: function() {
-        // reanimate our guest login
-        if (this.state.guestCreds) {
-            // TODO: this is probably a bit broken - we don't want to be
-            // clearing storage when we reanimate the guest creds.
-            Lifecycle.setLoggedIn(this.state.guestCreds);
-            this.setState({guestCreds: null});
-        }
+    onReturnToAppClick: function() {
+        // treat it the same as if the user had completed the login
+        this._onLoggedIn(null);
     },
 
     // returns a promise which resolves to the new MatrixClient
@@ -1457,7 +1450,7 @@ module.exports = React.createClass({
                     onLoggedIn={this.onRegistered}
                     onLoginClick={this.onLoginClick}
                     onRegisterClick={this.onRegisterClick}
-                    onCancelClick={this.state.guestCreds ? this.onReturnToGuestClick : null}
+                    onCancelClick={MatrixClientPeg.get() ? this.onReturnToAppClick : null}
                     />
             );
         }
@@ -1491,7 +1484,7 @@ module.exports = React.createClass({
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     onForgotPasswordClick={this.onForgotPasswordClick}
                     enableGuest={this.props.enableGuest}
-                    onCancelClick={this.state.guestCreds ? this.onReturnToGuestClick : null}
+                    onCancelClick={MatrixClientPeg.get() ? this.onReturnToAppClick : null}
                 />
             );
         }

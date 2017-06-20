@@ -557,7 +557,7 @@
     "You're not in any rooms yet! Press": "Vous n’êtes dans aucun salon ! Cliquez",
     "You are trying to access %(roomName)s.": "Vous essayez d'accéder à %(roomName)s.",
     "You cannot place a call with yourself.": "Vous ne pouvez pas passer d'appel avec vous-même.",
-    "You cannot place VoIP calls in this browser.": "Vous ne pouvez pas passer d'appel voix dans cet explorateur.",
+    "You cannot place VoIP calls in this browser.": "Vous ne pouvez pas passer d'appel vocal dans ce navigateur.",
     "You do not have permission to post to this room": "Vous n’avez pas la permission de poster dans ce salon",
     "You have been invited to join this room by %(inviterName)s": "Vous avez été invité à joindre ce salon par %(inviterName)s",
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device": "Vous avez été déconnecté de tous vos appareils et ne recevrez plus de notifications. Pour réactiver les notifications, identifiez vous à nouveau sur tous les appareils",
@@ -922,5 +922,7 @@
     "Authentication check failed: incorrect password?": "Erreur d’identification: mot de passe incorrect ?",
     "Disable Peer-to-Peer for 1:1 calls": "Désactiver les appels 1:1 pair-à-pair",
     "Do you want to set an email address?": "Souhaitez-vous configurer une adresse e-mail ?",
-    "This will allow you to reset your password and receive notifications.": "Ceci va vous permettre de réinitialiser votre mot de passe et de recevoir des notifications."
+    "This will allow you to reset your password and receive notifications.": "Ceci va vous permettre de réinitialiser votre mot de passe et de recevoir des notifications.",
+    "Press <StartChatButton> to start a chat with someone": "Cliquez sur <StartChatButton> pour entamer une discussion avec quelqu'un",
+    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Vous n'avez pas encore rejoint de salle ! Cliquez sur <CreateRoomButton> pour créer une salle ou sur <RoomDirectoryButton> pour explorer l'annuaire"
 }
