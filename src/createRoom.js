@@ -76,14 +76,11 @@ function createRoom(opts) {
         }
     ];
 
-    let modal;
-    setTimeout(()=>{
-        modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
-    }, 0);
+    const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
     let roomId;
     return client.createRoom(createOpts).finally(function() {
-        if (modal) modal.close();
+        modal.close();
     }).then(function(res) {
         roomId = res.room_id;
         if (opts.dmUserId) {
@@ -100,6 +97,7 @@ function createRoom(opts) {
             dis.dispatch({
                 action: 'view_room',
                 room_id: roomId,
+                should_peek: false,
             });
         }
         return roomId;

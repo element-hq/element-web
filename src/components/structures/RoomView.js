@@ -93,6 +93,7 @@ module.exports = React.createClass({
             roomId: null,
             roomLoading: true,
             peekLoading: false,
+            shouldPeek: true,
 
             // The event to be scrolled to initially
             initialEventId: null,
@@ -168,7 +169,13 @@ module.exports = React.createClass({
             initialEventId: RoomViewStore.getInitialEventId(),
             initialEventPixelOffset: RoomViewStore.getInitialEventPixelOffset(),
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
+            forwardingEvent: RoomViewStore.getForwardingEvent(),
+            shouldPeek: RoomViewStore.shouldPeek(),
         };
+
+        // finished joining, start waiting for a room and show a spinner. See onRoom.
+        newState.waitingForRoom = this.state.joining && !newState.joining &&
+                        !RoomViewStore.getJoinError();
 
         // Temporary logging to diagnose https://github.com/vector-im/riot-web/issues/4307
         console.log(
@@ -177,11 +184,10 @@ module.exports = React.createClass({
             newState.roomAlias,
             'loading?', newState.roomLoading,
             'joining?', newState.joining,
+            'initial?', initial,
+            'waiting?', newState.waitingForRoom,
+            'shouldPeek?', newState.shouldPeek,
         );
-
-        // finished joining, start waiting for a room and show a spinner. See onRoom.
-        newState.waitingForRoom = this.state.joining && !newState.joining &&
-                        !RoomViewStore.getJoinError();
 
         // NB: This does assume that the roomID will not change for the lifetime of
         // the RoomView instance
@@ -238,7 +244,7 @@ module.exports = React.createClass({
         if (!this.state.joining && this.state.roomId) {
             if (this.props.autoJoin) {
                 this.onJoinButtonClicked();
-            } else if (!room) {
+            } else if (!room && this.state.shouldPeek) {
                 console.log("Attempting to peek into room %s", this.state.roomId);
                 this.setState({
                     peekLoading: true,
@@ -452,11 +458,6 @@ module.exports = React.createClass({
                     callState: callState
                 });
 
-                break;
-            case 'forward_event':
-                this.setState({
-                    forwardingEvent: payload.content,
-                });
                 break;
         }
     },
@@ -1164,8 +1165,13 @@ module.exports = React.createClass({
         this.updateTint();
         this.setState({
             editingRoomSettings: false,
-            forwardingEvent: null,
         });
+        if (this.state.forwardingEvent) {
+            dis.dispatch({
+                action: 'forward_event',
+                event: null,
+            });
+        }
         dis.dispatch({action: 'focus_composer'});
     },
 
@@ -1576,7 +1582,7 @@ module.exports = React.createClass({
         } else if (this.state.uploadingRoomSettings) {
             aux = <Loader/>;
         } else if (this.state.forwardingEvent !== null) {
-            aux = <ForwardMessage onCancelClick={this.onCancelClick} currentRoomId={this.state.room.roomId} mxEvent={this.state.forwardingEvent} />;
+            aux = <ForwardMessage onCancelClick={this.onCancelClick} />;
         } else if (this.state.searching) {
             hideCancel = true; // has own cancel
             aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;

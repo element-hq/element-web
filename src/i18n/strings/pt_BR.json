@@ -356,6 +356,7 @@
     "%(senderName)s placed a %(callType)s call.": "%(senderName)s fez uma chamada de %(callType)s.",
     "Power level must be positive integer.": "O nível de permissões tem que ser um número inteiro e positivo.",
     "Press": "Aperte",
+    "Press <StartChatButton> to start a chat with someone": "Clique em <StartChatButton> para iniciar a conversa com alguém",
     "Reason": "Razão",
     "%(targetName)s rejected the invitation.": "%(targetName)s recusou o convite.",
     "%(senderName)s removed their display name (%(oldDisplayName)s).": "%(senderName)s removeu o seu nome público (%(oldDisplayName)s).",
@@ -398,7 +399,7 @@
     "VoIP is unsupported": "Chamada de voz não permitida",
     "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s desfez o convite a %(targetName)s.",
     "You are already in a call.": "Você já está em  uma chamada.",
-    "You're not in any rooms yet! Press": "Você ainda não está em nenhuma sala! Pressione",
+    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Você ainda não está em nenhuma sala! Clique em <CreateRoomButton> para criar uma sala ou em <RoomDirectoryButton> para navegar pela lista pública de salas",
     "You are trying to access %(roomName)s.": "Você está tentando acessar a sala %(roomName)s.",
     "You cannot place a call with yourself.": "Você não pode iniciar uma chamada.",
     "You cannot place VoIP calls in this browser.": "Você não pode fazer chamadas de voz neste navegador.",
@@ -960,5 +961,14 @@
     "Your home server does not support device management.": "O seu Servidor de Base não suporta o gerenciamento de dispositivos.",
     "(~%(count)s results).one": "(~%(count)s resultado)",
     "(~%(count)s results).other": "(~%(count)s resultados)",
-    "Device Name": "Nome do dispositivo"
+    "Device Name": "Nome do dispositivo",
+    "(could not connect media)": "(não foi possível conectar-se à mídia)",
+    "(no answer)": "(sem resposta)",
+    "(unknown failure: %(reason)s)": "(falha desconhecida: %(reason)s)",
+    "Your browser does not support the required cryptography extensions": "O seu navegador não suporta as extensões de criptografia necessárias",
+    "Not a valid Riot keyfile": "Não é um arquivo de chaves Riot válido",
+    "Authentication check failed: incorrect password?": "Falha ao checar a autenticação: senha incorreta?",
+    "Disable Peer-to-Peer for 1:1 calls": "Desabilitar as chamadas 1:1 par-a-par",
+    "Do you want to set an email address?": "Você deseja definir um endereço de e-mail?",
+    "This will allow you to reset your password and receive notifications.": "Isso permitirá que você redefina sua senha e receba notificações."
 }

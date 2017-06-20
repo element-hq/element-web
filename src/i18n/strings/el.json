@@ -839,13 +839,13 @@
     "Share message history with new users": "Διαμοιρασμός ιστορικού μηνυμάτων με τους νέους χρήστες",
     "numbullet": "απαρίθμηση",
     "%(severalUsers)sleft and rejoined %(repeats)s times": "%(severalUsers)s έφυγαν και ξανασυνδέθηκαν %(repeats)s φορές",
-    "%(oneUser)sleft and rejoined %(repeats)s times": "%(severalUsers)s έφυγε και ξανασυνδέθηκε %(repeats)s φορές",
+    "%(oneUser)sleft and rejoined %(repeats)s times": "%(oneUser)s έφυγε και ξανασυνδέθηκε %(repeats)s φορές",
     "%(severalUsers)sleft and rejoined": "%(severalUsers)s έφυγαν και ξανασυνδέθηκαν",
-    "%(oneUser)sleft and rejoined": "%(severalUsers)s έφυγε και ξανασυνδέθηκε",
+    "%(oneUser)sleft and rejoined": "%(oneUser)s έφυγε και ξανασυνδέθηκε",
     "%(severalUsers)shad their invitations withdrawn %(repeats)s times": "Οι %(severalUsers)s απέσυραν τις προσκλήσεις τους %(repeats)s φορές",
-    "%(oneUser)shad their invitation withdrawn %(repeats)s times": "Ο %(severalUsers)s απέσυρε την πρόσκληση του %(repeats)s φορές",
+    "%(oneUser)shad their invitation withdrawn %(repeats)s times": "Ο %(oneUser)s απέσυρε την πρόσκληση του %(repeats)s φορές",
     "%(severalUsers)shad their invitations withdrawn": "Οι %(severalUsers)s απέσυραν τις προσκλήσεις τους",
-    "%(oneUser)shad their invitation withdrawn": "Ο %(severalUsers)s απέσυρε την πρόσκληση του",
+    "%(oneUser)shad their invitation withdrawn": "Ο %(oneUser)s απέσυρε την πρόσκληση του",
     "You must join the room to see its files": "Πρέπει να συνδεθείτε στο δωμάτιο για να δείτε τα αρχεία του",
     "Reject all %(invitedRooms)s invites": "Απόρριψη όλων των προσκλήσεων %(invitedRooms)s",
     "Failed to invite the following users to the %(roomName)s room:": "Δεν ήταν δυνατή η πρόσκληση των χρηστών στο δωμάτιο %(roomName)s:",
@@ -914,5 +914,7 @@
     "were unbanned %(repeats)s times": "ξεμπλοκαρίστηκαν %(repeats)s φορές",
     "was unbanned %(repeats)s times": "ξεμπλοκαρίστηκε %(repeats)s φορές",
     "were unbanned": "ξεμπλοκαρίστηκαν",
-    "was unbanned": "ξεμπλοκαρίστηκε"
+    "was unbanned": "ξεμπλοκαρίστηκε",
+    "Press <StartChatButton> to start a chat with someone": "Πατήστε <StartChatButton> για να ξεκινήσετε μια συνομιλία",
+    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Δεν είστε σε κανένα δωμάτιο! Πατήστε <CreateRoomButton> για να δημιουργήσετε ένα δωμάτιο  ή <RoomDirectoryButton> για να δείτε το ευρετήριο"
 }
