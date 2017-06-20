@@ -276,6 +276,16 @@ module.exports = React.createClass({
         }
     },
 
+    // `UserSettings` assumes that the client peg will not be null, so give it some
+    // sort of assurance here by only allowing a re-render if the client is truthy.
+    //
+    // This is required because `UserSettings` maintains its own state and if this state
+    // updates (e.g. during _setStateFromSessionStore) after the client peg has been made
+    // null (during logout), then it will attempt to re-render and throw errors.
+    shouldComponentUpdate: function() {
+        return Boolean(MatrixClientPeg.get());
+    },
+
     _setStateFromSessionStore: function() {
         this.setState({
             userHasGeneratedPassword: Boolean(this._sessionStore.getCachedPassword()),
