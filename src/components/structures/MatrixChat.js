@@ -968,6 +968,7 @@ module.exports = React.createClass({
      * Called when the session is logged out
      */
     _onLoggedOut: function() {
+        this._setPageSubtitle();
         this.notifyNewScreen('login');
         this.setStateForNewScreen({
             loggedIn: false,
@@ -1267,6 +1268,10 @@ module.exports = React.createClass({
         });
     },
 
+    _setPageSubtitle: function(subtitle='') {
+        document.title = `Riot ${subtitle}`;
+    },
+
     updateStatusIndicator: function(state, prevState) {
         let notifCount = 0;
 
@@ -1287,15 +1292,15 @@ module.exports = React.createClass({
             PlatformPeg.get().setNotificationCount(notifCount);
         }
 
-        let title = "Riot ";
+        let subtitle = '';
         if (state === "ERROR") {
-            title += `[${_t("Offline")}] `;
+            subtitle += `[${_t("Offline")}] `;
         }
         if (notifCount > 0) {
-            title += `[${notifCount}]`;
+            subtitle += `[${notifCount}]`;
         }
 
-        document.title = title;
+        this._setPageSubtitle(subtitle);
     },
 
     onUserSettingsClose: function() {
