@@ -514,5 +514,15 @@
     "Press <StartChatButton> to start a chat with someone": "Druk op <StartChatButton> om een gesprek met iemand te starten",
     "Remove %(threePid)s?": "%(threePid)s verwijderen?",
     "%(senderName)s requested a VoIP conference.": "%(senderName)s heeft een VoIP gesprek aangevraagd.",
-    "Report it": "Melden"
+    "Report it": "Melden",
+    "Resetting password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Het wachtwoord veranderen betekent momenteel dat alle eind-tot-eind versleutelingssleutels op alle apparaten veranderen waardoor versleutelde gespreksgeschiedenis onleesbaar wordt, behalve als je eerst de ruimte sleutels exporteert en daarna opnieuw importeert. Dit zal in de toekomst verbeterd worden.",
+    "restore": "herstellen",
+    "Results from DuckDuckGo": "Resultaten van DuckDuckGo",
+    "Return to app": "Naar de app terugkeren",
+    "Return to login screen": "Naar het inlogscherm terugkeren",
+    "Riot does not have permission to send you notifications - please check your browser settings": "Riot heeft geen permissie om je notificaties te versturen - controleer je browser instellingen",
+    "Riot was not given permission to send notifications - please try again": "Riot heeft geen permissie gekregen om notificaties te versturen - probeer het opnieuw",
+    "riot-web version:": "riot-web versie:",
+    "Room %(roomId)s not visible": "Ruimte %(roomId)s is niet zichtbaar",
+    "Room Colour": "Ruimte Kleur"
 }
