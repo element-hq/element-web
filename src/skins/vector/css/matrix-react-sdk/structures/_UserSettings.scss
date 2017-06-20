@@ -102,6 +102,19 @@ limitations under the License.
     padding-right: 1em;
 }
 
+.mx_UserSettings_passwordWarning {
+    padding: 6px;
+    background-color: #76cfa6;
+    border-radius: 3px;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.mx_UserSettings_passwordWarning_icon {
+    vertical-align: -6px;
+    margin-right: 3px;
+}
+
 .mx_UserSettings_importExportButtons {
     padding-top: 10px;
     padding-left: 40px;

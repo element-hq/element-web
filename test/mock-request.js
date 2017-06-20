@@ -13,7 +13,7 @@ function HttpBackend() {
     // the request function dependency that the SDK needs.
     this.requestFn = function(opts, callback) {
         const req = new Request(opts, callback);
-        console.log("HTTP backend received request: " + req);
+        console.log(`${Date.now()} HTTP backend received request: ${req}`);
         self.requests.push(req);
 
         const abort = function() {
@@ -30,6 +30,33 @@ function HttpBackend() {
             abort: abort,
         };
     };
+
+    // very simplistic mapping from the whatwg fetch interface onto the request
+    // interface, so we can use the same mock backend for both.
+    this.fetchFn = function(input, init) {
+        init = init || {};
+        const requestOpts = {
+            uri: input,
+            method: init.method || 'GET',
+            body: init.body,
+        };
+
+        return new Promise((resolve, reject) => {
+            function callback(err, response, body) {
+                if (err) {
+                    reject(err);
+                }
+                resolve({
+                    ok: response.statusCode >= 200 && response.statusCode < 300,
+                    json: () => body,
+                });
+            };
+
+            const req = new Request(requestOpts, callback);
+            console.log(`HTTP backend received request: ${req}`);
+            self.requests.push(req);
+        });
+    };
 }
 HttpBackend.prototype = {
     /**
@@ -37,7 +64,7 @@ HttpBackend.prototype = {
      * @param {string} path The path to flush (optional) default: all.
      * @param {integer} numToFlush The number of things to flush (optional), default: all.
      * @param {integer=} waitTime  The time (in ms) to wait for a request to happen.
-     *    default: 5
+     *    default: 100
      *
      * @return {Promise} resolves when there is nothing left to flush, with the
      *    number of requests flushed
@@ -46,49 +73,46 @@ HttpBackend.prototype = {
         const defer = q.defer();
         const self = this;
         let flushed = 0;
-        let triedWaiting = false;
         if (waitTime === undefined) {
-            waitTime = 5;
+            waitTime = 100;
         }
-        console.log(
-            "HTTP backend flushing... (path=" + path
+
+        function log(msg) {
+            console.log(`${Date.now()} flush[${path || ''}]: ${msg}`);
+        }
+
+        log("HTTP backend flushing... (path=" + path
             + " numToFlush=" + numToFlush
             + " waitTime=" + waitTime
             + ")",
         );
+        const endTime =  waitTime + Date.now();
+
         const tryFlush = function() {
             // if there's more real requests and more expected requests, flush 'em.
-            console.log(
-                "  trying to flush queue => reqs=[" + self.requests
-                + "] expected=[" + self.expectedRequests
-                + "]",
+            log(`  trying to flush => reqs=[${self.requests}] ` +
+                `expected=[${self.expectedRequests}]`,
             );
             if (self._takeFromQueue(path)) {
                 // try again on the next tick.
                 flushed += 1;
                 if (numToFlush && flushed === numToFlush) {
-                    console.log("  Flushed assigned amount:", numToFlush);
+                    log(`Flushed assigned amount: ${numToFlush}`);
                     defer.resolve(flushed);
                 } else {
-                    console.log("  flushed. Trying for more.");
+                    log(`  flushed. Trying for more.`);
                     setTimeout(tryFlush, 0);
                 }
-            } else if (flushed === 0 && !triedWaiting) {
+            } else if (flushed === 0 && Date.now() < endTime) {
                 // we may not have made the request yet, wait a generous amount of
                 // time before giving up.
-                console.log(
-                    "  nothing to flush yet; waiting " + waitTime +
-                    "ms for requests.")
-                setTimeout(tryFlush, waitTime);
-                triedWaiting = true;
+                log(`  nothing to flush yet; waiting for requests.`);
+                setTimeout(tryFlush, 5);
             } else {
                 if (flushed === 0) {
-                    console.log("  nothing to flush; giving up");
+                    log("nothing to flush; giving up");
                 } else {
-                    console.log(
-                        "  no more flushes after flushing", flushed,
-                        "requests",
-                    );
+                    log(`no more flushes after flushing ${flushed} requests`);
                 }
                 defer.resolve(flushed);
             }
@@ -138,7 +162,7 @@ HttpBackend.prototype = {
                     matchingReq.checks[j](req);
                 }
                 testResponse = matchingReq.response;
-                console.log("    responding to %s", matchingReq.path);
+                console.log(`${Date.now()}    responding to ${matchingReq.path}`);
                 let body = testResponse.body;
                 if (Object.prototype.toString.call(body) == "[object Function]") {
                     body = body(req.path, req.data);

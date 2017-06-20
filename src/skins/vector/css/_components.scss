@@ -71,11 +71,13 @@
 @import "./vector-web/views/context_menus/_MessageContextMenu.scss";
 @import "./vector-web/views/context_menus/_RoomTileContextMenu.scss";
 @import "./vector-web/views/dialogs/_ChangelogDialog.scss";
+@import "./vector-web/views/dialogs/_SetEmailDialog.scss";
 @import "./vector-web/views/dialogs/_SetPasswordDialog.scss";
 @import "./vector-web/views/directory/_NetworkDropdown.scss";
 @import "./vector-web/views/elements/_ImageView.scss";
 @import "./vector-web/views/elements/_Spinner.scss";
 @import "./vector-web/views/globals/_MatrixToolbar.scss";
+@import "./vector-web/views/messages/_DateSeparator.scss";
 @import "./vector-web/views/messages/_MessageTimestamp.scss";
 @import "./vector-web/views/messages/_SenderProfile.scss";
 @import "./vector-web/views/rooms/_RoomDropTarget.scss";

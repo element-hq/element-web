@@ -1,5 +1,5 @@
 /*
-Copyright 2017 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,25 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_LoginBox_loginButton_wrapper {
-    text-align: center;
+.mx_SetEmailDialog_email_input {
+    border-radius: 3px;
+    border: 1px solid $input-border-color;
+    padding: 9px;
+    color: $input-fg-color;
+    background-color: $primary-bg-color;
+    font-size: 15px;
     width: 100%;
+    max-width: 280px;
+    margin-bottom: 10px;
 }
 
-.mx_LoginBox_loginButton,
-.mx_LoginBox_registerButton {
-    margin-top: -8px;
-    height: 40px;
-    border: 0px;
-    border-radius: 40px;
-    margin-left: 4px;
-    margin-right: 4px;
-    width: 80px;
+.mx_SetEmailDialog_email_input:focus {
+    outline: none;
+    box-shadow: none;
+    border: 1px solid $accent-color;
+}
 
-    background-color: $accent-color;
-    color: $primary-bg-color;
-
-    cursor: pointer;
-
-    font-size: 15px;
+.mx_SetEmailDialog_email_input_placeholder {
 }
