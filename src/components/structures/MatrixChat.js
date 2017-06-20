@@ -41,6 +41,7 @@ import PageTypes from '../../PageTypes';
 
 import createRoom from "../../createRoom";
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
+import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
 
 /** constants for MatrixChat.state.view */
@@ -1083,6 +1084,14 @@ module.exports = React.createClass({
                     });
                 }
             }
+        });
+
+        const krh = new KeyRequestHandler(cli);
+        cli.on("crypto.roomKeyRequest", (req) => {
+            krh.handleKeyRequest(req);
+        });
+        cli.on("crypto.roomKeyRequestCancellation", (req) => {
+            krh.handleKeyRequestCancellation(req);
         });
     },
 
