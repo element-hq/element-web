@@ -330,7 +330,7 @@ module.exports = React.createClass({
                     defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
                 });
             }).catch((e) => {
-                console.error("Unable to load session", e);
+                console.error(`Error attempting to load session from token params: ${e}`);
                 return false;
             }).then((loadedSession) => {
                 if (!loadedSession) {
