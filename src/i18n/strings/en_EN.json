@@ -440,6 +440,7 @@
   "Please Register": "Please Register",
   "Power level must be positive integer.": "Power level must be positive integer.",
   "Press": "Press",
+  "Press <StartChatButton> to start a chat with someone": "Press <StartChatButton> to start a chat with someone",
   "Privacy warning": "Privacy warning",
   "Private Chat": "Private Chat",
   "Privileged Users": "Privileged Users",
@@ -648,7 +649,7 @@
   "Would you like to <acceptText>accept</acceptText> or <declineText>decline</declineText> this invitation?": "Would you like to <acceptText>accept</acceptText> or <declineText>decline</declineText> this invitation?",
   "You already have existing direct chats with this user:": "You already have existing direct chats with this user:",
   "You are already in a call.": "You are already in a call.",
-  "You're not in any rooms yet! Press": "You're not in any rooms yet! Press",
+  "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory",
   "You are trying to access %(roomName)s.": "You are trying to access %(roomName)s.",
   "You cannot place a call with yourself.": "You cannot place a call with yourself.",
   "You cannot place VoIP calls in this browser.": "You cannot place VoIP calls in this browser.",
@@ -911,5 +912,12 @@
   "Disable Peer-to-Peer for 1:1 calls": "Disable Peer-to-Peer for 1:1 calls",
   "Do you want to set an email address?": "Do you want to set an email address?",
   "This will allow you to reset your password and receive notifications.": "This will allow you to reset your password and receive notifications.",
-  "To return to your account in future you need to set a password": "To return to your account in future you need to set a password"
+  "To return to your account in future you need to set a password": "To return to your account in future you need to set a password",
+  "Skip":"Skip",
+  "Start verification": "Start verification",
+  "Share without verifying": "Share without verifying",
+  "Ignore request": "Ignore request",
+  "You added a new device '%(displayName)s', which is requesting encryption keys.": "You added a new device '%(displayName)s', which is requesting encryption keys.",
+  "Your unverified device '%(displayName)s' is requesting encryption keys.": "Your unverified device '%(displayName)s' is requesting encryption keys.",
+  "Encryption key request": "Encryption key request"
 }
