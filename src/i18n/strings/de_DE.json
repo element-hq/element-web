@@ -976,5 +976,13 @@
     "Do you want to set an email address?": "Möchtest du eine E-Mail-Adresse setzen?",
     "This will allow you to reset your password and receive notifications.": "Dies erlaubt dir dein Passwort zurückzusetzen und Benachrichtigungen zu empfangen.",
     "Press <StartChatButton> to start a chat with someone": "Klicke auf <StartChatButton> um einen Chat mit jemanden zu starten",
-    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Du bist bisher in keinem Raum! Klicke auf <CreateRoomButton> um einen Raum zu erstellen oder <RoomDirectoryButton> um das Verzeichnis zu durchsuchen"
+    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Du bist bisher in keinem Raum! Klicke auf <CreateRoomButton> um einen Raum zu erstellen oder <RoomDirectoryButton> um das Verzeichnis zu durchsuchen",
+    "To return to your account in future you need to set a password": "Um in Zukunft zu deinem Konto zurückzukehren, musst du ein Passwort setzen",
+    "Skip": "Überspringen",
+    "Start verification": "Verifikation starten",
+    "Share without verifying": "Teile ohne Verifizierung",
+    "Ignore request": "Anfrage ignorieren",
+    "You added a new device '%(displayName)s', which is requesting encryption keys.": "Du hast das neue Gerät '%(displayName)s' hinzugefügt, welches nun Verschlüsselungs-Schlüssel anfragt.",
+    "Encryption key request": "Verschlüsselungs-Schlüssel-Anfrage",
+    "Your unverified device '%(displayName)s' is requesting encryption keys.": "Dein nicht verifiziertes Gerät '%(displayName)s' fragt nach Verschlüsselungs-Schlüsseln."
 }
