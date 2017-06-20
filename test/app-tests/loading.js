@@ -30,6 +30,7 @@ import sdk from 'matrix-react-sdk';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 import {VIEWS} from 'matrix-react-sdk/lib/components/structures/MatrixChat';
+import dis from 'matrix-react-sdk/lib/dispatcher';
 
 import * as test_utils from '../test-utils';
 import MockHttpBackend from '../mock-request';
@@ -492,6 +493,76 @@ describe('loading:', function () {
                 httpBackend.verifyNoOutstandingExpectation();
                 expect(windowLocation.hash).toEqual("#/room/!room:id");
             }).done(done, done);
+        });
+
+        describe('Login as user', function() {
+            beforeEach(function() {
+                // first we have to load the homepage
+                loadApp();
+
+                httpBackend.when('POST', '/register').check(function(req) {
+                    expect(req.queryParams.kind).toEqual('guest');
+                }).respond(200, {
+                    user_id: "@guest:localhost",
+                    access_token: "secret_token",
+                });
+
+                return httpBackend.flush().then(() => {
+                    return awaitSyncingSpinner(matrixChat);
+                }).then(() => {
+                    // we got a sync spinner - let the sync complete
+                    return expectAndAwaitSync();
+                }).then(() => {
+                    // once the sync completes, we should have a home page
+                    ReactTestUtils.findRenderedComponentWithType(
+                        matrixChat, sdk.getComponent('structures.HomePage'));
+
+                    // we simulate a click on the 'login' button by firing off
+                    // the relevant dispatch.
+                    //
+                    // XXX: is it an anti-pattern to access the react-sdk's
+                    // dispatcher in this way? Is it better to find the login
+                    // button and simulate a click? (we might have to arrange
+                    // for it to be shown - it's not always, due to the
+                    // collapsing left panel
+
+                    dis.dispatch({ action: 'start_login' });
+
+                    return q.delay(1);
+                });
+            });
+
+            it('should give us a login page', function() {
+                expect(windowLocation.hash).toEqual("#/login");
+
+                // we expect a single <Login> component
+                ReactTestUtils.findRenderedComponentWithType(
+                    matrixChat, sdk.getComponent('structures.login.Login')
+                );
+            });
+
+            it('should allow us to return to the app', function() {
+                const login = ReactTestUtils.findRenderedComponentWithType(
+                    matrixChat, sdk.getComponent('structures.login.Login')
+                );
+
+                const linkText = 'Return to app';
+
+                const returnToApp = ReactTestUtils.scryRenderedDOMComponentsWithTag(
+                    login, 'a').find((e) => e.innerText === linkText);
+
+                if (!returnToApp) {
+                    throw new Error(`Couldn't find '${linkText}' link`);
+                }
+
+                ReactTestUtils.Simulate.click(returnToApp);
+
+                return q.delay(1).then(() => {
+                    // we should be straight back into the home page
+                    ReactTestUtils.findRenderedComponentWithType(
+                        matrixChat, sdk.getComponent('structures.HomePage'));
+                });
+            });
         });
     });
 

@@ -1,3 +1,60 @@
+Changes in [0.11.3](https://github.com/vector-im/riot-web/releases/tag/v0.11.3) (2017-06-20)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.2...v0.11.3)
+
+ * Update to matrix-react-sdk 0.9.6 to fix infinite spinner bugs
+   and some parts of the app that had missed translation.
+
+Changes in [0.11.2](https://github.com/vector-im/riot-web/releases/tag/v0.11.2) (2017-06-19)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.2-rc.2...v0.11.2)
+
+ * Add more languages and translations
+ * Add a 'register' button
+
+Changes in [0.11.2-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.11.2-rc.2) (2017-06-16)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.2-rc.1...v0.11.2-rc.2)
+
+ * Update react-sdk to pull in fixes for URL previews, CAS
+   login, h2 in markdown and CAPTCHA forms.
+ * Enable Korean translation
+ * Update from Weblate.
+   [\#4323](https://github.com/vector-im/riot-web/pull/4323)
+ * Fix h2 in markdown being weird
+   [\#4332](https://github.com/vector-im/riot-web/pull/4332)
+
+Changes in [0.11.2-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.11.2-rc.1) (2017-06-15)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.1...v0.11.2-rc.1)
+
+ * Attempts to deflakify the joining test
+   [\#4313](https://github.com/vector-im/riot-web/pull/4313)
+ * Add a test for the login flow when there is a teamserver
+   [\#4315](https://github.com/vector-im/riot-web/pull/4315)
+ * Remove onload simulator from loading test
+   [\#4314](https://github.com/vector-im/riot-web/pull/4314)
+ * Update from Weblate.
+   [\#4305](https://github.com/vector-im/riot-web/pull/4305)
+ * Test that we handle stored mx_last_room_id correctly
+   [\#4292](https://github.com/vector-im/riot-web/pull/4292)
+ * Ask for email address after setting password for the first time
+   [\#4301](https://github.com/vector-im/riot-web/pull/4301)
+ * i18n for setting email after password flow
+   [\#4299](https://github.com/vector-im/riot-web/pull/4299)
+ * Update from Weblate.
+   [\#4290](https://github.com/vector-im/riot-web/pull/4290)
+ * Don't show the tooltips when filtering rooms
+   [\#4282](https://github.com/vector-im/riot-web/pull/4282)
+ * Update from Weblate.
+   [\#4272](https://github.com/vector-im/riot-web/pull/4272)
+ * Add missing VOIP Dropdown width
+   [\#4266](https://github.com/vector-im/riot-web/pull/4266)
+ * Update import and directory path in the Translations dev guide
+   [\#4261](https://github.com/vector-im/riot-web/pull/4261)
+ * Use Thai string for Thai in Language-Chooser
+   [\#4260](https://github.com/vector-im/riot-web/pull/4260)
+
 Changes in [0.11.1](https://github.com/vector-im/riot-web/releases/tag/v0.11.1) (2017-06-14)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.0...v0.11.1)
