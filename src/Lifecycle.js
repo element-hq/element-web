@@ -156,7 +156,7 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
 }
 
 function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
-    console.log("Doing guest login on %s", hsUrl);
+    console.log(`Doing guest login on ${hsUrl}`);
 
     // TODO: we should probably de-duplicate this and Login.loginAsGuest.
     // Not really sure where the right home for it is.
@@ -171,7 +171,7 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
             initial_device_display_name: defaultDeviceDisplayName,
         },
     }).then((creds) => {
-        console.log("Registered as guest: %s", creds.user_id);
+        console.log(`Registered as guest: ${creds.user_id}`);
         return _doSetLoggedIn({
             userId: creds.user_id,
             deviceId: creds.device_id,
@@ -215,7 +215,7 @@ function _restoreFromLocalStorage() {
     }
 
     if (accessToken && userId && hsUrl) {
-        console.log("Restoring session for %s", userId);
+        console.log(`Restoring session for ${userId}`);
         try {
             return _doSetLoggedIn({
                 userId: userId,
@@ -315,10 +315,10 @@ async function _doSetLoggedIn(credentials, clearStorage) {
     credentials.guest = Boolean(credentials.guest);
 
     console.log(
-        "setLoggedIn: mxid:", credentials.userId,
-        "deviceId:", credentials.deviceId,
-        "guest:", credentials.guest,
-        "hs:", credentials.homeserverUrl,
+        "setLoggedIn: mxid: " + credentials.userId +
+        " deviceId: " + credentials.deviceId +
+        " guest: " + credentials.guest +
+        " hs: " + credentials.homeserverUrl,
     );
 
     // This is dispatched to indicate that the user is still in the process of logging in
@@ -395,7 +395,7 @@ function _persistCredentialsToLocalStorage(credentials) {
         localStorage.setItem("mx_device_id", credentials.deviceId);
     }
 
-    console.log("Session persisted for %s", credentials.userId);
+    console.log(`Session persisted for ${credentials.userId}`);
 }
 
 /**

@@ -84,7 +84,9 @@ class MatrixClientPeg {
 
         let promise = this.matrixClient.store.startup();
         // log any errors when starting up the database (if one exists)
-        promise.catch((err) => { console.error(err); });
+        promise.catch((err) => {
+            console.error(`Error starting matrixclient store: ${err}`);
+        });
 
         // regardless of errors, start the client. If we did error out, we'll
         // just end up doing a full initial /sync.
