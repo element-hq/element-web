@@ -196,5 +196,7 @@
     "Unavailable": "Нема в наявності",
     "Unhide Preview": "Відкрити попередній перегляд",
     "Failed to set Direct Message status of room": "Не вдалось встановити статус прямого спілкування в кімнаті",
-    "Messages containing my display name": "Повідомлення,  вміщає моє ім'я"
+    "Messages containing my display name": "Повідомлення,  вміщає моє ім'я",
+    "Running Matrix services": "Запуск служби Matrix",
+    "Set Password": "Задати пароль"
 }
