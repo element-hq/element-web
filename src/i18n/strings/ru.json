@@ -960,5 +960,13 @@
     "Do you want to set an email address?": "Вы хотите указать адрес электронной почты?",
     "This will allow you to reset your password and receive notifications.": "Это позволит вам сбросить пароль и получить уведомления.",
     "Press <StartChatButton> to start a chat with someone": "Нажмите <StartChatButton> для начала чата с кем либо",
-    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Вы еще не в комнатах! Нажмите <CreateRoomButton>, чтобы создать комнату или <RoomDirectoryButton>, чтобы просмотреть каталог"
+    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Вы еще не в комнатах! Нажмите <CreateRoomButton>, чтобы создать комнату или <RoomDirectoryButton>, чтобы просмотреть каталог",
+    "To return to your account in future you need to set a password": "Чтобы в будущем к этой учётной записи вернутся, вы должны ввести пароль",
+    "Skip": "Пропуск",
+    "Start verification": "Запуск проверки",
+    "Share without verifying": "Поделиться без проверки",
+    "Ignore request": "Игнорировать запрос",
+    "You added a new device '%(displayName)s', which is requesting encryption keys.": "Вы добавили новое устройство '%(displayName)s', который запрашивает ключи шифрования.",
+    "Your unverified device '%(displayName)s' is requesting encryption keys.": "Ваше непроверенное устройство '%(displayName)s' запрашивает ключи шифрования.",
+    "Encryption key request": "Запрос ключа шифрования"
 }
