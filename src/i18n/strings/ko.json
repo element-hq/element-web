@@ -667,5 +667,8 @@
     "You are trying to access %(roomName)s.": "%(roomName)s에 들어가려고 하는 중이에요.",
     "You cannot place a call with yourself.": "자신에게 전화를 걸 수는 없어요.",
     "You cannot place VoIP calls in this browser.": "이 브라우저에서는 인터넷전화를 걸 수 없어요.",
-    "You do not have permission to post to this room": "이 방에서 글을 올릴 권한이 없어요"
+    "You do not have permission to post to this room": "이 방에서 글을 올릴 권한이 없어요",
+    "You have been banned from %(roomName)s by %(userName)s.": "%(userName)s님이 %(roomName)s에서 차단하셨어요.",
+    "You have been invited to join this room by %(inviterName)s": "%(inviterName)s님이 이 방에 초대하셨어요",
+    "You have been kicked from %(roomName)s by %(userName)s.": "%(userName)s님이 %(roomName)s에서 추방하셨어요."
 }
