@@ -198,5 +198,7 @@
     "This will allow you to return to your account after signing out, and sign in on other devices.": "Ezzel visszatérhetsz kijelentkezés után a fiókodhoz és más eszközökkel is be tudsz jelentkezni.",
     "(HTTP status %(httpStatus)s)": "(HTTP állapot %(httpStatus)s)",
     "You have successfully set a password and an email address!": "Sikeresen beállítottad a jelszavad és e-mail címed!",
-    "Remember, you can always set an email address in user settings if you change your mind.": "Ha meggondolod magad, bármikor beállíthatod az e-mail címed a felhasználói beállításoknál."
+    "Remember, you can always set an email address in user settings if you change your mind.": "Ha meggondolod magad, bármikor beállíthatod az e-mail címed a felhasználói beállításoknál.",
+    "To return to your account in future you need to <u>set a password</u>": "A fiókba való visszalépéshez <u>jelszót</u> kell beállítanod",
+    "Set Password": "Jelszó beállítása"
 }
