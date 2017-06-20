@@ -21,6 +21,7 @@ const MatrixClientPeg = require("../../MatrixClientPeg");
 const PlatformPeg = require("../../PlatformPeg");
 const Modal = require('../../Modal');
 const dis = require("../../dispatcher");
+import sessionStore from '../../stores/SessionStore';
 const q = require('q');
 const packageJson = require('../../../package.json');
 const UserSettingsStore = require('../../UserSettingsStore');
@@ -243,6 +244,12 @@ module.exports = React.createClass({
         this.setState({
             language: languageHandler.getCurrentLanguage(),
         });
+
+        this._sessionStore = sessionStore;
+        this._sessionStoreToken = this._sessionStore.addListener(
+            this._setStateFromSessionStore,
+        );
+        this._setStateFromSessionStore();
     },
 
     componentDidMount: function() {
@@ -267,6 +274,12 @@ module.exports = React.createClass({
             const {ipcRenderer} = require('electron');
             ipcRenderer.removeListener('settings', this._electronSettings);
         }
+    },
+
+    _setStateFromSessionStore: function() {
+        this.setState({
+            userHasGeneratedPassword: Boolean(this._sessionStore.getCachedPassword()),
+        });
     },
 
     _electronSettings: function(ev, settings) {
@@ -1201,10 +1214,14 @@ module.exports = React.createClass({
                 <h3>{ _t("Account") }</h3>
 
                 <div className="mx_UserSettings_section cadcampoHide">
-
                     <AccessibleButton className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
                         { _t("Sign out") }
                     </AccessibleButton>
+                    { this.state.userHasGeneratedPassword ?
+                        <div className="mx_UserSettings_passwordWarning">
+                            { _t("To return to your account in future you need to set a password") }
+                        </div> : null
+                    }
 
                     {accountJsx}
                 </div>

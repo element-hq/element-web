@@ -41,6 +41,7 @@ import PageTypes from '../../PageTypes';
 
 import createRoom from "../../createRoom";
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
+import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
 
 /** constants for MatrixChat.state.view */
@@ -533,12 +534,10 @@ module.exports = React.createClass({
                 break;
             case 'on_logging_in':
                 // We are now logging in, so set the state to reflect that
-                // and also that we're not ready (we'll be marked as logged
-                // in once the login completes, then ready once the sync
-                // completes).
+                // NB. This does not touch 'ready' since if our dispatches
+                // are delayed, the sync could already have completed
                 this.setStateForNewView({
                     view: VIEWS.LOGGING_IN,
-                    ready: false,
                 });
                 break;
             case 'on_logged_in':
@@ -1012,6 +1011,10 @@ module.exports = React.createClass({
      */
     _onWillStartClient() {
         const self = this;
+        // if the client is about to start, we are, by definition, not ready.
+        // Set ready to false now, then it'll be set to true when the sync
+        // listener we set below fires.
+        this.setState({ready: false});
         const cli = MatrixClientPeg.get();
 
         // Allow the JS SDK to reap timeline events. This reduces the amount of
@@ -1081,6 +1084,14 @@ module.exports = React.createClass({
                     });
                 }
             }
+        });
+
+        const krh = new KeyRequestHandler(cli);
+        cli.on("crypto.roomKeyRequest", (req) => {
+            krh.handleKeyRequest(req);
+        });
+        cli.on("crypto.roomKeyRequestCancellation", (req) => {
+            krh.handleKeyRequestCancellation(req);
         });
     },
 
