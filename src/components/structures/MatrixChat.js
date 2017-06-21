@@ -999,6 +999,7 @@ module.exports = React.createClass({
             page_type: PageTypes.RoomDirectory,
         });
         this._teamToken = null;
+        this._setPageSubtitle();
     },
 
     /**
@@ -1323,6 +1324,10 @@ module.exports = React.createClass({
         });
     },
 
+    _setPageSubtitle: function(subtitle='') {
+        document.title = `Riot ${subtitle}`;
+    },
+
     updateStatusIndicator: function(state, prevState) {
         let notifCount = 0;
 
@@ -1343,15 +1348,15 @@ module.exports = React.createClass({
             PlatformPeg.get().setNotificationCount(notifCount);
         }
 
-        let title = "Riot ";
+        let subtitle = '';
         if (state === "ERROR") {
-            title += `[${_t("Offline")}] `;
+            subtitle += `[${_t("Offline")}] `;
         }
         if (notifCount > 0) {
-            title += `[${notifCount}]`;
+            subtitle += `[${notifCount}]`;
         }
 
-        document.title = title;
+        this._setPageSubtitle(subtitle);
     },
 
     onUserSettingsClose: function() {
