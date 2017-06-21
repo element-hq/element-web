@@ -54,33 +54,38 @@ exports.create = function(win, config) {
         },
     ]);
 
-    trayIcon = new Tray(config.icon_path);
+    const defaultIcon = nativeImage.createFromPath(config.icon_path);
+
+    trayIcon = new Tray(defaultIcon);
     trayIcon.setToolTip(config.brand);
     trayIcon.setContextMenu(contextMenu);
     trayIcon.on('click', toggleWin);
 
     let lastFavicon = null;
     win.webContents.on('page-favicon-updated', async function(ev, favicons) {
-        let newFavicon = config.icon_path;
-        if (favicons && favicons.length > 0 && favicons[0].startsWith('data:')) {
-            newFavicon = favicons[0];
+        if (!favicons || favicons.length <= 0 || !favicons[0].startsWith('data:')) {
+            if (lastFavicon !== null) {
+                win.setIcon(defaultIcon);
+                trayIcon.setImage(defaultIcon);
+                lastFavicon = null;
+            }
+            return;
         }
 
         // No need to change, shortcut
-        if (newFavicon === lastFavicon) return;
-        lastFavicon = newFavicon;
+        if (favicons[0] === lastFavicon) return;
+        lastFavicon = favicons[0];
 
-        // if its not default we have to construct into nativeImage
-        if (newFavicon !== config.icon_path) {
-            newFavicon = nativeImage.createFromDataURL(favicons[0]);
+        let newFavicon = nativeImage.createFromDataURL(favicons[0]);
 
-            if (process.platform === 'win32') {
-                try {
-                    const icoPath = path.join(app.getPath('temp'), 'win32_riot_icon.ico')
-                    const icoBuf = await pngToIco(newFavicon.toPNG());
-                    fs.writeFileSync(icoPath, icoBuf);
-                    newFavicon = icoPath;
-                } catch (e) {console.error(e);}
+        // Windows likes ico's too much.
+        if (process.platform === 'win32') {
+            try {
+                const icoPath = path.join(app.getPath('temp'), 'win32_riot_icon.ico');
+                fs.writeFileSync(icoPath, await pngToIco(newFavicon.toPNG()));
+                newFavicon = nativeImage.createFromPath(icoPath);
+            } catch (e) {
+                console.error("Failed to make win32 ico", e);
             }
         }
 
