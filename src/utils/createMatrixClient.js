@@ -25,13 +25,13 @@ const localStorage = window.localStorage;
  * @param {Object} opts  options to pass to Matrix.createClient. This will be
  *    extended with `sessionStore` and `store` members.
  *
- * @param {string} indexedDbWorkerScript  Optional URL for a web worker script
- *    for IndexedDB store operations. If not given, indexeddb ops are done on
+ * @property {string} indexedDbWorkerScript  Optional URL for a web worker script
+ *    for IndexedDB store operations. By default, indexeddb ops are done on
  *    the main thread.
  *
  * @returns {MatrixClient} the newly-created MatrixClient
  */
-export default function createMatrixClient(opts, indexedDbWorkerScript) {
+export default function createMatrixClient(opts) {
     const storeOpts = {};
 
     if (localStorage) {
@@ -45,7 +45,7 @@ export default function createMatrixClient(opts, indexedDbWorkerScript) {
             indexedDB: window.indexedDB,
             dbName: "riot-web-sync",
             localStorage: localStorage,
-            workerScript: indexedDbWorkerScript,
+            workerScript: createMatrixClient.indexedDbWorkerScript,
         });
     }
 
@@ -53,3 +53,5 @@ export default function createMatrixClient(opts, indexedDbWorkerScript) {
 
     return Matrix.createClient(opts);
 }
+
+createMatrixClient.indexedDbWorkerScript = null;
