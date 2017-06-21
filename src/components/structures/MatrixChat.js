@@ -919,10 +919,6 @@ module.exports = React.createClass({
             dis.dispatch({action: 'view_home_page'});
         } else if (this._is_registered) {
             this._is_registered = false;
-            // reset the 'have completed first sync' flag,
-            // since we've just logged in and will be about to sync
-            this.firstSyncComplete = false;
-            this.firstSyncPromise = q.defer();
 
             // Set the display name = user ID localpart
             MatrixClientPeg.get().setDisplayName(
@@ -992,6 +988,12 @@ module.exports = React.createClass({
         // Set ready to false now, then it'll be set to true when the sync
         // listener we set below fires.
         this.setState({ready: false});
+
+        // reset the 'have completed first sync' flag,
+        // since we're about to start the client and therefore about
+        // to do the first sync
+        this.firstSyncComplete = false;
+        this.firstSyncPromise = q.defer();
         const cli = MatrixClientPeg.get();
 
         // Allow the JS SDK to reap timeline events. This reduces the amount of
