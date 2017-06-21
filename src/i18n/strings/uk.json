@@ -198,5 +198,7 @@
     "Failed to set Direct Message status of room": "Не вдалось встановити статус прямого спілкування в кімнаті",
     "Messages containing my display name": "Повідомлення,  вміщає моє ім'я",
     "Running Matrix services": "Запуск служби Matrix",
-    "Set Password": "Задати пароль"
+    "Set Password": "Задати пароль",
+    "Notifications on the following keywords follow rules which can’t be displayed here:": "Сповіщення з наступних ключових слів дотримуються правил, що не можуть бути показані тут:",
+    "To return to your account in future you need to <u>set a password</u>": "Щоб мати змогу використовувати вашу обліковку у майбутньому, <u>зазначте пароль</u>"
 }
