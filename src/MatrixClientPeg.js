@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -129,7 +130,7 @@ class MatrixClientPeg {
             timelineSupport: true,
         };
 
-        this.matrixClient = createMatrixClient(opts);
+        this.matrixClient = createMatrixClient(opts, this.indexedDbWorkerScript);
 
         // we're going to add eventlisteners for each matrix event tile, so the
         // potential number of event listeners is quite high.
