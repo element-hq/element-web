@@ -29,7 +29,6 @@ import DMRoomMap from './utils/DMRoomMap';
 import RtsClient from './RtsClient';
 import Modal from './Modal';
 import sdk from './index';
-import { _t } from './languageHandler';
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -237,27 +236,12 @@ function _restoreFromLocalStorage() {
 function _handleRestoreFailure(e) {
     console.log("Unable to restore session", e);
 
-    let msg = e.message;
-    if (msg == "OLM.BAD_LEGACY_ACCOUNT_PICKLE") {
-        msg = _t(
-            'You need to log back in to generate end-to-end encryption keys'
-            + ' for this device and submit the public key to your homeserver.'
-            + ' This is a once off; sorry for the inconvenience.',
-        );
-
-        _clearStorage();
-
-        return q.reject(new Error(
-            _t('Unable to restore previous session') + ': ' + msg,
-        ));
-    }
-
     const def = q.defer();
     const SessionRestoreErrorDialog =
           sdk.getComponent('views.dialogs.SessionRestoreErrorDialog');
 
     Modal.createDialog(SessionRestoreErrorDialog, {
-        error: msg,
+        error: e.message,
         onFinished: (success) => {
             def.resolve(success);
         },
