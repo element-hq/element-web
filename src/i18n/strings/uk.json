@@ -155,5 +155,16 @@
     "a room": "кімната",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Текстове повідомлення було надіслано +%(msisdn)s. Введіть, будь ласка, код підтвердження з цього повідомлення",
     "Accept": "Прийняти",
-    "Account": "Обліковка"
+    "Account": "Обліковка",
+    "%(targetName)s accepted an invitation.": "%(targetName)s прийняв запрошення.",
+    "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s прийняв запрошення від %(displayName)s.",
+    "Access Token:": "Токен:",
+    "Active call (%(roomName)s)": "Активний виклик (%(roomName)s)",
+    "Add": "Добавити",
+    "Add a topic": "Добавити тему",
+    "Add email address": "Добавити email адресу",
+    "Add phone number": "Добавити телефонний номер",
+    "Admin": "Адмін",
+    "Admin tools": "Адмін утиліта",
+    "And %(count)s more...": "І %(count)s більше..."
 }

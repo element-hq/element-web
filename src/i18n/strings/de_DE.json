@@ -417,7 +417,7 @@
     "Press": "Drücke",
     "tag as %(tagName)s": "als %(tagName)s markieren",
     "to browse the directory": "um das Raum-Verzeichnis zu durchsuchen",
-    "to demote": "um das Berechtigungslevel herabzusetzen",
+    "to demote": "um die Priorität herabzusetzen",
     "to favourite": "zum Favorisieren",
     "to make a room or": "um einen Raum zu erstellen, oder",
     "to restore": "zum wiederherstellen",
@@ -790,7 +790,7 @@
     "Opt out of analytics": "Zustimmung zur Übermittlung von anonymisierten Analysedaten verweigern",
     "Riot collects anonymous analytics to allow us to improve the application.": "Riot sammelt anonymisierte Analysedaten, um die Anwendung kontinuierlich verbessern zu können.",
     "Add an Integration": "Eine Integration hinzufügen",
-    "Removed or unknown message type": "Gelöschte oder unbekannter Nachrichten-Typ",
+    "Removed or unknown message type": "Gelöschte Nachricht oder unbekannter Nachrichten-Typ",
     "Disable URL previews by default for participants in this room": "URL-Vorschau für Teilnehmer dieses Raumes standardmäßig deaktivieren",
     "URL previews are %(globalDisableUrlPreview)s by default for participants in this room.": "URL-Vorschau ist standardmäßig %(globalDisableUrlPreview)s für Teilnehmer dieses Raumes.",
     "URL Previews": "URL-Vorschau",
@@ -975,5 +975,13 @@
     "Do you want to set an email address?": "Möchtest du eine E-Mail-Adresse setzen?",
     "This will allow you to reset your password and receive notifications.": "Dies erlaubt dir dein Passwort zurückzusetzen und Benachrichtigungen zu empfangen.",
     "Press <StartChatButton> to start a chat with someone": "Klicke auf <StartChatButton> um einen Chat mit jemanden zu starten",
-    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Du bist bisher in keinem Raum! Klicke auf <CreateRoomButton> um einen Raum zu erstellen oder <RoomDirectoryButton> um das Verzeichnis zu durchsuchen"
+    "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Du bist bisher in keinem Raum! Klicke auf <CreateRoomButton> um einen Raum zu erstellen oder <RoomDirectoryButton> um das Verzeichnis zu durchsuchen",
+    "To return to your account in future you need to set a password": "Um in Zukunft zu deinem Konto zurückzukehren, musst du ein Passwort setzen",
+    "Skip": "Überspringen",
+    "Start verification": "Verifikation starten",
+    "Share without verifying": "Teile ohne Verifizierung",
+    "Ignore request": "Anfrage ignorieren",
+    "You added a new device '%(displayName)s', which is requesting encryption keys.": "Du hast das neue Gerät '%(displayName)s' hinzugefügt, welches nun Verschlüsselungs-Schlüssel anfragt.",
+    "Encryption key request": "Verschlüsselungs-Schlüssel-Anfrage",
+    "Your unverified device '%(displayName)s' is requesting encryption keys.": "Dein nicht verifiziertes Gerät '%(displayName)s' fragt nach Verschlüsselungs-Schlüsseln."
 }
