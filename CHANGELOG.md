@@ -1,3 +1,13 @@
+Changes in [0.11.4](https://github.com/vector-im/riot-web/releases/tag/v0.11.4) (2017-06-22)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.3...v0.11.4)
+
+ * Update matrix-js-sdk and react-sdk to fix a regression where the
+   background indexedb worker was disabled, failures to open indexeddb
+   causing the app to fail to start, a race when starting that could break
+   switching to rooms, and the inability to to invite user with mixed case
+   usernames.
+
 Changes in [0.11.3](https://github.com/vector-im/riot-web/releases/tag/v0.11.3) (2017-06-20)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.2...v0.11.3)
