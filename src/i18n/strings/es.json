@@ -204,5 +204,6 @@
     "No update available.": "No hay actualizaciones disponibles.",
     "Downloading update...": "Descargando actualizaciones...",
     "To return to your account in future you need to <u>set a password</u>": "Para regresar a su cuenta en el futuro Ud. debe <u>establecer una contraseña</u>",
-    "Set Password": "Establezca la contraseña"
+    "Set Password": "Establezca la contraseña",
+    "Error encountered (%(errorDetail)s).": "Error encontrado (%(errorDetail)s)."
 }
