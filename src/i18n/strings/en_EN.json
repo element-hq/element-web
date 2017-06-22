@@ -159,6 +159,7 @@
   "Today": "Today",
   "Yesterday": "Yesterday",
   "OK": "OK",
+  "Warning": "Warning",
   "Checking for an update...": "Checking for an update...",
   "Error encountered (%(errorDetail)s).": "Error encountered (%(errorDetail)s).",
   "No update available.": "No update available.",

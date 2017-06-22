@@ -22,13 +22,6 @@ import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
 import {updateCheckStatusEnum} from '../../../vector/platform/VectorBasePlatform';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
-const statusText = {
-    CHECKING: 'Checking for an update...',
-    ERROR: 'Error encountered (%(errorDetail)s).',
-    NOTAVAILABLE: 'No update available.',
-    DOWNLOADING: 'Downloading update...',
-};
-
 const doneStatuses = [
     updateCheckStatusEnum.ERROR,
     updateCheckStatusEnum.NOTAVAILABLE,
@@ -42,16 +35,37 @@ export default React.createClass({
         detail: React.PropTypes.string,
     },
 
+    getDefaultProps: function() {
+        return {
+            detail: '',
+        }
+    },
+
+    getStatusText: function() {
+        switch(this.props.status) {
+            case updateCheckStatusEnum.ERROR:
+                return _t('Error encountered (%(errorDetail)s).', { errorDetail: this.props.detail });
+            case updateCheckStatusEnum.CHECKING:
+                return _t('Checking for an update...');
+            case updateCheckStatusEnum.NOTAVAILABLE:
+                return _t('No update available.');
+            case updateCheckStatusEnum.DOWNLOADING:
+                return _t('Downloading update...');
+        }
+    }
+    ,
+
     hideToolbar: function() {
         PlatformPeg.get().stopUpdateCheck();
     },
 
     render: function() {
-        const message = _t(statusText[this.props.status], { errorDetail: this.props.detail || '' });
+        const message = this.getStatusText();
+        const warning = _t('Warning');
 
         let image;
         if (doneStatuses.includes(this.props.status)) {
-            image = <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="Warning"/>;
+            image = <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt={warning}/>;
         } else {
             image = <img className="mx_MatrixToolbar_warning" src="img/spinner.gif" width="24" height="23" alt={message}/>;
         }
