@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -47,7 +48,6 @@ class MatrixClientPeg {
         this.opts = {
             initialSyncLimit: 20,
         };
-        this.indexedDbWorkerScript = null;
     }
 
     /**
@@ -58,7 +58,7 @@ class MatrixClientPeg {
      * @param {string} script href to the script to be passed to the web worker
      */
     setIndexedDbWorkerScript(script) {
-        this.indexedDbWorkerScript = script;
+        createMatrixClient.indexedDbWorkerScript = script;
     }
 
     get(): MatrixClient {
@@ -84,7 +84,9 @@ class MatrixClientPeg {
 
         let promise = this.matrixClient.store.startup();
         // log any errors when starting up the database (if one exists)
-        promise.catch((err) => { console.error(err); });
+        promise.catch((err) => {
+            console.error(`Error starting matrixclient store: ${err}`);
+        });
 
         // regardless of errors, start the client. If we did error out, we'll
         // just end up doing a full initial /sync.
@@ -127,7 +129,7 @@ class MatrixClientPeg {
             timelineSupport: true,
         };
 
-        this.matrixClient = createMatrixClient(opts);
+        this.matrixClient = createMatrixClient(opts, this.indexedDbWorkerScript);
 
         // we're going to add eventlisteners for each matrix event tile, so the
         // potential number of event listeners is quite high.

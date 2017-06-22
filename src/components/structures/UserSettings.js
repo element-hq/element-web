@@ -276,6 +276,16 @@ module.exports = React.createClass({
         }
     },
 
+    // `UserSettings` assumes that the client peg will not be null, so give it some
+    // sort of assurance here by only allowing a re-render if the client is truthy.
+    //
+    // This is required because `UserSettings` maintains its own state and if this state
+    // updates (e.g. during _setStateFromSessionStore) after the client peg has been made
+    // null (during logout), then it will attempt to re-render and throw errors.
+    shouldComponentUpdate: function() {
+        return Boolean(MatrixClientPeg.get());
+    },
+
     _setStateFromSessionStore: function() {
         this.setState({
             userHasGeneratedPassword: Boolean(this._sessionStore.getCachedPassword()),
@@ -874,6 +884,21 @@ module.exports = React.createClass({
         </div>;
     },
 
+    _renderCheckUpdate: function() {
+        const platform = PlatformPeg.get();
+        if ('canSelfUpdate' in platform && platform.canSelfUpdate() && 'startUpdateCheck' in platform) {
+            return <div>
+                <h3>{_t('Updates')}</h3>
+                <div className="mx_UserSettings_section">
+                    <AccessibleButton className="mx_UserSettings_button" onClick={platform.startUpdateCheck}>
+                        {_t('Check for update')}
+                    </AccessibleButton>
+                </div>
+            </div>;
+        }
+        return <div />;
+    },
+
     _renderBulkOptions: function() {
         const invitedRooms = MatrixClientPeg.get().getRooms().filter((r) => {
             return r.hasMembershipState(this._me, "invite");
@@ -1274,6 +1299,8 @@ module.exports = React.createClass({
                         { _t("olm version:") } {olmVersionString}<br/>
                     </div>
                 </div>
+
+                {this._renderCheckUpdate()}
 
                 {this._renderClearCache()}
 

@@ -178,7 +178,7 @@ module.exports = React.createClass({
     },
 
     onQueryChanged: function(ev) {
-        const query = ev.target.value.toLowerCase();
+        const query = ev.target.value;
         if (this.queryChangedDebouncer) {
             clearTimeout(this.queryChangedDebouncer);
         }
@@ -271,10 +271,11 @@ module.exports = React.createClass({
             query,
             searchError: null,
         });
+        const queryLowercase = query.toLowerCase();
         const results = [];
         MatrixClientPeg.get().getUsers().forEach((user) => {
-            if (user.userId.toLowerCase().indexOf(query) === -1 &&
-                user.displayName.toLowerCase().indexOf(query) === -1
+            if (user.userId.toLowerCase().indexOf(queryLowercase) === -1 &&
+                user.displayName.toLowerCase().indexOf(queryLowercase) === -1
             ) {
                 return;
             }

@@ -305,7 +305,6 @@
     "You are already in a call.": "Du bist bereits in einem Gespräch.",
     "You cannot place a call with yourself.": "Du kannst keinen Anruf mit dir selbst starten.",
     "You cannot place VoIP calls in this browser.": "VoIP-Gespräche werden von diesem Browser nicht unterstützt.",
-    "You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience.": "Du musst dich erneut anmelden, um Ende-zu-Ende-Verschlüsselungs-Schlüssel für dieses Gerät zu generieren und um den öffentlichen Schlüssel auf deinem Homeserver zu hinterlegen. Dies muss nur einmal durchgeführt werden, bitte entschuldige die Unannehmlichkeiten.",
     "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Deine E-Mail-Adresse scheint nicht mit einer Matrix-ID auf diesem Heimserver verbunden zu sein.",
     "Sun": "So",
     "Mon": "Mo",

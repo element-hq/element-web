@@ -29,7 +29,6 @@ import DMRoomMap from './utils/DMRoomMap';
 import RtsClient from './RtsClient';
 import Modal from './Modal';
 import sdk from './index';
-import { _t } from './languageHandler';
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -156,7 +155,7 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
 }
 
 function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
-    console.log("Doing guest login on %s", hsUrl);
+    console.log(`Doing guest login on ${hsUrl}`);
 
     // TODO: we should probably de-duplicate this and Login.loginAsGuest.
     // Not really sure where the right home for it is.
@@ -171,7 +170,7 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
             initial_device_display_name: defaultDeviceDisplayName,
         },
     }).then((creds) => {
-        console.log("Registered as guest: %s", creds.user_id);
+        console.log(`Registered as guest: ${creds.user_id}`);
         return _doSetLoggedIn({
             userId: creds.user_id,
             deviceId: creds.device_id,
@@ -215,7 +214,7 @@ function _restoreFromLocalStorage() {
     }
 
     if (accessToken && userId && hsUrl) {
-        console.log("Restoring session for %s", userId);
+        console.log(`Restoring session for ${userId}`);
         try {
             return _doSetLoggedIn({
                 userId: userId,
@@ -237,27 +236,12 @@ function _restoreFromLocalStorage() {
 function _handleRestoreFailure(e) {
     console.log("Unable to restore session", e);
 
-    let msg = e.message;
-    if (msg == "OLM.BAD_LEGACY_ACCOUNT_PICKLE") {
-        msg = _t(
-            'You need to log back in to generate end-to-end encryption keys'
-            + ' for this device and submit the public key to your homeserver.'
-            + ' This is a once off; sorry for the inconvenience.',
-        );
-
-        _clearStorage();
-
-        return q.reject(new Error(
-            _t('Unable to restore previous session') + ': ' + msg,
-        ));
-    }
-
     const def = q.defer();
     const SessionRestoreErrorDialog =
           sdk.getComponent('views.dialogs.SessionRestoreErrorDialog');
 
     Modal.createDialog(SessionRestoreErrorDialog, {
-        error: msg,
+        error: e.message,
         onFinished: (success) => {
             def.resolve(success);
         },
@@ -315,10 +299,10 @@ async function _doSetLoggedIn(credentials, clearStorage) {
     credentials.guest = Boolean(credentials.guest);
 
     console.log(
-        "setLoggedIn: mxid:", credentials.userId,
-        "deviceId:", credentials.deviceId,
-        "guest:", credentials.guest,
-        "hs:", credentials.homeserverUrl,
+        "setLoggedIn: mxid: " + credentials.userId +
+        " deviceId: " + credentials.deviceId +
+        " guest: " + credentials.guest +
+        " hs: " + credentials.homeserverUrl,
     );
 
     // This is dispatched to indicate that the user is still in the process of logging in
@@ -395,7 +379,7 @@ function _persistCredentialsToLocalStorage(credentials) {
         localStorage.setItem("mx_device_id", credentials.deviceId);
     }
 
-    console.log("Session persisted for %s", credentials.userId);
+    console.log(`Session persisted for ${credentials.userId}`);
 }
 
 /**
