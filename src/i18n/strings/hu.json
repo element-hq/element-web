@@ -675,7 +675,6 @@
     "You need to be able to invite users to do that.": "Hogy ezt csinálhasd meg kell tudnod hívni felhasználókat.",
     "You need to be logged in.": "Be kell jelentkezz.",
     "You need to enter a user name.": "Be kell írnod a felhasználói nevet.",
-    "You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience.": "Ahhoz, hogy kulcsot tudjál készíteni a végponttól végpontig való titkosításhoz ehhez az eszközhöz és elküld a kulcsot a egyéni szerverhez vissza kell jelentkezned. Ez egyszeri alkalom, elnézést a kellemetlenségér.",
     "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Ez az e-mail cím, úgy néz ki, nincs összekötve a Matrix azonosítóval ezen az egyedi szerveren.",
     "Your password has been reset": "A jelszavad visszaállítottuk",
     "Your password was successfully changed. You will not receive push notifications on other devices until you log back in to them": "A jelszavadat sikeresen megváltoztattuk. Nem kapsz \"push\" értesítéseket amíg a többi eszközön vissza nem jelentkezel"

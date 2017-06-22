@@ -566,7 +566,6 @@
     "You need to be able to invite users to do that.": "Vous devez être capable d’inviter des utilisateurs pour faire ça.",
     "You need to be logged in.": "Vous devez être connecté.",
     "You need to enter a user name.": "Vous devez entrer un nom d’utilisateur.",
-    "You need to log back in to generate end-to-end encryption keys for this device and submit the public key to your homeserver. This is a once off; sorry for the inconvenience.": "Vous devez vous connecter à nouveau pour générer les clés d’encryption pour cet appareil, et soumettre la clé publique à votre homeserver. Cette action ne se reproduira pas ; veuillez nous excuser pour la gêne occasionnée.",
     "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Votre adresse e-mail ne semble pas associée à un identifiant Matrix sur ce homeserver.",
     "Your password has been reset": "Votre mot de passe a été réinitialisé",
     "Your password was successfully changed. You will not receive push notifications on other devices until you log back in to them": "Votre mot de passe a été mis à jour avec succès. Vous ne recevrez plus de notification sur vos appareils jusqu’à ce que vous vous identifiez à nouveau",
