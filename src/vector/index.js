@@ -59,7 +59,6 @@ var sdk = require("matrix-react-sdk");
 const PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
-var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
@@ -275,7 +274,9 @@ async function loadApp() {
             Unable to load config file: please refresh the page to try again.
         </div>, document.getElementById('matrixchat'));
     } else if (validBrowser) {
-        UpdateChecker.start();
+        const platform = PlatformPeg.get();
+        platform.startUpdater();
+
         const MatrixChat = sdk.getComponent('structures.MatrixChat');
         window.matrixChat = ReactDOM.render(
             <MatrixChat
@@ -288,7 +289,7 @@ async function loadApp() {
                 enableGuest={true}
                 onTokenLoginCompleted={onTokenLoginCompleted}
                 initialScreenAfterLogin={getScreenFromLocation(window.location)}
-                defaultDeviceDisplayName={PlatformPeg.get().getDefaultDeviceDisplayName()}
+                defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
             />,
             document.getElementById('matrixchat')
         );
