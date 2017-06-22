@@ -18,6 +18,13 @@ import Matrix from 'matrix-js-sdk';
 
 const localStorage = window.localStorage;
 
+// just *accessing* indexedDB throws an exception in firefox with
+// indexeddb disabled.
+let indexedDB;
+try {
+    indexedDB = window.indexedDB;
+} catch(e) {}
+
 /**
  * Create a new matrix client, with the persistent stores set up appropriately
  * (using localstorage/indexeddb, etc)
@@ -37,12 +44,13 @@ export default function createMatrixClient(opts) {
     if (localStorage) {
         storeOpts.sessionStore = new Matrix.WebStorageSessionStore(localStorage);
     }
-    if (window.indexedDB && localStorage) {
+
+    if (indexedDB && localStorage) {
         // FIXME: bodge to remove old database. Remove this after a few weeks.
-        window.indexedDB.deleteDatabase("matrix-js-sdk:default");
+        indexedDB.deleteDatabase("matrix-js-sdk:default");
 
         storeOpts.store = new Matrix.IndexedDBStore({
-            indexedDB: window.indexedDB,
+            indexedDB: indexedDB,
             dbName: "riot-web-sync",
             localStorage: localStorage,
             workerScript: createMatrixClient.indexedDbWorkerScript,
