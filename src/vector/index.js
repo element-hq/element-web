@@ -45,6 +45,12 @@ rageshake.init().then(() => {
     console.error("Failed to initialise rageshake: " + err);
 });
 
+window.addEventListener('beforeunload', (e) => {
+    console.log('riot-web closing');
+    // try to flush the logs to indexeddb
+    rageshake.flush();
+});
+
 
  // add React and ReactPerf to the global namespace, to make them easier to
  // access via the console

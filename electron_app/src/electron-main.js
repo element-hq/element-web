@@ -242,6 +242,9 @@ electron.app.on('activate', () => {
 
 electron.app.on('before-quit', () => {
     global.appQuitting = true;
+    if (mainWindow) {
+        mainWindow.webContents.send('before-quit');
+    }
 });
 
 // Set the App User Model ID to match what the squirrel

@@ -427,6 +427,13 @@ module.exports = {
         return initPromise;
     },
 
+    flush: function() {
+        if (!store) {
+            return;
+        }
+        store.flush();
+    },
+
     /**
      * Clean up old logs.
      * @return Promise Resolves if cleaned logs.
