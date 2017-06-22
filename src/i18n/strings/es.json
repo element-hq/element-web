@@ -198,5 +198,11 @@
     "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Muchas salas ya están disponibles en Matrix, enlazadas a redes existentes (Slack, IRC, Gitter, etc) o independientes. ¡Revisa el directorio!",
     "You can now return to your account after signing out, and sign in on other devices.": "Ahora puedes regresar a tu cuenta después de cerrar tu sesión, e iniciar sesión en otros dispositivos.",
     "Please set a password!": "¡Por favor establece una contraseña!",
-    "This will allow you to return to your account after signing out, and sign in on other devices.": "Esto le permitirá regresar a su cuenta después de cerrar sesión, así como iniciar sesión en otros dispositivos."
+    "This will allow you to return to your account after signing out, and sign in on other devices.": "Esto le permitirá regresar a su cuenta después de cerrar sesión, así como iniciar sesión en otros dispositivos.",
+    "Warning": "Advertencia",
+    "Checking for an update...": "Comprobando actualizaciones...",
+    "No update available.": "No hay actualizaciones disponibles.",
+    "Downloading update...": "Descargando actualizaciones...",
+    "To return to your account in future you need to <u>set a password</u>": "Para regresar a su cuenta en el futuro Ud. debe <u>establecer una contraseña</u>",
+    "Set Password": "Establezca la contraseña"
 }
