@@ -920,7 +920,7 @@
     "Set": "Вводить",
     "Start authentication": "Начать идентификацию",
     "This room": "Эта комната",
-    "(~%(count)s results).other": "(~%(count) найдено)",
+    "(~%(count)s results).other": "(~%(count)s найдено)",
     "Device Name": "Имя устройства",
     "Custom": "Пользователь",
     "Decline": "Отклонить",
