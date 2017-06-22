@@ -1,3 +1,16 @@
+Changes in [0.9.7](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.7) (2017-06-22)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.6...v0.9.7)
+
+ * Fix ability to invite users with caps in their user IDs
+   [\#1128](https://github.com/matrix-org/matrix-react-sdk/pull/1128)
+ * Fix another race with first-sync
+   [\#1131](https://github.com/matrix-org/matrix-react-sdk/pull/1131)
+ * Make the indexeddb worker script work again
+   [\#1132](https://github.com/matrix-org/matrix-react-sdk/pull/1132)
+ * Use the web worker when clearing js-sdk stores
+   [\#1133](https://github.com/matrix-org/matrix-react-sdk/pull/1133)
+
 Changes in [0.9.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.6) (2017-06-20)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.5...v0.9.6)

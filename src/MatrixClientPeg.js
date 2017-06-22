@@ -48,7 +48,6 @@ class MatrixClientPeg {
         this.opts = {
             initialSyncLimit: 20,
         };
-        this.indexedDbWorkerScript = null;
     }
 
     /**
@@ -59,7 +58,7 @@ class MatrixClientPeg {
      * @param {string} script href to the script to be passed to the web worker
      */
     setIndexedDbWorkerScript(script) {
-        this.indexedDbWorkerScript = script;
+        createMatrixClient.indexedDbWorkerScript = script;
     }
 
     get(): MatrixClient {
