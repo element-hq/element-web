@@ -199,5 +199,12 @@
     "General discussion about Matrix and Riot": "พูดคุยเรื่องทั่วไป ทั้ง Matrix และ Riot",
     "(HTTP status %(httpStatus)s)": "(สถานะ HTTP %(httpStatus)s)",
     "Remember, you can always set an email address in user settings if you change your mind.": "อย่าลืม คุณสามารถตั้งที่อยู่อีเมลในการตั้งค่าผู้ใช้ได้ทุกเมื่อหากคุณเปลี่ยนใจ",
-    "You have successfully set a password and an email address!": "ตั้งรหัสผ่านและที่อยู่อีเมลสำเร็จแล้ว!"
+    "You have successfully set a password and an email address!": "ตั้งรหัสผ่านและที่อยู่อีเมลสำเร็จแล้ว!",
+    "Warning": "คำเตือน",
+    "Checking for an update...": "กำลังตรวจหาอัปเดต...",
+    "Error encountered (%(errorDetail)s).": "เกิดข้อผิดพลาด (%(errorDetail)s)",
+    "No update available.": "ไม่มีอัปเดตที่ใหม่กว่า",
+    "Downloading update...": "กำลังดาวน์โหลดอัปเดต...",
+    "To return to your account in future you need to <u>set a password</u>": "คุณต้อง<u>ตั้งรหัสผ่าน</u>เพื่อจะกลับมาที่บัญชีนี้ในอนาคต",
+    "Set Password": "ตั้งรหัสผ่าน"
 }
