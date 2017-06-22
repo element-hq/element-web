@@ -970,5 +970,13 @@
     "Authentication check failed: incorrect password?": "Falha ao checar a autenticação: senha incorreta?",
     "Disable Peer-to-Peer for 1:1 calls": "Desabilitar as chamadas 1:1 par-a-par",
     "Do you want to set an email address?": "Você deseja definir um endereço de e-mail?",
-    "This will allow you to reset your password and receive notifications.": "Isso permitirá que você redefina sua senha e receba notificações."
+    "This will allow you to reset your password and receive notifications.": "Isso permitirá que você redefina sua senha e receba notificações.",
+    "To return to your account in future you need to set a password": "Para poder futuramente voltar à sua conta, você precisa definir uma senha",
+    "Skip": "Pular",
+    "Start verification": "Iniciar a verificação",
+    "Share without verifying": "Compartilhar sem verificar",
+    "Ignore request": "Ignorar o pedido",
+    "You added a new device '%(displayName)s', which is requesting encryption keys.": "Você adicionou um novo dispositivo '%(displayName)s', que está solicitando chaves de criptografia.",
+    "Your unverified device '%(displayName)s' is requesting encryption keys.": "Seu dispositivo não verificado '%(displayName)s' está solicitando chaves de criptografia.",
+    "Encryption key request": "Solicitação de chave de criptografia"
 }
