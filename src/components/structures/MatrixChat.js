@@ -157,6 +157,7 @@ module.exports = React.createClass({
             newVersion: null,
             hasNewVersion: false,
             newVersionReleaseNotes: null,
+            checkingForUpdate: null,
 
             // Parameters used in the registration dance with the IS
             register_client_secret: null,
@@ -554,6 +555,9 @@ module.exports = React.createClass({
                     payload.currentVersion, payload.newVersion,
                     payload.releaseNotes,
                 );
+                break;
+            case 'check_updates':
+                this.setState({ checkingForUpdate: payload.value });
                 break;
             case 'send_event':
                 this.onSendEvent(payload.room_id, payload.event);
@@ -1300,6 +1304,7 @@ module.exports = React.createClass({
             newVersion: latest,
             hasNewVersion: current !== latest,
             newVersionReleaseNotes: releaseNotes,
+            checkingForUpdate: null,
         });
     },
 
