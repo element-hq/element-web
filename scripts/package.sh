@@ -30,7 +30,7 @@ else
     echo ${version} > riot-$version/version
 fi
 
-tar chvzf dist/riot-$version.tar.gz riot-$version
+tar chvz --owner=0 --group=0 -f dist/riot-$version.tar.gz riot-$version
 rm -r riot-$version
 
 echo
