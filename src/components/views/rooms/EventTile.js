@@ -336,6 +336,7 @@ module.exports = WithMatrixClient(React.createClass({
                     suppressAnimation={this._suppressReadReceiptAnimation}
                     onClick={this.toggleAllReadAvatars}
                     timestamp={receipt.ts}
+                    showTwelveHour={this.props.isTwelveHour}
                 />
             );
         }
