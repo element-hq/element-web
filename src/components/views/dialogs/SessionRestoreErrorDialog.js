@@ -18,6 +18,7 @@ import React from 'react';
 import sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
+import { _t, _tJsx } from '../../../languageHandler';
 
 
 export default React.createClass({
@@ -43,29 +44,32 @@ export default React.createClass({
 
         if (SdkConfig.get().bug_report_endpoint_url) {
             bugreport = (
-                <p>Otherwise, <a onClick={this._sendBugReport} href='#'>
-                   click here</a> to send a bug report.
+                <p>
+                {_tJsx(
+                    "Otherwise, <a>click here</a> to send a bug report.",
+                    /<a>(.*?)<\/a>/, (sub) => <a onClick={this._sendBugReport} key="bugreport" href='#'>{sub}</a>,
+                )}
                 </p>
             );
         }
 
         return (
             <BaseDialog className="mx_ErrorDialog" onFinished={this.props.onFinished}
-                    title='Unable to restore session'>
+                    title={_t('Unable to restore session')}>
                 <div className="mx_Dialog_content">
-                    <p>We encountered an error trying to restore your previous session. If
-                    you continue, you will need to log in again, and encrypted chat
-                    history will be unreadable.</p>
+                    <p>{_t("We encountered an error trying to restore your previous session. If " +
+                    "you continue, you will need to log in again, and encrypted chat " +
+                    "history will be unreadable.")}</p>
 
-                    <p>If you have previously used a more recent version of Riot, your session
-                    may be incompatible with this version. Close this window and return
-                    to the more recent version.</p>
+                    <p>{_t("If you have previously used a more recent version of Riot, your session " +
+                    "may be incompatible with this version. Close this window and return " +
+                    "to the more recent version.")}</p>
 
                     {bugreport}
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={this._continueClicked}>
-                        Continue anyway
+                        {_t("Continue anyway")}
                     </button>
                 </div>
             </BaseDialog>

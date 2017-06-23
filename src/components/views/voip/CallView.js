@@ -18,6 +18,7 @@ var dis = require("../../../dispatcher");
 var CallHandler = require("../../../CallHandler");
 var sdk = require('../../../index');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'CallView',
@@ -130,7 +131,11 @@ module.exports = React.createClass({
         var voice;
         if (this.state.call && this.state.call.type === "voice" && this.props.showVoice) {
             var callRoom = MatrixClientPeg.get().getRoom(this.state.call.roomId);
-            voice = <div className="mx_CallView_voice" onClick={ this.props.onClick }>Active call ({ callRoom.name })</div>;
+            voice = (
+                <div className="mx_CallView_voice" onClick={ this.props.onClick }>
+                {_t("Active call (%(roomName)s)", {roomName: callRoom.name})}
+                </div>
+            );
         }
 
         return (

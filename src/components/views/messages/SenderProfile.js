@@ -30,7 +30,7 @@ export default function SenderProfile(props) {
     }
 
     return (
-        <EmojiText className="mx_SenderProfile"
+        <EmojiText className="mx_SenderProfile" dir="auto"
               onClick={props.onClick}>{`${name || ''} ${props.aux || ''}`}</EmojiText>
     );
 }

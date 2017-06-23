@@ -148,17 +148,18 @@ var sanitizeHtmlParams = {
                     attribs.href = m[1];
                     delete attribs.target;
                 }
-
-                m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
-                if (m) {
-                    var entity = m[1];
-                    if (entity[0] === '@') {
-                        attribs.href = '#/user/' + entity;
+                else {
+                    m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
+                    if (m) {
+                        var entity = m[1];
+                        if (entity[0] === '@') {
+                            attribs.href = '#/user/' + entity;
+                        }
+                        else if (entity[0] === '#' || entity[0] === '!') {
+                            attribs.href = '#/room/' + entity;
+                        }
+                        delete attribs.target;
                     }
-                    else if (entity[0] === '#' || entity[0] === '!') {
-                        attribs.href = '#/room/' + entity;
-                    }
-                    delete attribs.target;
                 }
             }
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
@@ -344,6 +345,7 @@ export function bodyToHtml(content, highlights, opts) {
         }
         safeBody = sanitizeHtml(body, sanitizeHtmlParams);
         safeBody = unicodeToImage(safeBody);
+        safeBody = addCodeCopyButton(safeBody);
     }
     finally {
         delete sanitizeHtmlParams.textFilter;
@@ -359,7 +361,24 @@ export function bodyToHtml(content, highlights, opts) {
         'mx_EventTile_bigEmoji': emojiBody,
         'markdown-body': isHtml,
     });
-    return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} />;
+    return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" />;
+}
+
+function addCodeCopyButton(safeBody) {
+    // Adds 'copy' buttons to pre blocks
+    // Note that this only manipulates the markup to add the buttons:
+    // we need to add the event handlers once the nodes are in the DOM
+    // since we can't save functions in the markup.
+    // This is done in TextualBody
+    const el = document.createElement("div");
+    el.innerHTML = safeBody;
+    const codeBlocks = Array.from(el.getElementsByTagName("pre"));
+    codeBlocks.forEach(p => {
+        const button = document.createElement("span");
+        button.className = "mx_EventTile_copyButton";
+        p.appendChild(button);
+    });
+    return el.innerHTML;
 }
 
 export function emojifyText(text) {

@@ -19,11 +19,10 @@ limitations under the License.
 import React from 'react';
 import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import Model from '../../../Modal';
-import sdk from '../../../index';
 import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
 import q from 'q';
 import UserSettingsStore from '../../../UserSettingsStore';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'MVideoBody',
@@ -128,7 +127,7 @@ module.exports = React.createClass({
             return (
                 <span className="mx_MVideoBody" ref="body">
                     <img src="img/warning.svg" width="16" height="16"/>
-                    Error decrypting video
+                    {_t("Error decrypting video")}
                 </span>
             );
         }

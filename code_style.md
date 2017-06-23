@@ -69,25 +69,41 @@ General Style
       console.log("I am a fish"); // Bad
   }
   ```
+- No new line before else, catch, finally, etc:
+
+  ```javascript
+  if (x) {
+      console.log("I am a fish");
+  } else {
+      console.log("I am a chimp"); // Good
+  }
+
+  if (x) {
+      console.log("I am a fish");
+  }
+  else {
+      console.log("I am a chimp"); // Bad
+  }
+  ```
 - Declare one variable per var statement (consistent with Node). Unless they
   are simple and closely related. If you put the next declaration on a new line,
   treat yourself to another `var`:
 
   ```javascript
-  var key = "foo",
+  const key = "foo",
       comparator = function(x, y) {
           return x - y;
       }; // Bad
 
-  var key = "foo";
-  var comparator = function(x, y) {
+  const key = "foo";
+  const comparator = function(x, y) {
       return x - y;
   }; // Good
 
-  var x = 0, y = 0; // Fine
+  let x = 0, y = 0; // Fine
 
-  var x = 0;
-  var y = 0; // Also fine
+  let x = 0;
+  let y = 0; // Also fine
   ```
 - A single line `if` is fine, all others have braces. This prevents errors when adding to the code.:
 

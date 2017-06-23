@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 var MatrixClientPeg = require("./MatrixClientPeg");
+import { _t } from './languageHandler';
 
 /**
  * Allows a user to add a third party identifier to their Home Server and,
@@ -44,7 +45,7 @@ class AddThreepid {
             return res;
         }, function(err) {
             if (err.errcode == 'M_THREEPID_IN_USE') {
-                err.message = "This email address is already in use";
+                err.message = _t('This email address is already in use');
             } else if (err.httpStatus) {
                 err.message = err.message + ` (Status ${err.httpStatus})`;
             }
@@ -69,7 +70,7 @@ class AddThreepid {
             return res;
         }, function(err) {
             if (err.errcode == 'M_THREEPID_IN_USE') {
-                err.message = "This phone number is already in use";
+                err.message = _t('This phone number is already in use');
             } else if (err.httpStatus) {
                 err.message = err.message + ` (Status ${err.httpStatus})`;
             }
@@ -91,7 +92,7 @@ class AddThreepid {
             id_server: identityServerDomain
         }, this.bind).catch(function(err) {
             if (err.httpStatus === 401) {
-                err.message = "Failed to verify email address: make sure you clicked the link in the email";
+                err.message = _t('Failed to verify email address: make sure you clicked the link in the email');
             }
             else if (err.httpStatus) {
                 err.message += ` (Status ${err.httpStatus})`;

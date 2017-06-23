@@ -27,11 +27,12 @@ import Q from 'q';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
 import SlashCommands from '../../../SlashCommands';
+import KeyCode from '../../../KeyCode';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
 import dis from '../../../dispatcher';
-import KeyCode from '../../../KeyCode';
 import UserSettingsStore from '../../../UserSettingsStore';
 
 import * as RichText from '../../../RichText';
@@ -44,7 +45,14 @@ import {onSendMessageFailed} from './MessageComposerInputOld';
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
-const KEY_M = 77;
+const ZWS_CODE = 8203;
+const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
+function stateToMarkdown(state) {
+    return __stateToMarkdown(state)
+        .replace(
+            ZWS, // draft-js-export-markdown adds these
+            ''); // this is *not* a zero width space, trust me :)
+}
 
 /*
  * The textInput part of the MessageComposer
@@ -75,7 +83,7 @@ export default class MessageComposerInput extends React.Component {
 
     static getKeyBinding(e: SyntheticKeyboardEvent): string {
         // C-m => Toggles between rich text and markdown modes
-        if (e.keyCode === KEY_M && KeyBindingUtil.isCtrlKeyCommand(e)) {
+        if (e.keyCode === KeyCode.KEY_M && KeyBindingUtil.isCtrlKeyCommand(e)) {
             return 'toggle-mode';
         }
 
@@ -99,7 +107,6 @@ export default class MessageComposerInput extends React.Component {
         this.onAction = this.onAction.bind(this);
         this.handleReturn = this.handleReturn.bind(this);
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
-        this.handlePastedFiles = this.handlePastedFiles.bind(this);
         this.onEditorContentChanged = this.onEditorContentChanged.bind(this);
         this.onUpArrow = this.onUpArrow.bind(this);
         this.onDownArrow = this.onDownArrow.bind(this);
@@ -418,10 +425,6 @@ export default class MessageComposerInput extends React.Component {
         return false;
     }
 
-    handlePastedFiles(files) {
-        this.props.onUploadFileSelected(files, true);
-    }
-
     handleReturn(ev) {
         if (ev.shiftKey) {
             this.onEditorContentChanged(RichUtils.insertSoftNewline(this.state.editorState));
@@ -457,15 +460,15 @@ export default class MessageComposerInput extends React.Component {
                     console.error("Command failure: %s", err);
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createDialog(ErrorDialog, {
-                        title: "Server error",
-                        description: ((err && err.message) ? err.message : "Server unavailable, overloaded, or something else went wrong."),
+                        title: _t("Server error"),
+                        description: ((err && err.message) ? err.message : _t("Server unavailable, overloaded, or something else went wrong.")),
                     });
                 });
             } else if (cmd.error) {
                 console.error(cmd.error);
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Command error",
+                    title: _t("Command error"),
                     description: cmd.error,
                 });
             }
@@ -489,9 +492,9 @@ export default class MessageComposerInput extends React.Component {
         let sendTextFn = this.client.sendTextMessage;
 
         if (contentText.startsWith('/me')) {
-            contentText = contentText.replace('/me ', '');
+            contentText = contentText.substring(4);
             // bit of a hack, but the alternative would be quite complicated
-            if (contentHTML) contentHTML = contentHTML.replace('/me ', '');
+            if (contentHTML) contentHTML = contentHTML.replace(/\/me ?/, '');
             sendHtmlFn = this.client.sendHtmlEmote;
             sendTextFn = this.client.sendEmoteMessage;
         }
@@ -692,9 +695,10 @@ export default class MessageComposerInput extends React.Component {
                 <div className={className}>
                     <img className="mx_MessageComposer_input_markdownIndicator mx_filterFlipColor"
                          onMouseDown={this.onMarkdownToggleClicked}
-                         title={`Markdown is ${this.state.isRichtextEnabled ? 'disabled' : 'enabled'}`}
-                         src={`img/button-md-${!this.state.isRichtextEnabled}.png`}/>
+                         title={ this.state.isRichtextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
+                         src={`img/button-md-${!this.state.isRichtextEnabled}.png`} />
                     <Editor ref="editor"
+                            dir="auto"
                             placeholder={this.props.placeholder}
                             editorState={this.state.editorState}
                             onChange={this.onEditorContentChanged}
@@ -702,7 +706,7 @@ export default class MessageComposerInput extends React.Component {
                             keyBindingFn={MessageComposerInput.getKeyBinding}
                             handleKeyCommand={this.handleKeyCommand}
                             handleReturn={this.handleReturn}
-                            handlePastedFiles={this.handlePastedFiles}
+                            handlePastedFiles={this.props.onFilesPasted}
                             stripPastedStyles={!this.state.isRichtextEnabled}
                             onTab={this.onTab}
                             onUpArrow={this.onUpArrow}
@@ -732,7 +736,7 @@ MessageComposerInput.propTypes = {
 
     onDownArrow: React.PropTypes.func,
 
-    onUploadFileSelected: React.PropTypes.func,
+    onFilesPasted: React.PropTypes.func,
 
     // attempts to confirm currently selected completion, returns whether actually confirmed
     tryComplete: React.PropTypes.func,

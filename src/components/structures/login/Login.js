@@ -18,8 +18,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import url from 'url';
+import { _t, _tJsx } from '../../../languageHandler';
 import sdk from '../../../index';
 import Login from '../../../Login';
 
@@ -88,7 +87,27 @@ module.exports = React.createClass({
         ).then((data) => {
             this.props.onLoggedIn(data);
         }, (error) => {
-            this._setStateFromError(error, true);
+            let errorText;
+
+            // Some error strings only apply for logging in
+            const usingEmail = username.indexOf("@") > 0;
+            if (error.httpStatus == 400 && usingEmail) {
+                errorText = _t('This Home Server does not support login using email address.');
+            } else if (error.httpStatus === 401 || error.httpStatus === 403) {
+                errorText = _t('Incorrect username and/or password.');
+            } else {
+                // other errors, not specific to doing a password login
+                errorText = this._errorTextFromError(error);
+            }
+
+            this.setState({
+                errorText: errorText,
+                // 401 would be the sensible status code for 'incorrect password'
+                // but the login API gives a 403 https://matrix.org/jira/browse/SYN-744
+                // mentions this (although the bug is for UI auth which is not this)
+                // We treat both as an incorrect password
+                loginIncorrect: error.httpStatus === 401 || error.httpStatus == 403,
+            });
         }).finally(() => {
             this.setState({
                 busy: false
@@ -111,7 +130,16 @@ module.exports = React.createClass({
         this._loginLogic.loginAsGuest().then(function(data) {
             self.props.onLoggedIn(data);
         }, function(error) {
-            self._setStateFromError(error, true);
+            let errorText;
+            if (error.httpStatus === 403) {
+                errorText = _t("Guest access is disabled on this Home Server.");
+            } else {
+                errorText = self._errorTextFromError(error);
+            }
+            self.setState({
+                errorText: errorText,
+                loginIncorrect: false,
+            });
         }).finally(function() {
             self.setState({
                 busy: false
@@ -130,7 +158,7 @@ module.exports = React.createClass({
     onPhoneNumberChanged: function(phoneNumber) {
         // Validate the phone number entered
         if (!PHONE_NUMBER_REGEX.test(phoneNumber)) {
-            this.setState({ errorText: 'The phone number entered looks invalid' });
+            this.setState({ errorText: _t('The phone number entered looks invalid') });
             return;
         }
 
@@ -184,53 +212,48 @@ module.exports = React.createClass({
                 currentFlow: self._getCurrentFlowStep(),
             });
         }, function(err) {
-            self._setStateFromError(err, false);
+            self.setState({
+                errorText: self._errorTextFromError(err),
+                loginIncorrect: false,
+            });
         }).finally(function() {
             self.setState({
                 busy: false,
             });
-        });
+        }).done();
     },
 
     _getCurrentFlowStep: function() {
         return this._loginLogic ? this._loginLogic.getCurrentFlowStep() : null;
     },
 
-    _setStateFromError: function(err, isLoginAttempt) {
-        this.setState({
-            errorText: this._errorTextFromError(err),
-            // https://matrix.org/jira/browse/SYN-744
-            loginIncorrect: isLoginAttempt && (err.httpStatus == 401 || err.httpStatus == 403)
-        });
-    },
-
     _errorTextFromError(err) {
-        if (err.friendlyText) {
-            return err.friendlyText;
-        }
-
         let errCode = err.errcode;
         if (!errCode && err.httpStatus) {
             errCode = "HTTP " + err.httpStatus;
         }
 
-        let errorText = "Error: Problem communicating with the given homeserver " +
-                (errCode ? "(" + errCode + ")" : "");
+        let errorText = _t("Error: Problem communicating with the given homeserver.") +
+                (errCode ? " (" + errCode + ")" : "");
 
         if (err.cors === 'rejected') {
             if (window.location.protocol === 'https:' &&
                 (this.state.enteredHomeserverUrl.startsWith("http:") ||
-                 !this.state.enteredHomeserverUrl.startsWith("http")))
-            {
+                 !this.state.enteredHomeserverUrl.startsWith("http"))
+            ) {
                 errorText = <span>
-                    Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar.
-                    Either use HTTPS or <a href='https://www.google.com/search?&q=enable%20unsafe%20scripts'>enable unsafe scripts</a>
+                    { _tJsx("Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. " +
+                            "Either use HTTPS or <a>enable unsafe scripts</a>.",
+                      /<a>(.*?)<\/a>/,
+                      (sub) => { return <a href="https://www.google.com/search?&q=enable%20unsafe%20scripts">{ sub }</a>; }
+                    )}
                 </span>;
-            }
-            else {
+            } else {
                 errorText = <span>
-                    Can't connect to homeserver - please check your connectivity and ensure
-                    your <a href={ this.state.enteredHomeserverUrl }>homeserver's SSL certificate</a> is trusted.
+                    { _tJsx("Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
+                      /<a>(.*?)<\/a>/,
+                      (sub) => { return <a href={this.state.enteredHomeserverUrl}>{ sub }</a>; }
+                    )}
                 </span>;
             }
         }
@@ -242,12 +265,6 @@ module.exports = React.createClass({
         switch (step) {
             case 'm.login.password':
                 const PasswordLogin = sdk.getComponent('login.PasswordLogin');
-                // HSs that are not matrix.org may not be configured to have their
-                // domain name === domain part.
-                let hsDomain = url.parse(this.state.enteredHomeserverUrl).hostname;
-                if (hsDomain !== 'matrix.org') {
-                    hsDomain = null;
-                }
                 return (
                     <PasswordLogin
                         onSubmit={this.onPasswordLogin}
@@ -259,7 +276,6 @@ module.exports = React.createClass({
                         onPhoneNumberChanged={this.onPhoneNumberChanged}
                         onForgotPasswordClick={this.props.onForgotPasswordClick}
                         loginIncorrect={this.state.loginIncorrect}
-                        hsDomain={hsDomain}
                     />
                 );
             case 'm.login.cas':
@@ -273,8 +289,7 @@ module.exports = React.createClass({
                 }
                 return (
                     <div>
-                    Sorry, this homeserver is using a login which is not
-                    recognised ({step})
+                    { _t('Sorry, this homeserver is using a login which is not recognised ')}({step})
                     </div>
                 );
         }
@@ -291,7 +306,7 @@ module.exports = React.createClass({
         if (this.props.enableGuest) {
             loginAsGuestJsx =
                 <a className="mx_Login_create" onClick={this._onLoginAsGuestClick} href="#">
-                    Login as guest
+                    { _t('Login as guest')}
                 </a>;
         }
 
@@ -299,7 +314,7 @@ module.exports = React.createClass({
         if (this.props.onCancelClick) {
             returnToAppJsx =
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
-                    Return to app
+                    { _t('Return to app')}
                 </a>;
         }
 
@@ -308,7 +323,7 @@ module.exports = React.createClass({
                 <div className="mx_Login_box">
                     <LoginHeader />
                     <div>
-                        <h2>Sign in
+                        <h2>{ _t('Sign in')}
                             { loader }
                         </h2>
                         { this.componentForStep(this.state.currentFlow) }
@@ -324,7 +339,7 @@ module.exports = React.createClass({
                                 { this.state.errorText }
                         </div>
                         <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
-                            Create a new account
+                            { _t('Create an account')}
                         </a>
                         { loginAsGuestJsx }
                         { returnToAppJsx }

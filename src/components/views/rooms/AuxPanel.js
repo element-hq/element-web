@@ -14,11 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var MatrixClientPeg = require("../../../MatrixClientPeg");
-var sdk = require('../../../index');
-var dis = require("../../../dispatcher");
-var ObjectUtils = require('../../../ObjectUtils');
+import React from 'react';
+import MatrixClientPeg from "../../../MatrixClientPeg";
+import sdk from '../../../index';
+import dis from "../../../dispatcher";
+import ObjectUtils from '../../../ObjectUtils';
+import  { _t, _tJsx} from '../../../languageHandler';
+
 
 module.exports = React.createClass({
     displayName: 'AuxPanel',
@@ -76,10 +78,10 @@ module.exports = React.createClass({
             fileDropTarget = (
                 <div className="mx_RoomView_fileDropTarget">
                     <div className="mx_RoomView_fileDropTargetLabel"
-                      title="Drop File Here">
+                      title={_t("Drop File Here")}>
                         <TintableSvg src="img/upload-big.svg" width="45" height="59"/>
                         <br/>
-                        Drop file here to upload
+                        {_t("Drop file here to upload")}
                     </div>
                 </div>
             );
@@ -87,21 +89,31 @@ module.exports = React.createClass({
 
         var conferenceCallNotification = null;
         if (this.props.displayConfCallNotification) {
-            var supportedText, joinText;
+            let supportedText = '';
+            let joinNode;
             if (!MatrixClientPeg.get().supportsVoip()) {
-                supportedText = " (unsupported)";
+                supportedText = _t(" (unsupported)");
             }
             else {
-                joinText = (<span>
-                    Join as <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}}
-                               href="#">voice</a> or <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video'); }}
-                               href="#">video</a>.
+                joinNode = (<span>
+                    {_tJsx(
+                        "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.",
+                        [/<voiceText>(.*?)<\/voiceText>/, /<videoText>(.*?)<\/videoText>/],
+                        [
+                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}} href="#">{sub}</a>,
+                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video');}} href="#">{sub}</a>,
+                        ]
+                    )}
                 </span>);
 
             }
+            // XXX: the translation here isn't great: appending ' (unsupported)' is likely to not make sense in many languages,
+            // but there are translations for this in the languages we do have so I'm leaving it for now.
             conferenceCallNotification = (
                 <div className="mx_RoomView_ongoingConfCallNotification">
-                    Ongoing conference call{ supportedText }. { joinText }
+                    {_t("Ongoing conference call%(supportedText)s.", {supportedText: supportedText})}
+                    &nbsp;
+                    {joinNode}
                 </div>
             );
         }

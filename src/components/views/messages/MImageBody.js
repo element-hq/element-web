@@ -26,6 +26,7 @@ import dis from '../../../dispatcher';
 import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
 import q from 'q';
 import UserSettingsStore from '../../../UserSettingsStore';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'MImageBody',
@@ -56,7 +57,7 @@ module.exports = React.createClass({
             const ImageView = sdk.getComponent("elements.ImageView");
             const params = {
                 src: httpUrl,
-                name: content.body && content.body.length > 0 ? content.body : 'Attachment',
+                name: content.body && content.body.length > 0 ? content.body : _t('Attachment'),
                 mxEvent: this.props.mxEvent,
             };
 
@@ -191,7 +192,7 @@ module.exports = React.createClass({
             return (
                 <span className="mx_MImageBody" ref="body">
                     <img src="img/warning.svg" width="16" height="16"/>
-                    Error decrypting image
+                    {_t("Error decrypting image")}
                 </span>
             );
         }
@@ -238,13 +239,13 @@ module.exports = React.createClass({
         } else if (content.body) {
             return (
                 <span className="mx_MImageBody">
-                    Image '{content.body}' cannot be displayed.
+                    {_t("Image '%(Body)s' cannot be displayed.", {Body: content.body})}
                 </span>
             );
         } else {
             return (
                 <span className="mx_MImageBody">
-                    This image cannot be displayed.
+                    {_t("This image cannot be displayed.")}
                 </span>
             );
         }

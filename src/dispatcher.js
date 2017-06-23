@@ -16,13 +16,13 @@ limitations under the License.
 
 'use strict';
 
-var flux = require("flux");
+const flux = require("flux");
 
 class MatrixDispatcher extends flux.Dispatcher {
     /**
      * @param {Object} payload Required. The payload to dispatch.
      *        Must contain at least an 'action' key.
-     * @param {boolean} sync Optional. Pass true to dispatch
+     * @param {boolean=} sync Optional. Pass true to dispatch
      *        synchronously. This is useful for anything triggering
      *        an operation that the browser requires user interaction
      *        for.
@@ -41,9 +41,6 @@ class MatrixDispatcher extends flux.Dispatcher {
     }
 }
 
-// XXX this is a big anti-pattern, and makes testing hard. Because dispatches
-// happen asynchronously, it is possible for actions dispatched in one thread
-// to arrive in another, with *hilarious* consequences.
 if (global.mxDispatcher === undefined) {
     global.mxDispatcher = new MatrixDispatcher();
 }

@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+import { _t } from '../../../languageHandler';
 
 var Presets = {
     PrivateChat: "private_chat",
@@ -46,9 +47,9 @@ module.exports = React.createClass({
     render: function() {
         return (
             <select className="mx_Presets" onChange={this.onValueChanged} value={this.props.preset}>
-                <option value={this.Presets.PrivateChat}>Private Chat</option>
-                <option value={this.Presets.PublicChat}>Public Chat</option>
-                <option value={this.Presets.Custom}>Custom</option>
+                <option value={this.Presets.PrivateChat}>{_t("Private Chat")}</option>
+                <option value={this.Presets.PublicChat}>{_t("Public Chat")}</option>
+                <option value={this.Presets.Custom}>{_t("Custom")}</option>
             </select>
         );
     }

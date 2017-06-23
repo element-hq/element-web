@@ -27,31 +27,57 @@ if (!TextDecoder) {
     TextDecoder = TextEncodingUtf8.TextDecoder;
 }
 
+import { _t } from '../languageHandler';
+
+
 const subtleCrypto = window.crypto.subtle || window.crypto.webkitSubtle;
+
+/**
+ * Make an Error object which has a friendlyText property which is already
+ * translated and suitable for showing to the user.
+ *
+ * @param {string} msg   message for the exception
+ * @param {string} friendlyText
+ * @returns {Error}
+ */
+function friendlyError(msg, friendlyText) {
+    const e = new Error(msg);
+    e.friendlyText = friendlyText;
+    return e;
+}
+
+function cryptoFailMsg() {
+    return _t('Your browser does not support the required cryptography extensions');
+}
 
 /**
  * Decrypt a megolm key file
  *
- * @param {ArrayBuffer} file
+ * @param {ArrayBuffer} data file to decrypt
  * @param {String} password
  * @return {Promise<String>} promise for decrypted output
+ *
+ *
  */
-export function decryptMegolmKeyFile(data, password) {
+export async function decryptMegolmKeyFile(data, password) {
     const body = unpackMegolmKeyFile(data);
 
     // check we have a version byte
     if (body.length < 1) {
-        throw new Error('Invalid file: too short');
+        throw friendlyError('Invalid file: too short',
+            _t('Not a valid Riot keyfile'));
     }
 
     const version = body[0];
     if (version !== 1) {
-        throw new Error('Unsupported version');
+        throw friendlyError('Unsupported version',
+            _t('Not a valid Riot keyfile'));
     }
 
     const ciphertextLength = body.length-(1+16+16+4+32);
     if (ciphertextLength < 0) {
-        throw new Error('Invalid file: too short');
+        throw friendlyError('Invalid file: too short',
+            _t('Not a valid Riot keyfile'));
     }
 
     const salt = body.subarray(1, 1+16);
@@ -60,33 +86,41 @@ export function decryptMegolmKeyFile(data, password) {
     const ciphertext = body.subarray(37, 37+ciphertextLength);
     const hmac = body.subarray(-32);
 
-    return deriveKeys(salt, iterations, password).then((keys) => {
-        const [aes_key, hmac_key] = keys;
+    const [aesKey, hmacKey] = await deriveKeys(salt, iterations, password);
+    const toVerify = body.subarray(0, -32);
 
-        const toVerify = body.subarray(0, -32);
-        return subtleCrypto.verify(
+    let isValid;
+    try {
+        isValid = await subtleCrypto.verify(
             {name: 'HMAC'},
-            hmac_key,
+            hmacKey,
             hmac,
             toVerify,
-        ).then((isValid) => {
-            if (!isValid) {
-                throw new Error('Authentication check failed: incorrect password?');
-            }
+        );
+    } catch (e) {
+        throw friendlyError('subtleCrypto.verify failed: ' + e, cryptoFailMsg());
+    }
+    if (!isValid) {
+        throw friendlyError('hmac mismatch',
+            _t('Authentication check failed: incorrect password?'));
+    }
 
-            return subtleCrypto.decrypt(
-                {
-                    name: "AES-CTR",
-                    counter: iv,
-                    length: 64,
-                },
-                aes_key,
-                ciphertext,
-            );
-        });
-    }).then((plaintext) => {
-        return new TextDecoder().decode(new Uint8Array(plaintext));
-    });
+    let plaintext;
+    try {
+        plaintext = await subtleCrypto.decrypt(
+            {
+                name: "AES-CTR",
+                counter: iv,
+                length: 64,
+            },
+            aesKey,
+            ciphertext,
+        );
+    } catch(e) {
+        throw friendlyError('subtleCrypto.decrypt failed: ' + e, cryptoFailMsg());
+    }
+
+    return new TextDecoder().decode(new Uint8Array(plaintext));
 }
 
 
@@ -100,9 +134,9 @@ export function decryptMegolmKeyFile(data, password) {
  *    key-derivation function.
  * @return {Promise<ArrayBuffer>} promise for encrypted output
  */
-export function encryptMegolmKeyFile(data, password, options) {
+export async function encryptMegolmKeyFile(data, password, options) {
     options = options || {};
-    const kdf_rounds = options.kdf_rounds || 500000;
+    const kdfRounds = options.kdf_rounds || 500000;
 
     const salt = new Uint8Array(16);
     window.crypto.getRandomValues(salt);
@@ -115,44 +149,54 @@ export function encryptMegolmKeyFile(data, password, options) {
     // of a single bit of iv is a price we have to pay.
     iv[9] &= 0x7f;
 
-    return deriveKeys(salt, kdf_rounds, password).then((keys) => {
-        const [aes_key, hmac_key] = keys;
+    const [aesKey, hmacKey] = await deriveKeys(salt, kdfRounds, password);
+    const encodedData = new TextEncoder().encode(data);
 
-        return subtleCrypto.encrypt(
+    let ciphertext;
+    try {
+        ciphertext = await subtleCrypto.encrypt(
             {
                 name: "AES-CTR",
                 counter: iv,
                 length: 64,
             },
-            aes_key,
-            new TextEncoder().encode(data),
-        ).then((ciphertext) => {
-            const cipherArray = new Uint8Array(ciphertext);
-            const bodyLength = (1+salt.length+iv.length+4+cipherArray.length+32);
-            const resultBuffer = new Uint8Array(bodyLength);
-            let idx = 0;
-            resultBuffer[idx++] = 1; // version
-            resultBuffer.set(salt, idx); idx += salt.length;
-            resultBuffer.set(iv, idx); idx += iv.length;
-            resultBuffer[idx++] = kdf_rounds >> 24;
-            resultBuffer[idx++] = (kdf_rounds >> 16) & 0xff;
-            resultBuffer[idx++] = (kdf_rounds >> 8) & 0xff;
-            resultBuffer[idx++] = kdf_rounds & 0xff;
-            resultBuffer.set(cipherArray, idx); idx += cipherArray.length;
+            aesKey,
+            encodedData,
+        );
+    } catch (e) {
+        throw friendlyError('subtleCrypto.encrypt failed: ' + e, cryptoFailMsg());
+    }
 
-            const toSign = resultBuffer.subarray(0, idx);
+    const cipherArray = new Uint8Array(ciphertext);
+    const bodyLength = (1+salt.length+iv.length+4+cipherArray.length+32);
+    const resultBuffer = new Uint8Array(bodyLength);
+    let idx = 0;
+    resultBuffer[idx++] = 1; // version
+    resultBuffer.set(salt, idx); idx += salt.length;
+    resultBuffer.set(iv, idx); idx += iv.length;
+    resultBuffer[idx++] = kdfRounds >> 24;
+    resultBuffer[idx++] = (kdfRounds >> 16) & 0xff;
+    resultBuffer[idx++] = (kdfRounds >> 8) & 0xff;
+    resultBuffer[idx++] = kdfRounds & 0xff;
+    resultBuffer.set(cipherArray, idx); idx += cipherArray.length;
 
-            return subtleCrypto.sign(
-                {name: 'HMAC'},
-                hmac_key,
-                toSign,
-            ).then((hmac) => {
-                hmac = new Uint8Array(hmac);
-                resultBuffer.set(hmac, idx);
-                return packMegolmKeyFile(resultBuffer);
-            });
-        });
-    });
+    const toSign = resultBuffer.subarray(0, idx);
+
+    let hmac;
+    try {
+        hmac = await subtleCrypto.sign(
+            {name: 'HMAC'},
+            hmacKey,
+            toSign,
+        );
+    } catch (e) {
+        throw friendlyError('subtleCrypto.sign failed: ' + e, cryptoFailMsg());
+    }
+
+
+    const hmacArray = new Uint8Array(hmac);
+    resultBuffer.set(hmacArray, idx);
+    return packMegolmKeyFile(resultBuffer);
 }
 
 /**
@@ -163,16 +207,25 @@ export function encryptMegolmKeyFile(data, password, options) {
  * @param {String} password  password
  * @return {Promise<[CryptoKey, CryptoKey]>} promise for [aes key, hmac key]
  */
-function deriveKeys(salt, iterations, password) {
+async function deriveKeys(salt, iterations, password) {
     const start = new Date();
-    return subtleCrypto.importKey(
-        'raw',
-        new TextEncoder().encode(password),
-        {name: 'PBKDF2'},
-        false,
-        ['deriveBits']
-    ).then((key) => {
-        return subtleCrypto.deriveBits(
+
+    let key;
+    try {
+        key = await subtleCrypto.importKey(
+            'raw',
+            new TextEncoder().encode(password),
+            {name: 'PBKDF2'},
+            false,
+            ['deriveBits'],
+        );
+    } catch (e) {
+        throw friendlyError('subtleCrypto.importKey failed: ' + e, cryptoFailMsg());
+    }
+
+    let keybits;
+    try {
+        keybits = await subtleCrypto.deriveBits(
             {
                 name: 'PBKDF2',
                 salt: salt,
@@ -180,34 +233,42 @@ function deriveKeys(salt, iterations, password) {
                 hash: 'SHA-512',
             },
             key,
-            512
+            512,
         );
-    }).then((keybits) => {
-        const now = new Date();
-        console.log("E2e import/export: deriveKeys took " + (now - start) + "ms");
+    } catch (e) {
+        throw friendlyError('subtleCrypto.deriveBits failed: ' + e, cryptoFailMsg());
+    }
 
-        const aes_key = keybits.slice(0, 32);
-        const hmac_key = keybits.slice(32);
+    const now = new Date();
+    console.log("E2e import/export: deriveKeys took " + (now - start) + "ms");
 
-        const aes_prom = subtleCrypto.importKey(
-            'raw',
-            aes_key,
-            {name: 'AES-CTR'},
-            false,
-            ['encrypt', 'decrypt']
-        );
-        const hmac_prom = subtleCrypto.importKey(
-            'raw',
-            hmac_key,
-            {
-                name: 'HMAC',
-                hash: {name: 'SHA-256'},
-            },
-            false,
-            ['sign', 'verify']
-        );
-        return Promise.all([aes_prom, hmac_prom]);
+    const aesKey = keybits.slice(0, 32);
+    const hmacKey = keybits.slice(32);
+
+    const aesProm = subtleCrypto.importKey(
+        'raw',
+        aesKey,
+        {name: 'AES-CTR'},
+        false,
+        ['encrypt', 'decrypt'],
+    ).catch((e) => {
+        throw friendlyError('subtleCrypto.importKey failed for AES key: ' + e, cryptoFailMsg());
     });
+
+    const hmacProm = subtleCrypto.importKey(
+        'raw',
+        hmacKey,
+        {
+            name: 'HMAC',
+            hash: {name: 'SHA-256'},
+        },
+        false,
+        ['sign', 'verify'],
+    ).catch((e) => {
+        throw friendlyError('subtleCrypto.importKey failed for HMAC key: ' + e, cryptoFailMsg());
+    });
+
+    return await Promise.all([aesProm, hmacProm]);
 }
 
 const HEADER_LINE = '-----BEGIN MEGOLM SESSION DATA-----';
@@ -301,7 +362,7 @@ function packMegolmKeyFile(data) {
 function encodeBase64(uint8Array) {
     // Misinterpt the Uint8Array as Latin-1.
     // window.btoa expects a unicode string with codepoints in the range 0-255.
-    var latin1String = String.fromCharCode.apply(null, uint8Array);
+    const latin1String = String.fromCharCode.apply(null, uint8Array);
     // Use the builtin base64 encoder.
     return window.btoa(latin1String);
 }
@@ -313,10 +374,10 @@ function encodeBase64(uint8Array) {
  */
 function decodeBase64(base64) {
     // window.atob returns a unicode string with codepoints in the range 0-255.
-    var latin1String = window.atob(base64);
+    const latin1String = window.atob(base64);
     // Encode the string as a Uint8Array
-    var uint8Array = new Uint8Array(latin1String.length);
-    for (var i = 0; i < latin1String.length; i++) {
+    const uint8Array = new Uint8Array(latin1String.length);
+    for (let i = 0; i < latin1String.length; i++) {
         uint8Array[i] = latin1String.charCodeAt(i);
     }
     return uint8Array;

@@ -14,23 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
 import q from 'q';
 import MatrixClientPeg from './MatrixClientPeg';
 import Notifier from './Notifier';
+import { _t } from './languageHandler';
 
 /*
  * TODO: Make things use this. This is all WIP - see UserSettings.js for usage.
  */
 
-module.exports = {
+export default {
     LABS_FEATURES: [
         {
-            name: 'New Composer & Autocomplete',
+            name: "-",
             id: 'rich_text_editor',
             default: false,
         },
     ],
+
+    // horrible but it works. The locality makes this somewhat more palatable.
+    doTranslations: function() {
+        this.LABS_FEATURES[0].name = _t("New Composer & Autocomplete");
+    },
 
     loadProfileInfo: function() {
         const cli = MatrixClientPeg.get();

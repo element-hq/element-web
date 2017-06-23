@@ -17,12 +17,14 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../../index';
 import PropTypes from 'prop-types';
+import { _t } from '../../../languageHandler';
 
 const StartChatButton = function(props) {
     const ActionButton = sdk.getComponent('elements.ActionButton');
     return (
         <ActionButton action="view_create_chat"
-            label="Start chat"
+            mouseOverAction={props.callout ? "callout_start_chat" : null}
+            label={ _t("Start chat") }
             iconPath="img/icons-people.svg"
             size={props.size}
             tooltip={props.tooltip}

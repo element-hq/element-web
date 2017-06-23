@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import classnames from 'classnames';
 import AccessibleButton from './AccessibleButton';
+import { _t } from '../../../languageHandler';
 
 class MenuOption extends React.Component {
     constructor(props) {
@@ -152,10 +153,12 @@ export default class Dropdown extends React.Component {
     }
 
     _onInputClick(ev) {
-        this.setState({
-            expanded: !this.state.expanded,
-        });
-        ev.preventDefault();
+        if (!this.state.expanded) {
+            this.setState({
+                expanded: true,
+            });
+            ev.preventDefault();
+        }
     }
 
     _onMenuOptionClick(dropdownKey) {
@@ -252,8 +255,8 @@ export default class Dropdown extends React.Component {
             );
         });
         if (options.length === 0) {
-            return [<div className="mx_Dropdown_option">
-                No results
+            return [<div key="0" className="mx_Dropdown_option">
+                {_t("No results")}
             </div>];
         }
         return options;
