@@ -234,8 +234,6 @@ module.exports = React.createClass({
         // making it impossible to indicate a newly joined room.
         const room = this.state.room;
         if (room) {
-            UserProvider.getInstance().setUserListFromRoom(room);
-            this.tabComplete.loadEntries(room);
             this.setState({
                 unsentMessageError: this._getUnsentMessageError(room),
             });
@@ -523,6 +521,8 @@ module.exports = React.createClass({
         this._warnAboutEncryption(room);
         this._calculatePeekRules(room);
         this._updatePreviewUrlVisibility(room);
+        this.tabComplete.loadEntries(room);
+        UserProvider.getInstance().setUserListFromRoom(room);
     },
 
     _warnAboutEncryption: function(room) {
