@@ -166,5 +166,9 @@
     "Add phone number": "Добавити телефонний номер",
     "Admin": "Адмін",
     "Admin tools": "Адмін утиліта",
-    "And %(count)s more...": "І %(count)s більше..."
+    "And %(count)s more...": "І %(count)s більше...",
+    "VoIP": "VoIP",
+    "Missing Media Permissions, click here to request.": "Відсутьне розрішення, натисніть для запиту.",
+    "No Microphones detected": "Мікрофони не виявлено",
+    "No Webcams detected": "Веб-камера не виявленна"
 }
