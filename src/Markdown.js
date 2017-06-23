@@ -62,6 +62,9 @@ function is_multi_line(node) {
  */
 export default class Markdown {
     constructor(input) {
+        // Support GH-style strikeout
+        input = input.replace(/~~(.*?)~~/g, '<del>$1</del>');
+
         this.input = input;
 
         const parser = new commonmark.Parser();
