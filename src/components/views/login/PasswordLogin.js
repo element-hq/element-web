@@ -71,7 +71,7 @@ class PasswordLogin extends React.Component {
         ev.preventDefault();
         if (this.state.loginType === PasswordLogin.LOGIN_FIELD_PHONE) {
             this.props.onSubmit(
-                this.state.username,
+                '',
                 this.state.phoneCountry,
                 this.state.phoneNumber,
                 this.state.password,
