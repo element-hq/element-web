@@ -548,7 +548,12 @@ module.exports = React.createClass({
                 this._onLoggedOut();
                 break;
             case 'will_start_client':
-                this._onWillStartClient();
+                this.setState({ready: false}, () => {
+                    // if the client is about to start, we are, by definition, not ready.
+                    // Set ready to false now, then it'll be set to true when the sync
+                    // listener we set below fires.
+                    this._onWillStartClient();
+                });
                 break;
             case 'new_version':
                 this.onVersion(
@@ -1012,10 +1017,6 @@ module.exports = React.createClass({
      */
     _onWillStartClient() {
         const self = this;
-        // if the client is about to start, we are, by definition, not ready.
-        // Set ready to false now, then it'll be set to true when the sync
-        // listener we set below fires.
-        this.setState({ready: false});
 
         // reset the 'have completed first sync' flag,
         // since we're about to start the client and therefore about
