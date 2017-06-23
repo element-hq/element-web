@@ -16,8 +16,7 @@ limitations under the License.
 
 import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
-import sanitizeHtml from "sanitize-html";
-import { sanitizeHtmlParams } from '../../HtmlUtils';
+import { sanitizedHtmlNode } from '../../HtmlUtils';
 
 
 module.exports = React.createClass({
@@ -53,14 +52,13 @@ module.exports = React.createClass({
     },
 
     _loadGroupFromServer: function(groupId) {
-        const self = this;
-        MatrixClientPeg.get().getGroupSummary(groupId).done(function(res) {
-            self.setState({
+        MatrixClientPeg.get().getGroupSummary(groupId).done((res) => {
+            this.setState({
                 phase: "GroupView.DISPLAY",
                 summary: res,
             });
-        }, function(err) {
-            self.setState({
+        }, (err) => {
+            this.setState({
                 phase: err.errcode == 404 ? "GroupView.NOT_FOUND" :"GroupView.ERROR",
                 summary: null,
             });
@@ -68,15 +66,11 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
-        var Loader = sdk.getComponent("elements.Spinner");
+        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        const Loader = sdk.getComponent("elements.Spinner");
 
         if (this.state.phase == "GroupView.LOADING") {
-            return (
-                <div style={{margin: "auto"}}>
-                    <Loader />
-                </div>
-            );
+            return <Loader />;
         } else if (this.state.phase == "GroupView.DISPLAY") {
             const summary = this.state.summary;
             let avatar_url = null;
@@ -85,7 +79,7 @@ module.exports = React.createClass({
             }
             let description = null;
             if (summary.profile.long_description) {
-                description = sanitizeHtml(summary.profile.long_description);
+                description = sanitizedHtmlNode(summary.profile.long_description);
             }
             return (
                 <div style={{maxWidth: "960px", width: "100%", "margin": "20px auto"}}>
@@ -112,7 +106,7 @@ module.exports = React.createClass({
                             </div>
                         </div>
                     </div>
-                    <div dangerouslySetInnerHTML={{ __html: description }} />
+                    {description}
                 </div>
             );
         } else if (this.state.phase == "GroupView.NOT_FOUND") {
