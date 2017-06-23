@@ -4,7 +4,7 @@
     "accepted the invitation for": "принял приглашение на",
     "Account": "Аккаунт",
     "Add email address": "Добавить email адрес",
-    "Add phone number": "Добавить телефонный номер",
+    "Add phone number": "Добавить тел. номер",
     "Admin": "Админ",
     "Advanced": "Дополнительно",
     "Algorithm": "Алгоритм",
@@ -967,5 +967,7 @@
     "Ignore request": "Игнорировать запрос",
     "You added a new device '%(displayName)s', which is requesting encryption keys.": "Вы добавили новое устройство '%(displayName)s', который запрашивает ключи шифрования.",
     "Your unverified device '%(displayName)s' is requesting encryption keys.": "Ваше непроверенное устройство '%(displayName)s' запрашивает ключи шифрования.",
-    "Encryption key request": "Запрос ключа шифрования"
+    "Encryption key request": "Запрос ключа шифрования",
+    "Updates": "Обновления",
+    "Check for update": "Проверить обновление"
 }
