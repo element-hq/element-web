@@ -209,5 +209,10 @@
     "You have successfully set a password and an email address!": "Du hast erfolgreich ein Passwort und eine E-Mail-Adresse gesetzt!",
     "Remember, you can always set an email address in user settings if you change your mind.": "Denk daran, dass du in den Benutzereinstellungen jederzeit eine E-Mail-Adresse setzen kannst.",
     "To return to your account in future you need to <u>set a password</u>": "Um in Zukunft zu deinem Konto zurückkehren zu können, musst du <u>ein Passwort setzen</u>",
-    "Set Password": "Setze ein Passwort"
+    "Set Password": "Setze ein Passwort",
+    "Warning": "Warnung",
+    "Checking for an update...": "Nach Updates suchen...",
+    "Error encountered (%(errorDetail)s).": "Ein Fehler trat auf (%(errorDetail)s).",
+    "No update available.": "Kein Update verfügbar.",
+    "Downloading update...": "Update wird heruntergeladen..."
 }
