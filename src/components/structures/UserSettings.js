@@ -642,6 +642,10 @@ module.exports = React.createClass({
     },
 
     _renderUserInterfaceSettings: function() {
+        // TODO: this ought to be a separate component so that we don't need
+        // to rebind the onChange each time we render
+        const onChange = (e) =>
+            UserSettingsStore.setLocalSetting('autocompleteDelay', + e.target.value);
         return (
             <div>
                 <h3>{ _t("User Interface") }</h3>
@@ -657,9 +661,7 @@ module.exports = React.createClass({
                                 <input
                                     type="number"
                                     defaultValue={UserSettingsStore.getLocalSetting('autocompleteDelay', 200)}
-                                    onChange={
-                                        (e) => UserSettingsStore.setLocalSetting('autocompleteDelay', + e.target.value)
-                                    }
+                                    onChange={onChange}
                                 />
                             </td>
                         </tr>

@@ -19,15 +19,17 @@ const DEFAULT_DISTANCE = 5;
 import PrefixMatcher from './QueryMatcher';
 export default PrefixMatcher;
 
-class FuzzyMatcher {
+class FuzzyMatcher { // eslint-disable-line no-unused-vars
     /**
-     * Given an array of objects and keys, returns a KeyMap
+     * @param {object[]} objects the objects to perform a match on
+     * @param {string[]} keys an array of keys within each object to match on
      * Keys can refer to object properties by name and as in JavaScript (for nested properties)
      *
      * To use, simply presort objects by required criteria, run through this function and create a FuzzyMatcher with the
      * resulting KeyMap.
      *
      * TODO: Handle arrays and objects (Fuse did this, RoomProvider uses it)
+     * @return {KeyMap}
      */
     static valuesToKeyMap(objects: Array<Object>, keys: Array<String>): KeyMap {
         const keyMap = new KeyMap();
@@ -48,7 +50,7 @@ class FuzzyMatcher {
 
         keyMap.objectMap = map;
         keyMap.priorityMap = priorities;
-        keyMap.keys = _sortBy(_keys(map), [value => priorities[value]]);
+        keyMap.keys = _sortBy(_keys(map), [(value) => priorities[value]]);
         return keyMap;
     }
 
@@ -74,15 +76,15 @@ class FuzzyMatcher {
     match(query: String): Array<Object> {
         const candidates = this.matcher.transduce(query, this.options.distance || DEFAULT_DISTANCE);
         // TODO FIXME This is hideous. Clean up when possible.
-        const val =  _sortedUniq(_sortBy(_flatMap(candidates, candidate => {
-                return this.keyMap.objectMap[candidate[0]].map(value => {
+        const val = _sortedUniq(_sortBy(_flatMap(candidates, (candidate) => {
+                return this.keyMap.objectMap[candidate[0]].map((value) => {
                     return {
                         distance: candidate[1],
                         ...value,
                     };
                 });
             }),
-            [candidate => candidate.distance, candidate => this.keyMap.priorityMap[candidate]]));
+            [(candidate) => candidate.distance, (candidate) => this.keyMap.priorityMap[candidate]]));
         console.log(val);
         return val;
     }

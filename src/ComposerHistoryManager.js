@@ -21,14 +21,14 @@ class HistoryItem {
         let {message} = this;
         if (format === 'markdown') {
             if (this.format === 'html') {
-                message = _flow([RichText.HTMLtoContentState, RichText.stateToMarkdown])(message);
+                message = _flow([RichText.htmlToContentState, RichText.stateToMarkdown])(message);
             }
             return ContentState.createFromText(message);
         } else {
             if (this.format === 'markdown') {
                 message = new Markdown(message).toHTML();
             }
-            return RichText.HTMLtoContentState(message);
+            return RichText.htmlToContentState(message);
         }
     }
 }

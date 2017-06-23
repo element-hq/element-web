@@ -77,7 +77,7 @@ const COMMANDS = [
         command: '/op',
         args: '<userId> [<power level>]',
         description: 'Define the power level of a user',
-    }
+    },
 ];
 
 const COMMAND_RE = /(^\/\w*)/g;
@@ -96,7 +96,7 @@ export default class CommandProvider extends AutocompleteProvider {
         let completions = [];
         const {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
-            completions = this.matcher.match(command[0]).map(result => {
+            completions = this.matcher.match(command[0]).map((result) => {
                 return {
                     completion: result.command + ' ',
                     component: (<TextualCompletion

@@ -201,7 +201,7 @@ export default class MessageComposerInput extends React.Component {
                 let {body, formatted_body} = payload.event.getContent();
                 formatted_body = formatted_body || escape(body);
                 if (formatted_body) {
-                    let content = RichText.HTMLtoContentState(`<blockquote>${formatted_body}</blockquote>`);
+                    let content = RichText.htmlToContentState(`<blockquote>${formatted_body}</blockquote>`);
                     if (!this.state.isRichtextEnabled) {
                         content = ContentState.createFromText(RichText.stateToMarkdown(content));
                     }
@@ -350,7 +350,7 @@ export default class MessageComposerInput extends React.Component {
         let contentState = null;
         if (enabled) {
             const md = new Markdown(this.state.editorState.getCurrentContent().getPlainText());
-            contentState = RichText.HTMLtoContentState(md.toHTML());
+            contentState = RichText.htmlToContentState(md.toHTML());
         } else {
             let markdown = RichText.stateToMarkdown(this.state.editorState.getCurrentContent());
             if (markdown[markdown.length - 1] === '\n') {

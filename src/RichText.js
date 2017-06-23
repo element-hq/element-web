@@ -50,7 +50,7 @@ export const contentStateToHTML = (contentState: ContentState) => {
     });
 };
 
-export function HTMLtoContentState(html: string): ContentState {
+export function htmlToContentState(html: string): ContentState {
     return ContentState.createFromBlockArray(convertFromHTML(html));
 }
 

@@ -14,13 +14,15 @@ class KeyMap {
 
 export default class QueryMatcher {
     /**
-     * Given an array of objects and keys, returns a KeyMap
+     * @param {object[]} objects the objects to perform a match on
+     * @param {string[]} keys an array of keys within each object to match on
      * Keys can refer to object properties by name and as in JavaScript (for nested properties)
      *
      * To use, simply presort objects by required criteria, run through this function and create a QueryMatcher with the
      * resulting KeyMap.
      *
      * TODO: Handle arrays and objects (Fuse did this, RoomProvider uses it)
+     * @return {KeyMap}
      */
     static valuesToKeyMap(objects: Array<Object>, keys: Array<String>): KeyMap {
         const keyMap = new KeyMap();
