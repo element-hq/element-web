@@ -22,8 +22,15 @@ import dis from 'matrix-react-sdk/lib/dispatcher';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import q from 'q';
 import {remote, ipcRenderer} from 'electron';
+import rageshake from '../rageshake';
 
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
+
+// try to flush the rageshake logs to indexeddb before quit.
+ipcRenderer.on('before-quit', function () {
+    console.log('riot-desktop closing');
+    rageshake.flush();
+});
 
 function onUpdateDownloaded(ev: Event, releaseNotes: string, ver: string, date: Date, updateURL: string) {
     dis.dispatch({
