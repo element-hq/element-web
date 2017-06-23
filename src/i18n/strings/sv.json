@@ -296,7 +296,7 @@
     "Active call (%(roomName)s)": "Aktiv samtal (%(roomName)s)",
     "Add": "Lägg till",
     "Admin tools": "Admin verktyg",
-    "And %(count)s more...": "Och %(count) till...",
+    "And %(count)s more...": "Och %(count)s till...",
     "Alias (optional)": "Alias (valfri)",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Det gick inte att ansluta till servern - kontrollera anslutningen, försäkra att din <a>hemservers TLS-certifikat</a> är betrott, och att inget webbläsartillägg blockerar förfrågningar.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s ändrade maktnivån av %(powerLevelDiffText)s.",
