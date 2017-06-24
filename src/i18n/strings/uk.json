@@ -205,5 +205,6 @@
     "Checking for an update...": "Перевірка оновлень…",
     "Error encountered (%(errorDetail)s).": "Трапилась помилка (%(errorDetail)s).",
     "No update available.": "Оновлення відсутні.",
-    "Downloading update...": "Звантажується оновлення…"
+    "Downloading update...": "Звантажується оновлення…",
+    "Couldn't load home page": "Не вдалось завантажити домівку"
 }
