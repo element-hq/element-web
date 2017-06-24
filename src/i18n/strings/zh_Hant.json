@@ -205,5 +205,6 @@
     "You have successfully set a password and an email address!": "您已經成功設定密碼與電子郵件地址！",
     "Remember, you can always set an email address in user settings if you change your mind.": "記住，如果您改變心意了，您永遠可以在使用者設定中設定電子郵件地址。",
     "To return to your account in future you need to <u>set a password</u>": "要在未來回到您的帳號，您需要 <u>設定密碼</u>",
-    "Set Password": "設定密碼"
+    "Set Password": "設定密碼",
+    "Couldn't load home page": "無法載入首頁"
 }
