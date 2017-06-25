@@ -205,5 +205,6 @@
     "Checking for an update...": "Frissítés keresése...",
     "Error encountered (%(errorDetail)s).": "Hiba történt (%(errorDetail)s).",
     "No update available.": "Frissítés nem érthető el.",
-    "Downloading update...": "Frissítés letöltése..."
+    "Downloading update...": "Frissítés letöltése...",
+    "Couldn't load home page": "Kezdőképernyő betöltése sikertelen"
 }
