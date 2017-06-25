@@ -200,5 +200,10 @@
     "You have successfully set a password and an email address!": "Sikeresen beállítottad a jelszavad és e-mail címed!",
     "Remember, you can always set an email address in user settings if you change your mind.": "Ha meggondolod magad, bármikor beállíthatod az e-mail címed a felhasználói beállításoknál.",
     "To return to your account in future you need to <u>set a password</u>": "A fiókba való visszalépéshez <u>jelszót</u> kell beállítanod",
-    "Set Password": "Jelszó beállítása"
+    "Set Password": "Jelszó beállítása",
+    "Warning": "Figyelmeztetés",
+    "Checking for an update...": "Frissítés keresése...",
+    "Error encountered (%(errorDetail)s).": "Hiba történt (%(errorDetail)s).",
+    "No update available.": "Frissítés nem érthető el.",
+    "Downloading update...": "Frissítés letöltése..."
 }
