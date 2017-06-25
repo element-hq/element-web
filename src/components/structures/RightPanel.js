@@ -93,11 +93,7 @@ module.exports = React.createClass({
 
     onInviteButtonClick: function() {
         if (MatrixClientPeg.get().isGuest()) {
-            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: _t('Please Register'),
-                description: _t('Guest users can\'t invite users. Please register to invite.')
-            });
+            dis.dispatch({action: 'view_set_mxid'});
             return;
         }
 
@@ -224,7 +220,7 @@ module.exports = React.createClass({
                         <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" title={ _t("Hide panel") } onClick={ this.onCollapseClick }>
                             <TintableSvg src="img/minimise.svg" width="10" height="16"/>
                         </div>
-                  </div>;
+                    </div>;
         }
 
         if (!this.props.collapsed) {

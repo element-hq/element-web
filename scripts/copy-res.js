@@ -12,15 +12,24 @@ const INCLUDE_LANGS = [
     {'value': 'en_EN', 'label': 'English'},
     {'value': 'en_US', 'label': 'English (US)'},
     {'value': 'da', 'label': 'Dansk'},
+    {'value': 'el', 'label': 'Ελληνικά'},
+    {'value': 'eo', 'label': 'Esperanto'},
     {'value': 'nl', 'label': 'Nederlands'},
     {'value': 'de_DE', 'label': 'Deutsch'},
     {'value': 'fr', 'label': 'Français'},
+    {'value': 'hu', 'label': 'Magyar'},
+    {'value': 'ko', 'label': '한국어'},
+    {'value': 'nb_NO', 'label': 'Norwegian Bokmål'},
+    {'value': 'pl', 'label': 'Polski'},
     {'value': 'pt', 'label': 'Português'},
     {'value': 'pt_BR', 'label': 'Português do Brasil'},
     {'value': 'ru', 'label': 'Русский'},
     {'value': 'sv', 'label': 'Svenska'},
     {'value': 'es', 'label': 'Español'},
-    {'value': 'zh_Hans', 'label': '中文'}
+    {'value': 'th', 'label': 'ไทย'},
+    {'value': 'tr', 'label': 'Türk'},
+    {'value': 'zh_Hans', 'label': '简体中文'}, // simplified chinese
+    {'value': 'zh_Hant', 'label': '繁體中文'}, // traditional chinese
 ];
 
 // cpx includes globbed parts of the filename in the destination, but excludes
@@ -28,6 +37,8 @@ const INCLUDE_LANGS = [
 // "dest/b/...".
 const COPY_LIST = [
     ["res/manifest.json", "webapp"],
+    ["res/home.html", "webapp"],
+    ["res/home/**", "webapp/home"],
     ["res/{media,vector-icons}/**", "webapp"],
     ["res/flags/*", "webapp/flags/"],
     ["src/skins/vector/{fonts,img}/**", "webapp"],

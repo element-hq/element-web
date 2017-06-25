@@ -34,6 +34,10 @@ limitations under the License.
     word-wrap: nowrap;
 }
 
+.mx_ChatInviteDialog .mx_Dialog_content {
+    min-height: 50px
+}
+
 .mx_ChatInviteDialog_inputContainer {
     border-radius: 3px;
     border: solid 1px $input-border-color;
@@ -64,8 +68,3 @@ limitations under the License.
     pointer-events: none;
 }
 
-.mx_ChatInviteDialog_addressSelectHeader {
-    font-weight: bold;
-    line-height: 150%;
-    text-indent: 4px;
-}
