@@ -200,5 +200,10 @@
     "You are Rioting as a guest. <a>Register</a> or <a>sign in</a> to access more rooms and features!": "손님으로 라이엇에 들어오셨네요. <a>계정을 등록하거나</a> <a>로그인하시고</a> 더 많은 방과 기능을 즐기세요!",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "라이엇이 아닌 다른 클라이언트에서 구성하셨을 수도 있어요. 라이엇에서 조정할 수는 없지만 여전히 적용되있을 거에요",
     "To return to your account in future you need to <u>set a password</u>": "나중에 계정으로 돌아가려면 <u>비밀번호 설정</u>을 해야만 해요",
-    "Set Password": "비밀번호 설정"
+    "Set Password": "비밀번호 설정",
+    "Warning": "주의",
+    "Checking for an update...": "업데이트를 확인하는 중...",
+    "Error encountered (%(errorDetail)s).": "오류가 일어났어요 (%(errorDetail)s).",
+    "No update available.": "업데이트가 없어요.",
+    "Downloading update...": "업데이트를 받는 중..."
 }
