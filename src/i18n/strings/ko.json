@@ -205,5 +205,6 @@
     "Checking for an update...": "업데이트를 확인하는 중...",
     "Error encountered (%(errorDetail)s).": "오류가 일어났어요 (%(errorDetail)s).",
     "No update available.": "업데이트가 없어요.",
-    "Downloading update...": "업데이트를 받는 중..."
+    "Downloading update...": "업데이트를 받는 중...",
+    "Couldn't load home page": "중심 화면을 불러올 수 없어요"
 }
