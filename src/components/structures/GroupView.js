@@ -17,6 +17,7 @@ limitations under the License.
 import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
+import { _t } from '../../languageHandler';
 
 
 module.exports = React.createClass({
@@ -30,6 +31,7 @@ module.exports = React.createClass({
         return {
             phase: "GroupView.LOADING",  // LOADING / DISPLAY / ERROR / NOT_FOUND
             summary: null,
+            error: null,
         };
     },
 
@@ -61,6 +63,7 @@ module.exports = React.createClass({
             this.setState({
                 phase: err.httpStatus == 404 ? "GroupView.NOT_FOUND" :"GroupView.ERROR",
                 summary: null,
+                error: err,
             });
         });
     },
@@ -116,9 +119,14 @@ module.exports = React.createClass({
                 </div>
             );
         } else {
+            let extraText;
+            if (this.state.error.errcode === 'M_UNRECOGNIZED') {
+                extraText = <div>{_t('This Home server does not support groups')}</div>;
+            }
             return (
                 <div style={{margin: "auto"}}>
                     Failed to load {this.props.groupId}
+                    {extraText}
                 </div>
             );
         }

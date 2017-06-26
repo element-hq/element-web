@@ -920,5 +920,7 @@
   "Ignore request": "Ignore request",
   "You added a new device '%(displayName)s', which is requesting encryption keys.": "You added a new device '%(displayName)s', which is requesting encryption keys.",
   "Your unverified device '%(displayName)s' is requesting encryption keys.": "Your unverified device '%(displayName)s' is requesting encryption keys.",
-  "Encryption key request": "Encryption key request"
+  "Encryption key request": "Encryption key request",
+  "This Home server does not support groups": "This Home server does not support groups",
+  "Loading device info...": "Loading device info..."
 }
