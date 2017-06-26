@@ -45,6 +45,12 @@ rageshake.init().then(() => {
     console.error("Failed to initialise rageshake: " + err);
 });
 
+window.addEventListener('beforeunload', (e) => {
+    console.log('riot-web closing');
+    // try to flush the logs to indexeddb
+    rageshake.flush();
+});
+
 
  // add React and ReactPerf to the global namespace, to make them easier to
  // access via the console
@@ -56,10 +62,9 @@ if (process.env.NODE_ENV !== 'production') {
 var RunModernizrTests = require("./modernizr"); // this side-effects a global
 var ReactDOM = require("react-dom");
 var sdk = require("matrix-react-sdk");
-var PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
+const PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
-var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
@@ -143,7 +148,7 @@ var onNewScreen = function(screen) {
     var hash = '#/' + screen;
     lastLocationHashSet = hash;
     window.location.hash = hash;
-}
+};
 
 // We use this to work out what URL the SDK should
 // pass through when registering to allow the user to
@@ -216,18 +221,16 @@ function getConfig() {
     return deferred.promise;
 }
 
-function onLoadCompleted() {
+function onTokenLoginCompleted() {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
     // clear them.
-    if (window.location.search) {
-        var parsedUrl = url.parse(window.location.href);
-        parsedUrl.search = "";
-        var formatted = url.format(parsedUrl);
-        console.log("Redirecting to " + formatted + " to drop loginToken " +
-                    "from queryparams");
-        window.location.href = formatted;
-    }
+    var parsedUrl = url.parse(window.location.href);
+    parsedUrl.search = "";
+    var formatted = url.format(parsedUrl);
+    console.log("Redirecting to " + formatted + " to drop loginToken " +
+                "from queryparams");
+    window.location.href = formatted;
 }
 
 async function loadApp() {
@@ -245,13 +248,13 @@ async function loadApp() {
 
     if (!preventRedirect) {
         if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-            if (confirm("Riot is not supported on mobile web. Install the app?")) {
+            if (confirm(languageHandler._t("Riot is not supported on mobile web. Install the app?"))) {
                 window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
                 return;
             }
         }
         else if (/Android/.test(navigator.userAgent)) {
-            if (confirm("Riot is not supported on mobile web. Install the app?")) {
+            if (confirm(languageHandler._t("Riot is not supported on mobile web. Install the app?"))) {
                 window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
                 return;
             }
@@ -277,7 +280,8 @@ async function loadApp() {
             Unable to load config file: please refresh the page to try again.
         </div>, document.getElementById('matrixchat'));
     } else if (validBrowser) {
-        UpdateChecker.start();
+        const platform = PlatformPeg.get();
+        platform.startUpdater();
 
         const MatrixChat = sdk.getComponent('structures.MatrixChat');
         window.matrixChat = ReactDOM.render(
@@ -289,14 +293,13 @@ async function loadApp() {
                 realQueryParams={params}
                 startingFragmentQueryParams={fragparts.params}
                 enableGuest={true}
-                onLoadCompleted={onLoadCompleted}
+                onTokenLoginCompleted={onTokenLoginCompleted}
                 initialScreenAfterLogin={getScreenFromLocation(window.location)}
-                defaultDeviceDisplayName={PlatformPeg.get().getDefaultDeviceDisplayName()}
+                defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
             />,
             document.getElementById('matrixchat')
         );
-    }
-    else {
+    } else {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
         var CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");

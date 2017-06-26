@@ -17,6 +17,7 @@
 import React from 'react';
 import sdk from 'matrix-react-sdk';
 import request from 'browser-request';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 const REPOS = ['vector-im/vector-web', 'matrix-org/matrix-react-sdk', 'matrix-org/matrix-js-sdk'];
 
@@ -70,16 +71,16 @@ export default class ChangelogDialog extends React.Component {
 
         const content = (
             <div className="mx_ChangelogDialog_content">
-                {this.props.version == null || this.props.newVersion == null ? <h2>Unavailable</h2> : logs}
+                {this.props.version == null || this.props.newVersion == null ? <h2>{_t("Unavailable")}</h2> : logs}
             </div>
         );
 
 
         return (
             <QuestionDialog
-                title="Changelog"
+                title={_t("Changelog")}
                 description={content}
-                button="Update"
+                button={_t("Update")}
                 onFinished={this.props.onFinished}
                 />
         )

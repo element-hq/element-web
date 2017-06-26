@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import sdk from 'matrix-react-sdk';
 import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 export default class BugReportDialog extends React.Component {
     constructor(props, context) {
@@ -49,12 +50,12 @@ export default class BugReportDialog extends React.Component {
         const userText = this.state.text;
         if (!sendLogs && userText.trim().length === 0) {
             this.setState({
-                err: "Please describe the bug and/or send logs.",
+                err: _t("Please describe the bug and/or send logs."),
             });
             return;
         }
         this.setState({ busy: true, progress: null, err: null });
-        this._sendProgressCallback("Loading bug report module");
+        this._sendProgressCallback(_t("Loading bug report module"));
 
         require(['../../../vector/submit-rageshake'], (s) => {
             s(SdkConfig.get().bug_report_endpoint_url, {
@@ -69,8 +70,9 @@ export default class BugReportDialog extends React.Component {
             }, (err) => {
                 if (!this._unmounted) {
                     this.setState({
-                        busy: false, progress: null,
-                        err: `Failed to send report: ${err.message}`,
+                        busy: false,
+                        progress: null,
+                        err: _t("Failed to send report: ") + `${err.message}`,
                     });
                 }
             });
@@ -105,7 +107,7 @@ export default class BugReportDialog extends React.Component {
         let cancelButton = null;
         if (!this.state.busy) {
             cancelButton = <button onClick={this._onCancel}>
-                Cancel
+                { _t("Cancel") }
             </button>;
         }
 
@@ -122,25 +124,27 @@ export default class BugReportDialog extends React.Component {
         return (
             <div className="mx_BugReportDialog">
                 <div className="mx_Dialog_title">
-                    Report a bug
+                    { _t("Report a bug") }
                 </div>
                 <div className="mx_Dialog_content">
-                    <p>Please describe the bug. What did you do?
-                    What did you expect to happen?
-                    What actually happened?</p>
+                    <p>
+                    { _t("Please describe the bug. What did you do? What did you expect to happen? What actually happened?") }
+                    </p>
                     <textarea
                         className="mx_BugReportDialog_input"
                         rows={5}
                         onChange={this._onTextChange}
                         value={this.state.text}
-                        placeholder="Describe your problem here."
+                        placeholder={_t("Describe your problem here.")}
                     />
-                    <p>In order to diagnose problems, logs from this client will be sent with
-                    this bug report.
-                    If you would prefer to only send the text above, please untick:</p>
+                    <p>
+                    { _t("In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:") }
+                    </p>
                     <input type="checkbox" checked={this.state.sendLogs}
                         onChange={this._onSendLogsChange} id="mx_BugReportDialog_logs"/>
-                    <label htmlFor="mx_BugReportDialog_logs">Send logs</label>
+                    <label htmlFor="mx_BugReportDialog_logs">
+                        { _t("Send logs") }
+                    </label>
                     {progress}
                     {error}
                 </div>
@@ -151,7 +155,7 @@ export default class BugReportDialog extends React.Component {
                         autoFocus={true}
                         disabled={this.state.busy}
                     >
-                        Send
+                        { _t("Send") }
                     </button>
 
                     {cancelButton}

@@ -44,3 +44,10 @@ limitations under the License.
     padding-top: 3px;
     cursor: pointer;
 }
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_TopUnreadMessagesBar {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+}
