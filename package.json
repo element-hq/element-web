@@ -62,7 +62,6 @@
     "glob": "^5.0.14",
     "highlight.js": "^8.9.1",
     "isomorphic-fetch": "^2.2.1",
-    "liblevenshtein": "^2.0.4",
     "linkifyjs": "^2.1.3",
     "lodash": "^4.13.1",
     "matrix-js-sdk": "matrix-org/matrix-js-sdk#develop",

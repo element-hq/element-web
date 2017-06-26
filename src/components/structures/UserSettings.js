@@ -656,7 +656,7 @@ module.exports = React.createClass({
                     <table>
                         <tbody>
                         <tr>
-                            <td><strong>Autocomplete Delay (ms): </strong></td>
+                            <td><strong>{_t('Autocomplete Delay (ms):')}</strong></td>
                             <td>
                                 <input
                                     type="number"
