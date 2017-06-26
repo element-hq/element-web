@@ -983,5 +983,7 @@
     "Ignore request": "Anfrage ignorieren",
     "You added a new device '%(displayName)s', which is requesting encryption keys.": "Du hast das neue Gerät '%(displayName)s' hinzugefügt, welches nun Verschlüsselungs-Schlüssel anfragt.",
     "Encryption key request": "Verschlüsselungs-Schlüssel-Anfrage",
-    "Your unverified device '%(displayName)s' is requesting encryption keys.": "Dein nicht verifiziertes Gerät '%(displayName)s' fordert Verschlüsselungs-Schlüssel an."
+    "Your unverified device '%(displayName)s' is requesting encryption keys.": "Dein nicht verifiziertes Gerät '%(displayName)s' fordert Verschlüsselungs-Schlüssel an.",
+    "Updates": "Updates",
+    "Check for update": "Suche nach Updates"
 }
