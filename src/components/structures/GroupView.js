@@ -59,7 +59,7 @@ module.exports = React.createClass({
             });
         }, (err) => {
             this.setState({
-                phase: err.errcode == 404 ? "GroupView.NOT_FOUND" :"GroupView.ERROR",
+                phase: err.httpStatus == 404 ? "GroupView.NOT_FOUND" :"GroupView.ERROR",
                 summary: null,
             });
         });
@@ -110,9 +110,11 @@ module.exports = React.createClass({
                 </div>
             );
         } else if (this.state.phase == "GroupView.NOT_FOUND") {
-            <div style={{margin: "auto"}}>
-                Group {this.props.groupId} not found
-            </div>
+            return (
+                <div style={{margin: "auto"}}>
+                    Group {this.props.groupId} not found
+                </div>
+            );
         } else {
             return (
                 <div style={{margin: "auto"}}>
