@@ -397,7 +397,7 @@ export default class MessageComposerInput extends React.Component {
                 'bold': (text) => `**${text}**`,
                 'italic': (text) => `*${text}*`,
                 'underline': (text) => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
-                'strike': (text) => `~~${text}~~`,
+                'strike': (text) => `<del>${text}</del>`,
                 'code-block': (text) => `\`\`\`\n${text}\n\`\`\``,
                 'blockquote': (text) => text.split('\n').map((line) => `> ${line}\n`).join(''),
                 'unordered-list-item': (text) => text.split('\n').map((line) => `\n- ${line}`).join(''),
