@@ -244,7 +244,7 @@
     "Existing Call": "Llamada existente",
     "Export E2E room keys": "Exportar claves E2E de la sala",
     "Failed to ban user": "Bloqueo del usuario falló",
-    "Failed to change password. Is your password correct?": "Falló al cambiar la clave, ¿Está correcta tu clave?",
+    "Failed to change password. Is your password correct?": "No se pudo cambiar la contraseña. ¿Está usando la correcta?",
     "Failed to change power level": "Falló al cambiar de nivel de acceso",
     "Failed to delete device": "Falló al borrar el dispositivo",
     "Failed to forget room %(errCode)s": "Falló al olvidar la sala %(errCode)s",
