@@ -240,6 +240,7 @@
   "demote": "demote",
   "Deops user with given id": "Deops user with given id",
   "Default": "Default",
+  "Define the power level of a user": "Define the power level of a user",
   "Device already verified!": "Device already verified!",
   "Device ID": "Device ID",
   "Device ID:": "Device ID:",
@@ -581,6 +582,7 @@
   "Unable to restore previous session": "Unable to restore previous session",
   "Unable to verify email address.": "Unable to verify email address.",
   "Unban": "Unban",
+  "Unbans user with given id": "Unbans user with given id",
   "%(senderName)s unbanned %(targetName)s.": "%(senderName)s unbanned %(targetName)s.",
   "Unable to ascertain that the address this invite was sent to matches one associated with your account.": "Unable to ascertain that the address this invite was sent to matches one associated with your account.",
   "Unable to capture screen": "Unable to capture screen",
@@ -921,6 +923,7 @@
   "You added a new device '%(displayName)s', which is requesting encryption keys.": "You added a new device '%(displayName)s', which is requesting encryption keys.",
   "Your unverified device '%(displayName)s' is requesting encryption keys.": "Your unverified device '%(displayName)s' is requesting encryption keys.",
   "Encryption key request": "Encryption key request",
+  "Autocomplete Delay (ms):": "Autocomplete Delay (ms):",
   "This Home server does not support groups": "This Home server does not support groups",
   "Loading device info...": "Loading device info..."
 }

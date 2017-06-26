@@ -20,7 +20,6 @@ import {Editor, EditorState, RichUtils, CompositeDecorator,
     convertFromRaw, convertToRaw, Modifier, EditorChangeType,
     getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState} from 'draft-js';
 
-import {stateToMarkdown as __stateToMarkdown} from 'draft-js-export-markdown';
 import classNames from 'classnames';
 import escape from 'lodash/escape';
 import Q from 'q';
@@ -41,6 +40,7 @@ import * as HtmlUtils from '../../../HtmlUtils';
 import Autocomplete from './Autocomplete';
 import {Completion} from "../../../autocomplete/Autocompleter";
 import Markdown from '../../../Markdown';
+import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import {onSendMessageFailed} from './MessageComposerInputOld';
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
@@ -58,6 +58,29 @@ function stateToMarkdown(state) {
  * The textInput part of the MessageComposer
  */
 export default class MessageComposerInput extends React.Component {
+    static propTypes = {
+        tabComplete: React.PropTypes.any,
+
+        // a callback which is called when the height of the composer is
+        // changed due to a change in content.
+        onResize: React.PropTypes.func,
+
+        // js-sdk Room object
+        room: React.PropTypes.object.isRequired,
+
+        // called with current plaintext content (as a string) whenever it changes
+        onContentChanged: React.PropTypes.func,
+
+        onUpArrow: React.PropTypes.func,
+
+        onDownArrow: React.PropTypes.func,
+
+        // attempts to confirm currently selected completion, returns whether actually confirmed
+        tryComplete: React.PropTypes.func,
+
+        onInputStateChanged: React.PropTypes.func,
+    };
+
     static getKeyBinding(e: SyntheticKeyboardEvent): string {
         // C-m => Toggles between rich text and markdown modes
         if (e.keyCode === KeyCode.KEY_M && KeyBindingUtil.isCtrlKeyCommand(e)) {
@@ -77,6 +100,7 @@ export default class MessageComposerInput extends React.Component {
 
     client: MatrixClient;
     autocomplete: Autocomplete;
+    historyManager: ComposerHistoryManager;
 
     constructor(props, context) {
         super(props, context);
@@ -84,7 +108,6 @@ export default class MessageComposerInput extends React.Component {
         this.handleReturn = this.handleReturn.bind(this);
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
         this.onEditorContentChanged = this.onEditorContentChanged.bind(this);
-        this.setEditorState = this.setEditorState.bind(this);
         this.onUpArrow = this.onUpArrow.bind(this);
         this.onDownArrow = this.onDownArrow.bind(this);
         this.onTab = this.onTab.bind(this);
@@ -119,7 +142,7 @@ export default class MessageComposerInput extends React.Component {
      */
     createEditorState(richText: boolean, contentState: ?ContentState): EditorState {
         let decorators = richText ? RichText.getScopedRTDecorators(this.props) :
-                                    RichText.getScopedMDDecorators(this.props),
+                RichText.getScopedMDDecorators(this.props),
             compositeDecorator = new CompositeDecorator(decorators);
 
         let editorState = null;
@@ -132,110 +155,13 @@ export default class MessageComposerInput extends React.Component {
         return EditorState.moveFocusToEnd(editorState);
     }
 
-    componentWillMount() {
-        const component = this;
-        this.sentHistory = {
-            // The list of typed messages. Index 0 is more recent
-            data: [],
-            // The position in data currently displayed
-            position: -1,
-            // The room the history is for.
-            roomId: null,
-            // The original text before they hit UP
-            originalText: null,
-            // The textarea element to set text to.
-            element: null,
-
-            init: function(element, roomId) {
-                this.roomId = roomId;
-                this.element = element;
-                this.position = -1;
-                var storedData = window.sessionStorage.getItem(
-                    "mx_messagecomposer_history_" + roomId
-                );
-                if (storedData) {
-                    this.data = JSON.parse(storedData);
-                }
-                if (this.roomId) {
-                    this.setLastTextEntry();
-                }
-            },
-
-            push: function(text) {
-                // store a message in the sent history
-                this.data.unshift(text);
-                window.sessionStorage.setItem(
-                    "mx_messagecomposer_history_" + this.roomId,
-                    JSON.stringify(this.data)
-                );
-                // reset history position
-                this.position = -1;
-                this.originalText = null;
-            },
-
-            // move in the history. Returns true if we managed to move.
-            next: function(offset) {
-                if (this.position === -1) {
-                    // user is going into the history, save the current line.
-                    this.originalText = this.element.value;
-                }
-                else {
-                    // user may have modified this line in the history; remember it.
-                    this.data[this.position] = this.element.value;
-                }
-
-                if (offset > 0 && this.position === (this.data.length - 1)) {
-                    // we've run out of history
-                    return false;
-                }
-
-                // retrieve the next item (bounded).
-                var newPosition = this.position + offset;
-                newPosition = Math.max(-1, newPosition);
-                newPosition = Math.min(newPosition, this.data.length - 1);
-                this.position = newPosition;
-
-                if (this.position !== -1) {
-                    // show the message
-                    this.element.value = this.data[this.position];
-                }
-                else if (this.originalText !== undefined) {
-                    // restore the original text the user was typing.
-                    this.element.value = this.originalText;
-                }
-
-                return true;
-            },
-
-            saveLastTextEntry: function() {
-                // save the currently entered text in order to restore it later.
-                // NB: This isn't 'originalText' because we want to restore
-                // sent history items too!
-                let contentJSON = JSON.stringify(convertToRaw(component.state.editorState.getCurrentContent()));
-                window.sessionStorage.setItem("mx_messagecomposer_input_" + this.roomId, contentJSON);
-            },
-
-            setLastTextEntry: function() {
-                let contentJSON = window.sessionStorage.getItem("mx_messagecomposer_input_" + this.roomId);
-                if (contentJSON) {
-                    let content = convertFromRaw(JSON.parse(contentJSON));
-                    component.setEditorState(component.createEditorState(component.state.isRichtextEnabled, content));
-                }
-            },
-        };
-    }
-
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
-        this.sentHistory.init(
-            this.refs.editor,
-            this.props.room.roomId
-        );
+        this.historyManager = new ComposerHistoryManager(this.props.room.roomId);
     }
 
     componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
-        this.sentHistory.saveLastTextEntry();
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -247,8 +173,8 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    onAction(payload) {
-        let editor = this.refs.editor;
+    onAction = (payload) => {
+        const editor = this.refs.editor;
         let contentState = this.state.editorState.getCurrentContent();
 
         switch (payload.action) {
@@ -262,22 +188,22 @@ export default class MessageComposerInput extends React.Component {
                 contentState = Modifier.replaceText(
                     contentState,
                     this.state.editorState.getSelection(),
-                    `${payload.displayname}: `
+                    `${payload.displayname}: `,
                 );
                 let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
                 editorState = EditorState.forceSelection(editorState, contentState.getSelectionAfter());
                 this.onEditorContentChanged(editorState);
                 editor.focus();
             }
-            break;
+                break;
 
             case 'quote': {
                 let {body, formatted_body} = payload.event.getContent();
                 formatted_body = formatted_body || escape(body);
                 if (formatted_body) {
-                    let content = RichText.HTMLtoContentState(`<blockquote>${formatted_body}</blockquote>`);
+                    let content = RichText.htmlToContentState(`<blockquote>${formatted_body}</blockquote>`);
                     if (!this.state.isRichtextEnabled) {
-                        content = ContentState.createFromText(stateToMarkdown(content));
+                        content = ContentState.createFromText(RichText.stateToMarkdown(content));
                     }
 
                     const blockMap = content.getBlockMap();
@@ -291,14 +217,14 @@ export default class MessageComposerInput extends React.Component {
                     if (this.state.isRichtextEnabled) {
                         contentState = Modifier.setBlockType(contentState, startSelection, 'blockquote');
                     }
-                    let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
+                    const editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
                     this.onEditorContentChanged(editorState);
                     editor.focus();
                 }
             }
-            break;
+                break;
         }
-    }
+    };
 
     onTypingActivity() {
         this.isTyping = true;
@@ -318,7 +244,7 @@ export default class MessageComposerInput extends React.Component {
 
     startUserTypingTimer() {
         this.stopUserTypingTimer();
-        var self = this;
+        const self = this;
         this.userTypingTimer = setTimeout(function() {
             self.isTyping = false;
             self.sendTyping(self.isTyping);
@@ -335,7 +261,7 @@ export default class MessageComposerInput extends React.Component {
 
     startServerTypingTimer() {
         if (!this.serverTypingTimer) {
-            var self = this;
+            const self = this;
             this.serverTypingTimer = setTimeout(function() {
                 if (self.isTyping) {
                     self.sendTyping(self.isTyping);
@@ -356,7 +282,7 @@ export default class MessageComposerInput extends React.Component {
         if (UserSettingsStore.getSyncedSetting('dontSendTypingNotifications', false)) return;
         MatrixClientPeg.get().sendTyping(
             this.props.room.roomId,
-            this.isTyping, TYPING_SERVER_TIMEOUT
+            this.isTyping, TYPING_SERVER_TIMEOUT,
         ).done();
     }
 
@@ -367,60 +293,80 @@ export default class MessageComposerInput extends React.Component {
         }
     }
 
-    // Called by Draft to change editor contents, and by setEditorState
-    onEditorContentChanged(editorState: EditorState, didRespondToUserInput: boolean = true) {
+    // Called by Draft to change editor contents
+    onEditorContentChanged = (editorState: EditorState) => {
         editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
 
-        const contentChanged = Q.defer();
-        /* If a modification was made, set originalEditorState to null, since newState is now our original */
+        /* Since a modification was made, set originalEditorState to null, since newState is now our original */
         this.setState({
             editorState,
-            originalEditorState: didRespondToUserInput ? null : this.state.originalEditorState,
-        }, () => contentChanged.resolve());
+            originalEditorState: null,
+        });
+    };
 
-        if (editorState.getCurrentContent().hasText()) {
-            this.onTypingActivity();
-        } else {
-            this.onFinishedTyping();
+    /**
+     * We're overriding setState here because it's the most convenient way to monitor changes to the editorState.
+     * Doing it using a separate function that calls setState is a possibility (and was the old approach), but that
+     * approach requires a callback and an extra setState whenever trying to set multiple state properties.
+     *
+     * @param state
+     * @param callback
+     */
+    setState(state, callback) {
+        if (state.editorState != null) {
+            state.editorState = RichText.attachImmutableEntitiesToEmoji(
+                state.editorState);
+
+            if (state.editorState.getCurrentContent().hasText()) {
+                this.onTypingActivity();
+            } else {
+                this.onFinishedTyping();
+            }
+
+            if (!state.hasOwnProperty('originalEditorState')) {
+                state.originalEditorState = null;
+            }
         }
 
-        if (this.props.onContentChanged) {
-            const textContent = editorState.getCurrentContent().getPlainText();
-            const selection = RichText.selectionStateToTextOffsets(editorState.getSelection(),
-                editorState.getCurrentContent().getBlocksAsArray());
+        super.setState(state, () => {
+            if (callback != null) {
+                callback();
+            }
 
-            this.props.onContentChanged(textContent, selection);
-        }
-        return contentChanged.promise;
-    }
-
-    setEditorState(editorState: EditorState) {
-        return this.onEditorContentChanged(editorState, false);
+            if (this.props.onContentChanged) {
+                const textContent = this.state.editorState
+                    .getCurrentContent().getPlainText();
+                const selection = RichText.selectionStateToTextOffsets(
+                    this.state.editorState.getSelection(),
+                    this.state.editorState.getCurrentContent().getBlocksAsArray());
+                this.props.onContentChanged(textContent, selection);
+            }
+        });
     }
 
     enableRichtext(enabled: boolean) {
+        if (enabled === this.state.isRichtextEnabled) return;
+
         let contentState = null;
         if (enabled) {
             const md = new Markdown(this.state.editorState.getCurrentContent().getPlainText());
-            contentState = RichText.HTMLtoContentState(md.toHTML());
+            contentState = RichText.htmlToContentState(md.toHTML());
         } else {
-            let markdown = stateToMarkdown(this.state.editorState.getCurrentContent());
+            let markdown = RichText.stateToMarkdown(this.state.editorState.getCurrentContent());
             if (markdown[markdown.length - 1] === '\n') {
                 markdown = markdown.substring(0, markdown.length - 1); // stateToMarkdown tacks on an extra newline (?!?)
             }
             contentState = ContentState.createFromText(markdown);
         }
 
-        this.setEditorState(this.createEditorState(enabled, contentState)).then(() => {
-            this.setState({
-                isRichtextEnabled: enabled,
-            });
-
-            UserSettingsStore.setSyncedSetting('MessageComposerInput.isRichTextEnabled', enabled);
+        this.setState({
+            editorState: this.createEditorState(enabled, contentState),
+            isRichtextEnabled: enabled,
         });
+        UserSettingsStore.setSyncedSetting('MessageComposerInput.isRichTextEnabled', enabled);
     }
 
-    handleKeyCommand(command: string): boolean {
+    handleKeyCommand = (command: string): boolean => {
         if (command === 'toggle-mode') {
             this.enableRichtext(!this.state.isRichtextEnabled);
             return true;
@@ -434,31 +380,35 @@ export default class MessageComposerInput extends React.Component {
             const blockCommands = ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item'];
 
             if (blockCommands.includes(command)) {
-                this.setEditorState(RichUtils.toggleBlockType(this.state.editorState, command));
+                this.setState({
+                    editorState: RichUtils.toggleBlockType(this.state.editorState, command),
+                });
             } else if (command === 'strike') {
                 // this is the only inline style not handled by Draft by default
-                this.setEditorState(RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH'));
+                this.setState({
+                    editorState: RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH'),
+                });
             }
         } else {
             let contentState = this.state.editorState.getCurrentContent(),
                 selection = this.state.editorState.getSelection();
 
-            let modifyFn = {
-                'bold': text => `**${text}**`,
-                'italic': text => `*${text}*`,
-                'underline': text => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
-                'strike': text => `~~${text}~~`,
-                'code': text => `\`${text}\``,
-                'blockquote': text => text.split('\n').map(line => `> ${line}\n`).join(''),
-                'unordered-list-item': text => text.split('\n').map(line => `- ${line}\n`).join(''),
-                'ordered-list-item': text => text.split('\n').map((line, i) => `${i+1}. ${line}\n`).join(''),
+            const modifyFn = {
+                'bold': (text) => `**${text}**`,
+                'italic': (text) => `*${text}*`,
+                'underline': (text) => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
+                'strike': (text) => `<del>${text}</del>`,
+                'code-block': (text) => `\`\`\`\n${text}\n\`\`\``,
+                'blockquote': (text) => text.split('\n').map((line) => `> ${line}\n`).join(''),
+                'unordered-list-item': (text) => text.split('\n').map((line) => `\n- ${line}`).join(''),
+                'ordered-list-item': (text) => text.split('\n').map((line, i) => `\n${i + 1}. ${line}`).join(''),
             }[command];
 
             if (modifyFn) {
                 newState = EditorState.push(
                     this.state.editorState,
                     RichText.modifyText(contentState, selection, modifyFn),
-                    'insert-characters'
+                    'insert-characters',
                 );
             }
         }
@@ -468,7 +418,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
         if (newState != null) {
-            this.setEditorState(newState);
+            this.setState({editorState: newState});
             return true;
         }
 
@@ -481,6 +431,13 @@ export default class MessageComposerInput extends React.Component {
             return true;
         }
 
+        const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
+        // If we're in any of these three types of blocks, shift enter should insert soft newlines
+        // And just enter should end the block
+        if(['blockquote', 'unordered-list-item', 'ordered-list-item'].includes(currentBlockType)) {
+            return false;
+        }
+
         const contentState = this.state.editorState.getCurrentContent();
         if (!contentState.hasText()) {
             return true;
@@ -489,11 +446,11 @@ export default class MessageComposerInput extends React.Component {
 
         let contentText = contentState.getPlainText(), contentHTML;
 
-        var cmd = SlashCommands.processInput(this.props.room.roomId, contentText);
+        const cmd = SlashCommands.processInput(this.props.room.roomId, contentText);
         if (cmd) {
             if (!cmd.error) {
                 this.setState({
-                    editorState: this.createEditorState()
+                    editorState: this.createEditorState(),
                 });
             }
             if (cmd.promise) {
@@ -501,16 +458,15 @@ export default class MessageComposerInput extends React.Component {
                     console.log("Command success.");
                 }, function(err) {
                     console.error("Command failure: %s", err);
-                    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createDialog(ErrorDialog, {
                         title: _t("Server error"),
                         description: ((err && err.message) ? err.message : _t("Server unavailable, overloaded, or something else went wrong.")),
                     });
                 });
-            }
-            else if (cmd.error) {
+            } else if (cmd.error) {
                 console.error(cmd.error);
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Command error"),
                     description: cmd.error,
@@ -521,7 +477,7 @@ export default class MessageComposerInput extends React.Component {
 
         if (this.state.isRichtextEnabled) {
             contentHTML = HtmlUtils.stripParagraphs(
-                RichText.contentStateToHTML(contentState)
+                RichText.contentStateToHTML(contentState),
             );
         } else {
             const md = new Markdown(contentText);
@@ -543,12 +499,14 @@ export default class MessageComposerInput extends React.Component {
             sendTextFn = this.client.sendEmoteMessage;
         }
 
-        // XXX: We don't actually seem to use this history?
-        this.sentHistory.push(contentHTML || contentText);
+        this.historyManager.addItem(
+            this.state.isRichtextEnabled ? contentHTML : contentState.getPlainText(),
+            this.state.isRichtextEnabled ? 'html' : 'markdown');
+
         let sendMessagePromise;
         if (contentHTML) {
             sendMessagePromise = sendHtmlFn.call(
-                this.client, this.props.room.roomId, contentText, contentHTML
+                this.client, this.props.room.roomId, contentText, contentHTML,
             );
         } else {
             sendMessagePromise = sendTextFn.call(this.client, this.props.room.roomId, contentText);
@@ -567,87 +525,106 @@ export default class MessageComposerInput extends React.Component {
         this.autocomplete.hide();
 
         return true;
-    }
+    };
 
-    async onUpArrow(e) {
+    onUpArrow = async (e) => {
         const completion = this.autocomplete.onUpArrow();
-        if (completion != null) {
-            e.preventDefault();
+        if (completion == null) {
+            const newContent = this.historyManager.getItem(-1, this.state.isRichtextEnabled ? 'html' : 'markdown');
+            if (!newContent) return false;
+            const editorState = EditorState.push(this.state.editorState,
+                newContent,
+                'insert-characters');
+            this.setState({editorState});
+            return true;
         }
-        return await this.setDisplayedCompletion(completion);
-    }
-
-    async onDownArrow(e) {
-        const completion = this.autocomplete.onDownArrow();
         e.preventDefault();
         return await this.setDisplayedCompletion(completion);
-    }
+    };
+
+    onDownArrow = async (e) => {
+        const completion = this.autocomplete.onDownArrow();
+        if (completion == null) {
+            const newContent = this.historyManager.getItem(+1, this.state.isRichtextEnabled ? 'html' : 'markdown');
+            if (!newContent) return false;
+            const editorState = EditorState.push(this.state.editorState,
+                newContent,
+                'insert-characters');
+            this.setState({editorState});
+            return true;
+        }
+        e.preventDefault();
+        return await this.setDisplayedCompletion(completion);
+    };
 
     // tab and shift-tab are mapped to down and up arrow respectively
-    async onTab(e) {
+    onTab = async (e) => {
         e.preventDefault(); // we *never* want tab's default to happen, but we do want up/down sometimes
-        const didTab = await (e.shiftKey ? this.onUpArrow : this.onDownArrow)(e);
-        if (!didTab && this.autocomplete) {
-            this.autocomplete.forceComplete().then(() => {
-                this.onDownArrow(e);
-            });
+        if (this.autocomplete.state.completionList.length === 0) {
+            await this.autocomplete.forceComplete();
+            this.onDownArrow(e);
+        } else {
+            await (e.shiftKey ? this.onUpArrow : this.onDownArrow)(e);
         }
-    }
+    };
 
-    onEscape(e) {
+    onEscape = async (e) => {
         e.preventDefault();
         if (this.autocomplete) {
             this.autocomplete.onEscape(e);
         }
-        this.setDisplayedCompletion(null); // restore originalEditorState
-    }
+        await this.setDisplayedCompletion(null); // restore originalEditorState
+    };
 
     /* If passed null, restores the original editor content from state.originalEditorState.
      * If passed a non-null displayedCompletion, modifies state.originalEditorState to compute new state.editorState.
      */
-    async setDisplayedCompletion(displayedCompletion: ?Completion): boolean {
+    setDisplayedCompletion = async (displayedCompletion: ?Completion): boolean => {
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
 
         if (displayedCompletion == null) {
             if (this.state.originalEditorState) {
-                this.setEditorState(this.state.originalEditorState);
+                let editorState = this.state.originalEditorState;
+                // This is a workaround from https://github.com/facebook/draft-js/issues/458
+                // Due to the way we swap editorStates, Draft does not rerender at times
+                editorState = EditorState.forceSelection(editorState,
+                    editorState.getSelection());
+                this.setState({editorState});
+
             }
             return false;
         }
 
         const {range = {}, completion = ''} = displayedCompletion;
 
-        let contentState = Modifier.replaceText(
+        const contentState = Modifier.replaceText(
             activeEditorState.getCurrentContent(),
             RichText.textOffsetsToSelectionState(range, activeEditorState.getCurrentContent().getBlocksAsArray()),
-            completion
+            completion,
         );
 
         let editorState = EditorState.push(activeEditorState, contentState, 'insert-characters');
         editorState = EditorState.forceSelection(editorState, contentState.getSelectionAfter());
-        const originalEditorState = activeEditorState;
-
-        await this.setEditorState(editorState);
-        this.setState({originalEditorState});
+        this.setState({editorState, originalEditorState: activeEditorState});
 
         // for some reason, doing this right away does not update the editor :(
-        setTimeout(() => this.refs.editor.focus(), 50);
+        // setTimeout(() => this.refs.editor.focus(), 50);
         return true;
-    }
+    };
 
     onFormatButtonClicked(name: "bold" | "italic" | "strike" | "code" | "underline" | "quote" | "bullet" | "numbullet", e) {
         e.preventDefault(); // don't steal focus from the editor!
         const command = {
-            code: 'code-block',
-            quote: 'blockquote',
-            bullet: 'unordered-list-item',
-            numbullet: 'ordered-list-item',
-        }[name] || name;
+                code: 'code-block',
+                quote: 'blockquote',
+                bullet: 'unordered-list-item',
+                numbullet: 'ordered-list-item',
+            }[name] || name;
         this.handleKeyCommand(command);
     }
 
     /* returns inline style and block type of current SelectionState so MessageComposer can render formatting
-    buttons. */
+     buttons. */
     getSelectionInfo(editorState: EditorState) {
         const styleName = {
             BOLD: 'bold',
@@ -658,8 +635,8 @@ export default class MessageComposerInput extends React.Component {
 
         const originalStyle = editorState.getCurrentInlineStyle().toArray();
         const style = originalStyle
-                .map(style => styleName[style] || null)
-                .filter(styleName => !!styleName);
+            .map((style) => styleName[style] || null)
+            .filter((styleName) => !!styleName);
 
         const blockName = {
             'code-block': 'code',
@@ -678,10 +655,10 @@ export default class MessageComposerInput extends React.Component {
         };
     }
 
-    onMarkdownToggleClicked(e) {
+    onMarkdownToggleClicked = (e) => {
         e.preventDefault(); // don't steal focus from the editor!
         this.handleKeyCommand('toggle-mode');
-    }
+    };
 
     render() {
         const activeEditorState = this.state.originalEditorState || this.state.editorState;
@@ -698,7 +675,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
         const className = classNames('mx_MessageComposer_input', {
-                mx_MessageComposer_input_empty: hidePlaceholder,
+            mx_MessageComposer_input_empty: hidePlaceholder,
         });
 
         const content = activeEditorState.getCurrentContent();
@@ -713,7 +690,7 @@ export default class MessageComposerInput extends React.Component {
                         ref={(e) => this.autocomplete = e}
                         onConfirm={this.setDisplayedCompletion}
                         query={contentText}
-                        selection={selection} />
+                        selection={selection}/>
                 </div>
                 <div className={className}>
                     <img className="mx_MessageComposer_input_markdownIndicator mx_filterFlipColor"
@@ -735,7 +712,7 @@ export default class MessageComposerInput extends React.Component {
                             onUpArrow={this.onUpArrow}
                             onDownArrow={this.onDownArrow}
                             onEscape={this.onEscape}
-                            spellCheck={true} />
+                            spellCheck={true}/>
                 </div>
             </div>
         );

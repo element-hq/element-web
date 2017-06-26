@@ -234,8 +234,6 @@ module.exports = React.createClass({
         // making it impossible to indicate a newly joined room.
         const room = this.state.room;
         if (room) {
-            this._updateAutoComplete(room);
-            this.tabComplete.loadEntries(room);
             this.setState({
                 unsentMessageError: this._getUnsentMessageError(room),
             });
@@ -500,8 +498,7 @@ module.exports = React.createClass({
         // and that has probably just changed
         if (ev.sender) {
             this.tabComplete.onMemberSpoke(ev.sender);
-            // nb. we don't need to update the new autocomplete here since
-            // its results are currently ordered purely by search score.
+            UserProvider.getInstance().onUserSpoke(ev.sender);
         }
     },
 
@@ -524,6 +521,8 @@ module.exports = React.createClass({
         this._warnAboutEncryption(room);
         this._calculatePeekRules(room);
         this._updatePreviewUrlVisibility(room);
+        this.tabComplete.loadEntries(room);
+        UserProvider.getInstance().setUserListFromRoom(room);
     },
 
     _warnAboutEncryption: function(room) {
@@ -700,7 +699,7 @@ module.exports = React.createClass({
 
         // refresh the tab complete list
         this.tabComplete.loadEntries(this.state.room);
-        this._updateAutoComplete(this.state.room);
+        UserProvider.getInstance().setUserListFromRoom(this.state.room);
 
         // if we are now a member of the room, where we were not before, that
         // means we have finished joining a room we were previously peeking
@@ -1423,14 +1422,6 @@ module.exports = React.createClass({
             console.log("updateTint from RoomView._gatherTimelinePanelRef");
             this.updateTint();
         }
-    },
-
-    _updateAutoComplete: function(room) {
-        const myUserId = MatrixClientPeg.get().credentials.userId;
-        const members = room.getJoinedMembers().filter(function(member) {
-            if (member.userId !== myUserId) return true;
-        });
-        UserProvider.getInstance().setUserList(members);
     },
 
     render: function() {

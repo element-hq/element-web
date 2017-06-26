@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import Fuse from 'fuse.js';
+import FuzzyMatcher from './FuzzyMatcher';
 import {TextualCompletion} from './Components';
 
 // Warning: Since the description string will be translated in _t(result.description), all these strings below must be in i18n/strings/en_EN.json file
@@ -29,9 +29,19 @@ const COMMANDS = [
         description: 'Displays action',
     },
     {
+        command: '/part',
+        args: '[#alias:domain]',
+        description: 'Leave room',
+    },
+    {
         command: '/ban',
         args: '<user-id> [reason]',
         description: 'Bans user with given id',
+    },
+    {
+        command: '/unban',
+        args: '<user-id>',
+        description: 'Unbans user with given id',
     },
     {
         command: '/deop',
@@ -63,6 +73,11 @@ const COMMANDS = [
         args: '<query>',
         description: 'Searches DuckDuckGo for results',
     },
+    {
+        command: '/op',
+        args: '<userId> [<power level>]',
+        description: 'Define the power level of a user',
+    },
 ];
 
 const COMMAND_RE = /(^\/\w*)/g;
@@ -72,7 +87,7 @@ let instance = null;
 export default class CommandProvider extends AutocompleteProvider {
     constructor() {
         super(COMMAND_RE);
-        this.fuse = new Fuse(COMMANDS, {
+        this.matcher = new FuzzyMatcher(COMMANDS, {
            keys: ['command', 'args', 'description'],
         });
     }
@@ -81,7 +96,7 @@ export default class CommandProvider extends AutocompleteProvider {
         let completions = [];
         const {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
-            completions = this.fuse.search(command[0]).map((result) => {
+            completions = this.matcher.match(command[0]).map((result) => {
                 return {
                     completion: result.command + ' ',
                     component: (<TextualCompletion
