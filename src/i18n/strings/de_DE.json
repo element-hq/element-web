@@ -654,7 +654,7 @@
     "%(oneUser)sjoined %(repeats)s times": "%(oneUser)shat den Raum %(repeats)s mal betreten",
     "%(severalUsers)sjoined": "%(severalUsers)shaben den Raum betreten",
     "%(oneUser)sjoined": "%(oneUser)shat den Raum betreten",
-    "%(severalUsers)sleft %(repeats)s times": "%(severalUsers)shaben %(repeats)s mal den Raum verlassen",
+    "%(severalUsers)sleft %(repeats)s times": "%(severalUsers)shaben %(repeats)s-mal den Raum verlassen",
     "%(oneUser)sleft %(repeats)s times": "%(oneUser)shat den Raum %(repeats)s mal verlassen",
     "%(severalUsers)sleft": "%(severalUsers)shaben den Raum verlassen",
     "%(oneUser)sleft": "%(oneUser)shat den Raum verlassen",
