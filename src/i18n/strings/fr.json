@@ -206,5 +206,6 @@
     "No update available.": "Aucune mise à jour disponible.",
     "Downloading update...": "Mise à jour en cours de téléchargement...",
     "To return to your account in future you need to <u>set a password</u>": "Pour pouvoir accéder à votre compte dans le futur, vous devez <u>enregistrer un mot de passe</u>",
-    "Set Password": "Enregistrer un mot de passe"
+    "Set Password": "Enregistrer un mot de passe",
+    "Couldn't load home page": "Impossible de charger la page d'accueil"
 }
