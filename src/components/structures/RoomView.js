@@ -470,11 +470,6 @@ module.exports = React.createClass({
                     showApps: payload.show ? true : false,
                 });
                 break;
-            case 'forward_event':
-                this.setState({
-                    forwardingEvent: payload.content,
-                });
-                break;
         }
     },
 
