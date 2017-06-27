@@ -72,8 +72,8 @@ module.exports = React.createClass({
         } else if (this.state.summary) {
             const summary = this.state.summary;
             let avatarUrl = null;
-            if (summary.profile.avatarUrl) {
-                avatarUrl = MatrixClientPeg.get().mxcUrlToHttp(summary.profile.avatarUrl);
+            if (summary.profile.avatar_url) {
+                avatarUrl = MatrixClientPeg.get().mxcUrlToHttp(summary.profile.avatar_url);
             }
             let description = null;
             if (summary.profile.long_description) {
