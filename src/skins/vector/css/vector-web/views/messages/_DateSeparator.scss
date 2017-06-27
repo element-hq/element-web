@@ -1,5 +1,5 @@
 /*
-Copyright 2017 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,25 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_LoginBox_loginButton_wrapper {
-    text-align: center;
-    width: 100%;
+.mx_DateSeparator {
+    clear: both;
+    margin-top: 32px;
+    margin-bottom: 8px;
+    margin-left: 63px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid $primary-hairline-color;
 }
 
-.mx_LoginBox_loginButton,
-.mx_LoginBox_registerButton {
-    margin-top: -8px;
-    height: 40px;
-    border: 0px;
-    border-radius: 40px;
-    margin-left: 4px;
-    margin-right: 4px;
-    width: 80px;
-
-    background-color: $accent-color;
-    color: $primary-bg-color;
-
-    cursor: pointer;
-
-    font-size: 15px;
-}

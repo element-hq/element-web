@@ -45,6 +45,12 @@ rageshake.init().then(() => {
     console.error("Failed to initialise rageshake: " + err);
 });
 
+window.addEventListener('beforeunload', (e) => {
+    console.log('riot-web closing');
+    // try to flush the logs to indexeddb
+    rageshake.flush();
+});
+
 
  // add React and ReactPerf to the global namespace, to make them easier to
  // access via the console
@@ -59,7 +65,6 @@ var sdk = require("matrix-react-sdk");
 const PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
-var UpdateChecker = require("./updater");
 var q = require('q');
 var request = require('browser-request');
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
@@ -216,18 +221,16 @@ function getConfig() {
     return deferred.promise;
 }
 
-function onLoadCompleted() {
+function onTokenLoginCompleted() {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
     // clear them.
-    if (window.location.search) {
-        var parsedUrl = url.parse(window.location.href);
-        parsedUrl.search = "";
-        var formatted = url.format(parsedUrl);
-        console.log("Redirecting to " + formatted + " to drop loginToken " +
-                    "from queryparams");
-        window.location.href = formatted;
-    }
+    var parsedUrl = url.parse(window.location.href);
+    parsedUrl.search = "";
+    var formatted = url.format(parsedUrl);
+    console.log("Redirecting to " + formatted + " to drop loginToken " +
+                "from queryparams");
+    window.location.href = formatted;
 }
 
 async function loadApp() {
@@ -277,7 +280,9 @@ async function loadApp() {
             Unable to load config file: please refresh the page to try again.
         </div>, document.getElementById('matrixchat'));
     } else if (validBrowser) {
-        UpdateChecker.start();
+        const platform = PlatformPeg.get();
+        platform.startUpdater();
+
         const MatrixChat = sdk.getComponent('structures.MatrixChat');
         window.matrixChat = ReactDOM.render(
             <MatrixChat
@@ -288,9 +293,9 @@ async function loadApp() {
                 realQueryParams={params}
                 startingFragmentQueryParams={fragparts.params}
                 enableGuest={true}
-                onLoadCompleted={onLoadCompleted}
+                onTokenLoginCompleted={onTokenLoginCompleted}
                 initialScreenAfterLogin={getScreenFromLocation(window.location)}
-                defaultDeviceDisplayName={PlatformPeg.get().getDefaultDeviceDisplayName()}
+                defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
             />,
             document.getElementById('matrixchat')
         );

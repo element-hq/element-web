@@ -17,13 +17,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import VectorBasePlatform from './VectorBasePlatform';
+import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import q from 'q';
-import electron, {remote, ipcRenderer} from 'electron';
+import {remote, ipcRenderer} from 'electron';
+import rageshake from '../rageshake';
 
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
+
+// try to flush the rageshake logs to indexeddb before quit.
+ipcRenderer.on('before-quit', function () {
+    console.log('riot-desktop closing');
+    rageshake.flush();
+});
 
 function onUpdateDownloaded(ev: Event, releaseNotes: string, ver: string, date: Date, updateURL: string) {
     dis.dispatch({
@@ -62,10 +69,42 @@ function _onAction(payload: Object) {
     }
 }
 
+function getUpdateCheckStatus(status) {
+    if (status === true) {
+        return { status: updateCheckStatusEnum.DOWNLOADING };
+    } else if (status === false) {
+        return { status: updateCheckStatusEnum.NOTAVAILABLE };
+    } else {
+        return {
+            status: updateCheckStatusEnum.ERROR,
+            detail: status,
+        };
+    }
+}
+
 export default class ElectronPlatform extends VectorBasePlatform {
     constructor() {
         super();
         dis.register(_onAction);
+        this.updatable = Boolean(remote.autoUpdater.getFeedURL());
+
+        /*
+            IPC Call `check_updates` returns:
+            true if there is an update available
+            false if there is not
+            or the error if one is encountered
+         */
+        ipcRenderer.on('check_updates', (event, status) => {
+            if (!this.showUpdateCheck) return;
+            dis.dispatch({
+                action: 'check_updates',
+                value: getUpdateCheckStatus(status),
+            });
+            this.showUpdateCheck = false;
+        });
+
+        this.startUpdateCheck = this.startUpdateCheck.bind(this);
+        this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
     }
 
     getHumanReadableName(): string {
@@ -137,17 +176,18 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return q(remote.app.getVersion());
     }
 
-    pollForUpdate() {
-        // In electron we control the update process ourselves, since
-        // it needs to run in the main process, so we just run the timer
-        // loop in the main electron process instead.
+    startUpdateCheck() {
+        if (this.showUpdateCheck) return;
+        super.startUpdateCheck();
+
+        ipcRenderer.send('check_updates');
     }
 
     installUpdate() {
         // IPC to the main process to install the update, since quitAndInstall
         // doesn't fire the before-quit event so the main process needs to know
         // it should exit.
-        electron.ipcRenderer.send('install_update');
+        ipcRenderer.send('install_update');
     }
 
     getDefaultDeviceDisplayName(): string {

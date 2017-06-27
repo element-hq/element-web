@@ -171,7 +171,7 @@
     "Riot/Web &amp; Desktop chat": "แชทเกี่ยวกับ Riot บนเว็บและเดสก์ทอป",
     "Riot/iOS &amp; matrix-ios-sdk chat": "แชทเกี่ยวกับ Riot บน iOS และ matrix-ios-sdk",
     "Riot/Android &amp; matrix-android-sdk chat": "แชทเกี่ยวกับ Riot บน Android และ matrix-android-sdk",
-    "Matrix technical discussions": "พูดคุยเรื่อง Matrix ทางเทคนิค",
+    "Matrix technical discussions": "พูดคุยเรื่อง Matrix เชิงเทคนิค",
     "Running Matrix services": "การติดตั้งบริการ Matrix",
     "Community-run support for Synapse": "ฝ่ายสนับสนุน Synapse โดยชุมชนผู้ใช้",
     "Admin support for Dendrite": "ฝ่ายสนับสนุน Dendrite จากผู้ดูแล",
@@ -182,7 +182,7 @@
     "Implementing VR services with Matrix": "การอิมพลีเมนต์บริการ VR ด้วย Matrix",
     "Implementing VoIP services with Matrix": "การอิมพลีเมนต์บริการ VoIP ด้วย Matrix",
     "Support for those using, running and writing other bridges": "ฝ่ายสนับสนุนสำหรับผู้ใช้หรือพัฒนาตัวเชื่อมอื่น ๆ",
-    "Contributing code to Matrix and Riot": "สมทบโค๊ดกับ Matrix และ Riot",
+    "Contributing code to Matrix and Riot": "สมทบโค๊ดให้ Matrix และ Riot",
     "Dev chat for the Riot/Web dev team": "แชทสำหรับทีมพัฒนา Riot บนเว็บ",
     "Dev chat for the Dendrite dev team": "แชทสำหรับทีมพัฒนา Dendrite",
     "Co-ordination for Riot/Web translators": "แชทสำหรับประสานงานการแปล Riot บนเว็บ",
@@ -197,5 +197,14 @@
     "Discussion of the Identity Service API": "พูดคุยเกี่ยวกับ Identity Service API",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "ระบบแชทและประสานงาน ไร้ศูนย์กลางและเข้ารหัสได้ โดยใช้เทคโนโลยีจาก [matrix]",
     "General discussion about Matrix and Riot": "พูดคุยเรื่องทั่วไป ทั้ง Matrix และ Riot",
-    " (HTTP status %(httpStatus))": "(สถานะ HTTP %(httpStatus))"
+    "(HTTP status %(httpStatus)s)": "(สถานะ HTTP %(httpStatus)s)",
+    "Remember, you can always set an email address in user settings if you change your mind.": "อย่าลืม คุณสามารถตั้งที่อยู่อีเมลในการตั้งค่าผู้ใช้ได้ทุกเมื่อหากคุณเปลี่ยนใจ",
+    "You have successfully set a password and an email address!": "ตั้งรหัสผ่านและที่อยู่อีเมลสำเร็จแล้ว!",
+    "Warning": "คำเตือน",
+    "Checking for an update...": "กำลังตรวจหาอัปเดต...",
+    "Error encountered (%(errorDetail)s).": "เกิดข้อผิดพลาด (%(errorDetail)s)",
+    "No update available.": "ไม่มีอัปเดตที่ใหม่กว่า",
+    "Downloading update...": "กำลังดาวน์โหลดอัปเดต...",
+    "To return to your account in future you need to <u>set a password</u>": "คุณต้อง<u>ตั้งรหัสผ่าน</u>เพื่อจะกลับมาที่บัญชีนี้ในอนาคต",
+    "Set Password": "ตั้งรหัสผ่าน"
 }

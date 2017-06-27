@@ -530,7 +530,7 @@ var RoomSubList = React.createClass({
         var label = this.props.collapsed ? null : this.props.label;
 
         let content;
-        if (this.state.sortedList.length == 0) {
+        if (this.state.sortedList.length == 0 && !this.props.searchFilter) {
             content = this.props.emptyContent;
         } else {
             content = this.makeRoomTiles();

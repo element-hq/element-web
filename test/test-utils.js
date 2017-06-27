@@ -7,7 +7,7 @@ var q = require('q');
  * name to stdout.
  * @param {Mocha.Context} context  The test context
  */
-module.exports.beforeEach = function(context) {
+export function beforeEach(context) {
     var desc = context.currentTest.fullTitle();
     console.log();
     console.log(desc);
@@ -16,13 +16,43 @@ module.exports.beforeEach = function(context) {
     // some tests store things in localstorage. Improve independence of tests
     // by making sure that they don't inherit any old state.
     window.localStorage.clear();
-};
+}
 
 /**
  * returns true if the current environment supports webrtc
  */
-module.exports.browserSupportsWebRTC = function() {
+export function browserSupportsWebRTC() {
     var n = global.window.navigator;
     return n.getUserMedia || n.webkitGetUserMedia ||
         n.mozGetUserMedia;
-};
+}
+
+export function deleteIndexedDB(dbName) {
+    return new q.Promise((resolve, reject) => {
+        if (!window.indexedDB) {
+            resolve();
+            return;
+        }
+
+        console.log(`${Date.now()}: Removing indexeddb instance: ${dbName}`);
+        const req = window.indexedDB.deleteDatabase(dbName);
+
+        req.onblocked = () => {
+            console.log(`${Date.now()}: can't yet delete indexeddb ${dbName} because it is open elsewhere`);
+        };
+
+        req.onerror = (ev) => {
+            reject(new Error(
+                `${Date.now()}: unable to delete indexeddb ${dbName}: ${ev.target.error}`,
+            ));
+        };
+
+        req.onsuccess = () => {
+            console.log(`${Date.now()}: Removed indexeddb instance: ${dbName}`);
+            resolve();
+        };
+    }).catch((e) => {
+        console.error(`${Date.now()}: Error removing indexeddb instance ${dbName}: ${e}`);
+        throw e;
+    });
+}

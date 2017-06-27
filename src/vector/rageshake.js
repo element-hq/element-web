@@ -410,13 +410,28 @@ module.exports = {
         }
         logger = new ConsoleLogger();
         logger.monkeyPatch(window.console);
-        if (window.indexedDB) {
-            store = new IndexedDBLogStore(window.indexedDB, logger);
+
+        // just *accessing* indexedDB throws an exception in firefox with
+        // indexeddb disabled.
+        let indexedDB;
+        try {
+            indexedDB = window.indexedDB;
+        } catch(e) {}
+
+        if (indexedDB) {
+            store = new IndexedDBLogStore(indexedDB, logger);
             initPromise = store.connect();
             return initPromise;
         }
         initPromise = Promise.resolve();
         return initPromise;
+    },
+
+    flush: function() {
+        if (!store) {
+            return;
+        }
+        store.flush();
     },
 
     /**
