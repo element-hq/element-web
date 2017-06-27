@@ -39,13 +39,13 @@ module.exports = React.createClass({
         this._loadGroupFromServer(this.props.groupId);
     },
 
-    componentWillReceiveProps: function(new_props) {
-        if (this.props.groupId != new_props.groupId) {
+    componentWillReceiveProps: function(newProps) {
+        if (this.props.groupId != newProps.groupId) {
             this.setState({
                 summary: null,
                 error: null,
-            })
-            this._loadGroupFromServer(new_props.groupId);
+            });
+            this._loadGroupFromServer(newProps.groupId);
         }
     },
 

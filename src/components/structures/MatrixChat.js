@@ -487,10 +487,12 @@ module.exports = React.createClass({
                 this.notifyNewScreen('directory');
                 break;
             case 'view_group':
-                const groupId = payload.group_id;
-                this.setState({currentGroupId: groupId});
-                this._setPage(PageTypes.GroupView);
-                this.notifyNewScreen('group/' + groupId);
+                {
+                    const groupId = payload.group_id;
+                    this.setState({currentGroupId: groupId});
+                    this._setPage(PageTypes.GroupView);
+                    this.notifyNewScreen('group/' + groupId);
+                }
                 break;
             case 'view_home_page':
                 this._setPage(PageTypes.HomePage);
