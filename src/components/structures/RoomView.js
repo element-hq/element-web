@@ -47,13 +47,12 @@ import UserProvider from '../../autocomplete/UserProvider';
 
 import RoomViewStore from '../../stores/RoomViewStore';
 
-var DEBUG = false;
+const DEBUG = false;
+let debuglog = function() {};
 
 if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
-    var debuglog = console.log.bind(console);
-} else {
-    var debuglog = function() {};
+    debuglog = console.log.bind(console);
 }
 
 module.exports = React.createClass({
@@ -1623,7 +1622,7 @@ module.exports = React.createClass({
               displayConfCallNotification={this.state.displayConfCallNotification}
               maxHeight={this.state.auxPanelMaxHeight}
               onResize={this.onChildResize}
-              showApps={this.state.showApps} >
+              showApps={this.state.showApps && !this.state.editingRoomSettings} >
                 { aux }
             </AuxPanel>
         );
