@@ -238,6 +238,7 @@ module.exports = React.createClass({
         if (room) {
             this.setState({
                 unsentMessageError: this._getUnsentMessageError(room),
+                showApps: this._shouldShowApps(room),
             });
             this._onRoomLoaded(room);
         }
@@ -272,11 +273,6 @@ module.exports = React.createClass({
         } else if (room) {
             // Stop peeking because we have joined this room previously
             MatrixClientPeg.get().stopPeeking();
-            this.setState({
-                showApps: this._shouldShowApps(room),
-                unsentMessageError: this._getUnsentMessageError(room),
-            });
-            this._onRoomLoaded(room);
         }
     },
 
