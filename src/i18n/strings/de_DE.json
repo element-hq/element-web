@@ -650,7 +650,7 @@
     "%(items)s and %(remaining)s others": "%(items)s und %(remaining)s weitere",
     "%(items)s and one other": "%(items)s und ein(e) weitere(r)",
     "%(items)s and %(lastItem)s": "%(items)s und %(lastItem)s",
-    "%(severalUsers)sjoined %(repeats)s times": "%(severalUsers)ssind dem Raum %(repeats)s mal beigetreten",
+    "%(severalUsers)sjoined %(repeats)s times": "%(severalUsers)s sind dem Raum %(repeats)s mal beigetreten",
     "%(oneUser)sjoined %(repeats)s times": "%(oneUser)shat den Raum %(repeats)s mal betreten",
     "%(severalUsers)sjoined": "%(severalUsers)shaben den Raum betreten",
     "%(oneUser)sjoined": "%(oneUser)shat den Raum betreten",
