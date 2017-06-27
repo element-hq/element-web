@@ -63,32 +63,64 @@ module.exports = React.createClass({
         }
     },
 
-    _initAppConfig: function(appId, app) {
-        console.log("App props: ", this.props);
-        app.id = appId;
-        app.name = app.type;
-
-        switch(app.type) {
-            case 'etherpad':
-                app.queryParams = '?userName=' + this.props.userId +
-                    '&padId=' + this.props.room.roomId;
-                break;
-            case 'jitsi': {
-                const user = MatrixClientPeg.get().getUser(this.props.userId);
-                app.queryParams = '?confId=' + app.data.confId +
-                    '&displayName=' + encodeURIComponent(user.displayName) +
-                    '&avatarUrl=' + encodeURIComponent(MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl)) +
-                    '&email=' + encodeURIComponent(this.props.userId) +
-                    '&isAudioConf=' + app.data.isAudioConf;
-
-                app.name += ' - ' + app.data.confId;
-                break;
+    /**
+     * Encodes a URI according to a set of template variables. Variables will be
+     * passed through encodeURIComponent.
+     * @param {string} pathTemplate The path with template variables e.g. '/foo/$bar'.
+     * @param {Object} variables The key/value pairs to replace the template
+     * variables with. E.g. { "$bar": "baz" }.
+     * @return {string} The result of replacing all template variables e.g. '/foo/baz'.
+     */
+    encodeUri: function(pathTemplate, variables) {
+        for (const key in variables) {
+            if (!variables.hasOwnProperty(key)) {
+                continue;
             }
-            case 'vrdemo':
-                app.name = 'Matrix VR Demo - ' + app.data.roomAlias;
-                app.queryParams = '?roomAlias=' + encodeURIComponent(app.data.roomAlias);
-                break;
+            pathTemplate = pathTemplate.replace(
+                key, encodeURIComponent(variables[key]),
+            );
         }
+        return pathTemplate;
+    },
+
+    _initAppConfig: function(appId, app) {
+        const user = MatrixClientPeg.get().getUser(this.props.userId);
+        const params = {
+            '$matrix_user_id': this.props.userId,
+            '$matrix_room_id': this.props.room.roomId,
+            '$matrix_display_name': user ? user.displayName : this.props.userId,
+            '$matrix_avatar_url': user ? MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl) : '',
+        };
+
+        if(app.data) {
+            Object.keys(app.data).forEach((key) => {
+                params['$' + key] = app.data[key];
+            });
+        }
+
+        app.id = appId;
+        app.name = app.name || app.type;
+        app.url = this.encodeUri(app.url, params);
+
+        // switch(app.type) {
+        //     case 'etherpad':
+        //         app.queryParams = '?userName=' + this.props.userId +
+        //             '&padId=' + this.props.room.roomId;
+        //         break;
+        //     case 'jitsi': {
+        //
+        //         app.queryParams = '?confId=' + app.data.confId +
+        //             '&displayName=' + encodeURIComponent(user.displayName) +
+        //             '&avatarUrl=' + encodeURIComponent(MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl)) +
+        //             '&email=' + encodeURIComponent(this.props.userId) +
+        //             '&isAudioConf=' + app.data.isAudioConf;
+        //
+        //         break;
+        //     }
+        //     case 'vrdemo':
+        //         app.queryParams = '?roomAlias=' + encodeURIComponent(app.data.roomAlias);
+        //         break;
+        // }
 
         return app;
     },
@@ -156,14 +188,10 @@ module.exports = React.createClass({
     render: function() {
         const apps = this.state.apps.map(
             (app, index, arr) => {
-                let appUrl = app.url;
-                if (app.queryParams) {
-                    appUrl += app.queryParams;
-                }
                 return <AppTile
                     key={app.name}
                     id={app.id}
-                    url={appUrl}
+                    url={app.url}
                     name={app.name}
                     fullWidth={arr.length<2 ? true : false}
                     room={this.props.room}
