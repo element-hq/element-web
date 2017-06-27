@@ -30,6 +30,11 @@ export default {
             id: 'rich_text_editor',
             default: false,
         },
+        {
+            name: "Matrix Apps",
+            id: 'matrix_apps',
+            default: false,
+        },
     ],
 
     // horrible but it works. The locality makes this somewhat more palatable.
