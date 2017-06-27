@@ -20,7 +20,9 @@ import sdk from '../../../index';
 import dis from "../../../dispatcher";
 import ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
-import  { _t, _tJsx} from '../../../languageHandler';
+import { _t, _tJsx} from '../../../languageHandler';
+import UserSettingsStore from '../../../UserSettingsStore';
+
 
 module.exports = React.createClass({
     displayName: 'AuxPanel',
@@ -127,7 +129,7 @@ module.exports = React.createClass({
         );
 
         let appsDrawer = null;
-        if(this.props.showApps) {
+        if(UserSettingsStore.isFeatureEnabled('matrix_apps') && this.props.showApps) {
             appsDrawer = <AppsDrawer ref="appsDrawer"
                 room={this.props.room}
                 userId={this.props.userId}
