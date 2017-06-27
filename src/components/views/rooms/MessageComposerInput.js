@@ -121,6 +121,7 @@ export default class MessageComposerInput extends React.Component {
         this.onEscape = this.onEscape.bind(this);
         this.setDisplayedCompletion = this.setDisplayedCompletion.bind(this);
         this.onMarkdownToggleClicked = this.onMarkdownToggleClicked.bind(this);
+        this.onTextPasted = this.onTextPasted.bind(this);
 
         const isRichtextEnabled = UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false);
 
@@ -432,6 +433,29 @@ export default class MessageComposerInput extends React.Component {
         return false;
     }
 
+    onTextPasted(text: string, html?: string) {
+        const currentSelection = this.state.editorState.getSelection();
+        const currentContent = this.state.editorState.getCurrentContent();
+
+        let contentState = null;
+
+        if (html) {
+            contentState = Modifier.replaceWithFragment(
+                currentContent,
+                currentSelection,
+                RichText.htmlToContentState(html).getBlockMap(),
+            );
+        } else {
+            contentState = Modifier.replaceText(currentContent, currentSelection, text);
+        }
+
+        let newEditorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
+
+        newEditorState = EditorState.forceSelection(newEditorState, contentState.getSelectionAfter());
+        this.onEditorContentChanged(newEditorState);
+        return true;
+    }
+
     handleReturn(ev) {
         if (ev.shiftKey) {
             this.onEditorContentChanged(RichUtils.insertSoftNewline(this.state.editorState));
@@ -713,6 +737,7 @@ export default class MessageComposerInput extends React.Component {
                             keyBindingFn={MessageComposerInput.getKeyBinding}
                             handleKeyCommand={this.handleKeyCommand}
                             handleReturn={this.handleReturn}
+                            handlePastedText={this.onTextPasted}
                             handlePastedFiles={this.props.onFilesPasted}
                             stripPastedStyles={!this.state.isRichtextEnabled}
                             onTab={this.onTab}
