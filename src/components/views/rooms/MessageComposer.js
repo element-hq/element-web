@@ -166,6 +166,7 @@ export default class MessageComposer extends React.Component {
         // if (!appsStateEvent.videoConf) {
         //     appsStateEvent.videoConf = {
         //         type: 'jitsi',
+        //         // FIXME -- This should not be localhost
         //         url: 'http://localhost:8000/jitsi.html',
         //         data: {
         //             confId: this.props.room.roomId.replace(/[^A-Za-z0-9]/g, '_') + Date.now(),
