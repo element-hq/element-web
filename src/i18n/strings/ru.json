@@ -212,5 +212,6 @@
     "Checking for an update...": "Проверка обновлений...",
     "Error encountered (%(errorDetail)s).": "Обнаружена ошибка (%(errorDetail)s).",
     "No update available.": "Нет доступных обновлений.",
-    "Downloading update...": "Загрузка обновления..."
+    "Downloading update...": "Загрузка обновления...",
+    "Couldn't load home page": "Невозможно загрузить домашнюю страницу"
 }
