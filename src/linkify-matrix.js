@@ -198,7 +198,7 @@ matrixLinkify.options = {
         switch (type) {
             case 'roomalias':
             case 'userid':
-            case "groupid":
+            case 'groupid':
                 return matrixLinkify.MATRIXTO_BASE_URL + '/#/' + href;
             default:
                 var m;
