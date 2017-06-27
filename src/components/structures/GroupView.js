@@ -72,11 +72,11 @@ module.exports = React.createClass({
         } else if (this.state.summary) {
             const summary = this.state.summary;
             let avatarUrl = null;
-            if (summary.profile.avatar_url) {
+            if (summary.profile && summary.profile.avatar_url) {
                 avatarUrl = MatrixClientPeg.get().mxcUrlToHttp(summary.profile.avatar_url);
             }
             let description = null;
-            if (summary.profile.long_description) {
+            if (summary.profile && summary.profile.long_description) {
                 description = sanitizedHtmlNode(summary.profile.long_description);
             }
             return (
@@ -122,6 +122,9 @@ module.exports = React.createClass({
                     </div>
                 );
             }
+        } else {
+            console.error("Invalid state for GroupView");
+            return <div />;
         }
     },
 });
