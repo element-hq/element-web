@@ -30,21 +30,20 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            phase: "GroupView.LOADING",  // LOADING / DISPLAY / ERROR / NOT_FOUND
             summary: null,
             error: null,
         };
     },
 
     componentWillMount: function() {
-        this._loadGroupFromServer(this.props.groupId)
+        this._loadGroupFromServer(this.props.groupId);
     },
 
     componentWillReceiveProps: function(new_props) {
         if (this.props.groupId != new_props.groupId) {
             this.setState({
-                phase: "GroupView.LOADING",
                 summary: null,
+                error: null,
             })
             this._loadGroupFromServer(new_props.groupId);
         }
@@ -53,12 +52,11 @@ module.exports = React.createClass({
     _loadGroupFromServer: function(groupId) {
         MatrixClientPeg.get().getGroupSummary(groupId).done((res) => {
             this.setState({
-                phase: "GroupView.DISPLAY",
                 summary: res,
+                error: null,
             });
         }, (err) => {
             this.setState({
-                phase: err.httpStatus === 404 ? "GroupView.NOT_FOUND" : "GroupView.ERROR",
                 summary: null,
                 error: err,
             });
@@ -69,9 +67,9 @@ module.exports = React.createClass({
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
         const Loader = sdk.getComponent("elements.Spinner");
 
-        if (this.state.phase == "GroupView.LOADING") {
+        if (this.state.summary === null && this.state.error === null) {
             return <Loader />;
-        } else if (this.state.phase == "GroupView.DISPLAY") {
+        } else if (this.state.summary) {
             const summary = this.state.summary;
             let avatarUrl = null;
             if (summary.profile.avatarUrl) {
@@ -109,23 +107,25 @@ module.exports = React.createClass({
                     {description}
                 </div>
             );
-        } else if (this.state.phase == "GroupView.NOT_FOUND") {
-            return (
-                <div style={{margin: "auto"}}>
-                    Group {this.props.groupId} not found
-                </div>
-            );
-        } else {
-            let extraText;
-            if (this.state.error.errcode === 'M_UNRECOGNIZED') {
-                extraText = <div>{_t('This Home server does not support groups')}</div>;
+        } else if (this.state.error) {
+            if (this.state.error.httpStatus === 404) {
+                return (
+                    <div style={{margin: "auto"}}>
+                        Group {this.props.groupId} not found
+                    </div>
+                );
+            } else {
+                let extraText;
+                if (this.state.error.errcode === 'M_UNRECOGNIZED') {
+                    extraText = <div>{_t('This Home server does not support groups')}</div>;
+                }
+                return (
+                    <div style={{margin: "auto"}}>
+                        Failed to load {this.props.groupId}
+                        {extraText}
+                    </div>
+                );
             }
-            return (
-                <div style={{margin: "auto"}}>
-                    Failed to load {this.props.groupId}
-                    {extraText}
-                </div>
-            );
         }
     },
 });
