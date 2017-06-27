@@ -282,10 +282,9 @@ export default React.createClass({
                 right_panel = <RightPanel userId={this.props.viewUserId} opacity={this.props.rightOpacity} />;
                 break;
             case PageTypes.GroupView:
-                // TODO
                 page_element = <GroupView
                     groupId={this.props.currentGroupId}
-                />
+                />;
                 break;
         }
 

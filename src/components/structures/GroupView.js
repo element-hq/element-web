@@ -37,10 +37,6 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        this.setState({
-            phase: "GroupView.LOADING",
-            summary: null,
-        })
         this._loadGroupFromServer(this.props.groupId)
     },
 
@@ -62,7 +58,7 @@ module.exports = React.createClass({
             });
         }, (err) => {
             this.setState({
-                phase: err.httpStatus == 404 ? "GroupView.NOT_FOUND" :"GroupView.ERROR",
+                phase: err.httpStatus === 404 ? "GroupView.NOT_FOUND" : "GroupView.ERROR",
                 summary: null,
                 error: err,
             });
@@ -77,9 +73,9 @@ module.exports = React.createClass({
             return <Loader />;
         } else if (this.state.phase == "GroupView.DISPLAY") {
             const summary = this.state.summary;
-            let avatar_url = null;
-            if (summary.profile.avatar_url) {
-                avatar_url = MatrixClientPeg.get().mxcUrlToHttp(summary.profile.avatar_url);
+            let avatarUrl = null;
+            if (summary.profile.avatarUrl) {
+                avatarUrl = MatrixClientPeg.get().mxcUrlToHttp(summary.profile.avatarUrl);
             }
             let description = null;
             if (summary.profile.long_description) {
@@ -90,7 +86,7 @@ module.exports = React.createClass({
                     <div className="mx_RoomHeader">
                         <div className="mx_RoomHeader_wrapper">
                             <div className="mx_RoomHeader_avatar">
-                                <BaseAvatar url={avatar_url} name={summary.profile.name}
+                                <BaseAvatar url={avatarUrl} name={summary.profile.name}
                                     width={48} height={48} />
                             </div>
                             <div className="mx_RoomHeader_info">
