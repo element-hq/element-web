@@ -57,7 +57,7 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        ScalarMessaging.startListening();
+        ScalarMessaging.stopListening();
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
         }
