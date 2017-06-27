@@ -87,6 +87,13 @@ export default class MessageComposerInput extends React.Component {
             return 'toggle-mode';
         }
 
+        // Allow opening of dev tools. getDefaultKeyBinding would be 'italic' for KEY_I
+        if (e.keyCode === KeyCode.KEY_I && e.shiftKey && e.ctrlKey) {
+            // When null is returned, draft-js will NOT preventDefault, allowing dev tools
+            // to be toggled when the editor is focussed
+            return null;
+        }
+
         return getDefaultKeyBinding(e);
     }
 
