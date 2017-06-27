@@ -315,16 +315,18 @@ export default class MessageComposer extends React.Component {
         }
 
         // Apps
-        if (this.props.showApps) {
-            hideAppsButton =
-                <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title="Hide Apps">
-                    <TintableSvg src="img/icons-apps-active.svg" width="35" height="35"/>
-                </div>;
-        } else {
-            showAppsButton =
-                <div key="show_apps" className="mx_MessageComposer_apps" onClick={this.onShowAppsClick} title="Show Apps">
-                    <TintableSvg src="img/icons-apps.svg" width="35" height="35"/>
-                </div>;
+        if (UserSettingsStore.isFeatureEnabled('matrix_apps')) {
+            if (this.props.showApps) {
+                hideAppsButton =
+                    <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title="Hide Apps">
+                        <TintableSvg src="img/icons-apps-active.svg" width="35" height="35"/>
+                    </div>;
+            } else {
+                showAppsButton =
+                    <div key="show_apps" className="mx_MessageComposer_apps" onClick={this.onShowAppsClick} title="Show Apps">
+                        <TintableSvg src="img/icons-apps.svg" width="35" height="35"/>
+                    </div>;
+            }
         }
 
         const canSendMessages = this.props.room.currentState.maySendMessage(
