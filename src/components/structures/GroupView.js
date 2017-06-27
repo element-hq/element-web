@@ -80,7 +80,7 @@ module.exports = React.createClass({
                 description = sanitizedHtmlNode(summary.profile.long_description);
             }
             return (
-                <div style={{maxWidth: "960px", width: "100%", "margin": "20px auto"}}>
+                <div className="mx_GroupView">
                     <div className="mx_RoomHeader">
                         <div className="mx_RoomHeader_wrapper">
                             <div className="mx_RoomHeader_avatar">
@@ -90,11 +90,7 @@ module.exports = React.createClass({
                             <div className="mx_RoomHeader_info">
                                 <div className="mx_RoomHeader_name">
                                     <span>{summary.profile.name}</span>
-                                    <span style={{
-                                        fontWeight: "normal",
-                                        fontSize: "initial",
-                                        paddingLeft: "10px",
-                                    }}>
+                                    <span className="mx_GroupView_header_groupid">
                                         ({this.props.groupId})
                                     </span>
                                 </div>
@@ -110,7 +106,7 @@ module.exports = React.createClass({
         } else if (this.state.error) {
             if (this.state.error.httpStatus === 404) {
                 return (
-                    <div style={{margin: "auto"}}>
+                    <div className="mx_GroupView_error">
                         Group {this.props.groupId} not found
                     </div>
                 );
@@ -120,7 +116,7 @@ module.exports = React.createClass({
                     extraText = <div>{_t('This Home server does not support groups')}</div>;
                 }
                 return (
-                    <div style={{margin: "auto"}}>
+                    <div className="mx_GroupView_error">
                         Failed to load {this.props.groupId}
                         {extraText}
                     </div>
