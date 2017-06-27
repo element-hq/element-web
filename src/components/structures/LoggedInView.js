@@ -212,6 +212,7 @@ export default React.createClass({
         const HomePage = sdk.getComponent('structures.HomePage');
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
+        const UpdateCheckBar = sdk.getComponent('globals.UpdateCheckBar');
         const PasswordNagBar = sdk.getComponent('globals.PasswordNagBar');
 
         let page_element;
@@ -239,7 +240,6 @@ export default React.createClass({
                 page_element = <UserSettings
                     onClose={this.props.onUserSettingsClose}
                     brand={this.props.config.brand}
-                    collapsedRhs={this.props.collapse_rhs}
                     enableLabs={this.props.config.enableLabs}
                     referralBaseUrl={this.props.config.referralBaseUrl}
                     teamToken={this.props.teamToken}
@@ -270,7 +270,6 @@ export default React.createClass({
                     this.props.config.teamServerConfig.teamServerURL : null;
 
                 page_element = <HomePage
-                    collapsedRhs={this.props.collapse_rhs}
                     teamServerUrl={teamServerUrl}
                     teamToken={this.props.teamToken}
                     homePageUrl={this.props.config.welcomePageUrl}
@@ -283,12 +282,14 @@ export default React.createClass({
                 break;
         }
 
+        let topBar;
         const isGuest = this.props.matrixClient.isGuest();
-        var topBar;
         if (this.props.hasNewVersion) {
             topBar = <NewVersionBar version={this.props.version} newVersion={this.props.newVersion}
-                releaseNotes={this.props.newVersionReleaseNotes}
+                                    releaseNotes={this.props.newVersionReleaseNotes}
             />;
+        } else if (this.props.checkingForUpdate) {
+            topBar = <UpdateCheckBar {...this.props.checkingForUpdate} />;
         } else if (this.state.userHasGeneratedPassword) {
             topBar = <PasswordNagBar />;
         } else if (!isGuest && Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {

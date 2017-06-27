@@ -146,7 +146,6 @@ src/Roles.js
 src/RoomListSorter.js
 src/RoomNotifs.js
 src/Rooms.js
-src/RtsClient.js
 src/ScalarAuthClient.js
 src/ScalarMessaging.js
 src/SdkConfig.js

@@ -352,12 +352,13 @@ module.exports = React.createClass({
             const tile = tiles[backwards ? i : tiles.length - 1 - i];
             // Subtract height of tile as if it were unpaginated
             excessHeight -= tile.clientHeight;
+            //If removing the tile would lead to future pagination, break before setting scroll token
+            if (tile.clientHeight > excessHeight) {
+                break;
+            }
             // The tile may not have a scroll token, so guard it
             if (tile.dataset.scrollTokens) {
                 markerScrollToken = tile.dataset.scrollTokens.split(',')[0];
-            }
-            if (tile.clientHeight > excessHeight) {
-                break;
             }
         }
 

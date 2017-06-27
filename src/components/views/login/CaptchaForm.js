@@ -46,6 +46,10 @@ module.exports = React.createClass({
         };
     },
 
+    componentWillMount: function() {
+        this._captchaWidgetId = null;
+    },
+
     componentDidMount: function() {
         // Just putting a script tag into the returned jsx doesn't work, annoyingly,
         // so we do this instead.
@@ -75,6 +79,10 @@ module.exports = React.createClass({
         }
     },
 
+    componentWillUnmount: function() {
+        this._resetRecaptcha();
+    },
+
     _renderRecaptcha: function(divId) {
         if (!global.grecaptcha) {
             console.error("grecaptcha not loaded!");
@@ -90,10 +98,16 @@ module.exports = React.createClass({
         }
 
         console.log("Rendering to %s", divId);
-        global.grecaptcha.render(divId, {
+        this._captchaWidgetId = global.grecaptcha.render(divId, {
             sitekey: publicKey,
             callback: this.props.onCaptchaResponse,
         });
+    },
+
+    _resetRecaptcha: function() {
+        if (this._captchaWidgetId !== null) {
+            global.grecaptcha.reset(this._captchaWidgetId);
+        }
     },
 
     _onCaptchaLoaded: function() {

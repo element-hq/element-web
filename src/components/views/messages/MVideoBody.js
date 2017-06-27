@@ -79,7 +79,7 @@ module.exports = React.createClass({
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedThumbnailUrl;
-        } else if (content.info.thumbnail_url) {
+        } else if (content.info && content.info.thumbnail_url) {
             return MatrixClientPeg.get().mxcUrlToHttp(content.info.thumbnail_url);
         } else {
             return null;

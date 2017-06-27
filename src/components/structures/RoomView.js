@@ -94,6 +94,7 @@ module.exports = React.createClass({
             userId: null,
             roomLoading: true,
             peekLoading: false,
+            shouldPeek: true,
 
             // The event to be scrolled to initially
             initialEventId: null,
@@ -170,7 +171,31 @@ module.exports = React.createClass({
             initialEventId: RoomViewStore.getInitialEventId(),
             initialEventPixelOffset: RoomViewStore.getInitialEventPixelOffset(),
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
+            forwardingEvent: RoomViewStore.getForwardingEvent(),
+            shouldPeek: RoomViewStore.shouldPeek(),
         };
+
+        // finished joining, start waiting for a room and show a spinner. See onRoom.
+        newState.waitingForRoom = this.state.joining && !newState.joining &&
+                        !RoomViewStore.getJoinError();
+
+        // Temporary logging to diagnose https://github.com/vector-im/riot-web/issues/4307
+        console.log(
+            'RVS update:',
+            newState.roomId,
+            newState.roomAlias,
+            'loading?', newState.roomLoading,
+            'joining?', newState.joining,
+            'initial?', initial,
+            'waiting?', newState.waitingForRoom,
+            'shouldPeek?', newState.shouldPeek,
+        );
+
+        // NB: This does assume that the roomID will not change for the lifetime of
+        // the RoomView instance
+        if (initial) {
+            newState.room = MatrixClientPeg.get().getRoom(newState.roomId);
+        }
 
         // Clear the search results when clicking a search result (which changes the
         // currently scrolled to event, this.state.initialEventId).
@@ -187,8 +212,9 @@ module.exports = React.createClass({
         this.setState(newState, () => {
             // At this point, this.state.roomId could be null (e.g. the alias might not
             // have been resolved yet) so anything called here must handle this case.
-            this._onHaveRoom();
-            this.onRoom(MatrixClientPeg.get().getRoom(this.state.roomId));
+            if (initial) {
+                this._onHaveRoom();
+            }
         });
     },
 
@@ -204,25 +230,22 @@ module.exports = React.createClass({
         // which must be by alias or invite wherever possible (peeking currently does
         // not work over federation).
 
-        // NB. We peek if we are not in the room, although if we try to peek into
-        // a room in which we have a member event (ie. we've left) synapse will just
-        // send us the same data as we get in the sync (ie. the last events we saw).
-        const room = MatrixClientPeg.get().getRoom(this.state.roomId);
-        let isUserJoined = null;
+        // NB. We peek if we have never seen the room before (i.e. js-sdk does not know
+        // about it). We don't peek in the historical case where we were joined but are
+        // now not joined because the js-sdk peeking API will clobber our historical room,
+        // making it impossible to indicate a newly joined room.
+        const room = this.state.room;
         if (room) {
-            isUserJoined = room.hasMembershipState(
-                MatrixClientPeg.get().credentials.userId, 'join',
-            );
-
-            this._updateAutoComplete(room);
-            this.tabComplete.loadEntries(room);
+            this.setState({
+                unsentMessageError: this._getUnsentMessageError(room),
+            });
+            this._onRoomLoaded(room);
         }
-        if (!isUserJoined && !this.state.joining && this.state.roomId) {
+        if (!this.state.joining && this.state.roomId) {
             if (this.props.autoJoin) {
                 this.onJoinButtonClicked();
-            } else if (this.state.roomId) {
+            } else if (!room && this.state.shouldPeek) {
                 console.log("Attempting to peek into room %s", this.state.roomId);
-
                 this.setState({
                     peekLoading: true,
                 });
@@ -246,7 +269,8 @@ module.exports = React.createClass({
                     }
                 }).done();
             }
-        } else if (isUserJoined) {
+        } else if (room) {
+            // Stop peeking because we have joined this room previously
             MatrixClientPeg.get().stopPeeking();
             this.setState({
                 showApps: this._shouldShowApps(room),
@@ -496,8 +520,7 @@ module.exports = React.createClass({
         // and that has probably just changed
         if (ev.sender) {
             this.tabComplete.onMemberSpoke(ev.sender);
-            // nb. we don't need to update the new autocomplete here since
-            // its results are currently ordered purely by search score.
+            UserProvider.getInstance().onUserSpoke(ev.sender);
         }
     },
 
@@ -520,6 +543,8 @@ module.exports = React.createClass({
         this._warnAboutEncryption(room);
         this._calculatePeekRules(room);
         this._updatePreviewUrlVisibility(room);
+        this.tabComplete.loadEntries(room);
+        UserProvider.getInstance().setUserListFromRoom(room);
     },
 
     _warnAboutEncryption: function(room) {
@@ -620,6 +645,7 @@ module.exports = React.createClass({
         }
         this.setState({
             room: room,
+            waitingForRoom: false,
         }, () => {
             this._onRoomLoaded(room);
         });
@@ -675,7 +701,14 @@ module.exports = React.createClass({
 
     onRoomMemberMembership: function(ev, member, oldMembership) {
         if (member.userId == MatrixClientPeg.get().credentials.userId) {
-            this.forceUpdate();
+
+            if (member.membership === 'join') {
+                this.setState({
+                    waitingForRoom: false,
+                });
+            } else {
+                this.forceUpdate();
+            }
         }
     },
 
@@ -688,7 +721,7 @@ module.exports = React.createClass({
 
         // refresh the tab complete list
         this.tabComplete.loadEntries(this.state.room);
-        this._updateAutoComplete(this.state.room);
+        UserProvider.getInstance().setUserListFromRoom(this.state.room);
 
         // if we are now a member of the room, where we were not before, that
         // means we have finished joining a room we were previously peeking
@@ -1153,8 +1186,13 @@ module.exports = React.createClass({
         this.updateTint();
         this.setState({
             editingRoomSettings: false,
-            forwardingEvent: null,
         });
+        if (this.state.forwardingEvent) {
+            dis.dispatch({
+                action: 'forward_event',
+                event: null,
+            });
+        }
         dis.dispatch({action: 'focus_composer'});
     },
 
@@ -1408,14 +1446,6 @@ module.exports = React.createClass({
         }
     },
 
-    _updateAutoComplete: function(room) {
-        const myUserId = MatrixClientPeg.get().credentials.userId;
-        const members = room.getJoinedMembers().filter(function(member) {
-            if (member.userId !== myUserId) return true;
-        });
-        UserProvider.getInstance().setUserList(members);
-    },
-
     render: function() {
         const RoomHeader = sdk.getComponent('rooms.RoomHeader');
         const MessageComposer = sdk.getComponent('rooms.MessageComposer');
@@ -1428,6 +1458,10 @@ module.exports = React.createClass({
         const RoomPreviewBar = sdk.getComponent("rooms.RoomPreviewBar");
         const Loader = sdk.getComponent("elements.Spinner");
         const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
+
+        // Whether the preview bar spinner should be shown. We do this when joining or
+        // when waiting for a room to be returned by js-sdk when joining
+        const previewBarSpinner = this.state.joining || this.state.waitingForRoom;
 
         if (!this.state.room) {
             if (this.state.roomLoading || this.state.peekLoading) {
@@ -1448,7 +1482,7 @@ module.exports = React.createClass({
 
                 // We have no room object for this room, only the ID.
                 // We've got to this room by following a link, possibly a third party invite.
-                var room_alias = this.state.room_alias;
+                const roomAlias = this.state.roomAlias;
                 return (
                     <div className="mx_RoomView">
                         <RoomHeader ref="header"
@@ -1461,8 +1495,8 @@ module.exports = React.createClass({
                                             onForgetClick={ this.onForgetClick }
                                             onRejectClick={ this.onRejectThreepidInviteButtonClicked }
                                             canPreview={ false } error={ this.state.roomLoadError }
-                                            roomAlias={room_alias}
-                                            spinner={this.state.joining}
+                                            roomAlias={roomAlias}
+                                            spinner={previewBarSpinner}
                                             inviterName={inviterName}
                                             invitedEmail={invitedEmail}
                                             room={this.state.room}
@@ -1505,7 +1539,7 @@ module.exports = React.createClass({
                                             onRejectClick={ this.onRejectButtonClicked }
                                             inviterName={ inviterName }
                                             canPreview={ false }
-                                            spinner={this.state.joining}
+                                            spinner={previewBarSpinner}
                                             room={this.state.room}
                             />
                         </div>
@@ -1561,7 +1595,7 @@ module.exports = React.createClass({
         } else if (this.state.uploadingRoomSettings) {
             aux = <Loader/>;
         } else if (this.state.forwardingEvent !== null) {
-            aux = <ForwardMessage onCancelClick={this.onCancelClick} currentRoomId={this.state.room.roomId} mxEvent={this.state.forwardingEvent} />;
+            aux = <ForwardMessage onCancelClick={this.onCancelClick} />;
         } else if (this.state.searching) {
             hideCancel = true; // has own cancel
             aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;
@@ -1581,7 +1615,7 @@ module.exports = React.createClass({
                 <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
                                 onForgetClick={ this.onForgetClick }
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
-                                spinner={this.state.joining}
+                                spinner={previewBarSpinner}
                                 inviterName={inviterName}
                                 invitedEmail={invitedEmail}
                                 canPreview={this.state.canPeek}
