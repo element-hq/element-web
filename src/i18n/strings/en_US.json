@@ -378,6 +378,7 @@
     "Never send encrypted messages to unverified devices in this room from this device": "Never send encrypted messages to unverified devices in this room from this device",
     "New address (e.g. #foo:%(localDomain)s)": "New address (e.g. #foo:%(localDomain)s)",
     "New Composer & Autocomplete": "New Composer & Autocomplete",
+    "Matrix Apps": "Matrix Apps",
     "New password": "New password",
     "New passwords don't match": "New passwords don't match",
     "New passwords must match each other.": "New passwords must match each other.",
