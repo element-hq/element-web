@@ -47,7 +47,7 @@ import UserProvider from '../../autocomplete/UserProvider';
 
 import RoomViewStore from '../../stores/RoomViewStore';
 
-const DEBUG = false;
+let DEBUG = false;
 let debuglog = function() {};
 
 if (DEBUG) {
