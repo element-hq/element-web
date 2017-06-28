@@ -507,9 +507,9 @@ export default class MessageComposerInput extends React.Component {
         }
 
         if (this.state.isRichtextEnabled) {
-            contentHTML = HtmlUtils.stripParagraphs(
+            contentHTML = HtmlUtils.processHtmlForSending(
                 RichText.contentStateToHTML(contentState),
-            ).replace(/\<br\>\n/g, '<br>');
+            );
         } else {
             const md = new Markdown(contentText);
             if (md.isPlainText()) {
