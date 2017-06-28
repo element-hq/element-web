@@ -598,6 +598,8 @@ export default class MessageComposerInput extends React.Component {
     onTab = async (e) => {
         e.preventDefault(); // we *never* want tab's default to happen, but we do want up/down sometimes
         if (this.autocomplete.state.completionList.length === 0) {
+            // XXX THIS IS EVIL. We should not be emulating other keys when pressing other keys
+            // This causes issues such as https://github.com/vector-im/riot-web/issues/4445
             await this.autocomplete.forceComplete();
             this.onDownArrow(e);
         } else {
