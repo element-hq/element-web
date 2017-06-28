@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -109,6 +110,76 @@ Example:
     response: 78
 }
 
+set_widget
+----------
+Set a new widget in the room. Clobbers based on the ID.
+
+Request:
+ - `room_id` (String) is the room to set the widget in.
+ - `widget_id` (String) is the ID of the widget to add (or replace if it already exists).
+   It can be an arbitrary UTF8 string and is purely for distinguishing between widgets.
+ - `url` (String) is the URL that clients should load in an iframe to run the widget.
+   All widgets must have a valid URL. If the URL is `null` (not `undefined`), the
+   widget will be removed from the room.
+ - `type` (String) is the type of widget, which is provided as a hint for matrix clients so they
+   can configure/lay out the widget in different ways. All widgets must have a type.
+ - `name` (String) is an optional human-readable string about the widget.
+ - `data` (Object) is some optional data about the widget, and can contain arbitrary key/value pairs.
+Response:
+{
+    success: true
+}
+Example:
+{
+    action: "set_widget",
+    room_id: "!foo:bar",
+    widget_id: "abc123",
+    url: "http://widget.url",
+    type: "example",
+    response: {
+        success: true
+    }
+}
+
+get_widgets
+-----------
+Get a list of all widgets in the room. The response is the `content` field
+of the state event.
+
+Request:
+ - `room_id` (String) is the room to get the widgets in.
+Response:
+{
+    $widget_id: {
+        type: "example",
+        url: "http://widget.url",
+        name: "Example Widget",
+        data: {
+            key: "val"
+        }
+    },
+    $widget_id: { ... }
+}
+Example:
+{
+    action: "get_widgets",
+    room_id: "!foo:bar",
+    widget_id: "abc123",
+    url: "http://widget.url",
+    type: "example",
+    response: {
+        $widget_id: {
+            type: "example",
+            url: "http://widget.url",
+            name: "Example Widget",
+            data: {
+                key: "val"
+            }
+        },
+        $widget_id: { ... }
+    }
+}
+
 
 membership_state AND bot_options
 --------------------------------
@@ -189,6 +260,84 @@ function inviteUser(event, roomId, userId) {
     }, function(err) {
         sendError(event, _t('You need to be able to invite users to do that.'), err);
     });
+}
+
+function setWidget(event, roomId) {
+    const widgetId = event.data.widget_id;
+    const widgetType = event.data.type;
+    const widgetUrl = event.data.url;
+    const widgetName = event.data.name; // optional
+    const widgetData = event.data.data; // optional
+
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, _t('You need to be logged in.'));
+        return;
+    }
+
+    // both adding/removing widgets need these checks
+    if (!widgetId || widgetUrl === undefined) {
+        sendError(event, _t("Unable to create widget."), new Error("Missing required widget fields."));
+        return;
+    }
+
+    if (widgetUrl !== null) { // if url is null it is being deleted, don't need to check name/type/etc
+        // check types of fields
+        if (widgetName !== undefined && typeof widgetName !== 'string') {
+            sendError(event, _t("Unable to create widget."), new Error("Optional field 'name' must be a string."));
+            return;
+        }
+        if (widgetData !== undefined && !(widgetData instanceof Object)) {
+            sendError(event, _t("Unable to create widget."), new Error("Optional field 'data' must be an Object."));
+            return;
+        }
+        if (typeof widgetType !== 'string') {
+            sendError(event, _t("Unable to create widget."), new Error("Field 'type' must be a string."));
+            return;
+        }
+        if (typeof widgetUrl !== 'string') {
+            sendError(event, _t("Unable to create widget."), new Error("Field 'url' must be a string or null."));
+            return;
+        }
+    }
+
+    // TODO: same dance we do for power levels. It'd be nice if the JS SDK had helper methods to do this.
+    client.getStateEvent(roomId, "im.vector.modular.widgets", "").then((widgets) => {
+        if (widgetUrl === null) {
+            delete widgets[widgetId];
+        }
+        else {
+            widgets[widgetId] = {
+                type: widgetType,
+                url: widgetUrl,
+                name: widgetName,
+                data: widgetData,
+            };
+        }
+        return client.sendStateEvent(roomId, "im.vector.modular.widgets", widgets);
+    }, (err) => {
+        if (err.errcode === "M_NOT_FOUND") {
+            return client.sendStateEvent(roomId, "im.vector.modular.widgets", {
+                [widgetId]: {
+                    type: widgetType,
+                    url: widgetUrl,
+                    name: widgetName,
+                    data: widgetData,
+                }
+            });
+        }
+        throw err;
+    }).done(() => {
+        sendResponse(event, {
+            success: true,
+        });
+    }, (err) => {
+        sendError(event, _t('Failed to send request.'), err);
+    });
+}
+
+function getWidgets(event, roomId) {
+    returnStateEvent(event, roomId, "im.vector.modular.widgets", "");
 }
 
 function setPlumbingState(event, roomId, status) {
@@ -367,7 +516,7 @@ const onMessage = function(event) {
             return;
         }
 
-        // Getting join rules does not require userId
+        // These APIs don't require userId
         if (event.data.action === "join_rules_state") {
             getJoinRules(event, roomId);
             return;
@@ -376,6 +525,12 @@ const onMessage = function(event) {
             return;
         } else if (event.data.action === "get_membership_count") {
             getMembershipCount(event, roomId);
+            return;
+        } else if (event.data.action === "set_widget") {
+            setWidget(event, roomId);
+            return;
+        } else if (event.data.action === "get_widgets") {
+            getWidgets(event, roomId);
             return;
         }
 

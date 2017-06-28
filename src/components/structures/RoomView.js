@@ -47,13 +47,12 @@ import UserProvider from '../../autocomplete/UserProvider';
 
 import RoomViewStore from '../../stores/RoomViewStore';
 
-var DEBUG = false;
+let DEBUG = false;
+let debuglog = function() {};
 
 if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
-    var debuglog = console.log.bind(console);
-} else {
-    var debuglog = function() {};
+    debuglog = console.log.bind(console);
 }
 
 module.exports = React.createClass({
@@ -113,6 +112,7 @@ module.exports = React.createClass({
             callState: null,
             guestsCanJoin: false,
             canPeek: false,
+            showApps: false,
 
             // error object, as from the matrix client/server API
             // If we failed to load information about the room,
@@ -236,6 +236,7 @@ module.exports = React.createClass({
         if (room) {
             this.setState({
                 unsentMessageError: this._getUnsentMessageError(room),
+                showApps: this._shouldShowApps(room),
             });
             this._onRoomLoaded(room);
         }
@@ -271,6 +272,11 @@ module.exports = React.createClass({
             // Stop peeking because we have joined this room previously
             MatrixClientPeg.get().stopPeeking();
         }
+    },
+
+    _shouldShowApps: function(room) {
+        const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets', '');
+        return appsStateEvents && Object.keys(appsStateEvents.getContent()).length > 0;
     },
 
     componentDidMount: function() {
@@ -453,9 +459,14 @@ module.exports = React.createClass({
                 this._updateConfCallNotification();
 
                 this.setState({
-                    callState: callState
+                    callState: callState,
                 });
 
+                break;
+            case 'appsDrawer':
+                this.setState({
+                    showApps: payload.show,
+                });
                 break;
         }
     },
@@ -1604,11 +1615,13 @@ module.exports = React.createClass({
 
         var auxPanel = (
             <AuxPanel ref="auxPanel" room={this.state.room}
+              userId={MatrixClientPeg.get().credentials.userId}
               conferenceHandler={this.props.ConferenceHandler}
               draggingFile={this.state.draggingFile}
               displayConfCallNotification={this.state.displayConfCallNotification}
               maxHeight={this.state.auxPanelMaxHeight}
-              onResize={this.onChildResize} >
+              onResize={this.onChildResize}
+              showApps={this.state.showApps && !this.state.editingRoomSettings} >
                 { aux }
             </AuxPanel>
         );
@@ -1621,8 +1634,14 @@ module.exports = React.createClass({
         if (canSpeak) {
             messageComposer =
                 <MessageComposer
-                    room={this.state.room} onResize={this.onChildResize} uploadFile={this.uploadFile}
-                    callState={this.state.callState} tabComplete={this.tabComplete} opacity={ this.props.opacity }/>;
+                    room={this.state.room}
+                    onResize={this.onChildResize}
+                    uploadFile={this.uploadFile}
+                    callState={this.state.callState}
+                    tabComplete={this.tabComplete}
+                    opacity={ this.props.opacity }
+                    showApps={ this.state.showApps }
+                />;
         }
 
         // TODO: Why aren't we storing the term/scope/count in this format
