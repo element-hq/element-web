@@ -28,6 +28,7 @@ module.exports = {
         loaders: [
             { test: /\.json$/, loader: "json" },
             { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
+            { test: /\.node$/, loader: 'node-loader' },
             {
                 test: /\.scss$/,
 
@@ -97,14 +98,12 @@ module.exports = {
             // same goes for js-sdk
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
         },
+        modulesDirectories: ["node_modules", "electron_app/node_modules"],
     },
     externals: {
         // Don't try to bundle electron: leave it as a commonjs dependency
         // (the 'commonjs' here means it will output a 'require')
         "electron": "commonjs electron",
-        
-        // Because of stupid electron
-        "electron-spellchecker": "commonjs ../../resources/app/node_modules/electron-spellchecker",
     },
     plugins: [
         new webpack.DefinePlugin({

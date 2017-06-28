@@ -84,6 +84,14 @@ function _CutCopyPasteSelectContextMenus(params) {
     }];
 }
 
+function onSelectedContextMenu(ev, params) {
+    const items = _CutCopyPasteSelectContextMenus(params);
+    const popupMenu = Menu.buildFromTemplate(items);
+
+    popupMenu.popup();
+    ev.preventDefault();
+}
+
 function onEditableContextMenu(ev, params) {
     const items = [
         { role: 'undo' },
@@ -97,16 +105,41 @@ function onEditableContextMenu(ev, params) {
     ev.preventDefault();
 }
 
+let selection;
+function resetSelection () {
+    selection = {
+        isMisspelled: false,
+        spellingSuggestions: []
+    };
+}
+
+function onMisspelling (suggestions) {
+    console.log('??????');
+    console.log(suggestions);
+    // Prime the context menu with spelling suggestions if the user has selected text.
+    if (window.getSelection().toString()) {
+        selection.isMisspelled = true;
+        selection.spellingSuggestions = suggestions.slice(0, 3);
+    }
+    return selection;
+}
 
 module.exports = (webContents) => {
+    resetSelection();
     webContents.on('new-window', onWindowOrNavigate);
     webContents.on('will-navigate', onWindowOrNavigate);
+
+    // Reset the selection when clicking around, before the spell-checker runs and the context menu shows.
+    webContents.on('mousedown', resetSelection);
+
+    //Wait for misspellings
+    webContents.on('misspelling', onMisspelling);
 
     webContents.on('context-menu', function(ev, params) {
         if (params.linkURL || params.srcURL) {
             onLinkContextMenu(ev, params);
         } else if (params.selectionText) {
-            // ContextMenu handled by electron-spellchecker in ElectronPlatform and electron-main.js because of electrons splitting of Main and renderer
+            onSelectedContextMenu(ev, params);
         } else if (params.isEditable) {
             onEditableContextMenu(ev, params);
         }

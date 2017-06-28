@@ -22,10 +22,9 @@ import dis from 'matrix-react-sdk/lib/dispatcher';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import q from 'q';
 import electron, {remote, ipcRenderer} from 'electron';
-import {SpellCheckHandler, ContextMenuListener, ContextMenuBuilder} from 'electron-spellchecker';
-import rageshake from '../rageshake';
+import spellchecker from 'spellchecker';
 
-const Menu = remote.Menu;
+import rageshake from '../rageshake';
 
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
 
@@ -172,37 +171,13 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     initSpellCheckHandler(lang) {
-        window.spellCheckHandler = new SpellCheckHandler();
-        window.spellCheckHandler.attachToInput();
-
-        window.spellCheckHandler.switchLanguage(lang);
-        window.spellCheckHandler.autoUnloadDictionariesOnBlur();
-        let contextMenuBuilder = new ContextMenuBuilder(window.spellCheckHandler);
-        const seperatorItem = [{ type: 'separator' }];
-
-        async function generateMenu(contextInfo, MainMenu) {
-            let SpellMenu = new Menu();
-            await contextMenuBuilder.addSpellingItems(SpellMenu, contextInfo);
-            contextMenuBuilder.addSearchItems(SpellMenu, contextInfo);
-
-            const newMainMenuTemplate = [...MainMenu.items, ...seperatorItem, ...SpellMenu.items];
-            const newMainMenu = Menu.buildFromTemplate(newMainMenuTemplate);
-
-            newMainMenu.popup(remote.getCurrentWindow(), { async: true });
-        }
-
-        async function showMenu(contextInfo) {
-            ipcRenderer.send('SelectedContextMenu', contextInfo);
-            ipcRenderer.once('SelectedContextMenu-reply', async function(event, arg) {
-                await generateMenu(contextInfo, arg);
-            })
-        }
-
-        let contextMenuListener = new ContextMenuListener(async function(info) {
-            await showMenu(info);
-        });
-
-        return true;
+    	const spelllang = lang.replace('_', '-');
+        webFrame.setSpellCheckProvider(spelllang, true, {
+			spellCheck: function(text) {
+				console.log("Spellchecker called on "+text);
+				return !spellchecker.isMisspelled(text);
+			}
+		});
     }
 
     clearNotification(notif: Notification) {
