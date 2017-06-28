@@ -61,11 +61,20 @@ export default React.createClass({
         }
     },
 
+    formatAppTileName: function() {
+        let appTileName = "No name";
+        if(this.props.name && this.props.name.trim()) {
+            appTileName = this.props.name.trim();
+            appTileName = appTileName[0].toUpperCase() + appTileName.slice(1).toLowerCase();
+        }
+        return appTileName;
+    },
+
     render: function() {
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 <div className="mx_AppTileMenuBar">
-                    {this.props.name}
+                    {this.formatAppTileName()}
                     <span className="mx_AppTileMenuBarWidgets">
                         {/* Edit widget */}
                         {/* <img
