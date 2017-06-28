@@ -40,25 +40,51 @@ export default class Autocomplete extends React.Component {
         };
     }
 
-    async componentWillReceiveProps(props, state) {
-        if (props.query === this.props.query) {
-            return null;
-        }
-
-        return await this.complete(props.query, props.selection);
-    }
-
-    async complete(query, selection) {
-        let forceComplete = this.state.forceComplete;
-        const completionPromise = getCompletions(query, selection, forceComplete);
-        this.completionPromise = completionPromise;
-        const completions = await this.completionPromise;
-
-        // There's a newer completion request, so ignore results.
-        if (completionPromise !== this.completionPromise) {
+    componentWillReceiveProps(newProps, state) {
+        // Query hasn't changed so don't try to complete it
+        if (newProps.query === this.props.query) {
             return;
         }
 
+        this.complete(newProps.query, newProps.selection);
+    }
+
+    complete(query, selection) {
+        if (this.debounceCompletionsRequest) {
+            clearTimeout(this.debounceCompletionsRequest);
+        }
+        if (query === "") {
+            this.setState({
+                // Clear displayed completions
+                completions: [],
+                completionList: [],
+                // Reset selected completion
+                selectionOffset: COMPOSER_SELECTED,
+                // Hide the autocomplete box
+                hide: true,
+            });
+            return Q(null);
+        }
+        let autocompleteDelay = UserSettingsStore.getLocalSetting('autocompleteDelay', 200);
+
+        // Don't debounce if we are already showing completions
+        if (this.state.completions.length > 0) {
+            autocompleteDelay = 0;
+        }
+
+        const deferred = Q.defer();
+        this.debounceCompletionsRequest = setTimeout(() => {
+            getCompletions(
+                query, selection, this.state.forceComplete,
+            ).then((completions) => {
+                this.processCompletions(completions);
+                deferred.resolve();
+            });
+        }, autocompleteDelay);
+        return deferred.promise;
+    }
+
+    processCompletions(completions) {
         const completionList = flatMap(completions, (provider) => provider.completions);
 
         // Reset selection when completion list becomes empty.
@@ -88,23 +114,13 @@ export default class Autocomplete extends React.Component {
             hide = false;
         }
 
-        const autocompleteDelay = UserSettingsStore.getSyncedSetting('autocompleteDelay', 200);
-
-        // We had no completions before, but do now, so we should apply our display delay here
-        if (this.state.completionList.length === 0 && completionList.length > 0 &&
-            !forceComplete && autocompleteDelay > 0) {
-            await Q.delay(autocompleteDelay);
-        }
-
-        // Force complete is turned off each time since we can't edit the query in that case
-        forceComplete = false;
-
         this.setState({
             completions,
             completionList,
             selectionOffset,
             hide,
-            forceComplete,
+            // Force complete is turned off each time since we can't edit the query in that case
+            forceComplete: false,
         });
     }
 
