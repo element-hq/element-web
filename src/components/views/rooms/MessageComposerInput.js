@@ -560,7 +560,7 @@ export default class MessageComposerInput extends React.Component {
 
     onUpArrow = async (e) => {
         const completion = this.autocomplete.onUpArrow();
-        if (completion == null) {
+        if (completion == null && !(this.historyManager.currentIndex === -1 && this.state.editorState.getCurrentContent().hasText())) {
             const newContent = this.historyManager.getItem(-1, this.state.isRichtextEnabled ? 'html' : 'markdown');
             if (!newContent) return false;
             const editorState = EditorState.push(this.state.editorState,
@@ -575,7 +575,7 @@ export default class MessageComposerInput extends React.Component {
 
     onDownArrow = async (e) => {
         const completion = this.autocomplete.onDownArrow();
-        if (completion == null) {
+        if (completion == null && !(this.historyManager.currentIndex === -1 && this.state.editorState.getCurrentContent().hasText())) {
             const newContent = this.historyManager.getItem(+1, this.state.isRichtextEnabled ? 'html' : 'markdown');
             if (!newContent) return false;
             const editorState = EditorState.push(this.state.editorState,
