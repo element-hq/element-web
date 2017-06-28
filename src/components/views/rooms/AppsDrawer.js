@@ -165,7 +165,7 @@ module.exports = React.createClass({
             });
         }
         this.setState({
-            apps: this.apps,
+            apps: apps,
         });
     },
 

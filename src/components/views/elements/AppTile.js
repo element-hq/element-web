@@ -16,8 +16,9 @@ limitations under the License.
 
 'use strict';
 
-const React = require('react');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
+import React from 'react';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import { _t } from '../../../languageHandler';
 
 export default React.createClass({
     displayName: 'AppTile',
