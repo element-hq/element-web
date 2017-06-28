@@ -318,12 +318,12 @@ export default class MessageComposer extends React.Component {
         if (UserSettingsStore.isFeatureEnabled('matrix_apps')) {
             if (this.props.showApps) {
                 hideAppsButton =
-                    <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title="Hide Apps">
+                    <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title={_t("Hide Apps")}>
                         <TintableSvg src="img/icons-apps-active.svg" width="35" height="35"/>
                     </div>;
             } else {
                 showAppsButton =
-                    <div key="show_apps" className="mx_MessageComposer_apps" onClick={this.onShowAppsClick} title="Show Apps">
+                    <div key="show_apps" className="mx_MessageComposer_apps" onClick={this.onShowAppsClick} title={_t("Show Apps")}>
                         <TintableSvg src="img/icons-apps.svg" width="35" height="35"/>
                     </div>;
             }

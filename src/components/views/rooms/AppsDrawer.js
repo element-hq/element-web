@@ -25,6 +25,8 @@ import sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import ScalarMessaging from '../../../ScalarMessaging';
+import { _t } from '../../../languageHandler';
+
 
 module.exports = React.createClass({
     displayName: 'AppsDrawer',
@@ -205,8 +207,8 @@ module.exports = React.createClass({
                             role="button"
                             tabIndex="0"
                             className="mx_AddWidget_button"
-                            title="Add a widget">
-                            [+] Add a widget
+                            title={_t('Add a widget')}>
+                            [+] {_t('Add a widget')}
                         </div>);
 
         return (
