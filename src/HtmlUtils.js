@@ -84,7 +84,8 @@ export function charactersToImageNode(alt, useSvg, ...unicode) {
 }
 
 
-export function stripParagraphs(html: string): string {
+export function processHtmlForSending(html: string): string {
+
     const contentDiv = document.createElement('div');
     contentDiv.innerHTML = html;
 
@@ -97,6 +98,13 @@ export function stripParagraphs(html: string): string {
         const element = contentDiv.children[i];
         if (element.tagName.toLowerCase() === 'p') {
             contentHTML += element.innerHTML + '<br />';
+        } else if (element.tagName.toLowerCase() === 'pre') {
+            // Replace "<br>\n" with "\n" within `<pre>` tags because the <br> is
+            // redundant. This is a workaround for a bug in draft-js-export-html:
+            //   https://github.com/sstur/draft-js-export-html/issues/62
+            contentHTML += '<pre>' +
+                element.innerHTML.replace(/<br>\n/g, '\n').trim() +
+                '</pre>';
         } else {
             const temp = document.createElement('div');
             temp.appendChild(element.cloneNode(true));
