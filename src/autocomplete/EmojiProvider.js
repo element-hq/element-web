@@ -24,7 +24,7 @@ import sdk from '../index';
 import {PillCompletion} from './Components';
 import type {SelectionRange, Completion} from './Autocompleter';
 
-import EmojiData from 'emojione/emoji.json';
+import EmojiData from '../stripped-emoji.json';
 
 const LIMIT = 20;
 const CATEGORY_ORDER = [
