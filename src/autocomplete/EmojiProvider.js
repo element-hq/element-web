@@ -38,15 +38,15 @@ const emojiDataWithEmojiOneSupport = EmojiData.filter((a) => {
 
 const LIMIT = 20;
 const CATEGORY_ORDER = [
-  'People',
-  'Foods',
-  'Objects',
-  'Activity',
-  'Skin Tones',
-  'Nature',
-  'Places',
-  'Flags',
-  'Symbols',
+    'People',
+    'Foods',
+    'Objects',
+    'Activity',
+    'Skin Tones',
+    'Nature',
+    'Places',
+    'Flags',
+    'Symbols',
 ];
 
 const EMOJI_REGEX = /:\w*:?/g;
