@@ -33,6 +33,12 @@ module.exports = React.createClass({
         room: React.PropTypes.object.isRequired,
     },
 
+    getInitialState: function() {
+        return {
+            apps: this._getApps(),
+        };
+    },
+
     componentWillMount: function() {
         ScalarMessaging.startListening();
         MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
@@ -122,12 +128,6 @@ module.exports = React.createClass({
         // }
 
         return app;
-    },
-
-    getInitialState: function() {
-        return {
-            apps: this._getApps(),
-        };
     },
 
     onRoomStateEvents: function(ev, state) {
