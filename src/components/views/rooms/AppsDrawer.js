@@ -40,13 +40,12 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.scalarClient = null;
-        const appsDrawer = this;
         if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
             this.scalarClient = new ScalarAuthClient();
             this.scalarClient.connect().done(() => {
                 this.forceUpdate();
-                if (appsDrawer.state.apps && appsDrawer.state.apps.length < 1) {
-                    appsDrawer.onClickAddWidget();
+                if (this.state.apps && this.state.apps.length < 1) {
+                    this.onClickAddWidget();
                 }
             }, (err) => {
                 this.setState({
