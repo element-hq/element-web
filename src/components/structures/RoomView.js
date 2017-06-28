@@ -465,7 +465,7 @@ module.exports = React.createClass({
                 break;
             case 'appsDrawer':
                 this.setState({
-                    showApps: payload.show ? true : false,
+                    showApps: payload.show,
                 });
                 break;
         }
