@@ -556,36 +556,42 @@ export default class MessageComposerInput extends React.Component {
         this.autocomplete.hide();
 
         return true;
+    }
+
+    selectHistory = async (completion, delta) => {
+        if (completion == null) {
+            const newContent = this.historyManager.getItem(delta, this.state.isRichtextEnabled ? 'html' : 'markdown');
+            if (!newContent) return false;
+            let editorState = EditorState.push(
+                this.state.editorState,
+                newContent,
+                'insert-characters',
+            );
+
+            // Move selection to the end of the selected history
+            let newSelection = SelectionState.createEmpty(newContent.getLastBlock().getKey());
+            newSelection = newSelection.merge({
+                focusOffset: newContent.getLastBlock().getLength(),
+                anchorOffset: newContent.getLastBlock().getLength(),
+            });
+            editorState = EditorState.forceSelection(editorState, newSelection);
+
+            this.setState({editorState});
+            return true;
+        }
+        return await this.setDisplayedCompletion(completion);
     };
 
     onUpArrow = async (e) => {
-        const completion = this.autocomplete.onUpArrow();
-        if (completion == null) {
-            const newContent = this.historyManager.getItem(-1, this.state.isRichtextEnabled ? 'html' : 'markdown');
-            if (!newContent) return false;
-            const editorState = EditorState.push(this.state.editorState,
-                newContent,
-                'insert-characters');
-            this.setState({editorState});
-            return true;
-        }
         e.preventDefault();
-        return await this.setDisplayedCompletion(completion);
+        const completion = this.autocomplete.onUpArrow();
+        return this.selectHistory(completion, -1);
     };
 
     onDownArrow = async (e) => {
-        const completion = this.autocomplete.onDownArrow();
-        if (completion == null) {
-            const newContent = this.historyManager.getItem(+1, this.state.isRichtextEnabled ? 'html' : 'markdown');
-            if (!newContent) return false;
-            const editorState = EditorState.push(this.state.editorState,
-                newContent,
-                'insert-characters');
-            this.setState({editorState});
-            return true;
-        }
         e.preventDefault();
-        return await this.setDisplayedCompletion(completion);
+        const completion = this.autocomplete.onDownArrow();
+        return this.selectHistory(completion, -1);
     };
 
     // tab and shift-tab are mapped to down and up arrow respectively
