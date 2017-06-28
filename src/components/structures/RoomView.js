@@ -90,7 +90,6 @@ module.exports = React.createClass({
         return {
             room: null,
             roomId: null,
-            userId: null,
             roomLoading: true,
             peekLoading: false,
             shouldPeek: true,
