@@ -486,6 +486,10 @@ module.exports = React.createClass({
                 this._setPage(PageTypes.RoomDirectory);
                 this.notifyNewScreen('directory');
                 break;
+            case 'view_my_groups':
+                this._setPage(PageTypes.MyGroups);
+                this.notifyNewScreen('groups');
+                break;
             case 'view_group':
                 {
                     const groupId = payload.group_id;
@@ -1150,6 +1154,10 @@ module.exports = React.createClass({
         } else if (screen == 'directory') {
             dis.dispatch({
                 action: 'view_room_directory',
+            });
+        } else if (screen == 'groups') {
+            dis.dispatch({
+                action: 'view_my_groups',
             });
         } else if (screen == 'post_registration') {
             dis.dispatch({
