@@ -568,6 +568,14 @@ export default class MessageComposerInput extends React.Component {
                 'insert-characters',
             );
 
+            // Move selection to the end of the selected history
+            let newSelection = SelectionState.createEmpty(newContent.getLastBlock().getKey());
+            newSelection = newSelection.merge({
+                focusOffset: newContent.getLastBlock().getLength(),
+                anchorOffset: newContent.getLastBlock().getLength(),
+            });
+            editorState = EditorState.forceSelection(editorState, newSelection);
+
             this.setState({editorState});
             return true;
         }
