@@ -53,10 +53,12 @@ module.exports = React.createClass({
                 if (this.state.apps && this.state.apps.length < 1) {
                     this.onClickAddWidget();
                 }
-            }, (err) => {
-                this.setState({
-                    scalar_error: err,
-                });
+            // TODO -- Handle Scalar errors
+            // },
+            // (err) => {
+            //     this.setState({
+            //         scalar_error: err,
+            //     });
             });
         }
     },
