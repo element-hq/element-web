@@ -24,10 +24,34 @@ import sdk from '../index';
 import {PillCompletion} from './Components';
 import type {SelectionRange, Completion} from './Autocompleter';
 
+import EmojiData from '../stripped-emoji.json';
+
+const LIMIT = 20;
+const CATEGORY_ORDER = [
+    'people',
+    'food',
+    'objects',
+    'activity',
+    'nature',
+    'travel',
+    'flags',
+    'symbols',
+    'unicode9',
+    'modifier',
+];
+
 const EMOJI_REGEX = /:\w*:?/g;
-const EMOJI_SHORTNAMES = Object.keys(emojioneList).map(shortname => {
+const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sort(
+    (a, b) => {
+        if (a.category === b.category) {
+            return a.emoji_order - b.emoji_order;
+        }
+        return CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category);
+    },
+).map((a) => {
     return {
-        shortname,
+        name: a.name,
+        shortname: a.shortname,
     };
 });
 
@@ -37,7 +61,7 @@ export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
         this.matcher = new FuzzyMatcher(EMOJI_SHORTNAMES, {
-            keys: 'shortname',
+            keys: ['shortname', 'name'],
         });
     }
 
@@ -57,7 +81,7 @@ export default class EmojiProvider extends AutocompleteProvider {
                     ),
                     range,
                 };
-            }).slice(0, 8);
+            }).slice(0, LIMIT);
         }
         return completions;
     }
