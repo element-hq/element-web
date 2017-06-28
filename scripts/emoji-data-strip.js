@@ -14,5 +14,6 @@ const output = Object.keys(EMOJI_DATA).map(
     },
 );
 
-// Write to a file in src. Changes should be checked in to git
+// Write to a file in src. Changes should be checked into git. This file is copied by
+// babel using --copy-files
 fs.writeFileSync('./src/stripped-emoji.json', JSON.stringify(output));
