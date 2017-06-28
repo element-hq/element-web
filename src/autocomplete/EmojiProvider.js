@@ -24,43 +24,34 @@ import sdk from '../index';
 import {PillCompletion} from './Components';
 import type {SelectionRange, Completion} from './Autocompleter';
 
-import EmojiData from 'emoji-datasource/emoji';
-
-const emojiDataToEmojiOne = (name) => ':' + name + ':';
-
-// Only include emojis that are in both data sets
-const emojiOneShortNames = Object.keys(emojioneList);
-const emojiDataWithEmojiOneSupport = EmojiData.filter((a) => {
-    return emojiOneShortNames.indexOf(
-        emojiDataToEmojiOne(a.short_name),
-    ) !== -1;
-});
+import EmojiData from 'emojione/emoji.json';
 
 const LIMIT = 20;
 const CATEGORY_ORDER = [
-    'People',
-    'Foods',
-    'Objects',
-    'Activity',
-    'Skin Tones',
-    'Nature',
-    'Places',
-    'Flags',
-    'Symbols',
+    'people',
+    'food',
+    'objects',
+    'activity',
+    'nature',
+    'travel',
+    'flags',
+    'symbols',
+    'unicode9',
+    'modifier',
 ];
 
 const EMOJI_REGEX = /:\w*:?/g;
-const EMOJI_SHORTNAMES = emojiDataWithEmojiOneSupport.sort(
+const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sort(
     (a, b) => {
         if (a.category === b.category) {
-            return a.sort_order - b.sort_order;
+            return a.emoji_order - b.emoji_order;
         }
         return CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category);
     },
 ).map((a) => {
     return {
-        shortname: emojiDataToEmojiOne(a.short_name),
-        shortnames: a.short_names.join(','),
+        name: a.name,
+        shortname: a.shortname,
     };
 });
 
@@ -70,7 +61,7 @@ export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
         this.matcher = new FuzzyMatcher(EMOJI_SHORTNAMES, {
-            keys: ['shortname', 'shortnames'],
+            keys: ['shortname', 'name'],
         });
     }
 
