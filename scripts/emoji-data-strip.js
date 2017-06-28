@@ -11,7 +11,8 @@ const output = Object.keys(EMOJI_DATA).map(
             category: datum.category,
             emoji_order: datum.emoji_order,
         };
-    }
+    },
 );
 
-fs.writeFileSync('./lib/stripped-emoji.json', JSON.stringify(output));
+// Write to a file in src. Changes should be checked in to git
+fs.writeFileSync('./src/stripped-emoji.json', JSON.stringify(output));

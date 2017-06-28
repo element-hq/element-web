@@ -33,9 +33,8 @@
   "scripts": {
     "reskindex": "node scripts/reskindex.js -h header",
     "reskindex:watch": "node scripts/reskindex.js -h header -w",
-    "build:init": "mkdir -p lib && npm run emoji-data-strip",
-    "build": "npm run build:init && npm run reskindex && babel src -d lib --source-maps",
-    "build:watch": "npm run build:init && babel src -w -d lib --source-maps",
+    "build": "npm run reskindex && babel src -d lib --source-maps --copy-files",
+    "build:watch": "babel src -w -d lib --source-maps --copy-files",
     "emoji-data-strip": "node scripts/emoji-data-strip.js",
     "start": "parallelshell \"npm run build:watch\" \"npm run reskindex:watch\"",
     "lint": "eslint src/",
