@@ -87,7 +87,7 @@ export default React.createClass({
                         {/* Delete widget */}
                         <img src="img/cancel.svg"
                         className="mx_filterFlipColor mx_AppTileMenuBarWidget"
-                        width="8" height="8" alt="Cancel"
+                        width="8" height="8" alt={_t("Cancel")}
                         onClick={this._onDeleteClick}
                         />
                     </span>
