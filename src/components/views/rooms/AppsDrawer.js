@@ -163,7 +163,7 @@ module.exports = React.createClass({
             });
         }
         this.setState({
-            apps: this._getApps(),
+            apps: this.apps,
         });
     },
 
