@@ -63,6 +63,12 @@ export default class QueryMatcher {
         this.options = options;
         this.keys = options.keys;
         this.setObjects(objects);
+
+        // By default, we remove any non-alphanumeric characters ([^A-Za-z0-9_]) from the
+        // query and the value being queried before matching
+        if (this.options.shouldMatchWordsOnly === undefined) {
+            this.options.shouldMatchWordsOnly = true;
+        }
     }
 
     setObjects(objects: Array<Object>) {
@@ -70,9 +76,16 @@ export default class QueryMatcher {
     }
 
     match(query: String): Array<Object> {
-        query = query.toLowerCase().replace(/[^\w]/g, '');
+        query = query.toLowerCase();
+        if (this.options.shouldMatchWordsOnly) {
+            query = query.replace(/[^\w]/g, '');
+        }
         const results = _sortedUniq(_sortBy(_flatMap(this.keyMap.keys, (key) => {
-            return key.toLowerCase().replace(/[^\w]/g, '').indexOf(query) >= 0 ? this.keyMap.objectMap[key] : [];
+            let resultKey = key.toLowerCase();
+            if (this.options.shouldMatchWordsOnly) {
+                resultKey = resultKey.replace(/[^\w]/g, '');
+            }
+            return resultKey.indexOf(query) !== -1 ? this.keyMap.objectMap[key] : [];
         }), (candidate) => this.keyMap.priorityMap.get(candidate)));
         return results;
     }
