@@ -558,53 +558,62 @@ export default class MessageComposerInput extends React.Component {
         return true;
     }
 
-    selectHistory = async (completion, delta) => {
-        if (completion == null) {
-            const newContent = this.historyManager.getItem(delta, this.state.isRichtextEnabled ? 'html' : 'markdown');
-            if (!newContent) return false;
-            let editorState = EditorState.push(
-                this.state.editorState,
-                newContent,
-                'insert-characters',
-            );
-
-            // Move selection to the end of the selected history
-            let newSelection = SelectionState.createEmpty(newContent.getLastBlock().getKey());
-            newSelection = newSelection.merge({
-                focusOffset: newContent.getLastBlock().getLength(),
-                anchorOffset: newContent.getLastBlock().getLength(),
-            });
-            editorState = EditorState.forceSelection(editorState, newSelection);
-
-            this.setState({editorState});
-            return true;
-        }
-        return await this.setDisplayedCompletion(completion);
+    onUpArrow = (e) => {
+        this.onVerticalArrow(e, true);
     };
 
-    onUpArrow = async (e) => {
+    onDownArrow = (e) => {
+        this.onVerticalArrow(e, false);
+    };
+
+    onVerticalArrow = (e, up) => {
         e.preventDefault();
-        const completion = this.autocomplete.onUpArrow();
-        return this.selectHistory(completion, -1);
-    };
-
-    onDownArrow = async (e) => {
-        e.preventDefault();
-        const completion = this.autocomplete.onDownArrow();
-        return this.selectHistory(completion, -1);
-    };
-
-    // tab and shift-tab are mapped to down and up arrow respectively
-    onTab = async (e) => {
-        e.preventDefault(); // we *never* want tab's default to happen, but we do want up/down sometimes
+        // Select history only if we are not currently auto-completing
         if (this.autocomplete.state.completionList.length === 0) {
-            // XXX THIS IS EVIL. We should not be emulating other keys when pressing other keys
-            // This causes issues such as https://github.com/vector-im/riot-web/issues/4445
-            await this.autocomplete.forceComplete();
-            this.onDownArrow(e);
+            return this.selectHistory(up);
         } else {
-            await (e.shiftKey ? this.onUpArrow : this.onDownArrow)(e);
+            return this.moveAutocompleteSelection(up);
         }
+    };
+
+    selectHistory = async (up) => {
+        const delta = up ? -1 : 1;
+
+        const newContent = this.historyManager.getItem(delta, this.state.isRichtextEnabled ? 'html' : 'markdown');
+        if (!newContent) return false;
+        let editorState = EditorState.push(
+            this.state.editorState,
+            newContent,
+            'insert-characters',
+        );
+
+        // Move selection to the end of the selected history
+        let newSelection = SelectionState.createEmpty(newContent.getLastBlock().getKey());
+        newSelection = newSelection.merge({
+            focusOffset: newContent.getLastBlock().getLength(),
+            anchorOffset: newContent.getLastBlock().getLength(),
+        });
+        editorState = EditorState.forceSelection(editorState, newSelection);
+
+        this.setState({editorState});
+        return true;
+    };
+
+    onTab = async (e) => {
+        e.preventDefault();
+        if (this.autocomplete.state.completionList.length === 0) {
+            // Force completions to show for the text currently entered
+            await this.autocomplete.forceComplete();
+            // Select the first item by moving "down"
+            await this.moveAutocompleteSelection(false);
+        } else {
+            await this.moveAutocompleteSelection(e.shiftKey);
+        }
+    };
+
+    moveAutocompleteSelection = (up) => {
+        const completion = up ? this.autocomplete.onUpArrow() : this.autocomplete.onDownArrow();
+        return this.setDisplayedCompletion(completion);
     };
 
     onEscape = async (e) => {
