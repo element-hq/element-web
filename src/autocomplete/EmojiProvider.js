@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import {emojioneList, shortnameToImage, shortnameToUnicode} from 'emojione';
+import {emojioneList, shortnameToImage, shortnameToUnicode, asciiRegexp} from 'emojione';
 import FuzzyMatcher from './FuzzyMatcher';
 import sdk from '../index';
 import {PillCompletion} from './Components';
@@ -40,7 +40,8 @@ const CATEGORY_ORDER = [
     'modifier',
 ];
 
-const EMOJI_REGEX = /:\w*:?/g;
+// Match for ":wink:" or ascii-style ";-)" provided by emojione
+const EMOJI_REGEX = new RegExp('(:\\w*:?|' + asciiRegexp + ')', 'g');
 const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sort(
     (a, b) => {
         if (a.category === b.category) {
@@ -52,6 +53,7 @@ const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sor
     return {
         name: a.name,
         shortname: a.shortname,
+        aliases_ascii: a.aliases_ascii ? a.aliases_ascii.join(' ') : '',
     };
 });
 
@@ -61,7 +63,9 @@ export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
         this.matcher = new FuzzyMatcher(EMOJI_SHORTNAMES, {
-            keys: ['shortname', 'name'],
+            keys: ['aliases_ascii', 'shortname', 'name'],
+            // For matching against ascii equivalents
+            shouldMatchWordsOnly: false,
         });
     }
 
