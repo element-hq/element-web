@@ -229,7 +229,8 @@ export default class MessageComposerInput extends React.Component {
                     if (this.state.isRichtextEnabled) {
                         contentState = Modifier.setBlockType(contentState, startSelection, 'blockquote');
                     }
-                    const editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
+                    let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
+                    editorState = EditorState.moveSelectionToEnd(editorState);
                     this.onEditorContentChanged(editorState);
                     editor.focus();
                 }
