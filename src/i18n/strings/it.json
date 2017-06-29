@@ -1,1 +1,12 @@
-{}
+{
+    "Failed to forget room %(errCode)s": "Errore nel dimenticare la stanza %(errCode)",
+    "Mute": "Muta",
+    "Notifications": "Notifiche",
+    "Operation failed": "Operazione fallita",
+    "Please Register": "Per favore registrati",
+    "powered by Matrix": "powered by Matrix",
+    "Remove": "Rimuovi",
+    "Search": "Cerca",
+    "Settings": "Impostazioni",
+    "Start chat": "Avvia una chat"
+}
