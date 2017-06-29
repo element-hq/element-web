@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
@@ -28,7 +29,7 @@ const GROUP_REGEX = /^\+(.*?):(.*)$/;
 export default React.createClass({
     displayName: 'CreateGroupDialog',
     propTypes: {
-        onFinished: React.PropTypes.func.isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {

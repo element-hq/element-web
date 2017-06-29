@@ -43,7 +43,7 @@ const GroupTile = React.createClass({
     }
 });
 
-module.exports = WithMatrixClient(React.createClass({
+export default WithMatrixClient(React.createClass({
     displayName: 'GroupList',
 
     propTypes: {
