@@ -86,5 +86,10 @@
     "Off": "Off",
     "On": "Acceso",
     "Operation failed": "Operazione fallita",
-    "Permalink": "Permalink"
+    "Permalink": "Permalink",
+    "Please describe the bug. What did you do? What did you expect to happen? What actually happened?": "Per favore descrivi il bug. Cosa hai fatto? Cosa ti aspettavi accadesse? Cosa è accaduto invece?",
+    "Please describe the bug and/or send logs.": "Per favore descrivi il bug e/o invia i log.",
+    "Please install <a href=\"https://www.google.com/chrome\">Chrome</a> or <a href=\"https://getfirefox.com\">Firefox</a> for the best experience.": "Per favore installa<a href=\"https://www.google.com/chrome\">Chrome</a> o <a href=\"https://getfirefox.com\">Firefox</a> per un'esperienza migliore.",
+    "Please Register": "Per favore registrati",
+    "powered by Matrix": "powered by Matrix"
 }
