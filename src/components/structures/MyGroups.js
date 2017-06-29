@@ -91,11 +91,16 @@ export default WithMatrixClient(React.createClass({
                     </div>
                 );
             });
-            content = <div>{groupNodes}</div>;
+            content = <div>
+                <div>{_t('You are a member of these groups')}:</div>
+                {groupNodes}
+            </div>;
         } else if (this.state.error) {
             content = <div className="mx_MyGroups_error">
                 Error whilst fetching joined groups
             </div>;
+        } else {
+            content = <Loader />;
         }
 
         return <div className="mx_MyGroups">
@@ -105,7 +110,6 @@ export default WithMatrixClient(React.createClass({
                     {_t('Create a new group')}
                 </AccessibleButton>
             </div>
-            You are a member of these groups:
             {content}
         </div>;
     },

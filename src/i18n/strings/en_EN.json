@@ -936,5 +936,6 @@
   "+example:%(domain)s": "+example:%(domain)s",
   "Group IDs must be of the form +localpart:%(domain)s": "Group IDs must be of the form +localpart:%(domain)s",
   "It is currently only possible to create groups on your own home server: use a group ID ending with %(domain)s": "It is currently only possible to create groups on your own home server: use a group ID ending with %(domain)s",
-  "Room creation failed": "Room creation failed"
+  "Room creation failed": "Room creation failed",
+  "You are a member of these groups": "You are a member of these groups"
 }
