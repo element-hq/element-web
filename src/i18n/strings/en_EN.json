@@ -927,5 +927,14 @@
   "This Home server does not support groups": "This Home server does not support groups",
   "Loading device info...": "Loading device info...",
   "Groups": "Groups",
-  "Create a new group": "Create a new group"
+  "Create a new group": "Create a new group",
+  "Create Group": "Create Group",
+  "Group Name": "Group Name",
+  "Example": "Example",
+  "Create": "Create",
+  "Group ID": "Group ID",
+  "+example:%(domain)s": "+example:%(domain)s",
+  "Group IDs must be of the form +localpart:%(domain)s": "Group IDs must be of the form +localpart:%(domain)s",
+  "It is currently only possible to create groups on your own home server: use a group ID ending with %(domain)s": "It is currently only possible to create groups on your own home server: use a group ID ending with %(domain)s",
+  "Room creation failed": "Room creation failed"
 }

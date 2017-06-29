@@ -71,29 +71,42 @@ module.exports = React.createClass({
             return <Loader />;
         } else if (this.state.summary) {
             const summary = this.state.summary;
-            let avatarUrl = null;
+            let avatarNode = null;
             if (summary.profile && summary.profile.avatar_url) {
-                avatarUrl = MatrixClientPeg.get().mxcUrlToHttp(summary.profile.avatar_url);
+                avatarNode = <BaseAvatar
+                    url={MatrixClientPeg.get().mxcUrlToHttp(summary.profile.avatar_url)}
+                    name={summary.profile.name}
+                    width={48} height={48}
+                />;
             }
             let description = null;
             if (summary.profile && summary.profile.long_description) {
                 description = sanitizedHtmlNode(summary.profile.long_description);
             }
+
+            let nameNode;
+            if (summary.profile.name) {
+                nameNode = <div className="mx_RoomHeader_name">
+                    <span>{summary.profile.name}</span>
+                    <span className="mx_GroupView_header_groupid">
+                        ({this.props.groupId})
+                    </span>
+                </div>;
+            } else {
+                nameNode = <div className="mx_RoomHeader_name">
+                    <span>{this.props.groupId}</span>
+                </div>;
+            }
+
             return (
                 <div className="mx_GroupView">
                     <div className="mx_RoomHeader">
                         <div className="mx_RoomHeader_wrapper">
                             <div className="mx_RoomHeader_avatar">
-                                <BaseAvatar url={avatarUrl} name={summary.profile.name}
-                                    width={48} height={48} />
+                                {avatarNode}
                             </div>
                             <div className="mx_RoomHeader_info">
-                                <div className="mx_RoomHeader_name">
-                                    <span>{summary.profile.name}</span>
-                                    <span className="mx_GroupView_header_groupid">
-                                        ({this.props.groupId})
-                                    </span>
-                                </div>
+                                {nameNode}
                                 <div className="mx_RoomHeader_topic">
                                     {summary.profile.short_description}
                                 </div>
