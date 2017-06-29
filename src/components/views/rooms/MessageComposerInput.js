@@ -134,6 +134,10 @@ export default class MessageComposerInput extends React.Component {
 
             // the original editor state, before we started tabbing through completions
             originalEditorState: null,
+
+            // the virtual state "above" the history stack, the message currently being composed that
+            // we want to persist whilst browsing history
+            currentlyComposedEditorState: null,
         };
 
         // bit of a hack, but we need to do this here since createEditorState needs isRichtextEnabled
@@ -578,6 +582,24 @@ export default class MessageComposerInput extends React.Component {
 
     selectHistory = async (up) => {
         const delta = up ? -1 : 1;
+
+        // True if we are not currently selecting history, but composing a message
+        if (this.historyManager.currentIndex === this.historyManager.history.length) {
+            // We can't go any further - there isn't any more history, so nop.
+            if (!up) {
+                return;
+            }
+            this.setState({
+                currentlyComposedEditorState: this.state.editorState,
+            });
+        } else if (this.historyManager.currentIndex + delta === this.historyManager.history.length) {
+            // True when we return to the message being composed currently
+            this.setState({
+                editorState: this.state.currentlyComposedEditorState,
+            });
+            this.historyManager.currentIndex = this.historyManager.history.length;
+            return;
+        }
 
         const newContent = this.historyManager.getItem(delta, this.state.isRichtextEnabled ? 'html' : 'markdown');
         if (!newContent) return false;
