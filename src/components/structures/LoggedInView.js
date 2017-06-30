@@ -251,7 +251,6 @@ export default React.createClass({
 
             case PageTypes.MyGroups:
                 page_element = <MyGroups />;
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.rightOpacity}/>;
                 break;
 
             case PageTypes.CreateRoom:

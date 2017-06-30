@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../index';
-import { _t } from '../../languageHandler';
+import { _t, _tJsx } from '../../languageHandler';
 import WithMatrixClient from '../../wrappers/WithMatrixClient';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import dis from '../../dispatcher';
@@ -44,7 +44,7 @@ const GroupTile = React.createClass({
 });
 
 export default WithMatrixClient(React.createClass({
-    displayName: 'GroupList',
+    displayName: 'MyGroups',
 
     propTypes: {
         matrixClient: React.PropTypes.object.isRequired,
@@ -80,6 +80,7 @@ export default WithMatrixClient(React.createClass({
     render: function() {
         const Loader = sdk.getComponent("elements.Spinner");
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         let content;
         if (this.state.groups) {
@@ -105,12 +106,39 @@ export default WithMatrixClient(React.createClass({
 
         return <div className="mx_MyGroups">
             <SimpleRoomHeader title={ _t("Groups") } />
-            <div className='mx_MyGroups_buttonRow'>
-                <AccessibleButton className='mx_UserSettings_button' onClick={this._onCreateGroupClick}>
-                    {_t('Create a new group')}
-                </AccessibleButton>
+            <div className='mx_MyGroups_joinCreateBox'>
+                <div className="mx_MyGroups_createBox">
+                    <div className="mx_MyGroups_joinCreateHeader">
+                        {_t('Create a new group')}
+                    </div>
+                    <AccessibleButton className='mx_MyGroups_joinCreateButton' onClick={this._onCreateGroupClick}>
+                        <TintableSvg src="img/icons-create-room.svg" width="50" height="50" />
+                    </AccessibleButton>
+                    {_t(
+                        'Create a group to represent your community! '+
+                        'Define a set of rooms and your own custom homepage '+
+                        'to mark out your space in the Matrix universe.'
+                    )}
+                </div>
+                <div className="mx_MyGroups_joinBox">
+                    <div className="mx_MyGroups_joinCreateHeader">
+                        {_t('Join an existing group')}
+                    </div>
+                    <AccessibleButton className='mx_MyGroups_joinCreateButton' onClick={this._onJoinGroupClick}>
+                        <TintableSvg src="img/icons-create-room.svg" width="50" height="50" />
+                    </AccessibleButton>
+                    {_tJsx(
+                        'To join an exisitng group you\'ll have to '+
+                        'know its group identifier; this will look '+
+                        'something like <i>+example:matrix.org</i>.',
+                        /<i>(.*)<\/i>/,
+                        (sub) => <i>{sub}</i>,
+                    )}
+                </div>
             </div>
-            {content}
+            <div className="mx_MyGroups_content">
+                {content}
+            </div>
         </div>;
     },
 }));
