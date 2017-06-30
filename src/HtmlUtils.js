@@ -84,7 +84,7 @@ export function charactersToImageNode(alt, useSvg, ...unicode) {
 }
 
 
-export function stripParagraphs(html: string): string {
+export function processHtmlForSending(html: string): string {
     const contentDiv = document.createElement('div');
     contentDiv.innerHTML = html;
 
@@ -93,10 +93,21 @@ export function stripParagraphs(html: string): string {
     }
 
     let contentHTML = "";
-    for (let i=0; i<contentDiv.children.length; i++) {
+    for (let i=0; i < contentDiv.children.length; i++) {
         const element = contentDiv.children[i];
         if (element.tagName.toLowerCase() === 'p') {
-            contentHTML += element.innerHTML + '<br />';
+            contentHTML += element.innerHTML;
+            // Don't add a <br /> for the last <p>
+            if (i !== contentDiv.children.length - 1) {
+                contentHTML += '<br />';
+            }
+        } else if (element.tagName.toLowerCase() === 'pre') {
+            // Replace "<br>\n" with "\n" within `<pre>` tags because the <br> is
+            // redundant. This is a workaround for a bug in draft-js-export-html:
+            //   https://github.com/sstur/draft-js-export-html/issues/62
+            contentHTML += '<pre>' +
+                element.innerHTML.replace(/<br>\n/g, '\n').trim() +
+                '</pre>';
         } else {
             const temp = document.createElement('div');
             temp.appendChild(element.cloneNode(true));
@@ -134,6 +145,7 @@ const sanitizeHtmlParams = {
         // would make sense if we did
         img: ['src'],
         ol: ['start'],
+        code: ['class'], // We don't actually allow all classes, we filter them in transformTags
     },
     // Lots of these won't come up by default because we don't allow them
     selfClosing: ['img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
@@ -174,6 +186,19 @@ const sanitizeHtmlParams = {
             }
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
             return { tagName: tagName, attribs : attribs };
+        },
+        'code': function(tagName, attribs) {
+            if (typeof attribs.class !== 'undefined') {
+                // Filter out all classes other than ones starting with language- for syntax highlighting.
+                let classes = attribs.class.split(/\s+/).filter(function(cl) {
+                    return cl.startsWith('language-');
+                });
+                attribs.class = classes.join(' ');
+            }
+            return {
+                tagName: tagName,
+                attribs: attribs,
+            };
         },
         '*': function(tagName, attribs) {
             // Delete any style previously assigned, style is an allowedTag for font and span

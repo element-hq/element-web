@@ -93,6 +93,10 @@ const SETTINGS_LABELS = [
         id: 'disableMarkdown',
         label: 'Disable markdown formatting',
     },
+    {
+        id: 'enableSyntaxHighlightLanguageDetection',
+        label: 'Enable automatic language detection for syntax highlighting',
+    },
 /*
     {
         id: 'useFixedWidthFont',
