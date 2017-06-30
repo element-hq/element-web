@@ -593,12 +593,36 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onVerticalArrow = (e, up) => {
-        e.preventDefault();
         // Select history only if we are not currently auto-completing
         if (this.autocomplete.state.completionList.length === 0) {
-            return this.selectHistory(up);
+            // Don't go back in history if we're in the middle of a multi-line message
+            const selection = this.state.editorState.getSelection();
+            const blockKey = selection.getStartKey();
+            const firstBlock = this.state.editorState.getCurrentContent().getFirstBlock();
+            const lastBlock = this.state.editorState.getCurrentContent().getLastBlock();
+
+            const selectionOffset = selection.getAnchorOffset();
+            let canMoveUp = false;
+            let canMoveDown = false;
+            if (blockKey === firstBlock.getKey()) {
+                const textBeforeCursor = firstBlock.getText().slice(0, selectionOffset);
+                canMoveUp = textBeforeCursor.indexOf('\n') === -1;
+            }
+
+            if (blockKey === lastBlock.getKey()) {
+                const textAfterCursor = lastBlock.getText().slice(selectionOffset);
+                canMoveDown = textAfterCursor.indexOf('\n') === -1;
+            }
+
+            if ((up && !canMoveUp) || (!up && !canMoveDown)) return;
+
+            const selected = this.selectHistory(up);
+            if (selected) {
+                // We're selecting history, so prevent the key event from doing anything else
+                e.preventDefault();
+            }
         } else {
-            return this.moveAutocompleteSelection(up);
+            this.moveAutocompleteSelection(up);
         }
     };
 
