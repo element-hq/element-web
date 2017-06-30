@@ -556,9 +556,15 @@ export default class MessageComposerInput extends React.Component {
             sendTextFn = this.client.sendEmoteMessage;
         }
 
-        this.historyManager.addItem(
-            contentHTML ? contentHTML : contentText,
-            contentHTML ? 'html' : 'markdown');
+        if (this.state.isRichtextEnabled) {
+            this.historyManager.addItem(
+                contentHTML ? contentHTML : contentText,
+                contentHTML ? 'html' : 'markdown',
+            );
+        } else {
+            // Always store MD input as input history
+            this.historyManager.addItem(contentText, 'markdown');
+        }
 
         let sendMessagePromise;
         if (contentHTML) {
