@@ -168,6 +168,9 @@
         "StartupWMClass": "riot"
       }
     },
+      "mac": {
+          "icon": "electron_app/img/riot.icns"
+      },
     "win": {
       "target": "squirrel"
     },
