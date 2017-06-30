@@ -41,7 +41,7 @@ const CATEGORY_ORDER = [
 ];
 
 // Match for ":wink:" or ascii-style ";-)" provided by emojione
-const EMOJI_REGEX = new RegExp('(:\\w*:?|' + asciiRegexp + ')', 'g');
+const EMOJI_REGEX = new RegExp('(' + asciiRegexp + '|:\\w*:?)', 'g');
 const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sort(
     (a, b) => {
         if (a.category === b.category) {
