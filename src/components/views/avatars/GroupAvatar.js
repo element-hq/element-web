@@ -49,13 +49,15 @@ export default React.createClass({
 
     render: function() {
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        // extract the props we use from props so we can pass any others through
+        const {groupId, groupAvatarUrl, wifth, height, resizeMethod, ...otherProps} = this.props;
 
         return (
             <BaseAvatar
                 name={this.props.groupId[1]}
                 idName={this.props.groupId}
                 url={this.getGroupAvatarUrl()}
-                {...this.props}
+                {...otherProps}
             />
         );
     }
