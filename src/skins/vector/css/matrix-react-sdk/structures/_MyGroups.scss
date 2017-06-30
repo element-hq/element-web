@@ -14,7 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MyGroups_buttonRow {
-    margin-bottom: 20px;
+.mx_MyGroups_joinCreateBox {
+    display: table;
+    margin-bottom: 30px;
 }
 
+.mx_MyGroups_createBox, .mx_MyGroups_joinBox {
+    display: table-cell;
+    width: 40%;
+}
+
+.mx_MyGroups_joinCreateHeader {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.mx_MyGroups_joinCreateButton {
+    float: left;
+    margin: 10px;
+}
+
+.mx_MyGroups_joinCreateButton object {
+    pointer-events: none;
+}
+
+.mx_MyGroups_content {
+    clear: left;
+}
