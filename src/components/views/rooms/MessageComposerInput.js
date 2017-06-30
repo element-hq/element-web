@@ -512,9 +512,30 @@ export default class MessageComposerInput extends React.Component {
         }
 
         if (this.state.isRichtextEnabled) {
-            contentHTML = HtmlUtils.processHtmlForSending(
-                RichText.contentStateToHTML(contentState),
-            );
+            // We should only send HTML if any block is styled or contains inline style
+            let shouldSendHTML = false;
+            const blocks = contentState.getBlocksAsArray();
+            if (blocks.some((block) => block.getType() !== 'unstyled')) {
+                shouldSendHTML = true;
+            } else {
+                const characterLists = blocks.map((block) => block.getCharacterList());
+                // For each block of characters, determine if any inline styles are applied
+                // and if yes, send HTML
+                characterLists.forEach((characters) => {
+                    const numberOfStylesForCharacters = characters.map(
+                        (character) => character.getStyle().toArray().length,
+                    ).toArray();
+                    // If any character has more than 0 inline styles applied, send HTML
+                    if (numberOfStylesForCharacters.some((styles) => styles > 0)) {
+                        shouldSendHTML = true;
+                    }
+                });
+            }
+            if (shouldSendHTML) {
+                contentHTML = HtmlUtils.processHtmlForSending(
+                    RichText.contentStateToHTML(contentState),
+                );
+            }
         } else {
             const md = new Markdown(contentText);
             if (md.isPlainText()) {
@@ -536,8 +557,8 @@ export default class MessageComposerInput extends React.Component {
         }
 
         this.historyManager.addItem(
-            this.state.isRichtextEnabled ? contentHTML : contentState.getPlainText(),
-            this.state.isRichtextEnabled ? 'html' : 'markdown');
+            contentHTML ? contentHTML : contentText,
+            contentHTML ? 'html' : 'markdown');
 
         let sendMessagePromise;
         if (contentHTML) {
