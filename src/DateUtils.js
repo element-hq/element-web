@@ -55,7 +55,6 @@ function twelveHourTime(date) {
     let hours = date.getHours() % 12;
     const minutes = pad(date.getMinutes());
     const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
-    hours = pad(hours ? hours : 12);
     return `${hours}:${minutes}${ampm}`;
 }
 
