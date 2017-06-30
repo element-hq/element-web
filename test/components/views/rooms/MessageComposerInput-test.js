@@ -99,7 +99,7 @@ describe('MessageComposerInput', () => {
     });
 
     it('should not change content unnecessarily on Markdown -> RTE conversion', () => {
-        const spy = sinon.spy(client, 'sendHtmlMessage');
+        const spy = sinon.spy(client, 'sendTextMessage');
         mci.enableRichtext(false);
         addTextToDraft('a');
         mci.handleKeyCommand('toggle-mode');
@@ -110,7 +110,7 @@ describe('MessageComposerInput', () => {
     });
 
     it('should send emoji messages in rich text', () => {
-        const spy = sinon.spy(client, 'sendHtmlMessage');
+        const spy = sinon.spy(client, 'sendTextMessage');
         mci.enableRichtext(true);
         addTextToDraft('☹');
         mci.handleReturn(sinon.stub());
