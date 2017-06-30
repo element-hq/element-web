@@ -180,11 +180,6 @@ module.exports = React.createClass({
                 null;
         Modal.createDialog(IntegrationsManager, {
             src: src,
-            onFinished: ()=>{
-                if (e) {
-                    this.props.onCancelClick(e);
-                }
-            },
         }, "mx_IntegrationsManager");
     },
 
