@@ -109,7 +109,7 @@ describe('MessageComposerInput', () => {
         expect(spy.args[0][1]).toEqual('a');
     });
 
-    it('should send emoji messages in rich text', () => {
+    it('should send emoji messages when rich text is enabled', () => {
         const spy = sinon.spy(client, 'sendTextMessage');
         mci.enableRichtext(true);
         addTextToDraft('☹');
@@ -118,7 +118,7 @@ describe('MessageComposerInput', () => {
         expect(spy.calledOnce).toEqual(true, 'should send message');
     });
 
-    it('should send emoji messages in Markdown', () => {
+    it('should send emoji messages when Markdown is enabled', () => {
         const spy = sinon.spy(client, 'sendTextMessage');
         mci.enableRichtext(false);
         addTextToDraft('☹');
