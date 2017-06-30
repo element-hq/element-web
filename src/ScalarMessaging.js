@@ -564,12 +564,27 @@ const onMessage = function(event) {
     });
 };
 
+let listenerCount = 0;
 module.exports = {
     startListening: function() {
-        window.addEventListener("message", onMessage, false);
+        if (listenerCount === 0) {
+            window.addEventListener("message", onMessage, false);
+        }
+        listenerCount += 1;
     },
 
     stopListening: function() {
-        window.removeEventListener("message", onMessage);
+        listenerCount -= 1;
+        if (listenerCount === 0) {
+            window.removeEventListener("message", onMessage);
+        }
+        if (listenerCount < 0) {
+            // Make an error so we get a stack trace
+            const e = new Error(
+                "ScalarMessaging: mismatched startListening / stopListening detected." +
+                " Negative count"
+            );
+            console.error(e);
+        }
     },
 };
