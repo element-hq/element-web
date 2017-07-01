@@ -913,5 +913,7 @@
     "Ignore request": "Kérés figyelmen kívül hagyása",
     "You added a new device '%(displayName)s', which is requesting encryption keys.": "Hozzáadtál egy új eszközt '%(displayName)s', ami titkosítási kulcsokat kér.",
     "Your unverified device '%(displayName)s' is requesting encryption keys.": "Az ellenőrizetlen eszközöd '%(displayName)s' titkosítási kulcsokat kér.",
-    "Encryption key request": "Titkosítási kulcs kérés"
+    "Encryption key request": "Titkosítási kulcs kérés",
+    "Updates": "Frissítések",
+    "Check for update": "Frissítések keresése"
 }
