@@ -16,6 +16,7 @@ import * as sdk from './index';
 import * as emojione from 'emojione';
 import {stateToHTML} from 'draft-js-export-html';
 import {SelectionRange} from "./autocomplete/Autocompleter";
+import {stateToMarkdown as __stateToMarkdown} from 'draft-js-export-markdown';
 
 const MARKDOWN_REGEX = {
     LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
@@ -30,9 +31,26 @@ const USERNAME_REGEX = /@\S+:\S+/g;
 const ROOM_REGEX = /#\S+:\S+/g;
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp, 'g');
 
-export const contentStateToHTML = stateToHTML;
+const ZWS_CODE = 8203;
+const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
+export function stateToMarkdown(state) {
+    return __stateToMarkdown(state)
+        .replace(
+            ZWS, // draft-js-export-markdown adds these
+            ''); // this is *not* a zero width space, trust me :)
+}
 
-export function HTMLtoContentState(html: string): ContentState {
+export const contentStateToHTML = (contentState: ContentState) => {
+    return stateToHTML(contentState, {
+        inlineStyles: {
+            UNDERLINE: {
+                element: 'u'
+            }
+        }
+    });
+};
+
+export function htmlToContentState(html: string): ContentState {
     return ContentState.createFromBlockArray(convertFromHTML(html));
 }
 
@@ -146,9 +164,9 @@ export function getScopedMDDecorators(scope: any): CompositeDecorator {
             </a>
         )
     });
-    markdownDecorators.push(emojiDecorator);
-
-    return markdownDecorators;
+    // markdownDecorators.push(emojiDecorator);
+    // TODO Consider renabling "syntax highlighting" when we can do it properly
+    return [emojiDecorator];
 }
 
 /**

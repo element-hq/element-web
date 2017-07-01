@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import Fuse from 'fuse.js';
+import FuzzyMatcher from './FuzzyMatcher';
 import {TextualCompletion} from './Components';
 
 // TODO merge this with the factory mechanics of SlashCommands?
@@ -36,13 +36,13 @@ const COMMANDS = [
     },
     {
         command: '/unban',
-        args: '<user-id> [reason]',
+        args: '<user-id>',
         description: 'Unbans user with given id',
     },
     {
         command: '/op',
-        args: '<user-id>',
-        description: 'Ops user with given id',
+        args: '<userId> [<power-level>]',
+        description: 'Define the power level of a user',
     },
     {
         command: '/deop',
@@ -61,8 +61,8 @@ const COMMANDS = [
     },
     {
         command: '/part',
-        args: '<room-alias>',
-        description: 'Leaves room with given alias',
+        args: '[<room-alias>]',
+        description: 'Leave room',
     },
     {
         command: '/topic',
@@ -104,7 +104,7 @@ let instance = null;
 export default class CommandProvider extends AutocompleteProvider {
     constructor() {
         super(COMMAND_RE);
-        this.fuse = new Fuse(COMMANDS, {
+        this.matcher = new FuzzyMatcher(COMMANDS, {
            keys: ['command', 'args', 'description'],
         });
     }
@@ -113,7 +113,7 @@ export default class CommandProvider extends AutocompleteProvider {
         let completions = [];
         const {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
-            completions = this.fuse.search(command[0]).map((result) => {
+            completions = this.matcher.match(command[0]).map((result) => {
                 return {
                     completion: result.command + ' ',
                     component: (<TextualCompletion

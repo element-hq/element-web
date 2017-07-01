@@ -18,21 +18,55 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import {emojioneList, shortnameToImage, shortnameToUnicode} from 'emojione';
-import Fuse from 'fuse.js';
+import {emojioneList, shortnameToImage, shortnameToUnicode, asciiRegexp} from 'emojione';
+import FuzzyMatcher from './FuzzyMatcher';
 import sdk from '../index';
 import {PillCompletion} from './Components';
 import type {SelectionRange, Completion} from './Autocompleter';
 
-const EMOJI_REGEX = /:\w*:?/g;
-const EMOJI_SHORTNAMES = Object.keys(emojioneList);
+import EmojiData from '../stripped-emoji.json';
+
+const LIMIT = 20;
+const CATEGORY_ORDER = [
+    'people',
+    'food',
+    'objects',
+    'activity',
+    'nature',
+    'travel',
+    'flags',
+    'symbols',
+    'unicode9',
+    'modifier',
+];
+
+// Match for ":wink:" or ascii-style ";-)" provided by emojione
+const EMOJI_REGEX = new RegExp('(' + asciiRegexp + '|:\\w*:?)', 'g');
+const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sort(
+    (a, b) => {
+        if (a.category === b.category) {
+            return a.emoji_order - b.emoji_order;
+        }
+        return CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category);
+    },
+).map((a) => {
+    return {
+        name: a.name,
+        shortname: a.shortname,
+        aliases_ascii: a.aliases_ascii ? a.aliases_ascii.join(' ') : '',
+    };
+});
 
 let instance = null;
 
 export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
-        this.fuse = new Fuse(EMOJI_SHORTNAMES, {});
+        this.matcher = new FuzzyMatcher(EMOJI_SHORTNAMES, {
+            keys: ['aliases_ascii', 'shortname', 'name'],
+            // For matching against ascii equivalents
+            shouldMatchWordsOnly: false,
+        });
     }
 
     async getCompletions(query: string, selection: SelectionRange) {
@@ -41,8 +75,8 @@ export default class EmojiProvider extends AutocompleteProvider {
         let completions = [];
         let {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
-            completions = this.fuse.search(command[0]).map(result => {
-                const shortname = EMOJI_SHORTNAMES[result];
+            completions = this.matcher.match(command[0]).map(result => {
+                const {shortname} = result;
                 const unicode = shortnameToUnicode(shortname);
                 return {
                     completion: unicode,
@@ -51,7 +85,7 @@ export default class EmojiProvider extends AutocompleteProvider {
                     ),
                     range,
                 };
-            }).slice(0, 8);
+            }).slice(0, LIMIT);
         }
         return completions;
     }
