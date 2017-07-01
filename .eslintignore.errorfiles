@@ -129,10 +129,8 @@ src/Notifier.js
 src/PlatformPeg.js
 src/Presence.js
 src/ratelimitedfunc.js
-src/Resend.js
 src/RichText.js
 src/Roles.js
-src/RoomListSorter.js
 src/Rooms.js
 src/ScalarAuthClient.js
 src/ScalarMessaging.js
@@ -142,7 +140,6 @@ src/TextForEvent.js
 src/Tinter.js
 src/UiEffects.js
 src/Unread.js
-src/UserActivity.js
 src/utils/DecryptFile.js
 src/utils/DMRoomMap.js
 src/utils/FormattingUtils.js
