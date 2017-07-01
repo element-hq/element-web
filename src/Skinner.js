@@ -51,19 +51,18 @@ class Skinner {
         if (this.components !== null) {
             throw new Error(
                 "Attempted to load a skin while a skin is already loaded"+
-                "If you want to change the active skin, call resetSkin first"
-            );
+                "If you want to change the active skin, call resetSkin first");
         }
         this.components = {};
-        var compKeys = Object.keys(skinObject.components);
-        for (var i = 0; i < compKeys.length; ++i) {
-            var comp = skinObject.components[compKeys[i]];
+        const compKeys = Object.keys(skinObject.components);
+        for (let i = 0; i < compKeys.length; ++i) {
+            const comp = skinObject.components[compKeys[i]];
             this.addComponent(compKeys[i], comp);
         }
     }
 
     addComponent(name, comp) {
-        var slot = name;
+        let slot = name;
         if (comp.replaces !== undefined) {
             if (comp.replaces.indexOf('.') > -1) {
                 slot = comp.replaces;

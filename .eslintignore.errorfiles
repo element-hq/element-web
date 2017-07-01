@@ -140,11 +140,9 @@ src/Resend.js
 src/RichText.js
 src/Roles.js
 src/RoomListSorter.js
-src/RoomNotifs.js
 src/Rooms.js
 src/ScalarAuthClient.js
 src/ScalarMessaging.js
-src/Skinner.js
 src/stores/LifecycleStore.js
 src/TabComplete.js
 src/TabCompleteEntries.js
