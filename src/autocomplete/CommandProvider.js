@@ -21,6 +21,7 @@ import AutocompleteProvider from './AutocompleteProvider';
 import Fuse from 'fuse.js';
 import {TextualCompletion} from './Components';
 
+// TODO merge this with the factory mechanics of SlashCommands?
 // Warning: Since the description string will be translated in _t(result.description), all these strings below must be in i18n/strings/en_EN.json file
 const COMMANDS = [
     {
@@ -32,6 +33,16 @@ const COMMANDS = [
         command: '/ban',
         args: '<user-id> [reason]',
         description: 'Bans user with given id',
+    },
+    {
+        command: '/unban',
+        args: '<user-id> [reason]',
+        description: 'Unbans user with given id',
+    },
+    {
+        command: '/op',
+        args: '<user-id>',
+        description: 'Ops user with given id',
     },
     {
         command: '/deop',
@@ -49,6 +60,16 @@ const COMMANDS = [
         description: 'Joins room with given alias',
     },
     {
+        command: '/part',
+        args: '<room-alias>',
+        description: 'Leaves room with given alias',
+    },
+    {
+        command: '/topic',
+        args: '<topic>',
+        description: 'Sets the room topic',
+    },
+    {
         command: '/kick',
         args: '<user-id> [reason]',
         description: 'Kicks user with given id',
@@ -63,6 +84,17 @@ const COMMANDS = [
         args: '<query>',
         description: 'Searches DuckDuckGo for results',
     },
+    {
+        command: '/tint',
+        args: '<color1> [<color2>]',
+        description: 'Change colourscheme of current room',
+    },
+    {
+        command: '/verify',
+        args: '<userId> <deviceId> <deviceSigningKey>',
+        description: 'Verify a user, device, and pubkey tuple',
+    },
+    // Omitting `/markdown` as it only seems to apply to OldComposer
 ];
 
 const COMMAND_RE = /(^\/\w*)/g;
