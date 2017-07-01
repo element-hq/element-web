@@ -9,7 +9,6 @@ src/autocomplete/DuckDuckGoProvider.js
 src/autocomplete/EmojiProvider.js
 src/autocomplete/RoomProvider.js
 src/autocomplete/UserProvider.js
-src/BasePlatform.js
 src/CallHandler.js
 src/component-index.js
 src/components/structures/ContextualMenu.js
