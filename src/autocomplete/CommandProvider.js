@@ -87,12 +87,12 @@ const COMMANDS = [
     {
         command: '/tint',
         args: '<color1> [<color2>]',
-        description: 'Change colourscheme of current room',
+        description: 'Changes colourscheme of current room',
     },
     {
         command: '/verify',
         args: '<userId> <deviceId> <deviceSigningKey>',
-        description: 'Verify a user, device, and pubkey tuple',
+        description: 'Verifies a user, device, and pubkey tuple',
     },
     // Omitting `/markdown` as it only seems to apply to OldComposer
 ];
