@@ -132,7 +132,6 @@ src/MatrixClientPeg.js
 src/Modal.js
 src/Notifier.js
 src/ObjectUtils.js
-src/PasswordReset.js
 src/PlatformPeg.js
 src/Presence.js
 src/ratelimitedfunc.js
