@@ -119,7 +119,6 @@ src/ContentMessages.js
 src/createRoom.js
 src/DateUtils.js
 src/email.js
-src/Entities.js
 src/extend.js
 src/HtmlUtils.js
 src/ImageUtils.js
