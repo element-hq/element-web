@@ -111,10 +111,6 @@ src/components/views/settings/ChangePassword.js
 src/components/views/settings/DevicesPanel.js
 src/components/views/settings/DevicesPanelEntry.js
 src/components/views/settings/EnableNotificationsButton.js
-src/components/views/voip/CallView.js
-src/components/views/voip/IncomingCallBox.js
-src/components/views/voip/VideoFeed.js
-src/components/views/voip/VideoView.js
 src/ContentMessages.js
 src/HtmlUtils.js
 src/ImageUtils.js
