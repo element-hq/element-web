@@ -186,7 +186,7 @@ const commands = {
                     if (targetRoomId) { break; }
                 }
                 if (!targetRoomId) {
-                    return reject(_t("Unrecognised room alias:") +  ' ' + roomAlias);
+                    return reject(_t("Unrecognised room alias:") + ' ' + roomAlias);
                 }
             }
         }
@@ -344,8 +344,7 @@ const commands = {
                         _t('WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and device' +
                            ' %(deviceId)s is "%(fprint)s" which does not match the provided key' +
                            ' "%(fingerprint)s". This could mean your communications are being intercepted!',
-                            {deviceId: deviceId, fprint: fprint, userId: userId, fingerprint: fingerprint})
-                    );
+                            {deviceId: deviceId, fprint: fprint, userId: userId, fingerprint: fingerprint}));
                 }
             }
         }

@@ -9,7 +9,6 @@ src/autocomplete/DuckDuckGoProvider.js
 src/autocomplete/EmojiProvider.js
 src/autocomplete/RoomProvider.js
 src/autocomplete/UserProvider.js
-src/Avatar.js
 src/BasePlatform.js
 src/CallHandler.js
 src/component-index.js
@@ -96,7 +95,6 @@ src/components/views/rooms/MessageComposerInput.js
 src/components/views/rooms/MessageComposerInputOld.js
 src/components/views/rooms/PresenceLabel.js
 src/components/views/rooms/ReadReceiptMarker.js
-src/components/views/rooms/RoomHeader.js
 src/components/views/rooms/RoomList.js
 src/components/views/rooms/RoomNameEditor.js
 src/components/views/rooms/RoomPreviewBar.js
@@ -148,9 +146,7 @@ src/RoomNotifs.js
 src/Rooms.js
 src/ScalarAuthClient.js
 src/ScalarMessaging.js
-src/SdkConfig.js
 src/Skinner.js
-src/SlashCommands.js
 src/stores/LifecycleStore.js
 src/TabComplete.js
 src/TabCompleteEntries.js

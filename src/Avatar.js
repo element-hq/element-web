@@ -15,18 +15,18 @@ limitations under the License.
 */
 
 'use strict';
-var ContentRepo = require("matrix-js-sdk").ContentRepo;
-var MatrixClientPeg = require('./MatrixClientPeg');
+import {ContentRepo} from 'matrix-js-sdk';
+import MatrixClientPeg from './MatrixClientPeg';
 
 module.exports = {
     avatarUrlForMember: function(member, width, height, resizeMethod) {
-        var url = member.getAvatarUrl(
+        let url = member.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
             Math.floor(width * window.devicePixelRatio),
             Math.floor(height * window.devicePixelRatio),
             resizeMethod,
             false,
-            false
+            false,
         );
         if (!url) {
             // member can be null here currently since on invites, the JS SDK
@@ -38,11 +38,11 @@ module.exports = {
     },
 
     avatarUrlForUser: function(user, width, height, resizeMethod) {
-        var url = ContentRepo.getHttpUriForMxc(
+        const url = ContentRepo.getHttpUriForMxc(
             MatrixClientPeg.get().getHomeserverUrl(), user.avatarUrl,
             Math.floor(width * window.devicePixelRatio),
             Math.floor(height * window.devicePixelRatio),
-            resizeMethod
+            resizeMethod,
         );
         if (!url || url.length === 0) {
             return null;
@@ -51,11 +51,11 @@ module.exports = {
     },
 
     defaultAvatarUrlForString: function(s) {
-        var images = ['76cfa6', '50e2c2', 'f4c371'];
-        var total = 0;
-        for (var i = 0; i < s.length; ++i) {
+        const images = ['76cfa6', '50e2c2', 'f4c371'];
+        let total = 0;
+        for (let i = 0; i < s.length; ++i) {
             total += s.charCodeAt(i);
         }
         return 'img/' + images[total % images.length] + '.png';
-    }
+    },
 };
