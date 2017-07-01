@@ -50,7 +50,7 @@ class LifecycleStore extends Store {
                     deferred_action: null,
                 });
                 break;
-            case 'sync_state':
+            case 'sync_state': {
                 if (payload.state !== 'PREPARED') {
                     break;
                 }
@@ -61,6 +61,7 @@ class LifecycleStore extends Store {
                 });
                 dis.dispatch(deferredAction);
                 break;
+            }
             case 'on_logged_out':
                 this.reset();
                 break;

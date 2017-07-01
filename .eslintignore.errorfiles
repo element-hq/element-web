@@ -141,7 +141,6 @@ src/RoomListSorter.js
 src/Rooms.js
 src/ScalarAuthClient.js
 src/ScalarMessaging.js
-src/stores/LifecycleStore.js
 src/TabComplete.js
 src/TabCompleteEntries.js
 src/TextForEvent.js
