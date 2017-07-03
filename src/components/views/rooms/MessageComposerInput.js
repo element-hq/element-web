@@ -403,26 +403,59 @@ export default class MessageComposerInput extends React.Component {
                 });
             }
         } else {
-            let contentState = this.state.editorState.getCurrentContent(),
-                selection = this.state.editorState.getSelection();
+            let contentState = this.state.editorState.getCurrentContent();
 
             const modifyFn = {
                 'bold': (text) => `**${text}**`,
                 'italic': (text) => `*${text}*`,
                 'underline': (text) => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
                 'strike': (text) => `<del>${text}</del>`,
-                'code-block': (text) => `\`\`\`\n${text}\n\`\`\``,
-                'blockquote': (text) => text.split('\n').map((line) => `> ${line}\n`).join(''),
+                'code-block': (text) => `\`\`\`\n${text}\n\`\`\`\n`,
+                'blockquote': (text) => text.split('\n').map((line) => `> ${line}\n`).join('') + '\n',
                 'unordered-list-item': (text) => text.split('\n').map((line) => `\n- ${line}`).join(''),
                 'ordered-list-item': (text) => text.split('\n').map((line, i) => `\n${i + 1}. ${line}`).join(''),
             }[command];
 
+            const selectionAfterOffset = {
+                'bold': -2,
+                'italic': -1,
+                'underline': -1,
+                'strike': -6,
+                'code-block': -5,
+                'blockquote': -2,
+            }[command];
+
+            // Returns a function that collapses a selectionState to its end and moves it by offset
+            const collapseAndOffsetSelection = (selectionState, offset) => {
+                const key = selectionState.getEndKey();
+                return new SelectionState({
+                    anchorKey: key, anchorOffset: offset,
+                    focusKey: key, focusOffset: offset,
+                });
+            };
+
             if (modifyFn) {
+                const previousSelection = this.state.editorState.getSelection();
+                const newContentState = RichText.modifyText(contentState, previousSelection, modifyFn);
                 newState = EditorState.push(
                     this.state.editorState,
-                    RichText.modifyText(contentState, selection, modifyFn),
+                    newContentState,
                     'insert-characters',
                 );
+
+                let newSelection = newContentState.getSelectionAfter();
+                // If the selection range is 0, move the cursor inside the formatted body
+                if (previousSelection.getStartOffset() === previousSelection.getEndOffset() &&
+                    previousSelection.getStartKey() === previousSelection.getEndKey() &&
+                    selectionAfterOffset !== undefined
+                ) {
+                    const selectedBlock = newContentState.getBlockForKey(previousSelection.getAnchorKey());
+                    const blockLength = selectedBlock.getText().length;
+                    const newOffset = blockLength + selectionAfterOffset;
+                    newSelection = collapseAndOffsetSelection(newSelection, newOffset);
+                }
+
+                newState = EditorState.forceSelection(newState, newSelection);
             }
         }
 
