@@ -548,14 +548,6 @@ export default class MessageComposerInput extends React.Component {
         let sendHtmlFn = this.client.sendHtmlMessage;
         let sendTextFn = this.client.sendTextMessage;
 
-        if (contentText.startsWith('/me')) {
-            contentText = contentText.substring(4);
-            // bit of a hack, but the alternative would be quite complicated
-            if (contentHTML) contentHTML = contentHTML.replace(/\/me ?/, '');
-            sendHtmlFn = this.client.sendHtmlEmote;
-            sendTextFn = this.client.sendEmoteMessage;
-        }
-
         if (this.state.isRichtextEnabled) {
             this.historyManager.addItem(
                 contentHTML ? contentHTML : contentText,
@@ -564,6 +556,14 @@ export default class MessageComposerInput extends React.Component {
         } else {
             // Always store MD input as input history
             this.historyManager.addItem(contentText, 'markdown');
+        }
+
+        if (contentText.startsWith('/me')) {
+            contentText = contentText.substring(4);
+            // bit of a hack, but the alternative would be quite complicated
+            if (contentHTML) contentHTML = contentHTML.replace(/\/me ?/, '');
+            sendHtmlFn = this.client.sendHtmlEmote;
+            sendTextFn = this.client.sendEmoteMessage;
         }
 
         let sendMessagePromise;
