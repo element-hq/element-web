@@ -216,8 +216,8 @@ module.exports = React.createClass({
             const members = this.props.room ? this.props.room.getJoinedMembers() : undefined;
             if (members) {
                 if (members.length === 1 && members[0].userId === MatrixClientPeg.get().credentials.userId) {
-                    name = this.props.room.currentState.getStateEvents('m.room.name', '');
-                    if (!name || !name.getContent().name) {
+                    const nameEvent = this.props.room.currentState.getStateEvents('m.room.name', '');
+                    if (!nameEvent || !nameEvent.getContent().name) {
                         settingsHint = true;
                     }
                 }
