@@ -115,7 +115,7 @@
     "Start chat": "ചാറ്റ് തുടങ്ങുക",
     "The Home Server may be too old to support third party networks": "തേഡ് പാര്‍ട്ടി നെറ്റ്‍വര്‍ക്കുകളെ പിന്തുണക്കാത്ത വളരെ പഴയ ഹോം സെര്‍വര്‍ ആയേക്കാം",
     "There are advanced notifications which are not shown here": "ഇവിടെ കാണിക്കാത്ത നൂതന നോട്ടിഫിക്കേഷനുകള്‍ ഉണ്ട്",
-    "The server may be unavailable or overloaded": "സെര്‍വര്‍ ലഭ്യമല്ല അല്ലെങ്കില്‍ ഓവര്‍ലോഡഡ് ആണ്.",
+    "The server may be unavailable or overloaded": "സെര്‍വര്‍ ലഭ്യമല്ല അല്ലെങ്കില്‍ ഓവര്‍ലോഡഡ് ആണ്",
     "This Room": "ഈ റൂം",
     "This room is inaccessible to guests. You may be able to join if you register.": "ഈ റൂം അതിഥികള്‍ക്ക് അപ്രാപ്യമാണ്. അംഗമാകാന്‍ റെജിസ്റ്റര്‍ ചെയ്യൂ.",
     " to room": " റൂമിലേക്ക്",
@@ -178,7 +178,7 @@
     "Design and implementation of E2E in Matrix": "മാട്രിക്സിലെ e2eയുടെ ഡിസൈനും ഇമ്പ്ലിമെന്റേഷനും",
     "remove %(name)s from the directory.": "%(name)s ഡയറക്റ്ററിയില്‍ നിന്ന് നീക്കം ചെയ്യുക.",
     "World readable": "",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "വികേന്ദ്രീകൃത , എന്‍ക്രിപ്റ്റഡ് ചാറ്റ് &amb; മാട്രിക്സ് നല്‍കുന്ന കൊളാബൊറേഷന്‍",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "വികേന്ദ്രീകൃത , എന്‍ക്രിപ്റ്റഡ് ചാറ്റ് &amp; മാട്രിക്സ് നല്‍കുന്ന കൊളാബൊറേഷന്‍",
     "Support for those using, running and writing other bridges": "മറ്റ് ബ്രിഡ്ജുകള്‍ ഉപയോഗിക്കുന്ന, റണ്‍ ചെയ്യുന്ന, എഴുതുന്നവര്‍ക്കുള്ള പിന്തുണ",
     "Contributing code to Matrix and Riot": "മാട്രിക്സിലേക്കും റയട്ടിലേക്കും കോഡ് സംഭാവന ചെയ്യാം",
     "Dev chat for the Riot/Web dev team": "റയട്ട്/വെബ് ഡെവലപ്പര്‍ ടീമിനുള്ള dev chat",
@@ -201,5 +201,7 @@
     "Notify me for anything else": "ബാക്കി ഏതിനും എനിക്ക് അറിയിപ്പു നൽകുക",
     "Notify for all other messages/rooms": "ബാക്കി എല്ലാ സന്ദേശങ്ങൾക്കും/റൂമുകൾക്കും അറിയിപ്പു നൽകുക",
     "Building services on Matrix": "മട്രിക്സിന്മേൽ സർവീസുകൾ പണിയുന്നു",
-    "Implementing VR services with Matrix": "മട്രിക്സ് ഉപയോഗിച്ചു വി.അർ. സർവീസുകൾ നടപ്പിലാക്കുന്നു"
+    "Implementing VR services with Matrix": "മട്രിക്സ് ഉപയോഗിച്ചു വി.അർ. സർവീസുകൾ നടപ്പിലാക്കുന്നു",
+    "Implementing VoIP services with Matrix": "മേട്രിക്സിന്മേൽ വൊഇപ് സർവീസുകൾ നടപ്പിലാക്കുന്നു",
+    "Discussion of the Identity Service API": "ഐഡൻടിറ്റി സർവീസ് എപിഐ യെ പറ്റിയുള്ള ചർച്ച"
 }
