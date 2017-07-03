@@ -41,7 +41,7 @@ const COMMANDS = [
     },
     {
         command: '/op',
-        args: '<userId> [<power-level>]',
+        args: '<user-id> [<power-level>]',
         description: 'Define the power level of a user',
     },
     {
@@ -87,11 +87,11 @@ const COMMANDS = [
     {
         command: '/tint',
         args: '<color1> [<color2>]',
-        description: 'Changes colourscheme of current room',
+        description: 'Changes colour scheme of current room',
     },
     {
         command: '/verify',
-        args: '<userId> <deviceId> <deviceSigningKey>',
+        args: '<user-id> <device-id> <device-signing-key>',
         description: 'Verifies a user, device, and pubkey tuple',
     },
     // Omitting `/markdown` as it only seems to apply to OldComposer
