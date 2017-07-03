@@ -205,5 +205,6 @@
     "No update available.": "Geen update beschikbaar.",
     "Downloading update...": "Update aan het downloaden...",
     "To return to your account in future you need to <u>set a password</u>": "Om in de toekomst naar je account terug te gaan moet je <u>een wachtwoord instellen</u>",
-    "Set Password": "Wachtwoord instellen"
+    "Set Password": "Wachtwoord instellen",
+    "Couldn't load home page": "Kon de home pagina niet laden"
 }
