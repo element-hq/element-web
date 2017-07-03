@@ -120,6 +120,8 @@
     "zh-sg": "Chinese (Singapore)",
     "zh-tw": "Chinese (Taiwan)",
     "zu": "Zulu",
+    "AM": "AM",
+    "PM": "PM",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains",
     "accept": "accept",
     "%(targetName)s accepted an invitation.": "%(targetName)s accepted an invitation.",
