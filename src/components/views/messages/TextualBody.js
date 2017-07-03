@@ -29,6 +29,7 @@ import Modal from '../../../Modal';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
+import UserSettingsStore from "../../../UserSettingsStore";
 
 linkifyMatrix(linkify);
 
@@ -90,7 +91,18 @@ module.exports = React.createClass({
                 setTimeout(() => {
                     if (this._unmounted) return;
                     for (let i = 0; i < blocks.length; i++) {
-                        highlight.highlightBlock(blocks[i]);
+                        if (UserSettingsStore.getSyncedSetting("enableSyntaxHighlightLanguageDetection", false)) {
+                            highlight.highlightBlock(blocks[i])
+                        } else {
+                            // Only syntax highlight if there's a class starting with language-
+                            let classes = blocks[i].className.split(/\s+/).filter(function (cl) {
+                                return cl.startsWith('language-');
+                            });
+
+                            if (classes.length != 0) {
+                                highlight.highlightBlock(blocks[i]);
+                            }
+                        }
                     }
                 }, 10);
             }

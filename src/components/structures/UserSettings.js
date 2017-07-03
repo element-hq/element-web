@@ -93,6 +93,10 @@ const SETTINGS_LABELS = [
         id: 'disableMarkdown',
         label: 'Disable markdown formatting',
     },
+    {
+        id: 'enableSyntaxHighlightLanguageDetection',
+        label: 'Enable automatic language detection for syntax highlighting',
+    },
 /*
     {
         id: 'useFixedWidthFont',
@@ -642,6 +646,10 @@ module.exports = React.createClass({
     },
 
     _renderUserInterfaceSettings: function() {
+        // TODO: this ought to be a separate component so that we don't need
+        // to rebind the onChange each time we render
+        const onChange = (e) =>
+            UserSettingsStore.setLocalSetting('autocompleteDelay', + e.target.value);
         return (
             <div>
                 <h3>{ _t("User Interface") }</h3>
@@ -649,8 +657,21 @@ module.exports = React.createClass({
                     { this._renderUrlPreviewSelector() }
                     { SETTINGS_LABELS.map( this._renderSyncedSetting ) }
                     { THEMES.map( this._renderThemeSelector ) }
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td><strong>{_t('Autocomplete Delay (ms):')}</strong></td>
+                            <td>
+                                <input
+                                    type="number"
+                                    defaultValue={UserSettingsStore.getLocalSetting('autocompleteDelay', 200)}
+                                    onChange={onChange}
+                                />
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                     { this._renderLanguageSetting() }
-
                 </div>
             </div>
         );

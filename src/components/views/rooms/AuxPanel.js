@@ -19,7 +19,9 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import sdk from '../../../index';
 import dis from "../../../dispatcher";
 import ObjectUtils from '../../../ObjectUtils';
-import  { _t, _tJsx} from '../../../languageHandler';
+import AppsDrawer from './AppsDrawer';
+import { _t, _tJsx} from '../../../languageHandler';
+import UserSettingsStore from '../../../UserSettingsStore';
 
 
 module.exports = React.createClass({
@@ -28,6 +30,8 @@ module.exports = React.createClass({
     propTypes: {
         // js-sdk room object
         room: React.PropTypes.object.isRequired,
+        userId: React.PropTypes.string.isRequired,
+        showApps: React.PropTypes.bool,
 
         // Conference Handler implementation
         conferenceHandler: React.PropTypes.object,
@@ -70,10 +74,10 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var CallView = sdk.getComponent("voip.CallView");
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const CallView = sdk.getComponent("voip.CallView");
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        var fileDropTarget = null;
+        let fileDropTarget = null;
         if (this.props.draggingFile) {
             fileDropTarget = (
                 <div className="mx_RoomView_fileDropTarget">
@@ -87,14 +91,13 @@ module.exports = React.createClass({
             );
         }
 
-        var conferenceCallNotification = null;
+        let conferenceCallNotification = null;
         if (this.props.displayConfCallNotification) {
             let supportedText = '';
             let joinNode;
             if (!MatrixClientPeg.get().supportsVoip()) {
                 supportedText = _t(" (unsupported)");
-            }
-            else {
+            } else {
                 joinNode = (<span>
                     {_tJsx(
                         "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.",
@@ -105,7 +108,6 @@ module.exports = React.createClass({
                         ]
                     )}
                 </span>);
-
             }
             // XXX: the translation here isn't great: appending ' (unsupported)' is likely to not make sense in many languages,
             // but there are translations for this in the languages we do have so I'm leaving it for now.
@@ -118,7 +120,7 @@ module.exports = React.createClass({
             );
         }
 
-        var callView = (
+        const callView = (
             <CallView ref="callView" room={this.props.room}
                 ConferenceHandler={this.props.conferenceHandler}
                 onResize={this.props.onResize}
@@ -126,8 +128,17 @@ module.exports = React.createClass({
             />
         );
 
+        let appsDrawer = null;
+        if(UserSettingsStore.isFeatureEnabled('matrix_apps') && this.props.showApps) {
+            appsDrawer = <AppsDrawer ref="appsDrawer"
+                room={this.props.room}
+                userId={this.props.userId}
+                maxHeight={this.props.maxHeight}/>;
+        }
+
         return (
             <div className="mx_RoomView_auxPanel" style={{maxHeight: this.props.maxHeight}} >
+                { appsDrawer }
                 { fileDropTarget }
                 { callView }
                 { conferenceCallNotification }
