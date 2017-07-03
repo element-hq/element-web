@@ -177,7 +177,7 @@
     "Support for those using the Matrix spec": "Matrix spec ഉപയോഗിക്കുന്നവര്‍ക്കുള്ള പിന്തുണ",
     "Design and implementation of E2E in Matrix": "മാട്രിക്സിലെ e2eയുടെ ഡിസൈനും ഇമ്പ്ലിമെന്റേഷനും",
     "remove %(name)s from the directory.": "%(name)s ഡയറക്റ്ററിയില്‍ നിന്ന് നീക്കം ചെയ്യുക.",
-    "World readable": "",
+    "World readable": "ആർക്കും വായിക്കവുന്നത്",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "വികേന്ദ്രീകൃത , എന്‍ക്രിപ്റ്റഡ് ചാറ്റ് &amp; മാട്രിക്സ് നല്‍കുന്ന കൊളാബൊറേഷന്‍",
     "Support for those using, running and writing other bridges": "മറ്റ് ബ്രിഡ്ജുകള്‍ ഉപയോഗിക്കുന്ന, റണ്‍ ചെയ്യുന്ന, എഴുതുന്നവര്‍ക്കുള്ള പിന്തുണ",
     "Contributing code to Matrix and Riot": "മാട്രിക്സിലേക്കും റയട്ടിലേക്കും കോഡ് സംഭാവന ചെയ്യാം",
@@ -203,5 +203,6 @@
     "Building services on Matrix": "മട്രിക്സിന്മേൽ സർവീസുകൾ പണിയുന്നു",
     "Implementing VR services with Matrix": "മട്രിക്സ് ഉപയോഗിച്ചു വി.അർ. സർവീസുകൾ നടപ്പിലാക്കുന്നു",
     "Implementing VoIP services with Matrix": "മേട്രിക്സിന്മേൽ വൊഇപ് സർവീസുകൾ നടപ്പിലാക്കുന്നു",
-    "Discussion of the Identity Service API": "ഐഡൻടിറ്റി സർവീസ് എപിഐ യെ പറ്റിയുള്ള ചർച്ച"
+    "Discussion of the Identity Service API": "ഐഡൻടിറ്റി സർവീസ് എപിഐ യെ പറ്റിയുള്ള ചർച്ച",
+    "Notifications on the following keywords follow rules which can’t be displayed here:": "ഈ പറയുന്ന കീവേർഡുകളെ പറ്റിയുള്ള അറിയിപ്പുകൾ പിൻതുടരുന്ന നിയമങ്ങൾ ഇവിടെ കാണിക്കുവാൻ സാധ്യമല്ല:"
 }
