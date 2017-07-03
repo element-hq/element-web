@@ -421,6 +421,8 @@
     "Notifications": "Notifications",
     "(not supported by this browser)": "(not supported by this browser)",
     "<not supported>": "<not supported>",
+    "AM": "AM",
+    "PM": "PM",
     "NOT verified": "NOT verified",
     "No devices with registered encryption keys": "No devices with registered encryption keys",
     "No display name": "No display name",
