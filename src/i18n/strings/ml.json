@@ -199,5 +199,7 @@
     "Off": "ഓഫ്",
     "On": "ഓണ്‍",
     "Notify me for anything else": "ബാക്കി ഏതിനും എനിക്ക് അറിയിപ്പു നൽകുക",
-    "Notify for all other messages/rooms": "ബാക്കി എല്ലാ സന്ദേശങ്ങൾക്കും/റൂമുകൾക്കും അറിയിപ്പു നൽകുക"
+    "Notify for all other messages/rooms": "ബാക്കി എല്ലാ സന്ദേശങ്ങൾക്കും/റൂമുകൾക്കും അറിയിപ്പു നൽകുക",
+    "Building services on Matrix": "മട്രിക്സിന്മേൽ സർവീസുകൾ പണിയുന്നു",
+    "Implementing VR services with Matrix": "മട്രിക്സ് ഉപയോഗിച്ചു വി.അർ. സർവീസുകൾ നടപ്പിലാക്കുന്നു"
 }
