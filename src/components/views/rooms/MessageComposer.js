@@ -227,21 +227,6 @@ export default class MessageComposer extends React.Component {
         this.setState({inputState});
     }
 
-    onUpArrow() {
-        return this.refs.autocomplete.onUpArrow();
-    }
-
-    onDownArrow() {
-        return this.refs.autocomplete.onDownArrow();
-    }
-
-    _tryComplete(): boolean {
-        if (this.refs.autocomplete) {
-            return this.refs.autocomplete.onCompletionClicked();
-        }
-        return false;
-    }
-
     _onAutocompleteConfirm(range, completion) {
         if (this.messageComposerInput) {
             this.messageComposerInput.setDisplayedCompletion(range, completion);
@@ -366,10 +351,7 @@ export default class MessageComposer extends React.Component {
                     room={this.props.room}
                     placeholder={placeholderText}
                     tryComplete={this._tryComplete}
-                    onUpArrow={this.onUpArrow}
-                    onDownArrow={this.onDownArrow}
                     onFilesPasted={this.uploadFiles}
-                    tabComplete={this.props.tabComplete} // used for old messagecomposerinput/tabcomplete
                     onContentChanged={this.onInputContentChanged}
                     onInputStateChanged={this.onInputStateChanged} />,
                 formattingButton,
