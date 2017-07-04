@@ -69,6 +69,12 @@ export default class QueryMatcher {
         if (this.options.shouldMatchWordsOnly === undefined) {
             this.options.shouldMatchWordsOnly = true;
         }
+
+        // By default, match anywhere in the string being searched. If enabled, only return
+        // matches that are prefixed with the query.
+        if (this.options.shouldMatchPrefix === undefined) {
+            this.options.shouldMatchPrefix = false;
+        }
     }
 
     setObjects(objects: Array<Object>) {
@@ -87,7 +93,7 @@ export default class QueryMatcher {
                 resultKey = resultKey.replace(/[^\w]/g, '');
             }
             const index = resultKey.indexOf(query);
-            if (index !== -1) {
+            if (index !== -1 && (!this.options.shouldMatchPrefix || index === 0)) {
                 results.push({key, index});
             }
         });
