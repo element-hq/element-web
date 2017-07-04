@@ -86,6 +86,9 @@ export default class QueryMatcher {
         if (this.options.shouldMatchWordsOnly) {
             query = query.replace(/[^\w]/g, '');
         }
+        if (query.length === 0) {
+            return [];
+        }
         const results = [];
         this.keyMap.keys.forEach((key) => {
             let resultKey = key.toLowerCase();
