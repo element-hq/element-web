@@ -37,10 +37,11 @@ export default class UserProvider extends AutocompleteProvider {
 
     constructor() {
         super(USER_REGEX, {
-            keys: ['name', 'userId'],
+            keys: ['name'],
         });
         this.matcher = new FuzzyMatcher([], {
-            keys: ['name', 'userId'],
+            keys: ['name'],
+            shouldMatchPrefix: true,
         });
     }
 
