@@ -640,17 +640,16 @@ export default class MessageComposerInput extends React.Component {
             const firstBlock = this.state.editorState.getCurrentContent().getFirstBlock();
             const lastBlock = this.state.editorState.getCurrentContent().getLastBlock();
 
-            const selectionOffset = selection.getAnchorOffset();
             let canMoveUp = false;
             let canMoveDown = false;
             if (blockKey === firstBlock.getKey()) {
-                const textBeforeCursor = firstBlock.getText().slice(0, selectionOffset);
-                canMoveUp = textBeforeCursor.indexOf('\n') === -1;
+                canMoveUp = selection.getStartOffset() === selection.getEndOffset() &&
+                    selection.getStartOffset() === 0;
             }
 
             if (blockKey === lastBlock.getKey()) {
-                const textAfterCursor = lastBlock.getText().slice(selectionOffset);
-                canMoveDown = textAfterCursor.indexOf('\n') === -1;
+                canMoveDown = selection.getStartOffset() === selection.getEndOffset() &&
+                    selection.getStartOffset() === lastBlock.getText().length;
             }
 
             if ((up && !canMoveUp) || (!up && !canMoveDown)) return;
