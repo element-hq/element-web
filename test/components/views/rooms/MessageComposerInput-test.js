@@ -27,14 +27,10 @@ describe('MessageComposerInput', () => {
         mci = null,
         room = testUtils.mkStubRoom('!DdJkzRliezrwpNebLk:matrix.org');
 
-    // TODO Remove when RTE is out of labs.
-
     beforeEach(function() {
         testUtils.beforeEach(this);
         sandbox = testUtils.stubClient(sandbox);
         client = MatrixClientPeg.get();
-        UserSettingsStore.isFeatureEnabled = sinon.stub()
-            .withArgs('rich_text_editor').returns(true);
 
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);

@@ -27,11 +27,7 @@ export default {
     LABS_FEATURES: [
         {
             name: "-",
-            id: 'rich_text_editor',
-            default: false,
-        },
-        {
-            name: "-",
+            _tName: "Matrix Apps", // Translated!
             id: 'matrix_apps',
             default: false,
         },
@@ -39,8 +35,9 @@ export default {
 
     // horrible but it works. The locality makes this somewhat more palatable.
     doTranslations: function() {
-        this.LABS_FEATURES[0].name = _t("New Composer & Autocomplete");
-        this.LABS_FEATURES[1].name = _t("Matrix Apps");
+        this.LABS_FEATURES.forEach((f) => {
+            f.name = _t(f._tName);
+        });
     },
 
     loadProfileInfo: function() {

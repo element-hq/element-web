@@ -268,8 +268,7 @@ export default class MessageComposer extends React.Component {
         const uploadInputStyle = {display: 'none'};
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
-        const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput" +
-            (UserSettingsStore.isFeatureEnabled('rich_text_editor') ? "" : "Old"));
+        const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
 
         const controls = [];
 
@@ -352,8 +351,7 @@ export default class MessageComposer extends React.Component {
                      title={_t("Show Text Formatting Toolbar")}
                      src="img/button-text-formatting.svg"
                      onClick={this.onToggleFormattingClicked}
-                     style={{visibility: this.state.showFormatting ||
-                       !UserSettingsStore.isFeatureEnabled('rich_text_editor') ? 'hidden' : 'visible'}}
+                     style={{visibility: this.state.showFormatting ? 'hidden' : 'visible'}}
                      key="controls_formatting" />
             );
 
@@ -390,18 +388,6 @@ export default class MessageComposer extends React.Component {
             );
         }
 
-        let autoComplete;
-        if (UserSettingsStore.isFeatureEnabled('rich_text_editor')) {
-            autoComplete = <div className="mx_MessageComposer_autocomplete_wrapper">
-                <Autocomplete
-                    ref="autocomplete"
-                    onConfirm={this._onAutocompleteConfirm}
-                    query={this.state.autocompleteQuery}
-                    selection={this.state.selection} />
-            </div>;
-        }
-
-
         const {style, blockType} = this.state.inputState;
         const formatButtons = ["bold", "italic", "strike", "underline", "code", "quote", "bullet", "numbullet"].map(
             (name) => {
@@ -429,22 +415,20 @@ export default class MessageComposer extends React.Component {
                         {controls}
                     </div>
                 </div>
-                {UserSettingsStore.isFeatureEnabled('rich_text_editor') ?
-                    <div className="mx_MessageComposer_formatbar_wrapper">
-                        <div className="mx_MessageComposer_formatbar" style={this.state.showFormatting ? {} : {display: 'none'}}>
-                            {formatButtons}
-                            <div style={{flex: 1}}></div>
-                            <img title={ this.state.inputState.isRichtextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off") }
-                                 onMouseDown={this.onToggleMarkdownClicked}
-                                className="mx_MessageComposer_formatbar_markdown mx_filterFlipColor"
-                                src={`img/button-md-${!this.state.inputState.isRichtextEnabled}.png`} />
-                            <img title={ _t("Hide Text Formatting Toolbar") }
-                                 onClick={this.onToggleFormattingClicked}
-                                 className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
-                                 src="img/icon-text-cancel.svg" />
-                        </div>
-                    </div>: null
-                }
+                <div className="mx_MessageComposer_formatbar_wrapper">
+                    <div className="mx_MessageComposer_formatbar" style={this.state.showFormatting ? {} : {display: 'none'}}>
+                        {formatButtons}
+                        <div style={{flex: 1}}></div>
+                        <img title={ this.state.inputState.isRichtextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off") }
+                             onMouseDown={this.onToggleMarkdownClicked}
+                            className="mx_MessageComposer_formatbar_markdown mx_filterFlipColor"
+                            src={`img/button-md-${!this.state.inputState.isRichtextEnabled}.png`} />
+                        <img title={ _t("Hide Text Formatting Toolbar") }
+                             onClick={this.onToggleFormattingClicked}
+                             className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
+                             src="img/icon-text-cancel.svg" />
+                    </div>
+                </div>
             </div>
         );
     }
