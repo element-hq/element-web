@@ -80,13 +80,24 @@ export default class QueryMatcher {
         if (this.options.shouldMatchWordsOnly) {
             query = query.replace(/[^\w]/g, '');
         }
-        const results = _sortedUniq(_sortBy(_flatMap(this.keyMap.keys, (key) => {
+        const results = [];
+        this.keyMap.keys.forEach((key) => {
             let resultKey = key.toLowerCase();
             if (this.options.shouldMatchWordsOnly) {
                 resultKey = resultKey.replace(/[^\w]/g, '');
             }
-            return resultKey.indexOf(query) !== -1 ? this.keyMap.objectMap[key] : [];
-        }), (candidate) => this.keyMap.priorityMap.get(candidate)));
-        return results;
+            const index = resultKey.indexOf(query);
+            if (index !== -1) {
+                results.push({key, index});
+            }
+        });
+
+        return _sortedUniq(_flatMap(_sortBy(results, (candidate) => {
+            return candidate.index;
+        }).map((candidate) => {
+            // return an array of objects (those given to setObjects) that have the given
+            // key as a property.
+            return this.keyMap.objectMap[candidate.key];
+        })));
     }
 }

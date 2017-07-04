@@ -50,7 +50,7 @@ export default class UserProvider extends AutocompleteProvider {
         let completions = [];
         let {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
-            completions = this.matcher.match(command[0]).map(user => {
+            completions = this.matcher.match(command[0]).slice(0, 4).map((user) => {
                 let displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
                 let completion = displayName;
                 if (range.start === 0) {
@@ -68,7 +68,7 @@ export default class UserProvider extends AutocompleteProvider {
                     ),
                     range,
                 };
-            }).slice(0, 4);
+            });
         }
         return completions;
     }
@@ -90,7 +90,9 @@ export default class UserProvider extends AutocompleteProvider {
             if (member.userId !== currentUserId) return true;
         });
 
-        this.users = _sortBy(this.users, (user) => 1E20 - lastSpoken[user.userId] || 1E20);
+        this.users = _sortBy(this.users, (completion) =>
+            1E20 - lastSpoken[completion.user.userId] || 1E20,
+        );
 
         this.matcher.setObjects(this.users);
     }
@@ -98,9 +100,10 @@ export default class UserProvider extends AutocompleteProvider {
     onUserSpoke(user: RoomMember) {
         if(user.userId === MatrixClientPeg.get().credentials.userId) return;
 
-        // Probably unsafe to compare by reference here?
-        _pull(this.users, user);
-        this.users.splice(0, 0, user);
+        this.users = this.users.splice(
+            this.users.findIndex((user2) => user2.userId === user.userId), 1);
+        this.users = [user, ...this.users];
+
         this.matcher.setObjects(this.users);
     }
 
