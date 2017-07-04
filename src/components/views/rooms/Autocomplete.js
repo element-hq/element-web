@@ -68,7 +68,7 @@ export default class Autocomplete extends React.Component {
         let autocompleteDelay = UserSettingsStore.getLocalSetting('autocompleteDelay', 200);
 
         // Don't debounce if we are already showing completions
-        if (this.state.completions.length > 0) {
+        if (this.state.completions.length > 0 || this.state.forceComplete) {
             autocompleteDelay = 0;
         }
 
