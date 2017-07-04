@@ -19,8 +19,7 @@ limitations under the License.
 function tsOfNewestEvent(room) {
     if (room.timeline.length) {
         return room.timeline[room.timeline.length - 1].getTs();
-    }
-    else {
+    } else {
         return Number.MAX_SAFE_INTEGER;
     }
 }
@@ -32,5 +31,5 @@ function mostRecentActivityFirst(roomList) {
 }
 
 module.exports = {
-    mostRecentActivityFirst: mostRecentActivityFirst
+    mostRecentActivityFirst,
 };

@@ -14,24 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var MatrixClientPeg = require('./MatrixClientPeg');
-var Modal = require('./Modal');
-var sdk = require('./index');
+import MatrixClientPeg from './MatrixClientPeg';
+import Modal from './Modal';
+import sdk from './index';
 import { _t } from './languageHandler';
-var dis = require("./dispatcher");
-var Rooms = require("./Rooms");
+import dis from "./dispatcher";
+import Rooms from "./Rooms";
 
-var q = require('q');
+import q from 'q';
 
 /**
  * Create a new room, and switch to it.
  *
- * Returns a promise which resolves to the room id, or null if the
- * action was aborted or failed.
- *
  * @param {object=} opts parameters for creating the room
  * @param {string=} opts.dmUserId If specified, make this a DM room for this user and invite them
  * @param {object=} opts.createOpts set of options to pass to createRoom call.
+ *
+ * @returns {Promise} which resolves to the room id, or null if the
+ * action was aborted or failed.
  */
 function createRoom(opts) {
     opts = opts || {};
@@ -69,11 +69,11 @@ function createRoom(opts) {
     createOpts.initial_state = createOpts.initial_state || [
         {
             content: {
-                guest_access: 'can_join'
+                guest_access: 'can_join',
             },
             type: 'm.room.guest_access',
             state_key: '',
-        }
+        },
     ];
 
     const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');

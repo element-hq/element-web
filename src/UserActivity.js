@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var dis = require("./dispatcher");
+import dis from './dispatcher';
 
-var MIN_DISPATCH_INTERVAL_MS = 500;
-var CURRENTLY_ACTIVE_THRESHOLD_MS = 2000;
+const MIN_DISPATCH_INTERVAL_MS = 500;
+const CURRENTLY_ACTIVE_THRESHOLD_MS = 2000;
 
 /**
  * This class watches for user activity (moving the mouse or pressing a key)
@@ -58,16 +58,15 @@ class UserActivity {
     /**
      * Return true if there has been user activity very recently
      * (ie. within a few seconds)
+     * @returns {boolean} true if user is currently/very recently active
      */
     userCurrentlyActive() {
         return this.lastActivityAtTs > new Date().getTime() - CURRENTLY_ACTIVE_THRESHOLD_MS;
     }
 
     _onUserActivity(event) {
-        if (event.screenX && event.type == "mousemove") {
-            if (event.screenX === this.lastScreenX &&
-                event.screenY === this.lastScreenY)
-            {
+        if (event.screenX && event.type === "mousemove") {
+            if (event.screenX === this.lastScreenX && event.screenY === this.lastScreenY) {
                 // mouse hasn't actually moved
                 return;
             }
@@ -79,28 +78,24 @@ class UserActivity {
         if (this.lastDispatchAtTs < this.lastActivityAtTs - MIN_DISPATCH_INTERVAL_MS) {
             this.lastDispatchAtTs = this.lastActivityAtTs;
             dis.dispatch({
-                action: 'user_activity'
+                action: 'user_activity',
             });
             if (!this.activityEndTimer) {
-                this.activityEndTimer = setTimeout(
-                    this._onActivityEndTimer.bind(this), MIN_DISPATCH_INTERVAL_MS
-                );
+                this.activityEndTimer = setTimeout(this._onActivityEndTimer.bind(this), MIN_DISPATCH_INTERVAL_MS);
             }
         }
     }
 
     _onActivityEndTimer() {
-        var now = new Date().getTime();
-        var targetTime = this.lastActivityAtTs + MIN_DISPATCH_INTERVAL_MS;
+        const now = new Date().getTime();
+        const targetTime = this.lastActivityAtTs + MIN_DISPATCH_INTERVAL_MS;
         if (now >= targetTime) {
             dis.dispatch({
-                action: 'user_activity_end'
+                action: 'user_activity_end',
             });
             this.activityEndTimer = undefined;
         } else {
-            this.activityEndTimer = setTimeout(
-                this._onActivityEndTimer.bind(this), targetTime - now
-            );
+            this.activityEndTimer = setTimeout(this._onActivityEndTimer.bind(this), targetTime - now);
         }
     }
 }
