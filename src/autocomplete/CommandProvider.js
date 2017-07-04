@@ -21,17 +21,13 @@ import AutocompleteProvider from './AutocompleteProvider';
 import FuzzyMatcher from './FuzzyMatcher';
 import {TextualCompletion} from './Components';
 
+// TODO merge this with the factory mechanics of SlashCommands?
 // Warning: Since the description string will be translated in _t(result.description), all these strings below must be in i18n/strings/en_EN.json file
 const COMMANDS = [
     {
         command: '/me',
         args: '<message>',
         description: 'Displays action',
-    },
-    {
-        command: '/part',
-        args: '[#alias:domain]',
-        description: 'Leave room',
     },
     {
         command: '/ban',
@@ -42,6 +38,11 @@ const COMMANDS = [
         command: '/unban',
         args: '<user-id>',
         description: 'Unbans user with given id',
+    },
+    {
+        command: '/op',
+        args: '<user-id> [<power-level>]',
+        description: 'Define the power level of a user',
     },
     {
         command: '/deop',
@@ -59,6 +60,16 @@ const COMMANDS = [
         description: 'Joins room with given alias',
     },
     {
+        command: '/part',
+        args: '[<room-alias>]',
+        description: 'Leave room',
+    },
+    {
+        command: '/topic',
+        args: '<topic>',
+        description: 'Sets the room topic',
+    },
+    {
         command: '/kick',
         args: '<user-id> [reason]',
         description: 'Kicks user with given id',
@@ -74,10 +85,16 @@ const COMMANDS = [
         description: 'Searches DuckDuckGo for results',
     },
     {
-        command: '/op',
-        args: '<userId> [<power level>]',
-        description: 'Define the power level of a user',
+        command: '/tint',
+        args: '<color1> [<color2>]',
+        description: 'Changes colour scheme of current room',
     },
+    {
+        command: '/verify',
+        args: '<user-id> <device-id> <device-signing-key>',
+        description: 'Verifies a user, device, and pubkey tuple',
+    },
+    // Omitting `/markdown` as it only seems to apply to OldComposer
 ];
 
 const COMMAND_RE = /(^\/\w*)/g;
