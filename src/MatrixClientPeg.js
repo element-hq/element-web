@@ -77,22 +77,26 @@ class MatrixClientPeg {
         this._createClient(creds);
     }
 
-    start() {
+    async start() {
         const opts = utils.deepCopy(this.opts);
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
 
-        let promise = this.matrixClient.store.startup();
-        // log any errors when starting up the database (if one exists)
-        promise.catch((err) => {
+        try {
+            let promise = this.matrixClient.store.startup();
+            console.log(`MatrixClientPeg: waiting for MatrixClient store to initialise`);
+            await promise;
+        } catch(err) {
+            // log any errors when starting up the database (if one exists)
             console.error(`Error starting matrixclient store: ${err}`);
-        });
+        }
 
         // regardless of errors, start the client. If we did error out, we'll
         // just end up doing a full initial /sync.
-        promise.finally(() => {
-            this.get().startClient(opts);
-        });
+
+        console.log(`MatrixClientPeg: really starting MatrixClient`);
+        this.get().startClient(opts);
+        console.log(`MatrixClientPeg: MatrixClient started`);
     }
 
     getCredentials(): MatrixClientCreds {
