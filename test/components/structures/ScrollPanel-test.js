@@ -192,52 +192,37 @@ describe('ScrollPanel', function() {
         }
     });
 
-    it('should handle scrollEvent strangeness', function(done) {
-        var events = [];
+    it('should handle scrollEvent strangeness', function() {
+        const events = [];
 
-        q().then(() => {
-            // initialise with a few events
-            for (var i = 0; i < 10; i++) {
-                events.push(i+90);
+        return q().then(() => {
+            // initialise with a load of events
+            for (let i = 0; i < 20; i++) {
+                events.push(i+80);
             }
             tester.setTileKeys(events);
-            expect(tester.fillCounts.b).toEqual(1);
-            expect(tester.fillCounts.f).toEqual(2);
-            expect(scrollingDiv.scrollHeight).toEqual(1550) // 10*150 + 50
-            expect(scrollingDiv.scrollTop).toEqual(1550 - 600);
+            expect(scrollingDiv.scrollHeight).toEqual(3050); // 20*150 + 50
+            expect(scrollingDiv.scrollTop).toEqual(3050 - 600);
             return tester.awaitScroll();
         }).then(() => {
-            expect(tester.lastScrollEvent).toBe(950);
+            expect(tester.lastScrollEvent).toBe(3050 - 600);
 
-            // we want to simulate back-filling as we scroll up
-            tester.addFillHandler('b', function() {
-                var newEvents = [];
-                for (var i = 0; i < 10; i++) {
-                    newEvents.push(i+80);
-                }
-                events.unshift.apply(events, newEvents);
-                tester.setTileKeys(events);
-                return q(true);
-            });
-
-            // simulate scrolling up; this should trigger the backfill
-            scrollingDiv.scrollTop = 200;
-
-            return tester.awaitFill('b');
-        }).then(() => {
-            console.log('filled');
+            tester.scrollPanel().scrollToToken("92", 0);
 
             // at this point, ScrollPanel will have updated scrollTop, but
-            // the event hasn't fired. Stamp over the scrollTop.
-            expect(tester.lastScrollEvent).toEqual(200);
-            expect(scrollingDiv.scrollTop).toEqual(10*150 + 200);
+            // the event hasn't fired.
+            expect(tester.lastScrollEvent).toEqual(3050 - 600);
+            expect(scrollingDiv.scrollTop).toEqual(1950);
+
+            // now stamp over the scrollTop.
+            console.log('faking #528');
             scrollingDiv.scrollTop = 500;
 
             return tester.awaitScroll();
         }).then(() => {
-            expect(tester.lastScrollEvent).toBe(10*150 + 200);
-            expect(scrollingDiv.scrollTop).toEqual(10*150 + 200);
-        }).done(done);
+            expect(tester.lastScrollEvent).toBe(1950);
+            expect(scrollingDiv.scrollTop).toEqual(1950);
+        });
     });
 
     it('should not get stuck in #528 workaround', function(done) {
@@ -250,7 +235,7 @@ describe('ScrollPanel', function() {
             tester.setTileKeys(events);
             expect(tester.fillCounts.b).toEqual(1);
             expect(tester.fillCounts.f).toEqual(2);
-            expect(scrollingDiv.scrollHeight).toEqual(6050) // 40*150 + 50
+            expect(scrollingDiv.scrollHeight).toEqual(6050); // 40*150 + 50
             expect(scrollingDiv.scrollTop).toEqual(6050 - 600);
 
             // try to scroll up, to a non-integer offset.
