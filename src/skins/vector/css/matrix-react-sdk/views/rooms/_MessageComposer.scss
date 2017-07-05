@@ -78,6 +78,16 @@ limitations under the License.
     margin-right: 6px;
 }
 
+@keyframes visualbell
+{
+    from { background-color: #faa }
+    to { background-color: $primary-bg-color }
+}
+
+.mx_MessageComposer_input_error {
+    animation: 0.2s visualbell;
+}
+
 .mx_MessageComposer_input_empty .public-DraftEditorPlaceholder-root {
     display: none;
 }
