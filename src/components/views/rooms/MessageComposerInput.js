@@ -43,6 +43,8 @@ import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import {onSendMessageFailed} from './MessageComposerInputOld';
 
+import MessageComposerStore from '../../../stores/MessageComposerStore';
+
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
 const ZWS_CODE = 8203;
@@ -170,6 +172,11 @@ export default class MessageComposerInput extends React.Component {
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         this.historyManager = new ComposerHistoryManager(this.props.room.roomId);
+
+        // Reinstate the editor state for this room
+        this.setState({
+            editorState: MessageComposerStore.getEditorState(this.props.room.roomId),
+        });
     }
 
     componentWillUnmount() {
@@ -335,6 +342,14 @@ export default class MessageComposerInput extends React.Component {
             } else {
                 this.onFinishedTyping();
             }
+
+            // Record the editor state for this room so that it can be retrieved after
+            // switching to another room and back
+            dis.dispatch({
+                action: 'editor_state',
+                room_id: this.props.room.roomId,
+                editor_state: state.editorState,
+            });
 
             if (!state.hasOwnProperty('originalEditorState')) {
                 state.originalEditorState = null;
@@ -632,6 +647,10 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onVerticalArrow = (e, up) => {
+        if (e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) {
+            return;
+        }
+
         // Select history only if we are not currently auto-completing
         if (this.autocomplete.state.completionList.length === 0) {
             // Don't go back in history if we're in the middle of a multi-line message
