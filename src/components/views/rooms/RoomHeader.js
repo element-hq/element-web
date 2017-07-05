@@ -251,7 +251,7 @@ module.exports = React.createClass({
             }
             if (topic) {
                 topicElement =
-                    <EmojiText dir="auto" element="div" className="mx_RoomHeader_topic" ref="topic" title={topic}>{ topic }</EmojiText>;
+                    <div className="mx_RoomHeader_topic" ref="topic" title={ topic } dir="auto">{ topic }</div>;
             }
         }
 
