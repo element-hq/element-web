@@ -48,7 +48,7 @@
     "lintall": "eslint src/ test/",
     "clean": "rimraf lib webapp electron_app/dist",
     "prepublish": "npm run build:compile",
-    "test": "karma start --single-run=true --autoWatch=false --browsers PhantomJS --colors=false",
+    "test": "karma start --single-run=true --autoWatch=false --browsers ChromeHeadless --colors=false",
     "test-multi": "karma start"
   },
   "dependencies": {
@@ -119,14 +119,12 @@
     "karma-cli": "^0.1.2",
     "karma-junit-reporter": "^0.4.1",
     "karma-mocha": "^0.2.2",
-    "karma-phantomjs-launcher": "^1.0.0",
     "karma-webpack": "^1.7.0",
     "matrix-mock-request": "^1.0.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "mocha": "^2.4.5",
     "parallelshell": "^1.2.0",
-    "phantomjs-prebuilt": "^2.1.7",
     "postcss-extend": "^1.0.5",
     "postcss-import": "^9.0.0",
     "postcss-loader": "^1.2.2",
