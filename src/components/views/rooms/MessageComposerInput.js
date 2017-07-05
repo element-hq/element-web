@@ -138,6 +138,9 @@ export default class MessageComposerInput extends React.Component {
             // the virtual state "above" the history stack, the message currently being composed that
             // we want to persist whilst browsing history
             currentlyComposedEditorState: null,
+
+            // whether there were any completions
+            someCompletions: null,
         };
 
         // bit of a hack, but we need to do this here since createEditorState needs isRichtextEnabled
@@ -706,10 +709,16 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onTab = async (e) => {
+        this.setState({
+            someCompletions: null,
+        });
         e.preventDefault();
         if (this.autocomplete.state.completionList.length === 0) {
             // Force completions to show for the text currently entered
-            await this.autocomplete.forceComplete();
+            const completionCount = await this.autocomplete.forceComplete();
+            this.setState({
+                someCompletions: completionCount > 0,
+            });
             // Select the first item by moving "down"
             await this.moveAutocompleteSelection(false);
         } else {
@@ -830,6 +839,7 @@ export default class MessageComposerInput extends React.Component {
 
         const className = classNames('mx_MessageComposer_input', {
             mx_MessageComposer_input_empty: hidePlaceholder,
+            mx_MessageComposer_input_error: this.state.someCompletions === false,
         });
 
         const content = activeEditorState.getCurrentContent();

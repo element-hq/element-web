@@ -177,7 +177,7 @@ export default class Autocomplete extends React.Component {
             hide: false,
         }, () => {
             this.complete(this.props.query, this.props.selection).then(() => {
-                done.resolve();
+                done.resolve(this.countCompletions());
             });
         });
         return done.promise;
