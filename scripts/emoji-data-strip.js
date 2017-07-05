@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const EMOJI_DATA = require('emojione/emoji.json');
+const EMOJI_SUPPORTED = Object.keys(require('emojione').emojioneList);
 const fs = require('fs');
 
 const output = Object.keys(EMOJI_DATA).map(
@@ -16,7 +17,9 @@ const output = Object.keys(EMOJI_DATA).map(
         }
         return newDatum;
     }
-);
+).filter((datum) => {
+    return EMOJI_SUPPORTED.includes(datum.shortname);
+});
 
 // Write to a file in src. Changes should be checked into git. This file is copied by
 // babel using --copy-files
