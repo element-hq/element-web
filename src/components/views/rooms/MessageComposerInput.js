@@ -43,6 +43,8 @@ import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import {onSendMessageFailed} from './MessageComposerInputOld';
 
+import MessageComposerStore from '../../../stores/MessageComposerStore';
+
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
 const ZWS_CODE = 8203;
@@ -130,7 +132,10 @@ export default class MessageComposerInput extends React.Component {
             isRichtextEnabled,
 
             // the currently displayed editor state (note: this is always what is modified on input)
-            editorState: null,
+            editorState: this.createEditorState(
+                isRichtextEnabled,
+                MessageComposerStore.getContentState(this.props.room.roomId),
+            ),
 
             // the original editor state, before we started tabbing through completions
             originalEditorState: null,
@@ -142,10 +147,6 @@ export default class MessageComposerInput extends React.Component {
             // whether there were any completions
             someCompletions: null,
         };
-
-        // bit of a hack, but we need to do this here since createEditorState needs isRichtextEnabled
-        /* eslint react/no-direct-mutation-state:0 */
-        this.state.editorState = this.createEditorState();
 
         this.client = MatrixClientPeg.get();
     }
@@ -338,6 +339,14 @@ export default class MessageComposerInput extends React.Component {
             } else {
                 this.onFinishedTyping();
             }
+
+            // Record the editor state for this room so that it can be retrieved after
+            // switching to another room and back
+            dis.dispatch({
+                action: 'content_state',
+                room_id: this.props.room.roomId,
+                content_state: state.editorState.getCurrentContent(),
+            });
 
             if (!state.hasOwnProperty('originalEditorState')) {
                 state.originalEditorState = null;
@@ -635,6 +644,10 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onVerticalArrow = (e, up) => {
+        if (e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) {
+            return;
+        }
+
         // Select history only if we are not currently auto-completing
         if (this.autocomplete.state.completionList.length === 0) {
             // Don't go back in history if we're in the middle of a multi-line message
