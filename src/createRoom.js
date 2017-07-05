@@ -19,7 +19,7 @@ import Modal from './Modal';
 import sdk from './index';
 import { _t } from './languageHandler';
 import dis from "./dispatcher";
-import Rooms from "./Rooms";
+import * as Rooms from "./Rooms";
 
 import q from 'q';
 
