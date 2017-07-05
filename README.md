@@ -282,18 +282,33 @@ If any of these steps error with, `file table overflow`, you are probably on a m
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
 You'll need to do this in each new terminal you open before building Riot.
 
-How to add a new translation?
-=============================
+Running the tests
+-----------------
+
+There are a number of application-level tests in the `tests` directory; these
+are designed to run in a browser instance under the control of
+[karma](https://karma-runner.github.io). To run them:
+
+* Make sure you have Chrome installed (a recent version, like 59)
+* Make sure you have `matrix-js-sdk` and `matrix-react-sdk` installed and
+  built, as above
+* `npm run test`
+
+The above will run the tests under Chrome in a `headless` mode.
+
+You can also tell karma to run the tests in a loop (every time the source
+changes), in an instance of Chrome on your desktop, with `npm run
+test-multi`. This also gives you the option of running the tests in 'debug'
+mode, which is useful for stepping through the tests in the developer tools.
+
+Translations
+============
+
+To add a new translation, head to the [translating doc](docs/translating.md).
+
+For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 
 [<img src="https://translate.riot.im/widgets/riot-web/-/multi-auto.svg" alt="translationsstatus" width="340">](https://translate.riot.im/engage/riot-web/?utm_source=widget)
-
-
-Head to the [translating doc](docs/translating.md)
-
-Adding Strings to the translations (Developer Guide)
-====================================================
-
-Head to the [translating dev doc](docs/translating-dev.md)
 
 Triaging issues
 ===============
