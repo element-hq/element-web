@@ -132,7 +132,10 @@ export default class MessageComposerInput extends React.Component {
             isRichtextEnabled,
 
             // the currently displayed editor state (note: this is always what is modified on input)
-            editorState: null,
+            editorState: this.createEditorState(
+                isRichtextEnabled,
+                MessageComposerStore.getContentState(this.props.room.roomId),
+            ),
 
             // the original editor state, before we started tabbing through completions
             originalEditorState: null,
@@ -141,10 +144,6 @@ export default class MessageComposerInput extends React.Component {
             // we want to persist whilst browsing history
             currentlyComposedEditorState: null,
         };
-
-        // bit of a hack, but we need to do this here since createEditorState needs isRichtextEnabled
-        /* eslint react/no-direct-mutation-state:0 */
-        this.state.editorState = this.createEditorState();
 
         this.client = MatrixClientPeg.get();
     }
@@ -172,11 +171,6 @@ export default class MessageComposerInput extends React.Component {
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         this.historyManager = new ComposerHistoryManager(this.props.room.roomId);
-
-        // Reinstate the editor state for this room
-        this.setState({
-            editorState: MessageComposerStore.getEditorState(this.props.room.roomId),
-        });
     }
 
     componentWillUnmount() {
@@ -346,9 +340,9 @@ export default class MessageComposerInput extends React.Component {
             // Record the editor state for this room so that it can be retrieved after
             // switching to another room and back
             dis.dispatch({
-                action: 'editor_state',
+                action: 'content_state',
                 room_id: this.props.room.roomId,
-                editor_state: state.editorState,
+                content_state: state.editorState.getCurrentContent(),
             });
 
             if (!state.hasOwnProperty('originalEditorState')) {

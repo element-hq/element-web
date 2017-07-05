@@ -15,9 +15,11 @@ limitations under the License.
 */
 import dis from '../dispatcher';
 import {Store} from 'flux/utils';
+import {convertToRaw, convertFromRaw} from 'draft-js';
 
 const INITIAL_STATE = {
-    editorStateMap: {},
+    editorStateMap: localStorage.getItem('content_state') ?
+        JSON.parse(localStorage.getItem('content_state')) : {},
 };
 
 /**
@@ -40,8 +42,8 @@ class MessageComposerStore extends Store {
 
     __onDispatch(payload) {
         switch (payload.action) {
-            case 'editor_state':
-                this._editorState(payload);
+            case 'content_state':
+                this._contentState(payload);
                 break;
             case 'on_logged_out':
                 this.reset();
@@ -49,16 +51,19 @@ class MessageComposerStore extends Store {
         }
     }
 
-    _editorState(payload) {
+    _contentState(payload) {
         const editorStateMap = this._state.editorStateMap;
-        editorStateMap[payload.room_id] = payload.editor_state;
+        editorStateMap[payload.room_id] = convertToRaw(payload.content_state);
+        localStorage.setItem('content_state', JSON.stringify(editorStateMap));
+        console.info(localStorage.getItem('content_state'));
         this._setState({
             editorStateMap: editorStateMap,
         });
     }
 
-    getEditorState(roomId) {
-        return this._state.editorStateMap[roomId];
+    getContentState(roomId) {
+        return this._state.editorStateMap[roomId] ?
+            convertFromRaw(this._state.editorStateMap[roomId]) : null;
     }
 
     reset() {
