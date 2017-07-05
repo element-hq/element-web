@@ -81,7 +81,7 @@ to build.
    npm run build
    ```
    However, we recommend setting up a proper development environment (see "Setting
-   up a development environment" below) if you want to run your own copy of the
+   up a dev environment" below) if you want to run your own copy of the
    `develop` branch, as it makes it much easier to keep these dependencies
    up-to-date.  Or just use https://riot.im/develop - the continuous integration
    release of the develop branch.
@@ -253,7 +253,6 @@ Finally, build and start Riot itself:
 1. `rm -r node_modules/matrix-react-sdk; ln -s ../../matrix-react-sdk node_modules/`
 1. `npm start`
 1. Wait a few seconds for the initial build to finish; you should see something like:
-
     ```
     Hash: b0af76309dd56d7275c8
     Version: webpack 1.12.14
