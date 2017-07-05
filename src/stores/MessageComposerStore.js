@@ -32,7 +32,7 @@ class MessageComposerStore extends Store {
         super(dis);
 
         // Initialise state
-        this._state = INITIAL_STATE;
+        this._state = Object.assign({}, INITIAL_STATE);
     }
 
     _setState(newState) {
