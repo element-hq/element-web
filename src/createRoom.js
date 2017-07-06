@@ -79,6 +79,12 @@ function createRoom(opts) {
     const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
     let roomId;
+    if (opts.andView) {
+        // We will possibly have a successful join, indicate as such
+        dis.dispatch({
+            action: 'will_join',
+        });
+    }
     return client.createRoom(createOpts).finally(function() {
         modal.close();
     }).then(function(res) {
@@ -98,10 +104,16 @@ function createRoom(opts) {
                 action: 'view_room',
                 room_id: roomId,
                 should_peek: false,
+                // Creating a room will have joined us to the room
+                joined: true,
             });
         }
         return roomId;
     }, function(err) {
+        // We also failed to join the room (this sets joining to false in RoomViewStore)
+        dis.dispatch({
+            action: 'join_room_error',
+        });
         console.error("Failed to create room " + roomId + " " + err);
         Modal.createDialog(ErrorDialog, {
             title: _t("Failure to create room"),
