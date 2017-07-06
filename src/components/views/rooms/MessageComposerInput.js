@@ -408,7 +408,7 @@ export default class MessageComposerInput extends React.Component {
             const modifyFn = {
                 'bold': (text) => `**${text}**`,
                 'italic': (text) => `*${text}*`,
-                'underline': (text) => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
+                'underline': (text) => `<u>${text}</u>`,
                 'strike': (text) => `<del>${text}</del>`,
                 'code-block': (text) => `\`\`\`\n${text}\n\`\`\`\n`,
                 'blockquote': (text) => text.split('\n').map((line) => `> ${line}\n`).join('') + '\n',
@@ -419,7 +419,7 @@ export default class MessageComposerInput extends React.Component {
             const selectionAfterOffset = {
                 'bold': -2,
                 'italic': -1,
-                'underline': -1,
+                'underline': -4,
                 'strike': -6,
                 'code-block': -5,
                 'blockquote': -2,
