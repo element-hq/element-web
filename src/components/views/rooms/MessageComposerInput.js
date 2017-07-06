@@ -488,8 +488,7 @@ export default class MessageComposerInput extends React.Component {
         const currentContent = this.state.editorState.getCurrentContent();
 
         let contentState = null;
-
-        if (html) {
+        if (html && this.state.isRichtextEnabled) {
             contentState = Modifier.replaceWithFragment(
                 currentContent,
                 currentSelection,
