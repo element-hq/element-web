@@ -65,11 +65,10 @@ export default React.createClass({
         this._scalarClient = new ScalarAuthClient();
         this._scalarClient.getScalarToken().done((token) => {
             // Append scalar_token as a query param
-            let u = url.parse(this.props.url);
+            const u = url.parse(this.props.url);
             if (!u.search) {
                 u.search = "?scalar_token=" + encodeURIComponent(token);
-            }
-            else {
+            } else {
                 u.search += "&scalar_token=" + encodeURIComponent(token);
             }
 
@@ -127,8 +126,7 @@ export default React.createClass({
             appTileBody = (
                 <div> Loading... </div>
             );
-        }
-        else {
+        } else {
             appTileBody = (
                 <div className="mx_AppTileBody">
                     <iframe ref="appFrame" src={this.state.widgetUrl} allowFullScreen="true"></iframe>
