@@ -946,5 +946,6 @@
     "You are a member of these groups": "You are a member of these groups",
     "Create a group to represent your community! Define a set of rooms and your own custom homepage to mark out your space in the Matrix universe.": "Create a group to represent your community! Define a set of rooms and your own custom homepage to mark out your space in the Matrix universe.",
     "Join an existing group": "Join an existing group",
-    "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>."
+    "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.",
+  "Featured Rooms:": "Featured Rooms:"
 }
