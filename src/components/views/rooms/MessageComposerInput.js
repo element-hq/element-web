@@ -43,6 +43,8 @@ import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import {onSendMessageFailed} from './MessageComposerInputOld';
 
+import MessageComposerStore from '../../../stores/MessageComposerStore';
+
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
 const ZWS_CODE = 8203;
@@ -130,7 +132,10 @@ export default class MessageComposerInput extends React.Component {
             isRichtextEnabled,
 
             // the currently displayed editor state (note: this is always what is modified on input)
-            editorState: null,
+            editorState: this.createEditorState(
+                isRichtextEnabled,
+                MessageComposerStore.getContentState(this.props.room.roomId),
+            ),
 
             // the original editor state, before we started tabbing through completions
             originalEditorState: null,
@@ -138,11 +143,10 @@ export default class MessageComposerInput extends React.Component {
             // the virtual state "above" the history stack, the message currently being composed that
             // we want to persist whilst browsing history
             currentlyComposedEditorState: null,
-        };
 
-        // bit of a hack, but we need to do this here since createEditorState needs isRichtextEnabled
-        /* eslint react/no-direct-mutation-state:0 */
-        this.state.editorState = this.createEditorState();
+            // whether there were any completions
+            someCompletions: null,
+        };
 
         this.client = MatrixClientPeg.get();
     }
@@ -335,6 +339,14 @@ export default class MessageComposerInput extends React.Component {
             } else {
                 this.onFinishedTyping();
             }
+
+            // Record the editor state for this room so that it can be retrieved after
+            // switching to another room and back
+            dis.dispatch({
+                action: 'content_state',
+                room_id: this.props.room.roomId,
+                content_state: state.editorState.getCurrentContent(),
+            });
 
             if (!state.hasOwnProperty('originalEditorState')) {
                 state.originalEditorState = null;
@@ -632,6 +644,10 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onVerticalArrow = (e, up) => {
+        if (e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) {
+            return;
+        }
+
         // Select history only if we are not currently auto-completing
         if (this.autocomplete.state.completionList.length === 0) {
             // Don't go back in history if we're in the middle of a multi-line message
@@ -640,17 +656,16 @@ export default class MessageComposerInput extends React.Component {
             const firstBlock = this.state.editorState.getCurrentContent().getFirstBlock();
             const lastBlock = this.state.editorState.getCurrentContent().getLastBlock();
 
-            const selectionOffset = selection.getAnchorOffset();
             let canMoveUp = false;
             let canMoveDown = false;
             if (blockKey === firstBlock.getKey()) {
-                const textBeforeCursor = firstBlock.getText().slice(0, selectionOffset);
-                canMoveUp = textBeforeCursor.indexOf('\n') === -1;
+                canMoveUp = selection.getStartOffset() === selection.getEndOffset() &&
+                    selection.getStartOffset() === 0;
             }
 
             if (blockKey === lastBlock.getKey()) {
-                const textAfterCursor = lastBlock.getText().slice(selectionOffset);
-                canMoveDown = textAfterCursor.indexOf('\n') === -1;
+                canMoveDown = selection.getStartOffset() === selection.getEndOffset() &&
+                    selection.getStartOffset() === lastBlock.getText().length;
             }
 
             if ((up && !canMoveUp) || (!up && !canMoveDown)) return;
@@ -707,10 +722,16 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onTab = async (e) => {
+        this.setState({
+            someCompletions: null,
+        });
         e.preventDefault();
         if (this.autocomplete.state.completionList.length === 0) {
             // Force completions to show for the text currently entered
-            await this.autocomplete.forceComplete();
+            const completionCount = await this.autocomplete.forceComplete();
+            this.setState({
+                someCompletions: completionCount > 0,
+            });
             // Select the first item by moving "down"
             await this.moveAutocompleteSelection(false);
         } else {
@@ -831,6 +852,7 @@ export default class MessageComposerInput extends React.Component {
 
         const className = classNames('mx_MessageComposer_input', {
             mx_MessageComposer_input_empty: hidePlaceholder,
+            mx_MessageComposer_input_error: this.state.someCompletions === false,
         });
 
         const content = activeEditorState.getCurrentContent();

@@ -15,22 +15,24 @@ limitations under the License.
 */
 import dis from '../dispatcher';
 import {Store} from 'flux/utils';
+import {convertToRaw, convertFromRaw} from 'draft-js';
 
 const INITIAL_STATE = {
-    deferred_action: null,
+    editorStateMap: localStorage.getItem('content_state') ?
+        JSON.parse(localStorage.getItem('content_state')) : {},
 };
 
 /**
- * A class for storing application state to do with login/registration. This is a simple
+ * A class for storing application state to do with the message composer. This is a simple
  * flux store that listens for actions and updates its state accordingly, informing any
  * listeners (views) of state changes.
  */
-class LifecycleStore extends Store {
+class MessageComposerStore extends Store {
     constructor() {
         super(dis);
 
         // Initialise state
-        this._state = INITIAL_STATE;
+        this._state = Object.assign({}, INITIAL_STATE);
     }
 
     _setState(newState) {
@@ -40,32 +42,27 @@ class LifecycleStore extends Store {
 
     __onDispatch(payload) {
         switch (payload.action) {
-            case 'do_after_sync_prepared':
-                this._setState({
-                    deferred_action: payload.deferred_action,
-                });
+            case 'content_state':
+                this._contentState(payload);
                 break;
-            case 'cancel_after_sync_prepared':
-                this._setState({
-                    deferred_action: null,
-                });
-                break;
-            case 'sync_state': {
-                if (payload.state !== 'PREPARED') {
-                    break;
-                }
-                if (!this._state.deferred_action) break;
-                const deferredAction = Object.assign({}, this._state.deferred_action);
-                this._setState({
-                    deferred_action: null,
-                });
-                dis.dispatch(deferredAction);
-                break;
-            }
             case 'on_logged_out':
                 this.reset();
                 break;
         }
+    }
+
+    _contentState(payload) {
+        const editorStateMap = this._state.editorStateMap;
+        editorStateMap[payload.room_id] = convertToRaw(payload.content_state);
+        localStorage.setItem('content_state', JSON.stringify(editorStateMap));
+        this._setState({
+            editorStateMap: editorStateMap,
+        });
+    }
+
+    getContentState(roomId) {
+        return this._state.editorStateMap[roomId] ?
+            convertFromRaw(this._state.editorStateMap[roomId]) : null;
     }
 
     reset() {
@@ -73,8 +70,8 @@ class LifecycleStore extends Store {
     }
 }
 
-let singletonLifecycleStore = null;
-if (!singletonLifecycleStore) {
-    singletonLifecycleStore = new LifecycleStore();
+let singletonMessageComposerStore = null;
+if (!singletonMessageComposerStore) {
+    singletonMessageComposerStore = new MessageComposerStore();
 }
-module.exports = singletonLifecycleStore;
+module.exports = singletonMessageComposerStore;
