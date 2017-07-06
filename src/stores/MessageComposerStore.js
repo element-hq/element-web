@@ -55,7 +55,6 @@ class MessageComposerStore extends Store {
         const editorStateMap = this._state.editorStateMap;
         editorStateMap[payload.room_id] = convertToRaw(payload.content_state);
         localStorage.setItem('content_state', JSON.stringify(editorStateMap));
-        console.info(localStorage.getItem('content_state'));
         this._setState({
             editorStateMap: editorStateMap,
         });
