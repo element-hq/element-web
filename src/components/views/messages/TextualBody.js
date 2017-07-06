@@ -143,7 +143,7 @@ module.exports = React.createClass({
         if (this.props.showUrlPreview && !this.state.links.length) {
             var links = this.findLinks(this.refs.content.children);
             if (links.length) {
-                // de-dup the links
+                // de-dup the links (but preserve ordering)
                 const seen = new Set();
                 links = links.filter((link) => {
                     if (seen.has(link)) return false;
