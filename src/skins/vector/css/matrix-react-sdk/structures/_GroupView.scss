@@ -29,3 +29,24 @@ limitations under the License.
     font-size: initial;
     padding-left: 10px;
 }
+
+.mx_GroupView_featuredRooms {
+    margin-top: 20px;
+}
+
+.mx_GroupView_featuredRooms_header {
+    font-weight: bold;
+    font-size: 120%;
+    margin-bottom: 20px;
+}
+
+.mx_GroupView_featuredRooms_category {
+    font-weight: bold;
+    font-size: 110%;
+    margin-top: 10px;
+}
+
+.mx_GroupView_featuredRoom {
+    cursor: pointer;
+    display: table-cell;
+}
