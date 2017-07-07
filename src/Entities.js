@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var sdk = require('./index');
+import sdk from './index';
 
 function isMatch(query, name, uid) {
     query = query.toLowerCase();
@@ -33,8 +32,8 @@ function isMatch(query, name, uid) {
     }
 
     // split spaces in name and try matching constituent parts
-    var parts = name.split(" ");
-    for (var i = 0; i < parts.length; i++) {
+    const parts = name.split(" ");
+    for (let i = 0; i < parts.length; i++) {
         if (parts[i].indexOf(query) === 0) {
             return true;
         }
@@ -67,7 +66,7 @@ class Entity {
 
 class MemberEntity extends Entity {
     getJsx() {
-        var MemberTile = sdk.getComponent("rooms.MemberTile");
+        const MemberTile = sdk.getComponent("rooms.MemberTile");
         return (
             <MemberTile key={this.model.userId} member={this.model} />
         );
@@ -84,6 +83,7 @@ class UserEntity extends Entity {
         super(model);
         this.showInviteButton = Boolean(showInviteButton);
         this.inviteFn = inviteFn;
+        this.onClick = this.onClick.bind(this);
     }
 
     onClick() {
@@ -93,15 +93,15 @@ class UserEntity extends Entity {
     }
 
     getJsx() {
-        var UserTile = sdk.getComponent("rooms.UserTile");
+        const UserTile = sdk.getComponent("rooms.UserTile");
         return (
             <UserTile key={this.model.userId} user={this.model}
-                showInviteButton={this.showInviteButton} onClick={this.onClick.bind(this)} />
+                showInviteButton={this.showInviteButton} onClick={this.onClick} />
         );
     }
 
     matches(queryString) {
-        var name = this.model.displayName || this.model.userId;
+        const name = this.model.displayName || this.model.userId;
         return isMatch(queryString, name, this.model.userId);
     }
 }
@@ -109,7 +109,7 @@ class UserEntity extends Entity {
 
 module.exports = {
     newEntity: function(jsx, matchFn) {
-        var entity = new Entity();
+        const entity = new Entity();
         entity.getJsx = function() {
             return jsx;
         };
@@ -137,5 +137,5 @@ module.exports = {
         return users.map(function(u) {
             return new UserEntity(u, showInviteButton, inviteFn);
         });
-    }
+    },
 };

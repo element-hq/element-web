@@ -18,7 +18,11 @@ limitations under the License.
 
 import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import ScalarAuthClient from '../../../ScalarAuthClient';
+import SdkConfig from '../../../SdkConfig';
 import { _t } from '../../../languageHandler';
+
+import url from 'url';
 
 export default React.createClass({
     displayName: 'AppTile',
@@ -34,6 +38,51 @@ export default React.createClass({
         return {
             url: "",
         };
+    },
+
+    getInitialState: function() {
+        return {
+            loading: false,
+            widgetUrl: this.props.url,
+            error: null,
+        };
+    },
+
+    // Returns true if props.url is a scalar URL, typically https://scalar.vector.im/api
+    isScalarUrl: function() {
+        const scalarUrl = SdkConfig.get().integrations_rest_url;
+        return scalarUrl && this.props.url.startsWith(scalarUrl);
+    },
+
+    componentWillMount: function() {
+        if (!this.isScalarUrl()) {
+            return;
+        }
+        // Fetch the token before loading the iframe as we need to mangle the URL
+        this.setState({
+            loading: true,
+        });
+        this._scalarClient = new ScalarAuthClient();
+        this._scalarClient.getScalarToken().done((token) => {
+            // Append scalar_token as a query param
+            const u = url.parse(this.props.url);
+            if (!u.search) {
+                u.search = "?scalar_token=" + encodeURIComponent(token);
+            } else {
+                u.search += "&scalar_token=" + encodeURIComponent(token);
+            }
+
+            this.setState({
+                error: null,
+                widgetUrl: u.format(),
+                loading: false,
+            });
+        }, (err) => {
+            this.setState({
+                error: err.message,
+                loading: false,
+            });
+        });
     },
 
     _onEditClick: function() {
@@ -72,6 +121,18 @@ export default React.createClass({
     },
 
     render: function() {
+        let appTileBody;
+        if (this.state.loading) {
+            appTileBody = (
+                <div> Loading... </div>
+            );
+        } else {
+            appTileBody = (
+                <div className="mx_AppTileBody">
+                    <iframe ref="appFrame" src={this.state.widgetUrl} allowFullScreen="true"></iframe>
+                </div>
+            );
+        }
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 <div className="mx_AppTileMenuBar">
@@ -93,9 +154,7 @@ export default React.createClass({
                         />
                     </span>
                 </div>
-                <div className="mx_AppTileBody">
-                    <iframe ref="appFrame" src={this.props.url} allowFullScreen="true"></iframe>
-                </div>
+                {appTileBody}
             </div>
         );
     },

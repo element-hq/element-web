@@ -45,8 +45,9 @@ export default React.createClass({
             this.setState({
                 summary: null,
                 error: null,
+            }, () => {
+                this._loadGroupFromServer(newProps.groupId);
             });
-            this._loadGroupFromServer(newProps.groupId);
         }
     },
 
