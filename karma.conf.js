@@ -113,7 +113,22 @@ module.exports = function (config) {
         browsers: [
             'Chrome',
             //'PhantomJS',
+            //'ChromeHeadless'
         ],
+
+        customLaunchers: {
+            'ChromeHeadless': {
+                base: 'Chrome',
+                flags: [
+                    // '--no-sandbox',
+                    // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
+                    '--headless',
+                    '--disable-gpu',
+                    // Without a remote debugging port, Google Chrome exits immediately.
+                    '--remote-debugging-port=9222',
+                ],
+            }
+        },
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
