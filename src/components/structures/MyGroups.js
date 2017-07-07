@@ -61,9 +61,6 @@ export default withMatrixClient(React.createClass({
         this._fetch();
     },
 
-    componentWillUnmount: function() {
-    },
-
     _onCreateGroupClick: function() {
         const CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog");
         Modal.createDialog(CreateGroupDialog);
@@ -73,7 +70,7 @@ export default withMatrixClient(React.createClass({
         this.props.matrixClient.getJoinedGroups().done((result) => {
             this.setState({groups: result.groups, error: null});
         }, (err) => {
-            this.setState({result: null, error: err});
+            this.setState({groups: null, error: err});
         });
     },
 
@@ -93,12 +90,12 @@ export default withMatrixClient(React.createClass({
                 );
             });
             content = <div>
-                <div>{_t('You are a member of these groups')}:</div>
+                <div>{_t('You are a member of these groups:')}</div>
                 {groupNodes}
             </div>;
         } else if (this.state.error) {
             content = <div className="mx_MyGroups_error">
-                Error whilst fetching joined groups
+                {_t('Error whilst fetching joined groups')}
             </div>;
         } else {
             content = <Loader />;

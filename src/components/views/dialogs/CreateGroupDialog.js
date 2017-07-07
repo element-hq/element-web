@@ -130,10 +130,10 @@ export default React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const Loader = sdk.getComponent("elements.Spinner");
+        const Spinner = sdk.getComponent('elements.Spinner');
 
         if (this.state.creating) {
-            return <Loader />;
+            return <Spinner />;
         }
 
         let createErrorNode;
@@ -154,29 +154,32 @@ export default React.createClass({
             >
                 <form onSubmit={this._onFormSubmit}>
                     <div className="mx_Dialog_content">
-                        <div className="mx_CreateGroupDialog_label">
-                            <label htmlFor="groupname">{_t('Group Name')}</label>
+                        <div className="mx_CreateGroupDialog_inputRow">
+                            <div className="mx_CreateGroupDialog_label">
+                                <label htmlFor="groupname">{_t('Group Name')}</label>
+                            </div>
+                            <div>
+                                <input id="groupname" className="mx_CreateGroupDialog_input"
+                                    autoFocus={true} size="64"
+                                    placeholder={_t('Example')}
+                                    onChange={this._onGroupNameChange}
+                                    value={this.state.groupName}
+                                />
+                            </div>
                         </div>
-                        <div>
-                            <input id="groupname" className="mx_CreateGroupDialog_input"
-                                autoFocus={true} size="64"
-                                placeholder={_t('Example')}
-                                onChange={this._onGroupNameChange}
-                                value={this.state.groupName}
-                            />
-                        </div>
-                        <br />
-                        <div className="mx_CreateGroupDialog_label">
-                            <label htmlFor="groupid">{_t('Group ID')}</label>
-                        </div>
-                        <div>
-                            <input id="groupid" className="mx_CreateGroupDialog_input"
-                                size="64"
-                                placeholder={_t('+example:%(domain)s', {domain: MatrixClientPeg.get().getDomain()})}
-                                onChange={this._onGroupIdChange}
-                                onBlur={this._onGroupIdBlur}
-                                value={this.state.groupId}
-                            />
+                        <div className="mx_CreateGroupDialog_inputRow">
+                            <div className="mx_CreateGroupDialog_label">
+                                <label htmlFor="groupid">{_t('Group ID')}</label>
+                            </div>
+                            <div>
+                                <input id="groupid" className="mx_CreateGroupDialog_input"
+                                    size="64"
+                                    placeholder={_t('+example:%(domain)s', {domain: MatrixClientPeg.get().getDomain()})}
+                                    onChange={this._onGroupIdChange}
+                                    onBlur={this._onGroupIdBlur}
+                                    value={this.state.groupId}
+                                />
+                            </div>
                         </div>
                         <div className="error">
                             {this.state.groupIdError}

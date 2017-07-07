@@ -79,7 +79,7 @@ export default React.createClass({
             }
 
             let nameNode;
-            if (summary.profile.name) {
+            if (summary.profile && summary.profile.name) {
                 nameNode = <div className="mx_RoomHeader_name">
                     <span>{summary.profile.name}</span>
                     <span className="mx_GroupView_header_groupid">
@@ -92,6 +92,8 @@ export default React.createClass({
                 </div>;
             }
 
+            const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;
+
             return (
                 <div className="mx_GroupView">
                     <div className="mx_RoomHeader">
@@ -99,7 +101,7 @@ export default React.createClass({
                             <div className="mx_RoomHeader_avatar">
                                 <GroupAvatar
                                     groupId={this.props.groupId}
-                                    groupAvatarUrl={summary.profile.avatar_url}
+                                    groupAvatarUrl={groupAvatarUrl}
                                     width={48} height={48}
                                 />
                             </div>
