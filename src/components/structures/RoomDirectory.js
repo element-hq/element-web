@@ -73,6 +73,7 @@ module.exports = React.createClass({
             this.protocols = response;
             this.setState({protocolsLoading: false});
         }, (err) => {
+            console.warn(`error loading thirdparty protocols: ${err}`);
             this.setState({protocolsLoading: false});
             if (MatrixClientPeg.get().isGuest()) {
                 // Guests currently aren't allowed to use this API, so

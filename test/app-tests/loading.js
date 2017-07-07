@@ -33,7 +33,7 @@ import {VIEWS} from 'matrix-react-sdk/lib/components/structures/MatrixChat';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 
 import * as test_utils from '../test-utils';
-import MockHttpBackend from '../mock-request';
+import MockHttpBackend from 'matrix-mock-request';
 import {parseQs, parseQsFromFragment} from '../../src/vector/url_utils';
 
 var DEFAULT_HS_URL='http://my_server';

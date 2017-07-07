@@ -1,3 +1,10 @@
+# we need trusty for the chrome addon
+dist: trusty
+
+# we don't need sudo, so can run in a container, which makes startup much
+# quicker.
+sudo: false
+
 language: node_js
 node_js:
     # make sure we work with a range of node versions.
@@ -16,6 +23,8 @@ node_js:
     - 6.3
     - 6
     - 7
+addons:
+    chrome: stable
 install:
     # clone the deps with depth 1: we know we will only ever need that one
     # commit.
