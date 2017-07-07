@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../index';
 import { _t, _tJsx } from '../../languageHandler';
-import WithMatrixClient from '../../wrappers/WithMatrixClient';
+import withMatrixClient from '../../wrappers/withMatrixClient';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import dis from '../../dispatcher';
 import PropTypes from 'prop-types';
@@ -43,7 +43,7 @@ const GroupTile = React.createClass({
     },
 });
 
-export default WithMatrixClient(React.createClass({
+export default withMatrixClient(React.createClass({
     displayName: 'MyGroups',
 
     propTypes: {
