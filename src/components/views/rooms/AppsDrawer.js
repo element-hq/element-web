@@ -176,7 +176,7 @@ module.exports = React.createClass({
 
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
-                this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId) :
+                this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId, 'add_integ') :
                 null;
         Modal.createDialog(IntegrationsManager, {
             src: src,
@@ -187,7 +187,7 @@ module.exports = React.createClass({
         const apps = this.state.apps.map(
             (app, index, arr) => {
                 return <AppTile
-                    key={app.name}
+                    key={app.id}
                     id={app.id}
                     url={app.url}
                     name={app.name}
