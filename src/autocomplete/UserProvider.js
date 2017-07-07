@@ -91,8 +91,8 @@ export default class UserProvider extends AutocompleteProvider {
             if (member.userId !== currentUserId) return true;
         });
 
-        this.users = _sortBy(this.users, (completion) =>
-            1E20 - lastSpoken[completion.user.userId] || 1E20,
+        this.users = _sortBy(this.users, (member) =>
+            1E20 - lastSpoken[member.userId] || 1E20,
         );
 
         this.matcher.setObjects(this.users);
