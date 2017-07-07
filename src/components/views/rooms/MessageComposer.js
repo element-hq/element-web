@@ -21,7 +21,6 @@ import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import Autocomplete from './Autocomplete';
-import classNames from 'classnames';
 import UserSettingsStore from '../../../UserSettingsStore';
 
 
@@ -408,14 +407,10 @@ export default class MessageComposer extends React.Component {
                 const active = style.includes(name) || blockType === name;
                 const suffix = active ? '-o-n' : '';
                 const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
-                const disabled = !this.state.inputState.isRichtextEnabled && 'underline' === name;
-                const className = classNames("mx_MessageComposer_format_button", {
-                    mx_MessageComposer_format_button_disabled: disabled,
-                    mx_filterFlipColor: true,
-                });
+                const className = 'mx_MessageComposer_format_button mx_filterFlipColor';
                 return <img className={className}
                             title={ _t(name) }
-                            onMouseDown={disabled ? null : onFormatButtonClicked}
+                            onMouseDown={onFormatButtonClicked}
                             key={name}
                             src={`img/button-text-${name}${suffix}.svg`}
                             height="17" />;

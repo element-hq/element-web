@@ -41,7 +41,7 @@ const CATEGORY_ORDER = [
 ];
 
 // Match for ":wink:" or ascii-style ";-)" provided by emojione
-const EMOJI_REGEX = new RegExp('(:\\w*:?|' + asciiRegexp + ')', 'g');
+const EMOJI_REGEX = new RegExp('(' + asciiRegexp + '|:\\w*:?)$', 'g');
 const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sort(
     (a, b) => {
         if (a.category === b.category) {
@@ -101,7 +101,7 @@ export default class EmojiProvider extends AutocompleteProvider {
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
-        return <div className="mx_Autocomplete_Completion_container_pill">
+        return <div className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate">
             {completions}
         </div>;
     }

@@ -43,6 +43,8 @@ import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import {onSendMessageFailed} from './MessageComposerInputOld';
 
+import MessageComposerStore from '../../../stores/MessageComposerStore';
+
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
 const ZWS_CODE = 8203;
@@ -130,7 +132,10 @@ export default class MessageComposerInput extends React.Component {
             isRichtextEnabled,
 
             // the currently displayed editor state (note: this is always what is modified on input)
-            editorState: null,
+            editorState: this.createEditorState(
+                isRichtextEnabled,
+                MessageComposerStore.getContentState(this.props.room.roomId),
+            ),
 
             // the original editor state, before we started tabbing through completions
             originalEditorState: null,
@@ -138,11 +143,10 @@ export default class MessageComposerInput extends React.Component {
             // the virtual state "above" the history stack, the message currently being composed that
             // we want to persist whilst browsing history
             currentlyComposedEditorState: null,
-        };
 
-        // bit of a hack, but we need to do this here since createEditorState needs isRichtextEnabled
-        /* eslint react/no-direct-mutation-state:0 */
-        this.state.editorState = this.createEditorState();
+            // whether there were any completions
+            someCompletions: null,
+        };
 
         this.client = MatrixClientPeg.get();
     }
@@ -336,6 +340,14 @@ export default class MessageComposerInput extends React.Component {
                 this.onFinishedTyping();
             }
 
+            // Record the editor state for this room so that it can be retrieved after
+            // switching to another room and back
+            dis.dispatch({
+                action: 'content_state',
+                room_id: this.props.room.roomId,
+                content_state: state.editorState.getCurrentContent(),
+            });
+
             if (!state.hasOwnProperty('originalEditorState')) {
                 state.originalEditorState = null;
             }
@@ -403,26 +415,59 @@ export default class MessageComposerInput extends React.Component {
                 });
             }
         } else {
-            let contentState = this.state.editorState.getCurrentContent(),
-                selection = this.state.editorState.getSelection();
+            let contentState = this.state.editorState.getCurrentContent();
 
             const modifyFn = {
                 'bold': (text) => `**${text}**`,
                 'italic': (text) => `*${text}*`,
-                'underline': (text) => `_${text}_`, // there's actually no valid underline in Markdown, but *shrug*
+                'underline': (text) => `<u>${text}</u>`,
                 'strike': (text) => `<del>${text}</del>`,
-                'code-block': (text) => `\`\`\`\n${text}\n\`\`\``,
-                'blockquote': (text) => text.split('\n').map((line) => `> ${line}\n`).join(''),
+                'code-block': (text) => `\`\`\`\n${text}\n\`\`\`\n`,
+                'blockquote': (text) => text.split('\n').map((line) => `> ${line}\n`).join('') + '\n',
                 'unordered-list-item': (text) => text.split('\n').map((line) => `\n- ${line}`).join(''),
                 'ordered-list-item': (text) => text.split('\n').map((line, i) => `\n${i + 1}. ${line}`).join(''),
             }[command];
 
+            const selectionAfterOffset = {
+                'bold': -2,
+                'italic': -1,
+                'underline': -4,
+                'strike': -6,
+                'code-block': -5,
+                'blockquote': -2,
+            }[command];
+
+            // Returns a function that collapses a selectionState to its end and moves it by offset
+            const collapseAndOffsetSelection = (selectionState, offset) => {
+                const key = selectionState.getEndKey();
+                return new SelectionState({
+                    anchorKey: key, anchorOffset: offset,
+                    focusKey: key, focusOffset: offset,
+                });
+            };
+
             if (modifyFn) {
+                const previousSelection = this.state.editorState.getSelection();
+                const newContentState = RichText.modifyText(contentState, previousSelection, modifyFn);
                 newState = EditorState.push(
                     this.state.editorState,
-                    RichText.modifyText(contentState, selection, modifyFn),
+                    newContentState,
                     'insert-characters',
                 );
+
+                let newSelection = newContentState.getSelectionAfter();
+                // If the selection range is 0, move the cursor inside the formatted body
+                if (previousSelection.getStartOffset() === previousSelection.getEndOffset() &&
+                    previousSelection.getStartKey() === previousSelection.getEndKey() &&
+                    selectionAfterOffset !== undefined
+                ) {
+                    const selectedBlock = newContentState.getBlockForKey(previousSelection.getAnchorKey());
+                    const blockLength = selectedBlock.getText().length;
+                    const newOffset = blockLength + selectionAfterOffset;
+                    newSelection = collapseAndOffsetSelection(newSelection, newOffset);
+                }
+
+                newState = EditorState.forceSelection(newState, newSelection);
             }
         }
 
@@ -443,8 +488,7 @@ export default class MessageComposerInput extends React.Component {
         const currentContent = this.state.editorState.getCurrentContent();
 
         let contentState = null;
-
-        if (html) {
+        if (html && this.state.isRichtextEnabled) {
             contentState = Modifier.replaceWithFragment(
                 currentContent,
                 currentSelection,
@@ -548,14 +592,6 @@ export default class MessageComposerInput extends React.Component {
         let sendHtmlFn = this.client.sendHtmlMessage;
         let sendTextFn = this.client.sendTextMessage;
 
-        if (contentText.startsWith('/me')) {
-            contentText = contentText.substring(4);
-            // bit of a hack, but the alternative would be quite complicated
-            if (contentHTML) contentHTML = contentHTML.replace(/\/me ?/, '');
-            sendHtmlFn = this.client.sendHtmlEmote;
-            sendTextFn = this.client.sendEmoteMessage;
-        }
-
         if (this.state.isRichtextEnabled) {
             this.historyManager.addItem(
                 contentHTML ? contentHTML : contentText,
@@ -564,6 +600,14 @@ export default class MessageComposerInput extends React.Component {
         } else {
             // Always store MD input as input history
             this.historyManager.addItem(contentText, 'markdown');
+        }
+
+        if (contentText.startsWith('/me')) {
+            contentText = contentText.substring(4);
+            // bit of a hack, but the alternative would be quite complicated
+            if (contentHTML) contentHTML = contentHTML.replace(/\/me ?/, '');
+            sendHtmlFn = this.client.sendHtmlEmote;
+            sendTextFn = this.client.sendEmoteMessage;
         }
 
         let sendMessagePromise;
@@ -599,6 +643,10 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onVerticalArrow = (e, up) => {
+        if (e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) {
+            return;
+        }
+
         // Select history only if we are not currently auto-completing
         if (this.autocomplete.state.completionList.length === 0) {
             // Don't go back in history if we're in the middle of a multi-line message
@@ -607,17 +655,16 @@ export default class MessageComposerInput extends React.Component {
             const firstBlock = this.state.editorState.getCurrentContent().getFirstBlock();
             const lastBlock = this.state.editorState.getCurrentContent().getLastBlock();
 
-            const selectionOffset = selection.getAnchorOffset();
             let canMoveUp = false;
             let canMoveDown = false;
             if (blockKey === firstBlock.getKey()) {
-                const textBeforeCursor = firstBlock.getText().slice(0, selectionOffset);
-                canMoveUp = textBeforeCursor.indexOf('\n') === -1;
+                canMoveUp = selection.getStartOffset() === selection.getEndOffset() &&
+                    selection.getStartOffset() === 0;
             }
 
             if (blockKey === lastBlock.getKey()) {
-                const textAfterCursor = lastBlock.getText().slice(selectionOffset);
-                canMoveDown = textAfterCursor.indexOf('\n') === -1;
+                canMoveDown = selection.getStartOffset() === selection.getEndOffset() &&
+                    selection.getStartOffset() === lastBlock.getText().length;
             }
 
             if ((up && !canMoveUp) || (!up && !canMoveDown)) return;
@@ -674,10 +721,16 @@ export default class MessageComposerInput extends React.Component {
     };
 
     onTab = async (e) => {
+        this.setState({
+            someCompletions: null,
+        });
         e.preventDefault();
         if (this.autocomplete.state.completionList.length === 0) {
             // Force completions to show for the text currently entered
-            await this.autocomplete.forceComplete();
+            const completionCount = await this.autocomplete.forceComplete();
+            this.setState({
+                someCompletions: completionCount > 0,
+            });
             // Select the first item by moving "down"
             await this.moveAutocompleteSelection(false);
         } else {
@@ -798,6 +851,7 @@ export default class MessageComposerInput extends React.Component {
 
         const className = classNames('mx_MessageComposer_input', {
             mx_MessageComposer_input_empty: hidePlaceholder,
+            mx_MessageComposer_input_error: this.state.someCompletions === false,
         });
 
         const content = activeEditorState.getCurrentContent();
