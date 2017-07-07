@@ -141,6 +141,10 @@ class RoomViewStore extends Store {
                 shouldPeek: payload.should_peek === undefined ? true : payload.should_peek,
             };
 
+            if (payload.joined) {
+                newState.joining = false;
+            }
+
             // If an event ID wasn't specified, default to the one saved for this room
             // via update_scroll_state. Assume initialEventPixelOffset should be set.
             if (!newState.initialEventId) {
