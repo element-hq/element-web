@@ -63,6 +63,18 @@ export default class QueryMatcher {
         this.options = options;
         this.keys = options.keys;
         this.setObjects(objects);
+
+        // By default, we remove any non-alphanumeric characters ([^A-Za-z0-9_]) from the
+        // query and the value being queried before matching
+        if (this.options.shouldMatchWordsOnly === undefined) {
+            this.options.shouldMatchWordsOnly = true;
+        }
+
+        // By default, match anywhere in the string being searched. If enabled, only return
+        // matches that are prefixed with the query.
+        if (this.options.shouldMatchPrefix === undefined) {
+            this.options.shouldMatchPrefix = false;
+        }
     }
 
     setObjects(objects: Array<Object>) {
@@ -70,10 +82,31 @@ export default class QueryMatcher {
     }
 
     match(query: String): Array<Object> {
-        query = query.toLowerCase().replace(/[^\w]/g, '');
-        const results = _sortedUniq(_sortBy(_flatMap(this.keyMap.keys, (key) => {
-            return key.toLowerCase().replace(/[^\w]/g, '').indexOf(query) >= 0 ? this.keyMap.objectMap[key] : [];
-        }), (candidate) => this.keyMap.priorityMap.get(candidate)));
-        return results;
+        query = query.toLowerCase();
+        if (this.options.shouldMatchWordsOnly) {
+            query = query.replace(/[^\w]/g, '');
+        }
+        if (query.length === 0) {
+            return [];
+        }
+        const results = [];
+        this.keyMap.keys.forEach((key) => {
+            let resultKey = key.toLowerCase();
+            if (this.options.shouldMatchWordsOnly) {
+                resultKey = resultKey.replace(/[^\w]/g, '');
+            }
+            const index = resultKey.indexOf(query);
+            if (index !== -1 && (!this.options.shouldMatchPrefix || index === 0)) {
+                results.push({key, index});
+            }
+        });
+
+        return _sortedUniq(_flatMap(_sortBy(results, (candidate) => {
+            return candidate.index;
+        }).map((candidate) => {
+            // return an array of objects (those given to setObjects) that have the given
+            // key as a property.
+            return this.keyMap.objectMap[candidate.key];
+        })));
     }
 }

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var MatrixClientPeg = require("./MatrixClientPeg");
+import MatrixClientPeg from './MatrixClientPeg';
 import { _t } from './languageHandler';
 
 /**
@@ -44,7 +44,7 @@ class AddThreepid {
             this.sessionId = res.sid;
             return res;
         }, function(err) {
-            if (err.errcode == 'M_THREEPID_IN_USE') {
+            if (err.errcode === 'M_THREEPID_IN_USE') {
                 err.message = _t('This email address is already in use');
             } else if (err.httpStatus) {
                 err.message = err.message + ` (Status ${err.httpStatus})`;
@@ -69,7 +69,7 @@ class AddThreepid {
             this.sessionId = res.sid;
             return res;
         }, function(err) {
-            if (err.errcode == 'M_THREEPID_IN_USE') {
+            if (err.errcode === 'M_THREEPID_IN_USE') {
                 err.message = _t('This phone number is already in use');
             } else if (err.httpStatus) {
                 err.message = err.message + ` (Status ${err.httpStatus})`;
@@ -85,16 +85,15 @@ class AddThreepid {
      * the request failed.
      */
     checkEmailLinkClicked() {
-        var identityServerDomain = MatrixClientPeg.get().idBaseUrl.split("://")[1];
+        const identityServerDomain = MatrixClientPeg.get().idBaseUrl.split("://")[1];
         return MatrixClientPeg.get().addThreePid({
             sid: this.sessionId,
             client_secret: this.clientSecret,
-            id_server: identityServerDomain
+            id_server: identityServerDomain,
         }, this.bind).catch(function(err) {
             if (err.httpStatus === 401) {
                 err.message = _t('Failed to verify email address: make sure you clicked the link in the email');
-            }
-            else if (err.httpStatus) {
+            } else if (err.httpStatus) {
                 err.message += ` (Status ${err.httpStatus})`;
             }
             throw err;
@@ -104,6 +103,7 @@ class AddThreepid {
     /**
      * Takes a phone number verification code as entered by the user and validates
      * it with the ID server, then if successful, adds the phone number.
+     * @param {string} token phone number verification code as entered by the user
      * @return {Promise} Resolves if the phone number was added. Rejects with an object
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
@@ -119,7 +119,7 @@ class AddThreepid {
             return MatrixClientPeg.get().addThreePid({
                 sid: this.sessionId,
                 client_secret: this.clientSecret,
-                id_server: identityServerDomain
+                id_server: identityServerDomain,
             }, this.bind);
         });
     }

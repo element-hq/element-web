@@ -57,6 +57,7 @@ export default class BasePlatform {
     /**
      * Returns true if the platform supports displaying
      * notifications, otherwise false.
+     * @returns {boolean} whether the platform supports displaying notifications
      */
     supportsNotifications(): boolean {
         return false;
@@ -65,6 +66,7 @@ export default class BasePlatform {
     /**
      * Returns true if the application currently has permission
      * to display notifications. Otherwise false.
+     * @returns {boolean} whether the application has permission to display notifications
      */
     maySendNotifications(): boolean {
         return false;

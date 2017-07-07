@@ -19,7 +19,7 @@ export function levelRoleMap() {
     return {
         undefined: _t('Default'),
         0: _t('User'),
-        50:  _t('Moderator'),
+        50: _t('Moderator'),
         100: _t('Admin'),
     };
 }

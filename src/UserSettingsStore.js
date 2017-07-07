@@ -30,11 +30,17 @@ export default {
             id: 'rich_text_editor',
             default: false,
         },
+        {
+            name: "-",
+            id: 'matrix_apps',
+            default: false,
+        },
     ],
 
     // horrible but it works. The locality makes this somewhat more palatable.
     doTranslations: function() {
         this.LABS_FEATURES[0].name = _t("New Composer & Autocomplete");
+        this.LABS_FEATURES[1].name = _t("Matrix Apps");
     },
 
     loadProfileInfo: function() {

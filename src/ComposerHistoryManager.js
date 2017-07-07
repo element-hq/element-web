@@ -52,21 +52,19 @@ export default class ComposerHistoryManager {
     history: Array<HistoryItem> = [];
     prefix: string;
     lastIndex: number = 0;
-    currentIndex: number = -1;
+    currentIndex: number = 0;
 
     constructor(roomId: string, prefix: string = 'mx_composer_history_') {
         this.prefix = prefix + roomId;
 
         // TODO: Performance issues?
-        for(; sessionStorage.getItem(`${this.prefix}[${this.lastIndex}]`); this.lastIndex++, this.currentIndex++) {
+        let item;
+        for(; item = sessionStorage.getItem(`${this.prefix}[${this.currentIndex}]`); this.currentIndex++) {
             this.history.push(
-                Object.assign(
-                    new HistoryItem(),
-                    JSON.parse(sessionStorage.getItem(`${this.prefix}[${this.lastIndex}]`)),
-                ),
+                Object.assign(new HistoryItem(), JSON.parse(item)),
             );
         }
-        this.currentIndex--;
+        this.lastIndex = this.currentIndex;
     }
 
     addItem(message: string, format: MessageFormat) {

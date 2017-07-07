@@ -22,8 +22,11 @@ git checkout "$curbranch" || git checkout develop
 mkdir node_modules
 npm install
 
-(cd node_modules/matrix-js-sdk && npm install)
+# use the version of js-sdk we just used in the react-sdk tests
+rm -r node_modules/matrix-js-sdk
+ln -s "$REACT_SDK_DIR/node_modules/matrix-js-sdk" node_modules/matrix-js-sdk
 
+# ... and, of course, the version of react-sdk we just built
 rm -r node_modules/matrix-react-sdk
 ln -s "$REACT_SDK_DIR" node_modules/matrix-react-sdk
 

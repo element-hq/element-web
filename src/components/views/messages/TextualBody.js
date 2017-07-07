@@ -29,6 +29,7 @@ import Modal from '../../../Modal';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
+import UserSettingsStore from "../../../UserSettingsStore";
 
 linkifyMatrix(linkify);
 
@@ -90,7 +91,18 @@ module.exports = React.createClass({
                 setTimeout(() => {
                     if (this._unmounted) return;
                     for (let i = 0; i < blocks.length; i++) {
-                        highlight.highlightBlock(blocks[i]);
+                        if (UserSettingsStore.getSyncedSetting("enableSyntaxHighlightLanguageDetection", false)) {
+                            highlight.highlightBlock(blocks[i])
+                        } else {
+                            // Only syntax highlight if there's a class starting with language-
+                            let classes = blocks[i].className.split(/\s+/).filter(function (cl) {
+                                return cl.startsWith('language-');
+                            });
+
+                            if (classes.length != 0) {
+                                highlight.highlightBlock(blocks[i]);
+                            }
+                        }
                     }
                 }, 10);
             }
@@ -131,9 +143,15 @@ module.exports = React.createClass({
         if (this.props.showUrlPreview && !this.state.links.length) {
             var links = this.findLinks(this.refs.content.children);
             if (links.length) {
-                this.setState({ links: links.map((link)=>{
-                    return link.getAttribute("href");
-                })});
+                // de-dup the links (but preserve ordering)
+                const seen = new Set();
+                links = links.filter((link) => {
+                    if (seen.has(link)) return false;
+                    seen.add(link);
+                    return true;
+                });
+
+                this.setState({ links: links });
 
                 // lazy-load the hidden state of the preview widget from localstorage
                 if (global.localStorage) {
@@ -146,12 +164,13 @@ module.exports = React.createClass({
 
     findLinks: function(nodes) {
         var links = [];
+
         for (var i = 0; i < nodes.length; i++) {
             var node = nodes[i];
             if (node.tagName === "A" && node.getAttribute("href"))
             {
                 if (this.isLinkPreviewable(node)) {
-                    links.push(node);
+                    links.push(node.getAttribute("href"));
                 }
             }
             else if (node.tagName === "PRE" || node.tagName === "CODE" ||

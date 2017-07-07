@@ -18,16 +18,42 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import {emojioneList, shortnameToImage, shortnameToUnicode} from 'emojione';
+import {emojioneList, shortnameToImage, shortnameToUnicode, asciiRegexp} from 'emojione';
 import FuzzyMatcher from './FuzzyMatcher';
 import sdk from '../index';
 import {PillCompletion} from './Components';
 import type {SelectionRange, Completion} from './Autocompleter';
 
-const EMOJI_REGEX = /:\w*:?/g;
-const EMOJI_SHORTNAMES = Object.keys(emojioneList).map(shortname => {
+import EmojiData from '../stripped-emoji.json';
+
+const LIMIT = 20;
+const CATEGORY_ORDER = [
+    'people',
+    'food',
+    'objects',
+    'activity',
+    'nature',
+    'travel',
+    'flags',
+    'symbols',
+    'unicode9',
+    'modifier',
+];
+
+// Match for ":wink:" or ascii-style ";-)" provided by emojione
+const EMOJI_REGEX = new RegExp('(' + asciiRegexp + '|:\\w*:?)$', 'g');
+const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sort(
+    (a, b) => {
+        if (a.category === b.category) {
+            return a.emoji_order - b.emoji_order;
+        }
+        return CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category);
+    },
+).map((a) => {
     return {
-        shortname,
+        name: a.name,
+        shortname: a.shortname,
+        aliases_ascii: a.aliases_ascii ? a.aliases_ascii.join(' ') : '',
     };
 });
 
@@ -37,7 +63,9 @@ export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
         this.matcher = new FuzzyMatcher(EMOJI_SHORTNAMES, {
-            keys: 'shortname',
+            keys: ['aliases_ascii', 'shortname', 'name'],
+            // For matching against ascii equivalents
+            shouldMatchWordsOnly: false,
         });
     }
 
@@ -57,7 +85,7 @@ export default class EmojiProvider extends AutocompleteProvider {
                     ),
                     range,
                 };
-            }).slice(0, 8);
+            }).slice(0, LIMIT);
         }
         return completions;
     }
@@ -73,7 +101,7 @@ export default class EmojiProvider extends AutocompleteProvider {
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
-        return <div className="mx_Autocomplete_Completion_container_pill">
+        return <div className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate">
             {completions}
         </div>;
     }

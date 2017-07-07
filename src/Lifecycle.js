@@ -419,6 +419,8 @@ export function logout() {
  * listen for events while a session is logged in.
  */
 function startMatrixClient() {
+    console.log(`Lifecycle: Starting MatrixClient`);
+
     // dispatch this before starting the matrix client: it's used
     // to add listeners for the 'sync' event so otherwise we'd have
     // a race condition (and we need to dispatch synchronously for this
