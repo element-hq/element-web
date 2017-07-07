@@ -38,7 +38,7 @@ export default React.createClass({
         };
     },
 
-    getGroupAvatarUrl: function(props) {
+    getGroupAvatarUrl: function() {
         return MatrixClientPeg.get().mxcUrlToHttp(
             this.props.groupAvatarUrl,
             this.props.width,
@@ -50,6 +50,8 @@ export default React.createClass({
     render: function() {
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
         // extract the props we use from props so we can pass any others through
+        // should consider adding this as a global rule in js-sdk?
+        /*eslint no-unused-vars: ["error", { "ignoreRestSiblings": true }]*/
         const {groupId, groupAvatarUrl, ...otherProps} = this.props;
 
         return (
@@ -60,5 +62,5 @@ export default React.createClass({
                 {...otherProps}
             />
         );
-    }
+    },
 });
