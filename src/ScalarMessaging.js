@@ -481,7 +481,7 @@ const onMessage = function(event) {
     // All strings start with the empty string, so for sanity return if the length
     // of the event origin is 0.
     let url = SdkConfig.get().integrations_ui_url;
-    if (event.origin.length === 0 || !url.startsWith(event.origin)) {
+    if (event.origin.length === 0 || !url.startsWith(event.origin) || !event.data.action) {
         return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
     }
 
