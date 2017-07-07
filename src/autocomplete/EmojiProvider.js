@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import {emojioneList, shortnameToImage, shortnameToUnicode, asciiRegexp} from 'emojione';
+import {emojioneList, shortnameToImage, shortnameToUnicode, asciiRegexp, unicodeRegexp} from 'emojione';
 import FuzzyMatcher from './FuzzyMatcher';
 import sdk from '../index';
 import {PillCompletion} from './Components';
@@ -41,7 +41,15 @@ const CATEGORY_ORDER = [
 ];
 
 // Match for ":wink:" or ascii-style ";-)" provided by emojione
-const EMOJI_REGEX = new RegExp('(' + asciiRegexp + '|:\\w*:?)$', 'g');
+// (^|\s|(emojiUnicode)) to make sure we're either at the start of the string or there's a
+// whitespace character or an emoji before the emoji. The reason for unicodeRegexp is
+// that we need to support inputting multiple emoji with no space between them.
+const EMOJI_REGEX = new RegExp('(?:^|\\s|' + unicodeRegexp + ')(' + asciiRegexp + '|:\\w*:?)$', 'g');
+
+// We also need to match the non-zero-length prefixes to remove them from the final match,
+// and update the range so that we don't replace the whitespace or the previous emoji.
+const MATCH_PREFIX_REGEX = new RegExp('(\\s|' + unicodeRegexp + ')');
+
 const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sort(
     (a, b) => {
         if (a.category === b.category) {
@@ -73,9 +81,18 @@ export default class EmojiProvider extends AutocompleteProvider {
         const EmojiText = sdk.getComponent('views.elements.EmojiText');
 
         let completions = [];
-        let {command, range} = this.getCurrentCommand(query, selection);
+        const {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
-            completions = this.matcher.match(command[0]).map(result => {
+            let matchedString = command[0];
+
+            // Remove prefix of any length (single whitespace or unicode emoji)
+            const prefixMatch = MATCH_PREFIX_REGEX.exec(matchedString);
+            if (prefixMatch) {
+                matchedString = matchedString.slice(prefixMatch[0].length);
+                range.start += prefixMatch[0].length;
+            }
+
+            completions = this.matcher.match(matchedString).map((result) => {
                 const {shortname} = result;
                 const unicode = shortnameToUnicode(shortname);
                 return {
