@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../index';
 import { _t, _tJsx } from '../../languageHandler';
-import WithMatrixClient from '../../wrappers/WithMatrixClient';
+import withMatrixClient from '../../wrappers/withMatrixClient';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import dis from '../../dispatcher';
 import PropTypes from 'prop-types';
@@ -40,10 +40,10 @@ const GroupTile = React.createClass({
 
     render: function() {
         return <a onClick={this.onClick} href="#">{this.props.groupId}</a>;
-    }
+    },
 });
 
-export default WithMatrixClient(React.createClass({
+export default withMatrixClient(React.createClass({
     displayName: 'MyGroups',
 
     propTypes: {
@@ -84,12 +84,12 @@ export default WithMatrixClient(React.createClass({
 
         let content;
         if (this.state.groups) {
-            let groupNodes = [];
+            const groupNodes = [];
             this.state.groups.forEach((g) => {
                 groupNodes.push(
                     <div key={g}>
                         <GroupTile groupId={g} />
-                    </div>
+                    </div>,
                 );
             });
             content = <div>
@@ -117,7 +117,7 @@ export default WithMatrixClient(React.createClass({
                     {_t(
                         'Create a group to represent your community! '+
                         'Define a set of rooms and your own custom homepage '+
-                        'to mark out your space in the Matrix universe.'
+                        'to mark out your space in the Matrix universe.',
                     )}
                 </div>
                 <div className="mx_MyGroups_joinBox">

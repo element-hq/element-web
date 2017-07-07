@@ -20,7 +20,6 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import AccessibleButton from '../elements/AccessibleButton';
 
 // We match fairly liberally and leave it up to the server to reject if
 // there are invalid characters etc.
@@ -62,14 +61,17 @@ export default React.createClass({
         const parsedGroupId = this._parseGroupId(this.state.groupId);
         let error = null;
         if (parsedGroupId === null) {
-            error = _t("Group IDs must be of the form +localpart:%(domain)s", {domain: MatrixClientPeg.get().getDomain()});
+            error = _t(
+                "Group IDs must be of the form +localpart:%(domain)s",
+                {domain: MatrixClientPeg.get().getDomain()},
+            );
         } else {
-            const localpart = parsedGroupId[0];
             const domain = parsedGroupId[1];
             if (domain !== MatrixClientPeg.get().getDomain()) {
                 error = _t(
-                    "It is currently only possible to create groups on your own home server: use a group ID ending with %(domain)s",
-                    {domain: MatrixClientPeg.get().getDomain()}
+                    "It is currently only possible to create groups on your own home server: "+
+                    "use a group ID ending with %(domain)s",
+                    {domain: MatrixClientPeg.get().getDomain()},
                 );
             }
         }
@@ -114,6 +116,9 @@ export default React.createClass({
      * Parse a string that may be a group ID
      * If the string is a valid group ID, return a list of [localpart, domain],
      * otherwise return null.
+     *
+     * @param {string} groupId The ID of the group
+     * @return {string[]} array of localpart, domain
      */
     _parseGroupId: function(groupId) {
         const matches = GROUP_REGEX.exec(this.state.groupId);
