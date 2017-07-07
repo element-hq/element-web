@@ -118,7 +118,17 @@ export function processHtmlForSending(html: string): string {
     return contentHTML;
 }
 
-var sanitizeHtmlParams = {
+/*
+ * Given an untrusted HTML string, return a React node with an sanitized version
+ * of that HTML.
+ */
+export function sanitizedHtmlNode(insaneHtml) {
+    const saneHtml =  sanitizeHtml(insaneHtml, sanitizeHtmlParams);
+
+    return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" />;
+}
+
+const sanitizeHtmlParams = {
     allowedTags: [
         'font', // custom to matrix for IRC-style font coloring
         'del', // for markdown

@@ -290,6 +290,9 @@ module.exports = React.createClass({
         if (this.onUserClick) {
             linkifyMatrix.onUserClick = this.onUserClick;
         }
+        if (this.onGroupClick) {
+            linkifyMatrix.onGroupClick = this.onGroupClick;
+        }
 
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
@@ -482,6 +485,14 @@ module.exports = React.createClass({
             case 'view_room_directory':
                 this._setPage(PageTypes.RoomDirectory);
                 this.notifyNewScreen('directory');
+                break;
+            case 'view_group':
+                {
+                    const groupId = payload.group_id;
+                    this.setState({currentGroupId: groupId});
+                    this._setPage(PageTypes.GroupView);
+                    this.notifyNewScreen('group/' + groupId);
+                }
                 break;
             case 'view_home_page':
                 this._setPage(PageTypes.HomePage);
@@ -1199,6 +1210,15 @@ module.exports = React.createClass({
                     member: member,
                 });
             }
+        } else if (screen.indexOf('group/') == 0) {
+            const groupId = screen.substring(6);
+
+            // TODO: Check valid group ID
+
+            dis.dispatch({
+                action: 'view_group',
+                group_id: groupId,
+            });
         } else {
             console.info("Ignoring showScreen for '%s'", screen);
         }
@@ -1225,6 +1245,11 @@ module.exports = React.createClass({
             action: 'view_user',
             member: member,
         });
+    },
+
+    onGroupClick: function(event, groupId) {
+        event.preventDefault();
+        dis.dispatch({action: 'view_group', group_id: groupId});
     },
 
     onLogoutClick: function(event) {
