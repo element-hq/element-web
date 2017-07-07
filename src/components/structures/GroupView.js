@@ -29,7 +29,9 @@ function categoryRoomListNode(rooms, categoryId, category) {
         return <FeaturedRoom key={r.room_id} summaryInfo={r} />;
     });
     let catHeader = null;
-    if (category && category.profile) catHeader = <div className="mx_GroupView_featuredRooms_category">{category.profile.name}</div>
+    if (category && category.profile) {
+        catHeader = <div className="mx_GroupView_featuredRooms_category">{category.profile.name}</div>;
+    }
     return <div key={categoryId}>
         {catHeader}
         {roomNodes}
@@ -76,7 +78,7 @@ const FeaturedRoom = React.createClass({
             <RoomAvatar oobData={oobData} width={64} height={64} />
             <div className="mx_GroupView_featuredRoom_name">{roomNameNode}</div>
         </AccessibleButton>;
-    }
+    },
 });
 
 export default React.createClass({
