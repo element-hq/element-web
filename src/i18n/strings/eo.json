@@ -200,5 +200,6 @@
     "Fetching third party location failed": "Venigado de ekstere liverita loko malsukcesis",
     "Filter room names": "Filtri nomojn de ejoj",
     "Warning": "Averto",
-    "Checking for an update...": "Kontrolanta por ĝisdatigo..."
+    "Checking for an update...": "Kontrolanta por ĝisdatigo...",
+    "No update available.": "Ĝisdatigo ne estas disponata."
 }
