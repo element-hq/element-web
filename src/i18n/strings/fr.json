@@ -931,7 +931,7 @@
     "Share without verifying": "Partager sans vérifier",
     "Ignore request": "Ignorer la requête",
     "You added a new device '%(displayName)s', which is requesting encryption keys.": "Vous avez ajouté un nouvel appareil, '%(displayName)s', qui demande des clés de chiffrement.",
-    "Your unverified device '%(displayName)s' is requesting encryption keys.": "Votre appareil non vérifié '%(displayName)s' demande des clés de chiffrements",
+    "Your unverified device '%(displayName)s' is requesting encryption keys.": "Votre appareil non vérifié '%(displayName)s' demande des clés de chiffrements.",
     "Encryption key request": "Requête de clé de chiffrement",
     "Updates": "Mises à jour",
     "Check for update": "Rechercher une mise à jour"
