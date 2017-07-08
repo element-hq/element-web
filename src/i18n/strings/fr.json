@@ -666,7 +666,7 @@
     "was kicked %(repeats)s times": "a été expulsé(e) %(repeats)s fois",
     "were kicked": "ont été expulsé(e)s",
     "%(severalUsers)schanged their name %(repeats)s times": "%(severalUsers)sont changé leur nom %(repeats)s fois",
-    "%(oneUser)schanged their name %(repeats)s times": "%(oneUser)sa changé son nom %(repeats)s times",
+    "%(oneUser)schanged their name %(repeats)s times": "%(oneUser)sa changé son nom %(repeats)s fois",
     "%(severalUsers)schanged their name": "%(severalUsers)sont changé leur nom",
     "%(oneUser)schanged their name": "%(oneUser)sa changé son nom",
     "%(severalUsers)schanged their avatar %(repeats)s times": "%(severalUsers)sont changé leur photo de profil %(repeats)s fois",
