@@ -908,14 +908,7 @@ MessageComposerInput.propTypes = {
     // called with current plaintext content (as a string) whenever it changes
     onContentChanged: React.PropTypes.func,
 
-    onUpArrow: React.PropTypes.func,
-
-    onDownArrow: React.PropTypes.func,
-
     onFilesPasted: React.PropTypes.func,
-
-    // attempts to confirm currently selected completion, returns whether actually confirmed
-    tryComplete: React.PropTypes.func,
 
     onInputStateChanged: React.PropTypes.func,
 };
