@@ -514,6 +514,7 @@ export default class MessageComposerInput extends React.Component {
         const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
         // If we're in any of these three types of blocks, shift enter should insert soft newlines
         // And just enter should end the block
+        // XXX: Empirically enter does not end these blocks
         if(['blockquote', 'unordered-list-item', 'ordered-list-item'].includes(currentBlockType)) {
             return false;
         }
@@ -628,8 +629,6 @@ export default class MessageComposerInput extends React.Component {
         this.setState({
             editorState: this.createEditorState(),
         });
-
-        this.autocomplete.hide();
 
         return true;
     }
@@ -909,14 +908,7 @@ MessageComposerInput.propTypes = {
     // called with current plaintext content (as a string) whenever it changes
     onContentChanged: React.PropTypes.func,
 
-    onUpArrow: React.PropTypes.func,
-
-    onDownArrow: React.PropTypes.func,
-
     onFilesPasted: React.PropTypes.func,
-
-    // attempts to confirm currently selected completion, returns whether actually confirmed
-    tryComplete: React.PropTypes.func,
 
     onInputStateChanged: React.PropTypes.func,
 };
