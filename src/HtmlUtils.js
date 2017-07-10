@@ -151,9 +151,6 @@ const sanitizeHtmlParams = {
     // URL schemes we permit
     allowedSchemes: ['http', 'https', 'ftp', 'mailto'],
 
-    allowedSchemesByTag: {
-        img: ['http', 'https'],
-    },
     allowProtocolRelative: false,
 
     transformTags: { // custom to matrix
@@ -187,13 +184,14 @@ const sanitizeHtmlParams = {
             return { tagName: tagName, attribs : attribs };
         },
         'img': function(tagName, attribs) {
-            if (attribs.src.startsWith('mxc://')) {
-                attribs.src = MatrixClientPeg.get().mxcUrlToHttp(
-                    attribs.src,
-                    attribs.width || 800,
-                    attribs.height || 600,
-                );
+            if (!attribs.src.startsWith('mxc://')) {
+                return { tagName, attribs: {}};
             }
+            attribs.src = MatrixClientPeg.get().mxcUrlToHttp(
+                attribs.src,
+                attribs.width || 800,
+                attribs.height || 600,
+            );
             return { tagName: tagName, attribs: attribs };
         },
         'code': function(tagName, attribs) {
