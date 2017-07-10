@@ -36,9 +36,6 @@ export default class MessageComposer extends React.Component {
         this.uploadFiles = this.uploadFiles.bind(this);
         this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
         this.onInputContentChanged = this.onInputContentChanged.bind(this);
-        this.onUpArrow = this.onUpArrow.bind(this);
-        this.onDownArrow = this.onDownArrow.bind(this);
-        this._tryComplete = this._tryComplete.bind(this);
         this._onAutocompleteConfirm = this._onAutocompleteConfirm.bind(this);
         this.onToggleFormattingClicked = this.onToggleFormattingClicked.bind(this);
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
@@ -349,7 +346,6 @@ export default class MessageComposer extends React.Component {
                     onResize={this.props.onResize}
                     room={this.props.room}
                     placeholder={placeholderText}
-                    tryComplete={this._tryComplete}
                     onFilesPasted={this.uploadFiles}
                     onContentChanged={this.onInputContentChanged}
                     onInputStateChanged={this.onInputStateChanged} />,
