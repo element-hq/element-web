@@ -161,11 +161,6 @@ export default React.createClass({
                         list.push(r);
                     }
                 });
-                /*[defaultCategoryRooms, ...Object.values(categoryRooms)].forEach((roomList) => {
-                    roomList.sort((r1, r2) => {
-                        return r1.order - r2.order;
-                    });
-                });*/
 
                 let defaultCategoryNode = null;
                 if (defaultCategoryRooms.length > 0) {
