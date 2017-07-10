@@ -153,7 +153,7 @@ const sanitizeHtmlParams = {
     allowedSchemes: ['http', 'https', 'ftp', 'mailto'],
 
     allowedSchemesByTag: {
-        img: [ 'data', 'mxc' ],
+        img: ['mxc'],
     },
     allowProtocolRelative: false,
 
