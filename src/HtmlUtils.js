@@ -184,6 +184,9 @@ const sanitizeHtmlParams = {
             return { tagName: tagName, attribs : attribs };
         },
         'img': function(tagName, attribs) {
+            // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
+            // because transformTags is used _before_ we filter by allowedSchemesByTag and
+            // we don't want to allow images with `https?` `src`s.
             if (!attribs.src.startsWith('mxc://')) {
                 return { tagName, attribs: {}};
             }
