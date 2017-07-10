@@ -217,7 +217,8 @@ export default React.createClass({
                                     {summary.profile.short_description}
                                 </div>
                             </div>
-                            <AccessibleButton className="mx_RoomHeader_button" onClick={this._onSettingsClick} title={_t("Settings")}>
+                            // display: none until settings is wired up
+                            <AccessibleButton className="mx_RoomHeader_button" onClick={this._onSettingsClick} title={_t("Settings")} style={{display: 'none'}}>
                                 <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
                             </AccessibleButton>
                         </div>
