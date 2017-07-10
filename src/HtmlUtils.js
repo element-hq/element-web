@@ -23,6 +23,7 @@ var linkifyMatrix = require('./linkify-matrix');
 import escape from 'lodash/escape';
 import emojione from 'emojione';
 import classNames from 'classnames';
+import MatrixClientPeg from './MatrixClientPeg';
 
 emojione.imagePathSVG = 'emojione/svg/';
 // Store PNG path for displaying many flags at once (for increased performance over SVG)
@@ -141,8 +142,6 @@ const sanitizeHtmlParams = {
         font: ['color', 'data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
         span: ['data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
         a: ['href', 'name', 'target', 'rel'], // remote target: custom to matrix
-        // We don't currently allow img itself by default, but this
-        // would make sense if we did
         img: ['src'],
         ol: ['start'],
         code: ['class'], // We don't actually allow all classes, we filter them in transformTags
@@ -153,7 +152,7 @@ const sanitizeHtmlParams = {
     allowedSchemes: ['http', 'https', 'ftp', 'mailto'],
 
     allowedSchemesByTag: {
-        img: ['mxc'],
+        img: ['http', 'https'],
     },
     allowProtocolRelative: false,
 
@@ -186,6 +185,16 @@ const sanitizeHtmlParams = {
             }
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
             return { tagName: tagName, attribs : attribs };
+        },
+        'img': function(tagName, attribs) {
+            if (attribs.src.startsWith('mxc://')) {
+                attribs.src = MatrixClientPeg.get().mxcUrlToHttp(
+                    attribs.src,
+                    attribs.width || 800,
+                    attribs.height || 600,
+                );
+            }
+            return { tagName: tagName, attribs: attribs };
         },
         'code': function(tagName, attribs) {
             if (typeof attribs.class !== 'undefined') {
