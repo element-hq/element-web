@@ -23,6 +23,7 @@ var linkifyMatrix = require('./linkify-matrix');
 import escape from 'lodash/escape';
 import emojione from 'emojione';
 import classNames from 'classnames';
+import MatrixClientPeg from './MatrixClientPeg';
 
 emojione.imagePathSVG = 'emojione/svg/';
 // Store PNG path for displaying many flags at once (for increased performance over SVG)
@@ -134,15 +135,13 @@ const sanitizeHtmlParams = {
         'del', // for markdown
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
         'nl', 'li', 'b', 'i', 'u', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
-        'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'span',
+        'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'span', 'img',
     ],
     allowedAttributes: {
         // custom ones first:
         font: ['color', 'data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
         span: ['data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
         a: ['href', 'name', 'target', 'rel'], // remote target: custom to matrix
-        // We don't currently allow img itself by default, but this
-        // would make sense if we did
         img: ['src'],
         ol: ['start'],
         code: ['class'], // We don't actually allow all classes, we filter them in transformTags
@@ -152,10 +151,7 @@ const sanitizeHtmlParams = {
     // URL schemes we permit
     allowedSchemes: ['http', 'https', 'ftp', 'mailto'],
 
-    // DO NOT USE. sanitize-html allows all URL starting with '//'
-    // so this will always allow links to whatever scheme the
-    // host page is served over.
-    allowedSchemesByTag: {},
+    allowProtocolRelative: false,
 
     transformTags: { // custom to matrix
         // add blank targets to all hyperlinks except vector URLs
@@ -186,6 +182,20 @@ const sanitizeHtmlParams = {
             }
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
             return { tagName: tagName, attribs : attribs };
+        },
+        'img': function(tagName, attribs) {
+            // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
+            // because transformTags is used _before_ we filter by allowedSchemesByTag and
+            // we don't want to allow images with `https?` `src`s.
+            if (!attribs.src.startsWith('mxc://')) {
+                return { tagName, attribs: {}};
+            }
+            attribs.src = MatrixClientPeg.get().mxcUrlToHttp(
+                attribs.src,
+                attribs.width || 800,
+                attribs.height || 600,
+            );
+            return { tagName: tagName, attribs: attribs };
         },
         'code': function(tagName, attribs) {
             if (typeof attribs.class !== 'undefined') {
