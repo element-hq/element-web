@@ -36,12 +36,12 @@ import createRoom from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import Unread from '../../../Unread';
 import { findReadReceiptFromUserId } from '../../../utils/Receipt';
-import WithMatrixClient from '../../../wrappers/WithMatrixClient';
+import withMatrixClient from '../../../wrappers/withMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
 
-module.exports = WithMatrixClient(React.createClass({
+module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
 
     propTypes: {

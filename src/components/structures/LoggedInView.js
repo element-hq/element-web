@@ -211,6 +211,7 @@ export default React.createClass({
         const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         const HomePage = sdk.getComponent('structures.HomePage');
         const GroupView = sdk.getComponent('structures.GroupView');
+        const MyGroups = sdk.getComponent('structures.MyGroups');
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         const UpdateCheckBar = sdk.getComponent('globals.UpdateCheckBar');
@@ -248,6 +249,10 @@ export default React.createClass({
                 if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.rightOpacity}/>;
                 break;
 
+            case PageTypes.MyGroups:
+                page_element = <MyGroups />;
+                break;
+
             case PageTypes.CreateRoom:
                 page_element = <CreateRoom
                     onRoomCreated={this.props.onRoomCreated}
@@ -264,17 +269,19 @@ export default React.createClass({
                 break;
 
             case PageTypes.HomePage:
-                // If team server config is present, pass the teamServerURL. props.teamToken
-                // must also be set for the team page to be displayed, otherwise the
-                // welcomePageUrl is used (which might be undefined).
-                const teamServerUrl = this.props.config.teamServerConfig ?
-                    this.props.config.teamServerConfig.teamServerURL : null;
+                {
+                    // If team server config is present, pass the teamServerURL. props.teamToken
+                    // must also be set for the team page to be displayed, otherwise the
+                    // welcomePageUrl is used (which might be undefined).
+                    const teamServerUrl = this.props.config.teamServerConfig ?
+                        this.props.config.teamServerConfig.teamServerURL : null;
 
-                page_element = <HomePage
-                    teamServerUrl={teamServerUrl}
-                    teamToken={this.props.teamToken}
-                    homePageUrl={this.props.config.welcomePageUrl}
-                />;
+                    page_element = <HomePage
+                        teamServerUrl={teamServerUrl}
+                        teamToken={this.props.teamToken}
+                        homePageUrl={this.props.config.welcomePageUrl}
+                    />;
+                }
                 break;
 
             case PageTypes.UserView:

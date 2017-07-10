@@ -24,7 +24,7 @@ var Modal = require('../../../Modal');
 
 var sdk = require('../../../index');
 var TextForEvent = require('../../../TextForEvent');
-import WithMatrixClient from '../../../wrappers/WithMatrixClient';
+import withMatrixClient from '../../../wrappers/withMatrixClient';
 
 var ContextualMenu = require('../../structures/ContextualMenu');
 import dis from '../../../dispatcher';
@@ -59,7 +59,7 @@ var MAX_READ_AVATARS = 5;
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
-module.exports = WithMatrixClient(React.createClass({
+module.exports = withMatrixClient(React.createClass({
     displayName: 'EventTile',
 
     propTypes: {
