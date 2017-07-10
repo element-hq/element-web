@@ -147,8 +147,8 @@ export default React.createClass({
 
             let featuredRooms = null;
             if (summary.rooms_section.rooms.length > 0) {
-                let defaultCategoryRooms = [];
-                let categoryRooms = {};
+                const defaultCategoryRooms = [];
+                const categoryRooms = {};
                 summary.rooms_section.rooms.forEach((r) => {
                     if (r.category_id === null) {
                         defaultCategoryRooms.push(r);
