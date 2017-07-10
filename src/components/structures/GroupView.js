@@ -30,7 +30,7 @@ function categoryRoomListNode(rooms, categoryId, category) {
     });
     let catHeader = null;
     if (category && category.profile) {
-        catHeader = <div className="mx_GroupView_featuredRooms_category">{category.profile.name}</div>;
+        catHeader = <div className="mx_GroupView_featuredThings_category">{category.profile.name}</div>;
     }
     return <div key={categoryId}>
         {catHeader}
@@ -47,6 +47,7 @@ const FeaturedRoom = React.createClass({
 
     onClick: function(e) {
         e.preventDefault();
+        e.stopPropagation();
 
         dis.dispatch({
             action: 'view_room',
@@ -74,9 +75,54 @@ const FeaturedRoom = React.createClass({
             roomNameNode = <span>{this.props.summaryInfo.profile.name}</span>;
         }
 
-        return <AccessibleButton className="mx_GroupView_featuredRoom" onClick={this.onClick}>
+        return <AccessibleButton className="mx_GroupView_featuredThing" onClick={this.onClick}>
             <RoomAvatar oobData={oobData} width={64} height={64} />
-            <div className="mx_GroupView_featuredRoom_name">{roomNameNode}</div>
+            <div className="mx_GroupView_featuredThing_name">{roomNameNode}</div>
+        </AccessibleButton>;
+    },
+});
+
+function roleUserListNode(users, roleId, role) {
+    const userNodes = users.map((u) => {
+        return <FeaturedUser key={u.user_id} summaryInfo={u} />;
+    });
+    let roleHeader = null;
+    if (role && role.profile) {
+        roleHeader = <div className="mx_GroupView_featuredThings_category">{role.profile.name}</div>;
+    }
+    return <div key={roleId}>
+        {roleHeader}
+        {userNodes}
+    </div>;
+}
+
+const FeaturedUser = React.createClass({
+    displayName: 'FeaturedUser',
+
+    props: {
+        summaryInfo: PropTypes.object.isRequired,
+    },
+
+    onClick: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        dis.dispatch({
+            action: 'view_start_chat_or_reuse',
+            user_id: this.props.summaryInfo.user_id,
+            go_home_on_cancel: false,
+        });
+    },
+
+    render: function() {
+        // Add avatar once we get profile info inline in the summary response
+        //const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+
+        const permalink = 'https://matrix.to/#/' + this.props.summaryInfo.user_id;
+        const userNameNode = <a href={permalink} onClick={this.onClick} >{this.props.summaryInfo.user_id}</a>;
+
+        return <AccessibleButton className="mx_GroupView_featuredThing" onClick={this.onClick}>
+            <div className="mx_GroupView_featuredThing_name">{userNameNode}</div>
         </AccessibleButton>;
     },
 });
@@ -129,6 +175,82 @@ export default React.createClass({
         this.setState({editing: true});
     },
 
+    _getFeaturedRoomsNode() {
+        const summary = this.state.summary;
+
+        if (summary.rooms_section.rooms.length == 0) return null;
+
+        const defaultCategoryRooms = [];
+        const categoryRooms = {};
+        summary.rooms_section.rooms.forEach((r) => {
+            if (r.category_id === null) {
+                defaultCategoryRooms.push(r);
+            } else {
+                let list = categoryRooms[r.category_id];
+                if (list === undefined) {
+                    list = [];
+                    categoryRooms[r.category_id] = list;
+                }
+                list.push(r);
+            }
+        });
+
+        let defaultCategoryNode = null;
+        if (defaultCategoryRooms.length > 0) {
+            defaultCategoryNode = categoryRoomListNode(defaultCategoryRooms);
+        }
+        const categoryRoomNodes = Object.keys(categoryRooms).map((catId) => {
+            const cat = summary.rooms_section.categories[catId];
+            return categoryRoomListNode(categoryRooms[catId], catId, cat);
+        });
+
+        return <div className="mx_GroupView_featuredThings">
+            <div className="mx_GroupView_featuredThings_header">
+                {_t('Featured Rooms:')}
+            </div>
+            {defaultCategoryNode}
+            {categoryRoomNodes}
+        </div>;
+    },
+
+    _getFeaturedUsersNode() {
+        const summary = this.state.summary;
+
+        if (summary.users_section.users.length == 0) return null;
+
+        const noRoleUsers = [];
+        const roleUsers = {};
+        summary.users_section.users.forEach((u) => {
+            if (u.role_id === null) {
+                noRoleUsers.push(u);
+            } else {
+                let list = roleUsers[u.role_id];
+                if (list === undefined) {
+                    list = [];
+                    roleUsers[u.role_id] = list;
+                }
+                list.push(u);
+            }
+        });
+
+        let noRoleNode = null;
+        if (noRoleUsers.length > 0) {
+            noRoleNode = roleUserListNode(noRoleUsers);
+        }
+        const roleUserNodes = Object.keys(roleUsers).map((roleId) => {
+            const role = summary.users_section.roles[roleId];
+            return roleUserListNode(roleUsers[roleId], roleId, role);
+        });
+
+        return <div className="mx_GroupView_featuredThings">
+            <div className="mx_GroupView_featuredThings_header">
+                {_t('Featured Users:')}
+            </div>
+            {noRoleNode}
+            {roleUserNodes}
+        </div>;
+    },
+
     render: function() {
         const GroupAvatar = sdk.getComponent("avatars.GroupAvatar");
         const Loader = sdk.getComponent("elements.Spinner");
@@ -145,43 +267,10 @@ export default React.createClass({
                 description = sanitizedHtmlNode(summary.profile.long_description);
             }
 
-            let featuredRooms = null;
-            if (summary.rooms_section.rooms.length > 0) {
-                const defaultCategoryRooms = [];
-                const categoryRooms = {};
-                summary.rooms_section.rooms.forEach((r) => {
-                    if (r.category_id === null) {
-                        defaultCategoryRooms.push(r);
-                    } else {
-                        let list = categoryRooms[r.category_id];
-                        if (list === undefined) {
-                            list = [];
-                            categoryRooms[r.category_id] = list;
-                        }
-                        list.push(r);
-                    }
-                });
-
-                let defaultCategoryNode = null;
-                if (defaultCategoryRooms.length > 0) {
-                    defaultCategoryNode = categoryRoomListNode(defaultCategoryRooms);
-                }
-                const categoryRoomNodes = Object.keys(categoryRooms).map((catId) => {
-                    const cat = summary.rooms_section.categories[catId];
-                    return categoryRoomListNode(categoryRooms[catId], catId, cat);
-                });
-
-                featuredRooms = <div className="mx_GroupView_featuredRooms">
-                    <div className="mx_GroupView_featuredRooms_header">
-                        {_t('Featured Rooms:')}
-                    </div>
-                    {defaultCategoryNode}
-                    {categoryRoomNodes}
-                </div>;
-            }
             const roomBody = <div>
                 <div className="mx_GroupView_groupDesc">{description}</div>
-                {featuredRooms}
+                {this._getFeaturedRoomsNode()}
+                {this._getFeaturedUsersNode()}
             </div>;
 
             let nameNode;
@@ -200,6 +289,7 @@ export default React.createClass({
 
             const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;
 
+            // settings button is display: none until settings is wired up
             return (
                 <div className="mx_GroupView">
                     <div className="mx_RoomHeader">
@@ -217,7 +307,6 @@ export default React.createClass({
                                     {summary.profile.short_description}
                                 </div>
                             </div>
-                            // display: none until settings is wired up
                             <AccessibleButton className="mx_RoomHeader_button" onClick={this._onSettingsClick} title={_t("Settings")} style={{display: 'none'}}>
                                 <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
                             </AccessibleButton>

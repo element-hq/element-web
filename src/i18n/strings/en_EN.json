@@ -953,5 +953,6 @@
     "Join an existing group": "Join an existing group",
     "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.",
     "Featured Rooms:": "Featured Rooms:",
-    "Error whilst fetching joined groups": "Error whilst fetching joined groups"
+    "Error whilst fetching joined groups": "Error whilst fetching joined groups",
+    "Featured Users:": "Featured Users:"
 }
