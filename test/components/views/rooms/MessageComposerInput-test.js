@@ -8,7 +8,7 @@ import * as testUtils from '../../../test-utils';
 import sdk from 'matrix-react-sdk';
 import UserSettingsStore from '../../../../src/UserSettingsStore';
 const MessageComposerInput = sdk.getComponent('views.rooms.MessageComposerInput');
-import MatrixClientPeg from 'MatrixClientPeg';
+import MatrixClientPeg from '../../../../src/MatrixClientPeg';
 
 function addTextToDraft(text) {
     const components = document.getElementsByClassName('public-DraftEditor-content');
@@ -27,14 +27,10 @@ describe('MessageComposerInput', () => {
         mci = null,
         room = testUtils.mkStubRoom('!DdJkzRliezrwpNebLk:matrix.org');
 
-    // TODO Remove when RTE is out of labs.
-
     beforeEach(function() {
         testUtils.beforeEach(this);
         sandbox = testUtils.stubClient(sandbox);
         client = MatrixClientPeg.get();
-        UserSettingsStore.isFeatureEnabled = sinon.stub()
-            .withArgs('rich_text_editor').returns(true);
 
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
@@ -104,11 +100,12 @@ describe('MessageComposerInput', () => {
         addTextToDraft('a');
         mci.handleKeyCommand('toggle-mode');
         mci.handleReturn(sinon.stub());
+
         expect(spy.calledOnce).toEqual(true);
         expect(spy.args[0][1]).toEqual('a');
     });
 
-    it('should send emoji messages in rich text', () => {
+    it('should send emoji messages when rich text is enabled', () => {
         const spy = sinon.spy(client, 'sendTextMessage');
         mci.enableRichtext(true);
         addTextToDraft('☹');
@@ -117,7 +114,7 @@ describe('MessageComposerInput', () => {
         expect(spy.calledOnce).toEqual(true, 'should send message');
     });
 
-    it('should send emoji messages in Markdown', () => {
+    it('should send emoji messages when Markdown is enabled', () => {
         const spy = sinon.spy(client, 'sendTextMessage');
         mci.enableRichtext(false);
         addTextToDraft('☹');

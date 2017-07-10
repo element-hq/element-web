@@ -32,6 +32,7 @@ module.exports = React.createClass({
         urls: React.PropTypes.array, // [highest_priority, ... , lowest_priority]
         width: React.PropTypes.number,
         height: React.PropTypes.number,
+        // XXX resizeMethod not actually used.
         resizeMethod: React.PropTypes.string,
         defaultToInitialLetter: React.PropTypes.bool // true to add default url
     },

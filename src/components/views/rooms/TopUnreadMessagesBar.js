@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+import { _t } from '../../../languageHandler';
 var sdk = require('../../../index');
 
 module.exports = React.createClass({
@@ -32,14 +34,16 @@ module.exports = React.createClass({
             <div className="mx_TopUnreadMessagesBar">
                 <div className="mx_TopUnreadMessagesBar_scrollUp"
                         onClick={this.props.onScrollUpClick}>
-                    Jump to first unread message. <span style={{ textDecoration: 'underline' }} onClick={this.props.onCloseClick}>Mark all read</span>
+                    <img src="img/scrollto.svg" width="24" height="24"
+                        alt={ _t('Scroll to unread messages') }
+                        title={ _t('Scroll to unread messages') }/>
+                    { _t("Jump to first unread message.") }
                 </div>
-                <img className="mx_TopUnreadMessagesBar_close"
+                <img className="mx_TopUnreadMessagesBar_close mx_filterFlipColor"
                     src="img/cancel.svg" width="18" height="18"
-                    alt="Close" title="Close"
+                    alt={_t("Close")} title={_t("Close")}
                     onClick={this.props.onCloseClick} />
             </div>
         );
     },
 });
-

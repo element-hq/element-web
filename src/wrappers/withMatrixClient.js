@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,7 +27,7 @@ import React from 'react';
  */
 export default function(WrappedComponent) {
     return React.createClass({
-        displayName: "WithMatrixClient<" + WrappedComponent.displayName + ">",
+        displayName: "withMatrixClient<" + WrappedComponent.displayName + ">",
 
         contextTypes: {
             matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient).isRequired,

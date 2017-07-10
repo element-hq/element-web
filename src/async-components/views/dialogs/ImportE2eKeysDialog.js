@@ -19,6 +19,7 @@ import React from 'react';
 import * as Matrix from 'matrix-js-sdk';
 import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
 function readFileAsArrayBuffer(file) {
     return new Promise((resolve, reject) => {
@@ -88,11 +89,13 @@ export default React.createClass({
             // TODO: it would probably be nice to give some feedback about what we've imported here.
             this.props.onFinished(true);
         }).catch((e) => {
+            console.error("Error importing e2e keys:", e);
             if (this._unmounted) {
                 return;
             }
+            const msg = e.friendlyText || _t('Unknown error');
             this.setState({
-                errStr: e.message,
+                errStr: msg,
                 phase: PHASE_EDIT,
             });
         });
@@ -112,20 +115,23 @@ export default React.createClass({
         return (
             <BaseDialog className='mx_importE2eKeysDialog'
                 onFinished={this.props.onFinished}
-                title="Import room keys"
+                title={_t("Import room keys")}
             >
                 <form onSubmit={this._onFormSubmit}>
                     <div className="mx_Dialog_content">
                         <p>
-                            This process allows you to import encryption keys
-                            that you had previously exported from another Matrix
-                            client. You will then be able to decrypt any
-                            messages that the other client could decrypt.
+                            { _t(
+                                'This process allows you to import encryption keys ' +
+                                'that you had previously exported from another Matrix ' +
+                                'client. You will then be able to decrypt any ' +
+                                'messages that the other client could decrypt.',
+                            ) }
                         </p>
                         <p>
-                            The export file will be protected with a passphrase.
-                            You should enter the passphrase here, to decrypt the
-                            file.
+                            { _t(
+                                'The export file will be protected with a passphrase. ' +
+                                'You should enter the passphrase here, to decrypt the file.',
+                            ) }
                         </p>
                         <div className='error'>
                             {this.state.errStr}
@@ -134,7 +140,7 @@ export default React.createClass({
                             <div className='mx_E2eKeysDialog_inputRow'>
                                <div className='mx_E2eKeysDialog_inputLabel'>
                                    <label htmlFor='importFile'>
-                                       File to import
+                                       {_t("File to import")}
                                    </label>
                                </div>
                                <div className='mx_E2eKeysDialog_inputCell'>
@@ -147,7 +153,7 @@ export default React.createClass({
                             <div className='mx_E2eKeysDialog_inputRow'>
                                <div className='mx_E2eKeysDialog_inputLabel'>
                                    <label htmlFor='passphrase'>
-                                       Enter passphrase
+                                       {_t("Enter passphrase")}
                                    </label>
                                </div>
                                <div className='mx_E2eKeysDialog_inputCell'>
@@ -160,11 +166,11 @@ export default React.createClass({
                         </div>
                     </div>
                     <div className='mx_Dialog_buttons'>
-                        <input className='mx_Dialog_primary' type='submit' value='Import'
+                        <input className='mx_Dialog_primary' type='submit' value={_t('Import')}
                             disabled={!this.state.enableSubmit || disableForm}
                         />
                         <button onClick={this._onCancelClick} disabled={disableForm}>
-                            Cancel
+                            {_t("Cancel")}
                         </button>
                     </div>
                 </form>

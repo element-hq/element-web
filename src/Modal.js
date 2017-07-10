@@ -19,6 +19,7 @@ limitations under the License.
 
 var React = require('react');
 var ReactDOM = require('react-dom');
+import Analytics from './Analytics';
 import sdk from './index';
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
@@ -63,7 +64,6 @@ const AsyncWrapper = React.createClass({
 
     render: function() {
         const {loader, ...otherProps} = this.props;
-
         if (this.state.component) {
             const Component = this.state.component;
             return <Component {...otherProps} />;
@@ -104,6 +104,9 @@ class ModalManager {
     }
 
     createDialog(Element, props, className) {
+        if (props && props.title) {
+            Analytics.trackEvent('Modal', props.title, 'createDialog');
+        }
         return this.createDialogAsync((cb) => {cb(Element);}, props, className);
     }
 
@@ -195,4 +198,7 @@ class ModalManager {
     }
 }
 
-export default new ModalManager();
+if (!global.singletonModalManager) {
+    global.singletonModalManager = new ModalManager();
+}
+export default global.singletonModalManager;

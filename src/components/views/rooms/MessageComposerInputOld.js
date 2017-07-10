@@ -20,6 +20,8 @@ var SlashCommands = require("../../../SlashCommands");
 var Modal = require("../../../Modal");
 var MemberEntry = require("../../../TabCompleteEntries").MemberEntry;
 var sdk = require('../../../index');
+import { _t } from '../../../languageHandler';
+import UserSettingsStore from "../../../UserSettingsStore";
 
 var dis = require("../../../dispatcher");
 var KeyCode = require("../../../KeyCode");
@@ -27,7 +29,6 @@ var Markdown = require("../../../Markdown");
 
 var TYPING_USER_TIMEOUT = 10000;
 var TYPING_SERVER_TIMEOUT = 30000;
-var MARKDOWN_ENABLED = true;
 
 export function onSendMessageFailed(err, room) {
     // XXX: temporary logging to try to diagnose
@@ -68,11 +69,15 @@ export default React.createClass({
 
         // The text to use a placeholder in the input box
         placeholder: React.PropTypes.string.isRequired,
+
+        // callback to handle files pasted into the composer
+        onFilesPasted: React.PropTypes.func,
     },
 
     componentWillMount: function() {
         this.oldScrollHeight = 0;
-        this.markdownEnabled = MARKDOWN_ENABLED;
+        this.markdownEnabled = !UserSettingsStore.getSyncedSetting('disableMarkdown', false);
+
         var self = this;
         this.sentHistory = {
             // The list of typed messages. Index 0 is more recent
@@ -290,8 +295,8 @@ export default React.createClass({
             else {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Unknown command",
-                    description: "Usage: /markdown on|off"
+                    title: _t("Unknown command"),
+                    description: _t("Usage") + ": /markdown on|off",
                 });
             }
             return;
@@ -310,8 +315,8 @@ export default React.createClass({
                     console.error("Command failure: %s", err);
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createDialog(ErrorDialog, {
-                        title: "Server error",
-                        description: "Server unavailable, overloaded, or something else went wrong.",
+                        title: _t("Server error"),
+                        description: ((err && err.message) ? err.message : _t("Server unavailable, overloaded, or something else went wrong.")),
                     });
                 });
             }
@@ -319,8 +324,8 @@ export default React.createClass({
                 console.error(cmd.error);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createDialog(ErrorDialog, {
-                    title: "Command error",
-                    description: cmd.error
+                    title: _t("Command error"),
+                    description: cmd.error,
                 });
             }
             return;
@@ -420,6 +425,7 @@ export default React.createClass({
     },
 
     sendTyping: function(isTyping) {
+        if (UserSettingsStore.getSyncedSetting('dontSendTypingNotifications', false)) return;
         MatrixClientPeg.get().sendTyping(
             this.props.room.roomId,
             this.isTyping, TYPING_SERVER_TIMEOUT
@@ -437,10 +443,27 @@ export default React.createClass({
         this.refs.textarea.focus();
     },
 
+    _onPaste: function(ev) {
+        const items = ev.clipboardData.items;
+        const files = [];
+        for (const item of items) {
+            if (item.kind === 'file') {
+                files.push(item.getAsFile());
+            }
+        }
+        if (files.length && this.props.onFilesPasted) {
+            this.props.onFilesPasted(files);
+            return true;
+        }
+        return false;
+    },
+
     render: function() {
         return (
             <div className="mx_MessageComposer_input" onClick={ this.onInputClick }>
-                <textarea autoFocus ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder={this.props.placeholder} />
+                <textarea dir="auto" autoFocus ref="textarea" rows="1" onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} placeholder={this.props.placeholder}
+                    onPaste={this._onPaste}
+                />
             </div>
         );
     }

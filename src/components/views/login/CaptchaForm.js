@@ -16,7 +16,9 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import { _t } from '../../../languageHandler';
+
 var DIV_ID = 'mx_recaptcha';
 
 /**
@@ -42,6 +44,10 @@ module.exports = React.createClass({
         return {
             errorText: null,
         };
+    },
+
+    componentWillMount: function() {
+        this._captchaWidgetId = null;
     },
 
     componentDidMount: function() {
@@ -73,6 +79,10 @@ module.exports = React.createClass({
         }
     },
 
+    componentWillUnmount: function() {
+        this._resetRecaptcha();
+    },
+
     _renderRecaptcha: function(divId) {
         if (!global.grecaptcha) {
             console.error("grecaptcha not loaded!");
@@ -88,10 +98,16 @@ module.exports = React.createClass({
         }
 
         console.log("Rendering to %s", divId);
-        global.grecaptcha.render(divId, {
+        this._captchaWidgetId = global.grecaptcha.render(divId, {
             sitekey: publicKey,
             callback: this.props.onCaptchaResponse,
         });
+    },
+
+    _resetRecaptcha: function() {
+        if (this._captchaWidgetId !== null) {
+            global.grecaptcha.reset(this._captchaWidgetId);
+        }
     },
 
     _onCaptchaLoaded: function() {
@@ -117,7 +133,7 @@ module.exports = React.createClass({
 
         return (
             <div ref="recaptchaContainer">
-                This Home Server would like to make sure you are not a robot
+                {_t("This Home Server would like to make sure you are not a robot")}
                 <br/>
                 <div id={DIV_ID}></div>
                 {error}

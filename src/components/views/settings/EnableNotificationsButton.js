@@ -18,6 +18,7 @@ limitations under the License.
 var React = require("react");
 var Notifier = require("../../../Notifier");
 var dis = require("../../../dispatcher");
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'EnableNotificationsButton',
@@ -60,13 +61,13 @@ module.exports = React.createClass({
         if (this.enabled()) {
             return (
                 <button className="mx_EnableNotificationsButton" onClick={this.onClick}>
-                    Disable Notifications
+                    {_t("Disable Notifications")}
                 </button>
             );
         } else {
             return (
                 <button className="mx_EnableNotificationsButton" onClick={this.onClick}>
-                    Enable Notifications
+                    {_t("Enable Notifications")}
                 </button>
             );
         }

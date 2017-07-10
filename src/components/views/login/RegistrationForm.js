@@ -21,6 +21,7 @@ import sdk from '../../../index';
 import Email from '../../../email';
 import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
 import Modal from '../../../Modal';
+import { _t } from '../../../languageHandler';
 
 const FIELD_EMAIL = 'field_email';
 const FIELD_PHONE_COUNTRY = 'field_phone_country';
@@ -52,11 +53,6 @@ module.exports = React.createClass({
                 "domain": React.PropTypes.string,
             })).required,
         }),
-
-        // A username that will be used if no username is entered.
-        // Specifying this param will also warn the user that entering
-        // a different username will cause a fresh account to be generated.
-        guestUsername: React.PropTypes.string,
 
         minPasswordLength: React.PropTypes.number,
         onError: React.PropTypes.func,
@@ -100,30 +96,29 @@ module.exports = React.createClass({
             if (this.refs.email.value == '') {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 Modal.createDialog(QuestionDialog, {
-                    title: "Warning",
+                    title: _t("Warning!"),
                     description:
                         <div>
-                            If you don't specify an email address, you won't be able to reset your password.<br/>
-                            Are you sure?
+                            {_t("If you don't specify an email address, you won't be able to reset your password. " +
+                                "Are you sure?")}
                         </div>,
-                    button: "Continue",
+                    button: _t("Continue"),
                     onFinished: function(confirmed) {
                         if (confirmed) {
-                            self._doSubmit();
+                            self._doSubmit(ev);
                         }
                     },
                 });
-            }
-            else {
-                self._doSubmit();
+            } else {
+                self._doSubmit(ev);
             }
         }
     },
 
-    _doSubmit: function() {
+    _doSubmit: function(ev) {
         let email = this.refs.email.value.trim();
         var promise = this.props.onRegisterClick({
-            username: this.refs.username.value.trim() || this.props.guestUsername,
+            username: this.refs.username.value.trim(),
             password: this.refs.password.value.trim(),
             email: email,
             phoneCountry: this.state.phoneCountry,
@@ -191,7 +186,7 @@ module.exports = React.createClass({
                 break;
             case FIELD_USERNAME:
                 // XXX: SPEC-1
-                var username = this.refs.username.value.trim() || this.props.guestUsername;
+                var username = this.refs.username.value.trim();
                 if (encodeURIComponent(username) != username) {
                     this.markFieldValid(
                         field_id,
@@ -270,7 +265,8 @@ module.exports = React.createClass({
 
     _onPhoneCountryChange(newVal) {
         this.setState({
-            phoneCountry: newVal,
+            phoneCountry: newVal.iso2,
+            phonePrefix: newVal.prefix,
         });
     },
 
@@ -280,7 +276,7 @@ module.exports = React.createClass({
         const emailSection = (
             <div>
                 <input type="text" ref="email"
-                    autoFocus={true} placeholder="Email address (optional)"
+                    autoFocus={true} placeholder={_t("Email address (optional)")}
                     defaultValue={this.props.defaultEmail}
                     className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
                     onBlur={function() {self.validateField(FIELD_EMAIL);}}
@@ -303,7 +299,7 @@ module.exports = React.createClass({
             } else if (this.state.selectedTeam) {
                 belowEmailSection = (
                     <p className="mx_Login_support">
-                        You are registering with {this.state.selectedTeam.name}
+                        {_t("You are registering with %(SelectedTeamName)s", {SelectedTeamName: this.state.selectedTeam.name})}
                     </p>
                 );
             }
@@ -313,14 +309,19 @@ module.exports = React.createClass({
         const phoneSection = (
             <div className="mx_Login_phoneSection">
                 <CountryDropdown ref="phone_country" onOptionChange={this._onPhoneCountryChange}
-                    className="mx_Login_phoneCountry"
+                    className="mx_Login_phoneCountry mx_Login_field_prefix"
                     value={this.state.phoneCountry}
+                    isSmall={true}
+                    showPrefix={true}
                 />
                 <input type="text" ref="phoneNumber"
-                    placeholder="Mobile phone number (optional)"
+                    placeholder={_t("Mobile phone number (optional)")}
                     defaultValue={this.props.defaultPhoneNumber}
                     className={this._classForField(
-                        FIELD_PHONE_NUMBER, 'mx_Login_phoneNumberField', 'mx_Login_field'
+                        FIELD_PHONE_NUMBER,
+                        'mx_Login_phoneNumberField',
+                        'mx_Login_field',
+                        'mx_Login_field_has_prefix'
                     )}
                     onBlur={function() {self.validateField(FIELD_PHONE_NUMBER);}}
                     value={self.state.phoneNumber}
@@ -329,13 +330,10 @@ module.exports = React.createClass({
         );
 
         const registerButton = (
-            <input className="mx_Login_submit" type="submit" value="Register" />
+            <input className="mx_Login_submit" type="submit" value={_t("Register")} />
         );
 
-        let placeholderUserName = "User name";
-        if (this.props.guestUsername) {
-            placeholderUserName += " (default: " + this.props.guestUsername + ")";
-        }
+        let placeholderUserName = _t("User name");
 
         return (
             <div>
@@ -348,16 +346,13 @@ module.exports = React.createClass({
                         className={this._classForField(FIELD_USERNAME, 'mx_Login_field')}
                         onBlur={function() {self.validateField(FIELD_USERNAME);}} />
                     <br />
-                    { this.props.guestUsername ?
-                        <div className="mx_Login_fieldLabel">Setting a user name will create a fresh account</div> : null
-                    }
                     <input type="password" ref="password"
                         className={this._classForField(FIELD_PASSWORD, 'mx_Login_field')}
                         onBlur={function() {self.validateField(FIELD_PASSWORD);}}
-                        placeholder="Password" defaultValue={this.props.defaultPassword} />
+                        placeholder={_t("Password")} defaultValue={this.props.defaultPassword} />
                     <br />
                     <input type="password" ref="passwordConfirm"
-                        placeholder="Confirm password"
+                        placeholder={_t("Confirm password")}
                         className={this._classForField(FIELD_PASSWORD_CONFIRM, 'mx_Login_field')}
                         onBlur={function() {self.validateField(FIELD_PASSWORD_CONFIRM);}}
                         defaultValue={this.props.defaultPassword} />

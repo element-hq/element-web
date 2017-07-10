@@ -31,14 +31,17 @@ import classNames from 'classnames';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 import createRoom from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import Unread from '../../../Unread';
 import { findReadReceiptFromUserId } from '../../../utils/Receipt';
-import WithMatrixClient from '../../../wrappers/WithMatrixClient';
+import withMatrixClient from '../../../wrappers/withMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
+import GeminiScrollbar from 'react-gemini-scrollbar';
 
-module.exports = WithMatrixClient(React.createClass({
+
+module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
 
     propTypes: {
@@ -219,7 +222,7 @@ module.exports = WithMatrixClient(React.createClass({
 
     onKick: function() {
         const membership = this.props.member.membership;
-        const kickLabel = membership === "invite" ? "Disinvite" : "Kick";
+        const kickLabel = membership === "invite" ? _t("Disinvite") : _t("Kick");
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
             member: this.props.member,
@@ -241,8 +244,8 @@ module.exports = WithMatrixClient(React.createClass({
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Kick error: " + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Error", 
-                            description: "Failed to kick user",
+                            title: _t("Failed to kick"),
+                            description: ((err && err.message) ? err.message : "Operation failed"),
                         });
                     }
                 ).finally(()=>{
@@ -256,7 +259,7 @@ module.exports = WithMatrixClient(React.createClass({
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
             member: this.props.member,
-            action: this.props.member.membership == 'ban' ? 'Unban' : 'Ban',
+            action: this.props.member.membership == 'ban' ? _t("Unban") : _t("Ban"),
             askReason: this.props.member.membership != 'ban',
             danger: this.props.member.membership != 'ban',
             onFinished: (proceed, reason) => {
@@ -283,8 +286,8 @@ module.exports = WithMatrixClient(React.createClass({
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Ban error: " + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: "Error",
-                            description: "Failed to ban user",
+                            title: _t("Error"),
+                            description: _t("Failed to ban user"),
                         });
                     }
                 ).finally(()=>{
@@ -333,8 +336,8 @@ module.exports = WithMatrixClient(React.createClass({
                 }, function(err) {
                     console.error("Mute error: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Error",
-                        description: "Failed to mute user",
+                        title: _t("Error"),
+                        description: _t("Failed to mute user"),
                     });
                 }
             ).finally(()=>{
@@ -374,16 +377,12 @@ module.exports = WithMatrixClient(React.createClass({
                 console.log("Mod toggle success");
             }, function(err) {
                 if (err.errcode == 'M_GUEST_ACCESS_FORBIDDEN') {
-                    var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                    Modal.createDialog(NeedToRegisterDialog, {
-                        title: "Please Register",
-                        description: "This action cannot be performed by a guest user. Please register to be able to do this."
-                    });
+                    dis.dispatch({action: 'view_set_mxid'});
                 } else {
                     console.error("Toggle moderator error:" + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Error",
-                        description: "Failed to toggle moderator status",
+                        title: _t("Error"),
+                        description: _t("Failed to toggle moderator status"),
                     });
                 }
             }
@@ -403,8 +402,8 @@ module.exports = WithMatrixClient(React.createClass({
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Failed to change power level " + err);
                 Modal.createDialog(ErrorDialog, {
-                    title: "Error",
-                    description: "Failed to change power level",
+                    title: _t("Error"),
+                    description: _t("Failed to change power level"),
                 });
             }
         ).finally(()=>{
@@ -432,13 +431,13 @@ module.exports = WithMatrixClient(React.createClass({
             if (parseInt(myPower) === parseInt(powerLevel)) {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 Modal.createDialog(QuestionDialog, {
-                    title: "Warning",
+                    title: _t("Warning!"),
                     description:
                         <div>
-                            You will not be able to undo this change as you are promoting the user to have the same power level as yourself.<br/>
-                            Are you sure?
+                            { _t("You will not be able to undo this change as you are promoting the user to have the same power level as yourself.") }<br/>
+                            { _t("Are you sure?") }
                         </div>,
-                    button: "Continue",
+                    button: _t("Continue"),
                     onFinished: function(confirmed) {
                         if (confirmed) {
                             self._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
@@ -581,9 +580,9 @@ module.exports = WithMatrixClient(React.createClass({
             // still loading
             devComponents = <Spinner />;
         } else if (devices === null) {
-            devComponents = "Unable to load device list";
+            devComponents = _t("Unable to load device list");
         } else if (devices.length === 0) {
-            devComponents = "No devices with registered encryption keys";
+            devComponents = _t("No devices with registered encryption keys");
         } else {
             devComponents = [];
             for (var i = 0; i < devices.length; i++) {
@@ -595,7 +594,7 @@ module.exports = WithMatrixClient(React.createClass({
 
         return (
             <div>
-                <h3>Devices</h3>
+                <h3>{ _t("Devices") }</h3>
                 <div className="mx_MemberInfo_devices">
                     {devComponents}
                 </div>
@@ -644,11 +643,11 @@ module.exports = WithMatrixClient(React.createClass({
                 <div className="mx_RoomTile_avatar">
                     <img src="img/create-big.svg" width="26" height="26" />
                 </div>
-                <div className={labelClasses}><i>Start new chat</i></div>
+                <div className={labelClasses}><i>{ _t("Start a chat") }</i></div>
             </AccessibleButton>;
 
             startChat = <div>
-                <h3>Direct chats</h3>
+                <h3>{ _t("Direct chats") }</h3>
                 {tiles}
                 {startNewChat}
             </div>;
@@ -661,7 +660,7 @@ module.exports = WithMatrixClient(React.createClass({
 
         if (this.state.can.kick) {
             const membership = this.props.member.membership;
-            const kickLabel = membership === "invite" ? "Disinvite" : "Kick";
+            const kickLabel = membership === "invite" ? _t("Disinvite") : _t("Kick");
             kickButton = (
                 <AccessibleButton className="mx_MemberInfo_field"
                         onClick={this.onKick}>
@@ -670,9 +669,9 @@ module.exports = WithMatrixClient(React.createClass({
             );
         }
         if (this.state.can.ban) {
-            let label = 'Ban';
+            let label = _t("Ban");
             if (this.props.member.membership == 'ban') {
-                label = 'Unban';
+                label = _t("Unban");
             }
             banButton = (
                 <AccessibleButton className="mx_MemberInfo_field"
@@ -682,7 +681,7 @@ module.exports = WithMatrixClient(React.createClass({
             );
         }
         if (this.state.can.mute) {
-            const muteLabel = this.state.muted ? "Unmute" : "Mute";
+            const muteLabel = this.state.muted ? _t("Unmute") : _t("Mute");
             muteButton = (
                 <AccessibleButton className="mx_MemberInfo_field"
                         onClick={this.onMuteToggle}>
@@ -691,7 +690,7 @@ module.exports = WithMatrixClient(React.createClass({
             );
         }
         if (this.state.can.toggleMod) {
-            var giveOpLabel = this.state.isTargetMod ? "Revoke Moderator" : "Make Moderator";
+            var giveOpLabel = this.state.isTargetMod ? _t("Revoke Moderator") : _t("Make Moderator");
             giveModButton = <AccessibleButton className="mx_MemberInfo_field" onClick={this.onModToggle}>
                 {giveOpLabel}
             </AccessibleButton>;
@@ -704,7 +703,7 @@ module.exports = WithMatrixClient(React.createClass({
         if (kickButton || banButton || muteButton || giveModButton) {
             adminTools =
                 <div>
-                    <h3>Admin tools</h3>
+                    <h3>{_t("Admin tools")}</h3>
 
                     <div className="mx_MemberInfo_buttons">
                         {muteButton}
@@ -717,34 +716,49 @@ module.exports = WithMatrixClient(React.createClass({
 
         const memberName = this.props.member.name;
 
+        if (this.props.member.user) {
+            var presenceState = this.props.member.user.presence;
+            var presenceLastActiveAgo = this.props.member.user.lastActiveAgo;
+            var presenceLastTs = this.props.member.user.lastPresenceTs;
+            var presenceCurrentlyActive = this.props.member.user.currentlyActive;
+        }
+
         var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
+        var PresenceLabel = sdk.getComponent('rooms.PresenceLabel');
         const EmojiText = sdk.getComponent('elements.EmojiText');
         return (
             <div className="mx_MemberInfo">
-                <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}> <img src="img/cancel.svg" width="18" height="18"/></AccessibleButton>
-                <div className="mx_MemberInfo_avatar">
-                    <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
-                </div>
-
-                <EmojiText element="h2">{memberName}</EmojiText>
-
-                <div className="mx_MemberInfo_profile">
-                    <div className="mx_MemberInfo_profileField">
-                        { this.props.member.userId }
+                <GeminiScrollbar autoshow={true}>
+                    <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}> <img src="img/cancel.svg" width="18" height="18"/></AccessibleButton>
+                    <div className="mx_MemberInfo_avatar">
+                        <MemberAvatar onClick={this.onMemberAvatarClick} member={this.props.member} width={48} height={48} />
                     </div>
-                    <div className="mx_MemberInfo_profileField">
-                        Level: <b><PowerSelector controlled={true} value={ parseInt(this.props.member.powerLevel) } disabled={ !this.state.can.modifyLevel } onChange={ this.onPowerChange }/></b>
+
+                    <EmojiText element="h2">{memberName}</EmojiText>
+
+                    <div className="mx_MemberInfo_profile">
+                        <div className="mx_MemberInfo_profileField">
+                            { this.props.member.userId }
+                        </div>
+                        <div className="mx_MemberInfo_profileField">
+                            { _t("Level:") } <b><PowerSelector controlled={true} value={ parseInt(this.props.member.powerLevel) } disabled={ !this.state.can.modifyLevel } onChange={ this.onPowerChange }/></b>
+                        </div>
+                        <div className="mx_MemberInfo_profileField">
+                            <PresenceLabel activeAgo={ presenceLastActiveAgo }
+                                currentlyActive={ presenceCurrentlyActive }
+                                presenceState={ presenceState } />
+                        </div>
                     </div>
-                </div>
 
-                { adminTools }
+                    { adminTools }
 
-                { startChat }
+                    { startChat }
 
-                { this._renderDevices() }
+                    { this._renderDevices() }
 
-                { spinner }
+                    { spinner }
+                </GeminiScrollbar>
             </div>
         );
     }

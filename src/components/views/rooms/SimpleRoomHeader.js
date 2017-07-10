@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
-import dis from '../../../dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
+import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
 // cancel button which is shared between room header and simple room header
 export function CancelButton(props) {
@@ -27,7 +26,7 @@ export function CancelButton(props) {
     return (
         <AccessibleButton className='mx_RoomHeader_cancelButton' onClick={onClick}>
             <img src="img/cancel.svg" className='mx_filterFlipColor'
-                width="18" height="18" alt="Cancel"/>
+                width="18" height="18" alt={_t("Cancel")}/>
         </AccessibleButton>
     );
 }
@@ -43,38 +42,30 @@ export default React.createClass({
         title: React.PropTypes.string,
         onCancelClick: React.PropTypes.func,
 
-        // is the RightPanel collapsed?
-        collapsedRhs: React.PropTypes.bool,
-    },
-
-    onShowRhsClick: function(ev) {
-        dis.dispatch({ action: 'show_right_panel' });
+        // `src` to a TintableSvg. Optional.
+        icon: React.PropTypes.string,
     },
 
     render: function() {
         let cancelButton;
+        let icon;
         if (this.props.onCancelClick) {
             cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
         }
-
-        let showRhsButton;
-        /* // don't bother cluttering things up with this for now.
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
-
-        if (this.props.collapsedRhs) {
-            showRhsButton =
-                <div className="mx_RoomHeader_button" style={{ float: 'right' }} onClick={this.onShowRhsClick} title=">">
-                    <TintableSvg src="img/minimise.svg" width="10" height="16"/>
-                </div>
+        if (this.props.icon) {
+            const TintableSvg = sdk.getComponent('elements.TintableSvg');
+            icon = <TintableSvg
+                className="mx_RoomHeader_icon" src={this.props.icon}
+                width="25" height="25"
+            />;
         }
-        */
 
         return (
             <div className="mx_RoomHeader" >
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_simpleHeader">
+                        { icon }
                         { this.props.title }
-                        { showRhsButton }
                         { cancelButton }
                     </div>
                 </div>

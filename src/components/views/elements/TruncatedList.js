@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 var React = require('react');
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'TruncatedList',
@@ -33,7 +34,7 @@ module.exports = React.createClass({
             truncateAt: 2,
             createOverflowElement: function(overflowCount, totalCount) {
                 return (
-                    <div>And {overflowCount} more...</div>
+                    <div>{_t("And %(count)s more...", {count: overflowCount})}</div>
                 );
             }
         };

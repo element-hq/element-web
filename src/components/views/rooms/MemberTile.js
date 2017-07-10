@@ -22,6 +22,7 @@ var MatrixClientPeg = require('../../../MatrixClientPeg');
 var sdk = require('../../../index');
 var dis = require('../../../dispatcher');
 var Modal = require("../../../Modal");
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'MemberTile',
@@ -63,7 +64,7 @@ module.exports = React.createClass({
     },
 
     getPowerLabel: function() {
-        return this.props.member.userId + " (power " + this.props.member.powerLevel + ")";
+        return _t("%(userName)s (power %(powerLevelNumber)s)", {userName: this.props.member.userId, powerLevelNumber: this.props.member.powerLevel});
     },
 
     render: function() {

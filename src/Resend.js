@@ -14,10 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var MatrixClientPeg = require('./MatrixClientPeg');
-var dis = require('./dispatcher');
-var sdk = require('./index');
-var Modal = require('./Modal');
+import MatrixClientPeg from './MatrixClientPeg';
+import dis from './dispatcher';
 import { EventStatus } from 'matrix-js-sdk';
 
 module.exports = {
@@ -37,12 +35,10 @@ module.exports = {
     },
     resend: function(event) {
         const room = MatrixClientPeg.get().getRoom(event.getRoomId());
-        MatrixClientPeg.get().resendEvent(
-            event, room
-        ).done(function(res) {
+        MatrixClientPeg.get().resendEvent(event, room).done(function(res) {
             dis.dispatch({
                 action: 'message_sent',
-                event: event
+                event: event,
             });
         }, function(err) {
             // XXX: temporary logging to try to diagnose
@@ -58,7 +54,7 @@ module.exports = {
 
             dis.dispatch({
                 action: 'message_send_failed',
-                event: event
+                event: event,
             });
         });
     },
@@ -66,7 +62,7 @@ module.exports = {
         MatrixClientPeg.get().cancelPendingEvent(event);
         dis.dispatch({
             action: 'message_send_cancelled',
-            event: event
+            event: event,
         });
     },
 };

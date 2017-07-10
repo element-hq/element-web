@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
 export default class MemberDeviceInfo extends React.Component {
     render() {
@@ -25,19 +26,19 @@ export default class MemberDeviceInfo extends React.Component {
         if (this.props.device.isBlocked()) {
             indicator = (
                     <div className="mx_MemberDeviceInfo_blacklisted">
-                    <img src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} alt="Blacklisted"/>
+                    <img src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} alt={_t("Blacklisted")}/>
                     </div>
             );
         } else if (this.props.device.isVerified()) {
             indicator = (
                     <div className="mx_MemberDeviceInfo_verified">
-                    <img src="img/e2e-verified.svg" width="10" height="12" alt="Verified"/>
+                    <img src="img/e2e-verified.svg" width="10" height="12" alt={_t("Verified")}/>
                     </div>
             );
         } else {
             indicator = (
                     <div className="mx_MemberDeviceInfo_unverified">
-                    <img src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }} alt="Unverified"/>
+                    <img src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }} alt={_t("Unverified")}/>
                     </div>
             );
         }
@@ -49,7 +50,7 @@ export default class MemberDeviceInfo extends React.Component {
         // add the deviceId as a titletext to help with debugging
         return (
             <div className="mx_MemberDeviceInfo"
-                    title={"device id: " + this.props.device.deviceId} >
+                    title={_t("device id: ") + this.props.device.deviceId} >
                 <div className="mx_MemberDeviceInfo_deviceInfo">
                     <div className="mx_MemberDeviceInfo_deviceId">
                         {deviceName}
