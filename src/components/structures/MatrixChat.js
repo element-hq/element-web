@@ -506,7 +506,7 @@ module.exports = React.createClass({
                 this._setMxId(payload);
                 break;
             case 'view_start_chat_or_reuse':
-                this._chatCreateOrReuse(payload.user_id);
+                this._chatCreateOrReuse(payload.user_id, payload.go_home_on_cancel);
                 break;
             case 'view_create_chat':
                 this._createChat();
@@ -801,7 +801,9 @@ module.exports = React.createClass({
         });
     },
 
-    _chatCreateOrReuse: function(userId) {
+    _chatCreateOrReuse: function(userId, goHomeOnCancel) {
+        if (goHomeOnCancel === undefined) goHomeOnCancel = true;
+
         const ChatCreateOrReuseDialog = sdk.getComponent(
             'views.dialogs.ChatCreateOrReuseDialog',
         );
@@ -832,7 +834,7 @@ module.exports = React.createClass({
         const close = Modal.createDialog(ChatCreateOrReuseDialog, {
             userId: userId,
             onFinished: (success) => {
-                if (!success) {
+                if (!success && goHomeOnCancel) {
                     // Dialog cancelled, default to home
                     dis.dispatch({ action: 'view_home_page' });
                 }
