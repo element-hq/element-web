@@ -72,7 +72,12 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._unmounted = false;
         this._initLoginLogic();
+    },
+
+    componentWillUnmount: function() {
+        this._unmounted = true;
     },
 
     onPasswordLogin: function(username, phoneCountry, phoneNumber, password) {
@@ -87,6 +92,9 @@ module.exports = React.createClass({
         ).then((data) => {
             this.props.onLoggedIn(data);
         }, (error) => {
+            if(this._unmounted) {
+                return;
+            }
             let errorText;
 
             // Some error strings only apply for logging in
@@ -109,8 +117,11 @@ module.exports = React.createClass({
                 loginIncorrect: error.httpStatus === 401 || error.httpStatus == 403,
             });
         }).finally(() => {
+            if(this._unmounted) {
+                return;
+            }
             this.setState({
-                busy: false
+                busy: false,
             });
         }).done();
     },
