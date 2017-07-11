@@ -20,6 +20,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-addons-test-utils';
 import sinon from 'sinon';
+import MatrixReactTestUtils from 'matrix-react-test-utils';
 
 import sdk from 'matrix-react-sdk';
 import MatrixClientPeg from '../../../../src/MatrixClientPeg';
@@ -47,7 +48,7 @@ describe('InteractiveAuthDialog', function () {
         sandbox.restore();
     });
 
-    it('Should successfully complete a password flow', function(done) {
+    it('Should successfully complete a password flow', function() {
         const onFinished = sinon.spy();
         const doRequest = sinon.stub().returns(q({a:1}));
 
@@ -69,7 +70,7 @@ describe('InteractiveAuthDialog', function () {
             />, parentDiv);
 
         // wait for a password box and a submit button
-        test_utils.waitForRenderedDOMComponentWithTag(dlg, "form").then((formNode) => {
+        return MatrixReactTestUtils.waitForRenderedDOMComponentWithTag(dlg, "form").then((formNode) => {
             const inputNodes = ReactTestUtils.scryRenderedDOMComponentsWithTag(
                 dlg, "input"
             );
@@ -113,6 +114,6 @@ describe('InteractiveAuthDialog', function () {
         }).then(() => {
             expect(onFinished.callCount).toEqual(1);
             expect(onFinished.calledWithExactly(true, {a:1})).toBe(true);
-        }).done(done, done);
+        });
     });
 });

@@ -2,51 +2,11 @@
 
 import sinon from 'sinon';
 import q from 'q';
-import ReactTestUtils from 'react-addons-test-utils';
 
 import peg from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher';
 import jssdk from 'matrix-js-sdk';
 const MatrixEvent = jssdk.MatrixEvent;
-
-/**
- * Wrapper around window.requestAnimationFrame that returns a promise
- * @private
- */
-function _waitForFrame() {
-    const def = q.defer();
-    window.requestAnimationFrame(() => {
-        def.resolve();
-    });
-    return def.promise;
-}
-
-/**
- * Waits a small number of animation frames for a component to appear
- * in the DOM. Like findRenderedDOMComponentWithTag(), but allows
- * for the element to appear a short time later, eg. if a promise needs
- * to resolve first.
- * @return a promise that resolves once the component appears, or rejects
- *     if it doesn't appear after a nominal number of animation frames.
- */
-export function waitForRenderedDOMComponentWithTag(tree, tag, attempts) {
-    if (attempts === undefined) {
-        // Let's start by assuming we'll only need to wait a single frame, and
-        // we can try increasing this if necessary.
-        attempts = 1;
-    } else if (attempts == 0) {
-        return q.reject("Gave up waiting for component with tag: " + tag);
-    }
-
-    return _waitForFrame().then(() => {
-        const result = ReactTestUtils.scryRenderedDOMComponentsWithTag(tree, tag);
-        if (result.length > 0) {
-            return result[0];
-        } else {
-            return waitForRenderedDOMComponentWithTag(tree, tag, attempts - 1);
-        }
-    });
-}
 
 /**
  * Perform common actions before each test case, e.g. printing the test case
