@@ -42,7 +42,14 @@ const FeaturedRoom = React.createClass({
     displayName: 'FeaturedRoom',
 
     props: {
-        summaryInfo: PropTypes.object.isRequired,
+        summaryInfo: PropTypes.shape({
+            room_id: PropTypes.string.isRequired,
+            profile: PropTypes.shape({
+                name: PropTypes.string,
+                avatar_url: PropTypes.string,
+                canonical_alias: PropTypes.string,
+            }).isRequired,
+        }).isRequired,
     },
 
     onClick: function(e) {
@@ -100,7 +107,9 @@ const FeaturedUser = React.createClass({
     displayName: 'FeaturedUser',
 
     props: {
-        summaryInfo: PropTypes.object.isRequired,
+        summaryInfo: PropTypes.shape({
+            user_id: PropTypes.string.isRequired,
+        }).isRequired,
     },
 
     onClick: function(e) {
