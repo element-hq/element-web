@@ -801,8 +801,8 @@ module.exports = React.createClass({
         });
     },
 
-    _chatCreateOrReuse: function(userId, go_home_on_cancel) {
-        if (go_home_on_cancel === undefined) go_home_on_cancel = true;
+    _chatCreateOrReuse: function(userId, goHomeOnCancel) {
+        if (goHomeOnCancel === undefined) goHomeOnCancel = true;
 
         const ChatCreateOrReuseDialog = sdk.getComponent(
             'views.dialogs.ChatCreateOrReuseDialog',
@@ -834,7 +834,7 @@ module.exports = React.createClass({
         const close = Modal.createDialog(ChatCreateOrReuseDialog, {
             userId: userId,
             onFinished: (success) => {
-                if (!success && go_home_on_cancel) {
+                if (!success && goHomeOnCancel) {
                     // Dialog cancelled, default to home
                     dis.dispatch({ action: 'view_home_page' });
                 }
