@@ -126,10 +126,15 @@ describe('TimelinePanel', function() {
             timeline.addEvent(mkMessage(i));
         }
 
-        var scrollDefer;
+        let scrollDefer;
+        const onScroll = (e) => {
+            console.log(`TimelinePanel called onScroll: ${e.target.scrollTop}`);
+            if (scrollDefer) {
+                scrollDefer.resolve();
+            }
+        };
         var rendered = ReactDOM.render(
-                <WrappedTimelinePanel timelineSet={timelineSet} onScroll={() => {scrollDefer.resolve()}}
-                />,
+                <WrappedTimelinePanel timelineSet={timelineSet} onScroll={onScroll} />,
                 parentDiv,
         );
         var panel = rendered.refs.panel;
@@ -152,9 +157,8 @@ describe('TimelinePanel', function() {
             return scrollDefer.promise;
         };
 
-        // wait for the panel to load - we'll get a scroll event once it
-        // happens
-        awaitScroll().then(() => {
+        // let the first round of pagination finish off
+        q.delay(5).then(() => {
             expect(panel.state.canBackPaginate).toBe(false);
             expect(scryEventTiles(panel).length).toEqual(N_EVENTS);
 
@@ -164,6 +168,8 @@ describe('TimelinePanel', function() {
 
             // wait for the scroll event to land
         }).then(awaitScroll).then(() => {
+            expect(scrollingDiv.scrollTop).toEqual(0);
+
             // there should be no pagination going on now
             expect(panel.state.backPaginating).toBe(false);
             expect(panel.state.forwardPaginating).toBe(false);
