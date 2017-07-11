@@ -35,8 +35,8 @@ const CATEGORY_ORDER = [
     'nature',
     'travel',
     'flags',
+    'regional',
     'symbols',
-    'unicode9',
     'modifier',
 ];
 
