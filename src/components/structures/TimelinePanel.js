@@ -350,9 +350,9 @@ var TimelinePanel = React.createClass({
         });
     },
 
-    onMessageListScroll: function() {
+    onMessageListScroll: function(e) {
         if (this.props.onScroll) {
-            this.props.onScroll();
+            this.props.onScroll(e);
         }
 
         if (this.props.manageReadMarkers) {
