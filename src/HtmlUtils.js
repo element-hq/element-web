@@ -38,7 +38,7 @@ const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
  * because we want to include emoji shortnames in title text
  */
 export function unicodeToImage(str) {
-    let replaceWith, unicode, alt;
+    let replaceWith, unicode, alt, short, fname;
     const mappedUnicode = emojione.mapUnicodeToShort();
 
     str = str.replace(emojione.regUnicode, function(unicodeChar) {
@@ -50,11 +50,14 @@ export function unicodeToImage(str) {
             // get the unicode codepoint from the actual char
             unicode = emojione.jsEscapeMap[unicodeChar];
 
+            short = mappedUnicode[unicode];
+            fname = emojione.emojioneList[short].fname;
+
             // depending on the settings, we'll either add the native unicode as the alt tag, otherwise the shortname
             alt = (emojione.unicodeAlt) ? emojione.convert(unicode.toUpperCase()) : mappedUnicode[unicode];
             const title = mappedUnicode[unicode];
 
-            replaceWith = `<img class="mx_emojione" title="${title}" alt="${alt}" src="${emojione.imagePathSVG}${unicode}.svg${emojione.cacheBustParam}"/>`;
+            replaceWith = `<img class="mx_emojione" title="${title}" alt="${alt}" src="${emojione.imagePathSVG}${fname}.svg${emojione.cacheBustParam}"/>`;
             return replaceWith;
         }
     });
