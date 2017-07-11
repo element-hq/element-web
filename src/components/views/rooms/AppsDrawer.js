@@ -111,26 +111,6 @@ module.exports = React.createClass({
         app.name = app.name || app.type;
         app.url = this.encodeUri(app.url, params);
 
-        // switch(app.type) {
-        //     case 'etherpad':
-        //         app.queryParams = '?userName=' + this.props.userId +
-        //             '&padId=' + this.props.room.roomId;
-        //         break;
-        //     case 'jitsi': {
-        //
-        //         app.queryParams = '?confId=' + app.data.confId +
-        //             '&displayName=' + encodeURIComponent(user.displayName) +
-        //             '&avatarUrl=' + encodeURIComponent(MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl)) +
-        //             '&email=' + encodeURIComponent(this.props.userId) +
-        //             '&isAudioConf=' + app.data.isAudioConf;
-        //
-        //         break;
-        //     }
-        //     case 'vrdemo':
-        //         app.queryParams = '?roomAlias=' + encodeURIComponent(app.data.roomAlias);
-        //         break;
-        // }
-
         return app;
     },
 
@@ -142,17 +122,15 @@ module.exports = React.createClass({
     },
 
     _getApps: function() {
-        const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets', '');
+        const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets');
         if (!appsStateEvents) {
             return [];
         }
-        const appsStateEvent = appsStateEvents.getContent();
-        if (Object.keys(appsStateEvent).length < 1) {
-            return [];
-        }
 
-        return Object.keys(appsStateEvent).map((appId) => {
-            return this._initAppConfig(appId, appsStateEvent[appId]);
+        return appsStateEvents.filter((ev) => {
+            return ev.getContent().type && ev.getContent().url;
+        }).map((ev) => {
+            return this._initAppConfig(ev.getStateKey(), ev.getContent());
         });
     },
 

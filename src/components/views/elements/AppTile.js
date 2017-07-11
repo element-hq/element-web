@@ -91,24 +91,16 @@ export default React.createClass({
 
     _onDeleteClick: function() {
         console.log("Delete widget %s", this.props.id);
-        const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets', '');
-        if (!appsStateEvents) {
-            return;
-        }
-        const appsStateEvent = appsStateEvents.getContent();
-        if (appsStateEvent[this.props.id]) {
-            delete appsStateEvent[this.props.id];
-            MatrixClientPeg.get().sendStateEvent(
-                this.props.room.roomId,
-                'im.vector.modular.widgets',
-                appsStateEvent,
-                '',
-            ).then(() => {
-                console.log('Deleted widget');
-            }, (e) => {
-                console.error('Failed to delete widget', e);
-            });
-        }
+        MatrixClientPeg.get().sendStateEvent(
+            this.props.room.roomId,
+            'im.vector.modular.widgets',
+            {}, // empty content
+            this.props.id,
+        ).then(() => {
+            console.log('Deleted widget');
+        }, (e) => {
+            console.error('Failed to delete widget', e);
+        });
     },
 
     formatAppTileName: function() {

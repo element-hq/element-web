@@ -275,8 +275,14 @@ module.exports = React.createClass({
     },
 
     _shouldShowApps: function(room) {
-        const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets', '');
-        return appsStateEvents && Object.keys(appsStateEvents.getContent()).length > 0;
+        const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
+        // any valid widget = show apps
+        for (let i = 0; i < appsStateEvents.length; i++) {
+            if (appsStateEvents[i].getContent().type && appsStateEvents[i].getContent().url) {
+                return true;
+            }
+        }
+        return false;
     },
 
     componentDidMount: function() {
