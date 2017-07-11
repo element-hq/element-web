@@ -69,7 +69,7 @@ module.exports = React.createClass({
             request(
                 { method: "GET", url: src },
                 (err, response, body) => {
-                    if (this.unmounted) {
+                    if (this._unmounted) {
                         return;
                     }
 
