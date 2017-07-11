@@ -309,7 +309,10 @@ async function _doSetLoggedIn(credentials, clearStorage) {
     // because `teamPromise` may take some time to resolve, breaking the assumption that
     // `setLoggedIn` takes an "instant" to complete, and dispatch `on_logged_in` a few ms
     // later than MatrixChat might assume.
-    dis.dispatch({action: 'on_logging_in'});
+    //
+    // we fire it *synchronously* to make sure it fires before on_logged_in.
+    // (dis.dispatch uses `setTimeout`, which does not guarantee ordering.)
+    dis.dispatch({action: 'on_logging_in'}, true);
 
     if (clearStorage) {
         await _clearStorage();
@@ -344,6 +347,9 @@ async function _doSetLoggedIn(credentials, clearStorage) {
                     localStorage.setItem("mx_team_token", body.team_token);
                 }
                 return body.team_token;
+            }, (err) => {
+                console.warn(`Failed to get team token on login: ${err}` );
+                return null;
             });
         }
     } else {
@@ -354,9 +360,6 @@ async function _doSetLoggedIn(credentials, clearStorage) {
 
     teamPromise.then((teamToken) => {
         dis.dispatch({action: 'on_logged_in', teamToken: teamToken});
-    }, (err) => {
-        console.warn("Failed to get team token on login", err);
-        dis.dispatch({action: 'on_logged_in', teamToken: null});
     });
 
     startMatrixClient();
