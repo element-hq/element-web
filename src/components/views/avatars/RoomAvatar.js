@@ -72,7 +72,7 @@ module.exports = React.createClass({
     },
 
     getRoomAvatarUrl: function(props) {
-        if (!this.props.room) return null;
+        if (!props.room) return null;
 
         return props.room.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
@@ -84,7 +84,7 @@ module.exports = React.createClass({
     },
 
     getOneToOneAvatar: function(props) {
-        if (!this.props.room) return null;
+        if (!props.room) return null;
 
         var mlist = props.room.currentState.members;
         var userIds = [];
