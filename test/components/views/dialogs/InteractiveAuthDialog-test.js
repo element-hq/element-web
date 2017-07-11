@@ -70,7 +70,7 @@ describe('InteractiveAuthDialog', function () {
             />, parentDiv);
 
         // wait for a password box and a submit button
-        return MatrixReactTestUtils.waitForRenderedDOMComponentWithTag(dlg, "form").then((formNode) => {
+        return MatrixReactTestUtils.waitForRenderedDOMComponentWithTag(dlg, "form", 2).then((formNode) => {
             const inputNodes = ReactTestUtils.scryRenderedDOMComponentsWithTag(
                 dlg, "input"
             );
