@@ -18,7 +18,7 @@ limitations under the License.
 /*
 Listens for incoming postMessage requests from the integrations UI URL. The following API is exposed:
 {
-    action: "invite" | "membership_state" | "bot_options" | "set_bot_options",
+    action: "invite" | "membership_state" | "bot_options" | "set_bot_options" | etc... ,
     room_id: $ROOM_ID,
     user_id: $USER_ID
     // additional request fields
@@ -108,6 +108,26 @@ Example:
     action: "get_membership_count",
     room_id: "!foo:bar",
     response: 78
+}
+
+can_send_event
+--------------
+Check if the client can send the given event into the given room. If the client
+is unable to do this, an error response is returned instead of 'response: false'.
+
+Request:
+ - room_id is the room to do the check in.
+ - event_type is the event type which will be sent.
+ - is_state is true if the event to be sent is a state event.
+Response:
+true
+Example:
+{
+    action: "can_send_event",
+    is_state: false,
+    event_type: "m.room.message",
+    room_id: "!foo:bar",
+    response: true
 }
 
 set_widget
@@ -442,6 +462,42 @@ function getMembershipCount(event, roomId) {
     sendResponse(event, count);
 }
 
+function canSendEvent(event, roomId) {
+    const evType = "" + event.data.event_type; // force stringify
+    const isState = Boolean(event.data.is_state);
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, _t('You need to be logged in.'));
+        return;
+    }
+    const room = client.getRoom(roomId);
+    if (!room) {
+        sendError(event, _t('This room is not recognised.'));
+        return;
+    }
+    const me = client.credentials.userId;
+    const member = room.getMember(me);
+    if (!member || member.membership !== "join") {
+        sendError(event, _t('You are not in this room.'));
+        return;
+    }
+
+    let canSend = false;
+    if (isState) {
+        canSend = room.currentState.maySendStateEvent(evType, me);
+    }
+    else {
+        canSend = room.currentState.maySendEvent(evType, me);
+    }
+
+    if (!canSend) {
+        sendError(event, _t('You do not have permission in this room.'));
+        return;
+    }
+
+    sendResponse(event, true);
+}
+
 function returnStateEvent(event, roomId, eventType, stateKey) {
     const client = MatrixClientPeg.get();
     if (!client) {
@@ -537,6 +593,9 @@ const onMessage = function(event) {
             return;
         } else if (event.data.action === "get_widgets") {
             getWidgets(event, roomId);
+            return;
+        } else if (event.data.action === "can_send_event") {
+            canSendEvent(event, roomId);
             return;
         }
 

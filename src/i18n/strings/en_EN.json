@@ -661,6 +661,8 @@
     "Would you like to <acceptText>accept</acceptText> or <declineText>decline</declineText> this invitation?": "Would you like to <acceptText>accept</acceptText> or <declineText>decline</declineText> this invitation?",
     "You already have existing direct chats with this user:": "You already have existing direct chats with this user:",
     "You are already in a call.": "You are already in a call.",
+    "You are not in this room.": "You are not in this room.",
+    "You do not have permission to do that in this room.": "You do not have permission to do that in this room.",
     "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory",
     "You are trying to access %(roomName)s.": "You are trying to access %(roomName)s.",
     "You cannot place a call with yourself.": "You cannot place a call with yourself.",
