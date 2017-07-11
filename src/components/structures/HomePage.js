@@ -74,8 +74,8 @@ module.exports = React.createClass({
                     }
 
                     if (err || response.status < 200 || response.status >= 300) {
-                        console.log(err);
-                        this.setState({ page: "Couldn't load home page" });
+                        console.warn(`Error loading home page: ${err}`);
+                        this.setState({ page: _t("Couldn't load home page") });
                         return;
                     }
 
