@@ -29,7 +29,7 @@ const RoomSummaryType = PropTypes.shape({
         name: PropTypes.string,
         avatar_url: PropTypes.string,
         canonical_alias: PropTypes.string,
-    }).isRequired
+    }).isRequired,
 });
 
 const UserSummaryType = PropTypes.shape({
@@ -42,8 +42,7 @@ const CategoryRoomList = React.createClass({
     displayName: 'CategoryRoomList',
 
     props: {
-        rooms: PropTypes.arrayOf(RoomSummaryType).isRequired,  
-        categoryId: PropTypes.string,
+        rooms: PropTypes.arrayOf(RoomSummaryType).isRequired,
         category: PropTypes.shape({
             profile: PropTypes.shape({
                 name: PropTypes.string,
@@ -59,7 +58,7 @@ const CategoryRoomList = React.createClass({
         if (this.props.category && this.props.category.profile) {
             catHeader = <div className="mx_GroupView_featuredThings_category">{this.props.category.profile.name}</div>;
         }
-        return <div key={this.props.categoryId}>
+        return <div>
             {catHeader}
             {roomNodes}
         </div>;
@@ -115,7 +114,6 @@ const RoleUserList = React.createClass({
 
     props: {
         users: PropTypes.arrayOf(UserSummaryType).isRequired,
-        roleId: PropTypes.string,
         role: PropTypes.shape({
             profile: PropTypes.shape({
                 name: PropTypes.string,
@@ -131,7 +129,7 @@ const RoleUserList = React.createClass({
         if (this.props.role && this.props.role.profile) {
             roleHeader = <div className="mx_GroupView_featuredThings_category">{this.props.role.profile.name}</div>;
         }
-        return <div key={this.props.roleId}>
+        return <div>
             {roleHeader}
             {userNodes}
         </div>;
@@ -243,7 +241,7 @@ export default React.createClass({
         }
         const categoryRoomNodes = Object.keys(categoryRooms).map((catId) => {
             const cat = summary.rooms_section.categories[catId];
-            return <CategoryRoomList rooms={categoryRooms[catId]} categoryId={catId} category={cat} />;
+            return <CategoryRoomList key={catId} rooms={categoryRooms[catId]} category={cat} />;
         });
 
         return <div className="mx_GroupView_featuredThings">
@@ -281,7 +279,7 @@ export default React.createClass({
         }
         const roleUserNodes = Object.keys(roleUsers).map((roleId) => {
             const role = summary.users_section.roles[roleId];
-            return <RoleUserList users={roleUsers[roleId]} roleId={roleId} role={role} />;
+            return <RoleUserList key={roleId} users={roleUsers[roleId]} role={role} />;
         });
 
         return <div className="mx_GroupView_featuredThings">
