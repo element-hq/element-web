@@ -23,33 +23,54 @@ import { sanitizedHtmlNode } from '../../HtmlUtils';
 import { _t } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
 
+const RoomSummaryType = PropTypes.shape({
+    room_id: PropTypes.string.isRequired,
+    profile: PropTypes.shape({
+        name: PropTypes.string,
+        avatar_url: PropTypes.string,
+        canonical_alias: PropTypes.string,
+    }).isRequired
+});
 
-function categoryRoomListNode(rooms, categoryId, category) {
-    const roomNodes = rooms.map((r) => {
-        return <FeaturedRoom key={r.room_id} summaryInfo={r} />;
-    });
-    let catHeader = null;
-    if (category && category.profile) {
-        catHeader = <div className="mx_GroupView_featuredThings_category">{category.profile.name}</div>;
-    }
-    return <div key={categoryId}>
-        {catHeader}
-        {roomNodes}
-    </div>;
-}
+const UserSummaryType = PropTypes.shape({
+    summaryInfo: PropTypes.shape({
+        user_id: PropTypes.string.isRequired,
+    }).isRequired,
+});
+
+const CategoryRoomList = React.createClass({
+    displayName: 'CategoryRoomList',
+
+    props: {
+        rooms: PropTypes.arrayOf(RoomSummaryType).isRequired,  
+        categoryId: PropTypes.string,
+        category: PropTypes.shape({
+            profile: PropTypes.shape({
+                name: PropTypes.string,
+            }).isRequired,
+        }),
+    },
+
+    render: function() {
+        const roomNodes = this.props.rooms.map((r) => {
+            return <FeaturedRoom key={r.room_id} summaryInfo={r} />;
+        });
+        let catHeader = null;
+        if (this.props.category && this.props.category.profile) {
+            catHeader = <div className="mx_GroupView_featuredThings_category">{this.props.category.profile.name}</div>;
+        }
+        return <div key={this.props.categoryId}>
+            {catHeader}
+            {roomNodes}
+        </div>;
+    },
+});
 
 const FeaturedRoom = React.createClass({
     displayName: 'FeaturedRoom',
 
     props: {
-        summaryInfo: PropTypes.shape({
-            room_id: PropTypes.string.isRequired,
-            profile: PropTypes.shape({
-                name: PropTypes.string,
-                avatar_url: PropTypes.string,
-                canonical_alias: PropTypes.string,
-            }).isRequired,
-        }).isRequired,
+        summaryInfo: RoomSummaryType.isRequired,
     },
 
     onClick: function(e) {
@@ -89,27 +110,39 @@ const FeaturedRoom = React.createClass({
     },
 });
 
-function roleUserListNode(users, roleId, role) {
-    const userNodes = users.map((u) => {
-        return <FeaturedUser key={u.user_id} summaryInfo={u} />;
-    });
-    let roleHeader = null;
-    if (role && role.profile) {
-        roleHeader = <div className="mx_GroupView_featuredThings_category">{role.profile.name}</div>;
-    }
-    return <div key={roleId}>
-        {roleHeader}
-        {userNodes}
-    </div>;
-}
+const RoleUserList = React.createClass({
+    displayName: 'RoleUserList',
+
+    props: {
+        users: PropTypes.arrayOf(UserSummaryType).isRequired,
+        roleId: PropTypes.string,
+        role: PropTypes.shape({
+            profile: PropTypes.shape({
+                name: PropTypes.string,
+            }).isRequired,
+        }),
+    },
+
+    render: function() {
+        const userNodes = this.props.users.map((u) => {
+            return <FeaturedUser key={u.user_id} summaryInfo={u} />;
+        });
+        let roleHeader = null;
+        if (this.props.role && this.props.role.profile) {
+            roleHeader = <div className="mx_GroupView_featuredThings_category">{this.props.role.profile.name}</div>;
+        }
+        return <div key={this.props.roleId}>
+            {roleHeader}
+            {userNodes}
+        </div>;
+    },
+});
 
 const FeaturedUser = React.createClass({
     displayName: 'FeaturedUser',
 
     props: {
-        summaryInfo: PropTypes.shape({
-            user_id: PropTypes.string.isRequired,
-        }).isRequired,
+        summaryInfo: UserSummaryType.isRequired,
     },
 
     onClick: function(e) {
@@ -206,11 +239,11 @@ export default React.createClass({
 
         let defaultCategoryNode = null;
         if (defaultCategoryRooms.length > 0) {
-            defaultCategoryNode = categoryRoomListNode(defaultCategoryRooms);
+            defaultCategoryNode = <CategoryRoomList rooms={defaultCategoryRooms} />;
         }
         const categoryRoomNodes = Object.keys(categoryRooms).map((catId) => {
             const cat = summary.rooms_section.categories[catId];
-            return categoryRoomListNode(categoryRooms[catId], catId, cat);
+            return <CategoryRoomList rooms={categoryRooms[catId]} categoryId={catId} category={cat} />;
         });
 
         return <div className="mx_GroupView_featuredThings">
@@ -244,11 +277,11 @@ export default React.createClass({
 
         let noRoleNode = null;
         if (noRoleUsers.length > 0) {
-            noRoleNode = roleUserListNode(noRoleUsers);
+            noRoleNode = <RoleUserList users={noRoleUsers} />;
         }
         const roleUserNodes = Object.keys(roleUsers).map((roleId) => {
             const role = summary.users_section.roles[roleId];
-            return roleUserListNode(roleUsers[roleId], roleId, role);
+            return <RoleUserList users={roleUsers[roleId]} roleId={roleId} role={role} />;
         });
 
         return <div className="mx_GroupView_featuredThings">
