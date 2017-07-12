@@ -431,7 +431,9 @@ module.exports = React.createClass({
                             'global', kind, LEGACY_RULES[rule.rule_id], portLegacyActions(rule.actions)
                         ).then( function() {
                             return cli.deletePushRule('global', kind, rule.rule_id);
-                        })
+                        }).catch( (e) => {
+                            console.warn(`Error when porting legacy rule: ${e}`);
+                        });
                     }(kind, rule));
                 }
             }
@@ -440,7 +442,7 @@ module.exports = React.createClass({
         if (needsUpdate.length > 0) {
             // If some of the rules need to be ported then wait for the porting
             // to happen and then fetch the rules again.
-            return q.allSettled(needsUpdate).then( function() {
+            return q.all(needsUpdate).then( function() {
                 return cli.getPushRules();
             });
         } else {
