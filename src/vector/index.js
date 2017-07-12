@@ -65,7 +65,7 @@ var sdk = require("matrix-react-sdk");
 const PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
-var q = require('q');
+import Promise from 'bluebird';
 var request = require('browser-request');
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';

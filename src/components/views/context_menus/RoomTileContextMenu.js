@@ -17,7 +17,7 @@ limitations under the License.
 
 'use strict';
 
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
 import classNames from 'classnames';
 import sdk from 'matrix-react-sdk';

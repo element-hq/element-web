@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 var React = require('react');
 import { _t, _tJsx } from 'matrix-react-sdk/lib/languageHandler';
-var q = require("q");
+import Promise from 'bluebird';
 var sdk = require('matrix-react-sdk');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var UserSettingsStore = require('matrix-react-sdk/lib/UserSettingsStore');

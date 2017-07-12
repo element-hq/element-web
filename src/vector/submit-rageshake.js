@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import pako from 'pako';
-import q from "q";
+import Promise from 'bluebird';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';

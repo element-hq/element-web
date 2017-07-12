@@ -1,6 +1,6 @@
 "use strict";
 
-var q = require('q');
+import Promise from 'bluebird';
 
 /**
  * Perform common actions before each test case, e.g. printing the test case

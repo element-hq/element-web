@@ -33,7 +33,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactTestUtils = require('react-addons-test-utils');
 var expect = require('expect');
-var q = require('q');
+import Promise from 'bluebird';
 
 var test_utils = require('../test-utils');
 var MockHttpBackend = require('matrix-mock-request');

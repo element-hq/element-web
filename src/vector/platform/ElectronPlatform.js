@@ -20,7 +20,7 @@ limitations under the License.
 import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import q from 'q';
+import Promise from 'bluebird';
 import {remote, ipcRenderer} from 'electron';
 import rageshake from '../rageshake';
 

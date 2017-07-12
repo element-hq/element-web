@@ -28,7 +28,7 @@ var linkify = require('linkifyjs');
 var linkifyString = require('linkifyjs/string');
 var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
 var sanitizeHtml = require('sanitize-html');
-var q = require('q');
+import Promise from 'bluebird';
 
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 

@@ -16,7 +16,7 @@ limitations under the License.
 
 "use strict";
 
-var q = require("q");
+import Promise from 'bluebird';
 var Matrix = require("matrix-js-sdk");
 var Room = Matrix.Room;
 var CallHandler = require('matrix-react-sdk/lib/CallHandler');
