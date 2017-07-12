@@ -90,10 +90,6 @@ const SETTINGS_LABELS = [
         label: 'Hide removed messages',
     },
     {
-        id: 'disableMarkdown',
-        label: 'Disable markdown formatting',
-    },
-    {
         id: 'enableSyntaxHighlightLanguageDetection',
         label: 'Enable automatic language detection for syntax highlighting',
     },
