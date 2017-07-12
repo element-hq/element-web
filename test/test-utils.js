@@ -28,7 +28,7 @@ export function browserSupportsWebRTC() {
 }
 
 export function deleteIndexedDB(dbName) {
-    return new q.Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         if (!window.indexedDB) {
             resolve();
             return;

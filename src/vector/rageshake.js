@@ -116,7 +116,7 @@ class IndexedDBLogStore {
      */
     connect() {
         let req = this.indexedDB.open("logs");
-        return q.Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             req.onsuccess = (event) => {
                 this.db = event.target.result;
                 // Periodically flush logs to local storage / indexeddb
@@ -193,7 +193,7 @@ class IndexedDBLogStore {
         }
         // there is no flush promise or there was but it has finished, so do
         // a brand new one, destroying the chain which may have been built up.
-        this.flushPromise = q.Promise((resolve, reject) => {
+        this.flushPromise = new Promise((resolve, reject) => {
             if (!this.db) {
                 // not connected yet or user rejected access for us to r/w to
                 // the db.
@@ -277,7 +277,7 @@ class IndexedDBLogStore {
         }
 
         function deleteLogs(id) {
-            return q.Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 const txn = db.transaction(
                     ["logs", "logslastmod"], "readwrite"
                 );
@@ -375,7 +375,7 @@ class IndexedDBLogStore {
  */
 function selectQuery(store, keyRange, resultMapper) {
     const query = store.openCursor(keyRange);
-    return q.Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         let results = [];
         query.onerror = (event) => {
             reject(new Error("Query failed: " + event.target.errorCode));
