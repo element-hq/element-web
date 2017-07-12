@@ -113,5 +113,14 @@
     "Settings": "Impostazioni",
     "Source URL": "URL d'origine",
     "Sorry, your browser is <b>not</b> able to run Riot.": "Scusa, ma il tuo browser <b>non</b>  è in grado di utilizzare Riot.",
-    "Start chat": "Avvia una chat"
+    "Start chat": "Avvia una chat",
+    "Messages containing <span>keywords</span>": "Messaggi contenenti <span> parole chiave</span>",
+    "Notification targets": "Notifica obbiettivi",
+    "Notifications on the following keywords follow rules which can’t be displayed here:": "Le notifiche alle seguenti parole chiave seguono regole che non possono essere mostrate qui:",
+    "Room directory": "Directory camera",
+    "The Home Server may be too old to support third party networks": "L' Home Server potrebbe essere troppo vecchio per supportare networks di terze parti",
+    "There are advanced notifications which are not shown here": "Ci sono notifiche avanzate che non sono mostrate qui",
+    "The server may be unavailable or overloaded": "Il server potrebbe essere non disponibile o sovraccarico",
+    "This Room": "Questa Stanza",
+    "This room is inaccessible to guests. You may be able to join if you register.": "Questa stanza è inaccessibile agli ospiti. Potresti unirti se ti registri."
 }
