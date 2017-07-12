@@ -40,12 +40,10 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        document.addEventListener('keydown', this._onKeyDown);
     },
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
-        document.removeEventListener('keydown', this._onKeyDown);
     },
 
     onAction: function(payload) {
@@ -91,8 +89,6 @@ module.exports = React.createClass({
     },
 
     _onKeyDown: function(ev) {
-        // Only do anything when the key event target is the search input
-        if(ev.target !== this.refs.search) return;
         switch (ev.keyCode) {
             case KeyCode.ESCAPE:
                 this._clearSearch();
@@ -150,6 +146,7 @@ module.exports = React.createClass({
                         className="mx_SearchBox_search"
                         value={ this.state.searchTerm }
                         onChange={ this.onChange }
+                        onKeyDown={ this._onKeyDown }
                         placeholder={ _t('Filter room names') }
                     />
                 ];
