@@ -21,7 +21,7 @@ import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import KeyCode from 'matrix-react-sdk/lib/KeyCode';
 import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
-import RateLimitedFunc from 'matrix-react-sdk/lib/ratelimitedfunc';
+import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
 module.exports = React.createClass({
@@ -68,7 +68,7 @@ module.exports = React.createClass({
         this.onSearch();
     },
 
-    onSearch: new RateLimitedFunc(
+    onSearch: new rate_limited_func(
         function() {
             this.props.onSearch(this.refs.search.value);
         },
