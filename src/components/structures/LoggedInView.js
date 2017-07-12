@@ -156,13 +156,20 @@ export default React.createClass({
             }
             */
 
-        var handled = false;
+        let handled = false;
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        let ctrlCmdOnly;
+        if (isMac) {
+            ctrlCmdOnly = ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
+        } else {
+            ctrlCmdOnly = ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
+        }
 
         switch (ev.keyCode) {
             case KeyCode.UP:
             case KeyCode.DOWN:
                 if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey) {
-                    var action = ev.keyCode == KeyCode.UP ?
+                    let action = ev.keyCode == KeyCode.UP ?
                         'view_prev_room' : 'view_next_room';
                     dis.dispatch({action: action});
                     handled = true;
@@ -181,6 +188,14 @@ export default React.createClass({
             case KeyCode.END:
                 if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
                     this._onScrollKeyPressed(ev);
+                    handled = true;
+                }
+                break;
+            case KeyCode.KEY_K:
+                if (ctrlCmdOnly) {
+                    dis.dispatch({
+                        action: 'focus_room_filter',
+                    });
                     handled = true;
                 }
                 break;
