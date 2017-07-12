@@ -139,7 +139,7 @@ describe('loading:', function () {
                 realQueryParams={params}
                 startingFragmentQueryParams={fragParts.params}
                 enableGuest={true}
-                onTokenLoginCompleted={tokenLoginCompleteDefer.resolve}
+                onTokenLoginCompleted={() => tokenLoginCompleteDefer.resolve()}
                 initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
                 makeRegistrationUrl={() => {throw new Error('Not implemented');}}
             />, parentDiv
