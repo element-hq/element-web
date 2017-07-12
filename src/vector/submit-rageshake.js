@@ -100,7 +100,7 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
 }
 
 function _submitReport(endpoint, body, progressCallback) {
-    const deferred = q.defer();
+    const deferred = Promise.defer();
 
     const req = new XMLHttpRequest();
     req.open("POST", endpoint);

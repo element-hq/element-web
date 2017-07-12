@@ -53,7 +53,7 @@ ConferenceCall.prototype._joinConferenceUser = function() {
     // Make sure the conference user is in the group chat room
     var groupRoom = this.client.getRoom(this.groupRoomId);
     if (!groupRoom) {
-        return q.reject("Bad group room ID");
+        return Promise.reject("Bad group room ID");
     }
     var member = groupRoom.getMember(this.confUserId);
     if (member && member.membership === "join") {

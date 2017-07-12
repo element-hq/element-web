@@ -188,7 +188,7 @@ var makeRegistrationUrl = function(params) {
 window.addEventListener('hashchange', onHashChange);
 
 function getConfig() {
-    let deferred = q.defer();
+    let deferred = Promise.defer();
 
     request(
         { method: "GET", url: "config.json" },

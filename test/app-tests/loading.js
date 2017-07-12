@@ -103,7 +103,7 @@ describe('loading:', function () {
             toString: function() { return this.search + this.hash; },
         };
 
-        let tokenLoginCompleteDefer = q.defer();
+        let tokenLoginCompleteDefer = Promise.defer();
         tokenLoginCompletePromise = tokenLoginCompleteDefer.promise;
 
         function onNewScreen(screen) {
@@ -171,7 +171,7 @@ describe('loading:', function () {
         it('gives a login panel by default', function (done) {
             loadApp();
 
-            q.delay(1).then(() => {
+            Promise.delay(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -183,7 +183,7 @@ describe('loading:', function () {
                 return httpBackend.flush();
             }).then(() => {
                 // Wait for another trip around the event loop for the UI to update
-                return q.delay(10);
+                return Promise.delay(10);
             }).then(() => {
                 // we expect a single <Login> component following session load
                 ReactTestUtils.findRenderedComponentWithType(
@@ -197,7 +197,7 @@ describe('loading:', function () {
                 uriFragment: "#/room/!room:id",
             });
 
-            q.delay(1).then(() => {
+            Promise.delay(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -209,7 +209,7 @@ describe('loading:', function () {
                 return httpBackend.flush();
             }).then(() => {
                 // Wait for another trip around the event loop for the UI to update
-                return q.delay(10);
+                return Promise.delay(10);
             }).then(() => {
                 return completeLogin(matrixChat);
             }).then(() => {
@@ -232,7 +232,7 @@ describe('loading:', function () {
                 uriFragment: "#/login",
             });
 
-            return q.delay(100).then(() => {
+            return Promise.delay(100).then(() => {
                 // we expect a single <Login> component
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.login.Login'));
@@ -339,7 +339,7 @@ describe('loading:', function () {
                 },
             });
 
-            return q.delay(1).then(() => {
+            return Promise.delay(1).then(() => {
                 // we expect a loading spinner while we log into the RTS
                 assertAtLoadingSpinner(matrixChat);
 
@@ -366,7 +366,7 @@ describe('loading:', function () {
                 });
 
                 // give the UI a chance to display
-                return q.delay(50);
+                return Promise.delay(50);
             });
 
             it('shows a login view', function() {
@@ -403,7 +403,7 @@ describe('loading:', function () {
         it('shows a home page by default', function (done) {
             loadApp();
 
-            q.delay(1).then(() => {
+            Promise.delay(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -436,7 +436,7 @@ describe('loading:', function () {
 
             loadApp();
 
-            q.delay(1).then(() => {
+            Promise.delay(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -471,7 +471,7 @@ describe('loading:', function () {
             loadApp({
                 uriFragment: "#/room/!room:id"
             });
-            q.delay(1).then(() => {
+            Promise.delay(1).then(() => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
                 assertAtLoadingSpinner(matrixChat);
@@ -530,7 +530,7 @@ describe('loading:', function () {
 
                     dis.dispatch({ action: 'start_login' });
 
-                    return q.delay(1);
+                    return Promise.delay(1);
                 });
             });
 
@@ -559,7 +559,7 @@ describe('loading:', function () {
 
                 ReactTestUtils.Simulate.click(returnToApp);
 
-                return q.delay(1).then(() => {
+                return Promise.delay(1).then(() => {
                     // we should be straight back into the home page
                     ReactTestUtils.findRenderedComponentWithType(
                         matrixChat, sdk.getComponent('structures.HomePage'));
@@ -574,7 +574,7 @@ describe('loading:', function () {
                 queryString: "?loginToken=secretToken&homeserver=https%3A%2F%2Fhomeserver&identityServer=https%3A%2F%2Fidserver",
             });
 
-            q.delay(1).then(() => {
+            Promise.delay(1).then(() => {
                 // we expect a spinner while we're logging in
                 assertAtLoadingSpinner(matrixChat);
 
@@ -629,7 +629,7 @@ describe('loading:', function () {
 
         return httpBackend.flush().then(() => {
             // Wait for another trip around the event loop for the UI to update
-            return q.delay(1);
+            return Promise.delay(1);
         }).then(() => {
             // we expect a spinner
             ReactTestUtils.findRenderedComponentWithType(
@@ -674,7 +674,7 @@ function awaitSyncingSpinner(matrixChat, retryLimit, retryCount) {
         }
         // loading can take quite a long time, because we delete the
         // indexedDB store.
-        return q.delay(5).then(() => {
+        return Promise.delay(5).then(() => {
             return awaitSyncingSpinner(matrixChat, retryLimit, retryCount + 1);
         });
     }
@@ -711,7 +711,7 @@ function awaitRoomView(matrixChat, retryLimit, retryCount) {
             throw new Error("MatrixChat still not ready after " +
                             retryCount + " tries");
         }
-        return q.delay(0).then(() => {
+        return Promise.delay(0).then(() => {
             return awaitRoomView(matrixChat, retryLimit, retryCount + 1);
         });
     }

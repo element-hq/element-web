@@ -236,7 +236,7 @@ module.exports = React.createClass({
                 }
             }
 
-            q.all(deferreds).done(function() {
+            Promise.all(deferreds).done(function() {
                 self._refreshFromServer();
             }, function(error) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -306,7 +306,7 @@ module.exports = React.createClass({
             }
         }
 
-        q.all(deferreds).done(function(resps) {
+        Promise.all(deferreds).done(function(resps) {
             self._refreshFromServer();
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -361,7 +361,7 @@ module.exports = React.createClass({
         }
 
         // Then, add the new ones
-        q.all(removeDeferreds).done(function(resps) {
+        Promise.all(removeDeferreds).done(function(resps) {
             var deferreds = [];
 
             var pushRuleVectorStateKind = self.state.vectorContentRules.vectorState;
@@ -399,7 +399,7 @@ module.exports = React.createClass({
                 }
             }
 
-            q.all(deferreds).done(function(resps) {
+            Promise.all(deferreds).done(function(resps) {
                 self._refreshFromServer();
             }, onError);
         }, onError);
@@ -594,7 +594,7 @@ module.exports = React.createClass({
             self.setState({pushers: resp.pushers});
         });
 
-        q.all([pushRulesPromise, pushersPromise]).then(function() {
+        Promise.all([pushRulesPromise, pushersPromise]).then(function() {
             self.setState({
                 phase: self.phases.DISPLAY
             });

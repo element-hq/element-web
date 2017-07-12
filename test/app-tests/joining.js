@@ -118,7 +118,7 @@ describe('joining a room', function () {
                 // wait for the directory requests
                 httpBackend.when('POST', '/publicRooms').respond(200, {chunk: []});
                 httpBackend.when('GET', '/thirdparty/protocols').respond(200, {});
-                return q.all([
+                return Promise.all([
                     httpBackend.flush('/thirdparty/protocols'),
                     httpBackend.flush('/publicRooms'),
                 ]);
@@ -139,14 +139,14 @@ describe('joining a room', function () {
                 httpBackend.when('GET', '/rooms/'+encodeURIComponent(ROOM_ID)+"/initialSync")
                     .respond(401, {errcode: 'M_GUEST_ACCESS_FORBIDDEN'});
 
-                return q.all([
+                return Promise.all([
                     httpBackend.flush('/directory/room/'+encodeURIComponent(ROOM_ALIAS), 1, 200),
                     httpBackend.flush('/rooms/'+encodeURIComponent(ROOM_ID)+"/initialSync", 1, 200),
                 ]);
             }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
 
-                return q.delay(1);
+                return Promise.delay(1);
             }).then(() => {
                 // we should now have a roomview, with a preview bar
                 roomView = ReactTestUtils.findRenderedComponentWithType(
@@ -164,14 +164,14 @@ describe('joining a room', function () {
                     .respond(200, {room_id: ROOM_ID});
             }).then(() => {
                 // wait for the join request to be made
-                return q.delay(1);
+                return Promise.delay(1);
             }).then(() => {
                 // and again, because the state update has to go to the store and
                 // then one dispatch within the store, then to the view
                 // XXX: This is *super flaky*: a better way would be to declare
                 // that we expect a certain state transition to happen, then wait
                 // for that transition to occur.
-                return q.delay(1);
+                return Promise.delay(1);
             }).then(() => {
                 // the roomview should now be loading
                 expect(roomView.state.room).toBe(null);
@@ -186,7 +186,7 @@ describe('joining a room', function () {
             }).then(() => {
                 httpBackend.verifyNoOutstandingExpectation();
 
-                return q.delay(1);
+                return Promise.delay(1);
             }).then(() => {
                 // We've joined, expect this to false
                 expect(roomView.state.joining).toBe(false);
