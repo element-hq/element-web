@@ -568,15 +568,16 @@ module.exports = React.createClass({
         });
         // reject the invites
         const promises = rooms.map((room) => {
-            return MatrixClientPeg.get().leave(room.roomId);
+            return MatrixClientPeg.get().leave(room.roomId).catch((e) => {
+                // purposefully drop errors to the floor: we'll just have a non-zero number on the UI
+                // after trying to reject all the invites.
+            });
         });
-        // purposefully drop errors to the floor: we'll just have a non-zero number on the UI
-        // after trying to reject all the invites.
-        q.allSettled(promises).then(() => {
+        Promise.all(promises).then(() => {
             this.setState({
                 rejectingInvites: false,
             });
-        }).done();
+        });
     },
 
     _onExportE2eKeysClicked: function() {

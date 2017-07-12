@@ -386,19 +386,12 @@ module.exports = React.createClass({
         debuglog("ScrollPanel: starting "+dir+" fill");
 
         // onFillRequest can end up calling us recursively (via onScroll
-        // events) so make sure we set this before firing off the call. That
-        // does present the risk that we might not ever actually fire off the
-        // fill request, so wrap it in a try/catch.
+        // events) so make sure we set this before firing off the call.
         this._pendingFillRequests[dir] = true;
-        var fillPromise;
-        try {
-            fillPromise = this.props.onFillRequest(backwards);
-        } catch (e) {
-            this._pendingFillRequests[dir] = false;
-            throw e;
-        }
 
-        q.finally(fillPromise, () => {
+        Promise.try(() => {
+            return this.props.onFillRequest(backwards);
+        }).finally(() => {
             this._pendingFillRequests[dir] = false;
         }).then((hasMoreResults) => {
             if (this.unmounted) {

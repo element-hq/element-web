@@ -183,6 +183,12 @@ module.exports = React.createClass({
         });
     },
 
+    /**
+     * Returns a promise which resolves once all of the save operations have completed or failed.
+     *
+     * The result is a list of promise state snapshots, each with the form
+     * `{ state: "fulfilled", value: v }` or `{ state: "rejected", reason: r }`.
+     */
     save: function() {
         var stateWasSetDefer = Promise.defer();
         // the caller may have JUST called setState on stuff, so we need to re-render before saving
@@ -194,8 +200,18 @@ module.exports = React.createClass({
             this.setState({ _loading: false});
         });
 
+        function mapPromiseToSnapshot(p) {
+            return p.then((r) => {
+                return { state: "fulfilled", value: r };
+            }, (e) => {
+                return { state: "rejected", reason: e };
+            });
+        }
+
         return stateWasSetDefer.promise.then(() => {
-            return q.allSettled(this._calcSavePromises());
+            return Promise.all(
+                this._calcSavePromises().map(mapPromiseToSnapshot),
+            );
         });
     },
 
