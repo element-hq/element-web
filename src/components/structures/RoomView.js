@@ -50,6 +50,8 @@ import RoomViewStore from '../../stores/RoomViewStore';
 let DEBUG = false;
 let debuglog = function() {};
 
+const BROWSER_SUPPORTS_SANDBOX = 'sandbox' in document.createElement('iframe');
+
 if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
     debuglog = console.log.bind(console);
@@ -275,6 +277,8 @@ module.exports = React.createClass({
     },
 
     _shouldShowApps: function(room) {
+        if (!BROWSER_SUPPORTS_SANDBOX) return false;
+
         const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
         // any valid widget = show apps
         for (let i = 0; i < appsStateEvents.length; i++) {

@@ -121,7 +121,14 @@ export default React.createClass({
         } else {
             appTileBody = (
                 <div className="mx_AppTileBody">
-                    <iframe ref="appFrame" src={this.state.widgetUrl} allowFullScreen="true"></iframe>
+                    // Note that there is advice saying allow-scripts shouldn;t be used with allow-same-origin
+                    // because that would allow the iframe to prgramatically remove the sandbox attribute, but
+                    // this would only be for content hosted on the same origin as the riot client: anything
+                    // hosted on the same origin as the client will get the same access access as if you clicked
+                    // a link to it.
+                    <iframe ref="appFrame" src={this.state.widgetUrl} allowFullScreen="true"
+                        sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+                    ></iframe>
                 </div>
             );
         }
