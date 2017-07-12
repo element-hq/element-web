@@ -46,18 +46,22 @@ module.exports = React.createClass({
     },
 
     onAction: function(payload) {
-        // Disabling this as I find it really really annoying, and was used to the
-        // previous behaviour - see https://github.com/vector-im/riot-web/issues/3348
-/*        
         switch (payload.action) {
+/*      Disabling this as I find it really really annoying, and was used to the
+        previous behaviour - see https://github.com/vector-im/riot-web/issues/3348
             // Clear up the text field when a room is selected.
             case 'view_room':
                 if (this.refs.search) {
                     this._clearSearch();
                 }
                 break;
+*/
+            case 'focus_room_filter':
+                if (this.refs.search) {
+                    this.refs.search.focus();
+                }
+                break;
         }
-*/        
     },
 
     onChange: function() {
