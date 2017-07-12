@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var q = require("q");
+import Promise from 'bluebird';
 var request = require('browser-request');
 
 var SdkConfig = require('./SdkConfig');

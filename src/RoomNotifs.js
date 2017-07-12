@@ -16,7 +16,7 @@ limitations under the License.
 
 import MatrixClientPeg from './MatrixClientPeg';
 import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
-import q from 'q';
+import Promise from 'bluebird';
 
 export const ALL_MESSAGES_LOUD = 'all_messages_loud';
 export const ALL_MESSAGES = 'all_messages';

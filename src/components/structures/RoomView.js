@@ -22,7 +22,7 @@ limitations under the License.
 
 var React = require("react");
 var ReactDOM = require("react-dom");
-var q = require("q");
+import Promise from 'bluebird';
 var classNames = require("classnames");
 var Matrix = require("matrix-js-sdk");
 import { _t } from '../../languageHandler';

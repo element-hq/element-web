@@ -23,7 +23,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
-import q from 'q';
+import Promise from 'bluebird';
 import dis from '../../../dispatcher';
 
 const TRUNCATE_QUERY_LIST = 40;

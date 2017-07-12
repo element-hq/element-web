@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
 import { _t, _tJsx } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';

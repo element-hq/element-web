@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import expect from 'expect';
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-addons-test-utils';

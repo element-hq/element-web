@@ -17,7 +17,7 @@ limitations under the License.
 
 import Matrix from 'matrix-js-sdk';
 
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
 
 import sdk from '../../../index';

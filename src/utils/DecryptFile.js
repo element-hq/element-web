@@ -20,7 +20,7 @@ import encrypt from 'browser-encrypt-attachment';
 import 'isomorphic-fetch';
 // Grab the client so that we can turn mxc:// URLs into https:// URLS.
 import MatrixClientPeg from '../MatrixClientPeg';
-import q from 'q';
+import Promise from 'bluebird';
 
 
 /**

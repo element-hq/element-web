@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import q from 'q';
+import Promise from 'bluebird';
 import MatrixClientPeg from './MatrixClientPeg';
 import Notifier from './Notifier';
 import { _t } from './languageHandler';

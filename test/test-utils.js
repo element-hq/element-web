@@ -1,7 +1,7 @@
 "use strict";
 
 import sinon from 'sinon';
-import q from 'q';
+import Promise from 'bluebird';
 
 import peg from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher';

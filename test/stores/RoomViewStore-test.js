@@ -7,7 +7,7 @@ import RoomViewStore from '../../src/stores/RoomViewStore';
 import peg from '../../src/MatrixClientPeg';
 
 import * as testUtils from '../test-utils';
-import q from 'q';
+import Promise from 'bluebird';
 
 const dispatch = testUtils.getDispatchForStore(RoomViewStore);
 

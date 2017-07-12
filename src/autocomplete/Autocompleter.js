@@ -22,7 +22,7 @@ import DuckDuckGoProvider from './DuckDuckGoProvider';
 import RoomProvider from './RoomProvider';
 import UserProvider from './UserProvider';
 import EmojiProvider from './EmojiProvider';
-import Q from 'q';
+import Promise from 'bluebird';
 
 export type SelectionRange = {
     start: number,

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var q = require("q");
+import Promise from 'bluebird';
 var React = require('react');
 var ObjectUtils = require("../../../ObjectUtils");
 var MatrixClientPeg = require('../../../MatrixClientPeg');

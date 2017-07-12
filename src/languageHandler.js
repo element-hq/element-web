@@ -17,7 +17,7 @@ limitations under the License.
 
 import request from 'browser-request';
 import counterpart from 'counterpart';
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
 
 import UserSettingsStore from './UserSettingsStore';

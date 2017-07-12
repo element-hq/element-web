@@ -18,7 +18,7 @@ limitations under the License.
 import Matrix from "matrix-js-sdk";
 import { _t } from "./languageHandler";
 
-import q from 'q';
+import Promise from 'bluebird';
 import url from 'url';
 
 export default class Login {

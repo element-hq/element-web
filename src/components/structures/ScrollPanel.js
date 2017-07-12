@@ -17,7 +17,7 @@ limitations under the License.
 var React = require("react");
 var ReactDOM = require("react-dom");
 var GeminiScrollbar = require('react-gemini-scrollbar');
-var q = require("q");
+import Promise from 'bluebird';
 var KeyCode = require('../../KeyCode');
 
 var DEBUG_SCROLL = false;

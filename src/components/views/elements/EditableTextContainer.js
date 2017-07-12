@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
-import q from 'q';
+import Promise from 'bluebird';
 
 /**
  * A component which wraps an EditableText, with a spinner while updates take

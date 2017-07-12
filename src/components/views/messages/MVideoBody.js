@@ -20,7 +20,7 @@ import React from 'react';
 import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
-import q from 'q';
+import Promise from 'bluebird';
 import UserSettingsStore from '../../../UserSettingsStore';
 import { _t } from '../../../languageHandler';
 

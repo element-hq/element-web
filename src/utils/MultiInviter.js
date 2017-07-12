@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import {getAddressType, inviteToRoom} from '../Invite';
-import q from 'q';
+import Promise from 'bluebird';
 
 /**
  * Invites multiple addresses to a room, handling rate limiting from the server

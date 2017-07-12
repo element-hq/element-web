@@ -21,7 +21,7 @@ import { _t } from './languageHandler';
 import dis from "./dispatcher";
 import * as Rooms from "./Rooms";
 
-import q from 'q';
+import Promise from 'bluebird';
 
 /**
  * Create a new room, and switch to it.

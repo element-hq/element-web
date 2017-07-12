@@ -16,7 +16,7 @@ limitations under the License.
 
 'use strict';
 
-var q = require('q');
+import Promise from 'bluebird';
 var extend = require('./extend');
 var dis = require('./dispatcher');
 var MatrixClientPeg = require('./MatrixClientPeg');
