@@ -109,6 +109,7 @@
     "karma-mocha": "^0.2.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
+    "matrix-react-test-utils": "^0.1.1",
     "mocha": "^2.4.5",
     "parallelshell": "^1.2.0",
     "react-addons-test-utils": "^15.4.0",
