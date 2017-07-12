@@ -145,7 +145,7 @@ module.exports = React.createClass({
         return {
             stickyBottom: true,
             startAtBottom: true,
-            onFillRequest: function(backwards) { return q(false); },
+            onFillRequest: function(backwards) { return Promise.resolve(false); },
             onUnfillRequest: function(backwards, scrollToken) {},
             onScroll: function() {},
         };

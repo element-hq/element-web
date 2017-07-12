@@ -305,25 +305,25 @@ module.exports = React.createClass({
     },
 
     saveAliases: function() {
-        if (!this.refs.alias_settings) { return [q()]; }
+        if (!this.refs.alias_settings) { return [Promise.resolve()]; }
         return this.refs.alias_settings.saveSettings();
     },
 
     saveColor: function() {
-        if (!this.refs.color_settings) { return q(); }
+        if (!this.refs.color_settings) { return Promise.resolve(); }
         return this.refs.color_settings.saveSettings();
     },
 
     saveUrlPreviewSettings: function() {
-        if (!this.refs.url_preview_settings) { return q(); }
+        if (!this.refs.url_preview_settings) { return Promise.resolve(); }
         return this.refs.url_preview_settings.saveSettings();
     },
 
     saveEnableEncryption: function() {
-        if (!this.refs.encrypt) { return q(); }
+        if (!this.refs.encrypt) { return Promise.resolve(); }
 
         var encrypt = this.refs.encrypt.checked;
-        if (!encrypt) { return q(); }
+        if (!encrypt) { return Promise.resolve(); }
 
         var roomId = this.props.room.roomId;
         return MatrixClientPeg.get().sendStateEvent(

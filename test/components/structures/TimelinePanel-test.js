@@ -145,7 +145,7 @@ describe('TimelinePanel', function() {
         // panel isn't paginating
         var awaitPaginationCompletion = function() {
             if(!panel.state.forwardPaginating)
-                return q();
+                return Promise.resolve();
             else
                 return q.delay(0).then(awaitPaginationCompletion);
         };
@@ -214,7 +214,7 @@ describe('TimelinePanel', function() {
         client.paginateEventTimeline = sinon.spy((tl, opts) => {
             console.log("paginate:", opts);
             expect(opts.backwards).toBe(true);
-            return q(true);
+            return Promise.resolve(true);
         });
 
         var rendered = ReactDOM.render(

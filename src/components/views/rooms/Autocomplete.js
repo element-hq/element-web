@@ -64,7 +64,7 @@ export default class Autocomplete extends React.Component {
                 // Hide the autocomplete box
                 hide: true,
             });
-            return Q(null);
+            return Promise.resolve(null);
         }
         let autocompleteDelay = UserSettingsStore.getLocalSetting('autocompleteDelay', 200);
 

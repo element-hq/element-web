@@ -323,9 +323,9 @@ module.exports = React.createClass({
                 return;
             }
 
-            // the extra q() ensures that synchronous exceptions hit the same codepath as
+            // the extra Promise.resolve() ensures that synchronous exceptions hit the same codepath as
             // asynchronous ones.
-            return q().then(() => {
+            return Promise.resolve().then(() => {
                 return Lifecycle.loadSession({
                     fragmentQueryParams: this.props.startingFragmentQueryParams,
                     enableGuest: this.props.enableGuest,
@@ -694,7 +694,7 @@ module.exports = React.createClass({
 
         // Wait for the first sync to complete so that if a room does have an alias,
         // it would have been retrieved.
-        let waitFor = q(null);
+        let waitFor = Promise.resolve(null);
         if (!this.firstSyncComplete) {
             if (!this.firstSyncPromise) {
                 console.warn('Cannot view a room before first sync. room_id:', roomInfo.room_id);

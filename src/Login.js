@@ -144,7 +144,7 @@ export default class Login {
 
         const client = this._createTemporaryClient();
         return client.login('m.login.password', loginParams).then(function(data) {
-            return q({
+            return Promise.resolve({
                 homeserverUrl: self._hsUrl,
                 identityServerUrl: self._isUrl,
                 userId: data.user_id,
@@ -160,7 +160,7 @@ export default class Login {
                     });
 
                     return fbClient.login('m.login.password', loginParams).then(function(data) {
-                        return q({
+                        return Promise.resolve({
                             homeserverUrl: self._fallbackHsUrl,
                             identityServerUrl: self._isUrl,
                             userId: data.user_id,

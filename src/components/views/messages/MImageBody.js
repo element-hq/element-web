@@ -123,7 +123,7 @@ module.exports = React.createClass({
         this.fixupHeight();
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            let thumbnailPromise = q(null);
+            let thumbnailPromise = Promise.resolve(null);
             if (content.info.thumbnail_file) {
                 thumbnailPromise = decryptFile(
                     content.info.thumbnail_file,

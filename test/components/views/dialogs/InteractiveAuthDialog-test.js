@@ -50,7 +50,7 @@ describe('InteractiveAuthDialog', function () {
 
     it('Should successfully complete a password flow', function() {
         const onFinished = sinon.spy();
-        const doRequest = sinon.stub().returns(q({a:1}));
+        const doRequest = sinon.stub().returns(Promise.resolve({a:1}));
 
         // tell the stub matrixclient to return a real userid
         var client = MatrixClientPeg.get();

@@ -311,13 +311,13 @@ var TimelinePanel = React.createClass({
 
         if (!this.state[canPaginateKey]) {
             debuglog("TimelinePanel: have given up", dir, "paginating this timeline");
-            return q(false);
+            return Promise.resolve(false);
         }
 
         if(!this._timelineWindow.canPaginate(dir)) {
             debuglog("TimelinePanel: can't", dir, "paginate any further");
             this.setState({[canPaginateKey]: false});
-            return q(false);
+            return Promise.resolve(false);
         }
 
         debuglog("TimelinePanel: Initiating paginate; backwards:"+backwards);

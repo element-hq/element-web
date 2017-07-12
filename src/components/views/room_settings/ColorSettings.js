@@ -72,7 +72,7 @@ module.exports = React.createClass({
 
     saveSettings: function() { // : Promise
         if (!this.state.hasChanged) {
-            return q(); // They didn't explicitly give a color to save.
+            return Promise.resolve(); // They didn't explicitly give a color to save.
         }
         var originalState = this.getInitialState();
         if (originalState.primary_color !== this.state.primary_color ||
@@ -92,7 +92,7 @@ module.exports = React.createClass({
                 }
             });
         }
-        return q(); // no color diff
+        return Promise.resolve(); // no color diff
     },
 
     _getColorIndex: function(scheme) {

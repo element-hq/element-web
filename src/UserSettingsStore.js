@@ -48,7 +48,7 @@ export default {
 
     loadThreePids: function() {
         if (MatrixClientPeg.get().isGuest()) {
-            return q({
+            return Promise.resolve({
                 threepids: [],
             }); // guests can't poke 3pid endpoint
         }

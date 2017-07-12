@@ -148,5 +148,5 @@ EditableTextContainer.defaultProps = {
     initialValue: "",
     placeholder: "",
     blurToSubmit: false,
-    onSubmit: function(v) {return q(); },
+    onSubmit: function(v) {return Promise.resolve(); },
 };

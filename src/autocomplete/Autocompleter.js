@@ -57,7 +57,7 @@ export async function getCompletions(query: string, selection: SelectionRange, f
      state (== "fulfilled" || "rejected") and value. */
     const completionsList = await Q.allSettled(
         PROVIDERS.map(provider => {
-            return Q(provider.getCompletions(query, selection, force))
+            return Promise.resolve(provider.getCompletions(query, selection, force))
                 .timeout(PROVIDER_COMPLETION_TIMEOUT);
         }),
     );

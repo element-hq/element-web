@@ -39,7 +39,7 @@ class ScalarAuthClient {
     // Returns a scalar_token string
     getScalarToken() {
         var tok = window.localStorage.getItem("mx_scalar_token");
-        if (tok) return q(tok);
+        if (tok) return Promise.resolve(tok);
 
         // No saved token, so do the dance to get one. First, we
         // need an openid bearer token from the HS.

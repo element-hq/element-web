@@ -203,7 +203,7 @@ module.exports = React.createClass({
         this._addThreepid = null;
 
         if (PlatformPeg.get()) {
-            q().then(() => {
+            Promise.resolve().then(() => {
                 return PlatformPeg.get().getAppVersion();
             }).done((appVersion) => {
                 if (this._unmounted) return;
@@ -301,7 +301,7 @@ module.exports = React.createClass({
     },
 
     _refreshMediaDevices: function() {
-        q().then(() => {
+        Promise.resolve().then(() => {
             return CallMediaHandler.getDevices();
         }).then((mediaDevices) => {
             // console.log("got mediaDevices", mediaDevices, this._unmounted);

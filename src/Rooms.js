@@ -102,7 +102,7 @@ export function guessAndSetDMRoom(room, isDirect) {
  */
 export function setDMRoom(roomId, userId) {
     if (MatrixClientPeg.get().isGuest()) {
-        return q();
+        return Promise.resolve();
     }
 
     const mDirectEvent = MatrixClientPeg.get().getAccountData('m.direct');
