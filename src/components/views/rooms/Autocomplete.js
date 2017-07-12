@@ -73,7 +73,7 @@ export default class Autocomplete extends React.Component {
             autocompleteDelay = 0;
         }
 
-        const deferred = Q.defer();
+        const deferred = Promise.defer();
         this.debounceCompletionsRequest = setTimeout(() => {
             this.processQuery(query, selection).then(() => {
                 deferred.resolve();
@@ -176,7 +176,7 @@ export default class Autocomplete extends React.Component {
     }
 
     forceComplete() {
-        const done = Q.defer();
+        const done = Promise.defer();
         this.setState({
             forceComplete: true,
             hide: false,

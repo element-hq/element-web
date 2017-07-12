@@ -55,7 +55,7 @@ export default class MultiInviter {
                 this.errorTexts[addr] = 'Unrecognised address';
             }
         }
-        this.deferred = q.defer();
+        this.deferred = Promise.defer();
         this._inviteMore(0);
 
         return this.deferred.promise;

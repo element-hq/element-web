@@ -87,7 +87,7 @@ function setRoomNotifsStateMuted(roomId) {
         ],
     }));
 
-    return q.all(promises);
+    return Promise.all(promises);
 }
 
 function setRoomNotifsStateUnmuted(roomId, newState) {
@@ -126,7 +126,7 @@ function setRoomNotifsStateUnmuted(roomId, newState) {
         promises.push(cli.setPushRuleEnabled('global', 'room', roomId, true));
     }
 
-    return q.all(promises);
+    return Promise.all(promises);
 }
 
 function findOverrideMuteRule(roomId) {

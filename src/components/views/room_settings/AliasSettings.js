@@ -104,7 +104,7 @@ module.exports = React.createClass({
         }
         if (oldCanonicalAlias !== this.state.canonicalAlias) {
             console.log("AliasSettings: Updating canonical alias");
-            promises = [q.all(promises).then(
+            promises = [Promise.all(promises).then(
                 MatrixClientPeg.get().sendStateEvent(
                     this.props.roomId, "m.room.canonical_alias", {
                         alias: this.state.canonicalAlias

@@ -74,7 +74,7 @@ var Tester = React.createClass({
     /* returns a promise which will resolve when the fill happens */
     awaitFill: function(dir) {
         console.log("ScrollPanel Tester: awaiting " + dir + " fill");
-        var defer = q.defer();
+        var defer = Promise.defer();
         this._fillDefers[dir] = defer;
         return defer.promise;
     },
@@ -94,7 +94,7 @@ var Tester = React.createClass({
     /* returns a promise which will resolve when a scroll event happens */
     awaitScroll: function() {
         console.log("Awaiting scroll");
-        this._scrollDefer = q.defer();
+        this._scrollDefer = Promise.defer();
         return this._scrollDefer.promise;
     },
 

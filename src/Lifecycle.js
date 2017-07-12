@@ -236,7 +236,7 @@ function _restoreFromLocalStorage() {
 function _handleRestoreFailure(e) {
     console.log("Unable to restore session", e);
 
-    const def = q.defer();
+    const def = Promise.defer();
     const SessionRestoreErrorDialog =
           sdk.getComponent('views.dialogs.SessionRestoreErrorDialog');
 

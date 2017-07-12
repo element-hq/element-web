@@ -184,7 +184,7 @@ module.exports = React.createClass({
     },
 
     save: function() {
-        var stateWasSetDefer = q.defer();
+        var stateWasSetDefer = Promise.defer();
         // the caller may have JUST called setState on stuff, so we need to re-render before saving
         // else we won't use the latest values of things.
         // We can be a bit cheeky here and set a loading flag, and listen for the callback on that
@@ -282,7 +282,7 @@ module.exports = React.createClass({
         // color scheme
         var p;
         p = this.saveColor();
-        if (!q.isFulfilled(p)) {
+        if (!Promise.isFulfilled(p)) {
             promises.push(p);
         }
 
@@ -294,7 +294,7 @@ module.exports = React.createClass({
 
         // encryption
         p = this.saveEnableEncryption();
-        if (!q.isFulfilled(p)) {
+        if (!Promise.isFulfilled(p)) {
             promises.push(p);
         }
 

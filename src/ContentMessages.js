@@ -52,7 +52,7 @@ const MAX_HEIGHT = 600;
  *  and a thumbnail key.
  */
 function createThumbnail(element, inputWidth, inputHeight, mimeType) {
-    const deferred = q.defer();
+    const deferred = Promise.defer();
 
     var targetWidth = inputWidth;
     var targetHeight = inputHeight;
@@ -95,7 +95,7 @@ function createThumbnail(element, inputWidth, inputHeight, mimeType) {
  * @return {Promise} A promise that resolves with the html image element.
  */
 function loadImageElement(imageFile) {
-    const deferred = q.defer();
+    const deferred = Promise.defer();
 
     // Load the file into an html element
     const img = document.createElement("img");
@@ -154,7 +154,7 @@ function infoForImageFile(matrixClient, roomId, imageFile) {
  * @return {Promise} A promise that resolves with the video image element.
  */
 function loadVideoElement(videoFile) {
-    const deferred = q.defer();
+    const deferred = Promise.defer();
 
     // Load the file into an html element
     const video = document.createElement("video");
@@ -210,7 +210,7 @@ function infoForVideoFile(matrixClient, roomId, videoFile) {
  *   is read.
  */
 function readFileAsArrayBuffer(file) {
-    const deferred = q.defer();
+    const deferred = Promise.defer();
     const reader = new FileReader();
     reader.onload = function(e) {
         deferred.resolve(e.target.result);
@@ -288,7 +288,7 @@ class ContentMessages {
             content.info.mimetype = file.type;
         }
 
-        const def = q.defer();
+        const def = Promise.defer();
         if (file.type.indexOf('image/') == 0) {
             content.msgtype = 'm.image';
             infoForImageFile(matrixClient, roomId, file).then(imageInfo=>{

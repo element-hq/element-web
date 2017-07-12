@@ -53,7 +53,7 @@ class ScalarAuthClient {
     }
 
     exchangeForScalarToken(openid_token_object) {
-        var defer = q.defer();
+        var defer = Promise.defer();
 
         var scalar_rest_url = SdkConfig.get().integrations_rest_url;
         request({

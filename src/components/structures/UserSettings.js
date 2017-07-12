@@ -316,7 +316,7 @@ module.exports = React.createClass({
 
     _refreshFromServer: function() {
         const self = this;
-        q.all([
+        Promise.all([
             UserSettingsStore.loadProfileInfo(), UserSettingsStore.loadThreePids(),
         ]).done(function(resps) {
             self.setState({

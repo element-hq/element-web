@@ -498,7 +498,7 @@ module.exports = React.createClass({
         }
 
         // wait a bit to let the user finish typing
-        return q.delay(500).then(() => {
+        return Promise.delay(500).then(() => {
             if (cancelled) return null;
             return MatrixClientPeg.get().lookupThreePid(medium, address);
         }).then((res) => {

@@ -224,7 +224,7 @@ module.exports = React.createClass({
 
         // Used by _viewRoom before getting state from sync
         this.firstSyncComplete = false;
-        this.firstSyncPromise = q.defer();
+        this.firstSyncPromise = Promise.defer();
 
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
@@ -1039,7 +1039,7 @@ module.exports = React.createClass({
         // since we're about to start the client and therefore about
         // to do the first sync
         this.firstSyncComplete = false;
-        this.firstSyncPromise = q.defer();
+        this.firstSyncPromise = Promise.defer();
         const cli = MatrixClientPeg.get();
 
         // Allow the JS SDK to reap timeline events. This reduces the amount of

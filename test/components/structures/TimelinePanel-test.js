@@ -147,18 +147,18 @@ describe('TimelinePanel', function() {
             if(!panel.state.forwardPaginating)
                 return Promise.resolve();
             else
-                return q.delay(0).then(awaitPaginationCompletion);
+                return Promise.delay(0).then(awaitPaginationCompletion);
         };
 
         // helper function which will return a promise which resolves when
         // the TimelinePanel fires a scroll event
         var awaitScroll = function() {
-            scrollDefer = q.defer();
+            scrollDefer = Promise.defer();
             return scrollDefer.promise;
         };
 
         // let the first round of pagination finish off
-        q.delay(5).then(() => {
+        Promise.delay(5).then(() => {
             expect(panel.state.canBackPaginate).toBe(false);
             expect(scryEventTiles(panel).length).toEqual(N_EVENTS);
 
@@ -279,7 +279,7 @@ describe('TimelinePanel', function() {
         // helper function which will return a promise which resolves when
         // the TimelinePanel fires a scroll event
         var awaitScroll = function() {
-            scrollDefer = q.defer();
+            scrollDefer = Promise.defer();
 
             return scrollDefer.promise.then(() => {
                 console.log("got scroll event; scrollTop now " +

@@ -110,7 +110,7 @@ describe('InteractiveAuthDialog', function () {
             );
 
             // let the request complete
-            return q.delay(1);
+            return Promise.delay(1);
         }).then(() => {
             expect(onFinished.callCount).toEqual(1);
             expect(onFinished.calledWithExactly(true, {a:1})).toBe(true);

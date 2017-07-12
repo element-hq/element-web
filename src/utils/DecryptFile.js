@@ -28,7 +28,7 @@ import Promise from 'bluebird';
  * @return {Promise} A promise that resolves with the data:// URI.
  */
 export function readBlobAsDataUri(file) {
-    var deferred = q.defer();
+    var deferred = Promise.defer();
     var reader = new FileReader();
     reader.onload = function(e) {
         deferred.resolve(e.target.result);
