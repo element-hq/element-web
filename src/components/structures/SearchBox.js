@@ -16,12 +16,13 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-var sdk = require('matrix-react-sdk')
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
-var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+import KeyCode from 'matrix-react-sdk/lib/KeyCode';
+import sdk from 'matrix-react-sdk';
+import dis from 'matrix-react-sdk/lib/dispatcher';
+import RateLimitedFunc from 'matrix-react-sdk/lib/ratelimitedfunc';
+import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'SearchBox',
@@ -39,26 +40,25 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
+        document.addEventListener('keydown', this._onKeyDown);
     },
 
     componentWillUnmount: function() {
         dis.unregister(this.dispatcherRef);
+        document.removeEventListener('keydown', this._onKeyDown);
     },
 
     onAction: function(payload) {
         switch (payload.action) {
-/*      Disabling this as I find it really really annoying, and was used to the
-        previous behaviour - see https://github.com/vector-im/riot-web/issues/3348
-            // Clear up the text field when a room is selected.
             case 'view_room':
-                if (this.refs.search) {
+                if (this.refs.search && payload.clear_search) {
                     this._clearSearch();
                 }
                 break;
-*/
             case 'focus_room_filter':
                 if (this.refs.search) {
                     this.refs.search.focus();
+                    this.refs.search.select();
                 }
                 break;
         }
@@ -70,7 +70,7 @@ module.exports = React.createClass({
         this.onSearch();
     },
 
-    onSearch: new rate_limited_func(
+    onSearch: new RateLimitedFunc(
         function() {
             this.props.onSearch(this.refs.search.value);
         },
@@ -87,6 +87,17 @@ module.exports = React.createClass({
             dis.dispatch({
                 action: 'hide_left_panel',
             });
+        }
+    },
+
+    _onKeyDown: function(ev) {
+        // Only do anything when the key event target is the search input
+        if(ev.target !== this.refs.search) return;
+        switch (ev.keyCode) {
+            case KeyCode.ESCAPE:
+                this._clearSearch();
+                dis.dispatch({action: 'focus_composer'});
+                break;
         }
     },
 
