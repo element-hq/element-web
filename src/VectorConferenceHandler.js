@@ -57,7 +57,7 @@ ConferenceCall.prototype._joinConferenceUser = function() {
     }
     var member = groupRoom.getMember(this.confUserId);
     if (member && member.membership === "join") {
-        return q();
+        return Promise.resolve();
     }
     return this.client.invite(this.groupRoomId, this.confUserId);
 };
@@ -75,7 +75,7 @@ ConferenceCall.prototype._getConferenceUserRoom = function() {
         }
     }
     if (confRoom) {
-        return q(confRoom);
+        return Promise.resolve(confRoom);
     }
     return this.client.createRoom({
         preset: "private_chat",

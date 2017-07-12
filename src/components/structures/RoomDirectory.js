@@ -117,7 +117,7 @@ module.exports = React.createClass({
     },
 
     getMoreRooms: function() {
-        if (!MatrixClientPeg.get()) return q();
+        if (!MatrixClientPeg.get()) return Promise.resolve();
 
         const my_filter_string = this.state.filterString;
         const my_server = this.state.roomServer;
@@ -266,7 +266,7 @@ module.exports = React.createClass({
     },
 
     onFillRequest: function(backwards) {
-        if (backwards || !this.nextBatch) return q(false);
+        if (backwards || !this.nextBatch) return Promise.resolve(false);
 
         return this.getMoreRooms();
     },

@@ -132,7 +132,7 @@ export default class WebPlatform extends VectorBasePlatform {
 
     getAppVersion(): Promise<string> {
         if (this.runningVersion !== null) {
-            return q(this.runningVersion);
+            return Promise.resolve(this.runningVersion);
         }
         return this._getVersion();
     }

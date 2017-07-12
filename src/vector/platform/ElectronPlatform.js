@@ -173,7 +173,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     getAppVersion(): Promise<string> {
-        return q(remote.app.getVersion());
+        return Promise.resolve(remote.app.getVersion());
     }
 
     startUpdateCheck() {
@@ -201,7 +201,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     isElectron(): boolean { return true; }
 
     requestNotificationPermission(): Promise<string> {
-        return q('granted');
+        return Promise.resolve('granted');
     }
 
     reload() {

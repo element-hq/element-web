@@ -106,7 +106,7 @@ describe('joining a room', function () {
                 .respond(200, {});
             function awaitSync(attempts) {
                 if (syncDone) {
-                    return q();
+                    return Promise.resolve();
                 }
                 if (!attempts) {
                     throw new Error("Gave up waiting for /sync")

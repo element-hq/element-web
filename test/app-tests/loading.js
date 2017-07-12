@@ -683,7 +683,7 @@ function awaitSyncingSpinner(matrixChat, retryLimit, retryCount) {
 
     // state looks good, check the rendered output
     assertAtSyncingSpinner(matrixChat);
-    return q();
+    return Promise.resolve();
 }
 
 function assertAtSyncingSpinner(matrixChat) {
@@ -721,5 +721,5 @@ function awaitRoomView(matrixChat, retryLimit, retryCount) {
     // state looks good, check the rendered output
     ReactTestUtils.findRenderedComponentWithType(
         matrixChat, sdk.getComponent('structures.RoomView'));
-    return q();
+    return Promise.resolve();
 }
