@@ -16,13 +16,14 @@ limitations under the License.
 
 'use strict';
 
+import url from 'url';
 import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import SdkConfig from '../../../SdkConfig';
 import { _t } from '../../../languageHandler';
 
-import url from 'url';
+const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 
 export default React.createClass({
     displayName: 'AppTile',
@@ -126,9 +127,14 @@ export default React.createClass({
             // a link to it.
             const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox "+
                 "allow-same-origin allow-scripts";
+            const parsedWidgetUrl = url.parse(this.state.widgetUrl);
+            let safeWidgetUrl = '';
+            if (ALLOWED_APP_URL_SCHEMES.indexOf(parsedWidgetUrl.protocol) !== -1) {
+                safeWidgetUrl = url.format(parsedWidgetUrl);
+            }
             appTileBody = (
                 <div className="mx_AppTileBody">
-                    <iframe ref="appFrame" src={this.state.widgetUrl} allowFullScreen="true"
+                    <iframe ref="appFrame" src={safeWidgetUrl} allowFullScreen="true"
                         sandbox={sandboxFlags}
                     ></iframe>
                 </div>
