@@ -41,8 +41,6 @@ import Autocomplete from './Autocomplete';
 import {Completion} from "../../../autocomplete/Autocompleter";
 import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
-import {onSendMessageFailed} from './MessageComposerInputOld';
-
 import MessageComposerStore from '../../../stores/MessageComposerStore';
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
@@ -54,6 +52,22 @@ function stateToMarkdown(state) {
         .replace(
             ZWS, // draft-js-export-markdown adds these
             ''); // this is *not* a zero width space, trust me :)
+}
+
+function onSendMessageFailed(err, room) {
+    // XXX: temporary logging to try to diagnose
+    // https://github.com/vector-im/riot-web/issues/3148
+    console.log('MessageComposer got send failure: ' + err.name + '('+err+')');
+    if (err.name === "UnknownDeviceError") {
+        dis.dispatch({
+            action: 'unknown_device_error',
+            err: err,
+            room: room,
+        });
+    }
+    dis.dispatch({
+        action: 'message_send_failed',
+    });
 }
 
 /*
