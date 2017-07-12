@@ -184,6 +184,13 @@ export default React.createClass({
                     handled = true;
                 }
                 break;
+            case KeyCode.KEY_K:
+                if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                    dis.dispatch({
+                        action: 'focus_room_filter',
+                    });
+                }
+                break;
         }
 
         if (handled) {
