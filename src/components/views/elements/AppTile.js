@@ -46,6 +46,7 @@ export default React.createClass({
             loading: false,
             widgetUrl: this.props.url,
             error: null,
+            deleting: false,
         };
     },
 
@@ -92,6 +93,7 @@ export default React.createClass({
 
     _onDeleteClick: function() {
         console.log("Delete widget %s", this.props.id);
+        this.setState({deleting: true});
         MatrixClientPeg.get().sendStateEvent(
             this.props.room.roomId,
             'im.vector.modular.widgets',
@@ -101,6 +103,7 @@ export default React.createClass({
             console.log('Deleted widget');
         }, (e) => {
             console.error('Failed to delete widget', e);
+            this.setState({deleting: false});
         });
     },
 
@@ -115,6 +118,12 @@ export default React.createClass({
 
     render: function() {
         let appTileBody;
+
+        // Don't render widget if it is in the process of being deleted
+        if (this.state.deleting) {
+            return <div></div>;
+        }
+
         if (this.state.loading) {
             appTileBody = (
                 <div> Loading... </div>
