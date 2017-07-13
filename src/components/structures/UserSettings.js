@@ -93,6 +93,10 @@ const SETTINGS_LABELS = [
         id: 'enableSyntaxHighlightLanguageDetection',
         label: 'Enable automatic language detection for syntax highlighting',
     },
+    {
+        id: 'MessageComposerInput.autoReplaceEmoji',
+        label: 'Automatically replace plain text Emoji',
+    },
 /*
     {
         id: 'useFixedWidthFont',

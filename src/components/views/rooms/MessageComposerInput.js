@@ -43,6 +43,11 @@ import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
 
+import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
+const EMOJI_SHORTNAMES = Object.keys(emojioneList);
+const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
+const REGEX_EMOJI_WHITESPACE = new RegExp('(' + asciiRegexp + ')\\s$');
+
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
 const ZWS_CODE = 8203;
@@ -367,6 +372,32 @@ export default class MessageComposerInput extends React.Component {
             );
             // Reset selection
             editorState = EditorState.forceSelection(editorState, currentSelection);
+        }
+
+        // Automatic replacement of plaintext emoji to Unicode emoji
+        if (UserSettingsStore.getSyncedSetting('MessageComposerInput.autoReplaceEmoji', false)) {
+            // The first matched group includes just the matched plaintext emoji
+            const emojiMatch = REGEX_EMOJI_WHITESPACE.exec(text.slice(0, currentStartOffset));
+            if(emojiMatch) {
+                // plaintext -> hex unicode
+                const emojiUc = asciiList[emojiMatch[1]];
+                // hex unicode -> shortname -> actual unicode
+                const unicodeEmoji = shortnameToUnicode(EMOJI_UNICODE_TO_SHORTNAME[emojiUc]);
+                const newContentState = Modifier.replaceText(
+                    editorState.getCurrentContent(),
+                    currentSelection.merge({
+                        anchorOffset: currentStartOffset - emojiMatch[0].length,
+                        focusOffset: currentStartOffset,
+                    }),
+                    unicodeEmoji,
+                );
+                editorState = EditorState.push(
+                    editorState,
+                    newContentState,
+                    'insert-characters',
+                );
+                editorState = EditorState.forceSelection(editorState, newContentState.getSelectionAfter());
+            }
         }
 
         /* Since a modification was made, set originalEditorState to null, since newState is now our original */
