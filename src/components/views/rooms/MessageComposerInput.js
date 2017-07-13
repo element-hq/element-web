@@ -620,12 +620,13 @@ export default class MessageComposerInput extends React.Component {
                 });
             }
             if (!shouldSendHTML) {
-                const hasAnEntity = blocks.some((block) => {
+                const hasLink = blocks.some((block) => {
                     return block.getCharacterList().filter((c) => {
-                        return c.getEntity();
+                        const entityKey = c.getEntity();
+                        return entityKey && Entity.get(entityKey).getType() === 'LINK';
                     }).size > 0;
                 });
-                shouldSendHTML = hasAnEntity;
+                shouldSendHTML = hasLink;
             }
             if (shouldSendHTML) {
                 contentHTML = HtmlUtils.processHtmlForSending(
