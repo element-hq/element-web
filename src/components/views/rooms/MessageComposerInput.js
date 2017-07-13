@@ -22,7 +22,7 @@ import {Editor, EditorState, RichUtils, CompositeDecorator,
 
 import classNames from 'classnames';
 import escape from 'lodash/escape';
-import Q from 'q';
+import Promise from 'bluebird';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';

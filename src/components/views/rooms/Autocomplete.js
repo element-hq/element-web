@@ -5,7 +5,7 @@ import flatMap from 'lodash/flatMap';
 import isEqual from 'lodash/isEqual';
 import sdk from '../../../index';
 import type {Completion} from '../../../autocomplete/Autocompleter';
-import Q from 'q';
+import Promise from 'bluebird';
 import UserSettingsStore from '../../../UserSettingsStore';
 
 import {getCompletions} from '../../../autocomplete/Autocompleter';
@@ -64,7 +64,7 @@ export default class Autocomplete extends React.Component {
                 // Hide the autocomplete box
                 hide: true,
             });
-            return Q(null);
+            return Promise.resolve(null);
         }
         let autocompleteDelay = UserSettingsStore.getLocalSetting('autocompleteDelay', 200);
 
@@ -73,7 +73,7 @@ export default class Autocomplete extends React.Component {
             autocompleteDelay = 0;
         }
 
-        const deferred = Q.defer();
+        const deferred = Promise.defer();
         this.debounceCompletionsRequest = setTimeout(() => {
             this.processQuery(query, selection).then(() => {
                 deferred.resolve();
@@ -176,7 +176,7 @@ export default class Autocomplete extends React.Component {
     }
 
     forceComplete() {
-        const done = Q.defer();
+        const done = Promise.defer();
         this.setState({
             forceComplete: true,
             hide: false,

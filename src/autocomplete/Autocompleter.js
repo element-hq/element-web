@@ -22,7 +22,7 @@ import DuckDuckGoProvider from './DuckDuckGoProvider';
 import RoomProvider from './RoomProvider';
 import UserProvider from './UserProvider';
 import EmojiProvider from './EmojiProvider';
-import Q from 'q';
+import Promise from 'bluebird';
 
 export type SelectionRange = {
     start: number,
@@ -57,7 +57,7 @@ export async function getCompletions(query: string, selection: SelectionRange, f
      state (== "fulfilled" || "rejected") and value. */
     const completionsList = await Q.allSettled(
         PROVIDERS.map(provider => {
-            return Q(provider.getCompletions(query, selection, force))
+            return Promise.resolve(provider.getCompletions(query, selection, force))
                 .timeout(PROVIDER_COMPLETION_TIMEOUT);
         }),
     );

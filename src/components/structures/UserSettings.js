@@ -22,7 +22,7 @@ const PlatformPeg = require("../../PlatformPeg");
 const Modal = require('../../Modal');
 const dis = require("../../dispatcher");
 import sessionStore from '../../stores/SessionStore';
-const q = require('q');
+import Promise from 'bluebird';
 const packageJson = require('../../../package.json');
 const UserSettingsStore = require('../../UserSettingsStore');
 const CallMediaHandler = require('../../CallMediaHandler');
@@ -199,7 +199,7 @@ module.exports = React.createClass({
         this._addThreepid = null;
 
         if (PlatformPeg.get()) {
-            q().then(() => {
+            Promise.resolve().then(() => {
                 return PlatformPeg.get().getAppVersion();
             }).done((appVersion) => {
                 if (this._unmounted) return;
@@ -297,7 +297,7 @@ module.exports = React.createClass({
     },
 
     _refreshMediaDevices: function() {
-        q().then(() => {
+        Promise.resolve().then(() => {
             return CallMediaHandler.getDevices();
         }).then((mediaDevices) => {
             // console.log("got mediaDevices", mediaDevices, this._unmounted);
@@ -312,7 +312,7 @@ module.exports = React.createClass({
 
     _refreshFromServer: function() {
         const self = this;
-        q.all([
+        Promise.all([
             UserSettingsStore.loadProfileInfo(), UserSettingsStore.loadThreePids(),
         ]).done(function(resps) {
             self.setState({
@@ -564,15 +564,16 @@ module.exports = React.createClass({
         });
         // reject the invites
         const promises = rooms.map((room) => {
-            return MatrixClientPeg.get().leave(room.roomId);
+            return MatrixClientPeg.get().leave(room.roomId).catch((e) => {
+                // purposefully drop errors to the floor: we'll just have a non-zero number on the UI
+                // after trying to reject all the invites.
+            });
         });
-        // purposefully drop errors to the floor: we'll just have a non-zero number on the UI
-        // after trying to reject all the invites.
-        q.allSettled(promises).then(() => {
+        Promise.all(promises).then(() => {
             this.setState({
                 rejectingInvites: false,
             });
-        }).done();
+        });
     },
 
     _onExportE2eKeysClicked: function() {

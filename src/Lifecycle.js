@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import q from 'q';
+import Promise from 'bluebird';
 import Matrix from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
@@ -116,12 +116,12 @@ export function loadSession(opts) {
  */
 export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
     if (!queryParams.loginToken) {
-        return q(false);
+        return Promise.resolve(false);
     }
 
     if (!queryParams.homeserver) {
         console.warn("Cannot log in with token: can't determine HS URL to use");
-        return q(false);
+        return Promise.resolve(false);
     }
 
     // create a temporary MatrixClient to do the login
@@ -197,7 +197,7 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
 //      localStorage (e.g. teamToken, isGuest etc.)
 function _restoreFromLocalStorage() {
     if (!localStorage) {
-        return q(false);
+        return Promise.resolve(false);
     }
     const hsUrl = localStorage.getItem("mx_hs_url");
     const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
@@ -229,14 +229,14 @@ function _restoreFromLocalStorage() {
         }
     } else {
         console.log("No previous session found.");
-        return q(false);
+        return Promise.resolve(false);
     }
 }
 
 function _handleRestoreFailure(e) {
     console.log("Unable to restore session", e);
 
-    const def = q.defer();
+    const def = Promise.defer();
     const SessionRestoreErrorDialog =
           sdk.getComponent('views.dialogs.SessionRestoreErrorDialog');
 

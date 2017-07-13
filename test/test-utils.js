@@ -1,7 +1,7 @@
 "use strict";
 
 import sinon from 'sinon';
-import q from 'q';
+import Promise from 'bluebird';
 
 import peg from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher';
@@ -75,12 +75,12 @@ export function createTestClient() {
         on: sinon.stub(),
         removeListener: sinon.stub(),
         isRoomEncrypted: sinon.stub().returns(false),
-        peekInRoom: sinon.stub().returns(q(mkStubRoom())),
+        peekInRoom: sinon.stub().returns(Promise.resolve(mkStubRoom())),
 
-        paginateEventTimeline: sinon.stub().returns(q()),
-        sendReadReceipt: sinon.stub().returns(q()),
-        getRoomIdForAlias: sinon.stub().returns(q()),
-        getProfileInfo: sinon.stub().returns(q({})),
+        paginateEventTimeline: sinon.stub().returns(Promise.resolve()),
+        sendReadReceipt: sinon.stub().returns(Promise.resolve()),
+        getRoomIdForAlias: sinon.stub().returns(Promise.resolve()),
+        getProfileInfo: sinon.stub().returns(Promise.resolve({})),
         getAccountData: (type) => {
             return mkEvent({
                 type,
@@ -89,9 +89,9 @@ export function createTestClient() {
             });
         },
         setAccountData: sinon.stub(),
-        sendTyping: sinon.stub().returns(q({})),
-        sendTextMessage: () => q({}),
-        sendHtmlMessage: () => q({}),
+        sendTyping: sinon.stub().returns(Promise.resolve({})),
+        sendTextMessage: () => Promise.resolve({}),
+        sendHtmlMessage: () => Promise.resolve({}),
         getSyncState: () => "SYNCING",
         generateClientSecret: () => "t35tcl1Ent5ECr3T",
         isGuest: () => false,
@@ -101,13 +101,13 @@ export function createTestClient() {
 export function createTestRtsClient(teamMap, sidMap) {
     return {
         getTeamsConfig() {
-            return q(Object.keys(teamMap).map((token) => teamMap[token]));
+            return Promise.resolve(Object.keys(teamMap).map((token) => teamMap[token]));
         },
         trackReferral(referrer, emailSid, clientSecret) {
-            return q({team_token: sidMap[emailSid]});
+            return Promise.resolve({team_token: sidMap[emailSid]});
         },
         getTeam(teamToken) {
-            return q(teamMap[teamToken]);
+            return Promise.resolve(teamMap[teamToken]);
         },
     };
 }

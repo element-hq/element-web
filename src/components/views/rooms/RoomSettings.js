@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
 import { _t, _tJsx } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -183,8 +183,14 @@ module.exports = React.createClass({
         });
     },
 
+    /**
+     * Returns a promise which resolves once all of the save operations have completed or failed.
+     *
+     * The result is a list of promise state snapshots, each with the form
+     * `{ state: "fulfilled", value: v }` or `{ state: "rejected", reason: r }`.
+     */
     save: function() {
-        var stateWasSetDefer = q.defer();
+        var stateWasSetDefer = Promise.defer();
         // the caller may have JUST called setState on stuff, so we need to re-render before saving
         // else we won't use the latest values of things.
         // We can be a bit cheeky here and set a loading flag, and listen for the callback on that
@@ -194,8 +200,18 @@ module.exports = React.createClass({
             this.setState({ _loading: false});
         });
 
+        function mapPromiseToSnapshot(p) {
+            return p.then((r) => {
+                return { state: "fulfilled", value: r };
+            }, (e) => {
+                return { state: "rejected", reason: e };
+            });
+        }
+
         return stateWasSetDefer.promise.then(() => {
-            return q.allSettled(this._calcSavePromises());
+            return Promise.all(
+                this._calcSavePromises().map(mapPromiseToSnapshot),
+            );
         });
     },
 
@@ -282,7 +298,7 @@ module.exports = React.createClass({
         // color scheme
         var p;
         p = this.saveColor();
-        if (!q.isFulfilled(p)) {
+        if (!Promise.isFulfilled(p)) {
             promises.push(p);
         }
 
@@ -294,7 +310,7 @@ module.exports = React.createClass({
 
         // encryption
         p = this.saveEnableEncryption();
-        if (!q.isFulfilled(p)) {
+        if (!Promise.isFulfilled(p)) {
             promises.push(p);
         }
 
@@ -305,25 +321,25 @@ module.exports = React.createClass({
     },
 
     saveAliases: function() {
-        if (!this.refs.alias_settings) { return [q()]; }
+        if (!this.refs.alias_settings) { return [Promise.resolve()]; }
         return this.refs.alias_settings.saveSettings();
     },
 
     saveColor: function() {
-        if (!this.refs.color_settings) { return q(); }
+        if (!this.refs.color_settings) { return Promise.resolve(); }
         return this.refs.color_settings.saveSettings();
     },
 
     saveUrlPreviewSettings: function() {
-        if (!this.refs.url_preview_settings) { return q(); }
+        if (!this.refs.url_preview_settings) { return Promise.resolve(); }
         return this.refs.url_preview_settings.saveSettings();
     },
 
     saveEnableEncryption: function() {
-        if (!this.refs.encrypt) { return q(); }
+        if (!this.refs.encrypt) { return Promise.resolve(); }
 
         var encrypt = this.refs.encrypt.checked;
-        if (!encrypt) { return q(); }
+        if (!encrypt) { return Promise.resolve(); }
 
         var roomId = this.props.room.roomId;
         return MatrixClientPeg.get().sendStateEvent(

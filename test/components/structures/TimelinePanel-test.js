@@ -18,7 +18,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactTestUtils = require('react-addons-test-utils');
 var expect = require('expect');
-var q = require('q');
+import Promise from 'bluebird';
 var sinon = require('sinon');
 
 var jssdk = require('matrix-js-sdk');
@@ -145,20 +145,20 @@ describe('TimelinePanel', function() {
         // panel isn't paginating
         var awaitPaginationCompletion = function() {
             if(!panel.state.forwardPaginating)
-                return q();
+                return Promise.resolve();
             else
-                return q.delay(0).then(awaitPaginationCompletion);
+                return Promise.delay(0).then(awaitPaginationCompletion);
         };
 
         // helper function which will return a promise which resolves when
         // the TimelinePanel fires a scroll event
         var awaitScroll = function() {
-            scrollDefer = q.defer();
+            scrollDefer = Promise.defer();
             return scrollDefer.promise;
         };
 
         // let the first round of pagination finish off
-        q.delay(5).then(() => {
+        Promise.delay(5).then(() => {
             expect(panel.state.canBackPaginate).toBe(false);
             expect(scryEventTiles(panel).length).toEqual(N_EVENTS);
 
@@ -214,7 +214,7 @@ describe('TimelinePanel', function() {
         client.paginateEventTimeline = sinon.spy((tl, opts) => {
             console.log("paginate:", opts);
             expect(opts.backwards).toBe(true);
-            return q(true);
+            return Promise.resolve(true);
         });
 
         var rendered = ReactDOM.render(
@@ -279,7 +279,7 @@ describe('TimelinePanel', function() {
         // helper function which will return a promise which resolves when
         // the TimelinePanel fires a scroll event
         var awaitScroll = function() {
-            scrollDefer = q.defer();
+            scrollDefer = Promise.defer();
 
             return scrollDefer.promise.then(() => {
                 console.log("got scroll event; scrollTop now " +

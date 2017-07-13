@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import expect from 'expect';
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-addons-test-utils';
@@ -50,7 +50,7 @@ describe('InteractiveAuthDialog', function () {
 
     it('Should successfully complete a password flow', function() {
         const onFinished = sinon.spy();
-        const doRequest = sinon.stub().returns(q({a:1}));
+        const doRequest = sinon.stub().returns(Promise.resolve({a:1}));
 
         // tell the stub matrixclient to return a real userid
         var client = MatrixClientPeg.get();
@@ -110,7 +110,7 @@ describe('InteractiveAuthDialog', function () {
             );
 
             // let the request complete
-            return q.delay(1);
+            return Promise.delay(1);
         }).then(() => {
             expect(onFinished.callCount).toEqual(1);
             expect(onFinished.calledWithExactly(true, {a:1})).toBe(true);

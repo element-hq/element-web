@@ -22,7 +22,7 @@ limitations under the License.
 
 var React = require("react");
 var ReactDOM = require("react-dom");
-var q = require("q");
+import Promise from 'bluebird';
 var classNames = require("classnames");
 var Matrix = require("matrix-js-sdk");
 import { _t } from '../../languageHandler';
@@ -775,7 +775,7 @@ module.exports = React.createClass({
 
     onSearchResultsFillRequest: function(backwards) {
         if (!backwards) {
-            return q(false);
+            return Promise.resolve(false);
         }
 
         if (this.state.searchResults.next_batch) {
@@ -785,7 +785,7 @@ module.exports = React.createClass({
             return this._handleSearchResult(searchPromise);
         } else {
             debuglog("no more search results");
-            return q(false);
+            return Promise.resolve(false);
         }
     },
 
@@ -846,7 +846,7 @@ module.exports = React.createClass({
             return;
         }
 
-        q().then(() => {
+        Promise.resolve().then(() => {
             const signUrl = this.props.thirdPartyInvite ?
                 this.props.thirdPartyInvite.inviteSignUrl : undefined;
             dis.dispatch({
@@ -865,7 +865,7 @@ module.exports = React.createClass({
                     }
                 }
             }
-            return q();
+            return Promise.resolve();
         });
     },
 
