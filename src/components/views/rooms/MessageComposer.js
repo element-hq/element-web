@@ -408,8 +408,6 @@ export default class MessageComposer extends React.Component {
 }
 
 MessageComposer.propTypes = {
-    tabComplete: React.PropTypes.any,
-
     // a callback which is called when the height of the composer is
     // changed due to a change in content.
     onResize: React.PropTypes.func,

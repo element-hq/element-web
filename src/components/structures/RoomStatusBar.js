@@ -33,9 +33,6 @@ module.exports = React.createClass({
         // the room this statusbar is representing.
         room: React.PropTypes.object.isRequired,
 
-        // a TabComplete object
-        tabComplete: React.PropTypes.object.isRequired,
-
         // the number of messages which have arrived since we've been scrolled up
         numUnreadMessages: React.PropTypes.number,
 
@@ -143,12 +140,9 @@ module.exports = React.createClass({
             (this.state.usersTyping.length > 0) ||
             this.props.numUnreadMessages ||
             !this.props.atEndOfLiveTimeline ||
-            this.props.hasActiveCall ||
-            this.props.tabComplete.isTabCompleting()
+            this.props.hasActiveCall
         ) {
             return STATUS_BAR_EXPANDED;
-        } else if (this.props.tabCompleteEntries) {
-            return STATUS_BAR_HIDDEN;
         } else if (this.props.unsentMessageError) {
             return STATUS_BAR_EXPANDED_LARGE;
         }
@@ -237,8 +231,6 @@ module.exports = React.createClass({
 
     // return suitable content for the main (text) part of the status bar.
     _getContent: function() {
-        var TabCompleteBar = sdk.getComponent('rooms.TabCompleteBar');
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
         const EmojiText = sdk.getComponent('elements.EmojiText');
 
         // no conn bar trumps unread count since you can't get unread messages
@@ -254,20 +246,6 @@ module.exports = React.createClass({
                     </div>
                     <div className="mx_RoomStatusBar_connectionLostBar_desc">
                         {_t('Sent messages will be stored until your connection has returned.')}
-                    </div>
-                </div>
-            );
-        }
-
-        if (this.props.tabComplete.isTabCompleting()) {
-            return (
-                <div className="mx_RoomStatusBar_tabCompleteBar">
-                    <div className="mx_RoomStatusBar_tabCompleteWrapper">
-                        <TabCompleteBar tabComplete={this.props.tabComplete} />
-                        <div className="mx_RoomStatusBar_tabCompleteEol" title="->|">
-                            <TintableSvg src="img/eol.svg" width="22" height="16"/>
-                            {_t('Auto-complete')}
-                        </div>
                     </div>
                 </div>
             );

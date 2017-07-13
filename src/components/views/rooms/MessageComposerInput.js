@@ -75,8 +75,6 @@ function onSendMessageFailed(err, room) {
  */
 export default class MessageComposerInput extends React.Component {
     static propTypes = {
-        tabComplete: React.PropTypes.any,
-
         // a callback which is called when the height of the composer is
         // changed due to a change in content.
         onResize: React.PropTypes.func,
@@ -903,8 +901,6 @@ export default class MessageComposerInput extends React.Component {
 }
 
 MessageComposerInput.propTypes = {
-    tabComplete: React.PropTypes.any,
-
     // a callback which is called when the height of the composer is
     // changed due to a change in content.
     onResize: React.PropTypes.func,
