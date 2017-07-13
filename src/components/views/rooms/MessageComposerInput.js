@@ -16,9 +16,9 @@ limitations under the License.
 import React from 'react';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
-import {Editor, EditorState, RichUtils, CompositeDecorator,
-    convertFromRaw, convertToRaw, Modifier, EditorChangeType,
-    getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState} from 'draft-js';
+import {Editor, EditorState, RichUtils, CompositeDecorator, Modifier,
+    getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState,
+    Entity} from 'draft-js';
 
 import classNames from 'classnames';
 import escape from 'lodash/escape';
@@ -156,15 +156,37 @@ export default class MessageComposerInput extends React.Component {
         this.client = MatrixClientPeg.get();
     }
 
+    findLinkEntities(contentBlock, callback) {
+        contentBlock.findEntityRanges(
+            (character) => {
+                const entityKey = character.getEntity();
+                return (
+                    entityKey !== null &&
+                    Entity.get(entityKey).getType() === 'LINK'
+                );
+            }, callback,
+        );
+    }
     /*
      * "Does the right thing" to create an EditorState, based on:
      * - whether we've got rich text mode enabled
      * - contentState was passed in
      */
     createEditorState(richText: boolean, contentState: ?ContentState): EditorState {
-        let decorators = richText ? RichText.getScopedRTDecorators(this.props) :
-                RichText.getScopedMDDecorators(this.props),
-            compositeDecorator = new CompositeDecorator(decorators);
+        const decorators = richText ? RichText.getScopedRTDecorators(this.props) :
+                RichText.getScopedMDDecorators(this.props);
+        decorators.push({
+            strategy: this.findLinkEntities.bind(this),
+            component: (props) => {
+                const {url} = Entity.get(props.entityKey).getData();
+                return (
+                    <a href={url}>
+                        {props.children}
+                    </a>
+                );
+            },
+        });
+        const compositeDecorator = new CompositeDecorator(decorators);
 
         let editorState = null;
         if (contentState) {
@@ -318,6 +340,34 @@ export default class MessageComposerInput extends React.Component {
     // Called by Draft to change editor contents
     onEditorContentChanged = (editorState: EditorState) => {
         editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
+
+        const currentBlock = editorState.getSelection().getStartKey();
+        const currentSelection = editorState.getSelection();
+        const currentStartOffset = editorState.getSelection().getStartOffset();
+
+        const block = editorState.getCurrentContent().getBlockForKey(currentBlock);
+        const text = block.getText();
+
+        const entityBeforeCurrentOffset = block.getEntityAt(currentStartOffset - 1);
+        const entityAtCurrentOffset = block.getEntityAt(currentStartOffset);
+
+        // If the cursor is on the boundary between an entity and a non-entity and the
+        // text before the cursor has whitespace at the end, set the entity state of the
+        // character before the cursor (the whitespace) to null. This allows the user to
+        // stop editing the link.
+        if (entityBeforeCurrentOffset && !entityAtCurrentOffset &&
+            /\s$/.test(text.slice(0, currentStartOffset))) {
+            editorState = RichUtils.toggleLink(
+                editorState,
+                currentSelection.merge({
+                    anchorOffset: currentStartOffset - 1,
+                    focusOffset: currentStartOffset,
+                }),
+                null,
+            );
+            // Reset selection
+            editorState = EditorState.forceSelection(editorState, currentSelection);
+        }
 
         /* Since a modification was made, set originalEditorState to null, since newState is now our original */
         this.setState({
@@ -580,6 +630,15 @@ export default class MessageComposerInput extends React.Component {
                         shouldSendHTML = true;
                     }
                 });
+            }
+            if (!shouldSendHTML) {
+                const hasLink = blocks.some((block) => {
+                    return block.getCharacterList().filter((c) => {
+                        const entityKey = c.getEntity();
+                        return entityKey && Entity.get(entityKey).getType() === 'LINK';
+                    }).size > 0;
+                });
+                shouldSendHTML = hasLink;
             }
             if (shouldSendHTML) {
                 contentHTML = HtmlUtils.processHtmlForSending(
