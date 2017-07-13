@@ -21,7 +21,7 @@ import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/lib/dispatcher.js';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import q from 'q';
+import Promise from 'bluebird';
 
 import url from 'url';
 import UAParser from 'ua-parser-js';
@@ -68,7 +68,7 @@ export default class WebPlatform extends VectorBasePlatform {
         // annoyingly, the latest spec says this returns a
         // promise, but this is only supported in Chrome 46
         // and Firefox 47, so adapt the callback API.
-        const defer = q.defer();
+        const defer = Promise.defer();
         global.Notification.requestPermission((result) => {
             defer.resolve(result);
         });
@@ -103,7 +103,7 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     _getVersion(): Promise<string> {
-        const deferred = q.defer();
+        const deferred = Promise.defer();
 
         // We add a cachebuster to the request to make sure that we know about
         // the most recent version on the origin server. That might not
@@ -132,7 +132,7 @@ export default class WebPlatform extends VectorBasePlatform {
 
     getAppVersion(): Promise<string> {
         if (this.runningVersion !== null) {
-            return q(this.runningVersion);
+            return Promise.resolve(this.runningVersion);
         }
         return this._getVersion();
     }

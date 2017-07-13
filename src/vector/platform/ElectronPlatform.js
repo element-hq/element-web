@@ -20,7 +20,7 @@ limitations under the License.
 import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import q from 'q';
+import Promise from 'bluebird';
 import {remote, ipcRenderer} from 'electron';
 import rageshake from '../rageshake';
 
@@ -173,7 +173,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     getAppVersion(): Promise<string> {
-        return q(remote.app.getVersion());
+        return Promise.resolve(remote.app.getVersion());
     }
 
     startUpdateCheck() {
@@ -201,7 +201,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     isElectron(): boolean { return true; }
 
     requestNotificationPermission(): Promise<string> {
-        return q('granted');
+        return Promise.resolve('granted');
     }
 
     reload() {

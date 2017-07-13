@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import pako from 'pako';
-import q from "q";
+import Promise from 'bluebird';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
@@ -100,7 +100,7 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
 }
 
 function _submitReport(endpoint, body, progressCallback) {
-    const deferred = q.defer();
+    const deferred = Promise.defer();
 
     const req = new XMLHttpRequest();
     req.open("POST", endpoint);
