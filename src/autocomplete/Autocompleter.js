@@ -58,9 +58,10 @@ export async function getCompletions(query: string, selection: SelectionRange, f
         // single timeout to reject the Promise.all, reflect each one and once they've all
         // settled, filter for the fulfilled ones
         PROVIDERS.map((provider) => {
-            // Convert to bluebird promise so that we can do a timeout
-            const p = Promise.resolve(provider.getCompletions(query, selection, force));
-            return p.timeout(PROVIDER_COMPLETION_TIMEOUT).reflect();
+            return provider
+                .getCompletions(query, selection, force)
+                .timeout(PROVIDER_COMPLETION_TIMEOUT)
+                .reflect();
         }),
     );
 
