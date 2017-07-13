@@ -361,7 +361,6 @@
     "Unable to load device list": "ไม่สามารถโหลดรายชื่ออุปกรณ์",
     "Unencrypted room": "ห้องที่ไม่เข้ารหัส",
     "unencrypted": "ยังไม่ได้เข้ารหัส",
-    "Unknown command": "คำสั่งที่ไม่รู้จัก",
     "unknown device": "อุปกรณ์ที่ไม่รู้จัก",
     "Unknown room %(roomId)s": "ห้องที่ไม่รู้จัก %(roomId)s",
     "Unknown (user, device) pair:": "คู่ (ผู้ใช้, อุปกรณ์) ที่ไม่รู้จัก:",

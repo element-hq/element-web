@@ -33,7 +33,6 @@ var ContentMessages = require("../../ContentMessages");
 var Modal = require("../../Modal");
 var sdk = require('../../index');
 var CallHandler = require('../../CallHandler');
-var TabComplete = require("../../TabComplete");
 var Resend = require("../../Resend");
 var dis = require("../../dispatcher");
 var Tinter = require("../../Tinter");
@@ -143,15 +142,6 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("RoomMember.membership", this.onRoomMemberMembership);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
-
-        this.tabComplete = new TabComplete({
-            allowLooping: false,
-            autoEnterTabComplete: true,
-            onClickCompletes: true,
-            onStateChange: (isCompleting) => {
-                this.forceUpdate();
-            },
-        });
 
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
@@ -518,7 +508,6 @@ module.exports = React.createClass({
         // update the tab complete list as it depends on who most recently spoke,
         // and that has probably just changed
         if (ev.sender) {
-            this.tabComplete.onMemberSpoke(ev.sender);
             UserProvider.getInstance().onUserSpoke(ev.sender);
         }
     },
@@ -542,7 +531,6 @@ module.exports = React.createClass({
         this._warnAboutEncryption(room);
         this._calculatePeekRules(room);
         this._updatePreviewUrlVisibility(room);
-        this.tabComplete.loadEntries(room);
         UserProvider.getInstance().setUserListFromRoom(room);
     },
 
@@ -719,7 +707,6 @@ module.exports = React.createClass({
         this._updateConfCallNotification();
 
         // refresh the tab complete list
-        this.tabComplete.loadEntries(this.state.room);
         UserProvider.getInstance().setUserListFromRoom(this.state.room);
 
         // if we are now a member of the room, where we were not before, that
@@ -1572,7 +1559,6 @@ module.exports = React.createClass({
             isStatusAreaExpanded = this.state.statusBarVisible;
             statusBar = <RoomStatusBar
                 room={this.state.room}
-                tabComplete={this.tabComplete}
                 numUnreadMessages={this.state.numUnreadMessages}
                 unsentMessageError={this.state.unsentMessageError}
                 atEndOfLiveTimeline={this.state.atEndOfLiveTimeline}
@@ -1648,7 +1634,6 @@ module.exports = React.createClass({
                     onResize={this.onChildResize}
                     uploadFile={this.uploadFile}
                     callState={this.state.callState}
-                    tabComplete={this.tabComplete}
                     opacity={ this.props.opacity }
                     showApps={ this.state.showApps }
                 />;

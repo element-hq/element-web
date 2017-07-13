@@ -589,7 +589,6 @@
     "unencrypted": "şifrelenmemiş",
     "Unencrypted message": "Şifrelenmemiş mesaj",
     "unknown caller": "bilinmeyen arayıcı",
-    "Unknown command": "Bilinmeyen komut",
     "unknown device": "bilinmeyen cihaz",
     "unknown error code": "bilinmeyen hata kodu",
     "Unknown room %(roomId)s": "Bilinmeyen oda %(roomId)s",

@@ -41,8 +41,6 @@ import Autocomplete from './Autocomplete';
 import {Completion} from "../../../autocomplete/Autocompleter";
 import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
-import {onSendMessageFailed} from './MessageComposerInputOld';
-
 import MessageComposerStore from '../../../stores/MessageComposerStore';
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
@@ -56,13 +54,27 @@ function stateToMarkdown(state) {
             ''); // this is *not* a zero width space, trust me :)
 }
 
+function onSendMessageFailed(err, room) {
+    // XXX: temporary logging to try to diagnose
+    // https://github.com/vector-im/riot-web/issues/3148
+    console.log('MessageComposer got send failure: ' + err.name + '('+err+')');
+    if (err.name === "UnknownDeviceError") {
+        dis.dispatch({
+            action: 'unknown_device_error',
+            err: err,
+            room: room,
+        });
+    }
+    dis.dispatch({
+        action: 'message_send_failed',
+    });
+}
+
 /*
  * The textInput part of the MessageComposer
  */
 export default class MessageComposerInput extends React.Component {
     static propTypes = {
-        tabComplete: React.PropTypes.any,
-
         // a callback which is called when the height of the composer is
         // changed due to a change in content.
         onResize: React.PropTypes.func,
@@ -889,8 +901,6 @@ export default class MessageComposerInput extends React.Component {
 }
 
 MessageComposerInput.propTypes = {
-    tabComplete: React.PropTypes.any,
-
     // a callback which is called when the height of the composer is
     // changed due to a change in content.
     onResize: React.PropTypes.func,
