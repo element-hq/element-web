@@ -23,6 +23,7 @@ import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-addons-test-utils';
 import expect from 'expect';
 import q from 'q';
+import MatrixReactTestUtils from 'matrix-react-test-utils';
 
 import jssdk from 'matrix-js-sdk';
 
@@ -183,11 +184,8 @@ describe('loading:', function () {
                 return httpBackend.flush();
             }).then(() => {
                 // Wait for another trip around the event loop for the UI to update
-                return q.delay(10);
+                return awaitLoginComponent(matrixChat);
             }).then(() => {
-                // we expect a single <Login> component following session load
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, sdk.getComponent('structures.login.Login'));
                 expect(windowLocation.hash).toEqual("#/login");
             }).done(done, done);
         });
@@ -232,7 +230,7 @@ describe('loading:', function () {
                 uriFragment: "#/login",
             });
 
-            return q.delay(100).then(() => {
+            return awaitLoginComponent(matrixChat).then(() => {
                 // we expect a single <Login> component
                 ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, sdk.getComponent('structures.login.Login'));
@@ -366,7 +364,7 @@ describe('loading:', function () {
                 });
 
                 // give the UI a chance to display
-                return q.delay(50);
+                return awaitLoginComponent(matrixChat);
             });
 
             it('shows a login view', function() {
@@ -530,7 +528,7 @@ describe('loading:', function () {
 
                     dis.dispatch({ action: 'start_login' });
 
-                    return q.delay(1);
+                    return awaitLoginComponent(matrixChat);
                 });
             });
 
@@ -606,7 +604,6 @@ describe('loading:', function () {
             }).done(done, done);
         });
     });
-
 
     // check that we have a Login component, send a 'user:pass' login,
     // and await the HTTP requests.
@@ -722,4 +719,10 @@ function awaitRoomView(matrixChat, retryLimit, retryCount) {
     ReactTestUtils.findRenderedComponentWithType(
         matrixChat, sdk.getComponent('structures.RoomView'));
     return q();
+}
+
+function awaitLoginComponent(matrixChat, attempts) {
+    return MatrixReactTestUtils.waitForRenderedComponentWithType(
+        matrixChat, sdk.getComponent('structures.login.Login'), attempts,
+    );
 }

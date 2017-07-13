@@ -48,7 +48,7 @@
     "lintall": "eslint src/ test/",
     "clean": "rimraf lib webapp electron_app/dist",
     "prepublish": "npm run build:compile",
-    "test": "karma start --single-run=true --autoWatch=false --browsers ChromeHeadless --colors=false",
+    "test": "karma start --single-run=true --autoWatch=false --browsers ChromeHeadless",
     "test-multi": "karma start"
   },
   "dependencies": {
@@ -121,6 +121,7 @@
     "karma-mocha": "^0.2.2",
     "karma-webpack": "^1.7.0",
     "matrix-mock-request": "^1.0.0",
+    "matrix-react-test-utils": "^0.2.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "mocha": "^2.4.5",
