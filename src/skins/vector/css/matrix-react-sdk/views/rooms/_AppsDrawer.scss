@@ -76,6 +76,16 @@ limitations under the License.
 .mx_AppTileMenuBarWidget {
     // pointer-events: none;
     cursor: pointer;
+    width: 10px;
+    height: 10px;
+    padding: 1px;
+    transition-duration: 500ms;
+    border: 1px solid transparent;
+}
+
+.mx_AppTileMenuBarWidget:hover {
+    border: 1px solid $primary-hairline-color;
+    border-radius: 2px;
 }
 
 .mx_AppTileBody iframe {
