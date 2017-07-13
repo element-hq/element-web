@@ -60,8 +60,8 @@ export async function getCompletions(query: string, selection: SelectionRange, f
         PROVIDERS.map((provider) => {
             // Convert to bluebird promise so that we can do a timeout
             const p = Promise.resolve(provider.getCompletions(query, selection, force));
-            return p.timeout(PROVIDER_COMPLETION_TIMEOUT);
-        }).map((p) => p.reflect()),
+            return p.timeout(PROVIDER_COMPLETION_TIMEOUT).reflect();
+        }),
     );
 
     return completionsList.filter(
