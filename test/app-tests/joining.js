@@ -100,29 +100,17 @@ describe('joining a room', function () {
             // wait for /sync to happen. This may take some time, as the client
             // has to initialise indexeddb.
             console.log("waiting for /sync");
-            let syncDone = false;
             httpBackend.when('GET', '/sync')
-                .check((r) => {syncDone = true;})
                 .respond(200, {});
-            function awaitSync(attempts) {
-                if (syncDone) {
-                    return Promise.resolve();
-                }
-                if (!attempts) {
-                    throw new Error("Gave up waiting for /sync")
-                }
-                return httpBackend.flush().then(() => awaitSync(attempts-1));
-            }
 
-            return awaitSync(10).then(() => {
+            return httpBackend.flushAllExpected().then(() => {
                 // wait for the directory requests
                 httpBackend.when('POST', '/publicRooms').respond(200, {chunk: []});
                 httpBackend.when('GET', '/thirdparty/protocols').respond(200, {});
-                return Promise.all([
-                    httpBackend.flush('/thirdparty/protocols'),
-                    httpBackend.flush('/publicRooms'),
-                ]);
+                return httpBackend.flushAllExpected();
             }).then(() => {
+                console.log(`${Date.now()} App made requests for directory view; switching to a room.`);
+
                 var roomDir = ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, RoomDirectory);
 
@@ -139,19 +127,17 @@ describe('joining a room', function () {
                 httpBackend.when('GET', '/rooms/'+encodeURIComponent(ROOM_ID)+"/initialSync")
                     .respond(401, {errcode: 'M_GUEST_ACCESS_FORBIDDEN'});
 
-                return Promise.all([
-                    httpBackend.flush('/directory/room/'+encodeURIComponent(ROOM_ALIAS), 1, 200),
-                    httpBackend.flush('/rooms/'+encodeURIComponent(ROOM_ID)+"/initialSync", 1, 200),
-                ]);
+                return httpBackend.flushAllExpected();
             }).then(() => {
-                httpBackend.verifyNoOutstandingExpectation();
+                console.log(`${Date.now()} App made room preview request`);
 
-                return Promise.delay(1);
-            }).then(() => {
-                // we should now have a roomview, with a preview bar
+                // we should now have a roomview
                 roomView = ReactTestUtils.findRenderedComponentWithType(
                     matrixChat, RoomView);
 
+                // the preview bar may take a tick to be displayed
+                return Promise.delay(1);
+            }).then(() => {
                 const previewBar = ReactTestUtils.findRenderedComponentWithType(
                     roomView, RoomPreviewBar);
 
