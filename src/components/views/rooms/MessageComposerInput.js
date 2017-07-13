@@ -16,9 +16,9 @@ limitations under the License.
 import React from 'react';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
-import {Editor, EditorState, RichUtils, CompositeDecorator,
-    convertFromRaw, convertToRaw, Modifier, EditorChangeType,
-    getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState} from 'draft-js';
+import {Editor, EditorState, RichUtils, CompositeDecorator, Modifier,
+    getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState,
+    Entity} from 'draft-js';
 
 import classNames from 'classnames';
 import escape from 'lodash/escape';
@@ -144,15 +144,37 @@ export default class MessageComposerInput extends React.Component {
         this.client = MatrixClientPeg.get();
     }
 
+    findLinkEntities(contentBlock, callback) {
+        contentBlock.findEntityRanges(
+            (character) => {
+                const entityKey = character.getEntity();
+                return (
+                    entityKey !== null &&
+                    Entity.get(entityKey).getType() === 'LINK'
+                );
+            }, callback,
+        );
+    }
     /*
      * "Does the right thing" to create an EditorState, based on:
      * - whether we've got rich text mode enabled
      * - contentState was passed in
      */
     createEditorState(richText: boolean, contentState: ?ContentState): EditorState {
-        let decorators = richText ? RichText.getScopedRTDecorators(this.props) :
-                RichText.getScopedMDDecorators(this.props),
-            compositeDecorator = new CompositeDecorator(decorators);
+        const decorators = richText ? RichText.getScopedRTDecorators(this.props) :
+                RichText.getScopedMDDecorators(this.props);
+        decorators.push({
+          strategy: this.findLinkEntities.bind(this),
+          component: (props) => {
+                const {url} = Entity.get(props.entityKey).getData();
+                return (
+                  <a href={url}>
+                    {props.children}
+                  </a>
+                );
+            },
+        });
+        const compositeDecorator = new CompositeDecorator(decorators);
 
         let editorState = null;
         if (contentState) {
