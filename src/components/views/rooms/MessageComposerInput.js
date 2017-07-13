@@ -329,6 +329,34 @@ export default class MessageComposerInput extends React.Component {
     onEditorContentChanged = (editorState: EditorState) => {
         editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
 
+        const currentBlock = editorState.getSelection().getStartKey();
+        const currentSelection = editorState.getSelection();
+        const currentStartOffset = editorState.getSelection().getStartOffset();
+
+        const block = editorState.getCurrentContent().getBlockForKey(currentBlock);
+        const text = block.getText();
+
+        const entityBeforeCurrentOffset = block.getEntityAt(currentStartOffset - 1);
+        const entityAtCurrentOffset = block.getEntityAt(currentStartOffset);
+
+        // If the cursor is on the boundary between an entity and a non-entity and the
+        // text before the cursor has whitespace at the end, set the entity state of the
+        // character before the cursor (the whitespace) to null. This allows the user to
+        // stop editing the link.
+        if (entityBeforeCurrentOffset && !entityAtCurrentOffset &&
+            /\s$/.test(text.slice(0, currentStartOffset))) {
+            editorState = RichUtils.toggleLink(
+                editorState,
+                currentSelection.merge({
+                    anchorOffset: currentStartOffset - 1,
+                    focusOffset: currentStartOffset,
+                }),
+                null,
+            );
+            // Reset selection
+            editorState = EditorState.forceSelection(editorState, currentSelection);
+        }
+
         /* Since a modification was made, set originalEditorState to null, since newState is now our original */
         this.setState({
             editorState,
