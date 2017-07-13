@@ -74,7 +74,7 @@ export default class MessageComposer extends React.Component {
     }
 
     onPageUnload(event) {
-        if (this.messageComposerInput) {
+        if (this.messageComposerInput && this.messageComposerInput.sentHistory) {
             this.messageComposerInput.sentHistory.saveLastTextEntry();
         }
     }
