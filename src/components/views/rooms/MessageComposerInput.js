@@ -591,6 +591,14 @@ export default class MessageComposerInput extends React.Component {
                     }
                 });
             }
+            if (!shouldSendHTML) {
+                const hasAnEntity = blocks.some((block) => {
+                    return block.getCharacterList().filter((c) => {
+                        return c.getEntity();
+                    }).size > 0;
+                });
+                shouldSendHTML = hasAnEntity;
+            }
             if (shouldSendHTML) {
                 contentHTML = HtmlUtils.processHtmlForSending(
                     RichText.contentStateToHTML(contentState),
