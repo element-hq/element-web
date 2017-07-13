@@ -607,7 +607,6 @@
     "unencrypted": "암호화하지 않음",
     "Unencrypted message": "암호화하지 않은 메시지",
     "unknown caller": "알 수 없는 발신자",
-    "Unknown command": "알 수 없는 명령",
     "unknown device": "알 수 없는 장치",
     "Unknown room %(roomId)s": "알 수 없는 방 %(roomId)s",
     "Unknown (user, device) pair:": "알 수 없는 (사용자, 장치) 연결:",

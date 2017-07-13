@@ -591,7 +591,6 @@
     "to restore": "восстановить",
     "Turn Markdown off": "Выключить Markdown",
     "Turn Markdown on": "Включить Markdown",
-    "Unknown command": "Неизвестная команда",
     "Unknown room %(roomId)s": "Неизвестная комната %(roomId)s",
     "You have been invited to join this room by %(inviterName)s": "Вы были приглашены войти в эту комнату от %(inviterName)s",
     "You seem to be uploading files, are you sure you want to quit?": "Похоже вы передаёте файлы, вы уверены, что хотите выйти?",

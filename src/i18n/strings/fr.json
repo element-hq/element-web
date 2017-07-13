@@ -520,7 +520,6 @@
     "Unable to load device list": "Impossible de charger la liste d'appareils",
     "Unencrypted room": "Salon non chiffré",
     "unencrypted": "non chiffré",
-    "Unknown command": "Commande inconnue",
     "unknown device": "appareil inconnu",
     "Unknown room %(roomId)s": "Salon inconnu %(roomId)s",
     "unknown": "inconnu",
