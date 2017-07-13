@@ -164,13 +164,13 @@ export default class MessageComposerInput extends React.Component {
         const decorators = richText ? RichText.getScopedRTDecorators(this.props) :
                 RichText.getScopedMDDecorators(this.props);
         decorators.push({
-          strategy: this.findLinkEntities.bind(this),
-          component: (props) => {
+            strategy: this.findLinkEntities.bind(this),
+            component: (props) => {
                 const {url} = Entity.get(props.entityKey).getData();
                 return (
-                  <a href={url}>
-                    {props.children}
-                  </a>
+                    <a href={url}>
+                        {props.children}
+                    </a>
                 );
             },
         });
