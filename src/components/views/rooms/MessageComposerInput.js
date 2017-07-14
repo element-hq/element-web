@@ -26,6 +26,7 @@ import Promise from 'bluebird';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
+import {RoomMember} from 'matrix-js-sdk';
 import SlashCommands from '../../../SlashCommands';
 import KeyCode from '../../../KeyCode';
 import Modal from '../../../Modal';
@@ -42,6 +43,9 @@ import {Completion} from "../../../autocomplete/Autocompleter";
 import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
+
+import {MATRIXTO_URL_PATTERN} from '../../../linkify-matrix';
+const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
 
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
@@ -183,7 +187,42 @@ export default class MessageComposerInput extends React.Component {
         decorators.push({
             strategy: this.findLinkEntities.bind(this),
             component: (props) => {
+                const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+                const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
                 const {url} = Entity.get(props.entityKey).getData();
+                const matrixToMatch = REGEX_MATRIXTO.exec(url);
+                const isUserPill = matrixToMatch[2] === '@';
+                const isRoomPill = matrixToMatch[2] === '#' || matrixToMatch[2] === '!';
+
+                const classes = classNames({
+                    "mx_UserPill": isUserPill,
+                    "mx_RoomPill": isRoomPill,
+                });
+
+                let avatar = null;
+                if (isUserPill) {
+                    // If this user is not a member of this room, default to the empty
+                    // member. This could be improved by doing an async profile lookup.
+                    const member = this.props.room.getMember(matrixToMatch[1]) ||
+                        new RoomMember(null, matrixToMatch[1]);
+                    avatar = member ? <MemberAvatar member={member} width={16} height={16}/> : null;
+                } else if (isRoomPill) {
+                    const room = matrixToMatch[2] === '#' ?
+                        MatrixClientPeg.get().getRooms().find((r) => {
+                            return r.getCanonicalAlias() === matrixToMatch[1];
+                        }) : MatrixClientPeg.get().getRoom(matrixToMatch[1]);
+                    avatar = room ? <RoomAvatar room={room} width={16} height={16}/> : null;
+                }
+
+                if (isUserPill || isRoomPill) {
+                    return (
+                        <span className={classes}>
+                            {avatar}
+                            {props.children}
+                        </span>
+                    );
+                }
+
                 return (
                     <a href={url}>
                         {props.children}
