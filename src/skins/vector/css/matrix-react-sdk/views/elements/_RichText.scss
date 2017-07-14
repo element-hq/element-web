@@ -3,7 +3,7 @@
 // --Matthew
 
 .mx_UserPill {
-    color: #fff;
+    color: $accent-fg-color;
     background-color: $accent-color;
     padding: 1px 5px 0px 2px;
     border-radius: 16px;
@@ -16,7 +16,7 @@
 
 .mx_RoomPill {
     background-color: $rte-room-pill-color;
-    color: #fff;
+    color: $accent-fg-color;
     padding: 1px 5px 0px 2px;
     border-radius: 16px;
 }
