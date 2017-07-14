@@ -103,7 +103,9 @@ describe('joining a room', function () {
             httpBackend.when('GET', '/sync')
                 .respond(200, {});
 
-            return httpBackend.flushAllExpected().then(() => {
+            return httpBackend.flushAllExpected({
+                timeout: 1000,
+            }).then(() => {
                 // wait for the directory requests
                 httpBackend.when('POST', '/publicRooms').respond(200, {chunk: []});
                 httpBackend.when('GET', '/thirdparty/protocols').respond(200, {});
