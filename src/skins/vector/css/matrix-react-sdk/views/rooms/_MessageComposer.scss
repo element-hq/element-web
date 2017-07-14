@@ -100,6 +100,11 @@ limitations under the License.
     word-break: break-word;
 }
 
+.mx_MessageComposer_input .DraftEditor-root .DraftEditor-editorContainer {
+    /* Ensure mx_UserPill and mx_RoomPill (see _RichText) are not obscured from the top */
+    padding-top: 2px;
+}
+
 .mx_MessageComposer_input blockquote {
     color: $blockquote-fg-color;
     margin: 0 0 16px;

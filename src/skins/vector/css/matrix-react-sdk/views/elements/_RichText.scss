@@ -3,17 +3,21 @@
 // --Matthew
 
 .mx_UserPill {
-    color: white;
+    color: $accent-fg-color;
     background-color: $accent-color;
-    padding: 2px 8px;
+    padding: 1px 5px 0px 2px;
     border-radius: 16px;
 }
 
+.mx_UserPill img, .mx_RoomPill img {
+    vertical-align: -2px;
+    margin-right: 1px
+}
+
 .mx_RoomPill {
-    background-color: white;
-    color: $accent-color;
-    border: 1px solid $accent-color;
-    padding: 2px 8px;
+    background-color: $rte-room-pill-color;
+    color: $accent-fg-color;
+    padding: 1px 5px 0px 2px;
     border-radius: 16px;
 }
 
