@@ -120,7 +120,7 @@
     "karma-junit-reporter": "^0.4.1",
     "karma-mocha": "^0.2.2",
     "karma-webpack": "^1.7.0",
-    "matrix-mock-request": "^1.1.0",
+    "matrix-mock-request": "^1.2.0",
     "matrix-react-test-utils": "^0.2.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
