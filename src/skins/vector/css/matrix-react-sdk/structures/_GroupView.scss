@@ -17,7 +17,6 @@ limitations under the License.
 .mx_GroupView {
     max-width: 960px;
     width: 100%;
-    margin: 20px auto;
 }
 
 .mx_GroupView_error {
@@ -36,6 +35,7 @@ limitations under the License.
 
 .mx_GroupView_header_avatar, .mx_GroupView_header_info {
     display: table-cell;
+    vertical-align: middle;
 }
 
 .mx_GroupView_header_leftCol {
@@ -74,7 +74,6 @@ limitations under the License.
     color: $settings-grey-fg-color;
     font-weight: 300;
     font-size: 13px;
-    margin-left: 19px;
     margin-right: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
