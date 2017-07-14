@@ -21,7 +21,9 @@ import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import SdkConfig from '../../../SdkConfig';
+import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
+import sdk from '../../../index';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 
@@ -33,6 +35,7 @@ export default React.createClass({
         url: React.PropTypes.string.isRequired,
         name: React.PropTypes.string.isRequired,
         room: React.PropTypes.object.isRequired,
+        type: React.PropTypes.string.isRequired,
     },
 
     getDefaultProps: function() {
@@ -86,8 +89,13 @@ export default React.createClass({
         });
     },
 
-    _onEditClick: function() {
-        console.log("Edit widget %s", this.props.id);
+    _onEditClick: function(e) {
+        console.log("Edit widget ID ", this.props.id);
+        const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+        const src = this._scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId, 'type_' + this.props.type);
+        Modal.createDialog(IntegrationsManager, {
+            src: src,
+        }, "mx_IntegrationsManager");
     },
 
     _onDeleteClick: function() {
@@ -120,10 +128,10 @@ export default React.createClass({
                 <div> Loading... </div>
             );
         } else {
-            // Note that there is advice saying allow-scripts shouldn;t be used with allow-same-origin
+            // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
             // because that would allow the iframe to prgramatically remove the sandbox attribute, but
             // this would only be for content hosted on the same origin as the riot client: anything
-            // hosted on the same origin as the client will get the same access access as if you clicked
+            // hosted on the same origin as the client will get the same access as if you clicked
             // a link to it.
             const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox "+
                 "allow-same-origin allow-scripts";
@@ -140,18 +148,22 @@ export default React.createClass({
                 </div>
             );
         }
+
+        // editing is done in scalar
+        const showEditButton = Boolean(this._scalarClient);
+
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 <div className="mx_AppTileMenuBar">
                     {this.formatAppTileName()}
                     <span className="mx_AppTileMenuBarWidgets">
                         {/* Edit widget */}
-                        {/* <img
+                        {showEditButton && <img
                             src="img/edit.svg"
                             className="mx_filterFlipColor mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
                             width="8" height="8" alt="Edit"
                             onClick={this._onEditClick}
-                        /> */}
+                        />}
 
                         {/* Delete widget */}
                         <img src="img/cancel.svg"

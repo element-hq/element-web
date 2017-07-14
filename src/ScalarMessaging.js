@@ -491,7 +491,7 @@ function canSendEvent(event, roomId) {
     }
 
     if (!canSend) {
-        sendError(event, _t('You do not have permission in this room.'));
+        sendError(event, _t('You do not have permission to do that in this room.'));
         return;
     }
 
