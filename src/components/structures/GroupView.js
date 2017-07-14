@@ -312,52 +312,6 @@ export default React.createClass({
 
         if (this.state.summary === null && this.state.error === null) {
             return <Loader />;
-        } else if (false && this.state.editing) {
-            const summary = this.state.summary;
-            const avatarEdit = (
-                <div className="mx_GroupView_avatarPicker">
-                    <div onClick={this.onAvatarPickerClick}>
-                        <ChangeAvatar ref={this._collectChangeAvatar}
-                            groupId={this.props.groupId}
-                            initialAvatarUrl={this.state.summary.profile.avatar_url}
-                            setAvatar={false} onAvatar={this._onAvatarChange}
-                            showUploadSection={false} width={48} height={48}
-                        />
-                    </div>
-                    <div className="mx_GroupView_avatarPicker_edit">
-                        <label htmlFor="avatarInput" ref="file_label">
-                            <img src="img/camera.svg"
-                                alt={ _t("Upload avatar") } title={ _t("Upload avatar") }
-                                width="17" height="15" />
-                        </label>
-                        <input id="avatarInput" className="mx_GroupView_uploadInput" type="file" onChange={this._onAvatarSelected}/>
-                    </div>
-                </div>
-            );
-
-            return <div>
-                {avatarEdit}
-                <input type="text"
-                    value={this.state.profileForm.name}
-                    onChange={this._onNameChange}
-                    placeholder={_t('Group Name')}
-                />
-                <input type="text"
-                    value={this.state.profileForm.short_description}
-                    onChange={this._onShortDescChange}
-                    placeholder={_t('Description')}
-                />
-                <AccessibleButton className="mx_GroupView_saveButton" onClick={this._onSaveClick}>
-                    {_t('Save')}
-                </AccessibleButton>
-                <AccessibleButton className='mx_GroupView_cancelButton' onClick={this._onCancelClick}>
-                    <img src="img/cancel.svg" className='mx_filterFlipColor'
-                        width="18" height="18" alt={_t("Cancel")}/>
-                </AccessibleButton>
-                <textarea value={this.state.profileForm.long_description}
-                    onChange={this._onLongDescChange}
-                />
-            </div>;
         } else if (this.state.summary) {
             const summary = this.state.summary;
 
@@ -365,6 +319,7 @@ export default React.createClass({
             let nameNode;
             let shortDescNode;
             let rightButtons;
+            let headerBottom;
             let roomBody;
             if (this.state.editing) {
                 avatarNode = (
@@ -397,19 +352,20 @@ export default React.createClass({
                     onChange={this._onShortDescChange}
                     placeholder={_t('Description')}
                 />
-                roomBody = <div>
-                    <textarea value={this.state.profileForm.long_description}
-                        onChange={this._onLongDescChange}
-                    />
-                </div>;
-                rightButtons = <div>
-                    <AccessibleButton className="mx_GroupView_saveButton" onClick={this._onSaveClick}>
+                rightButtons = <span>
+                    <AccessibleButton className="mx_GroupView_saveButton mx_RoomHeader_textButton" onClick={this._onSaveClick}>
                         {_t('Save')}
                     </AccessibleButton>
                     <AccessibleButton className='mx_GroupView_cancelButton' onClick={this._onCancelClick}>
                         <img src="img/cancel.svg" className='mx_filterFlipColor'
                             width="18" height="18" alt={_t("Cancel")}/>
                     </AccessibleButton>
+                </span>;
+                headerBottom = <div className="mx_GroupView_header_editBottom" />;
+                roomBody = <div>
+                    <textarea className="mx_GroupView_editLongDesc" value={this.state.profileForm.long_description}
+                        onChange={this._onLongDescChange}
+                    />
                 </div>;
             } else {
                 const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;
@@ -428,14 +384,13 @@ export default React.createClass({
                 } else {
                     nameNode = <span>{this.props.groupId}</span>;
                 }
-                shortDescNode = <div className="mx_RoomHeader_topic">
-                    {summary.profile.short_description}
-                </div>;
+                shortDescNode = <span>{summary.profile.short_description}</span>;
 
                 let description = null;
                 if (summary.profile && summary.profile.long_description) {
                     description = sanitizedHtmlNode(summary.profile.long_description);
                 }
+                headerBottom = <div className="mx_GroupView_header_viewBottom" />;
                 roomBody = <div>
                     <div className="mx_GroupView_groupDesc">{description}</div>
                     {this._getFeaturedRoomsNode()}
@@ -466,6 +421,7 @@ export default React.createClass({
                             {rightButtons}
                         </div>
                     </div>
+                    {headerBottom}
                     {roomBody}
                 </div>
             );
