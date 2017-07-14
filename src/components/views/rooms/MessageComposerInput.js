@@ -598,10 +598,13 @@ export default class MessageComposerInput extends React.Component {
         }
 
         const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
-        // If we're in any of these three types of blocks, shift enter should insert soft newlines
-        // And just enter should end the block
-        // XXX: Empirically enter does not end these blocks
-        if(['blockquote', 'unordered-list-item', 'ordered-list-item'].includes(currentBlockType)) {
+        if(
+            ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item']
+            .includes(currentBlockType)
+        ) {
+            // By returning false, we allow the default draft-js key binding to occur,
+            // which in this case invokes "split-block". This creates a new block of the
+            // same type, allowing the user to delete it with backspace.
             return false;
         }
 
