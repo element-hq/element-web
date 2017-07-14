@@ -187,11 +187,11 @@ var makeRegistrationUrl = function(params) {
 
 window.addEventListener('hashchange', onHashChange);
 
-function getConfig() {
+function getConfig(configJsonFilename) {
     let deferred = Promise.defer();
 
     request(
-        { method: "GET", url: "config.json" },
+        { method: "GET", url: configJsonFilename },
         (err, response, body) => {
             if (err || response.status < 200 || response.status >= 300) {
                 // Lack of a config isn't an error, we should
@@ -261,10 +261,20 @@ async function loadApp() {
         }
     }
 
+    // Load the config file. First try to load up a domain-specific config of the
+    // form "config.$domain.json" and if that fails, fall back to config.json.
     let configJson;
     let configError;
     try {
-        configJson = await getConfig();
+        try {
+            configJson = await getConfig(`config.${document.domain}.json`);
+            // 404s succeed with an empty json config, so check that there are keys
+            if (Object.keys(configJson).length === 0) {
+                throw new Error(); // throw to enter the catch
+            }
+        } catch (e) {
+            configJson = await getConfig("config.json");
+        }
     } catch (e) {
         configError = e;
     }
