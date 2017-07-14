@@ -298,7 +298,7 @@ module.exports = React.createClass({
         // color scheme
         var p;
         p = this.saveColor();
-        if (!Promise.isFulfilled(p)) {
+        if (!p.isFulfilled()) {
             promises.push(p);
         }
 
@@ -310,7 +310,7 @@ module.exports = React.createClass({
 
         // encryption
         p = this.saveEnableEncryption();
-        if (!Promise.isFulfilled(p)) {
+        if (!p.isFulfilled()) {
             promises.push(p);
         }
 
