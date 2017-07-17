@@ -225,6 +225,27 @@ export default React.createClass({
         });
     },
 
+    _onNameChange: function(e) {
+        const newProfileForm = Object.assign(this.state.profileForm, { name: e.target.value });
+        this.setState({
+            profileForm: newProfileForm,
+        });
+    },
+
+    _onShortDescChange: function(e) {
+        const newProfileForm = Object.assign(this.state.profileForm, { short_description: e.target.value });
+        this.setState({
+            profileForm: newProfileForm,
+        });
+    },
+
+    _onLongDescChange: function(e) {
+        const newProfileForm = Object.assign(this.state.profileForm, { long_description: e.target.value });
+        this.setState({
+            profileForm: newProfileForm,
+        });
+    },
+
     _onSaveClick: function() {
     },
 
@@ -346,11 +367,13 @@ export default React.createClass({
                     value={this.state.profileForm.name}
                     onChange={this._onNameChange}
                     placeholder={_t('Group Name')}
+                    tabIndex="1"
                 />
                 shortDescNode = <input type="text"
                     value={this.state.profileForm.short_description}
                     onChange={this._onShortDescChange}
                     placeholder={_t('Description')}
+                    tabIndex="2"
                 />
                 rightButtons = <span>
                     <AccessibleButton className="mx_GroupView_saveButton mx_RoomHeader_textButton" onClick={this._onSaveClick}>
@@ -365,6 +388,7 @@ export default React.createClass({
                 roomBody = <div>
                     <textarea className="mx_GroupView_editLongDesc" value={this.state.profileForm.long_description}
                         onChange={this._onLongDescChange}
+                        tabIndex="3"
                     />
                 </div>;
             } else {
