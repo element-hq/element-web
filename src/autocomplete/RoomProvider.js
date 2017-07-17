@@ -52,9 +52,16 @@ export default class RoomProvider extends AutocompleteProvider {
                 };
             }));
             completions = this.matcher.match(command[0]).map(room => {
-                let displayAlias = getDisplayAliasForRoom(room.room) || room.roomId;
+                const displayAlias = getDisplayAliasForRoom(room.room) || room.roomId;
                 return {
-                    completion: displayAlias + ' ',
+                    completion: displayAlias,
+                    entity: {
+                        type: 'LINK',
+                        mutability: 'IMMUTABLE',
+                        data: {
+                            url: 'https://matrix.to/#/' + displayAlias,
+                        },
+                    },
                     component: (
                         <PillCompletion initialComponent={<RoomAvatar width={24} height={24} room={room.room} />} title={room.name} description={displayAlias} />
                     ),

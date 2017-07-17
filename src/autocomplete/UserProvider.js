@@ -51,16 +51,17 @@ export default class UserProvider extends AutocompleteProvider {
         let completions = [];
         let {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
-            completions = this.matcher.match(command[0]).slice(0, 4).map((user) => {
-                let displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
-                let completion = displayName;
-                if (range.start === 0) {
-                    completion += ': ';
-                } else {
-                    completion += ' ';
-                }
+            completions = this.matcher.match(command[0]).map((user) => {
+                const displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
                 return {
-                    completion,
+                    completion: displayName,
+                    entity: {
+                        type: 'LINK',
+                        mutability: 'IMMUTABLE',
+                        data: {
+                            url: 'https://matrix.to/#/' + user.userId,
+                        },
+                    },
                     component: (
                         <PillCompletion
                             initialComponent={<MemberAvatar member={user} width={24} height={24}/>}

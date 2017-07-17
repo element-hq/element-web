@@ -190,9 +190,16 @@ export default class MessageComposerInput extends React.Component {
                 const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
                 const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
                 const {url} = Entity.get(props.entityKey).getData();
-                const matrixToMatch = REGEX_MATRIXTO.exec(url);
-                const isUserPill = matrixToMatch[2] === '@';
-                const isRoomPill = matrixToMatch[2] === '#' || matrixToMatch[2] === '!';
+
+                // Default to the empty array if no match for simplicity
+                // resource and prefix will be undefined instead of throwing
+                const matrixToMatch = REGEX_MATRIXTO.exec(url) || [];
+
+                const resource = matrixToMatch[1]; // The room/user ID
+                const prefix = matrixToMatch[2]; // The first character of prefix
+
+                const isUserPill = prefix === '@';
+                const isRoomPill = prefix === '#' || prefix === '!';
 
                 const classes = classNames({
                     "mx_UserPill": isUserPill,
@@ -203,14 +210,14 @@ export default class MessageComposerInput extends React.Component {
                 if (isUserPill) {
                     // If this user is not a member of this room, default to the empty
                     // member. This could be improved by doing an async profile lookup.
-                    const member = this.props.room.getMember(matrixToMatch[1]) ||
-                        new RoomMember(null, matrixToMatch[1]);
+                    const member = this.props.room.getMember(resource) ||
+                        new RoomMember(null, resource);
                     avatar = member ? <MemberAvatar member={member} width={16} height={16}/> : null;
                 } else if (isRoomPill) {
-                    const room = matrixToMatch[2] === '#' ?
+                    const room = prefix === '#' ?
                         MatrixClientPeg.get().getRooms().find((r) => {
-                            return r.getCanonicalAlias() === matrixToMatch[1];
-                        }) : MatrixClientPeg.get().getRoom(matrixToMatch[1]);
+                            return r.getCanonicalAlias() === resource;
+                        }) : MatrixClientPeg.get().getRoom(resource);
                     avatar = room ? <RoomAvatar room={room} width={16} height={16}/> : null;
                 }
 
@@ -906,12 +913,24 @@ export default class MessageComposerInput extends React.Component {
             return false;
         }
 
-        const {range = {}, completion = ''} = displayedCompletion;
+        const {range = {}, completion = '', entity = null} = displayedCompletion;
+        let entityKey;
+        if (entity) {
+            entityKey = Entity.create(
+              entity.type,
+              entity.mutability,
+              entity.data,
+            );
+        }
 
         const contentState = Modifier.replaceText(
             activeEditorState.getCurrentContent(),
-            RichText.textOffsetsToSelectionState(range, activeEditorState.getCurrentContent().getBlocksAsArray()),
+            RichText.textOffsetsToSelectionState(
+                range, activeEditorState.getCurrentContent().getBlocksAsArray(),
+            ),
             completion,
+            null,
+            entityKey,
         );
 
         let editorState = EditorState.push(activeEditorState, contentState, 'insert-characters');
