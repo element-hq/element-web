@@ -30,6 +30,8 @@ import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import UserSettingsStore from "../../../UserSettingsStore";
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import {RoomMember} from 'matrix-js-sdk';
 
 linkifyMatrix(linkify);
 
@@ -80,6 +82,10 @@ module.exports = React.createClass({
     componentDidMount: function() {
         this._unmounted = false;
 
+        // pillifyLinks BEFORE linkifyElement because plain room/user URLs in the composer
+        // are still sent as plaintext URLs. If these are ever pillified in the composer,
+        // we should be pillify them here by doing the linkifying BEFORE the pillifying.
+        this.pillifyLinks(this.refs.content.children);
         linkifyElement(this.refs.content, linkifyMatrix.options);
         this.calculateUrlPreview();
 
@@ -158,6 +164,53 @@ module.exports = React.createClass({
                     var hidden = global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
                     this.setState({ widgetHidden: hidden });
                 }
+            }
+        }
+    },
+
+    pillifyLinks: function(nodes) {
+        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
+        for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
+            if (node.tagName === "A" && node.getAttribute("href")) {
+                const href = node.getAttribute("href");
+                // HtmlUtils transforms `matrix.to` links to local links, so match against
+                // user or room app links.
+                const match = /^#\/(user|room)\/(.*)$/.exec(href);
+                if (match) {
+                    let avatar;
+                    let roomId;
+                    let room;
+                    let member;
+                    switch (match[1]) {
+                        case "user":
+                            roomId = this.props.mxEvent.getRoomId();
+                            room = MatrixClientPeg.get().getRoom(roomId);
+                            member = room.getMember(match[2]) ||
+                                new RoomMember(null, match[2]);
+                            avatar = <MemberAvatar member={member} width={16} height={16} name={match[2]}/>;
+                        break;
+                        case "room":
+                            room = match[2][0] === '#' ?
+                                MatrixClientPeg.get().getRooms().find((r) => {
+                                    return r.getCanonicalAlias() === match[2];
+                                }) : MatrixClientPeg.get().getRoom(match[2]);
+                            if (room) {
+                                avatar = <RoomAvatar room={room} width={16} height={16}/>;
+                            }
+                        break;
+                    }
+                    if (avatar) {
+                        const avatarContainer = document.createElement('span');
+                        node.className = "mx_MTextBody_pill " +
+                            (match[1] === "user" ? "mx_UserPill" : "mx_RoomPill");
+                        ReactDOM.render(avatar, avatarContainer);
+                        node.insertBefore(avatarContainer, node.firstChild);
+                    }
+                }
+            } else if (node.children && node.children.length) {
+                this.pillifyLinks(node.children);
             }
         }
     },
