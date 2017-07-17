@@ -2,23 +2,34 @@
 // naming scheme; it's completely unclear where or how they're being used
 // --Matthew
 
+.mx_UserPill,
+.mx_RoomPill {
+    padding: 0px 5px 0px 2px;
+    border-radius: 16px;
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+}
+
+/* More specific to override `.markdown-body a` color */
+.mx_EventTile_content .markdown-body a.mx_UserPill,
 .mx_UserPill {
     color: $accent-fg-color;
     background-color: $accent-color;
-    padding: 1px 5px 0px 2px;
-    border-radius: 16px;
 }
 
-.mx_UserPill img, .mx_RoomPill img {
-    vertical-align: -2px;
-    margin-right: 1px
-}
-
+/* More specific to override `.markdown-body a` color */
+.mx_EventTile_content .markdown-body a.mx_RoomPill,
 .mx_RoomPill {
     background-color: $rte-room-pill-color;
     color: $accent-fg-color;
-    padding: 1px 5px 0px 2px;
-    border-radius: 16px;
+}
+
+.mx_UserPill .mx_BaseAvatar,
+.mx_RoomPill .mx_BaseAvatar {
+    position: relative;
+    top: 2px;
+    margin-right: 1px;
 }
 
 .mx_Markdown_BOLD {
