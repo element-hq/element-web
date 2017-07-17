@@ -329,7 +329,6 @@ export default React.createClass({
     render: function() {
         const GroupAvatar = sdk.getComponent("avatars.GroupAvatar");
         const Loader = sdk.getComponent("elements.Spinner");
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const ChangeAvatar = sdk.getComponent("settings.ChangeAvatar");
 
         if (this.state.summary === null && this.state.error === null) {
@@ -369,13 +368,13 @@ export default React.createClass({
                     onChange={this._onNameChange}
                     placeholder={_t('Group Name')}
                     tabIndex="1"
-                />
+                />;
                 shortDescNode = <input type="text"
                     value={this.state.profileForm.short_description}
                     onChange={this._onShortDescChange}
                     placeholder={_t('Description')}
                     tabIndex="2"
-                />
+                />;
                 rightButtons = <span>
                     <AccessibleButton className="mx_GroupView_saveButton mx_RoomHeader_textButton" onClick={this._onSaveClick}>
                         {_t('Save')}
@@ -422,9 +421,9 @@ export default React.createClass({
                     {this._getFeaturedUsersNode()}
                 </div>;
                 // disabled until editing works
-                rightButtons = null;//<AccessibleButton className="mx_GroupHeader_button" onClick={this._onEditClick} title={_t("Edit Group")}>
+                rightButtons = null;/*<AccessibleButton className="mx_GroupHeader_button" onClick={this._onEditClick} title={_t("Edit Group")}>
                     <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
-                </AccessibleButton>;
+                </AccessibleButton>;*/
             }
 
             return (
