@@ -36,6 +36,16 @@ limitations under the License.
     vertical-align: middle;
 }
 
+.mx_GroupHeader_button {
+    margin-left: 12px;
+    cursor: pointer;
+}
+
+.mx_GroupHeader_button object {
+    // prevents clicks from being swallowed by svg in 'object' tag
+    pointer-events: none;
+}
+
 .mx_GroupView_avatarPicker {
     position: relative;
 }
