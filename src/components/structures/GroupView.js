@@ -247,6 +247,7 @@ export default React.createClass({
     },
 
     _onSaveClick: function() {
+        // TODO: There's no API to edit group profile info yet.
     },
 
     _getFeaturedRoomsNode() {
@@ -420,7 +421,8 @@ export default React.createClass({
                     {this._getFeaturedRoomsNode()}
                     {this._getFeaturedUsersNode()}
                 </div>;
-                rightButtons = <AccessibleButton className="mx_GroupHeader_button" onClick={this._onEditClick} title={_t("Edit Group")}>
+                // disabled until editing works
+                rightButtons = null;//<AccessibleButton className="mx_GroupHeader_button" onClick={this._onEditClick} title={_t("Edit Group")}>
                     <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
                 </AccessibleButton>;
             }
