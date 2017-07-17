@@ -211,7 +211,7 @@ export default React.createClass({
         });
     },
 
-    _onSettingsClick: function() {
+    _onEditClick: function() {
         this.setState({
             editing: true,
             profileForm: Object.assign({}, this.state.summary.profile),
@@ -420,7 +420,7 @@ export default React.createClass({
                     {this._getFeaturedRoomsNode()}
                     {this._getFeaturedUsersNode()}
                 </div>;
-                rightButtons = <AccessibleButton className="mx_RoomHeader_button" onClick={this._onSettingsClick} title={_t("Settings")}>
+                rightButtons = <AccessibleButton className="mx_GroupHeader_button" onClick={this._onEditClick} title={_t("Edit Group")}>
                     <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
                 </AccessibleButton>;
             }
