@@ -17,7 +17,7 @@ limitations under the License.
 
 import Matrix from 'matrix-js-sdk';
 
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
 
 import sdk from '../../../index';
@@ -180,7 +180,7 @@ module.exports = React.createClass({
         // will just nop. The point of this being we might not have the email address
         // that the user registered with at this stage (depending on whether this
         // is the client they initiated registration).
-        let trackPromise = q(null);
+        let trackPromise = Promise.resolve(null);
         if (this._rtsClient && extra.emailSid) {
             // Track referral if this.props.referrer set, get team_token in order to
             // retrieve team config and see welcome page etc.
@@ -232,7 +232,7 @@ module.exports = React.createClass({
 
     _setupPushers: function(matrixClient) {
         if (!this.props.brand) {
-            return q();
+            return Promise.resolve();
         }
         return matrixClient.getPushers().then((resp)=>{
             const pushers = resp.pushers;

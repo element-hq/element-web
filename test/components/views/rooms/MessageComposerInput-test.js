@@ -3,7 +3,7 @@ import ReactTestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import expect, {createSpy} from 'expect';
 import sinon from 'sinon';
-import Q from 'q';
+import Promise from 'bluebird';
 import * as testUtils from '../../../test-utils';
 import sdk from 'matrix-react-sdk';
 import UserSettingsStore from '../../../../src/UserSettingsStore';
@@ -47,7 +47,7 @@ describe('MessageComposerInput', () => {
         // warnings
         // (please can we make the components not setState() after
         // they are unmounted?)
-        Q.delay(10).done(() => {
+        Promise.delay(10).done(() => {
             if (parentDiv) {
                 ReactDOM.unmountComponentAtNode(parentDiv);
                 parentDiv.remove();

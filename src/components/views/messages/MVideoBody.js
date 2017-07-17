@@ -20,7 +20,7 @@ import React from 'react';
 import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
-import q from 'q';
+import Promise from 'bluebird';
 import UserSettingsStore from '../../../UserSettingsStore';
 import { _t } from '../../../languageHandler';
 
@@ -89,7 +89,7 @@ module.exports = React.createClass({
     componentDidMount: function() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            var thumbnailPromise = q(null);
+            var thumbnailPromise = Promise.resolve(null);
             if (content.info.thumbnail_file) {
                 thumbnailPromise = decryptFile(
                     content.info.thumbnail_file

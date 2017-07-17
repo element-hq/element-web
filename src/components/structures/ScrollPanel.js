@@ -17,7 +17,7 @@ limitations under the License.
 var React = require("react");
 var ReactDOM = require("react-dom");
 var GeminiScrollbar = require('react-gemini-scrollbar');
-var q = require("q");
+import Promise from 'bluebird';
 var KeyCode = require('../../KeyCode');
 
 var DEBUG_SCROLL = false;
@@ -145,7 +145,7 @@ module.exports = React.createClass({
         return {
             stickyBottom: true,
             startAtBottom: true,
-            onFillRequest: function(backwards) { return q(false); },
+            onFillRequest: function(backwards) { return Promise.resolve(false); },
             onUnfillRequest: function(backwards, scrollToken) {},
             onScroll: function() {},
         };
@@ -386,19 +386,12 @@ module.exports = React.createClass({
         debuglog("ScrollPanel: starting "+dir+" fill");
 
         // onFillRequest can end up calling us recursively (via onScroll
-        // events) so make sure we set this before firing off the call. That
-        // does present the risk that we might not ever actually fire off the
-        // fill request, so wrap it in a try/catch.
+        // events) so make sure we set this before firing off the call.
         this._pendingFillRequests[dir] = true;
-        var fillPromise;
-        try {
-            fillPromise = this.props.onFillRequest(backwards);
-        } catch (e) {
-            this._pendingFillRequests[dir] = false;
-            throw e;
-        }
 
-        q.finally(fillPromise, () => {
+        Promise.try(() => {
+            return this.props.onFillRequest(backwards);
+        }).finally(() => {
             this._pendingFillRequests[dir] = false;
         }).then((hasMoreResults) => {
             if (this.unmounted) {

@@ -956,5 +956,6 @@
     "Featured Rooms:": "Featured Rooms:",
     "Error whilst fetching joined groups": "Error whilst fetching joined groups",
     "Featured Users:": "Featured Users:",
-    "Edit Group": "Edit Group"
+    "Edit Group": "Edit Group",
+    "Automatically replace plain text Emoji": "Automatically replace plain text Emoji"
 }

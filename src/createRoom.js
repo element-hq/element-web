@@ -21,7 +21,7 @@ import { _t } from './languageHandler';
 import dis from "./dispatcher";
 import * as Rooms from "./Rooms";
 
-import q from 'q';
+import Promise from 'bluebird';
 
 /**
  * Create a new room, and switch to it.
@@ -42,7 +42,7 @@ function createRoom(opts) {
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
         dis.dispatch({action: 'view_set_mxid'});
-        return q(null);
+        return Promise.resolve(null);
     }
 
     const defaultPreset = opts.dmUserId ? 'trusted_private_chat' : 'private_chat';
@@ -92,7 +92,7 @@ function createRoom(opts) {
         if (opts.dmUserId) {
             return Rooms.setDMRoom(roomId, opts.dmUserId);
         } else {
-            return q();
+            return Promise.resolve();
         }
     }).then(function() {
         // NB createRoom doesn't block on the client seeing the echo that the

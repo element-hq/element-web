@@ -17,7 +17,7 @@ var React = require('react');
 import { _t } from '../../../languageHandler';
 var classNames = require('classnames');
 var Matrix = require("matrix-js-sdk");
-var q = require('q');
+import Promise from 'bluebird';
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
 var Entities = require("../../../Entities");

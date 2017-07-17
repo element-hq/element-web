@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import {getAddressType, inviteToRoom} from '../Invite';
-import q from 'q';
+import Promise from 'bluebird';
 
 /**
  * Invites multiple addresses to a room, handling rate limiting from the server
@@ -55,7 +55,7 @@ export default class MultiInviter {
                 this.errorTexts[addr] = 'Unrecognised address';
             }
         }
-        this.deferred = q.defer();
+        this.deferred = Promise.defer();
         this._inviteMore(0);
 
         return this.deferred.promise;

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import MatrixClientPeg from './MatrixClientPeg';
-import q from 'q';
+import Promise from 'bluebird';
 
 /**
  * Given a room object, return the alias we should use for it,
@@ -102,7 +102,7 @@ export function guessAndSetDMRoom(room, isDirect) {
  */
 export function setDMRoom(roomId, userId) {
     if (MatrixClientPeg.get().isGuest()) {
-        return q();
+        return Promise.resolve();
     }
 
     const mDirectEvent = MatrixClientPeg.get().getAccountData('m.direct');

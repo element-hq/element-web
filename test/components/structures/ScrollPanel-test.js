@@ -18,7 +18,7 @@ var React = require('react');
 var ReactDOM = require("react-dom");
 var ReactTestUtils = require('react-addons-test-utils');
 var expect = require('expect');
-var q = require('q');
+import Promise from 'bluebird';
 
 var sdk = require('matrix-react-sdk');
 
@@ -58,7 +58,7 @@ var Tester = React.createClass({
         if (handler) {
             res = handler();
         } else {
-            res = q(false);
+            res = Promise.resolve(false);
         }
 
         if (defer) {
@@ -74,7 +74,7 @@ var Tester = React.createClass({
     /* returns a promise which will resolve when the fill happens */
     awaitFill: function(dir) {
         console.log("ScrollPanel Tester: awaiting " + dir + " fill");
-        var defer = q.defer();
+        var defer = Promise.defer();
         this._fillDefers[dir] = defer;
         return defer.promise;
     },
@@ -94,7 +94,7 @@ var Tester = React.createClass({
     /* returns a promise which will resolve when a scroll event happens */
     awaitScroll: function() {
         console.log("Awaiting scroll");
-        this._scrollDefer = q.defer();
+        this._scrollDefer = Promise.defer();
         return this._scrollDefer.promise;
     },
 
@@ -168,7 +168,7 @@ describe('ScrollPanel', function() {
         const sp = tester.scrollPanel();
         let retriesRemaining = 1;
         const awaitReady = function() {
-            return q().then(() => {
+            return Promise.resolve().then(() => {
                 if (sp._pendingFillRequests.b === false &&
                     sp._pendingFillRequests.f === false
                    ) {
@@ -195,7 +195,7 @@ describe('ScrollPanel', function() {
     it('should handle scrollEvent strangeness', function() {
         const events = [];
 
-        return q().then(() => {
+        return Promise.resolve().then(() => {
             // initialise with a load of events
             for (let i = 0; i < 20; i++) {
                 events.push(i+80);
@@ -227,7 +227,7 @@ describe('ScrollPanel', function() {
 
     it('should not get stuck in #528 workaround', function(done) {
         var events = [];
-        q().then(() => {
+        Promise.resolve().then(() => {
             // initialise with a bunch of events
             for (var i = 0; i < 40; i++) {
                 events.push(i);

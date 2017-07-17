@@ -16,16 +16,17 @@ limitations under the License.
 import React from 'react';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
-import {Editor, EditorState, RichUtils, CompositeDecorator,
-    convertFromRaw, convertToRaw, Modifier, EditorChangeType,
-    getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState} from 'draft-js';
+import {Editor, EditorState, RichUtils, CompositeDecorator, Modifier,
+    getDefaultKeyBinding, KeyBindingUtil, ContentState, ContentBlock, SelectionState,
+    Entity} from 'draft-js';
 
 import classNames from 'classnames';
 import escape from 'lodash/escape';
-import Q from 'q';
+import Promise from 'bluebird';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
+import {RoomMember} from 'matrix-js-sdk';
 import SlashCommands from '../../../SlashCommands';
 import KeyCode from '../../../KeyCode';
 import Modal from '../../../Modal';
@@ -42,6 +43,14 @@ import {Completion} from "../../../autocomplete/Autocompleter";
 import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
+
+import {MATRIXTO_URL_PATTERN} from '../../../linkify-matrix';
+const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
+
+import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
+const EMOJI_SHORTNAMES = Object.keys(emojioneList);
+const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
+const REGEX_EMOJI_WHITESPACE = new RegExp('(' + asciiRegexp + ')\\s$');
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
@@ -156,15 +165,72 @@ export default class MessageComposerInput extends React.Component {
         this.client = MatrixClientPeg.get();
     }
 
+    findLinkEntities(contentBlock, callback) {
+        contentBlock.findEntityRanges(
+            (character) => {
+                const entityKey = character.getEntity();
+                return (
+                    entityKey !== null &&
+                    Entity.get(entityKey).getType() === 'LINK'
+                );
+            }, callback,
+        );
+    }
     /*
      * "Does the right thing" to create an EditorState, based on:
      * - whether we've got rich text mode enabled
      * - contentState was passed in
      */
     createEditorState(richText: boolean, contentState: ?ContentState): EditorState {
-        let decorators = richText ? RichText.getScopedRTDecorators(this.props) :
-                RichText.getScopedMDDecorators(this.props),
-            compositeDecorator = new CompositeDecorator(decorators);
+        const decorators = richText ? RichText.getScopedRTDecorators(this.props) :
+                RichText.getScopedMDDecorators(this.props);
+        decorators.push({
+            strategy: this.findLinkEntities.bind(this),
+            component: (props) => {
+                const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+                const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
+                const {url} = Entity.get(props.entityKey).getData();
+                const matrixToMatch = REGEX_MATRIXTO.exec(url);
+                const isUserPill = matrixToMatch[2] === '@';
+                const isRoomPill = matrixToMatch[2] === '#' || matrixToMatch[2] === '!';
+
+                const classes = classNames({
+                    "mx_UserPill": isUserPill,
+                    "mx_RoomPill": isRoomPill,
+                });
+
+                let avatar = null;
+                if (isUserPill) {
+                    // If this user is not a member of this room, default to the empty
+                    // member. This could be improved by doing an async profile lookup.
+                    const member = this.props.room.getMember(matrixToMatch[1]) ||
+                        new RoomMember(null, matrixToMatch[1]);
+                    avatar = member ? <MemberAvatar member={member} width={16} height={16}/> : null;
+                } else if (isRoomPill) {
+                    const room = matrixToMatch[2] === '#' ?
+                        MatrixClientPeg.get().getRooms().find((r) => {
+                            return r.getCanonicalAlias() === matrixToMatch[1];
+                        }) : MatrixClientPeg.get().getRoom(matrixToMatch[1]);
+                    avatar = room ? <RoomAvatar room={room} width={16} height={16}/> : null;
+                }
+
+                if (isUserPill || isRoomPill) {
+                    return (
+                        <span className={classes}>
+                            {avatar}
+                            {props.children}
+                        </span>
+                    );
+                }
+
+                return (
+                    <a href={url}>
+                        {props.children}
+                    </a>
+                );
+            },
+        });
+        const compositeDecorator = new CompositeDecorator(decorators);
 
         let editorState = null;
         if (contentState) {
@@ -318,6 +384,60 @@ export default class MessageComposerInput extends React.Component {
     // Called by Draft to change editor contents
     onEditorContentChanged = (editorState: EditorState) => {
         editorState = RichText.attachImmutableEntitiesToEmoji(editorState);
+
+        const currentBlock = editorState.getSelection().getStartKey();
+        const currentSelection = editorState.getSelection();
+        const currentStartOffset = editorState.getSelection().getStartOffset();
+
+        const block = editorState.getCurrentContent().getBlockForKey(currentBlock);
+        const text = block.getText();
+
+        const entityBeforeCurrentOffset = block.getEntityAt(currentStartOffset - 1);
+        const entityAtCurrentOffset = block.getEntityAt(currentStartOffset);
+
+        // If the cursor is on the boundary between an entity and a non-entity and the
+        // text before the cursor has whitespace at the end, set the entity state of the
+        // character before the cursor (the whitespace) to null. This allows the user to
+        // stop editing the link.
+        if (entityBeforeCurrentOffset && !entityAtCurrentOffset &&
+            /\s$/.test(text.slice(0, currentStartOffset))) {
+            editorState = RichUtils.toggleLink(
+                editorState,
+                currentSelection.merge({
+                    anchorOffset: currentStartOffset - 1,
+                    focusOffset: currentStartOffset,
+                }),
+                null,
+            );
+            // Reset selection
+            editorState = EditorState.forceSelection(editorState, currentSelection);
+        }
+
+        // Automatic replacement of plaintext emoji to Unicode emoji
+        if (UserSettingsStore.getSyncedSetting('MessageComposerInput.autoReplaceEmoji', false)) {
+            // The first matched group includes just the matched plaintext emoji
+            const emojiMatch = REGEX_EMOJI_WHITESPACE.exec(text.slice(0, currentStartOffset));
+            if(emojiMatch) {
+                // plaintext -> hex unicode
+                const emojiUc = asciiList[emojiMatch[1]];
+                // hex unicode -> shortname -> actual unicode
+                const unicodeEmoji = shortnameToUnicode(EMOJI_UNICODE_TO_SHORTNAME[emojiUc]);
+                const newContentState = Modifier.replaceText(
+                    editorState.getCurrentContent(),
+                    currentSelection.merge({
+                        anchorOffset: currentStartOffset - emojiMatch[0].length,
+                        focusOffset: currentStartOffset,
+                    }),
+                    unicodeEmoji,
+                );
+                editorState = EditorState.push(
+                    editorState,
+                    newContentState,
+                    'insert-characters',
+                );
+                editorState = EditorState.forceSelection(editorState, newContentState.getSelectionAfter());
+            }
+        }
 
         /* Since a modification was made, set originalEditorState to null, since newState is now our original */
         this.setState({
@@ -517,10 +637,13 @@ export default class MessageComposerInput extends React.Component {
         }
 
         const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
-        // If we're in any of these three types of blocks, shift enter should insert soft newlines
-        // And just enter should end the block
-        // XXX: Empirically enter does not end these blocks
-        if(['blockquote', 'unordered-list-item', 'ordered-list-item'].includes(currentBlockType)) {
+        if(
+            ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item']
+            .includes(currentBlockType)
+        ) {
+            // By returning false, we allow the default draft-js key binding to occur,
+            // which in this case invokes "split-block". This creates a new block of the
+            // same type, allowing the user to delete it with backspace.
             return false;
         }
 
@@ -580,6 +703,15 @@ export default class MessageComposerInput extends React.Component {
                         shouldSendHTML = true;
                     }
                 });
+            }
+            if (!shouldSendHTML) {
+                const hasLink = blocks.some((block) => {
+                    return block.getCharacterList().filter((c) => {
+                        const entityKey = c.getEntity();
+                        return entityKey && Entity.get(entityKey).getType() === 'LINK';
+                    }).size > 0;
+                });
+                shouldSendHTML = hasLink;
             }
             if (shouldSendHTML) {
                 contentHTML = HtmlUtils.processHtmlForSending(

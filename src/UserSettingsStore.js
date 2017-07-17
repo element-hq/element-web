@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import q from 'q';
+import Promise from 'bluebird';
 import MatrixClientPeg from './MatrixClientPeg';
 import Notifier from './Notifier';
 import { _t } from './languageHandler';
@@ -48,7 +48,7 @@ export default {
 
     loadThreePids: function() {
         if (MatrixClientPeg.get().isGuest()) {
-            return q({
+            return Promise.resolve({
                 threepids: [],
             }); // guests can't poke 3pid endpoint
         }

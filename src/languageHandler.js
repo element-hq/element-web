@@ -17,7 +17,7 @@ limitations under the License.
 
 import request from 'browser-request';
 import counterpart from 'counterpart';
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
 
 import UserSettingsStore from './UserSettingsStore';
@@ -231,7 +231,7 @@ export function getCurrentLanguage() {
 }
 
 function getLangsJson() {
-    const deferred = q.defer();
+    const deferred = Promise.defer();
 
     request(
         { method: "GET", url: i18nFolder + 'languages.json' },
@@ -247,7 +247,7 @@ function getLangsJson() {
 }
 
 function getLanguage(langPath) {
-    const deferred = q.defer();
+    const deferred = Promise.defer();
 
     let response_return = {};
     request(

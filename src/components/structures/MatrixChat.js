@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import q from 'q';
+import Promise from 'bluebird';
 
 import React from 'react';
 import Matrix from "matrix-js-sdk";
@@ -224,7 +224,7 @@ module.exports = React.createClass({
 
         // Used by _viewRoom before getting state from sync
         this.firstSyncComplete = false;
-        this.firstSyncPromise = q.defer();
+        this.firstSyncPromise = Promise.defer();
 
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
@@ -323,9 +323,9 @@ module.exports = React.createClass({
                 return;
             }
 
-            // the extra q() ensures that synchronous exceptions hit the same codepath as
+            // the extra Promise.resolve() ensures that synchronous exceptions hit the same codepath as
             // asynchronous ones.
-            return q().then(() => {
+            return Promise.resolve().then(() => {
                 return Lifecycle.loadSession({
                     fragmentQueryParams: this.props.startingFragmentQueryParams,
                     enableGuest: this.props.enableGuest,
@@ -694,7 +694,7 @@ module.exports = React.createClass({
 
         // Wait for the first sync to complete so that if a room does have an alias,
         // it would have been retrieved.
-        let waitFor = q(null);
+        let waitFor = Promise.resolve(null);
         if (!this.firstSyncComplete) {
             if (!this.firstSyncPromise) {
                 console.warn('Cannot view a room before first sync. room_id:', roomInfo.room_id);
@@ -1039,7 +1039,7 @@ module.exports = React.createClass({
         // since we're about to start the client and therefore about
         // to do the first sync
         this.firstSyncComplete = false;
-        this.firstSyncPromise = q.defer();
+        this.firstSyncPromise = Promise.defer();
         const cli = MatrixClientPeg.get();
 
         // Allow the JS SDK to reap timeline events. This reduces the amount of
