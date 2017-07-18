@@ -1,4 +1,5 @@
 {
     "Close": "ముసివెయండి",
-    "Continue": "కొనసాగించు"
+    "Continue": "కొనసాగించు",
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s %(browserName)s ద్వర %(osName)s కి"
 }
