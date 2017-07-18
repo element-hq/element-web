@@ -316,7 +316,7 @@ limitations under the License.
     font-family: inherit ! important;
     white-space: normal ! important;
     line-height: inherit ! important;
-    color: inherit;
+    color: inherit; // inherit the colour from the dark or light theme by default (but not for code blocks)
     font-size: 14px;
 }
 
@@ -330,6 +330,7 @@ limitations under the License.
 }
 
 .mx_EventTile_content .markdown-body code {
+    // deliberate constants as we're behind an invert filter
     background-color: #f8f8f8;
     color: #333;
 }
@@ -353,7 +354,7 @@ limitations under the License.
 
 .mx_EventTile:hover .mx_EventTile_body pre
 {
-    border: 1px solid $primary-hairline-color;
+    border: 1px solid #e5e5e5; // deliberate constant as we're behind an invert filter
 }
 
 .mx_EventTile_body pre:hover .mx_EventTile_copyButton
