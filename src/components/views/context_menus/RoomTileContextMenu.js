@@ -17,7 +17,7 @@ limitations under the License.
 
 'use strict';
 
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
 import classNames from 'classnames';
 import sdk from 'matrix-react-sdk';
@@ -61,7 +61,7 @@ module.exports = React.createClass({
         const roomId = this.props.room.roomId;
         var cli = MatrixClientPeg.get();
         if (!cli.isGuest()) {
-            q.delay(500).then(function() {
+            Promise.delay(500).then(function() {
                 if (tagNameOff !== null && tagNameOff !== undefined) {
                     cli.deleteRoomTag(roomId, tagNameOff).finally(function() {
                         // Close the context menu
@@ -212,7 +212,7 @@ module.exports = React.createClass({
         RoomNotifs.setRoomNotifsState(this.props.room.roomId, newState).done(() => {
             // delay slightly so that the user can see their state change
             // before closing the menu
-            return q.delay(500).then(() => {
+            return Promise.delay(500).then(() => {
                 if (this._unmounted) return;
                 // Close the context menu
                 if (this.props.onFinished) {

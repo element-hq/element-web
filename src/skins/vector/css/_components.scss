@@ -41,6 +41,7 @@
 @import "./matrix-react-sdk/views/messages/_RoomAvatarEvent.scss";
 @import "./matrix-react-sdk/views/messages/_TextualEvent.scss";
 @import "./matrix-react-sdk/views/messages/_UnknownBody.scss";
+@import "./matrix-react-sdk/views/rooms/_AppsDrawer.scss";
 @import "./matrix-react-sdk/views/rooms/_Autocomplete.scss";
 @import "./matrix-react-sdk/views/rooms/_EntityTile.scss";
 @import "./matrix-react-sdk/views/rooms/_EventTile.scss";
@@ -56,9 +57,7 @@
 @import "./matrix-react-sdk/views/rooms/_RoomSettings.scss";
 @import "./matrix-react-sdk/views/rooms/_RoomTile.scss";
 @import "./matrix-react-sdk/views/rooms/_SearchableEntityList.scss";
-@import "./matrix-react-sdk/views/rooms/_TabCompleteBar.scss";
 @import "./matrix-react-sdk/views/rooms/_TopUnreadMessagesBar.scss";
-@import "./matrix-react-sdk/views/rooms/_AppsDrawer.scss";
 @import "./matrix-react-sdk/views/settings/_DevicesPanel.scss";
 @import "./matrix-react-sdk/views/settings/_IntegrationsManager.scss";
 @import "./matrix-react-sdk/views/voip/_CallView.scss";
