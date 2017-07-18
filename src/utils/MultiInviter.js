@@ -36,10 +36,6 @@ export default class MultiInviter {
      * Invite users to this room. This may only be called once per
      * instance of the class.
      *
-     * The promise is given progress when each address completes, with an
-     * object argument with each completed address with value either
-     * 'invited' or 'error'.
-     *
      * @param {array} addresses Array of addresses to invite
      * @returns {Promise} Resolved when all invitations in the queue are complete
      */
@@ -111,7 +107,6 @@ export default class MultiInviter {
             if (this._canceled) { return; }
 
             this.completionStates[addr] = 'invited';
-            this.deferred.notify(this.completionStates);
 
             this._inviteMore(nextIndex + 1);
         }, (err) => {
