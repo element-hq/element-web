@@ -131,7 +131,6 @@ export default class MultiInviter {
             this.busy = !fatal;
 
             if (!fatal) {
-                this.deferred.notify(this.completionStates);
                 this._inviteMore(nextIndex + 1);
             }
         });
