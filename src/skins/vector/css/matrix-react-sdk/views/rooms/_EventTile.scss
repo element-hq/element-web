@@ -316,7 +316,7 @@ limitations under the License.
     font-family: inherit ! important;
     white-space: normal ! important;
     line-height: inherit ! important;
-    color: inherit;
+    // color: inherit; // unclear why we ever had this? it breaks plain code blocks on dark theme...
     font-size: 14px;
 }
 
