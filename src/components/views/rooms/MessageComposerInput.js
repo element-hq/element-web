@@ -528,7 +528,6 @@ export default class MessageComposerInput extends React.Component {
             this.enableRichtext(!this.state.isRichtextEnabled);
             return true;
         }
-
         let newState: ?EditorState = null;
 
         // Draft handles rich text mode commands by default but we need to do it ourselves for Markdown.
@@ -536,7 +535,6 @@ export default class MessageComposerInput extends React.Component {
             // These are block types, not handled by RichUtils by default.
             const blockCommands = ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item'];
             const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
-
             if (blockCommands.includes(command)) {
                 newState = RichUtils.toggleBlockType(this.state.editorState, command);
             } else if (command === 'strike') {
@@ -550,14 +548,26 @@ export default class MessageComposerInput extends React.Component {
                 }
             }
         } else {
-            let contentState = this.state.editorState.getCurrentContent();
+            const contentState = this.state.editorState.getCurrentContent();
+            const multipleLinesSelected = RichText.hasMultiLineSelection(this.state.editorState);
 
+            const selectionState = this.state.editorState.getSelection();
+            const start = selectionState.getStartOffset();
+            const end = selectionState.getEndOffset();
+
+            // If multiple lines are selected or nothing is selected, insert a code block
+            // instead of applying inline code formatting. This is an attempt to mimic what
+            // happens in non-MD mode.
+            const treatInlineCodeAsBlock = multipleLinesSelected || start === end;
+            const textMdCodeBlock = (text) => `\`\`\`\n${text}\n\`\`\`\n`;
             const modifyFn = {
                 'bold': (text) => `**${text}**`,
                 'italic': (text) => `*${text}*`,
                 'underline': (text) => `<u>${text}</u>`,
                 'strike': (text) => `<del>${text}</del>`,
-                'code-block': (text) => `\`\`\`\n${text}\n\`\`\`\n`,
+                // ("code" is triggered by ctrl+j by draft-js by default)
+                'code': (text) => treatInlineCodeAsBlock ? textMdCodeBlock(text) : `\`${text}\``,
+                'code-block': textMdCodeBlock,
                 'blockquote': (text) => text.split('\n').map((line) => `> ${line}\n`).join('') + '\n',
                 'unordered-list-item': (text) => text.split('\n').map((line) => `\n- ${line}`).join(''),
                 'ordered-list-item': (text) => text.split('\n').map((line, i) => `\n${i + 1}. ${line}`).join(''),
@@ -568,6 +578,7 @@ export default class MessageComposerInput extends React.Component {
                 'italic': -1,
                 'underline': -4,
                 'strike': -6,
+                'code': treatInlineCodeAsBlock ? -5 : -1,
                 'code-block': -5,
                 'blockquote': -2,
             }[command];
