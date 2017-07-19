@@ -32,6 +32,7 @@ import { _t } from '../../../languageHandler';
 import UserSettingsStore from "../../../UserSettingsStore";
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import {RoomMember} from 'matrix-js-sdk';
+import classNames from 'classnames';
 
 linkifyMatrix(linkify);
 
@@ -182,13 +183,15 @@ module.exports = React.createClass({
                     let avatar;
                     let roomId;
                     let room;
+                    let userId;
                     let member;
                     switch (match[1]) {
                         case "user":
                             roomId = this.props.mxEvent.getRoomId();
                             room = MatrixClientPeg.get().getRoom(roomId);
-                            member = room.getMember(match[2]) ||
-                                new RoomMember(null, match[2]);
+                            userId = match[2];
+                            member = room.getMember(userId) ||
+                                new RoomMember(null, userId);
                             avatar = <MemberAvatar member={member} width={16} height={16} name={match[2]}/>;
                         break;
                         case "room":
@@ -203,8 +206,15 @@ module.exports = React.createClass({
                     }
                     if (avatar) {
                         const avatarContainer = document.createElement('span');
-                        node.className = "mx_MTextBody_pill " +
-                            (match[1] === "user" ? "mx_UserPill" : "mx_RoomPill");
+                        node.className = classNames(
+                            "mx_MTextBody_pill",
+                            {
+                                "mx_UserPill": match[1] === "user",
+                                "mx_RoomPill": match[1] === "room",
+                                "mx_UserPill_me":
+                                    userId === MatrixClientPeg.get().credentials.userId,
+                            },
+                        );
                         ReactDOM.render(avatar, avatarContainer);
                         node.insertBefore(avatarContainer, node.firstChild);
                     }
