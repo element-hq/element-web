@@ -186,13 +186,15 @@ module.exports = React.createClass({
                     let roomId;
                     let room;
                     let member;
+                    let userId;
                     switch (resourceType) {
                         case "user":
                             roomId = this.props.mxEvent.getRoomId();
                             room = MatrixClientPeg.get().getRoom(roomId);
-                            member = room.getMember(resourceId) ||
-                                new RoomMember(null, resourceId);
-                            avatar = <MemberAvatar member={member} width={16} height={16} name={resourceId}/>;
+                            userId = resourceId;
+                            member = room.getMember(userId) ||
+                                new RoomMember(null, userId);
+                            avatar = <MemberAvatar member={member} width={16} height={16} name={userId}/>;
                         break;
                         case "room":
                             room = resourceId[0] === '#' ?
