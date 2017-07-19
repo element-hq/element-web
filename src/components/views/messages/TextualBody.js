@@ -32,6 +32,7 @@ import { _t } from '../../../languageHandler';
 import UserSettingsStore from "../../../UserSettingsStore";
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import {RoomMember} from 'matrix-js-sdk';
+import classNames from 'classnames';
 
 linkifyMatrix(linkify);
 
@@ -205,8 +206,15 @@ module.exports = React.createClass({
                     }
                     if (avatar) {
                         const avatarContainer = document.createElement('span');
-                        node.className = "mx_MTextBody_pill " +
-                            (resourceType === "user" ? "mx_UserPill" : "mx_RoomPill");
+                        node.className = classNames(
+                            "mx_MTextBody_pill",
+                            {
+                                "mx_UserPill": match[1] === "user",
+                                "mx_RoomPill": match[1] === "room",
+                                "mx_UserPill_me":
+                                    userId === MatrixClientPeg.get().credentials.userId,
+                            },
+                        );
                         ReactDOM.render(avatar, avatarContainer);
                         node.insertBefore(avatarContainer, node.firstChild);
                     }
