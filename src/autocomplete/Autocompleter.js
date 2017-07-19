@@ -34,6 +34,12 @@ export type Completion = {
     component: ?Component,
     range: SelectionRange,
     command: ?string,
+    // An entity applied during the replacement (using draftjs@0.8.1 Entity.create)
+    entity: ? {
+        type: string,
+        mutability: string,
+        data: ?Object,
+    },
 };
 
 const PROVIDERS = [
