@@ -193,13 +193,12 @@ module.exports = withMatrixClient(React.createClass({
         }
     },
 
-    _verifyEvent: function(mxEvent) {
-        var verified = null;
-
-        if (mxEvent.isEncrypted()) {
-            verified = this.props.matrixClient.isEventSenderVerified(mxEvent);
+    _verifyEvent: async function(mxEvent) {
+        if (!mxEvent.isEncrypted()) {
+            return;
         }
 
+        const verified = await this.props.matrixClient.isEventSenderVerified(mxEvent);
         this.setState({
             verified: verified
         });
