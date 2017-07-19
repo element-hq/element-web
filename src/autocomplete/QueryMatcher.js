@@ -18,7 +18,7 @@ limitations under the License.
 import _at from 'lodash/at';
 import _flatMap from 'lodash/flatMap';
 import _sortBy from 'lodash/sortBy';
-import _sortedUniq from 'lodash/sortedUniq';
+import _uniq from 'lodash/uniq';
 import _keys from 'lodash/keys';
 
 class KeyMap {
@@ -101,7 +101,7 @@ export default class QueryMatcher {
             }
         });
 
-        return _sortedUniq(_flatMap(_sortBy(results, (candidate) => {
+        return _uniq(_flatMap(_sortBy(results, (candidate) => {
             return candidate.index;
         }).map((candidate) => {
             // return an array of objects (those given to setObjects) that have the given

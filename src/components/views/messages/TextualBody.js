@@ -178,27 +178,27 @@ module.exports = React.createClass({
                 const href = node.getAttribute("href");
                 // HtmlUtils transforms `matrix.to` links to local links, so match against
                 // user or room app links.
-                const match = /^#\/(user|room)\/(.*)$/.exec(href);
-                if (match) {
+                const match = /^#\/(user|room)\/(.*)$/.exec(href) || [];
+                const resourceType = match[1]; // "user" or "room"
+                const resourceId = match[2]; // user ID or room ID
+                if (match && resourceType && resourceId) {
                     let avatar;
                     let roomId;
                     let room;
-                    let userId;
                     let member;
-                    switch (match[1]) {
+                    switch (resourceType) {
                         case "user":
                             roomId = this.props.mxEvent.getRoomId();
                             room = MatrixClientPeg.get().getRoom(roomId);
-                            userId = match[2];
-                            member = room.getMember(userId) ||
-                                new RoomMember(null, userId);
-                            avatar = <MemberAvatar member={member} width={16} height={16} name={match[2]}/>;
+                            member = room.getMember(resourceId) ||
+                                new RoomMember(null, resourceId);
+                            avatar = <MemberAvatar member={member} width={16} height={16} name={resourceId}/>;
                         break;
                         case "room":
-                            room = match[2][0] === '#' ?
+                            room = resourceId[0] === '#' ?
                                 MatrixClientPeg.get().getRooms().find((r) => {
-                                    return r.getCanonicalAlias() === match[2];
-                                }) : MatrixClientPeg.get().getRoom(match[2]);
+                                    return r.getCanonicalAlias() === resourceId;
+                                }) : MatrixClientPeg.get().getRoom(resourceId);
                             if (room) {
                                 avatar = <RoomAvatar room={room} width={16} height={16}/>;
                             }
