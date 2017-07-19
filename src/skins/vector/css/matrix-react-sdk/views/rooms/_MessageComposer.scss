@@ -112,6 +112,12 @@ limitations under the License.
     border-left: 4px solid $blockquote-bar-color;
 }
 
+.mx_MessageComposer_input pre.public-DraftStyleDefault-pre pre {
+    background-color: $rte-code-bg-color;
+    border-radius: 3px;
+    padding: 10px;
+}
+
 .mx_MessageComposer_input textarea {
     display: block;
     width: 100%;
