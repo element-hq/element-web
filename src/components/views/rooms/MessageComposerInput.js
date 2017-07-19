@@ -527,15 +527,18 @@ export default class MessageComposerInput extends React.Component {
         if (this.state.isRichtextEnabled) {
             // These are block types, not handled by RichUtils by default.
             const blockCommands = ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item'];
+            const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
             if (blockCommands.includes(command)) {
-                this.setState({
-                    editorState: RichUtils.toggleBlockType(this.state.editorState, command),
-                });
+                newState = RichUtils.toggleBlockType(this.state.editorState, command);
             } else if (command === 'strike') {
                 // this is the only inline style not handled by Draft by default
-                this.setState({
-                    editorState: RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH'),
-                });
+                newState = RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH');
+            } else if (command === 'backspace' && currentBlockType !== 'unstyled') {
+                const currentStartOffset = this.state.editorState.getSelection().getStartOffset();
+                if (currentStartOffset === 0) {
+                    // Toggle current block type (setting it to 'unstyled')
+                    newState = RichUtils.toggleBlockType(this.state.editorState, currentBlockType);
+                }
             }
         } else {
             const contentState = this.state.editorState.getCurrentContent();
@@ -655,6 +658,7 @@ export default class MessageComposerInput extends React.Component {
             // By returning false, we allow the default draft-js key binding to occur,
             // which in this case invokes "split-block". This creates a new block of the
             // same type, allowing the user to delete it with backspace.
+            // See handleKeyCommand (when command === 'backspace')
             return false;
         }
 

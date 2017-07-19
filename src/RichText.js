@@ -113,31 +113,6 @@ let emojiDecorator = {
  * Returns a composite decorator which has access to provided scope.
  */
 export function getScopedRTDecorators(scope: any): CompositeDecorator {
-    let MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-
-    let usernameDecorator = {
-        strategy: (contentBlock, callback) => {
-            findWithRegex(USERNAME_REGEX, contentBlock, callback);
-        },
-        component: (props) => {
-            let member = scope.room.getMember(props.children[0].props.text);
-            // unused until we make these decorators immutable (autocomplete needed)
-            let name = member ? member.name : null;
-            let avatar = member ? <MemberAvatar member={member} width={16} height={16}/> : null;
-            return <span className="mx_UserPill">{avatar}{props.children}</span>;
-        }
-    };
-
-    let roomDecorator = {
-        strategy: (contentBlock, callback) => {
-            findWithRegex(ROOM_REGEX, contentBlock, callback);
-        },
-        component: (props) => {
-            return <span className="mx_RoomPill">{props.children}</span>;
-        }
-    };
-
-    // TODO Re-enable usernameDecorator and roomDecorator
     return [emojiDecorator];
 }
 
