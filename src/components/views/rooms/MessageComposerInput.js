@@ -928,7 +928,7 @@ export default class MessageComposerInput extends React.Component {
             return false;
         }
 
-        const {range = {}, completion = '', entity = null} = displayedCompletion;
+        const {range = {}, completion = '', entity = null, suffix = ''} = displayedCompletion;
         let entityKey;
         if (entity) {
             entityKey = Entity.create(
@@ -938,7 +938,7 @@ export default class MessageComposerInput extends React.Component {
             );
         }
 
-        const contentState = Modifier.replaceText(
+        let contentState = Modifier.replaceText(
             activeEditorState.getCurrentContent(),
             RichText.textOffsetsToSelectionState(
                 range, activeEditorState.getCurrentContent().getBlocksAsArray(),
@@ -947,6 +947,12 @@ export default class MessageComposerInput extends React.Component {
             null,
             entityKey,
         );
+
+        // Move the selection to the end of the block
+        const afterSelection = contentState.getSelectionAfter();
+        if (suffix) {
+            contentState = Modifier.replaceText(contentState, afterSelection, suffix);
+        }
 
         let editorState = EditorState.push(activeEditorState, contentState, 'insert-characters');
         editorState = EditorState.forceSelection(editorState, contentState.getSelectionAfter());

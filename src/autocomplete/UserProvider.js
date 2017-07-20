@@ -55,6 +55,7 @@ export default class UserProvider extends AutocompleteProvider {
                 const displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
                 return {
                     completion: displayName,
+                    suffix: range.start === 0 ? ': ' : ' ',
                     entity: {
                         type: 'LINK',
                         mutability: 'IMMUTABLE',
