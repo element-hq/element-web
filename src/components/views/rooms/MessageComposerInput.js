@@ -43,6 +43,7 @@ import {Completion} from "../../../autocomplete/Autocompleter";
 import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
+import { getDisplayAliasForRoom } from '../../../Rooms';
 
 import {MATRIXTO_URL_PATTERN} from '../../../linkify-matrix';
 const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
@@ -225,7 +226,7 @@ export default class MessageComposerInput extends React.Component {
                             return r.getCanonicalAlias() === resource;
                         }) : MatrixClientPeg.get().getRoom(resource);
 
-                    linkText = room.getCanonicalAlias();
+                    linkText = getDisplayAliasForRoom(room) || resource;
 
                     avatar = room ? <RoomAvatar room={room} width={16} height={16}/> : null;
                 }
