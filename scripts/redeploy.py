@@ -13,6 +13,7 @@
 from __future__ import print_function
 import json, requests, tarfile, argparse, os, errno
 import time
+import traceback
 from urlparse import urljoin
 
 from flask import Flask, jsonify, request, abort
@@ -124,6 +125,7 @@ def fetch_jenkins_build(job_name, build_num):
     try:
         extracted_dir = deploy_tarball(tar_gz_url, build_dir)
     except DeployException as e:
+        traceback.print_exc()
         abort(400, e.message)
 
     create_symlink(source=extracted_dir, linkname=arg_symlink)
