@@ -762,15 +762,10 @@ export default class MessageComposerInput extends React.Component {
         let sendHtmlFn = this.client.sendHtmlMessage;
         let sendTextFn = this.client.sendTextMessage;
 
-        if (this.state.isRichtextEnabled) {
-            this.historyManager.addItem(
-                contentHTML ? contentHTML : contentText,
-                contentHTML ? 'html' : 'markdown',
-            );
-        } else {
-            // Always store MD input as input history
-            this.historyManager.addItem(contentText, 'markdown');
-        }
+        this.historyManager.save(
+            contentState,
+            this.state.isRichtextEnabled ? 'html' : 'markdown',
+        );
 
         if (contentText.startsWith('/me')) {
             contentText = contentText.substring(4);
