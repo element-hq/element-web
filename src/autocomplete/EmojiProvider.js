@@ -64,7 +64,7 @@ const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sor
         name: a.name,
         shortname: a.shortname,
         aliases_ascii: a.aliases_ascii ? a.aliases_ascii.join(' ') : '',
-        // Include the so that we can preserve the original order
+        // Include the index so that we can preserve the original order
         _orderBy: index,
     };
 });
