@@ -56,13 +56,7 @@ export default class UserProvider extends AutocompleteProvider {
                 return {
                     completion: displayName,
                     suffix: range.start === 0 ? ': ' : ' ',
-                    entity: {
-                        type: 'LINK',
-                        mutability: 'IMMUTABLE',
-                        data: {
-                            url: 'https://matrix.to/#/' + user.userId,
-                        },
-                    },
+                    href: 'https://matrix.to/#/' + user.userId,
                     component: (
                         <PillCompletion
                             initialComponent={<MemberAvatar member={user} width={24} height={24}/>}
