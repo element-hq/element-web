@@ -286,29 +286,19 @@ export default class MessageComposerInput extends React.Component {
                 editor.focus();
                 break;
             case 'insert_displayname': {
-                const entityKey = Entity.create(
-                    'LINK', 'IMMUTABLE',
-                    { url: `https://matrix.to/#/${payload.user_id}`},
-                );
+                // Pretend that we've autocompleted this user because keeping two code
+                // paths for inserting a user pill is not fun
                 const selection = this.state.editorState.getSelection();
-                contentState = Modifier.replaceText(
-                    contentState,
+                const member = this.props.room.getMember(payload.user_id);
+                const completion = member ? member.name : payload.user_id;
+                this.setDisplayedCompletion({
+                    completion,
                     selection,
-                    `${payload.user_id}`,
-                    null,
-                    entityKey,
-                );
-
-                const suffix = selection.getStartOffset() === 0 ? ': ' : ' ';
-                contentState = Modifier.replaceText(contentState, contentState.getSelectionAfter(), suffix);
-
-                let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
-                editorState = EditorState.forceSelection(editorState, contentState.getSelectionAfter());
-                this.onEditorContentChanged(editorState);
-                editor.focus();
+                    href: `https://matrix.to/#/${payload.user_id}`,
+                    suffix: selection.getStartOffset() === 0 ? ': ' : ' ',
+                });
             }
                 break;
-
             case 'quote': {
                 let {body, formatted_body} = payload.event.getContent();
                 formatted_body = formatted_body || escape(body);
@@ -946,7 +936,8 @@ export default class MessageComposerInput extends React.Component {
             return false;
         }
 
-        const {range = {}, completion = '', href = null, suffix = ''} = displayedCompletion;
+        const {range = null, completion = '', href = null, suffix = ''} = displayedCompletion;
+
         let entityKey;
         let mdCompletion;
         if (href) {
@@ -956,11 +947,18 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
+        let selection;
+        if (range) {
+            selection = RichText.textOffsetsToSelectionState(
+                range, activeEditorState.getCurrentContent().getBlocksAsArray(),
+            );
+        } else {
+            selection = activeEditorState.getSelection();
+        }
+
         let contentState = Modifier.replaceText(
             activeEditorState.getCurrentContent(),
-            RichText.textOffsetsToSelectionState(
-                range, activeEditorState.getCurrentContent().getBlocksAsArray(),
-            ),
+            selection,
             mdCompletion || completion,
             null,
             entityKey,
