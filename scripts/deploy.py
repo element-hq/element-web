@@ -63,7 +63,8 @@ class Deployer:
         self.packages_path = "."
         self.bundles_path = None
         self.should_clean = False
-        self.config_location = None
+        # filename -> symlink path e.g 'config.localhost.json' => '../localhost/config.json'
+        self.config_locations = {}
         self.verify_signature = True
 
     def deploy(self, tarball, extract_path):
@@ -95,11 +96,12 @@ class Deployer:
 
         print ("Extracted into: %s" % extracted_dir)
 
-        if self.config_location:
-            create_relative_symlink(
-                target=self.config_location,
-                linkname=os.path.join(extracted_dir, 'config.json')
-            )
+        if self.config_locations:
+            for config_filename, config_loc in self.config_locations.iteritems():
+                create_relative_symlink(
+                    target=config_loc,
+                    linkname=os.path.join(extracted_dir, config_filename)
+                )
 
         if self.bundles_path:
             extracted_bundles = os.path.join(extracted_dir, 'bundles')
@@ -178,6 +180,8 @@ if __name__ == "__main__":
     deployer.packages_path = args.packages_dir
     deployer.bundles_path = args.bundles_dir
     deployer.should_clean = args.clean
-    deployer.config_location = args.config
+    deployer.config_locations = {
+        "config.json": args.config,
+    }
 
     deployer.deploy(args.tarball, args.extract_path)
