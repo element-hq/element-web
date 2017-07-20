@@ -82,9 +82,14 @@ describe('loading:', function () {
         // unmounting should have cleared the MatrixClientPeg
         expect(MatrixClientPeg.get()).toBe(null);
 
+        // chrome seems to take *ages* to delete the indexeddbs.
+        this.timeout(10000);
+
         // clear the indexeddbs so we can start from a clean slate next time.
-        await test_utils.deleteIndexedDB('matrix-js-sdk:crypto');
-        await test_utils.deleteIndexedDB('matrix-js-sdk:riot-web-sync');
+        await Promise.all([
+            test_utils.deleteIndexedDB('matrix-js-sdk:crypto'),
+            test_utils.deleteIndexedDB('matrix-js-sdk:riot-web-sync'),
+        ]);
         console.log(`${Date.now()}: loading: afterEach complete`);
     });
 
