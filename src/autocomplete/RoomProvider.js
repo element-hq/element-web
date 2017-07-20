@@ -55,13 +55,8 @@ export default class RoomProvider extends AutocompleteProvider {
                 const displayAlias = getDisplayAliasForRoom(room.room) || room.roomId;
                 return {
                     completion: displayAlias,
-                    entity: {
-                        type: 'LINK',
-                        mutability: 'IMMUTABLE',
-                        data: {
-                            url: 'https://matrix.to/#/' + displayAlias,
-                        },
-                    },
+                    suffix: ' ',
+                    href: 'https://matrix.to/#/' + displayAlias,
                     component: (
                         <PillCompletion initialComponent={<RoomAvatar width={24} height={24} room={room.room} />} title={room.name} description={displayAlias} />
                     ),
