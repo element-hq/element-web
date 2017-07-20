@@ -23,6 +23,8 @@ import FuzzyMatcher from './FuzzyMatcher';
 import sdk from '../index';
 import {PillCompletion} from './Components';
 import type {SelectionRange, Completion} from './Autocompleter';
+import _uniq from 'lodash/uniq';
+import _sortBy from 'lodash/sortBy';
 
 import EmojiData from '../stripped-emoji.json';
 
@@ -57,11 +59,13 @@ const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sor
         }
         return CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category);
     },
-).map((a) => {
+).map((a, index) => {
     return {
         name: a.name,
         shortname: a.shortname,
         aliases_ascii: a.aliases_ascii ? a.aliases_ascii.join(' ') : '',
+        // Include the index so that we can preserve the original order
+        _orderBy: index,
     };
 });
 
@@ -71,9 +75,14 @@ export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
         this.matcher = new FuzzyMatcher(EMOJI_SHORTNAMES, {
-            keys: ['aliases_ascii', 'shortname', 'name'],
+            keys: ['aliases_ascii', 'shortname'],
             // For matching against ascii equivalents
             shouldMatchWordsOnly: false,
+        });
+        this.nameMatcher = new FuzzyMatcher(EMOJI_SHORTNAMES, {
+            keys: ['name'],
+            // For removing punctuation
+            shouldMatchWordsOnly: true,
         });
     }
 
@@ -91,8 +100,13 @@ export default class EmojiProvider extends AutocompleteProvider {
                 matchedString = matchedString.slice(prefixMatch[0].length);
                 range.start += prefixMatch[0].length;
             }
+            completions = this.matcher.match(matchedString);
 
-            completions = this.matcher.match(matchedString).map((result) => {
+            // Do second match with shouldMatchWordsOnly in order to match against 'name'
+            completions = completions.concat(this.nameMatcher.match(matchedString));
+            // Reinstate original order
+            completions = _sortBy(_uniq(completions), '_orderBy');
+            completions = completions.map((result) => {
                 const {shortname} = result;
                 const unicode = shortnameToUnicode(shortname);
                 return {
