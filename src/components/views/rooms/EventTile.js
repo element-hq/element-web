@@ -359,7 +359,7 @@ module.exports = withMatrixClient(React.createClass({
     onSenderProfileClick: function(event) {
         const mxEvent = this.props.mxEvent;
         dis.dispatch({
-            action: 'insert_displayname',
+            action: 'insert_mention',
             user_id: mxEvent.getSender(),
         });
     },

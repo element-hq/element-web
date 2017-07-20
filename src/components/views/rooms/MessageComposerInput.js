@@ -285,7 +285,7 @@ export default class MessageComposerInput extends React.Component {
             case 'focus_composer':
                 editor.focus();
                 break;
-            case 'insert_displayname': {
+            case 'insert_mention': {
                 // Pretend that we've autocompleted this user because keeping two code
                 // paths for inserting a user pill is not fun
                 const selection = this.state.editorState.getSelection();
