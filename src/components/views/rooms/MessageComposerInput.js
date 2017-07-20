@@ -43,6 +43,7 @@ import {Completion} from "../../../autocomplete/Autocompleter";
 import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
+import { getDisplayAliasForRoom } from '../../../Rooms';
 
 import {MATRIXTO_URL_PATTERN} from '../../../linkify-matrix';
 const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
@@ -198,6 +199,9 @@ export default class MessageComposerInput extends React.Component {
                 const resource = matrixToMatch[1]; // The room/user ID
                 const prefix = matrixToMatch[2]; // The first character of prefix
 
+                // Default to the room/user ID
+                let linkText = resource;
+
                 const isUserPill = prefix === '@';
                 const isRoomPill = prefix === '#' || prefix === '!';
 
@@ -212,12 +216,18 @@ export default class MessageComposerInput extends React.Component {
                     // member. This could be improved by doing an async profile lookup.
                     const member = this.props.room.getMember(resource) ||
                         new RoomMember(null, resource);
+
+                    linkText = member.name;
+
                     avatar = member ? <MemberAvatar member={member} width={16} height={16}/> : null;
                 } else if (isRoomPill) {
                     const room = prefix === '#' ?
                         MatrixClientPeg.get().getRooms().find((r) => {
                             return r.getCanonicalAlias() === resource;
                         }) : MatrixClientPeg.get().getRoom(resource);
+
+                    linkText = getDisplayAliasForRoom(room) || resource;
+
                     avatar = room ? <RoomAvatar room={room} width={16} height={16}/> : null;
                 }
 
@@ -225,7 +235,7 @@ export default class MessageComposerInput extends React.Component {
                     return (
                         <span className={classes}>
                             {avatar}
-                            {props.children}
+                            {linkText}
                         </span>
                     );
                 }
@@ -928,14 +938,14 @@ export default class MessageComposerInput extends React.Component {
             return false;
         }
 
-        const {range = {}, completion = '', entity = null, suffix = ''} = displayedCompletion;
+        const {range = {}, completion = '', href = null, suffix = ''} = displayedCompletion;
         let entityKey;
-        if (entity) {
-            entityKey = Entity.create(
-              entity.type,
-              entity.mutability,
-              entity.data,
-            );
+        let mdCompletion;
+        if (href) {
+            entityKey = Entity.create('LINK', 'IMMUTABLE', {url: href});
+            if (!this.state.isRichtextEnabled) {
+                mdCompletion = `[${completion}](${href})`;
+            }
         }
 
         let contentState = Modifier.replaceText(
@@ -943,7 +953,7 @@ export default class MessageComposerInput extends React.Component {
             RichText.textOffsetsToSelectionState(
                 range, activeEditorState.getCurrentContent().getBlocksAsArray(),
             ),
-            completion,
+            mdCompletion || completion,
             null,
             entityKey,
         );
