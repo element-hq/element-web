@@ -275,15 +275,23 @@ export default class MessageComposerInput extends React.Component {
             case 'focus_composer':
                 editor.focus();
                 break;
-
-            // TODO change this so we insert a complete user alias
-
             case 'insert_displayname': {
+                const entityKey = Entity.create(
+                    'LINK', 'IMMUTABLE',
+                    { url: `https://matrix.to/#/${payload.user_id}`},
+                );
+                const selection = this.state.editorState.getSelection();
                 contentState = Modifier.replaceText(
                     contentState,
-                    this.state.editorState.getSelection(),
-                    `${payload.displayname}: `,
+                    selection,
+                    `${payload.user_id}`,
+                    null,
+                    entityKey,
                 );
+
+                const suffix = selection.getStartOffset() === 0 ? ': ' : ' ';
+                contentState = Modifier.replaceText(contentState, contentState.getSelectionAfter(), suffix);
+
                 let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
                 editorState = EditorState.forceSelection(editorState, contentState.getSelectionAfter());
                 this.onEditorContentChanged(editorState);

@@ -357,10 +357,10 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     onSenderProfileClick: function(event) {
-        var mxEvent = this.props.mxEvent;
+        const mxEvent = this.props.mxEvent;
         dis.dispatch({
             action: 'insert_displayname',
-            displayname: (mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()).replace(' (IRC)', ''),
+            user_id: mxEvent.getSender(),
         });
     },
 

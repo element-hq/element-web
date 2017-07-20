@@ -297,10 +297,9 @@ module.exports = React.createClass({
 
     onEmoteSenderClick: function(event) {
         const mxEvent = this.props.mxEvent;
-        const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
         dis.dispatch({
             action: 'insert_displayname',
-            displayname: name.replace(' (IRC)', ''),
+            user_id: mxEvent.getSender(),
         });
     },
 
