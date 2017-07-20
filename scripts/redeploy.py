@@ -186,10 +186,13 @@ if __name__ == "__main__":
         )
     )
 
+    def _raise(ex):
+        raise ex
+
     # --config config.json=../../config.json --config config.localhost.json=./localhost.json
     parser.add_argument(
         "--config", action="append", dest="configs",
-        type=lambda kv: kv.split("="), help=(
+        type=lambda kv: kv.split("=", 1) if "=" in kv else _raise(Exception("Missing =")), help=(
             "A list of configs to symlink into the extracted tarball. \
             For example, --config config.json=../config.json config2.json=../test/config.json"
         )
