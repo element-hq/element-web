@@ -631,5 +631,14 @@
     "Wednesday": "Miércoles",
     "Thursday": "Jueves",
     "Friday": "Viernes",
-    "Saturday": "Sábado"
+    "Saturday": "Sábado",
+    "New Composer & Autocomplete": "Nuevo compositor & Autocompletar",
+    "Start verification": "Comenzar la verificación",
+    "Skip": "Saltar",
+    "To return to your account in future you need to set a password": "Para volver a usar su cuenta en el futuro es necesario que establezca una contraseña",
+    "Share without verifying": "Compartir sin verificar",
+    "Ignore request": "Ignorar la solicitud",
+    "Do you want to set an email address?": "¿Quieres poner una dirección de correo electrónico?",
+    "This will allow you to reset your password and receive notifications.": "Esto te permitirá reiniciar tu contraseña y recibir notificaciones.",
+    "Authentication check failed: incorrect password?": "La verificación de la autentificación ha fallado: ¿El password es el correcto?"
 }
