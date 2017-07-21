@@ -374,7 +374,6 @@ export default React.createClass({
     render: function() {
         const GroupAvatar = sdk.getComponent("avatars.GroupAvatar");
         const Loader = sdk.getComponent("elements.Spinner");
-        const ChangeAvatar = sdk.getComponent("settings.ChangeAvatar");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         if (this.state.summary === null && this.state.error === null || this.state.saving) {
@@ -387,7 +386,7 @@ export default React.createClass({
             let shortDescNode;
             let rightButtons;
             let roomBody;
-            let headerClasses = {
+            const headerClasses = {
                 mx_GroupView_header: true,
             };
             if (this.state.editing) {
@@ -473,7 +472,9 @@ export default React.createClass({
                     {this._getFeaturedUsersNode()}
                 </div>;
                 // disabled until editing works
-                rightButtons = <AccessibleButton className="mx_GroupHeader_button" onClick={this._onEditClick} title={_t("Edit Group")}>
+                rightButtons = <AccessibleButton className="mx_GroupHeader_button"
+                    onClick={this._onEditClick} title={_t("Edit Group")}
+                >
                     <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
                 </AccessibleButton>;
 
