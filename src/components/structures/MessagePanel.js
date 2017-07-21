@@ -303,27 +303,29 @@ module.exports = React.createClass({
             this.currentGhostEventId = null;
         }
 
-        var isMembershipChange = (e) => e.getType() === 'm.room.member';
+        const isMembershipChange = (e) => e.getType() === 'm.room.member';
 
         for (i = 0; i < this.props.events.length; i++) {
             let mxEv = this.props.events[i];
+            let wantTile = true;
             let eventId = mxEv.getId();
             let readMarkerInMels = false;
-            let last = (i == lastShownEventIndex);
+            let last = (i === lastShownEventIndex);
 
             if (!this._shouldShowEvent(mxEv)) {
-                // Event is hidden but may be the read marker event
-                if (mxEv.getId() === this.props.readMarkerEventId) {
-                    ret.push(this._getReadMarkerTile(this.props.readMarkerVisible));
-                }
-                continue;
+                wantTile = false;
             }
 
+            // if (!this._shouldShowEvent(mxEv)) {
+                // Event is hidden but may be the read marker event
+                // if (mxEv.getId() === this.props.readMarkerEventId) {
+                //     ret.push(this._getReadMarkerTile(this.props.readMarkerVisible));
+                // }
+                // continue;
+            // }
+
             // Wrap consecutive member events in a ListSummary, ignore if redacted
-            if (isMembershipChange(mxEv) &&
-                EventTile.haveTileForEvent(mxEv) &&
-                !mxEv.isRedacted()
-            ) {
+            if (isMembershipChange(mxEv) && wantTile) {
                 let ts1 = mxEv.getTs();
                 // Ensure that the key of the MemberEventListSummary does not change with new
                 // member events. This will prevent it from being re-created unnecessarily, and
@@ -342,17 +344,23 @@ module.exports = React.createClass({
 
                 let summarisedEvents = [mxEv];
                 for (;i + 1 < this.props.events.length; i++) {
-                    let collapsedMxEv = this.props.events[i + 1];
-
-                    // Ignore redacted member events
-                    if (!EventTile.haveTileForEvent(collapsedMxEv) || !this._shouldShowEvent(collapsedMxEv)) {
-                        continue;
-                    }
+                    const collapsedMxEv = this.props.events[i + 1];
 
                     if (!isMembershipChange(collapsedMxEv) ||
                         this._wantsDateSeparator(this.props.events[i], collapsedMxEv.getDate())) {
                         break;
                     }
+
+                    // Ignore redacted member events
+                    if (!this._shouldShowEvent(collapsedMxEv)) {
+                        continue;
+                    }
+
+                    // If RM event is in MELS mark it as such and the RM will be appended after MELS.
+                    if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
+                        readMarkerInMels = true;
+                    }
+
                     summarisedEvents.push(collapsedMxEv);
                 }
                 // At this point, i = the index of the last event in the summary sequence
