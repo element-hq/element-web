@@ -24,19 +24,11 @@ module.exports = React.createClass({
     propTypes: {
         initialAvatarUrl: React.PropTypes.string,
         room: React.PropTypes.object,
-
-        // if set, set initialAvatarUrl to the current avatar, if it has one
-        groupId: React.PropTypes.string,
         // if false, you need to call changeAvatar.onFileSelected yourself.
         showUploadSection: React.PropTypes.bool,
         width: React.PropTypes.number,
         height: React.PropTypes.number,
-        className: React.PropTypes.string,
-
-        // Called with the mxc URL of the uploaded image after the avatar is
-        // uploaded. If undefined, the room or user avatar if changed once the
-        // image has finished uploading. Must be set for groups.
-        onUploadComplete: React.PropTypes.func,
+        className: React.PropTypes.string
     },
 
     Phases: {
@@ -80,19 +72,15 @@ module.exports = React.createClass({
         var self = this;
         var httpPromise = MatrixClientPeg.get().uploadContent(file).then(function(url) {
             newUrl = url;
-            if (this.props.onAvatar) {
-                this.props.onAvatar(url);
+            if (self.props.room) {
+                return MatrixClientPeg.get().sendStateEvent(
+                    self.props.room.roomId,
+                    'm.room.avatar',
+                    {url: url},
+                    ''
+                );
             } else {
-                if (self.props.room) {
-                    return MatrixClientPeg.get().sendStateEvent(
-                        self.props.room.roomId,
-                        'm.room.avatar',
-                        {url: url},
-                        ''
-                    );
-                } else if (!this.props.groupId) {
-                    return MatrixClientPeg.get().setAvatarUrl(url);
-                }
+                return MatrixClientPeg.get().setAvatarUrl(url);
             }
         });
 
@@ -123,25 +111,20 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        let avatarImg;
+        var avatarImg;
         // Having just set an avatar we just display that since it will take a little
         // time to propagate through to the RoomAvatar.
         if (this.props.room && !this.avatarSet) {
-            const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
+            var RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
             avatarImg = <RoomAvatar room={this.props.room} width={ this.props.width } height={ this.props.height } resizeMethod='crop' />;
-        } else if (this.props.groupId) {
-            const GroupAvatar = sdk.getComponent('avatars.GroupAvatar');
-            avatarImg = <GroupAvatar groupId={this.props.groupId} groupAvatarUrl={this.props.initialAvatarUrl}
-                width={this.props.width} height={this.props.height} resizeMethod='crop'
-            />;
         } else {
-            const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+            var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
             // XXX: FIXME: once we track in the JS what our own displayname is(!) then use it here rather than ?
             avatarImg = <BaseAvatar width={this.props.width} height={this.props.height} resizeMethod='crop'
                         name='?' idName={ MatrixClientPeg.get().getUserIdLocalpart() } url={this.state.avatarUrl} />;
         }
 
-        let uploadSection;
+        var uploadSection;
         if (this.props.showUploadSection) {
             uploadSection = (
                 <div className={this.props.className}>
@@ -164,7 +147,7 @@ module.exports = React.createClass({
                     </div>
                 );
             case this.Phases.Uploading:
-                const Loader = sdk.getComponent("elements.Spinner");
+                var Loader = sdk.getComponent("elements.Spinner");
                 return (
                     <Loader />
                 );
