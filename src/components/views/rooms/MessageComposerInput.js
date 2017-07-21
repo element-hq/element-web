@@ -45,8 +45,9 @@ import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
 import { getDisplayAliasForRoom } from '../../../Rooms';
 
-import {MATRIXTO_URL_PATTERN} from '../../../linkify-matrix';
+import {MATRIXTO_URL_PATTERN, MATRIXTO_MD_LINK_PATTERN} from '../../../linkify-matrix';
 const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
+const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g');
 
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
@@ -777,6 +778,13 @@ export default class MessageComposerInput extends React.Component {
             sendHtmlFn = this.client.sendHtmlEmote;
             sendTextFn = this.client.sendEmoteMessage;
         }
+
+        // Strip MD user mentions to preserve plaintext mention behaviour
+        // (MD links are very verbose and ugly)
+        contentText = contentText.replace(REGEX_MATRIXTO_MARKDOWN_GLOBAL,
+        (markdownLink, text, resource, prefix) => {
+            return prefix === '@' ? text : markdownLink;
+        });
 
         let sendMessagePromise;
         if (contentHTML) {
