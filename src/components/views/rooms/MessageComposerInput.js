@@ -285,22 +285,20 @@ export default class MessageComposerInput extends React.Component {
             case 'focus_composer':
                 editor.focus();
                 break;
-
-            // TODO change this so we insert a complete user alias
-
-            case 'insert_displayname': {
-                contentState = Modifier.replaceText(
-                    contentState,
-                    this.state.editorState.getSelection(),
-                    `${payload.displayname}: `,
-                );
-                let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
-                editorState = EditorState.forceSelection(editorState, contentState.getSelectionAfter());
-                this.onEditorContentChanged(editorState);
-                editor.focus();
+            case 'insert_mention': {
+                // Pretend that we've autocompleted this user because keeping two code
+                // paths for inserting a user pill is not fun
+                const selection = this.state.editorState.getSelection();
+                const member = this.props.room.getMember(payload.user_id);
+                const completion = member ? member.name.replace(' (IRC)', '') : payload.user_id;
+                this.setDisplayedCompletion({
+                    completion,
+                    selection,
+                    href: `https://matrix.to/#/${payload.user_id}`,
+                    suffix: selection.getStartOffset() === 0 ? ': ' : ' ',
+                });
             }
                 break;
-
             case 'quote': {
                 let {body, formatted_body} = payload.event.getContent();
                 formatted_body = formatted_body || escape(body);
@@ -938,7 +936,8 @@ export default class MessageComposerInput extends React.Component {
             return false;
         }
 
-        const {range = {}, completion = '', href = null, suffix = ''} = displayedCompletion;
+        const {range = null, completion = '', href = null, suffix = ''} = displayedCompletion;
+
         let entityKey;
         let mdCompletion;
         if (href) {
@@ -948,11 +947,18 @@ export default class MessageComposerInput extends React.Component {
             }
         }
 
+        let selection;
+        if (range) {
+            selection = RichText.textOffsetsToSelectionState(
+                range, activeEditorState.getCurrentContent().getBlocksAsArray(),
+            );
+        } else {
+            selection = activeEditorState.getSelection();
+        }
+
         let contentState = Modifier.replaceText(
             activeEditorState.getCurrentContent(),
-            RichText.textOffsetsToSelectionState(
-                range, activeEditorState.getCurrentContent().getBlocksAsArray(),
-            ),
+            selection,
             mdCompletion || completion,
             null,
             entityKey,
