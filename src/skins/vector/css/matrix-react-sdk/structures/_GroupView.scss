@@ -103,6 +103,10 @@ limitations under the License.
     border-bottom: 1px solid transparent;
 }
 
+.mx_GroupView_avatarPicker_label {
+    cursor: pointer;
+}
+
 .mx_GroupView_cancelButton {
     padding-left: 8px;
 }
