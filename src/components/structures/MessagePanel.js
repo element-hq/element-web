@@ -306,14 +306,11 @@ module.exports = React.createClass({
 
         for (i = 0; i < this.props.events.length; i++) {
             let mxEv = this.props.events[i];
-            let wantTile = true;
             let eventId = mxEv.getId();
             let readMarkerInMels = false;
             let last = (i === lastShownEventIndex);
 
-            if (!this._shouldShowEvent(mxEv)) {
-                wantTile = false;
-            }
+            const wantTile = this._shouldShowEvent(mxEv);
 
             // Wrap consecutive member events in a ListSummary, ignore if redacted
             if (isMembershipChange(mxEv) && wantTile) {
@@ -392,7 +389,7 @@ module.exports = React.createClass({
                 continue;
             }
 
-            if (EventTile.haveTileForEvent(mxEv)) {
+            if (wantTile) {
                 // make sure we unpack the array returned by _getTilesForEvent,
                 // otherwise react will auto-generate keys and we will end up
                 // replacing all of the DOM elements every time we paginate.
