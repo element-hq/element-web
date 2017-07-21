@@ -179,10 +179,12 @@ export default React.createClass({
             summary: null,
             error: null,
             editing: false,
+            saving: false,
         };
     },
 
     componentWillMount: function() {
+        this._changeAvatarComponent = null;
         this._loadGroupFromServer(this.props.groupId);
     },
 
@@ -195,6 +197,10 @@ export default React.createClass({
                 this._loadGroupFromServer(newProps.groupId);
             });
         }
+    },
+
+    _collectChangeAvatar: function(node) {
+        this._changeAvatarComponent = node;
     },
 
     _loadGroupFromServer: function(groupId) {
@@ -246,8 +252,36 @@ export default React.createClass({
         });
     },
 
+    _onAvatarSelected: function(e) {
+    },
+
+    _onAvatarChange: function(newAvatarUrl) {
+        const newProfileForm = Object.assign(this.state.profileForm, { avatar_url: newAvatarUrl });
+        this.setState({
+            profileForm: newProfileForm,
+        });
+    },
+
     _onSaveClick: function() {
-        // TODO: There's no API to edit group profile info yet.
+        this.setState({saving: true});
+        MatrixClientPeg.get().setGroupProfile(this.props.groupId, this.state.profileForm).then((result) => {
+            this.setState({
+                saving: false,
+                editing: false,
+                summary: false,
+            });
+            return this._loadGroupFromServer(this.props.groupId);
+        }).catch((e) => {
+            this.setState({
+                saving: false,
+            });
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Failed to save group profile", e);
+            Modal.createDialog(ErrorDialog, {
+                title: _t('Error'),
+                description: _t('Failed to update group'),
+            });
+        }).done();
     },
 
     _getFeaturedRoomsNode() {
@@ -330,8 +364,9 @@ export default React.createClass({
         const GroupAvatar = sdk.getComponent("avatars.GroupAvatar");
         const Loader = sdk.getComponent("elements.Spinner");
         const ChangeAvatar = sdk.getComponent("settings.ChangeAvatar");
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        if (this.state.summary === null && this.state.error === null) {
+        if (this.state.summary === null && this.state.error === null || this.state.saving) {
             return <Loader />;
         } else if (this.state.summary) {
             const summary = this.state.summary;
@@ -345,16 +380,16 @@ export default React.createClass({
             if (this.state.editing) {
                 avatarNode = (
                     <div className="mx_GroupView_avatarPicker">
-                        <div onClick={this.onAvatarPickerClick}>
+                        <label htmlFor="avatarInput" className="mx_GroupView_avatarPicker_label">
                             <ChangeAvatar ref={this._collectChangeAvatar}
                                 groupId={this.props.groupId}
                                 initialAvatarUrl={this.state.summary.profile.avatar_url}
-                                setAvatar={false} onAvatar={this._onAvatarChange}
+                                onUploadComplete={this._onAvatarChange}
                                 showUploadSection={false} width={48} height={48}
                             />
-                        </div>
+                        </label>
                         <div className="mx_GroupView_avatarPicker_edit">
-                            <label htmlFor="avatarInput" ref="file_label">
+                            <label htmlFor="avatarInput" className="mx_GroupView_avatarPicker_label">
                                 <img src="img/camera.svg"
                                     alt={ _t("Upload avatar") } title={ _t("Upload avatar") }
                                     width="17" height="15" />
@@ -421,9 +456,9 @@ export default React.createClass({
                     {this._getFeaturedUsersNode()}
                 </div>;
                 // disabled until editing works
-                rightButtons = null;/*<AccessibleButton className="mx_GroupHeader_button" onClick={this._onEditClick} title={_t("Edit Group")}>
+                rightButtons = <AccessibleButton className="mx_GroupHeader_button" onClick={this._onEditClick} title={_t("Edit Group")}>
                     <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
-                </AccessibleButton>;*/
+                </AccessibleButton>;
             }
 
             return (

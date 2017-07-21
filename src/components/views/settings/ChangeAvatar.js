@@ -33,12 +33,10 @@ module.exports = React.createClass({
         height: React.PropTypes.number,
         className: React.PropTypes.string,
 
-        // If true, set the room / user avatar once the image is uploaded.
-        // Ignored for groups.
-        setAvatar: React.PropTypes.bool,
-
-        // Called after the avatar is uploaded
-        onAvatar: React.PropTypes.func,
+        // Called with the mxc URL of the uploaded image after the avatar is
+        // uploaded. If undefined, the room or user avatar if changed once the
+        // image has finished uploading. Must be set for groups.
+        onUploadComplete: React.PropTypes.func,
     },
 
     Phases: {
@@ -53,7 +51,6 @@ module.exports = React.createClass({
             className: "",
             width: 80,
             height: 80,
-            setAvatar: true,
         };
     },
 
@@ -85,8 +82,7 @@ module.exports = React.createClass({
             newUrl = url;
             if (this.props.onAvatar) {
                 this.props.onAvatar(url);
-            }
-            if (this.props.setAvatar) {
+            } else {
                 if (self.props.room) {
                     return MatrixClientPeg.get().sendStateEvent(
                         self.props.room.roomId,
@@ -94,7 +90,7 @@ module.exports = React.createClass({
                         {url: url},
                         ''
                     );
-                } else {
+                } else if (!this.props.groupId) {
                     return MatrixClientPeg.get().setAvatarUrl(url);
                 }
             }
