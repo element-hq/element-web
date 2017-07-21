@@ -281,7 +281,7 @@ export default React.createClass({
                 editing: false,
                 summary: null,
             });
-            return this._loadGroupFromServer(this.props.groupId);
+            this._loadGroupFromServer(this.props.groupId);
         }).catch((e) => {
             this.setState({
                 saving: false,
