@@ -279,7 +279,7 @@ export default React.createClass({
             this.setState({
                 saving: false,
                 editing: false,
-                summary: false,
+                summary: null,
             });
             return this._loadGroupFromServer(this.props.groupId);
         }).catch((e) => {
