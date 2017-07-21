@@ -22,6 +22,7 @@ import dis from '../../dispatcher';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
 import { _t } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
+import Modal from '../../Modal';
 
 const RoomSummaryType = PropTypes.shape({
     room_id: PropTypes.string.isRequired,
@@ -180,6 +181,7 @@ export default React.createClass({
             error: null,
             editing: false,
             saving: false,
+            uploadingAvatar: false,
         };
     },
 
@@ -197,10 +199,6 @@ export default React.createClass({
                 this._loadGroupFromServer(newProps.groupId);
             });
         }
-    },
-
-    _collectChangeAvatar: function(node) {
-        this._changeAvatarComponent = node;
     },
 
     _loadGroupFromServer: function(groupId) {
@@ -252,14 +250,26 @@ export default React.createClass({
         });
     },
 
-    _onAvatarSelected: function(e) {
-    },
+    _onAvatarSelected: function(ev) {
+        const file = ev.target.files[0];
+        if (!file) return;
 
-    _onAvatarChange: function(newAvatarUrl) {
-        const newProfileForm = Object.assign(this.state.profileForm, { avatar_url: newAvatarUrl });
-        this.setState({
-            profileForm: newProfileForm,
-        });
+        this.setState({uploadingAvatar: true});
+        MatrixClientPeg.get().uploadContent(file).then((url) => {
+            const newProfileForm = Object.assign(this.state.profileForm, { avatar_url: url });
+            this.setState({
+                uploadingAvatar: false,
+                profileForm: newProfileForm,
+            });
+        }).catch((e) => {
+            this.setState({uploadingAvatar: false});
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Failed to upload avatar image", e);
+            Modal.createDialog(ErrorDialog, {
+                title: _t('Error'),
+                description: _t('Failed to upload image'),
+            });
+        }).done();
     },
 
     _onSaveClick: function() {
@@ -378,15 +388,21 @@ export default React.createClass({
             let headerBottom;
             let roomBody;
             if (this.state.editing) {
+                let avatarImage;
+                if (this.state.uploadingAvatar) {
+                    avatarImage = <Loader />;
+                } else {
+                    const GroupAvatar = sdk.getComponent('avatars.GroupAvatar');
+                    avatarImage = <GroupAvatar groupId={this.props.groupId}
+                        groupAvatarUrl={this.state.profileForm.avatar_url}
+                        width={48} height={48} resizeMethod='crop'
+                    />;
+                }
+
                 avatarNode = (
                     <div className="mx_GroupView_avatarPicker">
                         <label htmlFor="avatarInput" className="mx_GroupView_avatarPicker_label">
-                            <ChangeAvatar ref={this._collectChangeAvatar}
-                                groupId={this.props.groupId}
-                                initialAvatarUrl={this.state.summary.profile.avatar_url}
-                                onUploadComplete={this._onAvatarChange}
-                                showUploadSection={false} width={48} height={48}
-                            />
+                            {avatarImage}
                         </label>
                         <div className="mx_GroupView_avatarPicker_edit">
                             <label htmlFor="avatarInput" className="mx_GroupView_avatarPicker_label">

@@ -957,5 +957,7 @@
     "Error whilst fetching joined groups": "Error whilst fetching joined groups",
     "Featured Users:": "Featured Users:",
     "Edit Group": "Edit Group",
-    "Automatically replace plain text Emoji": "Automatically replace plain text Emoji"
+    "Automatically replace plain text Emoji": "Automatically replace plain text Emoji",
+    "Failed to upload image": "Failed to upload image",
+    "Failed to update group": "Failed to update group"
 }
