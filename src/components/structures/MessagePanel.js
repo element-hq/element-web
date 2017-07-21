@@ -241,7 +241,6 @@ module.exports = React.createClass({
 
     // TODO: Implement granular (per-room) hide options
     _shouldShowEvent: function(mxEv) {
-        // console.log("_shouldShowEvent ", mxEv.getId(), mxEv);
         const EventTile = sdk.getComponent('rooms.EventTile');
         if (!EventTile.haveTileForEvent(mxEv)) {
             return false; // no tile = no show
@@ -315,14 +314,6 @@ module.exports = React.createClass({
             if (!this._shouldShowEvent(mxEv)) {
                 wantTile = false;
             }
-
-            // if (!this._shouldShowEvent(mxEv)) {
-                // Event is hidden but may be the read marker event
-                // if (mxEv.getId() === this.props.readMarkerEventId) {
-                //     ret.push(this._getReadMarkerTile(this.props.readMarkerVisible));
-                // }
-                // continue;
-            // }
 
             // Wrap consecutive member events in a ListSummary, ignore if redacted
             if (isMembershipChange(mxEv) && wantTile) {
