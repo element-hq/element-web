@@ -59,7 +59,6 @@ export default React.createClass({
         // Default to the empty array if no match for simplicity
         // resource and prefix will be undefined instead of throwing
         const matrixToMatch = regex.exec(this.props.url) || [];
-        console.info(matrixToMatch);
 
         const resource = matrixToMatch[1]; // The room/user ID
         const prefix = matrixToMatch[2]; // The first character of prefix
