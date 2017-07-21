@@ -29,6 +29,11 @@ limitations under the License.
     height: 70px;
     align-items: center;
     display: flex;
+    margin-bottom: 20px;
+}
+
+.mx_GroupView_header_view {
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .mx_GroupView_header_avatar, .mx_GroupView_header_info {
@@ -54,6 +59,11 @@ limitations under the License.
     position: absolute;
     top: 50px;
     left: 15px;
+}
+
+.mx_GroupView_avatarPicker .mx_Spinner {
+    width: 48px;
+    height: 48px ! important;
 }
 
 .mx_GroupView_header_leftCol {
@@ -114,17 +124,6 @@ limitations under the License.
 .mx_GroupView_cancelButton img {
     position: relative;
     top: 5px;
-}
-
-.mx_GroupView_header_viewBottom {
-    border-bottom: 1px solid #e5e5e5;
-    height: 0;
-    margin-bottom: 20px;
-}
-
-.mx_GroupView_header_editBottom {
-    height: 0;
-    margin-top: 20px;
 }
 
 .mx_GroupView_featuredThings {
