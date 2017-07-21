@@ -19,10 +19,10 @@ import { _t } from '../../../languageHandler';
 
 import sdk from '../../../index';
 import AddThreepid from '../../../AddThreepid';
-import WithMatrixClient from '../../../wrappers/WithMatrixClient';
+import withMatrixClient from '../../../wrappers/withMatrixClient';
 import Modal from '../../../Modal';
 
-export default WithMatrixClient(React.createClass({
+export default withMatrixClient(React.createClass({
     displayName: 'AddPhoneNumber',
 
     propTypes: {

@@ -21,7 +21,7 @@ var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
 var sdk = require("../../../index");
 
-import q from 'q';
+import Promise from 'bluebird';
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
 
@@ -161,7 +161,7 @@ module.exports = React.createClass({
     },
 
     _optionallySetEmail: function() {
-        const deferred = q.defer();
+        const deferred = Promise.defer();
         // Ask for an email otherwise the user has no way to reset their password
         const SetEmailDialog = sdk.getComponent("dialogs.SetEmailDialog");
         Modal.createDialog(SetEmailDialog, {

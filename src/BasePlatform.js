@@ -17,6 +17,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import dis from './dispatcher';
+
 /**
  * Base class for classes that provide platform-specific functionality
  * eg. Setting an application badge or displaying notifications
@@ -27,6 +29,16 @@ export default class BasePlatform {
     constructor() {
         this.notificationCount = 0;
         this.errorDidOccur = false;
+
+        dis.register(this._onAction.bind(this));
+    }
+
+    _onAction(payload: Object) {
+        switch (payload.action) {
+            case 'on_logged_out':
+                this.setNotificationCount(0);
+                break;
+        }
     }
 
     // Used primarily for Analytics
@@ -45,6 +57,7 @@ export default class BasePlatform {
     /**
      * Returns true if the platform supports displaying
      * notifications, otherwise false.
+     * @returns {boolean} whether the platform supports displaying notifications
      */
     supportsNotifications(): boolean {
         return false;
@@ -53,6 +66,7 @@ export default class BasePlatform {
     /**
      * Returns true if the application currently has permission
      * to display notifications. Otherwise false.
+     * @returns {boolean} whether the application has permission to display notifications
      */
     maySendNotifications(): boolean {
         return false;

@@ -17,7 +17,6 @@
 
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import KeyCode from '../../../KeyCode';
 
@@ -26,11 +25,6 @@ module.exports = React.createClass({
     displayName: 'ForwardMessage',
 
     propTypes: {
-        currentRoomId: React.PropTypes.string.isRequired,
-
-        /* the MatrixEvent to be forwarded */
-        mxEvent: React.PropTypes.object.isRequired,
-
         onCancelClick: React.PropTypes.func.isRequired,
     },
 
@@ -44,7 +38,6 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        this.dispatcherRef = dis.register(this.onAction);
         document.addEventListener('keydown', this._onKeyDown);
     },
 
@@ -54,28 +47,7 @@ module.exports = React.createClass({
             sideOpacity: 1.0,
             middleOpacity: 1.0,
         });
-        dis.unregister(this.dispatcherRef);
         document.removeEventListener('keydown', this._onKeyDown);
-    },
-
-    onAction: function(payload) {
-        if (payload.action === 'view_room') {
-            const event = this.props.mxEvent;
-            const Client = MatrixClientPeg.get();
-            Client.sendEvent(payload.room_id, event.getType(), event.getContent()).done(() => {
-                dis.dispatch({action: 'message_sent'});
-            }, (err) => {
-                if (err.name === "UnknownDeviceError") {
-                    dis.dispatch({
-                        action: 'unknown_device_error',
-                        err: err,
-                        room: Client.getRoom(payload.room_id),
-                    });
-                }
-                dis.dispatch({action: 'message_send_failed'});
-            });
-            if (this.props.currentRoomId === payload.room_id) this.props.onCancelClick();
-        }
     },
 
     _onKeyDown: function(ev) {

@@ -36,12 +36,12 @@ import createRoom from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import Unread from '../../../Unread';
 import { findReadReceiptFromUserId } from '../../../utils/Receipt';
-import WithMatrixClient from '../../../wrappers/WithMatrixClient';
+import withMatrixClient from '../../../wrappers/withMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
 
-module.exports = WithMatrixClient(React.createClass({
+module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
 
     propTypes: {
@@ -136,8 +136,12 @@ module.exports = WithMatrixClient(React.createClass({
         if (userId == this.props.member.userId) {
             // no need to re-download the whole thing; just update our copy of
             // the list.
-            var devices = this.props.matrixClient.getStoredDevicesForUser(userId);
-            this.setState({devices: devices});
+
+            // Promise.resolve to handle transition from static result to promise; can be removed
+            // in future
+            Promise.resolve(this.props.matrixClient.getStoredDevicesForUser(userId)).then((devices) => {
+                this.setState({devices: devices});
+            });
         }
     },
 
@@ -204,14 +208,15 @@ module.exports = WithMatrixClient(React.createClass({
 
         var client = this.props.matrixClient;
         var self = this;
-        client.downloadKeys([member.userId], true).finally(function() {
+        client.downloadKeys([member.userId], true).then(() => {
+            return client.getStoredDevicesForUser(member.userId);
+        }).finally(function() {
             self._cancelDeviceList = null;
-        }).done(function() {
+        }).done(function(devices) {
             if (cancelled) {
                 // we got cancelled - presumably a different user now
                 return;
             }
-            var devices = client.getStoredDevicesForUser(member.userId);
             self._disambiguateDevices(devices);
             self.setState({devicesLoading: false, devices: devices});
         }, function(err) {

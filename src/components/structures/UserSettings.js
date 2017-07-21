@@ -21,7 +21,8 @@ const MatrixClientPeg = require("../../MatrixClientPeg");
 const PlatformPeg = require("../../PlatformPeg");
 const Modal = require('../../Modal');
 const dis = require("../../dispatcher");
-const q = require('q');
+import sessionStore from '../../stores/SessionStore';
+import Promise from 'bluebird';
 const packageJson = require('../../../package.json');
 const UserSettingsStore = require('../../UserSettingsStore');
 const CallMediaHandler = require('../../CallMediaHandler');
@@ -93,8 +94,12 @@ const SETTINGS_LABELS = [
         label: 'Hide removed messages',
     },
     {
-        id: 'disableMarkdown',
-        label: 'Disable markdown formatting',
+        id: 'enableSyntaxHighlightLanguageDetection',
+        label: 'Enable automatic language detection for syntax highlighting',
+    },
+    {
+        id: 'MessageComposerInput.autoReplaceEmoji',
+        label: 'Automatically replace plain text Emoji',
     },
 /*
     {
@@ -173,9 +178,6 @@ module.exports = React.createClass({
         // The base URL to use in the referral link. Defaults to window.location.origin.
         referralBaseUrl: React.PropTypes.string,
 
-        // true if RightPanel is collapsed
-        collapsedRhs: React.PropTypes.bool,
-
         // Team token for the referral link. If falsy, the referral section will
         // not appear
         teamToken: React.PropTypes.string,
@@ -205,7 +207,7 @@ module.exports = React.createClass({
         this._addThreepid = null;
 
         if (PlatformPeg.get()) {
-            q().then(() => {
+            Promise.resolve().then(() => {
                 return PlatformPeg.get().getAppVersion();
             }).done((appVersion) => {
                 if (this._unmounted) return;
@@ -250,6 +252,12 @@ module.exports = React.createClass({
         this.setState({
             language: languageHandler.getCurrentLanguage(),
         });
+
+        this._sessionStore = sessionStore;
+        this._sessionStoreToken = this._sessionStore.addListener(
+            this._setStateFromSessionStore,
+        );
+        this._setStateFromSessionStore();
     },
 
     componentDidMount: function() {
@@ -276,12 +284,28 @@ module.exports = React.createClass({
         }
     },
 
+    // `UserSettings` assumes that the client peg will not be null, so give it some
+    // sort of assurance here by only allowing a re-render if the client is truthy.
+    //
+    // This is required because `UserSettings` maintains its own state and if this state
+    // updates (e.g. during _setStateFromSessionStore) after the client peg has been made
+    // null (during logout), then it will attempt to re-render and throw errors.
+    shouldComponentUpdate: function() {
+        return Boolean(MatrixClientPeg.get());
+    },
+
+    _setStateFromSessionStore: function() {
+        this.setState({
+            userHasGeneratedPassword: Boolean(this._sessionStore.getCachedPassword()),
+        });
+    },
+
     _electronSettings: function(ev, settings) {
         this.setState({ electron_settings: settings });
     },
 
     _refreshMediaDevices: function() {
-        q().then(() => {
+        Promise.resolve().then(() => {
             return CallMediaHandler.getDevices();
         }).then((mediaDevices) => {
             // console.log("got mediaDevices", mediaDevices, this._unmounted);
@@ -296,7 +320,7 @@ module.exports = React.createClass({
 
     _refreshFromServer: function() {
         const self = this;
-        q.all([
+        Promise.all([
             UserSettingsStore.loadProfileInfo(), UserSettingsStore.loadThreePids(),
         ]).done(function(resps) {
             self.setState({
@@ -548,15 +572,16 @@ module.exports = React.createClass({
         });
         // reject the invites
         const promises = rooms.map((room) => {
-            return MatrixClientPeg.get().leave(room.roomId);
+            return MatrixClientPeg.get().leave(room.roomId).catch((e) => {
+                // purposefully drop errors to the floor: we'll just have a non-zero number on the UI
+                // after trying to reject all the invites.
+            });
         });
-        // purposefully drop errors to the floor: we'll just have a non-zero number on the UI
-        // after trying to reject all the invites.
-        q.allSettled(promises).then(() => {
+        Promise.all(promises).then(() => {
             this.setState({
                 rejectingInvites: false,
             });
-        }).done();
+        });
     },
 
     _onExportE2eKeysClicked: function() {
@@ -626,6 +651,10 @@ module.exports = React.createClass({
     },
 
     _renderUserInterfaceSettings: function() {
+        // TODO: this ought to be a separate component so that we don't need
+        // to rebind the onChange each time we render
+        const onChange = (e) =>
+            UserSettingsStore.setLocalSetting('autocompleteDelay', + e.target.value);
         return (
             <div>
                 <h3>{ _t("User Interface") }</h3>
@@ -633,8 +662,21 @@ module.exports = React.createClass({
                     { this._renderUrlPreviewSelector() }
                     { SETTINGS_LABELS.map( this._renderSyncedSetting ) }
                     { THEMES.map( this._renderThemeSelector ) }
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td><strong>{_t('Autocomplete Delay (ms):')}</strong></td>
+                            <td>
+                                <input
+                                    type="number"
+                                    defaultValue={UserSettingsStore.getLocalSetting('autocompleteDelay', 200)}
+                                    onChange={onChange}
+                                />
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                     { this._renderLanguageSetting() }
-
                 </div>
             </div>
         );
@@ -866,6 +908,21 @@ module.exports = React.createClass({
                     </AccessibleButton>
                 </div>
         </div>;
+    },
+
+    _renderCheckUpdate: function() {
+        const platform = PlatformPeg.get();
+        if ('canSelfUpdate' in platform && platform.canSelfUpdate() && 'startUpdateCheck' in platform) {
+            return <div>
+                <h3>{_t('Updates')}</h3>
+                <div className="mx_UserSettings_section">
+                    <AccessibleButton className="mx_UserSettings_button" onClick={platform.startUpdateCheck}>
+                        {_t('Check for update')}
+                    </AccessibleButton>
+                </div>
+            </div>;
+        }
+        return <div />;
     },
 
     _renderBulkOptions: function() {
@@ -1168,7 +1225,6 @@ module.exports = React.createClass({
             <div className="mx_UserSettings">
                 <SimpleRoomHeader
                     title={ _t("Settings") }
-                    collapsedRhs={ this.props.collapsedRhs }
                     onCancelClick={ this.props.onClose }
                 />
 
@@ -1209,10 +1265,14 @@ module.exports = React.createClass({
                 <h3>{ _t("Account") }</h3>
 
                 <div className="mx_UserSettings_section cadcampoHide">
-
                     <AccessibleButton className="mx_UserSettings_logout mx_UserSettings_button" onClick={this.onLogoutClicked}>
                         { _t("Sign out") }
                     </AccessibleButton>
+                    { this.state.userHasGeneratedPassword ?
+                        <div className="mx_UserSettings_passwordWarning">
+                            { _t("To return to your account in future you need to set a password") }
+                        </div> : null
+                    }
 
                     {accountJsx}
                 </div>
@@ -1265,6 +1325,8 @@ module.exports = React.createClass({
                         { _t("olm version:") } {olmVersionString}<br/>
                     </div>
                 </div>
+
+                {this._renderCheckUpdate()}
 
                 {this._renderClearCache()}
 

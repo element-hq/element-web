@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
 import { _t, _tJsx } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -39,6 +39,7 @@ function parseIntWithDefault(val, def) {
 
 const BannedUser = React.createClass({
     propTypes: {
+        canUnban: React.PropTypes.bool,
         member: React.PropTypes.object.isRequired, // js-sdk RoomMember
         reason: React.PropTypes.string,
     },
@@ -67,13 +68,17 @@ const BannedUser = React.createClass({
     },
 
     render: function() {
+        let unbanButton;
+
+        if (this.props.canUnban) {
+            unbanButton = <AccessibleButton className="mx_RoomSettings_unbanButton" onClick={this._onUnbanClick}>
+                { _t('Unban') }
+            </AccessibleButton>;
+        }
+
         return (
             <li>
-                <AccessibleButton className="mx_RoomSettings_unbanButton"
-                    onClick={this._onUnbanClick}
-                >
-                    { _t('Unban') }
-                </AccessibleButton>
+                { unbanButton }
                 <strong>{this.props.member.name}</strong> {this.props.member.userId}
                 {this.props.reason ? " " +_t('Reason') + ": " + this.props.reason : ""}
             </li>
@@ -178,8 +183,14 @@ module.exports = React.createClass({
         });
     },
 
+    /**
+     * Returns a promise which resolves once all of the save operations have completed or failed.
+     *
+     * The result is a list of promise state snapshots, each with the form
+     * `{ state: "fulfilled", value: v }` or `{ state: "rejected", reason: r }`.
+     */
     save: function() {
-        var stateWasSetDefer = q.defer();
+        var stateWasSetDefer = Promise.defer();
         // the caller may have JUST called setState on stuff, so we need to re-render before saving
         // else we won't use the latest values of things.
         // We can be a bit cheeky here and set a loading flag, and listen for the callback on that
@@ -189,8 +200,18 @@ module.exports = React.createClass({
             this.setState({ _loading: false});
         });
 
+        function mapPromiseToSnapshot(p) {
+            return p.then((r) => {
+                return { state: "fulfilled", value: r };
+            }, (e) => {
+                return { state: "rejected", reason: e };
+            });
+        }
+
         return stateWasSetDefer.promise.then(() => {
-            return q.allSettled(this._calcSavePromises());
+            return Promise.all(
+                this._calcSavePromises().map(mapPromiseToSnapshot),
+            );
         });
     },
 
@@ -277,7 +298,7 @@ module.exports = React.createClass({
         // color scheme
         var p;
         p = this.saveColor();
-        if (!q.isFulfilled(p)) {
+        if (!p.isFulfilled()) {
             promises.push(p);
         }
 
@@ -289,7 +310,7 @@ module.exports = React.createClass({
 
         // encryption
         p = this.saveEnableEncryption();
-        if (!q.isFulfilled(p)) {
+        if (!p.isFulfilled()) {
             promises.push(p);
         }
 
@@ -300,25 +321,25 @@ module.exports = React.createClass({
     },
 
     saveAliases: function() {
-        if (!this.refs.alias_settings) { return [q()]; }
+        if (!this.refs.alias_settings) { return [Promise.resolve()]; }
         return this.refs.alias_settings.saveSettings();
     },
 
     saveColor: function() {
-        if (!this.refs.color_settings) { return q(); }
+        if (!this.refs.color_settings) { return Promise.resolve(); }
         return this.refs.color_settings.saveSettings();
     },
 
     saveUrlPreviewSettings: function() {
-        if (!this.refs.url_preview_settings) { return q(); }
+        if (!this.refs.url_preview_settings) { return Promise.resolve(); }
         return this.refs.url_preview_settings.saveSettings();
     },
 
     saveEnableEncryption: function() {
-        if (!this.refs.encrypt) { return q(); }
+        if (!this.refs.encrypt) { return Promise.resolve(); }
 
         var encrypt = this.refs.encrypt.checked;
-        if (!encrypt) { return q(); }
+        if (!encrypt) { return Promise.resolve(); }
 
         var roomId = this.props.room.roomId;
         return MatrixClientPeg.get().sendStateEvent(
@@ -667,6 +688,7 @@ module.exports = React.createClass({
         const banned = this.props.room.getMembersWithMembership("ban");
         let bannedUsersSection;
         if (banned.length) {
+            const canBanUsers = current_user_level >= ban_level;
             bannedUsersSection =
                 <div>
                     <h3>{ _t('Banned users') }</h3>
@@ -674,7 +696,7 @@ module.exports = React.createClass({
                         {banned.map(function(member) {
                             const banEvent = member.events.member.getContent();
                             return (
-                                <BannedUser key={member.userId} member={member} reason={banEvent.reason} />
+                                <BannedUser key={member.userId} canUnban={canBanUsers} member={member} reason={banEvent.reason} />
                             );
                         })}
                     </ul>

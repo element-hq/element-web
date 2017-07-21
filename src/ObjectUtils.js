@@ -23,8 +23,8 @@ limitations under the License.
  * { key: $KEY, val: $VALUE, place: "add|del" }
  */
 module.exports.getKeyValueArrayDiffs = function(before, after) {
-    var results = [];
-    var delta = {};
+    const results = [];
+    const delta = {};
     Object.keys(before).forEach(function(beforeKey) {
         delta[beforeKey] = delta[beforeKey] || 0; // init to 0 initially
         delta[beforeKey]--; // keys present in the past have -ve values
@@ -46,9 +46,9 @@ module.exports.getKeyValueArrayDiffs = function(before, after) {
                     results.push({ place: "del", key: muxedKey, val: beforeVal });
                 });
                 break;
-            case 0: // A mix of added/removed keys
+            case 0: {// A mix of added/removed keys
                 // compare old & new vals
-                var itemDelta = {};
+                const itemDelta = {};
                 before[muxedKey].forEach(function(beforeVal) {
                     itemDelta[beforeVal] = itemDelta[beforeVal] || 0;
                     itemDelta[beforeVal]--;
@@ -68,9 +68,9 @@ module.exports.getKeyValueArrayDiffs = function(before, after) {
                     }
                 });
                 break;
+            }
             default:
-                console.error("Calculated key delta of " + delta[muxedKey] +
-                              " - this should never happen!");
+                console.error("Calculated key delta of " + delta[muxedKey] + " - this should never happen!");
                 break;
         }
     });
@@ -79,8 +79,10 @@ module.exports.getKeyValueArrayDiffs = function(before, after) {
 };
 
 /**
- * Shallow-compare two objects for equality: each key and value must be
- * identical
+ * Shallow-compare two objects for equality: each key and value must be identical
+ * @param {Object} objA First object to compare against the second
+ * @param {Object} objB Second object to compare against the first
+ * @return {boolean} whether the two objects have same key=values
  */
 module.exports.shallowEqual = function(objA, objB) {
     if (objA === objB) {
@@ -92,15 +94,15 @@ module.exports.shallowEqual = function(objA, objB) {
         return false;
     }
 
-    var keysA = Object.keys(objA);
-    var keysB = Object.keys(objB);
+    const keysA = Object.keys(objA);
+    const keysB = Object.keys(objB);
 
     if (keysA.length !== keysB.length) {
         return false;
     }
 
-    for (var i = 0; i < keysA.length; i++) {
-        var key = keysA[i];
+    for (let i = 0; i < keysA.length; i++) {
+        const key = keysA[i];
         if (!objB.hasOwnProperty(key) || objA[key] !== objB[key]) {
             return false;
         }

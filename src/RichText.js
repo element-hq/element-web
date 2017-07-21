@@ -16,6 +16,7 @@ import * as sdk from './index';
 import * as emojione from 'emojione';
 import {stateToHTML} from 'draft-js-export-html';
 import {SelectionRange} from "./autocomplete/Autocompleter";
+import {stateToMarkdown as __stateToMarkdown} from 'draft-js-export-markdown';
 
 const MARKDOWN_REGEX = {
     LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
@@ -30,9 +31,26 @@ const USERNAME_REGEX = /@\S+:\S+/g;
 const ROOM_REGEX = /#\S+:\S+/g;
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp, 'g');
 
-export const contentStateToHTML = stateToHTML;
+const ZWS_CODE = 8203;
+const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
+export function stateToMarkdown(state) {
+    return __stateToMarkdown(state)
+        .replace(
+            ZWS, // draft-js-export-markdown adds these
+            ''); // this is *not* a zero width space, trust me :)
+}
 
-export function HTMLtoContentState(html: string): ContentState {
+export const contentStateToHTML = (contentState: ContentState) => {
+    return stateToHTML(contentState, {
+        inlineStyles: {
+            UNDERLINE: {
+                element: 'u'
+            }
+        }
+    });
+};
+
+export function htmlToContentState(html: string): ContentState {
     return ContentState.createFromBlockArray(convertFromHTML(html));
 }
 
@@ -95,31 +113,6 @@ let emojiDecorator = {
  * Returns a composite decorator which has access to provided scope.
  */
 export function getScopedRTDecorators(scope: any): CompositeDecorator {
-    let MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-
-    let usernameDecorator = {
-        strategy: (contentBlock, callback) => {
-            findWithRegex(USERNAME_REGEX, contentBlock, callback);
-        },
-        component: (props) => {
-            let member = scope.room.getMember(props.children[0].props.text);
-            // unused until we make these decorators immutable (autocomplete needed)
-            let name = member ? member.name : null;
-            let avatar = member ? <MemberAvatar member={member} width={16} height={16}/> : null;
-            return <span className="mx_UserPill">{avatar}{props.children}</span>;
-        }
-    };
-
-    let roomDecorator = {
-        strategy: (contentBlock, callback) => {
-            findWithRegex(ROOM_REGEX, contentBlock, callback);
-        },
-        component: (props) => {
-            return <span className="mx_RoomPill">{props.children}</span>;
-        }
-    };
-
-    // TODO Re-enable usernameDecorator and roomDecorator
     return [emojiDecorator];
 }
 
@@ -146,9 +139,9 @@ export function getScopedMDDecorators(scope: any): CompositeDecorator {
             </a>
         )
     });
-    markdownDecorators.push(emojiDecorator);
-
-    return markdownDecorators;
+    // markdownDecorators.push(emojiDecorator);
+    // TODO Consider renabling "syntax highlighting" when we can do it properly
+    return [emojiDecorator];
 }
 
 /**
@@ -285,4 +278,15 @@ export function attachImmutableEntitiesToEmoji(editorState: EditorState): Editor
     }
 
     return editorState;
+}
+
+export function hasMultiLineSelection(editorState: EditorState): boolean {
+    const selectionState = editorState.getSelection();
+    const anchorKey = selectionState.getAnchorKey();
+    const currentContent = editorState.getCurrentContent();
+    const currentContentBlock = currentContent.getBlockForKey(anchorKey);
+    const start = selectionState.getStartOffset();
+    const end = selectionState.getEndOffset();
+    const selectedText = currentContentBlock.getText().slice(start, end);
+    return selectedText.includes('\n');
 }

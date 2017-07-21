@@ -66,6 +66,9 @@ module.exports = React.createClass({
 
         // Timestamp when the receipt was read
         timestamp: React.PropTypes.number,
+
+        // True to show twelve hour format, false otherwise
+        showTwelveHour: React.PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -172,7 +175,7 @@ module.exports = React.createClass({
         if (this.props.timestamp) {
             title = _t(
                 "Seen by %(userName)s at %(dateTime)s",
-                {userName: this.props.member.userId, dateTime: DateUtils.formatDate(new Date(this.props.timestamp))}
+                {userName: this.props.member.userId, dateTime: DateUtils.formatDate(new Date(this.props.timestamp), this.props.showTwelveHour)}
             );
         }
 

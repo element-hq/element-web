@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import {getAddressType, inviteToRoom} from '../Invite';
-import q from 'q';
+import Promise from 'bluebird';
 
 /**
  * Invites multiple addresses to a room, handling rate limiting from the server
@@ -36,10 +36,6 @@ export default class MultiInviter {
      * Invite users to this room. This may only be called once per
      * instance of the class.
      *
-     * The promise is given progress when each address completes, with an
-     * object argument with each completed address with value either
-     * 'invited' or 'error'.
-     *
      * @param {array} addresses Array of addresses to invite
      * @returns {Promise} Resolved when all invitations in the queue are complete
      */
@@ -55,7 +51,7 @@ export default class MultiInviter {
                 this.errorTexts[addr] = 'Unrecognised address';
             }
         }
-        this.deferred = q.defer();
+        this.deferred = Promise.defer();
         this._inviteMore(0);
 
         return this.deferred.promise;
@@ -111,7 +107,6 @@ export default class MultiInviter {
             if (this._canceled) { return; }
 
             this.completionStates[addr] = 'invited';
-            this.deferred.notify(this.completionStates);
 
             this._inviteMore(nextIndex + 1);
         }, (err) => {
@@ -136,7 +131,6 @@ export default class MultiInviter {
             this.busy = !fatal;
 
             if (!fatal) {
-                this.deferred.notify(this.completionStates);
                 this._inviteMore(nextIndex + 1);
             }
         });

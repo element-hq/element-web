@@ -1,3 +1,4 @@
+//@flow
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
@@ -18,22 +19,29 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import Fuse from 'fuse.js';
 import {PillCompletion} from './Components';
 import sdk from '../index';
+import FuzzyMatcher from './FuzzyMatcher';
+import _pull from 'lodash/pull';
+import _sortBy from 'lodash/sortBy';
+import MatrixClientPeg from '../MatrixClientPeg';
+
+import type {Room, RoomMember} from 'matrix-js-sdk';
 
 const USER_REGEX = /@\S*/g;
 
 let instance = null;
 
 export default class UserProvider extends AutocompleteProvider {
+    users: Array<RoomMember> = [];
+
     constructor() {
         super(USER_REGEX, {
-            keys: ['name', 'userId'],
+            keys: ['name'],
         });
-        this.users = [];
-        this.fuse = new Fuse([], {
-            keys: ['name', 'userId'],
+        this.matcher = new FuzzyMatcher([], {
+            keys: ['name'],
+            shouldMatchPrefix: true,
         });
     }
 
@@ -43,17 +51,12 @@ export default class UserProvider extends AutocompleteProvider {
         let completions = [];
         let {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
-            this.fuse.set(this.users);
-            completions = this.fuse.search(command[0]).map(user => {
-                let displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
-                let completion = displayName;
-                if (range.start === 0) {
-                    completion += ': ';
-                } else {
-                    completion += ' ';
-                }
+            completions = this.matcher.match(command[0]).map((user) => {
+                const displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
                 return {
-                    completion,
+                    completion: displayName,
+                    suffix: range.start === 0 ? ': ' : ' ',
+                    href: 'https://matrix.to/#/' + user.userId,
                     component: (
                         <PillCompletion
                             initialComponent={<MemberAvatar member={user} width={24} height={24}/>}
@@ -62,7 +65,7 @@ export default class UserProvider extends AutocompleteProvider {
                     ),
                     range,
                 };
-            }).slice(0, 4);
+            });
         }
         return completions;
     }
@@ -71,8 +74,35 @@ export default class UserProvider extends AutocompleteProvider {
         return '👥 ' + _t('Users');
     }
 
-    setUserList(users) {
-        this.users = users;
+    setUserListFromRoom(room: Room) {
+        const events = room.getLiveTimeline().getEvents();
+        const lastSpoken = {};
+
+        for(const event of events) {
+            lastSpoken[event.getSender()] = event.getTs();
+        }
+
+        const currentUserId = MatrixClientPeg.get().credentials.userId;
+        this.users = room.getJoinedMembers().filter((member) => {
+            if (member.userId !== currentUserId) return true;
+        });
+
+        this.users = _sortBy(this.users, (member) =>
+            1E20 - lastSpoken[member.userId] || 1E20,
+        );
+
+        this.matcher.setObjects(this.users);
+    }
+
+    onUserSpoke(user: RoomMember) {
+        if(user.userId === MatrixClientPeg.get().credentials.userId) return;
+
+        // Move the user that spoke to the front of the array
+        this.users.splice(
+            this.users.findIndex((user2) => user2.userId === user.userId), 1);
+        this.users = [user, ...this.users];
+
+        this.matcher.setObjects(this.users);
     }
 
     static getInstance(): UserProvider {
@@ -83,7 +113,7 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
-        return <div className="mx_Autocomplete_Completion_container_pill">
+        return <div className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate">
             {completions}
         </div>;
     }

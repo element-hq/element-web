@@ -17,7 +17,7 @@ limitations under the License.
 
 import Matrix from 'matrix-js-sdk';
 
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
 
 import sdk from '../../../index';
@@ -180,7 +180,7 @@ module.exports = React.createClass({
         // will just nop. The point of this being we might not have the email address
         // that the user registered with at this stage (depending on whether this
         // is the client they initiated registration).
-        let trackPromise = q(null);
+        let trackPromise = Promise.resolve(null);
         if (this._rtsClient && extra.emailSid) {
             // Track referral if this.props.referrer set, get team_token in order to
             // retrieve team config and see welcome page etc.
@@ -218,29 +218,29 @@ module.exports = React.createClass({
         }
 
         trackPromise.then((teamToken) => {
-            this.props.onLoggedIn({
+            return this.props.onLoggedIn({
                 userId: response.user_id,
                 deviceId: response.device_id,
                 homeserverUrl: this._matrixClient.getHomeserverUrl(),
                 identityServerUrl: this._matrixClient.getIdentityServerUrl(),
                 accessToken: response.access_token
             }, teamToken);
-        }).then(() => {
-            return this._setupPushers();
+        }).then((cli) => {
+            return this._setupPushers(cli);
         });
     },
 
-    _setupPushers: function() {
+    _setupPushers: function(matrixClient) {
         if (!this.props.brand) {
-            return q();
+            return Promise.resolve();
         }
-        return MatrixClientPeg.get().getPushers().then((resp)=>{
+        return matrixClient.getPushers().then((resp)=>{
             const pushers = resp.pushers;
             for (let i = 0; i < pushers.length; ++i) {
                 if (pushers[i].kind == 'email') {
                     const emailPusher = pushers[i];
                     emailPusher.data = { brand: this.props.brand };
-                    MatrixClientPeg.get().setPusher(emailPusher).done(() => {
+                    matrixClient.setPusher(emailPusher).done(() => {
                         console.log("Set email branding to " + this.props.brand);
                     }, (error) => {
                         console.error("Couldn't set email branding: " + error);

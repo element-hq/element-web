@@ -154,7 +154,7 @@ export default React.createClass({
                     />
                     <input
                         type="submit"
-                        value={_t("Cancel")}
+                        value={_t("Skip")}
                         onClick={this.onCancelled}
                     />
                 </div>

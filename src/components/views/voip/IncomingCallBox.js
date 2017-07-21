@@ -13,10 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var dis = require("../../../dispatcher");
-var CallHandler = require("../../../CallHandler");
+import React from 'react';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
@@ -29,34 +28,32 @@ module.exports = React.createClass({
     onAnswerClick: function() {
         dis.dispatch({
             action: 'answer',
-            room_id: this.props.incomingCall.roomId
+            room_id: this.props.incomingCall.roomId,
         });
     },
 
     onRejectClick: function() {
         dis.dispatch({
             action: 'hangup',
-            room_id: this.props.incomingCall.roomId
+            room_id: this.props.incomingCall.roomId,
         });
     },
 
     render: function() {
-        var room = null;
+        let room = null;
         if (this.props.incomingCall) {
             room = MatrixClientPeg.get().getRoom(this.props.incomingCall.roomId);
         }
 
-        var caller = room ? room.name : _t("unknown caller");
+        const caller = room ? room.name : _t("unknown caller");
 
         let incomingCallText = null;
         if (this.props.incomingCall) {
             if (this.props.incomingCall.type === "voice") {
                 incomingCallText = _t("Incoming voice call from %(name)s", {name: caller});
-            }
-            else if (this.props.incomingCall.type === "video") {
+            } else if (this.props.incomingCall.type === "video") {
                 incomingCallText = _t("Incoming video call from %(name)s", {name: caller});
-            }
-            else {
+            } else {
                 incomingCallText = _t("Incoming call from %(name)s", {name: caller});
             }
         }
@@ -81,6 +78,6 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
-    }
+    },
 });
 

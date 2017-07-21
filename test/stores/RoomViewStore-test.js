@@ -7,7 +7,7 @@ import RoomViewStore from '../../src/stores/RoomViewStore';
 import peg from '../../src/MatrixClientPeg';
 
 import * as testUtils from '../test-utils';
-import q from 'q';
+import Promise from 'bluebird';
 
 const dispatch = testUtils.getDispatchForStore(RoomViewStore);
 
@@ -39,7 +39,7 @@ describe('RoomViewStore', function() {
     });
 
     it('can be used to view a room by alias and join', function(done) {
-        peg.get().getRoomIdForAlias.returns(q({room_id: "!randomcharacters:aser.ver"}));
+        peg.get().getRoomIdForAlias.returns(Promise.resolve({room_id: "!randomcharacters:aser.ver"}));
         peg.get().joinRoom = (roomAddress) => {
             expect(roomAddress).toBe("#somealias2:aser.ver");
             done();

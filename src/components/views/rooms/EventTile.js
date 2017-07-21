@@ -24,7 +24,7 @@ var Modal = require('../../../Modal');
 
 var sdk = require('../../../index');
 var TextForEvent = require('../../../TextForEvent');
-import WithMatrixClient from '../../../wrappers/WithMatrixClient';
+import withMatrixClient from '../../../wrappers/withMatrixClient';
 
 var ContextualMenu = require('../../structures/ContextualMenu');
 import dis from '../../../dispatcher';
@@ -59,7 +59,7 @@ var MAX_READ_AVATARS = 5;
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
-module.exports = WithMatrixClient(React.createClass({
+module.exports = withMatrixClient(React.createClass({
     displayName: 'EventTile',
 
     propTypes: {
@@ -193,13 +193,12 @@ module.exports = WithMatrixClient(React.createClass({
         }
     },
 
-    _verifyEvent: function(mxEvent) {
-        var verified = null;
-
-        if (mxEvent.isEncrypted()) {
-            verified = this.props.matrixClient.isEventSenderVerified(mxEvent);
+    _verifyEvent: async function(mxEvent) {
+        if (!mxEvent.isEncrypted()) {
+            return;
         }
 
+        const verified = await this.props.matrixClient.isEventSenderVerified(mxEvent);
         this.setState({
             verified: verified
         });
@@ -336,6 +335,7 @@ module.exports = WithMatrixClient(React.createClass({
                     suppressAnimation={this._suppressReadReceiptAnimation}
                     onClick={this.toggleAllReadAvatars}
                     timestamp={receipt.ts}
+                    showTwelveHour={this.props.isTwelveHour}
                 />
             );
         }
@@ -357,10 +357,10 @@ module.exports = WithMatrixClient(React.createClass({
     },
 
     onSenderProfileClick: function(event) {
-        var mxEvent = this.props.mxEvent;
+        const mxEvent = this.props.mxEvent;
         dis.dispatch({
-            action: 'insert_displayname',
-            displayname: (mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()).replace(' (IRC)', ''),
+            action: 'insert_mention',
+            user_id: mxEvent.getSender(),
         });
     },
 

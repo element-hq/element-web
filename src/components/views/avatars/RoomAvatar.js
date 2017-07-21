@@ -72,7 +72,7 @@ module.exports = React.createClass({
     },
 
     getRoomAvatarUrl: function(props) {
-        if (!this.props.room) return null;
+        if (!props.room) return null;
 
         return props.room.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
@@ -84,7 +84,7 @@ module.exports = React.createClass({
     },
 
     getOneToOneAvatar: function(props) {
-        if (!this.props.room) return null;
+        if (!props.room) return null;
 
         var mlist = props.room.currentState.members;
         var userIds = [];
@@ -126,9 +126,16 @@ module.exports = React.createClass({
     },
 
     getFallbackAvatar: function(props) {
-        if (!this.props.room) return null;
+        let roomId = null;
+        if (props.oobData && props.oobData.roomId) {
+            roomId = this.props.oobData.roomId;
+        } else if (props.room) {
+            roomId = props.room.roomId;
+        } else {
+            return null;
+        }
 
-        return Avatar.defaultAvatarUrlForString(props.room.roomId);
+        return Avatar.defaultAvatarUrlForString(roomId);
     },
 
     render: function() {
