@@ -23,6 +23,7 @@ import { sanitizedHtmlNode } from '../../HtmlUtils';
 import { _t } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import Modal from '../../Modal';
+import classnames from 'classnames';
 
 const RoomSummaryType = PropTypes.shape({
     room_id: PropTypes.string.isRequired,
@@ -385,8 +386,10 @@ export default React.createClass({
             let nameNode;
             let shortDescNode;
             let rightButtons;
-            let headerBottom;
             let roomBody;
+            let headerClasses = {
+                mx_GroupView_header: true,
+            };
             if (this.state.editing) {
                 let avatarImage;
                 if (this.state.uploadingAvatar) {
@@ -435,7 +438,6 @@ export default React.createClass({
                             width="18" height="18" alt={_t("Cancel")}/>
                     </AccessibleButton>
                 </span>;
-                headerBottom = <div className="mx_GroupView_header_editBottom" />;
                 roomBody = <div>
                     <textarea className="mx_GroupView_editLongDesc" value={this.state.profileForm.long_description}
                         onChange={this._onLongDescChange}
@@ -465,7 +467,6 @@ export default React.createClass({
                 if (summary.profile && summary.profile.long_description) {
                     description = sanitizedHtmlNode(summary.profile.long_description);
                 }
-                headerBottom = <div className="mx_GroupView_header_viewBottom" />;
                 roomBody = <div>
                     <div className="mx_GroupView_groupDesc">{description}</div>
                     {this._getFeaturedRoomsNode()}
@@ -475,11 +476,13 @@ export default React.createClass({
                 rightButtons = <AccessibleButton className="mx_GroupHeader_button" onClick={this._onEditClick} title={_t("Edit Group")}>
                     <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
                 </AccessibleButton>;
+
+                headerClasses.mx_GroupView_header_view = true;
             }
 
             return (
                 <div className="mx_GroupView">
-                    <div className="mx_GroupView_header">
+                    <div className={classnames(headerClasses)}>
                         <div className="mx_GroupView_header_leftCol">
                             <div className="mx_GroupView_header_avatar">
                                 {avatarNode}
@@ -497,7 +500,6 @@ export default React.createClass({
                             {rightButtons}
                         </div>
                     </div>
-                    {headerBottom}
                     {roomBody}
                 </div>
             );
