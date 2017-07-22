@@ -253,7 +253,6 @@ module.exports = React.createClass({
     },
 
     _getEventTiles: function() {
-        const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
 
@@ -263,7 +262,7 @@ module.exports = React.createClass({
 
         // first figure out which is the last event in the list which we're
         // actually going to show; this allows us to behave slightly
-        // differently for the last event in the list. (eg show timestamps)
+        // differently for the last event in the list. (eg show timestamp)
         //
         // we also need to figure out which is the last event we show which isn't
         // a local echo, to manage the read-marker.
