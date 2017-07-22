@@ -344,7 +344,7 @@ module.exports = React.createClass({
                         readMarkerInMels = true;
                     }
 
-                    // Ignore redacted member events
+                    // Ignore redacted/hidden member events
                     if (!this._shouldShowEvent(collapsedMxEv)) {
                         continue;
                     }
@@ -353,20 +353,15 @@ module.exports = React.createClass({
                 }
                 // At this point, i = the index of the last event in the summary sequence
 
-                let eventTiles = summarisedEvents.map(
-                    (e) => {
-                        if (e.getId() === this.props.readMarkerEventId) {
-                            readMarkerInMels = true;
-                        }
-                        // In order to prevent DateSeparators from appearing in the expanded form
-                        // of MemberEventListSummary, render each member event as if the previous
-                        // one was itself. This way, the timestamp of the previous event === the
-                        // timestamp of the current event, and no DateSeperator is inserted.
-                        let ret = this._getTilesForEvent(e, e, last);
-                        prevEvent = e;
-                        return ret;
-                    }
-                ).reduce((a, b) => a.concat(b));
+                let eventTiles = summarisedEvents.map((e) => {
+                    // In order to prevent DateSeparators from appearing in the expanded form
+                    // of MemberEventListSummary, render each member event as if the previous
+                    // one was itself. This way, the timestamp of the previous event === the
+                    // timestamp of the current event, and no DateSeperator is inserted.
+                    const ret = this._getTilesForEvent(e, e, last);
+                    prevEvent = e;
+                    return ret;
+                }).reduce((a, b) => a.concat(b));
 
                 if (eventTiles.length === 0) {
                     eventTiles = null;
