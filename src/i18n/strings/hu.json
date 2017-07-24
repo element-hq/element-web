@@ -26,7 +26,7 @@
     "Enable them now": "Engedélyezés most",
     "Enter keywords separated by a comma:": "Kulcsszavak vesszővel elválasztva:",
     "Error": "Hiba",
-    "Error saving email notification preferences": "Hiba email értesítés beállításának mentésénél",
+    "Error saving email notification preferences": "Hiba e-mail értesítés beállításának mentésénél",
     "#example": "#példa",
     "Failed to": "Nem lehet",
     "Failed to add tag %(tagName)s to room": "Nem lehet a címkét hozzáadni a szobához: %(tagName)s",
