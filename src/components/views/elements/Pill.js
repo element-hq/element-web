@@ -92,7 +92,6 @@ export default React.createClass({
                 avatar = <RoomAvatar room={room} width={16} height={16}/>;
             }
         }
-
         const classes = classNames({
             "mx_UserPill": isUserPill,
             "mx_RoomPill": isRoomPill,
