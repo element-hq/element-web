@@ -78,7 +78,7 @@ export default React.createClass({
                 new RoomMember(null, resource);
             if (member) {
                 userId = member.userId;
-                linkText = member.name;
+                linkText = member.rawDisplayName;
                 avatar = <MemberAvatar member={member} width={16} height={16}/>;
             }
         } else if (isRoomPill) {
@@ -101,11 +101,11 @@ export default React.createClass({
 
         if ((isUserPill || isRoomPill) && avatar) {
             return this.props.inMessage ?
-                <a className={classes} href={this.props.url}>
+                <a className={classes} href={this.props.url} title={resource}>
                     {avatar}
                     {linkText}
                 </a> :
-                <span className={classes}>
+                <span className={classes} title={resource}>
                     {avatar}
                     {linkText}
                 </span>;
