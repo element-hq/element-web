@@ -732,7 +732,6 @@ export default class MessageComposerInput extends React.Component {
         }
 
         // Strip MD user mentions to preserve plaintext mention behaviour
-        // (MD links are very verbose and ugly)
         contentText = contentText.replace(REGEX_MATRIXTO_MARKDOWN_GLOBAL,
         (markdownLink, text, resource, prefix) => {
             return prefix === '@' ? text : markdownLink;
