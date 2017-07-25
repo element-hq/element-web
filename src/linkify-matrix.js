@@ -168,6 +168,8 @@ matrixLinkify.VECTOR_URL_PATTERN = "^(?:https?:\/\/)?(?:"
     + ")(#.*)";
 
 matrixLinkify.MATRIXTO_URL_PATTERN = "^(?:https?:\/\/)?(?:www\\.)?matrix\\.to/#/((#|@|!).*)";
+matrixLinkify.MATRIXTO_MD_LINK_PATTERN =
+    '\\[([^\\]]*)\\]\\((?:https?:\/\/)?(?:www\\.)?matrix\\.to/#/((#|@|!)[^\\)]*)\\)';
 matrixLinkify.MATRIXTO_BASE_URL= "https://matrix.to";
 
 matrixLinkify.options = {

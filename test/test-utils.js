@@ -238,7 +238,12 @@ export function mkStubRoom(roomId = null) {
     return {
         roomId,
         getReceiptsForEvent: sinon.stub().returns([]),
-        getMember: sinon.stub().returns({}),
+        getMember: sinon.stub().returns({
+            userId: '@member:domain.bla',
+            name: 'Member',
+            roomId: roomId,
+            getAvatarUrl: () => 'mxc://avatar.url/image.png',
+        }),
         getJoinedMembers: sinon.stub().returns([]),
         getPendingEvents: () => [],
         getLiveTimeline: () => stubTimeline,

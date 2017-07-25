@@ -170,56 +170,21 @@ module.exports = React.createClass({
     },
 
     pillifyLinks: function(nodes) {
-        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-        const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
         for (let i = 0; i < nodes.length; i++) {
             const node = nodes[i];
             if (node.tagName === "A" && node.getAttribute("href")) {
                 const href = node.getAttribute("href");
-                // HtmlUtils transforms `matrix.to` links to local links, so match against
-                // user or room app links.
-                const match = /^#\/(user|room)\/(.*)$/.exec(href) || [];
-                const resourceType = match[1]; // "user" or "room"
-                const resourceId = match[2]; // user ID or room ID
-                if (match && resourceType && resourceId) {
-                    let avatar;
-                    let roomId;
-                    let room;
-                    let member;
-                    let userId;
-                    switch (resourceType) {
-                        case "user":
-                            roomId = this.props.mxEvent.getRoomId();
-                            room = MatrixClientPeg.get().getRoom(roomId);
-                            userId = resourceId;
-                            member = room.getMember(userId) ||
-                                new RoomMember(null, userId);
-                            avatar = <MemberAvatar member={member} width={16} height={16} name={userId}/>;
-                        break;
-                        case "room":
-                            room = resourceId[0] === '#' ?
-                                MatrixClientPeg.get().getRooms().find((r) => {
-                                    return r.getCanonicalAlias() === resourceId;
-                                }) : MatrixClientPeg.get().getRoom(resourceId);
-                            if (room) {
-                                avatar = <RoomAvatar room={room} width={16} height={16}/>;
-                            }
-                        break;
-                    }
-                    if (avatar) {
-                        const avatarContainer = document.createElement('span');
-                        node.className = classNames(
-                            "mx_MTextBody_pill",
-                            {
-                                "mx_UserPill": match[1] === "user",
-                                "mx_RoomPill": match[1] === "room",
-                                "mx_UserPill_me":
-                                    userId === MatrixClientPeg.get().credentials.userId,
-                            },
-                        );
-                        ReactDOM.render(avatar, avatarContainer);
-                        node.insertBefore(avatarContainer, node.firstChild);
-                    }
+
+                // If the link is a (localised) matrix.to link, replace it with a pill
+                const Pill = sdk.getComponent('elements.Pill');
+                if (Pill.isMessagePillUrl(href)) {
+                    const pillContainer = document.createElement('span');
+
+                    const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+                    const pill = <Pill url={href} inMessage={true} room={room}/>;
+
+                    ReactDOM.render(pill, pillContainer);
+                    node.parentNode.replaceChild(pillContainer, node);
                 }
             } else if (node.children && node.children.length) {
                 this.pillifyLinks(node.children);
