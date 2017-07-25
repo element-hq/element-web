@@ -225,8 +225,10 @@
     "%(items)s and %(remaining)s others": "%(items)s과 %(remaining)s",
     "%(items)s and one other": "%(items)s과 다른 하나",
     "%(items)s and %(lastItem)s": "%(items)s과 %(lastItem)s",
-    "and %(overflowCount)s others...": "그리고 %(overflowCount)s...",
-    "and one other...": "그리고 다른 하나...",
+    "and %(count)s others...": {
+        "other": "그리고 %(count)s...",
+        "one": "그리고 다른 하나..."
+    },
     "%(names)s and %(lastPerson)s are typing": "%(names)s님과 %(lastPerson)s님이 입력중",
     "%(names)s and one other are typing": "%(names)s님과 다른 분이 입력중",
     "%(names)s and %(count)s others are typing": "%(names)s님과 %(count)s 분들이 입력중",

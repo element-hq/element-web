@@ -156,8 +156,10 @@
     "%(items)s and %(remaining)s others": "%(items)s ve %(remaining)s diğerleri",
     "%(items)s and one other": "%(items)s ve bir başkası",
     "%(items)s and %(lastItem)s": "%(items)s ve %(lastItem)s",
-    "and %(overflowCount)s others...": "ve %(overflowCount)s diğerleri...",
-    "and one other...": "ve bir diğeri...",
+    "and %(count)s others...": {
+        "other": "ve %(count)s diğerleri...",
+        "one": "ve bir diğeri..."
+    },
     "%(names)s and %(lastPerson)s are typing": "%(names)s ve %(lastPerson)s yazıyorlar",
     "%(names)s and one other are typing": "%(names)s ve birisi yazıyor",
     "%(names)s and %(count)s others are typing": "%(names)s ve %(count)s diğeri yazıyor",

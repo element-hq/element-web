@@ -117,9 +117,7 @@ var SearchableEntityList = React.createClass({
     _createOverflowEntity: function(overflowCount, totalCount) {
         var EntityTile = sdk.getComponent("rooms.EntityTile");
         var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
-        var text = (overflowCount > 1)
-        	? _t("and %(overflowCount)s others...", { overflowCount: overflowCount })
-        	: _t("and one other...");
+        const text = _t("and %(count)s others...", { count: overflowCount });
         return (
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
                 <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
