@@ -112,7 +112,7 @@ const Pill = React.createClass({
     },
 
     doProfileLookup: function(userId, member) {
-        MatrixClientPeg.get().getProfileInfo(userId).done((resp) => {
+        MatrixClientPeg.get().getProfileInfo(userId).then((resp) => {
             member.name = resp.displayname;
             member.rawDisplayName = resp.displayname;
             member.events.member = {
@@ -120,13 +120,9 @@ const Pill = React.createClass({
                     return {avatar_url: resp.avatar_url};
                 },
             };
-
             this.setState({member});
-        }, (err) => {
-            console.error(
-                'Could not retrieve profile data for ' + userId + ':',
-                err,
-            );
+        }).catch((err) => {
+            console.error('Could not retrieve profile data for ' + userId + ':', err);
         });
     },
 
