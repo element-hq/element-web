@@ -26,7 +26,6 @@ import Promise from 'bluebird';
 
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
-import {RoomMember} from 'matrix-js-sdk';
 import SlashCommands from '../../../SlashCommands';
 import KeyCode from '../../../KeyCode';
 import Modal from '../../../Modal';
@@ -43,10 +42,10 @@ import {Completion} from "../../../autocomplete/Autocompleter";
 import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
-import { getDisplayAliasForRoom } from '../../../Rooms';
 
-import {MATRIXTO_URL_PATTERN} from '../../../linkify-matrix';
+import {MATRIXTO_URL_PATTERN, MATRIXTO_MD_LINK_PATTERN} from '../../../linkify-matrix';
 const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
+const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g');
 
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
@@ -187,62 +186,16 @@ export default class MessageComposerInput extends React.Component {
                 RichText.getScopedMDDecorators(this.props);
         decorators.push({
             strategy: this.findLinkEntities.bind(this),
-            component: (props) => {
-                const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-                const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
-                const {url} = Entity.get(props.entityKey).getData();
-
-                // Default to the empty array if no match for simplicity
-                // resource and prefix will be undefined instead of throwing
-                const matrixToMatch = REGEX_MATRIXTO.exec(url) || [];
-
-                const resource = matrixToMatch[1]; // The room/user ID
-                const prefix = matrixToMatch[2]; // The first character of prefix
-
-                // Default to the room/user ID
-                let linkText = resource;
-
-                const isUserPill = prefix === '@';
-                const isRoomPill = prefix === '#' || prefix === '!';
-
-                const classes = classNames({
-                    "mx_UserPill": isUserPill,
-                    "mx_RoomPill": isRoomPill,
-                });
-
-                let avatar = null;
-                if (isUserPill) {
-                    // If this user is not a member of this room, default to the empty
-                    // member. This could be improved by doing an async profile lookup.
-                    const member = this.props.room.getMember(resource) ||
-                        new RoomMember(null, resource);
-
-                    linkText = member.name;
-
-                    avatar = member ? <MemberAvatar member={member} width={16} height={16}/> : null;
-                } else if (isRoomPill) {
-                    const room = prefix === '#' ?
-                        MatrixClientPeg.get().getRooms().find((r) => {
-                            return r.getCanonicalAlias() === resource;
-                        }) : MatrixClientPeg.get().getRoom(resource);
-
-                    linkText = getDisplayAliasForRoom(room) || resource;
-
-                    avatar = room ? <RoomAvatar room={room} width={16} height={16}/> : null;
-                }
-
-                if (isUserPill || isRoomPill) {
-                    return (
-                        <span className={classes}>
-                            {avatar}
-                            {linkText}
-                        </span>
-                    );
+            component: (entityProps) => {
+                const Pill = sdk.getComponent('elements.Pill');
+                const {url} = Entity.get(entityProps.entityKey).getData();
+                if (Pill.isPillUrl(url)) {
+                    return <Pill url={url} room={this.props.room} offsetKey={entityProps.offsetKey}/>;
                 }
 
                 return (
-                    <a href={url}>
-                        {props.children}
+                    <a href={url} data-offset-key={entityProps.offsetKey}>
+                        {entityProps.children}
                     </a>
                 );
             },
@@ -285,22 +238,20 @@ export default class MessageComposerInput extends React.Component {
             case 'focus_composer':
                 editor.focus();
                 break;
-
-            // TODO change this so we insert a complete user alias
-
-            case 'insert_displayname': {
-                contentState = Modifier.replaceText(
-                    contentState,
-                    this.state.editorState.getSelection(),
-                    `${payload.displayname}: `,
-                );
-                let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
-                editorState = EditorState.forceSelection(editorState, contentState.getSelectionAfter());
-                this.onEditorContentChanged(editorState);
-                editor.focus();
+            case 'insert_mention': {
+                // Pretend that we've autocompleted this user because keeping two code
+                // paths for inserting a user pill is not fun
+                const selection = this.state.editorState.getSelection();
+                const member = this.props.room.getMember(payload.user_id);
+                const completion = member ? member.name.replace(' (IRC)', '') : payload.user_id;
+                this.setDisplayedCompletion({
+                    completion,
+                    selection,
+                    href: `https://matrix.to/#/${payload.user_id}`,
+                    suffix: selection.getStartOffset() === 0 ? ': ' : ' ',
+                });
             }
                 break;
-
             case 'quote': {
                 let {body, formatted_body} = payload.event.getContent();
                 formatted_body = formatted_body || escape(body);
@@ -775,6 +726,35 @@ export default class MessageComposerInput extends React.Component {
             sendTextFn = this.client.sendEmoteMessage;
         }
 
+        // Strip MD user (tab-completed) mentions to preserve plaintext mention behaviour
+        contentText = contentText.replace(REGEX_MATRIXTO_MARKDOWN_GLOBAL,
+        (markdownLink, text, resource, prefix, offset) => {
+            // Calculate the offset relative to the current block that the offset is in
+            let sum = 0;
+            const blocks = contentState.getBlocksAsArray();
+            let block;
+            for (let i = 0; i < blocks.length; i++) {
+                block = blocks[i];
+                sum += block.getLength();
+                if (sum > offset) {
+                    sum -= block.getLength();
+                    break;
+                }
+            }
+            offset -= sum;
+
+            const entityKey = block.getEntityAt(offset);
+            const entity = entityKey ? Entity.get(entityKey) : null;
+            if (entity && entity.getData().isCompletion && prefix === '@') {
+                // This is a completed mention, so do not insert MD link, just text
+                return text;
+            } else {
+                // This is either a MD link that was typed into the composer or another
+                // type of pill (e.g. room pill)
+                return markdownLink;
+            }
+        });
+
         let sendMessagePromise;
         if (contentHTML) {
             sendMessagePromise = sendHtmlFn.call(
@@ -933,21 +913,32 @@ export default class MessageComposerInput extends React.Component {
             return false;
         }
 
-        const {range = {}, completion = '', href = null, suffix = ''} = displayedCompletion;
+        const {range = null, completion = '', href = null, suffix = ''} = displayedCompletion;
+
         let entityKey;
         let mdCompletion;
         if (href) {
-            entityKey = Entity.create('LINK', 'IMMUTABLE', {url: href});
+            entityKey = Entity.create('LINK', 'IMMUTABLE', {
+                url: href,
+                isCompletion: true,
+            });
             if (!this.state.isRichtextEnabled) {
                 mdCompletion = `[${completion}](${href})`;
             }
         }
 
+        let selection;
+        if (range) {
+            selection = RichText.textOffsetsToSelectionState(
+                range, activeEditorState.getCurrentContent().getBlocksAsArray(),
+            );
+        } else {
+            selection = activeEditorState.getSelection();
+        }
+
         let contentState = Modifier.replaceText(
             activeEditorState.getCurrentContent(),
-            RichText.textOffsetsToSelectionState(
-                range, activeEditorState.getCurrentContent().getBlocksAsArray(),
-            ),
+            selection,
             mdCompletion || completion,
             null,
             entityKey,

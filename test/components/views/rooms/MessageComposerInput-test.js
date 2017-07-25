@@ -9,6 +9,7 @@ import sdk from 'matrix-react-sdk';
 import UserSettingsStore from '../../../../src/UserSettingsStore';
 const MessageComposerInput = sdk.getComponent('views.rooms.MessageComposerInput');
 import MatrixClientPeg from '../../../../src/MatrixClientPeg';
+import RoomMember from 'matrix-js-sdk';
 
 function addTextToDraft(text) {
     const components = document.getElementsByClassName('public-DraftEditor-content');
@@ -31,6 +32,7 @@ describe('MessageComposerInput', () => {
         testUtils.beforeEach(this);
         sandbox = testUtils.stubClient(sandbox);
         client = MatrixClientPeg.get();
+        client.credentials = {userId: '@me:domain.com'};
 
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
@@ -235,5 +237,69 @@ describe('MessageComposerInput', () => {
 
         expect(spy.calledOnce).toEqual(true);
         expect(spy.args[0][1]).toEqual('Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nFusce congue sapien sed neque molestie volutpat.');
+    });
+
+    it('should strip tab-completed mentions so that only the display name is sent in the plain body in Markdown mode', () => {
+        // Sending a HTML message because we have entities in the composer (because of completions)
+        const spy = sinon.spy(client, 'sendHtmlMessage');
+        mci.enableRichtext(false);
+        mci.setDisplayedCompletion({
+            completion: 'Some Member',
+            selection: mci.state.editorState.getSelection(),
+            href: `https://matrix.to/#/@some_member:domain.bla`,
+        });
+
+        mci.handleReturn(sinon.stub());
+
+        expect(spy.args[0][1]).toEqual(
+            'Some Member',
+            'the plaintext body should only include the display name',
+        );
+        expect(spy.args[0][2]).toEqual(
+            '<a href="https://matrix.to/#/@some_member:domain.bla">Some Member</a>',
+            'the html body should contain an anchor tag with a matrix.to href and display name text',
+        );
+    });
+
+    it('should strip tab-completed mentions so that only the display name is sent in the plain body in RTE mode', () => {
+        // Sending a HTML message because we have entities in the composer (because of completions)
+        const spy = sinon.spy(client, 'sendHtmlMessage');
+        mci.enableRichtext(true);
+        mci.setDisplayedCompletion({
+            completion: 'Some Member',
+            selection: mci.state.editorState.getSelection(),
+            href: `https://matrix.to/#/@some_member:domain.bla`,
+        });
+
+        mci.handleReturn(sinon.stub());
+
+        expect(spy.args[0][1]).toEqual('Some Member');
+        expect(spy.args[0][2]).toEqual('<a href="https://matrix.to/#/@some_member:domain.bla">Some Member</a>');
+    });
+
+    it('should not strip non-tab-completed mentions when manually typing MD', () => {
+        // Sending a HTML message because we have entities in the composer (because of completions)
+        const spy = sinon.spy(client, 'sendHtmlMessage');
+        // Markdown mode enabled
+        mci.enableRichtext(false);
+        addTextToDraft('[My Not-Tab-Completed Mention](https://matrix.to/#/@some_member:domain.bla)');
+
+        mci.handleReturn(sinon.stub());
+
+        expect(spy.args[0][1]).toEqual('[My Not-Tab-Completed Mention](https://matrix.to/#/@some_member:domain.bla)');
+        expect(spy.args[0][2]).toEqual('<a href="https://matrix.to/#/@some_member:domain.bla">My Not-Tab-Completed Mention</a>');
+    });
+
+    it('should not strip arbitrary typed (i.e. not tab-completed) MD links', () => {
+        // Sending a HTML message because we have entities in the composer (because of completions)
+        const spy = sinon.spy(client, 'sendHtmlMessage');
+        // Markdown mode enabled
+        mci.enableRichtext(false);
+        addTextToDraft('[Click here](https://some.lovely.url)');
+
+        mci.handleReturn(sinon.stub());
+
+        expect(spy.args[0][1]).toEqual('[Click here](https://some.lovely.url)');
+        expect(spy.args[0][2]).toEqual('<a href="https://some.lovely.url">Click here</a>');
     });
 });
