@@ -43,6 +43,10 @@ import Markdown from '../../../Markdown';
 import ComposerHistoryManager from '../../../ComposerHistoryManager';
 import MessageComposerStore from '../../../stores/MessageComposerStore';
 
+import {MATRIXTO_URL_PATTERN, MATRIXTO_MD_LINK_PATTERN} from '../../../linkify-matrix';
+const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
+const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g');
+
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
@@ -727,6 +731,35 @@ export default class MessageComposerInput extends React.Component {
             sendTextFn = this.client.sendEmoteMessage;
         }
 
+        // Strip MD user (tab-completed) mentions to preserve plaintext mention behaviour
+        contentText = contentText.replace(REGEX_MATRIXTO_MARKDOWN_GLOBAL,
+        (markdownLink, text, resource, prefix, offset) => {
+            // Calculate the offset relative to the current block that the offset is in
+            let sum = 0;
+            const blocks = contentState.getBlocksAsArray();
+            let block;
+            for (let i = 0; i < blocks.length; i++) {
+                block = blocks[i];
+                sum += block.getLength();
+                if (sum > offset) {
+                    sum -= block.getLength();
+                    break;
+                }
+            }
+            offset -= sum;
+
+            const entityKey = block.getEntityAt(offset);
+            const entity = entityKey ? Entity.get(entityKey) : null;
+            if (entity && entity.getData().isCompletion && prefix === '@') {
+                // This is a completed mention, so do not insert MD link, just text
+                return text;
+            } else {
+                // This is either a MD link that was typed into the composer or another
+                // type of pill (e.g. room pill)
+                return markdownLink;
+            }
+        });
+
         let sendMessagePromise;
         if (contentHTML) {
             sendMessagePromise = sendHtmlFn.call(
@@ -890,7 +923,10 @@ export default class MessageComposerInput extends React.Component {
         let entityKey;
         let mdCompletion;
         if (href) {
-            entityKey = Entity.create('LINK', 'IMMUTABLE', {url: href});
+            entityKey = Entity.create('LINK', 'IMMUTABLE', {
+                url: href,
+                isCompletion: true,
+            });
             if (!this.state.isRichtextEnabled) {
                 mdCompletion = `[${completion}](${href})`;
             }
