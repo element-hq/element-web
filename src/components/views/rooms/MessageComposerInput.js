@@ -186,16 +186,16 @@ export default class MessageComposerInput extends React.Component {
                 RichText.getScopedMDDecorators(this.props);
         decorators.push({
             strategy: this.findLinkEntities.bind(this),
-            component: (props) => {
+            component: (entityProps) => {
                 const Pill = sdk.getComponent('elements.Pill');
-                const {url} = Entity.get(props.entityKey).getData();
+                const {url} = Entity.get(entityProps.entityKey).getData();
                 if (Pill.isPillUrl(url)) {
-                    return <Pill url={url} room={this.props.room} offsetKey={props.offsetKey}/>;
+                    return <Pill url={url} room={this.props.room} offsetKey={entityProps.offsetKey}/>;
                 }
 
                 return (
-                    <a href={url} data-offset-key={props.offsetKey}>
-                        {props.children}
+                    <a href={url} data-offset-key={entityProps.offsetKey}>
+                        {entityProps.children}
                     </a>
                 );
             },
