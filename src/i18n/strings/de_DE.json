@@ -215,5 +215,5 @@
     "Error encountered (%(errorDetail)s).": "Es ist ein Fehler aufgetreten (%(errorDetail)s).",
     "No update available.": "Kein Update verfügbar.",
     "Downloading update...": "Update wird heruntergeladen...",
-    "Couldn't load home page": "Konnte Startseite nicht laden"
+    "Couldn't load home page": "Startseite konnte nicht geladen werden"
 }
