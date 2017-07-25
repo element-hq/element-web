@@ -451,13 +451,19 @@ export default class MessageComposerInput extends React.Component {
                 callback();
             }
 
+            const textContent = this.state.editorState.getCurrentContent().getPlainText();
+            const selection = RichText.selectionStateToTextOffsets(
+                this.state.editorState.getSelection(),
+                this.state.editorState.getCurrentContent().getBlocksAsArray());
             if (this.props.onContentChanged) {
-                const textContent = this.state.editorState
-                    .getCurrentContent().getPlainText();
-                const selection = RichText.selectionStateToTextOffsets(
-                    this.state.editorState.getSelection(),
-                    this.state.editorState.getCurrentContent().getBlocksAsArray());
                 this.props.onContentChanged(textContent, selection);
+            }
+
+            // Scroll to the bottom of the editor if the cursor is on the last line of the
+            // composer. For some reason the editor won't scroll automatically if we paste
+            // blocks of text in or insert newlines.
+            if (textContent.slice(selection.start).indexOf("\n") === -1) {
+                this.refs.editor.refs.editor.scrollTop = this.refs.editor.refs.editor.scrollHeight;
             }
         });
     }
