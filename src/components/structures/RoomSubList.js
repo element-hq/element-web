@@ -511,7 +511,7 @@ var RoomSubList = React.createClass({
                 if (list[i].tags[self.props.tagName] && list[i].tags[self.props.tagName].order === undefined) {
                     MatrixClientPeg.get().setRoomTag(list[i].roomId, self.props.tagName, {order: (order + 1.0) / 2.0}).finally(function() {
                         // Do any final stuff here
-                    }).fail(function(err) {
+                    }).catch(function(err) {
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Failed to add tag " + self.props.tagName + " to room" + err);
                         Modal.createDialog(ErrorDialog, {
