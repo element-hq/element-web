@@ -147,7 +147,6 @@ const Pill = React.createClass({
         switch (this.state.pillType) {
             case Pill.TYPE_USER_MENTION: {
                     // If this user is not a member of this room, default to the empty member
-                    // TODO: This could be improved by doing an async profile lookup
                     const member = this.state.member;
                     if (member) {
                         userId = member.userId;
