@@ -22,6 +22,8 @@ import dis from '../../dispatcher';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
 import { _t } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
+import Modal from '../../Modal';
+import classnames from 'classnames';
 
 const RoomSummaryType = PropTypes.shape({
     room_id: PropTypes.string.isRequired,
@@ -179,10 +181,13 @@ export default React.createClass({
             summary: null,
             error: null,
             editing: false,
+            saving: false,
+            uploadingAvatar: false,
         };
     },
 
     componentWillMount: function() {
+        this._changeAvatarComponent = null;
         this._loadGroupFromServer(this.props.groupId);
     },
 
@@ -211,8 +216,83 @@ export default React.createClass({
         });
     },
 
-    _onSettingsClick: function() {
-        this.setState({editing: true});
+    _onEditClick: function() {
+        this.setState({
+            editing: true,
+            profileForm: Object.assign({}, this.state.summary.profile),
+        });
+    },
+
+    _onCancelClick: function() {
+        this.setState({
+            editing: false,
+            profileForm: null,
+        });
+    },
+
+    _onNameChange: function(e) {
+        const newProfileForm = Object.assign(this.state.profileForm, { name: e.target.value });
+        this.setState({
+            profileForm: newProfileForm,
+        });
+    },
+
+    _onShortDescChange: function(e) {
+        const newProfileForm = Object.assign(this.state.profileForm, { short_description: e.target.value });
+        this.setState({
+            profileForm: newProfileForm,
+        });
+    },
+
+    _onLongDescChange: function(e) {
+        const newProfileForm = Object.assign(this.state.profileForm, { long_description: e.target.value });
+        this.setState({
+            profileForm: newProfileForm,
+        });
+    },
+
+    _onAvatarSelected: function(ev) {
+        const file = ev.target.files[0];
+        if (!file) return;
+
+        this.setState({uploadingAvatar: true});
+        MatrixClientPeg.get().uploadContent(file).then((url) => {
+            const newProfileForm = Object.assign(this.state.profileForm, { avatar_url: url });
+            this.setState({
+                uploadingAvatar: false,
+                profileForm: newProfileForm,
+            });
+        }).catch((e) => {
+            this.setState({uploadingAvatar: false});
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Failed to upload avatar image", e);
+            Modal.createDialog(ErrorDialog, {
+                title: _t('Error'),
+                description: _t('Failed to upload image'),
+            });
+        }).done();
+    },
+
+    _onSaveClick: function() {
+        this.setState({saving: true});
+        MatrixClientPeg.get().setGroupProfile(this.props.groupId, this.state.profileForm).then((result) => {
+            this.setState({
+                saving: false,
+                editing: false,
+                summary: null,
+            });
+            this._loadGroupFromServer(this.props.groupId);
+        }).catch((e) => {
+            this.setState({
+                saving: false,
+            });
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            console.error("Failed to save group profile", e);
+            Modal.createDialog(ErrorDialog, {
+                title: _t('Error'),
+                description: _t('Failed to update group'),
+            });
+        }).done();
     },
 
     _getFeaturedRoomsNode() {
@@ -296,60 +376,129 @@ export default React.createClass({
         const Loader = sdk.getComponent("elements.Spinner");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        if (this.state.summary === null && this.state.error === null) {
+        if (this.state.summary === null && this.state.error === null || this.state.saving) {
             return <Loader />;
-        } else if (this.state.editing) {
-            return <div />;
         } else if (this.state.summary) {
             const summary = this.state.summary;
-            let description = null;
-            if (summary.profile && summary.profile.long_description) {
-                description = sanitizedHtmlNode(summary.profile.long_description);
-            }
 
-            const roomBody = <div>
-                <div className="mx_GroupView_groupDesc">{description}</div>
-                {this._getFeaturedRoomsNode()}
-                {this._getFeaturedUsersNode()}
-            </div>;
-
+            let avatarNode;
             let nameNode;
-            if (summary.profile && summary.profile.name) {
-                nameNode = <div className="mx_RoomHeader_name">
-                    <span>{summary.profile.name}</span>
-                    <span className="mx_GroupView_header_groupid">
-                        ({this.props.groupId})
-                    </span>
+            let shortDescNode;
+            let rightButtons;
+            let roomBody;
+            const headerClasses = {
+                mx_GroupView_header: true,
+            };
+            if (this.state.editing) {
+                let avatarImage;
+                if (this.state.uploadingAvatar) {
+                    avatarImage = <Loader />;
+                } else {
+                    const GroupAvatar = sdk.getComponent('avatars.GroupAvatar');
+                    avatarImage = <GroupAvatar groupId={this.props.groupId}
+                        groupAvatarUrl={this.state.profileForm.avatar_url}
+                        width={48} height={48} resizeMethod='crop'
+                    />;
+                }
+
+                avatarNode = (
+                    <div className="mx_GroupView_avatarPicker">
+                        <label htmlFor="avatarInput" className="mx_GroupView_avatarPicker_label">
+                            {avatarImage}
+                        </label>
+                        <div className="mx_GroupView_avatarPicker_edit">
+                            <label htmlFor="avatarInput" className="mx_GroupView_avatarPicker_label">
+                                <img src="img/camera.svg"
+                                    alt={ _t("Upload avatar") } title={ _t("Upload avatar") }
+                                    width="17" height="15" />
+                            </label>
+                            <input id="avatarInput" className="mx_GroupView_uploadInput" type="file" onChange={this._onAvatarSelected}/>
+                        </div>
+                    </div>
+                );
+                nameNode = <input type="text"
+                    value={this.state.profileForm.name}
+                    onChange={this._onNameChange}
+                    placeholder={_t('Group Name')}
+                    tabIndex="1"
+                />;
+                shortDescNode = <input type="text"
+                    value={this.state.profileForm.short_description}
+                    onChange={this._onShortDescChange}
+                    placeholder={_t('Description')}
+                    tabIndex="2"
+                />;
+                rightButtons = <span>
+                    <AccessibleButton className="mx_GroupView_saveButton mx_RoomHeader_textButton" onClick={this._onSaveClick}>
+                        {_t('Save')}
+                    </AccessibleButton>
+                    <AccessibleButton className='mx_GroupView_cancelButton' onClick={this._onCancelClick}>
+                        <img src="img/cancel.svg" className='mx_filterFlipColor'
+                            width="18" height="18" alt={_t("Cancel")}/>
+                    </AccessibleButton>
+                </span>;
+                roomBody = <div>
+                    <textarea className="mx_GroupView_editLongDesc" value={this.state.profileForm.long_description}
+                        onChange={this._onLongDescChange}
+                        tabIndex="3"
+                    />
                 </div>;
             } else {
-                nameNode = <div className="mx_RoomHeader_name">
-                    <span>{this.props.groupId}</span>
+                const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;
+                avatarNode = <GroupAvatar
+                    groupId={this.props.groupId}
+                    groupAvatarUrl={groupAvatarUrl}
+                    width={48} height={48}
+                />;
+                if (summary.profile && summary.profile.name) {
+                    nameNode = <div>
+                        <span>{summary.profile.name}</span>
+                        <span className="mx_GroupView_header_groupid">
+                            ({this.props.groupId})
+                        </span>
+                    </div>;
+                } else {
+                    nameNode = <span>{this.props.groupId}</span>;
+                }
+                shortDescNode = <span>{summary.profile.short_description}</span>;
+
+                let description = null;
+                if (summary.profile && summary.profile.long_description) {
+                    description = sanitizedHtmlNode(summary.profile.long_description);
+                }
+                roomBody = <div>
+                    <div className="mx_GroupView_groupDesc">{description}</div>
+                    {this._getFeaturedRoomsNode()}
+                    {this._getFeaturedUsersNode()}
                 </div>;
+                // disabled until editing works
+                rightButtons = <AccessibleButton className="mx_GroupHeader_button"
+                    onClick={this._onEditClick} title={_t("Edit Group")}
+                >
+                    <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
+                </AccessibleButton>;
+
+                headerClasses.mx_GroupView_header_view = true;
             }
 
-            const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;
-
-            // settings button is display: none until settings is wired up
             return (
                 <div className="mx_GroupView">
-                    <div className="mx_RoomHeader">
-                        <div className="mx_RoomHeader_wrapper">
-                            <div className="mx_RoomHeader_avatar">
-                                <GroupAvatar
-                                    groupId={this.props.groupId}
-                                    groupAvatarUrl={groupAvatarUrl}
-                                    width={48} height={48}
-                                />
+                    <div className={classnames(headerClasses)}>
+                        <div className="mx_GroupView_header_leftCol">
+                            <div className="mx_GroupView_header_avatar">
+                                {avatarNode}
                             </div>
-                            <div className="mx_RoomHeader_info">
-                                {nameNode}
-                                <div className="mx_RoomHeader_topic">
-                                    {summary.profile.short_description}
+                            <div className="mx_GroupView_header_info">
+                                <div className="mx_GroupView_header_name">
+                                    {nameNode}
+                                </div>
+                                <div className="mx_GroupView_header_shortDesc">
+                                    {shortDescNode}
                                 </div>
                             </div>
-                            <AccessibleButton className="mx_RoomHeader_button" onClick={this._onSettingsClick} title={_t("Settings")} style={{display: 'none'}}>
-                                <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
-                            </AccessibleButton>
+                        </div>
+                        <div className="mx_GroupView_header_rightCol">
+                            {rightButtons}
                         </div>
                     </div>
                     {roomBody}
