@@ -173,11 +173,11 @@ const Pill = React.createClass({
 
         if (this.state.pillType) {
             return this.props.inMessage ?
-                <a className={classes} href={this.props.url} title={resource}>
+                <a className={classes} href={this.props.url} title={resource} data-offset-key={this.props.offsetKey}>
                     {avatar}
                     {linkText}
                 </a> :
-                <span className={classes} title={resource}>
+                <span className={classes} title={resource} data-offset-key={this.props.offsetKey}>
                     {avatar}
                     {linkText}
                 </span>;
