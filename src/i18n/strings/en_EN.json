@@ -961,5 +961,7 @@
     "Edit Group": "Edit Group",
     "Automatically replace plain text Emoji": "Automatically replace plain text Emoji",
     "Failed to upload image": "Failed to upload image",
-    "Failed to update group": "Failed to update group"
+    "Failed to update group": "Failed to update group",
+    "Description": "Description",
+    "Filter group members": "Filter group members"
 }
