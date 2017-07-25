@@ -188,8 +188,10 @@
     "%(items)s and %(remaining)s others": "%(items)s et %(remaining)s autres",
     "%(items)s and one other": "%(items)s et un autre",
     "%(items)s and %(lastItem)s": "%(items)s et %(lastItem)s",
-    "and %(overflowCount)s others...": "et %(overflowCount)s autres...",
-    "and one other...": "et un autre...",
+    "and %(count)s others...": {
+        "other": "et %(count)s autres...",
+        "one": "et un autre..."
+    },
     "%(names)s and %(lastPerson)s are typing": "%(names)s et %(lastPerson)s sont en train de taper",
     "%(names)s and one other are typing": "%(names)s et un autre sont en train de taper",
     "%(names)s and %(count)s others are typing": "%(names)s et %(count)s d'autres sont en train de taper",

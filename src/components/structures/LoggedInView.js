@@ -227,6 +227,7 @@ export default React.createClass({
         const HomePage = sdk.getComponent('structures.HomePage');
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
+        const GroupMemberList = sdk.getComponent('groups.GroupMemberList');
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         const UpdateCheckBar = sdk.getComponent('globals.UpdateCheckBar');
@@ -307,6 +308,7 @@ export default React.createClass({
                 page_element = <GroupView
                     groupId={this.props.currentGroupId}
                 />;
+                right_panel = <RightPanel groupId={this.props.currentGroupId} opacity={this.props.rightOpacity} />;
                 break;
         }
 

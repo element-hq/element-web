@@ -1,0 +1,146 @@
+/*
+Copyright 2017 Vector Creations Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+import React from 'react';
+import { _t } from '../../../languageHandler';
+import Promise from 'bluebird';
+import sdk from '../../../index';
+import GeminiScrollbar from 'react-gemini-scrollbar';
+import PropTypes from 'prop-types';
+import withMatrixClient from '../../../wrappers/withMatrixClient';
+
+const INITIAL_LOAD_NUM_MEMBERS = 30;
+
+export default withMatrixClient(React.createClass({
+    displayName: 'GroupMemberList',
+
+    propTypes: {
+        matrixClient: PropTypes.object.isRequired,
+        groupId: PropTypes.string.isRequired,
+    },
+
+    getInitialState: function() {
+        return {
+            fetching: false,
+            members: null,
+        }
+    },
+
+    componentWillMount: function() {
+        this._unmounted = false;
+        this._fetchMembers();
+    },
+
+    _fetchMembers: function() {
+        this.setState({fetching: true});
+        this.props.matrixClient.getGroupUsers(this.props.groupId).then((result) => {
+            this.setState({
+                members: result.chunk,
+                fetching: false,
+            });
+        }).catch((e) => {
+            this.setState({fetching: false});
+            console.error("Failed to get group member list: " + e);
+        });
+    },
+
+    _createOverflowTile: function(overflowCount, totalCount) {
+        // For now we'll pretend this is any entity. It should probably be a separate tile.
+        const EntityTile = sdk.getComponent("rooms.EntityTile");
+        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        const text = _t("and %(count)s others...", { count: overflowCount });
+        return (
+            <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
+                <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
+            } name={text} presenceState="online" suppressOnHover={true}
+            onClick={this._showFullMemberList} />
+        );
+    },
+
+    _showFullMemberList: function() {
+        this.setState({
+            truncateAt: -1
+        });
+    },
+
+    onSearchQueryChanged: function(ev) {
+        this.setState({ searchQuery: ev.target.value });
+    },
+
+    makeGroupMemberTiles: function(query) {
+        const GroupMemberTile = sdk.getComponent("groups.GroupMemberTile");
+        query = (query || "").toLowerCase();
+
+        const memberList = this.state.members.filter((m) => {
+            if (query) {
+                //const matchesName = m.name.toLowerCase().indexOf(query) !== -1;
+                const matchesId = m.user_id.toLowerCase().indexOf(query) !== -1;
+
+                if (/*!matchesName &&*/ !matchesId) {
+                    return false;
+                }
+            }
+
+            return true;
+        }).map(function(m) {
+            return (
+                <GroupMemberTile key={m.user_id} member={m} />
+            );
+        });
+
+        memberList.sort((a, b) => {
+            // should put admins at the top: we don't yet have that info
+            if (a < b) {
+                return -1;
+            } else if (a > b) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        return memberList;
+    },
+
+    render: function() {
+        if (this.state.fetching) {
+            const Spinner = sdk.getComponent("elements.Spinner");
+            return <Spinner />;
+        } else if (this.state.members === null) {
+            return null;
+        }
+
+        const inputBox = (
+            <form autoComplete="off">
+                <input className="mx_MemberList_query" id="mx_MemberList_query" type="text"
+                        onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
+                        placeholder={ _t('Filter group members') } />
+            </form>
+        );
+
+        const TruncatedList = sdk.getComponent("elements.TruncatedList");
+        return (
+            <div className="mx_MemberList">
+                { inputBox }
+                <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
+                    <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
+                            createOverflowElement={this._createOverflowTile}>
+                        {this.makeGroupMemberTiles(this.state.searchQuery)}
+                    </TruncatedList>
+                </GeminiScrollbar>
+            </div>
+        );
+    }
+}));

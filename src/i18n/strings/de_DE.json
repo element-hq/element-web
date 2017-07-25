@@ -552,8 +552,10 @@
     "Failed to forget room %(errCode)s": "Das Entfernen des Raums ist fehlgeschlagen %(errCode)s",
     "Failed to join the room": "Fehler beim Betreten des Raumes",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Eine Textnachricht wurde an +%(msisdn)s gesendet. Bitte gebe den Verifikationscode ein, den er beinhaltet",
-    "and %(overflowCount)s others...": "und %(overflowCount)s weitere...",
-    "and one other...": "und ein(e) weitere(r)...",
+    "and %(count)s others...": {
+        "other": "und %(count)s weitere...",
+        "one": "und ein(e) weitere(r)..."
+    },
     "Are you sure?": "Bist du sicher?",
     "Attachment": "Anhang",
     "Ban": "Dauerhaft aus dem Raum ausschließen",

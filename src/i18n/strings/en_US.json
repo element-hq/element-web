@@ -154,8 +154,10 @@
     "%(items)s and %(remaining)s others": "%(items)s and %(remaining)s others",
     "%(items)s and one other": "%(items)s and one other",
     "%(items)s and %(lastItem)s": "%(items)s and %(lastItem)s",
-    "and %(overflowCount)s others...": "and %(overflowCount)s others...",
-    "and one other...": "and one other...",
+    "and %(count)s others...": {
+        "other": "and %(count)s others...",
+        "one": "and one other..."
+    },
     "%(names)s and %(lastPerson)s are typing": "%(names)s and %(lastPerson)s are typing",
     "%(names)s and one other are typing": "%(names)s and one other are typing",
     "%(names)s and %(count)s others are typing": "%(names)s and %(count)s others are typing",
