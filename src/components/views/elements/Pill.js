@@ -64,6 +64,7 @@ const Pill = React.createClass({
     },
 
     componentWillMount() {
+        this._unmounted = false;
         let regex = REGEX_MATRIXTO;
         if (this.props.inMessage) {
             regex = REGEX_LOCAL_MATRIXTO;
@@ -111,8 +112,15 @@ const Pill = React.createClass({
         this.setState({resourceId, pillType, member, room});
     },
 
+    componentWillUnmount() {
+        this._unmounted = true;
+    },
+
     doProfileLookup: function(userId, member) {
         MatrixClientPeg.get().getProfileInfo(userId).then((resp) => {
+            if (this._unmounted) {
+                return;
+            }
             member.name = resp.displayname;
             member.rawDisplayName = resp.displayname;
             member.events.member = {
