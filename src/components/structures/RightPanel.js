@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,8 +14,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-'use strict';
 
 import React from 'react';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
@@ -33,19 +32,21 @@ module.exports = React.createClass({
     propTypes: {
         userId: React.PropTypes.string, // if showing an orphaned MemberInfo page, this is set
         roomId: React.PropTypes.string, // if showing panels for a given room, this is set
+        groupId: React.PropTypes.string, // if showing panels for a given group, this is set
         collapsed: React.PropTypes.bool, // currently unused property to request for a minimized view of the panel
     },
 
     Phase: {
-        MemberList: 'MemberList',
+        RoomMemberList: 'RoomMemberList',
+        GroupMemberList: 'GroupMemberList',
         FilePanel: 'FilePanel',
         NotificationPanel: 'NotificationPanel',
-        MemberInfo: 'MemberInfo',
+        RoomMemberInfo: 'RoomMemberInfo',
     },
 
     componentWillMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        var cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
     },
 
@@ -58,21 +59,25 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         if (this.props.userId) {
-            var member = new Matrix.RoomMember(null, this.props.userId);
+            const member = new Matrix.RoomMember(null, this.props.userId);
             return {
-                phase: this.Phase.MemberInfo,
+                phase: this.Phase.RoomMemberInfo,
                 member: member,
+            };
+        } else if (this.props.groupId) {
+            return {
+                phase: this.Phase.GroupMemberList
             };
         } else {
             return {
-                phase: this.Phase.MemberList
+                phase: this.Phase.RoomMemberList
             };
         }
     },
 
     onMemberListButtonClick: function() {
         Analytics.trackEvent('Right Panel', 'Member List Button', 'click');
-        this.setState({ phase: this.Phase.MemberList });
+        this.setState({ phase: this.Phase.RoomMemberList });
     },
 
     onFileListButtonClick: function() {
@@ -106,10 +111,10 @@ module.exports = React.createClass({
 
     onRoomStateMember: function(ev, state, member) {
         // redraw the badge on the membership list
-        if (this.state.phase == this.Phase.MemberList && member.roomId === this.props.roomId) {
+        if (this.state.phase == this.Phase.RoomMemberList && member.roomId === this.props.roomId) {
             this._delayedUpdate();
         }
-        else if (this.state.phase === this.Phase.MemberInfo && member.roomId === this.props.roomId &&
+        else if (this.state.phase === this.Phase.RoomMemberInfo && member.roomId === this.props.roomId &&
                 member.userId === this.state.member.userId) {
             // refresh the member info (e.g. new power level)
             this._delayedUpdate();
@@ -127,39 +132,45 @@ module.exports = React.createClass({
             });
             if (payload.member) {
                 this.setState({
-                    phase: this.Phase.MemberInfo,
+                    phase: this.Phase.RoomMemberInfo,
                     member: payload.member,
                 });
-            }
-            else {
-                this.setState({
-                    phase: this.Phase.MemberList
-                });
+            } else {
+                if (this.props.roomId) {
+                    this.setState({
+                        phase: this.Phase.RoomMemberList
+                    });
+                } else if (this.props.groupId) {
+                    this.setState({
+                        phase: this.Phase.GroupMemberList
+                    });
+                }
             }
         }
         else if (payload.action === "view_room") {
-            if (this.state.phase === this.Phase.MemberInfo) {
+            if (this.state.phase === this.Phase.RoomMemberInfo) {
                 this.setState({
-                    phase: this.Phase.MemberList
+                    phase: this.Phase.RoomMemberList
                 });
             }
         }
     },
 
     render: function() {
-        var MemberList = sdk.getComponent('rooms.MemberList');
-        var NotificationPanel = sdk.getComponent('structures.NotificationPanel');
-        var FilePanel = sdk.getComponent('structures.FilePanel');
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        var buttonGroup;
-        var inviteGroup;
-        var panel;
+        const MemberList = sdk.getComponent('rooms.MemberList');
+        const GroupMemberList = sdk.getComponent('groups.GroupMemberList');
+        const NotificationPanel = sdk.getComponent('structures.NotificationPanel');
+        const FilePanel = sdk.getComponent('structures.FilePanel');
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        let buttonGroup;
+        let inviteGroup;
+        let panel;
 
-        var filesHighlight;
-        var membersHighlight;
-        var notificationsHighlight;
+        let filesHighlight;
+        let membersHighlight;
+        let notificationsHighlight;
         if (!this.props.collapsed) {
-            if (this.state.phase == this.Phase.MemberList || this.state.phase === this.Phase.MemberInfo) {
+            if (this.state.phase == this.Phase.RoomMemberList || this.state.phase === this.Phase.RoomMemberInfo) {
                 membersHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
             }
             else if (this.state.phase == this.Phase.FilePanel) {
@@ -170,11 +181,11 @@ module.exports = React.createClass({
             }
         }
 
-        var membersBadge;
-        if ((this.state.phase == this.Phase.MemberList || this.state.phase === this.Phase.MemberInfo) && this.props.roomId) {
-            var cli = MatrixClientPeg.get();
-            var room = cli.getRoom(this.props.roomId);
-            var user_is_in_room;
+        let membersBadge;
+        if ((this.state.phase == this.Phase.RoomMemberList || this.state.phase === this.Phase.RoomMemberInfo) && this.props.roomId) {
+            const cli = MatrixClientPeg.get();
+            const room = cli.getRoom(this.props.roomId);
+            let user_is_in_room;
             if (room) {
                 membersBadge = room.getJoinedMembers().length;
                 user_is_in_room = room.hasMembershipState(
@@ -224,17 +235,16 @@ module.exports = React.createClass({
         }
 
         if (!this.props.collapsed) {
-            if(this.props.roomId && this.state.phase == this.Phase.MemberList) {
+            if (this.props.roomId && this.state.phase == this.Phase.RoomMemberList) {
                 panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />
-            }
-            else if(this.state.phase == this.Phase.MemberInfo) {
-                var MemberInfo = sdk.getComponent('rooms.MemberInfo');
+            } else if (this.props.groupId && this.state.phase == this.Phase.GroupMemberList) {
+                panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />
+            } else if(this.state.phase == this.Phase.RoomMemberInfo) {
+                const MemberInfo = sdk.getComponent('rooms.MemberInfo');
                 panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.props.userId} />
-            }
-            else if (this.state.phase == this.Phase.NotificationPanel) {
+            } else if (this.state.phase == this.Phase.NotificationPanel) {
                 panel = <NotificationPanel />
-            }
-            else if (this.state.phase == this.Phase.FilePanel) {
+            } else if (this.state.phase == this.Phase.FilePanel) {
                 panel = <FilePanel roomId={this.props.roomId} />
             }
         }
@@ -243,7 +253,7 @@ module.exports = React.createClass({
             panel = <div className="mx_RightPanel_blank"></div>;
         }
 
-        var classes = "mx_RightPanel mx_fadable";
+        let classes = "mx_RightPanel mx_fadable";
         if (this.props.collapsed) {
             classes += " collapsed";
         }
