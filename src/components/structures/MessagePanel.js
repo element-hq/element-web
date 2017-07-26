@@ -266,7 +266,8 @@ module.exports = React.createClass({
         //
         // we also need to figure out which is the last event we show which isn't
         // a local echo, to manage the read-marker.
-        var lastShownEventIndex = -1;
+        let lastShownEvent;
+
         var lastShownNonLocalEchoIndex = -1;
         for (i = this.props.events.length-1; i >= 0; i--) {
             var mxEv = this.props.events[i];
@@ -274,8 +275,8 @@ module.exports = React.createClass({
                 continue;
             }
 
-            if (lastShownEventIndex < 0) {
-                lastShownEventIndex = i;
+            if (lastShownEvent === undefined) {
+                lastShownEvent = mxEv;
             }
 
             if (mxEv.status) {
@@ -307,7 +308,7 @@ module.exports = React.createClass({
             let mxEv = this.props.events[i];
             let eventId = mxEv.getId();
             let readMarkerInMels = false;
-            let last = (i === lastShownEventIndex);
+            let last = (mxEv === lastShownEvent);
 
             const wantTile = this._shouldShowEvent(mxEv);
 
@@ -350,14 +351,14 @@ module.exports = React.createClass({
 
                     summarisedEvents.push(collapsedMxEv);
                 }
-                // At this point, i = the index of the last event in the summary sequence
 
+                // At this point, i = the index of the last event in the summary sequence
                 let eventTiles = summarisedEvents.map((e) => {
                     // In order to prevent DateSeparators from appearing in the expanded form
                     // of MemberEventListSummary, render each member event as if the previous
                     // one was itself. This way, the timestamp of the previous event === the
                     // timestamp of the current event, and no DateSeperator is inserted.
-                    const ret = this._getTilesForEvent(e, e, last);
+                    const ret = this._getTilesForEvent(e, e, e === lastShownEvent);
                     prevEvent = e;
                     return ret;
                 }).reduce((a, b) => a.concat(b));
