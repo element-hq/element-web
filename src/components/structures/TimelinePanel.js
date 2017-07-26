@@ -1021,7 +1021,7 @@ var TimelinePanel = React.createClass({
             if ((allowPartial && boundingRect.top < wrapperRect.bottom) ||
                 (!allowPartial && boundingRect.bottom < wrapperRect.bottom)) {
                 let latestReadEventIndex = i;
-                // Place the RM at a hidden event below the latest seen event (if exists)
+                // Place the RM at a hidden event below the latest visible event.
                 // to prevent RM going up the timeline between clients which do not hide the same events.
                 for (let j = i + 1; j < this.state.events.length; j++) {
                     if (messagePanel._shouldShowEvent(this.state.events[j])) break;
