@@ -24,6 +24,7 @@ import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
+import AppPermission from './AppPermission';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const betaHelpMsg = 'This feature is currently experimental and is intended for beta testing only';
@@ -46,9 +47,12 @@ export default React.createClass({
     },
 
     getInitialState: function() {
+        const widgetPermissionId = [this.props.room.roomId, encodeURIComponent(this.props.url)].join('_');
         return {
             loading: false,
             widgetUrl: this.props.url,
+            widgetPermissionId: widgetPermissionId,
+            hasPermissionToLoad: localStorage.getItem(widgetPermissionId),
             error: null,
             deleting: false,
         };
@@ -116,6 +120,11 @@ export default React.createClass({
         });
     },
 
+    _grantWidgetPermission() {
+        console.warn('Granting permission to load widget - ', this.state.widgetUrl);
+        localStorage.setItem(this.state.widgetPermissionId, true);
+    },
+
     formatAppTileName: function() {
         let appTileName = "No name";
         if(this.props.name && this.props.name.trim()) {
@@ -133,29 +142,39 @@ export default React.createClass({
             return <div></div>;
         }
 
+        // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
+        // because that would allow the iframe to prgramatically remove the sandbox attribute, but
+        // this would only be for content hosted on the same origin as the riot client: anything
+        // hosted on the same origin as the client will get the same access as if you clicked
+        // a link to it.
+        const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox "+
+            "allow-same-origin allow-scripts";
+        const parsedWidgetUrl = url.parse(this.state.widgetUrl);
+        let safeWidgetUrl = '';
+        if (ALLOWED_APP_URL_SCHEMES.indexOf(parsedWidgetUrl.protocol) !== -1) {
+            safeWidgetUrl = url.format(parsedWidgetUrl);
+        }
+
         if (this.state.loading) {
             appTileBody = (
                 <div> Loading... </div>
             );
-        } else {
-            // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
-            // because that would allow the iframe to prgramatically remove the sandbox attribute, but
-            // this would only be for content hosted on the same origin as the riot client: anything
-            // hosted on the same origin as the client will get the same access as if you clicked
-            // a link to it.
-            const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox "+
-                "allow-same-origin allow-scripts";
-            const parsedWidgetUrl = url.parse(this.state.widgetUrl);
-            let safeWidgetUrl = '';
-            if (ALLOWED_APP_URL_SCHEMES.indexOf(parsedWidgetUrl.protocol) !== -1) {
-                safeWidgetUrl = url.format(parsedWidgetUrl);
-            }
+        } else if (this.state.hasPermissionToLoad === true) {
             appTileBody = (
                 <div className="mx_AppTileBody">
-                    <iframe ref="appFrame" src={safeWidgetUrl} allowFullScreen="true"
+                    <iframe
+                        ref="appFrame"
+                        src={safeWidgetUrl}
+                        allowFullScreen="true"
                         sandbox={sandboxFlags}
                     ></iframe>
                 </div>
+            );
+        } else {
+            appTileBody = (
+                <AppPermission
+                    url={this.state.widgetUrl}
+                />
             );
         }
 
