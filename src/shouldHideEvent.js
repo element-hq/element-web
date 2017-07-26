@@ -36,8 +36,11 @@ function _isLeaveOrJoin(ev) {
         // dupe join event, fall through to hide rules
     }
 
+
     // this only applies to joins/leaves not invites/kicks/bans
-    return membership === 'join' || (membership === 'leave' && ev.getStateKey() === ev.getSender());
+    const isJoin = membership === 'join' && prevMembership !== 'ban';
+    const isLeave = membership === 'leave' && ev.getStateKey() === ev.getSender();
+    return isJoin || isLeave;
 }
 
 export default function(ev, syncedSettings) {
