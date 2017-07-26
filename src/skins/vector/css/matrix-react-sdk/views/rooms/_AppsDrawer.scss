@@ -167,3 +167,37 @@ form.mx_Custom_Widget_Form div {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.mx_AppPermissionWarning {
+    text-align: center;
+    padding: 30px 0;
+    background-color: $lightbox-bg-color;
+}
+
+.mx_AppPermissionWarningImage {
+    margin: 10px 0;
+}
+
+.mx_AppPermissionWarningImage img {
+    width: 150px;
+}
+
+.mx_AppPermissionWarningText {
+    max-width: 300px;
+    margin: 10px auto 10px auto;
+    color: $primary-fg-color;
+}
+
+.mx_AppPermissionWarningTextLabel {
+    font-weight: bold;
+}
+
+.mx_AppPermissionWarningTextURL {
+    color: $accent-color;
+}
+
+.mx_AppPermissionButton {
+    padding: 5px;
+    border-radius: 5px;
+    color: $warning-color;
+}
