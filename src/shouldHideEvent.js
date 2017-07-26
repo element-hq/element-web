@@ -37,7 +37,7 @@ function _isLeaveOrJoin(ev) {
     }
 
 
-    // this only applies to joins/leaves not invites/kicks/bans
+    // this only applies to joins/invited joins/leaves not invites/kicks/bans
     const isJoin = membership === 'join' && prevMembership !== 'ban';
     const isLeave = membership === 'leave' && ev.getStateKey() === ev.getSender();
     return isJoin || isLeave;
