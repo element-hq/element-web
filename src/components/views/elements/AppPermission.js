@@ -1,30 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { URL, URLSearchParams } from 'url';
+import url from 'url';
 
 export default class AppPermission extends React.Component {
     constructor(props) {
         super(props);
 
+        const curl = this.getCurl();
         this.state = {
-            curl: this.getCurl(),
+            curl: curl,
         };
+        console.log('curl', curl);
     }
 
     getCurl() {
-        let wurl = URL.parse(this.props.url);
-        console.log('wurl', wurl);
-        if(wurl.searchParams.get('url')) {
-            let curl = wurl.searchParams.get('url');
-            console.log('curl', curl);
+        const wurl = url.parse(this.props.url);
+        let curl;
+
+        const searchParams = new URLSearchParams(wurl.search);
+        if(searchParams && searchParams.get('url')) {
+            curl = searchParams.get('url');
         }
+        curl = curl || wurl;
+        return curl;
     }
 
     render() {
         return (
-            <div>
-                Load widget with URL : {this.state.cUrl}
+            <div className='mx_AppPermissionWarning'>
+                <div className='mx_AppPermissionWarningImage'>
+                    <img src='img/warning.svg' alt='Warning'/>
+                </div>
+                <div className='mx_AppPermissionWarningText'>
+                    <span className='mx_AppPermissionWarningTextLabel'>Do you want to load widget from URL?:</span> <span className='mx_AppPermissionWarningTextURL'>{this.state.curl}</span>
+                </div>
                 <input
+                    className='mx_AppPermissionButton'
                     type='button'
                     value='Allow'
                     onClick={this.props.onPermissionGranted}

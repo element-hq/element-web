@@ -174,6 +174,7 @@ export default React.createClass({
             appTileBody = (
                 <AppPermission
                     url={this.state.widgetUrl}
+                    onPermissionGranted={this._grantWidgetPermission}
                 />
             );
         }
