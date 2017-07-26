@@ -640,5 +640,12 @@
     "Ignore request": "Ignorar la solicitud",
     "Do you want to set an email address?": "¿Quieres poner una dirección de correo electrónico?",
     "This will allow you to reset your password and receive notifications.": "Esto te permitirá reiniciar tu contraseña y recibir notificaciones.",
-    "Authentication check failed: incorrect password?": "La verificación de la autentificación ha fallado: ¿El password es el correcto?"
+    "Authentication check failed: incorrect password?": "La verificación de la autentificación ha fallado: ¿El password es el correcto?",
+    "And %(count)s more...": "Y %(count)s más...",
+    "Press <StartChatButton> to start a chat with someone": "Pulsa <StartChatButton> para empezar a charlar con alguien",
+    "To send events of type": "Para enviar eventos de tipo",
+    "To send messages": "Para enviar mensajes",
+    "to start a chat with someone": "para empezar a charlar con alguien",
+    "to tag as %(tagName)s": "para etiquetar como %(tagName)s",
+    "to tag direct chat": "para etiquetar como charla directa"
 }
