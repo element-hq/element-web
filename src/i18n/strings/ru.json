@@ -244,7 +244,7 @@
     "Failed to lookup current room": "Не удалось выполнить поиск текущий комнаты",
     "Failed to send request.": "Не удалось отправить запрос.",
     "Failed to set up conference call": "Не удалось настроить групповой вызов",
-    "Failed to verify email address: make sure you clicked the link in the email": "Не удалось проверить адрес электронной почты: убедитесь что вы перешли по ссылке в письме",
+    "Failed to verify email address: make sure you clicked the link in the email": "Не удалось проверить адрес электронной почты: убедитесь, что вы перешли по ссылке в письме",
     "Failure to create room": "Не удалось создать комнату",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s с %(fromPowerLevel)s на %(toPowerLevel)s",
     "Guest users can't create new rooms. Please register to create room and start a chat.": "Гости не могут создавать новые комнаты. Зарегистрируйтесь, чтобы создать комнату и начать чат.",
