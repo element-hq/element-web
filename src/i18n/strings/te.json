@@ -1,5 +1,15 @@
 {
     "Close": "ముసివెయండి",
     "Continue": "కొనసాగించు",
-    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s %(browserName)s ద్వర %(osName)s కి"
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s %(browserName)s ద్వర %(osName)s కి",
+    "Friday": "శుక్రువారం",
+    "Cancel": "రద్దు",
+    "Monday": "సోమవారం",
+    "Tuesday": "మంగళవారం",
+    "Wednesday": "బుధవారం",
+    "Thursday": "గురువారం",
+    "Saturday": "శనివారం",
+    "Sunday": "ఆదివారం",
+    "Failed to forget room %(errCode)s": "గది %(errCode) లు మర్చిపోవడంలో విఫలమైంది",
+    "unknown error code": "తెలియని కోడ్ లోపం"
 }
