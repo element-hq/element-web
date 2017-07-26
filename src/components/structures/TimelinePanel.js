@@ -1020,14 +1020,7 @@ var TimelinePanel = React.createClass({
             var boundingRect = node.getBoundingClientRect();
             if ((allowPartial && boundingRect.top < wrapperRect.bottom) ||
                 (!allowPartial && boundingRect.bottom < wrapperRect.bottom)) {
-                let latestReadEventIndex = i;
-                // Place the RM at a hidden event below the latest visible event.
-                // to prevent RM going up the timeline between clients which do not hide the same events.
-                for (let j = i + 1; j < this.state.events.length; j++) {
-                    if (messagePanel._shouldShowEvent(this.state.events[j])) break;
-                    latestReadEventIndex = j;
-                }
-                return latestReadEventIndex;
+                return i;
             }
         }
         return null;
