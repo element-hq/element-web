@@ -221,7 +221,7 @@ class RoomViewStore extends Store {
             });
             const msg = err.message ? err.message : JSON.stringify(err);
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to join room', err.toString(), ErrorDialog, {
                 title: _t("Failed to join room"),
                 description: msg,
             });

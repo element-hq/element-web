@@ -82,7 +82,7 @@ export default withMatrixClient(React.createClass({
         }).catch((err) => {
             console.error("Unable to add phone number: " + err);
             let msg = err.message;
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Add Phone Number Error', err.toString(), ErrorDialog, {
                 title: _t("Error"),
                 description: msg,
             });
@@ -107,7 +107,7 @@ export default withMatrixClient(React.createClass({
             }
             msgElements.push(<div key="_error" className="error">{msg}</div>);
         }
-        Modal.createDialog(TextInputDialog, {
+        Modal.createTrackedDialog('Prompt for MSISDN Verification Code', '', TextInputDialog, {
             title: _t("Enter Code"),
             description: <div>{msgElements}</div>,
             button: _t("Submit"),

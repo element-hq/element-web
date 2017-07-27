@@ -68,7 +68,7 @@ const commands = {
     ddg: new Command("ddg", "<query>", function(roomId, args) {
         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
         // TODO Don't explain this away, actually show a search UI here.
-        Modal.createDialog(ErrorDialog, {
+        Modal.createTrackedDialog('Slash Commands', '/ddg is not a command', ErrorDialog, {
             title: _t('/ddg is not a command'),
             description: _t('To use it, just wait for autocomplete results to load and tab through them.'),
         });
@@ -326,13 +326,11 @@ const commands = {
                                    {deviceId: deviceId, fprint: fprint, userId: userId, fingerprint: fingerprint}));
                         }
 
-                        return MatrixClientPeg.get().setDeviceVerified(
-                            userId, deviceId, true,
-                        );
+                        return MatrixClientPeg.get().setDeviceVerified(userId, deviceId, true);
                     }).then(() => {
                         // Tell the user we verified everything
                         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                        Modal.createDialog(QuestionDialog, {
+                        Modal.createTrackedDialog('Slash Commands', 'Verified key', QuestionDialog, {
                             title: _t("Verified key"),
                             description: (
                                 <div>

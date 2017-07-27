@@ -46,7 +46,7 @@ const BannedUser = React.createClass({
 
     _onUnbanClick: function() {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
-        Modal.createDialog(ConfirmUserActionDialog, {
+        Modal.createTrackedDialog('Confirm User Action Dialog', 'onUnbanClick', ConfirmUserActionDialog, {
             member: this.props.member,
             action: _t('Unban'),
             danger: false,
@@ -58,7 +58,7 @@ const BannedUser = React.createClass({
                 ).catch((err) => {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to unban: " + err);
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('Failed to unban', err.toString(), ErrorDialog, {
                         title: _t('Error'),
                         description: _t('Failed to unban'),
                     });
@@ -423,7 +423,7 @@ module.exports = React.createClass({
         ev.preventDefault();
         var value = ev.target.value;
 
-        Modal.createDialog(QuestionDialog, {
+        Modal.createTrackedDialog('Privacy warning', '', QuestionDialog, {
             title: _t('Privacy warning'),
             description:
                 <div>
@@ -516,7 +516,7 @@ module.exports = React.createClass({
     onManageIntegrations(ev) {
         ev.preventDefault();
         var IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        Modal.createDialog(IntegrationsManager, {
+        Modal.createTrackedDialog('Integrations Manager', 'onManageIntegrations', IntegrationsManager, {
             src: (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                     this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId) :
                     null,
@@ -549,7 +549,7 @@ module.exports = React.createClass({
         }, function(err) {
             var errCode = err.errcode || _t('unknown error code');
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to forget room', err.toString(), ErrorDialog, {
                 title: _t('Error'),
                 description: _t("Failed to forget room %(errCode)s", { errCode: errCode }),
             });
@@ -560,7 +560,7 @@ module.exports = React.createClass({
         if (!this.refs.encrypt.checked) return;
 
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        Modal.createDialog(QuestionDialog, {
+        Modal.createTrackedDialog('E2E Enable Warning', '', QuestionDialog, {
             title: _t('Warning!'),
             description: (
                 <div>

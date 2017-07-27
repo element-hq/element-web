@@ -119,7 +119,7 @@ module.exports = React.createClass({
             const errMsg = (typeof err === "string") ? err : (err.error || "");
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to set avatar: " + errMsg);
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to set avatar', err.toString(), ErrorDialog, {
                 title: _t("Error"),
                 description: _t("Failed to set avatar."),
             });

@@ -103,7 +103,7 @@ module.exports = React.createClass({
                     const ChatCreateOrReuseDialog = sdk.getComponent(
                         "views.dialogs.ChatCreateOrReuseDialog",
                     );
-                    const close = Modal.createDialog(ChatCreateOrReuseDialog, {
+                    const close = Modal.createTrackedDialog('Create or Reuse', '', ChatCreateOrReuseDialog, {
                         userId: userId,
                         onFinished: (success) => {
                             this.props.onFinished(success);
@@ -367,7 +367,7 @@ module.exports = React.createClass({
             .catch(function(err) {
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Failed to invite', err.toString(), ErrorDialog, {
                     title: _t("Failed to invite"),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });
@@ -380,7 +380,7 @@ module.exports = React.createClass({
             .catch(function(err) {
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Failed to invite user', err.toString(), ErrorDialog, {
                     title: _t("Failed to invite user"),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });
@@ -401,7 +401,7 @@ module.exports = React.createClass({
             .catch(function(err) {
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Failed to invite', err.toString(), ErrorDialog, {
                     title: _t("Failed to invite"),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });
@@ -448,7 +448,7 @@ module.exports = React.createClass({
 
         if (errorList.length > 0) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to invite the following users to the room', '', ErrorDialog, {
                 title: _t("Failed to invite the following users to the %(roomName)s room:", {roomName: room.name}),
                 description: errorList.join(", "),
             });

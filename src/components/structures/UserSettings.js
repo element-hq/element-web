@@ -331,7 +331,7 @@ module.exports = React.createClass({
         }, function(error) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to load user settings: " + error);
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Can\'t load user settings', error.toString(), ErrorDialog, {
                 title: _t("Can't load user settings"),
                 description: ((error && error.message) ? error.message : _t("Server may be unavailable or overloaded")),
             });
@@ -364,7 +364,7 @@ module.exports = React.createClass({
             // const errMsg = (typeof err === "string") ? err : (err.error || "");
             console.error("Failed to set avatar: " + err);
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to set avatar', err.toString(), ErrorDialog, {
                 title: _t("Failed to set avatar."),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
@@ -373,7 +373,7 @@ module.exports = React.createClass({
 
     onLogoutClicked: function(ev) {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        Modal.createDialog(QuestionDialog, {
+        Modal.createTrackedDialog('Logout E2E Export', '', QuestionDialog, {
             title: _t("Sign out"),
             description:
                 <div>
@@ -409,7 +409,7 @@ module.exports = React.createClass({
         }
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         console.error("Failed to change password: " + errMsg);
-        Modal.createDialog(ErrorDialog, {
+        Modal.createTrackedDialog('Failed to change password', err.toString(), ErrorDialog, {
             title: _t("Error"),
             description: errMsg,
         });
@@ -417,7 +417,7 @@ module.exports = React.createClass({
 
     onPasswordChanged: function() {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        Modal.createDialog(ErrorDialog, {
+        Modal.createTrackedDialog('Password changed', '', ErrorDialog, {
             title: _t("Success"),
             description: _t(
                 "Your password was successfully changed. You will not receive " +
@@ -442,7 +442,7 @@ module.exports = React.createClass({
 
         const emailAddress = this.refs.add_email_input.value;
         if (!Email.looksValid(emailAddress)) {
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Invalid email address', '', ErrorDialog, {
                 title: _t("Invalid Email Address"),
                 description: _t("This doesn't appear to be a valid email address"),
             });
@@ -452,7 +452,7 @@ module.exports = React.createClass({
         // we always bind emails when registering, so let's do the
         // same here.
         this._addThreepid.addEmailAddress(emailAddress, true).done(() => {
-            Modal.createDialog(QuestionDialog, {
+            Modal.createTrackedDialog('Verification Pending', '', QuestionDialog, {
                 title: _t("Verification Pending"),
                 description: _t(
                     "Please check your email and click on the link it contains. Once this " +
@@ -464,7 +464,7 @@ module.exports = React.createClass({
         }, (err) => {
             this.setState({email_add_pending: false});
             console.error("Unable to add email address " + emailAddress + " " + err);
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Unable to add email address', err.toString(), ErrorDialog, {
                 title: _t("Unable to add email address"),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
@@ -475,7 +475,7 @@ module.exports = React.createClass({
 
     onRemoveThreepidClicked: function(threepid) {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        Modal.createDialog(QuestionDialog, {
+        Modal.createTrackedDialog('Remove 3pid', '', QuestionDialog, {
             title: _t("Remove Contact Information?"),
             description: _t("Remove %(threePid)s?", { threePid: threepid.address }),
             button: _t('Remove'),
@@ -489,7 +489,7 @@ module.exports = React.createClass({
                     }).catch((err) => {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Unable to remove contact information: " + err);
-                        Modal.createDialog(ErrorDialog, {
+                        Modal.createTrackedDialog('Remove 3pid failed', err.toString(), ErrorDialog, {
                             title: _t("Unable to remove contact information"),
                             description: ((err && err.message) ? err.message : _t("Operation failed")),
                         });
@@ -521,7 +521,7 @@ module.exports = React.createClass({
                 const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 const message = _t("Unable to verify email address.") + " " +
                     _t("Please check your email and click on the link it contains. Once this is done, click continue.");
-                Modal.createDialog(QuestionDialog, {
+                Modal.createTrackedDialog('Verification Pending', '', QuestionDialog, {
                     title: _t("Verification Pending"),
                     description: message,
                     button: _t('Continue'),
@@ -530,7 +530,7 @@ module.exports = React.createClass({
             } else {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Unable to verify email address: " + err);
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Unable to verify email address', err.toString(), ErrorDialog, {
                     title: _t("Unable to verify email address."),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });
@@ -540,7 +540,7 @@ module.exports = React.createClass({
 
     _onDeactivateAccountClicked: function() {
         const DeactivateAccountDialog = sdk.getComponent("dialogs.DeactivateAccountDialog");
-        Modal.createDialog(DeactivateAccountDialog, {});
+        Modal.createTrackedDialog('Deactivate Account', '', DeactivateAccountDialog, {});
     },
 
     _onBugReportClicked: function() {
@@ -548,7 +548,7 @@ module.exports = React.createClass({
         if (!BugReportDialog) {
             return;
         }
-        Modal.createDialog(BugReportDialog, {});
+        Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {});
     },
 
     _onClearCacheClicked: function() {
@@ -585,27 +585,23 @@ module.exports = React.createClass({
     },
 
     _onExportE2eKeysClicked: function() {
-        Modal.createDialogAsync(
-            (cb) => {
-                require.ensure(['../../async-components/views/dialogs/ExportE2eKeysDialog'], () => {
-                    cb(require('../../async-components/views/dialogs/ExportE2eKeysDialog'));
-                }, "e2e-export");
-            }, {
-                matrixClient: MatrixClientPeg.get(),
-            },
-        );
+        Modal.createTrackedDialogAsync('Export E2E Keys', '', (cb) => {
+            require.ensure(['../../async-components/views/dialogs/ExportE2eKeysDialog'], () => {
+                cb(require('../../async-components/views/dialogs/ExportE2eKeysDialog'));
+            }, "e2e-export");
+        }, {
+            matrixClient: MatrixClientPeg.get(),
+        });
     },
 
     _onImportE2eKeysClicked: function() {
-        Modal.createDialogAsync(
-            (cb) => {
-                require.ensure(['../../async-components/views/dialogs/ImportE2eKeysDialog'], () => {
-                    cb(require('../../async-components/views/dialogs/ImportE2eKeysDialog'));
-                }, "e2e-export");
-            }, {
-                matrixClient: MatrixClientPeg.get(),
-            },
-        );
+        Modal.createTrackedDialogAsync('Import E2E Keys', '', (cb) => {
+            require.ensure(['../../async-components/views/dialogs/ImportE2eKeysDialog'], () => {
+                cb(require('../../async-components/views/dialogs/ImportE2eKeysDialog'));
+            }, "e2e-export");
+        }, {
+            matrixClient: MatrixClientPeg.get(),
+        });
     },
 
     _renderReferral: function() {
@@ -1004,7 +1000,7 @@ module.exports = React.createClass({
                 this._refreshMediaDevices,
                 function() {
                     const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('No media permissions', '', ErrorDialog, {
                         title: _t('No media permissions'),
                         description: _t('You may need to manually permit Riot to access your microphone/webcam'),
                     });

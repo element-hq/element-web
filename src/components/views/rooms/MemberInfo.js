@@ -229,7 +229,7 @@ module.exports = withMatrixClient(React.createClass({
         const membership = this.props.member.membership;
         const kickLabel = membership === "invite" ? _t("Disinvite") : _t("Kick");
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
-        Modal.createDialog(ConfirmUserActionDialog, {
+        Modal.createTrackedDialog('Confirm User Action Dialog', 'onKick', ConfirmUserActionDialog, {
             member: this.props.member,
             action: kickLabel,
             askReason: membership == "join",
@@ -248,7 +248,7 @@ module.exports = withMatrixClient(React.createClass({
                     }, function(err) {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Kick error: " + err);
-                        Modal.createDialog(ErrorDialog, {
+                        Modal.createTrackedDialog('Failed to kick', err.message, ErrorDialog, {
                             title: _t("Failed to kick"),
                             description: ((err && err.message) ? err.message : "Operation failed"),
                         });
@@ -262,7 +262,7 @@ module.exports = withMatrixClient(React.createClass({
 
     onBanOrUnban: function() {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
-        Modal.createDialog(ConfirmUserActionDialog, {
+        Modal.createTrackedDialog('Confirm User Action Dialog', 'onBanOrUnban', ConfirmUserActionDialog, {
             member: this.props.member,
             action: this.props.member.membership == 'ban' ? _t("Unban") : _t("Ban"),
             askReason: this.props.member.membership != 'ban',
@@ -290,7 +290,7 @@ module.exports = withMatrixClient(React.createClass({
                     }, function(err) {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Ban error: " + err);
-                        Modal.createDialog(ErrorDialog, {
+                        Modal.createTrackedDialog('Failed to ban user', err.message, ErrorDialog, {
                             title: _t("Error"),
                             description: _t("Failed to ban user"),
                         });
@@ -340,7 +340,7 @@ module.exports = withMatrixClient(React.createClass({
                     console.log("Mute toggle success");
                 }, function(err) {
                     console.error("Mute error: " + err);
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('Failed to mute user', err.message, ErrorDialog, {
                         title: _t("Error"),
                         description: _t("Failed to mute user"),
                     });
@@ -385,7 +385,7 @@ module.exports = withMatrixClient(React.createClass({
                     dis.dispatch({action: 'view_set_mxid'});
                 } else {
                     console.error("Toggle moderator error:" + err);
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('Failed to toggle moderator status', err.message, ErrorDialog, {
                         title: _t("Error"),
                         description: _t("Failed to toggle moderator status"),
                     });
@@ -406,7 +406,7 @@ module.exports = withMatrixClient(React.createClass({
             }, function(err) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Failed to change power level " + err);
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Failed to change power level', err.message, ErrorDialog, {
                     title: _t("Error"),
                     description: _t("Failed to change power level"),
                 });
@@ -435,7 +435,7 @@ module.exports = withMatrixClient(React.createClass({
             var myPower = powerLevelEvent.getContent().users[this.props.matrixClient.credentials.userId];
             if (parseInt(myPower) === parseInt(powerLevel)) {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                Modal.createDialog(QuestionDialog, {
+                Modal.createTrackedDialog('Promote to PL100 Warning', '', QuestionDialog, {
                     title: _t("Warning!"),
                     description:
                         <div>

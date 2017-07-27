@@ -99,7 +99,7 @@ export default class MessageComposer extends React.Component {
             </li>);
         }
 
-        Modal.createDialog(QuestionDialog, {
+        Modal.createTrackedDialog('Upload Files confirmation', '', QuestionDialog, {
             title: _t('Upload Files'),
             description: (
                 <div>
