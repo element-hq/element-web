@@ -25,6 +25,7 @@ import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import AppPermission from './AppPermission';
+import MessageSpinner from './MessageSpinner';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const betaHelpMsg = 'This feature is currently experimental and is intended for beta testing only';
@@ -38,6 +39,7 @@ export default React.createClass({
         name: React.PropTypes.string.isRequired,
         room: React.PropTypes.object.isRequired,
         type: React.PropTypes.string.isRequired,
+        fullWidth: React.PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -48,11 +50,12 @@ export default React.createClass({
 
     getInitialState: function() {
         const widgetPermissionId = [this.props.room.roomId, encodeURIComponent(this.props.url)].join('_');
+        const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
         return {
             loading: false,
             widgetUrl: this.props.url,
             widgetPermissionId: widgetPermissionId,
-            hasPermissionToLoad: localStorage.getItem(widgetPermissionId),
+            hasPermissionToLoad: Boolean(hasPermissionToLoad === 'true'),
             error: null,
             deleting: false,
         };
@@ -123,6 +126,7 @@ export default React.createClass({
     _grantWidgetPermission() {
         console.warn('Granting permission to load widget - ', this.state.widgetUrl);
         localStorage.setItem(this.state.widgetPermissionId, true);
+        this.setState({hasPermissionToLoad: true});
     },
 
     formatAppTileName: function() {
@@ -157,9 +161,11 @@ export default React.createClass({
 
         if (this.state.loading) {
             appTileBody = (
-                <div> Loading... </div>
+                <div className='mx_AppTileBody mx_AppLoading'>
+                    <MessageSpinner msg='Loading...'/>
+                </div>
             );
-        } else if (this.state.hasPermissionToLoad === true) {
+        } else if (this.state.hasPermissionToLoad == true) {
             appTileBody = (
                 <div className="mx_AppTileBody">
                     <iframe
@@ -172,10 +178,12 @@ export default React.createClass({
             );
         } else {
             appTileBody = (
-                <AppPermission
-                    url={this.state.widgetUrl}
-                    onPermissionGranted={this._grantWidgetPermission}
-                />
+                <div className="mx_AppTileBody">
+                    <AppPermission
+                        url={this.state.widgetUrl}
+                        onPermissionGranted={this._grantWidgetPermission}
+                    />
+                </div>
             );
         }
 
