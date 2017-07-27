@@ -26,6 +26,7 @@ import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import AppPermission from './AppPermission';
 import MessageSpinner from './MessageSpinner';
+import WidgetUtils from '../../../WidgetUtils';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const betaHelpMsg = 'This feature is currently experimental and is intended for beta testing only';
@@ -99,19 +100,12 @@ export default React.createClass({
     },
 
     _canUserModify: function() {
-        let canModify = false;
-        const client = MatrixClientPeg.get();
-        if (client) {
-            const room = client.getRoom(this.props.room.roomId);
-            const me = client.credentials.userId;
-            if(room && me) {
-                const member = room.getMember(me);
-                if (member && member.membership === "join") {
-                    canModify = room.currentState.maySendStateEvent('set_widget', me);
-                }
-            }
+        try {
+            return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
+        } catch(err) {
+            console.error(err);
+            return false;
         }
-        return canModify;
     },
 
     _onEditClick: function(e) {
