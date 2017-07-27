@@ -164,7 +164,7 @@ module.exports = React.createClass({
     render: function() {
         const apps = this.state.apps.map(
             (app, index, arr) => {
-                return <AppTile
+                return (<AppTile
                     key={app.id}
                     id={app.id}
                     url={app.url}
@@ -173,7 +173,7 @@ module.exports = React.createClass({
                     fullWidth={arr.length<2 ? true : false}
                     room={this.props.room}
                     userId={this.props.userId}
-                />;
+                />);
             });
 
         const addWidget = this.state.apps && this.state.apps.length < 2 &&
