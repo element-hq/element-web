@@ -718,9 +718,31 @@ export default class MessageComposerInput extends React.Component {
                 );
             }
         } else {
-            // Use the original plaintext because `contextText` has had mentions stripped
-            // and these need to end up in contentHTML
-            const md = new Markdown(contentState.getPlainText());
+            // Use the original contentState because `contentText` has had mentions
+            // stripped and these need to end up in contentHTML.
+
+            // Replace all Entities of type `LINK` with markdown link equivalents.
+            // TODO: move this into `Markdown` and do the same conversion in the other
+            // two places (toggling from MD->RT mode and loading MD history into RT mode)
+            // but this can only be done when history includes Entities.
+            const pt = contentState.getBlocksAsArray().map((block) => {
+                let blockText = block.getText();
+                let offset = 0;
+                this.findLinkEntities(block, (start, end) => {
+                    const entity = Entity.get(block.getEntityAt(start));
+                    if (entity.getType() !== 'LINK') {
+                        return;
+                    }
+                    const text = blockText.slice(offset + start, offset + end);
+                    const url = entity.getData().url;
+                    const mdLink = `[${text}](${url})`;
+                    blockText = blockText.slice(0, offset + start) + mdLink + blockText.slice(offset + end);
+                    offset += mdLink.length - text.length;
+                });
+                return blockText;
+            }).join('\n');
+
+            const md = new Markdown(pt);
             if (md.isPlainText()) {
                 contentText = md.toPlaintext();
             } else {
@@ -916,9 +938,6 @@ export default class MessageComposerInput extends React.Component {
                 url: href,
                 isCompletion: true,
             });
-            if (!this.state.isRichtextEnabled) {
-                mdCompletion = `[${completion}](${href})`;
-            }
         }
 
         let selection;
