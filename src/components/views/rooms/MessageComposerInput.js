@@ -644,7 +644,17 @@ export default class MessageComposerInput extends React.Component {
 
         let contentText = contentState.getPlainText(), contentHTML;
 
-        const cmd = SlashCommands.processInput(this.props.room.roomId, contentText);
+        // Strip MD user (tab-completed) mentions to preserve plaintext mention behaviour.
+        // We have to do this now as opposed to after calculating the contentText for MD
+        // mode because entity positions may not be maintained when using
+        // md.toPlaintext().
+        // Unfortunately this means we lose mentions in history when in MD mode. This
+        // would be fixed if history was stored as contentState.
+        contentText = this.removeMDLinks(contentState, ['@']);
+
+        // Some commands (/join) require pills to be replaced with their text content
+        const commandText = this.removeMDLinks(contentState, ['#']);
+        const cmd = SlashCommands.processInput(this.props.room.roomId, commandText);
         if (cmd) {
             if (!cmd.error) {
                 this.setState({
@@ -708,7 +718,9 @@ export default class MessageComposerInput extends React.Component {
                 );
             }
         } else {
-            const md = new Markdown(contentText);
+            // Use the original plaintext because `contextText` has had mentions stripped
+            // and these need to end up in contentHTML
+            const md = new Markdown(contentState.getPlainText());
             if (md.isPlainText()) {
                 contentText = md.toPlaintext();
             } else {
@@ -736,35 +748,6 @@ export default class MessageComposerInput extends React.Component {
             sendHtmlFn = this.client.sendHtmlEmote;
             sendTextFn = this.client.sendEmoteMessage;
         }
-
-        // Strip MD user (tab-completed) mentions to preserve plaintext mention behaviour
-        contentText = contentText.replace(REGEX_MATRIXTO_MARKDOWN_GLOBAL,
-        (markdownLink, text, resource, prefix, offset) => {
-            // Calculate the offset relative to the current block that the offset is in
-            let sum = 0;
-            const blocks = contentState.getBlocksAsArray();
-            let block;
-            for (let i = 0; i < blocks.length; i++) {
-                block = blocks[i];
-                sum += block.getLength();
-                if (sum > offset) {
-                    sum -= block.getLength();
-                    break;
-                }
-            }
-            offset -= sum;
-
-            const entityKey = block.getEntityAt(offset);
-            const entity = entityKey ? Entity.get(entityKey) : null;
-            if (entity && entity.getData().isCompletion && prefix === '@') {
-                // This is a completed mention, so do not insert MD link, just text
-                return text;
-            } else {
-                // This is either a MD link that was typed into the composer or another
-                // type of pill (e.g. room pill)
-                return markdownLink;
-            }
-        });
 
         let sendMessagePromise;
         if (contentHTML) {
@@ -1013,6 +996,45 @@ export default class MessageComposerInput extends React.Component {
         };
     }
 
+    getAutocompleteQuery(contentState: ContentState) {
+        // Don't send markdown links to the autocompleter
+        return this.removeMDLinks(contentState, ['@', '#']);
+    }
+
+    removeMDLinks(contentState: ContentState, prefixes: string[]) {
+        const plaintext = contentState.getPlainText();
+        console.info('Removing MD', plaintext);
+        if (!plaintext) return '';
+        return plaintext.replace(REGEX_MATRIXTO_MARKDOWN_GLOBAL,
+        (markdownLink, text, resource, prefix, offset) => {
+            if (!prefixes.includes(prefix)) return markdownLink;
+            // Calculate the offset relative to the current block that the offset is in
+            let sum = 0;
+            const blocks = contentState.getBlocksAsArray();
+            let block;
+            for (let i = 0; i < blocks.length; i++) {
+                block = blocks[i];
+                sum += block.getLength();
+                if (sum > offset) {
+                    sum -= block.getLength();
+                    break;
+                }
+            }
+            offset -= sum;
+
+            const entityKey = block.getEntityAt(offset);
+            const entity = entityKey ? Entity.get(entityKey) : null;
+            if (entity && entity.getData().isCompletion) {
+                // This is a completed mention, so do not insert MD link, just text
+                return text;
+            } else {
+                // This is either a MD link that was typed into the composer or another
+                // type of pill (e.g. room pill)
+                return markdownLink;
+            }
+        });
+    }
+
     onMarkdownToggleClicked = (e) => {
         e.preventDefault(); // don't steal focus from the editor!
         this.handleKeyCommand('toggle-mode');
@@ -1038,7 +1060,6 @@ export default class MessageComposerInput extends React.Component {
         });
 
         const content = activeEditorState.getCurrentContent();
-        const contentText = content.getPlainText();
         const selection = RichText.selectionStateToTextOffsets(activeEditorState.getSelection(),
             activeEditorState.getCurrentContent().getBlocksAsArray());
 
@@ -1048,7 +1069,7 @@ export default class MessageComposerInput extends React.Component {
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         onConfirm={this.setDisplayedCompletion}
-                        query={contentText}
+                        query={this.getAutocompleteQuery(content)}
                         selection={selection}/>
                 </div>
                 <div className={className}>
