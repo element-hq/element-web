@@ -101,7 +101,6 @@ export default React.createClass({
     _canUserModify: function() {
         let canModify = false;
         const client = MatrixClientPeg.get();
-        // const warningMsg = 'User can not modify widgets:';
         if (client) {
             const room = client.getRoom(this.props.room.roomId);
             const me = client.credentials.userId;
@@ -109,14 +108,8 @@ export default React.createClass({
                 const member = room.getMember(me);
                 if (member && member.membership === "join") {
                     canModify = room.currentState.maySendStateEvent('set_widget', me);
-                // } else {
-                //     console.warn(warningMsg, 'Not room member');
                 }
-            // } else {
-            //     console.warn(warningMsg, 'No roomId or userId');
             }
-        // } else {
-        //     console.warn(warningMsg, 'No Matrix client');
         }
         return canModify;
     },
