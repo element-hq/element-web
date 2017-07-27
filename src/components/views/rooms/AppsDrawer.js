@@ -26,6 +26,7 @@ import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
+import WidgetUtils from '../../../WidgetUtils';
 
 
 module.exports = React.createClass({
@@ -147,6 +148,15 @@ module.exports = React.createClass({
         });
     },
 
+    _canUserModify: function() {
+        try {
+            return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
+        } catch(err) {
+            console.error(err);
+            return false;
+        }
+    },
+
     onClickAddWidget: function(e) {
         if (e) {
             e.preventDefault();
@@ -176,7 +186,7 @@ module.exports = React.createClass({
                 />);
             });
 
-        const addWidget = this.state.apps && this.state.apps.length < 2 &&
+        const addWidget = this.state.apps && this.state.apps.length < 2 && this._canUserModify() &&
             (<div onClick={this.onClickAddWidget}
                             role="button"
                             tabIndex="0"
