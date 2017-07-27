@@ -98,6 +98,29 @@ export default React.createClass({
         });
     },
 
+    _canUserModify: function() {
+        let canModify = false;
+        const client = MatrixClientPeg.get();
+        // const warningMsg = 'User can not modify widgets:';
+        if (client) {
+            const room = client.getRoom(this.props.room.roomId);
+            const me = client.credentials.userId;
+            if(room && me) {
+                const member = room.getMember(me);
+                if (member && member.membership === "join") {
+                    canModify = room.currentState.maySendStateEvent('set_widget', me);
+                // } else {
+                //     console.warn(warningMsg, 'Not room member');
+                }
+            // } else {
+            //     console.warn(warningMsg, 'No roomId or userId');
+            }
+        // } else {
+        //     console.warn(warningMsg, 'No Matrix client');
+        }
+        return canModify;
+    },
+
     _onEditClick: function(e) {
         console.log("Edit widget ID ", this.props.id);
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
@@ -107,26 +130,46 @@ export default React.createClass({
         }, "mx_IntegrationsManager");
     },
 
+    /* If user has permission to modify widgets, delete the widget, otherwise revoke access for the widget to load in the user's browser
+    */
     _onDeleteClick: function() {
-        console.log("Delete widget %s", this.props.id);
-        this.setState({deleting: true});
-        MatrixClientPeg.get().sendStateEvent(
-            this.props.room.roomId,
-            'im.vector.modular.widgets',
-            {}, // empty content
-            this.props.id,
-        ).then(() => {
-            console.log('Deleted widget');
-        }, (e) => {
-            console.error('Failed to delete widget', e);
-            this.setState({deleting: false});
-        });
+        if (this._canUserModify()) {
+            console.log("Delete widget %s", this.props.id);
+            this.setState({deleting: true});
+            MatrixClientPeg.get().sendStateEvent(
+                this.props.room.roomId,
+                'im.vector.modular.widgets',
+                {}, // empty content
+                this.props.id,
+            ).then(() => {
+                console.log('Deleted widget');
+            }, (e) => {
+                console.error('Failed to delete widget', e);
+                this.setState({deleting: false});
+            });
+        } else {
+            console.log("Revoke widget permissions - %s", this.props.id);
+            this._revokeWidgetPermission();
+        }
+    },
+
+    _deleteWidgetLabel() {
+        if (this._canUserModify()) {
+            return 'Delete widget';
+        }
+        return 'Revoke widget access';
     },
 
     _grantWidgetPermission() {
         console.warn('Granting permission to load widget - ', this.state.widgetUrl);
         localStorage.setItem(this.state.widgetPermissionId, true);
         this.setState({hasPermissionToLoad: true});
+    },
+
+    _revokeWidgetPermission() {
+        console.warn('Revoking permission to load widget - ', this.state.widgetUrl);
+        localStorage.removeItem(this.state.widgetPermissionId);
+        this.setState({hasPermissionToLoad: false});
     },
 
     formatAppTileName: function() {
@@ -189,6 +232,13 @@ export default React.createClass({
 
         // editing is done in scalar
         const showEditButton = Boolean(this._scalarClient);
+        const deleteWidgetLabel = this._deleteWidgetLabel();
+        let deleteIcon = 'img/cancel.svg';
+        let deleteClasses = 'mx_filterFlipColor mx_AppTileMenuBarWidget';
+        if(this._canUserModify()) {
+            deleteIcon = 'img/cancel-red.svg';
+            deleteClasses += ' mx_AppTileMenuBarWidgetDelete';
+        }
 
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
@@ -205,9 +255,11 @@ export default React.createClass({
                         />}
 
                         {/* Delete widget */}
-                        <img src="img/cancel.svg"
-                        className="mx_filterFlipColor mx_AppTileMenuBarWidget"
-                        width="8" height="8" alt={_t("Cancel")}
+                        <img src={deleteIcon}
+                        className={deleteClasses}
+                        width="8" height="8"
+                        alt={_t(deleteWidgetLabel)}
+                        title={_t(deleteWidgetLabel)}
                         onClick={this._onDeleteClick}
                         />
                     </span>
