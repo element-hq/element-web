@@ -150,7 +150,7 @@ const Pill = React.createClass({
                     const member = this.state.member;
                     if (member) {
                         userId = member.userId;
-                        linkText = member.name.replace(' (IRC)', ''); // FIXME when groups are done
+                        linkText = member.rawDisplayName.replace(' (IRC)', ''); // FIXME when groups are done
                         avatar = <MemberAvatar member={member} width={16} height={16}/>;
                         pillClass = 'mx_UserPill';
                     }
