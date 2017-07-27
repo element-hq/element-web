@@ -72,7 +72,7 @@ module.exports = React.createClass({
 
     onViewSourceClick: function() {
         const ViewSource = sdk.getComponent('structures.ViewSource');
-        Modal.createDialog(ViewSource, {
+        Modal.createTrackedDialog('View Event Source', '', ViewSource, {
             content: this.props.mxEvent.event,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
@@ -80,7 +80,7 @@ module.exports = React.createClass({
 
     onViewClearSourceClick: function() {
         const ViewSource = sdk.getComponent('structures.ViewSource');
-        Modal.createDialog(ViewSource, {
+        Modal.createTrackedDialog('View Clear Event Source', '', ViewSource, {
             // FIXME: _clearEvent is private
             content: this.props.mxEvent._clearEvent,
         }, 'mx_Dialog_viewsource');
@@ -89,7 +89,7 @@ module.exports = React.createClass({
 
     onRedactClick: function() {
         const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
-        Modal.createDialog(ConfirmRedactDialog, {
+        Modal.createTrackedDialog('Confirm Redact Dialog', '', ConfirmRedactDialog, {
             onFinished: (proceed) => {
                 if (!proceed) return;
 
@@ -99,7 +99,7 @@ module.exports = React.createClass({
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     // display error message stating you couldn't delete this.
                     const code = e.errcode || e.statusCode;
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('You cannot delete this message', e.toString(), ErrorDialog, {
                         title: _t('Error'),
                         description: _t('You cannot delete this message. (%(code)s)', {code: code})
                     });
