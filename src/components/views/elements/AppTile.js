@@ -231,7 +231,7 @@ export default React.createClass({
         }
 
         // editing is done in scalar
-        const showEditButton = Boolean(this._scalarClient);
+        const showEditButton = Boolean(this._scalarClient && this._canUserModify());
         const deleteWidgetLabel = this._deleteWidgetLabel();
         let deleteIcon = 'img/cancel.svg';
         let deleteClasses = 'mx_filterFlipColor mx_AppTileMenuBarWidget';
@@ -250,7 +250,9 @@ export default React.createClass({
                         {showEditButton && <img
                             src="img/edit.svg"
                             className="mx_filterFlipColor mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
-                            width="8" height="8" alt="Edit"
+                            width="8" height="8"
+                            alt={_t('Edit')}
+                            title={_t('Edit')}
                             onClick={this._onEditClick}
                         />}
 
