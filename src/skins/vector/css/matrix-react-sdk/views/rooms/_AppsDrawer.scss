@@ -83,6 +83,10 @@ limitations under the License.
     border: 1px solid transparent;
 }
 
+.mx_AppTileMenuBarWidgetDelete {
+    filter: none;
+}
+
 .mx_AppTileMenuBarWidget:hover {
     border: 1px solid $primary-hairline-color;
     border-radius: 2px;
