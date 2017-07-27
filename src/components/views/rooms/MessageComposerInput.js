@@ -1003,7 +1003,6 @@ export default class MessageComposerInput extends React.Component {
 
     removeMDLinks(contentState: ContentState, prefixes: string[]) {
         const plaintext = contentState.getPlainText();
-        console.info('Removing MD', plaintext);
         if (!plaintext) return '';
         return plaintext.replace(REGEX_MATRIXTO_MARKDOWN_GLOBAL,
         (markdownLink, text, resource, prefix, offset) => {
