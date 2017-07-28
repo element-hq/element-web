@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import url from 'url';
+import { _t } from '../../../languageHandler';
 
 export default class AppPermission extends React.Component {
     constructor(props) {
@@ -36,7 +37,7 @@ export default class AppPermission extends React.Component {
         return (
             <div className='mx_AppPermissionWarning'>
                 <div className='mx_AppPermissionWarningImage'>
-                    <img src='img/warning.svg' alt='Warning'/>
+                    <img src='img/warning.svg' alt={_t('Warning!')}/>
                 </div>
                 <div className='mx_AppPermissionWarningText'>
                     <span className='mx_AppPermissionWarningTextLabel'>Do you want to load widget from URL:</span> <span className='mx_AppPermissionWarningTextURL'>{this.state.curlBase}</span>
