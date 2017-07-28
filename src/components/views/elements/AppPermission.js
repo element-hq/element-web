@@ -6,21 +6,20 @@ export default class AppPermission extends React.Component {
     constructor(props) {
         super(props);
 
-        const curl = this.getCurl();
+        const curlBase = this.getCurlBase();
         this.state = {
-            curl: curl,
+            curlBase: curlBase,
         };
-        console.log('curl', curl);
     }
 
-    getCurl() {
+    // Return string representation of content URL without query parameters
+    getCurlBase() {
         const wurl = url.parse(this.props.url);
         let curl;
         let curlString;
 
         const searchParams = new URLSearchParams(wurl.search);
 
-        // Return string representation of content URL without query parameters
         if(searchParams && searchParams.get('url')) {
             curl = url.parse(searchParams.get('url'));
             if(curl) {
@@ -42,7 +41,7 @@ export default class AppPermission extends React.Component {
                     <img src='img/warning.svg' alt='Warning'/>
                 </div>
                 <div className='mx_AppPermissionWarningText'>
-                    <span className='mx_AppPermissionWarningTextLabel'>Do you want to load widget from URL:</span> <span className='mx_AppPermissionWarningTextURL'>{this.state.curl}</span>
+                    <span className='mx_AppPermissionWarningTextLabel'>Do you want to load widget from URL:</span> <span className='mx_AppPermissionWarningTextURL'>{this.state.curlBase}</span>
                 </div>
                 <input
                     className='mx_AppPermissionButton'
