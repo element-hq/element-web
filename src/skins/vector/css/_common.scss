@@ -319,6 +319,7 @@ textarea {
     cursor: help;
     transition-duration: 200ms;
     font-size: smaller;
+    filter: opacity(0.5);
 }
 
 .mx_Beta:hover {
