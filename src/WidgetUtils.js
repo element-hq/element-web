@@ -21,6 +21,7 @@ export default class WidgetUtils {
     /* Returns true if user is able to send state events to modify widgets in this room
      * @param roomId -- The ID of the room to check
      * @return Boolean -- true if the user can modify widgets in this room
+     * @throws Error -- specifies the error reason
      */
     static canUserModifyWidgets(roomId) {
         if (!roomId) {
