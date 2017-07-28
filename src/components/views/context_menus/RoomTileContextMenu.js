@@ -68,7 +68,7 @@ module.exports = React.createClass({
                         if (self.props.onFinished) {
                             self.props.onFinished();
                         };
-                    }).fail(function(err) {
+                    }).catch(function(err) {
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         Modal.createTrackedDialog('Failed to remove tag from room 1', err.toString(), ErrorDialog, {
                             title: _t('Failed to remove tag %(tagName)s from room', {tagName: tagNameOff}),
@@ -85,7 +85,7 @@ module.exports = React.createClass({
                         if (self.props.onFinished) {
                             self.props.onFinished();
                         };
-                    }).fail(function(err) {
+                    }).catch(function(err) {
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         Modal.createTrackedDialog('Failed to remove tag from room 2', err.toString(), ErrorDialog, {
                             title: _t('Failed to remove tag %(tagName)s from room', {tagName: tagNameOn}),

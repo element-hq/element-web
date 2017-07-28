@@ -111,7 +111,7 @@ var roomTileSource = {
                 //component.state.set({ spinner: component.state.spinner ? component.state.spinner++ : 1 });
                 MatrixClientPeg.get().deleteRoomTag(item.room.roomId, prevTag).finally(function() {
                     //component.state.set({ spinner: component.state.spinner-- });
-                }).fail(function(err) {
+                }).catch(function(err) {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to remove tag " + prevTag + " from room: " + err);
                     Modal.createTrackedDialog('Failed to remove tag from room', err.toString(), ErrorDialog, {
