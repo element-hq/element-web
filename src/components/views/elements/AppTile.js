@@ -142,6 +142,8 @@ export default React.createClass({
         }
     },
 
+    // Widget labels to render, depending upon user permissions
+    // These strings are translated at the point that they are inserted in to the DOM, in the render method
     _deleteWidgetLabel() {
         if (this._canUserModify()) {
             return 'Delete widget';
