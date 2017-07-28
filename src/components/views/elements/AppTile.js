@@ -40,6 +40,8 @@ export default React.createClass({
         name: React.PropTypes.string.isRequired,
         room: React.PropTypes.object.isRequired,
         type: React.PropTypes.string.isRequired,
+        // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
+        // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
         fullWidth: React.PropTypes.bool,
     },
 
