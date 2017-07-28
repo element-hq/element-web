@@ -182,7 +182,7 @@ export default React.createClass({
         // hosted on the same origin as the client will get the same access as if you clicked
         // a link to it.
         const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox "+
-            "allow-same-origin allow-scripts";
+            "allow-same-origin allow-scripts allow-presentation";
         const parsedWidgetUrl = url.parse(this.state.widgetUrl);
         let safeWidgetUrl = '';
         if (ALLOWED_APP_URL_SCHEMES.indexOf(parsedWidgetUrl.protocol) !== -1) {
