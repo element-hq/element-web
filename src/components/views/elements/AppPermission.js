@@ -58,6 +58,6 @@ AppPermission.propTypes = {
     url: PropTypes.string.isRequired,
     onPermissionGranted: PropTypes.func.isRequired,
 };
-AppPermission.defaultPropTypes = {
+AppPermission.defaultProps = {
     onPermissionGranted: function() {},
 };
