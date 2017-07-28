@@ -16,16 +16,23 @@ export default class AppPermission extends React.Component {
     getCurl() {
         const wurl = url.parse(this.props.url);
         let curl;
+        let curlString;
 
         const searchParams = new URLSearchParams(wurl.search);
+
+        // Return string representation of content URL without query parameters
         if(searchParams && searchParams.get('url')) {
-            curl = searchParams.get('url');
+            curl = url.parse(searchParams.get('url'));
+            if(curl) {
+                curl.search = curl.query = "";
+                curlString = curl.format();
+            }
         }
         if (!curl && wurl) {
             wurl.search = wurl.query = "";
-            curl = wurl.format();
+            curlString = wurl.format();
         }
-        return curl;
+        return curlString;
     }
 
     render() {
