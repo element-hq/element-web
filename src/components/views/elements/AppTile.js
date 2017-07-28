@@ -151,6 +151,7 @@ export default React.createClass({
         return 'Revoke widget access';
     },
 
+    /* TODO -- Store permission in account data so that it is persisted across multiple devices */
     _grantWidgetPermission() {
         console.warn('Granting permission to load widget - ', this.state.widgetUrl);
         localStorage.setItem(this.state.widgetPermissionId, true);
