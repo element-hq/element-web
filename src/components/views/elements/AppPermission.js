@@ -45,7 +45,7 @@ export default class AppPermission extends React.Component {
                 <input
                     className='mx_AppPermissionButton'
                     type='button'
-                    value='Allow'
+                    value={_t('Allow')}
                     onClick={this.props.onPermissionGranted}
                 />
             </div>
