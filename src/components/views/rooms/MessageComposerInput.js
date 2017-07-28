@@ -502,12 +502,18 @@ export default class MessageComposerInput extends React.Component {
             // These are block types, not handled by RichUtils by default.
             const blockCommands = ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item'];
             const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
+
+            const shouldToggleBlockFormat = (
+                command === 'backspace' ||
+                command === 'split-block'
+            ) && currentBlockType !== 'unstyled';
+
             if (blockCommands.includes(command)) {
                 newState = RichUtils.toggleBlockType(this.state.editorState, command);
             } else if (command === 'strike') {
                 // this is the only inline style not handled by Draft by default
                 newState = RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH');
-            } else if (command === 'backspace' && currentBlockType !== 'unstyled') {
+            } else if (shouldToggleBlockFormat) {
                 const currentStartOffset = this.state.editorState.getSelection().getStartOffset();
                 if (currentStartOffset === 0) {
                     // Toggle current block type (setting it to 'unstyled')
