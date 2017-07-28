@@ -7,9 +7,7 @@ export default class AppPermission extends React.Component {
         super(props);
 
         const curlBase = this.getCurlBase();
-        this.state = {
-            curlBase: curlBase,
-        };
+        this.state = { curlBase: curlBase};
     }
 
     // Return string representation of content URL without query parameters
