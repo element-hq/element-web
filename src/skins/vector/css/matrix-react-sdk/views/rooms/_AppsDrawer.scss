@@ -83,9 +83,18 @@ limitations under the License.
     border: 1px solid transparent;
 }
 
+.mx_AppTileMenuBarWidgetDelete {
+    filter: none;
+}
+
 .mx_AppTileMenuBarWidget:hover {
     border: 1px solid $primary-hairline-color;
     border-radius: 2px;
+}
+
+.mx_AppTileBody{
+    height: 350px;
+    overflow: hidden;
 }
 
 .mx_AppTileBody iframe {
@@ -166,4 +175,53 @@ limitations under the License.
 form.mx_Custom_Widget_Form div {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.mx_AppPermissionWarning {
+    text-align: center;
+    padding: 30px 0;
+    background-color: $primary-bg-color;
+}
+
+.mx_AppPermissionWarningImage {
+    margin: 10px 0;
+}
+
+.mx_AppPermissionWarningImage img {
+    width: 150px;
+}
+
+.mx_AppPermissionWarningText {
+    max-width: 400px;
+    margin: 10px auto 10px auto;
+    color: $primary-fg-color;
+}
+
+.mx_AppPermissionWarningTextLabel {
+    font-weight: bold;
+}
+
+.mx_AppPermissionWarningTextURL {
+    color: $accent-color;
+}
+
+.mx_AppPermissionButton {
+    padding: 5px;
+    border-radius: 5px;
+    color: $warning-color;
+    background-color: $primary-bg-color;
+}
+
+.mx_AppPermissionButton:hover {
+    background-color: $primary-fg-color;
+    cursor: pointer;
+}
+
+.mx_AppLoading {
+    min-height: 305px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
 }
