@@ -113,7 +113,7 @@
     "Redact": "Удалить",
     "Remove %(name)s from the directory?": "Удалить %(name)s из каталога?",
     "remove %(name)s from the directory.": "удалить %(name)s из каталога.",
-    "Resend": "Отправить еще раз",
+    "Resend": "Переотправить",
     "Source URL": "Исходный URL-адрес",
     "Welcome page": "Страница приветствия",
     "Advanced notification settings": "Дополнительные параметры уведомлений",
