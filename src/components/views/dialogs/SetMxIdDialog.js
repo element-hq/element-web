@@ -106,6 +106,15 @@ export default React.createClass({
     },
 
     _doUsernameCheck: function() {
+        // XXX: SPEC-1
+        // Check if username is valid
+        if (encodeURIComponent(this.state.username) !== this.state.username) {
+            this.setState({
+                usernameError: _t('User names may only contain letters, numbers, dots, hyphens and underscores.'),
+            });
+            return Promise.resolve();
+        }
+
         // Check if username is available
         return this._matrixClient.isUsernameAvailable(this.state.username).then(
             (isAvailable) => {
