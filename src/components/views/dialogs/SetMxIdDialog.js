@@ -251,7 +251,7 @@ export default React.createClass({
         return (
             <BaseDialog className="mx_SetMxIdDialog"
                 onFinished={this.props.onFinished}
-                title="To get started, please pick a username!"
+                title={_t('To get started, please pick a username!')}
             >
                 <div className="mx_Dialog_content">
                     <div className="mx_SetMxIdDialog_input_group">
