@@ -112,7 +112,7 @@ export default React.createClass({
             this.setState({
                 usernameError: _t('User names may only contain letters, numbers, dots, hyphens and underscores.'),
             });
-            return Promise.resolve();
+            return Promise.reject();
         }
 
         // Check if username is available
