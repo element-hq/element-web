@@ -53,6 +53,6 @@ export default class WidgetUtils {
             return false;
         }
 
-        return room.currentState.maySendStateEvent('set_widget', me);
+        return room.currentState.maySendStateEvent('im.vector.modular.widgets', me);
     }
 }
