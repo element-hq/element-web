@@ -188,7 +188,7 @@ form.mx_Custom_Widget_Form div {
 }
 
 .mx_AppPermissionWarningImage img {
-    width: 150px;
+    width: 100px;
 }
 
 .mx_AppPermissionWarningText {
@@ -199,6 +199,7 @@ form.mx_Custom_Widget_Form div {
 
 .mx_AppPermissionWarningTextLabel {
     font-weight: bold;
+    display: block;
 }
 
 .mx_AppPermissionWarningTextURL {
