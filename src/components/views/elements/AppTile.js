@@ -209,24 +209,26 @@ export default React.createClass({
                 </div>
             );
         } else if (this.state.hasPermissionToLoad == true) {
-            appTileBody = (
-                <div className="mx_AppTileBody">
-                    <iframe
-                        ref="appFrame"
-                        src={safeWidgetUrl}
-                        allowFullScreen="true"
-                        sandbox={sandboxFlags}
-                    ></iframe>
-                </div>
-            );
-        } else if (this.isMixedContent()) {
-            appTileBody = (
-                <div className="mx_AppTileBody">
-                    <AppWarning
-                        errorMsg="Error - Mixed content"
-                    />
-                </div>
-            );
+            if (this.isMixedContent()) {
+                appTileBody = (
+                    <div className="mx_AppTileBody">
+                        <AppWarning
+                            errorMsg="Error - Mixed content"
+                        />
+                    </div>
+                );
+            } else {
+                appTileBody = (
+                    <div className="mx_AppTileBody">
+                        <iframe
+                            ref="appFrame"
+                            src={safeWidgetUrl}
+                            allowFullScreen="true"
+                            sandbox={sandboxFlags}
+                        ></iframe>
+                    </div>
+                );
+            }
         } else {
             appTileBody = (
                 <div className="mx_AppTileBody">
