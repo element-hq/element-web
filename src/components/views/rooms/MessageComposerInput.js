@@ -190,11 +190,11 @@ export default class MessageComposerInput extends React.Component {
                 const Pill = sdk.getComponent('elements.Pill');
                 const {url} = Entity.get(entityProps.entityKey).getData();
                 if (Pill.isPillUrl(url)) {
-                    return <Pill url={url} key={url} room={this.props.room} offsetKey={entityProps.offsetKey}/>;
+                    return <Pill url={url} room={this.props.room} offsetKey={entityProps.offsetKey}/>;
                 }
 
                 return (
-                    <a href={url} key={url} data-offset-key={entityProps.offsetKey}>
+                    <a href={url} data-offset-key={entityProps.offsetKey}>
                         {entityProps.children}
                     </a>
                 );
