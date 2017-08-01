@@ -25,6 +25,7 @@ import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import AppPermission from './AppPermission';
+import AppWarning from './AppWarning';
 import MessageSpinner from './MessageSpinner';
 import WidgetUtils from '../../../WidgetUtils';
 
@@ -68,6 +69,17 @@ export default React.createClass({
     isScalarUrl: function() {
         const scalarUrl = SdkConfig.get().integrations_rest_url;
         return scalarUrl && this.props.url.startsWith(scalarUrl);
+    },
+
+    isMixedContent: function() {
+        const parentContentProtocol = window.location.protocol;
+        const u = url.parse(this.props.url);
+        const childContentProtocol = u.protocol;
+        if (parentContentProtocol === 'https:' && childContentProtocol !== parentContentProtocol) {
+            console.warn("Refusing to load mixed-content app:", parentContentProtocol, childContentProtocol, window.location, this.props.url);
+            return true;
+        }
+        return false;
     },
 
     componentWillMount: function() {
@@ -205,6 +217,14 @@ export default React.createClass({
                         allowFullScreen="true"
                         sandbox={sandboxFlags}
                     ></iframe>
+                </div>
+            );
+        } else if (this.isMixedContent() == true) {
+            appTileBody = (
+                <div className="mx_AppTileBody">
+                    <AppWarning
+                        errorMsg="Error - Mixed content"
+                    />
                 </div>
             );
         } else {
