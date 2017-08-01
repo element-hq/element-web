@@ -102,13 +102,8 @@ export default React.createClass({
     },
 
     _canUserModify: function() {
-        try {
-            return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
-        } catch(err) {
-            console.error(err);
-            return false;
-        }
-    },
+        return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
+    }
 
     _onEditClick: function(e) {
         console.log("Edit widget ID ", this.props.id);

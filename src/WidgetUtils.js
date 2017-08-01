@@ -25,27 +25,32 @@ export default class WidgetUtils {
      */
     static canUserModifyWidgets(roomId) {
         if (!roomId) {
-            throw new Error('No room ID specified');
+            console.warn('No room ID specified');
+            return false;
         }
 
         const client = MatrixClientPeg.get();
         if (!client) {
-            throw new Error('User must be be logged in');
+            console.warn('User must be be logged in');
+            return false;
         }
 
         const room = client.getRoom(roomId);
         if (!room) {
-            throw new Error(`Room ID ${roomId} is not recognised`);
+            console.warn(`Room ID ${roomId} is not recognised`);
+            return false;
         }
 
         const me = client.credentials.userId;
         if (!me) {
-            throw new Error('Failed to get user ID');
+            console.warn('Failed to get user ID');
+            return false;
         }
 
         const member = room.getMember(me);
         if (!member || member.membership !== "join") {
-            throw new Error(`User ${me} is not in room ${roomId}`);
+            console.warn(`User ${me} is not in room ${roomId}`);
+            return false;
         }
 
         return room.currentState.maySendStateEvent('set_widget', me);
