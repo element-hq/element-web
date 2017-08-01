@@ -63,16 +63,15 @@ const Pill = React.createClass({
         };
     },
 
-    componentWillMount() {
-        this._unmounted = false;
+    componentWillReceiveProps(nextProps) {
         let regex = REGEX_MATRIXTO;
-        if (this.props.inMessage) {
+        if (nextProps.inMessage) {
             regex = REGEX_LOCAL_MATRIXTO;
         }
 
         // Default to the empty array if no match for simplicity
         // resource and prefix will be undefined instead of throwing
-        const matrixToMatch = regex.exec(this.props.url) || [];
+        const matrixToMatch = regex.exec(nextProps.url) || [];
 
         const resourceId = matrixToMatch[1]; // The room/user ID
         const prefix = matrixToMatch[2]; // The first character of prefix
@@ -87,7 +86,7 @@ const Pill = React.createClass({
         let room;
         switch (pillType) {
             case Pill.TYPE_USER_MENTION: {
-                const localMember = this.props.room.getMember(resourceId);
+                const localMember = nextProps.room.getMember(resourceId);
                 member = localMember;
                 if (!localMember) {
                     member = new RoomMember(null, resourceId);
@@ -110,6 +109,11 @@ const Pill = React.createClass({
                 break;
         }
         this.setState({resourceId, pillType, member, room});
+    },
+
+    componentWillMount() {
+        this._unmounted = false;
+        this.componentWillReceiveProps(this.props);
     },
 
     componentWillUnmount() {
