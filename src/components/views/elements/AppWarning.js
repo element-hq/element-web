@@ -1,8 +1,8 @@
-import React from 'react';
+import React from 'react'; // eslint-disable-line no-unused-vars
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
-function AppWarning(props) {
+const AppWarning = (props) => {
     return (
         <div className='mx_AppPermissionWarning'>
             <div className='mx_AppPermissionWarningImage'>
@@ -13,7 +13,7 @@ function AppWarning(props) {
             </div>
         </div>
     );
-}
+};
 
 AppWarning.propTypes = {
     errorMsg: PropTypes.string,
