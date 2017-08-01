@@ -81,6 +81,7 @@ export default React.createClass({
         this._scalarClient = new ScalarAuthClient();
         this._scalarClient.getScalarToken().done((token) => {
             // Append scalar_token as a query param
+            this._scalarClient.scalarToken = token;
             const u = url.parse(this.props.url);
             if (!u.search) {
                 u.search = "?scalar_token=" + encodeURIComponent(token);
