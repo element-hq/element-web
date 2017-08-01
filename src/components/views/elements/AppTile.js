@@ -219,7 +219,7 @@ export default React.createClass({
                     ></iframe>
                 </div>
             );
-        } else if (this.isMixedContent() == true) {
+        } else if (this.isMixedContent()) {
             appTileBody = (
                 <div className="mx_AppTileBody">
                     <AppWarning
