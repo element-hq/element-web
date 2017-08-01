@@ -50,7 +50,7 @@ const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g')
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
-const REGEX_EMOJI_WHITESPACE = new RegExp('(' + asciiRegexp + ')\\s$');
+const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
@@ -393,7 +393,7 @@ export default class MessageComposerInput extends React.Component {
                 const newContentState = Modifier.replaceText(
                     editorState.getCurrentContent(),
                     currentSelection.merge({
-                        anchorOffset: currentStartOffset - emojiMatch[0].length,
+                        anchorOffset: currentStartOffset - emojiMatch[1].length - 1,
                         focusOffset: currentStartOffset,
                     }),
                     unicodeEmoji,
