@@ -75,7 +75,7 @@ export default React.createClass({
         const parentContentProtocol = window.location.protocol;
         const u = url.parse(this.props.url);
         const childContentProtocol = u.protocol;
-        if (parentContentProtocol === 'https:' && childContentProtocol !== parentContentProtocol) {
+        if (parentContentProtocol === 'https:' && childContentProtocol !== 'https:') {
             console.warn("Refusing to load mixed-content app:", parentContentProtocol, childContentProtocol, window.location, this.props.url);
             return true;
         }
