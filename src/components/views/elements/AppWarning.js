@@ -19,7 +19,7 @@ AppWarning.propTypes = {
     errorMsg: PropTypes.string,
 };
 AppWarning.defaultProps = {
-    errorMsg: _t('Error'),
+    errorMsg: 'Error',
 };
 
 export default AppWarning;
