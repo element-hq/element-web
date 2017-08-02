@@ -63,9 +63,10 @@ export default class RoomProvider extends AutocompleteProvider {
                     displayedAlias: getDisplayAliasForRoom(room),
                 };
             }));
-            completions = this.matcher.match(command[0]);
+            const matchedString = command[0];
+            completions = this.matcher.match(matchedString);
             completions = _sortBy(completions, [
-                (c) => score(query, c.displayedAlias),
+                (c) => score(matchedString, c.displayedAlias),
                 (c) => c.displayedAlias.length,
             ]).map((room) => {
                 const displayAlias = getDisplayAliasForRoom(room.room) || room.roomId;
