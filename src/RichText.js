@@ -201,10 +201,8 @@ export function selectionStateToTextOffsets(selectionState: SelectionState,
 export function textOffsetsToSelectionState({start, end}: SelectionRange,
                                             contentBlocks: Array<ContentBlock>): SelectionState {
     let selectionState = SelectionState.createEmpty();
-
-    for (let block of contentBlocks) {
-        let blockLength = block.getLength();
-
+    for (const block of contentBlocks) {
+        const blockLength = block.getLength();
         if (start !== -1 && start < blockLength) {
             selectionState = selectionState.merge({
                 anchorKey: block.getKey(),
@@ -212,9 +210,8 @@ export function textOffsetsToSelectionState({start, end}: SelectionRange,
             });
             start = -1;
         } else {
-            start -= blockLength;
+            start -= blockLength + 1;
         }
-
         if (end !== -1 && end <= blockLength) {
             selectionState = selectionState.merge({
                 focusKey: block.getKey(),
@@ -222,10 +219,9 @@ export function textOffsetsToSelectionState({start, end}: SelectionRange,
             });
             end = -1;
         } else {
-            end -= blockLength;
+            end -= blockLength + 1;
         }
     }
-
     return selectionState;
 }
 
