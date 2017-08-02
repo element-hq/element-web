@@ -408,11 +408,12 @@ module.exports = React.createClass({
 
     _yankValueFromEvent: function(stateEventType, keyName, defaultValue) {
         // E.g.("m.room.name","name") would yank the "name" content key from "m.room.name"
-        var event = this.props.room.currentState.getStateEvents(stateEventType, '');
+        const event = this.props.room.currentState.getStateEvents(stateEventType, '');
         if (!event) {
             return defaultValue;
         }
-        return event.getContent()[keyName] || defaultValue;
+        const content = event.getContent();
+        return keyName in content ? content[keyName] : defaultValue;
     },
 
     _onHistoryRadioToggle: function(ev) {
@@ -704,7 +705,7 @@ module.exports = React.createClass({
         }
 
         var unfederatableSection;
-        if (this._yankValueFromEvent("m.room.create", "m.federate") === false) {
+        if (this._yankValueFromEvent("m.room.create", "m.federate", true) === false) {
              unfederatableSection = (
                 <div className="mx_RoomSettings_powerLevel">
                 { _t('This room is not accessible by remote Matrix servers') }.
