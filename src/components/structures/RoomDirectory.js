@@ -28,7 +28,7 @@ var linkify = require('linkifyjs');
 var linkifyString = require('linkifyjs/string');
 var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
 var sanitizeHtml = require('sanitize-html');
-var q = require('q');
+import Promise from 'bluebird';
 
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
@@ -73,6 +73,7 @@ module.exports = React.createClass({
             this.protocols = response;
             this.setState({protocolsLoading: false});
         }, (err) => {
+            console.warn(`error loading thirdparty protocols: ${err}`);
             this.setState({protocolsLoading: false});
             if (MatrixClientPeg.get().isGuest()) {
                 // Guests currently aren't allowed to use this API, so
@@ -116,7 +117,7 @@ module.exports = React.createClass({
     },
 
     getMoreRooms: function() {
-        if (!MatrixClientPeg.get()) return q();
+        if (!MatrixClientPeg.get()) return Promise.resolve();
 
         const my_filter_string = this.state.filterString;
         const my_server = this.state.roomServer;
@@ -265,7 +266,7 @@ module.exports = React.createClass({
     },
 
     onFillRequest: function(backwards) {
-        if (backwards || !this.nextBatch) return q(false);
+        if (backwards || !this.nextBatch) return Promise.resolve(false);
 
         return this.getMoreRooms();
     },

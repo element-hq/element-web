@@ -67,7 +67,7 @@ module.exports = React.createClass({
 
     onResendClick: function() {
         Resend.resend(this.props.mxEvent);
-        if (this.props.onFinished) this.props.onFinished();
+        this.closeMenu();
     },
 
     onViewSourceClick: function() {
@@ -75,7 +75,7 @@ module.exports = React.createClass({
         Modal.createDialog(ViewSource, {
             content: this.props.mxEvent.event,
         }, 'mx_Dialog_viewsource');
-        if (this.props.onFinished) this.props.onFinished();
+        this.closeMenu();
     },
 
     onViewClearSourceClick: function() {
@@ -84,7 +84,7 @@ module.exports = React.createClass({
             // FIXME: _clearEvent is private
             content: this.props.mxEvent._clearEvent,
         }, 'mx_Dialog_viewsource');
-        if (this.props.onFinished) this.props.onFinished();
+        this.closeMenu();
     },
 
     onRedactClick: function() {
@@ -106,12 +106,12 @@ module.exports = React.createClass({
                 }).done();
             },
         }, 'mx_Dialog_confirmredact');
-        if (this.props.onFinished) this.props.onFinished();
+        this.closeMenu();
     },
 
     onCancelSendClick: function() {
         Resend.removeFromQueue(this.props.mxEvent);
-        if (this.props.onFinished) this.props.onFinished();
+        this.closeMenu();
     },
 
     onForwardClick: function() {
@@ -130,7 +130,7 @@ module.exports = React.createClass({
         if (this.props.eventTileOps) {
             this.props.eventTileOps.unhideWidget();
         }
-        if (this.props.onFinished) this.props.onFinished();
+        this.closeMenu();
     },
 
     onQuoteClick: function() {
@@ -139,6 +139,7 @@ module.exports = React.createClass({
             action: 'quote',
             event: this.props.mxEvent,
         });
+        this.closeMenu();
     },
 
     render: function() {
@@ -247,7 +248,7 @@ module.exports = React.createClass({
                 {viewClearSourceButton}
                 {unhidePreviewButton}
                 {permalinkButton}
-                {UserSettingsStore.isFeatureEnabled('rich_text_editor') ? quoteButton : null}
+                {quoteButton}
                 {externalURLButton}
             </div>
         );
