@@ -23,35 +23,51 @@ import FuzzyMatcher from './FuzzyMatcher';
 import {PillCompletion} from './Components';
 import {getDisplayAliasForRoom} from '../Rooms';
 import sdk from '../index';
+import _sortBy from 'lodash/sortBy';
 
 const ROOM_REGEX = /(?=#)(\S*)/g;
 
 let instance = null;
 
+function score(query, space) {
+    const index = space.indexOf(query);
+    if (index === -1) {
+        return Infinity;
+    } else {
+        return index;
+    }
+}
+
 export default class RoomProvider extends AutocompleteProvider {
     constructor() {
         super(ROOM_REGEX);
         this.matcher = new FuzzyMatcher([], {
-            keys: ['name', 'roomId', 'aliases'],
+            keys: ['displayedAlias', 'name', 'roomId'],
         });
     }
 
     async getCompletions(query: string, selection: {start: number, end: number}, force = false) {
         const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
 
-        let client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.get();
         let completions = [];
         const {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
             // the only reason we need to do this is because Fuse only matches on properties
-            this.matcher.setObjects(client.getRooms().filter(room => !!room && !!getDisplayAliasForRoom(room)).map(room => {
+            this.matcher.setObjects(client.getRooms().filter(
+                (room) => !!room && !!getDisplayAliasForRoom(room),
+            ).map((room) => {
                 return {
                     room: room,
                     name: room.name,
-                    aliases: room.getAliases(),
+                    displayedAlias: getDisplayAliasForRoom(room),
                 };
             }));
-            completions = this.matcher.match(command[0]).map(room => {
+            completions = this.matcher.match(command[0]);
+            completions = _sortBy(completions, [
+                (c) => score(query, c.displayedAlias),
+                (c) => c.displayedAlias.length,
+            ]).map((room) => {
                 const displayAlias = getDisplayAliasForRoom(room.room) || room.roomId;
                 return {
                     completion: displayAlias,
@@ -62,7 +78,9 @@ export default class RoomProvider extends AutocompleteProvider {
                     ),
                     range,
                 };
-            }).filter(completion => !!completion.completion && completion.completion.length > 0).slice(0, 4);
+            })
+            .filter((completion) => !!completion.completion && completion.completion.length > 0)
+            .slice(0, 4);
         }
         return completions;
     }
