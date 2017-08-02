@@ -115,12 +115,12 @@ export default class EmojiProvider extends AutocompleteProvider {
             completions = completions.concat(this.nameMatcher.match(matchedString));
 
             const sorters = [];
-            // First, sort by score (Infinity if query not in shortname)
-            sorters.push((c) => score(query, c.shortname));
-            // If the query is not empty, sort by length of shortname. Example:
-            //  query = ":bookmark"
+            // First, sort by score (Infinity if matchedString not in shortname)
+            sorters.push((c) => score(matchedString, c.shortname));
+            // If the matchedString is not empty, sort by length of shortname. Example:
+            //  matchedString = ":bookmark"
             //  completions = [":bookmark:", ":bookmark_tabs:", ...]
-            if (query.length > 1) {
+            if (matchedString.length > 1) {
                 sorters.push((c) => c.shortname.length);
             }
             // Finally, sort by original ordering
