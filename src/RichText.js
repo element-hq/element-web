@@ -210,7 +210,7 @@ export function textOffsetsToSelectionState({start, end}: SelectionRange,
             });
             start = -1;
         } else {
-            start -= blockLength + 1;
+            start -= blockLength + 1; // +1 to account for newline between blocks
         }
         if (end !== -1 && end <= blockLength) {
             selectionState = selectionState.merge({
@@ -219,7 +219,7 @@ export function textOffsetsToSelectionState({start, end}: SelectionRange,
             });
             end = -1;
         } else {
-            end -= blockLength + 1;
+            end -= blockLength + 1; // +1 to account for newline between blocks
         }
     }
     return selectionState;
