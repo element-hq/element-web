@@ -214,10 +214,6 @@ module.exports = React.createClass({
         return this.props.config.default_is_url || "https://vector.im";
     },
 
-    getDefaultFederate() {
-        return this.props.config.default_federate && true;
-    },
-
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
 
@@ -790,19 +786,27 @@ module.exports = React.createClass({
             dis.dispatch({action: 'view_set_mxid'});
             return;
         }
+        // Dialog shows inverse of m.federate (noFederate) strict false check to skip undefined check (default = true)
+        const defaultNoFederate = this.props.config.default_federate === false;
         const TextInputWithCheckboxDialog = sdk.getComponent("dialogs.TextInputWithCheckboxDialog");
         Modal.createDialog(TextInputWithCheckboxDialog, {
             title: _t('Create Room'),
             description: _t('Room name (optional)'),
             button: _t('Create Room'),
-            // TODO i18n below.
-            check: this.getDefaultFederate(),
-            checkLabel: 'Federate room in domain ' + MatrixClientPeg.get().getDomain(),
-            onFinished: (shouldCreate, name, federate) => {
+            check: defaultNoFederate,
+            checkLabel: <span>
+                {_t('Block users on other matrix homeservers from joining this room')}
+                <br/>
+                ({_t('This setting cannot be changed later!')})
+            </span>,
+            onFinished: (shouldCreate, name, noFederate) => {
                 if (shouldCreate) {
-                    const createOpts = {};
+                    const createOpts = {
+                        creation_content: {
+                            "m.federate": !noFederate,
+                        },
+                    };
                     if (name) createOpts.name = name;
-                    if (federate) createOpts.creation_content = {"m.federate": federate};
                     createRoom({createOpts}).done();
                 }
             },

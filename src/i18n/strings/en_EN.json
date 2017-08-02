@@ -184,6 +184,8 @@
     "Banned users": "Banned users",
     "Bans user with given id": "Bans user with given id",
     "Blacklisted": "Blacklisted",
+    "Block users on other matrix homeservers from joining this room": "Block users on other matrix homeservers from joining this room",
+    "This setting cannot be changed later!": "This setting cannot be changed later!",
     "Bug Report": "Bug Report",
     "Bulk Options": "Bulk Options",
     "Call Timeout": "Call Timeout",

@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
 export default React.createClass({
     displayName: 'TextInputWithCheckboxDialog',
@@ -28,7 +29,10 @@ export default React.createClass({
         value: React.PropTypes.string,
         button: React.PropTypes.string,
         focus: React.PropTypes.bool,
-        checkLabel: React.PropTypes.string,
+        checkLabel: React.PropTypes.oneOfType([
+            React.PropTypes.element,
+            React.PropTypes.string,
+        ]),
         check: React.PropTypes.bool,
         onFinished: React.PropTypes.func.isRequired,
     },
@@ -38,16 +42,9 @@ export default React.createClass({
             title: "",
             value: "",
             description: "",
-            button: "OK",
             focus: true,
             checkLabel: "",
-            check: true,
-        };
-    },
-
-    getInitialState: function() {
-        return {
-            isChecked: this.props.check,
+            check: false,
         };
     },
 
@@ -59,18 +56,11 @@ export default React.createClass({
     },
 
     onOk: function() {
-        this.props.onFinished(true, this.refs.textinput.value, this.state.isChecked);
+        this.props.onFinished(true, this.refs.textinput.value, this.refs.checkbox.value);
     },
 
     onCancel: function() {
         this.props.onFinished(false);
-    },
-
-    _onToggle: function(keyName, checkedValue, uncheckedValue, ev) {
-        console.log("Checkbox toggle: %s %s", keyName, ev.target.checked);
-        var state = {};
-        state[keyName] = ev.target.checked ? checkedValue : uncheckedValue;
-        this.setState(state);
     },
 
     render: function() {
@@ -87,16 +77,15 @@ export default React.createClass({
                     <div>
                         <input id="textinput" ref="textinput" className="mx_TextInputWithCheckboxDialog_input" defaultValue={this.props.value} autoFocus={this.props.focus} size="64" onKeyDown={this.onKeyDown}/>
                     </div>
+                    <br/>
                     <label>
-                        <input type="checkbox" id="checkbox" ref="checkbox"
-                               onChange={ this._onToggle.bind(this, "isChecked", true, false)}
-                               checked={this.state.isChecked}/>
-												{this.props.checkLabel}?
+                        <input type="checkbox" id="checkbox" ref="checkbox" defaultChecked={this.props.check}/>
+                        {this.props.checkLabel}
                     </label>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.onCancel}>
-                        Cancel
+                        { _t("Cancel") }
                     </button>
                     <button className="mx_Dialog_primary" onClick={this.onOk}>
                         {this.props.button}
