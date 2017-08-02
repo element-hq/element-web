@@ -20,6 +20,7 @@ limitations under the License.
 
 .mx_TextualEvent.mx_MemberEventListSummary_summary {
     font-size: 14px;
+    display: inline-flex;
 }
 
 .mx_MemberEventListSummary_avatars {
@@ -46,4 +47,14 @@ limitations under the License.
     border-bottom: 1px solid $primary-hairline-color;
     margin-left: 63px;
     line-height: 30px;
+}
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_MemberEventListSummary_line {
+        line-height: 22px;
+    }
+
+    .mx_MemberEventListSummary_toggle {
+        margin-top: 2px;
+    }
 }

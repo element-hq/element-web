@@ -47,7 +47,6 @@ webpack_config.module.noParse.push(/sinon\/pkg\/sinon\.js$/);
 webpack_config.resolve.alias['sinon'] = 'sinon/pkg/sinon.js';
 
 webpack_config.resolve.root = [
-    path.resolve('./src'),
     path.resolve('./test'),
 ];
 

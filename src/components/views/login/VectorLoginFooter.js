@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 var React = require('react');
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 module.exports = React.createClass({
     displayName: 'VectorLoginFooter',
@@ -30,7 +31,7 @@ module.exports = React.createClass({
                 <a href="https://medium.com/@RiotChat">blog</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
                 <a href="https://twitter.com/@RiotChat">twitter</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
                 <a href="https://github.com/vector-im/vector-web">github</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-                <a href="https://matrix.org">powered by Matrix</a>
+                <a href="https://matrix.org">{ _t('powered by Matrix') }</a>
             </div>
         );
     }

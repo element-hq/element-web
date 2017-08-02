@@ -29,3 +29,8 @@ limitations under the License.
     font-weight: 300;
     color: $primary-fg-color;
 }
+
+.mx_ServerConfig_selector {
+    text-align: center;
+    width: 302px; // for fr i18n
+}

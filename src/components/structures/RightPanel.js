@@ -16,14 +16,16 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sdk = require('matrix-react-sdk');
-var Matrix = require("matrix-js-sdk");
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var MatrixClientPeg = require("matrix-react-sdk/lib/MatrixClientPeg");
-var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
-var Modal = require('matrix-react-sdk/lib/Modal');
-var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+import React from 'react';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import sdk from 'matrix-react-sdk';
+import Matrix from "matrix-js-sdk";
+import dis from 'matrix-react-sdk/lib/dispatcher';
+import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import Analytics from 'matrix-react-sdk/lib/Analytics';
+import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
+import Modal from 'matrix-react-sdk/lib/Modal';
+import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'RightPanel',
@@ -34,7 +36,7 @@ module.exports = React.createClass({
         collapsed: React.PropTypes.bool, // currently unused property to request for a minimized view of the panel
     },
 
-    Phase : {
+    Phase: {
         MemberList: 'MemberList',
         FilePanel: 'FilePanel',
         NotificationPanel: 'NotificationPanel',
@@ -60,24 +62,26 @@ module.exports = React.createClass({
             return {
                 phase: this.Phase.MemberInfo,
                 member: member,
-            }
-        }
-        else {
+            };
+        } else {
             return {
                 phase: this.Phase.MemberList
-            }
+            };
         }
     },
 
     onMemberListButtonClick: function() {
+        Analytics.trackEvent('Right Panel', 'Member List Button', 'click');
         this.setState({ phase: this.Phase.MemberList });
     },
 
     onFileListButtonClick: function() {
+        Analytics.trackEvent('Right Panel', 'File List Button', 'click');
         this.setState({ phase: this.Phase.FilePanel });
     },
 
     onNotificationListButtonClick: function() {
+        Analytics.trackEvent('Right Panel', 'Notification List Button', 'click');
         this.setState({ phase: this.Phase.NotificationPanel });
     },
 
@@ -89,11 +93,7 @@ module.exports = React.createClass({
 
     onInviteButtonClick: function() {
         if (MatrixClientPeg.get().isGuest()) {
-            var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: "Please Register",
-                description: "Guest users can't invite users. Please register to invite."
-            });
+            dis.dispatch({action: 'view_set_mxid'});
             return;
         }
 
@@ -188,7 +188,7 @@ module.exports = React.createClass({
                         <div className="mx_RightPanel_icon" >
                             <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
                         </div>
-                        <div className="mx_RightPanel_message">Invite to this room</div>
+                        <div className="mx_RightPanel_message">{ _t('Invite to this room') }</div>
                     </AccessibleButton>;
             }
 
@@ -198,26 +198,26 @@ module.exports = React.createClass({
             buttonGroup =
                     <div className="mx_RightPanel_headerButtonGroup">
                         <AccessibleButton className="mx_RightPanel_headerButton"
-                                title="Members" onClick={ this.onMemberListButtonClick }>
+                                title={ _t('Members') } onClick={ this.onMemberListButtonClick }>
                             <div className="mx_RightPanel_headerButton_badge">{ membersBadge ? membersBadge : <span>&nbsp;</span>}</div>
                             <TintableSvg src="img/icons-people.svg" width="25" height="25"/>
                             { membersHighlight }
                         </AccessibleButton>
                         <AccessibleButton
                                 className="mx_RightPanel_headerButton mx_RightPanel_filebutton"
-                                title="Files" onClick={ this.onFileListButtonClick }>
+                                title={ _t('Files') } onClick={ this.onFileListButtonClick }>
                             <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
                             <TintableSvg src="img/icons-files.svg" width="25" height="25"/>
                             { filesHighlight }
                         </AccessibleButton>
                         <AccessibleButton
                                 className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton"
-                                title="Notifications" onClick={ this.onNotificationListButtonClick }>
+                                title={ _t('Notifications') } onClick={ this.onNotificationListButtonClick }>
                             <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
                             <TintableSvg src="img/icons-notifications.svg" width="25" height="25"/>
                             { notificationsHighlight }
                         </AccessibleButton>
-                        <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" title="Hide panel" onClick={ this.onCollapseClick }>
+                        <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" title={ _t("Hide panel") } onClick={ this.onCollapseClick }>
                             <TintableSvg src="img/minimise.svg" width="10" height="16"/>
                         </div>
                     </div>;

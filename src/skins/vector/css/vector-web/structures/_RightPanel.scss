@@ -118,3 +118,14 @@ limitations under the License.
     vertical-align: top;
     padding-left: 10px
 }
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_RightPanel_footer {
+        flex: 0 0 50px;
+    }
+
+    .mx_RightPanel_footer .mx_RightPanel_invite {
+        line-height: 25px;
+        padding-top: 8px;
+    }
+}

@@ -175,3 +175,22 @@ limitations under the License.
     margin-top: -2px;
 }
 
+.mx_MatrixChat_useCompactLayout {
+    .mx_RoomStatusBar {
+        min-height: 40px;
+    }
+
+    .mx_RoomStatusBar_indicator {
+        margin-top: 10px;
+    }
+
+    .mx_RoomStatusBar_callBar {
+      height: 40px;
+      line-height: 40px;
+    }
+
+    .mx_RoomStatusBar_typingBar {
+      height: 40px;
+      line-height: 40px;
+    }
+}

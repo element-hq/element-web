@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="25px" height="25px" viewBox="0 0 25 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: sketchtool 3.8.3 (29802) - http://www.bohemiancoding.com/sketch -->
-    <title>E34C64ED-EBD7-49B6-BDD9-CB729162705A</title>
-    <desc>Created with sketchtool.</desc>
-    <defs>
-        <rect id="path-1" x="6" y="10" width="13" height="8" rx="1"></rect>
-        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="13" height="8" fill="white">
-            <use xlink:href="#path-1"></use>
-        </mask>
-    </defs>
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>icons_directory</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Room-list-Copy-3" transform="translate(-58.000000, -726.000000)">
-            <g id="icons_directory" transform="translate(58.000000, 726.000000)">
-                <path d="M12.5,25 C19.4035594,25 25,19.4035594 25,12.5 C25,5.59644063 19.4035594,0 12.5,0 C5.59644063,0 0,5.59644063 0,12.5 C0,19.4035594 5.59644063,25 12.5,25 Z" id="Oval-1-Copy-7" fill="#76CFA6"></path>
-                <use id="Rectangle-9" stroke="#FFFFFF" mask="url(#mask-2)" stroke-width="2" opacity="0.8" xlink:href="#path-1"></use>
-                <path d="M6,9 L6,6.99895656 C6,6.44724809 6.45097518,6 6.99077797,6 L11.009222,6 C11.5564136,6 12,6.44386482 12,7 L12,8 L17.9970707,8 C18.5509732,8 19,8.45318604 19,9 L19,9 L6,9 Z" id="Path-Copy" fill="#FFFFFF" opacity="0.6"></path>
+        <g id="Left-panel" transform="translate(-83.000000, -726.000000)">
+            <g id="icons_directory">
+                <g transform="translate(83.000000, 726.000000)">
+                    <path d="M12.5,25 C19.4035594,25 25,19.4035594 25,12.5 C25,5.59644063 19.4035594,0 12.5,0 C5.59644063,0 0,5.59644063 0,12.5 C0,19.4035594 5.59644063,25 12.5,25 Z" id="Oval-1-Copy-7" fill="#76CFA6"></path>
+                    <g id="Lines" transform="translate(6.000000, 7.000000)" stroke="#FFFFFF" stroke-linecap="round">
+                        <path d="M4,5.5 L9,5.5" id="Line"></path>
+                        <path d="M4,1.5 L13,1.5" id="Line-Copy-4"></path>
+                        <path d="M0,1.5 L2,1.5" id="Line" opacity="0.6"></path>
+                        <path d="M0,5.5 L2,5.5" id="Line" opacity="0.6"></path>
+                        <path d="M4,9.5 L11,9.5" id="Line-Copy-6"></path>
+                        <path d="M0,9.5 L2,9.5" id="Line-Copy-3" opacity="0.6"></path>
+                    </g>
+                </g>
             </g>
         </g>
     </g>

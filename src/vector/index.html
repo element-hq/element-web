@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="vector-icons/apple-touch-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="vector-icons/apple-touch-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="vector-icons/apple-touch-icon-180x180.png">
-    <link rel="manifest" href="vector-icons/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <link rel="shortcut icon" href="vector-icons/favicon.ico">
     <meta name="apple-mobile-web-app-title" content="Riot">
     <meta name="application-name" content="Riot">
@@ -36,7 +36,7 @@
   </head>
   <body style="height: 100%;">
     <section id="matrixchat" style="height: 100%;"></section>
-    <noscript>Sorry, Riot requires JavaScript to be enabled.</noscript>
+    <noscript>Sorry, Riot requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
     <% for (var i=0; i < htmlWebpackPlugin.files.js.length; i++) {
         // Not a particularly graceful way of not putting the indexeddb worker script
         // into the main page

@@ -18,9 +18,9 @@ limitations under the License.
 */
 
 import VectorBasePlatform from './VectorBasePlatform';
-import Favico from 'favico.js';
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/lib/dispatcher.js';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import q from 'q';
 
 import url from 'url';
@@ -30,52 +30,17 @@ export default class WebPlatform extends VectorBasePlatform {
     constructor() {
         super();
         this.runningVersion = null;
-        // The 'animations' are really low framerate and look terrible.
-        // Also it re-starts the animationb every time you set the badge,
-        // and we set the state each time, even if the value hasn't changed,
-        // so we'd need to fix that if enabling the animation.
-        this.favicon = new Favico({animation: 'none'});
-        this._updateFavicon();
     }
 
-    _updateFavicon() {
-        try {
-            // This needs to be in in a try block as it will throw
-            // if there are more than 100 badge count changes in
-            // its internal queue
-            let bgColor = "#d00",
-                notif = this.notificationCount;
-
-            if (this.errorDidOccur) {
-                notif = notif || "×";
-                bgColor = "#f00";
-            }
-
-            this.favicon.badge(notif, {
-                bgColor: bgColor
-            });
-        } catch (e) {
-            console.warn(`Failed to set badge count: ${e.message}`);
-        }
-    }
-
-    setNotificationCount(count: number) {
-        if (this.notificationCount === count) return;
-        super.setNotificationCount(count);
-        this._updateFavicon();
-    }
-
-    setErrorStatus(errorDidOccur: boolean) {
-        if (this.errorDidOccur === errorDidOccur) return;
-        super.setErrorStatus(errorDidOccur);
-        this._updateFavicon();
+    getHumanReadableName(): string {
+        return 'Web Platform'; // no translation required: only used for analytics
     }
 
     /**
      * Returns true if the platform supports displaying
      * notifications, otherwise false.
      */
-    supportsNotifications() : boolean {
+    supportsNotifications(): boolean {
         return Boolean(global.Notification);
     }
 
@@ -83,8 +48,8 @@ export default class WebPlatform extends VectorBasePlatform {
      * Returns true if the application currently has permission
      * to display notifications. Otherwise false.
      */
-    maySendNotifications() : boolean {
-        return global.Notification.permission == 'granted';
+    maySendNotifications(): boolean {
+        return global.Notification.permission === 'granted';
     }
 
     /**
@@ -94,7 +59,7 @@ export default class WebPlatform extends VectorBasePlatform {
      * that is 'granted' if the user allowed the request or
      * 'denied' otherwise.
      */
-    requestNotificationPermission() : Promise {
+    requestNotificationPermission(): Promise<string> {
         // annoyingly, the latest spec says this returns a
         // promise, but this is only supported in Chrome 46
         // and Firefox 47, so adapt the callback API.
@@ -113,13 +78,13 @@ export default class WebPlatform extends VectorBasePlatform {
                 icon: avatarUrl,
                 tag: "vector",
                 silent: true, // we play our own sounds
-            }
+            },
         );
 
         notification.onclick = function() {
             dis.dispatch({
                 action: 'view_room',
-                room_id: room.roomId
+                room_id: room.roomId,
             });
             global.focus();
             notification.close();
@@ -132,7 +97,7 @@ export default class WebPlatform extends VectorBasePlatform {
         }, 5 * 1000);
     }
 
-    _getVersion() {
+    _getVersion(): Promise<string> {
         const deferred = q.defer();
 
         // We add a cachebuster to the request to make sure that we know about
@@ -148,19 +113,19 @@ export default class WebPlatform extends VectorBasePlatform {
             },
             (err, response, body) => {
                 if (err || response.status < 200 || response.status >= 300) {
-                    if (err == null) err = { status: response.status };
+                    if (err === null) err = { status: response.status };
                     deferred.reject(err);
                     return;
                 }
 
                 const ver = body.trim();
                 deferred.resolve(ver);
-            }
+            },
         );
         return deferred.promise;
     }
 
-    getAppVersion() {
+    getAppVersion(): Promise<string> {
         if (this.runningVersion !== null) {
             return q(this.runningVersion);
         }
@@ -169,9 +134,9 @@ export default class WebPlatform extends VectorBasePlatform {
 
     pollForUpdate() {
         this._getVersion().done((ver) => {
-            if (this.runningVersion == null) {
+            if (this.runningVersion === null) {
                 this.runningVersion = ver;
-            } else if (this.runningVersion != ver) {
+            } else if (this.runningVersion !== ver) {
                 dis.dispatch({
                     action: 'new_version',
                     currentVersion: this.runningVersion,
@@ -187,22 +152,23 @@ export default class WebPlatform extends VectorBasePlatform {
         window.location.reload();
     }
 
-    getDefaultDeviceDisplayName() {
+    getDefaultDeviceDisplayName(): string {
         // strip query-string and fragment from uri
-        let u = url.parse(window.location.href);
+        const u = url.parse(window.location.href);
         u.search = "";
         u.hash = "";
-        let app_name = u.format();
+        const appName = u.format();
 
-        let ua = new UAParser();
-        return app_name + " via " + ua.getBrowser().name +
-            " on " + ua.getOS().name;
+        const ua = new UAParser();
+        const browserName = ua.getBrowser().name || "unknown browser";
+        const osName = ua.getOS().name || "unknown os";
+        return _t('%(appName)s via %(browserName)s on %(osName)s', {appName: appName, browserName: browserName, osName: osName});
     }
 
-    screenCaptureErrorString() {
+    screenCaptureErrorString(): ?string {
         // it won't work at all if you're not on HTTPS so whine whine whine
         if (!global.window || global.window.location.protocol !== "https:") {
-            return "You need to be using HTTPS to place a screen-sharing call.";
+            return _t("You need to be using HTTPS to place a screen-sharing call.");
         }
         return null;
     }

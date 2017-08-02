@@ -21,16 +21,18 @@ var DragDropContext = require('react-dnd').DragDropContext;
 var HTML5Backend = require('react-dnd-html5-backend');
 var sdk = require('matrix-react-sdk')
 var dis = require('matrix-react-sdk/lib/dispatcher');
+import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 
 var VectorConferenceHandler = require('../../VectorConferenceHandler');
 var CallHandler = require("matrix-react-sdk/lib/CallHandler");
+
+import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
 var LeftPanel = React.createClass({
     displayName: 'LeftPanel',
 
     propTypes: {
         collapsed: React.PropTypes.bool.isRequired,
-        teamToken: React.PropTypes.string,
     },
 
     getInitialState: function() {
@@ -97,16 +99,20 @@ var LeftPanel = React.createClass({
     render: function() {
         var RoomList = sdk.getComponent('rooms.RoomList');
         var BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
-        var SearchBox = sdk.getComponent('structures.SearchBox');
 
-        var collapseButton;
+        var topBox;
+        if (MatrixClientPeg.get().isGuest()) {
+            var LoginBox = sdk.getComponent('structures.LoginBox');
+            topBox = <LoginBox collapsed={ this.props.collapsed }/>;
+        }
+        else {
+            var SearchBox = sdk.getComponent('structures.SearchBox');
+            topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
+        }
+
         var classes = "mx_LeftPanel mx_fadable";
         if (this.props.collapsed) {
             classes += " collapsed";
-        }
-        else {
-            // Hide the collapse button until we work out how to display it in the new skin
-            // collapseButton = <img className="mx_LeftPanel_hideButton" onClick={ this.onHideClick } src="img/hide.png" width="12" height="20" alt="<"/>
         }
 
         var callPreview;
@@ -121,15 +127,14 @@ var LeftPanel = React.createClass({
 
         return (
             <aside className={classes} style={{ opacity: this.props.opacity }}>
-                <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />
-                { collapseButton }
+                { topBox }
                 { callPreview }
                 <RoomList
                     selectedRoom={this.props.selectedRoom}
                     collapsed={this.props.collapsed}
                     searchFilter={this.state.searchFilter}
                     ConferenceHandler={VectorConferenceHandler} />
-                <BottomLeftMenu collapsed={this.props.collapsed} teamToken={this.props.teamToken}/>
+                <BottomLeftMenu collapsed={this.props.collapsed}/>
             </aside>
         );
     }

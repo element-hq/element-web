@@ -127,15 +127,6 @@ limitations under the License.
     clear: both;
 }
 
-.mx_RoomView_MessageList h2 {
-    clear: both;
-    margin-top: 32px;
-    margin-bottom: 8px;
-    margin-left: 63px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid $primary-hairline-color;
-}
-
 .mx_RoomView_invitePrompt {
     order: 2;
 
@@ -160,7 +151,8 @@ hr.mx_RoomView_myReadMarker {
     border-bottom: solid 1px $accent-color;
     margin-top: 0px;
     position: relative;
-    top: 5px;
+    top: -1px;
+    z-index: 1;
 }
 
 .mx_RoomView_statusArea {
@@ -259,4 +251,14 @@ hr.mx_RoomView_myReadMarker {
 
 .mx_RoomView_ongoingConfCallNotification a {
     color: $accent-fg-color ! important;
+}
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_RoomView_MessageList {
+        margin-bottom: 4px;
+    }
+
+    .mx_RoomView_statusAreaBox {
+        min-height: 42px;
+    }
 }

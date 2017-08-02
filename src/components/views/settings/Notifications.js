@@ -16,6 +16,7 @@ limitations under the License.
 
 'use strict';
 var React = require('react');
+import { _t, _tJsx } from 'matrix-react-sdk/lib/languageHandler';
 var q = require("q");
 var sdk = require('matrix-react-sdk');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
@@ -131,8 +132,8 @@ module.exports = React.createClass({
         }, (error) => {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Error saving email notification preferences",
-                description: "An error occurred whilst saving your email notification preferences.",
+                title: _t('Error saving email notification preferences'),
+                description: _t('An error occurred whilst saving your email notification preferences.'),
             });
         });
     },
@@ -175,8 +176,9 @@ module.exports = React.createClass({
 
         var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
         Modal.createDialog(TextInputDialog, {
-            title: "Keywords",
-            description: "Enter keywords separated by a comma:",
+            title: _t('Keywords'),
+            description: _t('Enter keywords separated by a comma:'),
+            button: _t('OK'),
             value: keywords,
             onFinished: function onFinished(should_leave, newValue) {
 
@@ -240,8 +242,8 @@ module.exports = React.createClass({
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Failed to change settings: " + error);
                 Modal.createDialog(ErrorDialog, {
-                    title: "Error",
-                    description: "Failed to change settings",
+                    title: _t('Failed to change settings'),
+                    description: ((error && error.message) ? error.message : _t('Operation failed')),
                     onFinished: self._refreshFromServer
                 });
             });
@@ -310,8 +312,8 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Can't update user notification settings: " + error);
             Modal.createDialog(ErrorDialog, {
-                title: "Error",
-                description: "Can't update user notification settings",
+                title: _t('Can\'t update user notification settings'),
+                description: ((error && error.message) ? error.message : _t('Operation failed')),
                 onFinished: self._refreshFromServer
             });
         });
@@ -352,8 +354,8 @@ module.exports = React.createClass({
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to update keywords: " + error);
             Modal.createDialog(ErrorDialog, {
-                title: "Error",
-                description: "Failed to update keywords",
+                title: _t('Failed to update keywords'),
+                description: ((error && error.message) ? error.message : _t('Operation failed')),
                 onFinished: self._refreshFromServer
             });
         }
@@ -533,7 +535,16 @@ module.exports = React.createClass({
                     // it corresponds to all content push rules (stored in self.state.vectorContentRule)
                     self.state.vectorPushRules.push({
                         "vectorRuleId": "_keywords",
-                        "description" : (<span>Messages containing <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>keywords</span></span>),
+                        "description" : (
+                            <span>
+                            { _tJsx('Messages containing <span>keywords</span>',
+                                /<span>(.*?)<\/span>/,
+                                (sub) => {
+                                    return <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>{sub}</span>;
+                                }
+                            )}
+                            </span>
+                        ),
                         "vectorState": self.state.vectorContentRules.vectorState
                     });
                 }
@@ -547,7 +558,7 @@ module.exports = React.createClass({
 
                     self.state.vectorPushRules.push({
                         "vectorRuleId": vectorRuleId,
-                        "description" : ruleDefinition.description,
+                        "description" : _t(ruleDefinition.description), // Text from VectorPushRulesDefinitions.js
                         "rule": rule,
                         "vectorState": vectorState,
                     });
@@ -562,8 +573,8 @@ module.exports = React.createClass({
 
             // Build the rules not managed by Vector UI
             var otherRulesDescriptions = {
-                '.m.rule.message': "Notify for all other messages/rooms",
-                '.m.rule.fallback': "Notify me for anything else"
+                '.m.rule.message': _t('Notify for all other messages/rooms'),
+                '.m.rule.fallback': _t('Notify me for anything else'),
             };
 
             for (var i in defaultRules.others) {
@@ -588,6 +599,7 @@ module.exports = React.createClass({
                 phase: self.phases.DISPLAY
             });
         }, function(error) {
+            console.error(error);
             self.setState({
                 phase: self.phases.ERROR
             });
@@ -622,7 +634,7 @@ module.exports = React.createClass({
         return (
             <tr key={ className }>
                 <th>
-                    {title}
+                    { title }
                 </th>
 
                 <th>
@@ -698,7 +710,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_UserNotifSettings_labelCell">
                             <label htmlFor="enableNotifications">
-                                Enable notifications for this account
+                                { _t('Enable notifications for this account') }
                             </label>
                         </div>
                     </div>
@@ -713,7 +725,7 @@ module.exports = React.createClass({
                     {masterPushRuleDiv}
 
                     <div className="mx_UserSettings_notifTable">
-                        All notifications are currently disabled for all targets.
+                        { _t('All notifications are currently disabled for all targets.') }.
                     </div>
                 </div>
             );
@@ -723,13 +735,13 @@ module.exports = React.createClass({
         let emailNotificationsRow;
         if (emailThreepids.length === 0) {
             emailNotificationsRow = <div>
-                Add an email address above to configure email notifications
+                { _t('Add an email address above to configure email notifications') }
             </div>;
         } else {
             // This only supports the first email address in your profile for now
             emailNotificationsRow = this.emailNotificationsRow(
                 emailThreepids[0].address,
-                "Enable email notifications ("+emailThreepids[0].address+")"
+                _t('Enable email notifications') + ' (' + emailThreepids[0].address + ')'
             );
         }
 
@@ -737,7 +749,7 @@ module.exports = React.createClass({
         var externalRules = [];
         for (var i in this.state.externalPushRules) {
             var rule = this.state.externalPushRules[i];
-            externalRules.push(<li>{ rule.description }</li>);
+            externalRules.push(<li>{ _t(rule.description) }</li>);
         }
 
         // Show keywords not displayed by the vector UI as a single external push rule
@@ -748,12 +760,12 @@ module.exports = React.createClass({
         }
         if (externalKeyWords.length) {
             externalKeyWords = externalKeyWords.join(", ");
-            externalRules.push(<li>Notifications on the following keywords follow rules which can’t be displayed here: { externalKeyWords }</li>);
+            externalRules.push(<li>{ _t('Notifications on the following keywords follow rules which can’t be displayed here:') } { externalKeyWords }</li>);
         }
 
         var devicesSection;
         if (this.state.pushers === undefined) {
-            devicesSection = <div className="error">Unable to fetch notification target list</div>
+            devicesSection = <div className="error">{ _t('Unable to fetch notification target list') }</div>
         } else if (this.state.pushers.length == 0) {
             devicesSection = null;
         } else {
@@ -774,7 +786,7 @@ module.exports = React.createClass({
         }
         if (devicesSection) {
             devicesSection = (<div>
-                <h3>Notification targets</h3>
+                <h3>{ _t('Notification targets') }</h3>
                 { devicesSection }
             </div>);
         }
@@ -783,9 +795,9 @@ module.exports = React.createClass({
         if (externalRules.length) {
             advancedSettings = (
                 <div>
-                    <h3>Advanced notifications settings</h3>
-                    There are advanced notifications which are not shown here.<br/>
-                    You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply.
+                    <h3>{ _t('Advanced notification settings') }</h3>
+                    { _t('There are advanced notifications which are not shown here') }.<br/>
+                    { _t('You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply') }.
                     <ul>
                         { externalRules }
                     </ul>
@@ -812,7 +824,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_UserNotifSettings_labelCell">
                             <label htmlFor="enableDesktopNotifications">
-                                Enable desktop notifications
+                                { _t('Enable desktop notifications') }
                             </label>
                         </div>
                     </div>
@@ -830,7 +842,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="mx_UserNotifSettings_labelCell">
                             <label htmlFor="enableDesktopAudioNotifications">
-                                Enable audible notifications in web client
+                                { _t('Enable audible notifications in web client') }
                             </label>
                         </div>
                     </div>
@@ -842,9 +854,9 @@ module.exports = React.createClass({
                             <thead>
                                 <tr>
                                     <th width="55%"></th>
-                                    <th width="15%">Off</th>
-                                    <th width="15%">On</th>
-                                    <th width="15%">Noisy</th>
+                                    <th width="15%">{ _t('Off') }</th>
+                                    <th width="15%">{ _t('On') }</th>
+                                    <th width="15%">{ _t('Noisy') }</th>
                                 </tr>
                             </thead>
                             <tbody>

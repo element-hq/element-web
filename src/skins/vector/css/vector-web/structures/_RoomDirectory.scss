@@ -21,10 +21,15 @@ limitations under the License.
     margin-right: auto;
     margin-bottom: 12px;
     color: $primary-fg-color;
+    word-break: break-word;
 
     display: flex;
 
     flex-direction: column;
+}
+
+.mx_RoomDirectory .mx_RoomHeader_simpleHeader {
+    margin-left: 0px;
 }
 
 .mx_RoomDirectory_list {
