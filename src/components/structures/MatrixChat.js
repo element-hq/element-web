@@ -801,12 +801,9 @@ module.exports = React.createClass({
             </span>,
             onFinished: (shouldCreate, name, noFederate) => {
                 if (shouldCreate) {
-                    const createOpts = {
-                        creation_content: {
-                            "m.federate": !noFederate,
-                        },
-                    };
+                    const createOpts = {};
                     if (name) createOpts.name = name;
+                    if (noFederate) createOpts.creation_content = {'m.federate': false};
                     createRoom({createOpts}).done();
                 }
             },

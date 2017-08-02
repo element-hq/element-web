@@ -56,7 +56,7 @@ export default React.createClass({
     },
 
     onOk: function() {
-        this.props.onFinished(true, this.refs.textinput.value, this.refs.checkbox.value);
+        this.props.onFinished(true, this.refs.textinput.value, this.refs.checkbox.checked);
     },
 
     onCancel: function() {
