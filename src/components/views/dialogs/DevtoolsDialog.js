@@ -152,6 +152,89 @@ class SendCustomStateEvent extends React.Component {
     }
 }
 
+class RoomStateExplorer extends React.Component {
+    static propTypes = {
+        roomId: React.PropTypes.string.isRequired,
+        onFinished: React.PropTypes.func.isRequired,
+        onBack: React.PropTypes.func.isRequired,
+    };
+
+    constructor(props, context) {
+        super(props, context);
+
+        this.onBack = this.onBack.bind(this);
+    }
+
+    state = {
+        eventType: null,
+    };
+
+    browseEventType(eventType) {
+        const self = this;
+        return () => {
+            self.setState({ eventType });
+        };
+    }
+
+    onViewSourceClick(ev) {
+        const ViewSource = sdk.getComponent('structures.ViewSource');
+        return () => {
+            Modal.createDialog(ViewSource, {
+                content: ev,
+            }, 'mx_Dialog_viewsource');
+        };
+    }
+
+    onBack() {
+        if (this.state.eventType === null) {
+            this.props.onBack();
+        } else {
+            this.setState({ eventType: null });
+        }
+    }
+
+    render() {
+        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        const roomStateEvents = room.currentState.events;
+
+        const rows = [];
+
+        if (this.state.eventType === null) {
+            Object.keys(roomStateEvents).forEach((evType) => {
+                const stateGroup = roomStateEvents[evType];
+                const keys = Object.keys(stateGroup);
+
+                if (keys.length > 1) {
+                    rows.push(<button key={evType} onClick={this.browseEventType(evType)}>{evType}</button>);
+                } else if (keys.length === 1) {
+                    rows.push(<button key={evType} onClick={this.onViewSourceClick(stateGroup[keys[0]])}>{evType}</button>);
+                }
+            });
+        } else {
+            const evType = this.state.eventType;
+            const stateGroup = roomStateEvents[evType];
+            Object.keys(stateGroup).forEach((stateKey) => {
+                const ev = stateGroup[stateKey];
+                rows.push(<button key={stateKey} onClick={this.onViewSourceClick(ev)}>{stateKey}</button>);
+            });
+        }
+
+        return <div>
+            <div className="mx_Dialog_content">
+                <div className="mx_TextInputDialog_label">
+                    Room ID: {this.props.roomId}
+                </div>
+                <div>
+                    {rows}
+                </div>
+            </div>
+            <div className="mx_Dialog_buttons">
+                <button onClick={this.onBack}>Back</button>
+            </div>
+        </div>;
+    }
+}
+
 export default class DevtoolsDialog extends React.Component {
     static propTypes = {
         roomId: React.PropTypes.string.isRequired,
@@ -164,6 +247,7 @@ export default class DevtoolsDialog extends React.Component {
 
     constructor(props, context) {
         super(props, context);
+        this.onBack = this.onBack.bind(this);
         this.onCancel = this.onCancel.bind(this);
     }
 
@@ -177,6 +261,10 @@ export default class DevtoolsDialog extends React.Component {
         };
     }
 
+    onBack() {
+        this.setState({ mode: null });
+    }
+
     onCancel() {
         this.props.onFinished(false);
     }
@@ -185,12 +273,13 @@ export default class DevtoolsDialog extends React.Component {
         let body;
 
         if (this.state.mode) {
-            body = <this.state.mode {...this.props} />;
+            body = <this.state.mode {...this.props} onBack={this.onBack} />;
         } else {
             body = <div>
                 <div className="mx_Dialog_content">
                     <button onClick={this._setMode(SendCustomEvent)}>Send Custom Event</button>
                     <button onClick={this._setMode(SendCustomStateEvent)}>Send Custom State Event</button>
+                    <button onClick={this._setMode(RoomStateExplorer)}>Explore Room State</button>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.onCancel}>Cancel</button>
