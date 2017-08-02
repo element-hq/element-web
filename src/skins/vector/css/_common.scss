@@ -258,12 +258,12 @@ textarea {
     color: $warning-color;
 }
 
-.mx_TextInputDialog_label {
+.mx_TextInputDialog_label, .mx_TextInputWithCheckboxDialog_label {
     text-align: left;
     padding-bottom: 12px;
 }
 
-.mx_TextInputDialog_input {
+.mx_TextInputDialog_input, .mx_TextInputWithCheckboxDialog_input {
     font-size: 15px;
     border-radius: 3px;
     border: 1px solid $input-border-color;
