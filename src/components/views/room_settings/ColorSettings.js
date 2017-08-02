@@ -13,13 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var q = require("q");
+import Promise from 'bluebird';
 var React = require('react');
 
 var sdk = require('../../../index');
 var Tinter = require('../../../Tinter');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
+
+import dis from '../../../dispatcher';
 
 var ROOM_COLORS = [
     // magic room default values courtesy of Ribot
@@ -70,7 +72,7 @@ module.exports = React.createClass({
 
     saveSettings: function() { // : Promise
         if (!this.state.hasChanged) {
-            return q(); // They didn't explicitly give a color to save.
+            return Promise.resolve(); // They didn't explicitly give a color to save.
         }
         var originalState = this.getInitialState();
         if (originalState.primary_color !== this.state.primary_color ||
@@ -86,15 +88,11 @@ module.exports = React.createClass({
                 }
             ).catch(function(err) {
                 if (err.errcode == 'M_GUEST_ACCESS_FORBIDDEN') {
-                    var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                    Modal.createDialog(NeedToRegisterDialog, {
-                        title: "Please Register",
-                        description: "Saving room color settings is only available to registered users"
-                    });
+                    dis.dispatch({action: 'view_set_mxid'});
                 }
             });
         }
-        return q(); // no color diff
+        return Promise.resolve(); // no color diff
     },
 
     _getColorIndex: function(scheme) {

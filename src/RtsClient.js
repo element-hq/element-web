@@ -1,5 +1,7 @@
 import 'whatwg-fetch';
 
+let fetchFunction = fetch;
+
 function checkStatus(response) {
     if (!response.ok) {
         return response.text().then((text) => {
@@ -31,7 +33,7 @@ const request = (url, opts) => {
         opts.body = JSON.stringify(opts.body);
         opts.headers['Content-Type'] = 'application/json';
     }
-    return fetch(url, opts)
+    return fetchFunction(url, opts)
         .then(checkStatus)
         .then(parseJson);
 };
@@ -64,7 +66,7 @@ export default class RtsClient {
                     client_secret: clientSecret,
                 },
                 method: 'POST',
-            }
+            },
         );
     }
 
@@ -74,7 +76,7 @@ export default class RtsClient {
                 qs: {
                     team_token: teamToken,
                 },
-            }
+            },
         );
     }
 
@@ -91,7 +93,12 @@ export default class RtsClient {
                 qs: {
                     user_id: userId,
                 },
-            }
+            },
         );
+    }
+
+    // allow fetch to be replaced, for testing.
+    static setFetch(fn) {
+        fetchFunction = fn;
     }
 }

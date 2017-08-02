@@ -17,6 +17,7 @@ limitations under the License.
 var React = require('react');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var sdk = require('../../../index');
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'ChangeAvatar',
@@ -105,7 +106,7 @@ module.exports = React.createClass({
 
     onError: function(error) {
         this.setState({
-            errorText: "Failed to upload profile picture!"
+            errorText: _t("Failed to upload profile picture!")
         });
     },
 
@@ -127,7 +128,7 @@ module.exports = React.createClass({
         if (this.props.showUploadSection) {
             uploadSection = (
                 <div className={this.props.className}>
-                    Upload new:
+                    {_t("Upload new:")}
                     <input type="file" accept="image/*" onChange={this.onFileSelected}/>
                     {this.state.errorText}
                 </div>

@@ -19,6 +19,7 @@ import classNames from 'classnames';
 
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import { _t } from '../../../languageHandler';
 
 
 export default class DevicesPanel extends React.Component {
@@ -54,10 +55,10 @@ export default class DevicesPanel extends React.Component {
                 var errtxt;
                 if (error.httpStatus == 404) {
                     // 404 probably means the HS doesn't yet support the API.
-                    errtxt = "Your home server does not support device management.";
+                    errtxt = _t("Your home server does not support device management.");
                 } else {
                     console.error("Error loading devices:", error);
-                    errtxt = "Unable to load device list.";
+                    errtxt = _t("Unable to load device list");
                 }
                 this.setState({deviceLoadError: errtxt});
             }
@@ -127,9 +128,9 @@ export default class DevicesPanel extends React.Component {
         return (
             <div className={classes}>
                 <div className="mx_DevicesPanel_header">
-                    <div className="mx_DevicesPanel_deviceId">ID</div>
-                    <div className="mx_DevicesPanel_deviceName">Name</div>
-                    <div className="mx_DevicesPanel_deviceLastSeen">Last seen</div>
+                    <div className="mx_DevicesPanel_deviceId">{_t("Device ID")}</div>
+                    <div className="mx_DevicesPanel_deviceName">{_t("Device Name")}</div>
+                    <div className="mx_DevicesPanel_deviceLastSeen">{_t("Last seen")}</div>
                     <div className="mx_DevicesPanel_deviceButtons"></div>
                 </div>
                 {devices.map(this._renderDevice)}

@@ -15,8 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
+import { _t, _tJsx } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import SdkConfig from '../../../SdkConfig';
 import sdk from '../../../index';
@@ -38,14 +39,16 @@ function parseIntWithDefault(val, def) {
 
 const BannedUser = React.createClass({
     propTypes: {
+        canUnban: React.PropTypes.bool,
         member: React.PropTypes.object.isRequired, // js-sdk RoomMember
+        reason: React.PropTypes.string,
     },
 
     _onUnbanClick: function() {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
             member: this.props.member,
-            action: 'Unban',
+            action: _t('Unban'),
             danger: false,
             onFinished: (proceed) => {
                 if (!proceed) return;
@@ -56,8 +59,8 @@ const BannedUser = React.createClass({
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to unban: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: "Error",
-                        description: "Failed to unban",
+                        title: _t('Error'),
+                        description: _t('Failed to unban'),
                     });
                 }).done();
             },
@@ -65,17 +68,22 @@ const BannedUser = React.createClass({
     },
 
     render: function() {
+        let unbanButton;
+
+        if (this.props.canUnban) {
+            unbanButton = <AccessibleButton className="mx_RoomSettings_unbanButton" onClick={this._onUnbanClick}>
+                { _t('Unban') }
+            </AccessibleButton>;
+        }
+
         return (
             <li>
-                <AccessibleButton className="mx_RoomSettings_unbanButton"
-                    onClick={this._onUnbanClick}
-                >
-                    Unban
-                </AccessibleButton>
-                {this.props.member.userId}
+                { unbanButton }
+                <strong>{this.props.member.name}</strong> {this.props.member.userId}
+                {this.props.reason ? " " +_t('Reason') + ": " + this.props.reason : ""}
             </li>
         );
-    }
+    },
 });
 
 module.exports = React.createClass({
@@ -129,14 +137,17 @@ module.exports = React.createClass({
             console.error("Failed to get room visibility: " + err);
         });
 
-        this.scalarClient = new ScalarAuthClient();
-        this.scalarClient.connect().done(() => {
-            this.forceUpdate();
-        }, (err) => {
-            this.setState({
-                scalar_error: err
+        this.scalarClient = null;
+        if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
+            this.scalarClient = new ScalarAuthClient();
+            this.scalarClient.connect().done(() => {
+                this.forceUpdate();
+            }, (err) => {
+                this.setState({
+                    scalar_error: err
+                });
             });
-        });
+        }
 
         dis.dispatch({
             action: 'ui_opacity',
@@ -172,8 +183,14 @@ module.exports = React.createClass({
         });
     },
 
+    /**
+     * Returns a promise which resolves once all of the save operations have completed or failed.
+     *
+     * The result is a list of promise state snapshots, each with the form
+     * `{ state: "fulfilled", value: v }` or `{ state: "rejected", reason: r }`.
+     */
     save: function() {
-        var stateWasSetDefer = q.defer();
+        var stateWasSetDefer = Promise.defer();
         // the caller may have JUST called setState on stuff, so we need to re-render before saving
         // else we won't use the latest values of things.
         // We can be a bit cheeky here and set a loading flag, and listen for the callback on that
@@ -183,8 +200,18 @@ module.exports = React.createClass({
             this.setState({ _loading: false});
         });
 
+        function mapPromiseToSnapshot(p) {
+            return p.then((r) => {
+                return { state: "fulfilled", value: r };
+            }, (e) => {
+                return { state: "rejected", reason: e };
+            });
+        }
+
         return stateWasSetDefer.promise.then(() => {
-            return q.allSettled(this._calcSavePromises());
+            return Promise.all(
+                this._calcSavePromises().map(mapPromiseToSnapshot),
+            );
         });
     },
 
@@ -271,7 +298,7 @@ module.exports = React.createClass({
         // color scheme
         var p;
         p = this.saveColor();
-        if (!q.isFulfilled(p)) {
+        if (!p.isFulfilled()) {
             promises.push(p);
         }
 
@@ -283,7 +310,7 @@ module.exports = React.createClass({
 
         // encryption
         p = this.saveEnableEncryption();
-        if (!q.isFulfilled(p)) {
+        if (!p.isFulfilled()) {
             promises.push(p);
         }
 
@@ -294,25 +321,25 @@ module.exports = React.createClass({
     },
 
     saveAliases: function() {
-        if (!this.refs.alias_settings) { return [q()]; }
+        if (!this.refs.alias_settings) { return [Promise.resolve()]; }
         return this.refs.alias_settings.saveSettings();
     },
 
     saveColor: function() {
-        if (!this.refs.color_settings) { return q(); }
+        if (!this.refs.color_settings) { return Promise.resolve(); }
         return this.refs.color_settings.saveSettings();
     },
 
     saveUrlPreviewSettings: function() {
-        if (!this.refs.url_preview_settings) { return q(); }
+        if (!this.refs.url_preview_settings) { return Promise.resolve(); }
         return this.refs.url_preview_settings.saveSettings();
     },
 
     saveEnableEncryption: function() {
-        if (!this.refs.encrypt) { return q(); }
+        if (!this.refs.encrypt) { return Promise.resolve(); }
 
         var encrypt = this.refs.encrypt.checked;
-        if (!encrypt) { return q(); }
+        if (!encrypt) { return Promise.resolve(); }
 
         var roomId = this.props.room.roomId;
         return MatrixClientPeg.get().sendStateEvent(
@@ -397,13 +424,13 @@ module.exports = React.createClass({
         var value = ev.target.value;
 
         Modal.createDialog(QuestionDialog, {
-            title: "Privacy warning",
+            title: _t('Privacy warning'),
             description:
                 <div>
-                    Changes to who can read history will only apply to future messages in this room.<br/>
-                    The visibility of existing history will be unchanged.
+                    { _t('Changes to who can read history will only apply to future messages in this room') }.<br/>
+                    { _t('The visibility of existing history will be unchanged') }.
                 </div>,
-            button: "Continue",
+            button: _t('Continue'),
             onFinished: function(confirmed) {
                 if (confirmed) {
                     self.setState({
@@ -490,7 +517,7 @@ module.exports = React.createClass({
         ev.preventDefault();
         var IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         Modal.createDialog(IntegrationsManager, {
-            src: this.scalarClient.hasCredentials() ?
+            src: (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                     this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId) :
                     null,
             onFinished: ()=>{
@@ -520,11 +547,11 @@ module.exports = React.createClass({
         MatrixClientPeg.get().forget(this.props.room.roomId).done(function() {
             dis.dispatch({ action: 'view_next_room' });
         }, function(err) {
-            var errCode = err.errcode || "unknown error code";
+            var errCode = err.errcode || _t('unknown error code');
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createDialog(ErrorDialog, {
-                title: "Error",
-                description: `Failed to forget room (${errCode})`
+                title: _t('Error'),
+                description: _t("Failed to forget room %(errCode)s", { errCode: errCode }),
             });
         });
     },
@@ -534,14 +561,14 @@ module.exports = React.createClass({
 
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createDialog(QuestionDialog, {
-            title: "Warning!",
+            title: _t('Warning!'),
             description: (
                 <div>
-                    <p>End-to-end encryption is in beta and may not be reliable.</p>
-                    <p>You should <b>not</b> yet trust it to secure data.</p>
-                    <p>Devices will <b>not</b> yet be able to decrypt history from before they joined the room.</p>
-                    <p>Once encryption is enabled for a room it <b>cannot</b> be turned off again (for now).</p>
-                    <p>Encrypted messages will not be visible on clients that do not yet implement encryption.</p>
+                    <p>{ _t('End-to-end encryption is in beta and may not be reliable') }.</p>
+                    <p>{ _t('You should not yet trust it to secure data') }.</p>
+                    <p>{ _t('Devices will not yet be able to decrypt history from before they joined the room') }.</p>
+                    <p>{ _t('Once encryption is enabled for a room it cannot be turned off again (for now)') }.</p>
+                    <p>{ _t('Encrypted messages will not be visible on clients that do not yet implement encryption') }.</p>
                 </div>
             ),
             onFinished: confirm=>{
@@ -569,31 +596,29 @@ module.exports = React.createClass({
                 <input type="checkbox" ref="blacklistUnverified"
                        defaultChecked={ isGlobalBlacklistUnverified || isRoomBlacklistUnverified }
                        disabled={ isGlobalBlacklistUnverified || (this.refs.encrypt && !this.refs.encrypt.checked) }/>
-                Never send encrypted messages to unverified devices in this room from this device.
+                { _t('Never send encrypted messages to unverified devices in this room from this device') }.
             </label>;
 
-        if (!isEncrypted &&
-                roomState.mayClientSendStateEvent("m.room.encryption", cli)) {
+        if (!isEncrypted && roomState.mayClientSendStateEvent("m.room.encryption", cli)) {
             return (
                 <div>
                     <label>
                         <input type="checkbox" ref="encrypt" onClick={ this.onEnableEncryptionClick }/>
-                        <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
-                        Enable encryption (warning: cannot be disabled again!)
+                        <img className="mx_RoomSettings_e2eIcon mx_filterFlipColor" src="img/e2e-unencrypted.svg" width="12" height="12" />
+                        { _t('Enable encryption') } { _t('(warning: cannot be disabled again!)') }
                     </label>
                     { settings }
                 </div>
             );
-        }
-        else {
+        } else {
             return (
                 <div>
                     <label>
                     { isEncrypted
                       ? <img className="mx_RoomSettings_e2eIcon" src="img/e2e-verified.svg" width="10" height="12" />
-                      : <img className="mx_RoomSettings_e2eIcon" src="img/e2e-unencrypted.svg" width="12" height="12" />
+                      : <img className="mx_RoomSettings_e2eIcon mx_filterFlipColor" src="img/e2e-unencrypted.svg" width="12" height="12" />
                     }
-                    Encryption is { isEncrypted ? "" : "not " } enabled in this room.
+                    { isEncrypted ? _t("Encryption is enabled in this room") : _t("Encryption is not enabled in this room") }.
                     </label>
                     { settings }
                 </div>
@@ -644,12 +669,12 @@ module.exports = React.createClass({
         if (Object.keys(user_levels).length) {
             userLevelsSection =
                 <div>
-                    <h3>Privileged Users</h3>
+                    <h3>{ _t('Privileged Users') }</h3>
                     <ul className="mx_RoomSettings_userLevels">
                         {Object.keys(user_levels).map(function(user, i) {
                             return (
                                 <li className="mx_RoomSettings_userLevel" key={user}>
-                                    { user } is a <PowerSelector value={ user_levels[user] } disabled={true}/>
+                                    { _t("%(user)s is a", {user: user}) } <PowerSelector value={ user_levels[user] } disabled={true}/>
                                 </li>
                             );
                         })}
@@ -657,19 +682,21 @@ module.exports = React.createClass({
                 </div>;
         }
         else {
-            userLevelsSection = <div>No users have specific privileges in this room.</div>;
+            userLevelsSection = <div>{ _t('No users have specific privileges in this room') }.</div>;
         }
 
-        var banned = this.props.room.getMembersWithMembership("ban");
-        var bannedUsersSection;
+        const banned = this.props.room.getMembersWithMembership("ban");
+        let bannedUsersSection;
         if (banned.length) {
+            const canBanUsers = current_user_level >= ban_level;
             bannedUsersSection =
                 <div>
-                    <h3>Banned users</h3>
+                    <h3>{ _t('Banned users') }</h3>
                     <ul className="mx_RoomSettings_banned">
                         {banned.map(function(member) {
+                            const banEvent = member.events.member.getContent();
                             return (
-                                <BannedUser key={member.userId} member={member} />
+                                <BannedUser key={member.userId} canUnban={canBanUsers} member={member} reason={banEvent.reason} />
                             );
                         })}
                     </ul>
@@ -680,7 +707,7 @@ module.exports = React.createClass({
         if (this._yankValueFromEvent("m.room.create", "m.federate") === false) {
              unfederatableSection = (
                 <div className="mx_RoomSettings_powerLevel">
-                Ths room is not accessible by remote Matrix servers.
+                { _t('This room is not accessible by remote Matrix servers') }.
                 </div>
             );
         }
@@ -691,14 +718,14 @@ module.exports = React.createClass({
             if (myMember.membership === "join") {
                 leaveButton = (
                     <AccessibleButton className="mx_RoomSettings_leaveButton" onClick={ this.onLeaveClick }>
-                        Leave room
+                        { _t('Leave room') }
                     </AccessibleButton>
                 );
             }
             else if (myMember.membership === "leave") {
                 leaveButton = (
                     <AccessibleButton className="mx_RoomSettings_leaveButton" onClick={ this.onForgetClick }>
-                        Forget room
+                        { _t('Forget room') }
                     </AccessibleButton>
                 );
             }
@@ -708,8 +735,8 @@ module.exports = React.createClass({
         // TODO: support editing custom user_levels
 
         var tags = [
-            { name: "m.favourite", label: "Favourite", ref: "tag_favourite" },
-            { name: "m.lowpriority", label: "Low priority", ref: "tag_lowpriority" },
+            { name: "m.favourite", label: _t('Favourite'), ref: "tag_favourite" },
+            { name: "m.lowpriority", label: _t('Low priority'), ref: "tag_lowpriority" },
         ];
 
         Object.keys(this.state.tags).sort().forEach(function(tagName) {
@@ -722,7 +749,7 @@ module.exports = React.createClass({
         if (canSetTag || self.state.tags) {
             var tagsSection =
                 <div className="mx_RoomSettings_tags">
-                    Tagged as: { canSetTag ?
+                    {_t("Tagged as: ")}{ canSetTag ?
                         (tags.map(function(tag, i) {
                             return (<label key={ i }>
                                         <input type="checkbox"
@@ -750,7 +777,11 @@ module.exports = React.createClass({
         if (this.state.join_rule === "public" && aliasCount == 0) {
             addressWarning =
                 <div className="mx_RoomSettings_warning">
-                    To link to a room it must have <a href="#addresses">an address</a>.
+                        { _tJsx(
+                            'To link to a room it must have <a>an address</a>.',
+                            /<a>(.*?)<\/a>/,
+                            (sub) => <a href="#addresses">{sub}</a>
+                        )}
                 </div>;
         }
 
@@ -758,43 +789,46 @@ module.exports = React.createClass({
         if (this.state.join_rule !== "public" && this.state.guest_access === "forbidden") {
             inviteGuestWarning =
                 <div className="mx_RoomSettings_warning">
-                    Guests cannot join this room even if explicitly invited. <a href="#" onClick={ (e) => {
+                    { _t('Guests cannot join this room even if explicitly invited.') } <a href="#" onClick={ (e) => {
                         this.setState({ join_rule: "invite", guest_access: "can_join" });
                         e.preventDefault();
-                    }}>Click here to fix</a>.
+                    }}>{ _t('Click here to fix') }</a>.
                 </div>;
         }
 
-        var integrationsButton;
-        var integrationsError;
-        if (this.state.showIntegrationsError && this.state.scalar_error) {
-            console.error(this.state.scalar_error);
-            integrationsError = (
-                <span className="mx_RoomSettings_integrationsButton_errorPopup">
-                    Could not connect to the integration server
-                </span>
-            );
-        }
+        let integrationsButton;
+        let integrationsError;
 
-        if (this.scalarClient.hasCredentials()) {
-            integrationsButton = (
+        if (this.scalarClient !== null) {
+            if (this.state.showIntegrationsError && this.state.scalar_error) {
+                console.error(this.state.scalar_error);
+                integrationsError = (
+                    <span className="mx_RoomSettings_integrationsButton_errorPopup">
+                        { _t('Could not connect to the integration server') }
+                    </span>
+                );
+            }
+
+            if (this.scalarClient.hasCredentials()) {
+                integrationsButton = (
                     <div className="mx_RoomSettings_integrationsButton" onClick={ this.onManageIntegrations }>
-                    Manage Integrations
-                </div>
-            );
-        } else if (this.state.scalar_error) {
-            integrationsButton = (
+                        { _t('Manage Integrations') }
+                    </div>
+                );
+            } else if (this.state.scalar_error) {
+                integrationsButton = (
                     <div className="mx_RoomSettings_integrationsButton_error" onClick={ this.onShowIntegrationsError }>
-                    Integrations Error <img src="img/warning.svg" width="17"/>
-                    { integrationsError }
-                </div>
-            );
-        } else {
-            integrationsButton = (
-                    <div className="mx_RoomSettings_integrationsButton" style={{ opacity: 0.5 }}>
-                    Manage Integrations
-                </div>
-            );
+                        Integrations Error <img src="img/warning.svg" width="17"/>
+                        { integrationsError }
+                    </div>
+                );
+            } else {
+                integrationsButton = (
+                    <div className="mx_RoomSettings_integrationsButton" style={{opacity: 0.5}}>
+                        { _t('Manage Integrations') }
+                    </div>
+                );
+            }
         }
 
         return (
@@ -807,28 +841,28 @@ module.exports = React.createClass({
 
                 <div className="mx_RoomSettings_toggles">
                     <div className="mx_RoomSettings_settings">
-                        <h3>Who can access this room?</h3>
+                        <h3>{ _t('Who can access this room?') }</h3>
                         { inviteGuestWarning }
                         <label>
                             <input type="radio" name="roomVis" value="invite_only"
                                 disabled={ !this.mayChangeRoomAccess() }
                                 onChange={this._onRoomAccessRadioToggle}
                                 checked={this.state.join_rule !== "public"}/>
-                            Only people who have been invited
+                            { _t('Only people who have been invited') }
                         </label>
                         <label>
                             <input type="radio" name="roomVis" value="public_no_guests"
                                 disabled={ !this.mayChangeRoomAccess() }
                                 onChange={this._onRoomAccessRadioToggle}
                                 checked={this.state.join_rule === "public" && this.state.guest_access !== "can_join"}/>
-                            Anyone who knows the room's link, apart from guests
+                            { _t('Anyone who knows the room\'s link, apart from guests') }
                         </label>
                         <label>
                             <input type="radio" name="roomVis" value="public_with_guests"
                                 disabled={ !this.mayChangeRoomAccess() }
                                 onChange={this._onRoomAccessRadioToggle}
                                 checked={this.state.join_rule === "public" && this.state.guest_access === "can_join"}/>
-                            Anyone who knows the room's link, including guests
+                            { _t('Anyone who knows the room\'s link, including guests') }
                         </label>
                         { addressWarning }
                         <br/>
@@ -837,45 +871,45 @@ module.exports = React.createClass({
                             <input type="checkbox" disabled={ !roomState.mayClientSendStateEvent("m.room.aliases", cli) }
                                    onChange={ this._onToggle.bind(this, "isRoomPublished", true, false)}
                                    checked={this.state.isRoomPublished}/>
-                            List this room in { MatrixClientPeg.get().getDomain() }'s room directory?
+                            {_t("List this room in %(domain)s's room directory?", { domain: MatrixClientPeg.get().getDomain() })}
                         </label>
                     </div>
                     <div className="mx_RoomSettings_settings">
-                        <h3>Who can read history?</h3>
+                        <h3>{ _t('Who can read history?') }</h3>
                         <label>
                             <input type="radio" name="historyVis" value="world_readable"
                                     disabled={ !roomState.mayClientSendStateEvent("m.room.history_visibility", cli) }
                                     checked={historyVisibility === "world_readable"}
                                     onChange={this._onHistoryRadioToggle} />
-                            Anyone
+                            {_t("Anyone")}
                         </label>
                         <label>
                             <input type="radio" name="historyVis" value="shared"
                                     disabled={ !roomState.mayClientSendStateEvent("m.room.history_visibility", cli) }
                                     checked={historyVisibility === "shared"}
                                     onChange={this._onHistoryRadioToggle} />
-                            Members only (since the point in time of selecting this option)
+                            { _t('Members only') } ({ _t('since the point in time of selecting this option') })
                         </label>
                         <label>
                             <input type="radio" name="historyVis" value="invited"
                                     disabled={ !roomState.mayClientSendStateEvent("m.room.history_visibility", cli) }
                                     checked={historyVisibility === "invited"}
                                     onChange={this._onHistoryRadioToggle} />
-                            Members only (since they were invited)
+                            { _t('Members only') } ({ _t('since they were invited') })
                         </label>
                         <label >
                             <input type="radio" name="historyVis" value="joined"
                                     disabled={ !roomState.mayClientSendStateEvent("m.room.history_visibility", cli) }
                                     checked={historyVisibility === "joined"}
                                     onChange={this._onHistoryRadioToggle} />
-                            Members only (since they joined)
+                            { _t('Members only') } ({ _t('since they joined') })
                         </label>
                     </div>
                 </div>
 
 
                 <div>
-                    <h3>Room Colour</h3>
+                    <h3>{ _t('Room Colour') }</h3>
                     <ColorSettings ref="color_settings" room={this.props.room} />
                 </div>
 
@@ -893,41 +927,41 @@ module.exports = React.createClass({
 
                 <UrlPreviewSettings ref="url_preview_settings" room={this.props.room} />
 
-                <h3>Permissions</h3>
+                <h3>{ _t('Permissions') }</h3>
                 <div className="mx_RoomSettings_powerLevels mx_RoomSettings_settings">
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">The default role for new room members is </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('The default role for new room members is') } </span>
                         <PowerSelector ref="users_default" value={default_user_level} controlled={false} disabled={!can_change_levels || current_user_level < default_user_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">To send messages, you must be a </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To send messages') }, { _t('you must be a') } </span>
                         <PowerSelector ref="events_default" value={send_level} controlled={false} disabled={!can_change_levels || current_user_level < send_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">To invite users into the room, you must be a </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To invite users into the room') }, { _t('you must be a') } </span>
                         <PowerSelector ref="invite" value={invite_level} controlled={false} disabled={!can_change_levels || current_user_level < invite_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">To configure the room, you must be a </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To configure the room') }, { _t('you must be a') } </span>
                         <PowerSelector ref="state_default" value={state_level} controlled={false} disabled={!can_change_levels || current_user_level < state_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">To kick users, you must be a </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To kick users') }, { _t('you must be a') } </span>
                         <PowerSelector ref="kick" value={kick_level} controlled={false} disabled={!can_change_levels || current_user_level < kick_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">To ban users, you must be a </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To ban users') }, { _t('you must be a') } </span>
                         <PowerSelector ref="ban" value={ban_level} controlled={false} disabled={!can_change_levels || current_user_level < ban_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">To redact messages, you must be a </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To remove other users\' messages') }, { _t('you must be a') } </span>
                         <PowerSelector ref="redact" value={redact_level} controlled={false} disabled={!can_change_levels || current_user_level < redact_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
 
                     {Object.keys(events_levels).map(function(event_type, i) {
                         return (
                             <div className="mx_RoomSettings_powerLevel" key={event_type}>
-                                <span className="mx_RoomSettings_powerLevelKey">To send events of type <code>{ event_type }</code>, you must be a </span>
+                                <span className="mx_RoomSettings_powerLevelKey">{ _t('To send events of type') } <code>{ event_type }</code>, { _t('you must be a') } </span>
                                 <PowerSelector value={ events_levels[event_type] } controlled={false} disabled={true} onChange={self.onPowerLevelsChanged}/>
                             </div>
                         );
@@ -940,9 +974,9 @@ module.exports = React.createClass({
 
                 { bannedUsersSection }
 
-                <h3>Advanced</h3>
+                <h3>{ _t('Advanced') }</h3>
                 <div className="mx_RoomSettings_settings">
-                    This room's internal ID is <code>{ this.props.room.roomId }</code>
+                    { _t('This room\'s internal ID is') } <code>{ this.props.room.roomId }</code>
                 </div>
             </div>
         );

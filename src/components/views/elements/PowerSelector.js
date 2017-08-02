@@ -16,18 +16,12 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import * as Roles from '../../../Roles';
+import { _t } from '../../../languageHandler';
 
-var roles = {
-    0: 'User',
-    50: 'Moderator',
-    100: 'Admin',
-};
-
+var LEVEL_ROLE_MAP = {};
 var reverseRoles = {};
-Object.keys(roles).forEach(function(key) {
-    reverseRoles[roles[key]] = key;
-});
 
 module.exports = React.createClass({
     displayName: 'PowerSelector',
@@ -49,8 +43,15 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            custom: (roles[this.props.value] === undefined),
+            custom: (LEVEL_ROLE_MAP[this.props.value] === undefined),
         };
+    },
+    
+    componentWillMount: function() {
+    	LEVEL_ROLE_MAP = Roles.levelRoleMap();
+    	Object.keys(LEVEL_ROLE_MAP).forEach(function(key) {
+			reverseRoles[LEVEL_ROLE_MAP[key]] = key;
+		});
     },
 
     onSelectChange: function(event) {
@@ -99,22 +100,34 @@ module.exports = React.createClass({
             selectValue = "Custom";
         }
         else {
-            selectValue = roles[this.props.value] || "Custom";
+            selectValue = LEVEL_ROLE_MAP[this.props.value] || "Custom";
         }
         var select;
         if (this.props.disabled) {
             select = <span>{ selectValue }</span>;
         }
         else {
+            // Each level must have a definition in LEVEL_ROLE_MAP
+            const levels = [0, 50, 100];
+            let options = levels.map((level) => {
+                return {
+                    value: LEVEL_ROLE_MAP[level],
+                    // Give a userDefault (users_default in the power event) of 0 but
+                    // because level !== undefined, this should never be used.
+                    text: Roles.textualPowerLevel(level, 0),
+                }
+            });
+            options.push({ value: "Custom", text: _t("Custom level") });
+            options = options.map((op) => {
+                return <option value={op.value} key={op.value}>{op.text}</option>;
+            });
+
             select =
                 <select ref="select"
                         value={ this.props.controlled ? selectValue : undefined }
                         defaultValue={ !this.props.controlled ? selectValue : undefined }
                         onChange={ this.onSelectChange }>
-                    <option value="User">User (0)</option>
-                    <option value="Moderator">Moderator (50)</option>
-                    <option value="Admin">Admin (100)</option>
-                    <option value="Custom">Custom level</option>
+                    { options }
                 </select>;
         }
 

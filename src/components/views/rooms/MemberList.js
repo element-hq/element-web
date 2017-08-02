@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,9 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 var React = require('react');
+import { _t } from '../../../languageHandler';
 var classNames = require('classnames');
 var Matrix = require("matrix-js-sdk");
-var q = require('q');
+import Promise from 'bluebird';
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
 var Entities = require("../../../Entities");
@@ -27,12 +29,6 @@ var CallHandler = require("../../../CallHandler");
 var Invite = require("../../../Invite");
 
 var INITIAL_LOAD_NUM_MEMBERS = 30;
-var SHARE_HISTORY_WARNING =
-    <span>
-        Newly invited users will see the history of this room. <br/>
-        If you'd prefer invited users not to see messages that were sent before they joined, <br/>
-        turn off, 'Share message history with new users' in the settings for this room.
-    </span>;
 
 module.exports = React.createClass({
     displayName: 'MemberList',
@@ -205,9 +201,9 @@ module.exports = React.createClass({
 
     _createOverflowTile: function(overflowCount, totalCount) {
         // For now we'll pretend this is any entity. It should probably be a separate tile.
-        var EntityTile = sdk.getComponent("rooms.EntityTile");
-        var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
-        var text = "and " + overflowCount + " other" + (overflowCount > 1 ? "s" : "") + "...";
+        const EntityTile = sdk.getComponent("rooms.EntityTile");
+        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        const text = _t("and %(count)s others...", { count: overflowCount });
         return (
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
                 <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
@@ -352,7 +348,7 @@ module.exports = React.createClass({
         if (invitedMemberTiles.length > 0) {
             invitedSection = (
                 <div className="mx_MemberList_invited">
-                    <h2>Invited</h2>
+                    <h2>{ _t("Invited") }</h2>
                     <div className="mx_MemberList_wrapper">
                         {invitedMemberTiles}
                     </div>
@@ -363,8 +359,8 @@ module.exports = React.createClass({
         var inputBox = (
             <form autoComplete="off">
                 <input className="mx_MemberList_query" id="mx_MemberList_query" type="text"
-                    onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                    placeholder="Filter room members" />
+                        onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
+                        placeholder={ _t('Filter room members') } />
             </form>
         );
 

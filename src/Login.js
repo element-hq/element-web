@@ -16,8 +16,9 @@ limitations under the License.
 */
 
 import Matrix from "matrix-js-sdk";
+import { _t } from "./languageHandler";
 
-import q from 'q';
+import Promise from 'bluebird';
 import url from 'url';
 
 export default class Login {
@@ -96,11 +97,6 @@ export default class Login {
                 guest: true
             };
         }, (error) => {
-            if (error.httpStatus === 403) {
-                error.friendlyText = "Guest access is disabled on this Home Server.";
-            } else {
-                error.friendlyText = "Failed to register as guest: " + error.data;
-            }
             throw error;
         });
     }
@@ -148,7 +144,7 @@ export default class Login {
 
         const client = this._createTemporaryClient();
         return client.login('m.login.password', loginParams).then(function(data) {
-            return q({
+            return Promise.resolve({
                 homeserverUrl: self._hsUrl,
                 identityServerUrl: self._isUrl,
                 userId: data.user_id,
@@ -156,15 +152,7 @@ export default class Login {
                 accessToken: data.access_token
             });
         }, function(error) {
-            if (error.httpStatus == 400 && loginParams.medium) {
-                error.friendlyText = (
-                    'This Home Server does not support login using email address.'
-                );
-            }
-            else if (error.httpStatus === 403) {
-                error.friendlyText = (
-                    'Incorrect username and/or password.'
-                );
+            if (error.httpStatus === 403) {
                 if (self._fallbackHsUrl) {
                     var fbClient = Matrix.createClient({
                         baseUrl: self._fallbackHsUrl,
@@ -172,7 +160,7 @@ export default class Login {
                     });
 
                     return fbClient.login('m.login.password', loginParams).then(function(data) {
-                        return q({
+                        return Promise.resolve({
                             homeserverUrl: self._fallbackHsUrl,
                             identityServerUrl: self._isUrl,
                             userId: data.user_id,
@@ -185,21 +173,23 @@ export default class Login {
                     });
                 }
             }
-            else {
-                error.friendlyText = (
-                    'There was a problem logging in. (HTTP ' + error.httpStatus + ")"
-                );
-            }
             throw error;
         });
     }
 
     redirectToCas() {
-      var client = this._createTemporaryClient();
-      var parsedUrl = url.parse(window.location.href, true);
+      const client = this._createTemporaryClient();
+      const parsedUrl = url.parse(window.location.href, true);
+
+      // XXX: at this point, the fragment will always be #/login, which is no
+      // use to anyone. Ideally, we would get the intended fragment from
+      // MatrixChat.screenAfterLogin so that you could follow #/room links etc
+      // through a CAS login.
+      parsedUrl.hash = "";
+
       parsedUrl.query["homeserver"] = client.getHomeserverUrl();
       parsedUrl.query["identityServer"] = client.getIdentityServerUrl();
-      var casUrl = client.getCasLoginUrl(url.format(parsedUrl));
+      const casUrl = client.getCasLoginUrl(url.format(parsedUrl));
       window.location.href = casUrl;
     }
 }

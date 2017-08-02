@@ -1,9 +1,17 @@
+# we need trusty for the chrome addon
+dist: trusty
+
+# we don't need sudo, so can run in a container, which makes startup much
+# quicker.
+sudo: false
+
 language: node_js
 node_js:
     - node # Latest stable version of nodejs.
+addons:
+    chrome: stable
 install:
     - npm install
     - (cd node_modules/matrix-js-sdk && npm install)
 script:
-    - npm run test
-    - ./.travis-test-riot.sh
+    ./scripts/travis.sh

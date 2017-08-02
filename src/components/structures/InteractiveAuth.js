@@ -19,8 +19,6 @@ const InteractiveAuth = Matrix.InteractiveAuth;
 
 import React from 'react';
 
-import sdk from '../../index';
-
 import {getEntryComponentForLoginType} from '../views/login/InteractiveAuthEntryComponents';
 
 export default React.createClass({

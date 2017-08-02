@@ -24,6 +24,11 @@ import sdk from '../../../index';
 module.exports = React.createClass({
     displayName: 'TextualEvent',
 
+    propTypes: {
+        /* the MatrixEvent to show */
+        mxEvent: React.PropTypes.object.isRequired,
+    },
+    
     render: function() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
         var text = TextForEvent.textForEvent(this.props.mxEvent);

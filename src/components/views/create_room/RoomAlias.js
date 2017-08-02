@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 var React = require('react');
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'RoomAlias',
@@ -94,7 +95,7 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <input type="text" className="mx_RoomAlias" placeholder="Alias (optional)"
+            <input type="text" className="mx_RoomAlias" placeholder={_t("Alias (optional)")}
                 onChange={this.onValueChanged} onFocus={this.onFocus} onBlur={this.onBlur}
                 value={this.props.alias}/>
         );

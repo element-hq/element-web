@@ -19,11 +19,10 @@ limitations under the License.
 import React from 'react';
 import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import Model from '../../../Modal';
-import sdk from '../../../index';
 import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
-import q from 'q';
+import Promise from 'bluebird';
 import UserSettingsStore from '../../../UserSettingsStore';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'MVideoBody',
@@ -80,7 +79,7 @@ module.exports = React.createClass({
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedThumbnailUrl;
-        } else if (content.info.thumbnail_url) {
+        } else if (content.info && content.info.thumbnail_url) {
             return MatrixClientPeg.get().mxcUrlToHttp(content.info.thumbnail_url);
         } else {
             return null;
@@ -90,7 +89,7 @@ module.exports = React.createClass({
     componentDidMount: function() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            var thumbnailPromise = q(null);
+            var thumbnailPromise = Promise.resolve(null);
             if (content.info.thumbnail_file) {
                 thumbnailPromise = decryptFile(
                     content.info.thumbnail_file
@@ -128,7 +127,7 @@ module.exports = React.createClass({
             return (
                 <span className="mx_MVideoBody" ref="body">
                     <img src="img/warning.svg" width="16" height="16"/>
-                    Error decrypting video
+                    {_t("Error decrypting video")}
                 </span>
             );
         }

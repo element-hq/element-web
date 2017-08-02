@@ -16,7 +16,8 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'UserSelector',
@@ -59,9 +60,9 @@ module.exports = React.createClass({
                         return <li key={user_id}>{user_id} - <span onClick={function() {self.removeUser(user_id);}}>X</span></li>;
                     })}
                 </ul>
-                <input type="text" ref="user_id_input" defaultValue="" className="mx_UserSelector_userIdInput" placeholder="ex. @bob:example.com"/>
+                <input type="text" ref="user_id_input" defaultValue="" className="mx_UserSelector_userIdInput" placeholder={_t("ex. @bob:example.com")}/>
                 <button onClick={this.onAddUserId} className="mx_UserSelector_AddUserId">
-                    Add User
+                    {_t("Add User")}
                 </button>
             </div>
         );

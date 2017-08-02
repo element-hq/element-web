@@ -14,11 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var MatrixClientPeg = require("../../../MatrixClientPeg");
-var sdk = require('../../../index');
-var dis = require("../../../dispatcher");
-var ObjectUtils = require('../../../ObjectUtils');
+import React from 'react';
+import MatrixClientPeg from "../../../MatrixClientPeg";
+import sdk from '../../../index';
+import dis from "../../../dispatcher";
+import ObjectUtils from '../../../ObjectUtils';
+import AppsDrawer from './AppsDrawer';
+import { _t, _tJsx} from '../../../languageHandler';
+import UserSettingsStore from '../../../UserSettingsStore';
+
 
 module.exports = React.createClass({
     displayName: 'AuxPanel',
@@ -26,6 +30,8 @@ module.exports = React.createClass({
     propTypes: {
         // js-sdk room object
         room: React.PropTypes.object.isRequired,
+        userId: React.PropTypes.string.isRequired,
+        showApps: React.PropTypes.bool,
 
         // Conference Handler implementation
         conferenceHandler: React.PropTypes.object,
@@ -68,45 +74,53 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var CallView = sdk.getComponent("voip.CallView");
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const CallView = sdk.getComponent("voip.CallView");
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        var fileDropTarget = null;
+        let fileDropTarget = null;
         if (this.props.draggingFile) {
             fileDropTarget = (
                 <div className="mx_RoomView_fileDropTarget">
                     <div className="mx_RoomView_fileDropTargetLabel"
-                      title="Drop File Here">
+                      title={_t("Drop File Here")}>
                         <TintableSvg src="img/upload-big.svg" width="45" height="59"/>
                         <br/>
-                        Drop file here to upload
+                        {_t("Drop file here to upload")}
                     </div>
                 </div>
             );
         }
 
-        var conferenceCallNotification = null;
+        let conferenceCallNotification = null;
         if (this.props.displayConfCallNotification) {
-            var supportedText, joinText;
+            let supportedText = '';
+            let joinNode;
             if (!MatrixClientPeg.get().supportsVoip()) {
-                supportedText = " (unsupported)";
-            }
-            else {
-                joinText = (<span>
-                    Join as <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}}
-                               href="#">voice</a> or <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video'); }}
-                               href="#">video</a>.
+                supportedText = _t(" (unsupported)");
+            } else {
+                joinNode = (<span>
+                    {_tJsx(
+                        "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.",
+                        [/<voiceText>(.*?)<\/voiceText>/, /<videoText>(.*?)<\/videoText>/],
+                        [
+                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}} href="#">{sub}</a>,
+                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video');}} href="#">{sub}</a>,
+                        ]
+                    )}
                 </span>);
-
             }
+            // XXX: the translation here isn't great: appending ' (unsupported)' is likely to not make sense in many languages,
+            // but there are translations for this in the languages we do have so I'm leaving it for now.
             conferenceCallNotification = (
                 <div className="mx_RoomView_ongoingConfCallNotification">
-                    Ongoing conference call{ supportedText }. { joinText }
+                    {_t("Ongoing conference call%(supportedText)s.", {supportedText: supportedText})}
+                    &nbsp;
+                    {joinNode}
                 </div>
             );
         }
 
-        var callView = (
+        const callView = (
             <CallView ref="callView" room={this.props.room}
                 ConferenceHandler={this.props.conferenceHandler}
                 onResize={this.props.onResize}
@@ -114,8 +128,17 @@ module.exports = React.createClass({
             />
         );
 
+        let appsDrawer = null;
+        if(UserSettingsStore.isFeatureEnabled('matrix_apps') && this.props.showApps) {
+            appsDrawer = <AppsDrawer ref="appsDrawer"
+                room={this.props.room}
+                userId={this.props.userId}
+                maxHeight={this.props.maxHeight}/>;
+        }
+
         return (
             <div className="mx_RoomView_auxPanel" style={{maxHeight: this.props.maxHeight}} >
+                { appsDrawer }
                 { fileDropTarget }
                 { callView }
                 { conferenceCallNotification }

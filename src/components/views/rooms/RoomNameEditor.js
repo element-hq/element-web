@@ -19,6 +19,7 @@ limitations under the License.
 var React = require('react');
 var sdk = require('../../../index');
 var MatrixClientPeg = require('../../../MatrixClientPeg');
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'RoomNameEditor',
@@ -35,8 +36,8 @@ module.exports = React.createClass({
 
         this._initialName = name ? name.getContent().name : '';
 
-        this._placeholderName = "Unnamed Room";
-        if (defaultName && defaultName !== 'Empty room') {
+        this._placeholderName = _t("Unnamed Room");
+        if (defaultName && defaultName !== 'Empty room') { // default name from JS SDK, needs no translation as we don't ever show it.
             this._placeholderName += " (" + defaultName + ")";
         }
     },
@@ -55,9 +56,9 @@ module.exports = React.createClass({
                          placeholderClassName="mx_RoomHeader_placeholder"
                          placeholder={ this._placeholderName }
                          blurToCancel={ false }
-                         initialValue={ this._initialName }/>
+                         initialValue={ this._initialName }
+                         dir="auto" />
                 </div>
         );
     },
 });
-

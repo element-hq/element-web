@@ -67,7 +67,7 @@ export default React.createClass({
 
     render: function() {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
-                
+
         return (
             <div onKeyDown={this._onKeyDown} className={this.props.className}>
                 <AccessibleButton onClick={this._onCancelClick}

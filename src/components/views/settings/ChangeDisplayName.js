@@ -18,6 +18,7 @@ limitations under the License.
 var React = require('react');
 var sdk = require('../../../index');
 var MatrixClientPeg = require("../../../MatrixClientPeg");
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'ChangeDisplayName',
@@ -52,7 +53,7 @@ module.exports = React.createClass({
         return (
             <EditableTextContainer
                 getInitialValue={this._getDisplayName}
-                placeholder="No display name"
+                placeholder={_t("No display name")}
                 blurToSubmit={true}
                 onSubmit={this._changeDisplayName} />
         );

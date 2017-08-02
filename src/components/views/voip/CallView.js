@@ -13,11 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require("react");
-var dis = require("../../../dispatcher");
-var CallHandler = require("../../../CallHandler");
-var sdk = require('../../../index');
-var MatrixClientPeg = require("../../../MatrixClientPeg");
+import React from 'react';
+import dis from '../../../dispatcher';
+import CallHandler from '../../../CallHandler';
+import sdk from '../../../index';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'CallView',
@@ -72,10 +73,10 @@ module.exports = React.createClass({
     },
 
     showCall: function() {
-        var call;
+        let call;
 
         if (this.props.room) {
-            var roomId = this.props.room.roomId;
+            const roomId = this.props.room.roomId;
             call = CallHandler.getCallForRoom(roomId) ||
                 (this.props.ConferenceHandler ?
                  this.props.ConferenceHandler.getConferenceCallForRoom(roomId) :
@@ -85,9 +86,7 @@ module.exports = React.createClass({
             if (this.call) {
                 this.setState({ call: call });
             }
-
-        }
-        else {
+        } else {
             call = CallHandler.getAnyActiveCall();
             this.setState({ call: call });
         }
@@ -108,8 +107,7 @@ module.exports = React.createClass({
                 call.confUserId ? "none" : "block"
             );
             this.getVideoView().getRemoteVideoElement().style.display = "block";
-        }
-        else {
+        } else {
             this.getVideoView().getLocalVideoElement().style.display = "none";
             this.getVideoView().getRemoteVideoElement().style.display = "none";
             dis.dispatch({action: 'video_fullscreen', fullscreen: false});
@@ -125,12 +123,16 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var VideoView = sdk.getComponent('voip.VideoView');
+        const VideoView = sdk.getComponent('voip.VideoView');
 
-        var voice;
+        let voice;
         if (this.state.call && this.state.call.type === "voice" && this.props.showVoice) {
-            var callRoom = MatrixClientPeg.get().getRoom(this.state.call.roomId);
-            voice = <div className="mx_CallView_voice" onClick={ this.props.onClick }>Active call ({ callRoom.name })</div>;
+            const callRoom = MatrixClientPeg.get().getRoom(this.state.call.roomId);
+            voice = (
+                <div className="mx_CallView_voice" onClick={ this.props.onClick }>
+                {_t("Active call (%(roomName)s)", {roomName: callRoom.name})}
+                </div>
+            );
         }
 
         return (
@@ -142,6 +144,6 @@ module.exports = React.createClass({
                 { voice }
             </div>
         );
-    }
+    },
 });
 

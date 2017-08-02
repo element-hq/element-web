@@ -18,7 +18,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactTestUtils = require('react-addons-test-utils');
 var expect = require('expect');
-var q = require('q');
+import Promise from 'bluebird';
 var sinon = require('sinon');
 
 var jssdk = require('matrix-js-sdk');
@@ -126,10 +126,15 @@ describe('TimelinePanel', function() {
             timeline.addEvent(mkMessage(i));
         }
 
-        var scrollDefer;
+        let scrollDefer;
+        const onScroll = (e) => {
+            console.log(`TimelinePanel called onScroll: ${e.target.scrollTop}`);
+            if (scrollDefer) {
+                scrollDefer.resolve();
+            }
+        };
         var rendered = ReactDOM.render(
-                <WrappedTimelinePanel timelineSet={timelineSet} onScroll={() => {scrollDefer.resolve()}}
-                />,
+                <WrappedTimelinePanel timelineSet={timelineSet} onScroll={onScroll} />,
                 parentDiv,
         );
         var panel = rendered.refs.panel;
@@ -140,21 +145,20 @@ describe('TimelinePanel', function() {
         // panel isn't paginating
         var awaitPaginationCompletion = function() {
             if(!panel.state.forwardPaginating)
-                return q();
+                return Promise.resolve();
             else
-                return q.delay(0).then(awaitPaginationCompletion);
+                return Promise.delay(0).then(awaitPaginationCompletion);
         };
 
         // helper function which will return a promise which resolves when
         // the TimelinePanel fires a scroll event
         var awaitScroll = function() {
-            scrollDefer = q.defer();
+            scrollDefer = Promise.defer();
             return scrollDefer.promise;
         };
 
-        // wait for the panel to load - we'll get a scroll event once it
-        // happens
-        awaitScroll().then(() => {
+        // let the first round of pagination finish off
+        Promise.delay(5).then(() => {
             expect(panel.state.canBackPaginate).toBe(false);
             expect(scryEventTiles(panel).length).toEqual(N_EVENTS);
 
@@ -164,6 +168,8 @@ describe('TimelinePanel', function() {
 
             // wait for the scroll event to land
         }).then(awaitScroll).then(() => {
+            expect(scrollingDiv.scrollTop).toEqual(0);
+
             // there should be no pagination going on now
             expect(panel.state.backPaginating).toBe(false);
             expect(panel.state.forwardPaginating).toBe(false);
@@ -208,7 +214,7 @@ describe('TimelinePanel', function() {
         client.paginateEventTimeline = sinon.spy((tl, opts) => {
             console.log("paginate:", opts);
             expect(opts.backwards).toBe(true);
-            return q(true);
+            return Promise.resolve(true);
         });
 
         var rendered = ReactDOM.render(
@@ -273,7 +279,7 @@ describe('TimelinePanel', function() {
         // helper function which will return a promise which resolves when
         // the TimelinePanel fires a scroll event
         var awaitScroll = function() {
-            scrollDefer = q.defer();
+            scrollDefer = Promise.defer();
 
             return scrollDefer.promise.then(() => {
                 console.log("got scroll event; scrollTop now " +

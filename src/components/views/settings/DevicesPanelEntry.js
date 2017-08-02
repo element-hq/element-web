@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import DateUtils from '../../../DateUtils';
@@ -48,7 +49,7 @@ export default class DevicesPanelEntry extends React.Component {
             display_name: value,
         }).catch((e) => {
             console.error("Error setting device display name", e);
-            throw new Error("Failed to set display name");
+            throw new Error(_t("Failed to set display name"));
         });
     }
 
@@ -71,6 +72,7 @@ export default class DevicesPanelEntry extends React.Component {
             var InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
             Modal.createDialog(InteractiveAuthDialog, {
+            	title: _t("Authentication"),
                 matrixClient: MatrixClientPeg.get(),
                 authData: error.data,
                 makeRequest: this._makeDeleteRequest,
@@ -84,7 +86,7 @@ export default class DevicesPanelEntry extends React.Component {
             if (this._unmounted) { return; }
             this.setState({
                 deleting: false,
-                deleteError: "Failed to delete device",
+                deleteError: _t("Failed to delete device"),
             });
         }).done();
     }
@@ -132,7 +134,7 @@ export default class DevicesPanelEntry extends React.Component {
             deleteButton = (
                 <div className="mx_textButton"
                   onClick={this._onDeleteClick}>
-                    Delete
+                    { _t("Delete") }
                 </div>
             );
         }

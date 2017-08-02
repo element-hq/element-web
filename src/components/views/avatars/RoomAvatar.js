@@ -59,7 +59,9 @@ module.exports = React.createClass({
             ContentRepo.getHttpUriForMxc(
                 MatrixClientPeg.get().getHomeserverUrl(),
                 props.oobData.avatarUrl,
-                props.width, props.height, props.resizeMethod
+                Math.floor(props.width * window.devicePixelRatio),
+                Math.floor(props.height * window.devicePixelRatio),
+                props.resizeMethod
             ), // highest priority
             this.getRoomAvatarUrl(props),
             this.getOneToOneAvatar(props),
@@ -70,17 +72,19 @@ module.exports = React.createClass({
     },
 
     getRoomAvatarUrl: function(props) {
-        if (!this.props.room) return null;
+        if (!props.room) return null;
 
         return props.room.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
-            props.width, props.height, props.resizeMethod,
+            Math.floor(props.width * window.devicePixelRatio),
+            Math.floor(props.height * window.devicePixelRatio),
+            props.resizeMethod,
             false
         );
     },
 
     getOneToOneAvatar: function(props) {
-        if (!this.props.room) return null;
+        if (!props.room) return null;
 
         var mlist = props.room.currentState.members;
         var userIds = [];
@@ -103,14 +107,18 @@ module.exports = React.createClass({
             }
             return theOtherGuy.getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
-                props.width, props.height, props.resizeMethod,
+                Math.floor(props.width * window.devicePixelRatio),
+                Math.floor(props.height * window.devicePixelRatio),
+                props.resizeMethod,
                 false
             );
         } else if (userIds.length == 1) {
             return mlist[userIds[0]].getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
-                props.width, props.height, props.resizeMethod,
-                    false
+                Math.floor(props.width * window.devicePixelRatio),
+                Math.floor(props.height * window.devicePixelRatio),
+                props.resizeMethod,
+                false
             );
         } else {
            return null;
@@ -118,9 +126,16 @@ module.exports = React.createClass({
     },
 
     getFallbackAvatar: function(props) {
-        if (!this.props.room) return null;
+        let roomId = null;
+        if (props.oobData && props.oobData.roomId) {
+            roomId = this.props.oobData.roomId;
+        } else if (props.room) {
+            roomId = props.room.roomId;
+        } else {
+            return null;
+        }
 
-        return Avatar.defaultAvatarUrlForString(props.room.roomId);
+        return Avatar.defaultAvatarUrlForString(roomId);
     },
 
     render: function() {

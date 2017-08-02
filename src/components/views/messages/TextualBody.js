@@ -28,6 +28,11 @@ import ScalarAuthClient from '../../../ScalarAuthClient';
 import Modal from '../../../Modal';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
+import { _t } from '../../../languageHandler';
+import UserSettingsStore from "../../../UserSettingsStore";
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import {RoomMember} from 'matrix-js-sdk';
+import classNames from 'classnames';
 
 linkifyMatrix(linkify);
 
@@ -62,9 +67,26 @@ module.exports = React.createClass({
         };
     },
 
+    copyToClipboard: function(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            const successful = document.execCommand('copy');
+        } catch (err) {
+            console.log('Unable to copy');
+        }
+        document.body.removeChild(textArea);
+    },
+
     componentDidMount: function() {
         this._unmounted = false;
 
+        // pillifyLinks BEFORE linkifyElement because plain room/user URLs in the composer
+        // are still sent as plaintext URLs. If these are ever pillified in the composer,
+        // we should be pillify them here by doing the linkifying BEFORE the pillifying.
+        this.pillifyLinks(this.refs.content.children);
         linkifyElement(this.refs.content, linkifyMatrix.options);
         this.calculateUrlPreview();
 
@@ -76,9 +98,28 @@ module.exports = React.createClass({
                 setTimeout(() => {
                     if (this._unmounted) return;
                     for (let i = 0; i < blocks.length; i++) {
-                        highlight.highlightBlock(blocks[i]);
+                        if (UserSettingsStore.getSyncedSetting("enableSyntaxHighlightLanguageDetection", false)) {
+                            highlight.highlightBlock(blocks[i])
+                        } else {
+                            // Only syntax highlight if there's a class starting with language-
+                            let classes = blocks[i].className.split(/\s+/).filter(function (cl) {
+                                return cl.startsWith('language-');
+                            });
+
+                            if (classes.length != 0) {
+                                highlight.highlightBlock(blocks[i]);
+                            }
+                        }
                     }
                 }, 10);
+            }
+            // add event handlers to the 'copy code' buttons
+            const buttons = ReactDOM.findDOMNode(this).getElementsByClassName("mx_EventTile_copyButton");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].onclick = (e) => {
+                    const copyCode = buttons[i].parentNode.getElementsByTagName("code")[0];
+                    this.copyToClipboard(copyCode.textContent);
+                };
             }
         }
     },
@@ -109,9 +150,15 @@ module.exports = React.createClass({
         if (this.props.showUrlPreview && !this.state.links.length) {
             var links = this.findLinks(this.refs.content.children);
             if (links.length) {
-                this.setState({ links: links.map((link)=>{
-                    return link.getAttribute("href");
-                })});
+                // de-dup the links (but preserve ordering)
+                const seen = new Set();
+                links = links.filter((link) => {
+                    if (seen.has(link)) return false;
+                    seen.add(link);
+                    return true;
+                });
+
+                this.setState({ links: links });
 
                 // lazy-load the hidden state of the preview widget from localstorage
                 if (global.localStorage) {
@@ -122,17 +169,42 @@ module.exports = React.createClass({
         }
     },
 
+    pillifyLinks: function(nodes) {
+        for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
+            if (node.tagName === "A" && node.getAttribute("href")) {
+                const href = node.getAttribute("href");
+
+                // If the link is a (localised) matrix.to link, replace it with a pill
+                const Pill = sdk.getComponent('elements.Pill');
+                if (Pill.isMessagePillUrl(href)) {
+                    const pillContainer = document.createElement('span');
+
+                    const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+                    const pill = <Pill url={href} inMessage={true} room={room}/>;
+
+                    ReactDOM.render(pill, pillContainer);
+                    node.parentNode.replaceChild(pillContainer, node);
+                }
+            } else if (node.children && node.children.length) {
+                this.pillifyLinks(node.children);
+            }
+        }
+    },
+
     findLinks: function(nodes) {
         var links = [];
+
         for (var i = 0; i < nodes.length; i++) {
             var node = nodes[i];
             if (node.tagName === "A" && node.getAttribute("href"))
             {
                 if (this.isLinkPreviewable(node)) {
-                    links.push(node);
+                    links.push(node.getAttribute("href"));
                 }
             }
-            else if (node.tagName === "PRE" || node.tagName === "CODE") {
+            else if (node.tagName === "PRE" || node.tagName === "CODE" ||
+                    node.tagName === "BLOCKQUOTE") {
                 continue;
             }
             else if (node.children && node.children.length) {
@@ -190,10 +262,9 @@ module.exports = React.createClass({
 
     onEmoteSenderClick: function(event) {
         const mxEvent = this.props.mxEvent;
-        const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
         dis.dispatch({
-            action: 'insert_displayname',
-            displayname: name.replace(' (IRC)', ''),
+            action: 'insert_mention',
+            user_id: mxEvent.getSender(),
         });
     },
 
@@ -229,14 +300,14 @@ module.exports = React.createClass({
             let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             let integrationsUrl = SdkConfig.get().integrations_ui_url;
             Modal.createDialog(QuestionDialog, {
-                title: "Add an Integration",
+                title: _t("Add an Integration"),
                 description:
                     <div>
-                        You are about to be taken to a third-party site so you can
-                        authenticate your account for use with {integrationsUrl}.<br/>
-                        Do you wish to continue?
+                        {_t("You are about to be taken to a third-party site so you can " +
+                            "authenticate your account for use with %(integrationsUrl)s. " +
+                            "Do you wish to continue?", { integrationsUrl: integrationsUrl })}
                     </div>,
-                button: "Continue",
+                button: _t("Continue"),
                 onFinished: function(confirmed) {
                     if (!confirmed) {
                         return;
