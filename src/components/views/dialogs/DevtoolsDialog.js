@@ -204,15 +204,16 @@ class RoomStateExplorer extends React.Component {
         if (this.state.eventType === null) {
             Object.keys(roomStateEvents).forEach((evType) => {
                 const stateGroup = roomStateEvents[evType];
-                const keys = Object.keys(stateGroup);
+                const stateKeys = Object.keys(stateGroup);
 
-                if (keys.length > 1) {
-                    rows.push(<button key={evType} onClick={this.browseEventType(evType)}>{evType}</button>);
-                } else if (keys.length === 1) {
-                    rows.push(
-                        <button key={evType} onClick={this.onViewSourceClick(stateGroup[keys[0]])}>{evType}</button>
-                    );
+                let onClickFn;
+                if (stateKeys.length > 1) {
+                    onClickFn = this.browseEventType(evType);
+                } else if (stateKeys.length === 1) {
+                    onClickFn = this.onViewSourceClick(stateGroup[stateKeys[0]]);
                 }
+
+                rows.push(<button key={evType} onClick={onClickFn}>{ evType }</button>);
             });
         } else {
             const evType = this.state.eventType;
