@@ -936,32 +936,27 @@ export default class MessageComposerInput extends React.Component {
         }
 
         const {range = null, completion = '', href = null, suffix = ''} = displayedCompletion;
+        let contentState = activeEditorState.getCurrentContent();
 
         let entityKey;
-        let mdCompletion;
         if (href) {
-            entityKey = Entity.create('LINK', 'IMMUTABLE', {
+            contentState = contentState.createEntity('LINK', 'IMMUTABLE', {
                 url: href,
                 isCompletion: true,
             });
+            entityKey = contentState.getLastCreatedEntityKey();
         }
 
         let selection;
         if (range) {
             selection = RichText.textOffsetsToSelectionState(
-                range, activeEditorState.getCurrentContent().getBlocksAsArray(),
+                range, contentState.getBlocksAsArray(),
             );
         } else {
             selection = activeEditorState.getSelection();
         }
 
-        let contentState = Modifier.replaceText(
-            activeEditorState.getCurrentContent(),
-            selection,
-            mdCompletion || completion,
-            null,
-            entityKey,
-        );
+        contentState = Modifier.replaceText(contentState, selection, completion, null, entityKey);
 
         // Move the selection to the end of the block
         const afterSelection = contentState.getSelectionAfter();
