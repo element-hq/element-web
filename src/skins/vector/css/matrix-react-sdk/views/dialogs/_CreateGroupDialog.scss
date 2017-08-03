@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Vector Creations Ltd.
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,10 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MEmoteBody {
-    white-space: pre-wrap;
+.mx_CreateGroupDialog_inputRow {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-.mx_MEmoteBody_sender {
-    cursor: pointer;
+.mx_CreateGroupDialog_label {
+    text-align: left;
+    padding-bottom: 12px;
 }
+
+.mx_CreateGroupDialog_input {
+    font-size: 15px;
+    border-radius: 3px;
+    border: 1px solid $input-border-color;
+    padding: 9px;
+    color: $primary-fg-color;
+    background-color: $primary-bg-color;
+}
+

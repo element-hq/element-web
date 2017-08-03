@@ -128,6 +128,12 @@ limitations under the License.
     color: $event-sending-color;
 }
 
+.mx_EventTile_sending .mx_UserPill,
+.mx_EventTile_sending .mx_RoomPill,
+.mx_EventTile_sending .mx_emojione {
+    opacity: 0.5;
+}
+
 .mx_EventTile_notSent {
     color: $event-notsent-color;
 }
@@ -316,7 +322,7 @@ limitations under the License.
     font-family: inherit ! important;
     white-space: normal ! important;
     line-height: inherit ! important;
-    color: inherit;
+    color: inherit; // inherit the colour from the dark or light theme by default (but not for code blocks)
     font-size: 14px;
 }
 
@@ -330,8 +336,11 @@ limitations under the License.
 }
 
 .mx_EventTile_content .markdown-body code {
+    // deliberate constants as we're behind an invert filter
     background-color: #f8f8f8;
+    color: #333;
 }
+
 .mx_EventTile_copyButton {
     position: absolute;
     display: inline-block;
@@ -343,14 +352,17 @@ limitations under the License.
     height: 19px;
     background-image: url($copy-button-url);
 }
+
 .mx_EventTile_body pre {
     position: relative;
     border: 1px solid transparent;
 }
+
 .mx_EventTile:hover .mx_EventTile_body pre
 {
-    border: 1px solid $primary-hairline-color;
+    border: 1px solid #e5e5e5; // deliberate constant as we're behind an invert filter
 }
+
 .mx_EventTile_body pre:hover .mx_EventTile_copyButton
 {
     visibility: visible;
@@ -364,6 +376,7 @@ limitations under the License.
 .mx_EventTile_content .markdown-body h6
 {
     font-family: inherit ! important;
+    color: inherit;
 }
 
 

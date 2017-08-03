@@ -306,3 +306,24 @@ textarea {
 .changelog_text {
     font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
 }
+
+.mx_Beta {
+    color: red;
+    margin-right: 10px;
+    position: relative;
+    top: -3px;
+    background-color: white;
+    padding: 0 4px;
+    border-radius: 3px;
+    border: 1px solid darkred;
+    cursor: help;
+    transition-duration: 200ms;
+    font-size: smaller;
+    filter: opacity(0.5);
+}
+
+.mx_Beta:hover {
+    color: white;
+    border: 1px solid gray;
+    background-color: darkred;
+}

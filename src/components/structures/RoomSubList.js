@@ -30,6 +30,7 @@ var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
 var FormattingUtils = require('matrix-react-sdk/lib/utils/FormattingUtils');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 import Modal from 'matrix-react-sdk/lib/Modal';
+import KeyCode from 'matrix-react-sdk/lib/KeyCode';
 
 // turn this on for drop & drag console debugging galore
 var debug = false;
@@ -151,10 +152,11 @@ var RoomSubList = React.createClass({
         }
     },
 
-    onRoomTileClick(roomId) {
+    onRoomTileClick(roomId, ev) {
         dis.dispatch({
             action: 'view_room',
             room_id: roomId,
+            clear_search: (ev && (ev.keyCode == KeyCode.ENTER || ev.keyCode == KeyCode.SPACE)),
         });
     },
 
@@ -509,7 +511,7 @@ var RoomSubList = React.createClass({
                 if (list[i].tags[self.props.tagName] && list[i].tags[self.props.tagName].order === undefined) {
                     MatrixClientPeg.get().setRoomTag(list[i].roomId, self.props.tagName, {order: (order + 1.0) / 2.0}).finally(function() {
                         // Do any final stuff here
-                    }).fail(function(err) {
+                    }).catch(function(err) {
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Failed to add tag " + self.props.tagName + " to room" + err);
                         Modal.createDialog(ErrorDialog, {
