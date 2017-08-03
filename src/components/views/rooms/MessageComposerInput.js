@@ -165,17 +165,20 @@ export default class MessageComposerInput extends React.Component {
         this.client = MatrixClientPeg.get();
     }
 
-    findLinkEntities(contentBlock, callback) {
-        contentBlock.findEntityRanges(
-            (character) => {
-                const entityKey = character.getEntity();
-                return (
-                    entityKey !== null &&
-                    Entity.get(entityKey).getType() === 'LINK'
-                );
-            }, callback,
-        );
+    getLinkFindingStrategy(contentState: ContentState) {
+        return (contentBlock, callback) => {
+            contentBlock.findEntityRanges(
+                (character) => {
+                    const entityKey = character.getEntity();
+                    return (
+                        entityKey !== null &&
+                        contentState.getEntity(entityKey).getType() === 'LINK'
+                    );
+                }, callback,
+            );
+        };
     }
+
     /*
      * "Does the right thing" to create an EditorState, based on:
      * - whether we've got rich text mode enabled
@@ -185,10 +188,10 @@ export default class MessageComposerInput extends React.Component {
         const decorators = richText ? RichText.getScopedRTDecorators(this.props) :
                 RichText.getScopedMDDecorators(this.props);
         decorators.push({
-            strategy: this.findLinkEntities.bind(this),
+            strategy: this.getLinkFindingStrategy(contentState),
             component: (entityProps) => {
                 const Pill = sdk.getComponent('elements.Pill');
-                const {url} = Entity.get(entityProps.entityKey).getData();
+                const {url} = contentState.getEntity(entityProps.entityKey).getData();
                 if (Pill.isPillUrl(url)) {
                     return <Pill url={url} room={this.props.room} offsetKey={entityProps.offsetKey}/>;
                 }
@@ -713,7 +716,7 @@ export default class MessageComposerInput extends React.Component {
                 const hasLink = blocks.some((block) => {
                     return block.getCharacterList().filter((c) => {
                         const entityKey = c.getEntity();
-                        return entityKey && Entity.get(entityKey).getType() === 'LINK';
+                        return entityKey && contentState.getEntity(entityKey).getType() === 'LINK';
                     }).size > 0;
                 });
                 shouldSendHTML = hasLink;
@@ -724,6 +727,7 @@ export default class MessageComposerInput extends React.Component {
                 );
             }
         } else {
+            const findLinkEntities = this.getLinkFindingStrategy(contentState);
             // Use the original contentState because `contentText` has had mentions
             // stripped and these need to end up in contentHTML.
 
@@ -734,8 +738,8 @@ export default class MessageComposerInput extends React.Component {
             const pt = contentState.getBlocksAsArray().map((block) => {
                 let blockText = block.getText();
                 let offset = 0;
-                this.findLinkEntities(block, (start, end) => {
-                    const entity = Entity.get(block.getEntityAt(start));
+                findLinkEntities(block, (start, end) => {
+                    const entity = contentState.getEntity(block.getEntityAt(start));
                     if (entity.getType() !== 'LINK') {
                         return;
                     }
@@ -1042,7 +1046,7 @@ export default class MessageComposerInput extends React.Component {
             offset -= sum;
 
             const entityKey = block.getEntityAt(offset);
-            const entity = entityKey ? Entity.get(entityKey) : null;
+            const entity = entityKey ? contentState.getEntity(entityKey) : null;
             if (entity && entity.getData().isCompletion) {
                 // This is a completed mention, so do not insert MD link, just text
                 return text;

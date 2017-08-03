@@ -238,7 +238,7 @@ export function attachImmutableEntitiesToEmoji(editorState: EditorState): Editor
             const existingEntityKey = block.getEntityAt(start);
             if (existingEntityKey) {
                 // avoid manipulation in case the emoji already has an entity
-                const entity = Entity.get(existingEntityKey);
+                const entity = newContentState.getEntity(existingEntityKey);
                 if (entity && entity.get('type') === 'emoji') {
                     return;
                 }
