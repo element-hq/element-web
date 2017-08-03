@@ -165,17 +165,18 @@ export default class MessageComposerInput extends React.Component {
         this.client = MatrixClientPeg.get();
     }
 
-    findLinkEntities(contentBlock, callback) {
+    findLinkEntities(contentState: ContentState, contentBlock: ContentBlock, callback) {
         contentBlock.findEntityRanges(
             (character) => {
                 const entityKey = character.getEntity();
                 return (
                     entityKey !== null &&
-                    Entity.get(entityKey).getType() === 'LINK'
+                    contentState.getEntity(entityKey).getType() === 'LINK'
                 );
             }, callback,
         );
     }
+
     /*
      * "Does the right thing" to create an EditorState, based on:
      * - whether we've got rich text mode enabled
@@ -188,7 +189,7 @@ export default class MessageComposerInput extends React.Component {
             strategy: this.findLinkEntities.bind(this),
             component: (entityProps) => {
                 const Pill = sdk.getComponent('elements.Pill');
-                const {url} = Entity.get(entityProps.entityKey).getData();
+                const {url} = entityProps.contentState.getEntity(entityProps.entityKey).getData();
                 if (Pill.isPillUrl(url)) {
                     return <Pill url={url} room={this.props.room} offsetKey={entityProps.offsetKey}/>;
                 }
@@ -713,7 +714,7 @@ export default class MessageComposerInput extends React.Component {
                 const hasLink = blocks.some((block) => {
                     return block.getCharacterList().filter((c) => {
                         const entityKey = c.getEntity();
-                        return entityKey && Entity.get(entityKey).getType() === 'LINK';
+                        return entityKey && contentState.getEntity(entityKey).getType() === 'LINK';
                     }).size > 0;
                 });
                 shouldSendHTML = hasLink;
@@ -734,8 +735,8 @@ export default class MessageComposerInput extends React.Component {
             const pt = contentState.getBlocksAsArray().map((block) => {
                 let blockText = block.getText();
                 let offset = 0;
-                this.findLinkEntities(block, (start, end) => {
-                    const entity = Entity.get(block.getEntityAt(start));
+                this.findLinkEntities(contentState, block, (start, end) => {
+                    const entity = contentState.getEntity(block.getEntityAt(start));
                     if (entity.getType() !== 'LINK') {
                         return;
                     }
@@ -936,32 +937,27 @@ export default class MessageComposerInput extends React.Component {
         }
 
         const {range = null, completion = '', href = null, suffix = ''} = displayedCompletion;
+        let contentState = activeEditorState.getCurrentContent();
 
         let entityKey;
-        let mdCompletion;
         if (href) {
-            entityKey = Entity.create('LINK', 'IMMUTABLE', {
+            contentState = contentState.createEntity('LINK', 'IMMUTABLE', {
                 url: href,
                 isCompletion: true,
             });
+            entityKey = contentState.getLastCreatedEntityKey();
         }
 
         let selection;
         if (range) {
             selection = RichText.textOffsetsToSelectionState(
-                range, activeEditorState.getCurrentContent().getBlocksAsArray(),
+                range, contentState.getBlocksAsArray(),
             );
         } else {
             selection = activeEditorState.getSelection();
         }
 
-        let contentState = Modifier.replaceText(
-            activeEditorState.getCurrentContent(),
-            selection,
-            mdCompletion || completion,
-            null,
-            entityKey,
-        );
+        contentState = Modifier.replaceText(contentState, selection, completion, null, entityKey);
 
         // Move the selection to the end of the block
         const afterSelection = contentState.getSelectionAfter();
@@ -1047,7 +1043,7 @@ export default class MessageComposerInput extends React.Component {
             offset -= sum;
 
             const entityKey = block.getEntityAt(offset);
-            const entity = entityKey ? Entity.get(entityKey) : null;
+            const entity = entityKey ? contentState.getEntity(entityKey) : null;
             if (entity && entity.getData().isCompletion) {
                 // This is a completed mention, so do not insert MD link, just text
                 return text;
