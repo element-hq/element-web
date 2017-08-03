@@ -90,7 +90,7 @@ function findWithRegex(regex, contentBlock: ContentBlock, callback: (start: numb
 
 // Workaround for https://github.com/facebook/draft-js/issues/414
 let emojiDecorator = {
-    strategy: (contentBlock, callback) => {
+    strategy: (contentState, contentBlock, callback) => {
         findWithRegex(EMOJI_REGEX, contentBlock, callback);
     },
     component: (props) => {
@@ -119,7 +119,7 @@ export function getScopedRTDecorators(scope: any): CompositeDecorator {
 export function getScopedMDDecorators(scope: any): CompositeDecorator {
     let markdownDecorators = ['HR', 'BOLD', 'ITALIC', 'CODE', 'STRIKETHROUGH'].map(
         (style) => ({
-            strategy: (contentBlock, callback) => {
+            strategy: (contentState, contentBlock, callback) => {
                 return findWithRegex(MARKDOWN_REGEX[style], contentBlock, callback);
             },
             component: (props) => (
@@ -130,7 +130,7 @@ export function getScopedMDDecorators(scope: any): CompositeDecorator {
         }));
 
     markdownDecorators.push({
-        strategy: (contentBlock, callback) => {
+        strategy: (contentState, contentBlock, callback) => {
             return findWithRegex(MARKDOWN_REGEX.LINK, contentBlock, callback);
         },
         component: (props) => (

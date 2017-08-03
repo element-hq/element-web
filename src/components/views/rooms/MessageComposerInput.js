@@ -165,7 +165,7 @@ export default class MessageComposerInput extends React.Component {
         this.client = MatrixClientPeg.get();
     }
 
-    findLinkEntities(contentBlock: ContentBlock, callback, contentState: ContentState) {
+    findLinkEntities(contentState: ContentState, contentBlock: ContentBlock, callback) {
         contentBlock.findEntityRanges(
             (character) => {
                 const entityKey = character.getEntity();
@@ -189,7 +189,7 @@ export default class MessageComposerInput extends React.Component {
             strategy: this.findLinkEntities.bind(this),
             component: (entityProps) => {
                 const Pill = sdk.getComponent('elements.Pill');
-                const {url} = contentState.getEntity(entityProps.entityKey).getData();
+                const {url} = entityProps.contentState.getEntity(entityProps.entityKey).getData();
                 if (Pill.isPillUrl(url)) {
                     return <Pill url={url} room={this.props.room} offsetKey={entityProps.offsetKey}/>;
                 }
