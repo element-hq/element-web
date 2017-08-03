@@ -18,6 +18,9 @@
 #   - imagemagick --with-rsvg (because default imagemagick SVG
 #       renderer does not produce accurate results)
 #
+# on macOS, this is most easily done with:
+#   brew install imagemagick --with-librsvg
+#
 # This will clone the googlei18n flag repo before converting
 # all phonenumber.js-supported country flags (as SVGs) into
 # PNGs that can be used by CountryDropdown.js.
@@ -42,17 +45,18 @@ for f in region-flags/svg/*.svg; do
 
     # Run imagemagick convert
     #   -background none : transparent background
-    #   -thumbnail 25x15 : resize the flag to have a height of 15.
+    #   -resize 50x30    : resize the flag to have a height of 15px (2x)
     #       By default, aspect ratio is respected so the width will
     #       be correct and not necessarily 25px.
+    #   -filter Lanczos  : use sharper resampling to avoid muddiness
     #   -gravity Center  : keep the image central when adding an -extent
     #   -border 1        : add a 1px border around the flag
     #   -bordercolor     : set the border colour
-    #   -extent 27x27    : surround the image with padding so that it
-    #       has the dimensions 27x27.
-    convert $f -background none -thumbnail 25x15  \
-    -gravity Center -border 1 -bordercolor \#e0e0e0 \
-    -extent 27x27 $f.png
+    #   -extent 54x54    : surround the image with padding so that it
+    #       has the dimensions 27x27px (2x).
+    convert $f -background none -filter Lanczos -resize 50x30 \
+        -gravity Center -border 1 -bordercolor \#e0e0e0 \
+        -extent 54x54 $f.png
 
     # $f.png will be region-flags/svg/XX.svg.png at this point
 
@@ -61,6 +65,6 @@ for f in region-flags/svg/*.svg; do
     # Replace .svg with .png
     newname=${newname%.svg}.png
     # Move the file to flags directory
-    mv $f.png res/flags/$newname
+    mv $f.png ../res/flags/$newname
     echo "Generated res/flags/"$newname
 done

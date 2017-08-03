@@ -55,9 +55,10 @@ Building From Source
 Riot is a modular webapp built with modern ES6 and requires a npm build system
 to build.
 
-1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
-1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`
-1. Switch to the riot-web directory: `cd riot-web`
+1. Install or update `node.js` so that your `node` is at least v6.3.0 (and `npm`
+   is at least v3.10.x).
+1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`.
+1. Switch to the riot-web directory: `cd riot-web`.
 1. If you're using the `develop` branch, install the develop versions of the
    dependencies, as the released ones will be too old:
    ```
@@ -65,7 +66,7 @@ to build.
    ```
    Whenever you git pull on riot-web you will also probably need to force an update
    to these dependencies - the simplest way is to re-run the script, but you can also
-   manually update and reuild them:
+   manually update and rebuild them:
    ```
    cd matrix-js-sdk
    git pull
@@ -80,15 +81,15 @@ to build.
    npm run build
    ```
    However, we recommend setting up a proper development environment (see "Setting
-   up a development environment" below) if you want to run your own copy of the
+   up a dev environment" below) if you want to run your own copy of the
    `develop` branch, as it makes it much easier to keep these dependencies
    up-to-date.  Or just use https://riot.im/develop - the continuous integration
    release of the develop branch.
    (Note that we don't reference the develop versions in git directly due to
-   https://github.com/npm/npm/issues/3055)
-1. Install the prerequisites: `npm install`
+   https://github.com/npm/npm/issues/3055.)
+1. Install the prerequisites: `npm install`.
 1. Configure the app by copying `config.sample.json` to `config.json` and
-   modifying it (see below for details)
+   modifying it (see below for details).
 1. `npm run dist` to build a tarball to deploy. Untaring this file will give
    a version-specific directory containing all the files that need to go on your
    web server.
@@ -133,7 +134,7 @@ Running as a Desktop app
 
 Riot can also be run as a desktop app, wrapped in electron. You can download a
 pre-built version from https://riot.im/desktop.html or, if you prefer,
-built it yourself.
+build it yourself. Requires Electron >=1.6.0
 
 To run as a desktop app:
 
@@ -252,7 +253,6 @@ Finally, build and start Riot itself:
 1. `rm -r node_modules/matrix-react-sdk; ln -s ../../matrix-react-sdk node_modules/`
 1. `npm start`
 1. Wait a few seconds for the initial build to finish; you should see something like:
-
     ```
     Hash: b0af76309dd56d7275c8
     Version: webpack 1.12.14
@@ -281,18 +281,33 @@ If any of these steps error with, `file table overflow`, you are probably on a m
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
 You'll need to do this in each new terminal you open before building Riot.
 
-How to add a new translation?
-=============================
+Running the tests
+-----------------
 
-[<img src="https://translate.nordgedanken.de/widgets/riot-web/-/multi-auto.svg" alt="translationsstatus" width="340">](https://translate.nordgedanken.de/engage/riot-web/?utm_source=widget)
+There are a number of application-level tests in the `tests` directory; these
+are designed to run in a browser instance under the control of
+[karma](https://karma-runner.github.io). To run them:
 
+* Make sure you have Chrome installed (a recent version, like 59)
+* Make sure you have `matrix-js-sdk` and `matrix-react-sdk` installed and
+  built, as above
+* `npm run test`
 
-Head to the [translating doc](docs/translating.md)
+The above will run the tests under Chrome in a `headless` mode.
 
-Adding Strings to the translations (Developer Guide)
-====================================================
+You can also tell karma to run the tests in a loop (every time the source
+changes), in an instance of Chrome on your desktop, with `npm run
+test-multi`. This also gives you the option of running the tests in 'debug'
+mode, which is useful for stepping through the tests in the developer tools.
 
-Head to the [translating dev doc](docs/translating-dev.md)
+Translations
+============
+
+To add a new translation, head to the [translating doc](docs/translating.md).
+
+For a developer guide, see the [translating dev doc](docs/translating-dev.md).
+
+[<img src="https://translate.riot.im/widgets/riot-web/-/multi-auto.svg" alt="translationsstatus" width="340">](https://translate.riot.im/engage/riot-web/?utm_source=widget)
 
 Triaging issues
 ===============

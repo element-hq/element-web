@@ -16,12 +16,13 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-var sdk = require('matrix-react-sdk')
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
-var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+import KeyCode from 'matrix-react-sdk/lib/KeyCode';
+import sdk from 'matrix-react-sdk';
+import dis from 'matrix-react-sdk/lib/dispatcher';
+import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
+import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'SearchBox',
@@ -46,18 +47,19 @@ module.exports = React.createClass({
     },
 
     onAction: function(payload) {
-        // Disabling this as I find it really really annoying, and was used to the
-        // previous behaviour - see https://github.com/vector-im/riot-web/issues/3348
-/*        
         switch (payload.action) {
-            // Clear up the text field when a room is selected.
             case 'view_room':
-                if (this.refs.search) {
+                if (this.refs.search && payload.clear_search) {
                     this._clearSearch();
                 }
                 break;
+            case 'focus_room_filter':
+                if (this.refs.search) {
+                    this.refs.search.focus();
+                    this.refs.search.select();
+                }
+                break;
         }
-*/        
     },
 
     onChange: function() {
@@ -86,6 +88,15 @@ module.exports = React.createClass({
         }
     },
 
+    _onKeyDown: function(ev) {
+        switch (ev.keyCode) {
+            case KeyCode.ESCAPE:
+                this._clearSearch();
+                dis.dispatch({action: 'focus_composer'});
+                break;
+        }
+    },
+
     _clearSearch: function() {
         this.refs.search.value = "";
         this.onChange();
@@ -100,13 +111,13 @@ module.exports = React.createClass({
         if (this.props.collapsed) {
             toggleCollapse =
                 <AccessibleButton className="mx_SearchBox_maximise" tabIndex={collapseTabIndex} onClick={ this.onToggleCollapse.bind(this, true) }>
-                    <TintableSvg src="img/maximise.svg" width="10" height="16" alt="Expand panel"/>
+                    <TintableSvg src="img/maximise.svg" width="10" height="16" alt={ _t("Expand panel") }/>
                 </AccessibleButton>
         }
         else {
             toggleCollapse =
                 <AccessibleButton className="mx_SearchBox_minimise" tabIndex={collapseTabIndex} onClick={ this.onToggleCollapse.bind(this, false) }>
-                    <TintableSvg src="img/minimise.svg" width="10" height="16" alt="Collapse panel"/>
+                    <TintableSvg src="img/minimise.svg" width="10" height="16" alt={ _t("Collapse panel") }/>
                 </AccessibleButton>
         }
 
@@ -135,6 +146,7 @@ module.exports = React.createClass({
                         className="mx_SearchBox_search"
                         value={ this.state.searchTerm }
                         onChange={ this.onChange }
+                        onKeyDown={ this._onKeyDown }
                         placeholder={ _t('Filter room names') }
                     />
                 ];

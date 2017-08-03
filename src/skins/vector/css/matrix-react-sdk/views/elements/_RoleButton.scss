@@ -1,5 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
+Copyright 2107 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,17 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+.mx_RoleButton {
+    margin-left: 4px;
+    margin-right: 4px;
+    cursor: pointer;
+    display: inline-block;
+}
 
-var POKE_RATE_MS = 10 * 60 * 1000; // 10 min
+.mx_RoleButton object {
+    pointer-events: none;
+}
 
-module.exports = {
-    start: function() {
-        module.exports.poll();
-        setInterval(module.exports.poll, POKE_RATE_MS);
-    },
-
-    poll: function() {
-        PlatformPeg.get().pollForUpdate();
-    }
-};
+.mx_RoleButton_tooltip {
+    display: inline-block;
+    position: relative;
+    top: -25px;
+    left: 6px;
+}

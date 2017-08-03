@@ -10,7 +10,7 @@ module.exports = {
 
         // We ship olm.js as a separate lump of javascript. This makes it get
         // loaded via a separate <script/> tag in index.html (which loads it
-        // into the browser global `Olm`), and define it as an external below.
+        // into the browser global `Olm`, where js-sdk expects to find it).
         //
         // (we should probably make js-sdk load it asynchronously at some
         // point, so that it doesn't block the pageload, but that is a separate
@@ -99,7 +99,6 @@ module.exports = {
         },
     },
     externals: {
-        "olm": "Olm",
         // Don't try to bundle electron: leave it as a commonjs dependency
         // (the 'commonjs' here means it will output a 'require')
         "electron": "commonjs electron",

@@ -16,8 +16,8 @@ limitations under the License.
 
 'use strict';
 var React = require('react');
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
-var q = require("q");
+import { _t, _tJsx } from 'matrix-react-sdk/lib/languageHandler';
+import Promise from 'bluebird';
 var sdk = require('matrix-react-sdk');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var UserSettingsStore = require('matrix-react-sdk/lib/UserSettingsStore');
@@ -236,7 +236,7 @@ module.exports = React.createClass({
                 }
             }
 
-            q.all(deferreds).done(function() {
+            Promise.all(deferreds).done(function() {
                 self._refreshFromServer();
             }, function(error) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -306,7 +306,7 @@ module.exports = React.createClass({
             }
         }
 
-        q.all(deferreds).done(function(resps) {
+        Promise.all(deferreds).done(function(resps) {
             self._refreshFromServer();
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -361,7 +361,7 @@ module.exports = React.createClass({
         }
 
         // Then, add the new ones
-        q.all(removeDeferreds).done(function(resps) {
+        Promise.all(removeDeferreds).done(function(resps) {
             var deferreds = [];
 
             var pushRuleVectorStateKind = self.state.vectorContentRules.vectorState;
@@ -399,7 +399,7 @@ module.exports = React.createClass({
                 }
             }
 
-            q.all(deferreds).done(function(resps) {
+            Promise.all(deferreds).done(function(resps) {
                 self._refreshFromServer();
             }, onError);
         }, onError);
@@ -431,7 +431,9 @@ module.exports = React.createClass({
                             'global', kind, LEGACY_RULES[rule.rule_id], portLegacyActions(rule.actions)
                         ).then( function() {
                             return cli.deletePushRule('global', kind, rule.rule_id);
-                        })
+                        }).catch( (e) => {
+                            console.warn(`Error when porting legacy rule: ${e}`);
+                        });
                     }(kind, rule));
                 }
             }
@@ -440,7 +442,7 @@ module.exports = React.createClass({
         if (needsUpdate.length > 0) {
             // If some of the rules need to be ported then wait for the porting
             // to happen and then fetch the rules again.
-            return q.allSettled(needsUpdate).then( function() {
+            return Promise.all(needsUpdate).then( function() {
                 return cli.getPushRules();
             });
         } else {
@@ -535,7 +537,16 @@ module.exports = React.createClass({
                     // it corresponds to all content push rules (stored in self.state.vectorContentRule)
                     self.state.vectorPushRules.push({
                         "vectorRuleId": "_keywords",
-                        "description" : (<span>Messages containing <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>keywords</span></span>),
+                        "description" : (
+                            <span>
+                            { _tJsx('Messages containing <span>keywords</span>',
+                                /<span>(.*?)<\/span>/,
+                                (sub) => {
+                                    return <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>{sub}</span>;
+                                }
+                            )}
+                            </span>
+                        ),
                         "vectorState": self.state.vectorContentRules.vectorState
                     });
                 }
@@ -549,7 +560,7 @@ module.exports = React.createClass({
 
                     self.state.vectorPushRules.push({
                         "vectorRuleId": vectorRuleId,
-                        "description" : ruleDefinition.description,
+                        "description" : _t(ruleDefinition.description), // Text from VectorPushRulesDefinitions.js
                         "rule": rule,
                         "vectorState": vectorState,
                     });
@@ -585,11 +596,12 @@ module.exports = React.createClass({
             self.setState({pushers: resp.pushers});
         });
 
-        q.all([pushRulesPromise, pushersPromise]).then(function() {
+        Promise.all([pushRulesPromise, pushersPromise]).then(function() {
             self.setState({
                 phase: self.phases.DISPLAY
             });
         }, function(error) {
+            console.error(error);
             self.setState({
                 phase: self.phases.ERROR
             });
@@ -624,7 +636,7 @@ module.exports = React.createClass({
         return (
             <tr key={ className }>
                 <th>
-                    {title}
+                    { title }
                 </th>
 
                 <th>

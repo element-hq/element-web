@@ -49,11 +49,11 @@ module.exports = React.createClass({
             label = days[date.getDay()];
         }
         else {
-            label = DateUtils.formatFullDate(date);
+            label = DateUtils.formatFullDate(date, this.props.showTwelveHour);
         }
 
         return (
-            <h2>{ label }</h2>
+            <h2 className="mx_DateSeparator">{ label }</h2>
         );
     }
 });

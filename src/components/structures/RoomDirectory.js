@@ -28,7 +28,7 @@ var linkify = require('linkifyjs');
 var linkifyString = require('linkifyjs/string');
 var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
 var sanitizeHtml = require('sanitize-html');
-var q = require('q');
+import Promise from 'bluebird';
 
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
@@ -73,6 +73,7 @@ module.exports = React.createClass({
             this.protocols = response;
             this.setState({protocolsLoading: false});
         }, (err) => {
+            console.warn(`error loading thirdparty protocols: ${err}`);
             this.setState({protocolsLoading: false});
             if (MatrixClientPeg.get().isGuest()) {
                 // Guests currently aren't allowed to use this API, so
@@ -116,7 +117,7 @@ module.exports = React.createClass({
     },
 
     getMoreRooms: function() {
-        if (!MatrixClientPeg.get()) return q();
+        if (!MatrixClientPeg.get()) return Promise.resolve();
 
         const my_filter_string = this.state.filterString;
         const my_server = this.state.roomServer;
@@ -213,11 +214,11 @@ module.exports = React.createClass({
 
                 var Loader = sdk.getComponent("elements.Spinner");
                 var modal = Modal.createDialog(Loader);
-                var step = _t('remove %(name)s from the directory', {name: name}) + '.';
+                var step = _t('remove %(name)s from the directory.', {name: name});
 
                 MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
                     if (!alias) return;
-                    step = _t('delete the alias') + '.';
+                    step = _t('delete the alias.');
                     return MatrixClientPeg.get().deleteAlias(alias);
                 }).done(() => {
                     modal.close();
@@ -265,7 +266,7 @@ module.exports = React.createClass({
     },
 
     onFillRequest: function(backwards) {
-        if (backwards || !this.nextBatch) return q(false);
+        if (backwards || !this.nextBatch) return Promise.resolve(false);
 
         return this.getMoreRooms();
     },
@@ -353,11 +354,7 @@ module.exports = React.createClass({
             // to the directory.
             if (MatrixClientPeg.get().isGuest()) {
                 if (!room.world_readable && !room.guest_can_join) {
-                    var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                    Modal.createDialog(NeedToRegisterDialog, {
-                        title: _t('Failed to join the room'),
-                        description: _t('This room is inaccessible to guests. You may be able to join if you register') + '.'
-                    });
+                    dis.dispatch({action: 'view_set_mxid'});
                     return;
                 }
             }

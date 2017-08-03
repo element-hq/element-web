@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 import pako from 'pako';
-import q from "q";
+import Promise from 'bluebird';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 import rageshake from './rageshake'
 
@@ -53,7 +54,7 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
     opts = opts || {};
     const progressCallback = opts.progressCallback || (() => {});
 
-    progressCallback("Collecting app version information");
+    progressCallback(_t("Collecting app version information"));
     let version = "UNKNOWN";
     try {
         version = await PlatformPeg.get().getAppVersion();
@@ -81,7 +82,7 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
     }
 
     if (opts.sendLogs) {
-        progressCallback("Collecting logs");
+        progressCallback(_t("Collecting logs"));
         const logs = await rageshake.getLogsForReport();
         for (let entry of logs) {
             // encode as UTF-8
@@ -94,19 +95,19 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
         }
     }
 
-    progressCallback("Uploading report");
+    progressCallback(_t("Uploading report"));
     await _submitReport(bugReportEndpoint, body, progressCallback);
 }
 
 function _submitReport(endpoint, body, progressCallback) {
-    const deferred = q.defer();
+    const deferred = Promise.defer();
 
     const req = new XMLHttpRequest();
     req.open("POST", endpoint);
     req.timeout = 5 * 60 * 1000;
     req.onreadystatechange = function() {
         if (req.readyState === XMLHttpRequest.LOADING) {
-            progressCallback("Waiting for response from server");
+            progressCallback(_t("Waiting for response from server"));
         } else if (req.readyState === XMLHttpRequest.DONE) {
             on_done();
         }

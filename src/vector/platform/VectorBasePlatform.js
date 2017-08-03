@@ -18,7 +18,18 @@ limitations under the License.
 */
 
 import BasePlatform from 'matrix-react-sdk/lib/BasePlatform';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import dis from 'matrix-react-sdk/lib/dispatcher';
+
 import Favico from 'favico.js';
+
+export const updateCheckStatusEnum = {
+    CHECKING: 'CHECKING',
+    ERROR: 'ERROR',
+    NOTAVAILABLE: 'NOTAVAILABLE',
+    DOWNLOADING: 'DOWNLOADING',
+    READY: 'READY',
+};
 
 /**
  * Vector-specific extensions to the BasePlatform template
@@ -32,7 +43,16 @@ export default class VectorBasePlatform extends BasePlatform {
         // and we set the state each time, even if the value hasn't changed,
         // so we'd need to fix that if enabling the animation.
         this.favicon = new Favico({animation: 'none'});
+        this.showUpdateCheck = false;
         this._updateFavicon();
+        this.updatable = true;
+
+        this.startUpdateCheck = this.startUpdateCheck.bind(this);
+        this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
+    }
+
+    getHumanReadableName(): string {
+        return 'Vector Base Platform'; // no translation required: only used for analytics
     }
 
     _updateFavicon() {
@@ -69,12 +89,32 @@ export default class VectorBasePlatform extends BasePlatform {
     }
 
     /**
-     * Check for the availability of an update to the version of the
-     * app that's currently running.
-     * If an update is available, this function should dispatch the
-     * 'new_version' action.
+     * Begin update polling, if applicable
      */
-    pollForUpdate() {
+    startUpdater() {
+    }
+
+    /**
+     * Whether we can call checkForUpdate on this platform build
+     */
+    canSelfUpdate(): boolean {
+        return this.updatable;
+    }
+
+    startUpdateCheck() {
+        this.showUpdateCheck = true;
+        dis.dispatch({
+            action: 'check_updates',
+            value: { status: updateCheckStatusEnum.CHECKING },
+        });
+    }
+
+    stopUpdateCheck() {
+        this.showUpdateCheck = false;
+        dis.dispatch({
+            action: 'check_updates',
+            value: false,
+        })
     }
 
     /**
@@ -90,6 +130,6 @@ export default class VectorBasePlatform extends BasePlatform {
      * device Vector is running on
      */
     getDefaultDeviceDisplayName(): string {
-        return "Unknown device";
+        return _t("Unknown device");
     }
 }
