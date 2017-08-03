@@ -102,6 +102,13 @@ limitations under the License.
     padding-right: 1em;
 }
 
+.mx_UserSettings_passwordWarning {
+    /* To move the "Sign out" button out of the way */
+    clear: both;
+    color: $warning-color;
+    margin-bottom: 5px;
+}
+
 .mx_UserSettings_importExportButtons {
     padding-top: 10px;
     padding-left: 40px;
@@ -132,6 +139,10 @@ limitations under the License.
 }
 
 .mx_UserSettings_language {
+    width: 200px;
+}
+
+.mx_UserSettings_webRtcDevices_dropdown{
     width: 200px;
 }
 

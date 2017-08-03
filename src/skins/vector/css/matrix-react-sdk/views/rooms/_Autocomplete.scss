@@ -38,6 +38,7 @@
 .mx_Autocomplete_Completion_pill {
     border-radius: 17px;
     height: 34px;
+    padding: 0px 5px;
     display: flex;
     user-select: none;
     cursor: pointer;
@@ -45,8 +46,20 @@
     color: $primary-fg-color;
 }
 
-.mx_Autocomplete_Completion_pill * {
+.mx_Autocomplete_Completion_pill > * {
     margin: 0 3px;
+}
+
+.mx_Autocomplete_Completion_container_truncate {
+    .mx_Autocomplete_Completion_title,
+    .mx_Autocomplete_Completion_subtitle,
+    .mx_Autocomplete_Completion_description {
+        /* Ellipsis for long names/subtitles/descriptions*/
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 /* container for pill-style completions */

@@ -20,7 +20,6 @@ import React from 'react';
 import {DragSource} from 'react-dnd';
 import {DropTarget} from 'react-dnd';
 
-import dis from 'matrix-react-sdk/lib/dispatcher';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import sdk from 'matrix-react-sdk';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
@@ -112,7 +111,7 @@ var roomTileSource = {
                 //component.state.set({ spinner: component.state.spinner ? component.state.spinner++ : 1 });
                 MatrixClientPeg.get().deleteRoomTag(item.room.roomId, prevTag).finally(function() {
                     //component.state.set({ spinner: component.state.spinner-- });
-                }).fail(function(err) {
+                }).catch(function(err) {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to remove tag " + prevTag + " from room: " + err);
                     Modal.createDialog(ErrorDialog, {
@@ -131,10 +130,7 @@ var roomTileSource = {
             if (newTag && newTag !== 'im.vector.fake.direct' &&
                 (item.targetList !== item.originalList || newOrder)
             ) {
-                //component.state.set({ spinner: component.state.spinner ? component.state.spinner++ : 1 });
-                MatrixClientPeg.get().setRoomTag(item.room.roomId, newTag, newOrder).finally(function() {
-                    //component.state.set({ spinner: component.state.spinner-- });
-                }).fail(function(err) {
+                MatrixClientPeg.get().setRoomTag(item.room.roomId, newTag, newOrder).catch(function(err) {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to add tag " + newTag + " to room: " + err);
                     Modal.createDialog(ErrorDialog, {

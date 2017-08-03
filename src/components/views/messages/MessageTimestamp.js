@@ -16,8 +16,8 @@ limitations under the License.
 
 'use strict';
 
-const React = require('react');
-const DateUtils = require('matrix-react-sdk/lib/DateUtils');
+import React from 'react';
+import DateUtils from 'matrix-react-sdk/lib/DateUtils';
 
 module.exports = React.createClass({
     displayName: 'MessageTimestamp',
