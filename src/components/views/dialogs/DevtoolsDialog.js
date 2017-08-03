@@ -1,5 +1,5 @@
 /*
-Copyright 2017 OpenMarket Ltd
+Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -97,7 +97,9 @@ class SendCustomStateEvent extends React.Component {
     async _send() {
         try {
             const content = JSON.parse(this.refs.evContent.value);
-            await MatrixClientPeg.get().sendStateEvent(this.refs.roomId.value, this.refs.eventType.value, content, this.refs.stateKey.value);
+            await MatrixClientPeg.get().sendStateEvent(this.refs.roomId.value, this.refs.eventType.value, content,
+                this.refs.stateKey.value);
+
             this.props.onFinished(true);
         } catch (e) {
             this.props.onFinished(false);
@@ -207,7 +209,9 @@ class RoomStateExplorer extends React.Component {
                 if (keys.length > 1) {
                     rows.push(<button key={evType} onClick={this.browseEventType(evType)}>{evType}</button>);
                 } else if (keys.length === 1) {
-                    rows.push(<button key={evType} onClick={this.onViewSourceClick(stateGroup[keys[0]])}>{evType}</button>);
+                    rows.push(
+                        <button key={evType} onClick={this.onViewSourceClick(stateGroup[keys[0]])}>{evType}</button>
+                    );
                 }
             });
         } else {
