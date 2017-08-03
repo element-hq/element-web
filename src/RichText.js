@@ -51,7 +51,8 @@ export const contentStateToHTML = (contentState: ContentState) => {
 };
 
 export function htmlToContentState(html: string): ContentState {
-    return ContentState.createFromBlockArray(convertFromHTML(html));
+    const blockArray = convertFromHTML(html).contentBlocks;
+    return ContentState.createFromBlockArray(blockArray);
 }
 
 function unicodeToEmojiUri(str) {

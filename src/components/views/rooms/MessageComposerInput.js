@@ -735,7 +735,7 @@ export default class MessageComposerInput extends React.Component {
             const pt = contentState.getBlocksAsArray().map((block) => {
                 let blockText = block.getText();
                 let offset = 0;
-                this.findLinkEntities(block, (start, end) => {
+                this.findLinkEntities(contentState, block, (start, end) => {
                     const entity = contentState.getEntity(block.getEntityAt(start));
                     if (entity.getType() !== 'LINK') {
                         return;
