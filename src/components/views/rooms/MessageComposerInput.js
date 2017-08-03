@@ -165,18 +165,16 @@ export default class MessageComposerInput extends React.Component {
         this.client = MatrixClientPeg.get();
     }
 
-    getLinkFindingStrategy(contentState: ContentState) {
-        return (contentBlock, callback) => {
-            contentBlock.findEntityRanges(
-                (character) => {
-                    const entityKey = character.getEntity();
-                    return (
-                        entityKey !== null &&
-                        contentState.getEntity(entityKey).getType() === 'LINK'
-                    );
-                }, callback,
-            );
-        };
+    findLinkEntities(contentBlock: ContentBlock, callback, contentState: ContentState) {
+        contentBlock.findEntityRanges(
+            (character) => {
+                const entityKey = character.getEntity();
+                return (
+                    entityKey !== null &&
+                    contentState.getEntity(entityKey).getType() === 'LINK'
+                );
+            }, callback,
+        );
     }
 
     /*
@@ -188,7 +186,7 @@ export default class MessageComposerInput extends React.Component {
         const decorators = richText ? RichText.getScopedRTDecorators(this.props) :
                 RichText.getScopedMDDecorators(this.props);
         decorators.push({
-            strategy: this.getLinkFindingStrategy(contentState),
+            strategy: this.findLinkEntities.bind(this),
             component: (entityProps) => {
                 const Pill = sdk.getComponent('elements.Pill');
                 const {url} = contentState.getEntity(entityProps.entityKey).getData();
@@ -727,7 +725,6 @@ export default class MessageComposerInput extends React.Component {
                 );
             }
         } else {
-            const findLinkEntities = this.getLinkFindingStrategy(contentState);
             // Use the original contentState because `contentText` has had mentions
             // stripped and these need to end up in contentHTML.
 
@@ -738,7 +735,7 @@ export default class MessageComposerInput extends React.Component {
             const pt = contentState.getBlocksAsArray().map((block) => {
                 let blockText = block.getText();
                 let offset = 0;
-                findLinkEntities(block, (start, end) => {
+                this.findLinkEntities(block, (start, end) => {
                     const entity = contentState.getEntity(block.getEntityAt(start));
                     if (entity.getType() !== 'LINK') {
                         return;
