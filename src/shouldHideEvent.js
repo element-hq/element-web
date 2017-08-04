@@ -14,38 +14,36 @@
  limitations under the License.
  */
 
-function _isLeaveOrJoin(ev) {
-    const isMemberEvent = ev.getType() === 'm.room.member' && ev.getStateKey() !== undefined;
-    if (!isMemberEvent) {
-        return false; // bail early: all the checks below concern member events only
-    }
+function memberEventDiff(ev) {
+    const diff = {
+        isMembershipEvent: ev.getType() === 'm.room.member' && ev.getStateKey() !== undefined,
+    };
 
-    // TODO: These checks are done to make sure we're dealing with membership transitions not avatar changes / dupe joins
-    //       These checks are also being done in TextForEvent and should really reside in the JS SDK as a helper function
-    const membership = ev.getContent().membership;
-    const prevMembership = ev.getPrevContent().membership;
-    if (membership === prevMembership && membership === 'join') {
-        // join -> join : This happens when display names change / avatars are set / genuine dupe joins with no changes.
-        //                Find out which we're dealing with.
-        if (ev.getPrevContent().displayname !== ev.getContent().displayname) {
-            return false; // display name changed
-        }
-        if (ev.getPrevContent().avatar_url !== ev.getContent().avatar_url) {
-            return false; // avatar url changed
-        }
-        // dupe join event, fall through to hide rules
-    }
+    if (!diff.isMembershipEvent) return diff;
 
+    const content = ev.getContent();
+    const prevContent = ev.getPrevContent();
 
-    // this only applies to joins/invited joins/leaves not invites/kicks/bans
-    const isJoin = membership === 'join' && prevMembership !== 'ban';
-    const isLeave = membership === 'leave' && ev.getStateKey() === ev.getSender();
-    return isJoin || isLeave;
+    diff.isJoin = content.membership === 'join' && prevContent.membership !== 'ban';
+    diff.isPart = content.membership === 'leave' && ev.getStateKey() === ev.getSender();
+
+    const isJoinToJoin = content.membership === prevContent.membership && content.membership === 'join';
+    diff.isDisplaynameChange = isJoinToJoin && content.displayname !== prevContent.displayname;
+    diff.isAvatarChange = isJoinToJoin && content.avatar_url !== prevContent.avatar_url;
+    return diff;
 }
 
 export default function(ev, syncedSettings) {
     // Hide redacted events
     if (syncedSettings['hideRedactions'] && ev.isRedacted()) return true;
-    if (syncedSettings['hideJoinLeaves'] && _isLeaveOrJoin(ev)) return true;
+
+    const eventDiff = memberEventDiff(ev);
+
+    if (eventDiff.isMembershipEvent) {
+        if (syncedSettings['hideJoinLeaves'] && (eventDiff.isJoin || eventDiff.isPart)) return true;
+        const isMemberAvatarDisplaynameChange = eventDiff.isAvatarChange || eventDiff.isDisplaynameChange;
+        if (syncedSettings['hideAvatarDisplaynameChanges'] && isMemberAvatarDisplaynameChange) return true;
+    }
+
     return false;
 }
