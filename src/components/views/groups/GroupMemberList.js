@@ -17,6 +17,7 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import Promise from 'bluebird';
 import sdk from '../../../index';
+import { groupMemberFromApiObject } from '../../../groups';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import PropTypes from 'prop-types';
 import withMatrixClient from '../../../wrappers/withMatrixClient';
@@ -47,7 +48,9 @@ export default withMatrixClient(React.createClass({
         this.setState({fetching: true});
         this.props.matrixClient.getGroupUsers(this.props.groupId).then((result) => {
             this.setState({
-                members: result.chunk,
+                members: result.chunk.map((apiMember) => {
+                    return groupMemberFromApiObject(apiMember);
+                }),
                 fetching: false,
             });
         }).catch((e) => {
@@ -86,7 +89,7 @@ export default withMatrixClient(React.createClass({
         const memberList = this.state.members.filter((m) => {
             if (query) {
                 //const matchesName = m.name.toLowerCase().indexOf(query) !== -1;
-                const matchesId = m.user_id.toLowerCase().indexOf(query) !== -1;
+                const matchesId = m.userId.toLowerCase().indexOf(query) !== -1;
 
                 if (/*!matchesName &&*/ !matchesId) {
                     return false;
@@ -94,9 +97,9 @@ export default withMatrixClient(React.createClass({
             }
 
             return true;
-        }).map(function(m) {
+        }).map((m) => {
             return (
-                <GroupMemberTile key={m.user_id} member={m} />
+                <GroupMemberTile key={m.userId} groupId={this.props.groupId} member={m} />
             );
         });
 

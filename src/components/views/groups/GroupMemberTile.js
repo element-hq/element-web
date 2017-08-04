@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
+import { GroupMemberType } from '../../../groups';
 import withMatrixClient from '../../../wrappers/withMatrixClient';
 import Matrix from "matrix-js-sdk";
 
@@ -27,9 +28,8 @@ export default withMatrixClient(React.createClass({
 
     propTypes: {
         matrixClient: PropTypes.object,
-        member: PropTypes.shape({
-            user_id: PropTypes.string.isRequired,
-        }).isRequired,
+        groupId: PropTypes.string.isRequired,
+        member: GroupMemberType.isRequired,
     },
 
     getInitialState: function() {
@@ -37,10 +37,10 @@ export default withMatrixClient(React.createClass({
     },
 
     onClick: function(e) {
-        const member = new Matrix.RoomMember(null, this.props.member.user_id);
         dis.dispatch({
-            action: 'view_user',
-            member: member,
+            action: 'view_group_user',
+            member: this.props.member,
+            groupId: this.props.groupId,
         });
     },
 
@@ -52,10 +52,10 @@ export default withMatrixClient(React.createClass({
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const EntityTile = sdk.getComponent('rooms.EntityTile');
 
-        const name = this.props.member.user_id;
+        const name = this.props.member.userId;
 
         const av = (
-            <BaseAvatar name={this.props.member.user_id} width={36} height={36} />
+            <BaseAvatar name={this.props.member.userId} width={36} height={36} />
         );
 
         return (
