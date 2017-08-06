@@ -22,7 +22,7 @@ released version of Riot:
 1. Enter the URL into your browser and log into Riot!
 
 Releases are signed by PGP, and can be checked against the public key
-at https://riot.im/packages/keys/riot-master.asc
+at https://riot.im/packages/keys/riot.asc
 
 Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
