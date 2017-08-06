@@ -50,6 +50,7 @@ module.exports = React.createClass({
         onSaveClick: React.PropTypes.func,
         onSearchClick: React.PropTypes.func,
         onLeaveClick: React.PropTypes.func,
+        onCancelClick: React.PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -57,6 +58,7 @@ module.exports = React.createClass({
             editing: false,
             inRoom: false,
             onSaveClick: function() {},
+            onCancelClick: function() {},
         };
     },
 
@@ -119,9 +121,7 @@ module.exports = React.createClass({
                     this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId) :
                     null,
             onFinished: ()=>{
-                if (this._calcSavePromises().length === 0) {
-                    this.props.onCancelClick(ev);
-                }
+                this.props.onCancelClick(ev);
             },
         }, "mx_IntegrationsManager");
     },
