@@ -30,6 +30,9 @@ import linkifyElement from 'linkifyjs/element';
 import linkifyMatrix from '../../../linkify-matrix';
 import AccessibleButton from '../elements/AccessibleButton';
 import {CancelButton} from './SimpleRoomHeader';
+import SdkConfig from '../../../SdkConfig';
+import ScalarAuthClient from '../../../ScalarAuthClient';
+import ScalarMessaging from '../../../ScalarMessaging';
 
 linkifyMatrix(linkify);
 
@@ -57,6 +60,13 @@ module.exports = React.createClass({
         };
     },
 
+    getInitialState: function() {
+        return {
+             scalar_error: null,
+             showIntegrationsError: false,
+        };
+    },
+
     componentDidMount: function() {
         const cli = MatrixClientPeg.get();
         cli.on("RoomState.events", this._onRoomStateEvents);
@@ -75,7 +85,23 @@ module.exports = React.createClass({
         }
     },
 
+    componentWillMount: function() {
+        ScalarMessaging.startListening();
+        this.scalarClient = null;
+        if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
+            this.scalarClient = new ScalarAuthClient();
+            this.scalarClient.connect().done(() => {
+                this.forceUpdate();
+            }, (err) => {
+                this.setState({
+                    scalar_error: err,
+                });
+            });
+         }
+    },
+
     componentWillUnmount: function() {
+        ScalarMessaging.stopListening();
         if (this.props.room) {
             this.props.room.removeListener("Room.name", this._onRoomNameChange);
         }
@@ -83,6 +109,28 @@ module.exports = React.createClass({
         if (cli) {
             cli.removeListener("RoomState.events", this._onRoomStateEvents);
         }
+    },
+
+     onManageIntegrations(ev) {
+         ev.preventDefault();
+         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+        Modal.createDialog(IntegrationsManager, {
+            src: (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
+                    this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId) :
+                    null,
+            onFinished: ()=>{
+                if (this._calcSavePromises().length === 0) {
+                    this.props.onCancelClick(ev);
+                }
+            },
+        }, "mx_IntegrationsManager");
+    },
+
+    onShowIntegrationsError(ev) {
+        ev.preventDefault();
+        this.setState({
+            showIntegrationsError: !this.state.showIntegrationsError,
+        });
     },
 
     _onRoomStateEvents: function(event, state) {
@@ -320,10 +368,45 @@ module.exports = React.createClass({
         }
 
         let rightRow;
+        let integrationsButton;
+        let integrationsError;
+        if (this.scalarClient !== null) {
+            if (this.state.showIntegrationsError && this.state.scalar_error) {
+                console.error(this.state.scalar_error);
+                integrationsError = (
+                    <span className="mx_RoomSettings_integrationsButton_errorPopup">
+                        { _t('Could not connect to the integration server') }
+                    </span>
+                );
+            }
+
+            if (this.scalarClient.hasCredentials()) {
+                integrationsButton = (
+                    <AccessibleButton className="mx_RoomHeader_button" onClick={this.onManageIntegrations} title={ _t('Manage Integrations') }>
+                        <TintableSvg src="img/icons-apps.svg" width="35" height="35"/>
+                    </AccessibleButton>
+                );
+            } else if (this.state.scalar_error) {
+                integrationsButton = (
+                    <div className="mx_RoomSettings_integrationsButton_error" onClick={ this.onShowIntegrationsError }>
+                        <img src="img/warning.svg" title={_t('Integrations Error')} width="17"/>
+                        { integrationsError }
+                    </div>
+                );
+            } else {
+                integrationsButton = (
+                    <AccessibleButton className="mx_RoomHeader_button" onClick={this.onManageIntegrations} title={ _t('Manage Integrations') }>
+                        <TintableSvg src="img/icons-apps.svg" width="35" height="35"/>
+                    </AccessibleButton>
+                );
+            }
+        }
+
         if (!this.props.editing) {
             rightRow =
                 <div className="mx_RoomHeader_rightRow">
                     { settingsButton }
+                    { integrationsButton }
                     { forgetButton }
                     { searchButton }
                     { rightPanelButtons }

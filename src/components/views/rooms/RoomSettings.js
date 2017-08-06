@@ -24,8 +24,6 @@ import sdk from '../../../index';
 import Modal from '../../../Modal';
 import ObjectUtils from '../../../ObjectUtils';
 import dis from '../../../dispatcher';
-import ScalarAuthClient from '../../../ScalarAuthClient';
-import ScalarMessaging from '../../../ScalarMessaging';
 import UserSettingsStore from '../../../UserSettingsStore';
 import AccessibleButton from '../elements/AccessibleButton';
 
@@ -118,14 +116,10 @@ module.exports = React.createClass({
             // Default to false if it's undefined, otherwise react complains about changing
             // components from uncontrolled to controlled
             isRoomPublished: this._originalIsRoomPublished || false,
-            scalar_error: null,
-            showIntegrationsError: false,
         };
     },
 
     componentWillMount: function() {
-        ScalarMessaging.startListening();
-
         MatrixClientPeg.get().on("RoomMember.membership", this._onRoomMemberMembership);
 
         MatrixClientPeg.get().getRoomDirectoryVisibility(
@@ -137,18 +131,6 @@ module.exports = React.createClass({
             console.error("Failed to get room visibility: " + err);
         });
 
-        this.scalarClient = null;
-        if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
-            this.scalarClient = new ScalarAuthClient();
-            this.scalarClient.connect().done(() => {
-                this.forceUpdate();
-            }, (err) => {
-                this.setState({
-                    scalar_error: err
-                });
-            });
-        }
-
         dis.dispatch({
             action: 'ui_opacity',
             sideOpacity: 0.3,
@@ -157,8 +139,6 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        ScalarMessaging.stopListening();
-
         const cli = MatrixClientPeg.get();
         if (cli) {
             cli.removeListener("RoomMember.membership", this._onRoomMemberMembership);
@@ -513,28 +493,6 @@ module.exports = React.createClass({
                 roomState.mayClientSendStateEvent("m.room.guest_access", cli));
     },
 
-    onManageIntegrations(ev) {
-        ev.preventDefault();
-        var IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        Modal.createDialog(IntegrationsManager, {
-            src: (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
-                    this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId) :
-                    null,
-            onFinished: ()=>{
-                if (this._calcSavePromises().length === 0) {
-                    this.props.onCancelClick(ev);
-                }
-            },
-        }, "mx_IntegrationsManager");
-    },
-
-    onShowIntegrationsError(ev) {
-        ev.preventDefault();
-        this.setState({
-            showIntegrationsError: !this.state.showIntegrationsError,
-        });
-    },
-
     onLeaveClick() {
         dis.dispatch({
             action: 'leave_room',
@@ -796,46 +754,10 @@ module.exports = React.createClass({
                 </div>;
         }
 
-        let integrationsButton;
-        let integrationsError;
-
-        if (this.scalarClient !== null) {
-            if (this.state.showIntegrationsError && this.state.scalar_error) {
-                console.error(this.state.scalar_error);
-                integrationsError = (
-                    <span className="mx_RoomSettings_integrationsButton_errorPopup">
-                        { _t('Could not connect to the integration server') }
-                    </span>
-                );
-            }
-
-            if (this.scalarClient.hasCredentials()) {
-                integrationsButton = (
-                    <div className="mx_RoomSettings_integrationsButton" onClick={ this.onManageIntegrations }>
-                        { _t('Manage Integrations') }
-                    </div>
-                );
-            } else if (this.state.scalar_error) {
-                integrationsButton = (
-                    <div className="mx_RoomSettings_integrationsButton_error" onClick={ this.onShowIntegrationsError }>
-                        Integrations Error <img src="img/warning.svg" width="17"/>
-                        { integrationsError }
-                    </div>
-                );
-            } else {
-                integrationsButton = (
-                    <div className="mx_RoomSettings_integrationsButton" style={{opacity: 0.5}}>
-                        { _t('Manage Integrations') }
-                    </div>
-                );
-            }
-        }
-
         return (
             <div className="mx_RoomSettings">
 
                 { leaveButton }
-                { integrationsButton }
 
                 { tagsSection }
 
