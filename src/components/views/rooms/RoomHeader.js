@@ -121,7 +121,9 @@ module.exports = React.createClass({
                     this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId) :
                     null,
             onFinished: ()=>{
-                this.props.onCancelClick(ev);
+                if (this.props.onCancelClick) {
+                    this.props.onCancelClick(ev);
+                }
             },
         }, "mx_IntegrationsManager");
     },

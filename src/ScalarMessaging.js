@@ -338,6 +338,12 @@ function setWidget(event, roomId) {
         sendResponse(event, {
             success: true,
         });
+
+        if (widgetUrl !== null) {
+            client.sendTextMessage(roomId, `Added ${widgetType} widget - ${widgetUrl}`);
+        } else {
+            client.sendTextMessage(roomId, `Removed ${widgetType} widget`);
+        }
     }, (err) => {
         sendError(event, _t('Failed to send request.'), err);
     });
