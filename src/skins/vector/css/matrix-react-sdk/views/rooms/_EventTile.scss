@@ -403,7 +403,15 @@ limitations under the License.
     }
 
     .mx_EventTile.mx_EventTile_info {
+        // same as the padding for non-compact .mx_EventTile.mx_EventTile_info
         padding-top: 0px;
+        font-size: 13px;
+        .mx_EventTile_line {
+            line-height: 20px;
+        }
+        .mx_EventTile_avatar {
+            top: 4px;
+        }
     }
 
     .mx_EventTile .mx_SenderProfile {
@@ -411,6 +419,7 @@ limitations under the License.
     }
 
     .mx_EventTile.mx_EventTile_emote {
+        // add a bit more space for emotes so that avatars don't collide
         padding-top: 8px;
         .mx_EventTile_avatar {
             top: 2px;
@@ -438,10 +447,6 @@ limitations under the License.
         top: 2px;
     }
 
-    .mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
-        top: 5px;
-    }
-
     .mx_EventTile_e2eIcon {
         top: 7px;
     }
@@ -455,12 +460,21 @@ limitations under the License.
     }
 
     .mx_EventTile_continuation .mx_EventTile_readAvatars,
-    .mx_EventTile_info .mx_EventTile_readAvatars,
     .mx_EventTile_emote .mx_EventTile_readAvatars {
         top: 5px;
     }
 
+    .mx_EventTile_info .mx_EventTile_readAvatars {
+        top: 4px;
+    }
+
     .mx_RoomView_MessageList h2 {
         margin-top: 6px;
+    }
+
+    .mx_EventTile_content .markdown-body {
+      p, ul, ol, dl, blockquote, pre, table {
+        margin-bottom: 4px; // 1/4 of the non-compact margin-bottom
+      }
     }
 }
