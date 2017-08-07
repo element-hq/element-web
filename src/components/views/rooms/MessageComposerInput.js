@@ -519,7 +519,8 @@ export default class MessageComposerInput extends React.Component {
                 newState = RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH');
             } else if (shouldToggleBlockFormat) {
                 const currentStartOffset = this.state.editorState.getSelection().getStartOffset();
-                if (currentStartOffset === 0) {
+                const currentEndOffset = this.state.editorState.getSelection().getEndOffset();
+                if (currentStartOffset === 0 && currentEndOffset === 0) {
                     // Toggle current block type (setting it to 'unstyled')
                     newState = RichUtils.toggleBlockType(this.state.editorState, currentBlockType);
                 }
