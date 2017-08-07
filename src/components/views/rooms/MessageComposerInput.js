@@ -109,8 +109,7 @@ export default class MessageComposerInput extends React.Component {
         if ([KeyCode.KEY_B, KeyCode.KEY_I, KeyCode.KEY_U].includes(e.keyCode) &&
             e.shiftKey && e.ctrlKey
         ) {
-            // When null is returned, draft-js will NOT preventDefault, allowing dev tools
-            // to be toggled when the editor is focussed
+            // When null is returned, draft-js will NOT preventDefault
             return null;
         }
 
