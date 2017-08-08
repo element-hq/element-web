@@ -54,7 +54,9 @@ export default class UserProvider extends AutocompleteProvider {
             completions = this.matcher.match(command[0]).map((user) => {
                 const displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
                 return {
-                    completion: displayName,
+                    // Length of completion should equal length of text in decorator. draft-js
+                    // relies on the length of the entity === length of the text in the decoration.
+                    completion: user.rawDisplayName,
                     suffix: range.start === 0 ? ': ' : ' ',
                     href: 'https://matrix.to/#/' + user.userId,
                     component: (
