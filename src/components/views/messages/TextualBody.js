@@ -170,6 +170,7 @@ module.exports = React.createClass({
     },
 
     pillifyLinks: function(nodes) {
+        const shouldShowPillAvatar = !UserSettingsStore.getSyncedSetting("Pill.shouldHidePillAvatar", false);
         for (let i = 0; i < nodes.length; i++) {
             const node = nodes[i];
             if (node.tagName === "A" && node.getAttribute("href")) {
@@ -181,7 +182,12 @@ module.exports = React.createClass({
                     const pillContainer = document.createElement('span');
 
                     const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-                    const pill = <Pill url={href} inMessage={true} room={room}/>;
+                    const pill = <Pill
+                        url={href}
+                        inMessage={true}
+                        room={room}
+                        shouldShowPillAvatar={shouldShowPillAvatar}
+                    />;
 
                     ReactDOM.render(pill, pillContainer);
                     node.parentNode.replaceChild(pillContainer, node);
