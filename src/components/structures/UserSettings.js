@@ -102,9 +102,9 @@ const SETTINGS_LABELS = [
         label: 'Automatically replace plain text Emoji',
     },
     {
-        id :'Pill.shouldHidePillAvatar',
+        id: 'Pill.shouldHidePillAvatar',
         label: 'Hide avatars in user and room mentions',
-    }
+    },
 /*
     {
         id: 'useFixedWidthFont',
