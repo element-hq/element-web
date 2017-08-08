@@ -48,6 +48,12 @@ export default class UserProvider extends AutocompleteProvider {
     async getCompletions(query: string, selection: {start: number, end: number}, force = false) {
         const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
 
+        // Disable autocompletions when composing commands because of various issues
+        // (see https://github.com/vector-im/riot-web/issues/4762)
+        if (/^(\/ban|\/unban|\/op|\/deop|\/invite|\/kick|\/verify)/.test(query)) {
+            return [];
+        }
+
         let completions = [];
         let {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
