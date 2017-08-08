@@ -204,13 +204,19 @@ export default class MessageComposerInput extends React.Component {
     createEditorState(richText: boolean, contentState: ?ContentState): EditorState {
         const decorators = richText ? RichText.getScopedRTDecorators(this.props) :
                 RichText.getScopedMDDecorators(this.props);
+        const shouldShowPillAvatar = !UserSettingsStore.getSyncedSetting("Pill.shouldHidePillAvatar", false);
         decorators.push({
             strategy: this.findLinkEntities.bind(this),
             component: (entityProps) => {
                 const Pill = sdk.getComponent('elements.Pill');
                 const {url} = entityProps.contentState.getEntity(entityProps.entityKey).getData();
                 if (Pill.isPillUrl(url)) {
-                    return <Pill url={url} room={this.props.room} offsetKey={entityProps.offsetKey}/>;
+                    return <Pill
+                        url={url}
+                        room={this.props.room}
+                        offsetKey={entityProps.offsetKey}
+                        shouldShowPillAvatar={shouldShowPillAvatar}
+                    />;
                 }
 
                 return (

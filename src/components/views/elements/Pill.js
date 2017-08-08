@@ -47,6 +47,8 @@ const Pill = React.createClass({
         inMessage: PropTypes.bool,
         // The room in which this pill is being rendered
         room: PropTypes.instanceOf(Room),
+        // Whether to include an avatar in the pill
+        shouldShowPillAvatar: PropTypes.bool,
     },
 
     getInitialState() {
@@ -155,7 +157,9 @@ const Pill = React.createClass({
                     if (member) {
                         userId = member.userId;
                         linkText = member.rawDisplayName.replace(' (IRC)', ''); // FIXME when groups are done
-                        avatar = <MemberAvatar member={member} width={16} height={16}/>;
+                        if (this.props.shouldShowPillAvatar) {
+                            avatar = <MemberAvatar member={member} width={16} height={16}/>;
+                        }
                         pillClass = 'mx_UserPill';
                     }
             }
@@ -164,7 +168,9 @@ const Pill = React.createClass({
                 const room = this.state.room;
                 if (room) {
                     linkText = (room ? getDisplayAliasForRoom(room) : null) || resource;
-                    avatar = <RoomAvatar room={room} width={16} height={16}/>;
+                    if (this.props.shouldShowPillAvatar) {
+                        avatar = <RoomAvatar room={room} width={16} height={16}/>;
+                    }
                     pillClass = 'mx_RoomPill';
                 }
             }
