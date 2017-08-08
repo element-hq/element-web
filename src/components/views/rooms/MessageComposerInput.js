@@ -97,23 +97,39 @@ export default class MessageComposerInput extends React.Component {
         onInputStateChanged: React.PropTypes.func,
     };
 
-    static getKeyBinding(e: SyntheticKeyboardEvent): string {
-        // C-m => Toggles between rich text and markdown modes
-        if (e.keyCode === KeyCode.KEY_M && KeyBindingUtil.isCtrlKeyCommand(e)) {
-            return 'toggle-mode';
+    static getKeyBinding(ev: SyntheticKeyboardEvent): string {
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        let ctrlCmdOnly;
+        if (isMac) {
+            ctrlCmdOnly = ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
+        } else {
+            ctrlCmdOnly = ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
         }
 
-        // Allow opening of dev tools. getDefaultKeyBinding would be 'italic' for KEY_I
-        // Likewise protect bold and underline (in case some browsers use these as
-        // shortcuts for things).
-        if ([KeyCode.KEY_B, KeyCode.KEY_I, KeyCode.KEY_U].includes(e.keyCode) &&
-            e.shiftKey && e.ctrlKey
-        ) {
-            // When null is returned, draft-js will NOT preventDefault
-            return null;
+        // Restrict a subset of key bindings to ONLY having ctrl/meta* pressed and
+        // importantly NOT having alt, shift, meta/ctrl* pressed. draft-js does not
+        // handle this in `getDefaultKeyBinding` so we do it ourselves here.
+        //
+        // * if macOS, read second option
+        const ctrlCmdCommand = {
+            // C-m => Toggles between rich text and markdown modes
+            [KeyCode.KEY_M]: 'toggle-mode',
+            [KeyCode.KEY_B]: 'bold',
+            [KeyCode.KEY_I]: 'italic',
+            [KeyCode.KEY_U]: 'underline',
+            [KeyCode.KEY_J]: 'code',
+            [KeyCode.KEY_O]: 'split-block',
+        }[ev.keyCode];
+
+        if (ctrlCmdCommand) {
+            if (!ctrlCmdOnly) {
+                return null;
+            }
+            return ctrlCmdCommand;
         }
 
-        return getDefaultKeyBinding(e);
+        // Handle keys such as return, left and right arrows etc.
+        return getDefaultKeyBinding(ev);
     }
 
     static getBlockStyle(block: ContentBlock): ?string {
