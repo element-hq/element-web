@@ -62,7 +62,7 @@ to build.
 1. If you're using the `develop` branch, install the develop versions of the
    dependencies, as the released ones will be too old:
    ```
-   scripts/fetch-develop-deps.sh
+   scripts/fetch-develop.deps.sh
    ```
    Whenever you git pull on riot-web you will also probably need to force an update
    to these dependencies - the simplest way is to re-run the script, but you can also
