@@ -8,8 +8,11 @@ nvm use 6
 
 set -x
 
-# check out corresponding branches of dependencies
-`dirname $0`/fetch-develop.deps.sh
+# check out corresponding branches of dependencies.
+#
+# clone the deps with depth 1: we know we will only ever need that one
+# commit.
+`dirname $0`/fetch-develop.deps.sh --depth 1
 
 npm install
 
