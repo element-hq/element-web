@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 var MatrixClientPeg = require('./MatrixClientPeg');
+import UserSettingsStore from './UserSettingsStore';
+import shouldHideEvent from './shouldHideEvent';
 var sdk = require('./index');
 
 module.exports = {
@@ -63,6 +65,7 @@ module.exports = {
         // we have and the read receipt. We could fetch more history to try & find out,
         // but currently we just guess.
 
+        const syncedSettings = UserSettingsStore.getSyncedSettings();
         // Loop through messages, starting with the most recent...
         for (var i = room.timeline.length - 1; i >= 0; --i) {
             var ev = room.timeline[i];
@@ -72,7 +75,7 @@ module.exports = {
                 // that counts and we can stop looking because the user's read
                 // this and everything before.
                 return false;
-            } else if (this.eventTriggersUnreadCount(ev)) {
+            } else if (!shouldHideEvent(ev, syncedSettings) && this.eventTriggersUnreadCount(ev)) {
                 // We've found a message that counts before we hit
                 // the read marker, so this room is definitely unread.
                 return true;

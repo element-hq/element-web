@@ -82,6 +82,10 @@ const SETTINGS_LABELS = [
         label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
     },
     {
+        id: 'hideJoinLeaves',
+        label: 'Hide join/leave messages (invites/kicks/bans unaffected)',
+    },
+    {
         id: 'useCompactLayout',
         label: 'Use compact timeline layout',
     },
@@ -96,6 +100,10 @@ const SETTINGS_LABELS = [
     {
         id: 'MessageComposerInput.autoReplaceEmoji',
         label: 'Automatically replace plain text Emoji',
+    },
+    {
+        id: 'Pill.shouldHidePillAvatar',
+        label: 'Hide avatars in user and room mentions',
     },
 /*
     {
@@ -1136,7 +1144,7 @@ module.exports = React.createClass({
 
         const threepidsSection = this.state.threepids.map((val, pidIndex) => {
             const id = "3pid-" + val.address;
-            // TODO; make a separate component to avoid having to rebind onClick
+            // TODO: make a separate component to avoid having to rebind onClick
             // each time we render
             const onRemoveClick = (e) => this.onRemoveThreepidClicked(val);
             return (
