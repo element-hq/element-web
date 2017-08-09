@@ -457,6 +457,19 @@ export default class MessageComposerInput extends React.Component {
             state.editorState = RichText.attachImmutableEntitiesToEmoji(
                 state.editorState);
 
+            // Hide the autocomplete if the cursor location changes but the plaintext
+            // content stays the same. We don't hide if the pt has changed because the
+            // autocomplete will probably have different completions to show.
+            if (
+                !state.editorState.getSelection().equals(
+                    this.state.editorState.getSelection()
+                )
+                && state.editorState.getCurrentContent().getPlainText() ===
+                this.state.editorState.getCurrentContent().getPlainText()
+            ) {
+                this.autocomplete.hide();
+            }
+
             if (state.editorState.getCurrentContent().hasText()) {
                 this.onTypingActivity();
             } else {
