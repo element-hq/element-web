@@ -269,7 +269,8 @@ export default class MessageComposerInput extends React.Component {
                 // paths for inserting a user pill is not fun
                 const selection = this.state.editorState.getSelection();
                 const member = this.props.room.getMember(payload.user_id);
-                const completion = member ? member.name.replace(' (IRC)', '') : payload.user_id;
+                const completion = member ?
+                    member.rawDisplayName.replace(' (IRC)', '') : payload.user_id;
                 this.setDisplayedCompletion({
                     completion,
                     selection,

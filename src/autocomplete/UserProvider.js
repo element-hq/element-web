@@ -62,7 +62,7 @@ export default class UserProvider extends AutocompleteProvider {
                 return {
                     // Length of completion should equal length of text in decorator. draft-js
                     // relies on the length of the entity === length of the text in the decoration.
-                    completion: user.rawDisplayName,
+                    completion: user.rawDisplayName.replace(' (IRC)', ''),
                     suffix: range.start === 0 ? ': ' : ' ',
                     href: 'https://matrix.to/#/' + user.userId,
                     component: (
