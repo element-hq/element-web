@@ -108,6 +108,7 @@ export default React.createClass({
     _doUsernameCheck: function() {
         // XXX: SPEC-1
         // Check if username is valid
+        // Naive impl copied from https://github.com/matrix-org/matrix-react-sdk/blob/66c3a6d9ca695780eb6b662e242e88323053ff33/src/components/views/login/RegistrationForm.js#L190
         if (encodeURIComponent(this.state.username) !== this.state.username) {
             this.setState({
                 usernameError: _t('User names may only contain letters, numbers, dots, hyphens and underscores.'),
