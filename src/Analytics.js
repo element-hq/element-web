@@ -31,6 +31,7 @@ const customVariables = {
     'User Type': 3,
     'Chosen Language': 4,
     'Instance': 5,
+    'RTE: Uses Richtext Mode': 6,
 };
 
 
@@ -144,6 +145,11 @@ class Analytics {
     setGuest(guest) {
         if (this.disabled) return;
         this._setVisitVariable('User Type', guest ? 'Guest' : 'Logged In');
+    }
+
+    setRichtextMode(state) {
+        if (this.disabled) return;
+        this._setVisitVariable('RTE: Uses Richtext Mode', state ? 'on' : 'off');
     }
 }
 
