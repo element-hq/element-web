@@ -1,37 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="35px"
-	 height="35px" viewBox="0 0 35 35" enable-background="new 0 0 35 35" xml:space="preserve">
-<g id="Layer_1">
-	<path id="Oval-109-Copy" opacity="0.15" fill="#76CFA6" enable-background="new    " d="M17.5,35C27.165,35,35,27.165,35,17.5
-		S27.165,0,17.5,0S0,7.835,0,17.5S7.835,35,17.5,35z"/>
+<!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 35 35" style="enable-background:new 0 0 35 35;" xml:space="preserve">
+<style type="text/css">
+	.st0{opacity:0.15;}
+	.st2{fill:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:10;}
+	.st3{fill:none;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<g id="Layer_1_1_" class="st0">
+	<path id="Oval-109-Copy" fill="#76CFA6" d="M17.5,35C27.2,35,35,27.2,35,17.5S27.2,0,17.5,0S0,7.8,0,17.5S7.8,35,17.5,35z"/>
 </g>
-<g id="Layer_2">
-	<path fill="#7BC7A3" stroke="#7BC7A3" stroke-width="0.0506" stroke-miterlimit="10" d="M29.312,28.374V6.626
-		c0-0.518-0.42-0.938-0.938-0.938H6.625c-0.517,0-0.937,0.421-0.937,0.938v21.748c0,0.519,0.42,0.938,0.937,0.938h21.716
-		C28.858,29.312,29.312,28.893,29.312,28.374z M27.403,7.562v8.111H7.562V7.562H27.403z M7.562,27.438v-9.823h19.841v9.823H7.562z"
-		/>
-	<path fill="#7BC7A3" stroke="#7BC7A3" stroke-width="0.0506" stroke-miterlimit="10" d="M13.282,13.283v-3.136
-		c0-0.129-0.097-0.259-0.259-0.259H9.89c-0.129,0-0.259,0.098-0.259,0.259v3.136c0,0.129,0.098,0.259,0.259,0.259h3.135
-		C13.187,13.51,13.282,13.412,13.282,13.283z"/>
-	<path fill="#7BC7A3" stroke="#7BC7A3" stroke-width="0.0506" stroke-miterlimit="10" d="M19.293,13.283v-3.136
-		c0-0.129-0.097-0.259-0.259-0.259h-3.135c-0.129,0-0.258,0.098-0.258,0.259v3.136c0,0.129,0.097,0.259,0.258,0.259h3.135
-		C19.196,13.51,19.293,13.412,19.293,13.283z"/>
-	<path fill="#7BC7A3" stroke="#7BC7A3" stroke-width="0.0506" stroke-miterlimit="10" d="M25.304,13.283v-3.136
-		c0-0.129-0.098-0.259-0.259-0.259H21.91c-0.129,0-0.259,0.098-0.259,0.259v3.136c0,0.129,0.098,0.259,0.259,0.259h3.135
-		C25.174,13.51,25.304,13.412,25.304,13.283z"/>
-</g>
-<g id="Layer_3">
-	<g>
-		<line fill="none" x1="17.459" y1="18.648" x2="17.459" y2="26.01"/>
+<g id="frame">
+	<g id="Layer_3">
 		<g>
-			
-				<line fill="none" stroke="#7BC7A3" stroke-width="1.0937" stroke-linecap="round" stroke-miterlimit="10" x1="17.459" y1="18.648" x2="17.459" y2="23.655"/>
 			<g>
-				<polygon fill="#7BC7A3" points="19.104,23.178 17.469,26.01 15.832,23.178 				"/>
+				<line class="st2" stroke="#76CFA6" x1="17.5" y1="23.9" x2="17.5" y2="18.9"/>
+				<g>
+					<polygon fill="#76CFA6" points="19.5,23.1 17.5,26.6 15.5,23.1 					"/>
+				</g>
 			</g>
 		</g>
 	</g>
+	<rect x="6.7" y="6.7" class="st3" stroke="#76CFA6" width="21.6" height="21.6"/>
+	<line class="st3" stroke="#76CFA6" x1="6.7" y1="16.7" x2="28.2" y2="16.7"/>
+	<path fill="#76CFA6" d="M13.3,13.3v-3.1c0-0.1-0.1-0.3-0.3-0.3H9.9c-0.1,0-0.3,0.1-0.3,0.3v3.1c0,0.1,0.1,0.3,0.3,0.3H13
+		C13.2,13.5,13.3,13.4,13.3,13.3z"/>
+	<path fill="#76CFA6" d="M19.3,13.3v-3.1c0-0.1-0.1-0.3-0.3-0.3h-3.1c-0.1,0-0.3,0.1-0.3,0.3v3.1c0,0.1,0.1,0.3,0.3,0.3H19
+		C19.2,13.5,19.3,13.4,19.3,13.3z"/>
+	<path fill="#76CFA6" d="M25.3,13.3v-3.1c0-0.1-0.1-0.3-0.3-0.3h-3.1c-0.1,0-0.3,0.1-0.3,0.3v3.1c0,0.1,0.1,0.3,0.3,0.3H25
+		C25.2,13.5,25.3,13.4,25.3,13.3z"/>
 </g>
 </svg>
