@@ -161,6 +161,8 @@ export default class MessageComposerInput extends React.Component {
 
         const isRichtextEnabled = UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false);
 
+        Analytics.setRichtextMode(isRichtextEnabled);
+
         this.state = {
             // whether we're in rich text or markdown mode
             isRichtextEnabled,
