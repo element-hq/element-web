@@ -123,5 +123,6 @@
     "Chat with Riot Bot": "రియోట్ బొట్తో మాటామంతి చేయండి",
     "Please set a password!": "దయచేసి మీ రహస్యపదాన్నీ అమర్చండి!",
     "Set Password": "రహస్యపదాన్నీ  అమర్చండి",
-    "Couldn't load home page": "హోమ్ పేజీని లోడ్ చేయలేకపోయాము"
+    "Couldn't load home page": "హోమ్ పేజీని లోడ్ చేయలేకపోయాము",
+    "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.": "<a href=\"http://apple.com/safari\">సఫరి</a>ఇంక<a href=\"http://opera.com\">ఒపెర</a>కుద పని చెసతయి"
 }
