@@ -77,7 +77,7 @@
     "Members": "సభ్యులు",
     "Mentions only": "మాత్రమే ప్రస్తావిస్తుంది",
     "Messages containing my display name": "నా ప్రదర్శన పేరును కలిగి ఉన్న సందేశాలు",
-    "Messages containing <span>keywords</span>": "కీలక పదాలను</span> కలిగి ఉన్న సందేశం<span>",
+    "Messages containing <span>keywords</span>": "కీలక పదాలను</span>కలిగి ఉన్న సందేశం<span>",
     "Messages containing my user name": "నా వినియోగదారు పేరు కలిగి ఉన్న సందేశాలు",
     "Messages in group chats": "సమూహ మాటామంతిలో సందేశాలు",
     "Messages in one-to-one chats": "సందేశాలు నుండి ఒకరికి ఒకటి మాటామంతి",
@@ -124,5 +124,5 @@
     "Please set a password!": "దయచేసి మీ రహస్యపదాన్నీ అమర్చండి!",
     "Set Password": "రహస్యపదాన్నీ  అమర్చండి",
     "Couldn't load home page": "హోమ్ పేజీని లోడ్ చేయలేకపోయాము",
-    "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.": "<a href=\"http://apple.com/safari\">సఫరి</a>ఇంక<a href=\"http://opera.com\">ఒపెర</a>కుద పని చెసతయి"
+    "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.": "<a href=\"http://apple.com/safari\">సఫరి</a>ఇంక<a href=\"http://opera.com\">ఒపెర</a>కుద పని చెసతయి."
 }
