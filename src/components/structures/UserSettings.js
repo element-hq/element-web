@@ -101,6 +101,10 @@ const SETTINGS_LABELS = [
         id: 'MessageComposerInput.autoReplaceEmoji',
         label: 'Automatically replace plain text Emoji',
     },
+    {
+        id: 'Pill.shouldHidePillAvatar',
+        label: 'Hide avatars in user and room mentions',
+    },
 /*
     {
         id: 'useFixedWidthFont',
