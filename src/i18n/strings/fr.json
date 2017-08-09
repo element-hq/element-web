@@ -8,7 +8,7 @@
     "Can't update user notification settings": "Impossible de mettre à jour les notifications utilisateur",
     "Close": "Fermer",
     "Create new room": "Créer un nouveau salon",
-    "Couldn't find a matching Matrix room": "Impossible de trouver un salon Matrix",
+    "Couldn't find a matching Matrix room": "Impossible de trouver un salon Matrix correspondant",
     "Custom Server Options": "Options de serveur personnalisées",
     "delete the alias.": "supprimer l'alias.",
     "Delete the room alias %(alias)s and remove %(name)s from the directory?": "Supprimer l'alias %(alias)s du salon et supprimer %(name)s du répertoire ?",
