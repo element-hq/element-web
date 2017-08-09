@@ -42,6 +42,7 @@ module.exports = React.createClass({
         FilePanel: 'FilePanel',
         NotificationPanel: 'NotificationPanel',
         RoomMemberInfo: 'RoomMemberInfo',
+        GroupMemberInfo: 'GroupMemberInfo',
     },
 
     componentWillMount: function() {
@@ -55,6 +56,10 @@ module.exports = React.createClass({
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
         }
+    },
+
+    componentWillReceiveProps: function(newprops) {
+        this.setState(this.getInitialState());
     },
 
     getInitialState: function() {
@@ -142,12 +147,19 @@ module.exports = React.createClass({
                     });
                 } else if (this.props.groupId) {
                     this.setState({
-                        phase: this.Phase.GroupMemberList
+                        phase: this.Phase.GroupMemberList,
+                        groupId: payload.groupId,
+                        member: payload.member,
                     });
                 }
             }
-        }
-        else if (payload.action === "view_room") {
+        } else if (payload.action === "view_group_user") {
+            this.setState({
+                phase: this.Phase.GroupMemberInfo,
+                groupId: payload.groupId,
+                member: payload.member,
+            });
+        } else if (payload.action === "view_room") {
             if (this.state.phase === this.Phase.RoomMemberInfo) {
                 this.setState({
                     phase: this.Phase.RoomMemberList
@@ -239,9 +251,12 @@ module.exports = React.createClass({
                 panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />
             } else if (this.props.groupId && this.state.phase == this.Phase.GroupMemberList) {
                 panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />
-            } else if(this.state.phase == this.Phase.RoomMemberInfo) {
+            } else if (this.state.phase == this.Phase.RoomMemberInfo) {
                 const MemberInfo = sdk.getComponent('rooms.MemberInfo');
                 panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.props.userId} />
+            } else if (this.state.phase == this.Phase.GroupMemberInfo) {
+                const GroupMemberInfo = sdk.getComponent('groups.GroupMemberInfo');
+                panel = <GroupMemberInfo member={this.state.member} groupId={this.props.groupId} key={this.state.member.user_id} />
             } else if (this.state.phase == this.Phase.NotificationPanel) {
                 panel = <NotificationPanel />
             } else if (this.state.phase == this.Phase.FilePanel) {
