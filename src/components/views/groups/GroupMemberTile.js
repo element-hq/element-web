@@ -44,10 +44,6 @@ export default withMatrixClient(React.createClass({
         });
     },
 
-    getPowerLabel: function() {
-        return _t("%(userName)s (power %(powerLevelNumber)s)", {userName: this.props.member.userId, powerLevelNumber: this.props.member.powerLevel});
-    },
-
     render: function() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const EntityTile = sdk.getComponent('rooms.EntityTile');
@@ -60,7 +56,7 @@ export default withMatrixClient(React.createClass({
 
         return (
             <EntityTile presenceState="online"
-                avatarJsx={av} title={this.getPowerLabel()} onClick={this.onClick}
+                avatarJsx={av} onClick={this.onClick}
                 name={name} powerLevel={0} suppressOnHover={true}
             />
         );

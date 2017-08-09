@@ -26,6 +26,7 @@ import DMRoomMap from '../../../utils/DMRoomMap';
 import Unread from '../../../Unread';
 import { GroupMemberType } from '../../../groups';
 import { findReadReceiptFromUserId } from '../../../utils/Receipt';
+import { groupMemberFromApiObject } from '../../../groups';
 import withMatrixClient from '../../../wrappers/withMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
 import GeminiScrollbar from 'react-gemini-scrollbar';
@@ -48,7 +49,9 @@ module.exports = withMatrixClient(React.createClass({
         this.setState({fetching: true});
         this.props.matrixClient.getGroupUsers(this.props.groupId).then((result) => {
             this.setState({
-                members: result.chunk,
+                members: result.chunk.map((apiMember) => {
+                    return groupMemberFromApiObject(apiMember);
+                }),
                 fetching: false,
             });
         }).catch((e) => {
@@ -91,7 +94,7 @@ module.exports = withMatrixClient(React.createClass({
 
         let targetIsInGroup = false;
         for (const m of this.state.members) {
-            if (m.user_id == this.props.member.userId) {
+            if (m.userId == this.props.member.userId) {
                 targetIsInGroup = true;
             }
         }
