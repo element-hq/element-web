@@ -106,7 +106,7 @@ export default React.createClass({
                 const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 const message = _t("Unable to verify email address.") + " " +
                     _t("Please check your email and click on the link it contains. Once this is done, click continue.");
-                Modal.createTrackedDialog('Verification Pending', 'M_THREEPID_AUTH_FAILED', QuestionDialog, {
+                Modal.createTrackedDialog('Verification Pending', '3pid Auth Failed', QuestionDialog, {
                     title: _t("Verification Pending"),
                     description: message,
                     button: _t('Continue'),
