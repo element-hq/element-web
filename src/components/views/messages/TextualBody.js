@@ -170,6 +170,7 @@ module.exports = React.createClass({
     },
 
     pillifyLinks: function(nodes) {
+        const shouldShowPillAvatar = !UserSettingsStore.getSyncedSetting("Pill.shouldHidePillAvatar", false);
         for (let i = 0; i < nodes.length; i++) {
             const node = nodes[i];
             if (node.tagName === "A" && node.getAttribute("href")) {
@@ -181,7 +182,12 @@ module.exports = React.createClass({
                     const pillContainer = document.createElement('span');
 
                     const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-                    const pill = <Pill url={href} inMessage={true} room={room}/>;
+                    const pill = <Pill
+                        url={href}
+                        inMessage={true}
+                        room={room}
+                        shouldShowPillAvatar={shouldShowPillAvatar}
+                    />;
 
                     ReactDOM.render(pill, pillContainer);
                     node.parentNode.replaceChild(pillContainer, node);
@@ -269,18 +275,21 @@ module.exports = React.createClass({
     },
 
     getEventTileOps: function() {
-        var self = this;
         return {
-            isWidgetHidden: function() {
-                return self.state.widgetHidden;
+            isWidgetHidden: () => {
+                return this.state.widgetHidden;
             },
 
-            unhideWidget: function() {
-                self.setState({ widgetHidden: false });
+            unhideWidget: () => {
+                this.setState({ widgetHidden: false });
                 if (global.localStorage) {
-                    global.localStorage.removeItem("hide_preview_" + self.props.mxEvent.getId());
+                    global.localStorage.removeItem("hide_preview_" + this.props.mxEvent.getId());
                 }
             },
+
+            getInnerText: () => {
+                return this.refs.content.innerText;
+            }
         };
     },
 
@@ -299,7 +308,7 @@ module.exports = React.createClass({
             let completeUrl = scalarClient.getStarterLink(starterLink);
             let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             let integrationsUrl = SdkConfig.get().integrations_ui_url;
-            Modal.createDialog(QuestionDialog, {
+            Modal.createTrackedDialog('Add an integration', '', QuestionDialog, {
                 title: _t("Add an Integration"),
                 description:
                     <div>

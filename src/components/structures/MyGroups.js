@@ -63,7 +63,7 @@ export default withMatrixClient(React.createClass({
 
     _onCreateGroupClick: function() {
         const CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog");
-        Modal.createDialog(CreateGroupDialog);
+        Modal.createTrackedDialog('Create Group', '', CreateGroupDialog);
     },
 
     _fetch: function() {

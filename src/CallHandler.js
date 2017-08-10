@@ -143,7 +143,7 @@ function _setCallListeners(call) {
             pause("ringbackAudio");
             play("busyAudio");
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Call Handler', 'Call Timeout', ErrorDialog, {
                 title: _t('Call Timeout'),
                 description: _t('The remote side failed to pick up') + '.',
             });
@@ -205,7 +205,7 @@ function _onAction(payload) {
                 _setCallState(undefined, newCall.roomId, "ended");
                 console.log("Can't capture screen: " + screenCapErrorString);
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Call Handler', 'Unable to capture screen', ErrorDialog, {
                     title: _t('Unable to capture screen'),
                     description: screenCapErrorString,
                 });
@@ -225,7 +225,7 @@ function _onAction(payload) {
         case 'place_call':
             if (module.exports.getAnyActiveCall()) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Call Handler', 'Existing Call', ErrorDialog, {
                     title: _t('Existing Call'),
                     description: _t('You are already in a call.'),
                 });
@@ -235,7 +235,7 @@ function _onAction(payload) {
             // if the runtime env doesn't do VoIP, whine.
             if (!MatrixClientPeg.get().supportsVoip()) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {
                     title: _t('VoIP is unsupported'),
                     description: _t('You cannot place VoIP calls in this browser.'),
                 });
@@ -251,7 +251,7 @@ function _onAction(payload) {
             var members = room.getJoinedMembers();
             if (members.length <= 1) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Call Handler', 'Cannot place call with self', ErrorDialog, {
                     description: _t('You cannot place a call with yourself.'),
                 });
                 return;
@@ -277,13 +277,13 @@ function _onAction(payload) {
             console.log("Place conference call in %s", payload.room_id);
             if (!ConferenceHandler) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Call Handler', 'Conference call unsupported client', ErrorDialog, {
                     description: _t('Conference calls are not supported in this client'),
                 });
             }
             else if (!MatrixClientPeg.get().supportsVoip()) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {
                     title: _t('VoIP is unsupported'),
                     description: _t('You cannot place VoIP calls in this browser.'),
                 });
@@ -296,13 +296,13 @@ function _onAction(payload) {
                 // participant.
                 // Therefore we disable conference calling in E2E rooms.
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Call Handler', 'Conference calls unsupported e2e', ErrorDialog, {
                     description: _t('Conference calls are not supported in encrypted rooms'),
                 });
             }
             else {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                Modal.createDialog(QuestionDialog, {
+                Modal.createTrackedDialog('Call Handler', 'Conference calling in development', QuestionDialog, {
                     title: _t('Warning!'),
                     description: _t('Conference calling is in development and may not be reliable.'),
                     onFinished: confirm=>{
@@ -314,7 +314,7 @@ function _onAction(payload) {
                             }, function(err) {
                                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                                 console.error("Conference call failed: " + err);
-                                Modal.createDialog(ErrorDialog, {
+                                Modal.createTrackedDialog('Call Handler', 'Failed to set up conference call', ErrorDialog, {
                                     title: _t('Failed to set up conference call'),
                                     description: _t('Conference call failed.') + ' ' + ((err && err.message) ? err.message : ''),
                                 });

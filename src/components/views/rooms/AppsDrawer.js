@@ -26,6 +26,7 @@ import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
+import WidgetUtils from '../../../WidgetUtils';
 
 
 module.exports = React.createClass({
@@ -147,6 +148,15 @@ module.exports = React.createClass({
         });
     },
 
+    _canUserModify: function() {
+        try {
+            return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
+        } catch(err) {
+            console.error(err);
+            return false;
+        }
+    },
+
     onClickAddWidget: function(e) {
         if (e) {
             e.preventDefault();
@@ -156,7 +166,7 @@ module.exports = React.createClass({
         const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                 this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId, 'add_integ') :
                 null;
-        Modal.createDialog(IntegrationsManager, {
+        Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
             src: src,
         }, "mx_IntegrationsManager");
     },
@@ -164,7 +174,7 @@ module.exports = React.createClass({
     render: function() {
         const apps = this.state.apps.map(
             (app, index, arr) => {
-                return <AppTile
+                return (<AppTile
                     key={app.id}
                     id={app.id}
                     url={app.url}
@@ -173,10 +183,10 @@ module.exports = React.createClass({
                     fullWidth={arr.length<2 ? true : false}
                     room={this.props.room}
                     userId={this.props.userId}
-                />;
+                />);
             });
 
-        const addWidget = this.state.apps && this.state.apps.length < 2 &&
+        const addWidget = this.state.apps && this.state.apps.length < 2 && this._canUserModify() &&
             (<div onClick={this.onClickAddWidget}
                             role="button"
                             tabIndex="0"

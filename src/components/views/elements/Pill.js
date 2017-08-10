@@ -47,6 +47,8 @@ const Pill = React.createClass({
         inMessage: PropTypes.bool,
         // The room in which this pill is being rendered
         room: PropTypes.instanceOf(Room),
+        // Whether to include an avatar in the pill
+        shouldShowPillAvatar: PropTypes.bool,
     },
 
     getInitialState() {
@@ -63,16 +65,15 @@ const Pill = React.createClass({
         };
     },
 
-    componentWillMount() {
-        this._unmounted = false;
+    componentWillReceiveProps(nextProps) {
         let regex = REGEX_MATRIXTO;
-        if (this.props.inMessage) {
+        if (nextProps.inMessage) {
             regex = REGEX_LOCAL_MATRIXTO;
         }
 
         // Default to the empty array if no match for simplicity
         // resource and prefix will be undefined instead of throwing
-        const matrixToMatch = regex.exec(this.props.url) || [];
+        const matrixToMatch = regex.exec(nextProps.url) || [];
 
         const resourceId = matrixToMatch[1]; // The room/user ID
         const prefix = matrixToMatch[2]; // The first character of prefix
@@ -87,7 +88,7 @@ const Pill = React.createClass({
         let room;
         switch (pillType) {
             case Pill.TYPE_USER_MENTION: {
-                const localMember = this.props.room.getMember(resourceId);
+                const localMember = nextProps.room.getMember(resourceId);
                 member = localMember;
                 if (!localMember) {
                     member = new RoomMember(null, resourceId);
@@ -110,6 +111,11 @@ const Pill = React.createClass({
                 break;
         }
         this.setState({resourceId, pillType, member, room});
+    },
+
+    componentWillMount() {
+        this._unmounted = false;
+        this.componentWillReceiveProps(this.props);
     },
 
     componentWillUnmount() {
@@ -151,7 +157,9 @@ const Pill = React.createClass({
                     if (member) {
                         userId = member.userId;
                         linkText = member.rawDisplayName.replace(' (IRC)', ''); // FIXME when groups are done
-                        avatar = <MemberAvatar member={member} width={16} height={16}/>;
+                        if (this.props.shouldShowPillAvatar) {
+                            avatar = <MemberAvatar member={member} width={16} height={16}/>;
+                        }
                         pillClass = 'mx_UserPill';
                     }
             }
@@ -160,7 +168,9 @@ const Pill = React.createClass({
                 const room = this.state.room;
                 if (room) {
                     linkText = (room ? getDisplayAliasForRoom(room) : null) || resource;
-                    avatar = <RoomAvatar room={room} width={16} height={16}/>;
+                    if (this.props.shouldShowPillAvatar) {
+                        avatar = <RoomAvatar room={room} width={16} height={16}/>;
+                    }
                     pillClass = 'mx_RoomPill';
                 }
             }
