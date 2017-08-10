@@ -86,6 +86,10 @@ const SETTINGS_LABELS = [
         label: 'Hide join/leave messages (invites/kicks/bans unaffected)',
     },
     {
+        id: 'hideAvatarDisplaynameChanges',
+        label: 'Hide avatar and display name changes',
+    },
+    {
         id: 'useCompactLayout',
         label: 'Use compact timeline layout',
     },
