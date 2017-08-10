@@ -77,7 +77,7 @@ export default React.createClass({
         }, (err) => {
             this.setState({emailBusy: false});
             console.error("Unable to add email address " + emailAddress + " " + err);
-            Modal.createTrackedDialog('Unable to add email address', err.toString(), ErrorDialog, {
+            Modal.createTrackedDialog('Unable to add email address', '', ErrorDialog, {
                 title: _t("Unable to add email address"),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
@@ -115,7 +115,7 @@ export default React.createClass({
             } else {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Unable to verify email address: " + err);
-                Modal.createTrackedDialog('Unable to verify email address', err.toString(), ErrorDialog, {
+                Modal.createTrackedDialog('Unable to verify email address', '', ErrorDialog, {
                     title: _t("Unable to verify email address."),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });

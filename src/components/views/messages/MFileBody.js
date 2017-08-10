@@ -282,7 +282,7 @@ module.exports = React.createClass({
                         });
                     }).catch((err) => {
                         console.warn("Unable to decrypt attachment: ", err);
-                        Modal.createTrackedDialog('Error decrypting attachment', err.toString(), ErrorDialog, {
+                        Modal.createTrackedDialog('Error decrypting attachment', '', ErrorDialog, {
                             title: _t("Error"),
                             description: _t("Error decrypting attachment"),
                         });

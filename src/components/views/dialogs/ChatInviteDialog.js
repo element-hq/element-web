@@ -367,7 +367,7 @@ module.exports = React.createClass({
             .catch(function(err) {
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Failed to invite', err.toString(), ErrorDialog, {
+                Modal.createTrackedDialog('Failed to invite', '', ErrorDialog, {
                     title: _t("Failed to invite"),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });
@@ -380,7 +380,7 @@ module.exports = React.createClass({
             .catch(function(err) {
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Failed to invite user', err.toString(), ErrorDialog, {
+                Modal.createTrackedDialog('Failed to invite user', '', ErrorDialog, {
                     title: _t("Failed to invite user"),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });
@@ -401,7 +401,7 @@ module.exports = React.createClass({
             .catch(function(err) {
                 console.error(err.stack);
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Failed to invite', err.toString(), ErrorDialog, {
+                Modal.createTrackedDialog('Failed to invite', '', ErrorDialog, {
                     title: _t("Failed to invite"),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });

@@ -673,7 +673,7 @@ export default class MessageComposerInput extends React.Component {
                 }, function(err) {
                     console.error("Command failure: %s", err);
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createTrackedDialog('Server error', err.toString(), ErrorDialog, {
+                    Modal.createTrackedDialog('Server error', '', ErrorDialog, {
                         title: _t("Server error"),
                         description: ((err && err.message) ? err.message : _t("Server unavailable, overloaded, or something else went wrong.")),
                     });

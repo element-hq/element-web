@@ -1195,7 +1195,7 @@ module.exports = React.createClass({
         }, function(err) {
             var errCode = err.errcode || _t("unknown error code");
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to forget room', err.toString(), ErrorDialog, {
+            Modal.createTrackedDialog('Failed to forget room', '', ErrorDialog, {
                 title: _t("Error"),
                 description: _t("Failed to forget room %(errCode)s", { errCode: errCode }),
             });

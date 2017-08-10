@@ -82,7 +82,7 @@ export default withMatrixClient(React.createClass({
         }).catch((err) => {
             console.error("Unable to add phone number: " + err);
             let msg = err.message;
-            Modal.createTrackedDialog('Add Phone Number Error', err.toString(), ErrorDialog, {
+            Modal.createTrackedDialog('Add Phone Number Error', '', ErrorDialog, {
                 title: _t("Error"),
                 description: msg,
             });

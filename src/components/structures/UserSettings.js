@@ -364,7 +364,7 @@ module.exports = React.createClass({
             // const errMsg = (typeof err === "string") ? err : (err.error || "");
             console.error("Failed to set avatar: " + err);
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to set avatar', err.toString(), ErrorDialog, {
+            Modal.createTrackedDialog('Failed to set avatar', '', ErrorDialog, {
                 title: _t("Failed to set avatar."),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
@@ -409,7 +409,7 @@ module.exports = React.createClass({
         }
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         console.error("Failed to change password: " + errMsg);
-        Modal.createTrackedDialog('Failed to change password', err.toString(), ErrorDialog, {
+        Modal.createTrackedDialog('Failed to change password', '', ErrorDialog, {
             title: _t("Error"),
             description: errMsg,
         });
@@ -464,7 +464,7 @@ module.exports = React.createClass({
         }, (err) => {
             this.setState({email_add_pending: false});
             console.error("Unable to add email address " + emailAddress + " " + err);
-            Modal.createTrackedDialog('Unable to add email address', err.toString(), ErrorDialog, {
+            Modal.createTrackedDialog('Unable to add email address', '', ErrorDialog, {
                 title: _t("Unable to add email address"),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
@@ -489,7 +489,7 @@ module.exports = React.createClass({
                     }).catch((err) => {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Unable to remove contact information: " + err);
-                        Modal.createTrackedDialog('Remove 3pid failed', err.toString(), ErrorDialog, {
+                        Modal.createTrackedDialog('Remove 3pid failed', '', ErrorDialog, {
                             title: _t("Unable to remove contact information"),
                             description: ((err && err.message) ? err.message : _t("Operation failed")),
                         });
@@ -530,7 +530,7 @@ module.exports = React.createClass({
             } else {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Unable to verify email address: " + err);
-                Modal.createTrackedDialog('Unable to verify email address', err.toString(), ErrorDialog, {
+                Modal.createTrackedDialog('Unable to verify email address', '', ErrorDialog, {
                     title: _t("Unable to verify email address."),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });

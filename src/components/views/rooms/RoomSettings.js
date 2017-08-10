@@ -58,7 +58,7 @@ const BannedUser = React.createClass({
                 ).catch((err) => {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to unban: " + err);
-                    Modal.createTrackedDialog('Failed to unban', err.toString(), ErrorDialog, {
+                    Modal.createTrackedDialog('Failed to unban', '', ErrorDialog, {
                         title: _t('Error'),
                         description: _t('Failed to unban'),
                     });
@@ -549,7 +549,7 @@ module.exports = React.createClass({
         }, function(err) {
             var errCode = err.errcode || _t('unknown error code');
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to forget room', err.toString(), ErrorDialog, {
+            Modal.createTrackedDialog('Failed to forget room', '', ErrorDialog, {
                 title: _t('Error'),
                 description: _t("Failed to forget room %(errCode)s", { errCode: errCode }),
             });
