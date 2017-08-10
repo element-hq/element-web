@@ -16,6 +16,7 @@
 
 function memberEventDiff(ev) {
     const diff = {
+        // a Member Event is a State Event and so its State Key must not be undefined.
         isMemberEvent: ev.getType() === 'm.room.member' && ev.getStateKey() !== undefined,
     };
 
