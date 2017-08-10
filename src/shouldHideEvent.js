@@ -16,10 +16,10 @@
 
 function memberEventDiff(ev) {
     const diff = {
-        isMembershipEvent: ev.getType() === 'm.room.member' && ev.getStateKey() !== undefined,
+        isMemberEvent: ev.getType() === 'm.room.member' && ev.getStateKey() !== undefined,
     };
 
-    if (!diff.isMembershipEvent) return diff;
+    if (!diff.isMemberEvent) return diff;
 
     const content = ev.getContent();
     const prevContent = ev.getPrevContent();
@@ -39,7 +39,7 @@ export default function(ev, syncedSettings) {
 
     const eventDiff = memberEventDiff(ev);
 
-    if (eventDiff.isMembershipEvent) {
+    if (eventDiff.isMemberEvent) {
         if (syncedSettings['hideJoinLeaves'] && (eventDiff.isJoin || eventDiff.isPart)) return true;
         const isMemberAvatarDisplaynameChange = eventDiff.isAvatarChange || eventDiff.isDisplaynameChange;
         if (syncedSettings['hideAvatarDisplaynameChanges'] && isMemberAvatarDisplaynameChange) return true;
