@@ -934,7 +934,7 @@ module.exports = React.createClass({
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to upload file " + file + " " + error);
-            Modal.createTrackedDialog('Failed to upload file', error.toString(), ErrorDialog, {
+            Modal.createTrackedDialog('Failed to upload file', '', ErrorDialog, {
                 title: _t('Failed to upload file'),
                 description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or the file too big")),
             });
@@ -1021,7 +1021,7 @@ module.exports = React.createClass({
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Search failed: " + error);
-            Modal.createTrackedDialog('Search failed', error.toString(), ErrorDialog, {
+            Modal.createTrackedDialog('Search failed', '', ErrorDialog, {
                 title: _t("Search failed"),
                 description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or search timed out :(")),
             });
@@ -1217,7 +1217,7 @@ module.exports = React.createClass({
 
             var msg = error.message ? error.message : JSON.stringify(error);
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to reject invite', error.toString(), ErrorDialog, {
+            Modal.createTrackedDialog('Failed to reject invite', '', ErrorDialog, {
                 title: _t("Failed to reject invite"),
                 description: msg,
             });

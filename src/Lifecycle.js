@@ -240,7 +240,7 @@ function _handleRestoreFailure(e) {
     const SessionRestoreErrorDialog =
           sdk.getComponent('views.dialogs.SessionRestoreErrorDialog');
 
-    Modal.createTrackedDialog('Session Restore Error', e.message, SessionRestoreErrorDialog, {
+    Modal.createTrackedDialog('Session Restore Error', '', SessionRestoreErrorDialog, {
         error: e.message,
         onFinished: (success) => {
             def.resolve(success);

@@ -360,7 +360,7 @@ class ContentMessages {
                     desc = _t('The file \'%(fileName)s\' exceeds this home server\'s size limit for uploads', {fileName: upload.fileName});
                 }
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Upload failed', err.message, ErrorDialog, {
+                Modal.createTrackedDialog('Upload failed', '', ErrorDialog, {
                     title: _t('Upload Failed'),
                     description: desc,
                 });

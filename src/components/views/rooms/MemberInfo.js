@@ -248,7 +248,7 @@ module.exports = withMatrixClient(React.createClass({
                     }, function(err) {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Kick error: " + err);
-                        Modal.createTrackedDialog('Failed to kick', err.message, ErrorDialog, {
+                        Modal.createTrackedDialog('Failed to kick', '', ErrorDialog, {
                             title: _t("Failed to kick"),
                             description: ((err && err.message) ? err.message : "Operation failed"),
                         });
@@ -290,7 +290,7 @@ module.exports = withMatrixClient(React.createClass({
                     }, function(err) {
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                         console.error("Ban error: " + err);
-                        Modal.createTrackedDialog('Failed to ban user', err.message, ErrorDialog, {
+                        Modal.createTrackedDialog('Failed to ban user', '', ErrorDialog, {
                             title: _t("Error"),
                             description: _t("Failed to ban user"),
                         });
@@ -340,7 +340,7 @@ module.exports = withMatrixClient(React.createClass({
                     console.log("Mute toggle success");
                 }, function(err) {
                     console.error("Mute error: " + err);
-                    Modal.createTrackedDialog('Failed to mute user', err.message, ErrorDialog, {
+                    Modal.createTrackedDialog('Failed to mute user', '', ErrorDialog, {
                         title: _t("Error"),
                         description: _t("Failed to mute user"),
                     });
@@ -385,7 +385,7 @@ module.exports = withMatrixClient(React.createClass({
                     dis.dispatch({action: 'view_set_mxid'});
                 } else {
                     console.error("Toggle moderator error:" + err);
-                    Modal.createTrackedDialog('Failed to toggle moderator status', err.message, ErrorDialog, {
+                    Modal.createTrackedDialog('Failed to toggle moderator status', '', ErrorDialog, {
                         title: _t("Error"),
                         description: _t("Failed to toggle moderator status"),
                     });
@@ -406,7 +406,7 @@ module.exports = withMatrixClient(React.createClass({
             }, function(err) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Failed to change power level " + err);
-                Modal.createTrackedDialog('Failed to change power level', err.message, ErrorDialog, {
+                Modal.createTrackedDialog('Failed to change power level', '', ErrorDialog, {
                     title: _t("Error"),
                     description: _t("Failed to change power level"),
                 });

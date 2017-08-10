@@ -335,7 +335,7 @@ module.exports = React.createClass({
         }, function(error) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to load user settings: " + error);
-            Modal.createTrackedDialog('Can\'t load user settings', error.toString(), ErrorDialog, {
+            Modal.createTrackedDialog('Can\'t load user settings', '', ErrorDialog, {
                 title: _t("Can't load user settings"),
                 description: ((error && error.message) ? error.message : _t("Server may be unavailable or overloaded")),
             });
