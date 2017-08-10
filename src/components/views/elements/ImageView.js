@@ -76,7 +76,7 @@ module.exports = React.createClass({
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     // display error message stating you couldn't delete this.
                     var code = e.errcode || e.statusCode;
-                    Modal.createTrackedDialog('You cannot delete this image.', e.toString(), ErrorDialog, {
+                    Modal.createTrackedDialog('You cannot delete this image.', '', ErrorDialog, {
                         title: _t('Error'),
                         description: _t('You cannot delete this image. (%(code)s)', {code: code})
                     });

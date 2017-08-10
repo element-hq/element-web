@@ -99,7 +99,7 @@ module.exports = React.createClass({
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     // display error message stating you couldn't delete this.
                     const code = e.errcode || e.statusCode;
-                    Modal.createTrackedDialog('You cannot delete this message', e.toString(), ErrorDialog, {
+                    Modal.createTrackedDialog('You cannot delete this message', '', ErrorDialog, {
                         title: _t('Error'),
                         description: _t('You cannot delete this message. (%(code)s)', {code: code})
                     });

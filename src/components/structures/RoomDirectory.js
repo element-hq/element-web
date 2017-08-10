@@ -334,7 +334,7 @@ module.exports = React.createClass({
                 }
             }, (e) => {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Fetching third party location failed', e.toString(), ErrorDialog, {
+                Modal.createTrackedDialog('Fetching third party location failed', '', ErrorDialog, {
                     title: _t('Fetching third party location failed'),
                     description: _t('Unable to look up room ID from server'),
                 });
