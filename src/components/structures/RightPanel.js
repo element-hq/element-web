@@ -31,6 +31,7 @@ module.exports = React.createClass({
     displayName: 'RightPanel',
 
     propTypes: {
+        // TODO: This should not be a prop, it should be received from the RoomViewStore
         roomId: React.PropTypes.string, // if showing panels for a given room, this is set
         collapsed: React.PropTypes.bool, // currently unused property to request for a minimized view of the panel
     },
