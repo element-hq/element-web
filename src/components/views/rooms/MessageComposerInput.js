@@ -280,11 +280,10 @@ export default class MessageComposerInput extends React.Component {
             }
                 break;
             case 'quote': {
-                let {body} = payload.event.getContent();
                 /// XXX: Not doing rich-text quoting from formatted-body because draft-js
                 /// has regressed such that when links are quoted, errors are thrown. See
                 /// https://github.com/vector-im/riot-web/issues/4756.
-                body = escape(body);
+                let body = escape(payload.text);
                 if (body) {
                     let content = RichText.htmlToContentState(`<blockquote>${body}</blockquote>`);
                     if (!this.state.isRichtextEnabled) {
