@@ -22,13 +22,12 @@ import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 class SendCustomEvent extends React.Component {
     static propTypes = {
         roomId: React.PropTypes.string.isRequired,
-        onFinished: React.PropTypes.func.isRequired,
+        onBack: React.PropTypes.func.isRequired,
     };
 
     constructor(props, context) {
         super(props, context);
         this._send = this._send.bind(this);
-        this.onCancel = this.onCancel.bind(this);
     }
 
     async _send() {
@@ -44,10 +43,6 @@ class SendCustomEvent extends React.Component {
                 description: e.toString(),
             });
         }
-    }
-
-    onCancel() {
-        this.props.onFinished(false);
     }
 
     render() {
@@ -71,12 +66,12 @@ class SendCustomEvent extends React.Component {
                     <label htmlFor="evContent"> Event Content </label>
                 </div>
                 <div>
-                    <textarea id="evContent" ref="evContent" className="mx_TextInputDialog_input" defaultValue={"{\n\n}"} size="64" />
+                    <textarea id="evContent" ref="evContent" className="mx_TextInputDialog_input" defaultValue={"{\n\n}"} cols="64" />
                 </div>
             </div>
             <div className="mx_Dialog_buttons">
+                <button onClick={this.props.onBack}>Back</button>
                 <button onClick={this._send}>Send</button>
-                <button onClick={this.onCancel}>Cancel</button>
             </div>
         </div>;
     }
@@ -85,13 +80,12 @@ class SendCustomEvent extends React.Component {
 class SendCustomStateEvent extends React.Component {
     static propTypes = {
         roomId: React.PropTypes.string.isRequired,
-        onFinished: React.PropTypes.func.isRequired,
+        onBack: React.PropTypes.func.isRequired,
     };
 
     constructor(props, context) {
         super(props, context);
         this._send = this._send.bind(this);
-        this.onCancel = this.onCancel.bind(this);
     }
 
     async _send() {
@@ -105,14 +99,10 @@ class SendCustomStateEvent extends React.Component {
             this.props.onFinished(false);
             const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
             Modal.createDialog(ErrorDialog, {
-                title: 'Failed to send custom event',
+                title: 'Failed to send custom state event',
                 description: e.toString(),
             });
         }
-    }
-
-    onCancel() {
-        this.props.onFinished(false);
     }
 
     render() {
@@ -143,12 +133,12 @@ class SendCustomStateEvent extends React.Component {
                     <label htmlFor="evContent"> Event Content </label>
                 </div>
                 <div>
-                    <textarea id="evContent" ref="evContent" className="mx_TextInputDialog_input" defaultValue={"{\n\n}"} size="64" />
+                    <textarea id="evContent" ref="evContent" className="mx_TextInputDialog_input" defaultValue={"{\n\n}"} cols="64" />
                 </div>
             </div>
             <div className="mx_Dialog_buttons">
+                <button onClick={this.props.onBack}>Back</button>
                 <button onClick={this._send}>Send</button>
-                <button onClick={this.onCancel}>Cancel</button>
             </div>
         </div>;
     }
@@ -157,18 +147,21 @@ class SendCustomStateEvent extends React.Component {
 class RoomStateExplorer extends React.Component {
     static propTypes = {
         roomId: React.PropTypes.string.isRequired,
-        onFinished: React.PropTypes.func.isRequired,
         onBack: React.PropTypes.func.isRequired,
     };
 
     constructor(props, context) {
         super(props, context);
 
+        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        this.roomStateEvents = room.currentState.events;
+
         this.onBack = this.onBack.bind(this);
     }
 
     state = {
         eventType: null,
+        event: null,
     };
 
     browseEventType(eventType) {
@@ -178,32 +171,40 @@ class RoomStateExplorer extends React.Component {
         };
     }
 
-    onViewSourceClick(ev) {
-        const ViewSource = sdk.getComponent('structures.ViewSource');
+    onViewSourceClick(event) {
+        const self = this;
         return () => {
-            Modal.createDialog(ViewSource, {
-                content: ev,
-            }, 'mx_Dialog_viewsource');
+            self.setState({ event });
         };
     }
 
     onBack() {
-        if (this.state.eventType === null) {
-            this.props.onBack();
-        } else {
+        if (this.state.event) {
+            this.setState({ event: null });
+        } else if (this.state.eventType) {
             this.setState({ eventType: null });
+        } else {
+            this.props.onBack();
         }
     }
 
     render() {
-        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
-        const roomStateEvents = room.currentState.events;
+        if (this.state.event) {
+            return <div className="mx_ViewSource">
+                <div className="mx_Dialog_content">
+                    <pre>{JSON.stringify(this.state.event, null, 2)}</pre>
+                </div>
+                <div className="mx_Dialog_buttons">
+                    <button onClick={this.onBack}>Back</button>
+                </div>
+            </div>;
+        }
 
         const rows = [];
 
         if (this.state.eventType === null) {
-            Object.keys(roomStateEvents).forEach((evType) => {
-                const stateGroup = roomStateEvents[evType];
+            Object.keys(this.roomStateEvents).forEach((evType) => {
+                const stateGroup = this.roomStateEvents[evType];
                 const stateKeys = Object.keys(stateGroup);
 
                 let onClickFn;
@@ -217,7 +218,7 @@ class RoomStateExplorer extends React.Component {
             });
         } else {
             const evType = this.state.eventType;
-            const stateGroup = roomStateEvents[evType];
+            const stateGroup = this.roomStateEvents[evType];
             Object.keys(stateGroup).forEach((stateKey) => {
                 const ev = stateGroup[stateKey];
                 rows.push(<button key={stateKey} onClick={this.onViewSourceClick(ev)}>{stateKey}</button>);
