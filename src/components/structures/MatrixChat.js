@@ -1234,7 +1234,7 @@ module.exports = React.createClass({
                     });
                 } else {
                     // This user is not a member of this room, show the user view
-                    member = new Matrix.RoomMember(roomId, userId);
+                    member = new Matrix.RoomMember(null, userId);
                     this._setPage(PageTypes.UserView);
                 }
                 dis.dispatch({
