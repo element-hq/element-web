@@ -31,6 +31,7 @@ import KeyCode from '../../../KeyCode';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import Analytics from '../../../Analytics';
 
 import dis from '../../../dispatcher';
 import UserSettingsStore from '../../../UserSettingsStore';
@@ -159,6 +160,8 @@ export default class MessageComposerInput extends React.Component {
         this.onTextPasted = this.onTextPasted.bind(this);
 
         const isRichtextEnabled = UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false);
+
+        Analytics.setRichtextMode(isRichtextEnabled);
 
         this.state = {
             // whether we're in rich text or markdown mode
@@ -525,6 +528,8 @@ export default class MessageComposerInput extends React.Component {
             }
             contentState = ContentState.createFromText(markdown);
         }
+
+        Analytics.setRichtextMode(enabled);
 
         this.setState({
             editorState: this.createEditorState(enabled, contentState),
