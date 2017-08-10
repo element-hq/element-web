@@ -30,8 +30,9 @@ const customVariables = {
     'User Type': 3,
     'Chosen Language': 4,
     'Instance': 5,
-    'Homeserver URL': 6,
-    'Identity Server URL': 7,
+    'RTE: Uses Richtext Mode': 6,
+    'Homeserver URL': 7,
+    'Identity Server URL': 8,
 };
 
 function whitelistRedact(whitelist, str) {
@@ -147,6 +148,11 @@ class Analytics {
         this._setVisitVariable('User Type', isGuest ? 'Guest' : 'Logged In');
         this._setVisitVariable('Homeserver URL', whitelistRedact(whitelistedHSUrls, homeserverUrl));
         this._setVisitVariable('Identity Server URL', whitelistRedact(whitelistedISUrls, identityServerUrl));
+    }
+
+    setRichtextMode(state) {
+        if (this.disabled) return;
+        this._setVisitVariable('RTE: Uses Richtext Mode', state ? 'on' : 'off');
     }
 }
 

@@ -134,6 +134,7 @@
     "Add phone number": "Add phone number",
     "Admin": "Admin",
     "Admin tools": "Admin tools",
+    "Allow": "Allow",
     "And %(count)s more...": "And %(count)s more...",
     "VoIP": "VoIP",
     "Missing Media Permissions, click here to request.": "Missing Media Permissions, click here to request.",
@@ -241,6 +242,7 @@
     "Decrypt %(text)s": "Decrypt %(text)s",
     "Decryption error": "Decryption error",
     "Delete": "Delete",
+    "Delete widget": "Delete widget",
     "demote": "demote",
     "Deops user with given id": "Deops user with given id",
     "Default": "Default",
@@ -267,6 +269,7 @@
     "Drop here %(toAction)s": "Drop here %(toAction)s",
     "Drop here to tag %(section)s": "Drop here to tag %(section)s",
     "Ed25519 fingerprint": "Ed25519 fingerprint",
+    "Edit": "Edit",
     "Email": "Email",
     "Email address": "Email address",
     "Email address (optional)": "Email address (optional)",
@@ -460,6 +463,7 @@
     "Reason": "Reason",
     "Reason: %(reasonText)s": "Reason: %(reasonText)s",
     "Revoke Moderator": "Revoke Moderator",
+    "Revoke widget access": "Revoke widget access",
     "Refer a friend to Riot:": "Refer a friend to Riot:",
     "Register": "Register",
     "rejected": "rejected",
@@ -571,6 +575,7 @@
     "To configure the room": "To configure the room",
     "to demote": "to demote",
     "to favourite": "to favourite",
+    "To get started, please pick a username!": "To get started, please pick a username!",
     "To invite users into the room": "To invite users into the room",
     "To kick users": "To kick users",
     "To link to a room it must have <a>an address</a>.": "To link to a room it must have <a>an address</a>.",
@@ -962,5 +967,6 @@
     "Edit Group": "Edit Group",
     "Automatically replace plain text Emoji": "Automatically replace plain text Emoji",
     "Failed to upload image": "Failed to upload image",
-    "Failed to update group": "Failed to update group"
+    "Failed to update group": "Failed to update group",
+    "Hide avatars in user and room mentions": "Hide avatars in user and room mentions"
 }

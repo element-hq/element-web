@@ -131,9 +131,6 @@ module.exports = React.createClass({
             // the master view we are showing.
             view: VIEWS.LOADING,
 
-            // a thing to call showScreen with once login completes.
-            screenAfterLogin: this.props.initialScreenAfterLogin,
-
             // What the LoggedInView would be showing if visible
             page_type: null,
 
@@ -147,8 +144,6 @@ module.exports = React.createClass({
 
             collapse_lhs: false,
             collapse_rhs: false,
-            ready: false,
-            width: 10000,
             leftOpacity: 1.0,
             middleOpacity: 1.0,
             rightOpacity: 1.0,
@@ -274,6 +269,15 @@ module.exports = React.createClass({
                 register_hs_url: paramHs,
             });
         }
+
+        // a thing to call showScreen with once login completes.  this is kept
+        // outside this.state because updating it should never trigger a
+        // rerender.
+        this._screenAfterLogin = this.props.initialScreenAfterLogin;
+
+        this._windowWidth = 10000;
+        this.handleResize();
+        window.addEventListener('resize', this.handleResize);
     },
 
     componentDidMount: function() {
@@ -294,9 +298,6 @@ module.exports = React.createClass({
             linkifyMatrix.onGroupClick = this.onGroupClick;
         }
 
-        window.addEventListener('resize', this.handleResize);
-        this.handleResize();
-
         const teamServerConfig = this.props.config.teamServerConfig || {};
         Lifecycle.initRtsClient(teamServerConfig.teamServerURL);
 
@@ -312,13 +313,12 @@ module.exports = React.createClass({
 
             // if the user has followed a login or register link, don't reanimate
             // the old creds, but rather go straight to the relevant page
-            const firstScreen = this.state.screenAfterLogin ?
-                this.state.screenAfterLogin.screen : null;
+            const firstScreen = this._screenAfterLogin ?
+                this._screenAfterLogin.screen : null;
 
             if (firstScreen === 'login' ||
                     firstScreen === 'register' ||
                     firstScreen === 'forgot_password') {
-                this.setState({loading: false});
                 this._showScreenAfterLogin();
                 return;
             }
@@ -367,9 +367,9 @@ module.exports = React.createClass({
         }
         const newState = {
             viewUserId: null,
-       };
-       Object.assign(newState, state);
-       this.setState(newState);
+        };
+        Object.assign(newState, state);
+        this.setState(newState);
     },
 
     onAction: function(payload) {
@@ -992,14 +992,12 @@ module.exports = React.createClass({
     _showScreenAfterLogin: function() {
         // If screenAfterLogin is set, use that, then null it so that a second login will
         // result in view_home_page, _user_settings or _room_directory
-        if (this.state.screenAfterLogin && this.state.screenAfterLogin.screen) {
+        if (this._screenAfterLogin && this._screenAfterLogin.screen) {
             this.showScreen(
-                this.state.screenAfterLogin.screen,
-                this.state.screenAfterLogin.params,
+                this._screenAfterLogin.screen,
+                this._screenAfterLogin.params,
             );
-            // XXX: is this necessary? `showScreen` should do it for us.
-            this.notifyNewScreen(this.state.screenAfterLogin.screen);
-            this.setState({screenAfterLogin: null});
+            this._screenAfterLogin = null;
         } else if (localStorage && localStorage.getItem('mx_last_room_id')) {
             // Before defaulting to directory, show the last viewed room
             dis.dispatch({
@@ -1276,20 +1274,20 @@ module.exports = React.createClass({
         const hideRhsThreshold = 820;
         const showRhsThreshold = 820;
 
-        if (this.state.width > hideLhsThreshold && window.innerWidth <= hideLhsThreshold) {
+        if (this._windowWidth > hideLhsThreshold && window.innerWidth <= hideLhsThreshold) {
             dis.dispatch({ action: 'hide_left_panel' });
         }
-        if (this.state.width <= showLhsThreshold && window.innerWidth > showLhsThreshold) {
+        if (this._windowWidth <= showLhsThreshold && window.innerWidth > showLhsThreshold) {
             dis.dispatch({ action: 'show_left_panel' });
         }
-        if (this.state.width > hideRhsThreshold && window.innerWidth <= hideRhsThreshold) {
+        if (this._windowWidth > hideRhsThreshold && window.innerWidth <= hideRhsThreshold) {
             dis.dispatch({ action: 'hide_right_panel' });
         }
-        if (this.state.width <= showRhsThreshold && window.innerWidth > showRhsThreshold) {
+        if (this._windowWidth <= showRhsThreshold && window.innerWidth > showRhsThreshold) {
             dis.dispatch({ action: 'show_right_panel' });
         }
 
-        this.setState({width: window.innerWidth});
+        this._windowWidth = window.innerWidth;
     },
 
     onRoomCreated: function(roomId) {
