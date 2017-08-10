@@ -89,14 +89,14 @@ module.exports = React.createClass({
         }
         else {
             var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            Modal.createDialog(QuestionDialog, {
+            Modal.createTrackedDialog('Forgot Password Warning', '', QuestionDialog, {
                 title: _t('Warning!'),
                 description:
                     <div>
                         { _t(
                             'Resetting password will currently reset any ' +
                             'end-to-end encryption keys on all devices, ' +
-                            'making encrypted chat history unreadable, ' + 
+                            'making encrypted chat history unreadable, ' +
                             'unless you first export your room keys and re-import ' +
                             'them afterwards. In future this will be improved.'
                         ) }
@@ -121,15 +121,13 @@ module.exports = React.createClass({
     },
 
     _onExportE2eKeysClicked: function() {
-        Modal.createDialogAsync(
-            (cb) => {
-                require.ensure(['../../../async-components/views/dialogs/ExportE2eKeysDialog'], () => {
-                    cb(require('../../../async-components/views/dialogs/ExportE2eKeysDialog'));
-                }, "e2e-export");
-            }, {
-                matrixClient: MatrixClientPeg.get(),
-            }
-        );
+        Modal.createTrackedDialogAsync('Export E2E Keys', 'Forgot Password', (cb) => {
+            require.ensure(['../../../async-components/views/dialogs/ExportE2eKeysDialog'], () => {
+                cb(require('../../../async-components/views/dialogs/ExportE2eKeysDialog'));
+            }, "e2e-export");
+        }, {
+            matrixClient: MatrixClientPeg.get(),
+        });
     },
 
     onInputChanged: function(stateKey, ev) {
@@ -152,7 +150,7 @@ module.exports = React.createClass({
 
     showErrorDialog: function(body, title) {
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        Modal.createDialog(ErrorDialog, {
+        Modal.createTrackedDialog('Forgot Password Error', '', ErrorDialog, {
             title: title,
             description: body,
         });

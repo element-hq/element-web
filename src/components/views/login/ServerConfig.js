@@ -122,7 +122,7 @@ module.exports = React.createClass({
 
     showHelpPopup: function() {
         var CustomServerDialog = sdk.getComponent('login.CustomServerDialog');
-        Modal.createDialog(CustomServerDialog);
+        Modal.createTrackedDialog('Custom Server Dialog', '', CustomServerDialog);
     },
 
     render: function() {

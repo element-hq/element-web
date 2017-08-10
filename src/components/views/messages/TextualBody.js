@@ -308,7 +308,7 @@ module.exports = React.createClass({
             let completeUrl = scalarClient.getStarterLink(starterLink);
             let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             let integrationsUrl = SdkConfig.get().integrations_ui_url;
-            Modal.createDialog(QuestionDialog, {
+            Modal.createTrackedDialog('Add an integration', '', QuestionDialog, {
                 title: _t("Add an Integration"),
                 description:
                     <div>

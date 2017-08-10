@@ -104,7 +104,7 @@ module.exports = React.createClass({
         }
 
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        Modal.createDialog(QuestionDialog, {
+        Modal.createTrackedDialog('Change Password', '', QuestionDialog, {
             title: _t("Warning!"),
             description:
                 <div>
@@ -164,7 +164,7 @@ module.exports = React.createClass({
         const deferred = Promise.defer();
         // Ask for an email otherwise the user has no way to reset their password
         const SetEmailDialog = sdk.getComponent("dialogs.SetEmailDialog");
-        Modal.createDialog(SetEmailDialog, {
+        Modal.createTrackedDialog('Do you want to set an email address?', '', SetEmailDialog, {
             title: _t('Do you want to set an email address?'),
             onFinished: (confirmed) => {
                 // ignore confirmed, setting an email is optional
@@ -175,15 +175,13 @@ module.exports = React.createClass({
     },
 
     _onExportE2eKeysClicked: function() {
-        Modal.createDialogAsync(
-            (cb) => {
-                require.ensure(['../../../async-components/views/dialogs/ExportE2eKeysDialog'], () => {
-                    cb(require('../../../async-components/views/dialogs/ExportE2eKeysDialog'));
-                }, "e2e-export");
-            }, {
-                matrixClient: MatrixClientPeg.get(),
-            }
-        );
+        Modal.createTrackedDialogAsync('Export E2E Keys', 'Change Password', (cb) => {
+            require.ensure(['../../../async-components/views/dialogs/ExportE2eKeysDialog'], () => {
+                cb(require('../../../async-components/views/dialogs/ExportE2eKeysDialog'));
+            }, "e2e-export");
+        }, {
+            matrixClient: MatrixClientPeg.get(),
+        });
     },
 
     onClickChange: function() {

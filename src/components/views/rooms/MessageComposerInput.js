@@ -721,7 +721,7 @@ export default class MessageComposerInput extends React.Component {
                 }, function(err) {
                     console.error("Command failure: %s", err);
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('Server error', '', ErrorDialog, {
                         title: _t("Server error"),
                         description: ((err && err.message) ? err.message : _t("Server unavailable, overloaded, or something else went wrong.")),
                     });
@@ -729,7 +729,8 @@ export default class MessageComposerInput extends React.Component {
             } else if (cmd.error) {
                 console.error(cmd.error);
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                // TODO possibly track which command they ran (not its Arguments) here
+                Modal.createTrackedDialog('Command error', '', ErrorDialog, {
                     title: _t("Command error"),
                     description: cmd.error,
                 });
