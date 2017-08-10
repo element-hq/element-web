@@ -150,8 +150,7 @@ module.exports = React.createClass({
 
     showErrorDialog: function(body, title) {
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-        // TODO this will still lead to i18n in Analytics.
-        Modal.createTrackedDialog('Forgot Password Error', body, ErrorDialog, {
+        Modal.createTrackedDialog('Forgot Password Error', '', ErrorDialog, {
             title: title,
             description: body,
         });

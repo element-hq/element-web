@@ -729,7 +729,8 @@ export default class MessageComposerInput extends React.Component {
             } else if (cmd.error) {
                 console.error(cmd.error);
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Command error', cmd.error, ErrorDialog, {
+                // TODO possibly track which command they ran (not its Arguments) here
+                Modal.createTrackedDialog('Command error', '', ErrorDialog, {
                     title: _t("Command error"),
                     description: cmd.error,
                 });
