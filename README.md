@@ -22,7 +22,7 @@ released version of Riot:
 1. Enter the URL into your browser and log into Riot!
 
 Releases are signed by PGP, and can be checked against the public key
-at https://riot.im/packages/keys/riot-master.asc
+at https://riot.im/packages/keys/riot.asc
 
 Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
@@ -62,7 +62,7 @@ to build.
 1. If you're using the `develop` branch, install the develop versions of the
    dependencies, as the released ones will be too old:
    ```
-   scripts/fetch-develop-deps.sh
+   scripts/fetch-develop.deps.sh
    ```
    Whenever you git pull on riot-web you will also probably need to force an update
    to these dependencies - the simplest way is to re-run the script, but you can also
