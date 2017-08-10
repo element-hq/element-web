@@ -134,10 +134,9 @@ module.exports = React.createClass({
     },
 
     onQuoteClick: function() {
-        console.log(this.props.mxEvent);
         dis.dispatch({
             action: 'quote',
-            event: this.props.mxEvent,
+            text: this.props.eventTileOps.getInnerText(),
         });
         this.closeMenu();
     },
@@ -153,6 +152,7 @@ module.exports = React.createClass({
         let unhidePreviewButton;
         let permalinkButton;
         let externalURLButton;
+        let quoteButton;
 
         if (eventStatus === 'not_sent') {
             resendButton = (
@@ -221,11 +221,13 @@ module.exports = React.createClass({
             </div>
         );
 
-        const quoteButton = (
-            <div className="mx_MessageContextMenu_field" onClick={this.onQuoteClick}>
-                { _t('Quote') }
-            </div>
-        );
+        if (this.props.eventTileOps && this.props.eventTileOps.getInnerText) {
+            quoteButton = (
+                <div className="mx_MessageContextMenu_field" onClick={this.onQuoteClick}>
+                    { _t('Quote') }
+                </div>
+            );
+        }
 
         // Bridges can provide a 'external_url' to link back to the source.
         if( typeof(this.props.mxEvent.event.content.external_url) === "string") {
