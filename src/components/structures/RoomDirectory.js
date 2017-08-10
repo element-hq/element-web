@@ -82,7 +82,7 @@ module.exports = React.createClass({
                 return;
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to get protocol list from Home Server', '', ErrorDialog, {
                 title: _t('Failed to get protocol list from Home Server'),
                 description: _t('The Home Server may be too old to support third party networks'),
             });
@@ -178,7 +178,7 @@ module.exports = React.createClass({
             this.setState({ loading: false });
             console.error("Failed to get publicRooms: %s", JSON.stringify(err));
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to get public room list', '', ErrorDialog, {
                 title: _t('Failed to get public room list'),
                 description: ((err && err.message) ? err.message : _t('The server may be unavailable or overloaded'))
             });
@@ -206,7 +206,7 @@ module.exports = React.createClass({
             desc = _t('Remove %(name)s from the directory?', {name: name});
         }
 
-        Modal.createDialog(QuestionDialog, {
+        Modal.createTrackedDialog('Remove from Directory', '', QuestionDialog, {
             title: _t('Remove from Directory'),
             description: desc,
             onFinished: (should_delete) => {
@@ -227,7 +227,7 @@ module.exports = React.createClass({
                     modal.close();
                     this.refreshRoomList();
                     console.error("Failed to " + step + ": " + err);
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('Remove from Directory Error', '', ErrorDialog, {
                         title: _t('Error'),
                         description: ((err && err.message) ? err.message : _t('The server may be unavailable or overloaded'))
                     });
@@ -316,7 +316,7 @@ module.exports = React.createClass({
             const fields = protocolName ? this._getFieldsForThirdPartyLocation(alias, this.protocols[protocolName], instance) : null;
             if (!fields) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Unable to join network', '', ErrorDialog, {
                     title: _t('Unable to join network'),
                     description: _t('Riot does not know how to join a room on this network'),
                 });
@@ -327,14 +327,14 @@ module.exports = React.createClass({
                     this.showRoomAlias(resp[0].alias);
                 } else {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('Room not found', '', ErrorDialog, {
                         title: _t('Room not found'),
                         description: _t('Couldn\'t find a matching Matrix room'),
                     });
                 }
             }, (e) => {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Fetching third party location failed', '', ErrorDialog, {
                     title: _t('Fetching third party location failed'),
                     description: _t('Unable to look up room ID from server'),
                 });
