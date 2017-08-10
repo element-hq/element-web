@@ -33,7 +33,7 @@ function memberEventDiff(ev) {
     return diff;
 }
 
-export default function(ev, syncedSettings) {
+export default function shouldHideEvent(ev, syncedSettings) {
     // Hide redacted events
     if (syncedSettings['hideRedactions'] && ev.isRedacted()) return true;
 
