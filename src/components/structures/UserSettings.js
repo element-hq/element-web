@@ -87,7 +87,7 @@ const SETTINGS_LABELS = [
     },
     {
         id: 'hideAvatarDisplaynameChanges',
-        label: 'Hide Avatar and Display Name changes',
+        label: 'Hide avatar and display name changes',
     },
     {
         id: 'useCompactLayout',
