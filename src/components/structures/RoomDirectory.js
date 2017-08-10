@@ -82,7 +82,7 @@ module.exports = React.createClass({
                 return;
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to get protocol list from Home Server', err.toString(), ErrorDialog, {
+            Modal.createTrackedDialog('Failed to get protocol list from Home Server', '', ErrorDialog, {
                 title: _t('Failed to get protocol list from Home Server'),
                 description: _t('The Home Server may be too old to support third party networks'),
             });
@@ -178,7 +178,7 @@ module.exports = React.createClass({
             this.setState({ loading: false });
             console.error("Failed to get publicRooms: %s", JSON.stringify(err));
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to get public room list', err.toString(), ErrorDialog, {
+            Modal.createTrackedDialog('Failed to get public room list', '', ErrorDialog, {
                 title: _t('Failed to get public room list'),
                 description: ((err && err.message) ? err.message : _t('The server may be unavailable or overloaded'))
             });
@@ -227,7 +227,7 @@ module.exports = React.createClass({
                     modal.close();
                     this.refreshRoomList();
                     console.error("Failed to " + step + ": " + err);
-                    Modal.createTrackedDialog('Remove from Directory Error', err.toString(), ErrorDialog, {
+                    Modal.createTrackedDialog('Remove from Directory Error', '', ErrorDialog, {
                         title: _t('Error'),
                         description: ((err && err.message) ? err.message : _t('The server may be unavailable or overloaded'))
                     });
