@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import sdk from 'matrix-react-sdk';
-import Modal from 'matrix-react-sdk/lib/Modal';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 
 class SendCustomEvent extends React.Component {
@@ -28,33 +27,56 @@ class SendCustomEvent extends React.Component {
     constructor(props, context) {
         super(props, context);
         this._send = this._send.bind(this);
+        this.onBack = this.onBack.bind(this);
     }
 
-    async _send() {
-        try {
-            const content = JSON.parse(this.refs.evContent.value);
-            await MatrixClientPeg.get().sendEvent(this.refs.roomId.value, this.refs.eventType.value, content);
-            this.props.onFinished(true);
-        } catch (e) {
-            this.props.onFinished(false);
-            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
-            Modal.createDialog(ErrorDialog, {
-                title: 'Failed to send custom event',
-                description: e.toString(),
-            });
+    state = {
+        message: null,
+    };
+
+    onBack() {
+        if (this.state.message) {
+            this.setState({ message: null });
+        } else {
+            this.props.onBack();
         }
     }
 
+    _buttons() {
+        return <div className="mx_Dialog_buttons">
+            <button onClick={this.onBack}>Back</button>
+            {!this.state.message && <button onClick={this._send}>Send</button>}
+        </div>;
+    }
+
+    send(content) {
+        return MatrixClientPeg.get().sendEvent(this.props.roomId, this.refs.eventType.value, content);
+    }
+
+    async _send() {
+        let message;
+        try {
+            const content = JSON.parse(this.refs.evContent.value);
+            await this.send(content);
+            message = 'Event sent!';
+        } catch (e) {
+            message = 'Failed to send custom event.' + ` (${e.toString()})`;
+        }
+        this.setState({ message });
+    }
+
     render() {
+        if (this.state.message) {
+            return <div>
+                <div className="mx_Dialog_content">
+                    {this.state.message}
+                </div>
+                {this._buttons()}
+            </div>;
+        }
+
         return <div>
             <div className="mx_Dialog_content">
-                <div className="mx_TextInputDialog_label">
-                    <label htmlFor="roomId"> Room ID </label>
-                </div>
-                <div>
-                    <input id="roomId" ref="roomId" className="mx_TextInputDialog_input" defaultValue={this.props.roomId} size="64" />
-                </div>
-
                 <div className="mx_TextInputDialog_label">
                     <label htmlFor="eventType"> Event Type </label>
                 </div>
@@ -66,55 +88,32 @@ class SendCustomEvent extends React.Component {
                     <label htmlFor="evContent"> Event Content </label>
                 </div>
                 <div>
-                    <textarea id="evContent" ref="evContent" className="mx_TextInputDialog_input" defaultValue={"{\n\n}"} cols="64" />
+                    <textarea id="evContent" ref="evContent" className="mx_TextInputDialog_input" defaultValue={"{\n\n}"} cols="63" rows="5" />
                 </div>
             </div>
-            <div className="mx_Dialog_buttons">
-                <button onClick={this.props.onBack}>Back</button>
-                <button onClick={this._send}>Send</button>
-            </div>
+            {this._buttons()}
         </div>;
     }
 }
 
-class SendCustomStateEvent extends React.Component {
-    static propTypes = {
-        roomId: React.PropTypes.string.isRequired,
-        onBack: React.PropTypes.func.isRequired,
-    };
-
-    constructor(props, context) {
-        super(props, context);
-        this._send = this._send.bind(this);
-    }
-
-    async _send() {
-        try {
-            const content = JSON.parse(this.refs.evContent.value);
-            await MatrixClientPeg.get().sendStateEvent(this.refs.roomId.value, this.refs.eventType.value, content,
-                this.refs.stateKey.value);
-
-            this.props.onFinished(true);
-        } catch (e) {
-            this.props.onFinished(false);
-            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
-            Modal.createDialog(ErrorDialog, {
-                title: 'Failed to send custom state event',
-                description: e.toString(),
-            });
-        }
+class SendCustomStateEvent extends SendCustomEvent {
+    send(content) {
+        return MatrixClientPeg.get().sendStateEvent(this.props.roomId, this.refs.eventType.value, content,
+            this.refs.stateKey.value);
     }
 
     render() {
+        if (this.state.message) {
+            return <div>
+                <div className="mx_Dialog_content">
+                    {this.state.message}
+                </div>
+                {this._buttons()}
+            </div>;
+        }
+
         return <div>
             <div className="mx_Dialog_content">
-                <div className="mx_TextInputDialog_label">
-                    <label htmlFor="roomId"> Room ID </label>
-                </div>
-                <div>
-                    <input id="roomId" ref="roomId" className="mx_TextInputDialog_input" defaultValue={this.props.roomId} size="64" />
-                </div>
-
                 <div className="mx_TextInputDialog_label">
                     <label htmlFor="stateKey"> State Key </label>
                 </div>
@@ -133,13 +132,10 @@ class SendCustomStateEvent extends React.Component {
                     <label htmlFor="evContent"> Event Content </label>
                 </div>
                 <div>
-                    <textarea id="evContent" ref="evContent" className="mx_TextInputDialog_input" defaultValue={"{\n\n}"} cols="64" />
+                    <textarea id="evContent" ref="evContent" className="mx_TextInputDialog_input" defaultValue={"{\n\n}"} cols="63" rows="5" />
                 </div>
             </div>
-            <div className="mx_Dialog_buttons">
-                <button onClick={this.props.onBack}>Back</button>
-                <button onClick={this._send}>Send</button>
-            </div>
+            {this._buttons()}
         </div>;
     }
 }
@@ -227,12 +223,7 @@ class RoomStateExplorer extends React.Component {
 
         return <div>
             <div className="mx_Dialog_content">
-                <div className="mx_TextInputDialog_label">
-                    Room ID: {this.props.roomId}
-                </div>
-                <div>
-                    {rows}
-                </div>
+                {rows}
             </div>
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>Back</button>
@@ -295,6 +286,7 @@ export default class DevtoolsDialog extends React.Component {
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished} title="Developer Tools">
+            <div>Room ID: {this.props.roomId}</div>
             { body }
         </BaseDialog>;
     }
