@@ -1,1 +1,19 @@
-{}
+{
+    "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.": "<a href=\"http://apple.com/safari\">Safari</a>மற்றும்<a href=\"http://opera.com\">Opera</a>விலும் செயல்படும்.",
+    "A new version of Riot is available.": "Riot-ன் புதிய பதிப்பு உள்ளது.",
+    "Add an email address above to configure email notifications": "மின்னஞ்சல் அறிவிப்புகளை ஏற்றபடி மாற்ற ஒரு மின்னஞ்சல் முகவரியை மேலே இணைக்கவும்",
+    "Advanced notification settings": "மேம்பட்ட அறிவிப்பிற்க்கான அமைப்புகள்",
+    "All messages": "அனைத்து செய்திகள்",
+    "All messages (loud)": "அனைத்து செய்திகள் (உரக்க)",
+    "All Rooms": "அனைத்து அறைகள்",
+    "All notifications are currently disabled for all targets.": "அனைத்து இலக்குகளுக்கான அனைத்து அறிவுப்புகளும் தற்காலிகமாக முடக்கப்பட்டுள்ளது.",
+    "An error occurred whilst saving your email notification preferences.": "உங்கள் மின்னஞ்சல் அறிவிப்பு விருப்பங்களை சேமிக்கும்பொழுது தவறு ஏற்ப்பட்டது.",
+    "Cancel": "நீக்கு",
+    "Cancel Sending": "அனுப்புதலை நீக்கு",
+    "Changelog": "மாற்றப்பதிவுகள்",
+    "Close": "மூடு",
+    "Collapse panel": "பலகத்தை மாற்றியமை",
+    "Collecting app version information": "செயலியின் பதிப்பு தகவல்கள் சேகரிக்கப்படுகிறது",
+    "Collecting logs": "பதிவுகள் சேகரிக்கப்படுகிறது",
+    "Create new room": "புதிய அறையை உருவாக்கு"
+}
