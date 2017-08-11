@@ -448,6 +448,7 @@ module.exports = React.createClass({
                         });
                     }, 0);
                 }
+                this.notifyNewScreen('user/' + payload.member.userId);
                 break;
             case 'view_room':
                 // Takes either a room ID or room alias: if switching to a room the client is already
@@ -1203,21 +1204,44 @@ module.exports = React.createClass({
         } else if (screen.indexOf('user/') == 0) {
             const userId = screen.substring(5);
 
-            if (params.action === 'chat') {
-                this._chatCreateOrReuse(userId);
-                return;
-            }
+            // Wait for the first sync so that `getRoom` gives us a room object if it's
+            // in the sync response
+            const waitFor = this.firstSyncPromise ?
+                this.firstSyncPromise.promise : Promise.resolve();
+            waitFor.then(() => {
+                if (params.action === 'chat') {
+                    this._chatCreateOrReuse(userId);
+                    return;
+                }
 
-            this.setState({ viewUserId: userId });
-            this._setPage(PageTypes.UserView);
-            this.notifyNewScreen('user/' + userId);
-            const member = new Matrix.RoomMember(null, userId);
-            if (member) {
+                // Get the member object for the current room, if a current room is set or
+                // we have a last_room in localStorage. The user might not be a member of
+                // this room (in which case member will be falsey).
+                let member;
+                const roomId = this.state.currentRoomId || localStorage.getItem('mx_last_room_id');
+                if (roomId) {
+                    const room = MatrixClientPeg.get().getRoom(roomId);
+                    if (room) {
+                        member = room.getMember(userId);
+                    }
+                }
+
+                if (member) {
+                    // This user is a member of this room, so view the room
+                    dis.dispatch({
+                        action: 'view_room',
+                        room_id: roomId,
+                    });
+                } else {
+                    // This user is not a member of this room, show the user view
+                    member = new Matrix.RoomMember(null, userId);
+                    this._setPage(PageTypes.UserView);
+                }
                 dis.dispatch({
                     action: 'view_user',
                     member: member,
                 });
-            }
+            });
         } else if (screen.indexOf('group/') == 0) {
             const groupId = screen.substring(6);
 
