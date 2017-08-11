@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 
 import sdk from '../../../index';
+import Analytics from '../../../Analytics';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import * as Lifecycle from '../../../Lifecycle';
 import Velocity from 'velocity-vector';
@@ -54,6 +55,7 @@ export default class DeactivateAccountDialog extends React.Component {
             user: MatrixClientPeg.get().credentials.userId,
             password: this._passwordField.value,
         }).done(() => {
+            Analytics.trackEvent('Account', 'Deactivate Account');
             Lifecycle.onLoggedOut();
             this.props.onFinished(false);
         }, (err) => {

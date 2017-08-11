@@ -15,7 +15,6 @@
  */
 
 import { getCurrentLanguage } from './languageHandler';
-import MatrixClientPeg from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 
@@ -31,8 +30,18 @@ const customVariables = {
     'User Type': 3,
     'Chosen Language': 4,
     'Instance': 5,
+    'RTE: Uses Richtext Mode': 6,
+    'Homeserver URL': 7,
+    'Identity Server URL': 8,
 };
 
+function whitelistRedact(whitelist, str) {
+    if (whitelist.includes(str)) return str;
+    return '<redacted>';
+}
+
+const whitelistedHSUrls = ["https://matrix.org"];
+const whitelistedISUrls = ["https://vector.im"];
 
 class Analytics {
     constructor() {
@@ -76,7 +85,7 @@ class Analytics {
         this._paq.push(['trackAllContentImpressions']);
         this._paq.push(['discardHashTag', false]);
         this._paq.push(['enableHeartBeatTimer']);
-        this._paq.push(['enableLinkTracking', true]);
+        // this._paq.push(['enableLinkTracking', true]);
 
         const platform = PlatformPeg.get();
         this._setVisitVariable('App Platform', platform.getHumanReadableName());
@@ -130,20 +139,20 @@ class Analytics {
         this._paq.push(['deleteCookies']);
     }
 
-    login() { // not used currently
-        const cli = MatrixClientPeg.get();
-        if (this.disabled || !cli) return;
-
-        this._paq.push(['setUserId', `@${cli.getUserIdLocalpart()}:${cli.getDomain()}`]);
-    }
-
     _setVisitVariable(key, value) {
         this._paq.push(['setCustomVariable', customVariables[key], key, value, 'visit']);
     }
 
-    setGuest(guest) {
+    setLoggedIn(isGuest, homeserverUrl, identityServerUrl) {
         if (this.disabled) return;
-        this._setVisitVariable('User Type', guest ? 'Guest' : 'Logged In');
+        this._setVisitVariable('User Type', isGuest ? 'Guest' : 'Logged In');
+        this._setVisitVariable('Homeserver URL', whitelistRedact(whitelistedHSUrls, homeserverUrl));
+        this._setVisitVariable('Identity Server URL', whitelistRedact(whitelistedISUrls, identityServerUrl));
+    }
+
+    setRichtextMode(state) {
+        if (this.disabled) return;
+        this._setVisitVariable('RTE: Uses Richtext Mode', state ? 'on' : 'off');
     }
 }
 

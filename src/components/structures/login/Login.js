@@ -19,8 +19,11 @@ limitations under the License.
 
 import React from 'react';
 import { _t, _tJsx } from '../../../languageHandler';
+import * as languageHandler from '../../../languageHandler';
 import sdk from '../../../index';
 import Login from '../../../Login';
+import UserSettingsStore from '../../../UserSettingsStore';
+import PlatformPeg from '../../../PlatformPeg';
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9\(\)\-\s]*$/;
@@ -306,6 +309,23 @@ module.exports = React.createClass({
         }
     },
 
+    _onLanguageChange: function(newLang) {
+        if(languageHandler.getCurrentLanguage() !== newLang) {
+            UserSettingsStore.setLocalSetting('language', newLang);
+            PlatformPeg.get().reload();
+        }
+    },
+
+    _renderLanguageSetting: function() {
+        const LanguageDropdown = sdk.getComponent('views.elements.LanguageDropdown');
+        return <div className="mx_Login_language_div">
+            <LanguageDropdown onOptionChange={this._onLanguageChange}
+                          className="mx_Login_language"
+                          value={languageHandler.getCurrentLanguage()}
+            />
+        </div>;
+    },
+
     render: function() {
         const Loader = sdk.getComponent("elements.Spinner");
         const LoginHeader = sdk.getComponent("login.LoginHeader");
@@ -354,6 +374,7 @@ module.exports = React.createClass({
                         </a>
                         { loginAsGuestJsx }
                         { returnToAppJsx }
+                        { this._renderLanguageSetting() }
                         <LoginFooter />
                     </div>
                 </div>

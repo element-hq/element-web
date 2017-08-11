@@ -275,18 +275,21 @@ module.exports = React.createClass({
     },
 
     getEventTileOps: function() {
-        var self = this;
         return {
-            isWidgetHidden: function() {
-                return self.state.widgetHidden;
+            isWidgetHidden: () => {
+                return this.state.widgetHidden;
             },
 
-            unhideWidget: function() {
-                self.setState({ widgetHidden: false });
+            unhideWidget: () => {
+                this.setState({ widgetHidden: false });
                 if (global.localStorage) {
-                    global.localStorage.removeItem("hide_preview_" + self.props.mxEvent.getId());
+                    global.localStorage.removeItem("hide_preview_" + this.props.mxEvent.getId());
                 }
             },
+
+            getInnerText: () => {
+                return this.refs.content.innerText;
+            }
         };
     },
 
@@ -305,7 +308,7 @@ module.exports = React.createClass({
             let completeUrl = scalarClient.getStarterLink(starterLink);
             let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             let integrationsUrl = SdkConfig.get().integrations_ui_url;
-            Modal.createDialog(QuestionDialog, {
+            Modal.createTrackedDialog('Add an integration', '', QuestionDialog, {
                 title: _t("Add an Integration"),
                 description:
                     <div>

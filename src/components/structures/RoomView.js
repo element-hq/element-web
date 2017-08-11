@@ -544,7 +544,7 @@ module.exports = React.createClass({
         }
         if (!userHasUsedEncryption) {
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            Modal.createDialog(QuestionDialog, {
+            Modal.createTrackedDialog('E2E Warning', '', QuestionDialog, {
                 title: _t("Warning!"),
                 hasCancelButton: false,
                 description: (
@@ -820,7 +820,7 @@ module.exports = React.createClass({
             });
 
             const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
-            const close = Modal.createDialog(SetMxIdDialog, {
+            const close = Modal.createTrackedDialog('Set MXID', '', SetMxIdDialog, {
                 homeserverUrl: cli.getHomeserverUrl(),
                 onFinished: (submitted, credentials) => {
                     if (submitted) {
@@ -934,7 +934,7 @@ module.exports = React.createClass({
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to upload file " + file + " " + error);
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to upload file', '', ErrorDialog, {
                 title: _t('Failed to upload file'),
                 description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or the file too big")),
             });
@@ -1021,7 +1021,7 @@ module.exports = React.createClass({
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Search failed: " + error);
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Search failed', '', ErrorDialog, {
                 title: _t("Search failed"),
                 description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or search timed out :(")),
             });
@@ -1148,7 +1148,7 @@ module.exports = React.createClass({
                     console.error(result.reason);
                 });
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Failed to save room settings', '', ErrorDialog, {
                     title: _t("Failed to save settings"),
                     description: fails.map(function(result) { return result.reason; }).join("\n"),
                 });
@@ -1195,7 +1195,7 @@ module.exports = React.createClass({
         }, function(err) {
             var errCode = err.errcode || _t("unknown error code");
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to forget room', '', ErrorDialog, {
                 title: _t("Error"),
                 description: _t("Failed to forget room %(errCode)s", { errCode: errCode }),
             });
@@ -1217,7 +1217,7 @@ module.exports = React.createClass({
 
             var msg = error.message ? error.message : JSON.stringify(error);
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to reject invite', '', ErrorDialog, {
                 title: _t("Failed to reject invite"),
                 description: msg,
             });

@@ -31,6 +31,7 @@ import KeyCode from '../../../KeyCode';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import Analytics from '../../../Analytics';
 
 import dis from '../../../dispatcher';
 import UserSettingsStore from '../../../UserSettingsStore';
@@ -160,6 +161,8 @@ export default class MessageComposerInput extends React.Component {
 
         const isRichtextEnabled = UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false);
 
+        Analytics.setRichtextMode(isRichtextEnabled);
+
         this.state = {
             // whether we're in rich text or markdown mode
             isRichtextEnabled,
@@ -280,11 +283,10 @@ export default class MessageComposerInput extends React.Component {
             }
                 break;
             case 'quote': {
-                let {body} = payload.event.getContent();
                 /// XXX: Not doing rich-text quoting from formatted-body because draft-js
                 /// has regressed such that when links are quoted, errors are thrown. See
                 /// https://github.com/vector-im/riot-web/issues/4756.
-                body = escape(body);
+                let body = escape(payload.text);
                 if (body) {
                     let content = RichText.htmlToContentState(`<blockquote>${body}</blockquote>`);
                     if (!this.state.isRichtextEnabled) {
@@ -457,6 +459,19 @@ export default class MessageComposerInput extends React.Component {
             state.editorState = RichText.attachImmutableEntitiesToEmoji(
                 state.editorState);
 
+            // Hide the autocomplete if the cursor location changes but the plaintext
+            // content stays the same. We don't hide if the pt has changed because the
+            // autocomplete will probably have different completions to show.
+            if (
+                !state.editorState.getSelection().equals(
+                    this.state.editorState.getSelection()
+                )
+                && state.editorState.getCurrentContent().getPlainText() ===
+                this.state.editorState.getCurrentContent().getPlainText()
+            ) {
+                this.autocomplete.hide();
+            }
+
             if (state.editorState.getCurrentContent().hasText()) {
                 this.onTypingActivity();
             } else {
@@ -512,6 +527,8 @@ export default class MessageComposerInput extends React.Component {
             }
             contentState = ContentState.createFromText(markdown);
         }
+
+        Analytics.setRichtextMode(enabled);
 
         this.setState({
             editorState: this.createEditorState(enabled, contentState),
@@ -704,7 +721,7 @@ export default class MessageComposerInput extends React.Component {
                 }, function(err) {
                     console.error("Command failure: %s", err);
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('Server error', '', ErrorDialog, {
                         title: _t("Server error"),
                         description: ((err && err.message) ? err.message : _t("Server unavailable, overloaded, or something else went wrong.")),
                     });
@@ -712,7 +729,8 @@ export default class MessageComposerInput extends React.Component {
             } else if (cmd.error) {
                 console.error(cmd.error);
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                // TODO possibly track which command they ran (not its Arguments) here
+                Modal.createTrackedDialog('Command error', '', ErrorDialog, {
                     title: _t("Command error"),
                     description: cmd.error,
                 });
