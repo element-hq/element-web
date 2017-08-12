@@ -4,7 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: {
+   entry: {
         "bundle": "./src/vector/index.js",
         "indexeddb-worker": "./src/vector/indexedbd-worker.js",
 
@@ -22,12 +22,9 @@ module.exports = {
         "theme-dark": "./src/skins/vector/css/themes/dark.scss",
     },
     module: {
-        preLoaders: [
-            { test: /\.js$/, loader: "source-map-loader" },
-        ],
-        loaders: [
-            { test: /\.json$/, loader: "json" },
-            { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
+        rules: [
+            { enforce: 'pre', test: /\.js$/, use: "source-map-loader" },
+            { test: /\.js$/, use: "babel-loader", include: path.resolve('./src') },
             {
                 test: /\.scss$/,
 
@@ -38,15 +35,23 @@ module.exports = {
                 //    would also drag in the imgs and fonts that our CSS refers to
                 //    as webpack inputs.)
                 // 3. ExtractTextPlugin turns that string into a separate asset.
-                loader: ExtractTextPlugin.extract("css-raw-loader!postcss-loader?config=postcss.config.js"),
+                use: ExtractTextPlugin.extract({
+                    use: [
+                        "css-raw-loader",
+                        "postcss-loader"
+                    ],
+                }),
             },
             {
                 // this works similarly to the scss case, without postcss.
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract("css-raw-loader"),
+                use: ExtractTextPlugin.extract({
+                    use: "css-raw-loader"
+                }),
             },
+
         ],
-        noParse: [
+        noParse: function(content) {
             // for cross platform compatibility use [\\\/] as the path separator
             // this ensures that the regex trips on both Windows and *nix
 
@@ -54,12 +59,13 @@ module.exports = {
             // overflows (https://github.com/webpack/webpack/issues/1721), and
             // there is no need for webpack to parse them - they can just be
             // included as-is.
-            /highlight\.js[\\\/]lib[\\\/]languages/,
+            var highlightjs = /highlight\.js[\\\/]lib[\\\/]languages/;
 
             // olm takes ages for webpack to process, and it's already heavily
             // optimised, so there is little to gain by us uglifying it.
-            /olm[\\\/](javascript[\\\/])?olm\.js$/,
-        ],
+            var olm = /olm[\\\/](javascript[\\\/])?olm\.js$/;
+            return olm.test(content) || highlightjs.test(content)
+        },
     },
     output: {
         path: path.join(__dirname, "webapp"),
@@ -123,6 +129,7 @@ module.exports = {
             // about moving them.
             inject: false,
         }),
+        new webpack.optimize.ModuleConcatenationPlugin(),
     ],
     devtool: 'source-map',
 
