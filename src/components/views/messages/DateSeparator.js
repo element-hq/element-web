@@ -30,7 +30,7 @@ function getdaysArray() {
     ];
 }
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'DateSeparator',
     render: function() {
         var date = new Date(this.props.ts);

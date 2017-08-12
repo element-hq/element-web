@@ -220,8 +220,7 @@ var roomTileTarget = {
 
 // Export the wrapped version, inlining the 'collect' functions
 // to more closely resemble the ES7
-module.exports =
-DropTarget('RoomTile', roomTileTarget, function(connect, monitor) {
+export default DropTarget('RoomTile', roomTileTarget, function(connect, monitor) {
     return {
         // Call this function inside render()
         // to let React DnD handle the drag events:

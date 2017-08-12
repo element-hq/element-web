@@ -229,4 +229,4 @@ var LeftPanel = React.createClass({
     }
 });
 
-module.exports = DragDropContext(HTML5Backend)(LeftPanel);
+export default DragDropContext(HTML5Backend)(LeftPanel);

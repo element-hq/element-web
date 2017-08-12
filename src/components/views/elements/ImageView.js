@@ -27,7 +27,7 @@ const Modal = require('matrix-react-sdk/lib/Modal');
 const sdk = require('matrix-react-sdk');
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'ImageView',
 
     propTypes: {

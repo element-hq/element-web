@@ -574,8 +574,7 @@ var RoomSubList = React.createClass({
 
 // Export the wrapped version, inlining the 'collect' functions
 // to more closely resemble the ES7
-module.exports =
-DropTarget('RoomTile', roomListTarget, function(connect) {
+export default DropTarget('RoomTile', roomListTarget, function(connect) {
     return {
         connectDropTarget: connect.dropTarget(),
     }

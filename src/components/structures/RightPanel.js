@@ -27,7 +27,7 @@ import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
 import Modal from 'matrix-react-sdk/lib/Modal';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'RightPanel',
 
     propTypes: {

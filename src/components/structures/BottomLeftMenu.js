@@ -25,7 +25,7 @@ import 'velocity-vector/velocity.ui';
 
 const CALLOUT_ANIM_DURATION = 1000;
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'BottomLeftMenu',
 
     propTypes: {

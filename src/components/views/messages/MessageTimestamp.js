@@ -19,7 +19,7 @@ limitations under the License.
 import React from 'react';
 import DateUtils from 'matrix-react-sdk/lib/DateUtils';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'MessageTimestamp',
 
     propTypes: {

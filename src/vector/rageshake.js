@@ -397,77 +397,75 @@ function selectQuery(store, keyRange, resultMapper) {
 let store = null;
 let logger = null;
 let initPromise = null;
-module.exports = {
 
-    /**
-     * Configure rage shaking support for sending bug reports.
-     * Modifies globals.
-     * @return {Promise} Resolves when set up.
-     */
-    init: function() {
-        if (initPromise) {
-            return initPromise;
-        }
-        logger = new ConsoleLogger();
-        logger.monkeyPatch(window.console);
-
-        // just *accessing* indexedDB throws an exception in firefox with
-        // indexeddb disabled.
-        let indexedDB;
-        try {
-            indexedDB = window.indexedDB;
-        } catch(e) {}
-
-        if (indexedDB) {
-            store = new IndexedDBLogStore(indexedDB, logger);
-            initPromise = store.connect();
-            return initPromise;
-        }
-        initPromise = Promise.resolve();
+/**
+ * Configure rage shaking support for sending bug reports.
+ * Modifies globals.
+ * @return {Promise} Resolves when set up.
+ */
+export function init() {
+    if (initPromise) {
         return initPromise;
-    },
+    }
+    logger = new ConsoleLogger();
+    logger.monkeyPatch(window.console);
 
-    flush: function() {
-        if (!store) {
-            return;
-        }
-        store.flush();
-    },
+    // just *accessing* indexedDB throws an exception in firefox with
+    // indexeddb disabled.
+    let indexedDB;
+    try {
+        indexedDB = window.indexedDB;
+    } catch(e) {}
 
-    /**
-     * Clean up old logs.
-     * @return Promise Resolves if cleaned logs.
-     */
-    cleanup: async function() {
-        if (!store) {
-            return;
-        }
-        await store.consume();
-    },
+    if (indexedDB) {
+        store = new IndexedDBLogStore(indexedDB, logger);
+        initPromise = store.connect();
+        return initPromise;
+    }
+    initPromise = Promise.resolve();
+    return initPromise;
+}
 
-    /**
-     * Get a recent snapshot of the logs, ready for attaching to a bug report
-     *
-     * @return {Array<{lines: string, id, string}>}  list of log data
-     */
-    getLogsForReport: async function() {
-        if (!logger) {
-            throw new Error(
-                "No console logger, did you forget to call init()?"
-            );
-        }
-        // If in incognito mode, store is null, but we still want bug report
-        // sending to work going off the in-memory console logs.
-        if (store) {
-            // flush most recent logs
-            await store.flush();
-            return await store.consume();
-        }
-        else {
-            return [{
-                lines: logger.flush(true),
-                id: "-",
-            }];
-        }
-    },
-};
+export function flush() {
+    if (!store) {
+        return;
+    }
+    store.flush();
+}
+
+/**
+ * Clean up old logs.
+ * @return Promise Resolves if cleaned logs.
+ */
+export async function cleanup() {
+    if (!store) {
+        return;
+    }
+    await store.consume();
+}
+
+/**
+ * Get a recent snapshot of the logs, ready for attaching to a bug report
+ *
+ * @return {Array<{lines: string, id, string}>}  list of log data
+ */
+export async function getLogsForReport() {
+    if (!logger) {
+        throw new Error(
+            "No console logger, did you forget to call init()?"
+        );
+    }
+    // If in incognito mode, store is null, but we still want bug report
+    // sending to work going off the in-memory console logs.
+    if (store) {
+        // flush most recent logs
+        await store.flush();
+        return await store.consume();
+    }
+    else {
+        return [{
+            lines: logger.flush(true),
+            id: "-",
+        }];
+    }
+}

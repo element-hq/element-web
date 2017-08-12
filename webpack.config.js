@@ -24,9 +24,10 @@ module.exports = {
     module: {
         rules: [
             { enforce: 'pre', test: /\.js$/, use: "source-map-loader" },
-            { test: /\.js$/, use: "babel-loader", include: path.resolve('./src') },
+            { test: /\.js$/, use: "babel-loader", include: path.resolve('./src'), exclude: /node_modules/ },
             {
                 test: /\.scss$/,
+                exclude: /node_modules/,
 
                 // 1. postcss-loader turns the SCSS into normal CSS.
                 // 2. css-raw-loader turns the CSS into a javascript module
@@ -51,7 +52,7 @@ module.exports = {
             },
 
         ],
-        noParse: function(content) {
+        noParse: [
             // for cross platform compatibility use [\\\/] as the path separator
             // this ensures that the regex trips on both Windows and *nix
 
@@ -59,13 +60,12 @@ module.exports = {
             // overflows (https://github.com/webpack/webpack/issues/1721), and
             // there is no need for webpack to parse them - they can just be
             // included as-is.
-            var highlightjs = /highlight\.js[\\\/]lib[\\\/]languages/;
+            /highlight\.js[\\\/]lib[\\\/]languages/,
 
             // olm takes ages for webpack to process, and it's already heavily
             // optimised, so there is little to gain by us uglifying it.
-            var olm = /olm[\\\/](javascript[\\\/])?olm\.js$/;
-            return olm.test(content) || highlightjs.test(content)
-        },
+            /olm[\\\/](javascript[\\\/])?olm\.js$/,
+        ],
     },
     output: {
         path: path.join(__dirname, "webapp"),

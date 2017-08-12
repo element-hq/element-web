@@ -29,7 +29,7 @@ import * as Rooms from 'matrix-react-sdk/lib/Rooms';
 import * as RoomNotifs from 'matrix-react-sdk/lib/RoomNotifs';
 import Modal from 'matrix-react-sdk/lib/Modal';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'RoomTileContextMenu',
 
     propTypes: {

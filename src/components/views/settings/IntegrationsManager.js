@@ -21,7 +21,7 @@ var sdk = require('matrix-react-sdk');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'IntegrationsManager',
 
     propTypes: {

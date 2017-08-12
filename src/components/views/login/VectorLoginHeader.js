@@ -21,7 +21,7 @@ var React = require('react');
 const i = [1, 2, 3, 4, 5][Math.floor(Math.random() * 5)];
 const DEFAULT_LOGO_URI = "img/logos/riot-logo-" + i + ".svg";
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'VectorLoginHeader',
     statics: {
         replaces: 'LoginHeader',

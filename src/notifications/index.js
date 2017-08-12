@@ -16,9 +16,7 @@ limitations under the License.
 
 'use strict';
 
-module.exports = {
-    NotificationUtils: require('./NotificationUtils'),
-    PushRuleVectorState: require('./PushRuleVectorState'),
-    VectorPushRulesDefinitions: require('./VectorPushRulesDefinitions'),
-    ContentRules: require('./ContentRules'),
-};
+export var NotificationUtils = require('./NotificationUtils')
+export var PushRuleVectorState = require('./PushRuleVectorState')
+export var VectorPushRulesDefinitions = require('./VectorPushRulesDefinitions')
+export var ContentRules = require('./ContentRules')

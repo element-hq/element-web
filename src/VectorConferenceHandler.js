@@ -27,11 +27,10 @@ var CallHandler = require('matrix-react-sdk/lib/CallHandler');
 // at docs/conferencing.md for more info.
 var USER_PREFIX = "fs_";
 var DOMAIN = "matrix.org";
-
-function ConferenceCall(matrixClient, groupChatRoomId) {
+export function ConferenceCall(matrixClient, groupChatRoomId) {
     this.client = matrixClient;
     this.groupRoomId = groupChatRoomId;
-    this.confUserId = module.exports.getConferenceUserIdForRoom(this.groupRoomId);
+    this.confUserId = getConferenceUserIdForRoom(this.groupRoomId);
 }
 
 ConferenceCall.prototype.setup = function() {
@@ -90,7 +89,7 @@ ConferenceCall.prototype._getConferenceUserRoom = function() {
  * @param {string} userId The user ID to check.
  * @return {boolean} True if it is a conference bot.
  */
-module.exports.isConferenceUser = function(userId) {
+export function isConferenceUser(userId) {
     if (userId.indexOf("@" + USER_PREFIX) !== 0) {
         return false;
     }
@@ -103,24 +102,24 @@ module.exports.isConferenceUser = function(userId) {
     return false;
 };
 
-module.exports.getConferenceUserIdForRoom = function(roomId) {
+export function getConferenceUserIdForRoom(roomId) {
     // abuse browserify's core node Buffer support (strip padding ='s)
     var base64RoomId = new Buffer(roomId).toString("base64").replace(/=/g, "");
     return "@" + USER_PREFIX + base64RoomId + ":" + DOMAIN;
 };
 
-module.exports.createNewMatrixCall = function(client, roomId) {
+export function createNewMatrixCall(client, roomId) {
     var confCall = new ConferenceCall(
         client, roomId
     );
     return confCall.setup();
 };
 
-module.exports.getConferenceCallForRoom = function(roomId) {
+export function getConferenceCallForRoom(roomId) {
     // search for a conference 1:1 call for this group chat room ID
     var activeCall = CallHandler.getAnyActiveCall();
     if (activeCall && activeCall.confUserId) {
-        var thisRoomConfUserId = module.exports.getConferenceUserIdForRoom(
+        var thisRoomConfUserId = getConferenceUserIdForRoom(
             roomId
         );
         if (thisRoomConfUserId === activeCall.confUserId) {
@@ -130,6 +129,4 @@ module.exports.getConferenceCallForRoom = function(roomId) {
     return null;
 };
 
-module.exports.ConferenceCall = ConferenceCall;
-
-module.exports.slot = 'conference';
+export const slot = 'conference';
