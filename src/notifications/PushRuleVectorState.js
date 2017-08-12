@@ -19,25 +19,15 @@ limitations under the License.
 var StandardActions = require('./StandardActions');
 var NotificationUtils = require('./NotificationUtils');
 
-var states = {
-    /** The push rule is disabled */
-    OFF: "off",
+/** The push rule is disabled */
+export var OFF = "off"
 
     /** The user will receive push notification for this rule */
-    ON: "on",
+export var ON = "on"
 
-    /** The user will receive push notification for this rule with sound and
-        highlight if this is legitimate */
-    LOUD: "loud",
-};
-
-
-/**
- * Enum for state of a push rule as defined by the Vector UI.
- * @readonly
- * @enum {string}
- */
-export { states }
+/** The user will receive push notification for this rule with sound and
+    highlight if this is legitimate */
+export var LOUD = "loud"
 
 /**
  * Convert a PushRuleVectorState to a list of actions
