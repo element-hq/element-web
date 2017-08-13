@@ -21,9 +21,9 @@ let Platform = null;
 
 if (window && window.process && window.process && window.process.type === 'renderer') {
     // we're running inside electron
-    Platform = require('./ElectronPlatform');
+    Platform = require('./ElectronPlatform').default;
 } else {
-    Platform = require('./WebPlatform');
+    Platform = require('./WebPlatform').default;
 }
 
 export default Platform;

@@ -23,10 +23,11 @@ module.exports = {
     },
     module: {
         rules: [
-            { enforce: 'pre', test: /\.js$/, use: "source-map-loader" },
+            { enforce: 'pre', test: /\.js$/, use: "source-map-loader", exclude: /node_modules/, },
             { test: /\.js$/, use: "babel-loader", include: path.resolve('./src') },
             {
                 test: /\.scss$/,
+                exclude: /node_modules/,
 
                 // 1. postcss-loader turns the SCSS into normal CSS.
                 // 2. css-raw-loader turns the CSS into a javascript module
@@ -128,6 +129,7 @@ module.exports = {
             // about moving them.
             inject: false,
         }),
+        //new webpack.NormalModuleReplacementPlugin(/babel-runtime\/core-js\/promise/, 'bluebird'),
         new webpack.optimize.ModuleConcatenationPlugin(),
     ],
     devtool: 'source-map',
