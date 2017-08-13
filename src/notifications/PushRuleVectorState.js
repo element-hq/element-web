@@ -19,24 +19,15 @@ limitations under the License.
 import StandardActions from './StandardActions';
 import * as NotificationUtils from './NotificationUtils';
 
-const states = {
-    /** The push rule is disabled */
-    OFF: "off",
+/** The push rule is disabled */
+export var OFF = "off"
 
-    /** The user will receive push notification for this rule */
-    ON: "on",
+/** The user will receive push notification for this rule */
+export var ON = "on"
 
-    /** The user will receive push notification for this rule with sound and
-        highlight if this is legitimate */
-    LOUD: "loud",
-};
-
-/**
- * Enum for state of a push rule as defined by the Vector UI.
- * @readonly
- * @enum {string}
- */
-export default { states, };
+/** The user will receive push notification for this rule with sound and
+    highlight if this is legitimate */
+export var LOUD = "loud"
 
 /**
  * Convert a PushRuleVectorState to a list of actions
