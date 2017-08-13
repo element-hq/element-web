@@ -17,72 +17,71 @@ limitations under the License.
 "use strict";
 
 import Promise from 'bluebird';
-var Matrix = require("matrix-js-sdk");
-var Room = Matrix.Room;
-var CallHandler = require('matrix-react-sdk/lib/CallHandler');
+import Matrix from "matrix-js-sdk";
+const Room = Matrix.Room;
+import CallHandler from 'matrix-react-sdk/lib/CallHandler';
 
 // FIXME: This currently forces Vector to try to hit the matrix.org AS for conferencing.
 // This is bad because it prevents people running their own ASes from being used.
 // This isn't permanent and will be customisable in the future: see the proposal
 // at docs/conferencing.md for more info.
-var USER_PREFIX = "fs_";
-var DOMAIN = "matrix.org";
-export function ConferenceCall(matrixClient, groupChatRoomId) {
-    this.client = matrixClient;
-    this.groupRoomId = groupChatRoomId;
-    this.confUserId = getConferenceUserIdForRoom(this.groupRoomId);
-}
+const USER_PREFIX = "fs_";
+const DOMAIN = "matrix.org";
 
-ConferenceCall.prototype.setup = function() {
-    var self = this;
-    return this._joinConferenceUser().then(function() {
-        return self._getConferenceUserRoom();
-    }).then(function(room) {
-        // return a call for *this* room to be placed. We also tack on
-        // confUserId to speed up lookups (else we'd need to loop every room
-        // looking for a 1:1 room with this conf user ID!)
-        var call = Matrix.createNewMatrixCall(self.client, room.roomId);
-        call.confUserId = self.confUserId;
-        call.groupRoomId = self.groupRoomId;
-        return call;
-    });
-};
-
-ConferenceCall.prototype._joinConferenceUser = function() {
-    // Make sure the conference user is in the group chat room
-    var groupRoom = this.client.getRoom(this.groupRoomId);
-    if (!groupRoom) {
-        return Promise.reject("Bad group room ID");
+class ConferenceCall {
+    constructor(matrixClient, groupChatRoomId) {
+        this.client = matrixClient;
+        this.groupRoomId = groupChatRoomId;
+        this.confUserId = module.exports.getConferenceUserIdForRoom(this.groupRoomId);
     }
-    var member = groupRoom.getMember(this.confUserId);
-    if (member && member.membership === "join") {
-        return Promise.resolve();
-    }
-    return this.client.invite(this.groupRoomId, this.confUserId);
-};
 
-ConferenceCall.prototype._getConferenceUserRoom = function() {
-    // Use an existing 1:1 with the conference user; else make one
-    var rooms = this.client.getRooms();
-    var confRoom = null;
-    for (var i = 0; i < rooms.length; i++) {
-        var confUser = rooms[i].getMember(this.confUserId);
-        if (confUser && confUser.membership === "join" &&
-                rooms[i].getJoinedMembers().length === 2) {
-            confRoom = rooms[i];
-            break;
+    setup() {
+        const self = this;
+        return this._joinConferenceUser().then(() => self._getConferenceUserRoom()).then(room => {
+            // return a call for *this* room to be placed. We also tack on
+            // confUserId to speed up lookups (else we'd need to loop every room
+            // looking for a 1:1 room with this conf user ID!)
+            const call = Matrix.createNewMatrixCall(self.client, room.roomId);
+            call.confUserId = self.confUserId;
+            call.groupRoomId = self.groupRoomId;
+            return call;
+        });
+    }
+
+    _joinConferenceUser() {
+        // Make sure the conference user is in the group chat room
+        const groupRoom = this.client.getRoom(this.groupRoomId);
+        if (!groupRoom) {
+            return Promise.reject("Bad group room ID");
         }
+        const member = groupRoom.getMember(this.confUserId);
+        if (member && member.membership === "join") {
+            return Promise.resolve();
+        }
+        return this.client.invite(this.groupRoomId, this.confUserId);
     }
-    if (confRoom) {
-        return Promise.resolve(confRoom);
+
+    _getConferenceUserRoom() {
+        // Use an existing 1:1 with the conference user; else make one
+        const rooms = this.client.getRooms();
+        let confRoom = null;
+        for (let i = 0; i < rooms.length; i++) {
+            const confUser = rooms[i].getMember(this.confUserId);
+            if (confUser && confUser.membership === "join" &&
+                    rooms[i].getJoinedMembers().length === 2) {
+                confRoom = rooms[i];
+                break;
+            }
+        }
+        if (confRoom) {
+            return Promise.resolve(confRoom);
+        }
+        return this.client.createRoom({
+            preset: "private_chat",
+            invite: [this.confUserId]
+        }).then(res => new Room(res.room_id));
     }
-    return this.client.createRoom({
-        preset: "private_chat",
-        invite: [this.confUserId]
-    }).then(function(res) {
-        return new Room(res.room_id);
-    });
-};
+}
 
 /**
  * Check if this user ID is in fact a conference bot.
@@ -90,36 +89,36 @@ ConferenceCall.prototype._getConferenceUserRoom = function() {
  * @return {boolean} True if it is a conference bot.
  */
 export function isConferenceUser(userId) {
-    if (userId.indexOf("@" + USER_PREFIX) !== 0) {
+    if (userId.indexOf(`@${USER_PREFIX}`) !== 0) {
         return false;
     }
-    var base64part = userId.split(":")[0].substring(1 + USER_PREFIX.length);
+    const base64part = userId.split(":")[0].substring(1 + USER_PREFIX.length);
     if (base64part) {
-        var decoded = new Buffer(base64part, "base64").toString();
+        const decoded = new Buffer(base64part, "base64").toString();
         // ! $STUFF : $STUFF
         return /^!.+:.+/.test(decoded);
     }
     return false;
-};
+}
 
 export function getConferenceUserIdForRoom(roomId) {
     // abuse browserify's core node Buffer support (strip padding ='s)
-    var base64RoomId = new Buffer(roomId).toString("base64").replace(/=/g, "");
-    return "@" + USER_PREFIX + base64RoomId + ":" + DOMAIN;
-};
+    const base64RoomId = new Buffer(roomId).toString("base64").replace(/=/g, "");
+    return `@${USER_PREFIX}${base64RoomId}:${DOMAIN}`;
+}
 
 export function createNewMatrixCall(client, roomId) {
-    var confCall = new ConferenceCall(
+    const confCall = new ConferenceCall(
         client, roomId
     );
     return confCall.setup();
-};
+}
 
 export function getConferenceCallForRoom(roomId) {
     // search for a conference 1:1 call for this group chat room ID
-    var activeCall = CallHandler.getAnyActiveCall();
+    const activeCall = CallHandler.getAnyActiveCall();
     if (activeCall && activeCall.confUserId) {
-        var thisRoomConfUserId = getConferenceUserIdForRoom(
+        const thisRoomConfUserId = module.exports.getConferenceUserIdForRoom(
             roomId
         );
         if (thisRoomConfUserId === activeCall.confUserId) {
@@ -127,6 +126,7 @@ export function getConferenceCallForRoom(roomId) {
         }
     }
     return null;
-};
+}
 
-export const slot = 'conference';
+export {ConferenceCall};
+export var slot = 'conference';

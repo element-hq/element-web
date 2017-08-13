@@ -61,8 +61,8 @@ class VectorPushRuleDefinition {
 /**
  * The descriptions of rules managed by the Vector UI.
  */
-// Messages containing user's display name
-var rules = {
+export default {
+    // Messages containing user's display name
     ".m.rule.contains_display_name": new VectorPushRuleDefinition({
         kind: "override",
         description: "Messages containing my display name", // passed through _t() translation in src/components/views/settings/Notifications.js
@@ -141,6 +141,4 @@ var rules = {
             off: StandardActions.ACTION_DONT_NOTIFY,
         }
     }),
-}
-
-export { rules }
+};

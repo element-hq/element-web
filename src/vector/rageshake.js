@@ -397,7 +397,6 @@ function selectQuery(store, keyRange, resultMapper) {
 let store = null;
 let logger = null;
 let initPromise = null;
-
 /**
  * Configure rage shaking support for sending bug reports.
  * Modifies globals.
@@ -437,7 +436,7 @@ export function flush() {
  * Clean up old logs.
  * @return Promise Resolves if cleaned logs.
  */
-export async function cleanup() {
+const cleanup = async function() {
     if (!store) {
         return;
     }
@@ -449,7 +448,7 @@ export async function cleanup() {
  *
  * @return {Array<{lines: string, id, string}>}  list of log data
  */
-export async function getLogsForReport() {
+const getLogsForReport = async function() {
     if (!logger) {
         throw new Error(
             "No console logger, did you forget to call init()?"
@@ -469,3 +468,5 @@ export async function getLogsForReport() {
         }];
     }
 }
+
+export { cleanup, getLogsForReport };

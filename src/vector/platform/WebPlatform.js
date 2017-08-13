@@ -65,14 +65,14 @@ export default class WebPlatform extends VectorBasePlatform {
      * 'denied' otherwise.
      */
     requestNotificationPermission(): Promise<string> {
-        // annoyingly, the latest spec says this returns a
-        // promise, but this is only supported in Chrome 46
-        // and Firefox 47, so adapt the callback API.
-        const defer = Promise.defer();
-        global.Notification.requestPermission((result) => {
-            defer.resolve(result);
-        });
-        return defer.promise;
+         // annoyingly, the latest spec says this returns a
+         // promise, but this is only supported in Chrome 46
+         // and Firefox 47, so adapt the callback API.
+         return new Promise((resolve, reject) => {
+             global.Notification.requestPermission((result) => {
+                  resolve(result);
+             });
+         });
     }
 
     displayNotification(title: string, msg: string, avatarUrl: string, room: Object) {
@@ -103,31 +103,29 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     _getVersion(): Promise<string> {
-        const deferred = Promise.defer();
+        return new Promise((resolve, reject) => {
+            // We add a cachebuster to the request to make sure that we know about
+            // the most recent version on the origin server. That might not
+            // actually be the version we'd get on a reload (particularly in the
+            // presence of intermediate caching proxies), but still: we're trying
+            // to tell the user that there is a new version.
+            request(
+                {
+                    method: "GET",
+                    url: "version",
+                    qs: { cachebuster: Date.now() },
+                },
+                (err, response, body) => {
+                    if (err || response.status < 200 || response.status >= 300) {
+                        if (err === null) err = { status: response.status };
+                        reject(err);
+                    }
 
-        // We add a cachebuster to the request to make sure that we know about
-        // the most recent version on the origin server. That might not
-        // actually be the version we'd get on a reload (particularly in the
-        // presence of intermediate caching proxies), but still: we're trying
-        // to tell the user that there is a new version.
-        request(
-            {
-                method: "GET",
-                url: "version",
-                qs: { cachebuster: Date.now() },
-            },
-            (err, response, body) => {
-                if (err || response.status < 200 || response.status >= 300) {
-                    if (err === null) err = { status: response.status };
-                    deferred.reject(err);
-                    return;
-                }
-
-                const ver = body.trim();
-                deferred.resolve(ver);
-            },
-        );
-        return deferred.promise;
+                    const ver = body.trim();
+                    resolve(ver);
+                },
+            );
+        });
     }
 
     getAppVersion(): Promise<string> {

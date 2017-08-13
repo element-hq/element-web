@@ -16,66 +16,78 @@ limitations under the License.
 
 'use strict';
 
-var StandardActions = require('./StandardActions');
-var NotificationUtils = require('./NotificationUtils');
+import StandardActions from './StandardActions';
+import NotificationUtils from './NotificationUtils';
 
-/** The push rule is disabled */
-export var OFF = "off"
+const states = {
+    /** The push rule is disabled */
+    OFF: "off",
 
     /** The user will receive push notification for this rule */
-export var ON = "on"
+    ON: "on",
 
-/** The user will receive push notification for this rule with sound and
-    highlight if this is legitimate */
-export var LOUD = "loud"
+    /** The user will receive push notification for this rule with sound and
+        highlight if this is legitimate */
+    LOUD: "loud",
+};
 
-/**
- * Convert a PushRuleVectorState to a list of actions
- *
- * @return [object] list of push-rule actions
- */
-export function actionsFor(pushRuleVectorState) {
-    if (pushRuleVectorState === this.ON) {
-        return StandardActions.ACTION_NOTIFY;
-    }
-    else if (pushRuleVectorState === this.LOUD) {
-        return StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND;
-    }
-}
 
-/**
- * Convert a pushrule's actions to a PushRuleVectorState.
- *
- * Determines whether a content rule is in the PushRuleVectorState.ON
- * category or in PushRuleVectorState.LOUD, regardless of its enabled
- * state. Returns null if it does not match these categories.
- */
-export function contentRuleVectorStateKind(rule) {
-    var decoded = NotificationUtils.decodeActions(rule.actions);
+export default {
+    /**
+     * Enum for state of a push rule as defined by the Vector UI.
+     * @readonly
+     * @enum {string}
+     */
+    states,
 
-    if (!decoded) {
-        return null;
-    }
+    /**
+     * Convert a PushRuleVectorState to a list of actions
+     *
+     * @return [object] list of push-rule actions
+     */
+    actionsFor(pushRuleVectorState) {
+        if (pushRuleVectorState === this.ON) {
+            return StandardActions.ACTION_NOTIFY;
+        }
+        else if (pushRuleVectorState === this.LOUD) {
+            return StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND;
+        }
+    },
 
-    // Count tweaks to determine if it is a ON or LOUD rule
-    var tweaks = 0;
-    if (decoded.sound) {
-        tweaks++;
-    }
-    if (decoded.highlight) {
-        tweaks++;
-    }
-    var stateKind = null;
-    switch (tweaks) {
-        case 0:
-            stateKind = this.ON;
-            break;
-        case 2:
-            stateKind = this.LOUD;
-            break;
-    }
-    return stateKind;
-}
+    /**
+     * Convert a pushrule's actions to a PushRuleVectorState.
+     *
+     * Determines whether a content rule is in the PushRuleVectorState.ON
+     * category or in PushRuleVectorState.LOUD, regardless of its enabled
+     * state. Returns null if it does not match these categories.
+     */
+    contentRuleVectorStateKind(rule) {
+        const decoded = NotificationUtils.decodeActions(rule.actions);
+
+        if (!decoded) {
+            return null;
+        }
+
+        // Count tweaks to determine if it is a ON or LOUD rule
+        let tweaks = 0;
+        if (decoded.sound) {
+            tweaks++;
+        }
+        if (decoded.highlight) {
+            tweaks++;
+        }
+        let stateKind = null;
+        switch (tweaks) {
+            case 0:
+                stateKind = this.ON;
+                break;
+            case 2:
+                stateKind = this.LOUD;
+                break;
+        }
+        return stateKind;
+    },
+};
 
 // ES2015 seems to not allow module.exports anymore. This needs to be fix in some way maybe!
 /* for (var k in states) {
