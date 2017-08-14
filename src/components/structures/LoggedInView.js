@@ -301,13 +301,13 @@ export default React.createClass({
 
             case PageTypes.UserView:
                 page_element = null; // deliberately null for now
-                right_panel = <RightPanel opacity={this.props.rightOpacity} />;
+                right_panel = <RightPanel userId={this.props.viewUserId} opacity={this.props.rightOpacity} />;
                 break;
             case PageTypes.GroupView:
                 page_element = <GroupView
                     groupId={this.props.currentGroupId}
                 />;
-                //right_panel = <RightPanel opacity={this.props.rightOpacity} />;
+                //right_panel = <RightPanel userId={this.props.viewUserId} opacity={this.props.rightOpacity} />;
                 break;
         }
 
