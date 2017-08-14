@@ -190,7 +190,7 @@ export default {
 
         const feature = this.getFeatureById(featureId);
         if (!feature) {
-            console.warn('Unknown feature');
+            console.warn(`Unknown feature "${featureId}"`);
             return false;
         }
         // Return the default if this feature has an override to be the default value or
