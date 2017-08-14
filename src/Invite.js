@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,10 +17,34 @@ limitations under the License.
 
 import MatrixClientPeg from './MatrixClientPeg';
 import MultiInviter from './utils/MultiInviter';
+import Modal from "./Modal";
+import createRoom from './createRoom';
+import sdk from "./";
+import { _t } from './languageHandler';
 
 const emailRegex = /^\S+@\S+\.\S+$/;
 
 const mxidRegex = /^@\S+:\S+$/
+
+export const addressTypes = [
+    'mx', 'email',
+];
+
+// React PropType definition for an object describing
+// an address that can be invited to a room (which
+// could be a third party identifier or a matrix ID)
+// along with some additional information about the
+// address / target.
+export const InviteAddressType = React.PropTypes.shape({
+    addressType: React.PropTypes.oneOf(addressTypes).isRequired,
+    address: React.PropTypes.string.isRequired,
+    displayName: React.PropTypes.string,
+    avatarMxc: React.PropTypes.string,
+    // true if the address is known to be a valid address (eg. is a real
+    // user we've seen) or false otherwise (eg. is just an address the
+    // user has entered)
+    isKnown: React.PropTypes.bool,
+});
 
 export function getAddressType(inputText) {
     const isEmailAddress = emailRegex.test(inputText);
@@ -59,5 +84,109 @@ export function inviteToRoom(roomId, addr) {
 export function inviteMultipleToRoom(roomId, addrs) {
     const inviter = new MultiInviter(roomId);
     return inviter.invite(addrs);
+}
+
+export function showStartChatInviteDialog() {
+    const UserPickerDialog = sdk.getComponent("dialogs.UserPickerDialog");
+    Modal.createTrackedDialog('Start a chat', '', UserPickerDialog, {
+        title: _t('Start a chat'),
+        description: _t("Who would you like to communicate with?"),
+        placeholder: _t("Email, name or matrix ID"),
+        button: _t("Start Chat"),
+        onFinished: _onStartChatFinished,
+    });
+}
+
+export function showRoomInviteDialog(roomId) {
+    const UserPickerDialog = sdk.getComponent("dialogs.UserPickerDialog");
+    Modal.createTrackedDialog('Chat Invite', '', UserPickerDialog, {
+        title: _t('Invite new room members'),
+        description: _t('Who would you like to add to this room?'),
+        button: _t('Send Invites'),
+        placeholder: _t("Email, name or matrix ID"),
+        onFinished: (shouldInvite, addrs) => {
+            _onRoomInviteFinished(roomId, shouldInvite, addrs);
+        },
+    });
+}
+
+function _onStartChatFinished(shouldInvite, addrs) {
+    if (!shouldInvite) return;
+
+    const addrTexts = addrs.map(addr => addr.address);
+
+    if (_isDmChat(addrTexts)) {
+        // Start a new DM chat
+        createRoom({dmUserId: addrTexts[0]}).catch((err) => {
+            console.error(err.stack);
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog('Failed to invite user', '', ErrorDialog, {
+                title: _t("Failed to invite user"),
+                description: ((err && err.message) ? err.message : _t("Operation failed")),
+            });
+        });
+    } else {
+        // Start multi user chat
+        let room;
+        createRoom().then((roomId) => {
+            room = MatrixClientPeg.get().getRoom(roomId);
+            return inviteMultipleToRoom(roomId, addrTexts);
+        }).then((addrs) => {
+            return _showAnyInviteErrors(addrs, room);
+        }).catch((err) => {
+            console.error(err.stack);
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog('Failed to invite', '', ErrorDialog, {
+                title: _t("Failed to invite"),
+                description: ((err && err.message) ? err.message : _t("Operation failed")),
+            });
+        });
+    }
+}
+
+function _onRoomInviteFinished(roomId, shouldInvite, addrs) {
+    if (!shouldInvite) return;
+
+    const addrTexts = addrs.map(addr => addr.address);
+
+    // Invite new users to a room
+    inviteMultipleToRoom(roomId, addrTexts).then((addrs) => {
+        const room = MatrixClientPeg.get().getRoom(roomId);
+        return _showAnyInviteErrors(addrs, room);
+    }).catch((err) => {
+        console.error(err.stack);
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createTrackedDialog('Failed to invite', '', ErrorDialog, {
+            title: _t("Failed to invite"),
+            description: ((err && err.message) ? err.message : _t("Operation failed")),
+        });
+    });
+}
+
+function _isDmChat(addrTexts) {
+    if (addrTexts.length === 1 && getAddressType(addrTexts[0])) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function _showAnyInviteErrors(addrs, room) {
+    // Show user any errors
+    let errorList = [];
+    for (let addr of Object.keys(addrs)) {
+        if (addrs[addr] === "error") {
+            errorList.push(addr);
+        }
+    }
+
+    if (errorList.length > 0) {
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createTrackedDialog('Failed to invite the following users to the room', '', ErrorDialog, {
+            title: _t("Failed to invite the following users to the %(roomName)s room:", {roomName: room.name}),
+            description: errorList.join(", "),
+        });
+    }
+    return addrs;
 }
 

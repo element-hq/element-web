@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,9 +16,10 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
-import { getAddressType, inviteMultipleToRoom } from '../../../Invite';
+import { getAddressType } from '../../../Invite';
 import createRoom from '../../../createRoom';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
@@ -25,30 +27,34 @@ import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
 import Promise from 'bluebird';
 import dis from '../../../dispatcher';
+import { addressTypes, InviteAddressType } from '../../../Invite.js';
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
 
 module.exports = React.createClass({
-    displayName: "ChatInviteDialog",
+    displayName: "UserPickerDialog",
+
     propTypes: {
-        title: React.PropTypes.string.isRequired,
-        description: React.PropTypes.oneOfType([
-            React.PropTypes.element,
-            React.PropTypes.string,
+        title: PropTypes.string.isRequired,
+        description: PropTypes.oneOfType([
+            PropTypes.element,
+            PropTypes.string,
         ]),
-        value: React.PropTypes.string,
-        placeholder: React.PropTypes.string,
-        roomId: React.PropTypes.string,
-        button: React.PropTypes.string,
-        focus: React.PropTypes.bool,
-        onFinished: React.PropTypes.func.isRequired,
+        value: PropTypes.string,
+        placeholder: PropTypes.string,
+        roomId: PropTypes.string,
+        button: PropTypes.string,
+        focus: PropTypes.bool,
+        validAddressTypes: PropTypes.arrayOf(PropTypes.oneOfType(addressTypes)),
+        onFinished: PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {
         return {
             value: "",
             focus: true,
+            validAddressTypes: addressTypes,
         };
     },
 
@@ -56,7 +62,7 @@ module.exports = React.createClass({
         return {
             error: false,
 
-            // List of AddressTile.InviteAddressType objects representing
+            // List of InviteAddressType objects representing
             // the list of addresses we're going to invite
             inviteList: [],
 
@@ -90,50 +96,7 @@ module.exports = React.createClass({
             inviteList = this._addInputToList();
             if (inviteList === null) return;
         }
-
-        const addrTexts = inviteList.map(addr => addr.address);
-        if (inviteList.length > 0) {
-            if (this._isDmChat(addrTexts)) {
-                const userId = inviteList[0].address;
-                // Direct Message chat
-                const rooms = this._getDirectMessageRooms(userId);
-                if (rooms.length > 0) {
-                    // A Direct Message room already exists for this user, so select a
-                    // room from a list that is similar to the one in MemberInfo panel
-                    const ChatCreateOrReuseDialog = sdk.getComponent(
-                        "views.dialogs.ChatCreateOrReuseDialog",
-                    );
-                    const close = Modal.createTrackedDialog('Create or Reuse', '', ChatCreateOrReuseDialog, {
-                        userId: userId,
-                        onFinished: (success) => {
-                            this.props.onFinished(success);
-                        },
-                        onNewDMClick: () => {
-                            dis.dispatch({
-                                action: 'start_chat',
-                                user_id: userId,
-                            });
-                            close(true);
-                        },
-                        onExistingRoomSelected: (roomId) => {
-                            dis.dispatch({
-                                action: 'view_room',
-                                room_id: roomId,
-                            });
-                            close(true);
-                        },
-                    }).close;
-                } else {
-                    this._startChat(inviteList);
-                }
-            } else {
-                // Multi invite chat
-                this._startChat(inviteList);
-            }
-        } else {
-            // No addresses supplied
-            this.setState({ error: true });
-        }
+        this.props.onFinished(true, inviteList);
     },
 
     onCancel: function() {
@@ -201,11 +164,10 @@ module.exports = React.createClass({
     },
 
     onDismissed: function(index) {
-        var self = this;
         return () => {
-            var inviteList = self.state.inviteList.slice();
+            const inviteList = this.state.inviteList.slice();
             inviteList.splice(index, 1);
-            self.setState({
+            this.setState({
                 inviteList: inviteList,
                 queryList: [],
                 query: "",
@@ -215,14 +177,13 @@ module.exports = React.createClass({
     },
 
     onClick: function(index) {
-        var self = this;
-        return function() {
-            self.onSelected(index);
+        return () => {
+            this.onSelected(index);
         };
     },
 
     onSelected: function(index) {
-        var inviteList = this.state.inviteList.slice();
+        const inviteList = this.state.inviteList.slice();
         inviteList.push(this.state.queryList[index]);
         this.setState({
             inviteList: inviteList,
@@ -311,7 +272,7 @@ module.exports = React.createClass({
         // This is important, otherwise there's no way to invite
         // a perfectly valid address if there are close matches.
         const addrType = getAddressType(query);
-        if (addrType !== null) {
+        if (this.props.validAddressTypes.indexOf(addrType) !== -1) {
             queryList.unshift({
                 addressType: addrType,
                 address: query,
@@ -328,132 +289,6 @@ module.exports = React.createClass({
         }, () => {
             if (this.addressSelector) this.addressSelector.moveSelectionTop();
         });
-    },
-
-    _getDirectMessageRooms: function(addr) {
-        const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
-        const dmRooms = dmRoomMap.getDMRoomsForUserId(addr);
-        const rooms = [];
-        dmRooms.forEach(dmRoom => {
-            let room = MatrixClientPeg.get().getRoom(dmRoom);
-            if (room) {
-                const me = room.getMember(MatrixClientPeg.get().credentials.userId);
-                if (me.membership == 'join') {
-                    rooms.push(room);
-                }
-            }
-        });
-        return rooms;
-    },
-
-    _startChat: function(addrs) {
-        if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({action: 'view_set_mxid'});
-            return;
-        }
-
-        const addrTexts = addrs.map((addr) => {
-            return addr.address;
-        });
-
-        if (this.props.roomId) {
-            // Invite new user to a room
-            var self = this;
-            inviteMultipleToRoom(this.props.roomId, addrTexts)
-            .then(function(addrs) {
-                var room = MatrixClientPeg.get().getRoom(self.props.roomId);
-                return self._showAnyInviteErrors(addrs, room);
-            })
-            .catch(function(err) {
-                console.error(err.stack);
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Failed to invite', '', ErrorDialog, {
-                    title: _t("Failed to invite"),
-                    description: ((err && err.message) ? err.message : _t("Operation failed")),
-                });
-                return null;
-            })
-            .done();
-        } else if (this._isDmChat(addrTexts)) {
-            // Start the DM chat
-            createRoom({dmUserId: addrTexts[0]})
-            .catch(function(err) {
-                console.error(err.stack);
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Failed to invite user', '', ErrorDialog, {
-                    title: _t("Failed to invite user"),
-                    description: ((err && err.message) ? err.message : _t("Operation failed")),
-                });
-                return null;
-            })
-            .done();
-        } else {
-            // Start multi user chat
-            var self = this;
-            var room;
-            createRoom().then(function(roomId) {
-                room = MatrixClientPeg.get().getRoom(roomId);
-                return inviteMultipleToRoom(roomId, addrTexts);
-            })
-            .then(function(addrs) {
-                return self._showAnyInviteErrors(addrs, room);
-            })
-            .catch(function(err) {
-                console.error(err.stack);
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Failed to invite', '', ErrorDialog, {
-                    title: _t("Failed to invite"),
-                    description: ((err && err.message) ? err.message : _t("Operation failed")),
-                });
-                return null;
-            })
-            .done();
-        }
-
-        // Close - this will happen before the above, as that is async
-        this.props.onFinished(true, addrTexts);
-    },
-
-    _isOnInviteList: function(uid) {
-        for (let i = 0; i < this.state.inviteList.length; i++) {
-            if (
-                this.state.inviteList[i].addressType == 'mx' &&
-                this.state.inviteList[i].address.toLowerCase() === uid
-            ) {
-                return true;
-            }
-        }
-        return false;
-    },
-
-    _isDmChat: function(addrTexts) {
-        if (addrTexts.length === 1 &&
-            getAddressType(addrTexts[0]) === "mx" &&
-            !this.props.roomId
-        ) {
-            return true;
-        } else {
-            return false;
-        }
-    },
-
-    _showAnyInviteErrors: function(addrs, room) {
-        // Show user any errors
-        var errorList = [];
-        for (var addr in addrs) {
-            if (addrs.hasOwnProperty(addr) && addrs[addr] === "error") {
-                errorList.push(addr);
-            }
-        }
-
-        if (errorList.length > 0) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to invite the following users to the room', '', ErrorDialog, {
-                title: _t("Failed to invite the following users to the %(roomName)s room:", {roomName: room.name}),
-                description: errorList.join(", "),
-            });
-        }
-        return addrs;
     },
 
     _addInputToList: function() {
@@ -527,10 +362,10 @@ module.exports = React.createClass({
         const AddressSelector = sdk.getComponent("elements.AddressSelector");
         this.scrollElement = null;
 
-        var query = [];
+        let query = [];
         // create the invite list
         if (this.state.inviteList.length > 0) {
-            var AddressTile = sdk.getComponent("elements.AddressTile");
+            const AddressTile = sdk.getComponent("elements.AddressTile");
             for (let i = 0; i < this.state.inviteList.length; i++) {
                 query.push(
                     <AddressTile key={i} address={this.state.inviteList[i]} canDismiss={true} onDismissed={ this.onDismissed(i) } />
