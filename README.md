@@ -26,7 +26,7 @@ are currently filed against vector-im/riot-web rather than this project).
 
 Translation Status
 ==================
-[![translationsstatus](https://translate.nordgedanken.de/widgets/riot-web/-/multi-auto.svg)](https://translate.nordgedanken.de/engage/riot-web/?utm_source=widget)
+[![Translation status](https://translate.riot.im/widgets/riot-web/-/multi-auto.svg)](https://translate.riot.im/engage/riot-web/?utm_source=widget)
 
 Developer Guide
 ===============
