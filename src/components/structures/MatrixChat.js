@@ -1203,6 +1203,8 @@ module.exports = React.createClass({
         } else if (screen.indexOf('user/') == 0) {
             const userId = screen.substring(5);
 
+            // Wait for the first sync so that `getRoom` gives us a room object if it's
+            // in the sync response
             const waitFor = this.firstSyncPromise ?
                 this.firstSyncPromise.promise : Promise.resolve();
             waitFor.then(() => {
