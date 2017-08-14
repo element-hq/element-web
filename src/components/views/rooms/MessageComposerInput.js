@@ -890,6 +890,7 @@ export default class MessageComposerInput extends React.Component {
             }
         } else {
             this.moveAutocompleteSelection(up);
+            e.preventDefault();
         }
     };
 
