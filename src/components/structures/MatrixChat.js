@@ -1203,21 +1203,22 @@ module.exports = React.createClass({
         } else if (screen.indexOf('user/') == 0) {
             const userId = screen.substring(5);
 
-            if (params.action === 'chat') {
-                this._chatCreateOrReuse(userId);
-                return;
-            }
+            const waitFor = this.firstSyncPromise ?
+                this.firstSyncPromise.promise : Promise.resolve();
+            waitFor.then(() => {
+                if (params.action === 'chat') {
+                    this._chatCreateOrReuse(userId);
+                    return;
+                }
 
-            this.setState({ viewUserId: userId });
-            this._setPage(PageTypes.UserView);
-            this.notifyNewScreen('user/' + userId);
-            const member = new Matrix.RoomMember(null, userId);
-            if (member) {
+                this._setPage(PageTypes.UserView);
+                this.notifyNewScreen('user/' + userId);
+                const member = new Matrix.RoomMember(null, userId);
                 dis.dispatch({
                     action: 'view_user',
                     member: member,
                 });
-            }
+            });
         } else if (screen.indexOf('group/') == 0) {
             const groupId = screen.substring(6);
 
