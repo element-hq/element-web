@@ -448,7 +448,6 @@ module.exports = React.createClass({
                         });
                     }, 0);
                 }
-                this.notifyNewScreen('user/' + payload.member.userId);
                 break;
             case 'view_room':
                 // Takes either a room ID or room alias: if switching to a room the client is already
@@ -1214,29 +1213,9 @@ module.exports = React.createClass({
                     return;
                 }
 
-                // Get the member object for the current room, if a current room is set or
-                // we have a last_room in localStorage. The user might not be a member of
-                // this room (in which case member will be falsey).
-                let member;
-                const roomId = this.state.currentRoomId || localStorage.getItem('mx_last_room_id');
-                if (roomId) {
-                    const room = MatrixClientPeg.get().getRoom(roomId);
-                    if (room) {
-                        member = room.getMember(userId);
-                    }
-                }
-
-                if (member) {
-                    // This user is a member of this room, so view the room
-                    dis.dispatch({
-                        action: 'view_room',
-                        room_id: roomId,
-                    });
-                } else {
-                    // This user is not a member of this room, show the user view
-                    member = new Matrix.RoomMember(null, userId);
-                    this._setPage(PageTypes.UserView);
-                }
+                this._setPage(PageTypes.UserView);
+                this.notifyNewScreen('user/' + userId);
+                const member = new Matrix.RoomMember(null, userId);
                 dis.dispatch({
                     action: 'view_user',
                     member: member,
