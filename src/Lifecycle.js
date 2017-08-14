@@ -240,7 +240,7 @@ function _handleRestoreFailure(e) {
     const SessionRestoreErrorDialog =
           sdk.getComponent('views.dialogs.SessionRestoreErrorDialog');
 
-    Modal.createDialog(SessionRestoreErrorDialog, {
+    Modal.createTrackedDialog('Session Restore Error', '', SessionRestoreErrorDialog, {
         error: e.message,
         onFinished: (success) => {
             def.resolve(success);
@@ -318,7 +318,7 @@ async function _doSetLoggedIn(credentials, clearStorage) {
         await _clearStorage();
     }
 
-    Analytics.setGuest(credentials.guest);
+    Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl, credentials.identityServerUrl);
 
     // Resolves by default
     let teamPromise = Promise.resolve(null);

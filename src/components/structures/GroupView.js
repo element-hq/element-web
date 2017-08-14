@@ -266,7 +266,7 @@ export default React.createClass({
             this.setState({uploadingAvatar: false});
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to upload avatar image", e);
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to upload image', '', ErrorDialog, {
                 title: _t('Error'),
                 description: _t('Failed to upload image'),
             });
@@ -288,7 +288,7 @@ export default React.createClass({
             });
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to save group profile", e);
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to update group', '', ErrorDialog, {
                 title: _t('Error'),
                 description: _t('Failed to update group'),
             });

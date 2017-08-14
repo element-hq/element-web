@@ -31,6 +31,7 @@ import KeyCode from '../../../KeyCode';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import Analytics from '../../../Analytics';
 
 import dis from '../../../dispatcher';
 import UserSettingsStore from '../../../UserSettingsStore';
@@ -50,7 +51,7 @@ const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g')
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
-const REGEX_EMOJI_WHITESPACE = new RegExp('(' + asciiRegexp + ')\\s$');
+const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
 
 const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
@@ -97,20 +98,39 @@ export default class MessageComposerInput extends React.Component {
         onInputStateChanged: React.PropTypes.func,
     };
 
-    static getKeyBinding(e: SyntheticKeyboardEvent): string {
-        // C-m => Toggles between rich text and markdown modes
-        if (e.keyCode === KeyCode.KEY_M && KeyBindingUtil.isCtrlKeyCommand(e)) {
-            return 'toggle-mode';
+    static getKeyBinding(ev: SyntheticKeyboardEvent): string {
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        let ctrlCmdOnly;
+        if (isMac) {
+            ctrlCmdOnly = ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
+        } else {
+            ctrlCmdOnly = ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
         }
 
-        // Allow opening of dev tools. getDefaultKeyBinding would be 'italic' for KEY_I
-        if (e.keyCode === KeyCode.KEY_I && e.shiftKey && e.ctrlKey) {
-            // When null is returned, draft-js will NOT preventDefault, allowing dev tools
-            // to be toggled when the editor is focussed
-            return null;
+        // Restrict a subset of key bindings to ONLY having ctrl/meta* pressed and
+        // importantly NOT having alt, shift, meta/ctrl* pressed. draft-js does not
+        // handle this in `getDefaultKeyBinding` so we do it ourselves here.
+        //
+        // * if macOS, read second option
+        const ctrlCmdCommand = {
+            // C-m => Toggles between rich text and markdown modes
+            [KeyCode.KEY_M]: 'toggle-mode',
+            [KeyCode.KEY_B]: 'bold',
+            [KeyCode.KEY_I]: 'italic',
+            [KeyCode.KEY_U]: 'underline',
+            [KeyCode.KEY_J]: 'code',
+            [KeyCode.KEY_O]: 'split-block',
+        }[ev.keyCode];
+
+        if (ctrlCmdCommand) {
+            if (!ctrlCmdOnly) {
+                return null;
+            }
+            return ctrlCmdCommand;
         }
 
-        return getDefaultKeyBinding(e);
+        // Handle keys such as return, left and right arrows etc.
+        return getDefaultKeyBinding(ev);
     }
 
     static getBlockStyle(block: ContentBlock): ?string {
@@ -141,6 +161,8 @@ export default class MessageComposerInput extends React.Component {
 
         const isRichtextEnabled = UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false);
 
+        Analytics.setRichtextMode(isRichtextEnabled);
+
         this.state = {
             // whether we're in rich text or markdown mode
             isRichtextEnabled,
@@ -165,17 +187,18 @@ export default class MessageComposerInput extends React.Component {
         this.client = MatrixClientPeg.get();
     }
 
-    findLinkEntities(contentBlock, callback) {
+    findLinkEntities(contentState: ContentState, contentBlock: ContentBlock, callback) {
         contentBlock.findEntityRanges(
             (character) => {
                 const entityKey = character.getEntity();
                 return (
                     entityKey !== null &&
-                    Entity.get(entityKey).getType() === 'LINK'
+                    contentState.getEntity(entityKey).getType() === 'LINK'
                 );
             }, callback,
         );
     }
+
     /*
      * "Does the right thing" to create an EditorState, based on:
      * - whether we've got rich text mode enabled
@@ -184,13 +207,19 @@ export default class MessageComposerInput extends React.Component {
     createEditorState(richText: boolean, contentState: ?ContentState): EditorState {
         const decorators = richText ? RichText.getScopedRTDecorators(this.props) :
                 RichText.getScopedMDDecorators(this.props);
+        const shouldShowPillAvatar = !UserSettingsStore.getSyncedSetting("Pill.shouldHidePillAvatar", false);
         decorators.push({
             strategy: this.findLinkEntities.bind(this),
             component: (entityProps) => {
                 const Pill = sdk.getComponent('elements.Pill');
-                const {url} = Entity.get(entityProps.entityKey).getData();
+                const {url} = entityProps.contentState.getEntity(entityProps.entityKey).getData();
                 if (Pill.isPillUrl(url)) {
-                    return <Pill url={url} room={this.props.room} offsetKey={entityProps.offsetKey}/>;
+                    return <Pill
+                        url={url}
+                        room={this.props.room}
+                        offsetKey={entityProps.offsetKey}
+                        shouldShowPillAvatar={shouldShowPillAvatar}
+                    />;
                 }
 
                 return (
@@ -243,7 +272,8 @@ export default class MessageComposerInput extends React.Component {
                 // paths for inserting a user pill is not fun
                 const selection = this.state.editorState.getSelection();
                 const member = this.props.room.getMember(payload.user_id);
-                const completion = member ? member.name.replace(' (IRC)', '') : payload.user_id;
+                const completion = member ?
+                    member.rawDisplayName.replace(' (IRC)', '') : payload.user_id;
                 this.setDisplayedCompletion({
                     completion,
                     selection,
@@ -253,10 +283,12 @@ export default class MessageComposerInput extends React.Component {
             }
                 break;
             case 'quote': {
-                let {body, formatted_body} = payload.event.getContent();
-                formatted_body = formatted_body || escape(body);
-                if (formatted_body) {
-                    let content = RichText.htmlToContentState(`<blockquote>${formatted_body}</blockquote>`);
+                /// XXX: Not doing rich-text quoting from formatted-body because draft-js
+                /// has regressed such that when links are quoted, errors are thrown. See
+                /// https://github.com/vector-im/riot-web/issues/4756.
+                let body = escape(payload.text);
+                if (body) {
+                    let content = RichText.htmlToContentState(`<blockquote>${body}</blockquote>`);
                     if (!this.state.isRichtextEnabled) {
                         content = ContentState.createFromText(RichText.stateToMarkdown(content));
                     }
@@ -393,7 +425,7 @@ export default class MessageComposerInput extends React.Component {
                 const newContentState = Modifier.replaceText(
                     editorState.getCurrentContent(),
                     currentSelection.merge({
-                        anchorOffset: currentStartOffset - emojiMatch[0].length,
+                        anchorOffset: currentStartOffset - emojiMatch[1].length - 1,
                         focusOffset: currentStartOffset,
                     }),
                     unicodeEmoji,
@@ -427,6 +459,19 @@ export default class MessageComposerInput extends React.Component {
             state.editorState = RichText.attachImmutableEntitiesToEmoji(
                 state.editorState);
 
+            // Hide the autocomplete if the cursor location changes but the plaintext
+            // content stays the same. We don't hide if the pt has changed because the
+            // autocomplete will probably have different completions to show.
+            if (
+                !state.editorState.getSelection().equals(
+                    this.state.editorState.getSelection()
+                )
+                && state.editorState.getCurrentContent().getPlainText() ===
+                this.state.editorState.getCurrentContent().getPlainText()
+            ) {
+                this.autocomplete.hide();
+            }
+
             if (state.editorState.getCurrentContent().hasText()) {
                 this.onTypingActivity();
             } else {
@@ -451,13 +496,19 @@ export default class MessageComposerInput extends React.Component {
                 callback();
             }
 
+            const textContent = this.state.editorState.getCurrentContent().getPlainText();
+            const selection = RichText.selectionStateToTextOffsets(
+                this.state.editorState.getSelection(),
+                this.state.editorState.getCurrentContent().getBlocksAsArray());
             if (this.props.onContentChanged) {
-                const textContent = this.state.editorState
-                    .getCurrentContent().getPlainText();
-                const selection = RichText.selectionStateToTextOffsets(
-                    this.state.editorState.getSelection(),
-                    this.state.editorState.getCurrentContent().getBlocksAsArray());
                 this.props.onContentChanged(textContent, selection);
+            }
+
+            // Scroll to the bottom of the editor if the cursor is on the last line of the
+            // composer. For some reason the editor won't scroll automatically if we paste
+            // blocks of text in or insert newlines.
+            if (textContent.slice(selection.start).indexOf("\n") === -1) {
+                this.refs.editor.refs.editor.scrollTop = this.refs.editor.refs.editor.scrollHeight;
             }
         });
     }
@@ -476,6 +527,8 @@ export default class MessageComposerInput extends React.Component {
             }
             contentState = ContentState.createFromText(markdown);
         }
+
+        Analytics.setRichtextMode(enabled);
 
         this.setState({
             editorState: this.createEditorState(enabled, contentState),
@@ -496,14 +549,21 @@ export default class MessageComposerInput extends React.Component {
             // These are block types, not handled by RichUtils by default.
             const blockCommands = ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item'];
             const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
+
+            const shouldToggleBlockFormat = (
+                command === 'backspace' ||
+                command === 'split-block'
+            ) && currentBlockType !== 'unstyled';
+
             if (blockCommands.includes(command)) {
                 newState = RichUtils.toggleBlockType(this.state.editorState, command);
             } else if (command === 'strike') {
                 // this is the only inline style not handled by Draft by default
                 newState = RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH');
-            } else if (command === 'backspace' && currentBlockType !== 'unstyled') {
+            } else if (shouldToggleBlockFormat) {
                 const currentStartOffset = this.state.editorState.getSelection().getStartOffset();
-                if (currentStartOffset === 0) {
+                const currentEndOffset = this.state.editorState.getSelection().getEndOffset();
+                if (currentStartOffset === 0 && currentEndOffset === 0) {
                     // Toggle current block type (setting it to 'unstyled')
                     newState = RichUtils.toggleBlockType(this.state.editorState, currentBlockType);
                 }
@@ -638,7 +698,17 @@ export default class MessageComposerInput extends React.Component {
 
         let contentText = contentState.getPlainText(), contentHTML;
 
-        const cmd = SlashCommands.processInput(this.props.room.roomId, contentText);
+        // Strip MD user (tab-completed) mentions to preserve plaintext mention behaviour.
+        // We have to do this now as opposed to after calculating the contentText for MD
+        // mode because entity positions may not be maintained when using
+        // md.toPlaintext().
+        // Unfortunately this means we lose mentions in history when in MD mode. This
+        // would be fixed if history was stored as contentState.
+        contentText = this.removeMDLinks(contentState, ['@']);
+
+        // Some commands (/join) require pills to be replaced with their text content
+        const commandText = this.removeMDLinks(contentState, ['#']);
+        const cmd = SlashCommands.processInput(this.props.room.roomId, commandText);
         if (cmd) {
             if (!cmd.error) {
                 this.setState({
@@ -651,7 +721,7 @@ export default class MessageComposerInput extends React.Component {
                 }, function(err) {
                     console.error("Command failure: %s", err);
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('Server error', '', ErrorDialog, {
                         title: _t("Server error"),
                         description: ((err && err.message) ? err.message : _t("Server unavailable, overloaded, or something else went wrong.")),
                     });
@@ -659,7 +729,8 @@ export default class MessageComposerInput extends React.Component {
             } else if (cmd.error) {
                 console.error(cmd.error);
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                // TODO possibly track which command they ran (not its Arguments) here
+                Modal.createTrackedDialog('Command error', '', ErrorDialog, {
                     title: _t("Command error"),
                     description: cmd.error,
                 });
@@ -691,7 +762,7 @@ export default class MessageComposerInput extends React.Component {
                 const hasLink = blocks.some((block) => {
                     return block.getCharacterList().filter((c) => {
                         const entityKey = c.getEntity();
-                        return entityKey && Entity.get(entityKey).getType() === 'LINK';
+                        return entityKey && contentState.getEntity(entityKey).getType() === 'LINK';
                     }).size > 0;
                 });
                 shouldSendHTML = hasLink;
@@ -702,7 +773,31 @@ export default class MessageComposerInput extends React.Component {
                 );
             }
         } else {
-            const md = new Markdown(contentText);
+            // Use the original contentState because `contentText` has had mentions
+            // stripped and these need to end up in contentHTML.
+
+            // Replace all Entities of type `LINK` with markdown link equivalents.
+            // TODO: move this into `Markdown` and do the same conversion in the other
+            // two places (toggling from MD->RT mode and loading MD history into RT mode)
+            // but this can only be done when history includes Entities.
+            const pt = contentState.getBlocksAsArray().map((block) => {
+                let blockText = block.getText();
+                let offset = 0;
+                this.findLinkEntities(contentState, block, (start, end) => {
+                    const entity = contentState.getEntity(block.getEntityAt(start));
+                    if (entity.getType() !== 'LINK') {
+                        return;
+                    }
+                    const text = blockText.slice(offset + start, offset + end);
+                    const url = entity.getData().url;
+                    const mdLink = `[${text}](${url})`;
+                    blockText = blockText.slice(0, offset + start) + mdLink + blockText.slice(offset + end);
+                    offset += mdLink.length - text.length;
+                });
+                return blockText;
+            }).join('\n');
+
+            const md = new Markdown(pt);
             if (md.isPlainText()) {
                 contentText = md.toPlaintext();
             } else {
@@ -725,35 +820,6 @@ export default class MessageComposerInput extends React.Component {
             sendHtmlFn = this.client.sendHtmlEmote;
             sendTextFn = this.client.sendEmoteMessage;
         }
-
-        // Strip MD user (tab-completed) mentions to preserve plaintext mention behaviour
-        contentText = contentText.replace(REGEX_MATRIXTO_MARKDOWN_GLOBAL,
-        (markdownLink, text, resource, prefix, offset) => {
-            // Calculate the offset relative to the current block that the offset is in
-            let sum = 0;
-            const blocks = contentState.getBlocksAsArray();
-            let block;
-            for (let i = 0; i < blocks.length; i++) {
-                block = blocks[i];
-                sum += block.getLength();
-                if (sum > offset) {
-                    sum -= block.getLength();
-                    break;
-                }
-            }
-            offset -= sum;
-
-            const entityKey = block.getEntityAt(offset);
-            const entity = entityKey ? Entity.get(entityKey) : null;
-            if (entity && entity.getData().isCompletion && prefix === '@') {
-                // This is a completed mention, so do not insert MD link, just text
-                return text;
-            } else {
-                // This is either a MD link that was typed into the composer or another
-                // type of pill (e.g. room pill)
-                return markdownLink;
-            }
-        });
 
         let sendMessagePromise;
         if (contentHTML) {
@@ -819,6 +885,7 @@ export default class MessageComposerInput extends React.Component {
             }
         } else {
             this.moveAutocompleteSelection(up);
+            e.preventDefault();
         }
     };
 
@@ -914,35 +981,27 @@ export default class MessageComposerInput extends React.Component {
         }
 
         const {range = null, completion = '', href = null, suffix = ''} = displayedCompletion;
+        let contentState = activeEditorState.getCurrentContent();
 
         let entityKey;
-        let mdCompletion;
         if (href) {
-            entityKey = Entity.create('LINK', 'IMMUTABLE', {
+            contentState = contentState.createEntity('LINK', 'IMMUTABLE', {
                 url: href,
                 isCompletion: true,
             });
-            if (!this.state.isRichtextEnabled) {
-                mdCompletion = `[${completion}](${href})`;
-            }
+            entityKey = contentState.getLastCreatedEntityKey();
         }
 
         let selection;
         if (range) {
             selection = RichText.textOffsetsToSelectionState(
-                range, activeEditorState.getCurrentContent().getBlocksAsArray(),
+                range, contentState.getBlocksAsArray(),
             );
         } else {
             selection = activeEditorState.getSelection();
         }
 
-        let contentState = Modifier.replaceText(
-            activeEditorState.getCurrentContent(),
-            selection,
-            mdCompletion || completion,
-            null,
-            entityKey,
-        );
+        contentState = Modifier.replaceText(contentState, selection, completion, null, entityKey);
 
         // Move the selection to the end of the block
         const afterSelection = contentState.getSelectionAfter();
@@ -1002,6 +1061,44 @@ export default class MessageComposerInput extends React.Component {
         };
     }
 
+    getAutocompleteQuery(contentState: ContentState) {
+        // Don't send markdown links to the autocompleter
+        return this.removeMDLinks(contentState, ['@', '#']);
+    }
+
+    removeMDLinks(contentState: ContentState, prefixes: string[]) {
+        const plaintext = contentState.getPlainText();
+        if (!plaintext) return '';
+        return plaintext.replace(REGEX_MATRIXTO_MARKDOWN_GLOBAL,
+        (markdownLink, text, resource, prefix, offset) => {
+            if (!prefixes.includes(prefix)) return markdownLink;
+            // Calculate the offset relative to the current block that the offset is in
+            let sum = 0;
+            const blocks = contentState.getBlocksAsArray();
+            let block;
+            for (let i = 0; i < blocks.length; i++) {
+                block = blocks[i];
+                sum += block.getLength();
+                if (sum > offset) {
+                    sum -= block.getLength();
+                    break;
+                }
+            }
+            offset -= sum;
+
+            const entityKey = block.getEntityAt(offset);
+            const entity = entityKey ? contentState.getEntity(entityKey) : null;
+            if (entity && entity.getData().isCompletion) {
+                // This is a completed mention, so do not insert MD link, just text
+                return text;
+            } else {
+                // This is either a MD link that was typed into the composer or another
+                // type of pill (e.g. room pill)
+                return markdownLink;
+            }
+        });
+    }
+
     onMarkdownToggleClicked = (e) => {
         e.preventDefault(); // don't steal focus from the editor!
         this.handleKeyCommand('toggle-mode');
@@ -1027,7 +1124,6 @@ export default class MessageComposerInput extends React.Component {
         });
 
         const content = activeEditorState.getCurrentContent();
-        const contentText = content.getPlainText();
         const selection = RichText.selectionStateToTextOffsets(activeEditorState.getSelection(),
             activeEditorState.getCurrentContent().getBlocksAsArray());
 
@@ -1037,7 +1133,7 @@ export default class MessageComposerInput extends React.Component {
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         onConfirm={this.setDisplayedCompletion}
-                        query={contentText}
+                        query={this.getAutocompleteQuery(content)}
                         selection={selection}/>
                 </div>
                 <div className={className}>

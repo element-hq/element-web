@@ -71,6 +71,15 @@ const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sor
 
 let instance = null;
 
+function score(query, space) {
+    const index = space.indexOf(query);
+    if (index === -1) {
+        return Infinity;
+    } else {
+        return index;
+    }
+}
+
 export default class EmojiProvider extends AutocompleteProvider {
     constructor() {
         super(EMOJI_REGEX);
@@ -104,8 +113,20 @@ export default class EmojiProvider extends AutocompleteProvider {
 
             // Do second match with shouldMatchWordsOnly in order to match against 'name'
             completions = completions.concat(this.nameMatcher.match(matchedString));
-            // Reinstate original order
-            completions = _sortBy(_uniq(completions), '_orderBy');
+
+            const sorters = [];
+            // First, sort by score (Infinity if matchedString not in shortname)
+            sorters.push((c) => score(matchedString, c.shortname));
+            // If the matchedString is not empty, sort by length of shortname. Example:
+            //  matchedString = ":bookmark"
+            //  completions = [":bookmark:", ":bookmark_tabs:", ...]
+            if (matchedString.length > 1) {
+                sorters.push((c) => c.shortname.length);
+            }
+            // Finally, sort by original ordering
+            sorters.push((c) => c._orderBy);
+            completions = _sortBy(_uniq(completions), sorters);
+
             completions = completions.map((result) => {
                 const {shortname} = result;
                 const unicode = shortnameToUnicode(shortname);

@@ -51,7 +51,8 @@ export const contentStateToHTML = (contentState: ContentState) => {
 };
 
 export function htmlToContentState(html: string): ContentState {
-    return ContentState.createFromBlockArray(convertFromHTML(html));
+    const blockArray = convertFromHTML(html).contentBlocks;
+    return ContentState.createFromBlockArray(blockArray);
 }
 
 function unicodeToEmojiUri(str) {
@@ -90,7 +91,7 @@ function findWithRegex(regex, contentBlock: ContentBlock, callback: (start: numb
 
 // Workaround for https://github.com/facebook/draft-js/issues/414
 let emojiDecorator = {
-    strategy: (contentBlock, callback) => {
+    strategy: (contentState, contentBlock, callback) => {
         findWithRegex(EMOJI_REGEX, contentBlock, callback);
     },
     component: (props) => {
@@ -119,7 +120,7 @@ export function getScopedRTDecorators(scope: any): CompositeDecorator {
 export function getScopedMDDecorators(scope: any): CompositeDecorator {
     let markdownDecorators = ['HR', 'BOLD', 'ITALIC', 'CODE', 'STRIKETHROUGH'].map(
         (style) => ({
-            strategy: (contentBlock, callback) => {
+            strategy: (contentState, contentBlock, callback) => {
                 return findWithRegex(MARKDOWN_REGEX[style], contentBlock, callback);
             },
             component: (props) => (
@@ -130,7 +131,7 @@ export function getScopedMDDecorators(scope: any): CompositeDecorator {
         }));
 
     markdownDecorators.push({
-        strategy: (contentBlock, callback) => {
+        strategy: (contentState, contentBlock, callback) => {
             return findWithRegex(MARKDOWN_REGEX.LINK, contentBlock, callback);
         },
         component: (props) => (
@@ -201,10 +202,8 @@ export function selectionStateToTextOffsets(selectionState: SelectionState,
 export function textOffsetsToSelectionState({start, end}: SelectionRange,
                                             contentBlocks: Array<ContentBlock>): SelectionState {
     let selectionState = SelectionState.createEmpty();
-
-    for (let block of contentBlocks) {
-        let blockLength = block.getLength();
-
+    for (const block of contentBlocks) {
+        const blockLength = block.getLength();
         if (start !== -1 && start < blockLength) {
             selectionState = selectionState.merge({
                 anchorKey: block.getKey(),
@@ -212,9 +211,8 @@ export function textOffsetsToSelectionState({start, end}: SelectionRange,
             });
             start = -1;
         } else {
-            start -= blockLength;
+            start -= blockLength + 1; // +1 to account for newline between blocks
         }
-
         if (end !== -1 && end <= blockLength) {
             selectionState = selectionState.merge({
                 focusKey: block.getKey(),
@@ -222,10 +220,9 @@ export function textOffsetsToSelectionState({start, end}: SelectionRange,
             });
             end = -1;
         } else {
-            end -= blockLength;
+            end -= blockLength + 1; // +1 to account for newline between blocks
         }
     }
-
     return selectionState;
 }
 
@@ -242,7 +239,7 @@ export function attachImmutableEntitiesToEmoji(editorState: EditorState): Editor
             const existingEntityKey = block.getEntityAt(start);
             if (existingEntityKey) {
                 // avoid manipulation in case the emoji already has an entity
-                const entity = Entity.get(existingEntityKey);
+                const entity = newContentState.getEntity(existingEntityKey);
                 if (entity && entity.get('type') === 'emoji') {
                     return;
                 }
@@ -252,7 +249,10 @@ export function attachImmutableEntitiesToEmoji(editorState: EditorState): Editor
                 .set('anchorOffset', start)
                 .set('focusOffset', end);
             const emojiText = plainText.substring(start, end);
-            const entityKey = Entity.create('emoji', 'IMMUTABLE', { emojiUnicode: emojiText });
+            newContentState = newContentState.createEntity(
+                'emoji', 'IMMUTABLE', { emojiUnicode: emojiText }
+            );
+            const entityKey = newContentState.getLastCreatedEntityKey();
             newContentState = Modifier.replaceText(
                 newContentState,
                 selection,

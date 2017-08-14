@@ -172,7 +172,7 @@ export default class Autocomplete extends React.Component {
     }
 
     hide() {
-        this.setState({hide: true, selectionOffset: 0});
+        this.setState({hide: true, selectionOffset: 0, completions: [], completionList: []});
     }
 
     forceComplete() {
