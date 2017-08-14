@@ -38,13 +38,11 @@ class HistoryItem {
         const contentState = convertFromRaw(this.rawContentState);
         if (outputFormat === 'markdown') {
             if (this.format === 'html') {
-                console.info(outputFormat, 'to other format');
                 return ContentState.createFromText(RichText.stateToMarkdown(contentState));
             }
         } else {
             if (this.format === 'markdown') {
-                console.info(outputFormat, 'to other format');
-                return RichText.htmlToContentState(new Markdown(contentState).toHTML());
+                return RichText.htmlToContentState(new Markdown(contentState.getPlainText()).toHTML());
             }
         }
         // history item has format === outputFormat
