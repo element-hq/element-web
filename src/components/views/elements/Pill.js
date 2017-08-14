@@ -15,6 +15,7 @@ limitations under the License.
 */
 import React from 'react';
 import sdk from '../../../index';
+import dis from '../../../dispatcher';
 import classNames from 'classnames';
 import { Room, RoomMember } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
@@ -140,6 +141,12 @@ const Pill = React.createClass({
         });
     },
 
+    onUserPillClicked: function() {
+        dis.dispatch({
+            action: 'view_user',
+            member: this.state.member,
+        });
+    },
     render: function() {
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
@@ -150,6 +157,8 @@ const Pill = React.createClass({
         let linkText = resource;
         let pillClass;
         let userId;
+        let href = this.props.url;
+        let onClick;
         switch (this.state.pillType) {
             case Pill.TYPE_USER_MENTION: {
                     // If this user is not a member of this room, default to the empty member
@@ -161,6 +170,8 @@ const Pill = React.createClass({
                             avatar = <MemberAvatar member={member} width={16} height={16}/>;
                         }
                         pillClass = 'mx_UserPill';
+                        href = null;
+                        onClick = this.onUserPillClicked.bind(this);
                     }
             }
                 break;
@@ -183,7 +194,7 @@ const Pill = React.createClass({
 
         if (this.state.pillType) {
             return this.props.inMessage ?
-                <a className={classes} href={this.props.url} title={resource} data-offset-key={this.props.offsetKey}>
+                <a className={classes} href={href} onClick={onClick} title={resource} data-offset-key={this.props.offsetKey}>
                     {avatar}
                     {linkText}
                 </a> :
