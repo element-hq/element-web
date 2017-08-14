@@ -883,8 +883,7 @@ module.exports = React.createClass({
                         onChange={ onChange }
                     />
                     <label htmlFor={feature.id}>{feature.name}</label>
-                </div>
-            );
+                </div>);
         });
 
         // No labs section when there are no features in labs
