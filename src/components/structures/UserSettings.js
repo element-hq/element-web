@@ -859,7 +859,13 @@ module.exports = React.createClass({
         if (this.props.enableLabs === false) return null;
         UserSettingsStore.doTranslations();
 
-        const features = UserSettingsStore.LABS_FEATURES.map((feature) => {
+        const features = [];
+        UserSettingsStore.LABS_FEATURES.forEach((feature) => {
+            // This feature has an override and will be set to the default, so do not
+            // show it here.
+            if (feature.override) {
+                return;
+            }
             // TODO: this ought to be a separate component so that we don't need
             // to rebind the onChange each time we render
             const onChange = (e) => {
@@ -867,7 +873,7 @@ module.exports = React.createClass({
                 this.forceUpdate();
             };
 
-            return (
+            features.push(
                 <div key={feature.id} className="mx_UserSettings_toggle">
                     <input
                         type="checkbox"
@@ -880,6 +886,12 @@ module.exports = React.createClass({
                 </div>
             );
         });
+
+        // No labs section when there are no features in labs
+        if (features.length === 0) {
+            return null;
+        }
+
         return (
             <div>
                 <h3>{ _t("Labs") }</h3>
