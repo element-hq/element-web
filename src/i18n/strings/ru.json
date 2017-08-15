@@ -448,7 +448,10 @@
     "sx": "Суту",
     "zh-hk": "Китайский (Гонконг)",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Текстовое сообщение было отправлено на +%(msisdn)s. Введите проверочный код, который оно содержит",
-    "and %(overflowCount)s others...": "и %(overflowCount)s других...",
+    "and %(count)s others...": {
+        "other": "и %(count)s других...",
+        "one": "и ещё один..."
+    },
     "Are you sure?": "Вы уверены?",
     "Autoplay GIFs and videos": "Автовоспроизведение GIF и видео",
     "Can't connect to homeserver - please check your connectivity and ensure your <a>homeserver's SSL certificate</a> is trusted.": "Невозможно соединиться с домашним сервером - проверьте своё соединение и убедитесь, что <a>SSL-сертификат вашего домашнего сервера</a> включён в доверяемые.",
@@ -479,7 +482,6 @@
     "%(items)s and %(remaining)s others": "%(items)s и другие %(remaining)s",
     "%(items)s and one other": "%(items)s и еще один",
     "%(items)s and %(lastItem)s": "%(items)s и %(lastItem)s",
-    "and one other...": "и еще один...",
     "An error has occurred.": "Произошла ошибка.",
     "Attachment": "Вложение",
     "Ban": "Заблокировать",
@@ -591,7 +593,6 @@
     "to restore": "восстановить",
     "Turn Markdown off": "Выключить Markdown",
     "Turn Markdown on": "Включить Markdown",
-    "Unknown command": "Неизвестная команда",
     "Unknown room %(roomId)s": "Неизвестная комната %(roomId)s",
     "You have been invited to join this room by %(inviterName)s": "%(inviterName)s приглашает вас в комнату",
     "You seem to be uploading files, are you sure you want to quit?": "Похоже, вы отправляете файлы, вы уверены, что хотите выйти?",

@@ -141,8 +141,10 @@
     "%(items)s and %(remaining)s others": "%(items)s en %(remaining)s andere",
     "%(items)s and one other": "%(items)s en één andere",
     "%(items)s and %(lastItem)s": "%(items)s en %(lastItem)s",
-    "and %(overflowCount)s others...": "en %(overflowCount)s andere...",
-    "and one other...": "en één andere...",
+    "and %(count)s others...": {
+        "other": "en %(count)s andere...",
+        "one": "en één andere..."
+    },
     "%(names)s and %(lastPerson)s are typing": "%(names)s en %(lastPerson)s zijn aan het typen",
     "%(names)s and one other are typing": "%(names)s en één andere zijn aan het typen",
     "%(names)s and %(count)s others are typing": "%(names)s en %(count)s andere zijn aan het typen",

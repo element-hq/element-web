@@ -175,8 +175,10 @@
     "an address": "μία διεύθηνση",
     "%(items)s and %(remaining)s others": "%(items)s και %(remaining)s ακόμα",
     "%(items)s and one other": "%(items)s και ένας ακόμα",
-    "and %(overflowCount)s others...": "και %(overflowCount)s άλλοι...",
-    "and one other...": "και ένας ακόμα...",
+    "and %(count)s others...": {
+        "other": "και %(count)s άλλοι...",
+        "one": "και ένας ακόμα..."
+    },
     "%(names)s and %(lastPerson)s are typing": "%(names)s και %(lastPerson)s γράφουν",
     "%(names)s and one other are typing": "%(names)s και ένας ακόμα γράφουν",
     "%(names)s and %(count)s others are typing": "%(names)s και %(count)s άλλοι γράφουν",
@@ -499,7 +501,6 @@
     "unencrypted": "μη κρυπτογραφημένο",
     "Unencrypted message": "Μη κρυπτογραφημένο μήνυμα",
     "unknown caller": "άγνωστος καλών",
-    "Unknown command": "Άγνωστη εντολή",
     "unknown device": "άγνωστη συσκευή",
     "Unknown room %(roomId)s": "Άγνωστο δωμάτιο %(roomId)s",
     "unknown": "άγνωστο",

@@ -22,7 +22,7 @@ limitations under the License.
 
 var React = require("react");
 var ReactDOM = require("react-dom");
-var q = require("q");
+import Promise from 'bluebird';
 var classNames = require("classnames");
 var Matrix = require("matrix-js-sdk");
 import { _t } from '../../languageHandler';
@@ -33,7 +33,6 @@ var ContentMessages = require("../../ContentMessages");
 var Modal = require("../../Modal");
 var sdk = require('../../index');
 var CallHandler = require('../../CallHandler');
-var TabComplete = require("../../TabComplete");
 var Resend = require("../../Resend");
 var dis = require("../../dispatcher");
 var Tinter = require("../../Tinter");
@@ -47,13 +46,14 @@ import UserProvider from '../../autocomplete/UserProvider';
 
 import RoomViewStore from '../../stores/RoomViewStore';
 
-var DEBUG = false;
+let DEBUG = false;
+let debuglog = function() {};
+
+const BROWSER_SUPPORTS_SANDBOX = 'sandbox' in document.createElement('iframe');
 
 if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
-    var debuglog = console.log.bind(console);
-} else {
-    var debuglog = function() {};
+    debuglog = console.log.bind(console);
 }
 
 module.exports = React.createClass({
@@ -113,6 +113,7 @@ module.exports = React.createClass({
             callState: null,
             guestsCanJoin: false,
             canPeek: false,
+            showApps: false,
 
             // error object, as from the matrix client/server API
             // If we failed to load information about the room,
@@ -141,15 +142,6 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("RoomMember.membership", this.onRoomMemberMembership);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
-
-        this.tabComplete = new TabComplete({
-            allowLooping: false,
-            autoEnterTabComplete: true,
-            onClickCompletes: true,
-            onStateChange: (isCompleting) => {
-                this.forceUpdate();
-            },
-        });
 
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
@@ -234,10 +226,9 @@ module.exports = React.createClass({
         // making it impossible to indicate a newly joined room.
         const room = this.state.room;
         if (room) {
-            this._updateAutoComplete(room);
-            this.tabComplete.loadEntries(room);
             this.setState({
                 unsentMessageError: this._getUnsentMessageError(room),
+                showApps: this._shouldShowApps(room),
             });
             this._onRoomLoaded(room);
         }
@@ -273,6 +264,19 @@ module.exports = React.createClass({
             // Stop peeking because we have joined this room previously
             MatrixClientPeg.get().stopPeeking();
         }
+    },
+
+    _shouldShowApps: function(room) {
+        if (!BROWSER_SUPPORTS_SANDBOX) return false;
+
+        const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
+        // any valid widget = show apps
+        for (let i = 0; i < appsStateEvents.length; i++) {
+            if (appsStateEvents[i].getContent().type && appsStateEvents[i].getContent().url) {
+                return true;
+            }
+        }
+        return false;
     },
 
     componentDidMount: function() {
@@ -455,9 +459,14 @@ module.exports = React.createClass({
                 this._updateConfCallNotification();
 
                 this.setState({
-                    callState: callState
+                    callState: callState,
                 });
 
+                break;
+            case 'appsDrawer':
+                this.setState({
+                    showApps: payload.show,
+                });
                 break;
         }
     },
@@ -499,9 +508,7 @@ module.exports = React.createClass({
         // update the tab complete list as it depends on who most recently spoke,
         // and that has probably just changed
         if (ev.sender) {
-            this.tabComplete.onMemberSpoke(ev.sender);
-            // nb. we don't need to update the new autocomplete here since
-            // its results are currently ordered purely by search score.
+            UserProvider.getInstance().onUserSpoke(ev.sender);
         }
     },
 
@@ -524,6 +531,7 @@ module.exports = React.createClass({
         this._warnAboutEncryption(room);
         this._calculatePeekRules(room);
         this._updatePreviewUrlVisibility(room);
+        UserProvider.getInstance().setUserListFromRoom(room);
     },
 
     _warnAboutEncryption: function(room) {
@@ -536,7 +544,7 @@ module.exports = React.createClass({
         }
         if (!userHasUsedEncryption) {
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            Modal.createDialog(QuestionDialog, {
+            Modal.createTrackedDialog('E2E Warning', '', QuestionDialog, {
                 title: _t("Warning!"),
                 hasCancelButton: false,
                 description: (
@@ -699,8 +707,7 @@ module.exports = React.createClass({
         this._updateConfCallNotification();
 
         // refresh the tab complete list
-        this.tabComplete.loadEntries(this.state.room);
-        this._updateAutoComplete(this.state.room);
+        UserProvider.getInstance().setUserListFromRoom(this.state.room);
 
         // if we are now a member of the room, where we were not before, that
         // means we have finished joining a room we were previously peeking
@@ -768,7 +775,7 @@ module.exports = React.createClass({
 
     onSearchResultsFillRequest: function(backwards) {
         if (!backwards) {
-            return q(false);
+            return Promise.resolve(false);
         }
 
         if (this.state.searchResults.next_batch) {
@@ -778,7 +785,7 @@ module.exports = React.createClass({
             return this._handleSearchResult(searchPromise);
         } else {
             debuglog("no more search results");
-            return q(false);
+            return Promise.resolve(false);
         }
     },
 
@@ -813,7 +820,7 @@ module.exports = React.createClass({
             });
 
             const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
-            const close = Modal.createDialog(SetMxIdDialog, {
+            const close = Modal.createTrackedDialog('Set MXID', '', SetMxIdDialog, {
                 homeserverUrl: cli.getHomeserverUrl(),
                 onFinished: (submitted, credentials) => {
                     if (submitted) {
@@ -839,7 +846,7 @@ module.exports = React.createClass({
             return;
         }
 
-        q().then(() => {
+        Promise.resolve().then(() => {
             const signUrl = this.props.thirdPartyInvite ?
                 this.props.thirdPartyInvite.inviteSignUrl : undefined;
             dis.dispatch({
@@ -858,7 +865,7 @@ module.exports = React.createClass({
                     }
                 }
             }
-            return q();
+            return Promise.resolve();
         });
     },
 
@@ -927,7 +934,7 @@ module.exports = React.createClass({
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to upload file " + file + " " + error);
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to upload file', '', ErrorDialog, {
                 title: _t('Failed to upload file'),
                 description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or the file too big")),
             });
@@ -1014,7 +1021,7 @@ module.exports = React.createClass({
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Search failed: " + error);
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Search failed', '', ErrorDialog, {
                 title: _t("Search failed"),
                 description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or search timed out :(")),
             });
@@ -1141,7 +1148,7 @@ module.exports = React.createClass({
                     console.error(result.reason);
                 });
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Failed to save room settings', '', ErrorDialog, {
                     title: _t("Failed to save settings"),
                     description: fails.map(function(result) { return result.reason; }).join("\n"),
                 });
@@ -1188,7 +1195,7 @@ module.exports = React.createClass({
         }, function(err) {
             var errCode = err.errcode || _t("unknown error code");
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to forget room', '', ErrorDialog, {
                 title: _t("Error"),
                 description: _t("Failed to forget room %(errCode)s", { errCode: errCode }),
             });
@@ -1210,7 +1217,7 @@ module.exports = React.createClass({
 
             var msg = error.message ? error.message : JSON.stringify(error);
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to reject invite', '', ErrorDialog, {
                 title: _t("Failed to reject invite"),
                 description: msg,
             });
@@ -1425,14 +1432,6 @@ module.exports = React.createClass({
         }
     },
 
-    _updateAutoComplete: function(room) {
-        const myUserId = MatrixClientPeg.get().credentials.userId;
-        const members = room.getJoinedMembers().filter(function(member) {
-            if (member.userId !== myUserId) return true;
-        });
-        UserProvider.getInstance().setUserList(members);
-    },
-
     render: function() {
         const RoomHeader = sdk.getComponent('rooms.RoomHeader');
         const MessageComposer = sdk.getComponent('rooms.MessageComposer');
@@ -1560,7 +1559,6 @@ module.exports = React.createClass({
             isStatusAreaExpanded = this.state.statusBarVisible;
             statusBar = <RoomStatusBar
                 room={this.state.room}
-                tabComplete={this.tabComplete}
                 numUnreadMessages={this.state.numUnreadMessages}
                 unsentMessageError={this.state.unsentMessageError}
                 atEndOfLiveTimeline={this.state.atEndOfLiveTimeline}
@@ -1613,11 +1611,13 @@ module.exports = React.createClass({
 
         var auxPanel = (
             <AuxPanel ref="auxPanel" room={this.state.room}
+              userId={MatrixClientPeg.get().credentials.userId}
               conferenceHandler={this.props.ConferenceHandler}
               draggingFile={this.state.draggingFile}
               displayConfCallNotification={this.state.displayConfCallNotification}
               maxHeight={this.state.auxPanelMaxHeight}
-              onResize={this.onChildResize} >
+              onResize={this.onChildResize}
+              showApps={this.state.showApps && !this.state.editingRoomSettings} >
                 { aux }
             </AuxPanel>
         );
@@ -1630,8 +1630,13 @@ module.exports = React.createClass({
         if (canSpeak) {
             messageComposer =
                 <MessageComposer
-                    room={this.state.room} onResize={this.onChildResize} uploadFile={this.uploadFile}
-                    callState={this.state.callState} tabComplete={this.tabComplete} opacity={ this.props.opacity }/>;
+                    room={this.state.room}
+                    onResize={this.onChildResize}
+                    uploadFile={this.uploadFile}
+                    callState={this.state.callState}
+                    opacity={ this.props.opacity }
+                    showApps={ this.state.showApps }
+                />;
         }
 
         // TODO: Why aren't we storing the term/scope/count in this format

@@ -156,13 +156,20 @@ export default React.createClass({
             }
             */
 
-        var handled = false;
+        let handled = false;
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        let ctrlCmdOnly;
+        if (isMac) {
+            ctrlCmdOnly = ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
+        } else {
+            ctrlCmdOnly = ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
+        }
 
         switch (ev.keyCode) {
             case KeyCode.UP:
             case KeyCode.DOWN:
                 if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey) {
-                    var action = ev.keyCode == KeyCode.UP ?
+                    let action = ev.keyCode == KeyCode.UP ?
                         'view_prev_room' : 'view_next_room';
                     dis.dispatch({action: action});
                     handled = true;
@@ -181,6 +188,14 @@ export default React.createClass({
             case KeyCode.END:
                 if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
                     this._onScrollKeyPressed(ev);
+                    handled = true;
+                }
+                break;
+            case KeyCode.KEY_K:
+                if (ctrlCmdOnly) {
+                    dis.dispatch({
+                        action: 'focus_room_filter',
+                    });
                     handled = true;
                 }
                 break;
@@ -210,6 +225,8 @@ export default React.createClass({
         const CreateRoom = sdk.getComponent('structures.CreateRoom');
         const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
         const HomePage = sdk.getComponent('structures.HomePage');
+        const GroupView = sdk.getComponent('structures.GroupView');
+        const MyGroups = sdk.getComponent('structures.MyGroups');
         const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         const UpdateCheckBar = sdk.getComponent('globals.UpdateCheckBar');
@@ -247,6 +264,10 @@ export default React.createClass({
                 if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.rightOpacity}/>;
                 break;
 
+            case PageTypes.MyGroups:
+                page_element = <MyGroups />;
+                break;
+
             case PageTypes.CreateRoom:
                 page_element = <CreateRoom
                     onRoomCreated={this.props.onRoomCreated}
@@ -263,22 +284,30 @@ export default React.createClass({
                 break;
 
             case PageTypes.HomePage:
-                // If team server config is present, pass the teamServerURL. props.teamToken
-                // must also be set for the team page to be displayed, otherwise the
-                // welcomePageUrl is used (which might be undefined).
-                const teamServerUrl = this.props.config.teamServerConfig ?
-                    this.props.config.teamServerConfig.teamServerURL : null;
+                {
+                    // If team server config is present, pass the teamServerURL. props.teamToken
+                    // must also be set for the team page to be displayed, otherwise the
+                    // welcomePageUrl is used (which might be undefined).
+                    const teamServerUrl = this.props.config.teamServerConfig ?
+                        this.props.config.teamServerConfig.teamServerURL : null;
 
-                page_element = <HomePage
-                    teamServerUrl={teamServerUrl}
-                    teamToken={this.props.teamToken}
-                    homePageUrl={this.props.config.welcomePageUrl}
-                />;
+                    page_element = <HomePage
+                        teamServerUrl={teamServerUrl}
+                        teamToken={this.props.teamToken}
+                        homePageUrl={this.props.config.welcomePageUrl}
+                    />;
+                }
                 break;
 
             case PageTypes.UserView:
                 page_element = null; // deliberately null for now
-                right_panel = <RightPanel userId={this.props.viewUserId} opacity={this.props.rightOpacity} />;
+                right_panel = <RightPanel opacity={this.props.rightOpacity} />;
+                break;
+            case PageTypes.GroupView:
+                page_element = <GroupView
+                    groupId={this.props.currentGroupId}
+                />;
+                //right_panel = <RightPanel opacity={this.props.rightOpacity} />;
                 break;
         }
 

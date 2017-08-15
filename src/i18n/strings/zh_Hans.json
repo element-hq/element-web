@@ -239,8 +239,10 @@
     "%(items)s and %(remaining)s others": "%(items)s 和其它 %(remaining)s 个",
     "%(items)s and one other": "%(items)s 和其它一个",
     "%(items)s and %(lastItem)s": "%(items)s 和 %(lastItem)s",
-    "and %(overflowCount)s others...": "和其它 %(overflowCount)s 个...",
-    "and one other...": "和其它一个...",
+    "and %(count)s others...": {
+        "other": "和其它 %(count)s 个...",
+        "one": "和其它一个..."
+    },
     "%(names)s and one other are typing": "%(names)s 和另一个人正在打字",
     "anyone": "任何人",
     "Anyone": "任何人",

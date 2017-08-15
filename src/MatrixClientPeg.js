@@ -77,22 +77,38 @@ class MatrixClientPeg {
         this._createClient(creds);
     }
 
-    start() {
+    async start() {
+        // try to initialise e2e on the new client
+        try {
+            // check that we have a version of the js-sdk which includes initCrypto
+            if (this.matrixClient.initCrypto) {
+                await this.matrixClient.initCrypto();
+            }
+        } catch(e) {
+            // this can happen for a number of reasons, the most likely being
+            // that the olm library was missing. It's not fatal.
+            console.warn("Unable to initialise e2e: " + e);
+        }
+
         const opts = utils.deepCopy(this.opts);
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
 
-        let promise = this.matrixClient.store.startup();
-        // log any errors when starting up the database (if one exists)
-        promise.catch((err) => {
+        try {
+            let promise = this.matrixClient.store.startup();
+            console.log(`MatrixClientPeg: waiting for MatrixClient store to initialise`);
+            await promise;
+        } catch(err) {
+            // log any errors when starting up the database (if one exists)
             console.error(`Error starting matrixclient store: ${err}`);
-        });
+        }
 
         // regardless of errors, start the client. If we did error out, we'll
         // just end up doing a full initial /sync.
-        promise.finally(() => {
-            this.get().startClient(opts);
-        });
+
+        console.log(`MatrixClientPeg: really starting MatrixClient`);
+        this.get().startClient(opts);
+        console.log(`MatrixClientPeg: MatrixClient started`);
     }
 
     getCredentials(): MatrixClientCreds {

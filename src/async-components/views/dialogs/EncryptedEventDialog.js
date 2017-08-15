@@ -28,23 +28,31 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        return { device: this.refreshDevice() };
+        return { device: null };
     },
 
     componentWillMount: function() {
         this._unmounted = false;
         var client = MatrixClientPeg.get();
-        client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
 
-        // no need to redownload keys if we already have the device
-        if (this.state.device) {
-            return;
-        }
-        client.downloadKeys([this.props.event.getSender()], true).done(()=>{
+        // first try to load the device from our store.
+        //
+        this.refreshDevice().then((dev) => {
+            if (dev) {
+                return dev;
+            }
+
+            // tell the client to try to refresh the device list for this user
+            return client.downloadKeys([this.props.event.getSender()], true).then(() => {
+                return this.refreshDevice();
+            });
+        }).then((dev) => {
             if (this._unmounted) {
                 return;
             }
-            this.setState({ device: this.refreshDevice() });
+
+            this.setState({ device: dev });
+            client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         }, (err)=>{
             console.log("Error downloading devices", err);
         });
@@ -59,12 +67,16 @@ module.exports = React.createClass({
     },
 
     refreshDevice: function() {
-        return MatrixClientPeg.get().getEventSenderDeviceInfo(this.props.event);
+        // Promise.resolve to handle transition from static result to promise; can be removed
+        // in future
+        return Promise.resolve(MatrixClientPeg.get().getEventSenderDeviceInfo(this.props.event));
     },
 
     onDeviceVerificationChanged: function(userId, device) {
         if (userId == this.props.event.getSender()) {
-            this.setState({ device: this.refreshDevice() });
+            this.refreshDevice().then((dev) => {
+                this.setState({ device: dev });
+            });
         }
     },
 

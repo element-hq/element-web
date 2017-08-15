@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var q = require("q");
+import Promise from 'bluebird';
 var React = require('react');
 var ObjectUtils = require("../../../ObjectUtils");
 var MatrixClientPeg = require('../../../MatrixClientPeg');
@@ -104,7 +104,7 @@ module.exports = React.createClass({
         }
         if (oldCanonicalAlias !== this.state.canonicalAlias) {
             console.log("AliasSettings: Updating canonical alias");
-            promises = [q.all(promises).then(
+            promises = [Promise.all(promises).then(
                 MatrixClientPeg.get().sendStateEvent(
                     this.props.roomId, "m.room.canonical_alias", {
                         alias: this.state.canonicalAlias
@@ -154,7 +154,7 @@ module.exports = React.createClass({
         }
         else {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Invalid alias format', '', ErrorDialog, {
                 title: _t('Invalid alias format'),
                 description: _t('\'%(alias)s\' is not a valid format for an alias', { alias: alias }),
             });
@@ -170,7 +170,7 @@ module.exports = React.createClass({
         }
         else {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Invalid address format', '', ErrorDialog, {
                 title: _t('Invalid address format'),
                 description: _t('\'%(alias)s\' is not a valid format for an address', { alias: alias }),
             });

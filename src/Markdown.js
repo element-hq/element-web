@@ -17,7 +17,7 @@ limitations under the License.
 import commonmark from 'commonmark';
 import escape from 'lodash/escape';
 
-const ALLOWED_HTML_TAGS = ['del'];
+const ALLOWED_HTML_TAGS = ['del', 'u'];
 
 // These types of node are definitely text
 const TEXT_NODES = ['text', 'softbreak', 'linebreak', 'paragraph', 'document'];
@@ -55,6 +55,25 @@ function is_multi_line(node) {
     return par.firstChild != par.lastChild;
 }
 
+import linkifyMatrix from './linkify-matrix';
+import * as linkify from 'linkifyjs';
+linkifyMatrix(linkify);
+
+// Thieved from draft-js-export-markdown
+function escapeMarkdown(s) {
+    return s.replace(/[*_`]/g, '\\$&');
+}
+
+// Replace URLs, room aliases and user IDs with md-escaped URLs
+function linkifyMarkdown(s) {
+    const links = linkify.find(s);
+    links.forEach((l) => {
+        // This may replace several instances of `l.value` at once, but that's OK
+        s = s.replace(l.value, escapeMarkdown(l.value));
+    });
+    return s;
+}
+
 /**
  * Class that wraps commonmark, adding the ability to see whether
  * a given message actually uses any markdown syntax or whether
@@ -62,7 +81,7 @@ function is_multi_line(node) {
  */
 export default class Markdown {
     constructor(input) {
-        this.input = input;
+        this.input = linkifyMarkdown(input);
 
         const parser = new commonmark.Parser();
         this.parsed = parser.parse(this.input);

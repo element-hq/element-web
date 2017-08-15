@@ -16,11 +16,11 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-var sdk = require('../../../index');
-var dis = require('../../../dispatcher');
+import sdk from '../../../index';
+import dis from '../../../dispatcher';
 
 module.exports = React.createClass({
     displayName: 'VideoView',
@@ -53,9 +53,10 @@ module.exports = React.createClass({
         // this needs to be somewhere at the top of the DOM which
         // always exists to avoid audio interruptions.
         // Might as well just use DOM.
-        var remoteAudioElement = document.getElementById("remoteAudio");
+        const remoteAudioElement = document.getElementById("remoteAudio");
         if (!remoteAudioElement) {
-            console.error("Failed to find remoteAudio element - cannot play audio!  You need to add an <audio/> to the DOM.");
+            console.error("Failed to find remoteAudio element - cannot play audio!"
+                + "You need to add an <audio/> to the DOM.");
         }
         return remoteAudioElement;
     },
@@ -70,22 +71,21 @@ module.exports = React.createClass({
 
     onAction: function(payload) {
         switch (payload.action) {
-            case 'video_fullscreen':
+            case 'video_fullscreen': {
                 if (!this.container) {
                     return;
                 }
-                var element = this.container;
+                const element = this.container;
                 if (payload.fullscreen) {
-                    var requestMethod = (
+                    const requestMethod = (
                         element.requestFullScreen ||
                         element.webkitRequestFullScreen ||
                         element.mozRequestFullScreen ||
                         element.msRequestFullscreen
                     );
                     requestMethod.call(element);
-                }
-                else {
-                    var exitMethod = (
+                } else {
+                    const exitMethod = (
                         document.exitFullscreen ||
                         document.mozCancelFullScreen ||
                         document.webkitExitFullscreen ||
@@ -96,17 +96,18 @@ module.exports = React.createClass({
                     }
                 }
                 break;
+            }
         }
     },
 
     render: function() {
-        var VideoFeed = sdk.getComponent('voip.VideoFeed');
+        const VideoFeed = sdk.getComponent('voip.VideoFeed');
 
         // if we're fullscreen, we don't want to set a maxHeight on the video element.
-        var fullscreenElement = (document.fullscreenElement ||
+        const fullscreenElement = (document.fullscreenElement ||
                  document.mozFullScreenElement ||
                  document.webkitFullscreenElement);
-        var maxVideoHeight = fullscreenElement ? null : this.props.maxHeight;
+        const maxVideoHeight = fullscreenElement ? null : this.props.maxHeight;
 
         return (
             <div className="mx_VideoView" ref={this.setContainer} onClick={ this.props.onClick }>
@@ -119,5 +120,5 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
-    }
+    },
 });

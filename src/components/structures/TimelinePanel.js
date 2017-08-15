@@ -17,7 +17,7 @@ limitations under the License.
 
 var React = require('react');
 var ReactDOM = require("react-dom");
-var q = require("q");
+import Promise from 'bluebird';
 
 var Matrix = require("matrix-js-sdk");
 var EventTimeline = Matrix.EventTimeline;
@@ -181,9 +181,6 @@ var TimelinePanel = React.createClass({
 
             // always show timestamps on event tiles?
             alwaysShowTimestamps: syncedSettings.alwaysShowTimestamps,
-
-            // hide redacted events as per old behaviour
-            hideRedactions: syncedSettings.hideRedactions,
         };
     },
 
@@ -311,13 +308,13 @@ var TimelinePanel = React.createClass({
 
         if (!this.state[canPaginateKey]) {
             debuglog("TimelinePanel: have given up", dir, "paginating this timeline");
-            return q(false);
+            return Promise.resolve(false);
         }
 
         if(!this._timelineWindow.canPaginate(dir)) {
             debuglog("TimelinePanel: can't", dir, "paginate any further");
             this.setState({[canPaginateKey]: false});
-            return q(false);
+            return Promise.resolve(false);
         }
 
         debuglog("TimelinePanel: Initiating paginate; backwards:"+backwards);
@@ -350,9 +347,9 @@ var TimelinePanel = React.createClass({
         });
     },
 
-    onMessageListScroll: function() {
+    onMessageListScroll: function(e) {
         if (this.props.onScroll) {
-            this.props.onScroll();
+            this.props.onScroll(e);
         }
 
         if (this.props.manageReadMarkers) {
@@ -926,7 +923,7 @@ var TimelinePanel = React.createClass({
             var message = (error.errcode == 'M_FORBIDDEN')
             	? _t("Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.")
                 : _t("Tried to load a specific point in this room's timeline, but was unable to find it.");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to load timeline position', '', ErrorDialog, {
                 title: _t("Failed to load timeline position"),
                 description: message,
                 onFinished: onFinished,
@@ -1122,7 +1119,6 @@ var TimelinePanel = React.createClass({
         return (
             <MessagePanel ref="messagePanel"
                           hidden={ this.props.hidden }
-                          hideRedactions={ this.state.hideRedactions }
                           backPaginating={ this.state.backPaginating }
                           forwardPaginating={ forwardPaginating }
                           events={ this.state.events }

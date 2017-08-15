@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import q from 'q';
+import Promise from 'bluebird';
 import Matrix from 'matrix-js-sdk';
 
 import MatrixClientPeg from './MatrixClientPeg';
@@ -116,12 +116,12 @@ export function loadSession(opts) {
  */
 export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
     if (!queryParams.loginToken) {
-        return q(false);
+        return Promise.resolve(false);
     }
 
     if (!queryParams.homeserver) {
         console.warn("Cannot log in with token: can't determine HS URL to use");
-        return q(false);
+        return Promise.resolve(false);
     }
 
     // create a temporary MatrixClient to do the login
@@ -197,7 +197,7 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
 //      localStorage (e.g. teamToken, isGuest etc.)
 function _restoreFromLocalStorage() {
     if (!localStorage) {
-        return q(false);
+        return Promise.resolve(false);
     }
     const hsUrl = localStorage.getItem("mx_hs_url");
     const isUrl = localStorage.getItem("mx_is_url") || 'https://matrix.org';
@@ -229,18 +229,18 @@ function _restoreFromLocalStorage() {
         }
     } else {
         console.log("No previous session found.");
-        return q(false);
+        return Promise.resolve(false);
     }
 }
 
 function _handleRestoreFailure(e) {
     console.log("Unable to restore session", e);
 
-    const def = q.defer();
+    const def = Promise.defer();
     const SessionRestoreErrorDialog =
           sdk.getComponent('views.dialogs.SessionRestoreErrorDialog');
 
-    Modal.createDialog(SessionRestoreErrorDialog, {
+    Modal.createTrackedDialog('Session Restore Error', '', SessionRestoreErrorDialog, {
         error: e.message,
         onFinished: (success) => {
             def.resolve(success);
@@ -309,13 +309,16 @@ async function _doSetLoggedIn(credentials, clearStorage) {
     // because `teamPromise` may take some time to resolve, breaking the assumption that
     // `setLoggedIn` takes an "instant" to complete, and dispatch `on_logged_in` a few ms
     // later than MatrixChat might assume.
-    dis.dispatch({action: 'on_logging_in'});
+    //
+    // we fire it *synchronously* to make sure it fires before on_logged_in.
+    // (dis.dispatch uses `setTimeout`, which does not guarantee ordering.)
+    dis.dispatch({action: 'on_logging_in'}, true);
 
     if (clearStorage) {
         await _clearStorage();
     }
 
-    Analytics.setGuest(credentials.guest);
+    Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl, credentials.identityServerUrl);
 
     // Resolves by default
     let teamPromise = Promise.resolve(null);
@@ -344,6 +347,9 @@ async function _doSetLoggedIn(credentials, clearStorage) {
                     localStorage.setItem("mx_team_token", body.team_token);
                 }
                 return body.team_token;
+            }, (err) => {
+                console.warn(`Failed to get team token on login: ${err}` );
+                return null;
             });
         }
     } else {
@@ -354,9 +360,6 @@ async function _doSetLoggedIn(credentials, clearStorage) {
 
     teamPromise.then((teamToken) => {
         dis.dispatch({action: 'on_logged_in', teamToken: teamToken});
-    }, (err) => {
-        console.warn("Failed to get team token on login", err);
-        dis.dispatch({action: 'on_logged_in', teamToken: null});
     });
 
     startMatrixClient();
@@ -419,6 +422,8 @@ export function logout() {
  * listen for events while a session is logged in.
  */
 function startMatrixClient() {
+    console.log(`Lifecycle: Starting MatrixClient`);
+
     // dispatch this before starting the matrix client: it's used
     // to add listeners for the 'sync' event so otherwise we'd have
     // a race condition (and we need to dispatch synchronously for this

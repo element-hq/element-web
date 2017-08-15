@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@ var React = require('react');
 import { _t } from '../../../languageHandler';
 var classNames = require('classnames');
 var Matrix = require("matrix-js-sdk");
-var q = require('q');
+import Promise from 'bluebird';
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
 var Entities = require("../../../Entities");
@@ -200,11 +201,9 @@ module.exports = React.createClass({
 
     _createOverflowTile: function(overflowCount, totalCount) {
         // For now we'll pretend this is any entity. It should probably be a separate tile.
-        var EntityTile = sdk.getComponent("rooms.EntityTile");
-        var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
-        var text = (overflowCount > 1)
-        	? _t("and %(overflowCount)s others...", { overflowCount: overflowCount })
-        	: _t("and one other...");
+        const EntityTile = sdk.getComponent("rooms.EntityTile");
+        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        const text = _t("and %(count)s others...", { count: overflowCount });
         return (
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
                 <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />

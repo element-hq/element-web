@@ -150,8 +150,10 @@
     "%(items)s and %(remaining)s others": "%(items)s och %(remaining)s andra",
     "%(items)s and one other": "%(items)s och en annan",
     "%(items)s and %(lastItem)s": "%(items)s och %(lastItem)s",
-    "and %(overflowCount)s others...": "och %(overflowCount)s andra...",
-    "and one other...": "och en annan...",
+    "and %(count)s others...": {
+        "other": "och %(count)s andra...",
+        "one": "och en annan..."
+    },
     "%(names)s and %(lastPerson)s are typing": "%(names)s och %(lastPerson)s skriver",
     "%(names)s and one other are typing": "%(names)s och en annan skriver",
     "%(names)s and %(count)s others are typing": "%(names)s och %(count)s andra skriver",

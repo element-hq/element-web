@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -106,6 +106,16 @@ export default React.createClass({
     },
 
     _doUsernameCheck: function() {
+        // XXX: SPEC-1
+        // Check if username is valid
+        // Naive impl copied from https://github.com/matrix-org/matrix-react-sdk/blob/66c3a6d9ca695780eb6b662e242e88323053ff33/src/components/views/login/RegistrationForm.js#L190
+        if (encodeURIComponent(this.state.username) !== this.state.username) {
+            this.setState({
+                usernameError: _t('User names may only contain letters, numbers, dots, hyphens and underscores.'),
+            });
+            return Promise.reject();
+        }
+
         // Check if username is available
         return this._matrixClient.isUsernameAvailable(this.state.username).then(
             (isAvailable) => {
@@ -242,7 +252,7 @@ export default React.createClass({
         return (
             <BaseDialog className="mx_SetMxIdDialog"
                 onFinished={this.props.onFinished}
-                title="To get started, please pick a username!"
+                title={_t('To get started, please pick a username!')}
             >
                 <div className="mx_Dialog_content">
                     <div className="mx_SetMxIdDialog_input_group">

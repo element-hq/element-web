@@ -98,8 +98,10 @@
     "%(items)s and %(remaining)s others": "%(items)s และอีก %(remaining)s ผู้ใช้",
     "%(items)s and one other": "%(items)s และอีกหนึ่งผู้ใช้",
     "%(items)s and %(lastItem)s": "%(items)s และ %(lastItem)s",
-    "and %(overflowCount)s others...": "และอีก %(overflowCount)s ผู้ใช้...",
-    "and one other...": "และอีกหนึ่งผู้ใช้...",
+    "and %(count)s others...": {
+        "other": "และอีก %(count)s ผู้ใช้...",
+        "one": "และอีกหนึ่งผู้ใช้..."
+    },
     "%(names)s and %(lastPerson)s are typing": "%(names)s และ %(lastPerson)s กำลังพิมพ์",
     "%(names)s and one other are typing": "%(names)s และอีกหนึ่งคนกำลังพิมพ์",
     "%(names)s and %(count)s others are typing": "%(names)s และอีก %(count)s คนกำลังพิมพ์",
@@ -361,7 +363,6 @@
     "Unable to load device list": "ไม่สามารถโหลดรายชื่ออุปกรณ์",
     "Unencrypted room": "ห้องที่ไม่เข้ารหัส",
     "unencrypted": "ยังไม่ได้เข้ารหัส",
-    "Unknown command": "คำสั่งที่ไม่รู้จัก",
     "unknown device": "อุปกรณ์ที่ไม่รู้จัก",
     "Unknown room %(roomId)s": "ห้องที่ไม่รู้จัก %(roomId)s",
     "Unknown (user, device) pair:": "คู่ (ผู้ใช้, อุปกรณ์) ที่ไม่รู้จัก:",

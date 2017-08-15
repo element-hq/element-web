@@ -24,7 +24,7 @@ var Modal = require('../../../Modal');
 
 var sdk = require('../../../index');
 var TextForEvent = require('../../../TextForEvent');
-import WithMatrixClient from '../../../wrappers/WithMatrixClient';
+import withMatrixClient from '../../../wrappers/withMatrixClient';
 
 var ContextualMenu = require('../../structures/ContextualMenu');
 import dis from '../../../dispatcher';
@@ -59,7 +59,7 @@ var MAX_READ_AVATARS = 5;
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
-module.exports = WithMatrixClient(React.createClass({
+module.exports = withMatrixClient(React.createClass({
     displayName: 'EventTile',
 
     propTypes: {
@@ -155,7 +155,9 @@ module.exports = WithMatrixClient(React.createClass({
     },
 
     componentWillReceiveProps: function(nextProps) {
-        if (nextProps.mxEvent !== this.props.mxEvent) {
+        // re-check the sender verification as outgoing events progress through
+        // the send process.
+        if (nextProps.eventSendStatus !== this.props.eventSendStatus) {
             this._verifyEvent(nextProps.mxEvent);
         }
     },
@@ -193,13 +195,12 @@ module.exports = WithMatrixClient(React.createClass({
         }
     },
 
-    _verifyEvent: function(mxEvent) {
-        var verified = null;
-
-        if (mxEvent.isEncrypted()) {
-            verified = this.props.matrixClient.isEventSenderVerified(mxEvent);
+    _verifyEvent: async function(mxEvent) {
+        if (!mxEvent.isEncrypted()) {
+            return;
         }
 
+        const verified = await this.props.matrixClient.isEventSenderVerified(mxEvent);
         this.setState({
             verified: verified
         });
@@ -358,17 +359,17 @@ module.exports = WithMatrixClient(React.createClass({
     },
 
     onSenderProfileClick: function(event) {
-        var mxEvent = this.props.mxEvent;
+        const mxEvent = this.props.mxEvent;
         dis.dispatch({
-            action: 'insert_displayname',
-            displayname: (mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()).replace(' (IRC)', ''),
+            action: 'insert_mention',
+            user_id: mxEvent.getSender(),
         });
     },
 
     onCryptoClicked: function(e) {
         var event = this.props.mxEvent;
 
-        Modal.createDialogAsync((cb) => {
+        Modal.createTrackedDialogAsync('Encrypted Event Dialog', '', (cb) => {
             require(['../../../async-components/views/dialogs/EncryptedEventDialog'], cb);
         }, {
             event: event,
@@ -385,6 +386,36 @@ module.exports = WithMatrixClient(React.createClass({
             highlighted: true,
             room_id: this.props.mxEvent.getRoomId(),
         });
+    },
+
+    _renderE2EPadlock: function() {
+        const ev = this.props.mxEvent;
+        const props = {onClick: this.onCryptoClicked};
+
+
+        if (ev.getContent().msgtype === 'm.bad.encrypted') {
+            return <E2ePadlockUndecryptable {...props}/>;
+        } else if (ev.isEncrypted()) {
+            if (this.state.verified) {
+                return <E2ePadlockVerified {...props}/>;
+            } else {
+                return <E2ePadlockUnverified {...props}/>;
+            }
+        } else {
+            // XXX: if the event is being encrypted (ie eventSendStatus ===
+            // encrypting), it might be nice to show something other than the
+            // open padlock?
+
+            // if the event is not encrypted, but it's an e2e room, show the
+            // open padlock
+            const e2eEnabled = this.props.matrixClient.isRoomEncrypted(ev.getRoomId());
+            if (e2eEnabled) {
+                return <E2ePadlockUnencrypted {...props}/>;
+            }
+        }
+
+        // no padlock needed
+        return null;
     },
 
     render: function() {
@@ -408,7 +439,6 @@ module.exports = WithMatrixClient(React.createClass({
             throw new Error("Event type not supported");
         }
 
-        var e2eEnabled = this.props.matrixClient.isRoomEncrypted(this.props.mxEvent.getRoomId());
         var isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
         const isRedacted = (eventType === 'm.room.message') && this.props.isRedacted;
 
@@ -486,26 +516,7 @@ module.exports = WithMatrixClient(React.createClass({
         const editButton = (
             <span className="mx_EventTile_editButton" title={ _t("Options") } onClick={this.onEditClicked} />
         );
-        let e2e;
-        // cosmetic padlocks:
-        if ((e2eEnabled && this.props.eventSendStatus) || this.props.mxEvent.getType() === 'm.room.encryption') {
-            e2e = <img style={{ cursor: 'initial', marginLeft: '-1px' }} className="mx_EventTile_e2eIcon" alt={_t("Encrypted by a verified device")} src="img/e2e-verified.svg" width="10" height="12" />;
-        }
-        // real padlocks
-        else if (this.props.mxEvent.isEncrypted() || (e2eEnabled && this.props.eventSendStatus)) {
-            if (this.props.mxEvent.getContent().msgtype === 'm.bad.encrypted') {
-                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt={_t("Undecryptable")} src="img/e2e-blocked.svg" width="12" height="12" style={{ marginLeft: "-1px" }} />;
-            }
-            else if (this.state.verified == true || (e2eEnabled && this.props.eventSendStatus)) {
-                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt={_t("Encrypted by a verified device")} src="img/e2e-verified.svg" width="10" height="12"/>;
-            }
-            else {
-                e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt={_t("Encrypted by an unverified device")} src="img/e2e-warning.svg" width="15" height="12" style={{ marginLeft: "-2px" }}/>;
-            }
-        }
-        else if (e2eEnabled) {
-            e2e = <img onClick={ this.onCryptoClicked } className="mx_EventTile_e2eIcon" alt={_t("Unencrypted message")} src="img/e2e-unencrypted.svg" width="12" height="12"/>;
-        }
+
         const timestamp = this.props.mxEvent.getTs() ?
             <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
 
@@ -573,7 +584,7 @@ module.exports = WithMatrixClient(React.createClass({
                         <a href={ permalink } onClick={this.onPermalinkClicked}>
                             { timestamp }
                         </a>
-                        { e2e }
+                        { this._renderE2EPadlock() }
                         <EventTileType ref="tile"
                             mxEvent={this.props.mxEvent}
                             highlights={this.props.highlights}
@@ -598,3 +609,39 @@ module.exports.haveTileForEvent = function(e) {
         return true;
     }
 };
+
+function E2ePadlockUndecryptable(props) {
+    return (
+        <E2ePadlock alt={_t("Undecryptable")}
+            src="img/e2e-blocked.svg" width="12" height="12"
+            style={{ marginLeft: "-1px" }} {...props} />
+    );
+}
+
+function E2ePadlockVerified(props) {
+    return (
+        <E2ePadlock alt={_t("Encrypted by a verified device")}
+            src="img/e2e-verified.svg" width="10" height="12"
+            {...props} />
+    );
+}
+
+function E2ePadlockUnverified(props) {
+    return (
+        <E2ePadlock alt={_t("Encrypted by an unverified device")}
+            src="img/e2e-warning.svg" width="15" height="12"
+            style={{ marginLeft: "-2px" }} {...props} />
+    );
+}
+
+function E2ePadlockUnencrypted(props) {
+    return (
+        <E2ePadlock alt={_t("Unencrypted message")}
+            src="img/e2e-unencrypted.svg" width="12" height="12"
+            {...props} />
+    );
+}
+
+function E2ePadlock(props) {
+    return <img className="mx_EventTile_e2eIcon" {...props} />;
+}

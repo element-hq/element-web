@@ -18,9 +18,10 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import Fuse from 'fuse.js';
+import FuzzyMatcher from './FuzzyMatcher';
 import {TextualCompletion} from './Components';
 
+// TODO merge this with the factory mechanics of SlashCommands?
 // Warning: Since the description string will be translated in _t(result.description), all these strings below must be in i18n/strings/en_EN.json file
 const COMMANDS = [
     {
@@ -32,6 +33,16 @@ const COMMANDS = [
         command: '/ban',
         args: '<user-id> [reason]',
         description: 'Bans user with given id',
+    },
+    {
+        command: '/unban',
+        args: '<user-id>',
+        description: 'Unbans user with given id',
+    },
+    {
+        command: '/op',
+        args: '<user-id> [<power-level>]',
+        description: 'Define the power level of a user',
     },
     {
         command: '/deop',
@@ -49,6 +60,16 @@ const COMMANDS = [
         description: 'Joins room with given alias',
     },
     {
+        command: '/part',
+        args: '[<room-alias>]',
+        description: 'Leave room',
+    },
+    {
+        command: '/topic',
+        args: '<topic>',
+        description: 'Sets the room topic',
+    },
+    {
         command: '/kick',
         args: '<user-id> [reason]',
         description: 'Kicks user with given id',
@@ -63,6 +84,17 @@ const COMMANDS = [
         args: '<query>',
         description: 'Searches DuckDuckGo for results',
     },
+    {
+        command: '/tint',
+        args: '<color1> [<color2>]',
+        description: 'Changes colour scheme of current room',
+    },
+    {
+        command: '/verify',
+        args: '<user-id> <device-id> <device-signing-key>',
+        description: 'Verifies a user, device, and pubkey tuple',
+    },
+    // Omitting `/markdown` as it only seems to apply to OldComposer
 ];
 
 const COMMAND_RE = /(^\/\w*)/g;
@@ -72,7 +104,7 @@ let instance = null;
 export default class CommandProvider extends AutocompleteProvider {
     constructor() {
         super(COMMAND_RE);
-        this.fuse = new Fuse(COMMANDS, {
+        this.matcher = new FuzzyMatcher(COMMANDS, {
            keys: ['command', 'args', 'description'],
         });
     }
@@ -81,7 +113,7 @@ export default class CommandProvider extends AutocompleteProvider {
         let completions = [];
         const {command, range} = this.getCurrentCommand(query, selection);
         if (command) {
-            completions = this.fuse.search(command[0]).map((result) => {
+            completions = this.matcher.match(command[0]).map((result) => {
                 return {
                     completion: result.command + ' ',
                     component: (<TextualCompletion

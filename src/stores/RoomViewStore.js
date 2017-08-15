@@ -141,6 +141,10 @@ class RoomViewStore extends Store {
                 shouldPeek: payload.should_peek === undefined ? true : payload.should_peek,
             };
 
+            if (payload.joined) {
+                newState.joining = false;
+            }
+
             // If an event ID wasn't specified, default to the one saved for this room
             // via update_scroll_state. Assume initialEventPixelOffset should be set.
             if (!newState.initialEventId) {
@@ -217,7 +221,7 @@ class RoomViewStore extends Store {
             });
             const msg = err.message ? err.message : JSON.stringify(err);
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to join room', '', ErrorDialog, {
                 title: _t("Failed to join room"),
                 description: msg,
             });

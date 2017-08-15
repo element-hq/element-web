@@ -68,7 +68,7 @@ const commands = {
     ddg: new Command("ddg", "<query>", function(roomId, args) {
         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
         // TODO Don't explain this away, actually show a search UI here.
-        Modal.createDialog(ErrorDialog, {
+        Modal.createTrackedDialog('Slash Commands', '/ddg is not a command', ErrorDialog, {
             title: _t('/ddg is not a command'),
             description: _t('To use it, just wait for autocomplete results to load and tab through them.'),
         });
@@ -186,7 +186,7 @@ const commands = {
                     if (targetRoomId) { break; }
                 }
                 if (!targetRoomId) {
-                    return reject(_t("Unrecognised room alias:") +  ' ' + roomAlias);
+                    return reject(_t("Unrecognised room alias:") + ' ' + roomAlias);
                 }
             }
         }
@@ -301,52 +301,52 @@ const commands = {
                 const deviceId = matches[2];
                 const fingerprint = matches[3];
 
-                const device = MatrixClientPeg.get().getStoredDevice(userId, deviceId);
-                if (!device) {
-                    return reject(_t(`Unknown (user, device) pair:`) + ` (${userId}, ${deviceId})`);
-                }
+                return success(
+                    // Promise.resolve to handle transition from static result to promise; can be removed
+                    // in future
+                    Promise.resolve(MatrixClientPeg.get().getStoredDevice(userId, deviceId)).then((device) => {
+                        if (!device) {
+                            throw new Error(_t(`Unknown (user, device) pair:`) + ` (${userId}, ${deviceId})`);
+                        }
 
-                if (device.isVerified()) {
-                    if (device.getFingerprint() === fingerprint) {
-                        return reject(_t(`Device already verified!`));
-                    } else {
-                        return reject(_t(`WARNING: Device already verified, but keys do NOT MATCH!`));
-                    }
-                }
+                        if (device.isVerified()) {
+                            if (device.getFingerprint() === fingerprint) {
+                                throw new Error(_t(`Device already verified!`));
+                            } else {
+                                throw new Error(_t(`WARNING: Device already verified, but keys do NOT MATCH!`));
+                            }
+                        }
 
-                if (device.getFingerprint() === fingerprint) {
-                    MatrixClientPeg.get().setDeviceVerified(
-                        userId, deviceId, true,
-                    );
+                        if (device.getFingerprint() !== fingerprint) {
+                            const fprint = device.getFingerprint();
+                            throw new Error(
+                                _t('WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and device' +
+                                   ' %(deviceId)s is "%(fprint)s" which does not match the provided key' +
+                                   ' "%(fingerprint)s". This could mean your communications are being intercepted!',
+                                   {deviceId: deviceId, fprint: fprint, userId: userId, fingerprint: fingerprint}));
+                        }
 
-                    // Tell the user we verified everything!
-                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                    Modal.createDialog(QuestionDialog, {
-                        title: _t("Verified key"),
-                        description: (
-                            <div>
-                                <p>
-                                {
-                                    _t("The signing key you provided matches the signing key you received " +
-                                    "from %(userId)s's device %(deviceId)s. Device marked as verified.",
-                                    {userId: userId, deviceId: deviceId})
-                                }
-                                </p>
-                            </div>
-                        ),
-                        hasCancelButton: false,
-                    });
-
-                    return success();
-                } else {
-                    const fprint = device.getFingerprint();
-                    return reject(
-                        _t('WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and device' +
-                           ' %(deviceId)s is "%(fprint)s" which does not match the provided key' +
-                           ' "%(fingerprint)s". This could mean your communications are being intercepted!',
-                            {deviceId: deviceId, fprint: fprint, userId: userId, fingerprint: fingerprint})
-                    );
-                }
+                        return MatrixClientPeg.get().setDeviceVerified(userId, deviceId, true);
+                    }).then(() => {
+                        // Tell the user we verified everything
+                        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                        Modal.createTrackedDialog('Slash Commands', 'Verified key', QuestionDialog, {
+                            title: _t("Verified key"),
+                            description: (
+                                <div>
+                                  <p>
+                                    {
+                                        _t("The signing key you provided matches the signing key you received " +
+                                           "from %(userId)s's device %(deviceId)s. Device marked as verified.",
+                                           {userId: userId, deviceId: deviceId})
+                                    }
+                                  </p>
+                                </div>
+                            ),
+                            hasCancelButton: false,
+                        });
+                    }),
+                );
             }
         }
         return reject(this.getUsage());

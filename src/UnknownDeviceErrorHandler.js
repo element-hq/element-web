@@ -24,7 +24,7 @@ const onAction = function(payload) {
     if (payload.action === 'unknown_device_error' && !isDialogOpen) {
         const UnknownDeviceDialog = sdk.getComponent('dialogs.UnknownDeviceDialog');
         isDialogOpen = true;
-        Modal.createDialog(UnknownDeviceDialog, {
+        Modal.createTrackedDialog('Unknown Device Error', '', UnknownDeviceDialog, {
             devices: payload.err.devices,
             room: payload.room,
             onFinished: (r) => {

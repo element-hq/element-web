@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var q = require("q");
+import Promise from 'bluebird';
 var React = require('react');
 
 var sdk = require('../../../index');
@@ -72,7 +72,7 @@ module.exports = React.createClass({
 
     saveSettings: function() { // : Promise
         if (!this.state.hasChanged) {
-            return q(); // They didn't explicitly give a color to save.
+            return Promise.resolve(); // They didn't explicitly give a color to save.
         }
         var originalState = this.getInitialState();
         if (originalState.primary_color !== this.state.primary_color ||
@@ -92,7 +92,7 @@ module.exports = React.createClass({
                 }
             });
         }
-        return q(); // no color diff
+        return Promise.resolve(); // no color diff
     },
 
     _getColorIndex: function(scheme) {

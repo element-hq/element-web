@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var q = require("q");
+import Promise from 'bluebird';
 var request = require('browser-request');
 
 var SdkConfig = require('./SdkConfig');
@@ -39,7 +39,7 @@ class ScalarAuthClient {
     // Returns a scalar_token string
     getScalarToken() {
         var tok = window.localStorage.getItem("mx_scalar_token");
-        if (tok) return q(tok);
+        if (tok) return Promise.resolve(tok);
 
         // No saved token, so do the dance to get one. First, we
         // need an openid bearer token from the HS.
@@ -53,7 +53,7 @@ class ScalarAuthClient {
     }
 
     exchangeForScalarToken(openid_token_object) {
-        var defer = q.defer();
+        var defer = Promise.defer();
 
         var scalar_rest_url = SdkConfig.get().integrations_rest_url;
         request({
@@ -76,10 +76,13 @@ class ScalarAuthClient {
         return defer.promise;
     }
 
-    getScalarInterfaceUrlForRoom(roomId) {
+    getScalarInterfaceUrlForRoom(roomId, screen) {
         var url = SdkConfig.get().integrations_ui_url;
         url += "?scalar_token=" + encodeURIComponent(this.scalarToken);
         url += "&room_id=" + encodeURIComponent(roomId);
+        if (screen) {
+            url += '&screen=' + encodeURIComponent(screen);
+        }
         return url;
     }
 
@@ -89,4 +92,3 @@ class ScalarAuthClient {
 }
 
 module.exports = ScalarAuthClient;
-

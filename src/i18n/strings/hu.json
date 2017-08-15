@@ -190,8 +190,10 @@
     "%(items)s and %(remaining)s others": "%(items)s és még: %(remaining)s",
     "%(items)s and one other": "%(items)s és még egy",
     "%(items)s and %(lastItem)s": "%(items)s és %(lastItem)s",
-    "and %(overflowCount)s others...": "és még: %(overflowCount)s ...",
-    "and one other...": "és még egy...",
+    "and %(count)s others...": {
+        "other": "és még: %(count)s ...",
+        "one": "és még egy..."
+    },
     "%(names)s and %(lastPerson)s are typing": "%(names)s és %(lastPerson)s írnak",
     "%(names)s and one other are typing": "%(names)s és még valaki ír",
     "%(names)s and %(count)s others are typing": "%(names)s és %(count)s ember ír",
@@ -602,7 +604,6 @@
     "unencrypted": "titkosítatlan",
     "Unencrypted message": "Titkosítatlan üzenet",
     "unknown caller": "ismeretlen hívó",
-    "Unknown command": "Ismeretlen parancs",
     "unknown device": "ismeretlen eszköz",
     "Unknown room %(roomId)s": "Ismeretlen szoba %(roomId)s",
     "Unknown (user, device) pair:": "Ismeretlen (felhasználó, eszköz) pár:",

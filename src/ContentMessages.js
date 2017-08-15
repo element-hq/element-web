@@ -16,7 +16,7 @@ limitations under the License.
 
 'use strict';
 
-var q = require('q');
+import Promise from 'bluebird';
 var extend = require('./extend');
 var dis = require('./dispatcher');
 var MatrixClientPeg = require('./MatrixClientPeg');
@@ -52,7 +52,7 @@ const MAX_HEIGHT = 600;
  *  and a thumbnail key.
  */
 function createThumbnail(element, inputWidth, inputHeight, mimeType) {
-    const deferred = q.defer();
+    const deferred = Promise.defer();
 
     var targetWidth = inputWidth;
     var targetHeight = inputHeight;
@@ -95,7 +95,7 @@ function createThumbnail(element, inputWidth, inputHeight, mimeType) {
  * @return {Promise} A promise that resolves with the html image element.
  */
 function loadImageElement(imageFile) {
-    const deferred = q.defer();
+    const deferred = Promise.defer();
 
     // Load the file into an html element
     const img = document.createElement("img");
@@ -154,7 +154,7 @@ function infoForImageFile(matrixClient, roomId, imageFile) {
  * @return {Promise} A promise that resolves with the video image element.
  */
 function loadVideoElement(videoFile) {
-    const deferred = q.defer();
+    const deferred = Promise.defer();
 
     // Load the file into an html element
     const video = document.createElement("video");
@@ -210,7 +210,7 @@ function infoForVideoFile(matrixClient, roomId, videoFile) {
  *   is read.
  */
 function readFileAsArrayBuffer(file) {
-    const deferred = q.defer();
+    const deferred = Promise.defer();
     const reader = new FileReader();
     reader.onload = function(e) {
         deferred.resolve(e.target.result);
@@ -229,11 +229,13 @@ function readFileAsArrayBuffer(file) {
  * @param {MatrixClient} matrixClient The matrix client to upload the file with.
  * @param {String} roomId The ID of the room being uploaded to.
  * @param {File} file The file to upload.
+ * @param {Function?} progressHandler optional callback to be called when a chunk of
+ *    data is uploaded.
  * @return {Promise} A promise that resolves with an object.
  *  If the file is unencrypted then the object will have a "url" key.
  *  If the file is encrypted then the object will have a "file" key.
  */
-function uploadFile(matrixClient, roomId, file) {
+function uploadFile(matrixClient, roomId, file, progressHandler) {
     if (matrixClient.isRoomEncrypted(roomId)) {
         // If the room is encrypted then encrypt the file before uploading it.
         // First read the file into memory.
@@ -245,7 +247,9 @@ function uploadFile(matrixClient, roomId, file) {
             const encryptInfo = encryptResult.info;
             // Pass the encrypted data as a Blob to the uploader.
             const blob = new Blob([encryptResult.data]);
-            return matrixClient.uploadContent(blob).then(function(url) {
+            return matrixClient.uploadContent(blob, {
+                progressHandler: progressHandler,
+            }).then(function(url) {
                 // If the attachment is encrypted then bundle the URL along
                 // with the information needed to decrypt the attachment and
                 // add it under a file key.
@@ -257,7 +261,9 @@ function uploadFile(matrixClient, roomId, file) {
             });
         });
     } else {
-        const basePromise = matrixClient.uploadContent(file);
+        const basePromise = matrixClient.uploadContent(file, {
+            progressHandler: progressHandler,
+        });
         const promise1 = basePromise.then(function(url) {
             // If the attachment isn't encrypted then include the URL directly.
             return {"url": url};
@@ -288,7 +294,7 @@ class ContentMessages {
             content.info.mimetype = file.type;
         }
 
-        const def = q.defer();
+        const def = Promise.defer();
         if (file.type.indexOf('image/') == 0) {
             content.msgtype = 'm.image';
             infoForImageFile(matrixClient, roomId, file).then(imageInfo=>{
@@ -326,23 +332,24 @@ class ContentMessages {
         dis.dispatch({action: 'upload_started'});
 
         var error;
+
+        function onProgress(ev) {
+            upload.total = ev.total;
+            upload.loaded = ev.loaded;
+            dis.dispatch({action: 'upload_progress', upload: upload});
+        }
+
         return def.promise.then(function() {
             // XXX: upload.promise must be the promise that
             // is returned by uploadFile as it has an abort()
             // method hacked onto it.
             upload.promise = uploadFile(
-                matrixClient, roomId, file
+                matrixClient, roomId, file, onProgress,
             );
             return upload.promise.then(function(result) {
                 content.file = result.file;
                 content.url = result.url;
             });
-        }).progress(function(ev) {
-            if (ev) {
-                upload.total = ev.total;
-                upload.loaded = ev.loaded;
-                dis.dispatch({action: 'upload_progress', upload: upload});
-            }
         }).then(function(url) {
             return matrixClient.sendMessage(roomId, content);
         }, function(err) {
@@ -353,7 +360,7 @@ class ContentMessages {
                     desc = _t('The file \'%(fileName)s\' exceeds this home server\'s size limit for uploads', {fileName: upload.fileName});
                 }
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Upload failed', '', ErrorDialog, {
                     title: _t('Upload Failed'),
                     description: desc,
                 });

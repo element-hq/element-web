@@ -64,7 +64,7 @@ module.exports = React.createClass({
                     });
                     //console.log("translation: "+oldNode.style.left+" -> "+c.props.style.left);
                 }
-                if (oldNode.style.visibility == 'hidden' && c.props.style.visibility == 'visible') {
+                if (oldNode && oldNode.style.visibility == 'hidden' && c.props.style.visibility == 'visible') {
                     oldNode.style.visibility = c.props.style.visibility;
                 }
                 self.children[c.key] = old;

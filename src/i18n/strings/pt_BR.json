@@ -557,8 +557,10 @@
     "%(items)s and %(remaining)s others": "%(items)s e %(remaining)s outros",
     "%(items)s and one other": "%(items)s e um outro",
     "%(items)s and %(lastItem)s": "%(items)s e %(lastItem)s",
-    "and %(overflowCount)s others...": "e %(overflowCount)s outros...",
-    "and one other...": "e um outro...",
+    "and %(count)s others...": {
+        "other": "e %(count)s outros...",
+        "one": "e um outro..."
+    },
     "Are you sure?": "Você tem certeza?",
     "Attachment": "Anexo",
     "Autoplay GIFs and videos": "Reproduzir automaticamente GIFs e videos",
@@ -638,7 +640,6 @@
     "Turn Markdown off": "Desabilitar a formatação 'Markdown'",
     "Turn Markdown on": "Habilitar a marcação 'Markdown'",
     "Unable to load device list": "Não foi possível carregar a lista de dispositivos",
-    "Unknown command": "Comando desconhecido",
     "Unknown room %(roomId)s": "A sala %(roomId)s é desconhecida",
     "You have been invited to join this room by %(inviterName)s": "Você foi convidada/o por %(inviterName)s a ingressar nesta sala",
     "You seem to be in a call, are you sure you want to quit?": "Parece que você está em uma chamada. Tem certeza que quer sair?",
