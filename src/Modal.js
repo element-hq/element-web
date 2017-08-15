@@ -112,8 +112,8 @@ class ModalManager {
         return this.createDialogAsync((cb) => {cb(Element);}, props, className);
     }
 
-    createTrackedDialogAsync(analyticsId, loader, props, className) {
-        Analytics.trackEvent('Modal', analyticsId);
+    createTrackedDialogAsync(analyticsAction, analyticsInfo, loader, props, className) {
+        Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
         return this.createDialogAsync(loader, props, className);
     }
 
