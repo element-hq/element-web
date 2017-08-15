@@ -40,7 +40,7 @@ export default class UserProvider extends AutocompleteProvider {
             keys: ['name'],
         });
         this.matcher = new FuzzyMatcher([], {
-            keys: ['name'],
+            keys: ['name', 'userId'],
             shouldMatchPrefix: true,
         });
     }
