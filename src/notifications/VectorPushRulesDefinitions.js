@@ -61,7 +61,7 @@ class VectorPushRuleDefinition {
 /**
  * The descriptions of rules managed by the Vector UI.
  */
-module.exports = {
+export default {
     // Messages containing user's display name
     ".m.rule.contains_display_name": new VectorPushRuleDefinition({
         kind: "override",

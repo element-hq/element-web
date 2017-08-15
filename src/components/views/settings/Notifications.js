@@ -61,7 +61,7 @@ function portLegacyActions(actions) {
     }
 }
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'Notififications',
 
     phases: {

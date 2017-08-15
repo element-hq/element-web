@@ -36,7 +36,7 @@ import {instanceForInstanceId, protocolNameForInstanceId} from '../../utils/Dire
 
 linkifyMatrix(linkify);
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'RoomDirectory',
 
     propTypes: {

@@ -24,7 +24,7 @@ import dis from 'matrix-react-sdk/lib/dispatcher';
 import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'SearchBox',
 
     propTypes: {

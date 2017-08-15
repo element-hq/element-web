@@ -23,7 +23,7 @@ var dis = require('matrix-react-sdk/lib/dispatcher');
 var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'LoginBox',
 
     propTypes: {

@@ -20,7 +20,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'RoomTooltip',
 
     propTypes: {

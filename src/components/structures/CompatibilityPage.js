@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 import { _t, _tJsx } from 'matrix-react-sdk/lib/languageHandler';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'CompatibilityPage',
     propTypes: {
         onAccept: React.PropTypes.func

@@ -26,7 +26,7 @@ const Modal = require('matrix-react-sdk/lib/Modal');
 const Resend = require("matrix-react-sdk/lib/Resend");
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'MessageContextMenu',
 
     propTypes: {

@@ -23,7 +23,7 @@ var classNames = require('classnames');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 import { _t } from "matrix-react-sdk/lib/languageHandler";
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'SearchBar',
 
     getInitialState: function() {

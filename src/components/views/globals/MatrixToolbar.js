@@ -21,7 +21,7 @@ import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import Notifier from 'matrix-react-sdk/lib/Notifier';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'MatrixToolbar',
 
     hideToolbar: function() {

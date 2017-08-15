@@ -23,7 +23,7 @@ import request from 'browser-request';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import sanitizeHtml from 'sanitize-html';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'HomePage',
 
     propTypes: {

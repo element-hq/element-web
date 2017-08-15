@@ -19,7 +19,7 @@ limitations under the License.
 var React = require('react');
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'VectorLoginFooter',
     statics: {
         replaces: 'LoginFooter',
