@@ -20,14 +20,10 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import { getAddressType } from '../../../Invite';
-import createRoom from '../../../createRoom';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import DMRoomMap from '../../../utils/DMRoomMap';
-import Modal from '../../../Modal';
 import AccessibleButton from '../elements/AccessibleButton';
 import Promise from 'bluebird';
-import dis from '../../../dispatcher';
-import { addressTypes, InviteAddressType } from '../../../Invite.js';
+import { addressTypes } from '../../../Invite.js';
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -330,7 +326,7 @@ module.exports = React.createClass({
         // not like they leak.
         this._cancelThreepidLookup = function() {
             cancelled = true;
-        }
+        };
 
         // wait a bit to let the user finish typing
         return Promise.delay(500).then(() => {
@@ -362,13 +358,13 @@ module.exports = React.createClass({
         const AddressSelector = sdk.getComponent("elements.AddressSelector");
         this.scrollElement = null;
 
-        let query = [];
+        const query = [];
         // create the invite list
         if (this.state.inviteList.length > 0) {
             const AddressTile = sdk.getComponent("elements.AddressTile");
             for (let i = 0; i < this.state.inviteList.length; i++) {
                 query.push(
-                    <AddressTile key={i} address={this.state.inviteList[i]} canDismiss={true} onDismissed={ this.onDismissed(i) } />
+                    <AddressTile key={i} address={this.state.inviteList[i]} canDismiss={true} onDismissed={ this.onDismissed(i) } />,
                 );
             }
         }
@@ -390,7 +386,9 @@ module.exports = React.createClass({
         let error;
         let addressSelector;
         if (this.state.error) {
-            error = <div className="mx_ChatInviteDialog_error">{_t("You have entered an invalid contact. Try using their Matrix ID or email address.")}</div>;
+            error = <div className="mx_ChatInviteDialog_error">
+                {_t("You have entered an invalid contact. Try using their Matrix ID or email address.")}
+            </div>;
         } else if (this.state.searchError) {
             error = <div className="mx_ChatInviteDialog_error">{this.state.searchError}</div>;
         } else if (
@@ -433,5 +431,5 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
-    }
+    },
 });
