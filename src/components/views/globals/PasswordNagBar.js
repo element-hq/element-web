@@ -25,7 +25,7 @@ import { _t, _tJsx } from 'matrix-react-sdk/lib/languageHandler';
 export default React.createClass({
     onUpdateClicked: function() {
         const SetPasswordDialog = sdk.getComponent('dialogs.SetPasswordDialog');
-        Modal.createDialog(SetPasswordDialog, {
+        Modal.createTrackedDialog('Set Password Dialog', 'Password Nag Bar', SetPasswordDialog, {
             onFinished: (passwordChanged) => {
                 if (!passwordChanged) {
                     return;

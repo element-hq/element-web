@@ -30,7 +30,8 @@ module.exports = React.createClass({
     displayName: 'RightPanel',
 
     propTypes: {
-        userId: React.PropTypes.string, // if showing an orphaned MemberInfo page, this is set
+        // TODO: We're trying to move away from these being props, but we need to know
+        // whether we should be displaying a room or group member list
         roomId: React.PropTypes.string, // if showing panels for a given room, this is set
         groupId: React.PropTypes.string, // if showing panels for a given group, this is set
         collapsed: React.PropTypes.bool, // currently unused property to request for a minimized view of the panel
@@ -58,24 +59,14 @@ module.exports = React.createClass({
         }
     },
 
-    componentWillReceiveProps: function(newprops) {
-        this.setState(this.getInitialState());
-    },
-
     getInitialState: function() {
-        if (this.props.userId) {
-            const member = new Matrix.RoomMember(null, this.props.userId);
+        if (this.props.groupId) {
             return {
-                phase: this.Phase.RoomMemberInfo,
-                member: member,
-            };
-        } else if (this.props.groupId) {
-            return {
-                phase: this.Phase.GroupMemberList
+                phase: this.Phase.GroupMemberList,
             };
         } else {
             return {
-                phase: this.Phase.RoomMemberList
+                phase: this.Phase.RoomMemberList,
             };
         }
     },
@@ -153,6 +144,12 @@ module.exports = React.createClass({
                     });
                 }
             }
+        } else if (payload.action === "view_group") {
+            this.setState({
+                phase: this.Phase.GroupMemberList,
+                groupId: payload.groupId,
+                member: null,
+            });
         } else if (payload.action === "view_group_user") {
             this.setState({
                 phase: this.Phase.GroupMemberInfo,
@@ -160,11 +157,9 @@ module.exports = React.createClass({
                 member: payload.member,
             });
         } else if (payload.action === "view_room") {
-            if (this.state.phase === this.Phase.RoomMemberInfo) {
-                this.setState({
-                    phase: this.Phase.RoomMemberList
-                });
-            }
+            this.setState({
+                phase: this.Phase.RoomMemberList
+            });
         }
     },
 
@@ -253,7 +248,7 @@ module.exports = React.createClass({
                 panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />
             } else if (this.state.phase == this.Phase.RoomMemberInfo) {
                 const MemberInfo = sdk.getComponent('rooms.MemberInfo');
-                panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.props.userId} />
+                panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />
             } else if (this.state.phase == this.Phase.GroupMemberInfo) {
                 const GroupMemberInfo = sdk.getComponent('groups.GroupMemberInfo');
                 panel = <GroupMemberInfo member={this.state.member} groupId={this.props.groupId} key={this.state.member.user_id} />
