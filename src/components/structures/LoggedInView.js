@@ -306,8 +306,9 @@ export default React.createClass({
             case PageTypes.GroupView:
                 page_element = <GroupView
                     groupId={this.props.currentGroupId}
+                    collapsedRhs={this.props.collapse_rhs}
                 />;
-                right_panel = <RightPanel groupId={this.props.currentGroupId} opacity={this.props.rightOpacity} />;
+                if (!this.props.collapse_rhs) right_panel = <RightPanel groupId={this.props.currentGroupId} opacity={this.props.rightOpacity} />;
                 break;
         }
 

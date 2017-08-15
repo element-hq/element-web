@@ -216,6 +216,10 @@ export default React.createClass({
         });
     },
 
+    _onShowRhsClick: function(ev) {
+        dis.dispatch({ action: 'show_right_panel' });
+    },
+
     _onEditClick: function() {
         this.setState({
             editing: true,
@@ -384,8 +388,8 @@ export default React.createClass({
             let avatarNode;
             let nameNode;
             let shortDescNode;
-            let rightButtons;
             let roomBody;
+            let rightButtons = [];
             const headerClasses = {
                 mx_GroupView_header: true,
             };
@@ -428,15 +432,19 @@ export default React.createClass({
                     placeholder={_t('Description')}
                     tabIndex="2"
                 />;
-                rightButtons = <span>
-                    <AccessibleButton className="mx_GroupView_saveButton mx_RoomHeader_textButton" onClick={this._onSaveClick}>
+                rightButtons.push(
+                    <AccessibleButton className="mx_GroupView_saveButton mx_RoomHeader_textButton"
+                        onClick={this._onSaveClick} key="_saveButton"
+                    >
                         {_t('Save')}
                     </AccessibleButton>
-                    <AccessibleButton className='mx_GroupView_cancelButton' onClick={this._onCancelClick}>
+                );
+                rightButtons.push(
+                    <AccessibleButton className='mx_GroupView_cancelButton' onClick={this._onCancelClick} key="_cancelButton">
                         <img src="img/cancel.svg" className='mx_filterFlipColor'
                             width="18" height="18" alt={_t("Cancel")}/>
                     </AccessibleButton>
-                </span>;
+                );
                 roomBody = <div>
                     <textarea className="mx_GroupView_editLongDesc" value={this.state.profileForm.long_description}
                         onChange={this._onLongDescChange}
@@ -471,12 +479,22 @@ export default React.createClass({
                     {this._getFeaturedRoomsNode()}
                     {this._getFeaturedUsersNode()}
                 </div>;
-                // disabled until editing works
-                rightButtons = <AccessibleButton className="mx_GroupHeader_button"
-                    onClick={this._onEditClick} title={_t("Edit Group")}
-                >
-                    <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
-                </AccessibleButton>;
+                rightButtons.push(
+                    <AccessibleButton className="mx_GroupHeader_button"
+                        onClick={this._onEditClick} title={_t("Edit Group")} key="_editButton"
+                    >
+                        <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
+                    </AccessibleButton>
+                );
+                if (this.props.collapsedRhs) {
+                    rightButtons.push(
+                        <AccessibleButton className="mx_GroupHeader_button"
+                            onClick={this._onShowRhsClick} title={ _t('Show panel') } key="_maximiseButton"
+                        >
+                            <TintableSvg src="img/maximise.svg" width="10" height="16"/>
+                        </AccessibleButton>
+                    );
+                }
 
                 headerClasses.mx_GroupView_header_view = true;
             }
