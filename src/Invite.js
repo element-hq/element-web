@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import PropTypes from 'prop-types';
 import MatrixClientPeg from './MatrixClientPeg';
 import MultiInviter from './utils/MultiInviter';
 import Modal from "./Modal";
@@ -30,20 +31,20 @@ export const addressTypes = [
     'mx', 'email',
 ];
 
-// React PropType definition for an object describing
+// PropType definition for an object describing
 // an address that can be invited to a room (which
 // could be a third party identifier or a matrix ID)
 // along with some additional information about the
 // address / target.
-export const InviteAddressType = React.PropTypes.shape({
-    addressType: React.PropTypes.oneOf(addressTypes).isRequired,
-    address: React.PropTypes.string.isRequired,
-    displayName: React.PropTypes.string,
-    avatarMxc: React.PropTypes.string,
+export const InviteAddressType = PropTypes.shape({
+    addressType: PropTypes.oneOf(addressTypes).isRequired,
+    address: PropTypes.string.isRequired,
+    displayName: PropTypes.string,
+    avatarMxc: PropTypes.string,
     // true if the address is known to be a valid address (eg. is a real
     // user we've seen) or false otherwise (eg. is just an address the
     // user has entered)
-    isKnown: React.PropTypes.bool,
+    isKnown: PropTypes.bool,
 });
 
 export function getAddressType(inputText) {
