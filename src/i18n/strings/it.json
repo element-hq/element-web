@@ -143,7 +143,7 @@
     "You cannot delete this image. (%(code)s)": "Non puoi eliminare quest'immagine. (%(code)s)",
     "You cannot delete this message. (%(code)s)": "Non puoi eliminare questo messaggio. (%(code)s)",
     "You are not receiving desktop notifications": "Non stai ricevendo le notifiche sul desktop",
-    "You are Rioting as a guest. <a>Register</a> or <a>sign in</a> to access more rooms and features!": "Stai usando Riot come ospite.<a>Registrati</a>o<a>accedi</a>per ottenere più stanze e funzionalità!",
+    "You are Rioting as a guest. <a>Register</a> or <a>sign in</a> to access more rooms and features!": "Stai usando Riot come ospite.<a>Registrati</a> o <a>accedi</a> per ottenere più stanze e funzionalità!",
     "World readable": "Leggibile da tutti",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Potresti averli configurati in un client diverso da Riot. Non puoi cambiarli in Riot ma sono comunque applicati",
     "Sunday": "Domenica",
