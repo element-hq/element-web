@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,38 +15,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import classNames from 'classnames';
 import sdk from "../../../index";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
-
-// React PropType definition for an object describing
-// an address that can be invited to a room (which
-// could be a third party identifier or a matrix ID)
-// along with some additional information about the
-// address / target.
-export const InviteAddressType = React.PropTypes.shape({
-    addressType: React.PropTypes.oneOf([
-        'mx', 'email'
-    ]).isRequired,
-    address: React.PropTypes.string.isRequired,
-    displayName: React.PropTypes.string,
-    avatarMxc: React.PropTypes.string,
-    // true if the address is known to be a valid address (eg. is a real
-    // user we've seen) or false otherwise (eg. is just an address the
-    // user has entered)
-    isKnown: React.PropTypes.bool,
-});
+import { UserAddressType } from '../../../UserAddress.js';
 
 
 export default React.createClass({
     displayName: 'AddressTile',
 
     propTypes: {
-        address: InviteAddressType.isRequired,
+        address: UserAddressType.isRequired,
         canDismiss: React.PropTypes.bool,
         onDismissed: React.PropTypes.func,
         justified: React.PropTypes.bool,
