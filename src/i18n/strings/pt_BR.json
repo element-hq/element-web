@@ -203,5 +203,11 @@
     "You have successfully set a password and an email address!": "Você definiu uma senha e um endereço de e-mail com sucesso!",
     "Remember, you can always set an email address in user settings if you change your mind.": "Lembre-se: você pode sempre definir um endereço de e-mail nas configurações de usuário, se mudar de ideia.",
     "To return to your account in future you need to <u>set a password</u>": "Para poder, futuramente, retornar à sua conta, você precisa <u>definir uma senha</u>",
-    "Set Password": "Definir senha"
+    "Set Password": "Definir senha",
+    "Warning": "Atenção",
+    "Checking for an update...": "Verificando se há atualizações...",
+    "Error encountered (%(errorDetail)s).": "Erro encontrado (%(errorDetail)s).",
+    "No update available.": "Não há atualizações disponíveis.",
+    "Downloading update...": "Baixando atualização...",
+    "Couldn't load home page": "Não foi possível carregar a página inicial"
 }
