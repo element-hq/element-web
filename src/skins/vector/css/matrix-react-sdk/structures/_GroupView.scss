@@ -70,6 +70,10 @@ limitations under the License.
     flex: 1;
 }
 
+.mx_GroupView_header_rightCol {
+    display: flex;
+}
+
 .mx_GroupView_saveButton, .mx_GroupView_cancelButton {
     display: table-cell;
 }

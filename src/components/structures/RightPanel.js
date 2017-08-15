@@ -98,11 +98,15 @@ module.exports = React.createClass({
             return;
         }
 
-        // call ChatInviteDialog
-        dis.dispatch({
-            action: 'view_invite',
-            roomId: this.props.roomId,
-        });
+        if (this.state.phase === this.Phase.GroupMemberList) {
+            // TODO: display UserPickeDialog
+        } else {
+            // call UserPickerDialog
+            dis.dispatch({
+                action: 'view_invite',
+                roomId: this.props.roomId,
+            });
+        }
     },
 
     onRoomStateMember: function(ev, state, member) {
@@ -169,7 +173,6 @@ module.exports = React.createClass({
         const NotificationPanel = sdk.getComponent('structures.NotificationPanel');
         const FilePanel = sdk.getComponent('structures.FilePanel');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
-        let buttonGroup;
         let inviteGroup;
         let panel;
 
@@ -212,50 +215,72 @@ module.exports = React.createClass({
 
         }
 
+        let headerButtons = [];
         if (this.props.roomId) {
-            buttonGroup =
-                    <div className="mx_RightPanel_headerButtonGroup">
-                        <AccessibleButton className="mx_RightPanel_headerButton"
-                                title={ _t('Members') } onClick={ this.onMemberListButtonClick }>
-                            <div className="mx_RightPanel_headerButton_badge">{ membersBadge ? membersBadge : <span>&nbsp;</span>}</div>
-                            <TintableSvg src="img/icons-people.svg" width="25" height="25"/>
-                            { membersHighlight }
-                        </AccessibleButton>
-                        <AccessibleButton
-                                className="mx_RightPanel_headerButton mx_RightPanel_filebutton"
-                                title={ _t('Files') } onClick={ this.onFileListButtonClick }>
-                            <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
-                            <TintableSvg src="img/icons-files.svg" width="25" height="25"/>
-                            { filesHighlight }
-                        </AccessibleButton>
-                        <AccessibleButton
-                                className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton"
-                                title={ _t('Notifications') } onClick={ this.onNotificationListButtonClick }>
-                            <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
-                            <TintableSvg src="img/icons-notifications.svg" width="25" height="25"/>
-                            { notificationsHighlight }
-                        </AccessibleButton>
-                        <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" title={ _t("Hide panel") } onClick={ this.onCollapseClick }>
-                            <TintableSvg src="img/minimise.svg" width="10" height="16"/>
-                        </div>
-                    </div>;
+            headerButtons.push(
+                <AccessibleButton className="mx_RightPanel_headerButton" key="_membersButton"
+                        title={ _t('Members') } onClick={ this.onMemberListButtonClick }>
+                    <div className="mx_RightPanel_headerButton_badge">{ membersBadge ? membersBadge : <span>&nbsp;</span>}</div>
+                    <TintableSvg src="img/icons-people.svg" width="25" height="25"/>
+                    { membersHighlight }
+                </AccessibleButton>
+            );
+            headerButtons.push(
+                <AccessibleButton
+                        className="mx_RightPanel_headerButton mx_RightPanel_filebutton" key="_filesButton"
+                        title={ _t('Files') } onClick={ this.onFileListButtonClick }>
+                    <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
+                    <TintableSvg src="img/icons-files.svg" width="25" height="25"/>
+                    { filesHighlight }
+                </AccessibleButton>
+            );
+            headerButtons.push(
+                <AccessibleButton
+                        className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton" key="_notifsButton"
+                        title={ _t('Notifications') } onClick={ this.onNotificationListButtonClick }>
+                    <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
+                    <TintableSvg src="img/icons-notifications.svg" width="25" height="25"/>
+                    { notificationsHighlight }
+                </AccessibleButton>
+            );
+        }
+
+        if (this.props.roomId || this.props.groupId) {
+            // Hiding the right panel hides it completely and relies on an 'expand' button
+            // being put in the RoomHeader or GroupView header, so only show the minimise
+            // button on these 2 screens or you won't be able to re-expand the panel.
+            headerButtons.push(
+                <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" key="_minimizeButton"
+                    title={ _t("Hide panel") } onClick={ this.onCollapseClick }
+                >
+                    <TintableSvg src="img/minimise.svg" width="10" height="16"/>
+                </div>
+            );
         }
 
         if (!this.props.collapsed) {
             if (this.props.roomId && this.state.phase == this.Phase.RoomMemberList) {
                 panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />
             } else if (this.props.groupId && this.state.phase == this.Phase.GroupMemberList) {
-                panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />
+                panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />;
+                inviteGroup = (
+                    <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
+                        <div className="mx_RightPanel_icon" >
+                            <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
+                        </div>
+                        <div className="mx_RightPanel_message">{ _t('Invite to this group') }</div>
+                    </AccessibleButton>
+                );
             } else if (this.state.phase == this.Phase.RoomMemberInfo) {
                 const MemberInfo = sdk.getComponent('rooms.MemberInfo');
                 panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />
             } else if (this.state.phase == this.Phase.GroupMemberInfo) {
                 const GroupMemberInfo = sdk.getComponent('groups.GroupMemberInfo');
-                panel = <GroupMemberInfo member={this.state.member} groupId={this.props.groupId} key={this.state.member.user_id} />
+                panel = <GroupMemberInfo member={this.state.member} groupId={this.props.groupId} key={this.state.member.user_id} />;
             } else if (this.state.phase == this.Phase.NotificationPanel) {
-                panel = <NotificationPanel />
+                panel = <NotificationPanel />;
             } else if (this.state.phase == this.Phase.FilePanel) {
-                panel = <FilePanel roomId={this.props.roomId} />
+                panel = <FilePanel roomId={this.props.roomId} />;
             }
         }
 
@@ -271,7 +296,9 @@ module.exports = React.createClass({
         return (
             <aside className={classes} style={{ opacity: this.props.opacity }}>
                 <div className="mx_RightPanel_header">
-                    { buttonGroup }
+                    <div className="mx_RightPanel_headerButtonGroup">
+                        {headerButtons}
+                    </div>
                 </div>
                 { panel }
                 <div className="mx_RightPanel_footer">
