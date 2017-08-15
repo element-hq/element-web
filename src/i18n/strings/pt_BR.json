@@ -657,7 +657,7 @@
     "quote": "citação",
     "bullet": "marcador de lista",
     "numbullet": "marcador de numeração",
-    "%(severalUsers)sjoined %(repeats)s times": "%(severalUsers)singressaram %(repeats)s vezes",
+    "%(severalUsers)sjoined %(repeats)s times": "%(severalUsers)s ingressaram %(repeats)s vezes",
     "%(oneUser)sjoined %(repeats)s times": "%(oneUser)singressou %(repeats)s vezes",
     "%(severalUsers)sjoined": "%(severalUsers)singressaram",
     "%(oneUser)sjoined": "%(oneUser)singressou",
