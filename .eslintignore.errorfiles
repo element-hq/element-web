@@ -113,7 +113,6 @@ src/components/views/settings/EnableNotificationsButton.js
 src/ContentMessages.js
 src/HtmlUtils.js
 src/ImageUtils.js
-src/Invite.js
 src/languageHandler.js
 src/linkify-matrix.js
 src/Login.js

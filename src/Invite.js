@@ -15,7 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PropTypes from 'prop-types';
 import MatrixClientPeg from './MatrixClientPeg';
 import MultiInviter from './utils/MultiInviter';
 import Modal from './Modal';
@@ -41,9 +40,9 @@ export function inviteToRoom(roomId, addr) {
  * Simpler interface to utils/MultiInviter but with
  * no option to cancel.
  *
- * @param {roomId} The ID of the room to invite to
- * @param {array} Array of strings of addresses to invite. May be matrix IDs or 3pids.
- * @returns Promise
+ * @param {string} roomId The ID of the room to invite to
+ * @param {string[]} addrs Array of strings of addresses to invite. May be matrix IDs or 3pids.
+ * @returns {Promise} Promise
  */
 export function inviteMultipleToRoom(roomId, addrs) {
     const inviter = new MultiInviter(roomId);
@@ -77,7 +76,7 @@ export function showRoomInviteDialog(roomId) {
 function _onStartChatFinished(shouldInvite, addrs) {
     if (!shouldInvite) return;
 
-    const addrTexts = addrs.map(addr => addr.address);
+    const addrTexts = addrs.map((addr) => addr.address);
 
     if (_isDmChat(addrTexts)) {
         // Start a new DM chat
@@ -111,7 +110,7 @@ function _onStartChatFinished(shouldInvite, addrs) {
 function _onRoomInviteFinished(roomId, shouldInvite, addrs) {
     if (!shouldInvite) return;
 
-    const addrTexts = addrs.map(addr => addr.address);
+    const addrTexts = addrs.map((addr) => addr.address);
 
     // Invite new users to a room
     inviteMultipleToRoom(roomId, addrTexts).then((addrs) => {
@@ -137,8 +136,8 @@ function _isDmChat(addrTexts) {
 
 function _showAnyInviteErrors(addrs, room) {
     // Show user any errors
-    let errorList = [];
-    for (let addr of Object.keys(addrs)) {
+    const errorList = [];
+    for (const addr of Object.keys(addrs)) {
         if (addrs[addr] === "error") {
             errorList.push(addr);
         }
