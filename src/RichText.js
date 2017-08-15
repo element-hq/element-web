@@ -204,24 +204,26 @@ export function textOffsetsToSelectionState({start, end}: SelectionRange,
     let selectionState = SelectionState.createEmpty();
     for (const block of contentBlocks) {
         const blockLength = block.getLength();
+        // -1 indicating that the position start position has been found
         if (start !== -1) {
             if (start < blockLength + 1) {
                 selectionState = selectionState.merge({
                     anchorKey: block.getKey(),
                     anchorOffset: start,
                 });
-                start = -1;
+                start = -1; // selection state for the start calculated
             } else {
                 start -= blockLength + 1; // +1 to account for newline between blocks
             }
         }
+        // -1 indicating that the position end position has been found
         if (end !== -1) {
             if (end < blockLength + 1) {
                 selectionState = selectionState.merge({
                     focusKey: block.getKey(),
                     focusOffset: end,
                 });
-                end = -1;
+                end = -1; // selection state for the start calculated
             } else {
                 end -= blockLength + 1; // +1 to account for newline between blocks
             }
