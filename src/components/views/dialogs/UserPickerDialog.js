@@ -33,10 +33,7 @@ module.exports = React.createClass({
 
     propTypes: {
         title: PropTypes.string.isRequired,
-        description: PropTypes.oneOfType([
-            PropTypes.element,
-            PropTypes.string,
-        ]),
+        description: PropTypes.node,
         value: PropTypes.string,
         placeholder: PropTypes.string,
         roomId: PropTypes.string,
@@ -58,7 +55,7 @@ module.exports = React.createClass({
         return {
             error: false,
 
-            // List of InviteAddressType objects representing
+            // List of UserAddressType objects representing
             // the list of addresses we're going to invite
             inviteList: [],
 
@@ -70,7 +67,7 @@ module.exports = React.createClass({
             serverSupportsUserDirectory: true,
             // The query being searched for
             query: "",
-            // List of AddressTile.InviteAddressType objects representing
+            // List of UserAddressType objects representing
             // the set of auto-completion results for the current search
             // query.
             queryList: [],
@@ -254,7 +251,7 @@ module.exports = React.createClass({
                 return;
             }
             // Return objects, structure of which is defined
-            // by InviteAddressType
+            // by UserAddressType
             queryList.push({
                 addressType: 'mx',
                 address: user.user_id,
@@ -268,7 +265,7 @@ module.exports = React.createClass({
         // This is important, otherwise there's no way to invite
         // a perfectly valid address if there are close matches.
         const addrType = getAddressType(query);
-        if (this.props.validAddressTypes.indexOf(addrType) !== -1) {
+        if (this.props.validAddressTypes.includes(addrType)) {
             queryList.unshift({
                 addressType: addrType,
                 address: query,
@@ -342,7 +339,7 @@ module.exports = React.createClass({
             if (cancelled) return null;
             this.setState({
                 queryList: [{
-                    // an InviteAddressType
+                    // a UserAddressType
                     addressType: medium,
                     address: address,
                     displayName: res.displayname,

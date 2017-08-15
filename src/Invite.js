@@ -18,9 +18,9 @@ limitations under the License.
 import PropTypes from 'prop-types';
 import MatrixClientPeg from './MatrixClientPeg';
 import MultiInviter from './utils/MultiInviter';
-import Modal from "./Modal";
+import Modal from './Modal';
 import createRoom from './createRoom';
-import sdk from "./";
+import sdk from './';
 import { _t } from './languageHandler';
 
 const emailRegex = /^\S+@\S+\.\S+$/;
@@ -36,7 +36,7 @@ export const addressTypes = [
 // could be a third party identifier or a matrix ID)
 // along with some additional information about the
 // address / target.
-export const InviteAddressType = PropTypes.shape({
+export const UserAddressType = PropTypes.shape({
     addressType: PropTypes.oneOf(addressTypes).isRequired,
     address: PropTypes.string.isRequired,
     displayName: PropTypes.string,

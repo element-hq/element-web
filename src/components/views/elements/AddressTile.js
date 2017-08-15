@@ -20,14 +20,14 @@ import classNames from 'classnames';
 import sdk from "../../../index";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
-import { InviteAddressType } from '../../../Invite.js';
+import { UserAddressType } from '../../../Invite.js';
 
 
 export default React.createClass({
     displayName: 'AddressTile',
 
     propTypes: {
-        address: InviteAddressType.isRequired,
+        address: UserAddressType.isRequired,
         canDismiss: React.PropTypes.bool,
         onDismissed: React.PropTypes.func,
         justified: React.PropTypes.bool,
