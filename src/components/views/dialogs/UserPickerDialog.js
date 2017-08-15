@@ -19,11 +19,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
-import { getAddressType } from '../../../Invite';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import AccessibleButton from '../elements/AccessibleButton';
 import Promise from 'bluebird';
-import { addressTypes } from '../../../Invite.js';
+import { addressTypes, getAddressType } from '../../../UserAddress.js';
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;

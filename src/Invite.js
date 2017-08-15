@@ -19,47 +19,10 @@ import PropTypes from 'prop-types';
 import MatrixClientPeg from './MatrixClientPeg';
 import MultiInviter from './utils/MultiInviter';
 import Modal from './Modal';
+import { getAddressType } from './UserAddress';
 import createRoom from './createRoom';
 import sdk from './';
 import { _t } from './languageHandler';
-
-const emailRegex = /^\S+@\S+\.\S+$/;
-
-const mxidRegex = /^@\S+:\S+$/
-
-export const addressTypes = [
-    'mx', 'email',
-];
-
-// PropType definition for an object describing
-// an address that can be invited to a room (which
-// could be a third party identifier or a matrix ID)
-// along with some additional information about the
-// address / target.
-export const UserAddressType = PropTypes.shape({
-    addressType: PropTypes.oneOf(addressTypes).isRequired,
-    address: PropTypes.string.isRequired,
-    displayName: PropTypes.string,
-    avatarMxc: PropTypes.string,
-    // true if the address is known to be a valid address (eg. is a real
-    // user we've seen) or false otherwise (eg. is just an address the
-    // user has entered)
-    isKnown: PropTypes.bool,
-});
-
-export function getAddressType(inputText) {
-    const isEmailAddress = emailRegex.test(inputText);
-    const isMatrixId = mxidRegex.test(inputText);
-
-    // sanity check the input for user IDs
-    if (isEmailAddress) {
-        return 'email';
-    } else if (isMatrixId) {
-        return 'mx';
-    } else {
-        return null;
-    }
-}
 
 export function inviteToRoom(roomId, addr) {
     const addrType = getAddressType(addr);

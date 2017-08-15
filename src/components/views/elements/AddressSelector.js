@@ -20,7 +20,7 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../../index';
 import classNames from 'classnames';
-import { UserAddressType } from '../../../Invite';
+import { UserAddressType } from '../../../UserAddress';
 
 export default React.createClass({
     displayName: 'AddressSelector',

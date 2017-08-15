@@ -20,7 +20,7 @@ import classNames from 'classnames';
 import sdk from "../../../index";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
-import { UserAddressType } from '../../../Invite.js';
+import { UserAddressType } from '../../../UserAddress.js';
 
 
 export default React.createClass({
