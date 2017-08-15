@@ -57,7 +57,7 @@ module.exports = React.createClass({
 
             // List of UserAddressType objects representing
             // the list of addresses we're going to invite
-            inviteList: [],
+            userList: [],
 
             // Whether a search is ongoing
             busy: false,
@@ -82,14 +82,14 @@ module.exports = React.createClass({
     },
 
     onButtonClick: function() {
-        let inviteList = this.state.inviteList.slice();
+        let userList = this.state.userList.slice();
         // Check the text input field to see if user has an unconverted address
-        // If there is and it's valid add it to the local inviteList
+        // If there is and it's valid add it to the local userList
         if (this.refs.textinput.value !== '') {
-            inviteList = this._addInputToList();
-            if (inviteList === null) return;
+            userList = this._addInputToList();
+            if (userList === null) return;
         }
-        this.props.onFinished(true, inviteList);
+        this.props.onFinished(true, userList);
     },
 
     onCancel: function() {
@@ -113,10 +113,10 @@ module.exports = React.createClass({
             e.stopPropagation();
             e.preventDefault();
             if (this.addressSelector) this.addressSelector.chooseSelection();
-        } else if (this.refs.textinput.value.length === 0 && this.state.inviteList.length && e.keyCode === 8) { // backspace
+        } else if (this.refs.textinput.value.length === 0 && this.state.userList.length && e.keyCode === 8) { // backspace
             e.stopPropagation();
             e.preventDefault();
-            this.onDismissed(this.state.inviteList.length - 1)();
+            this.onDismissed(this.state.userList.length - 1)();
         } else if (e.keyCode === 13) { // enter
             e.stopPropagation();
             e.preventDefault();
@@ -158,10 +158,10 @@ module.exports = React.createClass({
 
     onDismissed: function(index) {
         return () => {
-            const inviteList = this.state.inviteList.slice();
-            inviteList.splice(index, 1);
+            const userList = this.state.userList.slice();
+            userList.splice(index, 1);
             this.setState({
-                inviteList: inviteList,
+                userList: userList,
                 queryList: [],
                 query: "",
             });
@@ -176,10 +176,10 @@ module.exports = React.createClass({
     },
 
     onSelected: function(index) {
-        const inviteList = this.state.inviteList.slice();
-        inviteList.push(this.state.queryList[index]);
+        const userList = this.state.userList.slice();
+        userList.push(this.state.queryList[index]);
         this.setState({
-            inviteList: inviteList,
+            userList: userList,
             queryList: [],
             query: "",
         });
@@ -304,15 +304,15 @@ module.exports = React.createClass({
             }
         }
 
-        const inviteList = this.state.inviteList.slice();
-        inviteList.push(addrObj);
+        const userList = this.state.userList.slice();
+        userList.push(addrObj);
         this.setState({
-            inviteList: inviteList,
+            userList: userList,
             queryList: [],
             query: "",
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
-        return inviteList;
+        return userList;
     },
 
     _lookupThreepid: function(medium, address) {
@@ -357,18 +357,18 @@ module.exports = React.createClass({
 
         const query = [];
         // create the invite list
-        if (this.state.inviteList.length > 0) {
+        if (this.state.userList.length > 0) {
             const AddressTile = sdk.getComponent("elements.AddressTile");
-            for (let i = 0; i < this.state.inviteList.length; i++) {
+            for (let i = 0; i < this.state.userList.length; i++) {
                 query.push(
-                    <AddressTile key={i} address={this.state.inviteList[i]} canDismiss={true} onDismissed={ this.onDismissed(i) } />,
+                    <AddressTile key={i} address={this.state.userList[i]} canDismiss={true} onDismissed={ this.onDismissed(i) } />,
                 );
             }
         }
 
         // Add the query at the end
         query.push(
-            <textarea key={this.state.inviteList.length}
+            <textarea key={this.state.userList.length}
                 rows="1"
                 id="textinput"
                 ref="textinput"
