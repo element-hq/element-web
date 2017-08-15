@@ -202,6 +202,9 @@ export function selectionStateToTextOffsets(selectionState: SelectionState,
 export function textOffsetsToSelectionState({start, end}: SelectionRange,
                                             contentBlocks: Array<ContentBlock>): SelectionState {
     let selectionState = SelectionState.createEmpty();
+    // Subtract block lengths from `start` and `end` until they are less than the current
+    // block length (accounting for the NL at the end of each block). Set them to -1 to
+    // indicate that the corresponding selection state has been determined.
     for (const block of contentBlocks) {
         const blockLength = block.getLength();
         // -1 indicating that the position start position has been found
@@ -223,7 +226,7 @@ export function textOffsetsToSelectionState({start, end}: SelectionRange,
                     focusKey: block.getKey(),
                     focusOffset: end,
                 });
-                end = -1; // selection state for the start calculated
+                end = -1; // selection state for the end calculated
             } else {
                 end -= blockLength + 1; // +1 to account for newline between blocks
             }
