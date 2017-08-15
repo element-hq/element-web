@@ -95,7 +95,7 @@ module.exports = React.createClass({
         if (this.allFieldsValid()) {
             if (this.refs.email.value == '') {
                 var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                Modal.createDialog(QuestionDialog, {
+                Modal.createTrackedDialog('If you don\'t specify an email address...', '', QuestionDialog, {
                     title: _t("Warning!"),
                     description:
                         <div>

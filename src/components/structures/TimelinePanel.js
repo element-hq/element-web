@@ -923,7 +923,7 @@ var TimelinePanel = React.createClass({
             var message = (error.errcode == 'M_FORBIDDEN')
             	? _t("Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.")
                 : _t("Tried to load a specific point in this room's timeline, but was unable to find it.");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to load timeline position', '', ErrorDialog, {
                 title: _t("Failed to load timeline position"),
                 description: message,
                 onFinished: onFinished,

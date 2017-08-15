@@ -31,7 +31,7 @@ export default React.createClass({
 
     _sendBugReport: function() {
         const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
-        Modal.createDialog(BugReportDialog, {});
+        Modal.createTrackedDialog('Session Restore Error', 'Send Bug Report Dialog', BugReportDialog, {});
     },
 
     _continueClicked: function() {

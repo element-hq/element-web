@@ -410,7 +410,7 @@ module.exports = React.createClass({
                 this._leaveRoom(payload.room_id);
                 break;
             case 'reject_invite':
-                Modal.createDialog(QuestionDialog, {
+                Modal.createTrackedDialog('Reject invitation', '', QuestionDialog, {
                     title: _t('Reject invitation'),
                     description: _t('Are you sure you want to reject the invitation?'),
                     onFinished: (confirm) => {
@@ -426,7 +426,7 @@ module.exports = React.createClass({
                                 }
                             }, (err) => {
                                 modal.close();
-                                Modal.createDialog(ErrorDialog, {
+                                Modal.createTrackedDialog('Failed to reject invitation', '', ErrorDialog, {
                                     title: _t('Failed to reject invitation'),
                                     description: err.toString(),
                                 });
@@ -728,7 +728,7 @@ module.exports = React.createClass({
 
     _setMxId: function(payload) {
         const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
-        const close = Modal.createDialog(SetMxIdDialog, {
+        const close = Modal.createTrackedDialog('Set MXID', '', SetMxIdDialog, {
             homeserverUrl: MatrixClientPeg.get().getHomeserverUrl(),
             onFinished: (submitted, credentials) => {
                 if (!submitted) {
@@ -767,7 +767,7 @@ module.exports = React.createClass({
             return;
         }
         const ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
-        Modal.createDialog(ChatInviteDialog, {
+        Modal.createTrackedDialog('Start a chat', '', ChatInviteDialog, {
             title: _t('Start a chat'),
             description: _t("Who would you like to communicate with?"),
             placeholder: _t("Email, name or matrix ID"),
@@ -787,7 +787,7 @@ module.exports = React.createClass({
             return;
         }
         const TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
-        Modal.createDialog(TextInputDialog, {
+        Modal.createTrackedDialog('Create Room', '', TextInputDialog, {
             title: _t('Create Room'),
             description: _t('Room name (optional)'),
             button: _t('Create Room'),
@@ -831,7 +831,7 @@ module.exports = React.createClass({
             return;
         }
 
-        const close = Modal.createDialog(ChatCreateOrReuseDialog, {
+        const close = Modal.createTrackedDialog('Chat create or reuse', '', ChatCreateOrReuseDialog, {
             userId: userId,
             onFinished: (success) => {
                 if (!success && goHomeOnCancel) {
@@ -859,7 +859,7 @@ module.exports = React.createClass({
 
     _invite: function(roomId) {
         const ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
-        Modal.createDialog(ChatInviteDialog, {
+        Modal.createTrackedDialog('Chat Invite', '', ChatInviteDialog, {
             title: _t('Invite new room members'),
             description: _t('Who would you like to add to this room?'),
             button: _t('Send Invites'),
@@ -873,7 +873,7 @@ module.exports = React.createClass({
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
-        Modal.createDialog(QuestionDialog, {
+        Modal.createTrackedDialog('Leave room', '', QuestionDialog, {
             title: _t("Leave room"),
             description: (
                 <span>
@@ -896,7 +896,7 @@ module.exports = React.createClass({
                     }, (err) => {
                         modal.close();
                         console.error("Failed to leave room " + roomId + " " + err);
-                        Modal.createDialog(ErrorDialog, {
+                        Modal.createTrackedDialog('Failed to leave room', '', ErrorDialog, {
                             title: _t("Failed to leave room"),
                             description: (err && err.message ? err.message :
                                 _t("Server may be unavailable, overloaded, or you hit a bug.")),
@@ -1090,7 +1090,7 @@ module.exports = React.createClass({
         });
         cli.on('Session.logged_out', function(call) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Signed out', '', ErrorDialog, {
                 title: _t('Signed Out'),
                 description: _t('For security, this session has been signed out. Please sign in again.'),
             });
@@ -1203,21 +1203,24 @@ module.exports = React.createClass({
         } else if (screen.indexOf('user/') == 0) {
             const userId = screen.substring(5);
 
-            if (params.action === 'chat') {
-                this._chatCreateOrReuse(userId);
-                return;
-            }
+            // Wait for the first sync so that `getRoom` gives us a room object if it's
+            // in the sync response
+            const waitFor = this.firstSyncPromise ?
+                this.firstSyncPromise.promise : Promise.resolve();
+            waitFor.then(() => {
+                if (params.action === 'chat') {
+                    this._chatCreateOrReuse(userId);
+                    return;
+                }
 
-            this.setState({ viewUserId: userId });
-            this._setPage(PageTypes.UserView);
-            this.notifyNewScreen('user/' + userId);
-            const member = new Matrix.RoomMember(null, userId);
-            if (member) {
+                this._setPage(PageTypes.UserView);
+                this.notifyNewScreen('user/' + userId);
+                const member = new Matrix.RoomMember(null, userId);
                 dis.dispatch({
                     action: 'view_user',
                     member: member,
                 });
-            }
+            });
         } else if (screen.indexOf('group/') == 0) {
             const groupId = screen.substring(6);
 

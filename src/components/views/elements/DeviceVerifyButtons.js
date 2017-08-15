@@ -52,7 +52,7 @@ export default React.createClass({
 
     onVerifyClick: function() {
         const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
-        Modal.createDialog(DeviceVerifyDialog, {
+        Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
             userId: this.props.userId,
             device: this.state.device,
         });

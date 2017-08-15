@@ -88,7 +88,7 @@ export default React.createClass({
         const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
 
         console.log("KeyShareDialog: Starting verify dialog");
-        Modal.createDialog(DeviceVerifyDialog, {
+        Modal.createTrackedDialog('Key Share', 'Starting dialog', DeviceVerifyDialog, {
             userId: this.props.userId,
             device: this.state.deviceInfo,
             onFinished: (verified) => {
