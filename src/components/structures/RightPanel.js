@@ -25,6 +25,7 @@ import Analytics from 'matrix-react-sdk/lib/Analytics';
 import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
 import Modal from 'matrix-react-sdk/lib/Modal';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
+import { showGroupInviteDialog } from 'matrix-react-sdk/lib/GroupInvite';
 
 module.exports = React.createClass({
     displayName: 'RightPanel',
@@ -99,7 +100,7 @@ module.exports = React.createClass({
         }
 
         if (this.state.phase === this.Phase.GroupMemberList) {
-            // TODO: display UserPickeDialog
+            showGroupInviteDialog(this.props.groupId);
         } else {
             // call UserPickerDialog
             dis.dispatch({
