@@ -28,6 +28,7 @@ import AppPermission from './AppPermission';
 import AppWarning from './AppWarning';
 import MessageSpinner from './MessageSpinner';
 import WidgetUtils from '../../../WidgetUtils';
+import dis from '../../../dispatcher';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const betaHelpMsg = 'This feature is currently experimental and is intended for beta testing only';
@@ -182,6 +183,14 @@ export default React.createClass({
         return appTileName;
     },
 
+    onClickMenuBar: function(e) {
+        e.preventDefault();
+        dis.dispatch({
+            action: 'appsDrawer',
+            show: !this.props.show,
+        });
+    },
+
     render: function() {
         let appTileBody;
 
@@ -218,7 +227,7 @@ export default React.createClass({
                         />
                     </div>
                 );
-            } else {
+            } else if (this.props.show) {
                 appTileBody = (
                     <div className="mx_AppTileBody">
                         <iframe
@@ -253,7 +262,7 @@ export default React.createClass({
 
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
-                <div className="mx_AppTileMenuBar">
+                <div className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
                     {this.formatAppTileName()}
                     <span className="mx_AppTileMenuBarWidgets">
                         <span className="mx_Beta" alt={betaHelpMsg} title={betaHelpMsg}>&#946;</span>
