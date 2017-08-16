@@ -20,7 +20,7 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../../index';
 import classNames from 'classnames';
-import { InviteAddressType } from './AddressTile';
+import { UserAddressType } from '../../../UserAddress';
 
 export default React.createClass({
     displayName: 'AddressSelector',
@@ -29,7 +29,7 @@ export default React.createClass({
         onSelected: React.PropTypes.func.isRequired,
 
         // List of the addresses to display
-        addressList: React.PropTypes.arrayOf(InviteAddressType).isRequired,
+        addressList: React.PropTypes.arrayOf(UserAddressType).isRequired,
         truncateAt: React.PropTypes.number.isRequired,
         selected: React.PropTypes.number,
 
