@@ -248,6 +248,26 @@ function textForPowerEvent(event) {
     });
 }
 
+function textForWidgetEvent(event) {
+    const senderName = event.sender ? event.sender.name : event.getSender();
+    const previousContent = event.getPrevContent() ? event.getPrevContent() : {};
+    const {name, type} = event.getContent() ? event.getContent() : {};
+    let widgetName = widgetName || name || type || previousContent.type || '';
+
+    // Apply sentence case
+    widgetName = widgetName ? widgetName[0].toUpperCase() + widgetName.slice(1).toLowerCase() + ' ' : '';
+
+    if (event.getContent().url) {
+        return _t('%(senderName)s added a %(widgetName)swidget', {
+            senderName, widgetName,
+        });
+    } else {
+        return _t('%(senderName)s removed a %(widgetName)swidget', {
+            senderName, widgetName,
+        });
+    }
+}
+
 var handlers = {
     'm.room.message': textForMessageEvent,
     'm.room.name':    textForRoomNameEvent,
@@ -260,6 +280,8 @@ var handlers = {
     'm.room.history_visibility': textForHistoryVisibilityEvent,
     'm.room.encryption': textForEncryptionEvent,
     'm.room.power_levels': textForPowerEvent,
+
+    'im.vector.modular.widgets': textForWidgetEvent,
 };
 
 module.exports = {
