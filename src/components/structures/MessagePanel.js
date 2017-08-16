@@ -339,6 +339,11 @@ module.exports = React.createClass({
                 for (;i + 1 < this.props.events.length; i++) {
                     const collapsedMxEv = this.props.events[i + 1];
 
+                    // Ignore redacted/hidden member events
+                    if (!this._shouldShowEvent(collapsedMxEv)) {
+                        continue;
+                    }
+
                     if (!isMembershipChange(collapsedMxEv) ||
                         this._wantsDateSeparator(this.props.events[i], collapsedMxEv.getDate())) {
                         break;
@@ -347,11 +352,6 @@ module.exports = React.createClass({
                     // If RM event is in MELS mark it as such and the RM will be appended after MELS.
                     if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
                         readMarkerInMels = true;
-                    }
-
-                    // Ignore redacted/hidden member events
-                    if (!this._shouldShowEvent(collapsedMxEv)) {
-                        continue;
                     }
 
                     summarisedEvents.push(collapsedMxEv);
