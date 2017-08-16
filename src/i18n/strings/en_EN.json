@@ -969,5 +969,7 @@
     "Automatically replace plain text Emoji": "Automatically replace plain text Emoji",
     "Failed to upload image": "Failed to upload image",
     "Failed to update group": "Failed to update group",
-    "Hide avatars in user and room mentions": "Hide avatars in user and room mentions"
+    "Hide avatars in user and room mentions": "Hide avatars in user and room mentions",
+    "%(senderName)s added a %(widgetName)swidget": "%(senderName)s added a %(widgetName)swidget",
+    "%(senderName)s removed a %(widgetName)swidget": "%(senderName)s removed a %(widgetName)swidget"
 }
