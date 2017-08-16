@@ -972,5 +972,9 @@
     "Hide avatars in user and room mentions": "Hide avatars in user and room mentions",
     "Description": "Description",
     "Filter group members": "Filter group members",
-    "Remove from group": "Remove from group"
+    "Remove from group": "Remove from group",
+    "Invite new group members": "Invite new group members",
+    "Who would you like to add to this group?": "Who would you like to add to this group?",
+    "Name or matrix ID": "Name or matrix ID",
+    "Invite to Group": "Invite to Group"
 }
