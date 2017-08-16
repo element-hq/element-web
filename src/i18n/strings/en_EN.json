@@ -969,5 +969,6 @@
     "Automatically replace plain text Emoji": "Automatically replace plain text Emoji",
     "Failed to upload image": "Failed to upload image",
     "Failed to update group": "Failed to update group",
-    "Hide avatars in user and room mentions": "Hide avatars in user and room mentions"
+    "Hide avatars in user and room mentions": "Hide avatars in user and room mentions",
+    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot check is currently unavailable on desktop - please use a <a>web browser</a>"
 }
