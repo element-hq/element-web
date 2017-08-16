@@ -22,7 +22,7 @@ const MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 const dis = require('matrix-react-sdk/lib/dispatcher');
 const sdk = require('matrix-react-sdk');
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-const Modal = require('matrix-react-sdk/lib/Modal');
+import Modal = from 'matrix-react-sdk/lib/Modal';
 const Resend = require("matrix-react-sdk/lib/Resend");
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 
