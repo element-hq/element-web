@@ -9,23 +9,23 @@
 // This could readily be automated, but it's nice to explicitly
 // control when we languages are available.
 const INCLUDE_LANGS = [
+    {'value': 'da', 'label': 'Dansk'},
+    {'value': 'de_DE', 'label': 'Deutsch'},
     {'value': 'en_EN', 'label': 'English'},
     {'value': 'en_US', 'label': 'English (US)'},
-    {'value': 'da', 'label': 'Dansk'},
     {'value': 'el', 'label': 'Ελληνικά'},
     {'value': 'eo', 'label': 'Esperanto'},
-    {'value': 'nl', 'label': 'Nederlands'},
-    {'value': 'de_DE', 'label': 'Deutsch'},
+    {'value': 'es', 'label': 'Español'},
     {'value': 'fr', 'label': 'Français'},
     {'value': 'hu', 'label': 'Magyar'},
     {'value': 'ko', 'label': '한국어'},
     {'value': 'nb_NO', 'label': 'Norwegian Bokmål'},
+    {'value': 'nl', 'label': 'Nederlands'},
     {'value': 'pl', 'label': 'Polski'},
     {'value': 'pt', 'label': 'Português'},
     {'value': 'pt_BR', 'label': 'Português do Brasil'},
     {'value': 'ru', 'label': 'Русский'},
     {'value': 'sv', 'label': 'Svenska'},
-    {'value': 'es', 'label': 'Español'},
     {'value': 'th', 'label': 'ไทย'},
     {'value': 'tr', 'label': 'Türk'},
     {'value': 'zh_Hans', 'label': '简体中文'}, // simplified chinese
