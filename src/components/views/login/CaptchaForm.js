@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import { _t } from '../../../languageHandler';
+import { _t, _tJsx } from '../../../languageHandler';
 
 var DIV_ID = 'mx_recaptcha';
 
