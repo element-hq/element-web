@@ -54,6 +54,7 @@ module.exports = React.createClass({
             this.scalarClient.connect().done(() => {
                 this.forceUpdate();
                 if (this.state.apps && this.state.apps.length < 1) {
+                    // XXX: This should not be called here, we should do something much nicer
                     this.onClickAddWidget();
                 }
             // TODO -- Handle Scalar errors
@@ -183,17 +184,25 @@ module.exports = React.createClass({
                     fullWidth={arr.length<2 ? true : false}
                     room={this.props.room}
                     userId={this.props.userId}
+                    show={this.props.showApps}
                 />);
             });
 
-        const addWidget = this.state.apps && this.state.apps.length < 2 && this._canUserModify() &&
-            (<div onClick={this.onClickAddWidget}
-                            role="button"
-                            tabIndex="0"
-                            className="mx_AddWidget_button"
-                            title={_t('Add a widget')}>
-                            [+] {_t('Add a widget')}
-                        </div>);
+        let addWidget;
+        if (this.props.showApps &&
+            this.state.apps &&
+            this.state.apps.length < 2 &&
+            this._canUserModify()
+        ) {
+            addWidget = <div
+                onClick={this.onClickAddWidget}
+                role="button"
+                tabIndex="0"
+                className="mx_AddWidget_button"
+                title={_t('Add a widget')}>
+                [+] {_t('Add a widget')}
+            </div>;
+        }
 
         return (
             <div className="mx_AppsDrawer">
