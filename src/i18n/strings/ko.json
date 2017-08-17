@@ -405,7 +405,6 @@
     "left": "떠났음",
     "%(targetName)s left the room.": "%(targetName)s님이 방을 떠나셨어요.",
     "Level:": "등급:",
-    "List this room in %(domain)s's room directory?": "%(domain)s's 방 목록에 이 방을 놓으시겠어요?",
     "Local addresses for this room:": "이 방의 로컬 주소:",
     "Logged in as:": "로그인:",
     "Login as guest": "손님으로 로그인",

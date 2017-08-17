@@ -853,7 +853,7 @@
     "device id: ": "Geräte-ID: ",
     "Device key:": "Geräte-Schlüssel:",
     "Email address (optional)": "E-Mail-Adresse (optional)",
-    "List this room in %(domain)s's room directory?": "Diesen Raum zum Raum-Verzeichnis von %(domain)s hinzufügen?",
+    "Publish this room to the public in %(domain)s's room directory?": "Diesen Raum mittels Raum-Verzeichnis von %(domain)s veröffentlichen?",
     "Mobile phone number (optional)": "Mobilfunknummer (optional)",
     "Password:": "Passwort:",
     "Register": "Registrieren",

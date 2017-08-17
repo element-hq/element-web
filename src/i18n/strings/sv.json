@@ -385,7 +385,6 @@
     "left": "lämnade",
     "%(targetName)s left the room.": "%(targetName)s lämnade rummet.",
     "Level:": "Nivå:",
-    "List this room in %(domain)s's room directory?": "Visa det här rummet i katalogen på %(domain)s?",
     "Local addresses for this room:": "Lokala adresser för rummet:",
     "Logged in as:": "Inloggad som:",
     "Login as guest": "Logga in som gäst",
