@@ -924,5 +924,7 @@
     "Ignore request": "Παράβλεψη αιτήματος",
     "You added a new device '%(displayName)s', which is requesting encryption keys.": "Έχετε προσθέσει μια νέα συσκευή '%(displayName)s', η οποία ζητά κλειδιά κρυπτογράφησης.",
     "Your unverified device '%(displayName)s' is requesting encryption keys.": "Η ανεπιβεβαίωτη συσκευή σας '%(displayName)s' ζητά κλειδιά κρυπτογράφησης.",
-    "Encryption key request": "Αίτημα κλειδιού κρυπτογράφησης"
+    "Encryption key request": "Αίτημα κλειδιού κρυπτογράφησης",
+    "Updates": "Ενημερώσεις",
+    "Check for update": "Έλεγχος για ενημέρωση"
 }

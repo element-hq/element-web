@@ -15,36 +15,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {ContentState} from 'draft-js';
+import {ContentState, convertToRaw, convertFromRaw} from 'draft-js';
 import * as RichText from './RichText';
 import Markdown from './Markdown';
-import _flow from 'lodash/flow';
 import _clamp from 'lodash/clamp';
 
 type MessageFormat = 'html' | 'markdown';
 
 class HistoryItem {
-    message: string = '';
+
+    // Keeping message for backwards-compatibility
+    message: string;
+    rawContentState: RawDraftContentState;
     format: MessageFormat = 'html';
 
-    constructor(message: string, format: MessageFormat) {
-        this.message = message;
+    constructor(contentState: ?ContentState, format: ?MessageFormat) {
+        this.rawContentState = contentState ? convertToRaw(contentState) : null;
         this.format = format;
     }
 
-    toContentState(format: MessageFormat): ContentState {
-        let {message} = this;
-        if (format === 'markdown') {
+    toContentState(outputFormat: MessageFormat): ContentState {
+        const contentState = convertFromRaw(this.rawContentState);
+        if (outputFormat === 'markdown') {
             if (this.format === 'html') {
-                message = _flow([RichText.htmlToContentState, RichText.stateToMarkdown])(message);
+                return ContentState.createFromText(RichText.stateToMarkdown(contentState));
             }
-            return ContentState.createFromText(message);
         } else {
             if (this.format === 'markdown') {
-                message = new Markdown(message).toHTML();
+                return RichText.htmlToContentState(new Markdown(contentState.getPlainText()).toHTML());
             }
-            return RichText.htmlToContentState(message);
         }
+        // history item has format === outputFormat
+        return contentState;
     }
 }
 
@@ -67,8 +69,8 @@ export default class ComposerHistoryManager {
         this.lastIndex = this.currentIndex;
     }
 
-    addItem(message: string, format: MessageFormat) {
-        const item = new HistoryItem(message, format);
+    save(contentState: ContentState, format: MessageFormat) {
+        const item = new HistoryItem(contentState, format);
         this.history.push(item);
         this.currentIndex = this.lastIndex + 1;
         sessionStorage.setItem(`${this.prefix}[${this.lastIndex++}]`, JSON.stringify(item));

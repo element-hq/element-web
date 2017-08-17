@@ -115,7 +115,7 @@ function createRoom(opts) {
             action: 'join_room_error',
         });
         console.error("Failed to create room " + roomId + " " + err);
-        Modal.createDialog(ErrorDialog, {
+        Modal.createTrackedDialog('Failure to create room', '', ErrorDialog, {
             title: _t("Failure to create room"),
             description: _t("Server may be unavailable, overloaded, or you hit a bug."),
         });

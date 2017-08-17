@@ -25,6 +25,7 @@ import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import AppPermission from './AppPermission';
+import AppWarning from './AppWarning';
 import MessageSpinner from './MessageSpinner';
 import WidgetUtils from '../../../WidgetUtils';
 
@@ -70,6 +71,18 @@ export default React.createClass({
         return scalarUrl && this.props.url.startsWith(scalarUrl);
     },
 
+    isMixedContent: function() {
+        const parentContentProtocol = window.location.protocol;
+        const u = url.parse(this.props.url);
+        const childContentProtocol = u.protocol;
+        if (parentContentProtocol === 'https:' && childContentProtocol !== 'https:') {
+            console.warn("Refusing to load mixed-content app:",
+            parentContentProtocol, childContentProtocol, window.location, this.props.url);
+            return true;
+        }
+        return false;
+    },
+
     componentWillMount: function() {
         if (!this.isScalarUrl()) {
             return;
@@ -110,7 +123,7 @@ export default React.createClass({
         console.log("Edit widget ID ", this.props.id);
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         const src = this._scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId, 'type_' + this.props.type);
-        Modal.createDialog(IntegrationsManager, {
+        Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
             src: src,
         }, "mx_IntegrationsManager");
     },
@@ -197,16 +210,26 @@ export default React.createClass({
                 </div>
             );
         } else if (this.state.hasPermissionToLoad == true) {
-            appTileBody = (
-                <div className="mx_AppTileBody">
-                    <iframe
-                        ref="appFrame"
-                        src={safeWidgetUrl}
-                        allowFullScreen="true"
-                        sandbox={sandboxFlags}
-                    ></iframe>
-                </div>
-            );
+            if (this.isMixedContent()) {
+                appTileBody = (
+                    <div className="mx_AppTileBody">
+                        <AppWarning
+                            errorMsg="Error - Mixed content"
+                        />
+                    </div>
+                );
+            } else {
+                appTileBody = (
+                    <div className="mx_AppTileBody">
+                        <iframe
+                            ref="appFrame"
+                            src={safeWidgetUrl}
+                            allowFullScreen="true"
+                            sandbox={sandboxFlags}
+                        ></iframe>
+                    </div>
+                );
+            }
         } else {
             appTileBody = (
                 <div className="mx_AppTileBody">

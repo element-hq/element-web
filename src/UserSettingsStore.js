@@ -28,7 +28,10 @@ export default {
         {
             name: "-",
             id: 'matrix_apps',
-            default: false,
+            default: true,
+
+            // XXX: Always use default, ignore localStorage and remove from labs
+            override: true,
         },
     ],
 
@@ -171,22 +174,36 @@ export default {
         localStorage.setItem('mx_local_settings', JSON.stringify(settings));
     },
 
-    isFeatureEnabled: function(feature: string): boolean {
+    getFeatureById(feature: string) {
+        for (let i = 0; i < this.LABS_FEATURES.length; i++) {
+            const f = this.LABS_FEATURES[i];
+            if (f.id === feature) {
+                return f;
+            }
+        }
+        return null;
+    },
+
+    isFeatureEnabled: function(featureId: string): boolean {
         // Disable labs for guests.
         if (MatrixClientPeg.get().isGuest()) return false;
 
-        if (localStorage.getItem(`mx_labs_feature_${feature}`) === null) {
-            for (let i = 0; i < this.LABS_FEATURES.length; i++) {
-                const f = this.LABS_FEATURES[i];
-                if (f.id === feature) {
-                    return f.default;
-                }
-            }
+        const feature = this.getFeatureById(featureId);
+        if (!feature) {
+            console.warn(`Unknown feature "${featureId}"`);
+            return false;
         }
-        return localStorage.getItem(`mx_labs_feature_${feature}`) === 'true';
+        // Return the default if this feature has an override to be the default value or
+        // if the feature has never been toggled and is therefore not in localStorage
+        if (Object.keys(feature).includes('override') ||
+            localStorage.getItem(`mx_labs_feature_${featureId}`) === null
+        ) {
+            return feature.default;
+        }
+        return localStorage.getItem(`mx_labs_feature_${featureId}`) === 'true';
     },
 
-    setFeatureEnabled: function(feature: string, enabled: boolean) {
-        localStorage.setItem(`mx_labs_feature_${feature}`, enabled);
+    setFeatureEnabled: function(featureId: string, enabled: boolean) {
+        localStorage.setItem(`mx_labs_feature_${featureId}`, enabled);
     },
 };

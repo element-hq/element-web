@@ -40,7 +40,7 @@ export default class UserProvider extends AutocompleteProvider {
             keys: ['name'],
         });
         this.matcher = new FuzzyMatcher([], {
-            keys: ['name'],
+            keys: ['name', 'userId'],
             shouldMatchPrefix: true,
         });
     }
@@ -48,13 +48,21 @@ export default class UserProvider extends AutocompleteProvider {
     async getCompletions(query: string, selection: {start: number, end: number}, force = false) {
         const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
 
+        // Disable autocompletions when composing commands because of various issues
+        // (see https://github.com/vector-im/riot-web/issues/4762)
+        if (/^(\/ban|\/unban|\/op|\/deop|\/invite|\/kick|\/verify)/.test(query)) {
+            return [];
+        }
+
         let completions = [];
         let {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
             completions = this.matcher.match(command[0]).map((user) => {
                 const displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
                 return {
-                    completion: displayName,
+                    // Length of completion should equal length of text in decorator. draft-js
+                    // relies on the length of the entity === length of the text in the decoration.
+                    completion: user.rawDisplayName.replace(' (IRC)', ''),
                     suffix: range.start === 0 ? ': ' : ' ',
                     href: 'https://matrix.to/#/' + user.userId,
                     component: (

@@ -37,6 +37,7 @@ export default class AppPermission extends React.Component {
         if(wurl && wurl.hostname && (
             wurl.hostname === 'scalar.vector.im' ||
             wurl.hostname === 'scalar-staging.riot.im' ||
+            wurl.hostname === 'scalar-develop.riot.im' ||
             wurl.hostname === 'demo.riot.im' ||
             wurl.hostname === 'localhost'
         )) {

@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,6 +32,7 @@ import dis from "../../dispatcher";
 import Modal from "../../Modal";
 import Tinter from "../../Tinter";
 import sdk from '../../index';
+import { showStartChatInviteDialog, showRoomInviteDialog } from '../../Invite';
 import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
@@ -131,9 +133,6 @@ module.exports = React.createClass({
             // the master view we are showing.
             view: VIEWS.LOADING,
 
-            // a thing to call showScreen with once login completes.
-            screenAfterLogin: this.props.initialScreenAfterLogin,
-
             // What the LoggedInView would be showing if visible
             page_type: null,
 
@@ -147,8 +146,6 @@ module.exports = React.createClass({
 
             collapse_lhs: false,
             collapse_rhs: false,
-            ready: false,
-            width: 10000,
             leftOpacity: 1.0,
             middleOpacity: 1.0,
             rightOpacity: 1.0,
@@ -274,6 +271,15 @@ module.exports = React.createClass({
                 register_hs_url: paramHs,
             });
         }
+
+        // a thing to call showScreen with once login completes.  this is kept
+        // outside this.state because updating it should never trigger a
+        // rerender.
+        this._screenAfterLogin = this.props.initialScreenAfterLogin;
+
+        this._windowWidth = 10000;
+        this.handleResize();
+        window.addEventListener('resize', this.handleResize);
     },
 
     componentDidMount: function() {
@@ -294,9 +300,6 @@ module.exports = React.createClass({
             linkifyMatrix.onGroupClick = this.onGroupClick;
         }
 
-        window.addEventListener('resize', this.handleResize);
-        this.handleResize();
-
         const teamServerConfig = this.props.config.teamServerConfig || {};
         Lifecycle.initRtsClient(teamServerConfig.teamServerURL);
 
@@ -312,13 +315,12 @@ module.exports = React.createClass({
 
             // if the user has followed a login or register link, don't reanimate
             // the old creds, but rather go straight to the relevant page
-            const firstScreen = this.state.screenAfterLogin ?
-                this.state.screenAfterLogin.screen : null;
+            const firstScreen = this._screenAfterLogin ?
+                this._screenAfterLogin.screen : null;
 
             if (firstScreen === 'login' ||
                     firstScreen === 'register' ||
                     firstScreen === 'forgot_password') {
-                this.setState({loading: false});
                 this._showScreenAfterLogin();
                 return;
             }
@@ -367,9 +369,9 @@ module.exports = React.createClass({
         }
         const newState = {
             viewUserId: null,
-       };
-       Object.assign(newState, state);
-       this.setState(newState);
+        };
+        Object.assign(newState, state);
+        this.setState(newState);
     },
 
     onAction: function(payload) {
@@ -410,7 +412,7 @@ module.exports = React.createClass({
                 this._leaveRoom(payload.room_id);
                 break;
             case 'reject_invite':
-                Modal.createDialog(QuestionDialog, {
+                Modal.createTrackedDialog('Reject invitation', '', QuestionDialog, {
                     title: _t('Reject invitation'),
                     description: _t('Are you sure you want to reject the invitation?'),
                     onFinished: (confirm) => {
@@ -426,7 +428,7 @@ module.exports = React.createClass({
                                 }
                             }, (err) => {
                                 modal.close();
-                                Modal.createDialog(ErrorDialog, {
+                                Modal.createTrackedDialog('Failed to reject invitation', '', ErrorDialog, {
                                     title: _t('Failed to reject invitation'),
                                     description: err.toString(),
                                 });
@@ -512,7 +514,7 @@ module.exports = React.createClass({
                 this._createChat();
                 break;
             case 'view_invite':
-                this._invite(payload.roomId);
+                showRoomInviteDialog(payload.roomId);
                 break;
             case 'notifier_enabled':
                 this.forceUpdate();
@@ -728,7 +730,7 @@ module.exports = React.createClass({
 
     _setMxId: function(payload) {
         const SetMxIdDialog = sdk.getComponent('views.dialogs.SetMxIdDialog');
-        const close = Modal.createDialog(SetMxIdDialog, {
+        const close = Modal.createTrackedDialog('Set MXID', '', SetMxIdDialog, {
             homeserverUrl: MatrixClientPeg.get().getHomeserverUrl(),
             onFinished: (submitted, credentials) => {
                 if (!submitted) {
@@ -766,13 +768,7 @@ module.exports = React.createClass({
             dis.dispatch({action: 'view_set_mxid'});
             return;
         }
-        const ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
-        Modal.createDialog(ChatInviteDialog, {
-            title: _t('Start a chat'),
-            description: _t("Who would you like to communicate with?"),
-            placeholder: _t("Email, name or matrix ID"),
-            button: _t("Start Chat"),
-        });
+        showStartChatInviteDialog();
     },
 
     _createRoom: function() {
@@ -787,7 +783,7 @@ module.exports = React.createClass({
             return;
         }
         const CreateRoomDialog = sdk.getComponent('dialogs.CreateRoomDialog');
-        Modal.createDialog(CreateRoomDialog, {
+        Modal.createTrackedDialog('Create Room', '', CreateRoomDialog, {
             onFinished: (shouldCreate, name, noFederate) => {
                 if (shouldCreate) {
                     const createOpts = {};
@@ -829,7 +825,7 @@ module.exports = React.createClass({
             return;
         }
 
-        const close = Modal.createDialog(ChatCreateOrReuseDialog, {
+        const close = Modal.createTrackedDialog('Chat create or reuse', '', ChatCreateOrReuseDialog, {
             userId: userId,
             onFinished: (success) => {
                 if (!success && goHomeOnCancel) {
@@ -855,23 +851,12 @@ module.exports = React.createClass({
         }).close;
     },
 
-    _invite: function(roomId) {
-        const ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
-        Modal.createDialog(ChatInviteDialog, {
-            title: _t('Invite new room members'),
-            description: _t('Who would you like to add to this room?'),
-            button: _t('Send Invites'),
-            placeholder: _t("Email, name or matrix ID"),
-            roomId: roomId,
-        });
-    },
-
     _leaveRoom: function(roomId) {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
-        Modal.createDialog(QuestionDialog, {
+        Modal.createTrackedDialog('Leave room', '', QuestionDialog, {
             title: _t("Leave room"),
             description: (
                 <span>
@@ -894,7 +879,7 @@ module.exports = React.createClass({
                     }, (err) => {
                         modal.close();
                         console.error("Failed to leave room " + roomId + " " + err);
-                        Modal.createDialog(ErrorDialog, {
+                        Modal.createTrackedDialog('Failed to leave room', '', ErrorDialog, {
                             title: _t("Failed to leave room"),
                             description: (err && err.message ? err.message :
                                 _t("Server may be unavailable, overloaded, or you hit a bug.")),
@@ -990,14 +975,12 @@ module.exports = React.createClass({
     _showScreenAfterLogin: function() {
         // If screenAfterLogin is set, use that, then null it so that a second login will
         // result in view_home_page, _user_settings or _room_directory
-        if (this.state.screenAfterLogin && this.state.screenAfterLogin.screen) {
+        if (this._screenAfterLogin && this._screenAfterLogin.screen) {
             this.showScreen(
-                this.state.screenAfterLogin.screen,
-                this.state.screenAfterLogin.params,
+                this._screenAfterLogin.screen,
+                this._screenAfterLogin.params,
             );
-            // XXX: is this necessary? `showScreen` should do it for us.
-            this.notifyNewScreen(this.state.screenAfterLogin.screen);
-            this.setState({screenAfterLogin: null});
+            this._screenAfterLogin = null;
         } else if (localStorage && localStorage.getItem('mx_last_room_id')) {
             // Before defaulting to directory, show the last viewed room
             dis.dispatch({
@@ -1090,7 +1073,7 @@ module.exports = React.createClass({
         });
         cli.on('Session.logged_out', function(call) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Signed out', '', ErrorDialog, {
                 title: _t('Signed Out'),
                 description: _t('For security, this session has been signed out. Please sign in again.'),
             });
@@ -1203,21 +1186,24 @@ module.exports = React.createClass({
         } else if (screen.indexOf('user/') == 0) {
             const userId = screen.substring(5);
 
-            if (params.action === 'chat') {
-                this._chatCreateOrReuse(userId);
-                return;
-            }
+            // Wait for the first sync so that `getRoom` gives us a room object if it's
+            // in the sync response
+            const waitFor = this.firstSyncPromise ?
+                this.firstSyncPromise.promise : Promise.resolve();
+            waitFor.then(() => {
+                if (params.action === 'chat') {
+                    this._chatCreateOrReuse(userId);
+                    return;
+                }
 
-            this.setState({ viewUserId: userId });
-            this._setPage(PageTypes.UserView);
-            this.notifyNewScreen('user/' + userId);
-            const member = new Matrix.RoomMember(null, userId);
-            if (member) {
+                this._setPage(PageTypes.UserView);
+                this.notifyNewScreen('user/' + userId);
+                const member = new Matrix.RoomMember(null, userId);
                 dis.dispatch({
                     action: 'view_user',
                     member: member,
                 });
-            }
+            });
         } else if (screen.indexOf('group/') == 0) {
             const groupId = screen.substring(6);
 
@@ -1274,20 +1260,20 @@ module.exports = React.createClass({
         const hideRhsThreshold = 820;
         const showRhsThreshold = 820;
 
-        if (this.state.width > hideLhsThreshold && window.innerWidth <= hideLhsThreshold) {
+        if (this._windowWidth > hideLhsThreshold && window.innerWidth <= hideLhsThreshold) {
             dis.dispatch({ action: 'hide_left_panel' });
         }
-        if (this.state.width <= showLhsThreshold && window.innerWidth > showLhsThreshold) {
+        if (this._windowWidth <= showLhsThreshold && window.innerWidth > showLhsThreshold) {
             dis.dispatch({ action: 'show_left_panel' });
         }
-        if (this.state.width > hideRhsThreshold && window.innerWidth <= hideRhsThreshold) {
+        if (this._windowWidth > hideRhsThreshold && window.innerWidth <= hideRhsThreshold) {
             dis.dispatch({ action: 'hide_right_panel' });
         }
-        if (this.state.width <= showRhsThreshold && window.innerWidth > showRhsThreshold) {
+        if (this._windowWidth <= showRhsThreshold && window.innerWidth > showRhsThreshold) {
             dis.dispatch({ action: 'show_right_panel' });
         }
 
-        this.setState({width: window.innerWidth});
+        this._windowWidth = window.innerWidth;
     },
 
     onRoomCreated: function(roomId) {

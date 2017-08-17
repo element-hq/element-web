@@ -103,11 +103,18 @@ class ModalManager {
         return container;
     }
 
+    createTrackedDialog(analyticsAction, analyticsInfo, Element, props, className) {
+        Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
+        return this.createDialog(Element, props, className);
+    }
+
     createDialog(Element, props, className) {
-        if (props && props.title) {
-            Analytics.trackEvent('Modal', props.title, 'createDialog');
-        }
         return this.createDialogAsync((cb) => {cb(Element);}, props, className);
+    }
+
+    createTrackedDialogAsync(analyticsAction, analyticsInfo, loader, props, className) {
+        Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
+        return this.createDialogAsync(loader, props, className);
     }
 
     /**
