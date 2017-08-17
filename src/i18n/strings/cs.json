@@ -4,5 +4,14 @@
     "A new version of Riot is available.": "Je dostupná nová verze Riotu.",
     "Notifications": "Upozornění",
     "Search": "Hledání",
-    "Settings": "Nastavení"
+    "Settings": "Nastavení",
+    "Create new room": "Založit novou místnost",
+    "Room directory": "Adresář místností",
+    "Start chat": "Začít chat",
+    "All Rooms": "Všechny místnosti",
+    "Files": "Soubory",
+    "Filter room names": "Filtrovat místnosti dle názvu",
+    "Forward Message": "Přeposlat zprávu",
+    "Invite to this room": "Pozvat do této místnosti",
+    "Members": "Členové"
 }
