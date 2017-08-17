@@ -329,7 +329,6 @@ module.exports = React.createClass({
                 <div className="mx_RoomHeader_rightRow">
                     { settingsButton }
                     <ManageIntegsButton
-                        onCancelClick={this.props.onCancelClick}
                         roomId={this.props.room.roomId}
                     />
                     { forgetButton }
