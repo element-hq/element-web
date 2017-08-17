@@ -28,6 +28,8 @@ import ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
 import WidgetUtils from '../../../WidgetUtils';
 
+// The maximum number of widgets that can be added in a room
+const MAX_WIDGETS = 2;
 
 module.exports = React.createClass({
     displayName: 'AppsDrawer',
@@ -162,6 +164,18 @@ module.exports = React.createClass({
             e.preventDefault();
         }
 
+        // Display a warning dialog if the max number of widgets have already been added to the room
+        if (this.state.apps && this.state.apps.length >= MAX_WIDGETS) {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            const errorMsg = `The maximum number of ${MAX_WIDGETS} widgets have already been added to this room.`;
+            console.error(errorMsg);
+            Modal.createDialog(ErrorDialog, {
+                title: _t("Cannot add any more widgets"),
+                description: _t("The maximum permitted number of widgets have already been added to this room."),
+            });
+            return;
+        }
+
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                 this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId, 'add_integ') :
@@ -186,21 +200,22 @@ module.exports = React.createClass({
                 />);
             });
 
-        const addWidget = this.state.apps && this.state.apps.length < 2 && this._canUserModify() &&
-            (<div onClick={this.onClickAddWidget}
-                            role="button"
-                            tabIndex="0"
-                            className="mx_AddWidget_button"
-                            title={_t('Add a widget')}>
-                            [+] {_t('Add a widget')}
-                        </div>);
+        const addWidget = (
+            <div onClick={this.onClickAddWidget}
+                role="button"
+                tabIndex="0"
+                className="mx_AddWidget_button"
+                title={_t('Add a widget')}>
+                [+] {_t('Add a widget')}
+            </div>
+        );
 
         return (
             <div className="mx_AppsDrawer">
                 <div id="apps" className="mx_AppsContainer">
                     {apps}
                 </div>
-                {addWidget}
+                {this._canUserModify() && addWidget}
             </div>
         );
     },
