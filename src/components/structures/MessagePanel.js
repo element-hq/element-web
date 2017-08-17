@@ -307,13 +307,13 @@ module.exports = React.createClass({
         for (i = 0; i < this.props.events.length; i++) {
             let mxEv = this.props.events[i];
             let eventId = mxEv.getId();
-            let readMarkerInMels = false;
             let last = (mxEv === lastShownEvent);
 
             const wantTile = this._shouldShowEvent(mxEv);
 
             // Wrap consecutive member events in a ListSummary, ignore if redacted
             if (isMembershipChange(mxEv) && wantTile) {
+                let readMarkerInMels = false;
                 let ts1 = mxEv.getTs();
                 // Ensure that the key of the MemberEventListSummary does not change with new
                 // member events. This will prevent it from being re-created unnecessarily, and
@@ -328,6 +328,11 @@ module.exports = React.createClass({
                 if (this._wantsDateSeparator(prevEvent, mxEv.getDate())) {
                     let dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1} showTwelveHour={this.props.isTwelveHour}/></li>;
                     ret.push(dateSeparator);
+                }
+
+                // If RM event is the first in the MELS, append the RM after MELS
+                if (mxEv.getId() === this.props.readMarkerEventId) {
+                    readMarkerInMels = true;
                 }
 
                 let summarisedEvents = [mxEv];
