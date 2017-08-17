@@ -66,7 +66,7 @@ module.exports = React.createClass({
 
     onRedactClick: function() {
         const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
-        Modal.createDialog(ConfirmRedactDialog, {
+        Modal.createTrackedDialog('Confirm Redact Dialog', 'Image View', ConfirmRedactDialog, {
             onFinished: (proceed) => {
                 if (!proceed) return;
                 var self = this;
@@ -76,7 +76,7 @@ module.exports = React.createClass({
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     // display error message stating you couldn't delete this.
                     var code = e.errcode || e.statusCode;
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('You cannot delete this image.', '', ErrorDialog, {
                         title: _t('Error'),
                         description: _t('You cannot delete this image. (%(code)s)', {code: code})
                     });

@@ -200,5 +200,11 @@
     "Running Matrix services": "Запуск служби Matrix",
     "Set Password": "Задати пароль",
     "Notifications on the following keywords follow rules which can’t be displayed here:": "Сповіщення з наступних ключових слів дотримуються правил, що не можуть бути показані тут:",
-    "To return to your account in future you need to <u>set a password</u>": "Щоб мати змогу використовувати вашу обліковку у майбутньому, <u>зазначте пароль</u>"
+    "To return to your account in future you need to <u>set a password</u>": "Щоб мати змогу використовувати вашу обліковку у майбутньому, <u>зазначте пароль</u>",
+    "Warning": "Попередження",
+    "Checking for an update...": "Перевірка оновлень…",
+    "Error encountered (%(errorDetail)s).": "Трапилась помилка (%(errorDetail)s).",
+    "No update available.": "Оновлення відсутні.",
+    "Downloading update...": "Звантажується оновлення…",
+    "Couldn't load home page": "Не вдалось завантажити домівку"
 }

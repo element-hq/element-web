@@ -40,7 +40,7 @@ export default React.createClass({
 
     displayReleaseNotes: function(releaseNotes) {
         const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
-        Modal.createDialog(QuestionDialog, {
+        Modal.createTrackedDialog('Display release notes', '', QuestionDialog, {
             title: _t("What's New"),
             description: <pre className="changelog_text">{releaseNotes}</pre>,
             button: _t("Update"),
@@ -54,7 +54,7 @@ export default React.createClass({
 
     displayChangelog: function() {
         const ChangelogDialog = sdk.getComponent('dialogs.ChangelogDialog');
-        Modal.createDialog(ChangelogDialog, {
+        Modal.createTrackedDialog('Display Changelog', '', ChangelogDialog, {
             version: this.props.version,
             newVersion: this.props.newVersion,
             onFinished: (update) => {

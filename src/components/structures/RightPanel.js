@@ -31,7 +31,7 @@ module.exports = React.createClass({
     displayName: 'RightPanel',
 
     propTypes: {
-        userId: React.PropTypes.string, // if showing an orphaned MemberInfo page, this is set
+        // TODO: This should not be a prop, it should be received from the RoomViewStore
         roomId: React.PropTypes.string, // if showing panels for a given room, this is set
         collapsed: React.PropTypes.bool, // currently unused property to request for a minimized view of the panel
     },
@@ -57,17 +57,9 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        if (this.props.userId) {
-            var member = new Matrix.RoomMember(null, this.props.userId);
-            return {
-                phase: this.Phase.MemberInfo,
-                member: member,
-            };
-        } else {
-            return {
-                phase: this.Phase.MemberList
-            };
-        }
+        return {
+            phase: this.Phase.MemberList
+        };
     },
 
     onMemberListButtonClick: function() {
@@ -229,7 +221,7 @@ module.exports = React.createClass({
             }
             else if(this.state.phase == this.Phase.MemberInfo) {
                 var MemberInfo = sdk.getComponent('rooms.MemberInfo');
-                panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.props.userId} />
+                panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />
             }
             else if (this.state.phase == this.Phase.NotificationPanel) {
                 panel = <NotificationPanel />
