@@ -786,19 +786,8 @@ module.exports = React.createClass({
             dis.dispatch({action: 'view_set_mxid'});
             return;
         }
-        // Dialog shows inverse of m.federate (noFederate) strict false check to skip undefined check (default = true)
-        const defaultNoFederate = this.props.config.default_federate === false;
-        const TextInputWithCheckboxDialog = sdk.getComponent("dialogs.TextInputWithCheckboxDialog");
-        Modal.createDialog(TextInputWithCheckboxDialog, {
-            title: _t('Create Room'),
-            description: _t('Room name (optional)'),
-            button: _t('Create Room'),
-            check: defaultNoFederate,
-            checkLabel: <span>
-                {_t('Block users on other matrix homeservers from joining this room')}
-                <br/>
-                ({_t('This setting cannot be changed later!')})
-            </span>,
+        const CreateRoomDialog = sdk.getComponent('dialogs.CreateRoomDialog');
+        Modal.createDialog(CreateRoomDialog, {
             onFinished: (shouldCreate, name, noFederate) => {
                 if (shouldCreate) {
                     const createOpts = {};
