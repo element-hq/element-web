@@ -323,14 +323,18 @@ module.exports = React.createClass({
         }
 
         let rightRow;
+        let manageIntegsButton;
+        if(this.props.room && this.props.room.roomId) {
+            manageIntegsButton = <ManageIntegsButton
+                roomId={this.props.room.roomId}
+            />;
+        }
 
         if (!this.props.editing) {
             rightRow =
                 <div className="mx_RoomHeader_rightRow">
                     { settingsButton }
-                    <ManageIntegsButton
-                        roomId={this.props.room.roomId}
-                    />
+                    { manageIntegsButton }
                     { forgetButton }
                     { searchButton }
                     { rightPanelButtons }
