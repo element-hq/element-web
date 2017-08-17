@@ -1,4 +1,8 @@
 {
     "Close": "Zavřít",
-    "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.": "<a href=\"http://apple.com/safari\">Safari</a> a <a href=\"http://opera.com\">Opera</a> fungují také."
+    "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.": "<a href=\"http://apple.com/safari\">Safari</a> a <a href=\"http://opera.com\">Opera</a> fungují také.",
+    "A new version of Riot is available.": "Je dostupná nová verze Riotu.",
+    "Notifications": "Upozornění",
+    "Search": "Hledání",
+    "Settings": "Nastavení"
 }
