@@ -297,7 +297,6 @@
     "left": "έφυγε",
     "%(targetName)s left the room.": "Ο χρήστης %(targetName)s έφυγε από το δωμάτιο.",
     "Level": "Επίπεδο",
-    "List this room in %(domain)s's room directory?": "Να εμφανίζεται το δωμάτιο στο γενικό ευρετήριο του διακομιστή %(domain)s;",
     "Local addresses for this room:": "Τοπική διεύθυνση για το δωμάτιο:",
     "Logged in as:": "Συνδεθήκατε ως:",
     "Login as guest": "Σύνδεση ως επισκέπτης",
