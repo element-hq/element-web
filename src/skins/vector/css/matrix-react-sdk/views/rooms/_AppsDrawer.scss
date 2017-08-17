@@ -43,6 +43,7 @@ limitations under the License.
 }
 
 .mx_AppTile {
+    max-width: 960px;
     width: 50%;
     margin: 0 5px 2px 0;
     border: 1px solid $primary-hairline-color;
@@ -52,6 +53,7 @@ limitations under the License.
 }
 
 .mx_AppTileFullWidth {
+    max-width: 960px;
     width: 100%;
     margin: 0;
     padding: 0;
