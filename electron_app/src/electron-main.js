@@ -228,6 +228,17 @@ electron.app.on('ready', () => {
         }
     });
 
+    if (process.platform === 'win32') {
+        // Handle forward/backward mouse buttons in Windows
+        mainWindow.on('app-command', (e, cmd) => {
+            if (cmd === 'browser-backward' && mainWindow.webContents.canGoBack()) {
+                mainWindow.webContents.goBack();
+            } else if (cmd === 'browser-forward' && mainWindow.webContents.canGoForward()) {
+                mainWindow.webContents.goForward();
+            }
+        });
+    }
+
     webContentsHandler(mainWindow.webContents);
     mainWindowState.manage(mainWindow);
 });
