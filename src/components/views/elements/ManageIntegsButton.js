@@ -61,7 +61,7 @@ export default class ManageIntegsButton extends React.Component {
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         Modal.createDialog(IntegrationsManager, {
             src: (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
-                this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId) :
+                this.scalarClient.getScalarInterfaceUrlForRoom(this.props.roomId) :
                 null,
             onFinished: ()=>{
                 if (this.props.onCancelClick) {
@@ -118,7 +118,7 @@ export default class ManageIntegsButton extends React.Component {
 }
 
 ManageIntegsButton.propTypes = {
-    room: PropTypes.object.isRequired,
+    roomId: PropTypes.string.isRequired,
     onCancelClick: PropTypes.func,
 };
 

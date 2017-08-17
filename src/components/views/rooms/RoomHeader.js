@@ -330,7 +330,7 @@ module.exports = React.createClass({
                     { settingsButton }
                     <ManageIntegsButton
                         onCancelClick={this.props.onCancelClick}
-                        room={this.props.room}
+                        roomId={this.props.room.roomId}
                     />
                     { forgetButton }
                     { searchButton }
