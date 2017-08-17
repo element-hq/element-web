@@ -30,7 +30,7 @@ export default class ManageIntegsButton extends React.Component {
         super(props);
 
         this.state = {
-            scalar_error: null,
+            scalarError: null,
             showIntegrationsError: false,
         };
 
@@ -47,7 +47,7 @@ export default class ManageIntegsButton extends React.Component {
             this.scalarClient.connect().done(() => {
                 this.forceUpdate();
             }, (err) => {
-                this.setState({ scalar_error: err});
+                this.setState({ scalarError: err});
             });
         }
     }
@@ -82,8 +82,8 @@ export default class ManageIntegsButton extends React.Component {
         let integrationsButton;
         let integrationsError;
         if (this.scalarClient !== null) {
-            if (this.state.showIntegrationsError && this.state.scalar_error) {
-                console.error(this.state.scalar_error);
+            if (this.state.showIntegrationsError && this.state.scalarError) {
+                console.error(this.state.scalarError);
                 integrationsError = (
                     <span className="mx_RoomSettings_integrationsButton_errorPopup">
                         { _t('Could not connect to the integration server') }
@@ -97,7 +97,7 @@ export default class ManageIntegsButton extends React.Component {
                         <TintableSvg src="img/icons-apps.svg" width="35" height="35"/>
                     </AccessibleButton>
                 );
-            } else if (this.state.scalar_error) {
+            } else if (this.state.scalarError) {
                 integrationsButton = (
                     <div className="mx_RoomSettings_integrationsButton_error" onClick={ this.onShowIntegrationsError }>
                         <img src="img/warning.svg" title={_t('Integrations Error')} width="17"/>
