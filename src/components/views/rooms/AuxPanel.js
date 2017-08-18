@@ -129,11 +129,13 @@ module.exports = React.createClass({
         );
 
         let appsDrawer = null;
-        if(UserSettingsStore.isFeatureEnabled('matrix_apps') && this.props.showApps) {
+        if(UserSettingsStore.isFeatureEnabled('matrix_apps')) {
             appsDrawer = <AppsDrawer ref="appsDrawer"
                 room={this.props.room}
                 userId={this.props.userId}
-                maxHeight={this.props.maxHeight}/>;
+                maxHeight={this.props.maxHeight}
+                showApps={this.props.showApps}
+            />;
         }
 
         return (
