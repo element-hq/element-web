@@ -341,6 +341,10 @@ module.exports = React.createClass({
 
                     // Ignore redacted/hidden member events
                     if (!this._shouldShowEvent(collapsedMxEv)) {
+                        // If this hidden event is the RM and in or at end of a MELS put RM after MELS.
+                        if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
+                            readMarkerInMels = true;
+                        }
                         continue;
                     }
 
