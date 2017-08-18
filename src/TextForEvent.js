@@ -252,10 +252,7 @@ function textForWidgetEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
     const previousContent = event.getPrevContent() || {};
     const {name, type, url} = event.getContent() || {};
-    let widgetName = widgetName || name || type || previousContent.type || '';
-
-    // Apply sentence case
-    widgetName = widgetName ? widgetName[0].toUpperCase() + widgetName.slice(1).toLowerCase() + ' ' : '';
+    const widgetName = widgetName || name || type || previousContent.type || '';
 
     // If the widget was removed, its content should be {}, but this is sufficiently
     // equivalent to that condition.

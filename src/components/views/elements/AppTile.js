@@ -183,7 +183,6 @@ export default React.createClass({
         let appTileName = "No name";
         if(this.props.name && this.props.name.trim()) {
             appTileName = this.props.name.trim();
-            appTileName = appTileName[0].toUpperCase() + appTileName.slice(1).toLowerCase();
         }
         return appTileName;
     },
