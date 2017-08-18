@@ -252,7 +252,8 @@ function textForWidgetEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
     const previousContent = event.getPrevContent() || {};
     const {name, type, url} = event.getContent() || {};
-    const widgetName = widgetName || name || type || previousContent.type || '';
+    let widgetName = widgetName || name || type || previousContent.type;
+    widgetName = widgetName ? widgetName + ' ' : '';
 
     // If the widget was removed, its content should be {}, but this is sufficiently
     // equivalent to that condition.
