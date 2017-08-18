@@ -544,8 +544,24 @@ module.exports = React.createClass({
         }
     },
 
+    _makeGroupInviteTiles() {
+        const ret = [];
+
+        const GroupInviteTile = sdk.getComponent('groups.GroupInviteTile');
+        for (const group of MatrixClientPeg.get().getGroups()) {
+            if (group.myMembership !== 'invite') continue;
+
+            ret.push(<GroupInviteTile key={group.groupId} group={group} />);
+        }
+
+        return ret;
+    },
+
     render: function() {
-        var RoomSubList = sdk.getComponent('structures.RoomSubList');
+        const RoomSubList = sdk.getComponent('structures.RoomSubList');
+
+        const inviteSectionExtraTiles = this._makeGroupInviteTiles();
+
         var self = this;
         return (
             <GeminiScrollbar className="mx_RoomList_scrollbar"
@@ -560,7 +576,9 @@ module.exports = React.createClass({
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
-                             onShowMoreRooms={ self.onShowMoreRooms } />
+                             onShowMoreRooms={ self.onShowMoreRooms }
+                             extraTiles={ inviteSectionExtraTiles }
+                />
 
                 <RoomSubList list={ self.state.lists['m.favourite'] }
                              label={ _t('Favourites') }
