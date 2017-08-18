@@ -53,10 +53,6 @@ module.exports = React.createClass({
             this.scalarClient = new ScalarAuthClient();
             this.scalarClient.connect().done(() => {
                 this.forceUpdate();
-                if (this.state.apps && this.state.apps.length < 1) {
-                    // XXX: This should not be called here, we should do something much nicer
-                    this.onClickAddWidget();
-                }
             // TODO -- Handle Scalar errors
             // },
             // (err) => {
@@ -65,12 +61,35 @@ module.exports = React.createClass({
             //     });
             });
         }
+
+        this.dispatcherRef = dis.register(this.onAction.bind(this));
     },
 
     componentWillUnmount: function() {
         ScalarMessaging.stopListening();
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
+        }
+        dis.unregister(this.dispatcherRef);
+    },
+
+    componentWillReceiveProps(newProps) {
+        // Room has changed probably, update apps
+        this._updateApps();
+    },
+
+    onAction: function(action) {
+        switch (action.action) {
+            case 'appsDrawer':
+                // When opening the app draw when there aren't any apps, auto-launch the
+                // integrations manager to skip the awkward click on "Add widget"
+                if (action.show) {
+                    const apps = this._getApps();
+                    if (apps.length === 0) {
+                        this._launchManageIntegrations();
+                    }
+                }
+                break;
         }
     },
 
@@ -139,12 +158,6 @@ module.exports = React.createClass({
 
     _updateApps: function() {
         const apps = this._getApps();
-        if (apps.length < 1) {
-            dis.dispatch({
-                action: 'appsDrawer',
-                show: false,
-            });
-        }
         this.setState({
             apps: apps,
         });
@@ -159,11 +172,7 @@ module.exports = React.createClass({
         }
     },
 
-    onClickAddWidget: function(e) {
-        if (e) {
-            e.preventDefault();
-        }
-
+    _launchManageIntegrations: function() {
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                 this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId, 'add_integ') :
@@ -171,6 +180,11 @@ module.exports = React.createClass({
         Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
             src: src,
         }, "mx_IntegrationsManager");
+    },
+
+    onClickAddWidget: function(e) {
+        e.preventDefault();
+        this._launchManageIntegrations();
     },
 
     render: function() {
