@@ -257,6 +257,8 @@ function textForWidgetEvent(event) {
     // Apply sentence case
     widgetName = widgetName ? widgetName[0].toUpperCase() + widgetName.slice(1).toLowerCase() + ' ' : '';
 
+    // If the widget was removed, its content should be {}, but this is sufficiently
+    // equivalent to that condition.
     if (url) {
         return _t('%(senderName)s added a %(widgetName)swidget', {
             senderName, widgetName,
