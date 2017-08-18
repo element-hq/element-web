@@ -29,6 +29,7 @@ import * as linkify from 'linkifyjs';
 import linkifyElement from 'linkifyjs/element';
 import linkifyMatrix from '../../../linkify-matrix';
 import AccessibleButton from '../elements/AccessibleButton';
+import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
 
 linkifyMatrix(linkify);
@@ -47,6 +48,7 @@ module.exports = React.createClass({
         onSaveClick: React.PropTypes.func,
         onSearchClick: React.PropTypes.func,
         onLeaveClick: React.PropTypes.func,
+        onCancelClick: React.PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -54,6 +56,7 @@ module.exports = React.createClass({
             editing: false,
             inRoom: false,
             onSaveClick: function() {},
+            onCancelClick: function() {},
         };
     },
 
@@ -320,10 +323,18 @@ module.exports = React.createClass({
         }
 
         let rightRow;
+        let manageIntegsButton;
+        if(this.props.room && this.props.room.roomId) {
+            manageIntegsButton = <ManageIntegsButton
+                roomId={this.props.room.roomId}
+            />;
+        }
+
         if (!this.props.editing) {
             rightRow =
                 <div className="mx_RoomHeader_rightRow">
                     { settingsButton }
+                    { manageIntegsButton }
                     { forgetButton }
                     { searchButton }
                     { rightPanelButtons }

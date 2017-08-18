@@ -28,6 +28,8 @@ import ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
 import WidgetUtils from '../../../WidgetUtils';
 
+// The maximum number of widgets that can be added in a room
+const MAX_WIDGETS = 2;
 
 module.exports = React.createClass({
     displayName: 'AppsDrawer',
@@ -184,6 +186,18 @@ module.exports = React.createClass({
 
     onClickAddWidget: function(e) {
         e.preventDefault();
+        // Display a warning dialog if the max number of widgets have already been added to the room
+        const apps = this._getApps();
+        if (apps && apps.length >= MAX_WIDGETS) {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            const errorMsg = `The maximum number of ${MAX_WIDGETS} widgets have already been added to this room.`;
+            console.error(errorMsg);
+            Modal.createDialog(ErrorDialog, {
+                title: _t("Cannot add any more widgets"),
+                description: _t("The maximum permitted number of widgets have already been added to this room."),
+            });
+            return;
+        }
         this._launchManageIntegrations();
     },
 
@@ -206,8 +220,6 @@ module.exports = React.createClass({
 
         let addWidget;
         if (this.props.showApps &&
-            this.state.apps &&
-            this.state.apps.length < 2 &&
             this._canUserModify()
         ) {
             addWidget = <div
@@ -225,7 +237,7 @@ module.exports = React.createClass({
                 <div id="apps" className="mx_AppsContainer">
                     {apps}
                 </div>
-                {addWidget}
+                {this._canUserModify() && addWidget}
             </div>
         );
     },
