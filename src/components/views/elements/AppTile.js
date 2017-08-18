@@ -223,42 +223,44 @@ export default React.createClass({
             safeWidgetUrl = url.format(parsedWidgetUrl);
         }
 
-        if (this.state.loading) {
-            appTileBody = (
-                <div className='mx_AppTileBody mx_AppLoading'>
-                    <MessageSpinner msg='Loading...'/>
-                </div>
-            );
-        } else if (this.state.hasPermissionToLoad == true) {
-            if (this.isMixedContent()) {
+        if (this.props.show) {
+            if (this.state.loading) {
+                appTileBody = (
+                    <div className='mx_AppTileBody mx_AppLoading'>
+                        <MessageSpinner msg='Loading...'/>
+                    </div>
+                );
+            } else if (this.state.hasPermissionToLoad == true) {
+                if (this.isMixedContent()) {
+                    appTileBody = (
+                        <div className="mx_AppTileBody">
+                            <AppWarning
+                                errorMsg="Error - Mixed content"
+                            />
+                        </div>
+                    );
+                } else {
+                    appTileBody = (
+                        <div className="mx_AppTileBody">
+                            <iframe
+                                ref="appFrame"
+                                src={safeWidgetUrl}
+                                allowFullScreen="true"
+                                sandbox={sandboxFlags}
+                            ></iframe>
+                        </div>
+                    );
+                }
+            } else {
                 appTileBody = (
                     <div className="mx_AppTileBody">
-                        <AppWarning
-                            errorMsg="Error - Mixed content"
+                        <AppPermission
+                            url={this.state.widgetUrl}
+                            onPermissionGranted={this._grantWidgetPermission}
                         />
                     </div>
                 );
-            } else if (this.props.show) {
-                appTileBody = (
-                    <div className="mx_AppTileBody">
-                        <iframe
-                            ref="appFrame"
-                            src={safeWidgetUrl}
-                            allowFullScreen="true"
-                            sandbox={sandboxFlags}
-                        ></iframe>
-                    </div>
-                );
             }
-        } else {
-            appTileBody = (
-                <div className="mx_AppTileBody">
-                    <AppPermission
-                        url={this.state.widgetUrl}
-                        onPermissionGranted={this._grantWidgetPermission}
-                    />
-                </div>
-            );
         }
 
         // editing is done in scalar
