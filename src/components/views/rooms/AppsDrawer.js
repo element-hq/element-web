@@ -220,8 +220,6 @@ module.exports = React.createClass({
 
         let addWidget;
         if (this.props.showApps &&
-            this.state.apps &&
-            this.state.apps.length < 2 &&
             this._canUserModify()
         ) {
             addWidget = <div
