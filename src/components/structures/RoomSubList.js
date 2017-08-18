@@ -88,6 +88,7 @@ var RoomSubList = React.createClass({
         searchFilter: React.PropTypes.string,
         emptyContent: React.PropTypes.node, // content shown if the list is empty
         headerItems: React.PropTypes.node, // content shown in the sublist header
+        extraTiles: React.PropTypes.arrayOf(React.PropTypes.node), // extra elements added beneath tiles
     },
 
     getInitialState: function() {
@@ -101,7 +102,8 @@ var RoomSubList = React.createClass({
     getDefaultProps: function() {
         return {
             onHeaderClick: function() {}, // NOP
-            onShowMoreRooms: function() {} // NOP
+            onShowMoreRooms: function() {}, // NOP
+            extraTiles: [],
         };
     },
 
@@ -532,13 +534,14 @@ var RoomSubList = React.createClass({
         var label = this.props.collapsed ? null : this.props.label;
 
         let content;
-        if (this.state.sortedList.length == 0 && !this.props.searchFilter) {
+        if (this.state.sortedList.length == 0 && !this.props.searchFilter && !this.props.extraTiles) {
             content = this.props.emptyContent;
         } else {
             content = this.makeRoomTiles();
+            content.push(...this.props.extraTiles);
         }
 
-        if (this.state.sortedList.length > 0 || this.props.editable) {
+        if (this.state.sortedList.length > 0 || this.props.extraTiles.length > 0 || this.props.editable) {
             var subList;
             var classes = "mx_RoomSubList";
 
