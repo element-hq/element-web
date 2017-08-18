@@ -115,6 +115,3 @@ export default class ManageIntegsButton extends React.Component {
 ManageIntegsButton.propTypes = {
     roomId: PropTypes.string.isRequired,
 };
-
-ManageIntegsButton.defaultProps = {
-};
