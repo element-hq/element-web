@@ -552,10 +552,8 @@
     "Failed to forget room %(errCode)s": "Das Entfernen des Raums ist fehlgeschlagen %(errCode)s",
     "Failed to join the room": "Fehler beim Betreten des Raumes",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Eine Textnachricht wurde an +%(msisdn)s gesendet. Bitte gebe den Verifikationscode ein, den er beinhaltet",
-    "and %(count)s others...": {
-        "other": "und %(count)s weitere...",
-        "one": "und ein(e) weitere(r)..."
-    },
+    "and %(count)s others....other": "und %(count)s weitere...",
+    "and %(count)s others....one": "und ein(e) weitere(r)...",
     "Are you sure?": "Bist du sicher?",
     "Attachment": "Anhang",
     "Ban": "Dauerhaft aus dem Raum ausschließen",
@@ -905,7 +903,7 @@
     "Something went wrong!": "Etwas ging schief!",
     "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.": "Dies wird dein zukünftiger Benutzername auf dem <span></span> Heimserver. Alternativ kannst du auch einen <a>anderen Server</a> auswählen.",
     "If you already have a Matrix account you can <a>log in</a> instead.": "Wenn du bereits ein Matrix-Benutzerkonto hast, kannst du dich stattdessen auch direkt <a>anmelden</a>.",
-    "Home": "Start",
+    "Home": "Startseite",
     "Username invalid: %(errMessage)s": "Ungültiger Benutzername: %(errMessage)s",
     "a room": "einen Raum",
     "Accept": "Akzeptieren",
