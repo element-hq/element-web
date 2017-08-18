@@ -64,11 +64,6 @@ export default class ManageIntegsButton extends React.Component {
             src: (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                 this.scalarClient.getScalarInterfaceUrlForRoom(this.props.roomId) :
                 null,
-            onFinished: ()=>{
-                if (this.props.onCancelClick) {
-                    this.props.onCancelClick(ev);
-                }
-            },
         }, "mx_IntegrationsManager");
     }
 
@@ -119,9 +114,7 @@ export default class ManageIntegsButton extends React.Component {
 
 ManageIntegsButton.propTypes = {
     roomId: PropTypes.string.isRequired,
-    onCancelClick: PropTypes.func,
 };
 
 ManageIntegsButton.defaultProps = {
-    onCancelClick: function() {},
 };
