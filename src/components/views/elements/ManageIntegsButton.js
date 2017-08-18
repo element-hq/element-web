@@ -48,6 +48,7 @@ export default class ManageIntegsButton extends React.Component {
                 this.forceUpdate();
             }, (err) => {
                 this.setState({ scalarError: err});
+                console.error(err);
             });
         }
     }
@@ -83,7 +84,6 @@ export default class ManageIntegsButton extends React.Component {
         let integrationsError;
         if (this.scalarClient !== null) {
             if (this.state.showIntegrationsError && this.state.scalarError) {
-                console.error(this.state.scalarError);
                 integrationsError = (
                     <span className="mx_RoomSettings_integrationsButton_errorPopup">
                         { _t('Could not connect to the integration server') }
