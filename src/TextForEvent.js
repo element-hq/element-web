@@ -252,18 +252,21 @@ function textForWidgetEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
     const previousContent = event.getPrevContent() || {};
     const {name, type, url} = event.getContent() || {};
-    let widgetName = widgetName || name || type || previousContent.type;
-    widgetName = widgetName ? widgetName + ' ' : '';
+    let widgetName = name || previousContent.name || type || previousContent.type || '';
+    // Apply sentence case to widget name
+    if (widgetName && widgetName.length > 0) {
+        widgetName = widgetName[0].toUpperCase() + widgetName.slice(1) + ' ';
+    }
 
     // If the widget was removed, its content should be {}, but this is sufficiently
     // equivalent to that condition.
     if (url) {
-        return _t('%(senderName)s added a %(widgetName)swidget', {
-            senderName, widgetName,
+        return _t('%(widgetName)s widget added by %(senderName)s', {
+            widgetName, senderName,
         });
     } else {
-        return _t('%(senderName)s removed a %(widgetName)swidget', {
-            senderName, widgetName,
+        return _t('%(widgetName)s widget removed by %(senderName)s', {
+            widgetName, senderName,
         });
     }
 }
