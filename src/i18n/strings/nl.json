@@ -480,7 +480,6 @@
     "left": "verlaten",
     "%(targetName)s left the room.": "%(targetName)s heeft de ruimte verlaten.",
     "Level:": "Niveau:",
-    "List this room in %(domain)s's room directory?": "Deze ruimte in %(domain)s's ruimte catalogus vermelden?",
     "Local addresses for this room:": "Lokale adressen voor deze ruimte:",
     "Logged in as:": "Ingelogd als:",
     "Login as guest": "Als gast inloggen",
