@@ -792,7 +792,7 @@ module.exports = React.createClass({
                             <input type="checkbox" disabled={ !roomState.mayClientSendStateEvent("m.room.aliases", cli) }
                                    onChange={ this._onToggle.bind(this, "isRoomPublished", true, false)}
                                    checked={this.state.isRoomPublished}/>
-                            {_t("List this room in %(domain)s's room directory?", { domain: MatrixClientPeg.get().getDomain() })}
+                            {_t("Publish this room to the public in %(domain)s's room directory?", { domain: MatrixClientPeg.get().getDomain() })}
                         </label>
                     </div>
                     <div className="mx_RoomSettings_settings">

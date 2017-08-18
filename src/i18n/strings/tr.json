@@ -380,7 +380,6 @@
     "left": "ayrıldı",
     "%(targetName)s left the room.": "%(targetName)s odadan ayrıldı.",
     "Level:": "Seviye :",
-    "List this room in %(domain)s's room directory?": "Bu oda %(domain)s' in oda dizininde listelensin mi ?",
     "Local addresses for this room:": "Bu oda için yerel adresler :",
     "Logged in as:": "Olarak giriş yaptı :",
     "Login as guest": "Misafir olarak giriş yaptı",

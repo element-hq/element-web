@@ -393,7 +393,7 @@
     "left": "left",
     "%(targetName)s left the room.": "%(targetName)s left the room.",
     "Level:": "Level:",
-    "List this room in %(domain)s's room directory?": "List this room in %(domain)s's room directory?",
+    "Publish this room to the public in %(domain)s's room directory?": "Publish this room to the public in %(domain)s's room directory?",
     "Local addresses for this room:": "Local addresses for this room:",
     "Logged in as:": "Logged in as:",
     "Login as guest": "Login as guest",
@@ -972,5 +972,7 @@
     "Failed to upload image": "Failed to upload image",
     "Failed to update group": "Failed to update group",
     "Hide avatars in user and room mentions": "Hide avatars in user and room mentions",
+    "%(senderName)s added a %(widgetName)swidget": "%(senderName)s added a %(widgetName)swidget",
+    "%(senderName)s removed a %(widgetName)swidget": "%(senderName)s removed a %(widgetName)swidget",
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot check is currently unavailable on desktop - please use a <a>web browser</a>"
 }

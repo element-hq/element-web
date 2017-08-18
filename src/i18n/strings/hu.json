@@ -404,7 +404,6 @@
     "left": "kilépett",
     "%(targetName)s left the room.": "%(targetName)s elhagyta a szobát.",
     "Level:": "Szint:",
-    "List this room in %(domain)s's room directory?": "%(domain)s szobát feltüntessük a szobák listájában?",
     "Local addresses for this room:": "A szoba helyi címe:",
     "Logged in as:": "Bejelentkezve mint:",
     "Login as guest": "Belépés vendégként",

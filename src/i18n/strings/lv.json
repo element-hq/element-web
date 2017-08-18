@@ -380,7 +380,6 @@
     "left": "atstāja",
     "%(targetName)s left the room.": "%(targetName)s atstāja istabu.",
     "Level:": "Līmenis:",
-    "List this room in %(domain)s's room directory?": "Rādīt šo istabu %(domain)s kataloga sarakstā?",
     "Local addresses for this room:": "Šīs istabas lokālās adreses:",
     "Logged in as:": "Pierakstījās kā:",
     "Login as guest": "Pierakstīties kā viesis",

@@ -231,7 +231,6 @@
     "left and rejoined": "ออกแล้วกลับเข้าร่วมอีกครั้ง",
     "left": "ออกไปแล้ว",
     "%(targetName)s left the room.": "%(targetName)s ออกจากห้องแล้ว",
-    "List this room in %(domain)s's room directory?": "แสดงห้องนี้ในไดเรกทอรีห้องของ %(domain)s?",
     "Logged in as:": "เข้าสู่ระบบในชื่อ:",
     "Login as guest": "เข้าสู่ระบบในฐานะแขก",
     "Logout": "ออกจากระบบ",

@@ -28,6 +28,7 @@ import AppPermission from './AppPermission';
 import AppWarning from './AppWarning';
 import MessageSpinner from './MessageSpinner';
 import WidgetUtils from '../../../WidgetUtils';
+import dis from '../../../dispatcher';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const betaHelpMsg = 'This feature is currently experimental and is intended for beta testing only';
@@ -44,6 +45,10 @@ export default React.createClass({
         // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
         // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
         fullWidth: React.PropTypes.bool,
+        // UserId of the current user
+        userId: React.PropTypes.string.isRequired,
+        // UserId of the entity that added / modified the widget
+        creatorUserId: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -59,7 +64,8 @@ export default React.createClass({
             loading: false,
             widgetUrl: this.props.url,
             widgetPermissionId: widgetPermissionId,
-            hasPermissionToLoad: Boolean(hasPermissionToLoad === 'true'),
+            // Assume that widget has permission to load if we are the user who added it to the room, or if explicitly granted by the user
+            hasPermissionToLoad: hasPermissionToLoad === 'true' || this.props.userId === this.props.creatorUserId,
             error: null,
             deleting: false,
         };
@@ -177,9 +183,23 @@ export default React.createClass({
         let appTileName = "No name";
         if(this.props.name && this.props.name.trim()) {
             appTileName = this.props.name.trim();
-            appTileName = appTileName[0].toUpperCase() + appTileName.slice(1).toLowerCase();
         }
         return appTileName;
+    },
+
+    onClickMenuBar: function(ev) {
+        ev.preventDefault();
+
+        // Ignore clicks on menu bar children
+        if (ev.target !== this.refs.menu_bar) {
+            return;
+        }
+
+        // Toggle the view state of the apps drawer
+        dis.dispatch({
+            action: 'appsDrawer',
+            show: !this.props.show,
+        });
     },
 
     render: function() {
@@ -218,7 +238,7 @@ export default React.createClass({
                         />
                     </div>
                 );
-            } else {
+            } else if (this.props.show) {
                 appTileBody = (
                     <div className="mx_AppTileBody">
                         <iframe
@@ -253,7 +273,7 @@ export default React.createClass({
 
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
-                <div className="mx_AppTileMenuBar">
+                <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
                     {this.formatAppTileName()}
                     <span className="mx_AppTileMenuBarWidgets">
                         <span className="mx_Beta" alt={betaHelpMsg} title={betaHelpMsg}>&#946;</span>

@@ -464,7 +464,6 @@
     "left": "atera da",
     "%(targetName)s left the room.": "%(targetName)s erabiltzailea gelatik atera da.",
     "Level:": "Maila:",
-    "List this room in %(domain)s's room directory?": "Gela hau %(domain)s's domeinuko gelen direktorioan zerrendatu?",
     "Local addresses for this room:": "Gela honen tokiko helbideak:",
     "Logged in as:": "Saioa hasteko erabiltzailea:",
     "Login as guest": "Hasi saioa bisitari gisa",
