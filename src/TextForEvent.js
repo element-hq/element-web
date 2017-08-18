@@ -250,8 +250,8 @@ function textForPowerEvent(event) {
 
 function textForWidgetEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
-    const previousContent = event.getPrevContent() ? event.getPrevContent() : {};
-    const {name, type, url} = event.getContent() ? event.getContent() : {};
+    const previousContent = event.getPrevContent() || {};
+    const {name, type, url} = event.getContent() || {};
     let widgetName = widgetName || name || type || previousContent.type || '';
 
     // Apply sentence case
