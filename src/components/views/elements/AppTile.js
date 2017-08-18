@@ -44,6 +44,10 @@ export default React.createClass({
         // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
         // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
         fullWidth: React.PropTypes.bool,
+        // UserId of the current user
+        userId: React.PropTypes.string.isRequired,
+        // UserId of the entity that added / modified the widget
+        creatorUserId: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -59,7 +63,8 @@ export default React.createClass({
             loading: false,
             widgetUrl: this.props.url,
             widgetPermissionId: widgetPermissionId,
-            hasPermissionToLoad: Boolean(hasPermissionToLoad === 'true'),
+            // Assume that widget has permission to load if we are the user who added it to the room, or if explicitly granted by the user
+            hasPermissionToLoad: hasPermissionToLoad === 'true' || this.props.userId === this.props.creatorUserId,
             error: null,
             deleting: false,
         };
