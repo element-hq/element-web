@@ -93,7 +93,7 @@ module.exports = React.createClass({
         return pathTemplate;
     },
 
-    _initAppConfig: function(appId, app) {
+    _initAppConfig: function(appId, app, sender) {
         const user = MatrixClientPeg.get().getUser(this.props.userId);
         const params = {
             '$matrix_user_id': this.props.userId,
@@ -111,6 +111,7 @@ module.exports = React.createClass({
         app.id = appId;
         app.name = app.name || app.type;
         app.url = this.encodeUri(app.url, params);
+        app.creatorUserId = (sender && sender.userId) ? sender.userId : null;
 
         return app;
     },
@@ -131,7 +132,7 @@ module.exports = React.createClass({
         return appsStateEvents.filter((ev) => {
             return ev.getContent().type && ev.getContent().url;
         }).map((ev) => {
-            return this._initAppConfig(ev.getStateKey(), ev.getContent());
+            return this._initAppConfig(ev.getStateKey(), ev.getContent(), ev.sender);
         });
     },
 
@@ -183,6 +184,7 @@ module.exports = React.createClass({
                     fullWidth={arr.length<2 ? true : false}
                     room={this.props.room}
                     userId={this.props.userId}
+                    creatorUserId={app.creatorUserId}
                 />);
             });
 
