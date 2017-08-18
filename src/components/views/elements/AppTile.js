@@ -122,7 +122,7 @@ export default React.createClass({
     _onEditClick: function(e) {
         console.log("Edit widget ID ", this.props.id);
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        const src = this._scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId, 'type_' + this.props.type);
+        const src = this._scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId, 'type_' + this.props.type, this.props.id);
         Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
             src: src,
         }, "mx_IntegrationsManager");

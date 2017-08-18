@@ -76,10 +76,13 @@ class ScalarAuthClient {
         return defer.promise;
     }
 
-    getScalarInterfaceUrlForRoom(roomId, screen) {
+    getScalarInterfaceUrlForRoom(roomId, screen, id) {
         var url = SdkConfig.get().integrations_ui_url;
         url += "?scalar_token=" + encodeURIComponent(this.scalarToken);
         url += "&room_id=" + encodeURIComponent(roomId);
+        if (id) {
+            url += '&integ_id=' + id;
+        }
         if (screen) {
             url += '&screen=' + encodeURIComponent(screen);
         }

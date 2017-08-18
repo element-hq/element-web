@@ -129,7 +129,10 @@ module.exports = React.createClass({
         );
 
         let appsDrawer = null;
+        let appCount = 0;
         if(UserSettingsStore.isFeatureEnabled('matrix_apps') && this.props.showApps) {
+            const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets');
+            if (appsStateEvents) appCount = appsStateEvents.length;
             appsDrawer = <AppsDrawer ref="appsDrawer"
                 room={this.props.room}
                 userId={this.props.userId}
@@ -137,7 +140,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className={ appsDrawer ? "mx_RoomView_auxPanel mx_RoomView_auxPanel_apps" : "mx_RoomView_auxPanel" } style={{maxHeight: this.props.maxHeight}} >
+            <div className={ appCount == 2 ? "mx_RoomView_auxPanel mx_RoomView_auxPanel_wide" : "mx_RoomView_auxPanel" } style={{maxHeight: this.props.maxHeight}} >
                 { appsDrawer }
                 { fileDropTarget }
                 { callView }
