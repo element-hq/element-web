@@ -251,13 +251,13 @@ function textForPowerEvent(event) {
 function textForWidgetEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
     const previousContent = event.getPrevContent() ? event.getPrevContent() : {};
-    const {name, type} = event.getContent() ? event.getContent() : {};
+    const {name, type, url} = event.getContent() ? event.getContent() : {};
     let widgetName = widgetName || name || type || previousContent.type || '';
 
     // Apply sentence case
     widgetName = widgetName ? widgetName[0].toUpperCase() + widgetName.slice(1).toLowerCase() + ' ' : '';
 
-    if (event.getContent().url) {
+    if (url) {
         return _t('%(senderName)s added a %(widgetName)swidget', {
             senderName, widgetName,
         });
