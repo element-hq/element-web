@@ -191,8 +191,10 @@
     "%(names)s and %(lastPerson)s are typing": "%(names)s et %(lastPerson)s sont en train d'écrire",
     "%(names)s and one other are typing": "%(names)s et un autre sont en train d'écrire",
     "%(names)s and %(count)s others are typing": "%(names)s et %(count)s d'autres sont en train d'écrire",
-    "and %(count)s others....other": "et %(count)s autres...",
-    "and %(count)s others....one": "et un autre...",
+    "and %(count)s others...": {
+        "other": "et %(count)s autres...",
+        "one": "et un autre..."
+    },
     "An email has been sent to": "Un e-mail a été envoyé à",
     "A new password must be entered.": "Un nouveau mot de passe doit être entré.",
     "Anyone who knows the room's link, apart from guests": "Tout ceux qui connaissent le lien du salon, à part les visiteurs",
