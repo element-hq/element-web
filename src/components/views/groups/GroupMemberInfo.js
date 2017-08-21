@@ -16,16 +16,11 @@ limitations under the License.
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classnames';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import createRoom from '../../../createRoom';
-import DMRoomMap from '../../../utils/DMRoomMap';
-import Unread from '../../../Unread';
 import { GroupMemberType } from '../../../groups';
-import { findReadReceiptFromUserId } from '../../../utils/Receipt';
 import { groupMemberFromApiObject } from '../../../groups';
 import withMatrixClient from '../../../wrappers/withMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
@@ -46,7 +41,7 @@ module.exports = withMatrixClient(React.createClass({
             fetching: false,
             removingUser: false,
             members: null,
-        }
+        };
     },
 
     componentWillMount: function() {
@@ -81,7 +76,7 @@ module.exports = withMatrixClient(React.createClass({
                 this.props.matrixClient.removeUserFromGroup(this.props.groupId, this.props.member.userId).then(() => {
                     dis.dispatch({
                         action: "view_user",
-                        member: null
+                        member: null,
                     });
                 }).catch((e) => {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -99,7 +94,7 @@ module.exports = withMatrixClient(React.createClass({
     _onCancel: function(e) {
         dis.dispatch({
             action: "view_user",
-            member: null
+            member: null,
         });
     },
 
@@ -124,7 +119,8 @@ module.exports = withMatrixClient(React.createClass({
             }
         }
 
-        let kickButton, adminButton;
+        let kickButton;
+        let adminButton;
 
         if (targetIsInGroup) {
             kickButton = (
@@ -182,5 +178,5 @@ module.exports = withMatrixClient(React.createClass({
                 </GeminiScrollbar>
             </div>
         );
-    }
+    },
 }));

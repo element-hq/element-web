@@ -105,7 +105,7 @@ export default React.createClass({
             userId = this.props.member.userId;
         } else {
             // we don't get this info from the API yet
-            avatar = <BaseAvatar name={this.props.groupMember.userId} width={36} height={36} />
+            avatar = <BaseAvatar name={this.props.groupMember.userId} width={36} height={36} />;
             name = this.props.groupMember.userId;
             userId = this.props.groupMember.userId;
         }

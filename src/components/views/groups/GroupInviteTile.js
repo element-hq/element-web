@@ -18,8 +18,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
-import withMatrixClient from '../../../wrappers/withMatrixClient';
-import Matrix from "matrix-js-sdk";
 import AccessibleButton from '../elements/AccessibleButton';
 
 export default React.createClass({
@@ -68,5 +66,5 @@ export default React.createClass({
                 </div>
             </AccessibleButton>
         );
-    }
+    },
 });

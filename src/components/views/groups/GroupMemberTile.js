@@ -18,10 +18,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
-import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
 import withMatrixClient from '../../../wrappers/withMatrixClient';
-import Matrix from "matrix-js-sdk";
 
 export default withMatrixClient(React.createClass({
     displayName: 'GroupMemberTile',
@@ -60,5 +58,5 @@ export default withMatrixClient(React.createClass({
                 name={name} powerLevel={0} suppressOnHover={true}
             />
         );
-    }
+    },
 }));

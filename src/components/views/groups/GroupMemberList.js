@@ -145,5 +145,5 @@ export default withMatrixClient(React.createClass({
                 </GeminiScrollbar>
             </div>
         );
-    }
+    },
 }));

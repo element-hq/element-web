@@ -14,12 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from './MatrixClientPeg';
 import Modal from './Modal';
 import sdk from './';
 import MultiInviter from './utils/MultiInviter';
 import { _t } from './languageHandler';
-import Promise from 'bluebird';
 
 export function showGroupInviteDialog(groupId) {
     const UserPickerDialog = sdk.getComponent("dialogs.UserPickerDialog");

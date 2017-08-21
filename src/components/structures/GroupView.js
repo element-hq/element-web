@@ -362,7 +362,7 @@ export default React.createClass({
                         description: _t("Unable to leave room"),
                     });
                 });
-            }
+            },
         });
     },
 
@@ -500,7 +500,7 @@ export default React.createClass({
             let nameNode;
             let shortDescNode;
             let roomBody;
-            let rightButtons = [];
+            const rightButtons = [];
             const headerClasses = {
                 mx_GroupView_header: true,
             };
@@ -548,13 +548,13 @@ export default React.createClass({
                         onClick={this._onSaveClick} key="_saveButton"
                     >
                         {_t('Save')}
-                    </AccessibleButton>
+                    </AccessibleButton>,
                 );
                 rightButtons.push(
                     <AccessibleButton className='mx_GroupView_textButton' onClick={this._onCancelClick} key="_cancelButton">
                         <img src="img/cancel.svg" className='mx_filterFlipColor'
                             width="18" height="18" alt={_t("Cancel")}/>
-                    </AccessibleButton>
+                    </AccessibleButton>,
                 );
                 roomBody = <div>
                     <textarea className="mx_GroupView_editLongDesc" value={this.state.profileForm.long_description}
@@ -596,7 +596,7 @@ export default React.createClass({
                         onClick={this._onEditClick} title={_t("Edit Group")} key="_editButton"
                     >
                         <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
-                    </AccessibleButton>
+                    </AccessibleButton>,
                 );
                 if (this.props.collapsedRhs) {
                     rightButtons.push(
@@ -604,7 +604,7 @@ export default React.createClass({
                             onClick={this._onShowRhsClick} title={ _t('Show panel') } key="_maximiseButton"
                         >
                             <TintableSvg src="img/maximise.svg" width="10" height="16"/>
-                        </AccessibleButton>
+                        </AccessibleButton>,
                     );
                 }
 

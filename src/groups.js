@@ -23,5 +23,5 @@ export const GroupMemberType = PropTypes.shape({
 export function groupMemberFromApiObject(apiObject) {
     return {
         userId: apiObject.user_id,
-    }
+    };
 }
