@@ -252,9 +252,11 @@ export default React.createClass({
                     );
                 }
             } else {
+                const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
                 appTileBody = (
                     <div className="mx_AppTileBody">
                         <AppPermission
+                            isRoomEncrypted={isRoomEncrypted}
                             url={this.state.widgetUrl}
                             onPermissionGranted={this._grantWidgetPermission}
                         />
