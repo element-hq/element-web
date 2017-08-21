@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 .mx_AppsDrawer {
+    margin-bottom: 3px;
 }
 
 .mx_AppsContainer {
@@ -69,7 +70,7 @@ limitations under the License.
     margin: 0;
     padding: 2px 10px;
     // background-color: $e2e-verified-color;
-    border-bottom: 1px solid $primary-hairline-color;
+    // border-bottom: 1px solid $primary-hairline-color;
     font-size: 10px;
 }
 
@@ -97,6 +98,7 @@ limitations under the License.
 
 .mx_AppTileBody{
     height: 350px;
+    width: 100%;
     overflow: hidden;
 }
 
