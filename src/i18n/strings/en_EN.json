@@ -363,6 +363,7 @@
     "Incoming voice call from %(name)s": "Incoming voice call from %(name)s",
     "Incorrect username and/or password.": "Incorrect username and/or password.",
     "Incorrect verification code": "Incorrect verification code",
+    "Integrations Error": "Integrations Error",
     "Interface Language": "Interface Language",
     "Invalid alias format": "Invalid alias format",
     "Invalid address format": "Invalid address format",
