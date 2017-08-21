@@ -31,7 +31,6 @@ import WidgetUtils from '../../../WidgetUtils';
 import dis from '../../../dispatcher';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
-const betaHelpMsg = 'This feature is currently experimental and is intended for beta testing only';
 
 export default React.createClass({
     displayName: 'AppTile',
@@ -280,7 +279,6 @@ export default React.createClass({
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
                     {this.formatAppTileName()}
                     <span className="mx_AppTileMenuBarWidgets">
-                        <span className="mx_Beta" alt={betaHelpMsg} title={betaHelpMsg}>&#946;</span>
                         {/* Edit widget */}
                         {showEditButton && <img
                             src="img/edit.svg"
