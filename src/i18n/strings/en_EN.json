@@ -972,7 +972,7 @@
     "Failed to upload image": "Failed to upload image",
     "Failed to update group": "Failed to update group",
     "Hide avatars in user and room mentions": "Hide avatars in user and room mentions",
-    "%(senderName)s added a %(widgetName)swidget": "%(senderName)s added a %(widgetName)swidget",
-    "%(senderName)s removed a %(widgetName)swidget": "%(senderName)s removed a %(widgetName)swidget",
+    "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s widget added by %(senderName)s",
+    "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s widget removed by %(senderName)s",
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot check is currently unavailable on desktop - please use a <a>web browser</a>"
 }
