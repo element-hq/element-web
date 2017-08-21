@@ -41,6 +41,14 @@ module.exports = withMatrixClient(React.createClass({
         member: GroupMemberType,
     },
 
+    getInitialState: function() {
+        return {
+            fetching: false,
+            removingUser: false,
+            members: null,
+        }
+    },
+
     componentWillMount: function() {
         this._fetchMembers();
     },
@@ -67,11 +75,28 @@ module.exports = withMatrixClient(React.createClass({
             action: _t('Remove from group'),
             danger: true,
             onFinished: (proceed) => {
+                if (!proceed) return;
+
+                this.setState({removingUser: true});
+                this.props.matrixClient.removeUserFromGroup(this.props.groupId, this.props.member.userId).then(() => {
+                    dis.dispatch({
+                        action: "view_user",
+                        member: null
+                    });
+                }).catch((e) => {
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog('Failed to remove user from group', '', ErrorDialog, {
+                        title: _t('Error'),
+                        description: _t('Failed to remove user from group'),
+                    });
+                }).finally(() => {
+                    this.setState({removingUser: false});
+                });
             },
         });
     },
 
-    onCancel: function(e) {
+    _onCancel: function(e) {
         dis.dispatch({
             action: "view_user",
             member: null
@@ -86,7 +111,7 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     render: function() {
-        if (this.state.fetching) {
+        if (this.state.fetching || this.state.removingUser) {
             const Loader = sdk.getComponent("elements.Spinner");
             return <Loader />;
         }
@@ -140,7 +165,7 @@ module.exports = withMatrixClient(React.createClass({
         return (
             <div className="mx_MemberInfo">
                 <GeminiScrollbar autoshow={true}>
-                    <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel}> <img src="img/cancel.svg" width="18" height="18"/></AccessibleButton>
+                    <AccessibleButton className="mx_MemberInfo_cancel" onClick={this._onCancel}> <img src="img/cancel.svg" width="18" height="18"/></AccessibleButton>
                     <div className="mx_MemberInfo_avatar">
                         {avatar}
                     </div>

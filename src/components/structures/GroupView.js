@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd.
+Copyright 2017 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -183,12 +184,19 @@ export default React.createClass({
             editing: false,
             saving: false,
             uploadingAvatar: false,
+            membershipBusy: false,
         };
     },
 
     componentWillMount: function() {
         this._changeAvatarComponent = null;
         this._loadGroupFromServer(this.props.groupId);
+
+        MatrixClientPeg.get().on("Group.myMembership", this._onGroupMyMembership);
+    },
+
+    componentWillUnmount: function() {
+        MatrixClientPeg.get().removeListener("Group.myMembership", this._onGroupMyMembership);
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -200,6 +208,12 @@ export default React.createClass({
                 this._loadGroupFromServer(newProps.groupId);
             });
         }
+    },
+
+    _onGroupMyMembership: function(group) {
+        if (group.groupId !== this.props.groupId) return;
+
+        this.setState({membershipBusy: false});
     },
 
     _loadGroupFromServer: function(groupId) {
@@ -299,6 +313,59 @@ export default React.createClass({
         }).done();
     },
 
+    _onAcceptInviteClick: function() {
+        this.setState({membershipBusy: true});
+        MatrixClientPeg.get().acceptGroupInvite(this.props.groupId).then(() => {
+            // don't reset membershipBusy here: wait for the membership change to come down the sync
+        }).catch((e) => {
+            this.setState({membershipBusy: false});
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog('Error accepting invite', '', ErrorDialog, {
+                title: _t("Error"),
+                description: _t("Unable to accept invite"),
+            });
+        });
+    },
+
+    _onRejectInviteClick: function() {
+        this.setState({membershipBusy: true});
+        MatrixClientPeg.get().leaveGroup(this.props.groupId).then(() => {
+            // don't reset membershipBusy here: wait for the membership change to come down the sync
+        }).catch((e) => {
+            this.setState({membershipBusy: false});
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog('Error rejecting invite', '', ErrorDialog, {
+                title: _t("Error"),
+                description: _t("Unable to reject invite"),
+            });
+        });
+    },
+
+    _onLeaveClick: function() {
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createTrackedDialog('Leave Group', '', QuestionDialog, {
+            title: _t("Leave Group"),
+            description: _t("Leave %(groupName)s?", {groupName: this.props.groupId}),
+            button: _t("Leave"),
+            danger: true,
+            onFinished: (confirmed) => {
+                if (!confirmed) return;
+
+                this.setState({membershipBusy: true});
+                MatrixClientPeg.get().leaveGroup(this.props.groupId).then(() => {
+                    // don't reset membershipBusy here: wait for the membership change to come down the sync
+                }).catch((e) => {
+                    this.setState({membershipBusy: false});
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog('Error leaving room', '', ErrorDialog, {
+                        title: _t("Error"),
+                        description: _t("Unable to leave room"),
+                    });
+                });
+            }
+        });
+    },
+
     _getFeaturedRoomsNode() {
         const summary = this.state.summary;
 
@@ -375,6 +442,50 @@ export default React.createClass({
         </div>;
     },
 
+    _getMembershipSection: function() {
+        const group = MatrixClientPeg.get().getGroup(this.props.groupId);
+        if (!group) return null;
+
+        if (group.myMembership === 'invite') {
+            const Spinner = sdk.getComponent("elements.Spinner");
+
+            if (this.state.membershipBusy) {
+                return <div className="mx_GroupView_invitedSection">
+                    <Spinner />
+                </div>;
+            }
+
+            return <div className="mx_GroupView_invitedSection">
+                {_t("%(inviter)s has invited you to join this group", {inviter: group.inviter.userId})}
+                <div className="mx_GroupView_membership_buttonContainer">
+                    <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
+                        onClick={this._onAcceptInviteClick}
+                    >
+                        {_t('Accept')}
+                    </AccessibleButton>
+                    <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
+                        onClick={this._onRejectInviteClick}
+                    >
+                        {_t('Decline')}
+                    </AccessibleButton>
+                </div>
+            </div>;
+        } else if (group.myMembership === 'join') {
+            return <div className="mx_GroupView_invitedSection">
+                {_t("You are a member of this group")}
+                <div className="mx_GroupView_membership_buttonContainer">
+                    <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
+                        onClick={this._onLeaveClick}
+                    >
+                        {_t('Leave')}
+                    </AccessibleButton>
+                </div>
+            </div>;
+        }
+
+        return null;
+    },
+
     render: function() {
         const GroupAvatar = sdk.getComponent("avatars.GroupAvatar");
         const Loader = sdk.getComponent("elements.Spinner");
@@ -433,14 +544,14 @@ export default React.createClass({
                     tabIndex="2"
                 />;
                 rightButtons.push(
-                    <AccessibleButton className="mx_GroupView_saveButton mx_RoomHeader_textButton"
+                    <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                         onClick={this._onSaveClick} key="_saveButton"
                     >
                         {_t('Save')}
                     </AccessibleButton>
                 );
                 rightButtons.push(
-                    <AccessibleButton className='mx_GroupView_cancelButton' onClick={this._onCancelClick} key="_cancelButton">
+                    <AccessibleButton className='mx_GroupView_textButton' onClick={this._onCancelClick} key="_cancelButton">
                         <img src="img/cancel.svg" className='mx_filterFlipColor'
                             width="18" height="18" alt={_t("Cancel")}/>
                     </AccessibleButton>
@@ -475,6 +586,7 @@ export default React.createClass({
                     description = sanitizedHtmlNode(summary.profile.long_description);
                 }
                 roomBody = <div>
+                    {this._getMembershipSection()}
                     <div className="mx_GroupView_groupDesc">{description}</div>
                     {this._getFeaturedRoomsNode()}
                     {this._getFeaturedUsersNode()}

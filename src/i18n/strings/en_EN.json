@@ -976,5 +976,17 @@
     "Invite new group members": "Invite new group members",
     "Who would you like to add to this group?": "Who would you like to add to this group?",
     "Name or matrix ID": "Name or matrix ID",
-    "Invite to Group": "Invite to Group"
+    "Invite to Group": "Invite to Group",
+    "Unable to accept invite": "Unable to accept invite",
+    "Unable to leave room": "Unable to leave room",
+    "%(inviter)s has invited you to join this group": "%(inviter)s has invited you to join this group",
+    "You are a member of this group": "You are a member of this group",
+    "Leave": "Leave",
+    "Failed to remove user from group": "Failed to remove user from group",
+    "Failed to invite the following users to %(groupId)s:": "Failed to invite the following users to %(groupId)s:",
+    "Failed to invite users group": "Failed to invite users group",
+    "Failed to invite users to %(groupId)s": "Failed to invite users to %(groupId)s",
+    "Unable to reject invite": "Unable to reject invite",
+    "Leave Group": "Leave Group",
+    "Leave %(groupName)s?": "Leave %(groupName)s?"
 }
