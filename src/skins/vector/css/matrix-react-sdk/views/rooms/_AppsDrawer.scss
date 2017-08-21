@@ -30,9 +30,13 @@ limitations under the License.
     cursor: pointer;
     padding-right: 12px;
     padding: 0;
-    margin: 0 0 5px 0;
+    margin: 5px auto 5px auto;
     color: $accent-color;
     font-size: 12px;
+}
+
+.mx_AddWidget_button_full_width {
+    max-width: 960px;
 }
 
 .mx_SetAppURLDialog_input {
