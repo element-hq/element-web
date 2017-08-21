@@ -15,7 +15,6 @@ limitations under the License.
 */
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import Promise from 'bluebird';
 import sdk from '../../../index';
 import { groupMemberFromApiObject } from '../../../groups';
 import GeminiScrollbar from 'react-gemini-scrollbar';
@@ -36,7 +35,8 @@ export default withMatrixClient(React.createClass({
         return {
             fetching: false,
             members: null,
-        }
+            truncateAt: INITIAL_LOAD_NUM_MEMBERS,
+        };
     },
 
     componentWillMount: function() {
@@ -74,7 +74,7 @@ export default withMatrixClient(React.createClass({
 
     _showFullMemberList: function() {
         this.setState({
-            truncateAt: -1
+            truncateAt: -1,
         });
     },
 
