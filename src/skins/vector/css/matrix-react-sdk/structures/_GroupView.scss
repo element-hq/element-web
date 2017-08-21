@@ -74,8 +74,12 @@ limitations under the License.
     display: flex;
 }
 
-.mx_GroupView_saveButton, .mx_GroupView_cancelButton {
-    display: table-cell;
+.mx_GroupView_membership_buttonContainer {
+    margin-top: 10px;
+}
+
+.mx_GroupView_textButton {
+    display: inline-block;
 }
 
 .mx_GroupView_header_groupid {
@@ -128,6 +132,16 @@ limitations under the License.
 .mx_GroupView_cancelButton img {
     position: relative;
     top: 5px;
+}
+
+.mx_GroupView_invitedSection {
+    width: 70%;
+    padding: 20px;
+    border: 1px solid $group-alert-color;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .mx_GroupView_featuredThings {
