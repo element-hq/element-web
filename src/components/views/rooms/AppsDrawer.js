@@ -64,7 +64,7 @@ module.exports = React.createClass({
             });
         }
 
-        this.dispatcherRef = dis.register(this.onAction.bind(this));
+        this.dispatcherRef = dis.register(this.onAction);
     },
 
     componentWillUnmount: function() {
