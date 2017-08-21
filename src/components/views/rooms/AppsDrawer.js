@@ -226,7 +226,10 @@ module.exports = React.createClass({
                 onClick={this.onClickAddWidget}
                 role="button"
                 tabIndex="0"
-                className="mx_AddWidget_button"
+                className={this.state.apps.length<2 ?
+                    "mx_AddWidget_button mx_AddWidget_button_full_width" :
+                    "mx_AddWidget_button"
+                }
                 title={_t('Add a widget')}>
                 [+] {_t('Add a widget')}
             </div>;
