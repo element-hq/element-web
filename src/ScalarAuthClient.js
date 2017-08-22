@@ -81,7 +81,7 @@ class ScalarAuthClient {
         url += "?scalar_token=" + encodeURIComponent(this.scalarToken);
         url += "&room_id=" + encodeURIComponent(roomId);
         if (id) {
-            url += '&integ_id=' + id;
+            url += '&integ_id=' + encodeURIComponent(id);
         }
         if (screen) {
             url += '&screen=' + encodeURIComponent(screen);
