@@ -26,7 +26,6 @@ var sdk = require('../../../index');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var rate_limited_func = require('../../../ratelimitedfunc');
 var CallHandler = require("../../../CallHandler");
-var Invite = require("../../../Invite");
 
 var INITIAL_LOAD_NUM_MEMBERS = 30;
 
