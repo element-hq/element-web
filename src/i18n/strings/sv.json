@@ -157,5 +157,8 @@
     "Delete the room alias %(alias)s and remove %(name)s from the directory?": "Radera rumsadressen %(alias)s och ta bort %(name)s från katalogen?",
     "Collecting logs": "Samlar in loggar",
     "Collecting app version information": "Samlar in appversionsinformation",
-    "Notifications on the following keywords follow rules which can’t be displayed here:": "Aviseringar för följande nyckelord följer regler som inte kan visas här:"
+    "Notifications on the following keywords follow rules which can’t be displayed here:": "Aviseringar för följande nyckelord följer regler som inte kan visas här:",
+    "Continue": "Fortsätt",
+    "Failed to change password. Is your password correct?": "Det gick inte att byta lösenord. Är lösenordet rätt?",
+    "Operation failed": "Handlingen misslyckades"
 }

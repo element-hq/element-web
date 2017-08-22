@@ -15,12 +15,14 @@ limitations under the License.
 */
 
 .mx_AppsDrawer {
+    margin-bottom: 3px;
 }
 
 .mx_AppsContainer {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
 }
 
 .mx_AddWidget_button {
@@ -28,9 +30,13 @@ limitations under the License.
     cursor: pointer;
     padding-right: 12px;
     padding: 0;
-    margin: 0 0 5px 0;
+    margin: 5px auto 5px auto;
     color: $accent-color;
     font-size: 12px;
+}
+
+.mx_AddWidget_button_full_width {
+    max-width: 960px;
 }
 
 .mx_SetAppURLDialog_input {
@@ -43,6 +49,7 @@ limitations under the License.
 }
 
 .mx_AppTile {
+    max-width: 960px;
     width: 50%;
     margin: 0 5px 2px 0;
     border: 1px solid $primary-hairline-color;
@@ -52,6 +59,7 @@ limitations under the License.
 }
 
 .mx_AppTileFullWidth {
+    max-width: 960px;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -66,7 +74,7 @@ limitations under the License.
     margin: 0;
     padding: 2px 10px;
     // background-color: $e2e-verified-color;
-    border-bottom: 1px solid $primary-hairline-color;
+    // border-bottom: 1px solid $primary-hairline-color;
     font-size: 10px;
 }
 
@@ -94,6 +102,7 @@ limitations under the License.
 
 .mx_AppTileBody{
     height: 350px;
+    width: 100%;
     overflow: hidden;
 }
 
