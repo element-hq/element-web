@@ -961,5 +961,14 @@
     "Automatically replace plain text Emoji": "Egyszerű szöveg automatikus cseréje Emoji-ra",
     "Failed to upload image": "Kép feltöltése sikertelen",
     "Failed to update group": "Csoport frissítése sikertelen",
-    "Hide avatars in user and room mentions": "Profilképek elrejtése felhasználó és szoba említésekben"
+    "Hide avatars in user and room mentions": "Profilképek elrejtése felhasználó és szoba említésekben",
+    "Cannot add any more widgets": "Nem lehet több kisalkalmazást hozzáadni",
+    "Do you want to load widget from URL:": "Betöltöd a kisalkalmazást erről az URL-ről:",
+    "Integrations Error": "Integrációs hiba",
+    "Publish this room to the public in %(domain)s's room directory?": "Publikálod a szobát a(z) %(domain)s szoba listájába?",
+    "NOTE: Apps are not end-to-end encrypted": "Megjegyzés: Az alkalmazások nem végponttól végpontig titkosítottak",
+    "The maximum permitted number of widgets have already been added to this room.": "A maximálisan megengedett számú kisalkalmazás már hozzá van adva a szobához.",
+    "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s kisalkalmazást %(senderName)s hozzáadta",
+    "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s kisalkalmazást %(senderName)s eltávolította",
+    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot ellenőrzés az asztali verzióban nem érhető el - használd a <a>web böngészőt</a>"
 }
