@@ -206,5 +206,5 @@
     "To return to your account in future you need to <u>set a password</u>": "Para regresar a su cuenta en el futuro Ud. debe <u>establecer una contraseña</u>",
     "Set Password": "Establezca la contraseña",
     "Error encountered (%(errorDetail)s).": "Error encontrado (%(errorDetail)s).",
-    "Couldn't load home page": "No se puede cargar la pagina principal"
+    "Couldn't load home page": "No se puede cargar la página principal"
 }
