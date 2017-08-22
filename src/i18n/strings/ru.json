@@ -702,7 +702,6 @@
     "Invalid file%(extra)s": "Недопустимый файл%(extra)s",
     "Invited": "Приглашен",
     "Jump to first unread message.": "Перейти к первому непрочитанному сообщению.",
-    "List this room in %(domain)s's room directory?": "Показывать эту комнату в каталоге комнат %(domain)s?",
     "Message not sent due to unknown devices being present": "Сообщение не отправлено из-за присутствия неизвестных устройств",
     "Mobile phone number (optional)": "Номер мобильного телефона (не обязательно)",
     "Once you&#39;ve followed the link it contains, click below": "После перехода по ссылке, нажмите на кнопку ниже",

@@ -33,7 +33,6 @@ src/components/views/create_room/CreateRoomButton.js
 src/components/views/create_room/Presets.js
 src/components/views/create_room/RoomAlias.js
 src/components/views/dialogs/ChatCreateOrReuseDialog.js
-src/components/views/dialogs/ChatInviteDialog.js
 src/components/views/dialogs/DeactivateAccountDialog.js
 src/components/views/dialogs/InteractiveAuthDialog.js
 src/components/views/dialogs/SetMxIdDialog.js
@@ -114,7 +113,6 @@ src/components/views/settings/EnableNotificationsButton.js
 src/ContentMessages.js
 src/HtmlUtils.js
 src/ImageUtils.js
-src/Invite.js
 src/languageHandler.js
 src/linkify-matrix.js
 src/Login.js

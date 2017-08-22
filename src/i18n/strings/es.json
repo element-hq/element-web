@@ -498,7 +498,6 @@
     "Drop File Here": "Deje el fichero aquí",
     "Guest access is disabled on this Home Server.": "El acceso de invitados está desactivado en este servidor.",
     "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.": "Conecte con <voiceText>voz</voiceText> o <videoText>vídeo</videoText>.",
-    "List this room in %(domain)s's room directory?": "¿Mostrar esta sala en el directorio de %(domain)s?",
     "Manage Integrations": "Gestionar integraciones",
     "Markdown is disabled": "Markdown está desactivado",
     "Markdown is enabled": "Markdown está activado",

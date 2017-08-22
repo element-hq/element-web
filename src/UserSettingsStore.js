@@ -28,7 +28,7 @@ export default {
         {
             name: "-",
             id: 'matrix_apps',
-            default: false,
+            default: true,
 
             // XXX: Always use default, ignore localStorage and remove from labs
             override: true,

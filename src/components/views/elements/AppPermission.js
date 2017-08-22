@@ -47,13 +47,19 @@ export default class AppPermission extends React.Component {
     }
 
     render() {
+        let e2eWarningText;
+        if (this.props.isRoomEncrypted) {
+            e2eWarningText =
+                <span className='mx_AppPermissionWarningTextLabel'>{_t('NOTE: Apps are not end-to-end encrypted')}</span>;
+        }
         return (
             <div className='mx_AppPermissionWarning'>
                 <div className='mx_AppPermissionWarningImage'>
                     <img src='img/warning.svg' alt={_t('Warning!')}/>
                 </div>
                 <div className='mx_AppPermissionWarningText'>
-                    <span className='mx_AppPermissionWarningTextLabel'>Do you want to load widget from URL:</span> <span className='mx_AppPermissionWarningTextURL'>{this.state.curlBase}</span>
+                    <span className='mx_AppPermissionWarningTextLabel'>{_t('Do you want to load widget from URL:')}</span> <span className='mx_AppPermissionWarningTextURL'>{this.state.curlBase}</span>
+                    {e2eWarningText}
                 </div>
                 <input
                     className='mx_AppPermissionButton'
@@ -67,9 +73,11 @@ export default class AppPermission extends React.Component {
 }
 
 AppPermission.propTypes = {
+    isRoomEncrypted: PropTypes.bool,
     url: PropTypes.string.isRequired,
     onPermissionGranted: PropTypes.func.isRequired,
 };
 AppPermission.defaultProps = {
+    isRoomEncrypted: false,
     onPermissionGranted: function() {},
 };
