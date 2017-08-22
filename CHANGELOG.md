@@ -1,3 +1,14 @@
+Changes in [0.12.1-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.1-rc.1) (2017-08-22)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.0-rc.2...v0.12.1-rc.1)
+
+ * Update from Weblate.
+   [\#4832](https://github.com/vector-im/riot-web/pull/4832)
+ * Misc styling fixes.
+   [\#4826](https://github.com/vector-im/riot-web/pull/4826)
+ * Show / Hide apps icons
+   [\#4774](https://github.com/vector-im/riot-web/pull/4774)
+
 Changes in [0.12.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.0-rc.1) (2017-08-16)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.4...v0.12.0-rc.1)
