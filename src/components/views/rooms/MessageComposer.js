@@ -289,12 +289,12 @@ export default class MessageComposer extends React.Component {
             if (this.props.showApps) {
                 hideAppsButton =
                     <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title={_t("Hide Apps")}>
-                        <TintableSvg src="img/icons-apps-active.svg" width="35" height="35"/>
+                        <TintableSvg src="img/icons-hide-apps.svg" width="35" height="35"/>
                     </div>;
             } else {
                 showAppsButton =
                     <div key="show_apps" className="mx_MessageComposer_apps" onClick={this.onShowAppsClick} title={_t("Show Apps")}>
-                        <TintableSvg src="img/icons-apps.svg" width="35" height="35"/>
+                        <TintableSvg src="img/icons-show-apps.svg" width="35" height="35"/>
                     </div>;
             }
         }

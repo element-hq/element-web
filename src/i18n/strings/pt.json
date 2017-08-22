@@ -862,7 +862,6 @@
     "device id: ": "id do dispositivo: ",
     "Device key:": "Chave do dispositivo:",
     "Email address (optional)": "Endereço de e-mail (opcional)",
-    "List this room in %(domain)s's room directory?": "Deseja listar esta sala na lista pública de salas de %(domain)s?",
     "Mobile phone number (optional)": "Número de telefone celular (opcional)",
     "Password:": "Senha:",
     "Register": "Registre-se",

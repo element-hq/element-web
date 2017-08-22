@@ -171,7 +171,7 @@ const Pill = React.createClass({
                         }
                         pillClass = 'mx_UserPill';
                         href = null;
-                        onClick = this.onUserPillClicked.bind(this);
+                        onClick = this.onUserPillClicked;
                     }
             }
                 break;
