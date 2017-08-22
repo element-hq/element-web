@@ -552,10 +552,8 @@
     "Failed to forget room %(errCode)s": "Das Entfernen des Raums ist fehlgeschlagen %(errCode)s",
     "Failed to join the room": "Fehler beim Betreten des Raumes",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Eine Textnachricht wurde an +%(msisdn)s gesendet. Bitte gebe den Verifikationscode ein, den er beinhaltet",
-    "and %(count)s others...": {
-        "other": "und %(count)s weitere...",
-        "one": "und ein(e) weitere(r)..."
-    },
+    "and %(count)s others....other": "und %(count)s weitere...",
+    "and %(count)s others....one": "und ein(e) weitere(r)...",
     "Are you sure?": "Bist du sicher?",
     "Attachment": "Anhang",
     "Ban": "Dauerhaft aus dem Raum ausschließen",
@@ -913,7 +911,7 @@
     "Admin tools": "Admin-Werkzeuge",
     "And %(count)s more...": "Und %(count)s weitere...",
     "Alias (optional)": "Alias (optional)",
-    "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Verbindung zum Heimserver fehlgeschlagen - bitte prüfe deine Verbindung, stelle sicher, dass dem <a>SSL-Zertifikat deines Heimservers</a> vertraut wird und keine Browser-Erweiterung Anfragen blockiert.",
+    "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Verbindung zum Heimserver fehlgeschlagen - bitte überprüfe die Internetverbindung und stelle sicher, dass dem <a>SSL-Zertifikat deines Heimservers</a> vertraut wird und dass Anfragen nicht durch eine Browser-Erweiterung blockiert werden.",
     "<a>Click here</a> to join the discussion!": "<a>Hier klicken</a>, um an der Diskussion teilzunehmen!",
     "Close": "Schließen",
     "Custom": "Erweitert",
@@ -1034,5 +1032,6 @@
     "Failed to update group": "Aktualisieren der Gruppe fehlgeschlagen",
     "Hide avatars in user and room mentions": "Verberge Profilbilder in Benutzer- und Raum-Erwähnungen",
     "AM": "am",
-    "PM": "pm"
+    "PM": "pm",
+    "The maximum permitted number of widgets have already been added to this room.": "Die maximal erlaubte Anzahl an hinzufügbaren Widgets für diesen Raum wurde erreicht."
 }
