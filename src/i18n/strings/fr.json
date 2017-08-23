@@ -191,10 +191,8 @@
     "%(names)s and %(lastPerson)s are typing": "%(names)s et %(lastPerson)s sont en train d'écrire",
     "%(names)s and one other are typing": "%(names)s et un autre sont en train d'écrire",
     "%(names)s and %(count)s others are typing": "%(names)s et %(count)s d'autres sont en train d'écrire",
-    "and %(count)s others...": {
-        "other": "et %(count)s autres...",
-        "one": "et un autre..."
-    },
+    "and %(count)s others....other": "et %(count)s autres...",
+    "and %(count)s others....one": "et un autre...",
     "An email has been sent to": "Un e-mail a été envoyé à",
     "A new password must be entered.": "Un nouveau mot de passe doit être entré.",
     "Anyone who knows the room's link, apart from guests": "Tout ceux qui connaissent le lien du salon, à part les visiteurs",
@@ -979,5 +977,8 @@
     "Automatically replace plain text Emoji": "Remplacer automatiquement le texte par des Emoji",
     "Failed to upload image": "Impossible de télécharger l'image",
     "Failed to update group": "Impossible de modifier le groupe",
-    "Hide avatars in user and room mentions": "Masquer les avatars dans les mentions d'utilisateur et de salon"
+    "Hide avatars in user and room mentions": "Masquer les avatars dans les mentions d'utilisateur et de salon",
+    "Do you want to load widget from URL:": "Charger un widget d’URL:",
+    "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s widget ajouté par %(senderName)s",
+    "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s widget supprimé par %(senderName)s"
 }
