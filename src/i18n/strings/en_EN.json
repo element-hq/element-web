@@ -158,8 +158,10 @@
     "%(items)s and %(remaining)s others": "%(items)s and %(remaining)s others",
     "%(items)s and one other": "%(items)s and one other",
     "%(items)s and %(lastItem)s": "%(items)s and %(lastItem)s",
-    "and %(count)s others....other": "and %(count)s others...",
-    "and %(count)s others....one": "and one other...",
+    "and %(count)s others...": {
+        "other": "and %(count)s others...",
+        "one": "and one other..."
+    },
     "%(names)s and %(lastPerson)s are typing": "%(names)s and %(lastPerson)s are typing",
     "%(names)s and one other are typing": "%(names)s and one other are typing",
     "%(names)s and %(count)s others are typing": "%(names)s and %(count)s others are typing",
@@ -222,8 +224,10 @@
     "Confirm your new password": "Confirm your new password",
     "Continue": "Continue",
     "Could not connect to the integration server": "Could not connect to the integration server",
-    "%(count)s new messages.one": "%(count)s new message",
-    "%(count)s new messages.other": "%(count)s new messages",
+    "%(count)s new messages": {
+        "one": "%(count)s new message",
+        "other": "%(count)s new messages"
+    },
     "Create a new chat or reuse an existing one": "Create a new chat or reuse an existing one",
     "Create an account": "Create an account",
     "Create Room": "Create Room",
@@ -623,9 +627,11 @@
     "Unrecognised command:": "Unrecognised command:",
     "Unrecognised room alias:": "Unrecognised room alias:",
     "Unverified": "Unverified",
-    "Uploading %(filename)s and %(count)s others.zero": "Uploading %(filename)s",
-    "Uploading %(filename)s and %(count)s others.one": "Uploading %(filename)s and %(count)s other",
-    "Uploading %(filename)s and %(count)s others.other": "Uploading %(filename)s and %(count)s others",
+    "Uploading %(filename)s and %(count)s others": {
+        "zero": "Uploading %(filename)s",
+        "one": "Uploading %(filename)s and %(count)s other",
+        "other": "Uploading %(filename)s and %(count)s others"
+    },
     "uploaded a file": "uploaded a file",
     "Upload avatar": "Upload avatar",
     "Upload Failed": "Upload Failed",
@@ -743,8 +749,10 @@
     "Sent messages will be stored until your connection has returned.": "Sent messages will be stored until your connection has returned.",
     "Auto-complete": "Auto-complete",
     "<a>Resend all</a> or <a>cancel all</a> now. You can also select individual messages to resend or cancel.": "<a>Resend all</a> or <a>cancel all</a> now. You can also select individual messages to resend or cancel.",
-    "(~%(count)s results).one": "(~%(count)s result)",
-    "(~%(count)s results).other": "(~%(count)s results)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s result)",
+        "other": "(~%(count)s results)"
+    },
     "Cancel": "Cancel",
     "or": "or",
     "Active call": "Active call",
@@ -958,7 +966,7 @@
     "You are a member of these groups:": "You are a member of these groups:",
     "Create a group to represent your community! Define a set of rooms and your own custom homepage to mark out your space in the Matrix universe.": "Create a group to represent your community! Define a set of rooms and your own custom homepage to mark out your space in the Matrix universe.",
     "Join an existing group": "Join an existing group",
-    "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "To join an existing group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.",
+    "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.",
     "Featured Rooms:": "Featured Rooms:",
     "Error whilst fetching joined groups": "Error whilst fetching joined groups",
     "Featured Users:": "Featured Users:",
