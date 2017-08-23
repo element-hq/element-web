@@ -1033,5 +1033,12 @@
     "Hide avatars in user and room mentions": "Verberge Profilbilder in Benutzer- und Raum-Erwähnungen",
     "AM": "am",
     "PM": "pm",
-    "The maximum permitted number of widgets have already been added to this room.": "Die maximal erlaubte Anzahl an hinzufügbaren Widgets für diesen Raum wurde erreicht."
+    "The maximum permitted number of widgets have already been added to this room.": "Die maximal erlaubte Anzahl an hinzufügbaren Widgets für diesen Raum wurde erreicht.",
+    "Cannot add any more widgets": "Kann keine weiteren Widgets hinzufügen",
+    "Do you want to load widget from URL:": "Mögest du das Widget von folgender URL laden:",
+    "Integrations Error": "Integrations-Error",
+    "NOTE: Apps are not end-to-end encrypted": "BEACHTE: Apps sind nicht Ende-zu-Ende verschlüsselt",
+    "%(widgetName)s widget added by %(senderName)s": "Widget \"%(widgetName)s\" von %(senderName)s hinzugefügt",
+    "%(widgetName)s widget removed by %(senderName)s": "Widget \"%(widgetName)s\" von %(senderName)s entfernt",
+    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Auf dem Desktop kann aktuell nicht geprüft werden, ob du ein Roboter bist. Bitte nutze einen <a>Browser</a>"
 }
