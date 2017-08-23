@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import DateUtils from 'matrix-react-sdk/lib/DateUtils';
+import { Sticky } from 'react-sticky';
 
 function getdaysArray() {
 	return [
@@ -53,7 +54,17 @@ module.exports = React.createClass({
         }
 
         return (
-            <h2 className="mx_DateSeparator">{ label }</h2>
+            <Sticky relative={true} disableCompensation={true}>
+                {({style, isSticky, wasSticky, distanceFromTop}) => {
+                    return (
+                        <div className={"mx_DateSeparator_container mx_DateSeparator_container" + (isSticky ? '_sticky' : '')}
+                            style={{top: isSticky ? -distanceFromTop + "px" : 0}}
+                        >
+                            <h2 className="mx_DateSeparator">{ label }</h2>
+                        </div>
+                    );
+                }}
+            </Sticky>
         );
-    }
+    },
 });
