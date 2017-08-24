@@ -256,7 +256,7 @@ const Notifier = {
 
         // If it's an encrypted event and the type is still 'm.room.encrypted',
         // it hasn't yet been decrypted, so wait until it is.
-        if (event.isBeingDecrypted() || event.isDecryptionFailure()) {
+        if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) {
             this.pendingEncryptedEventIds.push(ev.getId());
             // don't let the list fill up indefinitely
             while (this.pendingEncryptedEventIds.length > MAX_PENDING_ENCRYPTED) {
