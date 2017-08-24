@@ -53,14 +53,14 @@ module.exports = React.createClass({
         this.scalarClient = null;
         if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
             this.scalarClient = new ScalarAuthClient();
-            this.scalarClient.connect().done(() => {
+            this.scalarClient.connect().then(() => {
                 this.forceUpdate();
-            // TODO -- Handle Scalar errors
-            // },
-            // (err) => {
-            //     this.setState({
-            //         scalar_error: err,
-            //     });
+            }).catch((e) => {
+                console.log("Failed to connect to integrations server");
+                // TODO -- Handle Scalar errors
+                //     this.setState({
+                //         scalar_error: err,
+                //     });
             });
         }
 
