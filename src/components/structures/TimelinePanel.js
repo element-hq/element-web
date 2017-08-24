@@ -512,7 +512,9 @@ var TimelinePanel = React.createClass({
         // TODO: We should restrict this to only events in our timeline,
         // but possibly the event tile itself should just update when this
         // happens to save us re-rendering the whole timeline.
-        this.forceUpdate();
+        if (ev.getRoomId() === this.props.timelineSet.room.roomId) {
+            this.forceUpdate();
+        }
     },
 
     onSync: function(state, prevState, data) {
