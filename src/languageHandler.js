@@ -246,7 +246,6 @@ function getLangsJson() {
 
 function getLanguage(langPath) {
     return new Promise((resolve, reject) => {
-        let response_return = {};
         request(
             { method: "GET", url: langPath },
             (err, response, body) => {
