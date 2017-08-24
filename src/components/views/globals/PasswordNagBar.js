@@ -20,11 +20,12 @@ import React from 'react';
 import sdk from 'matrix-react-sdk';
 import Modal from 'matrix-react-sdk/lib/Modal';
 import dis from 'matrix-react-sdk/lib/dispatcher';
+import { _t, _tJsx } from 'matrix-react-sdk/lib/languageHandler';
 
 export default React.createClass({
     onUpdateClicked: function() {
         const SetPasswordDialog = sdk.getComponent('dialogs.SetPasswordDialog');
-        Modal.createDialog(SetPasswordDialog, {
+        Modal.createTrackedDialog('Set Password Dialog', 'Password Nag Bar', SetPasswordDialog, {
             onFinished: (passwordChanged) => {
                 if (!passwordChanged) {
                     return;
@@ -33,12 +34,11 @@ export default React.createClass({
                 dis.dispatch({
                     action: 'password_changed',
                 });
-            }
+            },
         });
     },
 
     render: function() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const toolbarClasses = "mx_MatrixToolbar mx_MatrixToolbar_clickable";
         return (
             <div className={toolbarClasses} onClick={this.onUpdateClicked}>
@@ -49,12 +49,16 @@ export default React.createClass({
                     alt="Warning"
                 />
                 <div className="mx_MatrixToolbar_content">
-                    To return to your account in future you need to <u>set a password</u>
+                    { _tJsx(
+                        "To return to your account in future you need to <u>set a password</u>",
+                        /<u>(.*?)<\/u>/,
+                        (sub) => { return <u>{ sub }</u>; },
+                    ) }
                 </div>
                 <button className="mx_MatrixToolbar_action">
-                    Set Password
+                    { _t("Set Password") }
                 </button>
             </div>
         );
-    }
+    },
 });

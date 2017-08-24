@@ -16,7 +16,7 @@ limitations under the License.
 
 "use strict";
 
-var q = require("q");
+import Promise from 'bluebird';
 var Matrix = require("matrix-js-sdk");
 var Room = Matrix.Room;
 var CallHandler = require('matrix-react-sdk/lib/CallHandler');
@@ -53,11 +53,11 @@ ConferenceCall.prototype._joinConferenceUser = function() {
     // Make sure the conference user is in the group chat room
     var groupRoom = this.client.getRoom(this.groupRoomId);
     if (!groupRoom) {
-        return q.reject("Bad group room ID");
+        return Promise.reject("Bad group room ID");
     }
     var member = groupRoom.getMember(this.confUserId);
     if (member && member.membership === "join") {
-        return q();
+        return Promise.resolve();
     }
     return this.client.invite(this.groupRoomId, this.confUserId);
 };
@@ -75,7 +75,7 @@ ConferenceCall.prototype._getConferenceUserRoom = function() {
         }
     }
     if (confRoom) {
-        return q(confRoom);
+        return Promise.resolve(confRoom);
     }
     return this.client.createRoom({
         preset: "private_chat",

@@ -89,7 +89,7 @@ var roomTileSource = {
                 }, (err) => {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to set direct chat tag " + err);
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('Failed to set direct chat tag', '', ErrorDialog, {
                         title: _t('Failed to set direct chat tag'),
                         description: ((err && err.message) ? err.message : _t('Operation failed')),
                     });
@@ -111,10 +111,10 @@ var roomTileSource = {
                 //component.state.set({ spinner: component.state.spinner ? component.state.spinner++ : 1 });
                 MatrixClientPeg.get().deleteRoomTag(item.room.roomId, prevTag).finally(function() {
                     //component.state.set({ spinner: component.state.spinner-- });
-                }).fail(function(err) {
+                }).catch(function(err) {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to remove tag " + prevTag + " from room: " + err);
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('Failed to remove tag from room', '', ErrorDialog, {
                         title: _t('Failed to remove tag %(tagName)s from room', {tagName: prevTag}),
                         description: ((err && err.message) ? err.message : _t('Operation failed')),
                     });
@@ -130,13 +130,10 @@ var roomTileSource = {
             if (newTag && newTag !== 'im.vector.fake.direct' &&
                 (item.targetList !== item.originalList || newOrder)
             ) {
-                //component.state.set({ spinner: component.state.spinner ? component.state.spinner++ : 1 });
-                MatrixClientPeg.get().setRoomTag(item.room.roomId, newTag, newOrder).finally(function() {
-                    //component.state.set({ spinner: component.state.spinner-- });
-                }).fail(function(err) {
+                MatrixClientPeg.get().setRoomTag(item.room.roomId, newTag, newOrder).catch(function(err) {
                     var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to add tag " + newTag + " to room: " + err);
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('Failed to add tag to room', '', ErrorDialog, {
                         title: _t('Failed to add tag %(tagName)s to room', {tagName: newTag}),
                         description: ((err && err.message) ? err.message : _t('Operation failed')),
                     });

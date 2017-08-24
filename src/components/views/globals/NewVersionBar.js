@@ -40,7 +40,7 @@ export default React.createClass({
 
     displayReleaseNotes: function(releaseNotes) {
         const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
-        Modal.createDialog(QuestionDialog, {
+        Modal.createTrackedDialog('Display release notes', '', QuestionDialog, {
             title: _t("What's New"),
             description: <pre className="changelog_text">{releaseNotes}</pre>,
             button: _t("Update"),
@@ -54,7 +54,7 @@ export default React.createClass({
 
     displayChangelog: function() {
         const ChangelogDialog = sdk.getComponent('dialogs.ChangelogDialog');
-        Modal.createDialog(ChangelogDialog, {
+        Modal.createTrackedDialog('Display Changelog', '', ChangelogDialog, {
             version: this.props.version,
             newVersion: this.props.newVersion,
             onFinished: (update) => {
@@ -96,7 +96,7 @@ export default React.createClass({
         }
         return (
             <div className="mx_MatrixToolbar">
-                <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="/!\"/>
+                <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="Warning"/>
                 <div className="mx_MatrixToolbar_content">
                     {_t("A new version of Riot is available.")}
                 </div>

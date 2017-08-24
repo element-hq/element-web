@@ -13,6 +13,7 @@
 from __future__ import print_function
 import json, requests, tarfile, argparse, os, errno
 import time
+import traceback
 from urlparse import urljoin
 
 from flask import Flask, jsonify, request, abort
@@ -124,6 +125,7 @@ def fetch_jenkins_build(job_name, build_num):
     try:
         extracted_dir = deploy_tarball(tar_gz_url, build_dir)
     except DeployException as e:
+        traceback.print_exc()
         abort(400, e.message)
 
     create_symlink(source=extracted_dir, linkname=arg_symlink)
@@ -185,10 +187,16 @@ if __name__ == "__main__":
             to the /vector directory INSIDE the tarball."
         )
     )
+
+    def _raise(ex):
+        raise ex
+
+    # --config config.json=../../config.json --config config.localhost.json=./localhost.json
     parser.add_argument(
-        "--config", dest="config", help=(
-            "Write a symlink to config.json in the extracted tarball. \
-            To this location."
+        "--config", action="append", dest="configs",
+        type=lambda kv: kv.split("=", 1) if "=" in kv else _raise(Exception("Missing =")), help=(
+            "A list of configs to symlink into the extracted tarball. \
+            For example, --config config.json=../config.json config2.json=../test/config.json"
         )
     )
     parser.add_argument(
@@ -212,7 +220,8 @@ if __name__ == "__main__":
     deployer = Deployer()
     deployer.bundles_path = args.bundles_dir
     deployer.should_clean = args.clean
-    deployer.config_location = args.config
+    deployer.config_locations = dict(args.configs) if args.configs else {}
+
 
     # we don't pgp-sign jenkins artifacts; instead we rely on HTTPS access to
     # the jenkins server (and the jenkins server not being compromised and/or
@@ -225,13 +234,13 @@ if __name__ == "__main__":
         deploy_tarball(args.tarball_uri, build_dir)
     else:
         print(
-            "Listening on port %s. Extracting to %s%s. Symlinking to %s. Jenkins URL: %s. Config location: %s" %
+            "Listening on port %s. Extracting to %s%s. Symlinking to %s. Jenkins URL: %s. Config locations: %s" %
             (args.port,
              arg_extract_path,
              " (clean after)" if deployer.should_clean else "",
              arg_symlink,
              arg_jenkins_url,
-             deployer.config_location,
+             deployer.config_locations,
             )
         )
         app.run(host="0.0.0.0", port=args.port, debug=True)

@@ -67,29 +67,29 @@ module.exports = React.createClass({
 
     onResendClick: function() {
         Resend.resend(this.props.mxEvent);
-        if (this.props.onFinished) this.props.onFinished();
+        this.closeMenu();
     },
 
     onViewSourceClick: function() {
         const ViewSource = sdk.getComponent('structures.ViewSource');
-        Modal.createDialog(ViewSource, {
+        Modal.createTrackedDialog('View Event Source', '', ViewSource, {
             content: this.props.mxEvent.event,
         }, 'mx_Dialog_viewsource');
-        if (this.props.onFinished) this.props.onFinished();
+        this.closeMenu();
     },
 
     onViewClearSourceClick: function() {
         const ViewSource = sdk.getComponent('structures.ViewSource');
-        Modal.createDialog(ViewSource, {
+        Modal.createTrackedDialog('View Clear Event Source', '', ViewSource, {
             // FIXME: _clearEvent is private
             content: this.props.mxEvent._clearEvent,
         }, 'mx_Dialog_viewsource');
-        if (this.props.onFinished) this.props.onFinished();
+        this.closeMenu();
     },
 
     onRedactClick: function() {
         const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
-        Modal.createDialog(ConfirmRedactDialog, {
+        Modal.createTrackedDialog('Confirm Redact Dialog', '', ConfirmRedactDialog, {
             onFinished: (proceed) => {
                 if (!proceed) return;
 
@@ -99,19 +99,19 @@ module.exports = React.createClass({
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     // display error message stating you couldn't delete this.
                     const code = e.errcode || e.statusCode;
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('You cannot delete this message', '', ErrorDialog, {
                         title: _t('Error'),
                         description: _t('You cannot delete this message. (%(code)s)', {code: code})
                     });
                 }).done();
             },
         }, 'mx_Dialog_confirmredact');
-        if (this.props.onFinished) this.props.onFinished();
+        this.closeMenu();
     },
 
     onCancelSendClick: function() {
         Resend.removeFromQueue(this.props.mxEvent);
-        if (this.props.onFinished) this.props.onFinished();
+        this.closeMenu();
     },
 
     onForwardClick: function() {
@@ -130,15 +130,15 @@ module.exports = React.createClass({
         if (this.props.eventTileOps) {
             this.props.eventTileOps.unhideWidget();
         }
-        if (this.props.onFinished) this.props.onFinished();
+        this.closeMenu();
     },
 
     onQuoteClick: function() {
-        console.log(this.props.mxEvent);
         dis.dispatch({
             action: 'quote',
-            event: this.props.mxEvent,
+            text: this.props.eventTileOps.getInnerText(),
         });
+        this.closeMenu();
     },
 
     render: function() {
@@ -152,6 +152,7 @@ module.exports = React.createClass({
         let unhidePreviewButton;
         let permalinkButton;
         let externalURLButton;
+        let quoteButton;
 
         if (eventStatus === 'not_sent') {
             resendButton = (
@@ -220,11 +221,13 @@ module.exports = React.createClass({
             </div>
         );
 
-        const quoteButton = (
-            <div className="mx_MessageContextMenu_field" onClick={this.onQuoteClick}>
-                { _t('Quote') }
-            </div>
-        );
+        if (this.props.eventTileOps && this.props.eventTileOps.getInnerText) {
+            quoteButton = (
+                <div className="mx_MessageContextMenu_field" onClick={this.onQuoteClick}>
+                    { _t('Quote') }
+                </div>
+            );
+        }
 
         // Bridges can provide a 'external_url' to link back to the source.
         if( typeof(this.props.mxEvent.event.content.external_url) === "string") {
@@ -247,7 +250,7 @@ module.exports = React.createClass({
                 {viewClearSourceButton}
                 {unhidePreviewButton}
                 {permalinkButton}
-                {UserSettingsStore.isFeatureEnabled('rich_text_editor') ? quoteButton : null}
+                {quoteButton}
                 {externalURLButton}
             </div>
         );

@@ -52,6 +52,8 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._unmounted = false;
+
         if (this.props.teamToken && this.props.teamServerUrl) {
             this.setState({
                 iframeSrc: `${this.props.teamServerUrl}/static/${this.props.teamToken}/home.html`
@@ -67,9 +69,14 @@ module.exports = React.createClass({
             request(
                 { method: "GET", url: src },
                 (err, response, body) => {
+                    if (this._unmounted) {
+                        return;
+                    }
+
                     if (err || response.status < 200 || response.status >= 300) {
-                        console.log(err);
-                        this.setState({ page: "Couldn't load home page" });
+                        console.warn(`Error loading home page: ${err}`);
+                        this.setState({ page: _t("Couldn't load home page") });
+                        return;
                     }
 
                     body = body.replace(/_t\(['"]([\s\S]*?)['"]\)/mg, (match, g1)=>this.translate(g1));
@@ -77,6 +84,10 @@ module.exports = React.createClass({
                 }
             );
         }
+    },
+
+    componentWillUnmount: function() {
+        this._unmounted = true;
     },
 
     render: function() {
