@@ -97,5 +97,10 @@
     "Drop here %(toAction)s": "Pudota tänne %(toAction)s",
     "Enable them now": "Ota käyttöön nyt",
     "Enter keywords separated by a comma:": "Anna avainsanat eroteltuna pilkuin:",
-    "Expand panel": "Avaa paneeli"
+    "Expand panel": "Avaa paneeli",
+    "Error saving email notification preferences": "Virhe tallennettaessa sähköposti-ilmoitusasetuksia",
+    "Failed to": "Ei voitu",
+    "Failed to change settings": "Asetusten muuttaminen epäonnistui",
+    "Failed to forget room %(errCode)s": "Huoneen unohtaminen epäonnistui %(errCode)s",
+    "Failed to update keywords": "Avainsanojen päivittäminen epäonnistui"
 }
