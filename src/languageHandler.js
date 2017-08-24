@@ -237,6 +237,7 @@ function getLangsJson() {
             (err, response, body) => {
                 if (err || response.status < 200 || response.status >= 300) {
                     reject({err: err, response: response});
+                    return;
                 }
                 resolve(JSON.parse(body));
             }
@@ -251,6 +252,7 @@ function getLanguage(langPath) {
             (err, response, body) => {
                 if (err || response.status < 200 || response.status >= 300) {
                     reject({err: err, response: response});
+                    return;
                 }
                 resolve(JSON.parse(body));
             }
