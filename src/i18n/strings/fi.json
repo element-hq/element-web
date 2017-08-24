@@ -1,6 +1,6 @@
 {
     "Sunday": "Sunnuntai",
-    "A new version of Riot is available.": "Uusi version Riot:sta on tarjolla.",
+    "A new version of Riot is available.": "Uusi Riot-versio on saatavilla.",
     "Add an email address above to configure email notifications": "Lisää sähköpostiosoite yllä saadaksesi ilmoituksia sähköpostiisi",
     "Advanced notification settings": "Laajat ilmoitusasetukset",
     "All messages": "Kaikki viestit",
@@ -86,5 +86,16 @@
     "Welcome to Riot.im": "Tervetuloa Riot.im:ään",
     "Search the room directory": "Hae huonehakemistosta",
     "Continue": "Jatka",
-    "Set Password": "Aseta salasana"
+    "Set Password": "Aseta salasana",
+    "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.": "<a href=\"http://apple.com/safari\">Safari</a> ja <a href=\"http://opera.com\">Opera</a> toimivat myös.",
+    "Collapse panel": "Piilota paneeli",
+    "Collecting app version information": "Kerätään sovelluksen versiotietoja",
+    "Collecting logs": "Kerätään lokitietoja",
+    "Custom Server Options": "Omat palvelinasetukset",
+    "customServer_text": "Voit käyttää palvelinasetuksia muille Matrix-palvelimille kirjautumiseen asettamalla oman kotipalvelinosoitteen.<br/>Näin voit käyttää Riotia toisella kotipalvelimella sijaitsevan Matrix-käyttäjän kanssa. <br/><br/>Voit myös asettaa oman tunnistautumispalvelimen, mutta sinua ei voi kutsua etkä voi kutsua muita sähköpostiosoitteella.",
+    "Delete the room alias %(alias)s and remove %(name)s from the directory?": "Poista huonetunnus  %(alias)s ja poista %(name)s hakemistosta?",
+    "Drop here %(toAction)s": "Pudota tänne %(toAction)s",
+    "Enable them now": "Ota käyttöön nyt",
+    "Enter keywords separated by a comma:": "Anna avainsanat eroteltuna pilkuin:",
+    "Expand panel": "Avaa paneeli"
 }
