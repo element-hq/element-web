@@ -1,3 +1,18 @@
+Changes in [0.10.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.2) (2017-08-24)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.1...v0.10.2)
+
+ * Force update on timelinepanel when event decrypted
+   [\#1334](https://github.com/matrix-org/matrix-react-sdk/pull/1334)
+ * Dispatch incoming_call synchronously
+   [\#1337](https://github.com/matrix-org/matrix-react-sdk/pull/1337)
+ * Fix React crying on machines without internet due to return undefined
+   [\#1335](https://github.com/matrix-org/matrix-react-sdk/pull/1335)
+ * Catch the promise rejection if scalar fails
+   [\#1333](https://github.com/matrix-org/matrix-react-sdk/pull/1333)
+ * Update from Weblate.
+   [\#1329](https://github.com/matrix-org/matrix-react-sdk/pull/1329)
+
 Changes in [0.10.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.1) (2017-08-23)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.1-rc.1...v0.10.1)
