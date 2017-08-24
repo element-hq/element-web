@@ -1,3 +1,10 @@
+Changes in [0.12.2](https://github.com/vector-im/riot-web/releases/tag/v0.12.2) (2017-08-24)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.1...v0.12.2)
+
+ * Update react-sdk and js-sdk to fix bugs with incoming calls, messages and notifications
+   in encrypted rooms.
+
 Changes in [0.12.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.1) (2017-08-23)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.1-rc.1...v0.12.1)
