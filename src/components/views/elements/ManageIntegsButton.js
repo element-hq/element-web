@@ -75,7 +75,7 @@ export default class ManageIntegsButton extends React.Component {
     }
 
     render() {
-        let integrationsButton;
+        let integrationsButton = <div />;
         let integrationsError;
         if (this.scalarClient !== null) {
             if (this.state.showIntegrationsError && this.state.scalarError) {
