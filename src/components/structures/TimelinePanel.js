@@ -197,6 +197,7 @@ var TimelinePanel = React.createClass({
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("Room.localEchoUpdated", this.onLocalEchoUpdated);
         MatrixClientPeg.get().on("Room.accountData", this.onAccountData);
+        MatrixClientPeg.get().on("Event.decrypted", this.onEventDecrypted);
         MatrixClientPeg.get().on("sync", this.onSync);
 
         this._initTimeline(this.props);
@@ -266,6 +267,7 @@ var TimelinePanel = React.createClass({
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
             client.removeListener("Room.accountData", this.onAccountData);
+            client.removeListener("Event.decrypted", this.onEventDecrypted);
             client.removeListener("sync", this.onSync);
         }
     },
@@ -501,6 +503,16 @@ var TimelinePanel = React.createClass({
         this.setState({
             readMarkerEventId: ev.getContent().event_id,
         }, this.props.onReadMarkerUpdated);
+    },
+
+    onEventDecrypted: function(ev) {
+        // Need to update as we don't display event tiles for events that
+        // haven't yet been decrypted. The event will have just been updated
+        // in place so we just need to re-render.
+        // TODO: We should restrict this to only events in our timeline,
+        // but possibly the event tile itself should just update when this
+        // happens to save us re-rendering the whole timeline.
+        this.forceUpdate();
     },
 
     onSync: function(state, prevState, data) {
