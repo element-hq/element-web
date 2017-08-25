@@ -837,7 +837,7 @@
     "Accept": "Accept",
     "a room": "a room",
     "Add": "Add",
-    "Admin tools": "Admin tools",
+    "Admin Tools": "Admin tools",
     "And %(count)s more...": "And %(count)s more...",
     "Alias (optional)": "Alias (optional)",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",

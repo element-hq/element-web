@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,14 +34,14 @@ module.exports = withMatrixClient(React.createClass({
     propTypes: {
         matrixClient: PropTypes.object.isRequired,
         groupId: PropTypes.string,
-        member: GroupMemberType,
+        groupMember: GroupMemberType,
     },
 
     getInitialState: function() {
         return {
             fetching: false,
             removingUser: false,
-            members: null,
+            groupMembers: null,
         };
     },
 
@@ -52,31 +53,32 @@ module.exports = withMatrixClient(React.createClass({
         this.setState({fetching: true});
         this.props.matrixClient.getGroupUsers(this.props.groupId).then((result) => {
             this.setState({
-                members: result.chunk.map((apiMember) => {
+                groupMembers: result.chunk.map((apiMember) => {
                     return groupMemberFromApiObject(apiMember);
                 }),
                 fetching: false,
             });
         }).catch((e) => {
             this.setState({fetching: false});
-            console.error("Failed to get group member list: " + e);
+            console.error("Failed to get group groupMember list: ", e);
         });
     },
 
     _onKick: function() {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
-            groupMember: this.props.member,
+            groupMember: this.props.groupMember,
             action: _t('Remove from group'),
             danger: true,
             onFinished: (proceed) => {
                 if (!proceed) return;
 
                 this.setState({removingUser: true});
-                this.props.matrixClient.removeUserFromGroup(this.props.groupId, this.props.member.userId).then(() => {
+                this.props.matrixClient.removeUserFromGroup(this.props.groupId, this.props.groupMember.userId).then(() => {
+                    // return to the user list
                     dis.dispatch({
                         action: "view_user",
-                        member: null,
+                        groupMember: null,
                     });
                 }).catch((e) => {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -92,9 +94,10 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     _onCancel: function(e) {
+        // Go back to the user list
         dis.dispatch({
             action: "view_user",
-            member: null,
+            groupMember: null,
         });
     },
 
@@ -107,17 +110,14 @@ module.exports = withMatrixClient(React.createClass({
 
     render: function() {
         if (this.state.fetching || this.state.removingUser) {
-            const Loader = sdk.getComponent("elements.Spinner");
-            return <Loader />;
+            const Spinner = sdk.getComponent("elements.Spinner");
+            return <Spinner />;
         }
-        if (!this.state.members) return null;
+        if (!this.state.groupMembers) return null;
 
-        let targetIsInGroup = false;
-        for (const m of this.state.members) {
-            if (m.userId == this.props.member.userId) {
-                targetIsInGroup = true;
-            }
-        }
+        const targetIsInGroup = this.state.groupMembers.some((m) => {
+            return m.userId == this.props.groupMember.userId;
+        });
 
         let kickButton;
         let adminButton;
@@ -140,8 +140,8 @@ module.exports = withMatrixClient(React.createClass({
         let adminTools;
         if (kickButton || adminButton) {
             adminTools =
-                <div>
-                    <h3>{_t("Admin tools")}</h3>
+                <div className="mx_MemberInfo_adminTools">
+                    <h3>{_t("Admin Tools")}</h3>
 
                     <div className="mx_MemberInfo_buttons">
                         {kickButton}
@@ -152,25 +152,27 @@ module.exports = withMatrixClient(React.createClass({
 
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const avatar = (
-            <BaseAvatar name={this.props.member.userId} width={36} height={36} />
+            <BaseAvatar name={this.props.groupMember.userId} width={36} height={36} />
         );
 
-        const memberName = this.props.member.userId;
+        const groupMemberName = this.props.groupMember.userId;
 
         const EmojiText = sdk.getComponent('elements.EmojiText');
         return (
             <div className="mx_MemberInfo">
                 <GeminiScrollbar autoshow={true}>
-                    <AccessibleButton className="mx_MemberInfo_cancel" onClick={this._onCancel}> <img src="img/cancel.svg" width="18" height="18"/></AccessibleButton>
+                    <AccessibleButton className="mx_MemberInfo_cancel"onClick={this._onCancel}>
+                        <img src="img/cancel.svg" width="18" height="18"/>
+                    </AccessibleButton>
                     <div className="mx_MemberInfo_avatar">
                         {avatar}
                     </div>
 
-                    <EmojiText element="h2">{memberName}</EmojiText>
+                    <EmojiText element="h2">{groupMemberName}</EmojiText>
 
                     <div className="mx_MemberInfo_profile">
                         <div className="mx_MemberInfo_profileField">
-                            { this.props.member.userId }
+                            { this.props.groupMember.userId }
                         </div>
                     </div>
 

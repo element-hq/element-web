@@ -144,8 +144,8 @@ module.exports = React.createClass({
             // If we're trying to just view a user ID (i.e. /user URL), this is it
             viewUserId: null,
 
-            collapse_lhs: false,
-            collapse_rhs: false,
+            collapseLhs: false,
+            collapseRhs: false,
             leftOpacity: 1.0,
             middleOpacity: 1.0,
             rightOpacity: 1.0,
@@ -439,7 +439,7 @@ module.exports = React.createClass({
                 break;
             case 'view_user':
                 // FIXME: ugly hack to expand the RightPanel and then re-dispatch.
-                if (this.state.collapse_rhs) {
+                if (this.state.collapseRhs) {
                     setTimeout(()=>{
                         dis.dispatch({
                             action: 'show_right_panel',
@@ -521,22 +521,22 @@ module.exports = React.createClass({
                 break;
             case 'hide_left_panel':
                 this.setState({
-                    collapse_lhs: true,
+                    collapseLhs: true,
                 });
                 break;
             case 'show_left_panel':
                 this.setState({
-                    collapse_lhs: false,
+                    collapseLhs: false,
                 });
                 break;
             case 'hide_right_panel':
                 this.setState({
-                    collapse_rhs: true,
+                    collapseRhs: true,
                 });
                 break;
             case 'show_right_panel':
                 this.setState({
-                    collapse_rhs: false,
+                    collapseRhs: false,
                 });
                 break;
             case 'ui_opacity': {
@@ -1002,8 +1002,8 @@ module.exports = React.createClass({
         this.setStateForNewView({
             view: VIEWS.LOGIN,
             ready: false,
-            collapse_lhs: false,
-            collapse_rhs: false,
+            collapseLhs: false,
+            collapseRhs: false,
             currentRoomId: null,
             page_type: PageTypes.RoomDirectory,
         });

@@ -600,7 +600,7 @@
     "%(user)s is a": "%(user)s เป็น",
     "(~%(count)s results).one": "(~%(count)s ผลลัพท์)",
     "(~%(count)s results).other": "(~%(count)s ผลลัพท์)",
-    "Admin tools": "เครื่องมือผู้ดูแล",
+    "Admin Tools": "เครื่องมือผู้ดูแล",
     "And %(count)s more...": "เพิ่มอีก %(count)s ชิ้น...",
     "Missing Media Permissions, click here to request.": "ไม่มีสิทธิ์เข้าถึงสื่อ, คลิกที่นี่เพื่อขอสิทธิ์",
     "Alias (optional)": "นามแฝง (ไม่ใส่ก็ได้)",

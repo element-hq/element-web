@@ -708,7 +708,7 @@ module.exports = withMatrixClient(React.createClass({
         if (kickButton || banButton || muteButton || giveModButton) {
             adminTools =
                 <div>
-                    <h3>{_t("Admin tools")}</h3>
+                    <h3>{_t("Admin Tools")}</h3>
 
                     <div className="mx_MemberInfo_buttons">
                         {muteButton}

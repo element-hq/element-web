@@ -854,7 +854,7 @@
     "a room": "un salon",
     "Accept": "Accepter",
     "Active call (%(roomName)s)": "Appel en cours (%(roomName)s)",
-    "Admin tools": "Outils d'administration",
+    "Admin Tools": "Outils d'administration",
     "Alias (optional)": "Alias (optionnel)",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Impossible de se connecter au homeserver - veuillez vérifier votre connexion, assurez vous que vous faites confiance au <a>certificat SSL de votre homeserver</a>, et qu'aucune extension de navigateur ne bloque les requêtes.",
     "<a>Click here</a> to join the discussion!": "<a>Cliquer ici</a> pour joindre la discussion !",

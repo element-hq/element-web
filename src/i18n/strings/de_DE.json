@@ -910,7 +910,7 @@
     "a room": "einen Raum",
     "Accept": "Akzeptieren",
     "Active call (%(roomName)s)": "Aktiver Anruf (%(roomName)s)",
-    "Admin tools": "Admin-Werkzeuge",
+    "Admin Tools": "Admin-Werkzeuge",
     "And %(count)s more...": "Und %(count)s weitere...",
     "Alias (optional)": "Alias (optional)",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Verbindung zum Heimserver fehlgeschlagen - bitte prüfe deine Verbindung, stelle sicher, dass dem <a>SSL-Zertifikat deines Heimservers</a> vertraut wird und keine Browser-Erweiterung Anfragen blockiert.",
