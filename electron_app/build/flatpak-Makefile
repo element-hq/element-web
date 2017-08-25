@@ -1,6 +1,6 @@
 
-ICON_FILES = $(wildcard electron/build/icons/*.png)
-ICON_SIZES = $(patsubst electron/build/icons/%.png,%,$(ICON_FILES))
+ICON_FILES = $(wildcard electron_app/build/icons/*.png)
+ICON_SIZES = $(patsubst electron_app/build/icons/%.png,%,$(ICON_FILES))
 
 all:
 	npm install
@@ -9,10 +9,10 @@ all:
 
 install:
 	install -dm755 /app/bin
-	cp -ar electron/dist/linux-unpacked/* /app/bin/
+	cp -ar electron_app/dist/linux-unpacked/* /app/bin/
 	for size in $(ICON_SIZES) ; do \
 		install -dm755 /app/share/icons/hicolor/$${size}/apps/ ; \
-		install -Dm644 electron/build/icons/$${size}.png \
+		install -Dm644 electron_app/build/icons/$${size}.png \
 			/app/share/icons/hicolor/$${size}/apps/im.vector.Riot.png ; \
 	done
 	install -dm755 /app/share/applications
