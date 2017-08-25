@@ -539,5 +539,17 @@
     "Thursday": "torsdag",
     "Friday": "fredag",
     "Saturday": "lördag",
-    "Welcome page": "Välkomstsida"
+    "Welcome page": "Välkomstsida",
+    "Add a widget": "Lägg till en widget",
+    "Allow": "Tillåt",
+    "Cannot add any more widgets": "Det går inte att lägga till fler widgets",
+    "Changes colour scheme of current room": "Ändrar färgschema för nuvarande rum",
+    "Delete widget": "Ta bort widget",
+    "Define the power level of a user": "Definiera anseende för en användare",
+    "Do you want to load widget from URL:": "Vill du ladda widgeten från URL:",
+    "Edit": "Redigera",
+    "Enable automatic language detection for syntax highlighting": "Aktivera automatisk språkdetektering för syntaxmarkering",
+    "Hide Apps": "Dölj Appar",
+    "Hide avatar and display name changes": "Dölj avatar och visningsnamns ändringar",
+    "Integrations Error": "Integrationsfel"
 }
