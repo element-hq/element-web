@@ -277,7 +277,7 @@ module.exports = React.createClass({
                 panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />
             } else if (this.state.phase == this.Phase.GroupMemberInfo) {
                 const GroupMemberInfo = sdk.getComponent('groups.GroupMemberInfo');
-                panel = <GroupMemberInfo member={this.state.member} groupId={this.props.groupId} key={this.state.member.user_id} />;
+                panel = <GroupMemberInfo groupMember={this.state.member} groupId={this.props.groupId} key={this.state.member.user_id} />;
             } else if (this.state.phase == this.Phase.NotificationPanel) {
                 panel = <NotificationPanel />;
             } else if (this.state.phase == this.Phase.FilePanel) {
