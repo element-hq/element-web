@@ -91,7 +91,7 @@
     "pl": "Poļu",
     "pt-br": "Brazīlijas portugāļu",
     "pt": "Portugāļu",
-    "rm": "Rhaeto-Rumāņu",
+    "rm": "Retoromāņu",
     "ro-mo": "Rumāņu (Moldovas Republika)",
     "ro": "Rumāņu",
     "ru-mo": "Krievu (Moldovas Republika)",
@@ -972,5 +972,5 @@
     "%(widgetName)s widget added by %(senderName)s": "%(senderName)s pievienoja %(widgetName)s vidžetu",
     "%(widgetName)s widget removed by %(senderName)s": "%(senderName)s dzēsa vidžetu %(widgetName)s",
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robotu pārbaude šobrīd nav pieejama darbvirsmas versijā. Lūdzu izmanto <a>web pārlūku</a>",
-    "Revoke widget access": "Atsaukt piekļuvi vidžetam"
+    "Revoke widget access": "Atsaukt vidžeta piekļuvi"
 }
