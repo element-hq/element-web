@@ -66,5 +66,6 @@
     "Thursday": "Čtvrtek",
     "Friday": "Pátek",
     "Saturday": "Sobota",
-    "OK": "OK"
+    "OK": "OK",
+    "Failed to forget room %(errCode)s": "Nepodařilo se zapomenout místnost %(errCode)s"
 }
