@@ -102,11 +102,11 @@ const Notifier = {
     },
 
     start: function() {
-        this.boundOnRoomTimeline = this.onRoomTimeline.bind(this);
+        this.boundOnEvent = this.onEvent.bind(this);
         this.boundOnSyncStateChange = this.onSyncStateChange.bind(this);
         this.boundOnRoomReceipt = this.onRoomReceipt.bind(this);
         this.boundOnEventDecrypted = this.onEventDecrypted.bind(this);
-        MatrixClientPeg.get().on('Room.timeline', this.boundOnRoomTimeline);
+        MatrixClientPeg.get().on('event', this.boundOnEvent);
         MatrixClientPeg.get().on('Room.receipt', this.boundOnRoomReceipt);
         MatrixClientPeg.get().on('Event.decrypted', this.boundOnEventDecrypted);
         MatrixClientPeg.get().on("sync", this.boundOnSyncStateChange);
@@ -116,7 +116,7 @@ const Notifier = {
 
     stop: function() {
         if (MatrixClientPeg.get() && this.boundOnRoomTimeline) {
-            MatrixClientPeg.get().removeListener('Room.timeline', this.boundOnRoomTimeline);
+            MatrixClientPeg.get().removeListener('Event', this.boundOnEvent);
             MatrixClientPeg.get().removeListener('Room.receipt', this.boundOnRoomReceipt);
             MatrixClientPeg.get().removeListener('Event.decrypted', this.boundOnEventDecrypted);
             MatrixClientPeg.get().removeListener('sync', this.boundOnSyncStateChange);
@@ -247,12 +247,9 @@ const Notifier = {
         }
     },
 
-    onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
-        if (toStartOfTimeline) return;
-        if (!room) return;
+    onEvent: function(ev) {
         if (!this.isSyncing) return; // don't alert for any messages initially
         if (ev.sender && ev.sender.userId === MatrixClientPeg.get().credentials.userId) return;
-        if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
 
         // If it's an encrypted event and the type is still 'm.room.encrypted',
         // it hasn't yet been decrypted, so wait until it is.
