@@ -51,5 +51,20 @@
     "Error": "Chyba",
     "Failed to join the room": "Nepodařilo se vstoupit do místnosti",
     "Favourite": "V oblíbených",
-    "Mute": "Ztišit"
+    "Mute": "Ztišit",
+    "Continue": "Pokračovat",
+    "Failed to change password. Is your password correct?": "Nelze změnit heslo. Je Vaše heslo správné?",
+    "Welcome page": "Uvítací stránka",
+    "Operation failed": "Chyba operace",
+    "Please Register": "Prosím zaregistrujte se",
+    "Remove": "Odebrat",
+    "unknown error code": "neznámý kód chyby",
+    "Sunday": "Neděle",
+    "Monday": "Pondělí",
+    "Tuesday": "Úterý",
+    "Wednesday": "Středa",
+    "Thursday": "Čtvrtek",
+    "Friday": "Pátek",
+    "Saturday": "Sobota",
+    "OK": "OK"
 }
