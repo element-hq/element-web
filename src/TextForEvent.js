@@ -248,6 +248,29 @@ function textForPowerEvent(event) {
     });
 }
 
+function textForWidgetEvent(event) {
+    const senderName = event.sender ? event.sender.name : event.getSender();
+    const previousContent = event.getPrevContent() || {};
+    const {name, type, url} = event.getContent() || {};
+    let widgetName = name || previousContent.name || type || previousContent.type || '';
+    // Apply sentence case to widget name
+    if (widgetName && widgetName.length > 0) {
+        widgetName = widgetName[0].toUpperCase() + widgetName.slice(1) + ' ';
+    }
+
+    // If the widget was removed, its content should be {}, but this is sufficiently
+    // equivalent to that condition.
+    if (url) {
+        return _t('%(widgetName)s widget added by %(senderName)s', {
+            widgetName, senderName,
+        });
+    } else {
+        return _t('%(widgetName)s widget removed by %(senderName)s', {
+            widgetName, senderName,
+        });
+    }
+}
+
 var handlers = {
     'm.room.message': textForMessageEvent,
     'm.room.name':    textForRoomNameEvent,
@@ -260,6 +283,8 @@ var handlers = {
     'm.room.history_visibility': textForHistoryVisibilityEvent,
     'm.room.encryption': textForEncryptionEvent,
     'm.room.power_levels': textForPowerEvent,
+
+    'im.vector.modular.widgets': textForWidgetEvent,
 };
 
 module.exports = {

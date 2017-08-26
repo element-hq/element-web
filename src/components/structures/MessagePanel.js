@@ -307,13 +307,13 @@ module.exports = React.createClass({
         for (i = 0; i < this.props.events.length; i++) {
             let mxEv = this.props.events[i];
             let eventId = mxEv.getId();
-            let readMarkerInMels = false;
             let last = (mxEv === lastShownEvent);
 
             const wantTile = this._shouldShowEvent(mxEv);
 
             // Wrap consecutive member events in a ListSummary, ignore if redacted
             if (isMembershipChange(mxEv) && wantTile) {
+                let readMarkerInMels = false;
                 let ts1 = mxEv.getTs();
                 // Ensure that the key of the MemberEventListSummary does not change with new
                 // member events. This will prevent it from being re-created unnecessarily, and
@@ -330,9 +330,23 @@ module.exports = React.createClass({
                     ret.push(dateSeparator);
                 }
 
+                // If RM event is the first in the MELS, append the RM after MELS
+                if (mxEv.getId() === this.props.readMarkerEventId) {
+                    readMarkerInMels = true;
+                }
+
                 let summarisedEvents = [mxEv];
                 for (;i + 1 < this.props.events.length; i++) {
                     const collapsedMxEv = this.props.events[i + 1];
+
+                    // Ignore redacted/hidden member events
+                    if (!this._shouldShowEvent(collapsedMxEv)) {
+                        // If this hidden event is the RM and in or at end of a MELS put RM after MELS.
+                        if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
+                            readMarkerInMels = true;
+                        }
+                        continue;
+                    }
 
                     if (!isMembershipChange(collapsedMxEv) ||
                         this._wantsDateSeparator(this.props.events[i], collapsedMxEv.getDate())) {
@@ -342,11 +356,6 @@ module.exports = React.createClass({
                     // If RM event is in MELS mark it as such and the RM will be appended after MELS.
                     if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
                         readMarkerInMels = true;
-                    }
-
-                    // Ignore redacted/hidden member events
-                    if (!this._shouldShowEvent(collapsedMxEv)) {
-                        continue;
                     }
 
                     summarisedEvents.push(collapsedMxEv);

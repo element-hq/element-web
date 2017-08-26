@@ -3,5 +3,11 @@
     "Continue": "استمر",
     "Username available": "اسم المستخدم متاح",
     "Username not available": "الإسم المستخدم غير موجود",
-    "Something went wrong!": "هناك خطأ ما!"
+    "Something went wrong!": "هناك خطأ ما!",
+    "Cancel": "إلغاء",
+    "Close": "إغلاق",
+    "Create new room": "إنشاء غرفة جديدة",
+    "Custom Server Options": "إعدادات السيرفر خاصة",
+    "Direct Chat": "دردشة مباشرة",
+    "Dismiss": "صرف النظر"
 }

@@ -202,25 +202,34 @@ export function selectionStateToTextOffsets(selectionState: SelectionState,
 export function textOffsetsToSelectionState({start, end}: SelectionRange,
                                             contentBlocks: Array<ContentBlock>): SelectionState {
     let selectionState = SelectionState.createEmpty();
+    // Subtract block lengths from `start` and `end` until they are less than the current
+    // block length (accounting for the NL at the end of each block). Set them to -1 to
+    // indicate that the corresponding selection state has been determined.
     for (const block of contentBlocks) {
         const blockLength = block.getLength();
-        if (start !== -1 && start < blockLength) {
-            selectionState = selectionState.merge({
-                anchorKey: block.getKey(),
-                anchorOffset: start,
-            });
-            start = -1;
-        } else {
-            start -= blockLength + 1; // +1 to account for newline between blocks
+        // -1 indicating that the position start position has been found
+        if (start !== -1) {
+            if (start < blockLength + 1) {
+                selectionState = selectionState.merge({
+                    anchorKey: block.getKey(),
+                    anchorOffset: start,
+                });
+                start = -1; // selection state for the start calculated
+            } else {
+                start -= blockLength + 1; // +1 to account for newline between blocks
+            }
         }
-        if (end !== -1 && end <= blockLength) {
-            selectionState = selectionState.merge({
-                focusKey: block.getKey(),
-                focusOffset: end,
-            });
-            end = -1;
-        } else {
-            end -= blockLength + 1; // +1 to account for newline between blocks
+        // -1 indicating that the position end position has been found
+        if (end !== -1) {
+            if (end < blockLength + 1) {
+                selectionState = selectionState.merge({
+                    focusKey: block.getKey(),
+                    focusOffset: end,
+                });
+                end = -1; // selection state for the end calculated
+            } else {
+                end -= blockLength + 1; // +1 to account for newline between blocks
+            }
         }
     }
     return selectionState;

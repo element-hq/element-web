@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,6 +32,7 @@ import dis from "../../dispatcher";
 import Modal from "../../Modal";
 import Tinter from "../../Tinter";
 import sdk from '../../index';
+import { showStartChatInviteDialog, showRoomInviteDialog } from '../../Invite';
 import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
@@ -512,7 +514,7 @@ module.exports = React.createClass({
                 this._createChat();
                 break;
             case 'view_invite':
-                this._invite(payload.roomId);
+                showRoomInviteDialog(payload.roomId);
                 break;
             case 'notifier_enabled':
                 this.forceUpdate();
@@ -766,13 +768,7 @@ module.exports = React.createClass({
             dis.dispatch({action: 'view_set_mxid'});
             return;
         }
-        const ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
-        Modal.createTrackedDialog('Start a chat', '', ChatInviteDialog, {
-            title: _t('Start a chat'),
-            description: _t("Who would you like to communicate with?"),
-            placeholder: _t("Email, name or matrix ID"),
-            button: _t("Start Chat"),
-        });
+        showStartChatInviteDialog();
     },
 
     _createRoom: function() {
@@ -855,17 +851,6 @@ module.exports = React.createClass({
                 close(true);
             },
         }).close;
-    },
-
-    _invite: function(roomId) {
-        const ChatInviteDialog = sdk.getComponent("dialogs.ChatInviteDialog");
-        Modal.createTrackedDialog('Chat Invite', '', ChatInviteDialog, {
-            title: _t('Invite new room members'),
-            description: _t('Who would you like to add to this room?'),
-            button: _t('Send Invites'),
-            placeholder: _t("Email, name or matrix ID"),
-            roomId: roomId,
-        });
     },
 
     _leaveRoom: function(roomId) {
@@ -1083,10 +1068,13 @@ module.exports = React.createClass({
             self.setState({ready: true});
         });
         cli.on('Call.incoming', function(call) {
+            // we dispatch this synchronously to make sure that the event
+            // handlers on the call are set up immediately (so that if
+            // we get an immediate hangup, we don't get a stuck call)
             dis.dispatch({
                 action: 'incoming_call',
                 call: call,
-            });
+            }, true);
         });
         cli.on('Session.logged_out', function(call) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -1203,21 +1191,24 @@ module.exports = React.createClass({
         } else if (screen.indexOf('user/') == 0) {
             const userId = screen.substring(5);
 
-            if (params.action === 'chat') {
-                this._chatCreateOrReuse(userId);
-                return;
-            }
+            // Wait for the first sync so that `getRoom` gives us a room object if it's
+            // in the sync response
+            const waitFor = this.firstSyncPromise ?
+                this.firstSyncPromise.promise : Promise.resolve();
+            waitFor.then(() => {
+                if (params.action === 'chat') {
+                    this._chatCreateOrReuse(userId);
+                    return;
+                }
 
-            this.setState({ viewUserId: userId });
-            this._setPage(PageTypes.UserView);
-            this.notifyNewScreen('user/' + userId);
-            const member = new Matrix.RoomMember(null, userId);
-            if (member) {
+                this._setPage(PageTypes.UserView);
+                this.notifyNewScreen('user/' + userId);
+                const member = new Matrix.RoomMember(null, userId);
                 dis.dispatch({
                     action: 'view_user',
                     member: member,
                 });
-            }
+            });
         } else if (screen.indexOf('group/') == 0) {
             const groupId = screen.substring(6);
 
