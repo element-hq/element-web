@@ -72,7 +72,7 @@
     "Send": "보내기",
     "Send logs": "로그 보내기",
     "Settings": "설정",
-    "Source URL": "출처 주소",
+    "Source URL": "출처 URL",
     "Sorry, your browser is <b>not</b> able to run Riot.": "죄송해요. 브라우저에서 라이엇을 켤 수가 <b>없어요</b>.",
     "Start chat": "이야기하기",
     "This Room": "방",
@@ -106,7 +106,7 @@
     "Please set a password!": "비밀번호를 설정해주세요!",
     "%(appName)s via %(browserName)s on %(osName)s": "%(osName)s의 %(browserName)s을 통한 %(appName)s",
     "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.": "<a href=\"http://apple.com/safari\">사파리</a>와 <a href=\"http://opera.com\">오페라</a>에서도 작동해요.",
-    "customServer_text": "사용자 지정 서버 설정에서 다른 홈 서버 주소를 지정해 다른 매트릭스 서버에 로그인할 수 있어요.<br/>이를 통해 라이엇과 다른 홈 서버의 기존 매트릭스 계정을 함께 쓸 수 있죠.<br/><br/>사용자 지정 ID 서버를 설정할 수도 있지만 이메일 주소로 사용자를 초대하거나 초대받을 수는 없답니다.",
+    "customServer_text": "사용자 지정 서버 설정에서 다른 홈 서버 URL을 지정해 다른 매트릭스 서버에 로그인할 수 있어요.<br/>이를 통해 라이엇과 다른 홈 서버의 기존 매트릭스 계정을 함께 쓸 수 있죠.<br/><br/>사용자 지정 ID 서버를 설정할 수도 있지만 이메일 주소로 사용자를 초대하거나 초대받을 수는 없답니다.",
     "Delete the room alias %(alias)s and remove %(name)s from the directory?": "방 가명 %(alias)s 을 지우고 목록에서 %(name)s를 지우시겠어요?",
     "Drop here %(toAction)s": "여기에 놓아주세요 %(toAction)s",
     "Enable audible notifications in web client": "웹 클라이언트에서 알림 소리 켜기",
@@ -200,5 +200,11 @@
     "You are Rioting as a guest. <a>Register</a> or <a>sign in</a> to access more rooms and features!": "손님으로 라이엇에 들어오셨네요. <a>계정을 등록하거나</a> <a>로그인하시고</a> 더 많은 방과 기능을 즐기세요!",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "라이엇이 아닌 다른 클라이언트에서 구성하셨을 수도 있어요. 라이엇에서 조정할 수는 없지만 여전히 적용되있을 거에요",
     "To return to your account in future you need to <u>set a password</u>": "나중에 계정으로 돌아가려면 <u>비밀번호 설정</u>을 해야만 해요",
-    "Set Password": "비밀번호 설정"
+    "Set Password": "비밀번호 설정",
+    "Warning": "주의",
+    "Checking for an update...": "업데이트를 확인하는 중...",
+    "Error encountered (%(errorDetail)s).": "오류가 일어났어요 (%(errorDetail)s).",
+    "No update available.": "업데이트가 없어요.",
+    "Downloading update...": "업데이트를 받는 중...",
+    "Couldn't load home page": "중심 화면을 불러올 수 없어요"
 }
