@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import sdk from 'matrix-react-sdk';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 
 class SendCustomEvent extends React.Component {
@@ -44,8 +45,8 @@ class SendCustomEvent extends React.Component {
 
     _buttons() {
         return <div className="mx_Dialog_buttons">
-            <button onClick={this.onBack}>Back</button>
-            {!this.state.message && <button onClick={this._send}>Send</button>}
+            <button onClick={this.onBack}>{ _t('Back') }</button>
+            {!this.state.message && <button onClick={this._send}>{ _t('Send') }</button>}
         </div>;
     }
 
@@ -58,9 +59,9 @@ class SendCustomEvent extends React.Component {
         try {
             const content = JSON.parse(this.refs.evContent.value);
             await this.send(content);
-            message = 'Event sent!';
+            message = _t('Event sent!');
         } catch (e) {
-            message = 'Failed to send custom event.' + ` (${e.toString()})`;
+            message = `${_t('Failed to send custom event.')} (${e.toString()})`;
         }
         this.setState({ message });
     }
@@ -78,14 +79,14 @@ class SendCustomEvent extends React.Component {
         return <div>
             <div className="mx_Dialog_content">
                 <div className="mx_TextInputDialog_label">
-                    <label htmlFor="eventType"> Event Type </label>
+                    <label htmlFor="eventType"> { _t('Event Type') } </label>
                 </div>
                 <div>
                     <input id="eventType" ref="eventType" className="mx_TextInputDialog_input" size="64" />
                 </div>
 
                 <div className="mx_TextInputDialog_label">
-                    <label htmlFor="evContent"> Event Content </label>
+                    <label htmlFor="evContent"> { _t('Event Content') } </label>
                 </div>
                 <div>
                     <textarea id="evContent" ref="evContent" className="mx_TextInputDialog_input" defaultValue={"{\n\n}"} cols="63" rows="5" />
@@ -115,21 +116,21 @@ class SendCustomStateEvent extends SendCustomEvent {
         return <div>
             <div className="mx_Dialog_content">
                 <div className="mx_TextInputDialog_label">
-                    <label htmlFor="stateKey"> State Key </label>
+                    <label htmlFor="stateKey"> { _t('State Key') } </label>
                 </div>
                 <div>
                     <input id="stateKey" ref="stateKey" className="mx_TextInputDialog_input" size="64" />
                 </div>
 
                 <div className="mx_TextInputDialog_label">
-                    <label htmlFor="eventType"> Event Type </label>
+                    <label htmlFor="eventType"> { _t('Event Type') } </label>
                 </div>
                 <div>
                     <input id="eventType" ref="eventType" className="mx_TextInputDialog_input" size="64" />
                 </div>
 
                 <div className="mx_TextInputDialog_label">
-                    <label htmlFor="evContent"> Event Content </label>
+                    <label htmlFor="evContent"> { _t('Event Content') } </label>
                 </div>
                 <div>
                     <textarea id="evContent" ref="evContent" className="mx_TextInputDialog_input" defaultValue={"{\n\n}"} cols="63" rows="5" />
@@ -191,7 +192,7 @@ class RoomStateExplorer extends React.Component {
                     <pre>{JSON.stringify(this.state.event, null, 2)}</pre>
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button onClick={this.onBack}>Back</button>
+                    <button onClick={this.onBack}>{ _t('Back') }</button>
                 </div>
             </div>;
         }
@@ -226,7 +227,7 @@ class RoomStateExplorer extends React.Component {
                 {rows}
             </div>
             <div className="mx_Dialog_buttons">
-                <button onClick={this.onBack}>Back</button>
+                <button onClick={this.onBack}>{ _t('Back') }</button>
             </div>
         </div>;
     }
@@ -274,18 +275,18 @@ export default class DevtoolsDialog extends React.Component {
         } else {
             body = <div>
                 <div className="mx_Dialog_content">
-                    <button onClick={this._setMode(SendCustomEvent)}>Send Custom Event</button>
-                    <button onClick={this._setMode(SendCustomStateEvent)}>Send Custom State Event</button>
-                    <button onClick={this._setMode(RoomStateExplorer)}>Explore Room State</button>
+                    <button onClick={this._setMode(SendCustomEvent)}>{ _t('Send Custom Event') }</button>
+                    <button onClick={this._setMode(SendCustomStateEvent)}>{ _t('Send Custom State Event') }</button>
+                    <button onClick={this._setMode(RoomStateExplorer)}>{ _t('Explore Room State') }</button>
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button onClick={this.onCancel}>Cancel</button>
+                    <button onClick={this.onCancel}>{ _t('Cancel') }</button>
                 </div>
             </div>;
         }
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        return <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished} title="Developer Tools">
+        return <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished} title={_t('Developer Tools')}>
             <div>Room ID: {this.props.roomId}</div>
             { body }
         </BaseDialog>;
