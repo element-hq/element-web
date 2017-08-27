@@ -620,7 +620,12 @@ module.exports = withMatrixClient(React.createClass({
                 const room = this.props.matrixClient.getRoom(roomId);
                 if (room) {
                     const me = room.getMember(this.props.matrixClient.credentials.userId);
-                    if (me.membership === 'leave') continue;
+                    // not a DM room if we have left it
+                    if (!me.membership || me.membership === 'leave') continue;
+                    // not a DM room if they have left it
+                    const them = this.props.member;
+                    if (!them.membership || them.membership === 'leave') continue;
+
                     const highlight = room.getUnreadNotificationCount('highlight') > 0 || me.membership === 'invite';
 
                     tiles.push(
