@@ -40,6 +40,8 @@ import withMatrixClient from '../../../wrappers/withMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
+// States which both sides of the dmRoom must have for it to be considered relevant.
+const joinStates = ['invite', 'join'];
 
 module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
@@ -620,11 +622,11 @@ module.exports = withMatrixClient(React.createClass({
                 const room = this.props.matrixClient.getRoom(roomId);
                 if (room) {
                     const me = room.getMember(this.props.matrixClient.credentials.userId);
-                    // not a DM room if we have left it
-                    if (!me.membership || me.membership === 'leave') continue;
-                    // not a DM room if they have left it
+                    // not a DM room if we have are not joined/invited
+                    if (!me.membership || !joinStates.includes(me.membership)) continue;
+                    // not a DM room if they are not joined/invited
                     const them = this.props.member;
-                    if (!them.membership || them.membership === 'leave') continue;
+                    if (!them.membership || !joinStates.includes(them.membership)) continue;
 
                     const highlight = room.getUnreadNotificationCount('highlight') > 0 || me.membership === 'invite';
 
