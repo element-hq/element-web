@@ -171,7 +171,7 @@ class RoomStateExplorer extends React.Component {
     onViewSourceClick(event) {
         const self = this;
         return () => {
-            self.setState({ event });
+            self.setState({ event: event.event });
         };
     }
 
