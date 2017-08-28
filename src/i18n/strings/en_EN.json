@@ -977,5 +977,6 @@
     "Hide avatars in user and room mentions": "Hide avatars in user and room mentions",
     "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s widget added by %(senderName)s",
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s widget removed by %(senderName)s",
+    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s widget modified by %(senderName)s",
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot check is currently unavailable on desktop - please use a <a>web browser</a>"
 }
