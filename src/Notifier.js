@@ -96,7 +96,6 @@ const Notifier = {
     _playAudioNotification: function(ev, room) {
         const e = document.getElementById("messageAudio");
         if (e) {
-            e.load();
             e.play();
         }
     },
