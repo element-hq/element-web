@@ -136,16 +136,15 @@ module.exports = React.createClass({
         });
     },
 
-    onHsUrlChanged: function(newHsUrl) {
-        this.setState({
-            enteredHomeserverUrl: newHsUrl
-        });
-    },
-
-    onIsUrlChanged: function(newIsUrl) {
-        this.setState({
-            enteredIdentityServerUrl: newIsUrl
-        });
+    onServerConfigChange: function(config) {
+        const newState = {};
+        if (config.hsUrl !== undefined) {
+            newState.enteredHomeserverUrl = config.hsUrl;
+        }
+        if (config.isUrl !== undefined) {
+            newState.enteredIdentityServerUrl = config.isUrl;
+        }
+        this.setState(newState);
     },
 
     showErrorDialog: function(body, title) {
@@ -221,8 +220,7 @@ module.exports = React.createClass({
                         defaultIsUrl={this.props.defaultIsUrl}
                         customHsUrl={this.props.customHsUrl}
                         customIsUrl={this.props.customIsUrl}
-                        onHsUrlChanged={this.onHsUrlChanged}
-                        onIsUrlChanged={this.onIsUrlChanged}
+                        onServerConfigChange={this.onServerConfigChange}
                         delayTimeMs={0}/>
                     <div className="mx_Login_error">
                     </div>
