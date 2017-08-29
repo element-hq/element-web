@@ -78,7 +78,7 @@ var RoomSubList = React.createClass({
         // undefined if no room is selected (eg we are showing settings)
         selectedRoom: React.PropTypes.string,
 
-        // pass explicitly, do not rely on label==='Invites' because i18n.
+        // passed through to RoomTile and used to highlight room with `!` regardless of notifications count
         isInvite: React.PropTypes.bool,
 
         startAsHidden: React.PropTypes.bool,
