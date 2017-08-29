@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -170,7 +171,7 @@ module.exports = React.createClass({
         else if (this.state.progress === "sent_email") {
             resetPasswordJsx = (
                 <div>
-                    { _t('An email has been sent to') } {this.state.email}. { _t('Once you&#39;ve followed the link it contains, click below') }.
+                    { _t('An email has been sent to') } {this.state.email}. { _t("Once you've followed the link it contains, click below") }.
                     <br />
                     <input className="mx_Login_submit" type="button" onClick={this.onVerify}
                         value={ _t('I have verified my email address') } />

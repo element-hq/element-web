@@ -452,7 +452,7 @@
     "People": "사람들",
     "Phone": "전화",
     "Once encryption is enabled for a room it cannot be turned off again (for now)": "방을 암호화하면 암호화를 도중에 끌 수 없어요. (현재로서는)",
-    "Once you&#39;ve followed the link it contains, click below": "포함된 주소를 따라가서, 아래를 누르세요",
+    "Once you've followed the link it contains, click below": "포함된 주소를 따라가서, 아래를 누르세요",
     "Only people who have been invited": "초대받은 사람만",
     "Otherwise, <a>click here</a> to send a bug report.": "그 밖에는, <a>여기를 눌러</a> 오류 보고서를 보내주세요.",
     "%(senderName)s placed a %(callType)s call.": "%(senderName)s님이 %(callType)s 전화를 걸었어요.",
