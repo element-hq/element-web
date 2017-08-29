@@ -395,7 +395,7 @@
     "Mute": "Couper le son",
     "No users have specific privileges in this room": "Aucun utilisateur n’a de privilège spécifique dans ce salon",
     "olm version:": "version de olm :",
-    "Once you&#39;ve followed the link it contains, click below": "Une fois que vous aurez suivi le lien qu’il contient, cliquez ci-dessous",
+    "Once you've followed the link it contains, click below": "Une fois que vous aurez suivi le lien qu’il contient, cliquez ci-dessous",
     "%(senderName)s placed a %(callType)s call.": "%(senderName)s a placé un appel %(callType)s.",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "Veuillez vérifier vos e-mails et cliquer sur le lien que vous avez reçu. Puis cliquez sur continuer.",
     "Power level must be positive integer.": "Le niveau d'autorité doit être un entier positif.",
