@@ -969,5 +969,14 @@
     "Your unverified device '%(displayName)s' is requesting encryption keys.": "Ваше непроверенное устройство '%(displayName)s' запрашивает ключи шифрования.",
     "Encryption key request": "Запрос ключа шифрования",
     "Updates": "Обновления",
-    "Check for update": "Проверить наличие обновлений"
+    "Check for update": "Проверить наличие обновлений",
+    "Add a widget": "Добавить виджет",
+    "Allow": "Принять",
+    "Cannot add any more widgets": "Невозможно добавить больше виджетов",
+    "Changes colour scheme of current room": "Изменяет цветовую схему текущей комнаты",
+    "Delete widget": "Удалить виджет",
+    "Define the power level of a user": "Определить уровень доступа пользователя",
+    "Do you want to load widget from URL:": "Загрузить виджет из URL-адреса:",
+    "Edit": "Изменить",
+    "Enable automatic language detection for syntax highlighting": "Включить автоматическое определение языка для подсветки синтаксиса"
 }

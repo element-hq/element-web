@@ -143,7 +143,6 @@ export default class Autocomplete extends React.Component {
             return null;
         }
         this.setSelection(selectionOffset);
-        return selectionOffset === COMPOSER_SELECTED ? null : this.state.completionList[selectionOffset - 1];
     }
 
     // called from MessageComposerInput
@@ -155,7 +154,6 @@ export default class Autocomplete extends React.Component {
             return null;
         }
         this.setSelection(selectionOffset);
-        return selectionOffset === COMPOSER_SELECTED ? null : this.state.completionList[selectionOffset - 1];
     }
 
     onEscape(e): boolean {
@@ -201,6 +199,9 @@ export default class Autocomplete extends React.Component {
 
     setSelection(selectionOffset: number) {
         this.setState({selectionOffset, hide: false});
+        if (this.props.onSelectionChange) {
+            this.props.onSelectionChange(this.state.completionList[selectionOffset - 1]);
+        }
     }
 
     componentDidUpdate() {
