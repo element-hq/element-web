@@ -72,8 +72,17 @@ export default React.createClass({
 
     // Returns true if props.url is a scalar URL, typically https://scalar.vector.im/api
     isScalarUrl: function() {
-        const scalarUrl = SdkConfig.get().integrations_rest_url;
-        return scalarUrl && this.props.url.startsWith(scalarUrl);
+        let scalarUrls = SdkConfig.get().integrations_widgets_urls;
+        if (!scalarUrls || scalarUrls.length == 0) {
+            scalarUrls = [SdkConfig.get().integrations_rest_url];
+        }
+
+        for (let i = 0; i < scalarUrls.length; i++) {
+            if (this.props.url.startsWith(scalarUrls[i])) {
+                return true;
+            }
+        }
+        return false;
     },
 
     isMixedContent: function() {
