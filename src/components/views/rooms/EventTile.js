@@ -508,10 +508,10 @@ module.exports = withMatrixClient(React.createClass({
                 if (msgtype === 'm.image') aux = _t('sent an image');
                 else if (msgtype === 'm.video') aux = _t('sent a video');
                 else if (msgtype === 'm.file') aux = _t('uploaded a file');
-                sender = <SenderProfile onClick={ this.onSenderProfileClick } mxEvent={this.props.mxEvent} aux={aux} />;
+                sender = <SenderProfile onClick={ this.onSenderProfileClick } mxEvent={this.props.mxEvent} enableFlair={!aux} aux={aux} />;
             }
             else {
-                sender = <SenderProfile mxEvent={this.props.mxEvent} />;
+                sender = <SenderProfile mxEvent={this.props.mxEvent} enableFlair={true} />;
             }
         }
 
