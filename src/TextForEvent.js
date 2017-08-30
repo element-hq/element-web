@@ -244,15 +244,16 @@ function textForPowerEvent(event) {
     }
     return _t('%(senderName)s changed the power level of %(powerLevelDiffText)s.', {
         senderName: senderName,
-        powerLevelDiffText: diff.join(", ")
+        powerLevelDiffText: diff.join(", "),
     });
 }
 
 function textForWidgetEvent(event) {
-    const senderName = event.sender ? event.sender.name : event.getSender();
-    const previousContent = event.getPrevContent() || {};
+    const senderName = event.getSender();
+    const {name: prevName, type: prevType, url: prevUrl} = event.getPrevContent();
     const {name, type, url} = event.getContent() || {};
-    let widgetName = name || previousContent.name || type || previousContent.type || '';
+
+    let widgetName = name || prevName || type || prevType || '';
     // Apply sentence case to widget name
     if (widgetName && widgetName.length > 0) {
         widgetName = widgetName[0].toUpperCase() + widgetName.slice(1) + ' ';
@@ -261,9 +262,15 @@ function textForWidgetEvent(event) {
     // If the widget was removed, its content should be {}, but this is sufficiently
     // equivalent to that condition.
     if (url) {
-        return _t('%(widgetName)s widget added by %(senderName)s', {
-            widgetName, senderName,
-        });
+        if (prevUrl) {
+            return _t('%(widgetName)s widget modified by %(senderName)s', {
+                widgetName, senderName,
+            });
+        } else {
+            return _t('%(widgetName)s widget added by %(senderName)s', {
+                widgetName, senderName,
+            });
+        }
     } else {
         return _t('%(widgetName)s widget removed by %(senderName)s', {
             widgetName, senderName,

@@ -495,7 +495,7 @@
     "No users have specific privileges in this room": "Ez dago gela honetan baimen zehatzik duen erabiltzailerik",
     "olm version:": "olm bertsioa:",
     "Once encryption is enabled for a room it cannot be turned off again (for now)": "Behin gela batean zifratzea gaituta ezin da gero desgaitu (oraingoz)",
-    "Once you&#39;ve followed the link it contains, click below": "Behin dakarren esteka jarraitu duzula, egin klik azpian",
+    "Once you've followed the link it contains, click below": "Behin dakarren esteka jarraitu duzula, egin klik azpian",
     "Otherwise, <a>click here</a> to send a bug report.": "Bestela, <a>bidali arazte-txosten bat</a>.",
     "Server may be unavailable, overloaded, or you hit a bug.": "Agian zerbitzaria ez dago eskuragarri, edo gainezka dago, edo akats bat aurkitu duzu.",
     "Changing password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Oraingoz pasahitza aldatzeak gailu guztietako muturretik muturrerako zifratze-gakoak berrezarriko ditu, eta ezin izango dituzu zifratutako txatetako historialak irakurri ez badituzu aurretik zure gelako gakoak esportatzen eta aldaketa eta gero berriro inportatzen. Etorkizunean hau hobetuko da.",
