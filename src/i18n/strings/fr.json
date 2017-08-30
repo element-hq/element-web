@@ -978,7 +978,11 @@
     "Failed to upload image": "Impossible de télécharger l'image",
     "Failed to update group": "Impossible de modifier le groupe",
     "Hide avatars in user and room mentions": "Masquer les avatars dans les mentions d'utilisateur et de salon",
-    "Do you want to load widget from URL:": "Charger un widget d’URL:",
+    "Do you want to load widget from URL:": "Charger un widget venant de l’URL :",
     "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s widget ajouté par %(senderName)s",
-    "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s widget supprimé par %(senderName)s"
+    "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s widget supprimé par %(senderName)s",
+    "Publish this room to the public in %(domain)s's room directory?": "Publier ce salon dans le l'annuaire public de %(domain)s ?",
+    "Integrations Error": "Erreur d'intégration",
+    "Cannot add any more widgets": "Impossible d'ajouter plus de widgets",
+    "The maximum permitted number of widgets have already been added to this room.": "Le nombre maximum de widgets autorisés a déjà été atteint pour ce salon."
 }
