@@ -213,5 +213,7 @@
     "Error encountered (%(errorDetail)s).": "Обнаружена ошибка (%(errorDetail)s).",
     "No update available.": "Нет доступных обновлений.",
     "Downloading update...": "Загрузка обновления...",
-    "Couldn't load home page": "Не удалось загрузить домашнюю страницу"
+    "Couldn't load home page": "Не удалось загрузить домашнюю страницу",
+    "Bug report sent": "Отчет об ошибке отправлен",
+    "Thank you!": "Спасибо!"
 }
