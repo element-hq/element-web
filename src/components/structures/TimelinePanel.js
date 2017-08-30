@@ -59,6 +59,7 @@ var TimelinePanel = React.createClass({
         // that room.
         timelineSet: React.PropTypes.object.isRequired,
 
+        showReadReceipts: React.PropTypes.bool,
         // Enable managing RRs and RMs. These require the timelineSet to have a room.
         manageReadReceipts: React.PropTypes.bool,
         manageReadMarkers: React.PropTypes.bool,
@@ -1140,8 +1141,8 @@ var TimelinePanel = React.createClass({
                           readMarkerEventId={ this.state.readMarkerEventId }
                           readMarkerVisible={ this.state.readMarkerVisible }
                           suppressFirstDateSeparator={ this.state.canBackPaginate }
-                          showUrlPreview = { this.props.showUrlPreview }
-                          manageReadReceipts = { this.props.manageReadReceipts }
+                          showUrlPreview={ this.props.showUrlPreview }
+                          showReadReceipts={ this.props.showReadReceipts }
                           ourUserId={ MatrixClientPeg.get().credentials.userId }
                           stickyBottom={ stickyBottom }
                           onScroll={ this.onMessageListScroll }

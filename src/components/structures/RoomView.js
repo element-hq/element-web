@@ -1715,18 +1715,19 @@ module.exports = React.createClass({
         // console.log("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
         var messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
-                timelineSet={this.state.room.getUnfilteredTimelineSet()}
-                manageReadReceipts={!UserSettingsStore.getSyncedSetting('hideReadReceipts', false)}
-                manageReadMarkers={true}
-                hidden={hideMessagePanel}
-                highlightedEventId={highlightedEventId}
-                eventId={this.state.initialEventId}
-                eventPixelOffset={this.state.initialEventPixelOffset}
-                onScroll={ this.onMessageListScroll }
-                onReadMarkerUpdated={ this._updateTopUnreadMessagesBar }
-                showUrlPreview = { this.state.showUrlPreview }
-                opacity={ this.props.opacity }
-                className="mx_RoomView_messagePanel"
+                           timelineSet={this.state.room.getUnfilteredTimelineSet()}
+                           showReadReceipts={!UserSettingsStore.getSyncedSetting('hideReadReceipts', false)}
+                           manageReadReceipts={true}
+                           manageReadMarkers={true}
+                           hidden={hideMessagePanel}
+                           highlightedEventId={highlightedEventId}
+                           eventId={this.state.initialEventId}
+                           eventPixelOffset={this.state.initialEventPixelOffset}
+                           onScroll={ this.onMessageListScroll }
+                           onReadMarkerUpdated={ this._updateTopUnreadMessagesBar }
+                           showUrlPreview = { this.state.showUrlPreview }
+                           opacity={ this.props.opacity }
+                           className="mx_RoomView_messagePanel"
             />);
 
         var topUnreadMessagesBar = null;
