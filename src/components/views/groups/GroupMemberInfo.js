@@ -74,7 +74,9 @@ module.exports = withMatrixClient(React.createClass({
                 if (!proceed) return;
 
                 this.setState({removingUser: true});
-                this.props.matrixClient.removeUserFromGroup(this.props.groupId, this.props.groupMember.userId).then(() => {
+                this.props.matrixClient.removeUserFromGroup(
+                    this.props.groupId, this.props.groupMember.userId,
+                ).then(() => {
                     // return to the user list
                     dis.dispatch({
                         action: "view_user",
