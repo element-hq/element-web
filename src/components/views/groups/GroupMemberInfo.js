@@ -78,7 +78,7 @@ module.exports = withMatrixClient(React.createClass({
                     // return to the user list
                     dis.dispatch({
                         action: "view_user",
-                        groupMember: null,
+                        member: null,
                     });
                 }).catch((e) => {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -97,7 +97,7 @@ module.exports = withMatrixClient(React.createClass({
         // Go back to the user list
         dis.dispatch({
             action: "view_user",
-            groupMember: null,
+            member: null,
         });
     },
 
@@ -116,7 +116,7 @@ module.exports = withMatrixClient(React.createClass({
         if (!this.state.groupMembers) return null;
 
         const targetIsInGroup = this.state.groupMembers.some((m) => {
-            return m.userId == this.props.groupMember.userId;
+            return m.userId === this.props.groupMember.userId;
         });
 
         let kickButton;

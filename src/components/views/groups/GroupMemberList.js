@@ -90,6 +90,7 @@ export default withMatrixClient(React.createClass({
         let memberList = this.state.members;
         if (query) {
             memberList = memberList.filter((m) => {
+                // TODO: add this when we have this info from the API
                 //const matchesName = m.name.toLowerCase().indexOf(query) !== -1;
                 const matchesId = m.userId.toLowerCase().includes(query);
 
