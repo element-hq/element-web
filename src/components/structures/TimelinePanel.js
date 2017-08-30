@@ -59,6 +59,7 @@ var TimelinePanel = React.createClass({
         // that room.
         timelineSet: React.PropTypes.object.isRequired,
 
+        showReadReceipts: React.PropTypes.bool,
         // Enable managing RRs and RMs. These require the timelineSet to have a room.
         manageReadReceipts: React.PropTypes.bool,
         manageReadMarkers: React.PropTypes.bool,
@@ -197,6 +198,7 @@ var TimelinePanel = React.createClass({
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("Room.localEchoUpdated", this.onLocalEchoUpdated);
         MatrixClientPeg.get().on("Room.accountData", this.onAccountData);
+        MatrixClientPeg.get().on("Event.decrypted", this.onEventDecrypted);
         MatrixClientPeg.get().on("sync", this.onSync);
 
         this._initTimeline(this.props);
@@ -266,6 +268,7 @@ var TimelinePanel = React.createClass({
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
             client.removeListener("Room.accountData", this.onAccountData);
+            client.removeListener("Event.decrypted", this.onEventDecrypted);
             client.removeListener("sync", this.onSync);
         }
     },
@@ -501,6 +504,18 @@ var TimelinePanel = React.createClass({
         this.setState({
             readMarkerEventId: ev.getContent().event_id,
         }, this.props.onReadMarkerUpdated);
+    },
+
+    onEventDecrypted: function(ev) {
+        // Need to update as we don't display event tiles for events that
+        // haven't yet been decrypted. The event will have just been updated
+        // in place so we just need to re-render.
+        // TODO: We should restrict this to only events in our timeline,
+        // but possibly the event tile itself should just update when this
+        // happens to save us re-rendering the whole timeline.
+        if (ev.getRoomId() === this.props.timelineSet.room.roomId) {
+            this.forceUpdate();
+        }
     },
 
     onSync: function(state, prevState, data) {
@@ -1125,8 +1140,8 @@ var TimelinePanel = React.createClass({
                           highlightedEventId={ this.props.highlightedEventId }
                           readMarkerEventId={ this.state.readMarkerEventId }
                           readMarkerVisible={ this.state.readMarkerVisible }
-                          showUrlPreview = { this.props.showUrlPreview }
-                          manageReadReceipts = { this.props.manageReadReceipts }
+                          showUrlPreview={ this.props.showUrlPreview }
+                          showReadReceipts={ this.props.showReadReceipts }
                           ourUserId={ MatrixClientPeg.get().credentials.userId }
                           stickyBottom={ stickyBottom }
                           onScroll={ this.onMessageListScroll }

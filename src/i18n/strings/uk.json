@@ -173,5 +173,32 @@
     "No Webcams detected": "Веб-камеру не виявлено",
     "Favourites": "Вибрані",
     "favourite": "вибране",
-    "Fill screen": "На весь екран"
+    "Fill screen": "На весь екран",
+    "No media permissions": "Нема дозволів на відео/аудіо",
+    "You may need to manually permit Riot to access your microphone/webcam": "Можливо, вам треба дозволити Riot використання мікрофону/камери вручну",
+    "Default Device": "Уставний пристрій",
+    "Microphone": "Мікрофон",
+    "Camera": "Камера",
+    "Advanced": "Додаткові",
+    "Algorithm": "Алгоритм",
+    "Hide removed messages": "Приховати видалені повідомлення",
+    "Always show message timestamps": "Завжди показувати часові позначки повідомлень",
+    "Authentication": "Впізнавання",
+    "Alias (optional)": "Псевдонім (необов'язково)",
+    "all room members": "усі члени кімнати",
+    "all room members, from the point they are invited": "усі члени кімнати з моменту запрошення",
+    "all room members, from the point they joined": "усі члени кімнати з моменту приєднання",
+    "and": "та",
+    "%(items)s and %(remaining)s others": "%(items)s та інші %(remaining)s",
+    "%(items)s and one other": "%(items)s і ще один інший",
+    "%(items)s and %(lastItem)s": "%(items)s та %(lastItem)s",
+    "and %(count)s others...": {
+        "other": "та %(count)s інші...",
+        "one": "і інше..."
+    },
+    "%(names)s and %(lastPerson)s are typing": "%(names)s та %(lastPerson)s пишуть",
+    "%(names)s and one other are typing": "%(names)s та інші пишуть",
+    "%(names)s and %(count)s others are typing": "%(names)s та %(count)s інших пишуть",
+    "An email has been sent to": "Лист було надіслано",
+    "A new password must be entered.": "Має бути введений новий пароль."
 }

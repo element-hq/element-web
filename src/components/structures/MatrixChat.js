@@ -1068,10 +1068,13 @@ module.exports = React.createClass({
             self.setState({ready: true});
         });
         cli.on('Call.incoming', function(call) {
+            // we dispatch this synchronously to make sure that the event
+            // handlers on the call are set up immediately (so that if
+            // we get an immediate hangup, we don't get a stuck call)
             dis.dispatch({
                 action: 'incoming_call',
                 call: call,
-            });
+            }, true);
         });
         cli.on('Session.logged_out', function(call) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");

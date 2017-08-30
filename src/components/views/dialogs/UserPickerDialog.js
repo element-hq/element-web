@@ -38,7 +38,7 @@ module.exports = React.createClass({
         roomId: PropTypes.string,
         button: PropTypes.string,
         focus: PropTypes.bool,
-        validAddressTypes: PropTypes.arrayOf(PropTypes.oneOfType(addressTypes)),
+        validAddressTypes: PropTypes.arrayOf(PropTypes.oneOf(addressTypes)),
         onFinished: PropTypes.func.isRequired,
     },
 

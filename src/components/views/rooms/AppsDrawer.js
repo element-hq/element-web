@@ -53,18 +53,18 @@ module.exports = React.createClass({
         this.scalarClient = null;
         if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
             this.scalarClient = new ScalarAuthClient();
-            this.scalarClient.connect().done(() => {
+            this.scalarClient.connect().then(() => {
                 this.forceUpdate();
-            // TODO -- Handle Scalar errors
-            // },
-            // (err) => {
-            //     this.setState({
-            //         scalar_error: err,
-            //     });
+            }).catch((e) => {
+                console.log("Failed to connect to integrations server");
+                // TODO -- Handle Scalar errors
+                //     this.setState({
+                //         scalar_error: err,
+                //     });
             });
         }
 
-        this.dispatcherRef = dis.register(this.onAction.bind(this));
+        this.dispatcherRef = dis.register(this.onAction);
     },
 
     componentWillUnmount: function() {
@@ -226,7 +226,10 @@ module.exports = React.createClass({
                 onClick={this.onClickAddWidget}
                 role="button"
                 tabIndex="0"
-                className="mx_AddWidget_button"
+                className={this.state.apps.length<2 ?
+                    "mx_AddWidget_button mx_AddWidget_button_full_width" :
+                    "mx_AddWidget_button"
+                }
                 title={_t('Add a widget')}>
                 [+] {_t('Add a widget')}
             </div>;

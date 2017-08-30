@@ -31,7 +31,6 @@ import WidgetUtils from '../../../WidgetUtils';
 import dis from '../../../dispatcher';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
-const betaHelpMsg = 'This feature is currently experimental and is intended for beta testing only';
 
 export default React.createClass({
     displayName: 'AppTile',
@@ -73,8 +72,17 @@ export default React.createClass({
 
     // Returns true if props.url is a scalar URL, typically https://scalar.vector.im/api
     isScalarUrl: function() {
-        const scalarUrl = SdkConfig.get().integrations_rest_url;
-        return scalarUrl && this.props.url.startsWith(scalarUrl);
+        let scalarUrls = SdkConfig.get().integrations_widgets_urls;
+        if (!scalarUrls || scalarUrls.length == 0) {
+            scalarUrls = [SdkConfig.get().integrations_rest_url];
+        }
+
+        for (let i = 0; i < scalarUrls.length; i++) {
+            if (this.props.url.startsWith(scalarUrls[i])) {
+                return true;
+            }
+        }
+        return false;
     },
 
     isMixedContent: function() {
@@ -128,7 +136,8 @@ export default React.createClass({
     _onEditClick: function(e) {
         console.log("Edit widget ID ", this.props.id);
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        const src = this._scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId, 'type_' + this.props.type);
+        const src = this._scalarClient.getScalarInterfaceUrlForRoom(
+            this.props.room.roomId, 'type_' + this.props.type, this.props.id);
         Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
             src: src,
         }, "mx_IntegrationsManager");
@@ -223,42 +232,46 @@ export default React.createClass({
             safeWidgetUrl = url.format(parsedWidgetUrl);
         }
 
-        if (this.state.loading) {
-            appTileBody = (
-                <div className='mx_AppTileBody mx_AppLoading'>
-                    <MessageSpinner msg='Loading...'/>
-                </div>
-            );
-        } else if (this.state.hasPermissionToLoad == true) {
-            if (this.isMixedContent()) {
+        if (this.props.show) {
+            if (this.state.loading) {
+                appTileBody = (
+                    <div className='mx_AppTileBody mx_AppLoading'>
+                        <MessageSpinner msg='Loading...'/>
+                    </div>
+                );
+            } else if (this.state.hasPermissionToLoad == true) {
+                if (this.isMixedContent()) {
+                    appTileBody = (
+                        <div className="mx_AppTileBody">
+                            <AppWarning
+                                errorMsg="Error - Mixed content"
+                            />
+                        </div>
+                    );
+                } else {
+                    appTileBody = (
+                        <div className="mx_AppTileBody">
+                            <iframe
+                                ref="appFrame"
+                                src={safeWidgetUrl}
+                                allowFullScreen="true"
+                                sandbox={sandboxFlags}
+                            ></iframe>
+                        </div>
+                    );
+                }
+            } else {
+                const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
                 appTileBody = (
                     <div className="mx_AppTileBody">
-                        <AppWarning
-                            errorMsg="Error - Mixed content"
+                        <AppPermission
+                            isRoomEncrypted={isRoomEncrypted}
+                            url={this.state.widgetUrl}
+                            onPermissionGranted={this._grantWidgetPermission}
                         />
                     </div>
                 );
-            } else if (this.props.show) {
-                appTileBody = (
-                    <div className="mx_AppTileBody">
-                        <iframe
-                            ref="appFrame"
-                            src={safeWidgetUrl}
-                            allowFullScreen="true"
-                            sandbox={sandboxFlags}
-                        ></iframe>
-                    </div>
-                );
             }
-        } else {
-            appTileBody = (
-                <div className="mx_AppTileBody">
-                    <AppPermission
-                        url={this.state.widgetUrl}
-                        onPermissionGranted={this._grantWidgetPermission}
-                    />
-                </div>
-            );
         }
 
         // editing is done in scalar
@@ -276,7 +289,6 @@ export default React.createClass({
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
                     {this.formatAppTileName()}
                     <span className="mx_AppTileMenuBarWidgets">
-                        <span className="mx_Beta" alt={betaHelpMsg} title={betaHelpMsg}>&#946;</span>
                         {/* Edit widget */}
                         {showEditButton && <img
                             src="img/edit.svg"

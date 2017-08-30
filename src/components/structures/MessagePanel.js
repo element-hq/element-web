@@ -62,7 +62,7 @@ module.exports = React.createClass({
         ourUserId: React.PropTypes.string,
 
         // whether to show read receipts
-        manageReadReceipts: React.PropTypes.bool,
+        showReadReceipts: React.PropTypes.bool,
 
         // true if updates to the event list should cause the scroll panel to
         // scroll down when we are at the bottom of the window. See ScrollPanel
@@ -488,7 +488,7 @@ module.exports = React.createClass({
         var scrollToken = mxEv.status ? undefined : eventId;
 
         var readReceipts;
-        if (this.props.manageReadReceipts) {
+        if (this.props.showReadReceipts) {
             readReceipts = this._getReadReceiptsForEvent(mxEv);
         }
         ret.push(
