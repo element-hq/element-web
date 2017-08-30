@@ -344,9 +344,20 @@ var TimelinePanel = React.createClass({
                 newState[canPaginateOtherWayKey] = true;
             }
 
-            this.setState(newState);
+            // Don't resolve until the setState has completed: we need to let
+            // the component update before we consider the pagination commpleted,
+            // otherwise we'll end up paginating in all the history the js-sdk
+            // has in memory because we never gave the component a chance to scroll
+            // itself into the right place
+            let resolveSetStatePromise;
+            const setStatePromise = new Promise(function(resolve) {
+                resolveSetStatePromise = resolve;
+            });
+            this.setState(newState, () => {
+                resolveSetStatePromise(r);
+            });
 
-            return r;
+            return setStatePromise;
         });
     },
 
