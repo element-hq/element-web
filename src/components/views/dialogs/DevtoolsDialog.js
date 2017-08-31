@@ -66,6 +66,10 @@ class SendCustomEvent extends React.Component {
         this.setState({ message });
     }
 
+    _additionalFields() {
+        return <div></div>;
+    }
+
     render() {
         if (this.state.message) {
             return <div>
@@ -78,6 +82,7 @@ class SendCustomEvent extends React.Component {
 
         return <div>
             <div className="mx_Dialog_content">
+                {this._additionalFields()}
                 <div className="mx_TextInputDialog_label">
                     <label htmlFor="eventType"> { _t('Event Type') } </label>
                 </div>
@@ -103,40 +108,14 @@ class SendCustomStateEvent extends SendCustomEvent {
             this.refs.stateKey.value);
     }
 
-    render() {
-        if (this.state.message) {
-            return <div>
-                <div className="mx_Dialog_content">
-                    {this.state.message}
-                </div>
-                {this._buttons()}
-            </div>;
-        }
-
+    _additionalFields() {
         return <div>
-            <div className="mx_Dialog_content">
-                <div className="mx_TextInputDialog_label">
-                    <label htmlFor="stateKey"> { _t('State Key') } </label>
-                </div>
-                <div>
-                    <input id="stateKey" ref="stateKey" className="mx_TextInputDialog_input" size="64" />
-                </div>
-
-                <div className="mx_TextInputDialog_label">
-                    <label htmlFor="eventType"> { _t('Event Type') } </label>
-                </div>
-                <div>
-                    <input id="eventType" ref="eventType" className="mx_TextInputDialog_input" size="64" />
-                </div>
-
-                <div className="mx_TextInputDialog_label">
-                    <label htmlFor="evContent"> { _t('Event Content') } </label>
-                </div>
-                <div>
-                    <textarea id="evContent" ref="evContent" className="mx_TextInputDialog_input" defaultValue={"{\n\n}"} cols="63" rows="5" />
-                </div>
+            <div className="mx_TextInputDialog_label">
+                <label htmlFor="stateKey"> { _t('State Key') } </label>
             </div>
-            {this._buttons()}
+            <div>
+                <input id="stateKey" ref="stateKey" className="mx_TextInputDialog_input" size="64" />
+            </div>
         </div>;
     }
 }
@@ -162,16 +141,14 @@ class RoomStateExplorer extends React.Component {
     };
 
     browseEventType(eventType) {
-        const self = this;
         return () => {
-            self.setState({ eventType });
+            this.setState({ eventType });
         };
     }
 
     onViewSourceClick(event) {
-        const self = this;
         return () => {
-            self.setState({ event: event.event });
+            this.setState({ event: event.event });
         };
     }
 
