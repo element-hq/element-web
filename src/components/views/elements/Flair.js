@@ -120,7 +120,7 @@ export default class Flair extends React.Component {
         this._unmounted = true;
     }
 
-    async componentWillMount() {
+    componentWillMount() {
         this._unmounted = false;
         this._generateAvatars();
     }
