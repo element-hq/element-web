@@ -117,7 +117,7 @@ export default class ScrollPanel extends StickyContainer {
         debuglog("Scroll event: offset now:", sn.scrollTop,
                  "_lastSetScroll:", this._lastSetScroll);
 
-        // Set the node and notify subscribers of the StickContainer
+        // Set the node and notify subscribers of the StickyContainer
         // By extending StickyContainer, we can set the scroll node to be that of the
         // ScrolPanel to allow any `<Sticky>` children to be sticky, namely DateSeparators.
         this.node = sn;
