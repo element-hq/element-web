@@ -205,5 +205,7 @@
     "Notifications on the following keywords follow rules which can’t be displayed here:": "Upozornění na následující klíčová slova se řídí pravidly, která zde nelze zobrazit:",
     "Unable to fetch notification target list": "Nepodařilo se získat seznam cílů upozornění",
     "Discussion of the Identity Service API": "Diskuze o API služby Identity",
-    "Noisy": "Hlučný"
+    "Noisy": "Hlučný",
+    "Bug report sent": "Hlášení o chybě bylo odesláno",
+    "Thank you!": "Děkujeme vám!"
 }
