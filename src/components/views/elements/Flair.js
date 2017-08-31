@@ -70,6 +70,16 @@ function getPublicGroupsCached(matrixClient, userId) {
         delete usersPending[userId];
     });
 
+    // This debounce will allow consecutive requests for the public groups of users that
+    // are sent in intervals of < BULK_REQUEST_DEBOUNCE_MS to be batched and only requested
+    // when no more requests are received within the next BULK_REQUEST_DEBOUNCE_MS. The naive
+    // implementation would do a request that only requested the groups for `userId`, leading
+    // to a worst and best case of 1 user per request. This implementation's worst is still
+    // 1 user per request but only if the requests are > BULK_REQUEST_DEBOUNCE_MS apart and the
+    // best case is N users per request.
+    //
+    // This is to reduce the number of requests made whilst trading off latency when viewing
+    // a Flair component.
     if (debounceTimeoutID) clearTimeout(debounceTimeoutID);
     debounceTimeoutID = setTimeout(() => {
         batchedGetPublicGroups(matrixClient);
