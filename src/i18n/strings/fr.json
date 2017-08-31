@@ -984,5 +984,6 @@
     "Publish this room to the public in %(domain)s's room directory?": "Publier ce salon dans le l'annuaire public de %(domain)s ?",
     "Integrations Error": "Erreur d'intégration",
     "Cannot add any more widgets": "Impossible d'ajouter plus de widgets",
-    "The maximum permitted number of widgets have already been added to this room.": "Le nombre maximum de widgets autorisés a déjà été atteint pour ce salon."
+    "The maximum permitted number of widgets have already been added to this room.": "Le nombre maximum de widgets autorisés a déjà été atteint pour ce salon.",
+    "NOTE: Apps are not end-to-end encrypted": "NOTE : Les applications ne sont pas chiffrées de bout en bout"
 }
