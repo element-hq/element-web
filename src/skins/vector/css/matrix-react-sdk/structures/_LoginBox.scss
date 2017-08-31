@@ -14,6 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_LoginBox {
+    min-height: 24px;
+    height: unset !important;
+    padding-top: 13px !important;
+    padding-bottom: 14px !important;
+}
+
 .mx_LoginBox_loginButton_wrapper {
     text-align: center;
     width: 100%;
@@ -21,13 +28,13 @@ limitations under the License.
 
 .mx_LoginBox_loginButton,
 .mx_LoginBox_registerButton {
-    margin-top: -8px;
+    margin-top: 3px;
     height: 40px;
     border: 0px;
     border-radius: 40px;
     margin-left: 4px;
     margin-right: 4px;
-    width: 80px;
+    min-width: 80px;
 
     background-color: $accent-color;
     color: $primary-bg-color;
@@ -35,4 +42,6 @@ limitations under the License.
     cursor: pointer;
 
     font-size: 15px;
+    padding: 0 11px;
+    word-break: break-word;
 }
