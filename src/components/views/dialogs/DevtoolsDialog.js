@@ -61,7 +61,7 @@ class SendCustomEvent extends React.Component {
             await this.send(content);
             message = _t('Event sent!');
         } catch (e) {
-            message = `${_t('Failed to send custom event.')} (${e.toString()})`;
+            message = _t('Failed to send custom event.') + ' (' + e.toString() + ')';
         }
         this.setState({ message });
     }
