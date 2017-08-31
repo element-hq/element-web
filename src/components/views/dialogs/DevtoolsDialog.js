@@ -188,14 +188,19 @@ class RoomStateExplorer extends React.Component {
                     onClickFn = this.onViewSourceClick(stateGroup[stateKeys[0]]);
                 }
 
-                rows.push(<button key={evType} onClick={onClickFn}>{ evType }</button>);
+                rows.push(<button className="mx_DevTools_RoomStateExplorer_button" key={evType} onClick={onClickFn}>
+                    { evType }
+                </button>);
             });
         } else {
             const evType = this.state.eventType;
             const stateGroup = this.roomStateEvents[evType];
             Object.keys(stateGroup).forEach((stateKey) => {
                 const ev = stateGroup[stateKey];
-                rows.push(<button key={stateKey} onClick={this.onViewSourceClick(ev)}>{stateKey}</button>);
+                rows.push(<button className="mx_DevTools_RoomStateExplorer_button" key={stateKey}
+                                  onClick={this.onViewSourceClick(ev)}>
+                    { stateKey }
+                </button>);
             });
         }
 
