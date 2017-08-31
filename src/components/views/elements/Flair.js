@@ -148,6 +148,9 @@ export default class Flair extends React.Component {
         } catch (err) {
             console.error('Could not get groups for user', this.props.userId, err);
         }
+        if (!groups || groups.length === 0) {
+            return;
+        }
         const avatarUrls = await this._getAvatarUrls(groups);
         if (!this.unmounted) {
             this.setState({avatarUrls});
