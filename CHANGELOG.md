@@ -1,3 +1,18 @@
+Changes in [0.12.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.3-rc.1) (2017-09-01)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.2...v0.12.3-rc.1)
+
+ * Fix overflowing login/register buttons on some languages issue #4804
+   [\#4858](https://github.com/vector-im/riot-web/pull/4858)
+ * Update vector-im to riot-im on Login
+   [\#4943](https://github.com/vector-im/riot-web/pull/4943)
+ * lets let people know that the bug report actually sent properly :)
+   [\#4910](https://github.com/vector-im/riot-web/pull/4910)
+ * another s/vector/riot/ in README
+   [\#4934](https://github.com/vector-im/riot-web/pull/4934)
+ * fix two room list regressions
+   [\#4907](https://github.com/vector-im/riot-web/pull/4907)
+
 Changes in [0.12.2](https://github.com/vector-im/riot-web/releases/tag/v0.12.2) (2017-08-24)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.1...v0.12.2)
