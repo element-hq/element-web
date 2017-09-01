@@ -969,7 +969,7 @@
     "You are a member of these groups:": "Vous êtes membre des groupes suivants :",
     "Create a group to represent your community! Define a set of rooms and your own custom homepage to mark out your space in the Matrix universe.": "Créez un groupe pour représenter votre communauté ! Définissez un jeu de salons et votre propre page d'accueil pour marquer votre espace dans l'univers Matrix.",
     "Join an existing group": "Rejoindre un groupe existant",
-    "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "Pour rejoindre un groupe existant, vous devez connaître son identifiant de groupe ; il ressemble à <i>+exemple:matrix.org</i>.",
+    "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "Pour rejoindre un groupe existant, vous devez connaître l'identifiant de ce groupe ; il ressemblera à <i>+exemple:matrix.org</i>.",
     "Featured Rooms:": "Salons mis en avant :",
     "Error whilst fetching joined groups": "Erreur en récupérant la liste des groupes",
     "Featured Users:": "Utilisateurs mis en avant :",
