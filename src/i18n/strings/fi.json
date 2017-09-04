@@ -195,5 +195,17 @@
     "You have successfully set a password and an email address!": "Olet onnistuneesti asettanut salasanan ja sähköpostiosoitteen!",
     "Remember, you can always set an email address in user settings if you change your mind.": "Muista että voit aina asettaa sähköpostiosoitteen käyttäjäasetuksista jos muutat mielesi.",
     "To return to your account in future you need to <u>set a password</u>": "Voidaksesi tulevaisuudessa palata tilillesi sinut pitää <u>asettaa salasana</u>",
-    "Couldn't load home page": "Kotisivun lataus epäonnistui"
+    "Couldn't load home page": "Kotisivun lataus epäonnistui",
+    "Bug report sent": "Virheraportti lähetetty",
+    "Failed to set Direct Message status of room": "Huoneen suoran viestittelyn tilan asettaminen epäonnistui",
+    "(HTTP status %(httpStatus)s)": "(HTTP tila %(httpStatus)s)",
+    "Notify for all other messages/rooms": "Ilmoita kaikista muista viesteistä/huoneista",
+    "powered by Matrix": "Matrix-pohjainen",
+    "Riot is not supported on mobile web. Install the app?": "Riot ei tue mobiiliselaimia. Asenna sovellus?",
+    "Thank you!": "Kiitos!",
+    "Design and implementation of E2E in Matrix": "Matrix päästä-päähän salauksen suunnittelu ja implementointi",
+    "Contributing code to Matrix and Riot": "Osallistu Matrix ja Riot kehitykseen",
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s selaimella %(browserName)s käyttöjärjestelmällä %(osName)s",
+    "There are advanced notifications which are not shown here": "On kehittyneitä ilmoituksia joita ei näytetä tässä",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Matrix-pohjainen hajautettu, salattu viestittely ja yhteistyö"
 }
