@@ -972,5 +972,6 @@
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s trepeta kendu du %(senderName)s erabiltzaileak",
     "Verifies a user, device, and pubkey tuple": "Erabiltzaile, gailu eta gako publiko multzoa egiaztatzen du",
     "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "Dagoen talde batetara elkartzeko taldearen identifikatzailea ezagutu behar duzu, honen antza du: <i>+adibidea:matrix.org</i>.",
-    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot egiaztaketa orain ez dago eskuragarri mahaigainean - erabili <a>web nabigatzailea</a>"
+    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot egiaztaketa orain ez dago eskuragarri mahaigainean - erabili <a>web nabigatzailea</a>",
+    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s trepeta aldatu du %(senderName)s erabiltzaileak"
 }
