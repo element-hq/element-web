@@ -6,7 +6,6 @@ src/autocomplete/Autocompleter.js
 src/autocomplete/Components.js
 src/autocomplete/DuckDuckGoProvider.js
 src/autocomplete/EmojiProvider.js
-src/autocomplete/RoomProvider.js
 src/autocomplete/UserProvider.js
 src/CallHandler.js
 src/component-index.js
@@ -35,7 +34,6 @@ src/components/views/create_room/RoomAlias.js
 src/components/views/dialogs/ChatCreateOrReuseDialog.js
 src/components/views/dialogs/DeactivateAccountDialog.js
 src/components/views/dialogs/InteractiveAuthDialog.js
-src/components/views/dialogs/SetMxIdDialog.js
 src/components/views/dialogs/UnknownDeviceDialog.js
 src/components/views/elements/AccessibleButton.js
 src/components/views/elements/ActionButton.js
@@ -89,7 +87,6 @@ src/components/views/rooms/MemberList.js
 src/components/views/rooms/MemberTile.js
 src/components/views/rooms/MessageComposer.js
 src/components/views/rooms/MessageComposerInput.js
-src/components/views/rooms/MessageComposerInputOld.js
 src/components/views/rooms/PresenceLabel.js
 src/components/views/rooms/ReadReceiptMarker.js
 src/components/views/rooms/RoomList.js
@@ -100,7 +97,6 @@ src/components/views/rooms/RoomTile.js
 src/components/views/rooms/RoomTopicEditor.js
 src/components/views/rooms/SearchableEntityList.js
 src/components/views/rooms/SearchResultTile.js
-src/components/views/rooms/TabCompleteBar.js
 src/components/views/rooms/TopUnreadMessagesBar.js
 src/components/views/rooms/UserTile.js
 src/components/views/settings/AddPhoneNumber.js
@@ -128,8 +124,6 @@ src/Roles.js
 src/Rooms.js
 src/ScalarAuthClient.js
 src/ScalarMessaging.js
-src/TabComplete.js
-src/TabCompleteEntries.js
 src/TextForEvent.js
 src/Tinter.js
 src/UiEffects.js
@@ -142,7 +136,7 @@ src/utils/Receipt.js
 src/Velociraptor.js
 src/VelocityBounce.js
 src/WhoIsTyping.js
-src/wrappers/WithMatrixClient.js
+src/wrappers/withMatrixClient.js
 test/all-tests.js
 test/components/structures/login/Registration-test.js
 test/components/structures/MessagePanel-test.js

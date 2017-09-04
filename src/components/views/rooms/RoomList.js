@@ -555,6 +555,7 @@ module.exports = React.createClass({
                              label={ _t('Invites') }
                              editable={ false }
                              order="recent"
+                             isInvite={true}
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }

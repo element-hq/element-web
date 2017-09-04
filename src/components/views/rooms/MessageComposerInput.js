@@ -949,8 +949,7 @@ export default class MessageComposerInput extends React.Component {
     };
 
     moveAutocompleteSelection = (up) => {
-        const completion = up ? this.autocomplete.onUpArrow() : this.autocomplete.onDownArrow();
-        return this.setDisplayedCompletion(completion);
+        up ? this.autocomplete.onUpArrow() : this.autocomplete.onDownArrow();
     };
 
     onEscape = async (e) => {
@@ -1133,6 +1132,7 @@ export default class MessageComposerInput extends React.Component {
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         onConfirm={this.setDisplayedCompletion}
+                        onSelectionChange={this.setDisplayedCompletion}
                         query={this.getAutocompleteQuery(content)}
                         selection={selection}/>
                 </div>

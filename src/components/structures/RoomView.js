@@ -20,6 +20,8 @@ limitations under the License.
 //  - Drag and drop
 //  - File uploading - uploadFile()
 
+import shouldHideEvent from "../../shouldHideEvent";
+
 var React = require("react");
 var ReactDOM = require("react-dom");
 import Promise from 'bluebird';
@@ -142,6 +144,8 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("RoomMember.membership", this.onRoomMemberMembership);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
+
+        this._syncedSettings = UserSettingsStore.getSyncedSettings();
 
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
@@ -497,8 +501,7 @@ module.exports = React.createClass({
             // update unread count when scrolled up
             if (!this.state.searchResults && this.state.atEndOfLiveTimeline) {
                 // no change
-            }
-            else {
+            } else if (!shouldHideEvent(ev, this._syncedSettings)) {
                 this.setState((state, props) => {
                     return {numUnreadMessages: state.numUnreadMessages + 1};
                 });
@@ -1716,7 +1719,8 @@ module.exports = React.createClass({
         var messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
                 timelineSet={this.state.room.getUnfilteredTimelineSet()}
-                manageReadReceipts={!UserSettingsStore.getSyncedSetting('hideReadReceipts', false)}
+                showReadReceipts={!UserSettingsStore.getSyncedSetting('hideReadReceipts', false)}
+                manageReadReceipts={true}
                 manageReadMarkers={true}
                 hidden={hideMessagePanel}
                 highlightedEventId={highlightedEventId}
