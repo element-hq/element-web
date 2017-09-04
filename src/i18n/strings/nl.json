@@ -964,7 +964,7 @@
     "You are a member of these groups:": "Je bent een deelnemer van deze groepen:",
     "Create a group to represent your community! Define a set of rooms and your own custom homepage to mark out your space in the Matrix universe.": "Maak een groep aan om je gemeenschap te representateren! Defineer een set van ruimtes en maak je eigen aangepaste homepagina om je eigen plek in het Matrix universum te creëren.",
     "Join an existing group": "Treed tot een bestaande groep toe",
-    "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "Om tot een bestaande groep toe te treden moet je groep identificatie weten; dit zal er ongeveer uit zien als <i>+voorbeeld:matrix.org</i>.",
+    "To join an existing group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "Om tot een bestaande groep toe te treden moet je groep identificatie weten; dit zal er ongeveer uit zien als <i>+voorbeeld:matrix.org</i>.",
     "Featured Rooms:": "Prominente Ruimtes:",
     "Error whilst fetching joined groups": "Er is een fout opgetreden tijdens het ophalen van de tot toegretreden groepen",
     "Featured Users:": "Prominente Gebruikers:",
