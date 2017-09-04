@@ -293,7 +293,7 @@
     "Riot was not given permission to send notifications - please try again": "Riot hat keine Berechtigung für das Senden von Benachrichtigungen erhalten - bitte erneut versuchen",
     "This email address is already in use": "Diese E-Mail-Adresse wird bereits verwendet",
     "This email address was not found": "Diese E-Mail-Adresse konnte nicht gefunden werden",
-    "The file '%(fileName)s' exceeds this home server's size limit for uploads": "Die Datei '%(fileName)s' überschreitet das Größen-Limit für Uploads auf diesem Homeserver",
+    "The file '%(fileName)s' exceeds this home server's size limit for uploads": "Die Datei '%(fileName)s' überschreitet das Größen-Limit für Uploads auf diesem Heimserver",
     "The file '%(fileName)s' failed to upload": "Das Hochladen der Datei '%(fileName)s' schlug fehl",
     "The remote side failed to pick up": "Die Gegenstelle konnte nicht abheben",
     "This phone number is already in use": "Diese Telefonnummer wird bereits verwendet",
