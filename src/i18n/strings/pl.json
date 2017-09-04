@@ -206,5 +206,7 @@
     "Error encountered (%(errorDetail)s).": "Wystąpił błąd (%(errorDetail)s).",
     "Downloading update...": "Pobieranie aktualizacji...",
     "Checking for an update...": "Sprawdzanie aktualizacji...",
-    "Couldn't load home page": "Nie można załadować strony startowej"
+    "Couldn't load home page": "Nie można załadować strony startowej",
+    "Bug report sent": "Raport błędu wysłany",
+    "Thank you!": "Dziękujemy!"
 }
