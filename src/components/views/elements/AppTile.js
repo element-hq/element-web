@@ -19,6 +19,7 @@ limitations under the License.
 import url from 'url';
 import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import PlatformPeg from '../../../PlatformPeg';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
@@ -127,6 +128,30 @@ export default React.createClass({
                 loading: false,
             });
         });
+        window.addEventListener('message', this._onMessage, false);
+    },
+
+    componentWillUnmount() {
+        window.removeEventListener('message', this._onMessage);
+    },
+
+    _onMessage(event) {
+        if (!PlatformPeg.get().isElectron() || this.props.type !== 'jitsi') {
+            return;
+        }
+        if (!event.origin) {
+            event.origin = event.originalEvent.origin;
+        }
+
+        if (this.state.widgetUrl.indexOf(event.origin) === -1) {
+            return;
+        }
+
+        if (event.data.widgetAction === 'jitsi_iframe_loaded') {
+            const iframe = this.refs.appFrame.contentWindow
+                .document.querySelector('iframe[id^="jitsiConferenceFrame"]');
+            PlatformPeg.get().setupScreenSharingForIframe(iframe);
+        }
     },
 
     _canUserModify: function() {
