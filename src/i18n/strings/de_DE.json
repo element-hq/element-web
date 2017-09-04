@@ -757,7 +757,7 @@
     "ex. @bob:example.com": "z. B. @bob:example.com",
     "Add User": "Benutzer hinzufügen",
     "Sign in with CAS": "Mit CAS anmelden",
-    "Custom Server Options": "Erweiterte Server-Optionen",
+    "Custom Server Options": "Benutzerdefinierte Server-Optionen",
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.": "Du kannst die erweiterten Server-Optionen nutzen, um dich an anderen Matrix-Servern anzumelden, indem du eine andere Heimserver-URL angibst.",
     "This allows you to use this app with an existing Matrix account on a different home server.": "Dies erlaubt es dir, diese App mit einem existierenden Matrix-Benutzerkonto auf einem anderen Heimserver zu verwenden.",
     "Dismiss": "Ablehnen",
