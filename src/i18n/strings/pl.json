@@ -280,7 +280,7 @@
     "Bans user with given id": "Zbanuj użytkownika o podanym id",
     "Blacklisted": "Umieszczono na czarnej liście",
     "Add a widget": "Dodaj widżet",
-    "Allow": "Zezwól",
+    "Allow": "Pozwól",
     "Missing Media Permissions, click here to request.": "Brakuje uprawnień mediów, kliknij tutaj, aby zażądać.",
     "and %(count)s others....other": "i %(count)s innych...",
     "and %(count)s others....one": "i jeszcze jedno...",
