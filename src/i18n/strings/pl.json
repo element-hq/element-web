@@ -278,5 +278,19 @@
     "%(senderName)s banned %(targetName)s.": "%(senderName)s zbanował %(targetName)s.",
     "Ban": "Zbanuj",
     "Bans user with given id": "Zbanuj użytkownika o podanym id",
-    "Blacklisted": "Umieszczono na czarnej liście"
+    "Blacklisted": "Umieszczono na czarnej liście",
+    "Add a widget": "Dodaj widżet",
+    "Allow": "Zezwól",
+    "Missing Media Permissions, click here to request.": "Brakuje uprawnień mediów, kliknij tutaj, aby zażądać.",
+    "and %(count)s others....other": "i %(count)s innych...",
+    "and %(count)s others....one": "i jeszcze jedno...",
+    "Bug Report": "Raport błędu",
+    "Bulk Options": "Masowe opcje",
+    "Call Timeout": "Upłynął limit czasu połączenia",
+    "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Nie można nawiązać połączenia z serwerem - proszę sprawdź twoje połączenie, upewnij się, że <a>certyfikat SSL serwera</a> jest zaufany, i że dodatki przeglądarki nie blokują żądania.",
+    "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Nie można nawiązać połączenia z serwerem przy użyciu HTTP podczas korzystania z HTTPS dla bieżącej strony. Użyj HTTPS lub <a>włącz niebezpieczne skrypty</a>.",
+    "Can't load user settings": "Nie można załadować ustawień użytkownika",
+    "Cannot add any more widgets": "Nie można dodać już więcej widżetów",
+    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s zmienił swoją nazwę z %(oldDisplayName)s na %(displayName)s.",
+    "%(senderName)s changed their profile picture.": "%(senderName)s zmienił swoje zdjęcie profilowe."
 }
