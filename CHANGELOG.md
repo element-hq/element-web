@@ -1,3 +1,12 @@
+Changes in [0.12.3-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.12.3-rc.3) (2017-09-05)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3-rc.2...v0.12.3-rc.3)
+
+ * Fix plurals in translations
+   [\#4971](https://github.com/vector-im/riot-web/pull/4971)
+ * Update from Weblate.
+   [\#4968](https://github.com/vector-im/riot-web/pull/4968)
+
 Changes in [0.12.3-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.12.3-rc.2) (2017-09-05)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3-rc.1...v0.12.3-rc.2)
