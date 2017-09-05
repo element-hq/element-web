@@ -192,10 +192,8 @@
     "%(items)s and %(remaining)s others": "%(items)s та інші %(remaining)s",
     "%(items)s and one other": "%(items)s і ще один інший",
     "%(items)s and %(lastItem)s": "%(items)s та %(lastItem)s",
-    "and %(count)s others...": {
-        "other": "та %(count)s інші...",
-        "one": "і інше..."
-    },
+    "and %(count)s others...|one": "і інше...",
+    "and %(count)s others...|other": "та %(count)s інші...",
     "%(names)s and %(lastPerson)s are typing": "%(names)s та %(lastPerson)s пишуть",
     "%(names)s and one other are typing": "%(names)s та інші пишуть",
     "%(names)s and %(count)s others are typing": "%(names)s та %(count)s інших пишуть",
