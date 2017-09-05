@@ -968,7 +968,7 @@
     "You are a member of these groups:": "您是這些群組的成員：",
     "Create a group to represent your community! Define a set of rooms and your own custom homepage to mark out your space in the Matrix universe.": "建立一個群組來代表您的社群！定義一組聊天室與您自己的自訂首頁來標記您在 Matrix 世界中的空間。",
     "Join an existing group": "加入既有的群組",
-    "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "要加入既有的群組，您將會需要知道其群組識別符；其看起來會像是 <i>+範例：matrix.org</i>。",
+    "To join an exisitng group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "要加入既有的群組，您將會需要知道其群組識別符；其看起來會像是 <i>+example:matrix.org</i>。",
     "Featured Rooms:": "特色聊天室：",
     "Error whilst fetching joined groups": "在擷取已加入的群組時發生錯誤",
     "Featured Users:": "特色使用者：",
@@ -979,5 +979,6 @@
     "Hide avatars in user and room mentions": "在使用者與聊天室提及中隱藏大頭貼",
     "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s 由 %(senderName)s 所新增",
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s 由 %(senderName)s 所移除",
-    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "機器人檢查目前在桌面端不可用 ── 請使用<a>網路瀏覽器</a>"
+    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "機器人檢查目前在桌面端不可用 ── 請使用<a>網路瀏覽器</a>",
+    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s 小工具已被 %(senderName)s 修改"
 }
