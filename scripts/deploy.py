@@ -48,11 +48,12 @@ def move_bundles(source, dest):
     for f in os.listdir(source):
         dst = os.path.join(dest, f)
         if os.path.exists(dst):
-            raise DeployException(
+            print (
                 "Not deploying. The bundle includes '%s' which we have previously deployed."
                 % f
             )
-        renames[os.path.join(source, f)] = dst
+        else:
+            renames[os.path.join(source, f)] = dst
 
     for (src, dst) in renames.iteritems():
         print ("Move %s -> %s" % (src, dst))
