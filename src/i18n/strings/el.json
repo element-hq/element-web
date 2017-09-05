@@ -727,7 +727,6 @@
     "You must join the room to see its files": "Πρέπει να συνδεθείτε στο δωμάτιο για να δείτε τα αρχεία του",
     "Reject all %(invitedRooms)s invites": "Απόρριψη όλων των προσκλήσεων %(invitedRooms)s",
     "Failed to invite the following users to the %(roomName)s room:": "Δεν ήταν δυνατή η πρόσκληση των χρηστών στο δωμάτιο %(roomName)s:",
-    "changing room on a RoomView is not supported": "Δεν υποστηρίζεται η αλλαγή δωματίου σε RoomView",
     "demote": "υποβίβαση",
     "Deops user with given id": "Deop χρήστη με το συγκεκριμένο αναγνωριστικό",
     "Disable inline URL previews by default": "Απενεργοποίηση προεπισκόπησης συνδέσμων από προεπιλογή",

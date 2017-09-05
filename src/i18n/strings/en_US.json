@@ -73,7 +73,6 @@
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s changed the topic to \"%(topic)s\".",
     "Changes to who can read history will only apply to future messages in this room": "Changes to who can read history will only apply to future messages in this room",
     "Changes your display nickname": "Changes your display nickname",
-    "changing room on a RoomView is not supported": "changing room on a RoomView is not supported",
     "Changing password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Changing password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.",
     "Claimed Ed25519 fingerprint key": "Claimed Ed25519 fingerprint key",
     "Clear Cache and Reload": "Clear Cache and Reload",

@@ -66,7 +66,6 @@
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s గది పేరు తొలగించబడింది.",
     "Changes to who can read history will only apply to future messages in this room": "చరిత్ర చదివేవారికి మార్పులు ఈ గదిలో భవిష్య సందేశాలకు మాత్రమే వర్తిస్తాయి",
     "Changes your display nickname": "మీ ప్రదర్శన మారుపేరుని మారుస్తుంది",
-    "changing room on a RoomView is not supported": "ఒక రూమ్వ్యూలో గది మార్చుకునేకి మద్దతు లేదు",
     "You cannot place a call with yourself.": "మీరు మీతో కాల్ చేయలేరు.",
     "You are already in a call.": "మీరు ఇప్పటికే కాల్లో ఉన్నారు.",
     "You are trying to access %(roomName)s.": "మీరు %(roomName)s లను యాక్సెస్ చేయడానికి ప్రయత్నిస్తున్నారు.",

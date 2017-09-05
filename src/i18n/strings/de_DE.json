@@ -444,7 +444,6 @@
     "Ban": "Verbannen",
     "Can't connect to homeserver - please check your connectivity and ensure your <a>homeserver's SSL certificate</a> is trusted.": "Verbindungsaufbau zum Heimserver nicht möglich - bitte Internetverbindung überprüfen und sicherstellen, ob das <a>SSL-Zertifikat des Heimservers</a> vertrauenswürdig ist.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Es kann keine Verbindung zum Heimserver via HTTP aufgebaut werden, wenn die Adresszeile des Browsers eine HTTPS-URL enthält. Entweder HTTPS verwenden oder alternativ <a>unsichere Skripte erlauben</a>.",
-    "changing room on a RoomView is not supported": "Das Ändern eines Raumes in einer RaumAnsicht wird nicht unterstützt",
     "Click to mute audio": "Klicke um den Ton stumm zu stellen",
     "Click to mute video": "Klicken, um das Video stummzuschalten",
     "Command error": "Befehlsfehler",

@@ -333,7 +333,6 @@
     "Are you sure?": "Вы уверены?",
     "Autoplay GIFs and videos": "Автовоспроизведение GIF и видео",
     "Can't connect to homeserver - please check your connectivity and ensure your <a>homeserver's SSL certificate</a> is trusted.": "Невозможно соединиться с домашним сервером - проверьте своё соединение и убедитесь, что <a>SSL-сертификат вашего домашнего сервера</a> включён в доверяемые.",
-    "changing room on a RoomView is not supported": "изменение комнаты в RoomView не поддерживается",
     "Click to mute audio": "Щелкните, чтобы выключить звук",
     "Click to mute video": "Щелкните, чтобы выключить видео",
     "Click to unmute video": "Щелкните, чтобы включить видео",
