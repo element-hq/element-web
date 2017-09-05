@@ -49,7 +49,7 @@ def move_bundles(source, dest):
         dst = os.path.join(dest, f)
         if os.path.exists(dst):
             print (
-                "Not deploying. The bundle includes '%s' which we have previously deployed."
+                "Skipping bundle. The bundle includes '%s' which we have previously deployed."
                 % f
             )
         else:
