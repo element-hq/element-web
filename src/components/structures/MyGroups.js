@@ -125,7 +125,7 @@ export default withMatrixClient(React.createClass({
                         <TintableSvg src="img/icons-create-room.svg" width="50" height="50" />
                     </AccessibleButton>
                     {_tJsx(
-                        'To join an exisitng group you\'ll have to '+
+                        'To join an existing group you\'ll have to '+
                         'know its group identifier; this will look '+
                         'something like <i>+example:matrix.org</i>.',
                         /<i>(.*)<\/i>/,

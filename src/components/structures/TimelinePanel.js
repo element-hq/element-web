@@ -344,9 +344,16 @@ var TimelinePanel = React.createClass({
                 newState[canPaginateOtherWayKey] = true;
             }
 
-            this.setState(newState);
-
-            return r;
+            // Don't resolve until the setState has completed: we need to let
+            // the component update before we consider the pagination completed,
+            // otherwise we'll end up paginating in all the history the js-sdk
+            // has in memory because we never gave the component a chance to scroll
+            // itself into the right place
+            return new Promise((resolve) => {
+                this.setState(newState, () => {
+                    resolve(r);
+                });
+            });
         });
     },
 
@@ -1140,7 +1147,6 @@ var TimelinePanel = React.createClass({
                           highlightedEventId={ this.props.highlightedEventId }
                           readMarkerEventId={ this.state.readMarkerEventId }
                           readMarkerVisible={ this.state.readMarkerVisible }
-                          suppressFirstDateSeparator={ this.state.canBackPaginate }
                           showUrlPreview={ this.props.showUrlPreview }
                           showReadReceipts={ this.props.showReadReceipts }
                           ourUserId={ MatrixClientPeg.get().credentials.userId }
