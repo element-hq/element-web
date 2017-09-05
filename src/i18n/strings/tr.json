@@ -197,7 +197,6 @@
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s konuyu \"%(topic)s\" olarak değiştirdi.",
     "Changes to who can read history will only apply to future messages in this room": "Geçmişi kimlerin okuyabileceğine ait değişiklikler yalnızca bu odada gelecekteki iletiler için geçerli olur",
     "Changes your display nickname": "Görünen takma adınızı değiştirir",
-    "changing room on a RoomView is not supported": "Oda Ekranında oda değiştirme desteklenmiyor",
     "Changing password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Şifre değiştirme eğer oda anahtarlarınızı dışa aktarmaz ve daha sonra tekrar içe aktarmazsanız , şu anda tüm cihazlarda uçtan uca şifreleme anahtarlarını sıfırlayacak ve geçmişi okunamaz hale getirecek . Gelecekte bu geliştirilecek.",
     "Claimed Ed25519 fingerprint key": "Ed25519 parmak izi anahtarı istendi",
     "Clear Cache and Reload": "Önbelleği Temizle ve Yeniden Yükle",

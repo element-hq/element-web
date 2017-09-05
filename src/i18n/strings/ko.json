@@ -250,7 +250,6 @@
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s님이 방 이름을 지우셨어요.",
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s님이 주제를 \"%(topic)s\"로 바꾸셨어요.",
     "Changes to who can read history will only apply to future messages in this room": "방의 이후 메시지부터 기록을 읽을 수 있는 조건의 변화가 적용되어요",
-    "changing room on a RoomView is not supported": "룸뷰에서 방을 바꾸는 건 지원하지 않아요",
     "Changing password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "비밀번호를 바꾸면 현재 모든 장치의 종단간 암호화 키가 다시 설정되고, 먼저 방의 키를 내보내고 나중에 다시 불러오지 않는 한, 암호화한 이야기 기록을 읽을 수 없게 되어요. 앞으로는 이 기능을 더 좋게 만들 거에요.",
     "Claimed Ed25519 fingerprint key": "Ed25519 지문 키가 필요",
     "<a>Click here</a> to join the discussion!": "<a>여기</a>를 눌러서 같이 논의해요!",

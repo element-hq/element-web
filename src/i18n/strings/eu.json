@@ -436,7 +436,6 @@
     "%(senderName)s changed their profile picture.": "%(senderName)s erabiltzaileak bere profileko argazkia aldatu du.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s erabiltzaileak %(powerLevelDiffText)s erabiltzailearen botere maila aldatu du.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s erabiltzaileak gelaren izena aldatu du, orain %(roomName)s da.",
-    "changing room on a RoomView is not supported": "ez da onartzen gela ikuspegi batean gelaz aldatzea",
     "Drop here to tag %(section)s": "Jaregin hona %(section)s atalari etiketa jartzeko",
     "Incoming voice call from %(name)s": "%(name)s erabiltzailearen deia jasotzen",
     "Incorrect username and/or password.": "Erabiltzaile-izen edo pasahitz okerra.",

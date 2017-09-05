@@ -179,7 +179,6 @@
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s heeft het onderwerp gewijzigd naar \"%(topic)s\".",
     "Changes to who can read history will only apply to future messages in this room": "Veranderingen aan wie de historie kan lezen worden alleen maar toegepast op toekomstige berichten in deze kamer",
     "Changes your display nickname": "Verandert jouw weergavenaam",
-    "changing room on a RoomView is not supported": "veranderen van een kamer in een RoomView wordt niet ondersteund",
     "Changing password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Het veranderen van het wachtwoord zal op het moment alle eind-tot-eind encryptie sleutels resetten, wat alle versleutelde chat geschiedenis onleesbaar zou maken, behalve als je eerst je kamer sleutels exporteert en achteraf opnieuw importeert. Dit zal worden verbeterd in de toekomst.",
     "Clear Cache and Reload": "Legen cache en herlaad",
     "Clear Cache": "Legen cache",

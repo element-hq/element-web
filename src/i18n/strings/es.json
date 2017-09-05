@@ -178,7 +178,6 @@
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s ha cambiado el tema de la sala a \"%(topic)s\".",
     "Changes to who can read history will only apply to future messages in this room": "Cambios para quien pueda leer el historial solo serán aplicados a futuros mensajes en la sala",
     "Changes your display nickname": "Cambia la visualización de tu apodo",
-    "changing room on a RoomView is not supported": "cambiando la sala en un RoomView no esta soportado",
     "Changing password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "El cambio de contraseña restablecerá actualmente todas las claves de cifrado de extremo a extremo de todos los dispositivos, haciendo que el historial de chat cifrado sea ilegible, a menos que primero exporte las claves de la habitación y vuelva a importarlas después. En el futuro esto será mejorado.",
     "Claimed Ed25519 fingerprint key": "Clave Ed25519 es necesaria",
     "Clear Cache and Reload": "Borrar caché y recargar",

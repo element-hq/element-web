@@ -126,7 +126,6 @@
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s เปลี่ยนชื่อห้องไปเป็น %(roomName)s",
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s ลบชื่อห้อง",
     "Changes your display nickname": "เปลี่ยนชื่อเล่นที่แสดงของคุณ",
-    "changing room on a RoomView is not supported": "ไม่รองรับการเปลี่ยนห้องใน RoomView",
     "Clear Cache and Reload": "ล้างแคชแล้วโหลดใหม่",
     "Clear Cache": "ล้างแคช",
     "Click here": "คลิกที่นี่",

@@ -214,7 +214,6 @@
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s telah mengubah nama ruang menjadi %(roomName)s.",
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s telah mengubah topik menjadi \"%(topic)s\".",
     "Changes to who can read history will only apply to future messages in this room": "Pengubahan siapa yang dapat membaca sejarah akan berlaku untuk pesan selanjutnya di ruang ini",
-    "changing room on a RoomView is not supported": "tidak dapat mengubah ruang di RoomView",
     "Changing password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Mengubah password saat ini akan mengatur ulang semua kunci enkripsi end-to-end di semua perangkat, menyebabkan sejarah obrolan yang terenkripsi menjadi tidak dapat dibaca, kecuali sebelumnya Anda ekspor dahulu kunci ruang lalu kemudian impor ulang setelahnya. Ke depan hal ini akan diperbaiki.",
     "<a>Click here</a> to join the discussion!": "<a>Klik di sini</a> untuk gabung diskusi!",
     "click to reveal": "Klik untuk menampilkan",

@@ -229,7 +229,6 @@
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s megváltoztatta a témát erre \"%(topic)s\".",
     "Changes to who can read history will only apply to future messages in this room": "Változtatások a napló olvasási jogosultságon csak a szoba új üzeneteire fog vonatkozni",
     "Changes your display nickname": "Becenév megváltoztatása",
-    "changing room on a RoomView is not supported": "Szoba nézetben nem lehet szobát váltani",
     "Changing password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Jelszó megváltoztatása jelenleg alaphelyzetbe állítja a titkosításnál használt kulcsokat minden készüléken, ezzel a régi titkosított üzenetek olvashatatlanok lesznek hacsak először nem mented ki a kulcsokat és újra betöltöd. A jövőben ezen javítunk.",
     "Claimed Ed25519 fingerprint key": "Igényelt Ed25519 ujjlenyomat kulcs",
     "Clear Cache and Reload": "Gyorsítótár törlése és újratöltés",

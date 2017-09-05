@@ -448,7 +448,6 @@
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s 已經變更主題為「%(topic)s」。",
     "Changes to who can read history will only apply to future messages in this room": "變更誰可以讀取歷史紀錄的設定僅套用於此房間未來的訊息",
     "Changes your display nickname": "變更您的顯示暱稱",
-    "changing room on a RoomView is not supported": "不支援在房間檢視時變更房間",
     "Changing password will currently reset any end-to-end encryption keys on all devices, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "目前變更密碼將會重設在所有裝置上的端對端加密金鑰，讓加密的聊天歷史無法讀取，除非您先匯出您的房間金鑰，並在稍後重新匯入它們。這會在未來改進。",
     "Claimed Ed25519 fingerprint key": "已索取 Ed25519 指紋金鑰",
     "Clear Cache and Reload": "清除快取並重新載入",
