@@ -1147,7 +1147,6 @@ var TimelinePanel = React.createClass({
                           highlightedEventId={ this.props.highlightedEventId }
                           readMarkerEventId={ this.state.readMarkerEventId }
                           readMarkerVisible={ this.state.readMarkerVisible }
-                          suppressFirstDateSeparator={ this.state.canBackPaginate }
                           showUrlPreview={ this.props.showUrlPreview }
                           showReadReceipts={ this.props.showReadReceipts }
                           ourUserId={ MatrixClientPeg.get().credentials.userId }
