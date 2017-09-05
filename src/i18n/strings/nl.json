@@ -1,4 +1,5 @@
 {
+    "Direct Chat": "Privégesprek",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Voer alsjeblieft de verificatiecode in die is verstuurd naar +%(msisdn)s",
     "accept": "accepteer",
     "%(targetName)s accepted an invitation.": "%(targetName)s heeft een uitnodiging geaccepteerd.",
