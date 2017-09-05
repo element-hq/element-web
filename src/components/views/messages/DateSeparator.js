@@ -15,45 +15,26 @@ limitations under the License.
 */
 
 import React from 'react';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import DateUtils from 'matrix-react-sdk/lib/DateUtils';
-
-function getdaysArray() {
-	return [
-        _t('Sunday'),
-        _t('Monday'),
-        _t('Tuesday'),
-        _t('Wednesday'),
-        _t('Thursday'),
-        _t('Friday'),
-        _t('Saturday'),
-    ];
-}
+import { Sticky } from 'react-sticky';
 
 module.exports = React.createClass({
     displayName: 'DateSeparator',
     render: function() {
-        var date = new Date(this.props.ts);
-        var today = new Date();
-        var yesterday = new Date();
-        var days = getdaysArray();
-        yesterday.setDate(today.getDate() - 1);
-        var label;
-        if (date.toDateString() === today.toDateString()) {
-            label = _t('Today');
-        }
-        else if (date.toDateString() === yesterday.toDateString()) {
-            label = _t('Yesterday');
-        }
-        else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
-            label = days[date.getDay()];
-        }
-        else {
-            label = DateUtils.formatFullDate(date, this.props.showTwelveHour);
-        }
-
+        const date = new Date(this.props.ts);
+        const label = DateUtils.formatDateSeparator(date);
         return (
-            <h2 className="mx_DateSeparator">{ label }</h2>
+            <Sticky relative={true} disableCompensation={true}>
+                {({style, isSticky, wasSticky, distanceFromTop}) => {
+                    return (
+                        <div className={"mx_DateSeparator_container mx_DateSeparator_container" + (isSticky ? '_sticky' : '')}
+                            style={{top: isSticky ? -distanceFromTop + "px" : 0}}
+                        >
+                            <h2 className="mx_DateSeparator">{ label }</h2>
+                        </div>
+                    );
+                }}
+            </Sticky>
         );
-    }
+    },
 });
