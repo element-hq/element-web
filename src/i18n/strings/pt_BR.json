@@ -392,6 +392,8 @@
     "Usage": "Uso",
     "Use with caution": "Use com cautela",
     "VoIP is unsupported": "Chamada de voz não permitida",
+    "Sunday": "Domingo",
+    "Monday": "Segunda",
     "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s desfez o convite a %(targetName)s.",
     "You are already in a call.": "Você já está em  uma chamada.",
     "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Você ainda não está em nenhuma sala! Clique em <CreateRoomButton> para criar uma sala ou em <RoomDirectoryButton> para navegar pela lista pública de salas",
