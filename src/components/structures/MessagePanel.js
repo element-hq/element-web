@@ -61,6 +61,9 @@ module.exports = React.createClass({
         // for pending messages.
         ourUserId: React.PropTypes.string,
 
+        // true to suppress the date at the start of the timeline
+        suppressFirstDateSeparator: React.PropTypes.bool,
+
         // whether to show read receipts
         showReadReceipts: React.PropTypes.bool,
 
@@ -514,10 +517,10 @@ module.exports = React.createClass({
 
     _wantsDateSeparator: function(prevEvent, nextEventDate) {
         if (prevEvent == null) {
-            // First event in the panel always wants a DateSeparator
-            return true;
+            // first event in the panel: depends if we could back-paginate from
+            // here.
+            return !this.props.suppressFirstDateSeparator;
         }
-
         const prevEventDate = prevEvent.getDate();
         if (!nextEventDate || !prevEventDate) {
             return false;
