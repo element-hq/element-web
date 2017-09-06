@@ -1,3 +1,9 @@
+Changes in [0.12.3](https://github.com/vector-im/riot-web/releases/tag/v0.12.3) (2017-09-06)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3-rc.3...v0.12.3)
+
+ * No changes
+
 Changes in [0.12.3-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.12.3-rc.3) (2017-09-05)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3-rc.2...v0.12.3-rc.3)
