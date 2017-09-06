@@ -73,12 +73,16 @@ module.exports = React.createClass({
         textArea.value = text;
         document.body.appendChild(textArea);
         textArea.select();
+
+        let successful;
         try {
-            const successful = document.execCommand('copy');
+            successful = document.execCommand('copy');
         } catch (err) {
             console.log('Unable to copy');
         }
+
         document.body.removeChild(textArea);
+        return successful;
     },
 
     componentDidMount: function() {
@@ -119,7 +123,7 @@ module.exports = React.createClass({
             for (let i = 0; i < buttons.length; i++) {
                 buttons[i].onclick = (e) => {
                     const copyCode = buttons[i].parentNode.getElementsByTagName("code")[0];
-                    this.copyToClipboard(copyCode.textContent);
+                    const successful = this.copyToClipboard(copyCode.textContent);
 
                     const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
                     const buttonRect = e.target.getBoundingClientRect();
@@ -131,7 +135,7 @@ module.exports = React.createClass({
                         chevronOffset: 10,
                         left: x,
                         top: y,
-                        message: "Copied!",
+                        message: successful ? _t('Copied!') : _t('Failed to copy'),
                     });
                     e.target.onmouseout = close;
                 };
