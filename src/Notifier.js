@@ -80,10 +80,11 @@ const Notifier = {
             if (ev.getContent().body) msg = ev.getContent().body;
         }
 
-        const avatarUrl = ev.sender ? Avatar.avatarUrlForMember(
-            ev.sender, 40, 40, 'crop'
-        ) : null;
+        if (!this.isBodyEnabled()) {
+            msg = '';
+        }
 
+        const avatarUrl = ev.sender ? Avatar.avatarUrlForMember(ev.sender, 40, 40, 'crop') : null;
         const notif = plaf.displayNotification(title, msg, avatarUrl, room);
 
         // if displayNotification returns non-null,  the platform supports
@@ -195,6 +196,19 @@ const Notifier = {
         return enabled === 'true';
     },
 
+    setBodyEnabled: function(enable) {
+        if (!global.localStorage) return;
+        global.localStorage.setItem('notifications_body_enabled', enable ? 'true' : 'false');
+    },
+
+    isBodyEnabled: function() {
+        if (!global.localStorage) return true;
+        const enabled = global.localStorage.getItem('notifications_body_enabled');
+        // default to true if the popups are enabled
+        if (enabled === null) return this.isEnabled();
+        return enabled === 'true';
+    },
+
     setAudioEnabled: function(enable) {
         if (!global.localStorage) return;
         global.localStorage.setItem('audio_notifications_enabled',
@@ -303,7 +317,7 @@ const Notifier = {
                 this._playAudioNotification(ev, room);
             }
         }
-    }
+    },
 };
 
 if (!global.mxNotifier) {
