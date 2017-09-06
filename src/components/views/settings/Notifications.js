@@ -116,6 +116,11 @@ module.exports = React.createClass({
         UserSettingsStore.setEnableNotifications(event.target.checked);
     },
 
+    onEnableDesktopNotificationBodyChange: function(event) {
+        UserSettingsStore.setEnableNotificationBody(event.target.checked);
+        this.forceUpdate();
+    },
+
     onEnableEmailNotificationsChange: function(address, event) {
         var emailPusherPromise;
         if (event.target.checked) {
@@ -827,6 +832,21 @@ module.exports = React.createClass({
                         <div className="mx_UserNotifSettings_labelCell">
                             <label htmlFor="enableDesktopNotifications">
                                 { _t('Enable desktop notifications') }
+                            </label>
+                        </div>
+                    </div>
+
+                    <div className="mx_UserNotifSettings_tableRow">
+                        <div className="mx_UserNotifSettings_inputCell">
+                            <input id="enableDesktopNotificationBody"
+                                ref="enableDesktopNotificationBody"
+                                type="checkbox"
+                                checked={ UserSettingsStore.getEnableNotificationBody() }
+                                onChange={ this.onEnableDesktopNotificationBodyChange } />
+                        </div>
+                        <div className="mx_UserNotifSettings_labelCell">
+                            <label htmlFor="enableDesktopNotificationBody">
+                                { _t('Show message in desktop notification') }
                             </label>
                         </div>
                     </div>
