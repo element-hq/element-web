@@ -94,6 +94,7 @@ distdir="$builddir/electron_app/dist"
 pubdir="$projdir/electron_app/pub"
 rm -r "$pubdir" || true
 mkdir -p "$pubdir"
+rm -r "$projdir/electron_app/dist" || true
 mkdir -p "$projdir/electron_app/dist/unsigned/"
 
 # Install packages: what the user downloads the first time,
@@ -122,8 +123,6 @@ cp $distdir/win/*.nupkg "$pubdir/update/win32/x64/"
 cp $distdir/win/RELEASES "$pubdir/update/win32/x64/"
 
 # Move the debs to the main project dir's dist folder
-rm -r "$projdir/electron_app/dist" || true
-mkdir -p "$projdir/electron_app/dist"
 cp $distdir/*.deb "$projdir/electron_app/dist/"
 
 rm -rf "$builddir"
