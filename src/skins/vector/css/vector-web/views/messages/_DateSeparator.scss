@@ -16,26 +16,10 @@ limitations under the License.
 
 .mx_DateSeparator {
     clear: both;
-    margin-top: 0px;
-    margin-bottom: 0px;
+    margin-top: 32px;
+    margin-bottom: 8px;
     margin-left: 63px;
-    padding-top: 5px;
     padding-bottom: 6px;
     border-bottom: 1px solid $primary-hairline-color;
 }
 
-.mx_DateSeparator_container {
-    margin-top: 27px;
-    margin-bottom: 8px;
-    background-color: $primary-bg-color;
-    z-index: 3;
-}
-
-.mx_DateSeparator_container_sticky {
-    position: relative;
-    border-bottom: 1px solid $primary-hairline-color;
-}
-
-.mx_DateSeparator_container_sticky .mx_DateSeparator {
-    border: 0px;
-}
