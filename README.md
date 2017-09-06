@@ -90,15 +90,13 @@ to build.
 1. Install the prerequisites: `npm install`.
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it (see below for details).
-1. `npm run dist` to build a tarball to deploy. Untaring this file will give
+1. Run `npm run dist` to build a tarball to deploy. Untaring this file will give
    a version-specific directory containing all the files that need to go on your
-   web server.
-
-Note that `npm run dist` is not supported on Windows, so Windows users can run `npm
-run build`, which will build all the necessary files into the `webapp`
-directory. The version of Riot will not appear in Settings without
-using the dist script. You can then mount the `webapp` directory on your
-webserver to actually serve up the app, which is entirely static content.
+   web server. (Note that `npm run dist` is not supported on Windows, so Windows
+   users can run `npm run build`, which will build all the necessary files into
+   the `webapp` directory. The version of Riot will not appear in Settings without
+   using the dist script. You can then mount the `webapp` directory on your
+   webserver to actually serve up the app, which is entirely static content.)
 
 config.json
 ===========
@@ -227,7 +225,7 @@ having to manually rebuild each time.
 
 First clone and build `matrix-js-sdk`:
 
-1. `git clone git@github.com:matrix-org/matrix-js-sdk.git`
+1. `git clone https://github.com/matrix-org/matrix-js-sdk.git`
 1. `pushd matrix-js-sdk`
 1. `git checkout develop`
 1. `npm install`
@@ -236,7 +234,7 @@ First clone and build `matrix-js-sdk`:
 
 Then similarly with `matrix-react-sdk`:
 
-1. `git clone git@github.com:matrix-org/matrix-react-sdk.git`
+1. `git clone https://github.com/matrix-org/matrix-react-sdk.git`
 1. `pushd matrix-react-sdk`
 1. `git checkout develop`
 1. `npm install`
@@ -245,13 +243,14 @@ Then similarly with `matrix-react-sdk`:
 
 Finally, build and start Riot itself:
 
-1. `git clone git@github.com:vector-im/riot-web.git`
+1. `git clone https://github.com/vector-im/riot-web.git`
 1. `cd riot-web`
 1. `git checkout develop`
 1. `npm install`
 1. `rm -r node_modules/matrix-js-sdk; ln -s ../../matrix-js-sdk node_modules/`
 1. `rm -r node_modules/matrix-react-sdk; ln -s ../../matrix-react-sdk node_modules/`
-1. `npm start`
+1. `cp -vi config.sample.json config.json` # and configure it
+1. `npm start` # this should be run inside a `screen` or `tmux` session
 1. Wait a few seconds for the initial build to finish; you should see something like:
     ```
     Hash: b0af76309dd56d7275c8
