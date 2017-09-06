@@ -31,6 +31,7 @@ import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import UserSettingsStore from "../../../UserSettingsStore";
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import ContextualMenu from '../../structures/ContextualMenu';
 import {RoomMember} from 'matrix-js-sdk';
 import classNames from 'classnames';
 
@@ -119,6 +120,20 @@ module.exports = React.createClass({
                 buttons[i].onclick = (e) => {
                     const copyCode = buttons[i].parentNode.getElementsByTagName("code")[0];
                     this.copyToClipboard(copyCode.textContent);
+
+                    const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
+                    const buttonRect = e.target.getBoundingClientRect();
+
+                    // The window X and Y offsets are to adjust position when zoomed in to page
+                    const x = buttonRect.right + window.pageXOffset;
+                    const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
+                    const {close} = ContextualMenu.createMenu(GenericTextContextMenu, {
+                        chevronOffset: 10,
+                        left: x,
+                        top: y,
+                        message: "Copied!",
+                    });
+                    e.target.onmouseout = close;
                 };
             }
         }
