@@ -104,7 +104,8 @@ var RoomSubList = React.createClass({
     getDefaultProps: function() {
         return {
             onHeaderClick: function() {}, // NOP
-            onShowMoreRooms: function() {} // NOP
+            onShowMoreRooms: function() {}, // NOP
+            isInvite: false,
         };
     },
 
