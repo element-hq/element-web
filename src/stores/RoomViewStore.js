@@ -211,15 +211,6 @@ class RoomViewStore extends Store {
         });
     }
 
-    _updateScrollState(payload) {
-        // Clobber existing scroll state for the given room ID
-        const newScrollStateMap = this._state.scrollStateMap;
-        newScrollStateMap[payload.room_id] = payload.scroll_state;
-        this._setState({
-            scrollStateMap: newScrollStateMap,
-        });
-    }
-
     reset() {
         this._state = Object.assign({}, INITIAL_STATE);
     }
@@ -232,11 +223,6 @@ class RoomViewStore extends Store {
     // The event to scroll to when the room is first viewed
     getInitialEventId() {
         return this._state.initialEventId;
-    }
-
-    // The offset to display the initial event at (see scrollStateMap)
-    getInitialEventPixelOffset() {
-        return this._state.initialEventPixelOffset;
     }
 
     // Whether to highlight the initial event
