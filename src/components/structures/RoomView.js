@@ -201,7 +201,7 @@ module.exports = React.createClass({
             // ...and get the scroll state for the new room
 
             // If an event ID wasn't specified, default to the one saved for this room
-            // via update_scroll_state. Assume initialEventPixelOffset should be set.
+            // in the scroll state store. Assume initialEventPixelOffset should be set.
             if (!newState.initialEventId) {
                 const roomScrollState = RoomScrollStateStore.getScrollState(newState.roomId);
                 if (roomScrollState) {
