@@ -393,7 +393,7 @@ export function bodyToHtml(content, highlights, opts) {
         }
         safeBody = sanitizeHtml(body, sanitizeHtmlParams);
         safeBody = unicodeToImage(safeBody);
-        safeBody = addCodeCopyButton(safeBody);
+        if (isHtml) safeBody = addCodeCopyButton(safeBody);
     }
     finally {
         delete sanitizeHtmlParams.textFilter;
