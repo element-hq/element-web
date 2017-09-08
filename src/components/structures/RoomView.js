@@ -47,6 +47,7 @@ import KeyCode from '../../KeyCode';
 import UserProvider from '../../autocomplete/UserProvider';
 
 import RoomViewStore from '../../stores/RoomViewStore';
+import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 
 let DEBUG = false;
 let debuglog = function() {};
@@ -163,7 +164,6 @@ module.exports = React.createClass({
             roomLoadError: RoomViewStore.getRoomLoadError(),
             joining: RoomViewStore.isJoining(),
             initialEventId: RoomViewStore.getInitialEventId(),
-            initialEventPixelOffset: RoomViewStore.getInitialEventPixelOffset(),
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
             forwardingEvent: RoomViewStore.getForwardingEvent(),
             shouldPeek: RoomViewStore.shouldPeek(),
@@ -191,16 +191,24 @@ module.exports = React.createClass({
             newState.room = MatrixClientPeg.get().getRoom(newState.roomId);
         }
 
+        if (this.state.roomId === null && newState.roomId !== null) {
+            // Get the scroll state for the new room
+
+            // If an event ID wasn't specified, default to the one saved for this room
+            // in the scroll state store. Assume initialEventPixelOffset should be set.
+            if (!newState.initialEventId) {
+                const roomScrollState = RoomScrollStateStore.getScrollState(newState.roomId);
+                if (roomScrollState) {
+                    newState.initialEventId = roomScrollState.focussedEvent;
+                    newState.initialEventPixelOffset = roomScrollState.pixelOffset;
+                }
+            }
+        }
+
         // Clear the search results when clicking a search result (which changes the
         // currently scrolled to event, this.state.initialEventId).
         if (this.state.initialEventId !== newState.initialEventId) {
             newState.searchResults = null;
-        }
-
-        // Store the scroll state for the previous room so that we can return to this
-        // position when viewing this room in future.
-        if (this.state.roomId !== newState.roomId) {
-            this._updateScrollMap(this.state.roomId);
         }
 
         this.setState(newState, () => {
@@ -340,7 +348,9 @@ module.exports = React.createClass({
         this.unmounted = true;
 
         // update the scroll map before we get unmounted
-        this._updateScrollMap(this.state.roomId);
+        if (this.state.roomId) {
+            RoomScrollStateStore.setScrollState(this.state.roomId, this._getScrollState());
+        }
 
         if (this.refs.roomView) {
             // disconnect the D&D event listeners from the room view. This
@@ -614,18 +624,6 @@ module.exports = React.createClass({
         // otherwise, we assume they're on.
         this.setState({
             showUrlPreview: true
-        });
-    },
-
-    _updateScrollMap(roomId) {
-        // No point updating scroll state if the room ID hasn't been resolved yet
-        if (!roomId) {
-            return;
-        }
-        dis.dispatch({
-            action: 'update_scroll_state',
-            room_id: roomId,
-            scroll_state: this._getScrollState(),
         });
     },
 
