@@ -189,6 +189,11 @@ module.exports = React.createClass({
         // the RoomView instance
         if (initial) {
             newState.room = MatrixClientPeg.get().getRoom(newState.roomId);
+            if (newState.room) {
+                newState.unsentMessageError = this._getUnsentMessageError(newState.room);
+                newState.showApps = this._shouldShowApps(newState.room);
+                this._onRoomLoaded(newState.room);
+            }
         }
 
         if (this.state.roomId === null && newState.roomId !== null) {
@@ -220,11 +225,11 @@ module.exports = React.createClass({
         // callback because this would prevent the setStates from being batched,
         // ie. cause it to render RoomView twice rather than the once that is necessary.
         if (initial) {
-            this._onHaveRoom(newState.room, newState.roomId, newState.joining, newState.shouldPeek);
+            this._setupRoom(newState.room, newState.roomId, newState.joining, newState.shouldPeek);
         }
     },
 
-    _onHaveRoom: function(room, roomId, joining, shouldPeek) {
+    _setupRoom: function(room, roomId, joining, shouldPeek) {
         // if this is an unknown room then we're in one of three states:
         // - This is a room we can peek into (search engine) (we can /peek)
         // - This is a room we can publicly join or were invited to. (we can /join)
@@ -240,13 +245,6 @@ module.exports = React.createClass({
         // about it). We don't peek in the historical case where we were joined but are
         // now not joined because the js-sdk peeking API will clobber our historical room,
         // making it impossible to indicate a newly joined room.
-        if (room) {
-            this.setState({
-                unsentMessageError: this._getUnsentMessageError(room),
-                showApps: this._shouldShowApps(room),
-            });
-            this._onRoomLoaded(room);
-        }
         if (!joining && roomId) {
             if (this.props.autoJoin) {
                 this.onJoinButtonClicked();
