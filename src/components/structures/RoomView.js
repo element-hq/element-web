@@ -211,16 +211,19 @@ module.exports = React.createClass({
             newState.searchResults = null;
         }
 
-        this.setState(newState, () => {
-            // At this point, this.state.roomId could be null (e.g. the alias might not
-            // have been resolved yet) so anything called here must handle this case.
-            if (initial) {
-                this._onHaveRoom();
-            }
-        });
+        this.setState(newState);
+        // At this point, newState.roomId could be null (e.g. the alias might not
+        // have been resolved yet) so anything called here must handle this case.
+        // We pass the new state into this function for it to read: it needs to
+        // observe the new state but we don't want to put it in the setState
+        // callback because this would prevent the setStates from being batched,
+        // ie. cause it to render RoomView twice rather than the once that is necessary.
+        if (initial) {
+            this._onHaveRoom(newState);
+        }
     },
 
-    _onHaveRoom: function() {
+    _onHaveRoom: function(state) {
         // if this is an unknown room then we're in one of three states:
         // - This is a room we can peek into (search engine) (we can /peek)
         // - This is a room we can publicly join or were invited to. (we can /join)
@@ -236,7 +239,7 @@ module.exports = React.createClass({
         // about it). We don't peek in the historical case where we were joined but are
         // now not joined because the js-sdk peeking API will clobber our historical room,
         // making it impossible to indicate a newly joined room.
-        const room = this.state.room;
+        const room = state.room;
         if (room) {
             this.setState({
                 unsentMessageError: this._getUnsentMessageError(room),
@@ -244,15 +247,15 @@ module.exports = React.createClass({
             });
             this._onRoomLoaded(room);
         }
-        if (!this.state.joining && this.state.roomId) {
+        if (!state.joining && state.roomId) {
             if (this.props.autoJoin) {
                 this.onJoinButtonClicked();
-            } else if (!room && this.state.shouldPeek) {
-                console.log("Attempting to peek into room %s", this.state.roomId);
+            } else if (!room && state.shouldPeek) {
+                console.log("Attempting to peek into room %s", state.roomId);
                 this.setState({
                     peekLoading: true,
                 });
-                MatrixClientPeg.get().peekInRoom(this.state.roomId).then((room) => {
+                MatrixClientPeg.get().peekInRoom(state.roomId).then((room) => {
                     this.setState({
                         room: room,
                         peekLoading: false,
