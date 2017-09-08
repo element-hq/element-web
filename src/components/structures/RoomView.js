@@ -220,11 +220,11 @@ module.exports = React.createClass({
         // callback because this would prevent the setStates from being batched,
         // ie. cause it to render RoomView twice rather than the once that is necessary.
         if (initial) {
-            this._onHaveRoom(newState);
+            this._onHaveRoom(newState.room, newState.roomId, newState.joining, newState.shouldPeek);
         }
     },
 
-    _onHaveRoom: function(state) {
+    _onHaveRoom: function(room, roomId, joining, shouldPeek) {
         // if this is an unknown room then we're in one of three states:
         // - This is a room we can peek into (search engine) (we can /peek)
         // - This is a room we can publicly join or were invited to. (we can /join)
@@ -240,7 +240,6 @@ module.exports = React.createClass({
         // about it). We don't peek in the historical case where we were joined but are
         // now not joined because the js-sdk peeking API will clobber our historical room,
         // making it impossible to indicate a newly joined room.
-        const room = state.room;
         if (room) {
             this.setState({
                 unsentMessageError: this._getUnsentMessageError(room),
@@ -248,15 +247,15 @@ module.exports = React.createClass({
             });
             this._onRoomLoaded(room);
         }
-        if (!state.joining && state.roomId) {
+        if (!joining && roomId) {
             if (this.props.autoJoin) {
                 this.onJoinButtonClicked();
-            } else if (!room && state.shouldPeek) {
-                console.log("Attempting to peek into room %s", state.roomId);
+            } else if (!room && shouldPeek) {
+                console.log("Attempting to peek into room %s", roomId);
                 this.setState({
                     peekLoading: true,
                 });
-                MatrixClientPeg.get().peekInRoom(state.roomId).then((room) => {
+                MatrixClientPeg.get().peekInRoom(roomId).then((room) => {
                     this.setState({
                         room: room,
                         peekLoading: false,
