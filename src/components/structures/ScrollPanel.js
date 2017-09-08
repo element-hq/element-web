@@ -157,7 +157,7 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        this.checkFillState();
+        this.checkScroll();
     },
 
     componentDidUpdate: function() {
