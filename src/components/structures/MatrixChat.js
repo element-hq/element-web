@@ -349,7 +349,6 @@ module.exports = React.createClass({
         UDEHandler.stopListening();
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
-        this._roomViewStoreToken.remove();
     },
 
     componentDidUpdate: function() {
