@@ -191,14 +191,8 @@ module.exports = React.createClass({
             newState.room = MatrixClientPeg.get().getRoom(newState.roomId);
         }
 
-        if (this.state.roomId !== newState.roomId) {
-            // Store the scroll state for the previous room so that we can return to this
-            // position when viewing this room in future.
-            if (this.state.roomId) {
-                RoomScrollStateStore.setScrollState(this.state.roomId, this._getScrollState());
-            }
-
-            // ...and get the scroll state for the new room
+        if (this.state.roomId === null && newState.roomId !== null) {
+            // Get the scroll state for the new room
 
             // If an event ID wasn't specified, default to the one saved for this room
             // in the scroll state store. Assume initialEventPixelOffset should be set.
@@ -354,7 +348,9 @@ module.exports = React.createClass({
         this.unmounted = true;
 
         // update the scroll map before we get unmounted
-        RoomScrollStateStore.setScrollState(this.state.roomId, this._getScrollState());
+        if (this.state.roomId) {
+            RoomScrollStateStore.setScrollState(this.state.roomId, this._getScrollState());
+        }
 
         if (this.refs.roomView) {
             // disconnect the D&D event listeners from the room view. This
