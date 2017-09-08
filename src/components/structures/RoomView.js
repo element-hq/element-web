@@ -214,6 +214,7 @@ module.exports = React.createClass({
         this.setState(newState);
         // At this point, newState.roomId could be null (e.g. the alias might not
         // have been resolved yet) so anything called here must handle this case.
+
         // We pass the new state into this function for it to read: it needs to
         // observe the new state but we don't want to put it in the setState
         // callback because this would prevent the setStates from being batched,
