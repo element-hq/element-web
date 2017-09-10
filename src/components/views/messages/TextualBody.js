@@ -114,16 +114,7 @@ module.exports = React.createClass({
                 }, 10);
             }
 
-            // Add 'copy' buttons to pre blocks
-            ReactDOM.findDOMNode(this).querySelectorAll('.mx_EventTile_body pre').forEach((p) => {
-                const button = document.createElement("span");
-                button.className = "mx_EventTile_copyButton";
-                button.onclick = (e) => {
-                    const copyCode = button.parentNode.getElementsByTagName("code")[0];
-                    this.copyToClipboard(copyCode.textContent);
-                };
-                p.appendChild(button);
-            });
+            this._addCodeCopyButton();
         }
     },
 
@@ -258,6 +249,19 @@ module.exports = React.createClass({
                 return true;
             }
         }
+    },
+
+    _addCodeCopyButton() {
+        // Add 'copy' buttons to pre blocks
+        ReactDOM.findDOMNode(this).querySelectorAll('.mx_EventTile_body pre').forEach((p) => {
+            const button = document.createElement("span");
+            button.className = "mx_EventTile_copyButton";
+            button.onclick = (e) => {
+                const copyCode = button.parentNode.getElementsByTagName("code")[0];
+                this.copyToClipboard(copyCode.textContent);
+            };
+            p.appendChild(button);
+        });
     },
 
     onCancelClick: function(event) {
