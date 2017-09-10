@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,13 +32,28 @@ emojione.imagePathPNG = 'emojione/png/';
 // Use SVGs for emojis
 emojione.imageType = 'svg';
 
+const SIMPLE_EMOJI_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
+
+/*
+ * Return true if the given string contains emoji
+ * Uses a much, much simpler regex than emojione's so will give false
+ * positives, but useful for fast-path testing strings to see if they
+ * need emojification.
+ * unicodeToImage uses this function.
+ */
+export function containsEmoji(str) {
+    return SIMPLE_EMOJI_PATTERN.test(str);
+}
 
 /* modified from https://github.com/Ranks/emojione/blob/master/lib/js/emojione.js
  * because we want to include emoji shortnames in title text
  */
 export function unicodeToImage(str) {
+    // fast path
+    if (!containsEmoji(str)) return str;
+
     let replaceWith, unicode, alt, short, fname;
     const mappedUnicode = emojione.mapUnicodeToShort();
 
