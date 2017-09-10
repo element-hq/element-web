@@ -143,5 +143,6 @@
     "World readable": "உலகமே படிக்கும்படி",
     "You cannot delete this image. (%(code)s)": "இந்த படத்தை நீங்கள் அழிக்க முடியாது. (%(code)s)",
     "You cannot delete this message. (%(code)s)": "இந்த செய்தியை நீங்கள் அழிக்க முடியாது. (%(code)s)",
-    "You are not receiving desktop notifications": "திரை அறிவிப்புகளை நீங்கள் பெறவில்லை"
+    "You are not receiving desktop notifications": "திரை அறிவிப்புகளை நீங்கள் பெறவில்லை",
+    "Bug report sent": "வழு அறிக்கை அனுப்பப்பட்டது"
 }
