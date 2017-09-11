@@ -157,6 +157,22 @@ module.exports = React.createClass({
         if (this.unmounted) {
             return;
         }
+
+        if (!initial && this.state.roomId !== RoomViewStore.getRoomId()) {
+            // RoomView explicitly does not support changing what room
+            // is being viewed: instead it should just be re-mounted when
+            // switching rooms. Therefore, if the room ID changes, we
+            // ignore this. We either need to do this or add code to handle
+            // saving the scroll position (otherwise we end up saving the
+            // scroll position against the wrong room).
+
+            // Given that doing the setState here would cause a bunch of
+            // unnecessary work, we just ignore the change since we know
+            // that if the current room ID has changed from what we thought
+            // it was, it means we're about to be unmounted.
+            return;
+        }
+
         const newState = {
             roomId: RoomViewStore.getRoomId(),
             roomAlias: RoomViewStore.getRoomAlias(),
