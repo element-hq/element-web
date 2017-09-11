@@ -909,5 +909,7 @@
     "Image '%(Body)s' cannot be displayed.": "Obraz '%(Body)s' nie może zostać wyświetlony.",
     "Error decrypting video": "Błąd deszyfrowania wideo",
     "Removed or unknown message type": "Usunięto lub nieznany typ wiadomości",
-    "Disable URL previews by default for participants in this room": "Ustaw podglądy linków na domyślnie wyłączone dla uczestników w tym pokoju"
+    "Disable URL previews by default for participants in this room": "Ustaw podglądy linków na domyślnie wyłączone dla uczestników w tym pokoju",
+    "Tried to load a specific point in this room's timeline, but was unable to find it.": "Próba załadowania punktu na osi czasu w tym pokoju się nie powiodła, ponieważ nie udało się go znaleźć.",
+    "The exported file will allow anyone who can read it to decrypt any encrypted messages that you can see, so you should be careful to keep it secure. To help with this, you should enter a passphrase below, which will be used to encrypt the exported data. It will only be possible to import the data by using the same passphrase.": ""
 }
