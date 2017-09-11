@@ -164,9 +164,12 @@ module.exports = React.createClass({
             // switching rooms. Therefore, if the room ID changes, we
             // ignore this. We either need to do this or add code to handle
             // saving the scroll position (otherwise we end up saving the
-            // scroll position against the wrong room). Given that doing the
-            // setState here would cause a bunch of unnecessary work, we
-            // just ignore the change.
+            // scroll position against the wrong room).
+
+            // Given that doing the setState here would cause a bunch of
+            // unnecessary work, we just ignore the change since we know
+            // that if the current room ID has changed from what we thought
+            // it was, it means we're about to be unmounted.
             return;
         }
 
