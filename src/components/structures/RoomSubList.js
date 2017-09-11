@@ -75,9 +75,6 @@ var RoomSubList = React.createClass({
 
         order: React.PropTypes.string.isRequired,
 
-        // undefined if no room is selected (eg we are showing settings)
-        selectedRoom: React.PropTypes.string,
-
         // passed through to RoomTile and used to highlight room with `!` regardless of notifications count
         isInvite: React.PropTypes.bool,
 
@@ -370,7 +367,6 @@ var RoomSubList = React.createClass({
         var self = this;
         var DNDRoomTile = sdk.getComponent("rooms.DNDRoomTile");
         return this.state.sortedList.map(function(room) {
-            var selected = room.roomId == self.props.selectedRoom;
             // XXX: is it evil to pass in self as a prop to RoomTile?
             return (
                 <DNDRoomTile
@@ -378,7 +374,6 @@ var RoomSubList = React.createClass({
                     roomSubList={ self }
                     key={ room.roomId }
                     collapsed={ self.props.collapsed || false}
-                    selected={ selected }
                     unread={ Unread.doesRoomHaveUnreadMessages(room) }
                     highlight={ room.getUnreadNotificationCount('highlight') > 0 || self.props.isInvite }
                     isInvite={ self.props.isInvite }
