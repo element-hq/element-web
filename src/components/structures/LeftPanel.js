@@ -46,7 +46,7 @@ var LeftPanel = React.createClass({
 
     shouldComponentUpdate: function(nextProps, nextState) {
         // MatrixChat will update whenever the user switches
-        // rooms, but propagating this chnage all the way down
+        // rooms, but propagating this change all the way down
         // the react tree is quite slow, so we cut this off
         // here. The RoomTiles listen for the room change
         // events themselves to know when to update.
