@@ -30,6 +30,8 @@ import VectorConferenceHandler from '../../VectorConferenceHandler';
 var LeftPanel = React.createClass({
     displayName: 'LeftPanel',
 
+    // NB. If you add props, don't forget to update
+    // shouldComponentUpdate!
     propTypes: {
         collapsed: React.PropTypes.bool.isRequired,
     },
