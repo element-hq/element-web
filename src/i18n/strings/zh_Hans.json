@@ -559,7 +559,7 @@
     "demote": "降级",
     "Deops user with given id": "Deops user",
     "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.": "通过 <voiceText>语言</voiceText> 或者 <videoText>视频</videoText>加入.",
-    "%(senderName)s made future room history visible to": "%(senderName) 设定历史浏览功能为",
+    "%(senderName)s made future room history visible to": "%(senderName)s 设定历史浏览功能为",
     "AM": "上午",
     "PM": "下午",
     "NOTE: Apps are not end-to-end encrypted": "提示：APP不支持端对端加密",
