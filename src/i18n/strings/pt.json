@@ -81,7 +81,7 @@
     "Remove from Directory": "Remover da lista pública de salas",
     "Resend": "Reenviar",
     "Riot does not know how to join a room on this network": "O Riot não sabe como entrar numa sala nesta rede",
-    "Room directory": "Lista de salas públicas",
+    "Room directory": "Lista de salas",
     "Room not found": "Sala não encontrada",
     "Search for a room": "Pesquisar por uma sala",
     "Settings": "Configurações",
@@ -162,5 +162,13 @@
     "Waiting for response from server": "À espera de resposta do servidor",
     "You are Rioting as a guest. <a>Register</a> or <a>sign in</a> to access more rooms and features!": "Está a usar o Riot como convidado. <a>Registe-se</a> ou <a>faça login</a> para aceder a mais salas e funcionalidades!",
     "OK": "Ok",
-    "You need to be using HTTPS to place a screen-sharing call.": "Necessita de estar a usar HTTPS para poder iniciar uma chamada com partilha de ecrã."
+    "You need to be using HTTPS to place a screen-sharing call.": "Necessita de estar a usar HTTPS para poder iniciar uma chamada com partilha de ecrã.",
+    "No update available.": "Nenhuma atualização disponível.",
+    "Welcome to Riot.im": "Bem-vindo ao Riot.im",
+    "Login": "Entrar",
+    "Warning": "Aviso",
+    "Checking for an update...": "A procurar uma atualização...",
+    "Error encountered (%(errorDetail)s).": "Erro encontrado (%(errorDetail)s).",
+    "Downloading update...": "A transferir atualização...",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Chat descentralizado, encriptado &amp; colaborativo alimentado por [matrix]"
 }
