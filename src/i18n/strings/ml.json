@@ -153,7 +153,7 @@
     "OK": "ശരി",
     "Warning": "മുന്നറിയിപ്പ്",
     "Checking for an update...": "അപ്ഡേറ്റ് ഉണ്ടോ എന്ന് തിരയുന്നു...",
-    "Error encountered (%(errorDetail)s).": "എറര്‍ നേരിട്ടു (%errorDetail)s).",
+    "Error encountered (%(errorDetail)s).": "എറര്‍ നേരിട്ടു (%(errorDetail)s).",
     "No update available.": "അപ്ഡേറ്റുകള്‍ ലഭ്യമല്ല.",
     "Downloading update...": "അപ്ഡേറ്റ് ഡൌണ്‍ലോഡ് ചെയ്യുന്നു...",
     "You need to be using HTTPS to place a screen-sharing call.": "സ്ക്രീന്‍ ഷെയറിങ്ങ് കോള്‍ നടത്തണമെങ്കില്‍ https ഉപയോഗിക്കണം.",
