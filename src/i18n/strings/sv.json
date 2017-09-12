@@ -206,5 +206,7 @@
     "Riot/iOS &amp; matrix-ios-sdk chat": "Riot/iOS &amp; matrix-ios-sdk-chatt",
     "Riot/Android &amp; matrix-android-sdk chat": "Riot/Android &amp; matrix-android-sdk-chatt",
     "Admin support for Dendrite": "Hjälp för administratörer av Dendrite",
-    "Building services on Matrix": "Bygga tjänster med Matrix"
+    "Building services on Matrix": "Bygga tjänster med Matrix",
+    "Bug report sent": "Buggraporten skickades",
+    "Thank you!": "Tack!"
 }

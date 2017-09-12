@@ -94,13 +94,13 @@
     "powered by Matrix": "offerto da Matrix",
     "Quote": "Cita",
     "Reject": "Rifiuta",
-    "Remove %(name)s from the directory?": "Rimuovere %(name) dalla lista?",
+    "Remove %(name)s from the directory?": "Rimuovere %(name)s dalla lista?",
     "Remove": "Rimuovi",
-    "remove %(name)s from the directory.": "rimuovi %(name) dalla lista.",
+    "remove %(name)s from the directory.": "rimuovi %(name)s dalla lista.",
     "Remove from Directory": "Rimuovi dalla lista",
     "Report a bug": "Segnala un errore",
     "Resend": "Reinvia",
-    "Riot Desktop on %(platformName)s": "Riot Desktop su %(platformName)",
+    "Riot Desktop on %(platformName)s": "Riot Desktop su %(platformName)s",
     "Riot does not know how to join a room on this network": "Riot non sa come entrare nella stanza su questa rete",
     "Riot is not supported on mobile web. Install the app?": "Riot non è supportato sul web mobile. Vuoi installare l'applicazione?",
     "Riot uses many advanced browser features, some of which are not available or experimental in your current browser.": "Riot utilizza molte funzioni avanzate del browser, alcune delle quali non sono disponibili o sono sperimentali nel tuo browser attuale.",
@@ -205,5 +205,6 @@
     "Discussion of all things Matrix!": "Discussione su tutto quanto riguardi Matrix!",
     "Dev chat for the Riot/Web dev team": "Chat per gli sviluppatori di Riot/Web",
     "Dev chat for the Dendrite dev team": "Chat per gli sviluppatori di Dendrite",
-    "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Esistono già molte stanze in Matrix, collegate a reti già esistenti (Slack, IRC, Gitter ecc) o indipendenti. Dai un'occhiata all'elenco!"
+    "Lots of rooms already exist in Matrix, linked to existing networks (Slack, IRC, Gitter etc) or independent. Check out the directory!": "Esistono già molte stanze in Matrix, collegate a reti già esistenti (Slack, IRC, Gitter ecc) o indipendenti. Dai un'occhiata all'elenco!",
+    "Thank you!": "Grazie!"
 }

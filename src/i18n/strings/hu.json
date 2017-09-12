@@ -129,7 +129,7 @@
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "A jelenlegi bőngésződdel teljesen hibás lehet az alkalmazás kinézete és bizonyos funkciók, ha nem az összes, nem fog működni. Ha mindenképpen ki akarod próbálni, folytathatod de egyedül vagy minden felbukkanó problémával!",
     "Messages containing <span>keywords</span>": "Az üzenet <span>kulcsszavakat</span> tartalmaz",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s alkalmazás %(browserName)s böngészőn %(osName)s rendszeren",
-    "A new version of Riot is available.": "Új verzió érhető el a Riot-ból.",
+    "A new version of Riot is available.": "Elérhető egy új Riot verzió.",
     "All Rooms": "Minden szobában",
     "Cancel": "Mégse",
     "Changelog": "Változások",
@@ -206,5 +206,7 @@
     "Error encountered (%(errorDetail)s).": "Hiba történt (%(errorDetail)s).",
     "No update available.": "Frissítés nem érthető el.",
     "Downloading update...": "Frissítés letöltése...",
-    "Couldn't load home page": "Kezdőképernyő betöltése sikertelen"
+    "Couldn't load home page": "Kezdőképernyő betöltése sikertelen",
+    "Bug report sent": "Hibajelentés elküldve",
+    "Thank you!": "Köszönjük!"
 }
