@@ -204,8 +204,6 @@
     "Conference calls are not supported in encrypted rooms": "Połączenia konferencyjne nie są obsługiwane w zaszyfrowanych pokojach",
     "Conference calls are not supported in this client": "Połączenia konferencyjne nie są obsługiwane w tym kliencie",
     "Could not connect to the integration server": "Nie można połączyć się z serwerem integracji",
-    "%(count)s new messages.one": "%(count)s nowa wiadomość",
-    "%(count)s new messages.other": "%(count)s nowych wiadomości",
     "Create a new chat or reuse an existing one": "Utwórz nowy czat lub użyj istniejącego",
     "Curve25519 identity key": "Curve25519 klucz tożsamości",
     "Custom": "Własny",
