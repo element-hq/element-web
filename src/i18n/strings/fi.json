@@ -90,5 +90,8 @@
     "Can't load user settings": "Käyttäjäasetusten lataaminen epäonnistui",
     "Change Password": "Muuta salasana",
     "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s muutti näyttönimensä %(oldDisplayName)s -> %(displayName)s.",
-    "%(senderName)s changed their profile picture.": "%(senderName)s muutti profiilikuvansa."
+    "%(senderName)s changed their profile picture.": "%(senderName)s muutti profiilikuvansa.",
+    "%(targetName)s accepted an invitation.": "%(targetName)s hyväksyi kutsun.",
+    "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s hyväksyi kutsun käyttäjän %(displayName)s puolesta.",
+    "Account": "Tili"
 }
