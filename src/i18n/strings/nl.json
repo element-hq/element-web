@@ -201,7 +201,7 @@
     "Remember, you can always set an email address in user settings if you change your mind.": "Onthoud dat u altijd een e-mailadres in kan stellen in de gebruikersinstellingen als u zich bedenkt.",
     "Warning": "Waarschuwing",
     "Checking for an update...": "Aan het kijken voor een update...",
-    "Error encountered (%(errorDetail)s).": "Fout ondervonden (%errorDetail)s).",
+    "Error encountered (%(errorDetail)s).": "Fout ondervonden (%(errorDetail)s).",
     "No update available.": "Geen update beschikbaar.",
     "Downloading update...": "Update aan het downloaden...",
     "To return to your account in future you need to <u>set a password</u>": "Om in de toekomst naar je account terug te gaan moet je <u>een wachtwoord instellen</u>",
