@@ -165,8 +165,8 @@
     "Add a widget": "Dodaj widżet",
     "Allow": "Pozwól",
     "Missing Media Permissions, click here to request.": "Brakuje uprawnień mediów. Kliknij tutaj, aby ich zażądać.",
-    "and %(count)s others....other": "i %(count)s innych...",
-    "and %(count)s others....one": "i jeszcze jedno...",
+    "and %(count)s others...|other": "i %(count)s innych...",
+    "and %(count)s others...|one": "i jeszcze jedno...",
     "Bug Report": "Raport błędu",
     "Bulk Options": "Masowe opcje",
     "Call Timeout": "Upłynął limit czasu połączenia",
@@ -576,9 +576,9 @@
     "Unrecognised command:": "Nierozpoznane polecenie:",
     "Unrecognised room alias:": "Nierozpoznany alias pokoju:",
     "Unverified": "Niezweryfikowany",
-    "Uploading %(filename)s and %(count)s others.zero": "Przesyłanie %(filename)s",
-    "Uploading %(filename)s and %(count)s others.one": "Przesyłanie %(filename)s i %(count)s inny",
-    "Uploading %(filename)s and %(count)s others.other": "Przesyłanie %(filename)s i %(count)s innych",
+    "Uploading %(filename)s and %(count)s others|zero": "Przesyłanie %(filename)s",
+    "Uploading %(filename)s and %(count)s others|one": "Przesyłanie %(filename)s i %(count)s inny",
+    "Uploading %(filename)s and %(count)s others|other": "Przesyłanie %(filename)s i %(count)s innych",
     "uploaded a file": "przesłał plik",
     "Upload avatar": "Prześlij zdjęcie profilowe",
     "Upload Failed": "Błąd przesyłania",
@@ -831,5 +831,8 @@
     "Automatically replace plain text Emoji": "Automatycznie zastępuj tekstowe emotikony",
     "Failed to upload image": "Przesyłanie obrazka nie powiodło się",
     "Failed to update group": "Uaktualnienie grupy nie powiodło się",
-    "and %(count)s others...|other": "i %(count)s innych..."
+    "and %(count)s others...|other": "i %(count)s innych...",
+    "and %(count)s others...|one": "i jeden inny...",
+    "%(count)s new messages|one": "%(count)s nowa wiadomość",
+    "%(count)s new messages|other": "%(count)s nowe wiadomości"
 }
