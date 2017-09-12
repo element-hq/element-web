@@ -375,7 +375,7 @@
     "Send Reset Email": "Skicka återställningsmeddelande",
     "sent an image": "skickade en bild",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s skickade en bild.",
-    "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s bjöd in %(targetDIsplayName)s med i rummet.",
+    "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s bjöd in %(targetDisplayName)s med i rummet.",
     "sent a video": "skickade en video",
     "Server error": "Serverfel",
     "Server may be unavailable or overloaded": "Servern kan vara otillgänglig eller överbelastad",
