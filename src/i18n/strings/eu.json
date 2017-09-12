@@ -658,7 +658,7 @@
     "%(oneUser)sleft and rejoined %(repeats)s times": "Erabiltzaile %(oneUser)s %(repeats)s aldiz atera eta berriro elkartu da",
     "%(severalUsers)sleft and rejoined": "%(severalUsers)s erabiltzaile atera eta berriro elkartu dira",
     "%(oneUser)sleft and rejoined": "Erabiltzaile %(oneUser)s atera eta berriro sartu da",
-    "%(severalUsers)shad their invitations withdrawn %(repeats)s times": "%(severalUsers) erabiltzaileen gonbidapenak %(repeats)s aldiz atzera bota dira",
+    "%(severalUsers)shad their invitations withdrawn %(repeats)s times": "%(severalUsers)s erabiltzaileen gonbidapenak %(repeats)s aldiz atzera bota dira",
     "%(oneUser)shad their invitation withdrawn %(repeats)s times": "Erabiltzaile %(oneUser)sen gonbidapena %(repeats)s aldiz bota da atzera",
     "%(severalUsers)shad their invitations withdrawn": "%(severalUsers)s erabiltzaileen gonbidapena atzera bota da",
     "%(oneUser)shad their invitation withdrawn": "Erabiltzaile %(oneUser)sen gonbidapena atzera bota da",
