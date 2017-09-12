@@ -830,5 +830,6 @@
     "Error whilst fetching joined groups": "Błąd podczas pobierania informacji o dołączonych grupach",
     "Automatically replace plain text Emoji": "Automatycznie zastępuj tekstowe emotikony",
     "Failed to upload image": "Przesyłanie obrazka nie powiodło się",
-    "Failed to update group": "Uaktualnienie grupy nie powiodło się"
+    "Failed to update group": "Uaktualnienie grupy nie powiodło się",
+    "and %(count)s others...|other": "i %(count)s innych..."
 }
