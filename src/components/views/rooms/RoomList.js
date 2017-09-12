@@ -63,7 +63,6 @@ module.exports = React.createClass({
     propTypes: {
         ConferenceHandler: React.PropTypes.any,
         collapsed: React.PropTypes.bool.isRequired,
-        currentRoom: React.PropTypes.string,
         searchFilter: React.PropTypes.string,
     },
 
