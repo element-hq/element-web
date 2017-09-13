@@ -84,6 +84,9 @@ class Skinner {
 // behaviour with multiple copies of files etc. is erratic at best.
 // XXX: We can still end up with the same file twice in the resulting
 // JS bundle which is nonideal.
+// See https://derickbailey.com/2016/03/09/creating-a-true-singleton-in-node-js-with-es6-symbols/
+// or https://nodejs.org/api/modules.html#modules_module_caching_caveats
+// ("Modules are cached based on their resolved filename")
 if (global.mxSkinner === undefined) {
     global.mxSkinner = new Skinner();
 }

@@ -17,7 +17,6 @@ limitations under the License.
 var React = require("react");
 var ReactDOM = require("react-dom");
 var GeminiScrollbar = require('react-gemini-scrollbar');
-import { StickyContainer } from 'react-sticky';
 import Promise from 'bluebird';
 var KeyCode = require('../../KeyCode');
 
@@ -78,51 +77,110 @@ if (DEBUG_SCROLL) {
  * scroll down further. If stickyBottom is disabled, we just save the scroll
  * offset as normal.
  */
-export default class ScrollPanel extends StickyContainer {
+module.exports = React.createClass({
+    displayName: 'ScrollPanel',
 
-    constructor() {
-        super();
-        this.onResize = this.onResize.bind(this);
-        this.onScroll = this.onScroll.bind(this);
-    }
+    propTypes: {
+        /* stickyBottom: if set to true, then once the user hits the bottom of
+         * the list, any new children added to the list will cause the list to
+         * scroll down to show the new element, rather than preserving the
+         * existing view.
+         */
+        stickyBottom: React.PropTypes.bool,
 
-    componentWillMount() {
+        /* startAtBottom: if set to true, the view is assumed to start
+         * scrolled to the bottom.
+         * XXX: It's likley this is unecessary and can be derived from
+         * stickyBottom, but I'm adding an extra parameter to ensure
+         * behaviour stays the same for other uses of ScrollPanel.
+         * If so, let's remove this parameter down the line.
+         */
+        startAtBottom: React.PropTypes.bool,
+
+        /* onFillRequest(backwards): a callback which is called on scroll when
+         * the user nears the start (backwards = true) or end (backwards =
+         * false) of the list.
+         *
+         * This should return a promise; no more calls will be made until the
+         * promise completes.
+         *
+         * The promise should resolve to true if there is more data to be
+         * retrieved in this direction (in which case onFillRequest may be
+         * called again immediately), or false if there is no more data in this
+         * directon (at this time) - which will stop the pagination cycle until
+         * the user scrolls again.
+         */
+        onFillRequest: React.PropTypes.func,
+
+        /* onUnfillRequest(backwards): a callback which is called on scroll when
+         * there are children elements that are far out of view and could be removed
+         * without causing pagination to occur.
+         *
+         * This function should accept a boolean, which is true to indicate the back/top
+         * of the panel and false otherwise, and a scroll token, which refers to the
+         * first element to remove if removing from the front/bottom, and last element
+         * to remove if removing from the back/top.
+         */
+        onUnfillRequest: React.PropTypes.func,
+
+        /* onScroll: a callback which is called whenever any scroll happens.
+         */
+        onScroll: React.PropTypes.func,
+
+        /* onResize: a callback which is called whenever the Gemini scroll
+         * panel is resized
+         */
+        onResize: React.PropTypes.func,
+
+        /* className: classnames to add to the top-level div
+         */
+        className: React.PropTypes.string,
+
+        /* style: styles to add to the top-level div
+         */
+        style: React.PropTypes.object,
+    },
+
+    getDefaultProps: function() {
+        return {
+            stickyBottom: true,
+            startAtBottom: true,
+            onFillRequest: function(backwards) { return Promise.resolve(false); },
+            onUnfillRequest: function(backwards, scrollToken) {},
+            onScroll: function() {},
+        };
+    },
+
+    componentWillMount: function() {
         this._pendingFillRequests = {b: null, f: null};
         this.resetScrollState();
-    }
+    },
 
-    componentDidMount() {
-        this.checkFillState();
-    }
+    componentDidMount: function() {
+        this.checkScroll();
+    },
 
-    componentDidUpdate() {
+    componentDidUpdate: function() {
         // after adding event tiles, we may need to tweak the scroll (either to
         // keep at the bottom of the timeline, or to maintain the view after
         // adding events to the top).
         //
         // This will also re-check the fill state, in case the paginate was inadequate
         this.checkScroll();
-    }
+    },
 
-    componentWillUnmount() {
+    componentWillUnmount: function() {
         // set a boolean to say we've been unmounted, which any pending
         // promises can use to throw away their results.
         //
         // (We could use isMounted(), but facebook have deprecated that.)
         this.unmounted = true;
-    }
+    },
 
-    onScroll(ev) {
+    onScroll: function(ev) {
         var sn = this._getScrollNode();
         debuglog("Scroll event: offset now:", sn.scrollTop,
                  "_lastSetScroll:", this._lastSetScroll);
-
-        // Set the node and notify subscribers of the StickyContainer
-        // By extending StickyContainer, we can set the scroll node to be that of the
-        // ScrolPanel to allow any `<Sticky>` children to be sticky, namely DateSeparators.
-        this.node = sn;
-        // Update subscribers - arbitrarily nested `<Sticky>` children
-        this.notifySubscribers(ev);
 
         // Sometimes we see attempts to write to scrollTop essentially being
         // ignored. (Or rather, it is successfully written, but on the next
@@ -159,27 +217,27 @@ export default class ScrollPanel extends StickyContainer {
         this.props.onScroll(ev);
 
         this.checkFillState();
-    }
+    },
 
-    onResize() {
+    onResize: function() {
         this.props.onResize();
         this.checkScroll();
         this.refs.geminiPanel.forceUpdate();
-    }
+    },
 
     // after an update to the contents of the panel, check that the scroll is
     // where it ought to be, and set off pagination requests if necessary.
-    checkScroll() {
+    checkScroll: function() {
         this._restoreSavedScrollState();
         this.checkFillState();
-    }
+    },
 
     // return true if the content is fully scrolled down right now; else false.
     //
     // note that this is independent of the 'stuckAtBottom' state - it is simply
     // about whether the the content is scrolled down right now, irrespective of
     // whether it will stay that way when the children update.
-    isAtBottom() {
+    isAtBottom: function() {
         var sn = this._getScrollNode();
 
         // there seems to be some bug with flexbox/gemini/chrome/richvdh's
@@ -189,7 +247,7 @@ export default class ScrollPanel extends StickyContainer {
         // that we're at the bottom when we're still a few pixels off.
 
         return sn.scrollHeight - Math.ceil(sn.scrollTop) <= sn.clientHeight + 3;
-    }
+    },
 
     // returns the vertical height in the given direction that can be removed from
     // the content box (which has a height of scrollHeight, see checkFillState) without
@@ -222,17 +280,17 @@ export default class ScrollPanel extends StickyContainer {
     //   |#########|   -                                   |
     //   |#########|                                       |
     //   `---------'                                       -
-    _getExcessHeight(backwards) {
+    _getExcessHeight: function(backwards) {
         var sn = this._getScrollNode();
         if (backwards) {
             return sn.scrollTop - sn.clientHeight - UNPAGINATION_PADDING;
         } else {
             return sn.scrollHeight - (sn.scrollTop + 2*sn.clientHeight) - UNPAGINATION_PADDING;
         }
-    }
+    },
 
     // check the scroll state and send out backfill requests if necessary.
-    checkFillState() {
+    checkFillState: function() {
         if (this.unmounted) {
             return;
         }
@@ -271,10 +329,10 @@ export default class ScrollPanel extends StickyContainer {
             // need to forward-fill
             this._maybeFill(false);
         }
-    }
+    },
 
     // check if unfilling is possible and send an unfill request if necessary
-    _checkUnfillState(backwards) {
+    _checkUnfillState: function(backwards) {
         let excessHeight = this._getExcessHeight(backwards);
         if (excessHeight <= 0) {
             return;
@@ -315,10 +373,10 @@ export default class ScrollPanel extends StickyContainer {
                 this.props.onUnfillRequest(backwards, markerScrollToken);
             }, UNFILL_REQUEST_DEBOUNCE_MS);
         }
-    }
+    },
 
     // check if there is already a pending fill request. If not, set one off.
-    _maybeFill(backwards) {
+    _maybeFill: function(backwards) {
         var dir = backwards ? 'b' : 'f';
         if (this._pendingFillRequests[dir]) {
             debuglog("ScrollPanel: Already a "+dir+" fill in progress - not starting another");
@@ -350,7 +408,7 @@ export default class ScrollPanel extends StickyContainer {
                 this.checkFillState();
             }
         }).done();
-    }
+    },
 
     /* get the current scroll state. This returns an object with the following
      * properties:
@@ -366,9 +424,9 @@ export default class ScrollPanel extends StickyContainer {
      *   the number of pixels the bottom of the tracked child is above the
      *   bottom of the scroll panel.
      */
-    getScrollState() {
+    getScrollState: function() {
         return this.scrollState;
-    }
+    },
 
     /* reset the saved scroll state.
      *
@@ -382,46 +440,46 @@ export default class ScrollPanel extends StickyContainer {
      * no use if no children exist yet, or if you are about to replace the
      * child list.)
      */
-    resetScrollState() {
+    resetScrollState: function() {
         this.scrollState = {stuckAtBottom: this.props.startAtBottom};
-    }
+    },
 
     /**
      * jump to the top of the content.
      */
-    scrollToTop() {
+    scrollToTop: function() {
         this._setScrollTop(0);
         this._saveScrollState();
-    }
+    },
 
     /**
      * jump to the bottom of the content.
      */
-    scrollToBottom() {
+    scrollToBottom: function() {
         // the easiest way to make sure that the scroll state is correctly
         // saved is to do the scroll, then save the updated state. (Calculating
         // it ourselves is hard, and we can't rely on an onScroll callback
         // happening, since there may be no user-visible change here).
         this._setScrollTop(Number.MAX_VALUE);
         this._saveScrollState();
-    }
+    },
 
     /**
      * Page up/down.
      *
      * mult: -1 to page up, +1 to page down
      */
-    scrollRelative(mult) {
+    scrollRelative: function(mult) {
         var scrollNode = this._getScrollNode();
         var delta = mult * scrollNode.clientHeight * 0.5;
         this._setScrollTop(scrollNode.scrollTop + delta);
         this._saveScrollState();
-    }
+    },
 
     /**
      * Scroll up/down in response to a scroll key
      */
-    handleScrollKey(ev) {
+    handleScrollKey: function(ev) {
         switch (ev.keyCode) {
             case KeyCode.PAGE_UP:
                 if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
@@ -447,7 +505,7 @@ export default class ScrollPanel extends StickyContainer {
                 }
                 break;
         }
-    }
+    },
 
     /* Scroll the panel to bring the DOM node with the scroll token
      * `scrollToken` into view.
@@ -460,7 +518,7 @@ export default class ScrollPanel extends StickyContainer {
      * node (specifically, the bottom of it) will be positioned. If omitted, it
      * defaults to 0.
      */
-    scrollToToken(scrollToken, pixelOffset, offsetBase) {
+    scrollToToken: function(scrollToken, pixelOffset, offsetBase) {
         pixelOffset = pixelOffset || 0;
         offsetBase = offsetBase || 0;
 
@@ -482,11 +540,11 @@ export default class ScrollPanel extends StickyContainer {
 
         // ... then make it so.
         this._restoreSavedScrollState();
-    }
+    },
 
     // set the scrollTop attribute appropriately to position the given child at the
     // given offset in the window. A helper for _restoreSavedScrollState.
-    _scrollToToken(scrollToken, pixelOffset) {
+    _scrollToToken: function(scrollToken, pixelOffset) {
         /* find the dom node with the right scrolltoken */
         var node;
         var messages = this.refs.itemlist.children;
@@ -518,9 +576,9 @@ export default class ScrollPanel extends StickyContainer {
             this._setScrollTop(scrollNode.scrollTop + scrollDelta);
         }
 
-    }
+    },
 
-    _saveScrollState() {
+    _saveScrollState: function() {
         if (this.props.stickyBottom && this.isAtBottom()) {
             this.scrollState = { stuckAtBottom: true };
             debuglog("ScrollPanel: Saved scroll state", this.scrollState);
@@ -558,9 +616,9 @@ export default class ScrollPanel extends StickyContainer {
         } else {
             debuglog("ScrollPanel: unable to save scroll state: found no children in the viewport");
         }
-    }
+    },
 
-    _restoreSavedScrollState() {
+    _restoreSavedScrollState: function() {
         var scrollState = this.scrollState;
         var scrollNode = this._getScrollNode();
 
@@ -570,9 +628,9 @@ export default class ScrollPanel extends StickyContainer {
             this._scrollToToken(scrollState.trackedScrollToken,
                                scrollState.pixelOffset);
         }
-    }
+    },
 
-    _setScrollTop(scrollTop) {
+    _setScrollTop: function(scrollTop) {
         var scrollNode = this._getScrollNode();
 
         var prevScroll = scrollNode.scrollTop;
@@ -594,12 +652,12 @@ export default class ScrollPanel extends StickyContainer {
         debuglog("ScrollPanel: set scrollTop:", scrollNode.scrollTop,
                  "requested:", scrollTop,
                  "_lastSetScroll:", this._lastSetScroll);
-    }
+    },
 
     /* get the DOM node which has the scrollTop property we care about for our
      * message panel.
      */
-    _getScrollNode() {
+    _getScrollNode: function() {
         if (this.unmounted) {
             // this shouldn't happen, but when it does, turn the NPE into
             // something more meaningful.
@@ -607,91 +665,21 @@ export default class ScrollPanel extends StickyContainer {
         }
 
         return this.refs.geminiPanel.scrollbar.getViewElement();
-    }
+    },
 
-    render() {
+    render: function() {
         // TODO: the classnames on the div and ol could do with being updated to
         // reflect the fact that we don't necessarily contain a list of messages.
         // it's not obvious why we have a separate div and ol anyway.
-        return (
-            <GeminiScrollbar autoshow={true} ref="geminiPanel"
-            onScroll={this.onScroll} onResize={this.onResize}
-            className={this.props.className} style={this.props.style}>
-                <div className="mx_RoomView_messageListWrapper">
-                    <ol ref="itemlist" className="mx_RoomView_MessageList" aria-live="polite">
-                        {this.props.children}
-                    </ol>
-                </div>
-            </GeminiScrollbar>
-        );
-    }
-}
-
-ScrollPanel.propTypes = {
-    /* stickyBottom: if set to true, then once the user hits the bottom of
-     * the list, any new children added to the list will cause the list to
-     * scroll down to show the new element, rather than preserving the
-     * existing view.
-     */
-    stickyBottom: React.PropTypes.bool,
-
-    /* startAtBottom: if set to true, the view is assumed to start
-     * scrolled to the bottom.
-     * XXX: It's likley this is unecessary and can be derived from
-     * stickyBottom, but I'm adding an extra parameter to ensure
-     * behaviour stays the same for other uses of ScrollPanel.
-     * If so, let's remove this parameter down the line.
-     */
-    startAtBottom: React.PropTypes.bool,
-
-    /* onFillRequest(backwards): a callback which is called on scroll when
-     * the user nears the start (backwards = true) or end (backwards =
-     * false) of the list.
-     *
-     * This should return a promise; no more calls will be made until the
-     * promise completes.
-     *
-     * The promise should resolve to true if there is more data to be
-     * retrieved in this direction (in which case onFillRequest may be
-     * called again immediately), or false if there is no more data in this
-     * directon (at this time) - which will stop the pagination cycle until
-     * the user scrolls again.
-     */
-    onFillRequest: React.PropTypes.func,
-
-    /* onUnfillRequest(backwards): a callback which is called on scroll when
-     * there are children elements that are far out of view and could be removed
-     * without causing pagination to occur.
-     *
-     * This function should accept a boolean, which is true to indicate the back/top
-     * of the panel and false otherwise, and a scroll token, which refers to the
-     * first element to remove if removing from the front/bottom, and last element
-     * to remove if removing from the back/top.
-     */
-    onUnfillRequest: React.PropTypes.func,
-
-    /* onScroll: a callback which is called whenever any scroll happens.
-     */
-    onScroll: React.PropTypes.func,
-
-    /* onResize: a callback which is called whenever the Gemini scroll
-     * panel is resized
-     */
-    onResize: React.PropTypes.func,
-
-    /* className: classnames to add to the top-level div
-     */
-    className: React.PropTypes.string,
-
-    /* style: styles to add to the top-level div
-     */
-    style: React.PropTypes.object,
-};
-
-ScrollPanel.defaultProps = {
-    stickyBottom: true,
-    startAtBottom: true,
-    onFillRequest: function(backwards) { return Promise.resolve(false); },
-    onUnfillRequest: function(backwards, scrollToken) {},
-    onScroll: function() {},
-};
+        return (<GeminiScrollbar autoshow={true} ref="geminiPanel"
+                onScroll={this.onScroll} onResize={this.onResize}
+                className={this.props.className} style={this.props.style}>
+                    <div className="mx_RoomView_messageListWrapper">
+                        <ol ref="itemlist" className="mx_RoomView_MessageList" aria-live="polite">
+                            {this.props.children}
+                        </ol>
+                    </div>
+                </GeminiScrollbar>
+               );
+    },
+});

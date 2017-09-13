@@ -47,6 +47,7 @@ import KeyCode from '../../KeyCode';
 import UserProvider from '../../autocomplete/UserProvider';
 
 import RoomViewStore from '../../stores/RoomViewStore';
+import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 
 let DEBUG = false;
 let debuglog = function() {};
@@ -163,7 +164,6 @@ module.exports = React.createClass({
             roomLoadError: RoomViewStore.getRoomLoadError(),
             joining: RoomViewStore.isJoining(),
             initialEventId: RoomViewStore.getInitialEventId(),
-            initialEventPixelOffset: RoomViewStore.getInitialEventPixelOffset(),
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
             forwardingEvent: RoomViewStore.getForwardingEvent(),
             shouldPeek: RoomViewStore.shouldPeek(),
@@ -189,6 +189,25 @@ module.exports = React.createClass({
         // the RoomView instance
         if (initial) {
             newState.room = MatrixClientPeg.get().getRoom(newState.roomId);
+            if (newState.room) {
+                newState.unsentMessageError = this._getUnsentMessageError(newState.room);
+                newState.showApps = this._shouldShowApps(newState.room);
+                this._onRoomLoaded(newState.room);
+            }
+        }
+
+        if (this.state.roomId === null && newState.roomId !== null) {
+            // Get the scroll state for the new room
+
+            // If an event ID wasn't specified, default to the one saved for this room
+            // in the scroll state store. Assume initialEventPixelOffset should be set.
+            if (!newState.initialEventId) {
+                const roomScrollState = RoomScrollStateStore.getScrollState(newState.roomId);
+                if (roomScrollState) {
+                    newState.initialEventId = roomScrollState.focussedEvent;
+                    newState.initialEventPixelOffset = roomScrollState.pixelOffset;
+                }
+            }
         }
 
         // Clear the search results when clicking a search result (which changes the
@@ -197,22 +216,20 @@ module.exports = React.createClass({
             newState.searchResults = null;
         }
 
-        // Store the scroll state for the previous room so that we can return to this
-        // position when viewing this room in future.
-        if (this.state.roomId !== newState.roomId) {
-            this._updateScrollMap(this.state.roomId);
-        }
+        this.setState(newState);
+        // At this point, newState.roomId could be null (e.g. the alias might not
+        // have been resolved yet) so anything called here must handle this case.
 
-        this.setState(newState, () => {
-            // At this point, this.state.roomId could be null (e.g. the alias might not
-            // have been resolved yet) so anything called here must handle this case.
-            if (initial) {
-                this._onHaveRoom();
-            }
-        });
+        // We pass the new state into this function for it to read: it needs to
+        // observe the new state but we don't want to put it in the setState
+        // callback because this would prevent the setStates from being batched,
+        // ie. cause it to render RoomView twice rather than the once that is necessary.
+        if (initial) {
+            this._setupRoom(newState.room, newState.roomId, newState.joining, newState.shouldPeek);
+        }
     },
 
-    _onHaveRoom: function() {
+    _setupRoom: function(room, roomId, joining, shouldPeek) {
         // if this is an unknown room then we're in one of three states:
         // - This is a room we can peek into (search engine) (we can /peek)
         // - This is a room we can publicly join or were invited to. (we can /join)
@@ -228,23 +245,15 @@ module.exports = React.createClass({
         // about it). We don't peek in the historical case where we were joined but are
         // now not joined because the js-sdk peeking API will clobber our historical room,
         // making it impossible to indicate a newly joined room.
-        const room = this.state.room;
-        if (room) {
-            this.setState({
-                unsentMessageError: this._getUnsentMessageError(room),
-                showApps: this._shouldShowApps(room),
-            });
-            this._onRoomLoaded(room);
-        }
-        if (!this.state.joining && this.state.roomId) {
+        if (!joining && roomId) {
             if (this.props.autoJoin) {
                 this.onJoinButtonClicked();
-            } else if (!room && this.state.shouldPeek) {
-                console.log("Attempting to peek into room %s", this.state.roomId);
+            } else if (!room && shouldPeek) {
+                console.log("Attempting to peek into room %s", roomId);
                 this.setState({
                     peekLoading: true,
                 });
-                MatrixClientPeg.get().peekInRoom(this.state.roomId).then((room) => {
+                MatrixClientPeg.get().peekInRoom(roomId).then((room) => {
                     this.setState({
                         room: room,
                         peekLoading: false,
@@ -340,7 +349,9 @@ module.exports = React.createClass({
         this.unmounted = true;
 
         // update the scroll map before we get unmounted
-        this._updateScrollMap(this.state.roomId);
+        if (this.state.roomId) {
+            RoomScrollStateStore.setScrollState(this.state.roomId, this._getScrollState());
+        }
 
         if (this.refs.roomView) {
             // disconnect the D&D event listeners from the room view. This
@@ -614,18 +625,6 @@ module.exports = React.createClass({
         // otherwise, we assume they're on.
         this.setState({
             showUrlPreview: true
-        });
-    },
-
-    _updateScrollMap(roomId) {
-        // No point updating scroll state if the room ID hasn't been resolved yet
-        if (!roomId) {
-            return;
-        }
-        dis.dispatch({
-            action: 'update_scroll_state',
-            room_id: roomId,
-            scroll_state: this._getScrollState(),
         });
     },
 
