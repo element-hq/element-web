@@ -231,35 +231,31 @@ export function getCurrentLanguage() {
 }
 
 function getLangsJson() {
-    const deferred = Promise.defer();
-
-    request(
-        { method: "GET", url: i18nFolder + 'languages.json' },
-        (err, response, body) => {
-            if (err || response.status < 200 || response.status >= 300) {
-                deferred.reject({err: err, response: response});
-                return;
+    return new Promise((resolve, reject) => {
+        request(
+            { method: "GET", url: i18nFolder + 'languages.json' },
+            (err, response, body) => {
+                if (err || response.status < 200 || response.status >= 300) {
+                    reject({err: err, response: response});
+                    return;
+                }
+                resolve(JSON.parse(body));
             }
-            deferred.resolve(JSON.parse(body));
-        }
-    );
-    return deferred.promise;
+        );
+    });
 }
 
 function getLanguage(langPath) {
-    const deferred = Promise.defer();
-
-    let response_return = {};
-    request(
-        { method: "GET", url: langPath },
-        (err, response, body) => {
-            if (err || response.status < 200 || response.status >= 300) {
-                deferred.reject({err: err, response: response});
-                return;
+    return new Promise((resolve, reject) => {
+        request(
+            { method: "GET", url: langPath },
+            (err, response, body) => {
+                if (err || response.status < 200 || response.status >= 300) {
+                    reject({err: err, response: response});
+                    return;
+                }
+                resolve(JSON.parse(body));
             }
-
-            deferred.resolve(JSON.parse(body));
-        }
-    );
-    return deferred.promise;
+        );
+    });
 }

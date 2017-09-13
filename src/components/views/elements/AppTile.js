@@ -72,8 +72,17 @@ export default React.createClass({
 
     // Returns true if props.url is a scalar URL, typically https://scalar.vector.im/api
     isScalarUrl: function() {
-        const scalarUrl = SdkConfig.get().integrations_rest_url;
-        return scalarUrl && this.props.url.startsWith(scalarUrl);
+        let scalarUrls = SdkConfig.get().integrations_widgets_urls;
+        if (!scalarUrls || scalarUrls.length == 0) {
+            scalarUrls = [SdkConfig.get().integrations_rest_url];
+        }
+
+        for (let i = 0; i < scalarUrls.length; i++) {
+            if (this.props.url.startsWith(scalarUrls[i])) {
+                return true;
+            }
+        }
+        return false;
     },
 
     isMixedContent: function() {
@@ -127,7 +136,8 @@ export default React.createClass({
     _onEditClick: function(e) {
         console.log("Edit widget ID ", this.props.id);
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        const src = this._scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId, 'type_' + this.props.type);
+        const src = this._scalarClient.getScalarInterfaceUrlForRoom(
+            this.props.room.roomId, 'type_' + this.props.type, this.props.id);
         Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
             src: src,
         }, "mx_IntegrationsManager");

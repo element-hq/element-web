@@ -63,7 +63,6 @@ module.exports = React.createClass({
     propTypes: {
         ConferenceHandler: React.PropTypes.any,
         collapsed: React.PropTypes.bool.isRequired,
-        currentRoom: React.PropTypes.string,
         searchFilter: React.PropTypes.string,
     },
 
@@ -88,6 +87,7 @@ module.exports = React.createClass({
         cli.on("Room.receipt", this.onRoomReceipt);
         cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
+        cli.on("Event.decrypted", this.onEventDecrypted);
         cli.on("accountData", this.onAccountData);
 
         this.refreshRoomList();
@@ -155,6 +155,7 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
+            MatrixClientPeg.get().removeListener("Event.decrypted", this.onEventDecrypted);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
         }
         // cancel any pending calls to the rate_limited_funcs
@@ -221,6 +222,11 @@ module.exports = React.createClass({
     },
 
     onRoomMemberName: function(ev, member) {
+        this._delayedRefreshRoomList();
+    },
+
+    onEventDecrypted: function(ev) {
+        // An event being decrypted may mean we need to re-order the room list
         this._delayedRefreshRoomList();
     },
 
@@ -571,6 +577,7 @@ module.exports = React.createClass({
                              label={ _t('Invites') }
                              editable={ false }
                              order="recent"
+                             isInvite={true}
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }

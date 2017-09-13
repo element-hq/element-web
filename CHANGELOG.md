@@ -1,3 +1,126 @@
+Changes in [0.10.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.3) (2017-09-06)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.3-rc.2...v0.10.3)
+
+ * No changes
+
+Changes in [0.10.3-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.3-rc.2) (2017-09-05)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.3-rc.1...v0.10.3-rc.2)
+
+ * Fix plurals in translations
+   [\#1358](https://github.com/matrix-org/matrix-react-sdk/pull/1358)
+ * Fix typo
+   [\#1357](https://github.com/matrix-org/matrix-react-sdk/pull/1357)
+ * Update from Weblate.
+   [\#1356](https://github.com/matrix-org/matrix-react-sdk/pull/1356)
+
+Changes in [0.10.3-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.3-rc.1) (2017-09-01)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.2...v0.10.3-rc.1)
+
+ * Fix room change sometimes being very slow
+   [\#1354](https://github.com/matrix-org/matrix-react-sdk/pull/1354)
+ * apply shouldHideEvent fn to onRoomTimeline for RoomStatusBar
+   [\#1346](https://github.com/matrix-org/matrix-react-sdk/pull/1346)
+ * text4event widget modified, used to show widget added each time.
+   [\#1345](https://github.com/matrix-org/matrix-react-sdk/pull/1345)
+ * separate concepts of showing and managing RRs to fix regression
+   [\#1352](https://github.com/matrix-org/matrix-react-sdk/pull/1352)
+ * Make staging widgets work with live and vice versa.
+   [\#1350](https://github.com/matrix-org/matrix-react-sdk/pull/1350)
+ * Avoid breaking /sync with uncaught exceptions
+   [\#1349](https://github.com/matrix-org/matrix-react-sdk/pull/1349)
+ * we need to pass whether it is an invite RoomSubList explicitly (i18n)
+   [\#1343](https://github.com/matrix-org/matrix-react-sdk/pull/1343)
+ * Percent encoding isn't a valid thing within _t
+   [\#1348](https://github.com/matrix-org/matrix-react-sdk/pull/1348)
+ * Fix spurious notifications
+   [\#1339](https://github.com/matrix-org/matrix-react-sdk/pull/1339)
+ * Unbreak password reset with a non-default HS
+   [\#1347](https://github.com/matrix-org/matrix-react-sdk/pull/1347)
+ * Remove unnecessary 'load' on notif audio element
+   [\#1341](https://github.com/matrix-org/matrix-react-sdk/pull/1341)
+ * _tJsx returns a React Object, the sub fn must return a React Object
+   [\#1340](https://github.com/matrix-org/matrix-react-sdk/pull/1340)
+ * Fix deprecation warning about promise.defer()
+   [\#1292](https://github.com/matrix-org/matrix-react-sdk/pull/1292)
+ * Fix click to insert completion
+   [\#1331](https://github.com/matrix-org/matrix-react-sdk/pull/1331)
+
+Changes in [0.10.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.2) (2017-08-24)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.1...v0.10.2)
+
+ * Force update on timelinepanel when event decrypted
+   [\#1334](https://github.com/matrix-org/matrix-react-sdk/pull/1334)
+ * Dispatch incoming_call synchronously
+   [\#1337](https://github.com/matrix-org/matrix-react-sdk/pull/1337)
+ * Fix React crying on machines without internet due to return undefined
+   [\#1335](https://github.com/matrix-org/matrix-react-sdk/pull/1335)
+ * Catch the promise rejection if scalar fails
+   [\#1333](https://github.com/matrix-org/matrix-react-sdk/pull/1333)
+ * Update from Weblate.
+   [\#1329](https://github.com/matrix-org/matrix-react-sdk/pull/1329)
+
+Changes in [0.10.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.1) (2017-08-23)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.1-rc.1...v0.10.1)
+
+ * [No changes]
+
+Changes in [0.10.1-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.1-rc.1) (2017-08-22)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.0-rc.2...v0.10.1-rc.1)
+
+ * Matthew/multiple widgets
+   [\#1327](https://github.com/matrix-org/matrix-react-sdk/pull/1327)
+ * Fix proptypes on UserPickerDialog
+   [\#1326](https://github.com/matrix-org/matrix-react-sdk/pull/1326)
+ * AppsDrawer: Remove unnecessary bind
+   [\#1325](https://github.com/matrix-org/matrix-react-sdk/pull/1325)
+ * Position add app widget link
+   [\#1322](https://github.com/matrix-org/matrix-react-sdk/pull/1322)
+ * Remove app tile beta tag.
+   [\#1323](https://github.com/matrix-org/matrix-react-sdk/pull/1323)
+ * Add missing translation.
+   [\#1324](https://github.com/matrix-org/matrix-react-sdk/pull/1324)
+ * Note that apps are not E2EE
+   [\#1319](https://github.com/matrix-org/matrix-react-sdk/pull/1319)
+ * Only render appTile body (including warnings) if drawer shown.
+   [\#1321](https://github.com/matrix-org/matrix-react-sdk/pull/1321)
+ * Timeline improvements
+   [\#1320](https://github.com/matrix-org/matrix-react-sdk/pull/1320)
+ * Add a space between widget name and "widget" in widget event tiles
+   [\#1318](https://github.com/matrix-org/matrix-react-sdk/pull/1318)
+ * Move manage integrations button from settings page to room header as a
+   stand-alone component
+   [\#1286](https://github.com/matrix-org/matrix-react-sdk/pull/1286)
+ * Don't apply case logic to app names
+   [\#1316](https://github.com/matrix-org/matrix-react-sdk/pull/1316)
+ * Stop integ manager opening on every room switch
+   [\#1315](https://github.com/matrix-org/matrix-react-sdk/pull/1315)
+ * Add behaviour to toggle app draw on app tile header click
+   [\#1313](https://github.com/matrix-org/matrix-react-sdk/pull/1313)
+ * Change OOO so that MELS generation will continue over hidden events
+   [\#1308](https://github.com/matrix-org/matrix-react-sdk/pull/1308)
+ * Implement TextualEvent tiles for im.vector.modular.widgets
+   [\#1312](https://github.com/matrix-org/matrix-react-sdk/pull/1312)
+ * Don't show widget security warning to the person that added it to the room
+   [\#1314](https://github.com/matrix-org/matrix-react-sdk/pull/1314)
+ * remove unused strings introduced by string change
+   [\#1311](https://github.com/matrix-org/matrix-react-sdk/pull/1311)
+ * hotfix bad fn signature regression
+   [\#1310](https://github.com/matrix-org/matrix-react-sdk/pull/1310)
+ * Show a dialog if the maximum number of widgets allowed has been reached.
+   [\#1291](https://github.com/matrix-org/matrix-react-sdk/pull/1291)
+ * Fix Robot translation
+   [\#1309](https://github.com/matrix-org/matrix-react-sdk/pull/1309)
+ * Refactor ChatInviteDialog to be UserPickerDialog
+   [\#1300](https://github.com/matrix-org/matrix-react-sdk/pull/1300)
+ * Update Link to Translation status
+   [\#1302](https://github.com/matrix-org/matrix-react-sdk/pull/1302)
+
 Changes in [0.9.7](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.9.7) (2017-06-22)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.9.6...v0.9.7)

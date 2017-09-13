@@ -81,10 +81,6 @@ export default React.createClass({
         // stash the MatrixClient in case we log out before we are unmounted
         this._matrixClient = this.props.matrixClient;
 
-        // _scrollStateMap is a map from room id to the scroll state returned by
-        // RoomView.getScrollState()
-        this._scrollStateMap = {};
-
         CallMediaHandler.loadDevices();
 
         document.addEventListener('keydown', this._onKeyDown);
@@ -114,10 +110,6 @@ export default React.createClass({
     // attempt to re-render and the children will throw errors.
     shouldComponentUpdate: function() {
         return Boolean(MatrixClientPeg.get());
-    },
-
-    getScrollStateForRoom: function(roomId) {
-        return this._scrollStateMap[roomId];
     },
 
     canResetTimelineInRoom: function(roomId) {
@@ -248,7 +240,6 @@ export default React.createClass({
                         opacity={this.props.middleOpacity}
                         collapsedRhs={this.props.collapse_rhs}
                         ConferenceHandler={this.props.ConferenceHandler}
-                        scrollStateMap={this._scrollStateMap}
                     />;
                 if (!this.props.collapse_rhs) right_panel = <RightPanel roomId={this.props.currentRoomId} opacity={this.props.rightOpacity} />;
                 break;
