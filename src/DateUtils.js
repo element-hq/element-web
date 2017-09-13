@@ -77,7 +77,7 @@ module.exports = {
         const days = getDaysArray();
         const months = getMonthsArray();
         if (date.toDateString() === now.toDateString()) {
-            return this.formatTime(date);
+            return this.formatTime(date, showTwelveHour);
         } else if (now.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
             // TODO: use standard date localize function provided in counterpart
             return _t('%(weekDayName)s %(time)s', {
@@ -90,7 +90,7 @@ module.exports = {
                 weekDayName: days[date.getDay()],
                 monthName: months[date.getMonth()],
                 day: date.getDate(),
-                time: this.formatTime(date),
+                time: this.formatTime(date, showTwelveHour),
             });
         }
         return this.formatFullDate(date, showTwelveHour);
@@ -104,7 +104,7 @@ module.exports = {
             monthName: months[date.getMonth()],
             day: date.getDate(),
             fullYear: date.getFullYear(),
-            time: showTwelveHour ? twelveHourTime(date) : this.formatTime(date),
+            time: this.formatTime(date, showTwelveHour),
         });
     },
 
@@ -142,7 +142,7 @@ module.exports = {
 
     formatTime: function(date, showTwelveHour=false) {
         if (showTwelveHour) {
-          return twelveHourTime(date);
+            return twelveHourTime(date);
         }
         return pad(date.getHours()) + ':' + pad(date.getMinutes());
     },
