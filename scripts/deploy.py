@@ -13,6 +13,7 @@ import os.path
 import subprocess
 import sys
 import tarfile
+import shutil
 
 try:
     # python3
@@ -48,11 +49,12 @@ def move_bundles(source, dest):
     for f in os.listdir(source):
         dst = os.path.join(dest, f)
         if os.path.exists(dst):
-            raise DeployException(
-                "Not deploying. The bundle includes '%s' which we have previously deployed."
+            print (
+                "Skipping bundle. The bundle includes '%s' which we have previously deployed."
                 % f
             )
-        renames[os.path.join(source, f)] = dst
+        else:
+            renames[os.path.join(source, f)] = dst
 
     for (src, dst) in renames.iteritems():
         print ("Move %s -> %s" % (src, dst))
@@ -107,9 +109,9 @@ class Deployer:
             extracted_bundles = os.path.join(extracted_dir, 'bundles')
             move_bundles(source=extracted_bundles, dest=self.bundles_path)
 
-            # replace the (hopefully now empty) extracted_bundles dir with a
-            # symlink to the common dir.
-            os.rmdir(extracted_bundles)
+            # replace the extracted_bundles dir (which may not be empty if some
+            # bundles were skipped) with a symlink to the common dir.
+            shutil.rmtree(extracted_bundles)
             create_relative_symlink(
                 target=self.bundles_path,
                 linkname=extracted_bundles,

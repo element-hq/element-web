@@ -1,3 +1,64 @@
+Changes in [0.12.3](https://github.com/vector-im/riot-web/releases/tag/v0.12.3) (2017-09-06)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3-rc.3...v0.12.3)
+
+ * No changes
+
+Changes in [0.12.3-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.12.3-rc.3) (2017-09-05)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3-rc.2...v0.12.3-rc.3)
+
+ * Fix plurals in translations
+   [\#4971](https://github.com/vector-im/riot-web/pull/4971)
+ * Update from Weblate.
+   [\#4968](https://github.com/vector-im/riot-web/pull/4968)
+
+Changes in [0.12.3-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.12.3-rc.2) (2017-09-05)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3-rc.1...v0.12.3-rc.2)
+
+ * New react-sdk version to pull in new translations and fix some translation bugs.
+
+
+Changes in [0.12.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.3-rc.1) (2017-09-01)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.2...v0.12.3-rc.1)
+
+ * Fix overflowing login/register buttons on some languages issue #4804
+   [\#4858](https://github.com/vector-im/riot-web/pull/4858)
+ * Update vector-im to riot-im on Login
+   [\#4943](https://github.com/vector-im/riot-web/pull/4943)
+ * lets let people know that the bug report actually sent properly :)
+   [\#4910](https://github.com/vector-im/riot-web/pull/4910)
+ * another s/vector/riot/ in README
+   [\#4934](https://github.com/vector-im/riot-web/pull/4934)
+ * fix two room list regressions
+   [\#4907](https://github.com/vector-im/riot-web/pull/4907)
+
+Changes in [0.12.2](https://github.com/vector-im/riot-web/releases/tag/v0.12.2) (2017-08-24)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.1...v0.12.2)
+
+ * Update react-sdk and js-sdk to fix bugs with incoming calls, messages and notifications
+   in encrypted rooms.
+
+Changes in [0.12.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.1) (2017-08-23)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.1-rc.1...v0.12.1)
+
+ * [No changes]
+
+Changes in [0.12.1-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.1-rc.1) (2017-08-22)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.0-rc.2...v0.12.1-rc.1)
+
+ * Update from Weblate.
+   [\#4832](https://github.com/vector-im/riot-web/pull/4832)
+ * Misc styling fixes.
+   [\#4826](https://github.com/vector-im/riot-web/pull/4826)
+ * Show / Hide apps icons
+   [\#4774](https://github.com/vector-im/riot-web/pull/4774)
+
 Changes in [0.12.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.0-rc.1) (2017-08-16)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.4...v0.12.0-rc.1)

@@ -16,7 +16,7 @@ released version of Riot:
 
 1. Download the latest version from https://github.com/vector-im/riot-web/releases
 1. Untar the tarball on your web server
-1. Move (or symlink) the vector-x.x.x directory to an appropriate name
+1. Move (or symlink) the riot-x.x.x directory to an appropriate name
 1. If desired, copy `config.sample.json` to `config.json` and edit it
    as desired. See below for details.
 1. Enter the URL into your browser and log into Riot!

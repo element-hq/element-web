@@ -75,8 +75,8 @@ var RoomSubList = React.createClass({
 
         order: React.PropTypes.string.isRequired,
 
-        // undefined if no room is selected (eg we are showing settings)
-        selectedRoom: React.PropTypes.string,
+        // passed through to RoomTile and used to highlight room with `!` regardless of notifications count
+        isInvite: React.PropTypes.bool,
 
         startAsHidden: React.PropTypes.bool,
         showSpinner: React.PropTypes.bool, // true to show a spinner if 0 elements when expanded
@@ -104,6 +104,7 @@ var RoomSubList = React.createClass({
             onHeaderClick: function() {}, // NOP
             onShowMoreRooms: function() {}, // NOP
             extraTiles: [],
+            isInvite: false,
         };
     },
 
@@ -248,7 +249,7 @@ var RoomSubList = React.createClass({
         return this.props.list.reduce(function(result, room, index) {
             if (truncateAt === undefined || index >= truncateAt) {
                 var roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
-                var highlight = room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites';
+                var highlight = room.getUnreadNotificationCount('highlight') > 0 || self.props.isInvite;
                 var notificationCount = room.getUnreadNotificationCount();
 
                 const notifBadges = notificationCount > 0 && self._shouldShowNotifBadge(roomNotifState);
@@ -368,7 +369,6 @@ var RoomSubList = React.createClass({
         var self = this;
         var DNDRoomTile = sdk.getComponent("rooms.DNDRoomTile");
         return this.state.sortedList.map(function(room) {
-            var selected = room.roomId == self.props.selectedRoom;
             // XXX: is it evil to pass in self as a prop to RoomTile?
             return (
                 <DNDRoomTile
@@ -376,10 +376,9 @@ var RoomSubList = React.createClass({
                     roomSubList={ self }
                     key={ room.roomId }
                     collapsed={ self.props.collapsed || false}
-                    selected={ selected }
                     unread={ Unread.doesRoomHaveUnreadMessages(room) }
-                    highlight={ room.getUnreadNotificationCount('highlight') > 0 || self.props.label === 'Invites' }
-                    isInvite={ self.props.label === 'Invites' }
+                    highlight={ room.getUnreadNotificationCount('highlight') > 0 || self.props.isInvite }
+                    isInvite={ self.props.isInvite }
                     refreshSubList={ self._updateSubListCount }
                     incomingCall={ null }
                     onClick={ self.onRoomTileClick }
@@ -411,6 +410,9 @@ var RoomSubList = React.createClass({
         var badge;
         if (subListNotifCount > 0) {
             badge = <div className={badgeClasses}>{ FormattingUtils.formatCount(subListNotifCount) }</div>;
+        } else if (this.props.isInvite) {
+            // no notifications but highlight anyway because this is an invite badge
+            badge = <div className={badgeClasses}>!</div>;
         }
 
         // When collapsed, allow a long hover on the header to show user
