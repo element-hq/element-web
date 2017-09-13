@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,6 +28,8 @@ var RoomNotifs = require('../../../RoomNotifs');
 var FormattingUtils = require('../../../utils/FormattingUtils');
 import AccessibleButton from '../elements/AccessibleButton';
 var UserSettingsStore = require('../../../UserSettingsStore');
+import ActiveRoomObserver from '../../../ActiveRoomObserver';
+import RoomViewStore from '../../../stores/RoomViewStore';
 
 module.exports = React.createClass({
     displayName: 'RoomTile',
@@ -39,7 +42,6 @@ module.exports = React.createClass({
 
         room: React.PropTypes.object.isRequired,
         collapsed: React.PropTypes.bool.isRequired,
-        selected: React.PropTypes.bool.isRequired,
         unread: React.PropTypes.bool.isRequired,
         highlight: React.PropTypes.bool.isRequired,
         isInvite: React.PropTypes.bool.isRequired,
@@ -58,6 +60,7 @@ module.exports = React.createClass({
             badgeHover : false,
             menuDisplayed: false,
             notifState: RoomNotifs.getRoomNotifsState(this.props.room.roomId),
+            selected: this.props.room.roomId === RoomViewStore.getRoomId(),
         });
     },
 
@@ -87,8 +90,15 @@ module.exports = React.createClass({
         }
     },
 
+    _onActiveRoomChange: function() {
+        this.setState({
+            selected: this.props.room.roomId === RoomViewStore.getRoomId(),
+        });
+    },
+
     componentWillMount: function() {
         MatrixClientPeg.get().on("accountData", this.onAccountData);
+        ActiveRoomObserver.addListener(this.props.room.roomId, this._onActiveRoomChange);
     },
 
     componentWillUnmount: function() {
@@ -96,6 +106,7 @@ module.exports = React.createClass({
         if (cli) {
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
         }
+        ActiveRoomObserver.removeListener(this.props.room.roomId, this._onActiveRoomChange);
     },
 
     onClick: function(ev) {
@@ -174,7 +185,7 @@ module.exports = React.createClass({
 
         var classes = classNames({
             'mx_RoomTile': true,
-            'mx_RoomTile_selected': this.props.selected,
+            'mx_RoomTile_selected': this.state.selected,
             'mx_RoomTile_unread': this.props.unread,
             'mx_RoomTile_unreadNotify': notifBadges,
             'mx_RoomTile_highlight': mentionBadges,
@@ -221,7 +232,7 @@ module.exports = React.createClass({
                 'mx_RoomTile_badgeShown': badges || this.state.badgeHover || this.state.menuDisplayed,
             });
 
-            if (this.props.selected) {
+            if (this.state.selected) {
                 let nameSelected = <EmojiText>{name}</EmojiText>;
 
                 label = <div title={ name } className={ nameClasses } dir="auto">{ nameSelected }</div>;

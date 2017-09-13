@@ -234,6 +234,7 @@ describe('TimelinePanel', function() {
             // 5 times, and we should have given up paginating
             expect(client.paginateEventTimeline.callCount).toEqual(5);
             expect(messagePanel.props.backPaginating).toBe(false);
+            expect(messagePanel.props.suppressFirstDateSeparator).toBe(false);
 
             // now, if we update the events, there shouldn't be any
             // more requests.
@@ -338,6 +339,7 @@ describe('TimelinePanel', function() {
         awaitScroll().then(() => {
             // we should now have loaded the first few events
             expect(messagePanel.props.backPaginating).toBe(false);
+            expect(messagePanel.props.suppressFirstDateSeparator).toBe(true);
 
             // back-paginate until we hit the start
             return backPaginate();
@@ -345,6 +347,7 @@ describe('TimelinePanel', function() {
             // hopefully, we got to the start of the timeline
             expect(messagePanel.props.backPaginating).toBe(false);
 
+            expect(messagePanel.props.suppressFirstDateSeparator).toBe(false);
             var events = scryEventTiles(panel);
             expect(events[0].props.mxEvent).toBe(timeline.getEvents()[0]);
 

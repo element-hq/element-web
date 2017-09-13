@@ -30,18 +30,6 @@ function getDaysArray() {
     ];
 }
 
-function getLongDaysArray() {
-    return [
-        _t('Sunday'),
-        _t('Monday'),
-        _t('Tuesday'),
-        _t('Wednesday'),
-        _t('Thursday'),
-        _t('Friday'),
-        _t('Saturday'),
-    ];
-}
-
 function getMonthsArray() {
     return [
         _t('Jan'),
@@ -106,38 +94,6 @@ module.exports = {
             fullYear: date.getFullYear(),
             time: this.formatTime(date, showTwelveHour),
         });
-    },
-
-    formatDateSeparator: function(date) {
-        const days = getDaysArray();
-        const longDays = getLongDaysArray();
-        const months = getMonthsArray();
-
-        const today = new Date();
-        const yesterday = new Date();
-        yesterday.setDate(today.getDate() - 1);
-
-        if (date.toDateString() === today.toDateString()) {
-            return _t('Today');
-        } else if (date.toDateString() === yesterday.toDateString()) {
-            return _t('Yesterday');
-        } else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
-            return longDays[date.getDay()];
-        } else if (today.getTime() - date.getTime() < 365 * 24 * 60 * 60 * 1000) {
-            return _t('%(weekDayName)s, %(monthName)s %(day)s', {
-                weekDayName: days[date.getDay()],
-                monthName: months[date.getMonth()],
-                day: date.getDate(),
-                fullYear: date.getFullYear(),
-            });
-        } else {
-            return _t('%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s', {
-                weekDayName: days[date.getDay()],
-                monthName: months[date.getMonth()],
-                day: date.getDate(),
-                fullYear: date.getFullYear(),
-            });
-        }
     },
 
     formatTime: function(date, showTwelveHour=false) {
