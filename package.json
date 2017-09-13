@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -73,7 +73,6 @@
     "react-addons-css-transition-group": "15.3.2",
     "react-dom": "^15.4.0",
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
-    "react-sticky": "^6.0.1",
     "sanitize-html": "^1.14.1",
     "text-encoding-utf-8": "^1.0.1",
     "url": "^0.11.0",

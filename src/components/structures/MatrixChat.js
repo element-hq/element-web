@@ -38,7 +38,6 @@ import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
 // LifecycleStore is not used but does listen to and dispatch actions
 require('../../stores/LifecycleStore');
-import RoomViewStore from '../../stores/RoomViewStore';
 import PageTypes from '../../PageTypes';
 
 import createRoom from "../../createRoom";
@@ -214,9 +213,6 @@ module.exports = React.createClass({
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
 
-        this._roomViewStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdated);
-        this._onRoomViewStoreUpdated();
-
         if (!UserSettingsStore.getLocalSetting('analyticsOptOut', false)) Analytics.enable();
 
         // Used by _viewRoom before getting state from sync
@@ -353,7 +349,6 @@ module.exports = React.createClass({
         UDEHandler.stopListening();
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
-        this._roomViewStoreToken.remove();
     },
 
     componentDidUpdate: function() {
@@ -587,10 +582,6 @@ module.exports = React.createClass({
         }
     },
 
-    _onRoomViewStoreUpdated: function() {
-        this.setState({ currentRoomId: RoomViewStore.getRoomId() });
-    },
-
     _setPage: function(pageType) {
         this.setState({
             page_type: pageType,
@@ -677,6 +668,7 @@ module.exports = React.createClass({
         this.focusComposer = true;
 
         const newState = {
+            currentRoomId: roomInfo.room_id || null,
             page_type: PageTypes.RoomView,
             thirdPartyInvite: roomInfo.third_party_invite,
             roomOobData: roomInfo.oob_data,
