@@ -74,7 +74,7 @@ module.exports = React.createClass({
         document.body.appendChild(textArea);
         textArea.select();
 
-        let successful;
+        let successful = false;
         try {
             successful = document.execCommand('copy');
         } catch (err) {
