@@ -927,5 +927,7 @@
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "In der Desktop-Version kann derzeit nicht geprüft werden, ob ein Benutzer ein Roboter ist. Bitte einen <a>Webbrowser</a> verwenden",
     "%(widgetName)s widget modified by %(senderName)s": "Das Widget '%(widgetName)s' wurde von %(senderName)s bearbeitet",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
-    "%(weekDayName)s, %(monthName)s %(day)s": "%(weekDayName)s, %(day)s %(monthName)s"
+    "%(weekDayName)s, %(monthName)s %(day)s": "%(weekDayName)s, %(day)s %(monthName)s",
+    "Copied!": "Kopiert!",
+    "Failed to copy": "Kopieren fehlgeschlagen"
 }
