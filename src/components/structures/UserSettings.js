@@ -172,6 +172,42 @@ const THEMES = [
     },
 ];
 
+const IgnoredUser = React.createClass({
+    propTypes: {
+        userId: React.PropTypes.string.isRequired,
+        onUnignored: React.PropTypes.func.isRequired,
+    },
+
+    _onUnignoreClick: function() {
+        const ignoredUsers = MatrixClientPeg.get().getIgnoredUsers();
+        const index = ignoredUsers.indexOf(this.props.userId);
+        if (index !== -1) {
+            ignoredUsers.splice(index, 1);
+            MatrixClientPeg.get().setIgnoredUsers(ignoredUsers)
+                .then(() => this.props.onUnignored(this.props.userId));
+        } else this.props.onUnignored(this.props.userId);
+    },
+
+    render: function() {
+        let unbanButton;
+
+        if (this.props.canUnban) {
+            unbanButton = <AccessibleButton className="mx_RoomSettings_unbanButton" onClick={this._onUnbanClick}>
+                { _t('Unban') }
+            </AccessibleButton>;
+        }
+
+        return (
+            <li>
+                <AccessibleButton onClick={this._onUnignoreClick} className="mx_UserSettings_button mx_UserSettings_buttonSmall">
+                    { _t("Unignore") }
+                </AccessibleButton>
+                { this.props.userId }
+            </li>
+        );
+    },
+});
+
 module.exports = React.createClass({
     displayName: 'UserSettings',
 
@@ -207,6 +243,7 @@ module.exports = React.createClass({
             vectorVersion: undefined,
             rejectingInvites: false,
             mediaDevices: null,
+            ignoredUsers: []
         };
     },
 
@@ -228,6 +265,7 @@ module.exports = React.createClass({
         }
 
         this._refreshMediaDevices();
+        this._refreshIgnoredUsers();
 
         // Bulk rejecting invites:
         // /sync won't have had time to return when UserSettings re-renders from state changes, so getRooms()
@@ -343,6 +381,18 @@ module.exports = React.createClass({
                 title: _t("Can't load user settings"),
                 description: ((error && error.message) ? error.message : _t("Server may be unavailable or overloaded")),
             });
+        });
+    },
+
+    _refreshIgnoredUsers: function(userIdUnignored=null) {
+        let users = MatrixClientPeg.get().getIgnoredUsers();
+        if (userIdUnignored) {
+            var index = users.indexOf(userIdUnignored);
+            if (index !== -1) users.splice(index, 1);
+        }
+        console.log("Updating ignored users: "+JSON.stringify(users));
+        this.setState({
+            ignoredUsers: users
         });
     },
 
@@ -797,14 +847,16 @@ module.exports = React.createClass({
     },
 
     _renderIgnoredUsers: function() {
-        let ignoredUsers = MatrixClientPeg.get().getIgnoredUsers();
-        if (ignoredUsers.length > 0) {
+        if (this.state.ignoredUsers.length > 0) {
+            let updateHandler = this._refreshIgnoredUsers;
             return (
                 <div>
                     <h3>{ _t("Ignored Users") }</h3>
                     <div className="mx_UserSettings_section mx_UserSettings_ignoredUsersSection">
                         <ul>
-                            {ignoredUsers.map(u => (<li key={u}>{u}</li>))}
+                            {this.state.ignoredUsers.map(function(userId) {
+                                return (<IgnoredUser key={userId} userId={userId} onUnignored={updateHandler}></IgnoredUser>);
+                            })}
                         </ul>
                     </div>
                 </div>
