@@ -158,6 +158,7 @@ class RoomViewStore extends Store {
                     highlighted: payload.highlighted,
                     room_alias: payload.room_alias,
                     auto_join: payload.auto_join,
+                    oob_data: payload.oob_data,
                 });
             }, (err) => {
                 dis.dispatch({
