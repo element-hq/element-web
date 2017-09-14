@@ -361,8 +361,13 @@ module.exports = React.createClass({
                     summarisedEvents.push(collapsedMxEv);
                 }
 
+                let highlightInMels = false;
+
                 // At this point, i = the index of the last event in the summary sequence
                 let eventTiles = summarisedEvents.map((e) => {
+                    if (e.getId() === this.props.highlightedEventId) {
+                        highlightInMels = true;
+                    }
                     // In order to prevent DateSeparators from appearing in the expanded form
                     // of MemberEventListSummary, render each member event as if the previous
                     // one was itself. This way, the timestamp of the previous event === the
@@ -376,15 +381,13 @@ module.exports = React.createClass({
                     eventTiles = null;
                 }
 
-                ret.push(
-                    <MemberEventListSummary
-                        key={key}
-                        events={summarisedEvents}
-                        onToggle={this._onWidgetLoad} // Update scroll state
-                    >
-                            {eventTiles}
-                    </MemberEventListSummary>
-                );
+                ret.push(<MemberEventListSummary key={key}
+                    events={summarisedEvents}
+                    onToggle={this._onWidgetLoad} // Update scroll state
+                    startExpanded={highlightInMels}
+                >
+                        {eventTiles}
+                </MemberEventListSummary>);
 
                 if (readMarkerInMels) {
                     ret.push(this._getReadMarkerTile(visible));
