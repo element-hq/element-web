@@ -189,14 +189,6 @@ const IgnoredUser = React.createClass({
     },
 
     render: function() {
-        let unbanButton;
-
-        if (this.props.canUnban) {
-            unbanButton = <AccessibleButton className="mx_RoomSettings_unbanButton" onClick={this._onUnbanClick}>
-                { _t('Unban') }
-            </AccessibleButton>;
-        }
-
         return (
             <li>
                 <AccessibleButton onClick={this._onUnignoreClick} className="mx_UserSettings_button mx_UserSettings_buttonSmall">
@@ -243,7 +235,7 @@ module.exports = React.createClass({
             vectorVersion: undefined,
             rejectingInvites: false,
             mediaDevices: null,
-            ignoredUsers: []
+            ignoredUsers: [],
         };
     },
 
@@ -385,14 +377,13 @@ module.exports = React.createClass({
     },
 
     _refreshIgnoredUsers: function(userIdUnignored=null) {
-        let users = MatrixClientPeg.get().getIgnoredUsers();
+        const users = MatrixClientPeg.get().getIgnoredUsers();
         if (userIdUnignored) {
-            var index = users.indexOf(userIdUnignored);
+            const index = users.indexOf(userIdUnignored);
             if (index !== -1) users.splice(index, 1);
         }
-        console.log("Updating ignored users: "+JSON.stringify(users));
         this.setState({
-            ignoredUsers: users
+            ignoredUsers: users,
         });
     },
 
@@ -848,14 +839,16 @@ module.exports = React.createClass({
 
     _renderIgnoredUsers: function() {
         if (this.state.ignoredUsers.length > 0) {
-            let updateHandler = this._refreshIgnoredUsers;
+            const updateHandler = this._refreshIgnoredUsers;
             return (
                 <div>
                     <h3>{ _t("Ignored Users") }</h3>
                     <div className="mx_UserSettings_section mx_UserSettings_ignoredUsersSection">
                         <ul>
                             {this.state.ignoredUsers.map(function(userId) {
-                                return (<IgnoredUser key={userId} userId={userId} onUnignored={updateHandler}></IgnoredUser>);
+                                return (<IgnoredUser key={userId}
+                                                     userId={userId}
+                                                     onUnignored={updateHandler}></IgnoredUser>);
                             })}
                         </ul>
                     </div>
