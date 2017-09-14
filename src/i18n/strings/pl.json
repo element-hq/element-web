@@ -129,7 +129,7 @@
     "No Microphones detected": "Nie wykryto żadnego mikrofonu",
     "No Webcams detected": "Nie wykryto żadnej kamerki internetowej",
     "No media permissions": "Brak uprawnień do mediów",
-    "You may need to manually permit Riot to access your microphone/webcam": "Możliwe, że będziesz musiał ręcznie pozwolić Riotowi na dostęp do twojego mikrofonu/kamerki",
+    "You may need to manually permit Riot to access your microphone/webcam": "Możliwe, że będziesz musiał ręcznie pozwolić Riotowi na dostęp do twojego mikrofonu/kamerki internetowej",
     "Default Device": "Urządzenie domyślne",
     "Advanced": "Zaawansowane",
     "Always show message timestamps": "Zawsze pokazuj znaczniki czasu wiadomości",
