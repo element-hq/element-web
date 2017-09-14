@@ -134,6 +134,37 @@ function textForMessageEvent(ev) {
     return message;
 }
 
+function textForRoomAliasesEvent(ev) {
+    const senderName = event.sender ? event.sender.name : event.getSender();
+    const oldAliases = ev.getPrevContent().aliases || [];
+    const newAliases = ev.getContent().aliases || [];
+
+    const addedAliases = newAliases.filter((x) => !oldAliases.includes(x));
+    const removedAliases = oldAliases.filter((x) => !newAliases.includes(x));
+
+    if (!addedAliases.length && !removedAliases.length) {
+        return '';
+    }
+
+    if (addedAliases.length && !removedAliases.length) {
+        return _t('%(senderName)s added %(addedAddresses)s as addresses for this room.', {
+            senderName: senderName,
+            addedAddresses: addedAliases.join(', '),
+        });
+    } else if (!addedAliases.length && removedAliases.length) {
+        return _t('%(senderName)s removed %(addresses)s as addresses for this room.', {
+            senderName: senderName,
+            removedAddresses: removedAliases.join(', '),
+        });
+    } else {
+        return _t('%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.', {
+            senderName: senderName,
+            addedAddresses: addedAliases.join(', '),
+            removedAddresses: removedAliases.join(', '),
+        });
+    }
+}
+
 function textForCallAnswerEvent(event) {
     var senderName = event.sender ? event.sender.name : _t('Someone');
     var supported = MatrixClientPeg.get().supportsVoip() ? "" : _t('(not supported by this browser)');
@@ -280,6 +311,7 @@ function textForWidgetEvent(event) {
 
 var handlers = {
     'm.room.message': textForMessageEvent,
+    'm.room.aliases': textForRoomAliasesEvent,
     'm.room.name':    textForRoomNameEvent,
     'm.room.topic':   textForTopicEvent,
     'm.room.member':  textForMemberEvent,
