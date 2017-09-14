@@ -240,6 +240,35 @@ const commands = {
         return reject(this.getUsage());
     }),
 
+    ignore: new Command("ignore", "<userId>", function(roomId, args) {
+        if (args) {
+            const matches = args.match(/^(\S+)$/);
+            if (matches) {
+                const ignoredUsers = MatrixClientPeg.get().getIgnoredUsers();
+                ignoredUsers.push(matches[1]); // de-duped internally below
+                return success(
+                    MatrixClientPeg.get().setIgnoredUsers(ignoredUsers),
+                );
+            }
+        }
+        return reject(this.getUsage());
+    }),
+
+    unignore: new Command("unignore", "<userId>", function(roomId, args) {
+        if (args) {
+            const matches = args.match(/^(\S+)$/);
+            if (matches) {
+                const ignoredUsers = MatrixClientPeg.get().getIgnoredUsers();
+                const index = ignoredUsers.indexOf(matches[1]);
+                if (index !== -1) ignoredUsers.splice(index, 1);
+                return success(
+                    MatrixClientPeg.get().setIgnoredUsers(ignoredUsers),
+                );
+            }
+        }
+        return reject(this.getUsage());
+    }),
+
     // Define the power level of a user
     op: new Command("op", "<userId> [<power level>]", function(roomId, args) {
         if (args) {
