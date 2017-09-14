@@ -244,10 +244,22 @@ const commands = {
         if (args) {
             const matches = args.match(/^(\S+)$/);
             if (matches) {
+                const userId = matches[1];
                 const ignoredUsers = MatrixClientPeg.get().getIgnoredUsers();
-                ignoredUsers.push(matches[1]); // de-duped internally below
+                ignoredUsers.push(userId); // de-duped internally below
                 return success(
-                    MatrixClientPeg.get().setIgnoredUsers(ignoredUsers),
+                    MatrixClientPeg.get().setIgnoredUsers(ignoredUsers).then(() => {
+                        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                        Modal.createTrackedDialog('Slash Commands', 'User ignored', QuestionDialog, {
+                            title: _t("Ignored user"),
+                            description: (
+                                <div>
+                                    <p>{_t("You are now ignoring %(userId)s", {userId: userId})}</p>
+                                </div>
+                            ),
+                            hasCancelButton: false,
+                        });
+                    }),
                 );
             }
         }
@@ -258,11 +270,23 @@ const commands = {
         if (args) {
             const matches = args.match(/^(\S+)$/);
             if (matches) {
+                const userId = matches[1];
                 const ignoredUsers = MatrixClientPeg.get().getIgnoredUsers();
-                const index = ignoredUsers.indexOf(matches[1]);
+                const index = ignoredUsers.indexOf(userId);
                 if (index !== -1) ignoredUsers.splice(index, 1);
                 return success(
-                    MatrixClientPeg.get().setIgnoredUsers(ignoredUsers),
+                    MatrixClientPeg.get().setIgnoredUsers(ignoredUsers).then(() => {
+                        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                        Modal.createTrackedDialog('Slash Commands', 'User unignored', QuestionDialog, {
+                            title: _t("Unignored user"),
+                            description: (
+                                <div>
+                                    <p>{_t("You are no longer ignoring %(userId)s", {userId: userId})}</p>
+                                </div>
+                            ),
+                            hasCancelButton: false,
+                        });
+                    }),
                 );
             }
         }
