@@ -33,7 +33,7 @@ var ObjectUtils = require('../../../ObjectUtils');
 
 var eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
-    'm.room.aliases': 'messages.TextualEvent',
+    'm.room.aliases': 'messages.RoomAliasesEvent',
     'm.room.member' : 'messages.TextualEvent',
     'm.call.invite' : 'messages.TextualEvent',
     'm.call.answer' : 'messages.TextualEvent',

@@ -149,19 +149,32 @@ function textForRoomAliasesEvent(ev) {
     if (addedAliases.length && !removedAliases.length) {
         return _t('%(senderName)s added %(addedAddresses)s as addresses for this room.', {
             senderName: senderName,
+            count: addedAliases.length,
             addedAddresses: addedAliases.join(', '),
         });
     } else if (!addedAliases.length && removedAliases.length) {
-        return _t('%(senderName)s removed %(addresses)s as addresses for this room.', {
+        return _t('%(senderName)s removed %(removedAddresses)s as addresses for this room.', {
             senderName: senderName,
+            count: removedAliases.length,
             removedAddresses: removedAliases.join(', '),
         });
     } else {
-        return _t('%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.', {
+        const args = {
             senderName: senderName,
             addedAddresses: addedAliases.join(', '),
             removedAddresses: removedAliases.join(', '),
-        });
+        };
+        /* eslint-disable max-len */
+        if (addedAliases.length === 1 && removedAliases.length === 1) {
+            return _t('%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.|one,one', args);
+        } else if (addedAliases.length !== 1 && removedAliases.length === 1) {
+            return _t('%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.|other,one', args);
+        } else if (addedAliases.length === 1 && removedAliases.length !== 1) {
+            return _t('%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.|one,other', args);
+        } else {
+            return _t('%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.|other,other', args);
+        }
+        /* eslint-enable max-len */
     }
 }
 

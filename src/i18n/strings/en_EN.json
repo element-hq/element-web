@@ -853,5 +853,10 @@
     "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s widget added by %(senderName)s",
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s widget removed by %(senderName)s",
     "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s widget modified by %(senderName)s",
-    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot check is currently unavailable on desktop - please use a <a>web browser</a>"
+    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot check is currently unavailable on desktop - please use a <a>web browser</a>",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|one": "%(senderName)s added %(addedAddresses)s as an address for this room.",
+    "%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.|other": "%(senderName)s added %(addedAddresses)s as addresses for this room.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|one": "%(senderName)s removed %(removedAddresses)s as an address for this room.",
+    "%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.|other": "%(senderName)s removed %(removedAddresses)s as addresses for this room.",
+    "%(senderName)s changed the addresses of this room.": "%(senderName)s changed the addresses of this room."
 }
