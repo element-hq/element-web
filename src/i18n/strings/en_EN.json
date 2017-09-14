@@ -827,6 +827,7 @@
     "Autocomplete Delay (ms):": "Autocomplete Delay (ms):",
     "This Home server does not support groups": "This Home server does not support groups",
     "Loading device info...": "Loading device info...",
+    "Message removed by %(userId)s": "Message removed by %(userId)s",
     "Groups": "Groups",
     "Create a new group": "Create a new group",
     "Create Group": "Create Group",
