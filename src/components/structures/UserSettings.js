@@ -796,6 +796,22 @@ module.exports = React.createClass({
         );
     },
 
+    _renderIgnoredUsers: function() {
+        let ignoredUsers = MatrixClientPeg.get().getIgnoredUsers();
+        if (ignoredUsers.length > 0) {
+            return (
+                <div>
+                    <h3>{ _t("Ignored Users") }</h3>
+                    <div className="mx_UserSettings_section mx_UserSettings_ignoredUsersSection">
+                        <ul>
+                            {ignoredUsers.map(u => (<li key={u}>{u}</li>))}
+                        </ul>
+                    </div>
+                </div>
+            );
+        } else return (<div />);
+    },
+
     _renderLocalSetting: function(setting) {
         // TODO: this ought to be a separate component so that we don't need
         // to rebind the onChange each time we render
@@ -1302,6 +1318,7 @@ module.exports = React.createClass({
                 {this._renderWebRtcSettings()}
                 {this._renderDevicesPanel()}
                 {this._renderCryptoInfo()}
+                {this._renderIgnoredUsers()}
                 {this._renderBulkOptions()}
                 {this._renderBugReport()}
 
