@@ -835,7 +835,7 @@
     "You are a member of these groups:": "Ezeknek a csoportoknak vagy a tagja:",
     "Create a group to represent your community! Define a set of rooms and your own custom homepage to mark out your space in the Matrix universe.": "Hozz létre csoportot a közösség meghatározásához! Jelölj ki szobákat és saját kezdőoldalt amivel meghatározhatod a territóriumodat a Matrix univerzumában.",
     "Join an existing group": "Csatlakozz meglévő csoporthoz",
-    "To join an existing group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "Ahhoz, hogy meglévő csoporthoz csatlakozhass tudnod kell a csoport azonosítóját ami valahogy így nézhet ki: <i>+példa:matrix.org</i>.",
+    "To join an existing group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "Ahhoz, hogy meglévő csoporthoz csatlakozhass tudnod kell a csoport azonosítóját ami valahogy így nézhet ki: <i>+example:matrix.org</i>.",
     "Featured Rooms:": "Kiemelt szobák:",
     "Error whilst fetching joined groups": "Hiba a csatlakozott csoportok betöltésénél",
     "Featured Users:": "Kiemelt felhasználók:",
@@ -852,5 +852,6 @@
     "The maximum permitted number of widgets have already been added to this room.": "A maximálisan megengedett számú kisalkalmazás már hozzá van adva a szobához.",
     "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s kisalkalmazást %(senderName)s hozzáadta",
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s kisalkalmazást %(senderName)s eltávolította",
-    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot ellenőrzés az asztali verzióban nem érhető el - használd a <a>web böngészőt</a>"
+    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot ellenőrzés az asztali verzióban nem érhető el - használd a <a>web böngészőt</a>",
+    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s kisalkalmazást %(senderName)s módosította"
 }

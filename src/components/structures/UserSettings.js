@@ -729,6 +729,7 @@ module.exports = React.createClass({
         // to rebind the onChange each time we render
         const onChange = (e) => {
             if (e.target.checked) {
+                this._syncedSettings[setting.id] = setting.value;
                 UserSettingsStore.setSyncedSetting(setting.id, setting.value);
             }
             dis.dispatch({
@@ -741,7 +742,7 @@ module.exports = React.createClass({
                    type="radio"
                    name={ setting.id }
                    value={ setting.value }
-                   defaultChecked={ this._syncedSettings[setting.id] === setting.value }
+                   checked={ this._syncedSettings[setting.id] === setting.value }
                    onChange={ onChange }
             />
             <label htmlFor={ setting.id + "_" + setting.value }>

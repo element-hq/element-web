@@ -30,8 +30,6 @@ const INITIAL_STATE = {
 
     // The event to scroll to when the room is first viewed
     initialEventId: null,
-    // The offset to display the initial event at (see scrollStateMap)
-    initialEventPixelOffset: null,
     // Whether to highlight the initial event
     isInitialEventHighlighted: false,
 
@@ -41,20 +39,6 @@ const INITIAL_STATE = {
     roomLoading: false,
     // Any error that has occurred during loading
     roomLoadError: null,
-    // A map from room id to scroll state.
-    //
-    // If there is no special scroll state (ie, we are following the live
-    // timeline), the scroll state is null. Otherwise, it is an object with
-    // the following properties:
-    //
-    //    focussedEvent: the ID of the 'focussed' event. Typically this is
-    //        the last event fully visible in the viewport, though if we
-    //        have done an explicit scroll to an explicit event, it will be
-    //        that event.
-    //
-    //    pixelOffset: the number of pixels the window is scrolled down
-    //        from the focussedEvent.
-    scrollStateMap: {},
 
     forwardingEvent: null,
 };
@@ -115,9 +99,6 @@ class RoomViewStore extends Store {
             case 'on_logged_out':
                 this.reset();
                 break;
-            case 'update_scroll_state':
-                this._updateScrollState(payload);
-                break;
             case 'forward_event':
                 this._setState({
                     forwardingEvent: payload.event,
@@ -132,7 +113,6 @@ class RoomViewStore extends Store {
                 roomId: payload.room_id,
                 roomAlias: payload.room_alias,
                 initialEventId: payload.event_id,
-                initialEventPixelOffset: undefined,
                 isInitialEventHighlighted: payload.highlighted,
                 forwardingEvent: null,
                 roomLoading: false,
@@ -143,16 +123,6 @@ class RoomViewStore extends Store {
 
             if (payload.joined) {
                 newState.joining = false;
-            }
-
-            // If an event ID wasn't specified, default to the one saved for this room
-            // via update_scroll_state. Assume initialEventPixelOffset should be set.
-            if (!newState.initialEventId) {
-                const roomScrollState = this._state.scrollStateMap[payload.room_id];
-                if (roomScrollState) {
-                    newState.initialEventId = roomScrollState.focussedEvent;
-                    newState.initialEventPixelOffset = roomScrollState.pixelOffset;
-                }
             }
 
             if (this._state.forwardingEvent) {
@@ -183,6 +153,7 @@ class RoomViewStore extends Store {
                     event_id: payload.event_id,
                     highlighted: payload.highlighted,
                     room_alias: payload.room_alias,
+                    oob_data: payload.oob_data,
                 });
             }, (err) => {
                 dis.dispatch({
@@ -241,15 +212,6 @@ class RoomViewStore extends Store {
         });
     }
 
-    _updateScrollState(payload) {
-        // Clobber existing scroll state for the given room ID
-        const newScrollStateMap = this._state.scrollStateMap;
-        newScrollStateMap[payload.room_id] = payload.scroll_state;
-        this._setState({
-            scrollStateMap: newScrollStateMap,
-        });
-    }
-
     reset() {
         this._state = Object.assign({}, INITIAL_STATE);
     }
@@ -262,11 +224,6 @@ class RoomViewStore extends Store {
     // The event to scroll to when the room is first viewed
     getInitialEventId() {
         return this._state.initialEventId;
-    }
-
-    // The offset to display the initial event at (see scrollStateMap)
-    getInitialEventPixelOffset() {
-        return this._state.initialEventPixelOffset;
     }
 
     // Whether to highlight the initial event

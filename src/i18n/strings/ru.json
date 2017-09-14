@@ -891,7 +891,7 @@
     "You are a member of these groups:": "Вы являетесь членом этих групп:",
     "Create a group to represent your community! Define a set of rooms and your own custom homepage to mark out your space in the Matrix universe.": "Создайте группу для представления своего сообщества! Определите набор комнат и собственную домашнюю страницу, чтобы выделить свое пространство во вселенной Matrix.",
     "Join an existing group": "Присоединиться к существующей группе",
-    "To join an existing group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "Чтобы присоединиться к группе, вам нужно знать ее идентификатор; он выглядит примерно так:<i>+пример:matrix.org</i>.",
+    "To join an existing group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "Чтобы присоединиться к группе, вам нужно знать ее идентификатор; он выглядит примерно так:<i>+example:matrix.org</i>.",
     "Featured Rooms:": "Рекомендуемые комнаты:",
     "Error whilst fetching joined groups": "Ошибка при извлечении объединенных групп",
     "Featured Users:": "Избранные пользователи:",
