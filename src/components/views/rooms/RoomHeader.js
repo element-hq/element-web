@@ -56,7 +56,7 @@ module.exports = React.createClass({
             editing: false,
             inRoom: false,
             onSaveClick: function() {},
-            onCancelClick: function() {},
+            onCancelClick: null,
         };
     },
 
