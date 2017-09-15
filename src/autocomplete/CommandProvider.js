@@ -94,6 +94,16 @@ const COMMANDS = [
         args: '<user-id> <device-id> <device-signing-key>',
         description: 'Verifies a user, device, and pubkey tuple',
     },
+    {
+        command: '/ignore',
+        args: '<user-id>',
+        description: 'Ignores a user, hiding their messages from you'
+    },
+    {
+        command: '/unignore',
+        args: '<user-id>',
+        description: 'Stops ignoring a user, showing their messages going forward'
+    },
     // Omitting `/markdown` as it only seems to apply to OldComposer
 ];
 

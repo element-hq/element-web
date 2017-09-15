@@ -239,6 +239,8 @@
     "You are no longer ignoring %(userId)s": "You are no longer ignoring %(userId)s",
     "Unignored user": "Unignored user",
     "Ignored user": "Ignored user",
+    "Stops ignoring a user, showing their messages going forward": "Stops ignoring a user, showing their messages going forward",
+    "Ignores a user, hiding their messages from you": "Ignores a user, hiding their messages from you",
     "Leave room": "Leave room",
     "left and rejoined": "left and rejoined",
     "left": "left",
