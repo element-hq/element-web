@@ -32,7 +32,15 @@ emojione.imagePathPNG = 'emojione/png/';
 // Use SVGs for emojis
 emojione.imageType = 'svg';
 
-const SIMPLE_EMOJI_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
+// Anything outside the basic multilingual plane will be a surrogate pair
+const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
+// And there a bunch more symbol characters that emojione has within the
+// BMP, so this includes the ranges from 'letterlike symbols' to
+// 'miscellaneous symbols and arrows' which should catch all of them
+// (with plenty of false positives, but that's OK)
+const SYMBOL_PATTERN = /([\u2100-\u2bff])/;
+
+// And this is emojione's complete regex
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
@@ -44,7 +52,7 @@ const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
  * unicodeToImage uses this function.
  */
 export function containsEmoji(str) {
-    return SIMPLE_EMOJI_PATTERN.test(str);
+    return SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str);
 }
 
 /* modified from https://github.com/Ranks/emojione/blob/master/lib/js/emojione.js
