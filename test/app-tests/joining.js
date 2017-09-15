@@ -176,9 +176,6 @@ describe('joining a room', function () {
 
                 return Promise.delay(1);
             }).then(() => {
-                // We've joined, expect this to false
-                expect(roomView.state.joining).toBe(false);
-
                 // now send the room down the /sync pipe
                 httpBackend.when('GET', '/sync').
                     respond(200, {
