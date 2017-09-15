@@ -58,10 +58,7 @@ export function containsEmoji(str) {
 /* modified from https://github.com/Ranks/emojione/blob/master/lib/js/emojione.js
  * because we want to include emoji shortnames in title text
  */
-export function unicodeToImage(str) {
-    // fast path
-    if (!containsEmoji(str)) return str;
-
+function unicodeToImage(str) {
     let replaceWith, unicode, alt, short, fname;
     const mappedUnicode = emojione.mapUnicodeToShort();
 
@@ -399,6 +396,8 @@ export function bodyToHtml(content, highlights, opts) {
     var isHtml = (content.format === "org.matrix.custom.html");
     let body = isHtml ? content.formatted_body : escape(content.body);
 
+    let bodyHasEmoji = false;
+
     var safeBody;
     // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
     // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
@@ -416,16 +415,20 @@ export function bodyToHtml(content, highlights, opts) {
             };
         }
         safeBody = sanitizeHtml(body, sanitizeHtmlParams);
-        safeBody = unicodeToImage(safeBody);
+        bodyHasEmoji = containsEmoji(body);
+        if (bodyHasEmoji) safeBody = unicodeToImage(safeBody);
     }
     finally {
         delete sanitizeHtmlParams.textFilter;
     }
 
-    EMOJI_REGEX.lastIndex = 0;
-    let contentBodyTrimmed = content.body !== undefined ? content.body.trim() : '';
-    let match = EMOJI_REGEX.exec(contentBodyTrimmed);
-    let emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
+    let emojiBody = false;
+    if (bodyHasEmoji) {
+        EMOJI_REGEX.lastIndex = 0;
+        let contentBodyTrimmed = content.body !== undefined ? content.body.trim() : '';
+        let match = EMOJI_REGEX.exec(contentBodyTrimmed);
+        emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
+    }
 
     const className = classNames({
         'mx_EventTile_body': true,
