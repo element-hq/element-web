@@ -119,11 +119,9 @@ class RoomViewStore extends Store {
                 roomLoadError: null,
                 // should peek by default
                 shouldPeek: payload.should_peek === undefined ? true : payload.should_peek,
+                // have we sent a join request for this room and are waiting for a response?
+                joining: payload.joining || false,
             };
-
-            if (payload.joined) {
-                newState.joining = false;
-            }
 
             if (this._state.forwardingEvent) {
                 dis.dispatch({
