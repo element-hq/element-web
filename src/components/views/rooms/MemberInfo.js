@@ -115,7 +115,7 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     _checkIgnoreState: function() {
-        const isIgnoring = this.props.matrixClient.getIgnoredUsers().indexOf(this.props.member.userId) !== -1;
+        const isIgnoring = this.props.matrixClient.isUserIgnored(this.props.member.userId);
         this.setState({isIgnoring: isIgnoring});
     },
 
