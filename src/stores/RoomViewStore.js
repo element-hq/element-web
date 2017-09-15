@@ -132,6 +132,10 @@ class RoomViewStore extends Store {
             }
 
             this._setState(newState);
+
+            if (payload.auto_join) {
+                this._joinRoom(payload);
+            }
         } else if (payload.room_alias) {
             // Resolve the alias and then do a second dispatch with the room ID acquired
             this._setState({
@@ -151,6 +155,7 @@ class RoomViewStore extends Store {
                     event_id: payload.event_id,
                     highlighted: payload.highlighted,
                     room_alias: payload.room_alias,
+                    auto_join: payload.auto_join,
                     oob_data: payload.oob_data,
                 });
             }, (err) => {
