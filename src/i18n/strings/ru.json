@@ -904,5 +904,9 @@
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s виджет, удаленный %(senderName)s",
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Проверка робота в настоящее время недоступна на компьютере - пожалуйста, используйте <a>браузер</a>",
     "Publish this room to the public in %(domain)s's room directory?": "Опубликовать эту комнату для пользователей в %(domain)s каталоге комнат?",
-    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s виджет, измененный %(senderName)s"
+    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s виджет, измененный %(senderName)s",
+    "%(weekDayName)s, %(monthName)s %(day)s": "%(weekDayName)s, %(monthName)s %(day)s",
+    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
+    "Copied!": "Скопировано!",
+    "Failed to copy": "Не удалось скопировать"
 }
