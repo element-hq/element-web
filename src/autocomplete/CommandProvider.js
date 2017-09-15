@@ -97,12 +97,12 @@ const COMMANDS = [
     {
         command: '/ignore',
         args: '<user-id>',
-        description: 'Ignores a user, hiding their messages from you'
+        description: 'Ignores a user, hiding their messages from you',
     },
     {
         command: '/unignore',
         args: '<user-id>',
-        description: 'Stops ignoring a user, showing their messages going forward'
+        description: 'Stops ignoring a user, showing their messages going forward',
     },
     // Omitting `/markdown` as it only seems to apply to OldComposer
 ];
