@@ -553,6 +553,9 @@ module.exports = React.createClass({
             if (!r.userId || r.type !== "m.read" || r.userId === myUserId) {
                 return; // ignore non-read receipts and receipts from self.
             }
+            if (MatrixClientPeg.get().isUserIgnored(r.userId)) {
+                return; // ignore ignored users
+            }
             let member = room.getMember(r.userId);
             if (!member) {
                 return; // ignore unknown user IDs
