@@ -345,6 +345,13 @@ const commands = {
         return reject(this.getUsage());
     }),
 
+    // Open developer tools
+    devtools: new Command("devtools", "", function(roomId) {
+        const DevtoolsDialog = sdk.getComponent("dialogs.DevtoolsDialog");
+        Modal.createDialog(DevtoolsDialog, { roomId });
+        return success();
+    }),
+
     // Verify a user, device, and pubkey tuple
     verify: new Command("verify", "<userId> <deviceId> <deviceSigningKey>", function(roomId, args) {
         if (args) {
