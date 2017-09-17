@@ -619,6 +619,8 @@
     "Encrypt room": "Encrypt room",
     "There are no visible files in this room": "There are no visible files in this room",
     "Room": "Room",
+    "Copied!": "Copied!",
+    "Failed to copy": "Failed to copy",
     "Connectivity to the server has been lost.": "Connectivity to the server has been lost.",
     "Sent messages will be stored until your connection has returned.": "Sent messages will be stored until your connection has returned.",
     "Auto-complete": "Auto-complete",

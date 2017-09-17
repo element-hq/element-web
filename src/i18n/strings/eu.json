@@ -657,7 +657,7 @@
     "%(oneUser)sleft and rejoined %(repeats)s times": "Erabiltzaile %(oneUser)s %(repeats)s aldiz atera eta berriro elkartu da",
     "%(severalUsers)sleft and rejoined": "%(severalUsers)s erabiltzaile atera eta berriro elkartu dira",
     "%(oneUser)sleft and rejoined": "Erabiltzaile %(oneUser)s atera eta berriro sartu da",
-    "%(severalUsers)shad their invitations withdrawn %(repeats)s times": "%(severalUsers) erabiltzaileen gonbidapenak %(repeats)s aldiz atzera bota dira",
+    "%(severalUsers)shad their invitations withdrawn %(repeats)s times": "%(severalUsers)s erabiltzaileen gonbidapenak %(repeats)s aldiz atzera bota dira",
     "%(oneUser)shad their invitation withdrawn %(repeats)s times": "Erabiltzaile %(oneUser)sen gonbidapena %(repeats)s aldiz bota da atzera",
     "%(severalUsers)shad their invitations withdrawn": "%(severalUsers)s erabiltzaileen gonbidapena atzera bota da",
     "%(oneUser)shad their invitation withdrawn": "Erabiltzaile %(oneUser)sen gonbidapena atzera bota da",
@@ -850,5 +850,10 @@
     "Verifies a user, device, and pubkey tuple": "Erabiltzaile, gailu eta gako publiko multzoa egiaztatzen du",
     "To join an existing group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "Dagoen talde batetara elkartzeko taldearen identifikatzailea ezagutu behar duzu, honen antza du: <i>+adibidea:matrix.org</i>.",
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot egiaztaketa orain ez dago eskuragarri mahaigainean - erabili <a>web nabigatzailea</a>",
-    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s trepeta aldatu du %(senderName)s erabiltzaileak"
+    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s trepeta aldatu du %(senderName)s erabiltzaileak",
+    "%(weekDayName)s, %(monthName)s %(day)s": "%(weekDayName)s, %(monthName)sk %(day)s",
+    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(fullYear)sko %(monthName)sk %(day)s",
+    "Copied!": "Kopiatuta!",
+    "Failed to copy": "Kopiak huts egin du",
+    "Cancel": "Utzi"
 }

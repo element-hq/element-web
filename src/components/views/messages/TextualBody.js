@@ -31,6 +31,7 @@ import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import UserSettingsStore from "../../../UserSettingsStore";
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import ContextualMenu from '../../structures/ContextualMenu';
 import {RoomMember} from 'matrix-js-sdk';
 import classNames from 'classnames';
 
@@ -72,12 +73,16 @@ module.exports = React.createClass({
         textArea.value = text;
         document.body.appendChild(textArea);
         textArea.select();
+
+        let successful = false;
         try {
-            const successful = document.execCommand('copy');
+            successful = document.execCommand('copy');
         } catch (err) {
             console.log('Unable to copy');
         }
+
         document.body.removeChild(textArea);
+        return successful;
     },
 
     componentDidMount: function() {
@@ -113,7 +118,6 @@ module.exports = React.createClass({
                     }
                 }, 10);
             }
-
             this._addCodeCopyButton();
         }
     },
@@ -258,7 +262,21 @@ module.exports = React.createClass({
             button.className = "mx_EventTile_copyButton";
             button.onclick = (e) => {
                 const copyCode = button.parentNode.getElementsByTagName("code")[0];
-                this.copyToClipboard(copyCode.textContent);
+                const successful = this.copyToClipboard(copyCode.textContent);
+              
+                const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
+                const buttonRect = e.target.getBoundingClientRect();
+
+                // The window X and Y offsets are to adjust position when zoomed in to page
+                const x = buttonRect.right + window.pageXOffset;
+                const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
+                const {close} = ContextualMenu.createMenu(GenericTextContextMenu, {
+                    chevronOffset: 10,
+                    left: x,
+                    top: y,
+                    message: successful ? _t('Copied!') : _t('Failed to copy'),
+                });
+                e.target.onmouseout = close;
             };
             p.appendChild(button);
         });
