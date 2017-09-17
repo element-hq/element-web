@@ -175,7 +175,6 @@ function textForThreePidInviteEvent(event) {
     return _t('%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.', {senderName: senderName, targetDisplayName: event.getContent().display_name});
 }
 
-
 function textForHistoryVisibilityEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
     switch (event.getContent().history_visibility) {
