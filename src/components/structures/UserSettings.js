@@ -106,6 +106,10 @@ const SETTINGS_LABELS = [
         label: 'Automatically replace plain text Emoji',
     },
     {
+        id: 'MessageComposerInput.dontSuggestEmoji',
+        label: 'Disable Emoji suggestions while typing',
+    },
+    {
         id: 'Pill.shouldHidePillAvatar',
         label: 'Hide avatars in user and room mentions',
     },
