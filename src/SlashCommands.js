@@ -246,7 +246,7 @@ const commands = {
             if (matches) {
                 const userId = matches[1];
                 const ignoredUsers = MatrixClientPeg.get().getIgnoredUsers();
-                ignoredUsers.push(userId); // de-duped internally below
+                ignoredUsers.push(userId); // de-duped internally in the js-sdk
                 return success(
                     MatrixClientPeg.get().setIgnoredUsers(ignoredUsers).then(() => {
                         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
