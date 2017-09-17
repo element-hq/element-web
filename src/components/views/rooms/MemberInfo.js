@@ -62,6 +62,7 @@ module.exports = withMatrixClient(React.createClass({
             updating: 0,
             devicesLoading: true,
             devices: null,
+            isIgnoring: false,
         };
     },
 
@@ -81,6 +82,8 @@ module.exports = withMatrixClient(React.createClass({
         cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("accountData", this.onAccountData);
+
+        this._checkIgnoreState();
     },
 
     componentDidMount: function() {
@@ -109,6 +112,11 @@ module.exports = withMatrixClient(React.createClass({
         if (this._cancelDeviceList) {
             this._cancelDeviceList();
         }
+    },
+
+    _checkIgnoreState: function() {
+        const isIgnoring = this.props.matrixClient.isUserIgnored(this.props.member.userId);
+        this.setState({isIgnoring: isIgnoring});
     },
 
     _disambiguateDevices: function(devices) {
@@ -223,6 +231,18 @@ module.exports = withMatrixClient(React.createClass({
             console.log("Error downloading devices", err);
             self.setState({devicesLoading: false});
         });
+    },
+
+    onIgnoreToggle: function() {
+        const ignoredUsers = this.props.matrixClient.getIgnoredUsers();
+        if (this.state.isIgnoring) {
+            const index = ignoredUsers.indexOf(this.props.member.userId);
+            if (index !== -1) ignoredUsers.splice(index, 1);
+        } else {
+            ignoredUsers.push(this.props.member.userId);
+        }
+
+        this.props.matrixClient.setIgnoredUsers(ignoredUsers).then(() => this.setState({isIgnoring: !this.state.isIgnoring}));
     },
 
     onKick: function() {
@@ -607,6 +627,29 @@ module.exports = withMatrixClient(React.createClass({
         );
     },
 
+    _renderUserOptions: function() {
+        // Only allow the user to ignore the user if its not ourselves
+        let ignoreButton = null;
+        if (this.props.member.userId !== this.props.matrixClient.getUserId()) {
+            ignoreButton = (
+                <AccessibleButton onClick={this.onIgnoreToggle} className="mx_MemberInfo_field">
+                    {this.state.isIgnoring ? _t("Unignore") : _t("Ignore")}
+                </AccessibleButton>
+            );
+        }
+
+        if (!ignoreButton) return null;
+
+        return (
+            <div>
+                <h3>{ _t("User Options") }</h3>
+                <div className="mx_MemberInfo_buttons">
+                    {ignoreButton}
+                </div>
+            </div>
+        );
+    },
+
     render: function() {
         var startChat, kickButton, banButton, muteButton, giveModButton, spinner;
         if (this.props.member.userId !== this.props.matrixClient.credentials.userId) {
@@ -755,6 +798,8 @@ module.exports = withMatrixClient(React.createClass({
                                 presenceState={ presenceState } />
                         </div>
                     </div>
+
+                    { this._renderUserOptions() }
 
                     { adminTools }
 

@@ -121,7 +121,7 @@ module.exports = React.createClass({
 
     onRoomMemberTyping: function(ev, member) {
         this.setState({
-            usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
+            usersTyping: WhoIsTyping.usersTypingApartFromMeAndIgnored(this.props.room),
         });
     },
 
