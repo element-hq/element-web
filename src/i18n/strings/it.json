@@ -59,5 +59,7 @@
     "all room members": "Tutti i membri della stanza",
     "all room members, from the point they are invited": "Tutti i membri della stanza, dal punto in cui sono stati/e invitati/e",
     "all room members, from the point they joined": "tutti i membri della stanza, dal punto in cui si sono uniti",
-    "and": "e"
+    "and": "e",
+    "Add a widget": "Aggiungi un widget",
+    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Un messaggio di testo è stato inviato a +%(msisdn)s. Inserisci il codice di verifica che contiene"
 }
