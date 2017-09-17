@@ -175,27 +175,26 @@ function textForThreePidInviteEvent(event) {
     return _t('%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.', {senderName: senderName, targetDisplayName: event.getContent().display_name});
 }
 
+
 function textForHistoryVisibilityEvent(event) {
-    var senderName = event.sender ? event.sender.name : event.getSender();
-    var vis = event.getContent().history_visibility;
-    // XXX: This i18n just isn't going to work for languages with different sentence structure.
-    var text = _t('%(senderName)s made future room history visible to', {senderName: senderName}) + ' ';
-    if (vis === "invited") {
-        text += _t('all room members, from the point they are invited') + '.';
+    const senderName = event.sender ? event.sender.name : event.getSender();
+    switch (event.getContent().history_visibility) {
+        case 'invited':
+            return _t('%(senderName)s made future room history visible to all room members, '
+                + 'from the point they are invited.', {senderName});
+        case 'joined':
+            return _t('%(senderName)s made future room history visible to all room members, '
+                + 'from the point they joined.', {senderName});
+        case 'shared':
+            return _t('%(senderName)s made future room history visible to all room members.', {senderName});
+        case 'world_readable':
+            return _t('%(senderName)s made future room history visible to anyone.', {senderName});
+        default:
+            return _t('%(senderName)s made future room history visible to unknown (%(visibility)s).', {
+                senderName,
+                visibility: event.getContent().history_visibility,
+            });
     }
-    else if (vis === "joined") {
-        text += _t('all room members, from the point they joined') + '.';
-    }
-    else if (vis === "shared") {
-        text += _t('all room members') + '.';
-    }
-    else if (vis === "world_readable") {
-        text += _t('anyone') + '.';
-    }
-    else {
-        text += ' ' + _t('unknown') + ' (' + vis + ').';
-    }
-    return text;
 }
 
 function textForEncryptionEvent(event) {
