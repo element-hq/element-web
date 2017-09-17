@@ -390,6 +390,8 @@ module.exports = React.createClass({
     onAction: function(payload) {
         if (payload.action === "notifier_enabled") {
             this.forceUpdate();
+        } else if (payload.action === "ignore_state_changed") {
+            this._refreshIgnoredUsers();
         }
     },
 
