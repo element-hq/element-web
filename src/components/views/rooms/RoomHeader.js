@@ -324,7 +324,7 @@ module.exports = React.createClass({
 
         let rightRow;
         let manageIntegsButton;
-        if(this.props.room && this.props.room.roomId) {
+        if(this.props.room && this.props.room.roomId && this.props.inRoom) {
             manageIntegsButton = <ManageIntegsButton
                 roomId={this.props.room.roomId}
             />;
