@@ -861,5 +861,7 @@
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "機器人檢查目前在桌面端不可用 ── 請使用<a>網路瀏覽器</a>",
     "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s 小工具已被 %(senderName)s 修改",
     "%(weekDayName)s, %(monthName)s %(day)s": "%(monthName)s%(day)s %(weekDayName)s",
-    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(fullYear)s %(monthName)s %(day)s %(weekDayName)s"
+    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(fullYear)s %(monthName)s %(day)s %(weekDayName)s",
+    "Copied!": "已複製！",
+    "Failed to copy": "複製失敗"
 }
