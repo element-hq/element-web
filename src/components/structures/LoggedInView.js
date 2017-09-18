@@ -131,6 +131,9 @@ export default React.createClass({
                 useCompactLayout: event.getContent().useCompactLayout,
             });
         }
+        if (event.getType() === "m.ignored_user_list") {
+            dis.dispatch({action: "ignore_state_changed"});
+        }
     },
 
     _onKeyDown: function(ev) {

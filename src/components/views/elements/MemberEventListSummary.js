@@ -34,11 +34,13 @@ module.exports = React.createClass({
         threshold: React.PropTypes.number,
         // Called when the MELS expansion is toggled
         onToggle: React.PropTypes.func,
+        // Whether or not to begin with state.expanded=true
+        startExpanded: React.PropTypes.bool,
     },
 
     getInitialState: function() {
         return {
-            expanded: false,
+            expanded: Boolean(this.props.startExpanded),
         };
     },
 
@@ -376,7 +378,7 @@ module.exports = React.createClass({
             return items[0];
         } else if (remaining) {
             items = items.slice(0, itemLimit);
-            return (remaining > 1) 
+            return (remaining > 1)
                 ? _t("%(items)s and %(remaining)s others", { items: items.join(', '), remaining: remaining } )
                 : _t("%(items)s and one other", { items: items.join(', ') });
         } else {

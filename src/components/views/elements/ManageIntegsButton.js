@@ -48,7 +48,7 @@ export default class ManageIntegsButton extends React.Component {
                 this.forceUpdate();
             }, (err) => {
                 this.setState({ scalarError: err});
-                console.error(err);
+                console.error('Error whilst initialising scalarClient for ManageIntegsButton', err);
             });
         }
     }

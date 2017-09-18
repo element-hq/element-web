@@ -32,7 +32,15 @@ emojione.imagePathPNG = 'emojione/png/';
 // Use SVGs for emojis
 emojione.imageType = 'svg';
 
-const SIMPLE_EMOJI_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
+// Anything outside the basic multilingual plane will be a surrogate pair
+const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
+// And there a bunch more symbol characters that emojione has within the
+// BMP, so this includes the ranges from 'letterlike symbols' to
+// 'miscellaneous symbols and arrows' which should catch all of them
+// (with plenty of false positives, but that's OK)
+const SYMBOL_PATTERN = /([\u2100-\u2bff])/;
+
+// And this is emojione's complete regex
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
@@ -44,16 +52,13 @@ const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
  * unicodeToImage uses this function.
  */
 export function containsEmoji(str) {
-    return SIMPLE_EMOJI_PATTERN.test(str);
+    return SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str);
 }
 
 /* modified from https://github.com/Ranks/emojione/blob/master/lib/js/emojione.js
  * because we want to include emoji shortnames in title text
  */
-export function unicodeToImage(str) {
-    // fast path
-    if (!containsEmoji(str)) return str;
-
+function unicodeToImage(str) {
     let replaceWith, unicode, alt, short, fname;
     const mappedUnicode = emojione.mapUnicodeToShort();
 
@@ -391,6 +396,8 @@ export function bodyToHtml(content, highlights, opts) {
     var isHtml = (content.format === "org.matrix.custom.html");
     let body = isHtml ? content.formatted_body : escape(content.body);
 
+    let bodyHasEmoji = false;
+
     var safeBody;
     // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
     // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
@@ -408,16 +415,20 @@ export function bodyToHtml(content, highlights, opts) {
             };
         }
         safeBody = sanitizeHtml(body, sanitizeHtmlParams);
-        safeBody = unicodeToImage(safeBody);
+        bodyHasEmoji = containsEmoji(body);
+        if (bodyHasEmoji) safeBody = unicodeToImage(safeBody);
     }
     finally {
         delete sanitizeHtmlParams.textFilter;
     }
 
-    EMOJI_REGEX.lastIndex = 0;
-    let contentBodyTrimmed = content.body !== undefined ? content.body.trim() : '';
-    let match = EMOJI_REGEX.exec(contentBodyTrimmed);
-    let emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
+    let emojiBody = false;
+    if (bodyHasEmoji) {
+        EMOJI_REGEX.lastIndex = 0;
+        let contentBodyTrimmed = content.body !== undefined ? content.body.trim() : '';
+        let match = EMOJI_REGEX.exec(contentBodyTrimmed);
+        emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
+    }
 
     const className = classNames({
         'mx_EventTile_body': true,
