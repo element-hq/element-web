@@ -19,6 +19,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClient} from 'matrix-js-sdk';
+import UserSettingsStore from '../../../UserSettingsStore';
 
 const BULK_REQUEST_DEBOUNCE_MS = 200;
 
@@ -132,7 +133,9 @@ export default class Flair extends React.Component {
 
     componentWillMount() {
         this._unmounted = false;
-        this._generateAvatars();
+        if (UserSettingsStore.isFeatureEnabled('feature_flair')) {
+            this._generateAvatars();
+        }
     }
 
     async _getAvatarUrls(groups) {
