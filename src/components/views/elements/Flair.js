@@ -100,7 +100,7 @@ async function batchedGetPublicGroups(matrixClient) {
     } catch (err) {
         // Propagate the same error to all usersInFlight
         usersInFlight.forEach((userId) => {
-            usersPending[userId].prom.reject(err);
+            usersPending[userId].reject(err);
         });
         return;
     }
