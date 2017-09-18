@@ -29,11 +29,14 @@ class SendCustomEvent extends React.Component {
         super(props, context);
         this._send = this._send.bind(this);
         this.onBack = this.onBack.bind(this);
-    }
+        this._onChange = this._onChange.bind(this);
 
-    state = {
-        message: null,
-    };
+        this.state = {
+            message: null,
+            input_eventType: '',
+            input_evContent: '{\n\n}',
+        };
+    }
 
     onBack() {
         if (this.state.message) {
@@ -51,13 +54,18 @@ class SendCustomEvent extends React.Component {
     }
 
     send(content) {
-        return MatrixClientPeg.get().sendEvent(this.props.roomId, this.refs.eventType.value, content);
+        return MatrixClientPeg.get().sendEvent(this.props.roomId, this.state.input_eventType, content);
     }
 
     async _send() {
+        if (this.state.input_eventType === '') {
+            this.setState({ message: _t('You must specify an event type!') });
+            return;
+        }
+
         let message;
         try {
-            const content = JSON.parse(this.refs.evContent.value);
+            const content = JSON.parse(this.state.input_evContent);
             await this.send(content);
             message = _t('Event sent!');
         } catch (e) {
@@ -67,7 +75,11 @@ class SendCustomEvent extends React.Component {
     }
 
     _additionalFields() {
-        return <div></div>;
+        return <div/>;
+    }
+
+    _onChange(e) {
+        this.setState({[`input_${e.target.id}`]: e.target.value});
     }
 
     render() {
@@ -87,14 +99,14 @@ class SendCustomEvent extends React.Component {
                     <label htmlFor="eventType"> { _t('Event Type') } </label>
                 </div>
                 <div>
-                    <input id="eventType" ref="eventType" className="mx_TextInputDialog_input" size="64" />
+                    <input id="eventType" onChange={this._onChange} value={this.state.input_eventType} className="mx_TextInputDialog_input" size="64" />
                 </div>
 
                 <div className="mx_TextInputDialog_label">
                     <label htmlFor="evContent"> { _t('Event Content') } </label>
                 </div>
                 <div>
-                    <textarea id="evContent" ref="evContent" className="mx_TextInputDialog_input" defaultValue={"{\n\n}"} cols="63" rows="5" />
+                    <textarea id="evContent" onChange={this._onChange} value={this.state.input_evContent} className="mx_TextInputDialog_input" cols="63" rows="5" />
                 </div>
             </div>
             {this._buttons()}
@@ -103,9 +115,14 @@ class SendCustomEvent extends React.Component {
 }
 
 class SendCustomStateEvent extends SendCustomEvent {
+    constructor(props, context) {
+        super(props, context);
+        this.state['input_stateKey'] = '';
+    }
+
     send(content) {
-        return MatrixClientPeg.get().sendStateEvent(this.props.roomId, this.refs.eventType.value, content,
-            this.refs.stateKey.value);
+        const cli = MatrixClientPeg.get();
+        return cli.sendStateEvent(this.props.roomId, this.state.input_eventType, content, this.state.input_stateKey);
     }
 
     _additionalFields() {
@@ -114,7 +131,7 @@ class SendCustomStateEvent extends SendCustomEvent {
                 <label htmlFor="stateKey"> { _t('State Key') } </label>
             </div>
             <div>
-                <input id="stateKey" ref="stateKey" className="mx_TextInputDialog_input" size="64" />
+                <input id="stateKey" onChange={this._onChange} value={this.state.input_stateKey} className="mx_TextInputDialog_input" size="64" />
             </div>
         </div>;
     }
