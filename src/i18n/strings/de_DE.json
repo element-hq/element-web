@@ -217,5 +217,15 @@
     "Downloading update...": "Update wird heruntergeladen...",
     "Couldn't load home page": "Startseite konnte nicht geladen werden",
     "Bug report sent": "Fehlerbericht wurde gesendet",
-    "Thank you!": "Danke!"
+    "Thank you!": "Danke!",
+    "Back": "Zurück",
+    "Developer Tools": "Entwicklerwerkzeuge",
+    "Failed to send custom event.": "Senden des benutzerdefinierten Events fehlgeschlagen.",
+    "Send Custom Event": "Sende benutzerdefiniertes Event",
+    "Send Custom State Event": "Sende benutzerdefiniertes Status-Event",
+    "Explore Room State": "Erkunde Raum-Status",
+    "Event sent!": "Event gesendet!",
+    "Event Type": "Event-Typ",
+    "Event Content": "Event-Inhalt",
+    "State Key": "Status-Schlüssel"
 }
