@@ -23,6 +23,14 @@ class SendCustomEvent extends React.Component {
     static propTypes = {
         roomId: React.PropTypes.string.isRequired,
         onBack: React.PropTypes.func.isRequired,
+
+        eventType: React.PropTypes.string.isRequired,
+        evContent: React.PropTypes.string.isRequired,
+    };
+
+    static defaultProps = {
+        eventType: '',
+        evContent: '{\n\n}',
     };
 
     constructor(props, context) {
@@ -33,8 +41,8 @@ class SendCustomEvent extends React.Component {
 
         this.state = {
             message: null,
-            input_eventType: '',
-            input_evContent: '{\n\n}',
+            input_eventType: this.props.eventType,
+            input_evContent: this.props.evContent,
         };
     }
 
@@ -115,9 +123,24 @@ class SendCustomEvent extends React.Component {
 }
 
 class SendCustomStateEvent extends SendCustomEvent {
+    static propTypes = {
+        roomId: React.PropTypes.string.isRequired,
+        onBack: React.PropTypes.func.isRequired,
+
+        eventType: React.PropTypes.string.isRequired,
+        evContent: React.PropTypes.string.isRequired,
+        stateKey: React.PropTypes.string.isRequired,
+    };
+
+    static defaultProps = {
+        eventType: '',
+        evContent: '{\n\n}',
+        stateKey: '',
+    };
+
     constructor(props, context) {
         super(props, context);
-        this.state['input_stateKey'] = '';
+        this.state['input_stateKey'] = this.props.stateKey;
     }
 
     send(content) {
@@ -139,6 +162,7 @@ class SendCustomStateEvent extends SendCustomEvent {
 
 class RoomStateExplorer extends React.Component {
     static propTypes = {
+        setMode: React.PropTypes.func.isRequired,
         roomId: React.PropTypes.string.isRequired,
         onBack: React.PropTypes.func.isRequired,
     };
@@ -150,6 +174,7 @@ class RoomStateExplorer extends React.Component {
         this.roomStateEvents = room.currentState.events;
 
         this.onBack = this.onBack.bind(this);
+        this.editEv = this.editEv.bind(this);
     }
 
     state = {
@@ -165,7 +190,7 @@ class RoomStateExplorer extends React.Component {
 
     onViewSourceClick(event) {
         return () => {
-            this.setState({ event: event.event });
+            this.setState({ event });
         };
     }
 
@@ -179,14 +204,24 @@ class RoomStateExplorer extends React.Component {
         }
     }
 
+    editEv() {
+        const ev = this.state.event;
+        this.props.setMode(SendCustomStateEvent, {
+            eventType: ev.getType(),
+            evContent: JSON.stringify(ev.getContent(), null, '\t'),
+            stateKey: ev.getStateKey(),
+        });
+    }
+
     render() {
         if (this.state.event) {
             return <div className="mx_ViewSource">
                 <div className="mx_Dialog_content">
-                    <pre>{JSON.stringify(this.state.event, null, 2)}</pre>
+                    <pre>{JSON.stringify(this.state.event.event, null, 2)}</pre>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.onBack}>{ _t('Back') }</button>
+                    <button onClick={this.editEv}>{ _t('Edit') }</button>
                 </div>
             </div>;
         }
@@ -240,11 +275,13 @@ export default class DevtoolsDialog extends React.Component {
 
     state = {
         mode: null,
+        modeArgs: {},
     };
 
     constructor(props, context) {
         super(props, context);
         this.onBack = this.onBack.bind(this);
+        this.setMode = this.setMode.bind(this);
         this.onCancel = this.onCancel.bind(this);
     }
 
@@ -254,8 +291,12 @@ export default class DevtoolsDialog extends React.Component {
 
     _setMode(mode) {
         return () => {
-            this.setState({ mode });
+            this.setMode(mode);
         };
+    }
+
+    setMode(mode, modeArgs={}) {
+        this.setState({ mode, modeArgs });
     }
 
     onBack() {
@@ -270,7 +311,8 @@ export default class DevtoolsDialog extends React.Component {
         let body;
 
         if (this.state.mode) {
-            body = <this.state.mode {...this.props} onBack={this.onBack} />;
+            body =
+                <this.state.mode {...this.props} {...this.state.modeArgs} onBack={this.onBack} setMode={this.setMode} />;
         } else {
             body = <div>
                 <div className="mx_Dialog_content">
@@ -285,9 +327,11 @@ export default class DevtoolsDialog extends React.Component {
         }
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        return <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished} title={_t('Developer Tools')}>
-            <div>Room ID: {this.props.roomId}</div>
-            { body }
-        </BaseDialog>;
+        return (
+            <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished} title={_t('Developer Tools')}>
+                <div>Room ID: { this.props.roomId }</div>
+                { body }
+            </BaseDialog>
+        );
     }
 }
