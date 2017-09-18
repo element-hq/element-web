@@ -175,9 +175,11 @@ class RoomStateExplorer extends React.Component {
 
         this.onBack = this.onBack.bind(this);
         this.editEv = this.editEv.bind(this);
+        this.onQuery = this.onQuery.bind(this);
     }
 
     state = {
+        query: '',
         eventType: null,
         event: null,
     };
@@ -213,6 +215,10 @@ class RoomStateExplorer extends React.Component {
         });
     }
 
+    onQuery(ev) {
+        this.setState({ query: ev.target.value });
+    }
+
     render() {
         if (this.state.event) {
             return <div className="mx_ViewSource">
@@ -230,6 +236,9 @@ class RoomStateExplorer extends React.Component {
 
         if (this.state.eventType === null) {
             Object.keys(this.roomStateEvents).forEach((evType) => {
+                // Skip this entry if does not contain search query
+                if (this.state.query && !evType.includes(this.state.query)) return;
+
                 const stateGroup = this.roomStateEvents[evType];
                 const stateKeys = Object.keys(stateGroup);
 
@@ -248,6 +257,9 @@ class RoomStateExplorer extends React.Component {
             const evType = this.state.eventType;
             const stateGroup = this.roomStateEvents[evType];
             Object.keys(stateGroup).forEach((stateKey) => {
+                // Skip this entry if does not contain search query
+                if (this.state.query && !stateKey.includes(this.state.query)) return;
+
                 const ev = stateGroup[stateKey];
                 rows.push(<button className="mx_DevTools_RoomStateExplorer_button" key={stateKey}
                                   onClick={this.onViewSourceClick(ev)}>
@@ -258,6 +270,7 @@ class RoomStateExplorer extends React.Component {
 
         return <div>
             <div className="mx_Dialog_content">
+                <input onChange={this.onQuery} placeholder={_t('Filter results')} size="64" className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query" value={this.state.query} />
                 {rows}
             </div>
             <div className="mx_Dialog_buttons">
