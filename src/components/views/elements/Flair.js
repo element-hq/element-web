@@ -23,6 +23,10 @@ import UserSettingsStore from '../../../UserSettingsStore';
 
 const BULK_REQUEST_DEBOUNCE_MS = 200;
 
+// Does the server support groups? Assume yes until we receive M_UNRECOGNIZED.
+// If true, flair can function and we should keep sending requests for groups and avatars.
+let groupSupport = true;
+
 // TODO: Cache-busting based on time. (The server won't inform us of membership changes.)
 // This applies to userGroups and groupProfiles. We can provide a slightly better UX by
 // cache-busting when the current user joins/leaves a group.
@@ -133,7 +137,7 @@ export default class Flair extends React.Component {
 
     componentWillMount() {
         this._unmounted = false;
-        if (UserSettingsStore.isFeatureEnabled('feature_flair')) {
+        if (UserSettingsStore.isFeatureEnabled('feature_flair') && groupSupport) {
             this._generateAvatars();
         }
     }
@@ -159,6 +163,13 @@ export default class Flair extends React.Component {
         try {
             groups = await getPublicisedGroupsCached(this.context.matrixClient, this.props.userId);
         } catch (err) {
+            // Indicate whether the homeserver supports groups
+            if (err.errcode === 'M_UNRECOGNIZED') {
+                console.warn('Cannot display flair, server does not support groups');
+                groupSupport = false;
+                // Return silently to avoid spamming for non-supporting servers
+                return;
+            }
             console.error('Could not get groups for user', this.props.userId, err);
         }
         if (!groups || groups.length === 0) {
