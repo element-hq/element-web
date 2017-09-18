@@ -47,7 +47,7 @@ const usersPending = {
 };
 
 let debounceTimeoutID;
-function getPublicGroupsCached(matrixClient, userId) {
+function getPublicisedGroupsCached(matrixClient, userId) {
     if (userGroups[userId]) {
         return Promise.resolve(userGroups[userId]);
     }
@@ -96,7 +96,7 @@ async function batchedGetPublicGroups(matrixClient) {
         users: [],
     };
     try {
-        resp = await matrixClient.getPublicGroups(usersInFlight);
+        resp = await matrixClient.getPublicisedGroups(usersInFlight);
     } catch (err) {
         // Propagate the same error to all usersInFlight
         usersInFlight.forEach((userId) => {
@@ -157,7 +157,7 @@ export default class Flair extends React.Component {
     async _generateAvatars() {
         let groups;
         try {
-            groups = await getPublicGroupsCached(this.context.matrixClient, this.props.userId);
+            groups = await getPublicisedGroupsCached(this.context.matrixClient, this.props.userId);
         } catch (err) {
             console.error('Could not get groups for user', this.props.userId, err);
         }
