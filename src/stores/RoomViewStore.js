@@ -249,11 +249,15 @@ class RoomViewStore extends Store {
     //
     // This flag remains true after the room has been sucessfully joined,
     // (this store doesn't listen for the appropriate member events)
-    // so you should always consider the room to be joined if the user's
-    // member events says they are joined.
+    // so you should always observe the joined state from the member event
+    // if a room object is present.
     // ie. The correct logic is:
-    // if (room && myMember.membership == 'joined') {
-    //     // user is joined to the room
+    // if (room) {
+    //     if (myMember.membership == 'joined') {
+    //         // user is joined to the room
+    //     } else {
+    //         // Not joined
+    //     }
     // } else {
     //     if (RoomViewStore.isJoining()) {
     //         // show spinner
