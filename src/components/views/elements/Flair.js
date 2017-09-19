@@ -20,6 +20,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClient} from 'matrix-js-sdk';
 import UserSettingsStore from '../../../UserSettingsStore';
+import Promise from 'bluebird';
 
 const BULK_REQUEST_DEBOUNCE_MS = 200;
 
