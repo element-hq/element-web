@@ -34,7 +34,7 @@ export default function SenderProfile(props) {
         <div className="mx_SenderProfile" dir="auto" onClick={props.onClick}>
             <EmojiText>{name || ''}</EmojiText>
             {props.enableFlair ? <Flair userId={mxEvent.getSender()} /> : null}
-            {props.aux ? <EmojiText> props.aux</EmojiText> : null}
+            {props.aux ? <EmojiText> {props.aux}</EmojiText> : null}
         </div>
     );
 }
