@@ -208,5 +208,10 @@
     "Downloading update...": "Frissítés letöltése...",
     "Couldn't load home page": "Kezdőképernyő betöltése sikertelen",
     "Bug report sent": "Hibajelentés elküldve",
-    "Thank you!": "Köszönjük!"
+    "Thank you!": "Köszönjük!",
+    "Back": "Vissza",
+    "Developer Tools": "Fejlesztői eszközök",
+    "Failed to send custom event.": "Egyéni esemény elküldése nem sikerült.",
+    "Send Custom Event": "Egyéni esemény elküldése",
+    "Send Custom State Event": ""
 }
