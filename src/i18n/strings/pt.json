@@ -855,5 +855,14 @@
     "Hide Apps": "Ocultar apps",
     "Hide join/leave messages (invites/kicks/bans unaffected)": "Ocultar mensagens de entrada/saída (não afeta convites/expulsões/proibições)",
     "Hide avatar and display name changes": "Ocultar mudanças de avatar e de nome público",
-    "Integrations Error": "Erro de integrações"
+    "Integrations Error": "Erro de integrações",
+    "Publish this room to the public in %(domain)s's room directory?": "Publicar esta sala ao público no diretório de salas de %(domain)s's?",
+    "Matrix Apps": "Apps Matrix",
+    "AM": "AM",
+    "PM": "PM",
+    "NOTE: Apps are not end-to-end encrypted": "NOTA: As apps não são cifradas ponta-a-ponta",
+    "Press <StartChatButton> to start a chat with someone": "Clique <StartChatButton> para iniciar uma conversa com alguém",
+    "Revoke widget access": "Revogar o acesso do wiget",
+    "Sets the room topic": "Define o assunto da sala",
+    "Show Apps": "Mostrar apps"
 }
