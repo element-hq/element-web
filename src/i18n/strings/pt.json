@@ -842,5 +842,18 @@
     "Start chat": "Iniciar conversa",
     "You already have existing direct chats with this user:": "Você já tem conversas pessoais com esta pessoa:",
     "Accept": "Aceitar",
-    "%(roomName)s is not accessible at this time.": "%(roomName)s não está acessível neste momento."
+    "%(roomName)s is not accessible at this time.": "%(roomName)s não está acessível neste momento.",
+    "Add a widget": "Adicionar widget",
+    "Allow": "Permitir",
+    "Cannot add any more widgets": "Não é possível adicionar mais widgets",
+    "Changes colour scheme of current room": "Altera o esquema de cores da sala atual",
+    "Delete widget": "Apagar widget",
+    "Define the power level of a user": "Definir o nível de privilégios de um utilizador",
+    "Do you want to load widget from URL:": "Deseja carregar o widget a partir do URL:",
+    "Edit": "Editar",
+    "Enable automatic language detection for syntax highlighting": "Ativar deteção automática da linguagem para o destaque da sintaxe",
+    "Hide Apps": "Ocultar apps",
+    "Hide join/leave messages (invites/kicks/bans unaffected)": "Ocultar mensagens de entrada/saída (não afeta convites/expulsões/proibições)",
+    "Hide avatar and display name changes": "Ocultar mudanças de avatar e de nome público",
+    "Integrations Error": "Erro de integrações"
 }
