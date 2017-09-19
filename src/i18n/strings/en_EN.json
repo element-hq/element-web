@@ -883,5 +883,8 @@
     "Failed to invite users to %(groupId)s": "Failed to invite users to %(groupId)s",
     "Unable to reject invite": "Unable to reject invite",
     "Leave Group": "Leave Group",
-    "Leave %(groupName)s?": "Leave %(groupName)s?"
+    "Leave %(groupName)s?": "Leave %(groupName)s?",
+    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s widget modified by %(senderName)s",
+    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot check is currently unavailable on desktop - please use a <a>web browser</a>",
+    "Flair": "Flair"
 }
