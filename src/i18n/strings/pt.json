@@ -772,7 +772,7 @@
     "Public Chat": "Conversa pública",
     "Uploading %(filename)s and %(count)s others|zero": "Enviando o arquivo %(filename)s",
     "Room contains unknown devices": "Esta sala contém dispositivos desconhecidos",
-    "Admin tools": "Ferramentas de administração",
+    "Admin Tools": "Ferramentas de administração",
     "You have been kicked from %(roomName)s by %(userName)s.": "Você foi removido(a) da sala %(roomName)s por %(userName)s.",
     "Undecryptable": "Não é possível descriptografar",
     "Incoming video call from %(name)s": "Chamada de vídeo de %(name)s recebida",
