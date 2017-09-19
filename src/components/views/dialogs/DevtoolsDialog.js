@@ -23,17 +23,28 @@ class SendCustomEvent extends React.Component {
     static propTypes = {
         roomId: React.PropTypes.string.isRequired,
         onBack: React.PropTypes.func.isRequired,
+
+        eventType: React.PropTypes.string.isRequired,
+        evContent: React.PropTypes.string.isRequired,
+    };
+
+    static defaultProps = {
+        eventType: '',
+        evContent: '{\n\n}',
     };
 
     constructor(props, context) {
         super(props, context);
         this._send = this._send.bind(this);
         this.onBack = this.onBack.bind(this);
-    }
+        this._onChange = this._onChange.bind(this);
 
-    state = {
-        message: null,
-    };
+        this.state = {
+            message: null,
+            input_eventType: this.props.eventType,
+            input_evContent: this.props.evContent,
+        };
+    }
 
     onBack() {
         if (this.state.message) {
@@ -51,13 +62,18 @@ class SendCustomEvent extends React.Component {
     }
 
     send(content) {
-        return MatrixClientPeg.get().sendEvent(this.props.roomId, this.refs.eventType.value, content);
+        return MatrixClientPeg.get().sendEvent(this.props.roomId, this.state.input_eventType, content);
     }
 
     async _send() {
+        if (this.state.input_eventType === '') {
+            this.setState({ message: _t('You must specify an event type!') });
+            return;
+        }
+
         let message;
         try {
-            const content = JSON.parse(this.refs.evContent.value);
+            const content = JSON.parse(this.state.input_evContent);
             await this.send(content);
             message = _t('Event sent!');
         } catch (e) {
@@ -67,7 +83,11 @@ class SendCustomEvent extends React.Component {
     }
 
     _additionalFields() {
-        return <div></div>;
+        return <div/>;
+    }
+
+    _onChange(e) {
+        this.setState({[`input_${e.target.id}`]: e.target.value});
     }
 
     render() {
@@ -87,14 +107,14 @@ class SendCustomEvent extends React.Component {
                     <label htmlFor="eventType"> { _t('Event Type') } </label>
                 </div>
                 <div>
-                    <input id="eventType" ref="eventType" className="mx_TextInputDialog_input" size="64" />
+                    <input id="eventType" onChange={this._onChange} value={this.state.input_eventType} className="mx_TextInputDialog_input" size="64" />
                 </div>
 
                 <div className="mx_TextInputDialog_label">
                     <label htmlFor="evContent"> { _t('Event Content') } </label>
                 </div>
                 <div>
-                    <textarea id="evContent" ref="evContent" className="mx_TextInputDialog_input" defaultValue={"{\n\n}"} cols="63" rows="5" />
+                    <textarea id="evContent" onChange={this._onChange} value={this.state.input_evContent} className="mx_TextInputDialog_input" cols="63" rows="5" />
                 </div>
             </div>
             {this._buttons()}
@@ -103,9 +123,29 @@ class SendCustomEvent extends React.Component {
 }
 
 class SendCustomStateEvent extends SendCustomEvent {
+    static propTypes = {
+        roomId: React.PropTypes.string.isRequired,
+        onBack: React.PropTypes.func.isRequired,
+
+        eventType: React.PropTypes.string.isRequired,
+        evContent: React.PropTypes.string.isRequired,
+        stateKey: React.PropTypes.string.isRequired,
+    };
+
+    static defaultProps = {
+        eventType: '',
+        evContent: '{\n\n}',
+        stateKey: '',
+    };
+
+    constructor(props, context) {
+        super(props, context);
+        this.state['input_stateKey'] = this.props.stateKey;
+    }
+
     send(content) {
-        return MatrixClientPeg.get().sendStateEvent(this.props.roomId, this.refs.eventType.value, content,
-            this.refs.stateKey.value);
+        const cli = MatrixClientPeg.get();
+        return cli.sendStateEvent(this.props.roomId, this.state.input_eventType, content, this.state.input_stateKey);
     }
 
     _additionalFields() {
@@ -114,7 +154,7 @@ class SendCustomStateEvent extends SendCustomEvent {
                 <label htmlFor="stateKey"> { _t('State Key') } </label>
             </div>
             <div>
-                <input id="stateKey" ref="stateKey" className="mx_TextInputDialog_input" size="64" />
+                <input id="stateKey" onChange={this._onChange} value={this.state.input_stateKey} className="mx_TextInputDialog_input" size="64" />
             </div>
         </div>;
     }
@@ -122,6 +162,7 @@ class SendCustomStateEvent extends SendCustomEvent {
 
 class RoomStateExplorer extends React.Component {
     static propTypes = {
+        setMode: React.PropTypes.func.isRequired,
         roomId: React.PropTypes.string.isRequired,
         onBack: React.PropTypes.func.isRequired,
     };
@@ -133,9 +174,12 @@ class RoomStateExplorer extends React.Component {
         this.roomStateEvents = room.currentState.events;
 
         this.onBack = this.onBack.bind(this);
+        this.editEv = this.editEv.bind(this);
+        this.onQuery = this.onQuery.bind(this);
     }
 
     state = {
+        query: '',
         eventType: null,
         event: null,
     };
@@ -148,7 +192,7 @@ class RoomStateExplorer extends React.Component {
 
     onViewSourceClick(event) {
         return () => {
-            this.setState({ event: event.event });
+            this.setState({ event });
         };
     }
 
@@ -162,14 +206,28 @@ class RoomStateExplorer extends React.Component {
         }
     }
 
+    editEv() {
+        const ev = this.state.event;
+        this.props.setMode(SendCustomStateEvent, {
+            eventType: ev.getType(),
+            evContent: JSON.stringify(ev.getContent(), null, '\t'),
+            stateKey: ev.getStateKey(),
+        });
+    }
+
+    onQuery(ev) {
+        this.setState({ query: ev.target.value });
+    }
+
     render() {
         if (this.state.event) {
             return <div className="mx_ViewSource">
                 <div className="mx_Dialog_content">
-                    <pre>{JSON.stringify(this.state.event, null, 2)}</pre>
+                    <pre>{JSON.stringify(this.state.event.event, null, 2)}</pre>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.onBack}>{ _t('Back') }</button>
+                    <button onClick={this.editEv}>{ _t('Edit') }</button>
                 </div>
             </div>;
         }
@@ -178,6 +236,9 @@ class RoomStateExplorer extends React.Component {
 
         if (this.state.eventType === null) {
             Object.keys(this.roomStateEvents).forEach((evType) => {
+                // Skip this entry if does not contain search query
+                if (this.state.query && !evType.includes(this.state.query)) return;
+
                 const stateGroup = this.roomStateEvents[evType];
                 const stateKeys = Object.keys(stateGroup);
 
@@ -196,6 +257,9 @@ class RoomStateExplorer extends React.Component {
             const evType = this.state.eventType;
             const stateGroup = this.roomStateEvents[evType];
             Object.keys(stateGroup).forEach((stateKey) => {
+                // Skip this entry if does not contain search query
+                if (this.state.query && !stateKey.includes(this.state.query)) return;
+
                 const ev = stateGroup[stateKey];
                 rows.push(<button className="mx_DevTools_RoomStateExplorer_button" key={stateKey}
                                   onClick={this.onViewSourceClick(ev)}>
@@ -206,6 +270,7 @@ class RoomStateExplorer extends React.Component {
 
         return <div>
             <div className="mx_Dialog_content">
+                <input onChange={this.onQuery} placeholder={_t('Filter results')} size="64" className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query" value={this.state.query} />
                 {rows}
             </div>
             <div className="mx_Dialog_buttons">
@@ -223,11 +288,13 @@ export default class DevtoolsDialog extends React.Component {
 
     state = {
         mode: null,
+        modeArgs: {},
     };
 
     constructor(props, context) {
         super(props, context);
         this.onBack = this.onBack.bind(this);
+        this.setMode = this.setMode.bind(this);
         this.onCancel = this.onCancel.bind(this);
     }
 
@@ -237,8 +304,12 @@ export default class DevtoolsDialog extends React.Component {
 
     _setMode(mode) {
         return () => {
-            this.setState({ mode });
+            this.setMode(mode);
         };
+    }
+
+    setMode(mode, modeArgs={}) {
+        this.setState({ mode, modeArgs });
     }
 
     onBack() {
@@ -253,7 +324,8 @@ export default class DevtoolsDialog extends React.Component {
         let body;
 
         if (this.state.mode) {
-            body = <this.state.mode {...this.props} onBack={this.onBack} />;
+            body =
+                <this.state.mode {...this.props} {...this.state.modeArgs} onBack={this.onBack} setMode={this.setMode} />;
         } else {
             body = <div>
                 <div className="mx_Dialog_content">
@@ -268,9 +340,11 @@ export default class DevtoolsDialog extends React.Component {
         }
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        return <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished} title={_t('Developer Tools')}>
-            <div>Room ID: {this.props.roomId}</div>
-            { body }
-        </BaseDialog>;
+        return (
+            <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished} title={_t('Developer Tools')}>
+                <div>Room ID: { this.props.roomId }</div>
+                { body }
+            </BaseDialog>
+        );
     }
 }
