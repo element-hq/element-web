@@ -127,7 +127,7 @@ function _onRoomInviteFinished(roomId, shouldInvite, addrs) {
 }
 
 function _isDmChat(addrTexts) {
-    if (addrTexts.length === 1 && getAddressType(addrTexts[0])) {
+    if (addrTexts.length === 1 && getAddressType(addrTexts[0]) === 'mx') {
         return true;
     } else {
         return false;

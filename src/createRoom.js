@@ -79,12 +79,6 @@ function createRoom(opts) {
     const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
     let roomId;
-    if (opts.andView) {
-        // We will possibly have a successful join, indicate as such
-        dis.dispatch({
-            action: 'will_join',
-        });
-    }
     return client.createRoom(createOpts).finally(function() {
         modal.close();
     }).then(function(res) {
@@ -104,8 +98,10 @@ function createRoom(opts) {
                 action: 'view_room',
                 room_id: roomId,
                 should_peek: false,
-                // Creating a room will have joined us to the room
-                joined: true,
+                // Creating a room will have joined us to the room,
+                // so we are expecting the room to come down the sync
+                // stream, if it hasn't already.
+                joining: true,
             });
         }
         return roomId;

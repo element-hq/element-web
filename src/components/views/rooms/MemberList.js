@@ -332,7 +332,7 @@ module.exports = React.createClass({
                         return;
                     }
                     memberList.push(
-                        <EntityTile key={e.getStateKey()} name={e.getContent().display_name} />
+                        <EntityTile key={e.getStateKey()} name={e.getContent().display_name} suppressOnHover={true} />
                     );
                 });
             }

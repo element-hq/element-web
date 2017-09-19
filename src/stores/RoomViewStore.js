@@ -21,7 +21,7 @@ import Modal from '../Modal';
 import { _t } from '../languageHandler';
 
 const INITIAL_STATE = {
-    // Whether we're joining the currently viewed room
+    // Whether we're joining the currently viewed room (see isJoining())
     joining: false,
     // Any error that has occurred during joining
     joinError: null,
@@ -90,9 +90,6 @@ class RoomViewStore extends Store {
             case 'join_room':
                 this._joinRoom(payload);
                 break;
-            case 'joined_room':
-                this._joinedRoom(payload);
-                break;
             case 'join_room_error':
                 this._joinRoomError(payload);
                 break;
@@ -119,11 +116,9 @@ class RoomViewStore extends Store {
                 roomLoadError: null,
                 // should peek by default
                 shouldPeek: payload.should_peek === undefined ? true : payload.should_peek,
+                // have we sent a join request for this room and are waiting for a response?
+                joining: payload.joining || false,
             };
-
-            if (payload.joined) {
-                newState.joining = false;
-            }
 
             if (this._state.forwardingEvent) {
                 dis.dispatch({
@@ -134,6 +129,10 @@ class RoomViewStore extends Store {
             }
 
             this._setState(newState);
+
+            if (payload.auto_join) {
+                this._joinRoom(payload);
+            }
         } else if (payload.room_alias) {
             // Resolve the alias and then do a second dispatch with the room ID acquired
             this._setState({
@@ -153,6 +152,8 @@ class RoomViewStore extends Store {
                     event_id: payload.event_id,
                     highlighted: payload.highlighted,
                     room_alias: payload.room_alias,
+                    auto_join: payload.auto_join,
+                    oob_data: payload.oob_data,
                 });
             }, (err) => {
                 dis.dispatch({
@@ -181,9 +182,11 @@ class RoomViewStore extends Store {
         MatrixClientPeg.get().joinRoom(
             this._state.roomAlias || this._state.roomId, payload.opts,
         ).done(() => {
-            dis.dispatch({
-                action: 'joined_room',
-            });
+            // We don't actually need to do anything here: we do *not*
+            // clear the 'joining' flag because the Room object and/or
+            // our 'joined' member event may not have come down the sync
+            // stream yet, and that's the point at which we'd consider
+            // the user joined to the room.
         }, (err) => {
             dis.dispatch({
                 action: 'join_room_error',
@@ -195,12 +198,6 @@ class RoomViewStore extends Store {
                 title: _t("Failed to join room"),
                 description: msg,
             });
-        });
-    }
-
-    _joinedRoom(payload) {
-        this._setState({
-            joining: false,
         });
     }
 
@@ -245,7 +242,29 @@ class RoomViewStore extends Store {
         return this._state.roomLoadError;
     }
 
-    // Whether we're joining the currently viewed room
+    // True if we're expecting the user to be joined to the room currently being
+    // viewed. Note that this is left true after the join request has finished,
+    // since we should still consider a join to be in progress until the room
+    // & member events come down the sync.
+    //
+    // This flag remains true after the room has been sucessfully joined,
+    // (this store doesn't listen for the appropriate member events)
+    // so you should always observe the joined state from the member event
+    // if a room object is present.
+    // ie. The correct logic is:
+    // if (room) {
+    //     if (myMember.membership == 'joined') {
+    //         // user is joined to the room
+    //     } else {
+    //         // Not joined
+    //     }
+    // } else {
+    //     if (RoomViewStore.isJoining()) {
+    //         // show spinner
+    //     } else {
+    //         // show join prompt
+    //     }
+    // }
     isJoining() {
         return this._state.joining;
     }

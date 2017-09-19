@@ -25,6 +25,7 @@ import {PillCompletion} from './Components';
 import type {SelectionRange, Completion} from './Autocompleter';
 import _uniq from 'lodash/uniq';
 import _sortBy from 'lodash/sortBy';
+import UserSettingsStore from '../UserSettingsStore';
 
 import EmojiData from '../stripped-emoji.json';
 
@@ -96,6 +97,10 @@ export default class EmojiProvider extends AutocompleteProvider {
     }
 
     async getCompletions(query: string, selection: SelectionRange) {
+        if (UserSettingsStore.getSyncedSetting("MessageComposerInput.dontSuggestEmoji")) {
+            return []; // don't give any suggestions if the user doesn't want them
+        }
+
         const EmojiText = sdk.getComponent('views.elements.EmojiText');
 
         let completions = [];
