@@ -213,5 +213,11 @@
     "Developer Tools": "Fejlesztői eszközök",
     "Failed to send custom event.": "Egyéni esemény elküldése nem sikerült.",
     "Send Custom Event": "Egyéni esemény elküldése",
-    "Send Custom State Event": ""
+    "Send Custom State Event": "Egyedi állapot küldés",
+    "Explore Room State": "Szoba állapotának felderítése",
+    "Event sent!": "Esemény elküldve!",
+    "Event Type": "Esemény típusa",
+    "Event Content": "Esemény tartalma",
+    "State Key": "Állapot kulcs",
+    "Invite to this group": "Meghívás ebbe a csoportba"
 }
