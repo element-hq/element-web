@@ -241,10 +241,10 @@ export default React.createClass({
                         eventPixelOffset={this.props.initialEventPixelOffset}
                         key={this.props.currentRoomId || 'roomview'}
                         opacity={this.props.middleOpacity}
-                        collapsedRhs={this.props.collapse_rhs}
+                        collapsedRhs={this.props.collapseRhs}
                         ConferenceHandler={this.props.ConferenceHandler}
                     />;
-                if (!this.props.collapse_rhs) right_panel = <RightPanel roomId={this.props.currentRoomId} opacity={this.props.rightOpacity} />;
+                if (!this.props.collapseRhs) right_panel = <RightPanel roomId={this.props.currentRoomId} opacity={this.props.rightOpacity} />;
                 break;
 
             case PageTypes.UserSettings:
@@ -255,7 +255,7 @@ export default React.createClass({
                     referralBaseUrl={this.props.config.referralBaseUrl}
                     teamToken={this.props.teamToken}
                 />;
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.rightOpacity}/>;
+                if (!this.props.collapseRhs) right_panel = <RightPanel opacity={this.props.rightOpacity}/>;
                 break;
 
             case PageTypes.MyGroups:
@@ -265,9 +265,9 @@ export default React.createClass({
             case PageTypes.CreateRoom:
                 page_element = <CreateRoom
                     onRoomCreated={this.props.onRoomCreated}
-                    collapsedRhs={this.props.collapse_rhs}
+                    collapsedRhs={this.props.collapseRhs}
                 />;
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.rightOpacity}/>;
+                if (!this.props.collapseRhs) right_panel = <RightPanel opacity={this.props.rightOpacity}/>;
                 break;
 
             case PageTypes.RoomDirectory:
@@ -300,8 +300,9 @@ export default React.createClass({
             case PageTypes.GroupView:
                 page_element = <GroupView
                     groupId={this.props.currentGroupId}
+                    collapsedRhs={this.props.collapseRhs}
                 />;
-                //right_panel = <RightPanel opacity={this.props.rightOpacity} />;
+                if (!this.props.collapseRhs) right_panel = <RightPanel groupId={this.props.currentGroupId} opacity={this.props.rightOpacity} />;
                 break;
         }
 
@@ -333,7 +334,7 @@ export default React.createClass({
                 <div className={bodyClasses}>
                     <LeftPanel
                         selectedRoom={this.props.currentRoomId}
-                        collapsed={this.props.collapse_lhs || false}
+                        collapsed={this.props.collapseLhs || false}
                         opacity={this.props.leftOpacity}
                     />
                     <main className='mx_MatrixChat_middlePanel'>
