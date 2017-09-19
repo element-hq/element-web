@@ -853,5 +853,9 @@
     "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s kisalkalmazást %(senderName)s hozzáadta",
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s kisalkalmazást %(senderName)s eltávolította",
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot ellenőrzés az asztali verzióban nem érhető el - használd a <a>web böngészőt</a>",
-    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s kisalkalmazást %(senderName)s módosította"
+    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s kisalkalmazást %(senderName)s módosította",
+    "%(weekDayName)s, %(monthName)s %(day)s": "%(weekDayName)s, %(monthName)s %(day)s",
+    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(fullYear)s %(monthName)s %(day)s",
+    "Copied!": "Lemásolva!",
+    "Failed to copy": "Sikertelen másolás"
 }
