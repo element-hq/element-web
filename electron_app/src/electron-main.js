@@ -84,7 +84,7 @@ let powerSaveBlockerId;
 electron.ipcMain.on('app_onAction', function(ev, payload) {
     switch (payload.action) {
         case 'call_state':
-            if (powerSaveBlockerId && powerSaveBlockerId.isStarted(powerSaveBlockerId)) {
+            if (powerSaveBlockerId && electron.powerSaveBlocker.isStarted(powerSaveBlockerId)) {
                 if (payload.state === 'ended') {
                     electron.powerSaveBlocker.stop(powerSaveBlockerId);
                 }
