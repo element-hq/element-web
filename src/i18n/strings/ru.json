@@ -215,5 +215,16 @@
     "Downloading update...": "Загрузка обновления...",
     "Couldn't load home page": "Не удалось загрузить домашнюю страницу",
     "Bug report sent": "Отчет об ошибке отправлен",
-    "Thank you!": "Спасибо!"
+    "Thank you!": "Спасибо!",
+    "Back": "Назад",
+    "Developer Tools": "Инструменты разработчика",
+    "Failed to send custom event.": "Не удалось отправить индивидуальное мероприятие.",
+    "Send Custom Event": "Отправить индивидуальное мероприятие",
+    "Send Custom State Event": "Отправить статус индивидуального мероприятия",
+    "Explore Room State": "Просмотр статуса комнаты",
+    "Event sent!": "Мероприятие отправлено!",
+    "Event Type": "Тип мероприятия",
+    "Event Content": "Содержание мероприятия",
+    "State Key": "Ключ состояния",
+    "Invite to this group": "Пригласить в эту группу"
 }
