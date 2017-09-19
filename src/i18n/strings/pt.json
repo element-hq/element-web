@@ -918,5 +918,12 @@
     "Error whilst fetching joined groups": "Erro ao obter os seus grupos",
     "Featured Users:": "Utilizadores em destaque:",
     "Edit Group": "Editar grupo",
-    "Automatically replace plain text Emoji": "Substituir Emoji em texto automaticamente"
+    "Automatically replace plain text Emoji": "Substituir Emoji em texto automaticamente",
+    "Failed to upload image": "Falha ao carregar imagem",
+    "Failed to update group": "Falha ao atualizar grupo",
+    "Hide avatars in user and room mentions": "Ocultar avatares nas menções de utilizadores e salas",
+    "%(widgetName)s widget added by %(senderName)s": "Widget %(widgetName)s adicionado por %(senderName)s",
+    "%(widgetName)s widget removed by %(senderName)s": "Widget %(widgetName)s removido por %(senderName)s",
+    "%(widgetName)s widget modified by %(senderName)s": "Widget %(widgetName)s modificado por %(senderName)s",
+    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "A verificação através de robot está atualmente indisponível na versão desktop - utilize um <a>navegador web</a>"
 }
