@@ -208,5 +208,10 @@
     "Set Password": "Wachtwoord instellen",
     "Couldn't load home page": "Kon de home pagina niet laden",
     "Bug report sent": "Bug report verzonden",
-    "Thank you!": "Bedankt!"
+    "Thank you!": "Bedankt!",
+    "Back": "Terug",
+    "Failed to send custom event.": "Aangepast Event verzenden mislukt.",
+    "Send Custom Event": "Verzend aangepast evenement",
+    "Send Custom State Event": "Verzend aangepast State Event",
+    "Invite to this group": "Nodig uit voor deze groep"
 }
