@@ -461,12 +461,12 @@ export default React.createClass({
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                         onClick={this._onAcceptInviteClick}
                     >
-                        {_t('Accept')}
+                        {_t("Accept")}
                     </AccessibleButton>
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                         onClick={this._onRejectInviteClick}
                     >
-                        {_t('Decline')}
+                        {_t("Decline")}
                     </AccessibleButton>
                 </div>
             </div>;
@@ -477,7 +477,7 @@ export default React.createClass({
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                         onClick={this._onLeaveClick}
                     >
-                        {_t('Leave')}
+                        {_t("Leave")}
                     </AccessibleButton>
                 </div>
             </div>;

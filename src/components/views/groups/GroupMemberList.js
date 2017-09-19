@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd.
+Copyright 2017 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -86,25 +87,29 @@ export default withMatrixClient(React.createClass({
         const GroupMemberTile = sdk.getComponent("groups.GroupMemberTile");
         query = (query || "").toLowerCase();
 
-        const memberList = this.state.members.filter((m) => {
-            if (query) {
+        let memberList = this.state.members;
+        if (query) {
+            memberList = memberList.filter((m) => {
+                // TODO: add this when we have this info from the API
                 //const matchesName = m.name.toLowerCase().indexOf(query) !== -1;
-                const matchesId = m.userId.toLowerCase().indexOf(query) !== -1;
+                const matchesId = m.userId.toLowerCase().includes(query);
 
                 if (/*!matchesName &&*/ !matchesId) {
                     return false;
                 }
-            }
 
-            return true;
-        }).map((m) => {
+                return true;
+            });
+        }
+
+        memberList = memberList.map((m) => {
             return (
                 <GroupMemberTile key={m.userId} groupId={this.props.groupId} member={m} />
             );
         });
 
         memberList.sort((a, b) => {
-            // should put admins at the top: we don't yet have that info
+            // TODO: should put admins at the top: we don't yet have that info
             if (a < b) {
                 return -1;
             } else if (a > b) {

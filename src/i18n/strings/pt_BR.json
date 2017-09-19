@@ -783,7 +783,7 @@
     "a room": "uma sala",
     "Accept": "Aceitar",
     "Active call (%(roomName)s)": "Chamada ativa (%(roomName)s)",
-    "Admin tools": "Ferramentas de administração",
+    "Admin Tools": "Ferramentas de administração",
     "And %(count)s more...": "E mais %(count)s...",
     "Alias (optional)": "Apelido (opcional)",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Não foi possível conectar ao Servidor de Base. Por favor, confira sua conectividade à internet, garanta que o <a>certificado SSL do Servidor de Base</a> é confiável, e que uma extensão do navegador não esteja bloqueando as requisições de rede.",

@@ -27,8 +27,8 @@ export function showGroupInviteDialog(groupId) {
         placeholder: _t("Name or matrix ID"),
         button: _t("Invite to Group"),
         validAddressTypes: ['mx'],
-        onFinished: (shouldInvite, addrs) => {
-            if (!shouldInvite) return;
+        onFinished: (success, addrs) => {
+            if (!success) return;
 
             _onGroupInviteFinished(groupId, addrs);
         },

@@ -302,7 +302,7 @@
     "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s 已接受 %(displayName)s 的邀請。",
     "Active call (%(roomName)s)": "活躍的通話（%(roomName)s）",
     "Add": "新增",
-    "Admin tools": "管理員工具",
+    "Admin Tools": "管理員工具",
     "And %(count)s more...": "還有 %(count)s 個...",
     "Missing Media Permissions, click here to request.": "遺失媒體權限，點選這裡來要求。",
     "No Microphones detected": "未偵測到麥克風",
