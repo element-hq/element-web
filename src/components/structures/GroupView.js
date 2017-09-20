@@ -38,6 +38,9 @@ const RoomSummaryType = PropTypes.shape({
 const UserSummaryType = PropTypes.shape({
     summaryInfo: PropTypes.shape({
         user_id: PropTypes.string.isRequired,
+        role_id: PropTypes.string,
+        avatar_url: PropTypes.string,
+        displayname: PropTypes.string,
     }).isRequired,
 });
 
@@ -194,13 +197,16 @@ const FeaturedUser = React.createClass({
     },
 
     render: function() {
-        // Add avatar once we get profile info inline in the summary response
-        //const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        const name = this.props.summaryInfo.displayname || this.props.summaryInfo.user_id.slice(1);
 
         const permalink = 'https://matrix.to/#/' + this.props.summaryInfo.user_id;
-        const userNameNode = <a href={permalink} onClick={this.onClick} >{this.props.summaryInfo.user_id}</a>;
+        const userNameNode = <a href={permalink} onClick={this.onClick}>{name}</a>;
+        const httpUrl = MatrixClientPeg.get()
+            .mxcUrlToHttp(this.props.summaryInfo.avatar_url, 64, 64);
 
         return <AccessibleButton className="mx_GroupView_featuredThing" onClick={this.onClick}>
+            <BaseAvatar name={name} url={httpUrl} width={64} height={64} />
             <div className="mx_GroupView_featuredThing_name">{userNameNode}</div>
         </AccessibleButton>;
     },
