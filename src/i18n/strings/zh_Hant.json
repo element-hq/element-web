@@ -221,5 +221,6 @@
     "State Key": "狀態金鑰",
     "Invite to this group": "邀請進入此群組",
     "Filter results": "過濾結果",
-    "You must specify an event type!": "您必須指定事件類型！"
+    "You must specify an event type!": "您必須指定事件類型！",
+    "Add room to this group": "新增聊天室到此群組"
 }
