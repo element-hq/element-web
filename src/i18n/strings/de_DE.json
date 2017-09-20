@@ -228,5 +228,7 @@
     "Event Type": "Event-Typ",
     "Event Content": "Event-Inhalt",
     "State Key": "Status-Schlüssel",
-    "Invite to this group": "In diese Gruppe einladen"
+    "Invite to this group": "In diese Gruppe einladen",
+    "Filter results": "Ergebnisse filtern",
+    "You must specify an event type!": "Du musst einen Event-Typen spezifizieren!"
 }
