@@ -208,5 +208,18 @@
     "Checking for an update...": "Sprawdzanie aktualizacji...",
     "Couldn't load home page": "Nie można załadować strony startowej",
     "Bug report sent": "Raport błędu wysłany",
-    "Thank you!": "Dziękujemy!"
+    "Thank you!": "Dziękujemy!",
+    "Back": "Powrót",
+    "Developer Tools": "Narzędzia programistyczne",
+    "Failed to send custom event.": "Wysyłanie niestandardowego wydarzenia nie powiodło się.",
+    "Filter results": "Filtruj wyniki",
+    "Send Custom Event": "Wyślij niestandardowe wydarzenie",
+    "Send Custom State Event": "Wyślij wydarzenie o niestandardowym stanie",
+    "Explore Room State": "Przeglądaj stan pokoju",
+    "You must specify an event type!": "Musisz określić typ wydarzenia!",
+    "Event sent!": "Wydarzenie wysłane!",
+    "Event Type": "Typ wydarzenia",
+    "Event Content": "Zawartość wydarzenia",
+    "State Key": "Klucz stanu",
+    "Invite to this group": "Zaproś do tej grupy"
 }
