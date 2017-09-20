@@ -219,5 +219,7 @@
     "Event Type": "事件類型",
     "Event Content": "事件內容",
     "State Key": "狀態金鑰",
-    "Invite to this group": "邀請進入此群組"
+    "Invite to this group": "邀請進入此群組",
+    "Filter results": "過濾結果",
+    "You must specify an event type!": "您必須指定事件類型！"
 }
