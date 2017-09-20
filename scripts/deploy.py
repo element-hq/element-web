@@ -165,7 +165,7 @@ if __name__ == "__main__":
         )
     )
     parser.add_argument(
-        "--config", nargs='?', default='./config.json', help=(
+        "--config", nargs='*', default='./config.json', help=(
             "Write a symlink at config.json in the extracted tarball to this \
             location. (Default: '%(default)s')"
         )
@@ -182,8 +182,7 @@ if __name__ == "__main__":
     deployer.packages_path = args.packages_dir
     deployer.bundles_path = args.bundles_dir
     deployer.should_clean = args.clean
-    deployer.config_locations = {
-        "config.json": args.config,
-    }
+
+    deployer.config_locations = { os.path.basename(c): c for c in args.config }
 
     deployer.deploy(args.tarball, args.extract_path)
