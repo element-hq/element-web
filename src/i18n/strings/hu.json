@@ -221,5 +221,6 @@
     "State Key": "Állapot kulcs",
     "Invite to this group": "Meghívás ebbe a csoportba",
     "Filter results": "Találatok szűrése",
-    "You must specify an event type!": "Meg kell határoznod az esemény típusát!"
+    "You must specify an event type!": "Meg kell határoznod az esemény típusát!",
+    "Add room to this group": "Szoba hozzáadása ehhez a csoporthoz"
 }
