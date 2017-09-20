@@ -195,7 +195,14 @@ module.exports = React.createClass({
             searchError: null,
         });
         MatrixClientPeg.get().getGroupUsers(this.props.groupId).then((resp) => {
-            this._processResults(resp.chunk, query);
+            const results = resp.chunk.map((u) => {
+                return {
+                    user_id: u.user_id,
+                    avatar_url: u.avatar_url,
+                    display_name: u.displayname,
+                };
+            });
+            this._processResults(results, query);
         }).catch((err) => {
             console.error('Error whilst searching user directory: ', err);
             this.setState({

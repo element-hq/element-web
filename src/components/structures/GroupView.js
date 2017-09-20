@@ -133,13 +133,6 @@ const RoleUserList = React.createClass({
         groupId: PropTypes.string.isRequired,
     },
 
-    onUsersSelected: function(addrs) {
-        addrs.forEach((addr) => {
-            // const userId = addr.address;
-            // TODO: Add user to the group via API hit
-        });
-    },
-
     onAddUsersClicked: function(ev) {
         ev.preventDefault();
         const UserPickerDialog = sdk.getComponent("dialogs.UserPickerDialog");
@@ -152,8 +145,10 @@ const RoleUserList = React.createClass({
             groupId: this.props.groupId,
             onFinished: (success, addrs) => {
                 if (!success) return;
-
-                this.onUsersSelected(addrs);
+                addrs.map((addr) => {
+                    return MatrixClientPeg.get()
+                        .addUserToGroupSummary(this.props.groupId, addr.address);
+                });
             },
         });
     },
