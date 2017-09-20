@@ -886,5 +886,7 @@
     "Leave %(groupName)s?": "Leave %(groupName)s?",
     "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s widget modified by %(senderName)s",
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot check is currently unavailable on desktop - please use a <a>web browser</a>",
-    "Flair": "Flair"
+    "Flair": "Flair",
+    "Add a Room": "Add a Room",
+    "Add a User": "Add a User"
 }

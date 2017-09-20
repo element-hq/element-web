@@ -54,16 +54,24 @@ const CategoryRoomList = React.createClass({
     },
 
     render: function() {
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const roomNodes = this.props.rooms.map((r) => {
             return <FeaturedRoom key={r.room_id} summaryInfo={r} />;
         });
+
         let catHeader = null;
         if (this.props.category && this.props.category.profile) {
             catHeader = <div className="mx_GroupView_featuredThings_category">{this.props.category.profile.name}</div>;
         }
-        return <div>
+        return <div className="mx_GroupView_featuredThings_container">
             {catHeader}
             {roomNodes}
+            <div className="mx_GroupView_featuredThings_addButton">
+                <TintableSvg src="img/icons-create-room.svg" width="64" height="64"/>
+                <div className="mx_GroupView_featuredThings_addButton_label">
+                    {_t('Add a Room')}
+                </div>
+            </div>
         </div>;
     },
 });
@@ -125,6 +133,7 @@ const RoleUserList = React.createClass({
     },
 
     render: function() {
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const userNodes = this.props.users.map((u) => {
             return <FeaturedUser key={u.user_id} summaryInfo={u} />;
         });
@@ -132,9 +141,15 @@ const RoleUserList = React.createClass({
         if (this.props.role && this.props.role.profile) {
             roleHeader = <div className="mx_GroupView_featuredThings_category">{this.props.role.profile.name}</div>;
         }
-        return <div>
+        return <div className="mx_GroupView_featuredThings_container">
             {roleHeader}
             {userNodes}
+            <div className="mx_GroupView_featuredThings_addButton">
+                <TintableSvg src="img/icons-create-room.svg" width="64" height="64"/>
+                <div className="mx_GroupView_featuredThings_addButton_label">
+                    {_t('Add a User')}
+                </div>
+            </div>
         </div>;
     },
 });
@@ -369,8 +384,6 @@ export default React.createClass({
     _getFeaturedRoomsNode() {
         const summary = this.state.summary;
 
-        if (summary.rooms_section.rooms.length == 0) return null;
-
         const defaultCategoryRooms = [];
         const categoryRooms = {};
         summary.rooms_section.rooms.forEach((r) => {
@@ -386,10 +399,7 @@ export default React.createClass({
             }
         });
 
-        let defaultCategoryNode = null;
-        if (defaultCategoryRooms.length > 0) {
-            defaultCategoryNode = <CategoryRoomList rooms={defaultCategoryRooms} />;
-        }
+        const defaultCategoryNode = <CategoryRoomList rooms={defaultCategoryRooms} />;
         const categoryRoomNodes = Object.keys(categoryRooms).map((catId) => {
             const cat = summary.rooms_section.categories[catId];
             return <CategoryRoomList key={catId} rooms={categoryRooms[catId]} category={cat} />;
@@ -407,8 +417,6 @@ export default React.createClass({
     _getFeaturedUsersNode() {
         const summary = this.state.summary;
 
-        if (summary.users_section.users.length == 0) return null;
-
         const noRoleUsers = [];
         const roleUsers = {};
         summary.users_section.users.forEach((u) => {
@@ -424,10 +432,7 @@ export default React.createClass({
             }
         });
 
-        let noRoleNode = null;
-        if (noRoleUsers.length > 0) {
-            noRoleNode = <RoleUserList users={noRoleUsers} />;
-        }
+        const noRoleNode = <RoleUserList users={noRoleUsers} />;
         const roleUserNodes = Object.keys(roleUsers).map((roleId) => {
             const role = summary.users_section.roles[roleId];
             return <RoleUserList key={roleId} users={roleUsers[roleId]} role={role} />;
