@@ -57,7 +57,6 @@ const CategoryRoomList = React.createClass({
     },
 
     render: function() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const roomNodes = this.props.rooms.map((r) => {
             return <FeaturedRoom key={r.room_id} summaryInfo={r} />;
         });
@@ -69,13 +68,15 @@ const CategoryRoomList = React.createClass({
         return <div className="mx_GroupView_featuredThings_container">
             {catHeader}
             {roomNodes}
-            <AccessibleButton className="mx_GroupView_featuredThings_addButton">
-                <TintableSvg src="img/icons-create-room.svg" width="64" height="64"/>
-                <div className="mx_GroupView_featuredThings_addButton_label">
-                    {_t('Add a Room')}
-                </div>
-            </AccessibleButton>
         </div>;
+        // TODO: Modify UserPickerDialog to allow picking of rooms, and then use it here
+        // const TintableSvg = sdk.getComponent("elements.TintableSvg");
+            // <AccessibleButton className="mx_GroupView_featuredThings_addButton">
+            //     <TintableSvg src="img/icons-create-room.svg" width="64" height="64"/>
+            //     <div className="mx_GroupView_featuredThings_addButton_label">
+            //         {_t('Add a Room')}
+            //     </div>
+            // </AccessibleButton>
     },
 });
 
