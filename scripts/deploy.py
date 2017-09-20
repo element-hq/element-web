@@ -14,6 +14,7 @@ import subprocess
 import sys
 import tarfile
 import shutil
+import glob
 
 try:
     # python3
@@ -165,7 +166,7 @@ if __name__ == "__main__":
         )
     )
     parser.add_argument(
-        "--config", nargs='*', default='./config.json', help=(
+        "--config", nargs='*', default='./config*.json', help=(
             "Write a symlink at config.json in the extracted tarball to this \
             location. (Default: '%(default)s')"
         )
@@ -183,6 +184,9 @@ if __name__ == "__main__":
     deployer.bundles_path = args.bundles_dir
     deployer.should_clean = args.clean
 
-    deployer.config_locations = { os.path.basename(c): c for c in args.config }
+    deployer.config_locations = {}
+
+    for c in args.config:
+        deployer.config_locations.update({ os.path.basename(c): pth for pth in glob.iglob(c) })
 
     deployer.deploy(args.tarball, args.extract_path)
