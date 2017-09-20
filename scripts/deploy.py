@@ -190,6 +190,4 @@ if __name__ == "__main__":
     for include in args.include:
         deployer.symlink_paths.update({ os.path.basename(pth): pth for pth in glob.iglob(include) })
 
-    print("%r", (deployer.symlink_paths,))
-
     deployer.deploy(args.tarball, args.extract_path)
