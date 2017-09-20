@@ -166,7 +166,7 @@ if __name__ == "__main__":
         )
     )
     parser.add_argument(
-        "--symlink", nargs='*', default='./config*.json', help=(
+        "--include", nargs='*', default='./config*.json', help=(
             "Symlink these files into the root of the deployed tarball. \
              Useful for config files and home pages. Supports glob syntax. \
              (Default: '%(default)s')"
@@ -187,8 +187,8 @@ if __name__ == "__main__":
 
     deployer.symlink_paths = {}
 
-    for symlink in args.symlink:
-        deployer.symlink_paths.update({ os.path.basename(pth): pth for pth in glob.iglob(symlink) })
+    for include in args.include:
+        deployer.symlink_paths.update({ os.path.basename(pth): pth for pth in glob.iglob(include) })
 
     print("%r", (deployer.symlink_paths,))
 
