@@ -204,7 +204,7 @@ module.exports = React.createClass({
             });
             this._processResults(results, query);
         }).catch((err) => {
-            console.error('Error whilst searching user directory: ', err);
+            console.error('Error whilst searching group users: ', err);
             this.setState({
                 searchError: err.errcode ? err.message : _t('Something went wrong!'),
             });
