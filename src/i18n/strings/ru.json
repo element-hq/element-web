@@ -228,5 +228,6 @@
     "State Key": "Ключ состояния",
     "Invite to this group": "Пригласить в эту группу",
     "Filter results": "Фильтрация результатов",
-    "You must specify an event type!": "Необходимо указать тип мероприятия!"
+    "You must specify an event type!": "Необходимо указать тип мероприятия!",
+    "Add room to this group": "Добавить комнату в эту группу"
 }
