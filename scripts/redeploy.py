@@ -219,8 +219,6 @@ if __name__ == "__main__":
     deployer.bundles_path = args.bundles_dir
     deployer.should_clean = args.clean
 
-    deployer.symlink_paths = {}
-
     for include in args.include:
         deployer.symlink_paths.update({ os.path.basename(pth): pth for pth in glob.iglob(include) })
 
