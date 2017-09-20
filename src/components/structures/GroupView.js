@@ -66,12 +66,12 @@ const CategoryRoomList = React.createClass({
         return <div className="mx_GroupView_featuredThings_container">
             {catHeader}
             {roomNodes}
-            <div className="mx_GroupView_featuredThings_addButton">
+            <AccessibleButton className="mx_GroupView_featuredThings_addButton">
                 <TintableSvg src="img/icons-create-room.svg" width="64" height="64"/>
                 <div className="mx_GroupView_featuredThings_addButton_label">
                     {_t('Add a Room')}
                 </div>
-            </div>
+            </AccessibleButton>
         </div>;
     },
 });
@@ -130,6 +130,32 @@ const RoleUserList = React.createClass({
                 name: PropTypes.string,
             }).isRequired,
         }),
+        groupId: PropTypes.string.isRequired,
+    },
+
+    onUsersSelected: function(addrs) {
+        addrs.forEach((addr) => {
+            // const userId = addr.address;
+            // TODO: Add user to the group via API hit
+        });
+    },
+
+    onAddUsersClicked: function(ev) {
+        ev.preventDefault();
+        const UserPickerDialog = sdk.getComponent("dialogs.UserPickerDialog");
+        Modal.createTrackedDialog('Add Users to Group Summary', '', UserPickerDialog, {
+            title: _t('Add users to the group summary'),
+            description: _t("Who would you like to add to this summary?"),
+            placeholder: _t("Name or matrix ID"),
+            button: _t("Add to summary"),
+            validAddressTypes: ['mx'],
+            groupId: this.props.groupId,
+            onFinished: (success, addrs) => {
+                if (!success) return;
+
+                this.onUsersSelected(addrs);
+            },
+        });
     },
 
     render: function() {
@@ -144,12 +170,12 @@ const RoleUserList = React.createClass({
         return <div className="mx_GroupView_featuredThings_container">
             {roleHeader}
             {userNodes}
-            <div className="mx_GroupView_featuredThings_addButton">
+            <AccessibleButton className="mx_GroupView_featuredThings_addButton" onClick={this.onAddUsersClicked}>
                 <TintableSvg src="img/icons-create-room.svg" width="64" height="64"/>
                 <div className="mx_GroupView_featuredThings_addButton_label">
                     {_t('Add a User')}
                 </div>
-            </div>
+            </AccessibleButton>
         </div>;
     },
 });
@@ -432,10 +458,10 @@ export default React.createClass({
             }
         });
 
-        const noRoleNode = <RoleUserList users={noRoleUsers} />;
+        const noRoleNode = <RoleUserList users={noRoleUsers} groupId={this.props.groupId}/>;
         const roleUserNodes = Object.keys(roleUsers).map((roleId) => {
             const role = summary.users_section.roles[roleId];
-            return <RoleUserList key={roleId} users={roleUsers[roleId]} role={role} />;
+            return <RoleUserList key={roleId} users={roleUsers[roleId]} role={role} groupId={this.props.groupId}/>;
         });
 
         return <div className="mx_GroupView_featuredThings">

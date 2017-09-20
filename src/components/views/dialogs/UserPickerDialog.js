@@ -40,6 +40,7 @@ module.exports = React.createClass({
         focus: PropTypes.bool,
         validAddressTypes: PropTypes.arrayOf(PropTypes.oneOf(addressTypes)),
         onFinished: PropTypes.func.isRequired,
+        groupId: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -140,7 +141,9 @@ module.exports = React.createClass({
         // Only do search if there is something to search
         if (query.length > 0 && query != '@' && query.length >= 2) {
             this.queryChangedDebouncer = setTimeout(() => {
-                if (this.state.serverSupportsUserDirectory) {
+                if (this.props.groupId) {
+                    this._doNaiveGroupSearch(query);
+                } else if (this.state.serverSupportsUserDirectory) {
                     this._doUserDirectorySearch(query);
                 } else {
                     this._doLocalSearch(query);
@@ -183,6 +186,26 @@ module.exports = React.createClass({
             query: "",
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+    },
+
+    _doNaiveGroupSearch: function(query) {
+        this.setState({
+            busy: true,
+            query,
+            searchError: null,
+        });
+        MatrixClientPeg.get().getGroupUsers(this.props.groupId).then((resp) => {
+            this._processResults(resp.chunk, query);
+        }).catch((err) => {
+            console.error('Error whilst searching user directory: ', err);
+            this.setState({
+                searchError: err.errcode ? err.message : _t('Something went wrong!'),
+            });
+        }).done(() => {
+            this.setState({
+                busy: false,
+            });
+        });
     },
 
     _doUserDirectorySearch: function(query) {
