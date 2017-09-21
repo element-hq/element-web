@@ -568,13 +568,15 @@ export default React.createClass({
             const Spinner = sdk.getComponent("elements.Spinner");
 
             if (this.state.membershipBusy) {
-                return <div className="mx_GroupView_invitedSection">
+                return <div className="mx_GroupView_membershipSection">
                     <Spinner />
                 </div>;
             }
 
-            return <div className="mx_GroupView_invitedSection">
-                {_t("%(inviter)s has invited you to join this group", {inviter: group.inviter.userId})}
+            return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_invited">
+                <div className="mx_GroupView_membershipSection_description">
+                    {_t("%(inviter)s has invited you to join this group", {inviter: group.inviter.userId})}
+                </div>
                 <div className="mx_GroupView_membership_buttonContainer">
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                         onClick={this._onAcceptInviteClick}
@@ -593,8 +595,10 @@ export default React.createClass({
             if (this.state.summary.user && this.state.summary.user.is_privileged) {
                 youAreAMemberText = _t("You are an administrator of this group");
             }
-            return <div className="mx_GroupView_invitedSection">
-                {youAreAMemberText}
+            return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_joined">
+                <div className="mx_GroupView_membershipSection_description">
+                    {youAreAMemberText}
+                </div>
                 <div className="mx_GroupView_membership_buttonContainer">
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                         onClick={this._onLeaveClick}
