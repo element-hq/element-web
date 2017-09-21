@@ -74,10 +74,6 @@ limitations under the License.
     display: flex;
 }
 
-.mx_GroupView_membership_buttonContainer {
-    margin-top: 10px;
-}
-
 .mx_GroupView_textButton {
     display: inline-block;
 }
@@ -134,14 +130,24 @@ limitations under the License.
     top: 5px;
 }
 
-.mx_GroupView_invitedSection {
-    width: 70%;
-    padding: 20px;
-    border: 1px solid $group-alert-color;
+.mx_GroupView_membershipSection {
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 20px;
-    text-align: center;
+    margin-bottom: 11px;
+    justify-content: space-between;
+    display: flex;
+    color: $greyed-fg-color;
+}
+
+.mx_GroupView_membershipSection_description {
+    /* To match textButton */
+    line-height: 34px;
+}
+
+.mx_GroupView_membershipSection .mx_GroupView_textButton {
+    margin-right: 0px;
+    margin-top: 0px;
+    margin-left: 8px;
 }
 
 .mx_GroupView_featuredThings {
