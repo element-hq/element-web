@@ -1,3 +1,9 @@
+Changes in [0.12.6](https://github.com/vector-im/riot-web/releases/tag/v0.12.6) (2017-09-21)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.5...v0.12.6)
+
+ * Use matrix-js-sdk v0.8.4 to fix build
+
 Changes in [0.12.5](https://github.com/vector-im/riot-web/releases/tag/v0.12.5) (2017-09-21)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.4...v0.12.5)
