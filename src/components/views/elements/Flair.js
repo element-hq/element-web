@@ -20,6 +20,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClient} from 'matrix-js-sdk';
 import UserSettingsStore from '../../../UserSettingsStore';
+import dis from '../../../dispatcher';
 import Promise from 'bluebird';
 
 const BULK_REQUEST_DEBOUNCE_MS = 200;
@@ -121,14 +122,47 @@ async function getGroupProfileCached(matrixClient, groupId) {
     }
 
     groupProfiles[groupId] = await matrixClient.getGroupProfile(groupId);
+    groupProfiles[groupId].group_id = groupId;
+
     return groupProfiles[groupId];
 }
+
+class FlairAvatar extends React.Component {
+    constructor() {
+        super();
+        this.onClick = this.onClick.bind(this);
+    }
+
+    onClick(ev) {
+        ev.preventDefault();
+        // Don't trigger onClick of parent element
+        ev.stopPropagation();
+        dis.dispatch({
+            action: 'view_group',
+            group_id: this.props.groupProfile.group_id,
+        });
+    }
+
+    render() {
+        const httpUrl = this.context.matrixClient.mxcUrlToHttp(
+            this.props.groupProfile.avatar_url, 14, 14, 'scale', false);
+        return <img src={httpUrl} width="14px" height="14px" onClick={this.onClick}/>;
+    }
+}
+
+FlairAvatar.propTypes = {
+    groupProfile: PropTypes.string,
+};
+
+FlairAvatar.contextTypes = {
+    matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
+};
 
 export default class Flair extends React.Component {
     constructor() {
         super();
         this.state = {
-            avatarUrls: [],
+            profiles: [],
         };
     }
 
@@ -143,7 +177,7 @@ export default class Flair extends React.Component {
         }
     }
 
-    async _getAvatarUrls(groups) {
+    async _getGroupProfiles(groups) {
         const profiles = [];
         for (const groupId of groups) {
             let groupProfile = null;
@@ -154,9 +188,7 @@ export default class Flair extends React.Component {
             }
             profiles.push(groupProfile);
         }
-
-        const avatarUrls = profiles.filter((p) => p !== null).map((p) => p.avatar_url);
-        return avatarUrls;
+        return profiles.filter((p) => p !== null);
     }
 
     async _generateAvatars() {
@@ -176,19 +208,18 @@ export default class Flair extends React.Component {
         if (!groups || groups.length === 0) {
             return;
         }
-        const avatarUrls = await this._getAvatarUrls(groups);
+        const profiles = await this._getGroupProfiles(groups);
         if (!this.unmounted) {
-            this.setState({avatarUrls});
+            this.setState({profiles});
         }
     }
 
     render() {
-        if (this.state.avatarUrls.length === 0) {
+        if (this.state.profiles.length === 0) {
             return <div />;
         }
-        const avatars = this.state.avatarUrls.map((avatarUrl, index) => {
-            const httpUrl = this.context.matrixClient.mxcUrlToHttp(avatarUrl, 14, 14, 'scale', false);
-            return <img key={index} src={httpUrl} width="14px" height="14px"/>;
+        const avatars = this.state.profiles.map((profile, index) => {
+            return <FlairAvatar key={index} groupProfile={profile}/>;
         });
         return (
             <span className="mx_Flair" style={{"marginLeft": "5px", "verticalAlign": "-3px"}}>
