@@ -55,6 +55,9 @@ const CategoryRoomList = React.createClass({
                 name: PropTypes.string,
             }).isRequired,
         }),
+
+        // Whether the list should be editable
+        editing: PropTypes.bool.isRequired,
     },
 
     render: function() {
@@ -136,6 +139,9 @@ const RoleUserList = React.createClass({
             }).isRequired,
         }),
         groupId: PropTypes.string.isRequired,
+
+        // Whether the list should be editable
+        editing: PropTypes.bool.isRequired,
     },
 
     onAddUsersClicked: function(ev) {
@@ -178,6 +184,13 @@ const RoleUserList = React.createClass({
 
     render: function() {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const addButton = this.props.editing ?
+            (<AccessibleButton className="mx_GroupView_featuredThings_addButton" onClick={this.onAddUsersClicked}>
+                 <TintableSvg src="img/icons-create-room.svg" width="64" height="64"/>
+                 <div className="mx_GroupView_featuredThings_addButton_label">
+                     {_t('Add a User')}
+                 </div>
+             </AccessibleButton>) : null;
         const userNodes = this.props.users.map((u) => {
             return <FeaturedUser key={u.user_id} summaryInfo={u} />;
         });
@@ -188,12 +201,7 @@ const RoleUserList = React.createClass({
         return <div className="mx_GroupView_featuredThings_container">
             {roleHeader}
             {userNodes}
-            <AccessibleButton className="mx_GroupView_featuredThings_addButton" onClick={this.onAddUsersClicked}>
-                <TintableSvg src="img/icons-create-room.svg" width="64" height="64"/>
-                <div className="mx_GroupView_featuredThings_addButton_label">
-                    {_t('Add a User')}
-                </div>
-            </AccessibleButton>
+            {addButton}
         </div>;
     },
 });
@@ -446,10 +454,16 @@ export default React.createClass({
             }
         });
 
-        const defaultCategoryNode = <CategoryRoomList rooms={defaultCategoryRooms} />;
+        const defaultCategoryNode = <CategoryRoomList
+            rooms={defaultCategoryRooms}
+            editing={this.state.editing}/>;
         const categoryRoomNodes = Object.keys(categoryRooms).map((catId) => {
             const cat = summary.rooms_section.categories[catId];
-            return <CategoryRoomList key={catId} rooms={categoryRooms[catId]} category={cat} />;
+            return <CategoryRoomList
+                key={catId}
+                rooms={categoryRooms[catId]}
+                category={cat}
+                editing={this.state.editing}/>;
         });
 
         return <div className="mx_GroupView_featuredThings">
@@ -479,10 +493,18 @@ export default React.createClass({
             }
         });
 
-        const noRoleNode = <RoleUserList users={noRoleUsers} groupId={this.props.groupId}/>;
+        const noRoleNode = <RoleUserList
+            users={noRoleUsers}
+            groupId={this.props.groupId}
+            editing={this.state.editing}/>;
         const roleUserNodes = Object.keys(roleUsers).map((roleId) => {
             const role = summary.users_section.roles[roleId];
-            return <RoleUserList key={roleId} users={roleUsers[roleId]} role={role} groupId={this.props.groupId}/>;
+            return <RoleUserList
+                key={roleId}
+                users={roleUsers[roleId]}
+                role={role}
+                groupId={this.props.groupId}
+                editing={this.state.editing}/>;
         });
 
         return <div className="mx_GroupView_featuredThings">
@@ -613,6 +635,8 @@ export default React.createClass({
                         onChange={this._onLongDescChange}
                         tabIndex="3"
                     />
+                    {this._getFeaturedRoomsNode()}
+                    {this._getFeaturedUsersNode()}
                 </div>;
             } else {
                 const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;
