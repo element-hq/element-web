@@ -1,3 +1,9 @@
+Changes in [0.12.5](https://github.com/vector-im/riot-web/releases/tag/v0.12.5) (2017-09-21)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.4...v0.12.5)
+
+ * Use react-sdk v0.10.5 to fix build
+
 Changes in [0.12.4](https://github.com/vector-im/riot-web/releases/tag/v0.12.4) (2017-09-20)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.4-rc.1...v0.12.4)
