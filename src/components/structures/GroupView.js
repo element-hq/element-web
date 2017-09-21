@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import Promise from 'bluebird';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
 import dis from '../../dispatcher';
@@ -149,9 +150,27 @@ const RoleUserList = React.createClass({
             groupId: this.props.groupId,
             onFinished: (success, addrs) => {
                 if (!success) return;
-                addrs.map((addr) => {
+                const errorList = [];
+                Promise.all(addrs.map((addr) => {
                     return MatrixClientPeg.get()
-                        .addUserToGroupSummary(this.props.groupId, addr.address);
+                        .addUserToGroupSummary(this.props.groupId, addr.address)
+                        .catch(() => { errorList.push(addr.address); })
+                        .reflect();
+                })).then(() => {
+                    if (errorList.length === 0) {
+                        return;
+                    }
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog(
+                        'Failed to add the following users to the group summary',
+                        '', ErrorDialog,
+                    {
+                        title: _t(
+                            "Failed to add the following users to the summary of %(groupId)s:",
+                            {groupId: this.props.groupId},
+                        ),
+                        description: errorList.join(", "),
+                    });
                 });
             },
         });

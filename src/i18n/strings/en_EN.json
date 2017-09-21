@@ -891,5 +891,6 @@
     "Add a User": "Add a User",
     "Add users to the group summary": "Add users to the group summary",
     "Who would you like to add to this summary?": "Who would you like to add to this summary?",
-    "Add to summary": "Add to summary"
+    "Add to summary": "Add to summary",
+    "Failed to add the following users to the summary of %(groupId)s:": "Failed to add the following users to the summary of %(groupId)s:"
 }
