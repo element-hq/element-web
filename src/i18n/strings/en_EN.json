@@ -893,5 +893,8 @@
     "Who would you like to add to this summary?": "Who would you like to add to this summary?",
     "Add to summary": "Add to summary",
     "Failed to add the following users to the summary of %(groupId)s:": "Failed to add the following users to the summary of %(groupId)s:",
+    "Add rooms to the group summary": "Add rooms to the group summary",
+    "Which rooms would you like to add to this summary?": "Which rooms would you like to add to this summary?",
+    "Room name or alias": "Room name or alias",
     "You are an administrator of this group": "You are an administrator of this group"
 }

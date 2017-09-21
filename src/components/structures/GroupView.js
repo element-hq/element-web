@@ -55,32 +55,74 @@ const CategoryRoomList = React.createClass({
                 name: PropTypes.string,
             }).isRequired,
         }),
+        groupId: PropTypes.string.isRequired,
 
         // Whether the list should be editable
         editing: PropTypes.bool.isRequired,
     },
 
+    onAddRoomsClicked: function(ev) {
+        ev.preventDefault();
+        const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
+        Modal.createTrackedDialog('Add Rooms to Group Summary', '', AddressPickerDialog, {
+            title: _t('Add rooms to the group summary'),
+            description: _t("Which rooms would you like to add to this summary?"),
+            placeholder: _t("Room name or alias"),
+            button: _t("Add to summary"),
+            pickerType: 'room',
+            validAddressTypes: ['mx'],
+            groupId: this.props.groupId,
+            onFinished: (success, addrs) => {
+                if (!success) return;
+                const errorList = [];
+                Promise.all(addrs.map((addr) => {
+                    return MatrixClientPeg.get()
+                        .addRoomToGroupSummary(this.props.groupId, addr.address)
+                        .catch(() => { errorList.push(addr.address); })
+                        .reflect();
+                })).then(() => {
+                    if (errorList.length === 0) {
+                        return;
+                    }
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog(
+                        'Failed to add the following room to the group summary',
+                        '', ErrorDialog,
+                    {
+                        title: _t(
+                            "Failed to add the following rooms to the summary of %(groupId)s:",
+                            {groupId: this.props.groupId},
+                        ),
+                        description: errorList.join(", "),
+                    });
+                });
+            },
+        });
+    },
+
     render: function() {
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const addButton = this.props.editing ?
+            (<AccessibleButton className="mx_GroupView_featuredThings_addButton" onClick={this.onAddRoomsClicked}>
+                <TintableSvg src="img/icons-create-room.svg" width="64" height="64"/>
+                <div className="mx_GroupView_featuredThings_addButton_label">
+                    {_t('Add a Room')}
+                </div>
+            </AccessibleButton>) : <div />;
+
         const roomNodes = this.props.rooms.map((r) => {
             return <FeaturedRoom key={r.room_id} summaryInfo={r} />;
         });
 
-        let catHeader = null;
+        let catHeader = <div />;
         if (this.props.category && this.props.category.profile) {
             catHeader = <div className="mx_GroupView_featuredThings_category">{this.props.category.profile.name}</div>;
         }
         return <div className="mx_GroupView_featuredThings_container">
             {catHeader}
             {roomNodes}
+            {addButton}
         </div>;
-        // TODO: Modify UserPickerDialog to allow picking of rooms, and then use it here
-        // const TintableSvg = sdk.getComponent("elements.TintableSvg");
-            // <AccessibleButton className="mx_GroupView_featuredThings_addButton">
-            //     <TintableSvg src="img/icons-create-room.svg" width="64" height="64"/>
-            //     <div className="mx_GroupView_featuredThings_addButton_label">
-            //         {_t('Add a Room')}
-            //     </div>
-            // </AccessibleButton>
     },
 });
 
@@ -146,8 +188,8 @@ const RoleUserList = React.createClass({
 
     onAddUsersClicked: function(ev) {
         ev.preventDefault();
-        const UserPickerDialog = sdk.getComponent("dialogs.UserPickerDialog");
-        Modal.createTrackedDialog('Add Users to Group Summary', '', UserPickerDialog, {
+        const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
+        Modal.createTrackedDialog('Add Users to Group Summary', '', AddressPickerDialog, {
             title: _t('Add users to the group summary'),
             description: _t("Who would you like to add to this summary?"),
             placeholder: _t("Name or matrix ID"),
@@ -190,11 +232,11 @@ const RoleUserList = React.createClass({
                  <div className="mx_GroupView_featuredThings_addButton_label">
                      {_t('Add a User')}
                  </div>
-             </AccessibleButton>) : null;
+             </AccessibleButton>) : <div />;
         const userNodes = this.props.users.map((u) => {
             return <FeaturedUser key={u.user_id} summaryInfo={u} />;
         });
-        let roleHeader = null;
+        let roleHeader = <div />;
         if (this.props.role && this.props.role.profile) {
             roleHeader = <div className="mx_GroupView_featuredThings_category">{this.props.role.profile.name}</div>;
         }
@@ -456,6 +498,7 @@ export default React.createClass({
 
         const defaultCategoryNode = <CategoryRoomList
             rooms={defaultCategoryRooms}
+            groupId={this.props.groupId}
             editing={this.state.editing}/>;
         const categoryRoomNodes = Object.keys(categoryRooms).map((catId) => {
             const cat = summary.rooms_section.categories[catId];
@@ -463,6 +506,7 @@ export default React.createClass({
                 key={catId}
                 rooms={categoryRooms[catId]}
                 category={cat}
+                groupId={this.props.groupId}
                 editing={this.state.editing}/>;
         });
 

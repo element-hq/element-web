@@ -20,8 +20,8 @@ import MultiInviter from './utils/MultiInviter';
 import { _t } from './languageHandler';
 
 export function showGroupInviteDialog(groupId) {
-    const UserPickerDialog = sdk.getComponent("dialogs.UserPickerDialog");
-    Modal.createTrackedDialog('Group Invite', '', UserPickerDialog, {
+    const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
+    Modal.createTrackedDialog('Group Invite', '', AddressPickerDialog, {
         title: _t('Invite new group members'),
         description: _t("Who would you like to add to this group?"),
         placeholder: _t("Name or matrix ID"),
