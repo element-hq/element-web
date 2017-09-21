@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import Promise from 'bluebird';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
 import dis from '../../dispatcher';
@@ -38,6 +39,9 @@ const RoomSummaryType = PropTypes.shape({
 const UserSummaryType = PropTypes.shape({
     summaryInfo: PropTypes.shape({
         user_id: PropTypes.string.isRequired,
+        role_id: PropTypes.string,
+        avatar_url: PropTypes.string,
+        displayname: PropTypes.string,
     }).isRequired,
 });
 
@@ -51,20 +55,32 @@ const CategoryRoomList = React.createClass({
                 name: PropTypes.string,
             }).isRequired,
         }),
+
+        // Whether the list should be editable
+        editing: PropTypes.bool.isRequired,
     },
 
     render: function() {
         const roomNodes = this.props.rooms.map((r) => {
             return <FeaturedRoom key={r.room_id} summaryInfo={r} />;
         });
+
         let catHeader = null;
         if (this.props.category && this.props.category.profile) {
             catHeader = <div className="mx_GroupView_featuredThings_category">{this.props.category.profile.name}</div>;
         }
-        return <div>
+        return <div className="mx_GroupView_featuredThings_container">
             {catHeader}
             {roomNodes}
         </div>;
+        // TODO: Modify UserPickerDialog to allow picking of rooms, and then use it here
+        // const TintableSvg = sdk.getComponent("elements.TintableSvg");
+            // <AccessibleButton className="mx_GroupView_featuredThings_addButton">
+            //     <TintableSvg src="img/icons-create-room.svg" width="64" height="64"/>
+            //     <div className="mx_GroupView_featuredThings_addButton_label">
+            //         {_t('Add a Room')}
+            //     </div>
+            // </AccessibleButton>
     },
 });
 
@@ -122,9 +138,59 @@ const RoleUserList = React.createClass({
                 name: PropTypes.string,
             }).isRequired,
         }),
+        groupId: PropTypes.string.isRequired,
+
+        // Whether the list should be editable
+        editing: PropTypes.bool.isRequired,
+    },
+
+    onAddUsersClicked: function(ev) {
+        ev.preventDefault();
+        const UserPickerDialog = sdk.getComponent("dialogs.UserPickerDialog");
+        Modal.createTrackedDialog('Add Users to Group Summary', '', UserPickerDialog, {
+            title: _t('Add users to the group summary'),
+            description: _t("Who would you like to add to this summary?"),
+            placeholder: _t("Name or matrix ID"),
+            button: _t("Add to summary"),
+            validAddressTypes: ['mx'],
+            groupId: this.props.groupId,
+            onFinished: (success, addrs) => {
+                if (!success) return;
+                const errorList = [];
+                Promise.all(addrs.map((addr) => {
+                    return MatrixClientPeg.get()
+                        .addUserToGroupSummary(this.props.groupId, addr.address)
+                        .catch(() => { errorList.push(addr.address); })
+                        .reflect();
+                })).then(() => {
+                    if (errorList.length === 0) {
+                        return;
+                    }
+                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    Modal.createTrackedDialog(
+                        'Failed to add the following users to the group summary',
+                        '', ErrorDialog,
+                    {
+                        title: _t(
+                            "Failed to add the following users to the summary of %(groupId)s:",
+                            {groupId: this.props.groupId},
+                        ),
+                        description: errorList.join(", "),
+                    });
+                });
+            },
+        });
     },
 
     render: function() {
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const addButton = this.props.editing ?
+            (<AccessibleButton className="mx_GroupView_featuredThings_addButton" onClick={this.onAddUsersClicked}>
+                 <TintableSvg src="img/icons-create-room.svg" width="64" height="64"/>
+                 <div className="mx_GroupView_featuredThings_addButton_label">
+                     {_t('Add a User')}
+                 </div>
+             </AccessibleButton>) : null;
         const userNodes = this.props.users.map((u) => {
             return <FeaturedUser key={u.user_id} summaryInfo={u} />;
         });
@@ -132,9 +198,10 @@ const RoleUserList = React.createClass({
         if (this.props.role && this.props.role.profile) {
             roleHeader = <div className="mx_GroupView_featuredThings_category">{this.props.role.profile.name}</div>;
         }
-        return <div>
+        return <div className="mx_GroupView_featuredThings_container">
             {roleHeader}
             {userNodes}
+            {addButton}
         </div>;
     },
 });
@@ -158,13 +225,16 @@ const FeaturedUser = React.createClass({
     },
 
     render: function() {
-        // Add avatar once we get profile info inline in the summary response
-        //const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        const name = this.props.summaryInfo.displayname || this.props.summaryInfo.user_id;
 
         const permalink = 'https://matrix.to/#/' + this.props.summaryInfo.user_id;
-        const userNameNode = <a href={permalink} onClick={this.onClick} >{this.props.summaryInfo.user_id}</a>;
+        const userNameNode = <a href={permalink} onClick={this.onClick}>{name}</a>;
+        const httpUrl = MatrixClientPeg.get()
+            .mxcUrlToHttp(this.props.summaryInfo.avatar_url, 64, 64);
 
         return <AccessibleButton className="mx_GroupView_featuredThing" onClick={this.onClick}>
+            <BaseAvatar name={name} url={httpUrl} width={64} height={64} />
             <div className="mx_GroupView_featuredThing_name">{userNameNode}</div>
         </AccessibleButton>;
     },
@@ -369,8 +439,6 @@ export default React.createClass({
     _getFeaturedRoomsNode() {
         const summary = this.state.summary;
 
-        if (summary.rooms_section.rooms.length == 0) return null;
-
         const defaultCategoryRooms = [];
         const categoryRooms = {};
         summary.rooms_section.rooms.forEach((r) => {
@@ -386,13 +454,16 @@ export default React.createClass({
             }
         });
 
-        let defaultCategoryNode = null;
-        if (defaultCategoryRooms.length > 0) {
-            defaultCategoryNode = <CategoryRoomList rooms={defaultCategoryRooms} />;
-        }
+        const defaultCategoryNode = <CategoryRoomList
+            rooms={defaultCategoryRooms}
+            editing={this.state.editing}/>;
         const categoryRoomNodes = Object.keys(categoryRooms).map((catId) => {
             const cat = summary.rooms_section.categories[catId];
-            return <CategoryRoomList key={catId} rooms={categoryRooms[catId]} category={cat} />;
+            return <CategoryRoomList
+                key={catId}
+                rooms={categoryRooms[catId]}
+                category={cat}
+                editing={this.state.editing}/>;
         });
 
         return <div className="mx_GroupView_featuredThings">
@@ -406,8 +477,6 @@ export default React.createClass({
 
     _getFeaturedUsersNode() {
         const summary = this.state.summary;
-
-        if (summary.users_section.users.length == 0) return null;
 
         const noRoleUsers = [];
         const roleUsers = {};
@@ -424,13 +493,18 @@ export default React.createClass({
             }
         });
 
-        let noRoleNode = null;
-        if (noRoleUsers.length > 0) {
-            noRoleNode = <RoleUserList users={noRoleUsers} />;
-        }
+        const noRoleNode = <RoleUserList
+            users={noRoleUsers}
+            groupId={this.props.groupId}
+            editing={this.state.editing}/>;
         const roleUserNodes = Object.keys(roleUsers).map((roleId) => {
             const role = summary.users_section.roles[roleId];
-            return <RoleUserList key={roleId} users={roleUsers[roleId]} role={role} />;
+            return <RoleUserList
+                key={roleId}
+                users={roleUsers[roleId]}
+                role={role}
+                groupId={this.props.groupId}
+                editing={this.state.editing}/>;
         });
 
         return <div className="mx_GroupView_featuredThings">
@@ -561,6 +635,8 @@ export default React.createClass({
                         onChange={this._onLongDescChange}
                         tabIndex="3"
                     />
+                    {this._getFeaturedRoomsNode()}
+                    {this._getFeaturedUsersNode()}
                 </div>;
             } else {
                 const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;

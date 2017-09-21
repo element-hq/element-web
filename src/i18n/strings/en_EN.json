@@ -886,5 +886,11 @@
     "Leave %(groupName)s?": "Leave %(groupName)s?",
     "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s widget modified by %(senderName)s",
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot check is currently unavailable on desktop - please use a <a>web browser</a>",
-    "Flair": "Flair"
+    "Flair": "Flair",
+    "Add a Room": "Add a Room",
+    "Add a User": "Add a User",
+    "Add users to the group summary": "Add users to the group summary",
+    "Who would you like to add to this summary?": "Who would you like to add to this summary?",
+    "Add to summary": "Add to summary",
+    "Failed to add the following users to the summary of %(groupId)s:": "Failed to add the following users to the summary of %(groupId)s:"
 }
