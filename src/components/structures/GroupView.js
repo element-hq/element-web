@@ -562,11 +562,6 @@ export default React.createClass({
                         {_t("Leave")}
                     </AccessibleButton>
                 </div>
-                <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
-                    onClick={this._onLeaveClick}
-                >
-                    {_t("Leave")}
-                </AccessibleButton>
             </div>;
         }
 
