@@ -221,5 +221,7 @@
     "To return to your account in future you need to <u>set a password</u>": "Para voltar à sua conta no futuro, necessita de <u>definir uma palavra-passe</u>",
     "Set Password": "Definir palavra-passe",
     "Couldn't load home page": "Não foi possível carregar a página inicial",
-    "Invite to this group": "Convidar para este grupo"
+    "Invite to this group": "Convidar para este grupo",
+    "Filter results": "Filtrar resultados",
+    "You must specify an event type!": "Tem que especificar um tipo de evento!"
 }
