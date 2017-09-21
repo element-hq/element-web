@@ -121,8 +121,11 @@ async function getGroupProfileCached(matrixClient, groupId) {
         return groupProfiles[groupId];
     }
 
-    groupProfiles[groupId] = await matrixClient.getGroupProfile(groupId);
-    groupProfiles[groupId].group_id = groupId;
+    const profile = await matrixClient.getGroupProfile(groupId);
+    groupProfiles[groupId] = {
+        groupId,
+        avatarUrl: profile.avatar_url,
+    };
 
     return groupProfiles[groupId];
 }
@@ -139,19 +142,22 @@ class FlairAvatar extends React.Component {
         ev.stopPropagation();
         dis.dispatch({
             action: 'view_group',
-            group_id: this.props.groupProfile.group_id,
+            group_id: this.props.groupProfile.groupId,
         });
     }
 
     render() {
         const httpUrl = this.context.matrixClient.mxcUrlToHttp(
-            this.props.groupProfile.avatar_url, 14, 14, 'scale', false);
+            this.props.groupProfile.avatarUrl, 14, 14, 'scale', false);
         return <img src={httpUrl} width="14px" height="14px" onClick={this.onClick}/>;
     }
 }
 
 FlairAvatar.propTypes = {
-    groupProfile: PropTypes.string,
+    groupProfile: PropTypes.shape({
+        groupId: PropTypes.string.isRequired,
+        avatarUrl: PropTypes.string.isRequired,
+    }),
 };
 
 FlairAvatar.contextTypes = {
