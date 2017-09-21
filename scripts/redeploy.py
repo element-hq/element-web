@@ -234,7 +234,7 @@ if __name__ == "__main__":
         deploy_tarball(args.tarball_uri, build_dir)
     else:
         print(
-            "Listening on port %s. Extracting to %s%s. Symlinking to %s. Jenkins URL: %s. Include patterns: %s" %
+            "Listening on port %s. Extracting to %s%s. Symlinking to %s. Jenkins URL: %s. Include files: %s" %
             (args.port,
              arg_extract_path,
              " (clean after)" if deployer.should_clean else "",
