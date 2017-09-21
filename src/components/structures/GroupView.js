@@ -547,9 +547,20 @@ export default React.createClass({
                 </div>
             </div>;
         } else if (group.myMembership === 'join') {
+            let youAreAMemberText = _t("You are a member of this group");
+            if (this.state.summary.user && this.state.summary.user.is_privileged) {
+                youAreAMemberText = _t("You are an administrator of this group");
+            }
             return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_joined">
                 <div className="mx_GroupView_membershipSection_description">
-                    {_t("You are a member of this group")}
+                    {youAreAMemberText}
+                </div>
+                <div className="mx_GroupView_membership_buttonContainer">
+                    <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
+                        onClick={this._onLeaveClick}
+                    >
+                        {_t("Leave")}
+                    </AccessibleButton>
                 </div>
                 <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                     onClick={this._onLeaveClick}
@@ -669,13 +680,15 @@ export default React.createClass({
                     {this._getFeaturedRoomsNode()}
                     {this._getFeaturedUsersNode()}
                 </div>;
-                rightButtons.push(
-                    <AccessibleButton className="mx_GroupHeader_button"
-                        onClick={this._onEditClick} title={_t("Edit Group")} key="_editButton"
-                    >
-                        <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
-                    </AccessibleButton>,
-                );
+                if (summary.user && summary.user.is_privileged) {
+                    rightButtons.push(
+                        <AccessibleButton className="mx_GroupHeader_button"
+                            onClick={this._onEditClick} title={_t("Edit Group")} key="_editButton"
+                        >
+                            <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
+                        </AccessibleButton>,
+                    );
+                }
                 if (this.props.collapsedRhs) {
                     rightButtons.push(
                         <AccessibleButton className="mx_GroupHeader_button"
