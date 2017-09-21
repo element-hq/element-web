@@ -189,18 +189,25 @@ module.exports = React.createClass({
     },
 
     _doNaiveGroupSearch: function(query) {
+        const lowerCaseQuery = query.toLowerCase();
         this.setState({
             busy: true,
             query,
             searchError: null,
         });
         MatrixClientPeg.get().getGroupUsers(this.props.groupId).then((resp) => {
-            const results = resp.chunk.map((u) => {
-                return {
+            const results = [];
+            resp.chunk.forEach((u) => {
+                const userIdMatch = u.user_id.toLowerCase().includes(lowerCaseQuery);
+                const displayNameMatch = (u.displayname || '').toLowerCase().includes(lowerCaseQuery);
+                if (!(userIdMatch || displayNameMatch)) {
+                    return;
+                }
+                results.push({
                     user_id: u.user_id,
                     avatar_url: u.avatar_url,
                     display_name: u.displayname,
-                };
+                });
             });
             this._processResults(results, query);
         }).catch((err) => {
