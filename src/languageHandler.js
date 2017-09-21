@@ -191,7 +191,7 @@ export function getAllLanguagesFromJson() {
 export function getLanguagesFromBrowser() {
     if (navigator.languages && navigator.languages.length) return navigator.languages;
     if (navigator.language) return [navigator.language];
-    return [navigator.userLanguage];
+    return [navigator.userLanguage || "en"];
 }
 
 /**
