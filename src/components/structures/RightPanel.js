@@ -103,7 +103,7 @@ module.exports = React.createClass({
         if (this.state.phase === this.Phase.GroupMemberList) {
             showGroupInviteDialog(this.props.groupId);
         } else {
-            // call UserPickerDialog
+            // call AddressPickerDialog
             dis.dispatch({
                 action: 'view_invite',
                 roomId: this.props.roomId,
