@@ -199,7 +199,7 @@ const FeaturedUser = React.createClass({
 
     render: function() {
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
-        const name = this.props.summaryInfo.displayname || this.props.summaryInfo.user_id.slice(1);
+        const name = this.props.summaryInfo.displayname || this.props.summaryInfo.user_id;
 
         const permalink = 'https://matrix.to/#/' + this.props.summaryInfo.user_id;
         const userNameNode = <a href={permalink} onClick={this.onClick}>{name}</a>;
