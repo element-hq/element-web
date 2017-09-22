@@ -28,9 +28,8 @@ module.exports = React.createClass({
         // The className to apply to the wrapping div
         className: PropTypes.string,
         // A function that returns the children to be rendered into the element.
-        // Takes two integers which define the range of child indices to return.
+        // function getChildren(start: number, end: number): Array<React.Node>
         // The start element is included, the end is not (as in `slice`).
-        // Returns an array.
         // If omitted, the React child elements will be used. This parameter can be used
         // to avoid creating unnecessary React elements.
         getChildren: PropTypes.func,
