@@ -53,16 +53,16 @@ module.exports = React.createClass({
         };
     },
 
-    _getChildren: function(min, max) {
+    _getChildren: function(start, end) {
         if (this.props.getChildren && this.props.getChildCount) {
-            return this.props.getChildren(min, max);
+            return this.props.getChildren(start, end);
         } else {
             // XXX: I'm not sure why anything would pass null into this, it seems
             // like a bizzare case to handle, but I'm preserving the behaviour.
             // (see commit 38d5c7d5c5d5a34dc16ef5d46278315f5c57f542)
             return React.Children.toArray(this.props.children).filter((c) => {
                 return c != null;
-            }).slice(min, max);
+            }).slice(start, end);
         }
     },
 

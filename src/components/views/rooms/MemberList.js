@@ -356,8 +356,8 @@ module.exports = React.createClass({
         return memberList;
     },
 
-    _getChildrenJoined: function(min, max) {
-        return this._makeMemberTiles(this.state.filteredJoinedMembers.slice(min, max));
+    _getChildrenJoined: function(start, end) {
+        return this._makeMemberTiles(this.state.filteredJoinedMembers.slice(start, end));
     },
 
     _getChildCountJoined: function() {
