@@ -32,7 +32,7 @@ const AddThreepid = require('../../AddThreepid');
 const SdkConfig = require('../../SdkConfig');
 import Analytics from '../../Analytics';
 import AccessibleButton from '../views/elements/AccessibleButton';
-import { _t } from '../../languageHandler';
+import { _t, _td } from '../../languageHandler';
 import * as languageHandler from '../../languageHandler';
 import * as FormattingUtils from '../../utils/FormattingUtils';
 
@@ -63,55 +63,55 @@ const gHVersionLabel = function(repo, token='') {
 const SETTINGS_LABELS = [
     {
         id: 'autoplayGifsAndVideos',
-        label: 'Autoplay GIFs and videos',
+        label: _td('Autoplay GIFs and videos'),
     },
     {
         id: 'hideReadReceipts',
-        label: 'Hide read receipts',
+        label: _td('Hide read receipts'),
     },
     {
         id: 'dontSendTypingNotifications',
-        label: "Don't send typing notifications",
+        label: _td("Don't send typing notifications"),
     },
     {
         id: 'alwaysShowTimestamps',
-        label: 'Always show message timestamps',
+        label: _td('Always show message timestamps'),
     },
     {
         id: 'showTwelveHourTimestamps',
-        label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
+        label: _td('Show timestamps in 12 hour format (e.g. 2:30pm)'),
     },
     {
         id: 'hideJoinLeaves',
-        label: 'Hide join/leave messages (invites/kicks/bans unaffected)',
+        label: _td('Hide join/leave messages (invites/kicks/bans unaffected)'),
     },
     {
         id: 'hideAvatarDisplaynameChanges',
-        label: 'Hide avatar and display name changes',
+        label: _td('Hide avatar and display name changes'),
     },
     {
         id: 'useCompactLayout',
-        label: 'Use compact timeline layout',
+        label: _td('Use compact timeline layout'),
     },
     {
         id: 'hideRedactions',
-        label: 'Hide removed messages',
+        label: _td('Hide removed messages'),
     },
     {
         id: 'enableSyntaxHighlightLanguageDetection',
-        label: 'Enable automatic language detection for syntax highlighting',
+        label: _td('Enable automatic language detection for syntax highlighting'),
     },
     {
         id: 'MessageComposerInput.autoReplaceEmoji',
-        label: 'Automatically replace plain text Emoji',
+        label: _td('Automatically replace plain text Emoji'),
     },
     {
         id: 'MessageComposerInput.dontSuggestEmoji',
-        label: 'Disable Emoji suggestions while typing',
+        label: _td('Disable Emoji suggestions while typing'),
     },
     {
         id: 'Pill.shouldHidePillAvatar',
-        label: 'Hide avatars in user and room mentions',
+        label: _td('Hide avatars in user and room mentions'),
     },
 /*
     {
@@ -124,7 +124,7 @@ const SETTINGS_LABELS = [
 const ANALYTICS_SETTINGS_LABELS = [
     {
         id: 'analyticsOptOut',
-        label: 'Opt out of analytics',
+        label: _td('Opt out of analytics'),
         fn: function(checked) {
             Analytics[checked ? 'disable' : 'enable']();
         },
@@ -134,7 +134,7 @@ const ANALYTICS_SETTINGS_LABELS = [
 const WEBRTC_SETTINGS_LABELS = [
     {
         id: 'webRtcForceTURN',
-        label: 'Disable Peer-to-Peer for 1:1 calls',
+        label: _td('Disable Peer-to-Peer for 1:1 calls'),
     },
 ];
 
@@ -143,7 +143,7 @@ const WEBRTC_SETTINGS_LABELS = [
 const CRYPTO_SETTINGS_LABELS = [
     {
         id: 'blacklistUnverifiedDevices',
-        label: 'Never send encrypted messages to unverified devices from this device',
+        label: _td('Never send encrypted messages to unverified devices from this device'),
         fn: function(checked) {
             MatrixClientPeg.get().setGlobalBlacklistUnverifiedDevices(checked);
         },
@@ -166,12 +166,12 @@ const CRYPTO_SETTINGS_LABELS = [
 const THEMES = [
     {
         id: 'theme',
-        label: 'Light theme',
+        label: _td('Light theme'),
         value: 'light',
     },
     {
         id: 'theme',
-        label: 'Dark theme',
+        label: _td('Dark theme'),
         value: 'dark',
     },
 ];
