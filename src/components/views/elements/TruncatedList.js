@@ -77,7 +77,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        let childNodes;
         let overflowNode = null;
 
         const totalChildren = this._getChildCount();
@@ -91,7 +90,7 @@ module.exports = React.createClass({
                 upperBound = this.props.truncateAt;
             }
         }
-        childNodes = this._getChildren(0, upperBound);
+        const childNodes = this._getChildren(0, upperBound);
 
         return (
             <div className={this.props.className}>
