@@ -27,6 +27,15 @@ module.exports = React.createClass({
         truncateAt: PropTypes.number,
         // The className to apply to the wrapping div
         className: PropTypes.string,
+        // A function that returns the children to be rendered into the element.
+        // function getChildren(start: number, end: number): Array<React.Node>
+        // The start element is included, the end is not (as in `slice`).
+        // If omitted, the React child elements will be used. This parameter can be used
+        // to avoid creating unnecessary React elements.
+        getChildren: PropTypes.func,
+        // A function that should return the total number of child element available.
+        // Required if getChildren is supplied.
+        getChildCount: PropTypes.func,
         // A function which will be invoked when an overflow element is required.
         // This will be inserted after the children.
         createOverflowElement: PropTypes.func,
@@ -43,33 +52,49 @@ module.exports = React.createClass({
         };
     },
 
+    _getChildren: function(start, end) {
+        if (this.props.getChildren && this.props.getChildCount) {
+            return this.props.getChildren(start, end);
+        } else {
+            // XXX: I'm not sure why anything would pass null into this, it seems
+            // like a bizzare case to handle, but I'm preserving the behaviour.
+            // (see commit 38d5c7d5c5d5a34dc16ef5d46278315f5c57f542)
+            return React.Children.toArray(this.props.children).filter((c) => {
+                return c != null;
+            }).slice(start, end);
+        }
+    },
+
+    _getChildCount: function() {
+        if (this.props.getChildren && this.props.getChildCount) {
+            return this.props.getChildCount();
+        } else {
+            return React.Children.toArray(this.props.children).filter((c) => {
+                return c != null;
+            }).length;
+        }
+    },
+
     render: function() {
-        let childsJsx = this.props.children;
-        let overflowJsx;
-        const childArray = React.Children.toArray(this.props.children).filter((c) => {
-            return c != null;
-        });
+        let overflowNode = null;
 
-        const childCount = childArray.length;
-
+        const totalChildren = this._getChildCount();
+        let upperBound = totalChildren;
         if (this.props.truncateAt >= 0) {
-            const overflowCount = childCount - this.props.truncateAt;
-
+            const overflowCount = totalChildren - this.props.truncateAt;
             if (overflowCount > 1) {
-                overflowJsx = this.props.createOverflowElement(
-                    overflowCount, childCount,
+                overflowNode = this.props.createOverflowElement(
+                    overflowCount, totalChildren,
                 );
-
-                // cut out the overflow elements
-                childArray.splice(childCount - overflowCount, overflowCount);
-                childsJsx = childArray; // use what is left
+                upperBound = this.props.truncateAt;
             }
         }
+        const childNodes = this._getChildren(0, upperBound);
 
         return (
             <div className={this.props.className}>
-                {childsJsx}
-                {overflowJsx}
+                {childNodes}
+                {overflowNode}
             </div>
         );
     },
