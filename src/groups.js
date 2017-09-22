@@ -18,10 +18,14 @@ import PropTypes from 'prop-types';
 
 export const GroupMemberType = PropTypes.shape({
     userId: PropTypes.string.isRequired,
+    displayname: PropTypes.string,
+    avatarUrl: PropTypes.string,
 });
 
 export function groupMemberFromApiObject(apiObject) {
     return {
         userId: apiObject.user_id,
+        displayname: apiObject.displayname,
+        avatarUrl: apiObject.avatar_url,
     };
 }
