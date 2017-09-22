@@ -30,6 +30,7 @@ var rate_limited_func = require('../../../ratelimitedfunc');
 var CallHandler = require("../../../CallHandler");
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
+const INITIAL_LOAD_NUM_INVITED = 5;
 
 module.exports = React.createClass({
     displayName: 'MemberList',
@@ -39,7 +40,8 @@ module.exports = React.createClass({
             members: [],
             // ideally we'd size this to the page height, but
             // in practice I find that a little constraining
-            truncateAt: INITIAL_LOAD_NUM_MEMBERS,
+            truncateAtJoined: INITIAL_LOAD_NUM_MEMBERS,
+            truncateAtInvited: INITIAL_LOAD_NUM_INVITED,
             searchQuery: "",
         };
         if (!this.props.roomId) return state;
@@ -204,7 +206,15 @@ module.exports = React.createClass({
         return to_display;
     },
 
-    _createOverflowTile: function(overflowCount, totalCount) {
+    _createOverflowTileJoined: function(overflowCount, totalCount) {
+        return this._createOverflowTile(overflowCount, totalCount, this._showFullJoinedMemberList);
+    },
+
+    _createOverflowTileInvited: function(overflowCount, totalCount) {
+        return this._createOverflowTile(overflowCount, totalCount, this._showFullInvitedMemberList);
+    },
+
+    _createOverflowTile: function(overflowCount, totalCount, onClick) {
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         const EntityTile = sdk.getComponent("rooms.EntityTile");
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
@@ -213,13 +223,19 @@ module.exports = React.createClass({
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
                 <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
             } name={text} presenceState="online" suppressOnHover={true}
-            onClick={this._showFullMemberList} />
+            onClick={onClick} />
         );
     },
 
-    _showFullMemberList: function() {
+    _showFullJoinedMemberList: function() {
         this.setState({
-            truncateAt: -1
+            truncateAtJoined: -1
+        });
+    },
+
+    _showFullInvitedMemberList: function() {
+        this.setState({
+            truncateAtInvited: -1
         });
     },
 
@@ -364,15 +380,28 @@ module.exports = React.createClass({
         return this.state.filteredJoinedMembers.length;
     },
 
+    _getChildrenInvited: function(start, end) {
+        return this._makeMemberTiles(this.state.filteredInvitedMembers.slice(start, end));
+    },
+
+    _getChildCountInvited: function() {
+        return this.state.filteredInvitedMembers.length;
+    },
+
     render: function() {
+        const TruncatedList = sdk.getComponent("elements.TruncatedList");
+
         let invitedSection = null;
-        const invitedMemberTiles = this._makeMemberTiles(this.state.filteredInvitedMembers, 'invite');
-        if (invitedMemberTiles.length > 0) {
+        if (this._getChildCountInvited() > 0) {
             invitedSection = (
                 <div className="mx_MemberList_invited">
                     <h2>{ _t("Invited") }</h2>
                     <div className="mx_MemberList_wrapper">
-                        {invitedMemberTiles}
+                        <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAtInvited}
+                                createOverflowElement={this._createOverflowTileInvited}
+                                getChildren={this._getChildrenInvited}
+                                getChildCount={this._getChildCountInvited}
+                        />
                     </div>
                 </div>
             );
@@ -386,13 +415,12 @@ module.exports = React.createClass({
             </form>
         );
 
-        const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return (
             <div className="mx_MemberList">
                 { inputBox }
                 <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
-                    <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
-                            createOverflowElement={this._createOverflowTile}
+                    <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAtJoined}
+                            createOverflowElement={this._createOverflowTileJoined}
                             getChildren={this._getChildrenJoined}
                             getChildCount={this._getChildCountJoined}
                     />
