@@ -33,7 +33,8 @@ const USER_REGEX = /@\S*/g;
 let instance = null;
 
 export default class UserProvider extends AutocompleteProvider {
-    users: Array<RoomMember> = [];
+    users: Array<RoomMember> = null;
+    room: Room = null;
 
     constructor() {
         super(USER_REGEX, {
@@ -53,6 +54,9 @@ export default class UserProvider extends AutocompleteProvider {
         if (/^(\/ban|\/unban|\/op|\/deop|\/invite|\/kick|\/verify)/.test(query)) {
             return [];
         }
+
+        // lazy-load user list into matcher
+        if (this.users === null) this._makeUsers();
 
         let completions = [];
         let {command, range} = this.getCurrentCommand(query, selection, force);
@@ -83,7 +87,12 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     setUserListFromRoom(room: Room) {
-        const events = room.getLiveTimeline().getEvents();
+        this.room = room;
+        this.users = null;
+    }
+
+    _makeUsers() {
+        const events = this.room.getLiveTimeline().getEvents();
         const lastSpoken = {};
 
         for(const event of events) {
@@ -91,7 +100,7 @@ export default class UserProvider extends AutocompleteProvider {
         }
 
         const currentUserId = MatrixClientPeg.get().credentials.userId;
-        this.users = room.getJoinedMembers().filter((member) => {
+        this.users = this.room.getJoinedMembers().filter((member) => {
             if (member.userId !== currentUserId) return true;
         });
 
@@ -103,7 +112,8 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     onUserSpoke(user: RoomMember) {
-        if(user.userId === MatrixClientPeg.get().credentials.userId) return;
+        if (this.room === null) return;
+        if (user.userId === MatrixClientPeg.get().credentials.userId) return;
 
         // Move the user that spoke to the front of the array
         this.users.splice(
