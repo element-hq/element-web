@@ -134,9 +134,14 @@ limitations under the License.
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 11px;
+    color: $greyed-fg-color;
+}
+
+.mx_GroupView_membershipSubSection {
     justify-content: space-between;
     display: flex;
-    color: $greyed-fg-color;
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
 .mx_GroupView_membershipSection_description {
