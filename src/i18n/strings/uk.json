@@ -206,5 +206,11 @@
     "Error encountered (%(errorDetail)s).": "Трапилась помилка (%(errorDetail)s).",
     "No update available.": "Оновлення відсутні.",
     "Downloading update...": "Звантажується оновлення…",
-    "Couldn't load home page": "Не вдалось завантажити домівку"
+    "Couldn't load home page": "Не вдалось завантажити домівку",
+    "Back": "Назад",
+    "Bug report sent": "Звіт про помилки відправлений",
+    "Developer Tools": "Інструменти розробника",
+    "Failed to send custom event.": "Не вдалося відправити приватний захід.",
+    "Filter results": "Фільтр результатів",
+    "Send Custom Event": "Відправити приватний захід"
 }
