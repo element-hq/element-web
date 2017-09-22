@@ -379,6 +379,7 @@ export default React.createClass({
             saving: false,
             uploadingAvatar: false,
             membershipBusy: false,
+            publicityBusy: false,
         };
     },
 
@@ -560,7 +561,28 @@ export default React.createClass({
         });
     },
 
-    _getFeaturedRoomsNode() {
+    _onPubliciseOffClick: function() {
+        this._setPublicity(false);
+    },
+
+    _onPubliciseOnClick: function() {
+        this._setPublicity(true);
+    },
+
+    _setPublicity: function(publicity) {
+        this.setState({
+            publicityBusy: true,
+        });
+        MatrixClientPeg.get().setGroupPublicity(this.props.groupId, publicity).then(() => {
+            this._loadGroupFromServer(this.props.groupId);
+        }).then(() => {
+            this.setState({
+                publicityBusy: false,
+            });
+        });
+    },
+
+    _getFeaturedRoomsNode: function() {
         const summary = this.state.summary;
 
         const defaultCategoryRooms = [];
@@ -601,7 +623,7 @@ export default React.createClass({
         </div>;
     },
 
-    _getFeaturedUsersNode() {
+    _getFeaturedUsersNode: function() {
         const summary = this.state.summary;
 
         const noRoleUsers = [];
@@ -643,11 +665,12 @@ export default React.createClass({
     },
 
     _getMembershipSection: function() {
+        const Spinner = sdk.getComponent("elements.Spinner");
+
         const group = MatrixClientPeg.get().getGroup(this.props.groupId);
         if (!group) return null;
 
         if (group.myMembership === 'invite') {
-            const Spinner = sdk.getComponent("elements.Spinner");
 
             if (this.state.membershipBusy) {
                 return <div className="mx_GroupView_membershipSection">
@@ -677,17 +700,57 @@ export default React.createClass({
             if (this.state.summary.user && this.state.summary.user.is_privileged) {
                 youAreAMemberText = _t("You are an administrator of this group");
             }
-            return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_joined">
-                <div className="mx_GroupView_membershipSection_description">
-                    {youAreAMemberText}
-                </div>
-                <div className="mx_GroupView_membership_buttonContainer">
-                    <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
-                        onClick={this._onLeaveClick}
+
+            let publicisedButton;
+            if (this.state.publicityBusy) {
+                publicisedButton = <Spinner />;
+            }
+
+            let publicisedSection;
+            if (this.state.summary.user && this.state.summary.user.is_public) {
+                if (!this.state.publicityBusy) {
+                    publicisedButton = <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
+                            onClick={this._onPubliciseOffClick}
+                        >
+                            {_t("Make private")}
+                        </AccessibleButton>;
+                }
+                publicisedSection = <div className="mx_GroupView_membershipSubSection">
+                    {_t("Your membership of this group is public")}
+                    <div className="mx_GroupView_membership_buttonContainer">
+                        {publicisedButton}
+                    </div>
+                </div>;
+            } else {
+                if (!this.state.publicityBusy) {
+                    publicisedButton = <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
+                        onClick={this._onPubliciseOnClick}
                     >
-                        {_t("Leave")}
+                        {_t("Make public")}
                     </AccessibleButton>
+                }
+                publicisedSection = <div className="mx_GroupView_membershipSubSection">
+                    {_t("Your membership of this group is private")}
+                    <div className="mx_GroupView_membership_buttonContainer">
+                        {publicisedButton}
+                    </div>
+                </div>;
+            }
+
+            return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_joined">
+                <div className="mx_GroupView_membershipSubSection">
+                    <div className="mx_GroupView_membershipSection_description">
+                        {youAreAMemberText}
+                    </div>
+                    <div className="mx_GroupView_membership_buttonContainer">
+                        <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
+                            onClick={this._onLeaveClick}
+                        >
+                            {_t("Leave")}
+                        </AccessibleButton>
+                    </div>
                 </div>
+                {publicisedSection}
             </div>;
         }
 
