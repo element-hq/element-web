@@ -179,6 +179,17 @@ limitations under the License.
     margin: 0px 20px;
 }
 
+.mx_GroupView_featuredThing {
+    position: relative;
+}
+
+.mx_GroupView_featuredThing .mx_GroupView_featuredThing_deleteButton {
+    position: absolute;
+    top: -7px;
+    right: 11px;
+    opacity: 0.4;
+}
+
 .mx_GroupView_featuredThing .mx_BaseAvatar {
     /* To prevent misalignment with mx_TintableSvg (in addButton) */
     vertical-align: initial;
