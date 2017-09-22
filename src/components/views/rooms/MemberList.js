@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,10 +15,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react');
+
+import React from 'react';
 import { _t } from '../../../languageHandler';
-var classNames = require('classnames');
-var Matrix = require("matrix-js-sdk");
+import classNames from 'classnames';
+import Matrix from 'matrix-js-sdk';
 import Promise from 'bluebird';
 var MatrixClientPeg = require("../../../MatrixClientPeg");
 var Modal = require("../../../Modal");
@@ -27,13 +29,13 @@ var GeminiScrollbar = require('react-gemini-scrollbar');
 var rate_limited_func = require('../../../ratelimitedfunc');
 var CallHandler = require("../../../CallHandler");
 
-var INITIAL_LOAD_NUM_MEMBERS = 30;
+const INITIAL_LOAD_NUM_MEMBERS = 30;
 
 module.exports = React.createClass({
     displayName: 'MemberList',
 
     getInitialState: function() {
-        var state = {
+        const state = {
             members: [],
             // ideally we'd size this to the page height, but
             // in practice I find that a little constraining
@@ -48,6 +50,8 @@ module.exports = React.createClass({
         this.memberDict = this.getMemberDict();
 
         state.members = this.roomMembers();
+        state.filteredJoinedMembers = this._filterMembers(state.members, 'join');
+        state.filteredInvitedMembers = this._filterMembers(state.members, 'invite');
         return state;
     },
 
@@ -146,10 +150,12 @@ module.exports = React.createClass({
         // console.log("Updating memberlist");
         this.memberDict = this.getMemberDict();
 
-        var self = this;
-        this.setState({
-            members: self.roomMembers()
-        });
+        const newState = {
+            members: this.roomMembers(),
+        };
+        newState.filteredJoinedMembers = this._filterMembers(newState.members, 'join');
+        newState.filteredInvitedMembers = this._filterMembers(newState.members, 'invite');
+        this.setState(newState);
     }, 500),
 
     getMemberDict: function() {
@@ -279,17 +285,17 @@ module.exports = React.createClass({
     },
 
     onSearchQueryChanged: function(ev) {
-        this.setState({ searchQuery: ev.target.value });
+        const q = ev.target.value;
+        this.setState({
+            searchQuery: q,
+            filteredJoinedMembers: this._filterMembers(this.state.members, 'join', q),
+            filteredInvitedMembers: this._filterMembers(this.state.members, 'invite', q),
+        });
     },
 
-    makeMemberTiles: function(membership, query) {
-        var MemberTile = sdk.getComponent("rooms.MemberTile");
-        query = (query || "").toLowerCase();
-
-        var self = this;
-
-        var memberList = self.state.members.filter(function(userId) {
-            var m = self.memberDict[userId];
+    _filterMembers: function(members, membership, query) {
+        return members.filter((userId) => {
+            const m = this.memberDict[userId];
 
             if (query) {
                 const matchesName = m.name.toLowerCase().indexOf(query) !== -1;
@@ -301,14 +307,23 @@ module.exports = React.createClass({
             }
 
             return m.membership == membership;
-        }).map(function(userId) {
-            var m = self.memberDict[userId];
+        });
+    },
+
+    _makeMemberTiles: function(members, membership) {
+        const MemberTile = sdk.getComponent("rooms.MemberTile");
+
+        const memberList = members.map((userId) => {
+            const m = this.memberDict[userId];
             return (
                 <MemberTile key={userId} member={m} ref={userId} />
             );
         });
 
         // XXX: surely this is not the right home for this logic.
+        // Double XXX: Now it's really, really not the right home for this logic:
+        // we shouldn't even be passing in the 'membership' param to this function.
+        // Ew, ew, and ew.
         if (membership === "invite") {
             // include 3pid invites (m.room.third_party_invite) state events.
             // The HS may have already converted these into m.room.member invites so
@@ -341,9 +356,17 @@ module.exports = React.createClass({
         return memberList;
     },
 
+    _getChildrenJoined: function(min, max) {
+        return this._makeMemberTiles(this.state.filteredJoinedMembers.slice(min, max));
+    },
+
+    _getChildCountJoined: function() {
+        return this.state.filteredJoinedMembers.length;
+    },
+
     render: function() {
-        var invitedSection = null;
-        var invitedMemberTiles = this.makeMemberTiles('invite', this.state.searchQuery);
+        let invitedSection = null;
+        const invitedMemberTiles = this._makeMemberTiles(this.state.filteredInvitedMembers, 'invite');
         if (invitedMemberTiles.length > 0) {
             invitedSection = (
                 <div className="mx_MemberList_invited">
@@ -355,7 +378,7 @@ module.exports = React.createClass({
             );
         }
 
-        var inputBox = (
+        const inputBox = (
             <form autoComplete="off">
                 <input className="mx_MemberList_query" id="mx_MemberList_query" type="text"
                         onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
@@ -363,15 +386,16 @@ module.exports = React.createClass({
             </form>
         );
 
-        var TruncatedList = sdk.getComponent("elements.TruncatedList");
+        const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return (
             <div className="mx_MemberList">
                 { inputBox }
                 <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
                     <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
-                            createOverflowElement={this._createOverflowTile}>
-                        {this.makeMemberTiles('join', this.state.searchQuery)}
-                    </TruncatedList>
+                            createOverflowElement={this._createOverflowTile}
+                            getChildren={this._getChildrenJoined}
+                            getChildCount={this._getChildCountJoined}
+                    />
                     {invitedSection}
                 </GeminiScrollbar>
             </div>
