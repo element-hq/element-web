@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,7 +14,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react');
+
+import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
@@ -21,12 +24,12 @@ module.exports = React.createClass({
 
     propTypes: {
         // The number of elements to show before truncating. If negative, no truncation is done.
-        truncateAt: React.PropTypes.number,
+        truncateAt: PropTypes.number,
         // The className to apply to the wrapping div
-        className: React.PropTypes.string,
+        className: PropTypes.string,
         // A function which will be invoked when an overflow element is required.
         // This will be inserted after the children.
-        createOverflowElement: React.PropTypes.func
+        createOverflowElement: PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -36,25 +39,25 @@ module.exports = React.createClass({
                 return (
                     <div>{_t("And %(count)s more...", {count: overflowCount})}</div>
                 );
-            }
+            },
         };
     },
 
     render: function() {
-        var childsJsx = this.props.children;
-        var overflowJsx;
-        var childArray = React.Children.toArray(this.props.children).filter((c) => {
+        let childsJsx = this.props.children;
+        let overflowJsx;
+        const childArray = React.Children.toArray(this.props.children).filter((c) => {
             return c != null;
         });
 
-        var childCount = childArray.length;
+        const childCount = childArray.length;
 
         if (this.props.truncateAt >= 0) {
-            var overflowCount = childCount - this.props.truncateAt;
+            const overflowCount = childCount - this.props.truncateAt;
 
             if (overflowCount > 1) {
                 overflowJsx = this.props.createOverflowElement(
-                    overflowCount, childCount
+                    overflowCount, childCount,
                 );
 
                 // cut out the overflow elements
@@ -69,5 +72,5 @@ module.exports = React.createClass({
                 {overflowJsx}
             </div>
         );
-    }
+    },
 });
