@@ -47,10 +47,13 @@ export default withMatrixClient(React.createClass({
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const EntityTile = sdk.getComponent('rooms.EntityTile');
 
-        const name = this.props.member.userId;
+        const name = this.props.member.displayname || this.props.member.userId;
 
         const av = (
-            <BaseAvatar name={this.props.member.userId} width={36} height={36} />
+            <BaseAvatar name={this.props.member.userId}
+                width={36} height={36}
+                url={this.props.matrixClient.mxcUrlToHttp(this.props.member.avatarUrl)}
+            />
         );
 
         return (
