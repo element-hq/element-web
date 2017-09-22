@@ -876,6 +876,7 @@
     "Which rooms would you like to add to this summary?": "Which rooms would you like to add to this summary?",
     "Room name or alias": "Room name or alias",
     "You are an administrator of this group": "You are an administrator of this group",
+    "Failed to add the following rooms to the summary of %(groupId)s:": "Failed to add the following rooms to the summary of %(groupId)s:",
     "Failed to remove the room from the summary of %(groupId)s": "Failed to remove the room from the summary of %(groupId)s",
     "The room '%(roomName)' could not be removed from the summary.": "The room '%(roomName)' could not be removed from the summary.",
     "Failed to remove a user from the summary of %(groupId)s": "Failed to remove a user from the summary of %(groupId)s",
