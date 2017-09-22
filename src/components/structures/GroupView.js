@@ -111,7 +111,11 @@ const CategoryRoomList = React.createClass({
             </AccessibleButton>) : <div />;
 
         const roomNodes = this.props.rooms.map((r) => {
-            return <FeaturedRoom key={r.room_id} summaryInfo={r} />;
+            return <FeaturedRoom
+                key={r.room_id}
+                groupId={this.props.groupId}
+                editing={this.props.editing}
+                summaryInfo={r}/>;
         });
 
         let catHeader = <div />;
@@ -131,6 +135,8 @@ const FeaturedRoom = React.createClass({
 
     props: {
         summaryInfo: RoomSummaryType.isRequired,
+        editing: PropTypes.bool.isRequired,
+        groupId: PropTypes.string.isRequired,
     },
 
     onClick: function(e) {
@@ -141,6 +147,31 @@ const FeaturedRoom = React.createClass({
             action: 'view_room',
             room_alias: this.props.summaryInfo.profile.canonical_alias,
             room_id: this.props.summaryInfo.room_id,
+        });
+    },
+
+    onDeleteClicked: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        MatrixClientPeg.get().removeRoomFromGroupSummary(
+            this.props.groupId,
+            this.props.summaryInfo.room_id,
+        ).catch((err) => {
+            console.error('Error whilst removing room from group summary', err);
+            const roomName = this.props.summaryInfo.name ||
+                this.props.summaryInfo.canonical_alias ||
+                this.props.summaryInfo.room_id;
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog(
+                'Failed to remove room from group summary',
+                '', ErrorDialog,
+            {
+                title: _t(
+                    "Failed to remove the room from the summary of %(groupId)s",
+                    {groupId: this.props.groupId},
+                ),
+                description: _t("The room '%(roomName)s' could not be removed from the summary.", {roomName}),
+            });
         });
     },
 
@@ -163,9 +194,20 @@ const FeaturedRoom = React.createClass({
             roomNameNode = <span>{this.props.summaryInfo.profile.name}</span>;
         }
 
+        const deleteButton = this.props.editing ?
+            <img
+                className="mx_GroupView_featuredThing_deleteButton"
+                src="img/cancel-small.svg"
+                width="14"
+                height="14"
+                alt="Delete"
+                onClick={this.onDeleteClicked}/>
+            : <div />;
+
         return <AccessibleButton className="mx_GroupView_featuredThing" onClick={this.onClick}>
             <RoomAvatar oobData={oobData} width={64} height={64} />
             <div className="mx_GroupView_featuredThing_name">{roomNameNode}</div>
+            {deleteButton}
         </AccessibleButton>;
     },
 });
@@ -234,7 +276,11 @@ const RoleUserList = React.createClass({
                  </div>
              </AccessibleButton>) : <div />;
         const userNodes = this.props.users.map((u) => {
-            return <FeaturedUser key={u.user_id} summaryInfo={u} />;
+            return <FeaturedUser
+                key={u.user_id}
+                summaryInfo={u}
+                editing={this.props.editing}
+                groupId={this.props.groupId}/>;
         });
         let roleHeader = <div />;
         if (this.props.role && this.props.role.profile) {
@@ -253,6 +299,8 @@ const FeaturedUser = React.createClass({
 
     props: {
         summaryInfo: UserSummaryType.isRequired,
+        editing: PropTypes.bool.isRequired,
+        groupId: PropTypes.string.isRequired,
     },
 
     onClick: function(e) {
@@ -266,6 +314,29 @@ const FeaturedUser = React.createClass({
         });
     },
 
+    onDeleteClicked: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        MatrixClientPeg.get().removeUserFromGroupSummary(
+            this.props.groupId,
+            this.props.summaryInfo.user_id,
+        ).catch((err) => {
+            console.error('Error whilst removing user from group summary', err);
+            const displayName = this.props.summaryInfo.displayname || this.props.summaryInfo.user_id;
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog(
+                'Failed to remove user from group summary',
+                '', ErrorDialog,
+            {
+                title: _t(
+                    "Failed to remove a user from the summary of %(groupId)s",
+                    {groupId: this.props.groupId},
+                ),
+                description: _t("The user '%(displayName)s' could not be removed from the summary.", {displayName}),
+            });
+        });
+    },
+
     render: function() {
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
         const name = this.props.summaryInfo.displayname || this.props.summaryInfo.user_id;
@@ -275,9 +346,20 @@ const FeaturedUser = React.createClass({
         const httpUrl = MatrixClientPeg.get()
             .mxcUrlToHttp(this.props.summaryInfo.avatar_url, 64, 64);
 
+        const deleteButton = this.props.editing ?
+            <img
+                className="mx_GroupView_featuredThing_deleteButton"
+                src="img/cancel-small.svg"
+                width="14"
+                height="14"
+                alt="Delete"
+                onClick={this.onDeleteClicked}/>
+            : <div />;
+
         return <AccessibleButton className="mx_GroupView_featuredThing" onClick={this.onClick}>
             <BaseAvatar name={name} url={httpUrl} width={64} height={64} />
             <div className="mx_GroupView_featuredThing_name">{userNameNode}</div>
+            {deleteButton}
         </AccessibleButton>;
     },
 });

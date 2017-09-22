@@ -112,7 +112,7 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     onUserSpoke(user: RoomMember) {
-        if (this.room === null) return;
+        if (this.users === null) return;
         if (user.userId === MatrixClientPeg.get().credentials.userId) return;
 
         // Move the user that spoke to the front of the array
