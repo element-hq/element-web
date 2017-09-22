@@ -40,10 +40,8 @@
     "Cancel": "Cancel·la",
     "Close": "Tanca",
     "Create new room": "Crea una nova sala",
-    "Direct Chat": "Xat directe",
     "Error": "Error",
     "Failed to forget room %(errCode)s": "No s'ha pogut oblidar la sala %(errCode)s",
-    "Failed to join the room": "No s'ha pogut unir a la sala",
     "Favourite": "Favorit",
     "Mute": "Silenciat",
     "Room directory": "Directori de sales",
@@ -64,5 +62,4 @@
     "Friday": "Divendres",
     "Saturday": "Dissabte",
     "OK": "D'acord",
-    "Welcome page": "Pàgina de benvinguda"
 }
