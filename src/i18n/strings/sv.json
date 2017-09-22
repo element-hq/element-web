@@ -208,5 +208,9 @@
     "Admin support for Dendrite": "Hjälp för administratörer av Dendrite",
     "Building services on Matrix": "Bygga tjänster med Matrix",
     "Bug report sent": "Buggraporten skickades",
-    "Thank you!": "Tack!"
+    "Thank you!": "Tack!",
+    "Back": "Tillbaka",
+    "Filter results": "Filtrera resultaten",
+    "Explore Room State": "Utforska rumläget",
+    "Invite to this group": "Bjud in till denna grupp"
 }
