@@ -793,7 +793,7 @@ module.exports = React.createClass({
                    onChange={ onChange }
             />
             <label htmlFor={ setting.id + "_" + setting.value }>
-                { setting.label }
+                { _t(setting.label) }
             </label>
         </div>;
     },

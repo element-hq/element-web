@@ -879,5 +879,7 @@
     "Failed to remove the room from the summary of %(groupId)s": "Failed to remove the room from the summary of %(groupId)s",
     "The room '%(roomName)' could not be removed from the summary.": "The room '%(roomName)' could not be removed from the summary.",
     "Failed to remove a user from the summary of %(groupId)s": "Failed to remove a user from the summary of %(groupId)s",
-    "The user '%(displayName)s' could not be removed from the summary.": "The user '%(displayName)s' could not be removed from the summary."
+    "The user '%(displayName)s' could not be removed from the summary.": "The user '%(displayName)s' could not be removed from the summary.",
+    "Light theme": "Light theme",
+    "Dark theme": "Dark theme"
 }
