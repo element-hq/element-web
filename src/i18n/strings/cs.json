@@ -210,5 +210,12 @@
     "Thank you!": "Děkujeme vám!",
     "Back": "Zpět",
     "Event Type": "Typ události",
-    "Event Content": "Obsah události"
+    "Event Content": "Obsah události",
+    "Developer Tools": "Nástroje pro vývojáře",
+    "Filter results": "Filtrovat výsledky",
+    "You must specify an event type!": "Musíte určit typ události!",
+    "Event sent!": "Událost odeslána!",
+    "Invite to this group": "Pozvat do této místnosti",
+    "Failed to send custom event.": "Nepodařilo se odeslat vlastní událost.",
+    "Send Custom Event": "Odeslat vlastní událost"
 }
