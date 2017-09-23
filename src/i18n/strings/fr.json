@@ -209,5 +209,13 @@
     "Set Password": "Enregistrer un mot de passe",
     "Couldn't load home page": "Impossible de charger la page d'accueil",
     "Bug report sent": "Rapport de bug envoyé",
-    "Thank you!": "Merci !"
+    "Thank you!": "Merci !",
+    "Back": "Retour",
+    "Developer Tools": "Outils de développement",
+    "Filter results": "Filtrer les résultats",
+    "You must specify an event type!": "Vous devez spécifier un type d'événement!",
+    "Event sent!": "Evénement envoyé!",
+    "Event Type": "Type d'événement",
+    "Invite to this group": "Inviter à ce groupe",
+    "Event Content": "Contenu de l'événement"
 }
