@@ -881,5 +881,6 @@
     "Failed to remove a user from the summary of %(groupId)s": "Failed to remove a user from the summary of %(groupId)s",
     "The user '%(displayName)s' could not be removed from the summary.": "The user '%(displayName)s' could not be removed from the summary.",
     "Light theme": "Light theme",
-    "Dark theme": "Dark theme"
+    "Dark theme": "Dark theme",
+    "Unknown": "Unknown"
 }
