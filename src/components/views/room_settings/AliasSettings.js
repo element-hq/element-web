@@ -299,7 +299,7 @@ module.exports = React.createClass({
                                 blurToCancel={ false }
                                 onValueChanged={ self.onAliasAdded } />
                             <div className="mx_RoomSettings_addAlias mx_filterFlipColor">
-                                 <img src="img/plus.svg" width="14" height="14" alt="Add"
+                                 <img src="img/plus.svg" width="14" height="14" alt={ _t("Add") }
                                       onClick={ self.onAliasAdded.bind(self, undefined) }/>
                             </div>
                         </div> : ""
