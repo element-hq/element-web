@@ -152,10 +152,15 @@ module.exports = withMatrixClient(React.createClass({
                 </div>;
         }
 
+        const avatarUrl = this.props.matrixClient.mxcUrlToHttp(
+            this.props.groupMember.avatarUrl,
+            36, 36, 'crop'
+        );
+
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const avatar = (
             <BaseAvatar name={this.props.groupMember.userId} width={36} height={36}
-                url={this.props.matrixClient.mxcUrlToHttp(this.props.groupMember.avatarUrl)}
+                url={avatarUrl}
             />
         );
 
