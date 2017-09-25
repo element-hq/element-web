@@ -50,7 +50,7 @@ export default withMatrixClient(React.createClass({
         const name = this.props.member.displayname || this.props.member.userId;
         const avatarUrl = this.props.matrixClient.mxcUrlToHttp(
             this.props.member.avatarUrl,
-            36, 36, 'crop'
+            36, 36, 'crop',
         );
 
         const av = (
