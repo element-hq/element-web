@@ -21,7 +21,7 @@ import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import Promise from 'bluebird';
-import electron, {remote, ipcRenderer} from 'electron';
+import {remote, ipcRenderer, desktopCapturer} from 'electron';
 import rageshake from '../rageshake';
 
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);
@@ -233,7 +233,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
              * 150px.
              */
             obtainDesktopStreams(callback, errorCallback, options = {}) {
-                electron.desktopCapturer.getSources(options,
+                desktopCapturer.getSources(options,
                     (error, sources) => {
                         if (error) {
                             errorCallback(error);
