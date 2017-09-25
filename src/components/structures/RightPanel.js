@@ -44,7 +44,6 @@ class HeaderButton extends React.Component {
     render() {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-        const isHighlighted = this.props.phases.includes(this.props.currentPhase);
 
         return <AccessibleButton
             className="mx_RightPanel_headerButton"
@@ -55,16 +54,14 @@ class HeaderButton extends React.Component {
                 { this.props.badge ? this.props.badge : <span>&nbsp;</span>}
             </div>
             <TintableSvg src={this.props.iconSrc} width="25" height="25"/>
-            { isHighlighted ? <div className="mx_RightPanel_headerButton_highlight"></div> : <div/> }
+            { this.props.isHighlighted ? <div className="mx_RightPanel_headerButton_highlight"></div> : <div/> }
         </AccessibleButton>;
     }
 }
 
 HeaderButton.propTypes = {
-    // If currentPhase is one of the specified phases, the button will be highlighted
-    phases: PropTypes.arrayOf(PropTypes.string).isRequired,
-    // The currentPhase of the RightPanel
-    currentPhase: PropTypes.string.isRequired,
+    // Whether this button is highlighted
+    isHighlighted: PropTypes.bool.isRequired,
     // The phase to swap to when the button is clicked
     clickPhase: PropTypes.string.isRequired,
     // The source file of the icon to display
@@ -243,22 +240,18 @@ module.exports = React.createClass({
         if (this.props.roomId) {
             headerButtons = [
                 <HeaderButton key="_membersButton" title={_t('Members')} iconSrc="img/icons-people.svg"
-                    phases={[this.Phase.RoomMemberList, this.Phase.RoomMemberInfo]}
+                    isHighlighted={[this.Phase.RoomMemberList, this.Phase.RoomMemberInfo].includes(this.state.phase)}
                     clickPhase={this.Phase.RoomMemberList}
-                    currentPhase={this.state.phase}
                     badge={membersBadge}
                     analytics={['Right Panel', 'Member List Button', 'click']}
                 />,
                 <HeaderButton key="_filesButton" title={_t('Files')} iconSrc="img/icons-files.svg"
-                    phases={[this.Phase.FilePanel]}
-                    clickPhase={this.Phase.FilePanel}
-                    currentPhase={this.state.phase}
+                    isHighlighted={this.state.phase === this.Phase.FilePanel}
                     analytics={['Right Panel', 'File List Button', 'click']}
                 />,
                 <HeaderButton key="_notifsButton" title={_t('Notifications')} iconSrc="img/icons-notifications.svg"
-                    phases={[this.Phase.NotificationPanel]}
+                    isHighlighted={this.state.phase === this.Phase.NotificationPanel}
                     clickPhase={this.Phase.NotificationPanel}
-                    currentPhase={this.state.phase}
                     analytics={['Right Panel', 'Notification List Button', 'click']}
                 />,
             ];
