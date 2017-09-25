@@ -26,6 +26,7 @@ var CallHandler = require("../../../CallHandler");
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
+const SHOW_MORE_INCREMENT = 100;
 
 module.exports = React.createClass({
     displayName: 'MemberList',
@@ -197,11 +198,11 @@ module.exports = React.createClass({
     },
 
     _createOverflowTileJoined: function(overflowCount, totalCount) {
-        return this._createOverflowTile(overflowCount, totalCount, this._showFullJoinedMemberList);
+        return this._createOverflowTile(overflowCount, totalCount, this._showMoreJoinedMemberList);
     },
 
     _createOverflowTileInvited: function(overflowCount, totalCount) {
-        return this._createOverflowTile(overflowCount, totalCount, this._showFullInvitedMemberList);
+        return this._createOverflowTile(overflowCount, totalCount, this._showMoreInvitedMemberList);
     },
 
     _createOverflowTile: function(overflowCount, totalCount, onClick) {
@@ -217,15 +218,15 @@ module.exports = React.createClass({
         );
     },
 
-    _showFullJoinedMemberList: function() {
+    _showMoreJoinedMemberList: function() {
         this.setState({
-            truncateAtJoined: -1
+            truncateAtJoined: this.state.truncateAtJoined + SHOW_MORE_INCREMENT,
         });
     },
 
-    _showFullInvitedMemberList: function() {
+    _showMoreInvitedMemberList: function() {
         this.setState({
-            truncateAtInvited: -1
+            truncateAtInvited: this.state.truncateAtInvited + SHOW_MORE_INCREMENT,
         });
     },
 
