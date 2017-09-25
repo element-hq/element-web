@@ -13,56 +13,67 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import MatrixClientPeg from "./MatrixClientPeg";
-import CallHandler from "./CallHandler";
+import MatrixClientPeg from './MatrixClientPeg';
+import CallHandler from './CallHandler';
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
 
 function textForMemberEvent(ev) {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
-    var senderName = ev.sender ? ev.sender.name : ev.getSender();
-    var targetName = ev.target ? ev.target.name : ev.getStateKey();
-    var ConferenceHandler = CallHandler.getConferenceHandler();
-    var reason = ev.getContent().reason ? (
-        _t('Reason') + ': ' + ev.getContent().reason
-    ) : "";
-    switch (ev.getContent().membership) {
-        case 'invite':
-            var threePidContent = ev.getContent().third_party_invite;
+    const senderName = ev.sender ? ev.sender.name : ev.getSender();
+    const targetName = ev.target ? ev.target.name : ev.getStateKey();
+    const prevContent = ev.getPrevContent();
+    const content = ev.getContent();
+
+    const ConferenceHandler = CallHandler.getConferenceHandler();
+    const reason = content.reason ? (_t('Reason') + ': ' + content.reason) : '';
+    switch (content.membership) {
+        case 'invite': {
+            const threePidContent = content.third_party_invite;
             if (threePidContent) {
                 if (threePidContent.display_name) {
-                    return _t('%(targetName)s accepted the invitation for %(displayName)s.', {targetName: targetName, displayName: threePidContent.display_name});
+                    return _t('%(targetName)s accepted the invitation for %(displayName)s.', {
+                        targetName,
+                        displayName: threePidContent.display_name,
+                    });
                 } else {
-                    return _t('%(targetName)s accepted an invitation.', {targetName: targetName});
+                    return _t('%(targetName)s accepted an invitation.', {targetName});
                 }
-            }
-            else {
+            } else {
                 if (ConferenceHandler && ConferenceHandler.isConferenceUser(ev.getStateKey())) {
-                    return _t('%(senderName)s requested a VoIP conference.', {senderName: senderName});
-                }
-                else {
-                    return _t('%(senderName)s invited %(targetName)s.', {senderName: senderName, targetName: targetName});
+                    return _t('%(senderName)s requested a VoIP conference.', {senderName});
+                } else {
+                    return _t('%(senderName)s invited %(targetName)s.', {senderName, targetName});
                 }
             }
+        }
         case 'ban':
-            return _t(
-                '%(senderName)s banned %(targetName)s.',
-                {senderName: senderName, targetName: targetName}
-            ) + ' ' + reason;
+            return _t('%(senderName)s banned %(targetName)s.', {senderName, targetName}) + ' ' + reason;
         case 'join':
-            if (ev.getPrevContent() && ev.getPrevContent().membership == 'join') {
-                if (ev.getPrevContent().displayname && ev.getContent().displayname && ev.getPrevContent().displayname != ev.getContent().displayname) {
-                    return _t('%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.', {senderName: ev.getSender(), oldDisplayName: ev.getPrevContent().displayname, displayName: ev.getContent().displayname});
-                } else if (!ev.getPrevContent().displayname && ev.getContent().displayname) {
-                    return _t('%(senderName)s set their display name to %(displayName)s.', {senderName: ev.getSender(), displayName: ev.getContent().displayname});
-                } else if (ev.getPrevContent().displayname && !ev.getContent().displayname) {
-                    return _t('%(senderName)s removed their display name (%(oldDisplayName)s).', {senderName: ev.getSender(), oldDisplayName: ev.getPrevContent().displayname});
-                } else if (ev.getPrevContent().avatar_url && !ev.getContent().avatar_url) {
-                    return _t('%(senderName)s removed their profile picture.', {senderName: senderName});
-                } else if (ev.getPrevContent().avatar_url && ev.getContent().avatar_url && ev.getPrevContent().avatar_url != ev.getContent().avatar_url) {
-                    return _t('%(senderName)s changed their profile picture.', {senderName: senderName});
-                } else if (!ev.getPrevContent().avatar_url && ev.getContent().avatar_url) {
-                    return _t('%(senderName)s set a profile picture.', {senderName: senderName});
+            if (prevContent && prevContent.membership === 'join') {
+                if (prevContent.displayname && content.displayname && prevContent.displayname !== content.displayname) {
+                    return _t('%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.', {
+                        senderName,
+                        oldDisplayName: prevContent.displayname,
+                        displayName: content.displayname,
+                    });
+                } else if (!prevContent.displayname && content.displayname) {
+                    return _t('%(senderName)s set their display name to %(displayName)s.', {
+                        senderName,
+                        displayName: content.displayname,
+                    });
+                } else if (prevContent.displayname && !content.displayname) {
+                    return _t('%(senderName)s removed their display name (%(oldDisplayName)s).', {
+                        senderName,
+                        oldDisplayName: prevContent.displayname,
+                    });
+                } else if (prevContent.avatar_url && !prevContent.avatar_url) {
+                    return _t('%(senderName)s removed their profile picture.', {senderName});
+                } else if (prevContent.avatar_url && content.avatar_url &&
+                    prevContent.avatar_url !== content.avatar_url) {
+                    return _t('%(senderName)s changed their profile picture.', {senderName});
+                } else if (!prevContent.avatar_url && content.avatar_url) {
+                    return _t('%(senderName)s set a profile picture.', {senderName});
                 } else {
                     // suppress null rejoins
                     return '';
@@ -71,73 +82,69 @@ function textForMemberEvent(ev) {
                 if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
                 if (ConferenceHandler && ConferenceHandler.isConferenceUser(ev.getStateKey())) {
                     return _t('VoIP conference started.');
-                }
-                else {
-                    return _t('%(targetName)s joined the room.', {targetName: targetName});
+                } else {
+                    return _t('%(targetName)s joined the room.', {targetName});
                 }
             }
         case 'leave':
             if (ev.getSender() === ev.getStateKey()) {
                 if (ConferenceHandler && ConferenceHandler.isConferenceUser(ev.getStateKey())) {
                     return _t('VoIP conference finished.');
+                } else if (prevContent.membership === "invite") {
+                    return _t('%(targetName)s rejected the invitation.', {targetName});
+                } else {
+                    return _t('%(targetName)s left the room.', {targetName});
                 }
-                else if (ev.getPrevContent().membership === "invite") {
-                    return _t('%(targetName)s rejected the invitation.', {targetName: targetName});
-                }
-                else {
-                    return _t('%(targetName)s left the room.', {targetName: targetName});
-                }
-            }
-            else if (ev.getPrevContent().membership === "ban") {
-                return _t('%(senderName)s unbanned %(targetName)s.', {senderName: senderName, targetName: targetName});
-            }
-            else if (ev.getPrevContent().membership === "join") {
-                return _t(
-                    '%(senderName)s kicked %(targetName)s.',
-                    {senderName: senderName, targetName: targetName}
-                ) + ' ' + reason;
-            }
-            else if (ev.getPrevContent().membership === "invite") {
-                return _t(
-                    '%(senderName)s withdrew %(targetName)s\'s invitation.',
-                    {senderName: senderName, targetName: targetName}
-                ) + ' ' + reason;
-            }
-            else {
-                return _t('%(targetName)s left the room.', {targetName: targetName});
+            } else if (prevContent.membership === "ban") {
+                return _t('%(senderName)s unbanned %(targetName)s.', {senderName, targetName});
+            } else if (prevContent.membership === "join") {
+                return _t('%(senderName)s kicked %(targetName)s.', {senderName, targetName}) + ' ' + reason;
+            } else if (prevContent.membership === "invite") {
+                return _t('%(senderName)s withdrew %(targetName)s\'s invitation.', {
+                    senderName,
+                    targetName,
+                }) + ' ' + reason;
+            } else {
+                return _t('%(targetName)s left the room.', {targetName});
             }
     }
 }
 
 function textForTopicEvent(ev) {
-    var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-    return _t('%(senderDisplayName)s changed the topic to "%(topic)s".', {senderDisplayName: senderDisplayName, topic: ev.getContent().topic});
+    const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    return _t('%(senderDisplayName)s changed the topic to "%(topic)s".', {
+        senderDisplayName,
+        topic: ev.getContent().topic,
+    });
 }
 
 function textForRoomNameEvent(ev) {
-    var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
     if (!ev.getContent().name || ev.getContent().name.trim().length === 0) {
-        return _t('%(senderDisplayName)s removed the room name.', {senderDisplayName: senderDisplayName});
+        return _t('%(senderDisplayName)s removed the room name.', {senderDisplayName});
     }
-    return _t('%(senderDisplayName)s changed the room name to %(roomName)s.', {senderDisplayName: senderDisplayName, roomName: ev.getContent().name});
+    return _t('%(senderDisplayName)s changed the room name to %(roomName)s.', {
+        senderDisplayName,
+        roomName: ev.getContent().name,
+    });
 }
 
 function textForMessageEvent(ev) {
-    var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-    var message = senderDisplayName + ': ' + ev.getContent().body;
+    const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    let message = senderDisplayName + ': ' + ev.getContent().body;
     if (ev.getContent().msgtype === "m.emote") {
         message = "* " + senderDisplayName + " " + message;
     } else if (ev.getContent().msgtype === "m.image") {
-        message = _t('%(senderDisplayName)s sent an image.', {senderDisplayName: senderDisplayName});
+        message = _t('%(senderDisplayName)s sent an image.', {senderDisplayName});
     }
     return message;
 }
 
 function textForCallAnswerEvent(event) {
-    var senderName = event.sender ? event.sender.name : _t('Someone');
-    var supported = MatrixClientPeg.get().supportsVoip() ? "" : _t('(not supported by this browser)');
-    return _t('%(senderName)s answered the call.', {senderName: senderName}) + ' ' + supported;
+    const senderName = event.sender ? event.sender.name : _t('Someone');
+    const supported = MatrixClientPeg.get().supportsVoip() ? '' : _t('(not supported by this browser)');
+    return _t('%(senderName)s answered the call.', {senderName}) + ' ' + supported;
 }
 
 function textForCallHangupEvent(event) {
@@ -159,20 +166,23 @@ function textForCallHangupEvent(event) {
 }
 
 function textForCallInviteEvent(event) {
-    var senderName = event.sender ? event.sender.name : _t('Someone');
+    const senderName = event.sender ? event.sender.name : _t('Someone');
     // FIXME: Find a better way to determine this from the event?
-    var type = "voice";
+    let callType = "voice";
     if (event.getContent().offer && event.getContent().offer.sdp &&
             event.getContent().offer.sdp.indexOf('m=video') !== -1) {
-        type = "video";
+        callType = "video";
     }
-    var supported = MatrixClientPeg.get().supportsVoip() ? "" : _t('(not supported by this browser)');
-    return _t('%(senderName)s placed a %(callType)s call.', {senderName: senderName, callType: type}) + ' ' + supported;
+    const supported = MatrixClientPeg.get().supportsVoip() ? "" : _t('(not supported by this browser)');
+    return _t('%(senderName)s placed a %(callType)s call.', {senderName, callType}) + ' ' + supported;
 }
 
 function textForThreePidInviteEvent(event) {
-    var senderName = event.sender ? event.sender.name : event.getSender();
-    return _t('%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.', {senderName: senderName, targetDisplayName: event.getContent().display_name});
+    const senderName = event.sender ? event.sender.name : event.getSender();
+    return _t('%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.', {
+        senderName,
+        targetDisplayName: event.getContent().display_name,
+    });
 }
 
 function textForHistoryVisibilityEvent(event) {
@@ -197,8 +207,11 @@ function textForHistoryVisibilityEvent(event) {
 }
 
 function textForEncryptionEvent(event) {
-    var senderName = event.sender ? event.sender.name : event.getSender();
-    return _t('%(senderName)s turned on end-to-end encryption (algorithm %(algorithm)s).', {senderName: senderName, algorithm: event.getContent().algorithm});
+    const senderName = event.sender ? event.sender.name : event.getSender();
+    return _t('%(senderName)s turned on end-to-end encryption (algorithm %(algorithm)s).', {
+        senderName,
+        algorithm: event.getContent().algorithm,
+    });
 }
 
 // Currently will only display a change if a user's power level is changed
@@ -209,18 +222,18 @@ function textForPowerEvent(event) {
     }
     const userDefault = event.getContent().users_default || 0;
     // Construct set of userIds
-    let users = [];
+    const users = [];
     Object.keys(event.getContent().users).forEach(
         (userId) => {
             if (users.indexOf(userId) === -1) users.push(userId);
-        }
+        },
     );
     Object.keys(event.getPrevContent().users).forEach(
         (userId) => {
             if (users.indexOf(userId) === -1) users.push(userId);
-        }
+        },
     );
-    let diff = [];
+    const diff = [];
     // XXX: This is also surely broken for i18n
     users.forEach((userId) => {
         // Previous power level
@@ -229,11 +242,11 @@ function textForPowerEvent(event) {
         const to = event.getContent().users[userId];
         if (to !== from) {
             diff.push(
-            	_t('%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s', {
+                _t('%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s', {
                     userId: userId,
                     fromPowerLevel: Roles.textualPowerLevel(from, userDefault),
-                    toPowerLevel: Roles.textualPowerLevel(to, userDefault)
-                })
+                    toPowerLevel: Roles.textualPowerLevel(to, userDefault),
+                }),
             );
         }
     });
@@ -276,14 +289,14 @@ function textForWidgetEvent(event) {
     }
 }
 
-var handlers = {
+const handlers = {
     'm.room.message': textForMessageEvent,
-    'm.room.name':    textForRoomNameEvent,
-    'm.room.topic':   textForTopicEvent,
-    'm.room.member':  textForMemberEvent,
-    'm.call.invite':  textForCallInviteEvent,
-    'm.call.answer':  textForCallAnswerEvent,
-    'm.call.hangup':  textForCallHangupEvent,
+    'm.room.name': textForRoomNameEvent,
+    'm.room.topic': textForTopicEvent,
+    'm.room.member': textForMemberEvent,
+    'm.call.invite': textForCallInviteEvent,
+    'm.call.answer': textForCallAnswerEvent,
+    'm.call.hangup': textForCallHangupEvent,
     'm.room.third_party_invite': textForThreePidInviteEvent,
     'm.room.history_visibility': textForHistoryVisibilityEvent,
     'm.room.encryption': textForEncryptionEvent,
@@ -294,8 +307,8 @@ var handlers = {
 
 module.exports = {
     textForEvent: function(ev) {
-        var hdlr = handlers[ev.getType()];
-        if (!hdlr) return "";
+        const hdlr = handlers[ev.getType()];
+        if (!hdlr) return '';
         return hdlr(ev);
-    }
+    },
 };
