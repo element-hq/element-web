@@ -17,16 +17,55 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import sdk from 'matrix-react-sdk';
-import Matrix from "matrix-js-sdk";
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import Analytics from 'matrix-react-sdk/lib/Analytics';
 import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
-import Modal from 'matrix-react-sdk/lib/Modal';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 import { showGroupInviteDialog } from 'matrix-react-sdk/lib/GroupInvite';
+
+class HeaderButton extends React.Component {
+    constructor() {
+        super();
+        this.onClick = this.onClick.bind(this);
+    }
+
+    onClick(ev) {
+        dis.dispatch({
+            action: 'view_right_panel_phase',
+            phase: this.props.clickPhase,
+        });
+    }
+
+    render() {
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+        const isHighlighted = this.props.phases.includes(this.props.currentPhase);
+
+        return <AccessibleButton
+            className="mx_RightPanel_headerButton"
+            key={this.props.key}
+            onClick={ this.onClick }
+        >
+            <div className="mx_RightPanel_headerButton_badge">
+                { this.props.badge ? this.props.badge : <span>&nbsp;</span>}
+            </div>
+            <TintableSvg src={this.props.iconSrc} width="25" height="25"/>
+            { isHighlighted ? <div className="mx_RightPanel_headerButton_highlight"></div> : <div/> }
+        </AccessibleButton>;
+    }
+}
+
+HeaderButton.propTypes = {
+    phases: PropTypes.arrayOf(PropTypes.string).isRequired,
+    currentPhase: PropTypes.string.isRequired,
+    clickPhase: PropTypes.string.isRequired,
+    iconSrc: PropTypes.string.isRequired,
+    badge: PropTypes.node,
+};
 
 module.exports = React.createClass({
     displayName: 'RightPanel',
@@ -140,7 +179,7 @@ module.exports = React.createClass({
             } else {
                 if (this.props.roomId) {
                     this.setState({
-                        phase: this.Phase.RoomMemberList
+                        phase: this.Phase.RoomMemberList,
                     });
                 } else if (this.props.groupId) {
                     this.setState({
@@ -164,7 +203,11 @@ module.exports = React.createClass({
             });
         } else if (payload.action === "view_room") {
             this.setState({
-                phase: this.Phase.RoomMemberList
+                phase: this.Phase.RoomMemberList,
+            });
+        } else if (payload.action === "view_right_panel_phase") {
+            this.setState({
+                phase: payload.phase,
             });
         }
     },
@@ -176,36 +219,22 @@ module.exports = React.createClass({
         const FilePanel = sdk.getComponent('structures.FilePanel');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         let inviteGroup;
-        let panel;
-
-        let filesHighlight;
-        let membersHighlight;
-        let notificationsHighlight;
-        if (!this.props.collapsed) {
-            if (this.state.phase == this.Phase.RoomMemberList || this.state.phase === this.Phase.RoomMemberInfo) {
-                membersHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
-            }
-            else if (this.state.phase == this.Phase.FilePanel) {
-                filesHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
-            }
-            else if (this.state.phase == this.Phase.NotificationPanel) {
-                notificationsHighlight = <div className="mx_RightPanel_headerButton_highlight"></div>;
-            }
-        }
 
         let membersBadge;
-        if ((this.state.phase == this.Phase.RoomMemberList || this.state.phase === this.Phase.RoomMemberInfo) && this.props.roomId) {
+        if ((this.state.phase == this.Phase.RoomMemberList || this.state.phase === this.Phase.RoomMemberInfo)
+            && this.props.roomId
+        ) {
             const cli = MatrixClientPeg.get();
             const room = cli.getRoom(this.props.roomId);
-            let user_is_in_room;
+            let userIsInRoom;
             if (room) {
                 membersBadge = room.getJoinedMembers().length;
-                user_is_in_room = room.hasMembershipState(
-                    MatrixClientPeg.get().credentials.userId, 'join'
+                userIsInRoom = room.hasMembershipState(
+                    MatrixClientPeg.get().credentials.userId, 'join',
                 );
             }
 
-            if (user_is_in_room) {
+            if (userIsInRoom) {
                 inviteGroup =
                     <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
                         <div className="mx_RightPanel_icon" >
@@ -214,37 +243,28 @@ module.exports = React.createClass({
                         <div className="mx_RightPanel_message">{ _t('Invite to this room') }</div>
                     </AccessibleButton>;
             }
-
         }
 
         let headerButtons = [];
         if (this.props.roomId) {
-            headerButtons.push(
-                <AccessibleButton className="mx_RightPanel_headerButton" key="_membersButton"
-                        title={ _t('Members') } onClick={ this.onMemberListButtonClick }>
-                    <div className="mx_RightPanel_headerButton_badge">{ membersBadge ? membersBadge : <span>&nbsp;</span>}</div>
-                    <TintableSvg src="img/icons-people.svg" width="25" height="25"/>
-                    { membersHighlight }
-                </AccessibleButton>
-            );
-            headerButtons.push(
-                <AccessibleButton
-                        className="mx_RightPanel_headerButton mx_RightPanel_filebutton" key="_filesButton"
-                        title={ _t('Files') } onClick={ this.onFileListButtonClick }>
-                    <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
-                    <TintableSvg src="img/icons-files.svg" width="25" height="25"/>
-                    { filesHighlight }
-                </AccessibleButton>
-            );
-            headerButtons.push(
-                <AccessibleButton
-                        className="mx_RightPanel_headerButton mx_RightPanel_notificationbutton" key="_notifsButton"
-                        title={ _t('Notifications') } onClick={ this.onNotificationListButtonClick }>
-                    <div className="mx_RightPanel_headerButton_badge">&nbsp;</div>
-                    <TintableSvg src="img/icons-notifications.svg" width="25" height="25"/>
-                    { notificationsHighlight }
-                </AccessibleButton>
-            );
+            headerButtons = [
+                <HeaderButton key="_membersButton" title={_t('Members')} iconSrc="img/icons-people.svg"
+                    phases={[this.Phase.RoomMemberList, this.Phase.RoomMemberInfo]}
+                    clickPhase={this.Phase.RoomMemberList}
+                    currentPhase={this.state.phase}
+                    badge={membersBadge}
+                />,
+                <HeaderButton key="_filesButton" title={_t('Files')} iconSrc="img/icons-files.svg"
+                    phases={[this.Phase.FilePanel]}
+                    clickPhase={this.Phase.FilePanel}
+                    currentPhase={this.state.phase}
+                />,
+                <HeaderButton key="_notifsButton" title={_t('Notifications')} iconSrc="img/icons-notifications.svg"
+                    phases={[this.Phase.NotificationPanel]}
+                    clickPhase={this.Phase.NotificationPanel}
+                    currentPhase={this.state.phase}
+                />,
+            ];
         }
 
         if (this.props.roomId || this.props.groupId) {
@@ -256,13 +276,14 @@ module.exports = React.createClass({
                     title={ _t("Hide panel") } onClick={ this.onCollapseClick }
                 >
                     <TintableSvg src="img/minimise.svg" width="10" height="16"/>
-                </div>
+                </div>,
             );
         }
 
+        let panel = <div />;
         if (!this.props.collapsed) {
             if (this.props.roomId && this.state.phase == this.Phase.RoomMemberList) {
-                panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />
+                panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />;
             } else if (this.props.groupId && this.state.phase == this.Phase.GroupMemberList) {
                 panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />;
                 inviteGroup = (
@@ -275,10 +296,13 @@ module.exports = React.createClass({
                 );
             } else if (this.state.phase == this.Phase.RoomMemberInfo) {
                 const MemberInfo = sdk.getComponent('rooms.MemberInfo');
-                panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />
+                panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />;
             } else if (this.state.phase == this.Phase.GroupMemberInfo) {
                 const GroupMemberInfo = sdk.getComponent('groups.GroupMemberInfo');
-                panel = <GroupMemberInfo groupMember={this.state.member} groupId={this.props.groupId} key={this.state.member.user_id} />;
+                panel = <GroupMemberInfo
+                    groupMember={this.state.member}
+                    groupId={this.props.groupId}
+                    key={this.state.member.user_id} />;
             } else if (this.state.phase == this.Phase.NotificationPanel) {
                 panel = <NotificationPanel />;
             } else if (this.state.phase == this.Phase.FilePanel) {
@@ -308,5 +332,5 @@ module.exports = React.createClass({
                 </div>
             </aside>
         );
-    }
+    },
 });
