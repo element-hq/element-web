@@ -15,21 +15,21 @@ limitations under the License.
 */
 
 import EventEmitter from 'events';
-import MatrixClientPeg from '../MatrixClientPeg';
 
 /**
  * Stores the group summary for a room and provides an API to change it
  */
 export default class GroupSummaryStore extends EventEmitter {
-    constructor(groupId) {
+    constructor(matrixClient, groupId) {
         super();
         this._groupId = groupId;
+        this._matrixClient = matrixClient;
         this._summary = {};
         this._fetchSummary();
     }
 
     _fetchSummary() {
-        MatrixClientPeg.get().getGroupSummary(this._groupId).then((resp) => {
+        this._matrixClient.getGroupSummary(this._groupId).then((resp) => {
             this._summary = resp;
             this._notifyListeners();
         }).catch((err) => {
@@ -46,25 +46,25 @@ export default class GroupSummaryStore extends EventEmitter {
     }
 
     addRoomToGroupSummary(roomId, categoryId) {
-        return MatrixClientPeg.get()
+        return this._matrixClient
             .addRoomToGroupSummary(this._groupId, roomId, categoryId)
             .then(this._fetchSummary.bind(this));
     }
 
     addUserToGroupSummary(userId, roleId) {
-        return MatrixClientPeg.get()
+        return this._matrixClient
             .addUserToGroupSummary(this._groupId, userId, roleId)
             .then(this._fetchSummary.bind(this));
     }
 
     removeRoomFromGroupSummary(roomId) {
-        return MatrixClientPeg.get()
+        return this._matrixClient
             .removeRoomFromGroupSummary(this._groupId, roomId)
             .then(this._fetchSummary.bind(this));
     }
 
     removeUserFromGroupSummary(userId) {
-        return MatrixClientPeg.get()
+        return this._matrixClient
             .removeUserFromGroupSummary(this._groupId, userId)
             .then(this._fetchSummary.bind(this));
     }

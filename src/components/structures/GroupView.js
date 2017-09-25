@@ -430,7 +430,9 @@ export default React.createClass({
     },
 
     _loadGroupFromServer: function(groupId) {
-        this._groupSummaryStore = new GroupSummaryStore(this.props.groupId);
+        this._groupSummaryStore = new GroupSummaryStore(
+            MatrixClientPeg.get(), this.props.groupId,
+        );
         this._groupSummaryStore.on('update', () => {
             this.setState({
                 summary: this._groupSummaryStore.getSummary(),
