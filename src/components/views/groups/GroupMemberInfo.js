@@ -152,12 +152,21 @@ module.exports = withMatrixClient(React.createClass({
                 </div>;
         }
 
-        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const avatar = (
-            <BaseAvatar name={this.props.groupMember.userId} width={36} height={36} />
+        const avatarUrl = this.props.matrixClient.mxcUrlToHttp(
+            this.props.groupMember.avatarUrl,
+            36, 36, 'crop',
         );
 
-        const groupMemberName = this.props.groupMember.userId;
+        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+        const avatar = (
+            <BaseAvatar name={this.props.groupMember.userId} width={36} height={36}
+                url={avatarUrl}
+            />
+        );
+
+        const groupMemberName = (
+            this.props.groupMember.displayname || this.props.groupMember.userId
+        );
 
         const EmojiText = sdk.getComponent('elements.EmojiText');
         return (
