@@ -410,6 +410,7 @@ export default React.createClass({
 
     componentWillUnmount: function() {
         MatrixClientPeg.get().removeListener("Group.myMembership", this._onGroupMyMembership);
+        this._groupSummaryStore.removeAllListeners();
     },
 
     componentWillReceiveProps: function(newProps) {
