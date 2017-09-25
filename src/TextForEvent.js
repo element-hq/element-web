@@ -67,7 +67,7 @@ function textForMemberEvent(ev) {
                         senderName,
                         oldDisplayName: prevContent.displayname,
                     });
-                } else if (prevContent.avatar_url && !prevContent.avatar_url) {
+                } else if (prevContent.avatar_url && !content.avatar_url) {
                     return _t('%(senderName)s removed their profile picture.', {senderName});
                 } else if (prevContent.avatar_url && content.avatar_url &&
                     prevContent.avatar_url !== content.avatar_url) {
