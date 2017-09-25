@@ -23,9 +23,14 @@ module.exports = React.createClass({
     displayName: 'UnknownBody',
 
     render: function() {
+        let tooltip = _t("Removed or unknown message type");
+        if (this.props.mxEvent.isRedacted()) {
+            tooltip = _t("Message removed by %(userId)s", {userId: this.props.mxEvent.getSender()});
+        }
+
         const text = this.props.mxEvent.getContent().body;
         return (
-            <span className="mx_UnknownBody" title={_t("Removed or unknown message type")}>
+            <span className="mx_UnknownBody" title={tooltip}>
                 {text}
             </span>
         );

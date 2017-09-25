@@ -46,7 +46,7 @@ Please follow the standard Matrix contributor's guide:
 https://github.com/matrix-org/synapse/tree/master/CONTRIBUTING.rst
 
 Please follow the Matrix JS/React code style as per:
-https://github.com/matrix-org/matrix-react-sdk/tree/master/code_style.rst
+https://github.com/matrix-org/matrix-react-sdk/blob/master/code_style.md
 
 Whilst the layering separation between matrix-react-sdk and Riot is broken
 (as of July 2016), code should be committed as follows:

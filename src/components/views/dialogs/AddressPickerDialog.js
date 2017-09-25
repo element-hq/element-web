@@ -28,7 +28,7 @@ const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
 
 module.exports = React.createClass({
-    displayName: "UserPickerDialog",
+    displayName: "AddressPickerDialog",
 
     propTypes: {
         title: PropTypes.string.isRequired,
@@ -40,6 +40,8 @@ module.exports = React.createClass({
         focus: PropTypes.bool,
         validAddressTypes: PropTypes.arrayOf(PropTypes.oneOf(addressTypes)),
         onFinished: PropTypes.func.isRequired,
+        groupId: PropTypes.string,
+        pickerType: PropTypes.oneOf(['user', 'room']),
     },
 
     getDefaultProps: function() {
@@ -47,6 +49,7 @@ module.exports = React.createClass({
             value: "",
             focus: true,
             validAddressTypes: addressTypes,
+            pickerType: 'user',
         };
     },
 
@@ -140,10 +143,22 @@ module.exports = React.createClass({
         // Only do search if there is something to search
         if (query.length > 0 && query != '@' && query.length >= 2) {
             this.queryChangedDebouncer = setTimeout(() => {
-                if (this.state.serverSupportsUserDirectory) {
-                    this._doUserDirectorySearch(query);
+                if (this.props.pickerType === 'user') {
+                    if (this.props.groupId) {
+                        this._doNaiveGroupSearch(query);
+                    } else if (this.state.serverSupportsUserDirectory) {
+                        this._doUserDirectorySearch(query);
+                    } else {
+                        this._doLocalSearch(query);
+                    }
+                } else if (this.props.pickerType === 'room') {
+                    if (this.props.groupId) {
+                        this._doNaiveGroupRoomSearch(query);
+                    } else {
+                        console.error('Room searching only implemented for groups');
+                    }
                 } else {
-                    this._doLocalSearch(query);
+                    console.error('Unknown pickerType', this.props.pickerType);
                 }
             }, QUERY_USER_DIRECTORY_DEBOUNCE_MS);
         } else {
@@ -183,6 +198,70 @@ module.exports = React.createClass({
             query: "",
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+    },
+
+    _doNaiveGroupSearch: function(query) {
+        const lowerCaseQuery = query.toLowerCase();
+        this.setState({
+            busy: true,
+            query,
+            searchError: null,
+        });
+        MatrixClientPeg.get().getGroupUsers(this.props.groupId).then((resp) => {
+            const results = [];
+            resp.chunk.forEach((u) => {
+                const userIdMatch = u.user_id.toLowerCase().includes(lowerCaseQuery);
+                const displayNameMatch = (u.displayname || '').toLowerCase().includes(lowerCaseQuery);
+                if (!(userIdMatch || displayNameMatch)) {
+                    return;
+                }
+                results.push({
+                    user_id: u.user_id,
+                    avatar_url: u.avatar_url,
+                    display_name: u.displayname,
+                });
+            });
+            this._processResults(results, query);
+        }).catch((err) => {
+            console.error('Error whilst searching group rooms: ', err);
+            this.setState({
+                searchError: err.errcode ? err.message : _t('Something went wrong!'),
+            });
+        }).done(() => {
+            this.setState({
+                busy: false,
+            });
+        });
+    },
+
+    _doNaiveGroupRoomSearch: function(query) {
+        const lowerCaseQuery = query.toLowerCase();
+        MatrixClientPeg.get().getGroupRooms(this.props.groupId).then((resp) => {
+            const results = [];
+            resp.chunk.forEach((r) => {
+                const nameMatch = (r.name || '').toLowerCase().includes(lowerCaseQuery);
+                const topicMatch = (r.topic || '').toLowerCase().includes(lowerCaseQuery);
+                const aliasMatch = (r.canonical_alias || '').toLowerCase().includes(lowerCaseQuery);
+                if (!(nameMatch || topicMatch || aliasMatch)) {
+                    return;
+                }
+                results.push({
+                    room_id: r.room_id,
+                    avatar_url: r.avatar_url,
+                    name: r.name,
+                });
+            });
+            this._processResults(results, query);
+        }).catch((err) => {
+            console.error('Error whilst searching group users: ', err);
+            this.setState({
+                searchError: err.errcode ? err.message : _t('Something went wrong!'),
+            });
+        }).done(() => {
+            this.setState({
+                busy: false,
+            });
+        });
     },
 
     _doUserDirectorySearch: function(query) {
@@ -245,17 +324,28 @@ module.exports = React.createClass({
 
     _processResults: function(results, query) {
         const queryList = [];
-        results.forEach((user) => {
-            if (user.user_id === MatrixClientPeg.get().credentials.userId) {
+        results.forEach((result) => {
+            if (result.room_id) {
+                queryList.push({
+                    addressType: 'mx',
+                    address: result.room_id,
+                    displayName: result.name,
+                    avatarMxc: result.avatar_url,
+                    isKnown: true,
+                });
                 return;
             }
+            if (result.user_id === MatrixClientPeg.get().credentials.userId) {
+                return;
+            }
+
             // Return objects, structure of which is defined
             // by UserAddressType
             queryList.push({
                 addressType: 'mx',
-                address: user.user_id,
-                displayName: user.display_name,
-                avatarMxc: user.avatar_url,
+                address: result.user_id,
+                displayName: result.display_name,
+                avatarMxc: result.avatar_url,
                 isKnown: true,
             });
         });

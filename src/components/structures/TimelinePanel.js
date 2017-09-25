@@ -384,6 +384,9 @@ var TimelinePanel = React.createClass({
                 this.sendReadReceipt();
                 this.updateReadMarker();
                 break;
+            case 'ignore_state_changed':
+                this.forceUpdate();
+                break;
         }
     },
 

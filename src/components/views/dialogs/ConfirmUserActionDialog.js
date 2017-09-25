@@ -18,6 +18,7 @@ import React from 'react';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import classnames from 'classnames';
+import { GroupMemberType } from '../../../groups';
 
 /*
  * A dialog for confirming an operation on another user.
@@ -30,7 +31,10 @@ import classnames from 'classnames';
 export default React.createClass({
     displayName: 'ConfirmUserActionDialog',
     propTypes: {
-        member: React.PropTypes.object.isRequired, // matrix-js-sdk member object
+        // matrix-js-sdk (room) member object. Supply either this or 'groupMember'
+        member: React.PropTypes.object,
+        // group member object. Supply either this or 'member'
+        groupMember: GroupMemberType,
         action: React.PropTypes.string.isRequired, // eg. 'Ban'
 
         // Whether to display a text field for a reason
@@ -69,6 +73,7 @@ export default React.createClass({
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
+        const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
 
         const title = _t("%(actionVerb)s this person?", { actionVerb: this.props.action});
         const confirmButtonClass = classnames({
@@ -91,6 +96,20 @@ export default React.createClass({
             );
         }
 
+        let avatar;
+        let name;
+        let userId;
+        if (this.props.member) {
+            avatar = <MemberAvatar member={this.props.member} width={48} height={48} />;
+            name = this.props.member.name;
+            userId = this.props.member.userId;
+        } else {
+            // we don't get this info from the API yet
+            avatar = <BaseAvatar name={this.props.groupMember.userId} width={48} height={48} />;
+            name = this.props.groupMember.userId;
+            userId = this.props.groupMember.userId;
+        }
+
         return (
             <BaseDialog className="mx_ConfirmUserActionDialog" onFinished={this.props.onFinished}
                 onEnterPressed={ this.onOk }
@@ -98,10 +117,10 @@ export default React.createClass({
             >
                 <div className="mx_Dialog_content">
                     <div className="mx_ConfirmUserActionDialog_avatar">
-                        <MemberAvatar member={this.props.member} width={48} height={48} />
+                        {avatar}
                     </div>
-                    <div className="mx_ConfirmUserActionDialog_name">{this.props.member.name}</div>
-                    <div className="mx_ConfirmUserActionDialog_userId">{this.props.member.userId}</div>
+                    <div className="mx_ConfirmUserActionDialog_name">{name}</div>
+                    <div className="mx_ConfirmUserActionDialog_userId">{userId}</div>
                 </div>
                 {reasonBox}
                 <div className="mx_Dialog_buttons">

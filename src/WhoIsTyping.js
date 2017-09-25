@@ -18,6 +18,12 @@ var MatrixClientPeg = require("./MatrixClientPeg");
 import { _t } from './languageHandler';
 
 module.exports = {
+    usersTypingApartFromMeAndIgnored: function(room) {
+        return this.usersTyping(
+            room, [MatrixClientPeg.get().credentials.userId].concat(MatrixClientPeg.get().getIgnoredUsers())
+        );
+    },
+
     usersTypingApartFromMe: function(room) {
         return this.usersTyping(
             room, [MatrixClientPeg.get().credentials.userId]

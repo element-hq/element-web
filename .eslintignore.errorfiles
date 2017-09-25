@@ -54,7 +54,6 @@ src/components/views/elements/RoomDirectoryButton.js
 src/components/views/elements/SettingsButton.js
 src/components/views/elements/StartChatButton.js
 src/components/views/elements/TintableSvg.js
-src/components/views/elements/TruncatedList.js
 src/components/views/elements/UserSelector.js
 src/components/views/login/CaptchaForm.js
 src/components/views/login/CasLogin.js

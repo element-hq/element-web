@@ -50,8 +50,8 @@ export function inviteMultipleToRoom(roomId, addrs) {
 }
 
 export function showStartChatInviteDialog() {
-    const UserPickerDialog = sdk.getComponent("dialogs.UserPickerDialog");
-    Modal.createTrackedDialog('Start a chat', '', UserPickerDialog, {
+    const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
+    Modal.createTrackedDialog('Start a chat', '', AddressPickerDialog, {
         title: _t('Start a chat'),
         description: _t("Who would you like to communicate with?"),
         placeholder: _t("Email, name or matrix ID"),
@@ -61,8 +61,8 @@ export function showStartChatInviteDialog() {
 }
 
 export function showRoomInviteDialog(roomId) {
-    const UserPickerDialog = sdk.getComponent("dialogs.UserPickerDialog");
-    Modal.createTrackedDialog('Chat Invite', '', UserPickerDialog, {
+    const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
+    Modal.createTrackedDialog('Chat Invite', '', AddressPickerDialog, {
         title: _t('Invite new room members'),
         description: _t('Who would you like to add to this room?'),
         button: _t('Send Invites'),
@@ -127,7 +127,7 @@ function _onRoomInviteFinished(roomId, shouldInvite, addrs) {
 }
 
 function _isDmChat(addrTexts) {
-    if (addrTexts.length === 1 && getAddressType(addrTexts[0])) {
+    if (addrTexts.length === 1 && getAddressType(addrTexts[0]) === 'mx') {
         return true;
     } else {
         return false;

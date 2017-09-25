@@ -18,6 +18,7 @@
 
 import React from 'react';
 import sdk from '../../../index';
+import Flair from '../elements/Flair.js';
 
 export default function SenderProfile(props) {
     const EmojiText = sdk.getComponent('elements.EmojiText');
@@ -30,8 +31,11 @@ export default function SenderProfile(props) {
     }
 
     return (
-        <EmojiText className="mx_SenderProfile" dir="auto"
-              onClick={props.onClick}>{`${name || ''} ${props.aux || ''}`}</EmojiText>
+        <div className="mx_SenderProfile" dir="auto" onClick={props.onClick}>
+            <EmojiText className="mx_SenderProfile_name">{name || ''}</EmojiText>
+            {props.enableFlair ? <Flair userId={mxEvent.getSender()} /> : null}
+            {props.aux ? <EmojiText className="mx_SenderProfile_aux"> {props.aux}</EmojiText> : null}
+        </div>
     );
 }
 

@@ -106,6 +106,10 @@ const SETTINGS_LABELS = [
         label: 'Automatically replace plain text Emoji',
     },
     {
+        id: 'MessageComposerInput.dontSuggestEmoji',
+        label: 'Disable Emoji suggestions while typing',
+    },
+    {
         id: 'Pill.shouldHidePillAvatar',
         label: 'Hide avatars in user and room mentions',
     },
@@ -172,6 +176,34 @@ const THEMES = [
     },
 ];
 
+const IgnoredUser = React.createClass({
+    propTypes: {
+        userId: React.PropTypes.string.isRequired,
+        onUnignored: React.PropTypes.func.isRequired,
+    },
+
+    _onUnignoreClick: function() {
+        const ignoredUsers = MatrixClientPeg.get().getIgnoredUsers();
+        const index = ignoredUsers.indexOf(this.props.userId);
+        if (index !== -1) {
+            ignoredUsers.splice(index, 1);
+            MatrixClientPeg.get().setIgnoredUsers(ignoredUsers)
+                .then(() => this.props.onUnignored(this.props.userId));
+        } else this.props.onUnignored(this.props.userId);
+    },
+
+    render: function() {
+        return (
+            <li>
+                <AccessibleButton onClick={this._onUnignoreClick} className="mx_UserSettings_button mx_UserSettings_buttonSmall">
+                    { _t("Unignore") }
+                </AccessibleButton>
+                { this.props.userId }
+            </li>
+        );
+    },
+});
+
 module.exports = React.createClass({
     displayName: 'UserSettings',
 
@@ -207,6 +239,7 @@ module.exports = React.createClass({
             vectorVersion: undefined,
             rejectingInvites: false,
             mediaDevices: null,
+            ignoredUsers: [],
         };
     },
 
@@ -228,6 +261,7 @@ module.exports = React.createClass({
         }
 
         this._refreshMediaDevices();
+        this._refreshIgnoredUsers();
 
         // Bulk rejecting invites:
         // /sync won't have had time to return when UserSettings re-renders from state changes, so getRooms()
@@ -346,9 +380,22 @@ module.exports = React.createClass({
         });
     },
 
+    _refreshIgnoredUsers: function(userIdUnignored=null) {
+        const users = MatrixClientPeg.get().getIgnoredUsers();
+        if (userIdUnignored) {
+            const index = users.indexOf(userIdUnignored);
+            if (index !== -1) users.splice(index, 1);
+        }
+        this.setState({
+            ignoredUsers: users,
+        });
+    },
+
     onAction: function(payload) {
         if (payload.action === "notifier_enabled") {
             this.forceUpdate();
+        } else if (payload.action === "ignore_state_changed") {
+            this._refreshIgnoredUsers();
         }
     },
 
@@ -729,6 +776,7 @@ module.exports = React.createClass({
         // to rebind the onChange each time we render
         const onChange = (e) => {
             if (e.target.checked) {
+                this._syncedSettings[setting.id] = setting.value;
                 UserSettingsStore.setSyncedSetting(setting.id, setting.value);
             }
             dis.dispatch({
@@ -741,7 +789,7 @@ module.exports = React.createClass({
                    type="radio"
                    name={ setting.id }
                    value={ setting.value }
-                   defaultChecked={ this._syncedSettings[setting.id] === setting.value }
+                   checked={ this._syncedSettings[setting.id] === setting.value }
                    onChange={ onChange }
             />
             <label htmlFor={ setting.id + "_" + setting.value }>
@@ -793,6 +841,26 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
+    },
+
+    _renderIgnoredUsers: function() {
+        if (this.state.ignoredUsers.length > 0) {
+            const updateHandler = this._refreshIgnoredUsers;
+            return (
+                <div>
+                    <h3>{ _t("Ignored Users") }</h3>
+                    <div className="mx_UserSettings_section mx_UserSettings_ignoredUsersSection">
+                        <ul>
+                            {this.state.ignoredUsers.map(function(userId) {
+                                return (<IgnoredUser key={userId}
+                                                     userId={userId}
+                                                     onUnignored={updateHandler}></IgnoredUser>);
+                            })}
+                        </ul>
+                    </div>
+                </div>
+            );
+        } else return (<div />);
     },
 
     _renderLocalSetting: function(setting) {
@@ -1301,6 +1369,7 @@ module.exports = React.createClass({
                 {this._renderWebRtcSettings()}
                 {this._renderDevicesPanel()}
                 {this._renderCryptoInfo()}
+                {this._renderIgnoredUsers()}
                 {this._renderBulkOptions()}
                 {this._renderBugReport()}
 
