@@ -34,6 +34,7 @@ class HeaderButton extends React.Component {
     }
 
     onClick(ev) {
+        Analytics.trackEvent(...this.props.analytics);
         dis.dispatch({
             action: 'view_right_panel_phase',
             phase: this.props.clickPhase,
@@ -60,11 +61,19 @@ class HeaderButton extends React.Component {
 }
 
 HeaderButton.propTypes = {
+    // If currentPhase is one of the specified phases, the button will be highlighted
     phases: PropTypes.arrayOf(PropTypes.string).isRequired,
+    // The currentPhase of the RightPanel
     currentPhase: PropTypes.string.isRequired,
+    // The phase to swap to when the button is clicked
     clickPhase: PropTypes.string.isRequired,
+    // The source file of the icon to display
     iconSrc: PropTypes.string.isRequired,
+
+    // The badge to display above the icon
     badge: PropTypes.node,
+    // The parameters to track the click event
+    analytics: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 module.exports = React.createClass({
@@ -110,21 +119,6 @@ module.exports = React.createClass({
                 phase: this.Phase.RoomMemberList,
             };
         }
-    },
-
-    onMemberListButtonClick: function() {
-        Analytics.trackEvent('Right Panel', 'Member List Button', 'click');
-        this.setState({ phase: this.Phase.RoomMemberList });
-    },
-
-    onFileListButtonClick: function() {
-        Analytics.trackEvent('Right Panel', 'File List Button', 'click');
-        this.setState({ phase: this.Phase.FilePanel });
-    },
-
-    onNotificationListButtonClick: function() {
-        Analytics.trackEvent('Right Panel', 'Notification List Button', 'click');
-        this.setState({ phase: this.Phase.NotificationPanel });
     },
 
     onCollapseClick: function() {
@@ -253,16 +247,19 @@ module.exports = React.createClass({
                     clickPhase={this.Phase.RoomMemberList}
                     currentPhase={this.state.phase}
                     badge={membersBadge}
+                    analytics={['Right Panel', 'Member List Button', 'click']}
                 />,
                 <HeaderButton key="_filesButton" title={_t('Files')} iconSrc="img/icons-files.svg"
                     phases={[this.Phase.FilePanel]}
                     clickPhase={this.Phase.FilePanel}
                     currentPhase={this.state.phase}
+                    analytics={['Right Panel', 'File List Button', 'click']}
                 />,
                 <HeaderButton key="_notifsButton" title={_t('Notifications')} iconSrc="img/icons-notifications.svg"
                     phases={[this.Phase.NotificationPanel]}
                     clickPhase={this.Phase.NotificationPanel}
                     currentPhase={this.state.phase}
+                    analytics={['Right Panel', 'Notification List Button', 'click']}
                 />,
             ];
         }
