@@ -143,7 +143,7 @@ export default React.createClass({
             event.origin = event.originalEvent.origin;
         }
 
-        if (this.state.widgetUrl.indexOf(event.origin) === -1) {
+        if (!this.state.widgetUrl.startsWith(event.origin)) {
             return;
         }
 
