@@ -246,6 +246,7 @@ module.exports = React.createClass({
                     analytics={['Right Panel', 'Member List Button', 'click']}
                 />,
                 <HeaderButton key="_filesButton" title={_t('Files')} iconSrc="img/icons-files.svg"
+                    clickPhase={this.Phase.FilePanel}
                     isHighlighted={this.state.phase === this.Phase.FilePanel}
                     analytics={['Right Panel', 'File List Button', 'click']}
                 />,
