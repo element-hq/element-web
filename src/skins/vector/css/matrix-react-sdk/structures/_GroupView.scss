@@ -70,8 +70,12 @@ limitations under the License.
     flex: 1;
 }
 
-.mx_GroupView_saveButton, .mx_GroupView_cancelButton {
-    display: table-cell;
+.mx_GroupView_header_rightCol {
+    display: flex;
+}
+
+.mx_GroupView_textButton {
+    display: inline-block;
 }
 
 .mx_GroupView_header_groupid {
@@ -126,6 +130,31 @@ limitations under the License.
     top: 5px;
 }
 
+.mx_GroupView_membershipSection {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 11px;
+    color: $greyed-fg-color;
+}
+
+.mx_GroupView_membershipSubSection {
+    justify-content: space-between;
+    display: flex;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.mx_GroupView_membershipSection_description {
+    /* To match textButton */
+    line-height: 34px;
+}
+
+.mx_GroupView_membershipSection .mx_GroupView_textButton {
+    margin-right: 0px;
+    margin-top: 0px;
+    margin-left: 8px;
+}
+
 .mx_GroupView_featuredThings {
     margin-top: 20px;
 }
@@ -142,9 +171,41 @@ limitations under the License.
     margin-top: 10px;
 }
 
+.mx_GroupView_featuredThings_container {
+    display: flex;
+}
+
+.mx_GroupView_featuredThings_addButton,
 .mx_GroupView_featuredThing {
-    cursor: pointer;
     display: table-cell;
+    text-align: center;
+
+    width: 100px;
+    margin: 0px 20px;
+}
+
+.mx_GroupView_featuredThing {
+    position: relative;
+}
+
+.mx_GroupView_featuredThing .mx_GroupView_featuredThing_deleteButton {
+    position: absolute;
+    top: -7px;
+    right: 11px;
+    opacity: 0.4;
+}
+
+.mx_GroupView_featuredThing .mx_BaseAvatar {
+    /* To prevent misalignment with mx_TintableSvg (in addButton) */
+    vertical-align: initial;
+}
+
+.mx_GroupView_featuredThings_addButton object {
+    pointer-events: none;
+}
+
+.mx_GroupView_featuredThing_name {
+    word-wrap: break-word;
 }
 
 .mx_GroupView_uploadInput {

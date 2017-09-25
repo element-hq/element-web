@@ -30,7 +30,7 @@
     "Error": "Chyba",
     "Failed to change settings": "Nepodařilo se změnit nastavení",
     "Failed to get public room list": "Nepodařilo se získat seznam veřejných místností",
-    "Failed to join the room": "Nepodařilo se vstoupit do místnosti",
+    "Failed to join the room": "Vstup do místnosti se nezdařil",
     "Favourite": "V oblíbených",
     "Guests can join": "Hosté mohou vstoupit",
     "Guest users can't invite users. Please register to invite.": "Hosté nemohou zvát uživatele. Zaregistrujte se a budete moci zvát.",

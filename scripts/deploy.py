@@ -14,6 +14,7 @@ import subprocess
 import sys
 import tarfile
 import shutil
+import glob
 
 try:
     # python3
@@ -66,7 +67,7 @@ class Deployer:
         self.bundles_path = None
         self.should_clean = False
         # filename -> symlink path e.g 'config.localhost.json' => '../localhost/config.json'
-        self.config_locations = {}
+        self.symlink_paths = {}
         self.verify_signature = True
 
     def deploy(self, tarball, extract_path):
@@ -98,11 +99,11 @@ class Deployer:
 
         print ("Extracted into: %s" % extracted_dir)
 
-        if self.config_locations:
-            for config_filename, config_loc in self.config_locations.iteritems():
+        if self.symlink_paths:
+            for link_path, file_path in self.symlink_paths.iteritems():
                 create_relative_symlink(
-                    target=config_loc,
-                    linkname=os.path.join(extracted_dir, config_filename)
+                    target=file_path,
+                    linkname=os.path.join(extracted_dir, link_path)
                 )
 
         if self.bundles_path:
@@ -165,9 +166,10 @@ if __name__ == "__main__":
         )
     )
     parser.add_argument(
-        "--config", nargs='?', default='./config.json', help=(
-            "Write a symlink at config.json in the extracted tarball to this \
-            location. (Default: '%(default)s')"
+        "--include", nargs='*', default='./config*.json', help=(
+            "Symlink these files into the root of the deployed tarball. \
+             Useful for config files and home pages. Supports glob syntax. \
+             (Default: '%(default)s')"
         )
     )
     parser.add_argument(
@@ -182,8 +184,8 @@ if __name__ == "__main__":
     deployer.packages_path = args.packages_dir
     deployer.bundles_path = args.bundles_dir
     deployer.should_clean = args.clean
-    deployer.config_locations = {
-        "config.json": args.config,
-    }
+
+    for include in args.include:
+        deployer.symlink_paths.update({ os.path.basename(pth): pth for pth in glob.iglob(include) })
 
     deployer.deploy(args.tarball, args.extract_path)

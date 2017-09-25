@@ -139,7 +139,7 @@
     "Uploaded on %(date)s by %(user)s": "由 %(user)s 在 %(date)s 上传",
     "Uploading report": "上传报告",
     "View Decrypted Source": "查看解密的来源",
-    "View Source": "查看来源",
+    "View Source": "查看源码",
     "What's New": "新鲜事",
     "What's new?": "有什么新闻？",
     "Waiting for response from server": "正在等待来自服务器的回应",
