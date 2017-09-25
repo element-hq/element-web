@@ -671,7 +671,6 @@ export default React.createClass({
         if (!group) return null;
 
         if (group.myMembership === 'invite') {
-
             if (this.state.membershipBusy) {
                 return <div className="mx_GroupView_membershipSection">
                     <Spinner />
@@ -727,7 +726,7 @@ export default React.createClass({
                         onClick={this._onPubliciseOnClick}
                     >
                         {_t("Make public")}
-                    </AccessibleButton>
+                    </AccessibleButton>;
                 }
                 publicisedSection = <div className="mx_GroupView_membershipSubSection">
                     {_t("Your membership of this group is private")}
