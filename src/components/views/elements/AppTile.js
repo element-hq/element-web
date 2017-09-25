@@ -136,7 +136,7 @@ export default React.createClass({
     },
 
     _onMessage(event) {
-        if (!PlatformPeg.get().isElectron() || this.props.type !== 'jitsi') {
+        if (this.props.type !== 'jitsi') {
             return;
         }
         if (!event.origin) {
