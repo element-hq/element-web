@@ -403,7 +403,7 @@ export default React.createClass({
 
     componentWillMount: function() {
         this._changeAvatarComponent = null;
-        this._loadGroupFromServer(this.props.groupId);
+        this._initGroupSummaryStore(this.props.groupId);
 
         MatrixClientPeg.get().on("Group.myMembership", this._onGroupMyMembership);
     },
@@ -418,7 +418,7 @@ export default React.createClass({
                 summary: null,
                 error: null,
             }, () => {
-                this._loadGroupFromServer(newProps.groupId);
+                this._initGroupSummaryStore(newProps.groupId);
             });
         }
     },
@@ -429,7 +429,7 @@ export default React.createClass({
         this.setState({membershipBusy: false});
     },
 
-    _loadGroupFromServer: function(groupId) {
+    _initGroupSummaryStore: function(groupId) {
         this._groupSummaryStore = new GroupSummaryStore(
             MatrixClientPeg.get(), this.props.groupId,
         );
@@ -516,7 +516,7 @@ export default React.createClass({
                 editing: false,
                 summary: null,
             });
-            this._loadGroupFromServer(this.props.groupId);
+            this._initGroupSummaryStore(this.props.groupId);
         }).catch((e) => {
             this.setState({
                 saving: false,
