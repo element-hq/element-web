@@ -207,5 +207,16 @@
     "Set Password": "设置密码",
     "Couldn't load home page": "不能加载首页",
     "Bug report sent": "发送DEBUG报告",
-    "Thank you!": "谢谢！"
+    "Thank you!": "谢谢！",
+    "Developer Tools": "开发者工具",
+    "Failed to send custom event.": "发送自定义事件失败。",
+    "Filter results": "过滤结果",
+    "Send Custom Event": "发送自定义事件",
+    "Send Custom State Event": "发送自定义状态事件",
+    "You must specify an event type!": "你必须制定一个事件类型！",
+    "Event sent!": "事件已发出！",
+    "Event Type": "事件类型",
+    "Event Content": "事件内容",
+    "State Key": "状态密钥",
+    "Invite to this group": "邀请到这个群组"
 }
