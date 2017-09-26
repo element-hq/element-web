@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_EntityTile {
+.mx_EntityTile,
+.mx_GroupRoomTile {
     display: table-row;
     position: relative;
     color: $primary-fg-color;
@@ -28,7 +29,8 @@ limitations under the License.
     width: 26px;
 }
 
-.mx_EntityTile_avatar {
+.mx_EntityTile_avatar,
+.mx_GroupRoomTile_avatar {
     display: table-cell;
     padding-left: 3px;
     padding-right: 12px;
@@ -48,7 +50,8 @@ limitations under the License.
     right: 6px;
 }
 
-.mx_EntityTile_name {
+.mx_EntityTile_name,
+.mx_GroupRoomTile_name {
     display: table-cell;
     vertical-align: middle;
     overflow: hidden;

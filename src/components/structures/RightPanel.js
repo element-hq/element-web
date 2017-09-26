@@ -25,7 +25,7 @@ import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import Analytics from 'matrix-react-sdk/lib/Analytics';
 import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
-import { showGroupInviteDialog } from 'matrix-react-sdk/lib/GroupInvite';
+import { showGroupInviteDialog, showGroupAddRoomDialog } from 'matrix-react-sdk/lib/GroupAddressPicker';
 
 class HeaderButton extends React.Component {
     constructor() {
@@ -87,6 +87,7 @@ module.exports = React.createClass({
     Phase: {
         RoomMemberList: 'RoomMemberList',
         GroupMemberList: 'GroupMemberList',
+        GroupRoomList: 'GroupRoomList',
         FilePanel: 'FilePanel',
         NotificationPanel: 'NotificationPanel',
         RoomMemberInfo: 'RoomMemberInfo',
@@ -132,6 +133,10 @@ module.exports = React.createClass({
 
         if (this.state.phase === this.Phase.GroupMemberList) {
             showGroupInviteDialog(this.props.groupId);
+        } else if (this.state.phase === this.Phase.GroupRoomList) {
+            showGroupAddRoomDialog(this.props.groupId).then(() => {
+                this.forceUpdate();
+            });
         } else {
             // call AddressPickerDialog
             dis.dispatch({
@@ -205,10 +210,16 @@ module.exports = React.createClass({
 
     render: function() {
         const MemberList = sdk.getComponent('rooms.MemberList');
-        const GroupMemberList = sdk.getComponent('groups.GroupMemberList');
+        const MemberInfo = sdk.getComponent('rooms.MemberInfo');
         const NotificationPanel = sdk.getComponent('structures.NotificationPanel');
         const FilePanel = sdk.getComponent('structures.FilePanel');
+
+        const GroupMemberList = sdk.getComponent('groups.GroupMemberList');
+        const GroupMemberInfo = sdk.getComponent('groups.GroupMemberInfo');
+        const GroupRoomList = sdk.getComponent('groups.GroupRoomList');
+
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
+
         let inviteGroup;
 
         let membersBadge;
@@ -256,6 +267,19 @@ module.exports = React.createClass({
                     analytics={['Right Panel', 'Notification List Button', 'click']}
                 />,
             ];
+        } else if (this.props.groupId) {
+            headerButtons = [
+                <HeaderButton key="_groupMembersButton" title={_t('Members')} iconSrc="img/icons-people.svg"
+                    isHighlighted={this.state.phase === this.Phase.GroupMemberList}
+                    clickPhase={this.Phase.GroupMemberList}
+                    analytics={['Right Panel', 'Group Member List Button', 'click']}
+                />,
+                <HeaderButton key="_roomsButton" title={_t('Rooms')} iconSrc="img/icons-files.svg"
+                    isHighlighted={this.state.phase === this.Phase.GroupRoomList}
+                    clickPhase={this.Phase.GroupRoomList}
+                    analytics={['Right Panel', 'Group Room List Button', 'click']}
+                />,
+            ];
         }
 
         if (this.props.roomId || this.props.groupId) {
@@ -277,19 +301,11 @@ module.exports = React.createClass({
                 panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />;
             } else if (this.props.groupId && this.state.phase == this.Phase.GroupMemberList) {
                 panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />;
-                inviteGroup = (
-                    <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
-                        <div className="mx_RightPanel_icon" >
-                            <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
-                        </div>
-                        <div className="mx_RightPanel_message">{ _t('Invite to this group') }</div>
-                    </AccessibleButton>
-                );
+            } else if (this.state.phase === this.Phase.GroupRoomList) {
+                panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
             } else if (this.state.phase == this.Phase.RoomMemberInfo) {
-                const MemberInfo = sdk.getComponent('rooms.MemberInfo');
                 panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />;
             } else if (this.state.phase == this.Phase.GroupMemberInfo) {
-                const GroupMemberInfo = sdk.getComponent('groups.GroupMemberInfo');
                 panel = <GroupMemberInfo
                     groupMember={this.state.member}
                     groupId={this.props.groupId}
@@ -303,6 +319,24 @@ module.exports = React.createClass({
 
         if (!panel) {
             panel = <div className="mx_RightPanel_blank"></div>;
+        }
+
+        if (this.props.groupId) {
+            inviteGroup = this.state.phase === this.Phase.GroupMemberList ? (
+                <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
+                    <div className="mx_RightPanel_icon" >
+                        <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
+                    </div>
+                    <div className="mx_RightPanel_message">{ _t('Invite to this group') }</div>
+                </AccessibleButton>
+            ) : (
+                <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
+                    <div className="mx_RightPanel_icon" >
+                        <TintableSvg src="img/icons-files.svg" width="35" height="35" />
+                    </div>
+                    <div className="mx_RightPanel_message">{ _t('Add room to this group') }</div>
+                </AccessibleButton>
+            );
         }
 
         let classes = "mx_RightPanel mx_fadable";
