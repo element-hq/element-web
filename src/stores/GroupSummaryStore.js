@@ -69,9 +69,9 @@ export default class GroupSummaryStore extends EventEmitter {
             .then(this._fetchSummary.bind(this));
     }
 
-    setGroupPublicity(is_published) {
+    setGroupPublicity(isPublished) {
         return this._matrixClient
-            .setGroupPublicity(this._groupId, is_published)
+            .setGroupPublicity(this._groupId, isPublished)
             .then(this._fetchSummary.bind(this));
     }
 }
