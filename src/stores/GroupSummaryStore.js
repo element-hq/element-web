@@ -68,4 +68,10 @@ export default class GroupSummaryStore extends EventEmitter {
             .removeUserFromGroupSummary(this._groupId, userId)
             .then(this._fetchSummary.bind(this));
     }
+
+    setGroupPublicity(isPublished) {
+        return this._matrixClient
+            .setGroupPublicity(this._groupId, isPublished)
+            .then(this._fetchSummary.bind(this));
+    }
 }
