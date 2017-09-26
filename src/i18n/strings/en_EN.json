@@ -884,12 +884,12 @@
     "The user '%(displayName)s' could not be removed from the summary.": "The user '%(displayName)s' could not be removed from the summary.",
     "Failed to add the following rooms to the summary of %(groupId)s:": "Failed to add the following rooms to the summary of %(groupId)s:",
     "The room '%(roomName)s' could not be removed from the summary.": "The room '%(roomName)s' could not be removed from the summary.",
-    "Your membership of this group is public": "Your membership of this group is public",
-    "Your membership of this group is private": "Your membership of this group is private",
-    "Make private": "Make private",
-    "Make public": "Make public",
     "Add rooms to the group": "Add rooms to the group",
     "Which rooms would you like to add to this group?": "Which rooms would you like to add to this group?",
     "Add to group": "Add to group",
-    "Failed to add the following rooms to %(groupId)s:": "Failed to add the following rooms to %(groupId)s:"
+    "Failed to add the following rooms to %(groupId)s:": "Failed to add the following rooms to %(groupId)s:",
+    "Unpublish": "Unpublish",
+    "This group is published on your profile": "This group is published on your profile",
+    "Publish": "Publish",
+    "This group is not published on your profile": "This group is not published on your profile"
 }

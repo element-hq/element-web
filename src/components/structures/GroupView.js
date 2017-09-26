@@ -597,9 +597,7 @@ export default React.createClass({
         this.setState({
             publicityBusy: true,
         });
-        MatrixClientPeg.get().setGroupPublicity(this.props.groupId, publicity).then(() => {
-            this._loadGroupFromServer(this.props.groupId);
-        }).then(() => {
+        this._groupSummaryStore.setGroupPublicity(publicity).then(() => {
             this.setState({
                 publicityBusy: false,
             });
@@ -730,16 +728,16 @@ export default React.createClass({
             }
 
             let publicisedSection;
-            if (this.state.summary.user && this.state.summary.user.is_public) {
+            if (this.state.summary.user && this.state.summary.user.is_publicised) {
                 if (!this.state.publicityBusy) {
                     publicisedButton = <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                             onClick={this._onPubliciseOffClick}
                         >
-                            {_t("Make private")}
+                            {_t("Unpublish")}
                         </AccessibleButton>;
                 }
                 publicisedSection = <div className="mx_GroupView_membershipSubSection">
-                    {_t("Your membership of this group is public")}
+                    {_t("This group is published on your profile")}
                     <div className="mx_GroupView_membership_buttonContainer">
                         {publicisedButton}
                     </div>
@@ -749,11 +747,11 @@ export default React.createClass({
                     publicisedButton = <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                         onClick={this._onPubliciseOnClick}
                     >
-                        {_t("Make public")}
+                        {_t("Publish")}
                     </AccessibleButton>;
                 }
                 publicisedSection = <div className="mx_GroupView_membershipSubSection">
-                    {_t("Your membership of this group is private")}
+                    {_t("This group is not published on your profile")}
                     <div className="mx_GroupView_membership_buttonContainer">
                         {publicisedButton}
                     </div>
