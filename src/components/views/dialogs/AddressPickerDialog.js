@@ -248,7 +248,7 @@ module.exports = React.createClass({
                 results.push({
                     room_id: r.room_id,
                     avatar_url: r.avatar_url,
-                    name: r.name,
+                    name: r.name || r.canonical_alias,
                 });
             });
             this._processResults(results, query);
@@ -265,29 +265,33 @@ module.exports = React.createClass({
     },
 
     _doRoomSearch: function(query) {
-        MatrixClientPeg.get().publicRooms({
-            filter: {
-                generic_search_term: query,
-            },
-        }).then((resp) => {
-            const results = [];
-            resp.chunk.forEach((r) => {
-                results.push({
-                    room_id: r.room_id,
-                    avatar_url: r.avatar_url,
-                    name: r.name,
-                });
+        const lowerCaseQuery = query.toLowerCase();
+        const rooms = MatrixClientPeg.get().getRooms();
+        const results = [];
+        rooms.forEach((room) => {
+            const nameEvent = room.currentState.getStateEvents('m.room.name', '');
+            const topicEvent = room.currentState.getStateEvents('m.room.topic', '');
+            const name = nameEvent ? nameEvent.getContent().name : '';
+            const canonicalAlias = room.getCanonicalAlias();
+            const topic = topicEvent ? topicEvent.getContent().topic : '';
+
+            const nameMatch = (name || '').toLowerCase().includes(lowerCaseQuery);
+            const aliasMatch = (canonicalAlias || '').toLowerCase().includes(lowerCaseQuery);
+            const topicMatch = (topic || '').toLowerCase().includes(lowerCaseQuery);
+            if (!(nameMatch || topicMatch || aliasMatch)) {
+                return;
+            }
+            const avatarEvent = room.currentState.getStateEvents('m.room.avatar', '');
+            const avatarUrl = avatarEvent ? avatarEvent.getContent().url : undefined;
+            results.push({
+                room_id: room.roomId,
+                avatar_url: avatarUrl,
+                name: name || canonicalAlias,
             });
-            this._processResults(results, query);
-        }).catch((err) => {
-            console.error('Error whilst searching public rooms: ', err);
-            this.setState({
-                searchError: err.errcode ? err.message : _t('Something went wrong!'),
-            });
-        }).done(() => {
-            this.setState({
-                busy: false,
-            });
+        });
+        this._processResults(results, query);
+        this.setState({
+            busy: false,
         });
     },
 
