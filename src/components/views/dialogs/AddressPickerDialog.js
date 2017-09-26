@@ -155,7 +155,7 @@ module.exports = React.createClass({
                     if (this.props.groupId) {
                         this._doNaiveGroupRoomSearch(query);
                     } else {
-                        console.error('Room searching only implemented for groups');
+                        this._doRoomSearch(query);
                     }
                 } else {
                     console.error('Unknown pickerType', this.props.pickerType);
@@ -254,6 +254,33 @@ module.exports = React.createClass({
             this._processResults(results, query);
         }).catch((err) => {
             console.error('Error whilst searching group users: ', err);
+            this.setState({
+                searchError: err.errcode ? err.message : _t('Something went wrong!'),
+            });
+        }).done(() => {
+            this.setState({
+                busy: false,
+            });
+        });
+    },
+
+    _doRoomSearch: function(query) {
+        MatrixClientPeg.get().publicRooms({
+            filter: {
+                generic_search_term: query,
+            },
+        }).then((resp) => {
+            const results = [];
+            resp.chunk.forEach((r) => {
+                results.push({
+                    room_id: r.room_id,
+                    avatar_url: r.avatar_url,
+                    name: r.name,
+                });
+            });
+            this._processResults(results, query);
+        }).catch((err) => {
+            console.error('Error whilst searching public rooms: ', err);
             this.setState({
                 searchError: err.errcode ? err.message : _t('Something went wrong!'),
             });

@@ -18,11 +18,12 @@ import Modal from './Modal';
 import sdk from './';
 import MultiInviter from './utils/MultiInviter';
 import { _t } from './languageHandler';
+import MatrixClientPeg from './MatrixClientPeg';
 
 export function showGroupInviteDialog(groupId) {
     const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
     Modal.createTrackedDialog('Group Invite', '', AddressPickerDialog, {
-        title: _t('Invite new group members'),
+        title: _t("Invite new group members"),
         description: _t("Who would you like to add to this group?"),
         placeholder: _t("Name or matrix ID"),
         button: _t("Invite to Group"),
@@ -32,6 +33,25 @@ export function showGroupInviteDialog(groupId) {
 
             _onGroupInviteFinished(groupId, addrs);
         },
+    });
+}
+
+export function showGroupAddRoomDialog(groupId) {
+    return new Promise((resolve, reject) => {
+        const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
+        Modal.createTrackedDialog('Add Rooms to Group', '', AddressPickerDialog, {
+            title: _t("Add rooms to the group"),
+            description: _t("Which rooms would you like to add to this group?"),
+            placeholder: _t("Room name or alias"),
+            button: _t("Add to group"),
+            pickerType: 'room',
+            validAddressTypes: ['mx'],
+            onFinished: (success, addrs) => {
+                if (!success) return;
+
+                _onGroupAddRoomFinished(groupId, addrs).then(resolve, reject);
+            },
+        });
     });
 }
 
@@ -65,3 +85,27 @@ function _onGroupInviteFinished(groupId, addrs) {
     });
 }
 
+function _onGroupAddRoomFinished(groupId, addrs) {
+    const errorList = [];
+    return Promise.all(addrs.map((addr) => {
+        return MatrixClientPeg.get()
+            .addRoomToGroup(groupId, addr.address)
+            .catch(() => { errorList.push(addr.address); })
+            .reflect();
+    })).then(() => {
+        if (errorList.length === 0) {
+            return;
+        }
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createTrackedDialog(
+            'Failed to add the following room to the group',
+            '', ErrorDialog,
+        {
+            title: _t(
+                "Failed to add the following rooms to %(groupId)s:",
+                {groupId},
+            ),
+            description: errorList.join(", "),
+        });
+    });
+}

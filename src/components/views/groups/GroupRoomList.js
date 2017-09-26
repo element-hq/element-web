@@ -1,5 +1,4 @@
 /*
-Copyright 2017 Vector Creations Ltd.
 Copyright 2017 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,46 +16,48 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
-import { groupMemberFromApiObject } from '../../../groups';
+import { groupRoomFromApiObject } from '../../../groups';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import PropTypes from 'prop-types';
-import withMatrixClient from '../../../wrappers/withMatrixClient';
+import {MatrixClient} from 'matrix-js-sdk';
 
-const INITIAL_LOAD_NUM_MEMBERS = 30;
+const INITIAL_LOAD_NUM_ROOMS = 30;
 
-export default withMatrixClient(React.createClass({
-    displayName: 'GroupMemberList',
+export default React.createClass({
+    contextTypes: {
+        matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
+    },
 
     propTypes: {
-        matrixClient: PropTypes.object.isRequired,
         groupId: PropTypes.string.isRequired,
     },
 
     getInitialState: function() {
         return {
             fetching: false,
-            members: null,
-            truncateAt: INITIAL_LOAD_NUM_MEMBERS,
+            rooms: null,
+            truncateAt: INITIAL_LOAD_NUM_ROOMS,
+            searchQuery: "",
         };
     },
 
     componentWillMount: function() {
         this._unmounted = false;
-        this._fetchMembers();
+        this._fetchRooms();
     },
 
-    _fetchMembers: function() {
+    _fetchRooms: function() {
         this.setState({fetching: true});
-        this.props.matrixClient.getGroupUsers(this.props.groupId).then((result) => {
+        this.context.matrixClient.getGroupRooms(this.props.groupId).then((result) => {
             this.setState({
-                members: result.chunk.map((apiMember) => {
-                    return groupMemberFromApiObject(apiMember);
+                rooms: result.chunk.map((apiRoom) => {
+                    return groupRoomFromApiObject(apiRoom);
                 }),
                 fetching: false,
             });
         }).catch((e) => {
             this.setState({fetching: false});
-            console.error("Failed to get group member list: " + e);
+            console.error("Failed to get group room list: ", e);
         });
     },
 
@@ -69,11 +70,11 @@ export default withMatrixClient(React.createClass({
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
                 <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
             } name={text} presenceState="online" suppressOnHover={true}
-            onClick={this._showFullMemberList} />
+            onClick={this._showFullRoomList} />
         );
     },
 
-    _showFullMemberList: function() {
+    _showFullRoomList: function() {
         this.setState({
             truncateAt: -1,
         });
@@ -83,71 +84,60 @@ export default withMatrixClient(React.createClass({
         this.setState({ searchQuery: ev.target.value });
     },
 
-    makeGroupMemberTiles: function(query) {
-        const GroupMemberTile = sdk.getComponent("groups.GroupMemberTile");
+    makeGroupRoomTiles: function(query) {
+        const GroupRoomTile = sdk.getComponent("groups.GroupRoomTile");
         query = (query || "").toLowerCase();
 
-        let memberList = this.state.members;
+        let roomList = this.state.rooms;
         if (query) {
-            memberList = memberList.filter((m) => {
-                const matchesName = m.displayname.toLowerCase().indexOf(query) !== -1;
-                const matchesId = m.userId.toLowerCase().includes(query);
-
-                if (!matchesName && !matchesId) {
-                    return false;
-                }
-
-                return true;
+            roomList = roomList.filter((room) => {
+                const matchesName = (room.name || "").toLowerCase().include(query);
+                const matchesAlias = (room.canonicalAlias || "").toLowerCase().includes(query);
+                return matchesName || matchesAlias;
             });
         }
 
-        memberList = memberList.map((m) => {
+        roomList = roomList.map((groupRoom, index) => {
             return (
-                <GroupMemberTile key={m.userId} groupId={this.props.groupId} member={m} />
+                <GroupRoomTile
+                    key={index}
+                    groupId={this.props.groupId}
+                    groupRoom={groupRoom} />
             );
         });
 
-        memberList.sort((a, b) => {
-            // TODO: should put admins at the top: we don't yet have that info
-            if (a < b) {
-                return -1;
-            } else if (a > b) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
-
-        return memberList;
+        return roomList;
     },
 
     render: function() {
         if (this.state.fetching) {
             const Spinner = sdk.getComponent("elements.Spinner");
-            return <Spinner />;
-        } else if (this.state.members === null) {
+            return (<div className="mx_GroupRoomList">
+                <Spinner />
+            </div>);
+        } else if (this.state.rooms === null) {
             return null;
         }
 
         const inputBox = (
             <form autoComplete="off">
-                <input className="mx_GroupMemberList_query" id="mx_GroupMemberList_query" type="text"
+                <input className="mx_GroupRoomList_query" id="mx_GroupRoomList_query" type="text"
                         onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={ _t('Filter group members') } />
+                        placeholder={ _t('Filter group rooms') } />
             </form>
         );
 
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return (
-            <div className="mx_MemberList">
+            <div className="mx_GroupRoomList">
                 { inputBox }
-                <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
-                    <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
+                <GeminiScrollbar autoshow={true} className="mx_GroupRoomList_joined mx_GroupRoomList_outerWrapper">
+                    <TruncatedList className="mx_GroupRoomList_wrapper" truncateAt={this.state.truncateAt}
                             createOverflowElement={this._createOverflowTile}>
-                        {this.makeGroupMemberTiles(this.state.searchQuery)}
+                        {this.makeGroupRoomTiles(this.state.searchQuery)}
                     </TruncatedList>
                 </GeminiScrollbar>
             </div>
         );
     },
-}));
+});

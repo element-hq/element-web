@@ -846,6 +846,7 @@
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot check is currently unavailable on desktop - please use a <a>web browser</a>",
     "Description": "Description",
     "Filter group members": "Filter group members",
+    "Filter group rooms": "Filter group rooms",
     "Remove from group": "Remove from group",
     "Invite new group members": "Invite new group members",
     "Who would you like to add to this group?": "Who would you like to add to this group?",
@@ -886,5 +887,9 @@
     "Your membership of this group is public": "Your membership of this group is public",
     "Your membership of this group is private": "Your membership of this group is private",
     "Make private": "Make private",
-    "Make public": "Make public"
+    "Make public": "Make public",
+    "Add rooms to the group": "Add rooms to the group",
+    "Which rooms would you like to add to this group?": "Which rooms would you like to add to this group?",
+    "Add to group": "Add to group",
+    "Failed to add the following rooms to %(groupId)s:": "Failed to add the following rooms to %(groupId)s:"
 }
