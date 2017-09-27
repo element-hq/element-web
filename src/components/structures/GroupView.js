@@ -843,8 +843,8 @@ export default React.createClass({
                     </AccessibleButton>,
                 );
                 rightButtons.push(
-                    <AccessibleButton className='mx_GroupView_textButton' onClick={this._onCancelClick} key="_cancelButton">
-                        <img src="img/cancel.svg" className='mx_filterFlipColor'
+                    <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this._onCancelClick} key="_cancelButton">
+                        <img src="img/cancel.svg" className="mx_filterFlipColor"
                             width="18" height="18" alt={_t("Cancel")}/>
                     </AccessibleButton>,
                 );

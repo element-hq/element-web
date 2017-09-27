@@ -124,7 +124,9 @@ export default withMatrixClient(React.createClass({
     render: function() {
         if (this.state.fetching) {
             const Spinner = sdk.getComponent("elements.Spinner");
-            return <Spinner />;
+            return (<div className="mx_MemberList">
+                <Spinner />
+            </div>);
         } else if (this.state.members === null) {
             return null;
         }
