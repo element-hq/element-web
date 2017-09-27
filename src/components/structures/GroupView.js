@@ -72,7 +72,7 @@ const CategoryRoomList = React.createClass({
             placeholder: _t("Room name or alias"),
             button: _t("Add to summary"),
             pickerType: 'room',
-            validAddressTypes: ['mx'],
+            validAddressTypes: ['mx-room-id'],
             groupId: this.props.groupId,
             onFinished: (success, addrs) => {
                 if (!success) return;
@@ -237,7 +237,7 @@ const RoleUserList = React.createClass({
             description: _t("Who would you like to add to this summary?"),
             placeholder: _t("Name or matrix ID"),
             button: _t("Add to summary"),
-            validAddressTypes: ['mx'],
+            validAddressTypes: ['mx-user-id'],
             groupId: this.props.groupId,
             shouldOmitSelf: false,
             onFinished: (success, addrs) => {

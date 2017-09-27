@@ -363,7 +363,7 @@ module.exports = React.createClass({
         results.forEach((result) => {
             if (result.room_id) {
                 queryList.push({
-                    addressType: 'mx',
+                    addressType: 'mx-room-id',
                     address: result.room_id,
                     displayName: result.name,
                     avatarMxc: result.avatar_url,
@@ -380,7 +380,7 @@ module.exports = React.createClass({
             // Return objects, structure of which is defined
             // by UserAddressType
             queryList.push({
-                addressType: 'mx',
+                addressType: 'mx-user-id',
                 address: result.user_id,
                 displayName: result.display_name,
                 avatarMxc: result.avatar_url,
@@ -422,11 +422,18 @@ module.exports = React.createClass({
         if (addrType == null) {
             this.setState({ error: true });
             return null;
-        } else if (addrType == 'mx') {
+        } else if (addrType == 'mx-user-id') {
             const user = MatrixClientPeg.get().getUser(addrObj.address);
             if (user) {
                 addrObj.displayName = user.displayName;
                 addrObj.avatarMxc = user.avatarUrl;
+                addrObj.isKnown = true;
+            }
+        } else if (addrType == 'mx-room-id') {
+            const room = MatrixClientPeg.get().getRoom(addrObj.address);
+            if (room) {
+                addrObj.displayName = room.name;
+                addrObj.avatarMxc = room.avatarUrl;
                 addrObj.isKnown = true;
             }
         }
