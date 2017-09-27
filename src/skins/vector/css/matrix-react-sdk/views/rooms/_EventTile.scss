@@ -65,6 +65,10 @@ limitations under the License.
     opacity: 0.7;
 }
 
+.mx_EventTile .mx_SenderProfile .mx_Flair img {
+    margin-right: 2px;
+}
+
 .mx_EventTile .mx_MessageTimestamp {
     display: block;
     visibility: hidden;
