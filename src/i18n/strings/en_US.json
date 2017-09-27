@@ -864,5 +864,6 @@
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot check is currently unavailable on desktop - please use a <a>web browser</a>",
     "Verifies a user, device, and pubkey tuple": "Verifies a user, device, and pubkey tuple",
     "It is currently only possible to create groups on your own home server: use a group ID ending with %(domain)s": "It is currently only possible to create groups on your own home server: use a group ID ending with %(domain)s",
-    "To join an existing group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "To join an existing group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>."
+    "To join an existing group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.": "To join an existing group you'll have to know its group identifier; this will look something like <i>+example:matrix.org</i>.",
+    "%(weekDayName)s, %(monthName)s %(day)s": "print \"<i>fdsafsdsad\""
 }
