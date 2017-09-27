@@ -18,12 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from '../../../languageHandler';
-import classNames from 'classnames';
-import Matrix from 'matrix-js-sdk';
-import Promise from 'bluebird';
 var MatrixClientPeg = require("../../../MatrixClientPeg");
-var Modal = require("../../../Modal");
-var Entities = require("../../../Entities");
 var sdk = require('../../../index');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var rate_limited_func = require('../../../ratelimitedfunc');
@@ -31,30 +26,26 @@ var CallHandler = require("../../../CallHandler");
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
+const SHOW_MORE_INCREMENT = 100;
 
 module.exports = React.createClass({
     displayName: 'MemberList',
 
     getInitialState: function() {
-        const state = {
-            members: [],
+        this.memberDict = this.getMemberDict();
+        const members = this.roomMembers();
+
+        return {
+            members: members,
+            filteredJoinedMembers: this._filterMembers(members, 'join'),
+            filteredInvitedMembers: this._filterMembers(members, 'invite'),
+
             // ideally we'd size this to the page height, but
             // in practice I find that a little constraining
             truncateAtJoined: INITIAL_LOAD_NUM_MEMBERS,
             truncateAtInvited: INITIAL_LOAD_NUM_INVITED,
             searchQuery: "",
         };
-        if (!this.props.roomId) return state;
-        var cli = MatrixClientPeg.get();
-        var room = cli.getRoom(this.props.roomId);
-        if (!room) return state;
-
-        this.memberDict = this.getMemberDict();
-
-        state.members = this.roomMembers();
-        state.filteredJoinedMembers = this._filterMembers(state.members, 'join');
-        state.filteredInvitedMembers = this._filterMembers(state.members, 'invite');
-        return state;
     },
 
     componentWillMount: function() {
@@ -207,11 +198,11 @@ module.exports = React.createClass({
     },
 
     _createOverflowTileJoined: function(overflowCount, totalCount) {
-        return this._createOverflowTile(overflowCount, totalCount, this._showFullJoinedMemberList);
+        return this._createOverflowTile(overflowCount, totalCount, this._showMoreJoinedMemberList);
     },
 
     _createOverflowTileInvited: function(overflowCount, totalCount) {
-        return this._createOverflowTile(overflowCount, totalCount, this._showFullInvitedMemberList);
+        return this._createOverflowTile(overflowCount, totalCount, this._showMoreInvitedMemberList);
     },
 
     _createOverflowTile: function(overflowCount, totalCount, onClick) {
@@ -227,15 +218,15 @@ module.exports = React.createClass({
         );
     },
 
-    _showFullJoinedMemberList: function() {
+    _showMoreJoinedMemberList: function() {
         this.setState({
-            truncateAtJoined: -1
+            truncateAtJoined: this.state.truncateAtJoined + SHOW_MORE_INCREMENT,
         });
     },
 
-    _showFullInvitedMemberList: function() {
+    _showMoreInvitedMemberList: function() {
         this.setState({
-            truncateAtInvited: -1
+            truncateAtInvited: this.state.truncateAtInvited + SHOW_MORE_INCREMENT,
         });
     },
 

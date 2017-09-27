@@ -22,10 +22,26 @@ export const GroupMemberType = PropTypes.shape({
     avatarUrl: PropTypes.string,
 });
 
+export const GroupRoomType = PropTypes.shape({
+    name: PropTypes.string,
+    // TODO: API doesn't return this yet
+    // roomId: PropTypes.string.isRequired,
+    canonicalAlias: PropTypes.string,
+    avatarUrl: PropTypes.string,
+});
+
 export function groupMemberFromApiObject(apiObject) {
     return {
         userId: apiObject.user_id,
         displayname: apiObject.displayname,
+        avatarUrl: apiObject.avatar_url,
+    };
+}
+
+export function groupRoomFromApiObject(apiObject) {
+    return {
+        name: apiObject.name,
+        canonicalAlias: apiObject.canonical_alias,
         avatarUrl: apiObject.avatar_url,
     };
 }

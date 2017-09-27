@@ -29,6 +29,9 @@ const BULK_REQUEST_DEBOUNCE_MS = 200;
 // If true, flair can function and we should keep sending requests for groups and avatars.
 let groupSupport = true;
 
+const USER_GROUPS_CACHE_BUST_MS = 1800000; // 30 mins
+const GROUP_PROFILES_CACHE_BUST_MS = 1800000; // 30 mins
+
 // TODO: Cache-busting based on time. (The server won't inform us of membership changes.)
 // This applies to userGroups and groupProfiles. We can provide a slightly better UX by
 // cache-busting when the current user joins/leaves a group.
@@ -69,7 +72,9 @@ function getPublicisedGroupsCached(matrixClient, userId) {
         usersPending[userId].reject = reject;
     }).then((groups) => {
         userGroups[userId] = groups;
-        // TODO: Reset cache at this point
+        setTimeout(() => {
+            delete userGroups[userId];
+        }, USER_GROUPS_CACHE_BUST_MS);
         return userGroups[userId];
     }).catch((err) => {
         throw err;
@@ -126,6 +131,9 @@ async function getGroupProfileCached(matrixClient, groupId) {
         groupId,
         avatarUrl: profile.avatar_url,
     };
+    setTimeout(() => {
+        delete groupProfiles[groupId];
+    }, GROUP_PROFILES_CACHE_BUST_MS);
 
     return groupProfiles[groupId];
 }

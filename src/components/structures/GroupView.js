@@ -27,6 +27,8 @@ import AccessibleButton from '../views/elements/AccessibleButton';
 import Modal from '../../Modal';
 import classnames from 'classnames';
 
+import GroupSummaryStore from '../../stores/GroupSummaryStore';
+
 const RoomSummaryType = PropTypes.shape({
     room_id: PropTypes.string.isRequired,
     profile: PropTypes.shape({
@@ -76,8 +78,8 @@ const CategoryRoomList = React.createClass({
                 if (!success) return;
                 const errorList = [];
                 Promise.all(addrs.map((addr) => {
-                    return MatrixClientPeg.get()
-                        .addRoomToGroupSummary(this.props.groupId, addr.address)
+                    return this.context.groupSummaryStore
+                        .addRoomToGroupSummary(addr.address)
                         .catch(() => { errorList.push(addr.address); })
                         .reflect();
                 })).then(() => {
@@ -153,8 +155,7 @@ const FeaturedRoom = React.createClass({
     onDeleteClicked: function(e) {
         e.preventDefault();
         e.stopPropagation();
-        MatrixClientPeg.get().removeRoomFromGroupSummary(
-            this.props.groupId,
+        this.context.groupSummaryStore.removeRoomFromGroupSummary(
             this.props.summaryInfo.room_id,
         ).catch((err) => {
             console.error('Error whilst removing room from group summary', err);
@@ -242,8 +243,8 @@ const RoleUserList = React.createClass({
                 if (!success) return;
                 const errorList = [];
                 Promise.all(addrs.map((addr) => {
-                    return MatrixClientPeg.get()
-                        .addUserToGroupSummary(this.props.groupId, addr.address)
+                    return this.context.groupSummaryStore
+                        .addUserToGroupSummary(addr.address)
                         .catch(() => { errorList.push(addr.address); })
                         .reflect();
                 })).then(() => {
@@ -317,8 +318,7 @@ const FeaturedUser = React.createClass({
     onDeleteClicked: function(e) {
         e.preventDefault();
         e.stopPropagation();
-        MatrixClientPeg.get().removeUserFromGroupSummary(
-            this.props.groupId,
+        this.context.groupSummaryStore.removeUserFromGroupSummary(
             this.props.summaryInfo.user_id,
         ).catch((err) => {
             console.error('Error whilst removing user from group summary', err);
@@ -364,11 +364,30 @@ const FeaturedUser = React.createClass({
     },
 });
 
+const GroupSummaryContext = {
+    groupSummaryStore: React.PropTypes.instanceOf(GroupSummaryStore).isRequired,
+};
+
+CategoryRoomList.contextTypes = GroupSummaryContext;
+FeaturedRoom.contextTypes = GroupSummaryContext;
+RoleUserList.contextTypes = GroupSummaryContext;
+FeaturedUser.contextTypes = GroupSummaryContext;
+
 export default React.createClass({
     displayName: 'GroupView',
 
     propTypes: {
         groupId: PropTypes.string.isRequired,
+    },
+
+    childContextTypes: {
+        groupSummaryStore: React.PropTypes.instanceOf(GroupSummaryStore),
+    },
+
+    getChildContext: function() {
+        return {
+            groupSummaryStore: this._groupSummaryStore,
+        };
     },
 
     getInitialState: function() {
@@ -379,18 +398,20 @@ export default React.createClass({
             saving: false,
             uploadingAvatar: false,
             membershipBusy: false,
+            publicityBusy: false,
         };
     },
 
     componentWillMount: function() {
         this._changeAvatarComponent = null;
-        this._loadGroupFromServer(this.props.groupId);
+        this._initGroupSummaryStore(this.props.groupId);
 
         MatrixClientPeg.get().on("Group.myMembership", this._onGroupMyMembership);
     },
 
     componentWillUnmount: function() {
         MatrixClientPeg.get().removeListener("Group.myMembership", this._onGroupMyMembership);
+        this._groupSummaryStore.removeAllListeners();
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -399,7 +420,7 @@ export default React.createClass({
                 summary: null,
                 error: null,
             }, () => {
-                this._loadGroupFromServer(newProps.groupId);
+                this._initGroupSummaryStore(newProps.groupId);
             });
         }
     },
@@ -410,13 +431,17 @@ export default React.createClass({
         this.setState({membershipBusy: false});
     },
 
-    _loadGroupFromServer: function(groupId) {
-        MatrixClientPeg.get().getGroupSummary(groupId).done((res) => {
+    _initGroupSummaryStore: function(groupId) {
+        this._groupSummaryStore = new GroupSummaryStore(
+            MatrixClientPeg.get(), this.props.groupId,
+        );
+        this._groupSummaryStore.on('update', () => {
             this.setState({
-                summary: res,
+                summary: this._groupSummaryStore.getSummary(),
                 error: null,
             });
-        }, (err) => {
+        });
+        this._groupSummaryStore.on('error', (err) => {
             this.setState({
                 summary: null,
                 error: err,
@@ -493,7 +518,7 @@ export default React.createClass({
                 editing: false,
                 summary: null,
             });
-            this._loadGroupFromServer(this.props.groupId);
+            this._initGroupSummaryStore(this.props.groupId);
         }).catch((e) => {
             this.setState({
                 saving: false,
@@ -560,7 +585,26 @@ export default React.createClass({
         });
     },
 
-    _getFeaturedRoomsNode() {
+    _onPubliciseOffClick: function() {
+        this._setPublicity(false);
+    },
+
+    _onPubliciseOnClick: function() {
+        this._setPublicity(true);
+    },
+
+    _setPublicity: function(publicity) {
+        this.setState({
+            publicityBusy: true,
+        });
+        this._groupSummaryStore.setGroupPublicity(publicity).then(() => {
+            this.setState({
+                publicityBusy: false,
+            });
+        });
+    },
+
+    _getFeaturedRoomsNode: function() {
         const summary = this.state.summary;
 
         const defaultCategoryRooms = [];
@@ -601,7 +645,7 @@ export default React.createClass({
         </div>;
     },
 
-    _getFeaturedUsersNode() {
+    _getFeaturedUsersNode: function() {
         const summary = this.state.summary;
 
         const noRoleUsers = [];
@@ -643,12 +687,12 @@ export default React.createClass({
     },
 
     _getMembershipSection: function() {
+        const Spinner = sdk.getComponent("elements.Spinner");
+
         const group = MatrixClientPeg.get().getGroup(this.props.groupId);
         if (!group) return null;
 
         if (group.myMembership === 'invite') {
-            const Spinner = sdk.getComponent("elements.Spinner");
-
             if (this.state.membershipBusy) {
                 return <div className="mx_GroupView_membershipSection">
                     <Spinner />
@@ -677,17 +721,57 @@ export default React.createClass({
             if (this.state.summary.user && this.state.summary.user.is_privileged) {
                 youAreAMemberText = _t("You are an administrator of this group");
             }
-            return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_joined">
-                <div className="mx_GroupView_membershipSection_description">
-                    {youAreAMemberText}
-                </div>
-                <div className="mx_GroupView_membership_buttonContainer">
-                    <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
-                        onClick={this._onLeaveClick}
+
+            let publicisedButton;
+            if (this.state.publicityBusy) {
+                publicisedButton = <Spinner />;
+            }
+
+            let publicisedSection;
+            if (this.state.summary.user && this.state.summary.user.is_publicised) {
+                if (!this.state.publicityBusy) {
+                    publicisedButton = <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
+                            onClick={this._onPubliciseOffClick}
+                        >
+                            {_t("Unpublish")}
+                        </AccessibleButton>;
+                }
+                publicisedSection = <div className="mx_GroupView_membershipSubSection">
+                    {_t("This group is published on your profile")}
+                    <div className="mx_GroupView_membership_buttonContainer">
+                        {publicisedButton}
+                    </div>
+                </div>;
+            } else {
+                if (!this.state.publicityBusy) {
+                    publicisedButton = <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
+                        onClick={this._onPubliciseOnClick}
                     >
-                        {_t("Leave")}
-                    </AccessibleButton>
+                        {_t("Publish")}
+                    </AccessibleButton>;
+                }
+                publicisedSection = <div className="mx_GroupView_membershipSubSection">
+                    {_t("This group is not published on your profile")}
+                    <div className="mx_GroupView_membership_buttonContainer">
+                        {publicisedButton}
+                    </div>
+                </div>;
+            }
+
+            return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_joined">
+                <div className="mx_GroupView_membershipSubSection">
+                    <div className="mx_GroupView_membershipSection_description">
+                        {youAreAMemberText}
+                    </div>
+                    <div className="mx_GroupView_membership_buttonContainer">
+                        <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
+                            onClick={this._onLeaveClick}
+                        >
+                            {_t("Leave")}
+                        </AccessibleButton>
+                    </div>
                 </div>
+                {publicisedSection}
             </div>;
         }
 

@@ -155,7 +155,7 @@ module.exports = React.createClass({
                     if (this.props.groupId) {
                         this._doNaiveGroupRoomSearch(query);
                     } else {
-                        console.error('Room searching only implemented for groups');
+                        this._doRoomSearch(query);
                     }
                 } else {
                     console.error('Unknown pickerType', this.props.pickerType);
@@ -248,7 +248,7 @@ module.exports = React.createClass({
                 results.push({
                     room_id: r.room_id,
                     avatar_url: r.avatar_url,
-                    name: r.name,
+                    name: r.name || r.canonical_alias,
                 });
             });
             this._processResults(results, query);
@@ -261,6 +261,37 @@ module.exports = React.createClass({
             this.setState({
                 busy: false,
             });
+        });
+    },
+
+    _doRoomSearch: function(query) {
+        const lowerCaseQuery = query.toLowerCase();
+        const rooms = MatrixClientPeg.get().getRooms();
+        const results = [];
+        rooms.forEach((room) => {
+            const nameEvent = room.currentState.getStateEvents('m.room.name', '');
+            const topicEvent = room.currentState.getStateEvents('m.room.topic', '');
+            const name = nameEvent ? nameEvent.getContent().name : '';
+            const canonicalAlias = room.getCanonicalAlias();
+            const topic = topicEvent ? topicEvent.getContent().topic : '';
+
+            const nameMatch = (name || '').toLowerCase().includes(lowerCaseQuery);
+            const aliasMatch = (canonicalAlias || '').toLowerCase().includes(lowerCaseQuery);
+            const topicMatch = (topic || '').toLowerCase().includes(lowerCaseQuery);
+            if (!(nameMatch || topicMatch || aliasMatch)) {
+                return;
+            }
+            const avatarEvent = room.currentState.getStateEvents('m.room.avatar', '');
+            const avatarUrl = avatarEvent ? avatarEvent.getContent().url : undefined;
+            results.push({
+                room_id: room.roomId,
+                avatar_url: avatarUrl,
+                name: name || canonicalAlias,
+            });
+        });
+        this._processResults(results, query);
+        this.setState({
+            busy: false,
         });
     },
 

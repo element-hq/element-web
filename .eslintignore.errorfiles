@@ -123,7 +123,6 @@ src/Roles.js
 src/Rooms.js
 src/ScalarAuthClient.js
 src/ScalarMessaging.js
-src/TextForEvent.js
 src/Tinter.js
 src/UiEffects.js
 src/Unread.js
