@@ -891,5 +891,10 @@
     "Unpublish": "Unpublish",
     "This group is published on your profile": "This group is published on your profile",
     "Publish": "Publish",
-    "This group is not published on your profile": "This group is not published on your profile"
+    "This group is not published on your profile": "This group is not published on your profile",
+    "Matrix ID": "Matrix ID",
+    "Matrix Room ID": "Matrix Room ID",
+    "email address": "email address",
+    "Try using one of the following valid address types: %(validTypesList)s.": "Try using one of the following valid address types: %(validTypesList)s.",
+    "You have entered an invalid address.": "You have entered an invalid address."
 }
