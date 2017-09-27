@@ -535,7 +535,6 @@
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device": "모든 장치에서 로그아웃되었고 더 이상 알림을 받지 않으실 거에요. 다시 알림을 받으시려면, 각 장치에 로그인해주세요",
     "You have <a>disabled</a> URL previews by default.": "URL 미리보기 <a>쓰지 않기</a>를 기본으로 하셨어요.",
     "You have <a>enabled</a> URL previews by default.": "URL 미리보기 <a>쓰기</a>를 기본으로 하셨어요.",
-    "You have entered an invalid contact. Try using their Matrix ID or email address.": "잘못된 연락처를 입력하셨어요. 매트릭스 ID나 이메일 주소를 써보세요.",
     "You have no visible notifications": "보여드릴 알림이 없어요",
     "You may wish to login with a different account, or add this email to this account.": "다른 계정으로 로그인하거나, 이 이메일을 이 계정에 추가할 수도 있어요.",
     "you must be a": "해야해요",
