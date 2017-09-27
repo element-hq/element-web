@@ -17,6 +17,8 @@ limitations under the License.
 .mx_GroupView {
     max-width: 960px;
     width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .mx_GroupView_error {
@@ -72,6 +74,7 @@ limitations under the License.
 
 .mx_GroupView_header_rightCol {
     display: flex;
+    align-items: center;
 }
 
 .mx_GroupView_textButton {
