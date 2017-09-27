@@ -41,7 +41,11 @@ module.exports = React.createClass({
         validAddressTypes: PropTypes.arrayOf(PropTypes.oneOf(addressTypes)),
         onFinished: PropTypes.func.isRequired,
         groupId: PropTypes.string,
+        // The type of entity to search for. Default: 'user'.
         pickerType: PropTypes.oneOf(['user', 'room']),
+        // Whether the current user should be included in the addresses returned. Only
+        // applicable when pickerType is `user`. Default: false.
+        includeSelf: PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -50,6 +54,7 @@ module.exports = React.createClass({
             focus: true,
             validAddressTypes: addressTypes,
             pickerType: 'user',
+            includeSelf: false,
         };
     },
 
@@ -366,7 +371,9 @@ module.exports = React.createClass({
                 });
                 return;
             }
-            if (result.user_id === MatrixClientPeg.get().credentials.userId) {
+            if (!this.props.includeSelf &&
+                result.user_id === MatrixClientPeg.get().credentials.userId
+            ) {
                 return;
             }
 
