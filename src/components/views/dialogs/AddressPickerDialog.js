@@ -419,7 +419,7 @@ module.exports = React.createClass({
             address: addressText,
             isKnown: false,
         };
-        if (addrType == null) {
+        if (!this.props.validAddressTypes.includes(addrType)) {
             this.setState({ error: true });
             return null;
         } else if (addrType == 'mx-user-id') {
@@ -517,8 +517,21 @@ module.exports = React.createClass({
         let error;
         let addressSelector;
         if (this.state.error) {
+            let tryUsing = '';
+            const validTypeDescriptions = this.props.validAddressTypes.map((t) => {
+                return {
+                    'mx-user-id': _t("Matrix ID"),
+                    'mx-room-id': _t("Matrix Room ID"),
+                    'email': _t("email address"),
+                }[t];
+            });
+            tryUsing = _t("Try using one of the following valid address types: %(validTypesList)s.", {
+                validTypesList: validTypeDescriptions.join(", "),
+            });
             error = <div className="mx_ChatInviteDialog_error">
-                {_t("You have entered an invalid contact. Try using their Matrix ID or email address.")}
+                {_t("You have entered an invalid address.")}
+                <br />
+                {tryUsing}
             </div>;
         } else if (this.state.searchError) {
             error = <div className="mx_ChatInviteDialog_error">{this.state.searchError}</div>;
