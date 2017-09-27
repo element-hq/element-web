@@ -239,6 +239,7 @@ const RoleUserList = React.createClass({
             button: _t("Add to summary"),
             validAddressTypes: ['mx'],
             groupId: this.props.groupId,
+            shouldOmitSelf: false,
             onFinished: (success, addrs) => {
                 if (!success) return;
                 const errorList = [];
