@@ -179,20 +179,26 @@ const FeaturedRoom = React.createClass({
     render: function() {
         const RoomAvatar = sdk.getComponent("avatars.RoomAvatar");
 
+        const roomName = this.props.summaryInfo.profile.name ||
+            this.props.summaryInfo.profile.canonical_alias ||
+            _t("Unnamed Room");
+
         const oobData = {
             roomId: this.props.summaryInfo.room_id,
             avatarUrl: this.props.summaryInfo.profile.avatar_url,
-            name: this.props.summaryInfo.profile.name,
+            name: roomName,
         };
+
         let permalink = null;
         if (this.props.summaryInfo.profile && this.props.summaryInfo.profile.canonical_alias) {
             permalink = 'https://matrix.to/#/' + this.props.summaryInfo.profile.canonical_alias;
         }
+
         let roomNameNode = null;
         if (permalink) {
-            roomNameNode = <a href={permalink} onClick={this.onClick} >{this.props.summaryInfo.profile.name}</a>;
+            roomNameNode = <a href={permalink} onClick={this.onClick} >{roomName}</a>;
         } else {
-            roomNameNode = <span>{this.props.summaryInfo.profile.name}</span>;
+            roomNameNode = <span>{roomName}</span>;
         }
 
         const deleteButton = this.props.editing ?
