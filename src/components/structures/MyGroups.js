@@ -102,7 +102,7 @@ export default withMatrixClient(React.createClass({
         }
 
         return <div className="mx_MyGroups">
-            <SimpleRoomHeader title={ _t("Groups") } />
+            <SimpleRoomHeader title={ _t("Groups") } icon="img/icons-groups.svg" />
             <div className='mx_MyGroups_joinCreateBox'>
                 <div className="mx_MyGroups_createBox">
                     <div className="mx_MyGroups_joinCreateHeader">
