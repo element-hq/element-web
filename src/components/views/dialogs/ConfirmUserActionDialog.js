@@ -88,7 +88,7 @@ export default React.createClass({
                     <form onSubmit={this.onOk}>
                         <input className="mx_ConfirmUserActionDialog_reasonField"
                             ref={this._collectReasonField}
-                            placeholder={ _t("Reason") }
+                            placeholder={_t("Reason")}
                             autoFocus={true}
                         />
                     </form>
@@ -112,22 +112,22 @@ export default React.createClass({
 
         return (
             <BaseDialog className="mx_ConfirmUserActionDialog" onFinished={this.props.onFinished}
-                onEnterPressed={ this.onOk }
+                onEnterPressed={this.onOk}
                 title={title}
             >
                 <div className="mx_Dialog_content">
                     <div className="mx_ConfirmUserActionDialog_avatar">
-                        {avatar}
+                        { avatar }
                     </div>
-                    <div className="mx_ConfirmUserActionDialog_name">{name}</div>
-                    <div className="mx_ConfirmUserActionDialog_userId">{userId}</div>
+                    <div className="mx_ConfirmUserActionDialog_name">{ name }</div>
+                    <div className="mx_ConfirmUserActionDialog_userId">{ userId }</div>
                 </div>
-                {reasonBox}
+                { reasonBox }
                 <div className="mx_Dialog_buttons">
                     <button className={confirmButtonClass}
                         onClick={this.onOk} autoFocus={!this.props.askReason}
                     >
-                        {this.props.action}
+                        { this.props.action }
                     </button>
 
                     <button onClick={this.onCancel}>

@@ -71,10 +71,10 @@ const GroupRoomTile = React.createClass({
         return (
             <AccessibleButton className="mx_GroupRoomTile" onClick={this.onClick}>
                 <div className="mx_GroupRoomTile_avatar">
-                    {av}
+                    { av }
                 </div>
                 <div className="mx_GroupRoomTile_name">
-                    {name}
+                    { name }
                 </div>
             </AccessibleButton>
         );

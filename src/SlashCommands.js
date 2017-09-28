@@ -254,7 +254,7 @@ const commands = {
                             title: _t("Ignored user"),
                             description: (
                                 <div>
-                                    <p>{_t("You are now ignoring %(userId)s", {userId: userId})}</p>
+                                    <p>{ _t("You are now ignoring %(userId)s", {userId: userId}) }</p>
                                 </div>
                             ),
                             hasCancelButton: false,
@@ -281,7 +281,7 @@ const commands = {
                             title: _t("Unignored user"),
                             description: (
                                 <div>
-                                    <p>{_t("You are no longer ignoring %(userId)s", {userId: userId})}</p>
+                                    <p>{ _t("You are no longer ignoring %(userId)s", {userId: userId}) }</p>
                                 </div>
                             ),
                             hasCancelButton: false,

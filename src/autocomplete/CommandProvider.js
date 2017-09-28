@@ -129,7 +129,7 @@ export default class CommandProvider extends AutocompleteProvider {
                     component: (<TextualCompletion
                         title={result.command}
                         subtitle={result.args}
-                        description={ _t(result.description) }
+                        description={_t(result.description)}
                         />),
                     range,
                 };
@@ -150,7 +150,7 @@ export default class CommandProvider extends AutocompleteProvider {
 
     renderCompletions(completions: [React.Component]): ?React.Component {
         return <div className="mx_Autocomplete_Completion_container_block">
-            {completions}
+            { completions }
         </div>;
     }
 }

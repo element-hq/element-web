@@ -46,7 +46,7 @@ module.exports = React.createClass({
             truncateAt: 2,
             createOverflowElement: function(overflowCount, totalCount) {
                 return (
-                    <div>{_t("And %(count)s more...", {count: overflowCount})}</div>
+                    <div>{ _t("And %(count)s more...", {count: overflowCount}) }</div>
                 );
             },
         };
@@ -93,8 +93,8 @@ module.exports = React.createClass({
 
         return (
             <div className={this.props.className}>
-                {childNodes}
-                {overflowNode}
+                { childNodes }
+                { overflowNode }
             </div>
         );
     },

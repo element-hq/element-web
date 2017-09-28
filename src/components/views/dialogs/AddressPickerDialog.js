@@ -419,7 +419,7 @@ module.exports = React.createClass({
             address: addressText,
             isKnown: false,
         };
-        if (addrType == null) {
+        if (!this.props.validAddressTypes.includes(addrType)) {
             this.setState({ error: true });
             return null;
         } else if (addrType == 'mx-user-id') {
@@ -495,7 +495,7 @@ module.exports = React.createClass({
             const AddressTile = sdk.getComponent("elements.AddressTile");
             for (let i = 0; i < this.state.userList.length; i++) {
                 query.push(
-                    <AddressTile key={i} address={this.state.userList[i]} canDismiss={true} onDismissed={ this.onDismissed(i) } />,
+                    <AddressTile key={i} address={this.state.userList[i]} canDismiss={true} onDismissed={this.onDismissed(i)} />,
                 );
             }
         }
@@ -517,23 +517,36 @@ module.exports = React.createClass({
         let error;
         let addressSelector;
         if (this.state.error) {
+            let tryUsing = '';
+            const validTypeDescriptions = this.props.validAddressTypes.map((t) => {
+                return {
+                    'mx-user-id': _t("Matrix ID"),
+                    'mx-room-id': _t("Matrix Room ID"),
+                    'email': _t("email address"),
+                }[t];
+            });
+            tryUsing = _t("Try using one of the following valid address types: %(validTypesList)s.", {
+                validTypesList: validTypeDescriptions.join(", "),
+            });
             error = <div className="mx_ChatInviteDialog_error">
-                {_t("You have entered an invalid contact. Try using their Matrix ID or email address.")}
+                { _t("You have entered an invalid address.") }
+                <br />
+                { tryUsing }
             </div>;
         } else if (this.state.searchError) {
-            error = <div className="mx_ChatInviteDialog_error">{this.state.searchError}</div>;
+            error = <div className="mx_ChatInviteDialog_error">{ this.state.searchError }</div>;
         } else if (
             this.state.query.length > 0 &&
             this.state.queryList.length === 0 &&
             !this.state.busy
         ) {
-            error = <div className="mx_ChatInviteDialog_error">{_t("No results")}</div>;
+            error = <div className="mx_ChatInviteDialog_error">{ _t("No results") }</div>;
         } else {
             addressSelector = (
                 <AddressSelector ref={(ref) => {this.addressSelector = ref;}}
-                    addressList={ this.state.queryList }
-                    onSelected={ this.onSelected }
-                    truncateAt={ TRUNCATE_QUERY_LIST }
+                    addressList={this.state.queryList}
+                    onSelected={this.onSelected}
+                    truncateAt={TRUNCATE_QUERY_LIST}
                 />
             );
         }
@@ -541,7 +554,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_ChatInviteDialog" onKeyDown={this.onKeyDown}>
                 <div className="mx_Dialog_title">
-                    {this.props.title}
+                    { this.props.title }
                 </div>
                 <AccessibleButton className="mx_ChatInviteDialog_cancel"
                         onClick={this.onCancel} >
@@ -557,7 +570,7 @@ module.exports = React.createClass({
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={this.onButtonClick}>
-                        {this.props.button}
+                        { this.props.button }
                     </button>
                 </div>
             </div>

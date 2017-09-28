@@ -106,7 +106,7 @@ export default class RoomProvider extends AutocompleteProvider {
 
     renderCompletions(completions: [React.Component]): ?React.Component {
         return <div className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate">
-            {completions}
+            { completions }
         </div>;
     }
 }

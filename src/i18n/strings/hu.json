@@ -529,7 +529,6 @@
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device": "Kijelentkeztél minden eszközről így nem fogsz \"push\" értesítéseket kapni. Az értesítések engedélyezéséhez jelentkezz vissza mindegyik eszközön",
     "You have <a>disabled</a> URL previews by default.": "Az URL előnézet alapból <a>tiltva</a> van.",
     "You have <a>enabled</a> URL previews by default.": "Az URL előnézet alapból <a>engedélyezve</a> van.",
-    "You have entered an invalid contact. Try using their Matrix ID or email address.": "Érvénytelen kapcsolatot adtál meg. Próbáld meg a Matrix azonosítóját vagy e-mail címét használni.",
     "You have no visible notifications": "Nincsenek látható értesítéseid",
     "You may wish to login with a different account, or add this email to this account.": "Lehet, hogy más fiókba szeretnél belépni vagy ezt az e-mail címet szeretnéd ehhez a fiókhoz kötni.",
     "you must be a": "szükséges  szerep:",

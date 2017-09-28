@@ -135,7 +135,7 @@ export default withMatrixClient(React.createClass({
             <form autoComplete="off">
                 <input className="mx_GroupMemberList_query" id="mx_GroupMemberList_query" type="text"
                         onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={ _t('Filter group members') } />
+                        placeholder={_t('Filter group members')} />
             </form>
         );
 
@@ -146,7 +146,7 @@ export default withMatrixClient(React.createClass({
                 <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
                     <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
                             createOverflowElement={this._createOverflowTile}>
-                        {this.makeGroupMemberTiles(this.state.searchQuery)}
+                        { this.makeGroupMemberTiles(this.state.searchQuery) }
                     </TruncatedList>
                 </GeminiScrollbar>
             </div>

@@ -50,7 +50,7 @@ export default React.createClass({
             className="mx_GroupInviteTile_name"
             dir="auto"
         >
-            {this.props.group.name}
+            { this.props.group.name }
         </EmojiText>;
 
         const badge = <div className="mx_GroupInviteTile_badge">!</div>;
@@ -58,11 +58,11 @@ export default React.createClass({
         return (
             <AccessibleButton className="mx_GroupInviteTile" onClick={this.onClick}>
                 <div className="mx_GroupInviteTile_avatarContainer">
-                    {av}
+                    { av }
                 </div>
                 <div className="mx_GroupInviteTile_nameContainer">
-                    {label}
-                    {badge}
+                    { label }
+                    { badge }
                 </div>
             </AccessibleButton>
         );
