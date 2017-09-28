@@ -603,7 +603,6 @@
     "You have been kicked from %(roomName)s by %(userName)s.": "Zostałeś usunięty z %(roomName)s przez %(userName)s.",
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device": "Wylogowałeś się ze wszystkich urządzeń i nie będziesz już otrzymywał powiadomień push. Aby ponownie aktywować powiadomienia zaloguj się ponownie na każdym urządzeniu",
     "You have <a>disabled</a> URL previews by default.": "Masz domyślnie <a>wyłączone</a> podglądy linków.",
-    "You have entered an invalid contact. Try using their Matrix ID or email address.": "Wpisałeś niewłaściwy kontakt. Spróbuj używając Matrix ID lub adresu e-mail.",
     "You have no visible notifications": "Nie masz widocznych powiadomień",
     "You may wish to login with a different account, or add this email to this account.": "Możesz chcieć zalogować się z innego konta lub dodać e-mail do tego konta.",
     "you must be a": "musisz być",

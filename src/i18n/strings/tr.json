@@ -516,7 +516,6 @@
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device": "Tüm cihazlardan çıkış yaptınız ve artık bildirimler almayacaksınız . Bildirimleri yeniden etkinleştirmek için , her cihazda tekrar giriş yapın",
     "You have <a>disabled</a> URL previews by default.": "URL önizlemelerini varsayılan olarak <a> devre dışı </a> bıraktınız.",
     "You have <a>enabled</a> URL previews by default.": "URL önizlemelerini varsayılan olarak <a> etkinleştirdiniz </a> .",
-    "You have entered an invalid contact. Try using their Matrix ID or email address.": "Geçersiz bir kişi girdiniz . Matrix ID veya e-posta adresini kullanarak tekrar deneyin.",
     "You have no visible notifications": "Hiçbir görünür bildiriminiz yok",
     "You may wish to login with a different account, or add this email to this account.": "Farklı bir hesap ile giriş yapmak veya bu e-postayı bu hesaba eklemek istemiş olabilirsiniz.",
     "you must be a": "olabilirsiniz",
