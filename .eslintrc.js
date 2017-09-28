@@ -42,7 +42,16 @@ module.exports = {
 
         // Assert no spacing in JSX curly brackets
         // <Element prop={ consideredError} prop={notConsideredError} />
+        //
+        // https://github.com/yannickcr/eslint-plugin-react/blob/HEAD/docs/rules/jsx-curly-spacing.md
         "react/jsx-curly-spacing": ["error", "never"],
+
+        // Assert spacing before self-closing JSX tags, and no spacing before or
+        // after the closing slash, and no spacing after the opening bracket of
+        // the opening tag or closing tag.
+        //
+        // https://github.com/yannickcr/eslint-plugin-react/blob/HEAD/docs/rules/jsx-tag-spacing.md
+        "react/jsx-tag-spacing": ["error"],
 
         /** flowtype **/
         "flowtype/require-parameter-type": ["warn", {
