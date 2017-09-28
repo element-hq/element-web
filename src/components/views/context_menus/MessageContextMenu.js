@@ -65,6 +65,13 @@ module.exports = React.createClass({
         this.setState({canRedact});
     },
 
+    _isPinned: function() {
+        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        const pinnedEvent = room.currentState.getStateEvents('m.room.pinned_events', '');
+        if (!pinnedEvent) return false;
+        return pinnedEvent.getContent().pinned.includes(this.props.mxEvent.getId());
+    },
+
     onResendClick: function() {
         Resend.resend(this.props.mxEvent);
         this.closeMenu();
@@ -122,6 +129,22 @@ module.exports = React.createClass({
         this.closeMenu();
     },
 
+    onPinClick: function() {
+        MatrixClientPeg.get().getStateEvent(this.props.mxEvent.getRoomId(), 'm.room.pinned_events', '').then(event => {
+            const eventIds = (event ? event.pinned : []) || [];
+            if (!eventIds.includes(this.props.mxEvent.getId())) {
+                // Not pinned - add
+                eventIds.push(this.props.mxEvent.getId());
+            } else {
+                // Pinned - remove
+                eventIds.splice(eventIds.indexOf(this.props.mxEvent.getId()), 1);
+            }
+
+            MatrixClientPeg.get().sendStateEvent(this.props.mxEvent.getRoomId(), 'm.room.pinned_events', {pinned: eventIds}, '');
+        });
+        this.closeMenu();
+    },
+
     closeMenu: function() {
         if (this.props.onFinished) this.props.onFinished();
     },
@@ -147,6 +170,7 @@ module.exports = React.createClass({
         let redactButton;
         let cancelButton;
         let forwardButton;
+        let pinButton;
         let viewSourceButton;
         let viewClearSourceButton;
         let unhidePreviewButton;
@@ -184,6 +208,11 @@ module.exports = React.createClass({
                 forwardButton = (
                     <div className="mx_MessageContextMenu_field" onClick={this.onForwardClick}>
                         { _t('Forward Message') }
+                    </div>
+                );
+                pinButton = (
+                    <div className="mx_MessageContextMenu_field" onClick={this.onPinClick}>
+                        { this._isPinned() ? _t('Unpin Message') : _t('Pin Message') }
                     </div>
                 );
             }
@@ -246,6 +275,7 @@ module.exports = React.createClass({
                 {redactButton}
                 {cancelButton}
                 {forwardButton}
+                {pinButton}
                 {viewSourceButton}
                 {viewClearSourceButton}
                 {unhidePreviewButton}
