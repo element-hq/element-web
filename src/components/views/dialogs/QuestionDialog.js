@@ -55,7 +55,7 @@ export default React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const cancelButton = this.props.hasCancelButton ? (
             <button onClick={this.onCancel}>
-                {_t("Cancel")}
+                { _t("Cancel") }
             </button>
         ) : null;
         const buttonClasses = classnames({
@@ -64,18 +64,18 @@ export default React.createClass({
         });
         return (
             <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished}
-                onEnterPressed={ this.onOk }
+                onEnterPressed={this.onOk}
                 title={this.props.title}
             >
                 <div className="mx_Dialog_content">
-                    {this.props.description}
+                    { this.props.description }
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className={buttonClasses} onClick={this.onOk} autoFocus={this.props.focus}>
-                        {this.props.button || _t('OK')}
+                        { this.props.button || _t('OK') }
                     </button>
-                    {this.props.extraButtons}
-                    {cancelButton}
+                    { this.props.extraButtons }
+                    { cancelButton }
                 </div>
             </BaseDialog>
         );

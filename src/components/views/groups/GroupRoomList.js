@@ -123,7 +123,7 @@ export default React.createClass({
             <form autoComplete="off">
                 <input className="mx_GroupRoomList_query" id="mx_GroupRoomList_query" type="text"
                         onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={ _t('Filter group rooms') } />
+                        placeholder={_t('Filter group rooms')} />
             </form>
         );
 
@@ -134,7 +134,7 @@ export default React.createClass({
                 <GeminiScrollbar autoshow={true} className="mx_GroupRoomList_joined mx_GroupRoomList_outerWrapper">
                     <TruncatedList className="mx_GroupRoomList_wrapper" truncateAt={this.state.truncateAt}
                             createOverflowElement={this._createOverflowTile}>
-                        {this.makeGroupRoomTiles(this.state.searchQuery)}
+                        { this.makeGroupRoomTiles(this.state.searchQuery) }
                     </TruncatedList>
                 </GeminiScrollbar>
             </div>
