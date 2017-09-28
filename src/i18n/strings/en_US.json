@@ -837,6 +837,7 @@
     "+example:%(domain)s": "+example:%(domain)s",
     "Group IDs must be of the form +localpart:%(domain)s": "Group IDs must be of the form +localpart:%(domain)s",
     "Room creation failed": "Room creation failed",
+    "Pinned Messages": "Pinned Messages",
     "You are a member of these groups:": "You are a member of these groups:",
     "Create a group to represent your community! Define a set of rooms and your own custom homepage to mark out your space in the Matrix universe.": "Create a group to represent your community! Define a set of rooms and your own custom homepage to mark out your space in the Matrix universe.",
     "Join an existing group": "Join an existing group",

@@ -1128,6 +1128,10 @@ module.exports = React.createClass({
         return ret;
     },
 
+    onPinnedClick: function() {
+        this.setState({showingPinned: !this.state.showingPinned, searching: false});
+    },
+
     onSettingsClick: function() {
         this.showSettings(true);
     },
@@ -1248,7 +1252,7 @@ module.exports = React.createClass({
     },
 
     onSearchClick: function() {
-        this.setState({ searching: true });
+        this.setState({ searching: true, showingPinned: false });
     },
 
     onCancelSearchClick: function() {
@@ -1447,6 +1451,7 @@ module.exports = React.createClass({
         const RoomSettings = sdk.getComponent("rooms.RoomSettings");
         const AuxPanel = sdk.getComponent("rooms.AuxPanel");
         const SearchBar = sdk.getComponent("rooms.SearchBar");
+        const PinnedEventsPanel = sdk.getComponent("rooms.PinnedEventsPanel");
         const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const RoomPreviewBar = sdk.getComponent("rooms.RoomPreviewBar");
@@ -1587,7 +1592,11 @@ module.exports = React.createClass({
             aux = <ForwardMessage onCancelClick={this.onCancelClick} />;
         } else if (this.state.searching) {
             hideCancel = true; // has own cancel
-            aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress } onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;
+            aux = <SearchBar ref="search_bar" searchInProgress={this.state.searchInProgress}
+                             onCancelClick={this.onCancelSearchClick} onSearch={this.onSearch}/>;
+        } else if (this.state.showingPinned) {
+            hideCancel = true; // has own cancel
+            aux = <PinnedEventsPanel room={this.state.room} />;
         } else if (!myMember || myMember.membership !== "join") {
             // We do have a room object for this room, but we're not currently in it.
             // We may have a 3rd party invite to it.
@@ -1761,6 +1770,7 @@ module.exports = React.createClass({
                     collapsedRhs={ this.props.collapsedRhs }
                     onSearchClick={this.onSearchClick}
                     onSettingsClick={this.onSettingsClick}
+                    onPinnedClick={this.onPinnedClick}
                     onSaveClick={this.onSettingsSaveClick}
                     onCancelClick={(aux && !hideCancel) ? this.onCancelClick : null}
                     onForgetClick={(myMember && myMember.membership === "leave") ? this.onForgetClick : null}
