@@ -20,8 +20,42 @@ var React = require('react');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var sdk = require('matrix-react-sdk');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+var dis = require('matrix-react-sdk/lib/dispatcher');
 import { _t } from "matrix-react-sdk/lib/languageHandler";
 import { EventTimeline } from "matrix-js-sdk";
+
+const PinnedEventTile = React.createClass({
+    displayName: 'PinnedEventTile',
+    propTypes: {
+        mxRoom: React.PropTypes.object.isRequired,
+        mxEvent: React.PropTypes.object.isRequired,
+    },
+    onTileClicked: function() {
+        dis.dispatch({
+            action: 'view_room',
+            event_id: this.props.mxEvent.getId(),
+            highlighted: true,
+            room_id: this.props.mxEvent.getRoomId(),
+        });
+    },
+    render: function() {
+        const MessageEvent = sdk.getComponent("views.messages.MessageEvent");
+        const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
+
+        const sender = this.props.mxRoom.getMember(this.props.mxEvent.getSender());
+        const avatarSize = 40;
+
+        return (
+            <div className="mx_PinnedEventTile" onClick={this.onTileClicked}>
+                <MemberAvatar member={sender} width={avatarSize} height={avatarSize} />
+                <span className="mx_PinnedEventTile_sender">
+                    {sender.name}
+                </span>
+                <MessageEvent mxEvent={this.props.mxEvent} className="mx_PinnedEventTile_body" />
+            </div>
+        );
+    }
+});
 
 module.exports = React.createClass({
     displayName: 'PinnedEventsPanel',
@@ -59,31 +93,17 @@ module.exports = React.createClass({
     },
 
     _getPinnedTiles: function() {
-        const MessageEvent = sdk.getComponent("views.messages.MessageEvent");
-        const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
-
         if (this.state.pinned.length == 0) {
             return <div>No pinned messages.</div>;
         }
 
         return this.state.pinned.map(pinnedEvent => {
             const event = pinnedEvent.timeline.getEvents().find(e => e.getId() === pinnedEvent.eventId);
-            const sender = this.props.room.getMember(event.getSender());
-            const avatarSize = 40;
 
             // Don't show non-messages. Technically users can pin state/custom events, but we won't
             // support those events.
             if (event.getType() !== "m.room.message") return '';
-
-            return (
-                <div key={"pinnedEvent_" + pinnedEvent.eventId} className="mx_PinnedEventsPanel_pinnedEvent">
-                    <MemberAvatar member={sender} width={avatarSize} height={avatarSize} />
-                    <span className="mx_PinnedEventsPanel_sender">
-                        {sender.name}
-                    </span>
-                    <MessageEvent mxEvent={event} className="mx_PinnedEventsPanel_body" />
-                </div>
-            );
+            return (<PinnedEventTile key={event.getId()} mxRoom={this.props.room} mxEvent={event} />);
         });
     },
 

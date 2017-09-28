@@ -29,7 +29,7 @@ limitations under the License.
     padding-bottom: 15px;
 }
 
-.mx_PinnedEventsPanel_pinnedEvent {
+.mx_PinnedEventTile {
     min-height: 40px;
     margin-bottom: 5px;
     cursor: pointer;
@@ -37,25 +37,25 @@ limitations under the License.
     border-radius: 5px; // for the hover
 }
 
-.mx_PinnedEventsPanel_pinnedEvent:hover {
+.mx_PinnedEventTile:hover {
     background-color: $event-selected-color;
 }
 
-.mx_PinnedEventsPanel_pinnedEvent .mx_PinnedEventsPanel_sender {
+.mx_PinnedEventTile .mx_PinnedEventTile_sender {
     color: #868686;
     font-size: 0.8em;
     vertical-align: top;
     display: block;
 }
 
-.mx_PinnedEventsPanel_pinnedEvent .mx_EventTile_content {
+.mx_PinnedEventTile .mx_EventTile_content {
     margin-left: 50px;
     position: relative;
     top: 0;
     left: 0;
 }
 
-.mx_PinnedEventsPanel_pinnedEvent .mx_BaseAvatar {
+.mx_PinnedEventTile .mx_BaseAvatar {
     float: left;
     margin-right: 10px;
 }
