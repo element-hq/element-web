@@ -238,11 +238,11 @@ export default class Flair extends React.Component {
             return <div />;
         }
         const avatars = this.state.profiles.map((profile, index) => {
-            return <FlairAvatar key={index} groupProfile={profile}/>;
+            return <FlairAvatar key={index} groupProfile={profile} />;
         });
         return (
             <span className="mx_Flair" style={{"marginLeft": "5px", "verticalAlign": "-3px"}}>
-                {avatars}
+                { avatars }
             </span>
         );
     }

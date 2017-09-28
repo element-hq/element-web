@@ -44,7 +44,7 @@ module.exports = {
         // <Element prop={ consideredError} prop={notConsideredError} />
         //
         // https://github.com/yannickcr/eslint-plugin-react/blob/HEAD/docs/rules/jsx-curly-spacing.md
-        "react/jsx-curly-spacing": ["error", "never"],
+        "react/jsx-curly-spacing": ["error", {"when": "never", "children": {"when": "always"}}],
 
         // Assert spacing before self-closing JSX tags, and no spacing before or
         // after the closing slash, and no spacing after the opening bracket of

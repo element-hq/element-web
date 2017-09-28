@@ -62,17 +62,17 @@ module.exports = React.createClass({
             <div className="mx_IncomingCallBox" id="incomingCallBox">
                 <img className="mx_IncomingCallBox_chevron" src="img/chevron-left.png" width="9" height="16" />
                 <div className="mx_IncomingCallBox_title">
-                    {incomingCallText}
+                    { incomingCallText }
                 </div>
                 <div className="mx_IncomingCallBox_buttons">
                     <div className="mx_IncomingCallBox_buttons_cell">
                         <div className="mx_IncomingCallBox_buttons_decline" onClick={this.onRejectClick}>
-                            {_t("Decline")}
+                            { _t("Decline") }
                         </div>
                     </div>
                     <div className="mx_IncomingCallBox_buttons_cell">
                         <div className="mx_IncomingCallBox_buttons_accept" onClick={this.onAnswerClick}>
-                            {_t("Accept")}
+                            { _t("Accept") }
                         </div>
                     </div>
                 </div>

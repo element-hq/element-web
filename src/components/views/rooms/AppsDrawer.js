@@ -231,16 +231,16 @@ module.exports = React.createClass({
                     "mx_AddWidget_button"
                 }
                 title={_t('Add a widget')}>
-                [+] {_t('Add a widget')}
+                [+] { _t('Add a widget') }
             </div>;
         }
 
         return (
             <div className="mx_AppsDrawer">
                 <div id="apps" className="mx_AppsContainer">
-                    {apps}
+                    { apps }
                 </div>
-                {this._canUserModify() && addWidget}
+                { this._canUserModify() && addWidget }
             </div>
         );
     },

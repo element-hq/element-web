@@ -128,7 +128,7 @@ module.exports = withMatrixClient(React.createClass({
             kickButton = (
                 <AccessibleButton className="mx_MemberInfo_field"
                         onClick={this._onKick}>
-                    {_t('Remove from group')}
+                    { _t('Remove from group') }
                 </AccessibleButton>
             );
 
@@ -143,11 +143,11 @@ module.exports = withMatrixClient(React.createClass({
         if (kickButton || adminButton) {
             adminTools =
                 <div className="mx_MemberInfo_adminTools">
-                    <h3>{_t("Admin Tools")}</h3>
+                    <h3>{ _t("Admin Tools") }</h3>
 
                     <div className="mx_MemberInfo_buttons">
-                        {kickButton}
-                        {adminButton}
+                        { kickButton }
+                        { adminButton }
                     </div>
                 </div>;
         }
@@ -173,13 +173,13 @@ module.exports = withMatrixClient(React.createClass({
             <div className="mx_MemberInfo">
                 <GeminiScrollbar autoshow={true}>
                     <AccessibleButton className="mx_MemberInfo_cancel"onClick={this._onCancel}>
-                        <img src="img/cancel.svg" width="18" height="18"/>
+                        <img src="img/cancel.svg" width="18" height="18" />
                     </AccessibleButton>
                     <div className="mx_MemberInfo_avatar">
-                        {avatar}
+                        { avatar }
                     </div>
 
-                    <EmojiText element="h2">{groupMemberName}</EmojiText>
+                    <EmojiText element="h2">{ groupMemberName }</EmojiText>
 
                     <div className="mx_MemberInfo_profile">
                         <div className="mx_MemberInfo_profileField">
