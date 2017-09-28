@@ -1,0 +1,67 @@
+/*
+Copyright 2017 Travis Ralston
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_PinnedEventsPanel {
+    border-top: 1px solid $primary-hairline-color;
+}
+
+.mx_PinnedEventsPanel_body {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.mx_PinnedEventsPanel_header {
+    margin: 0;
+    padding-top: 8px;
+    padding-bottom: 15px;
+}
+
+.mx_PinnedEventsPanel_pinnedEvent {
+    min-height: 40px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px; // for the hover
+}
+
+.mx_PinnedEventsPanel_pinnedEvent:hover {
+    background-color: $event-selected-color;
+}
+
+.mx_PinnedEventsPanel_pinnedEvent .mx_PinnedEventsPanel_sender {
+    color: #868686;
+    font-size: 0.8em;
+    vertical-align: top;
+    display: block;
+}
+
+.mx_PinnedEventsPanel_pinnedEvent .mx_EventTile_content {
+    margin-left: 50px;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.mx_PinnedEventsPanel_pinnedEvent .mx_BaseAvatar {
+    float: left;
+    margin-right: 10px;
+}
+
+.mx_PinnedEventsPanel_cancel {
+    margin: 12px;
+    float: right;
+    display: inline-block;
+}
