@@ -875,6 +875,7 @@
     "Add rooms to the group summary": "Add rooms to the group summary",
     "Which rooms would you like to add to this summary?": "Which rooms would you like to add to this summary?",
     "Room name or alias": "Room name or alias",
+    "%(senderName)s changed the pinned messages for the room.": "%(senderName)s changed the pinned messages for the room.",
     "You are an administrator of this group": "You are an administrator of this group",
     "Failed to add the following rooms to the summary of %(groupId)s:": "Failed to add the following rooms to the summary of %(groupId)s:",
     "Failed to remove the room from the summary of %(groupId)s": "Failed to remove the room from the summary of %(groupId)s",

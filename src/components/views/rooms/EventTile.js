@@ -44,6 +44,7 @@ var eventTileTypes = {
     'm.room.history_visibility' : 'messages.TextualEvent',
     'm.room.encryption' : 'messages.TextualEvent',
     'm.room.power_levels' : 'messages.TextualEvent',
+    'm.room.pinned_events' : 'messages.TextualEvent',
 
     'im.vector.modular.widgets': 'messages.TextualEvent',
 };
