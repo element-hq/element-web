@@ -40,6 +40,10 @@ module.exports = {
         }],
         "react/jsx-key": ["error"],
 
+        // Assert no spacing in JSX curly brackets
+        // <Element prop={ consideredError} prop={notConsideredError} />
+        "react/jsx-curly-spacing": ["error", "never"],
+
         /** flowtype **/
         "flowtype/require-parameter-type": ["warn", {
             "excludeArrowFunctions": true,
