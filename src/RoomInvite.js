@@ -28,7 +28,7 @@ export function inviteToRoom(roomId, addr) {
 
     if (addrType == 'email') {
         return MatrixClientPeg.get().inviteByEmail(roomId, addr);
-    } else if (addrType == 'mx') {
+    } else if (addrType == 'mx-user-id') {
         return MatrixClientPeg.get().invite(roomId, addr);
     } else {
         throw new Error('Unsupported address');
