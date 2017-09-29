@@ -145,6 +145,7 @@ module.exports = React.createClass({
             // Don't show non-messages. Technically users can pin state/custom events, but we won't
             // support those events.
             if (event.getType() !== "m.room.message") return '';
+            if (event.isRedacted()) return ''; // don't show redacted pins
             return (<PinnedEventTile key={event.getId()} mxRoom={this.props.room} mxEvent={event} onUnpinned={this._updatePinnedMessages} />);
         });
     },
