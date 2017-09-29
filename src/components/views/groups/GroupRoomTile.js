@@ -49,6 +49,13 @@ const GroupRoomTile = React.createClass({
         });
     },
 
+    onDeleteClick: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.context.matrixClient
+            .removeRoomFromGroup(this.props.groupId, this.props.groupRoom.roomId);
+    },
+
     render: function() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -76,6 +83,9 @@ const GroupRoomTile = React.createClass({
                 <div className="mx_GroupRoomTile_name">
                     { name }
                 </div>
+                <AccessibleButton className="mx_GroupRoomTile_delete" onClick={this.onDeleteClick}>
+                    <img src="img/cancel-small.svg" />
+                </AccessibleButton>
             </AccessibleButton>
         );
     },
