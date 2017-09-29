@@ -364,6 +364,11 @@ module.exports = React.createClass({
         var powerLevels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
         powerLevels = powerLevels ? powerLevels.getContent() : {};
 
+        for (let key of Object.keys(this.refs).filter(k => k.startsWith("event_levels_"))) {
+            const eventType = key.substring("event_levels_".length);
+            powerLevels.events[eventType] = parseInt(this.refs[key].getValue());
+        }
+
         var newPowerLevels = {
             ban: parseInt(this.refs.ban.getValue()),
             kick: parseInt(this.refs.kick.getValue()),
@@ -883,7 +888,8 @@ module.exports = React.createClass({
                         return (
                             <div className="mx_RoomSettings_powerLevel" key={event_type}>
                                 <span className="mx_RoomSettings_powerLevelKey">{ _t('To send events of type') } <code>{ event_type }</code>, { _t('you must be a') } </span>
-                                <PowerSelector value={ events_levels[event_type] } controlled={false} disabled={true} onChange={self.onPowerLevelsChanged}/>
+                                <PowerSelector ref={"event_levels_"+event_type} value={ events_levels[event_type] } onChange={self.onPowerLevelsChanged}
+                                               controlled={false} disabled={!can_change_levels || current_user_level < events_levels[event_type]} />
                             </div>
                         );
                     })}
