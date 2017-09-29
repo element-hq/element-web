@@ -270,7 +270,7 @@ module.exports = React.createClass({
                     clickPhase={this.Phase.GroupMemberList}
                     analytics={['Right Panel', 'Group Member List Button', 'click']}
                 />,
-                <HeaderButton key="_roomsButton" title={_t('Rooms')} iconSrc="img/icons-files.svg"
+                <HeaderButton key="_roomsButton" title={_t('Rooms')} iconSrc="img/icons-room.svg"
                     isHighlighted={this.state.phase === this.Phase.GroupRoomList}
                     clickPhase={this.Phase.GroupRoomList}
                     analytics={['Right Panel', 'Group Room List Button', 'click']}
@@ -328,7 +328,7 @@ module.exports = React.createClass({
             ) : (
                 <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
                     <div className="mx_RightPanel_icon" >
-                        <TintableSvg src="img/icons-files.svg" width="35" height="35" />
+                        <TintableSvg src="img/icons-room-add.svg" width="35" height="35" />
                     </div>
                     <div className="mx_RightPanel_message">{ _t('Add room to this group') }</div>
                 </AccessibleButton>
