@@ -62,8 +62,11 @@ module.exports = React.createClass({
 
         let unpinButton = null;
         if (this._canUnpin()) {
-            unpinButton = <img src="img/cancel-red.svg" className="mx_PinnedEventTile_unpinButton" width="8" height="8"
-                               onClick={this.onUnpinClicked} alt={_t('Unpin Message')} title={_t('Unpin Message')} />;
+            unpinButton = (
+                <AccessibleButton onClick={this.onUnpinClicked} className="mx_PinnedEventTile_unpinButton">
+                    <img src="img/cancel-red.svg" width="8" height="8" alt={_t('Unpin Message')} title={_t('Unpin Message')} />
+                </AccessibleButton>
+            );
         }
 
         return (
