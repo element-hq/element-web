@@ -20,7 +20,8 @@ limitations under the License.
 
 .mx_PinnedEventsPanel_body {
     max-height: 300px;
-    overflow-y: scroll;
+    overflow-y: auto;
+    padding-bottom: 15px;
 }
 
 .mx_PinnedEventsPanel_header {

@@ -55,6 +55,9 @@ const PinnedEventTile = React.createClass({
             } else if (this.props.onUnpinned) this.props.onUnpinned();
         }
     },
+    _canUnpin: function() {
+        return this.props.mxRoom.currentState.mayClientSendStateEvent('m.room.pinned_events', MatrixClientPeg.get());
+    },
     render: function() {
         const MessageEvent = sdk.getComponent("views.messages.MessageEvent");
         const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
@@ -62,14 +65,19 @@ const PinnedEventTile = React.createClass({
         const sender = this.props.mxRoom.getMember(this.props.mxEvent.getSender());
         const avatarSize = 40;
 
+        let unpinButton = null;
+        if (this._canUnpin()) {
+            unpinButton = <img src="img/cancel-red.svg" className="mx_PinnedEventTile_unpinButton" width="8" height="8"
+                               onClick={this.onUnpinClicked} alt={_t('Unpin Message')} title={_t('Unpin Message')} />;
+        }
+
         return (
             <div className="mx_PinnedEventTile">
                 <div className="mx_PinnedEventTile_actions">
                     <AccessibleButton className="mx_PinnedEventTile_gotoButton mx_textButton" onClick={this.onTileClicked}>
                         Jump to message
                     </AccessibleButton>
-                    <img src="img/cancel-red.svg" className="mx_PinnedEventTile_unpinButton" width="8" height="8"
-                         onClick={this.onUnpinClicked} alt={_t('Unpin Message')} title={_t('Unpin Message')} />
+                    { unpinButton }
                 </div>
 
                 <MemberAvatar member={sender} width={avatarSize} height={avatarSize} />
