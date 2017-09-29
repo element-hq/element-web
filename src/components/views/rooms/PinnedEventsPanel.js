@@ -75,7 +75,7 @@ const PinnedEventTile = React.createClass({
             <div className="mx_PinnedEventTile">
                 <div className="mx_PinnedEventTile_actions">
                     <AccessibleButton className="mx_PinnedEventTile_gotoButton mx_textButton" onClick={this.onTileClicked}>
-                        Jump to message
+                        { _t("Jump to message") }
                     </AccessibleButton>
                     { unpinButton }
                 </div>

@@ -201,6 +201,7 @@
     "Warning": "Warning",
     "Pin Message": "Pin Message",
     "Unpin Message": "Unpin Message",
+    "Jump to message": "Jump to message",
     "Checking for an update...": "Checking for an update...",
     "Error encountered (%(errorDetail)s).": "Error encountered (%(errorDetail)s).",
     "No update available.": "No update available.",
