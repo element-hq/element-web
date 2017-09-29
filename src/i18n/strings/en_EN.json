@@ -838,6 +838,7 @@
     "To change the room's history visibility, you must be a": "To change the room's history visibility, you must be a",
     "To change the permissions in the room, you must be a": "To change the permissions in the room, you must be a",
     "To change the topic, you must be a": "To change the topic, you must be a",
+    "To modify widgets in the room, you must be a": "To modify widgets in the room, you must be a",
     "Error whilst fetching joined groups": "Error whilst fetching joined groups",
     "Featured Users:": "Featured Users:",
     "Edit Group": "Edit Group",
