@@ -120,11 +120,16 @@ module.exports = React.createClass({
             pinnedEvents.getContent().pinned.map(eventId => {
                 promises.push(cli.getEventTimeline(this.props.room.getUnfilteredTimelineSet(), eventId, 0).then(timeline => {
                     return {eventId, timeline};
+                }).catch(err => {
+                    console.error("Error looking up pinned event " + eventId + " in room " + this.props.room.roomId);
+                    console.error(err);
+                    return null; // return lack of context to avoid unhandled errors
                 }));
             });
 
             Promise.all(promises).then(contexts => {
-                this.setState({ loading: false, pinned: contexts });
+                // Filter out the contexts that may have failed early by doing a truthy test
+                this.setState({ loading: false, pinned: contexts.filter(c => c) });
             });
         }
     },
