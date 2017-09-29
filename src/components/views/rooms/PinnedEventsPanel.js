@@ -29,6 +29,7 @@ const PinnedEventTile = React.createClass({
     propTypes: {
         mxRoom: React.PropTypes.object.isRequired,
         mxEvent: React.PropTypes.object.isRequired,
+        onUnpinned: React.PropTypes.func,
     },
     onTileClicked: function() {
         dis.dispatch({
@@ -38,6 +39,22 @@ const PinnedEventTile = React.createClass({
             room_id: this.props.mxEvent.getRoomId(),
         });
     },
+    onUnpinClicked: function() {
+        const pinnedEvents = this.props.mxRoom.currentState.getStateEvents("m.room.pinned_events", "");
+        if (!pinnedEvents || !pinnedEvents.getContent().pinned) {
+            // Nothing to do: already unpinned
+            if (this.props.onUnpinned) this.props.onUnpinned();
+        } else {
+            const pinned = pinnedEvents.getContent().pinned;
+            const index = pinned.indexOf(this.props.mxEvent.getId());
+            if (index !== -1) {
+                pinned.splice(index, 1);
+                MatrixClientPeg.get().sendStateEvent(this.props.mxRoom.roomId, 'm.room.pinned_events', {pinned}, '').then(() => {
+                    if (this.props.onUnpinned) this.props.onUnpinned();
+                });
+            } else if (this.props.onUnpinned) this.props.onUnpinned();
+        }
+    },
     render: function() {
         const MessageEvent = sdk.getComponent("views.messages.MessageEvent");
         const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
@@ -46,7 +63,15 @@ const PinnedEventTile = React.createClass({
         const avatarSize = 40;
 
         return (
-            <div className="mx_PinnedEventTile" onClick={this.onTileClicked}>
+            <div className="mx_PinnedEventTile">
+                <div className="mx_PinnedEventTile_actions">
+                    <AccessibleButton className="mx_PinnedEventTile_gotoButton mx_textButton" onClick={this.onTileClicked}>
+                        Jump to message
+                    </AccessibleButton>
+                    <img src="img/cancel-red.svg" className="mx_PinnedEventTile_unpinButton" width="8" height="8"
+                         onClick={this.onUnpinClicked} alt={_t('Unpin Message')} title={_t('Unpin Message')} />
+                </div>
+
                 <MemberAvatar member={sender} width={avatarSize} height={avatarSize} />
                 <span className="mx_PinnedEventTile_sender">
                     {sender.name}
@@ -73,6 +98,10 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
+        this._updatePinnedMessages();
+    },
+
+    _updatePinnedMessages: function() {
         const pinnedEvents = this.props.room.currentState.getStateEvents("m.room.pinned_events", "");
         if (!pinnedEvents || !pinnedEvents.getContent().pinned) {
             this.setState({ loading: false, pinned: [] });
@@ -103,7 +132,7 @@ module.exports = React.createClass({
             // Don't show non-messages. Technically users can pin state/custom events, but we won't
             // support those events.
             if (event.getType() !== "m.room.message") return '';
-            return (<PinnedEventTile key={event.getId()} mxRoom={this.props.room} mxEvent={event} />);
+            return (<PinnedEventTile key={event.getId()} mxRoom={this.props.room} mxEvent={event} onUnpinned={this._updatePinnedMessages} />);
         });
     },
 
