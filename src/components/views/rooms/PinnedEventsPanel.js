@@ -119,7 +119,8 @@ module.exports = React.createClass({
 
             pinnedEvents.getContent().pinned.map(eventId => {
                 promises.push(cli.getEventTimeline(this.props.room.getUnfilteredTimelineSet(), eventId, 0).then(timeline => {
-                    return {eventId, timeline};
+                    const event = timeline.getEvents().find(e => e.getId() === eventId);
+                    return {eventId, timeline, event};
                 }).catch(err => {
                     console.error("Error looking up pinned event " + eventId + " in room " + this.props.room.roomId);
                     console.error(err);
@@ -128,8 +129,15 @@ module.exports = React.createClass({
             });
 
             Promise.all(promises).then(contexts => {
-                // Filter out the contexts that may have failed early by doing a truthy test
-                this.setState({ loading: false, pinned: contexts.filter(c => c) });
+                // Filter out the messages before we try to render them
+                const pinned = contexts.filter(context => {
+                    if (!context) return false; // no context == not applicable for the room
+                    if (context.event.getType() !== "m.room.message") return false;
+                    if (context.event.isRedacted()) return false;
+                    return true;
+                });
+
+                this.setState({ loading: false, pinned });
             });
         }
     },
@@ -139,14 +147,8 @@ module.exports = React.createClass({
             return <div>{ _t("No pinned messages.") }</div>;
         }
 
-        return this.state.pinned.map(pinnedEvent => {
-            const event = pinnedEvent.timeline.getEvents().find(e => e.getId() === pinnedEvent.eventId);
-
-            // Don't show non-messages. Technically users can pin state/custom events, but we won't
-            // support those events.
-            if (event.getType() !== "m.room.message") return '';
-            if (event.isRedacted()) return ''; // don't show redacted pins
-            return (<PinnedEventTile key={event.getId()} mxRoom={this.props.room} mxEvent={event} onUnpinned={this._updatePinnedMessages} />);
+        return this.state.pinned.map(context => {
+            return (<PinnedEventTile key={context.event.getId()} mxRoom={this.props.room} mxEvent={context.event} onUnpinned={this._updatePinnedMessages} />);
         });
     },
 
