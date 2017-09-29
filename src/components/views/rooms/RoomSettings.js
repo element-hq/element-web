@@ -45,6 +45,15 @@ const plEventsToLabels = {
     "m.room.power_levels": "To change the permissions in the room, you must be a",
 };
 
+const plEventsToShow = {
+    // If an event is listed here, it will be shown in the PL settings. Defaults will be calculated.
+    "m.room.avatar": {isState: true},
+    "m.room.name": {isState: true},
+    "m.room.canonical_alias": {isState: true},
+    "m.room.history_visibility": {isState: true},
+    "m.room.power_levels": {isState: true},
+}
+
 const BannedUser = React.createClass({
     propTypes: {
         canUnban: React.PropTypes.bool,
@@ -556,6 +565,14 @@ module.exports = React.createClass({
         this.forceUpdate();
     },
 
+    _populateDefaultPlEvents: function(eventsSection, stateLevel, eventsLevel) {
+        for (let desiredEvent of Object.keys(plEventsToShow)) {
+            if (!(desiredEvent in eventsSection)) {
+                eventsSection[desiredEvent] = (plEventsToShow[desiredEvent].isState ? stateLevel : eventsLevel);
+            }
+        }
+    },
+
     _renderEncryptionSection: function() {
         var cli = MatrixClientPeg.get();
         var roomState = this.props.room.currentState;
@@ -625,6 +642,8 @@ module.exports = React.createClass({
         var send_level = parseIntWithDefault(power_levels.events_default, 0);
         var state_level = power_level_event ? parseIntWithDefault(power_levels.state_default, 50) : 0;
         var default_user_level = parseIntWithDefault(power_levels.users_default, 0);
+
+        this._populateDefaultPlEvents(events_levels, state_level, send_level);
 
         var current_user_level = user_levels[user_id];
         if (current_user_level === undefined) {
