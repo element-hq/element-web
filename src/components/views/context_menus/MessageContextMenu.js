@@ -43,26 +43,30 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             canRedact: false,
+            canPin: false,
         };
     },
 
     componentWillMount: function() {
-        MatrixClientPeg.get().on('RoomMember.powerLevel', this._checkCanRedact);
-        this._checkCanRedact();
+        MatrixClientPeg.get().on('RoomMember.powerLevel', this._checkPermissions);
+        this._checkPermissions();
     },
 
     componentWillUnmount: function() {
         const cli = MatrixClientPeg.get();
         if (cli) {
-            cli.removeListener('RoomMember.powerLevel', this._checkCanRedact);
+            cli.removeListener('RoomMember.powerLevel', this._checkPermissions);
         }
     },
 
-    _checkCanRedact: function() {
+    _checkPermissions: function() {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
+
         const canRedact = room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId);
-        this.setState({canRedact});
+        const canPin = room.currentState.mayClientSendStateEvent('m.room.pinned_events', cli);
+
+        this.setState({canRedact, canPin});
     },
 
     _isPinned: function() {
@@ -210,11 +214,14 @@ module.exports = React.createClass({
                         { _t('Forward Message') }
                     </div>
                 );
-                pinButton = (
-                    <div className="mx_MessageContextMenu_field" onClick={this.onPinClick}>
-                        { this._isPinned() ? _t('Unpin Message') : _t('Pin Message') }
-                    </div>
-                );
+
+                if (this.state.canPin) {
+                    pinButton = (
+                        <div className="mx_MessageContextMenu_field" onClick={this.onPinClick}>
+                            {this._isPinned() ? _t('Unpin Message') : _t('Pin Message')}
+                        </div>
+                    );
+                }
             }
         }
 
