@@ -34,7 +34,7 @@ var ROOM_COLORS = [
     ["#dad658", "#f5f4ea"],
     ["#80c553", "#eef5ea"],
     ["#bb814e", "#eee8e3"],
-    ["#595959", "#ececec"],
+    //["#595959", "#ececec"], // Grey makes everything appear disabled, so remove it for now
 ];
 
 module.exports = React.createClass({
