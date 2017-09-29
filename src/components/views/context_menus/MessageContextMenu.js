@@ -134,18 +134,24 @@ module.exports = React.createClass({
     },
 
     onPinClick: function() {
-        MatrixClientPeg.get().getStateEvent(this.props.mxEvent.getRoomId(), 'm.room.pinned_events', '').then(event => {
-            const eventIds = (event ? event.pinned : []) || [];
-            if (!eventIds.includes(this.props.mxEvent.getId())) {
-                // Not pinned - add
-                eventIds.push(this.props.mxEvent.getId());
-            } else {
-                // Pinned - remove
-                eventIds.splice(eventIds.indexOf(this.props.mxEvent.getId()), 1);
-            }
+        MatrixClientPeg.get().getStateEvent(this.props.mxEvent.getRoomId(), 'm.room.pinned_events', '')
+            .then(null, e => {
+                // Intercept the Event Not Found error and fall through the promise chain with no event.
+                if (e.errcode === "M_NOT_FOUND") return null;
+                throw e;
+            })
+            .then(event => {
+                const eventIds = (event ? event.pinned : []) || [];
+                if (!eventIds.includes(this.props.mxEvent.getId())) {
+                    // Not pinned - add
+                    eventIds.push(this.props.mxEvent.getId());
+                } else {
+                    // Pinned - remove
+                    eventIds.splice(eventIds.indexOf(this.props.mxEvent.getId()), 1);
+                }
 
-            MatrixClientPeg.get().sendStateEvent(this.props.mxEvent.getRoomId(), 'm.room.pinned_events', {pinned: eventIds}, '');
-        });
+                MatrixClientPeg.get().sendStateEvent(this.props.mxEvent.getRoomId(), 'm.room.pinned_events', {pinned: eventIds}, '');
+            });
         this.closeMenu();
     },
 
