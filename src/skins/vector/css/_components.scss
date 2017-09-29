@@ -64,6 +64,7 @@
 @import "./matrix-react-sdk/views/voip/_CallView.scss";
 @import "./matrix-react-sdk/views/voip/_IncomingCallbox.scss";
 @import "./matrix-react-sdk/views/voip/_VideoView.scss";
+@import "./matrix-react-sdk/views/rooms/_PinnedEventsPanel.scss";
 @import "./vector-web/_fonts.scss";
 @import "./vector-web/structures/_CompatibilityPage.scss";
 @import "./vector-web/structures/_HomePage.scss";
@@ -88,5 +89,4 @@
 @import "./vector-web/views/rooms/_RoomDropTarget.scss";
 @import "./vector-web/views/rooms/_RoomTooltip.scss";
 @import "./vector-web/views/rooms/_SearchBar.scss";
-@import "./vector-web/views/rooms/_PinnedEventsPanel.scss";
 @import "./vector-web/views/settings/_Notifications.scss";
