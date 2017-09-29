@@ -35,6 +35,16 @@ function parseIntWithDefault(val, def) {
     return isNaN(res) ? def : res;
 }
 
+const plEventsToLabels = {
+    // These will be translated for us later.
+    // TODO: _td() these when https://github.com/matrix-org/matrix-react-sdk/pull/1421 lands
+    "m.room.avatar": "To change the room's avatar, you must be a",
+    "m.room.name": "To change the room's name, you must be a",
+    "m.room.canonical_alias": "To change the room's main address, you must be a",
+    "m.room.history_visibility": "To change the room's history visibility, you must be a",
+    "m.room.power_levels": "To change the permissions in the room, you must be a",
+};
+
 const BannedUser = React.createClass({
     propTypes: {
         canUnban: React.PropTypes.bool,
@@ -885,9 +895,12 @@ module.exports = React.createClass({
                     </div>
 
                     {Object.keys(events_levels).map(function(event_type, i) {
+                        let label = plEventsToLabels[event_type];
+                        if (label) label = _t(label);
+                        else label = _tJsx("To send events of type <eventType/>, you must be a", /<eventType\/>/, () => <code>{ event_type }</code>);
                         return (
                             <div className="mx_RoomSettings_powerLevel" key={event_type}>
-                                <span className="mx_RoomSettings_powerLevelKey">{ _tJsx("To send events of type <eventType/>, you must be a", /<eventType\/>/, () => <code>{ event_type }</code>) } </span>
+                                <span className="mx_RoomSettings_powerLevelKey">{ label } </span>
                                 <PowerSelector ref={"event_levels_"+event_type} value={ events_levels[event_type] } onChange={self.onPowerLevelsChanged}
                                                controlled={false} disabled={!can_change_levels || current_user_level < events_levels[event_type]} />
                             </div>
