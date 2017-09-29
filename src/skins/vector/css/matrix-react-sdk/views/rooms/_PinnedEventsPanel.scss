@@ -30,59 +30,8 @@ limitations under the License.
     padding-bottom: 15px;
 }
 
-.mx_PinnedEventTile {
-    min-height: 40px;
-    margin-bottom: 5px;
-    width: 100%;
-    border-radius: 5px; // for the hover
-}
-
-.mx_PinnedEventTile:hover {
-    background-color: $event-selected-color;
-}
-
-.mx_PinnedEventTile .mx_PinnedEventTile_sender {
-    color: #868686;
-    font-size: 0.8em;
-    vertical-align: top;
-    display: block;
-    padding-bottom: 3px;
-}
-
-.mx_PinnedEventTile .mx_EventTile_content {
-    margin-left: 50px;
-    position: relative;
-    top: 0;
-    left: 0;
-}
-
-.mx_PinnedEventTile .mx_BaseAvatar {
-    float: left;
-    margin-right: 10px;
-}
-
 .mx_PinnedEventsPanel_cancel {
     margin: 12px;
     float: right;
     display: inline-block;
-}
-
-.mx_PinnedEventTile:hover .mx_PinnedEventTile_actions {
-    display: block;
-}
-
-.mx_PinnedEventTile_actions {
-    float: right;
-    margin-right: 10px;
-    display: none;
-}
-
-.mx_PinnedEventTile_unpinButton {
-    cursor: pointer;
-    margin-left: 10px;
-}
-
-.mx_PinnedEventTile_gotoButton {
-    display: inline-block;
-    font-size: 0.8em;
 }

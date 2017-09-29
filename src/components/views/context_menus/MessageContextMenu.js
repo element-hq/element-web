@@ -135,7 +135,7 @@ module.exports = React.createClass({
 
     onPinClick: function() {
         MatrixClientPeg.get().getStateEvent(this.props.mxEvent.getRoomId(), 'm.room.pinned_events', '')
-            .then(null, e => {
+            .catch(e => {
                 // Intercept the Event Not Found error and fall through the promise chain with no event.
                 if (e.errcode === "M_NOT_FOUND") return null;
                 throw e;
