@@ -191,7 +191,7 @@ export default class Flair extends React.Component {
 
     componentWillMount() {
         this._unmounted = false;
-        if (UserSettingsStore.isFeatureEnabled('feature_flair') && groupSupport) {
+        if (UserSettingsStore.isFeatureEnabled('feature_groups') && groupSupport) {
             this._generateAvatars();
         }
     }
