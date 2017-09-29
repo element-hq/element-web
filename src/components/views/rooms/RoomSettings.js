@@ -860,34 +860,34 @@ module.exports = React.createClass({
                         <PowerSelector ref="users_default" value={default_user_level} controlled={false} disabled={!can_change_levels || current_user_level < default_user_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To send messages') }, { _t('you must be a') } </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To send messages, you must be a') } </span>
                         <PowerSelector ref="events_default" value={send_level} controlled={false} disabled={!can_change_levels || current_user_level < send_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To invite users into the room') }, { _t('you must be a') } </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To invite users into the room, you must be a') } </span>
                         <PowerSelector ref="invite" value={invite_level} controlled={false} disabled={!can_change_levels || current_user_level < invite_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To configure the room') }, { _t('you must be a') } </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To configure the room, you must be a') } </span>
                         <PowerSelector ref="state_default" value={state_level} controlled={false} disabled={!can_change_levels || current_user_level < state_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To kick users') }, { _t('you must be a') } </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To kick users, you must be a') } </span>
                         <PowerSelector ref="kick" value={kick_level} controlled={false} disabled={!can_change_levels || current_user_level < kick_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To ban users') }, { _t('you must be a') } </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To ban users, you must be a') } </span>
                         <PowerSelector ref="ban" value={ban_level} controlled={false} disabled={!can_change_levels || current_user_level < ban_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To remove other users\' messages') }, { _t('you must be a') } </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To remove other users\' messages, you must be a') } </span>
                         <PowerSelector ref="redact" value={redact_level} controlled={false} disabled={!can_change_levels || current_user_level < redact_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
 
                     {Object.keys(events_levels).map(function(event_type, i) {
                         return (
                             <div className="mx_RoomSettings_powerLevel" key={event_type}>
-                                <span className="mx_RoomSettings_powerLevelKey">{ _t('To send events of type') } <code>{ event_type }</code>, { _t('you must be a') } </span>
+                                <span className="mx_RoomSettings_powerLevelKey">{ _tJsx("To send events of type <eventType/>, you must be a", /<eventType\/>/, () => <code>{ event_type }</code>) } </span>
                                 <PowerSelector ref={"event_levels_"+event_type} value={ events_levels[event_type] } onChange={self.onPowerLevelsChanged}
                                                controlled={false} disabled={!can_change_levels || current_user_level < events_levels[event_type]} />
                             </div>
