@@ -43,6 +43,7 @@ const plEventsToLabels = {
     "m.room.canonical_alias": "To change the room's main address, you must be a",
     "m.room.history_visibility": "To change the room's history visibility, you must be a",
     "m.room.power_levels": "To change the permissions in the room, you must be a",
+    "m.room.topic": "To change the topic, you must be a",
 };
 
 const plEventsToShow = {
@@ -52,6 +53,7 @@ const plEventsToShow = {
     "m.room.canonical_alias": {isState: true},
     "m.room.history_visibility": {isState: true},
     "m.room.power_levels": {isState: true},
+    "m.room.topic": {isState: true},
 }
 
 const BannedUser = React.createClass({
