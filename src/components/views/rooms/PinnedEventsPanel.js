@@ -136,7 +136,7 @@ module.exports = React.createClass({
 
     _getPinnedTiles: function() {
         if (this.state.pinned.length == 0) {
-            return <div>No pinned messages.</div>;
+            return <div>{ _t("No pinned messages.") }</div>;
         }
 
         return this.state.pinned.map(pinnedEvent => {
@@ -151,7 +151,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        let tiles = <div>Loading...</div>;
+        let tiles = <div>{ _t("Loading...") }</div>;
         if (this.state && !this.state.loading) {
             tiles = this._getPinnedTiles();
         }
