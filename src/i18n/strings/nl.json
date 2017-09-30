@@ -35,7 +35,7 @@
     "Failed to update keywords": "Trefwoorden bijwerken mislukt",
     "Failed to get protocol list from Home Server": "Protocollijst ophalen van de homeserver mislukt",
     "Failed to get public room list": "Lijst met publieke kamers ophalen mislukt",
-    "Failed to join the room": "Kamer binnengaan mislukt",
+    "Failed to join the room": "Ruimte toetreden mislukt",
     "Failed to remove tag %(tagName)s from room": "Label %(tagName)s van de kamer verwijderen mislukt",
     "Failed to set direct chat tag": "Het is mislukt om het privéchatlabel weg te halen",
     "Favourite": "Favoriet",
