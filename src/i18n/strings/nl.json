@@ -213,5 +213,14 @@
     "Failed to send custom event.": "Aangepast Event verzenden mislukt.",
     "Send Custom Event": "Verzend aangepast evenement",
     "Send Custom State Event": "Verzend aangepast State Event",
-    "Invite to this group": "Nodig uit voor deze groep"
+    "Invite to this group": "Nodig uit voor deze groep",
+    "Developer Tools": "Ontwikkelaarsgereedschap",
+    "Filter results": "Resultaten filteren",
+    "Explore Room State": "Verken Ruimtetoestand",
+    "You must specify an event type!": "Je moet een event-type specificeren!",
+    "Event sent!": "Event verstuurd!",
+    "Event Type": "Event-type",
+    "Event Content": "Event-inhoud",
+    "State Key": "Toestandssleutel",
+    "Add room to this group": "Voeg een ruimte aan deze groep toe"
 }
