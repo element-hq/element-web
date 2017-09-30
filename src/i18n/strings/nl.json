@@ -108,7 +108,7 @@
     "Drop here %(toAction)s": "%(toAction)s hier naartoe verplaatsen",
     "Error": "Fout",
     "Failed to forget room %(errCode)s": "Ruimte vergeten mislukt %(errCode)s",
-    "Failed to join the room": "Kamer binnengaan mislukt",
+    "Failed to join the room": "Ruimte toetreden mislukt",
     "Favourite": "Favoriet",
     "Mute": "Dempen",
     "Notifications": "Meldingen",
