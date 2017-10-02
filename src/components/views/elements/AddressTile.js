@@ -45,11 +45,12 @@ export default React.createClass({
         const address = this.props.address;
         const name = address.displayName || address.address;
 
-        let imgUrls = [];
+        const imgUrls = [];
+        const isMatrixAddress = ['mx-user-id', 'mx-room-id'].includes(address.addressType);
 
-        if (address.addressType === "mx" && address.avatarMxc) {
+        if (isMatrixAddress && address.avatarMxc) {
             imgUrls.push(MatrixClientPeg.get().mxcUrlToHttp(
-                address.avatarMxc, 25, 25, 'crop'
+                address.avatarMxc, 25, 25, 'crop',
             ));
         } else if (address.addressType === 'email') {
             imgUrls.push('img/icon-email-user.svg');
@@ -77,7 +78,7 @@ export default React.createClass({
 
         let info;
         let error = false;
-        if (address.addressType === "mx" && address.isKnown) {
+        if (isMatrixAddress && address.isKnown) {
             const idClasses = classNames({
                 "mx_AddressTile_id": true,
                 "mx_AddressTile_justified": this.props.justified,
@@ -89,7 +90,7 @@ export default React.createClass({
                     <div className={idClasses}>{ address.address }</div>
                 </div>
             );
-        } else if (address.addressType === "mx") {
+        } else if (isMatrixAddress) {
             const unknownMxClasses = classNames({
                 "mx_AddressTile_unknownMx": true,
                 "mx_AddressTile_justified": this.props.justified,

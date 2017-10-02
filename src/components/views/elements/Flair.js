@@ -157,7 +157,12 @@ class FlairAvatar extends React.Component {
     render() {
         const httpUrl = this.context.matrixClient.mxcUrlToHttp(
             this.props.groupProfile.avatarUrl, 14, 14, 'scale', false);
-        return <img src={httpUrl} width="14px" height="14px" onClick={this.onClick}/>;
+        return <img
+            src={httpUrl}
+            width="14px"
+            height="14px"
+            onClick={this.onClick}
+            title={this.props.groupProfile.groupId} />;
     }
 }
 
@@ -186,7 +191,7 @@ export default class Flair extends React.Component {
 
     componentWillMount() {
         this._unmounted = false;
-        if (UserSettingsStore.isFeatureEnabled('feature_flair') && groupSupport) {
+        if (UserSettingsStore.isFeatureEnabled('feature_groups') && groupSupport) {
             this._generateAvatars();
         }
     }
@@ -233,11 +238,11 @@ export default class Flair extends React.Component {
             return <div />;
         }
         const avatars = this.state.profiles.map((profile, index) => {
-            return <FlairAvatar key={index} groupProfile={profile}/>;
+            return <FlairAvatar key={index} groupProfile={profile} />;
         });
         return (
             <span className="mx_Flair" style={{"marginLeft": "5px", "verticalAlign": "-3px"}}>
-                {avatars}
+                { avatars }
             </span>
         );
     }

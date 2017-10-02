@@ -261,7 +261,7 @@ export default React.createClass({
             if (this.state.loading) {
                 appTileBody = (
                     <div className='mx_AppTileBody mx_AppLoading'>
-                        <MessageSpinner msg='Loading...'/>
+                        <MessageSpinner msg='Loading...' />
                     </div>
                 );
             } else if (this.state.hasPermissionToLoad == true) {
@@ -312,19 +312,19 @@ export default React.createClass({
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
-                    {this.formatAppTileName()}
+                    { this.formatAppTileName() }
                     <span className="mx_AppTileMenuBarWidgets">
-                        {/* Edit widget */}
-                        {showEditButton && <img
+                        { /* Edit widget */ }
+                        { showEditButton && <img
                             src="img/edit.svg"
                             className="mx_filterFlipColor mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
                             width="8" height="8"
                             alt={_t('Edit')}
                             title={_t('Edit')}
                             onClick={this._onEditClick}
-                        />}
+                        /> }
 
-                        {/* Delete widget */}
+                        { /* Delete widget */ }
                         <img src={deleteIcon}
                         className={deleteClasses}
                         width="8" height="8"
@@ -334,7 +334,7 @@ export default React.createClass({
                         />
                     </span>
                 </div>
-                {appTileBody}
+                { appTileBody }
             </div>
         );
     },

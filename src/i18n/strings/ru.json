@@ -618,7 +618,6 @@
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and device %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ВНИМАНИЕ: ОШИБКА ПРОВЕРКИ КЛЮЧЕЙ! Ключ подписи пользователя %(userId)s на устройстве %(deviceId)s — \"%(fprint)s\", и он не соответствует предоставленному ключу \"%(fingerprint)s\". Это может означать, что ваше общение перехватывается!",
     "You have <a>disabled</a> URL previews by default.": "Предварительный просмотр ссылок <a>отключен</a> по-умолчанию.",
     "You have <a>enabled</a> URL previews by default.": "Предварительный просмотр ссылок <a>включен</a> по-умолчанию.",
-    "You have entered an invalid contact. Try using their Matrix ID or email address.": "Вы ввели недопустимый контакт. Попробуйте использовать Matrix ID или адрес электронной почты.",
     "You need to enter a user name.": "Необходимо ввести имя пользователя.",
     "You seem to be in a call, are you sure you want to quit?": "Звонок не завершен, вы уверены, что хотите выйти?",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Вы не сможете отменить это изменение, так как этот пользователь получит уровень доступа, аналогичный вашему.",

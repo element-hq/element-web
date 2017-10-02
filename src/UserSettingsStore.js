@@ -35,7 +35,7 @@ export default {
         },
         {
             name: "-",
-            id: 'feature_flair',
+            id: 'feature_groups',
             default: false,
         },
     ],
@@ -43,7 +43,7 @@ export default {
     // horrible but it works. The locality makes this somewhat more palatable.
     doTranslations: function() {
         this.LABS_FEATURES[0].name = _t("Matrix Apps");
-        this.LABS_FEATURES[1].name = _t("Flair");
+        this.LABS_FEATURES[1].name = _t("Groups");
     },
 
     loadProfileInfo: function() {

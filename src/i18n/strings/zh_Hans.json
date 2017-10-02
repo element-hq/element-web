@@ -630,7 +630,6 @@
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device": "你已经登出了所有的设备并不再接收推送通知。要重新启用通知，请再在每个设备上登录",
     "You have <a>disabled</a> URL previews by default.": "你已经默认 <a>禁用</a> URL 预览。",
     "You have <a>enabled</a> URL previews by default.": "你已经默认 <a>启用</a> URL 预览。",
-    "You have entered an invalid contact. Try using their Matrix ID or email address.": "你输入了一个非法的联系人。尝试使用他们的 Matrix ID 或者电子邮件地址。",
     "Your home server does not support device management.": "你的 home server 不支持设备管理。",
     "Set a display name:": "设置一个昵称：",
     "This server does not support authentication with a phone number.": "这个服务器不支持用电话号码认证。",

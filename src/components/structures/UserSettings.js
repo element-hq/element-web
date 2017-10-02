@@ -52,7 +52,7 @@ const gHVersionLabel = function(repo, token='') {
     } else {
         url = `https://github.com/${repo}/commit/${token.split('-')[0]}`;
     }
-    return <a target="_blank" rel="noopener" href={url}>{token}</a>;
+    return <a target="_blank" rel="noopener" href={url}>{ token }</a>;
 };
 
 // Enumerate some simple 'flip a bit' UI settings (if any).
@@ -674,7 +674,7 @@ module.exports = React.createClass({
             <div>
                 <h3>Referral</h3>
                 <div className="mx_UserSettings_section">
-                    {_t("Refer a friend to Riot:")} <a href={href}>{href}</a>
+                    { _t("Refer a friend to Riot:") } <a href={href}>{ href }</a>
                 </div>
             </div>
         );
@@ -693,7 +693,7 @@ module.exports = React.createClass({
     _renderLanguageSetting: function() {
         const LanguageDropdown = sdk.getComponent('views.elements.LanguageDropdown');
         return <div>
-            <label htmlFor="languageSelector">{_t('Interface Language')}</label>
+            <label htmlFor="languageSelector">{ _t('Interface Language') }</label>
             <LanguageDropdown ref="language" onOptionChange={this.onLanguageChange}
                           className="mx_UserSettings_language"
                           value={this.state.language}
@@ -716,7 +716,7 @@ module.exports = React.createClass({
                     <table>
                         <tbody>
                         <tr>
-                            <td><strong>{_t('Autocomplete Delay (ms):')}</strong></td>
+                            <td><strong>{ _t('Autocomplete Delay (ms):') }</strong></td>
                             <td>
                                 <input
                                     type="number"
@@ -737,8 +737,8 @@ module.exports = React.createClass({
         return <div className="mx_UserSettings_toggle">
             <input id="urlPreviewsDisabled"
                    type="checkbox"
-                   defaultChecked={ UserSettingsStore.getUrlPreviewsDisabled() }
-                   onChange={ this._onPreviewsDisabledChanged }
+                   defaultChecked={UserSettingsStore.getUrlPreviewsDisabled()}
+                   onChange={this._onPreviewsDisabledChanged}
             />
             <label htmlFor="urlPreviewsDisabled">
                 { _t("Disable inline URL previews by default") }
@@ -759,13 +759,13 @@ module.exports = React.createClass({
             if (setting.fn) setting.fn(e.target.checked);
         };
 
-        return <div className="mx_UserSettings_toggle" key={ setting.id }>
-            <input id={ setting.id }
+        return <div className="mx_UserSettings_toggle" key={setting.id}>
+            <input id={setting.id}
                    type="checkbox"
-                   defaultChecked={ this._syncedSettings[setting.id] }
-                   onChange={ onChange }
+                   defaultChecked={this._syncedSettings[setting.id]}
+                   onChange={onChange}
             />
-            <label htmlFor={ setting.id }>
+            <label htmlFor={setting.id}>
                 { _t(setting.label) }
             </label>
         </div>;
@@ -784,15 +784,15 @@ module.exports = React.createClass({
                 value: setting.value,
             });
         };
-        return <div className="mx_UserSettings_toggle" key={ setting.id + "_" + setting.value }>
-            <input id={ setting.id + "_" + setting.value }
+        return <div className="mx_UserSettings_toggle" key={setting.id + "_" + setting.value}>
+            <input id={setting.id + "_" + setting.value}
                    type="radio"
-                   name={ setting.id }
-                   value={ setting.value }
-                   checked={ this._syncedSettings[setting.id] === setting.value }
-                   onChange={ onChange }
+                   name={setting.id}
+                   value={setting.value}
+                   checked={this._syncedSettings[setting.id] === setting.value}
+                   onChange={onChange}
             />
-            <label htmlFor={ setting.id + "_" + setting.value }>
+            <label htmlFor={setting.id + "_" + setting.value}>
                 { _t(setting.label) }
             </label>
         </div>;
@@ -829,10 +829,10 @@ module.exports = React.createClass({
                 <h3>{ _t("Cryptography") }</h3>
                 <div className="mx_UserSettings_section mx_UserSettings_cryptoSection">
                     <ul>
-                        <li><label>{_t("Device ID:")}</label>
-                            <span><code>{deviceId}</code></span></li>
-                        <li><label>{_t("Device key:")}</label>
-                            <span><code><b>{identityKey}</b></code></span></li>
+                        <li><label>{ _t("Device ID:") }</label>
+                            <span><code>{ deviceId }</code></span></li>
+                        <li><label>{ _t("Device key:") }</label>
+                            <span><code><b>{ identityKey }</b></code></span></li>
                     </ul>
                     { importExportButtons }
                 </div>
@@ -851,11 +851,11 @@ module.exports = React.createClass({
                     <h3>{ _t("Ignored Users") }</h3>
                     <div className="mx_UserSettings_section mx_UserSettings_ignoredUsersSection">
                         <ul>
-                            {this.state.ignoredUsers.map(function(userId) {
+                            { this.state.ignoredUsers.map(function(userId) {
                                 return (<IgnoredUser key={userId}
                                                      userId={userId}
                                                      onUnignored={updateHandler}></IgnoredUser>);
-                            })}
+                            }) }
                         </ul>
                     </div>
                 </div>
@@ -871,13 +871,13 @@ module.exports = React.createClass({
             if (setting.fn) setting.fn(e.target.checked);
         };
 
-        return <div className="mx_UserSettings_toggle" key={ setting.id }>
-            <input id={ setting.id }
+        return <div className="mx_UserSettings_toggle" key={setting.id}>
+            <input id={setting.id}
                    type="checkbox"
-                   defaultChecked={ this._localSettings[setting.id] }
-                   onChange={ onChange }
+                   defaultChecked={this._localSettings[setting.id]}
+                   onChange={onChange}
             />
-            <label htmlFor={ setting.id }>
+            <label htmlFor={setting.id}>
                 { _t(setting.label) }
             </label>
         </div>;
@@ -887,8 +887,8 @@ module.exports = React.createClass({
         const DevicesPanel = sdk.getComponent('settings.DevicesPanel');
         return (
             <div>
-                <h3>{_t("Devices")}</h3>
-                <DevicesPanel className="mx_UserSettings_section"/>
+                <h3>{ _t("Devices") }</h3>
+                <DevicesPanel className="mx_UserSettings_section" />
             </div>
         );
     },
@@ -903,7 +903,7 @@ module.exports = React.createClass({
                 <div className="mx_UserSettings_section">
                     <p>{ _t("Found a bug?") }</p>
                     <button className="mx_UserSettings_button danger"
-                        onClick={this._onBugReportClicked}>{_t('Report it')}
+                        onClick={this._onBugReportClicked}>{ _t('Report it') }
                     </button>
                 </div>
             </div>
@@ -911,13 +911,13 @@ module.exports = React.createClass({
     },
 
     _renderAnalyticsControl: function() {
-        if (!SdkConfig.get().piwik) return <div/>;
+        if (!SdkConfig.get().piwik) return <div />;
 
         return <div>
             <h3>{ _t('Analytics') }</h3>
             <div className="mx_UserSettings_section">
-                {_t('Riot collects anonymous analytics to allow us to improve the application.')}
-                {ANALYTICS_SETTINGS_LABELS.map( this._renderLocalSetting )}
+                { _t('Riot collects anonymous analytics to allow us to improve the application.') }
+                { ANALYTICS_SETTINGS_LABELS.map( this._renderLocalSetting ) }
             </div>
         </div>;
     },
@@ -947,10 +947,10 @@ module.exports = React.createClass({
                         type="checkbox"
                         id={feature.id}
                         name={feature.id}
-                        defaultChecked={ UserSettingsStore.isFeatureEnabled(feature.id) }
-                        onChange={ onChange }
+                        defaultChecked={UserSettingsStore.isFeatureEnabled(feature.id)}
+                        onChange={onChange}
                     />
-                    <label htmlFor={feature.id}>{feature.name}</label>
+                    <label htmlFor={feature.id}>{ feature.name }</label>
                 </div>);
         });
 
@@ -964,7 +964,7 @@ module.exports = React.createClass({
                 <h3>{ _t("Labs") }</h3>
                 <div className="mx_UserSettings_section">
                     <p>{ _t("These are experimental features that may break in unexpected ways") }. { _t("Use with caution") }.</p>
-                    {features}
+                    { features }
                 </div>
             </div>
         );
@@ -997,10 +997,10 @@ module.exports = React.createClass({
         const platform = PlatformPeg.get();
         if ('canSelfUpdate' in platform && platform.canSelfUpdate() && 'startUpdateCheck' in platform) {
             return <div>
-                <h3>{_t('Updates')}</h3>
+                <h3>{ _t('Updates') }</h3>
                 <div className="mx_UserSettings_section">
                     <AccessibleButton className="mx_UserSettings_button" onClick={platform.startUpdateCheck}>
-                        {_t('Check for update')}
+                        { _t('Check for update') }
                     </AccessibleButton>
                 </div>
             </div>;
@@ -1026,7 +1026,7 @@ module.exports = React.createClass({
             reject = (
                 <AccessibleButton className="mx_UserSettings_button danger"
                 onClick={onClick}>
-                    {_t("Reject all %(invitedRooms)s invites", {invitedRooms: invitedRooms.length})}
+                    { _t("Reject all %(invitedRooms)s invites", {invitedRooms: invitedRooms.length}) }
                 </AccessibleButton>
             );
         }
@@ -1034,7 +1034,7 @@ module.exports = React.createClass({
         return <div>
             <h3>{ _t("Bulk Options") }</h3>
                 <div className="mx_UserSettings_section">
-                    {reject}
+                    { reject }
                 </div>
         </div>;
     },
@@ -1052,7 +1052,7 @@ module.exports = React.createClass({
                            defaultChecked={settings['auto-launch']}
                            onChange={this._onAutoLaunchChanged}
                     />
-                    <label htmlFor="auto-launch">{_t('Start automatically after system login')}</label>
+                    <label htmlFor="auto-launch">{ _t('Start automatically after system login') }</label>
                 </div>
             </div>
         </div>;
@@ -1064,7 +1064,7 @@ module.exports = React.createClass({
     },
 
     _mapWebRtcDevicesToSpans: function(devices) {
-        return devices.map((device) => <span key={device.deviceId}>{device.label}</span>);
+        return devices.map((device) => <span key={device.deviceId}>{ device.label }</span>);
     },
 
     _setAudioInput: function(deviceId) {
@@ -1100,15 +1100,15 @@ module.exports = React.createClass({
         if (this.state.mediaDevices === false) {
             return (
                 <p className="mx_UserSettings_link" onClick={this._requestMediaPermissions}>
-                    {_t('Missing Media Permissions, click here to request.')}
+                    { _t('Missing Media Permissions, click here to request.') }
                 </p>
             );
         } else if (!this.state.mediaDevices) return;
 
         const Dropdown = sdk.getComponent('elements.Dropdown');
 
-        let microphoneDropdown = <p>{_t('No Microphones detected')}</p>;
-        let webcamDropdown = <p>{_t('No Webcams detected')}</p>;
+        let microphoneDropdown = <p>{ _t('No Microphones detected') }</p>;
+        let webcamDropdown = <p>{ _t('No Webcams detected') }</p>;
 
         const defaultOption = {
             deviceId: '',
@@ -1125,12 +1125,12 @@ module.exports = React.createClass({
             }
 
             microphoneDropdown = <div>
-                <h4>{_t('Microphone')}</h4>
+                <h4>{ _t('Microphone') }</h4>
                 <Dropdown
                     className="mx_UserSettings_webRtcDevices_dropdown"
                     value={this.state.activeAudioInput || defaultInput}
                     onOptionChange={this._setAudioInput}>
-                    {this._mapWebRtcDevicesToSpans(audioInputs)}
+                    { this._mapWebRtcDevicesToSpans(audioInputs) }
                 </Dropdown>
             </div>;
         }
@@ -1145,25 +1145,25 @@ module.exports = React.createClass({
             }
 
             webcamDropdown = <div>
-                <h4>{_t('Camera')}</h4>
+                <h4>{ _t('Camera') }</h4>
                 <Dropdown
                     className="mx_UserSettings_webRtcDevices_dropdown"
                     value={this.state.activeVideoInput || defaultInput}
                     onOptionChange={this._setVideoInput}>
-                    {this._mapWebRtcDevicesToSpans(videoInputs)}
+                    { this._mapWebRtcDevicesToSpans(videoInputs) }
                 </Dropdown>
             </div>;
         }
 
         return <div>
-                {microphoneDropdown}
-                {webcamDropdown}
+                { microphoneDropdown }
+                { webcamDropdown }
         </div>;
     },
 
     _renderWebRtcSettings: function() {
         return <div>
-            <h3>{_t('VoIP')}</h3>
+            <h3>{ _t('VoIP') }</h3>
             <div className="mx_UserSettings_section">
                 { WEBRTC_SETTINGS_LABELS.map(this._renderLocalSetting) }
                 { this._renderWebRtcDeviceSettings() }
@@ -1229,7 +1229,7 @@ module.exports = React.createClass({
             return (
                 <div className="mx_UserSettings_profileTableRow" key={pidIndex}>
                     <div className="mx_UserSettings_profileLabelCell">
-                        <label htmlFor={id}>{this.nameForMedium(val.medium)}</label>
+                        <label htmlFor={id}>{ this.nameForMedium(val.medium) }</label>
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
                         <input type="text" key={val.address} id={id}
@@ -1237,7 +1237,7 @@ module.exports = React.createClass({
                         />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
-                        <img src="img/cancel-small.svg" width="14" height="14" alt={ _t("Remove") }
+                        <img src="img/cancel-small.svg" width="14" height="14" alt={_t("Remove")}
                             onClick={onRemoveClick} />
                     </div>
                 </div>
@@ -1250,16 +1250,16 @@ module.exports = React.createClass({
             addEmailSection = (
                 <div className="mx_UserSettings_profileTableRow" key="_newEmail">
                     <div className="mx_UserSettings_profileLabelCell">
-                        <label>{_t('Email')}</label>
+                        <label>{ _t('Email') }</label>
                     </div>
                     <div className="mx_UserSettings_profileInputCell">
                         <EditableText
                             ref="add_email_input"
                             className="mx_UserSettings_editable"
                             placeholderClassName="mx_UserSettings_threepidPlaceholder"
-                            placeholder={ _t("Add email address") }
-                            blurToCancel={ false }
-                            onValueChanged={ this._onAddEmailEditFinished } />
+                            placeholder={_t("Add email address")}
+                            blurToCancel={false}
+                            onValueChanged={this._onAddEmailEditFinished} />
                     </div>
                     <div className="mx_UserSettings_threepidButton mx_filterFlipColor">
                          <img src="img/plus.svg" width="14" height="14" alt={_t("Add")} onClick={this._addEmail} />
@@ -1307,8 +1307,8 @@ module.exports = React.createClass({
         return (
             <div className="mx_UserSettings">
                 <SimpleRoomHeader
-                    title={ _t("Settings") }
-                    onCancelClick={ this.props.onClose }
+                    title={_t("Settings")}
+                    onCancelClick={this.props.onClose}
                 />
 
                 <GeminiScrollbar className="mx_UserSettings_body"
@@ -1326,21 +1326,21 @@ module.exports = React.createClass({
                                 <ChangeDisplayName />
                             </div>
                         </div>
-                        {threepidsSection}
+                        { threepidsSection }
                     </div>
 
                     <div className="mx_UserSettings_avatarPicker">
-                        <div onClick={ this.onAvatarPickerClick }>
+                        <div onClick={this.onAvatarPickerClick}>
                             <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
-                                showUploadSection={false} className="mx_UserSettings_avatarPicker_img"/>
+                                showUploadSection={false} className="mx_UserSettings_avatarPicker_img" />
                         </div>
                         <div className="mx_UserSettings_avatarPicker_edit">
                             <label htmlFor="avatarInput" ref="file_label">
                                 <img src="img/camera.svg" className="mx_filterFlipColor"
-                                    alt={ _t("Upload avatar") } title={ _t("Upload avatar") }
+                                    alt={_t("Upload avatar")} title={_t("Upload avatar")}
                                     width="17" height="15" />
                             </label>
-                            <input id="avatarInput" type="file" onChange={this.onAvatarSelected}/>
+                            <input id="avatarInput" type="file" onChange={this.onAvatarSelected} />
                         </div>
                     </div>
                 </div>
@@ -1357,37 +1357,37 @@ module.exports = React.createClass({
                         </div> : null
                     }
 
-                    {accountJsx}
+                    { accountJsx }
                 </div>
 
-                {this._renderReferral()}
+                { this._renderReferral() }
 
-                {notificationArea}
+                { notificationArea }
 
-                {this._renderUserInterfaceSettings()}
-                {this._renderLabs()}
-                {this._renderWebRtcSettings()}
-                {this._renderDevicesPanel()}
-                {this._renderCryptoInfo()}
-                {this._renderIgnoredUsers()}
-                {this._renderBulkOptions()}
-                {this._renderBugReport()}
+                { this._renderUserInterfaceSettings() }
+                { this._renderLabs() }
+                { this._renderWebRtcSettings() }
+                { this._renderDevicesPanel() }
+                { this._renderCryptoInfo() }
+                { this._renderIgnoredUsers() }
+                { this._renderBulkOptions() }
+                { this._renderBugReport() }
 
-                {PlatformPeg.get().isElectron() && this._renderElectronSettings()}
+                { PlatformPeg.get().isElectron() && this._renderElectronSettings() }
 
-                {this._renderAnalyticsControl()}
+                { this._renderAnalyticsControl() }
 
                 <h3>{ _t("Advanced") }</h3>
 
                 <div className="mx_UserSettings_section">
                     <div className="mx_UserSettings_advanced">
-                        { _t("Logged in as:") } {this._me}
+                        { _t("Logged in as:") } { this._me }
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        {_t('Access Token:')}
+                        { _t('Access Token:') }
                         <span className="mx_UserSettings_advanced_spoiler"
                                 onClick={this._showSpoiler}
-                                data-spoiler={ MatrixClientPeg.get().getAccessToken() }>
+                                data-spoiler={MatrixClientPeg.get().getAccessToken()}>
                             &lt;{ _t("click to reveal") }&gt;
                         </span>
                     </div>
@@ -1398,23 +1398,23 @@ module.exports = React.createClass({
                         { _t("Identity Server is") } { MatrixClientPeg.get().getIdentityServerUrl() }
                     </div>
                     <div className="mx_UserSettings_advanced">
-                        {_t('matrix-react-sdk version:')} {(REACT_SDK_VERSION !== '<local>')
+                        { _t('matrix-react-sdk version:') } { (REACT_SDK_VERSION !== '<local>')
                             ? gHVersionLabel('matrix-org/matrix-react-sdk', REACT_SDK_VERSION)
                             : REACT_SDK_VERSION
-                        }<br/>
-                        {_t('riot-web version:')} {(this.state.vectorVersion !== undefined)
+                        }<br />
+                        { _t('riot-web version:') } { (this.state.vectorVersion !== undefined)
                             ? gHVersionLabel('vector-im/riot-web', this.state.vectorVersion)
                             : 'unknown'
-                        }<br/>
-                        { _t("olm version:") } {olmVersionString}<br/>
+                        }<br />
+                        { _t("olm version:") } { olmVersionString }<br />
                     </div>
                 </div>
 
-                {this._renderCheckUpdate()}
+                { this._renderCheckUpdate() }
 
-                {this._renderClearCache()}
+                { this._renderClearCache() }
 
-                {this._renderDeactivateAccount()}
+                { this._renderDeactivateAccount() }
 
                 </GeminiScrollbar>
             </div>

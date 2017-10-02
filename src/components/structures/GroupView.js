@@ -72,7 +72,7 @@ const CategoryRoomList = React.createClass({
             placeholder: _t("Room name or alias"),
             button: _t("Add to summary"),
             pickerType: 'room',
-            validAddressTypes: ['mx'],
+            validAddressTypes: ['mx-room-id'],
             groupId: this.props.groupId,
             onFinished: (success, addrs) => {
                 if (!success) return;
@@ -106,9 +106,9 @@ const CategoryRoomList = React.createClass({
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const addButton = this.props.editing ?
             (<AccessibleButton className="mx_GroupView_featuredThings_addButton" onClick={this.onAddRoomsClicked}>
-                <TintableSvg src="img/icons-create-room.svg" width="64" height="64"/>
+                <TintableSvg src="img/icons-create-room.svg" width="64" height="64" />
                 <div className="mx_GroupView_featuredThings_addButton_label">
-                    {_t('Add a Room')}
+                    { _t('Add a Room') }
                 </div>
             </AccessibleButton>) : <div />;
 
@@ -117,17 +117,19 @@ const CategoryRoomList = React.createClass({
                 key={r.room_id}
                 groupId={this.props.groupId}
                 editing={this.props.editing}
-                summaryInfo={r}/>;
+                summaryInfo={r} />;
         });
 
         let catHeader = <div />;
         if (this.props.category && this.props.category.profile) {
-            catHeader = <div className="mx_GroupView_featuredThings_category">{this.props.category.profile.name}</div>;
+            catHeader = <div className="mx_GroupView_featuredThings_category">
+            { this.props.category.profile.name }
+        </div>;
         }
         return <div className="mx_GroupView_featuredThings_container">
-            {catHeader}
-            {roomNodes}
-            {addButton}
+            { catHeader }
+            { roomNodes }
+            { addButton }
         </div>;
     },
 });
@@ -179,20 +181,26 @@ const FeaturedRoom = React.createClass({
     render: function() {
         const RoomAvatar = sdk.getComponent("avatars.RoomAvatar");
 
+        const roomName = this.props.summaryInfo.profile.name ||
+            this.props.summaryInfo.profile.canonical_alias ||
+            _t("Unnamed Room");
+
         const oobData = {
             roomId: this.props.summaryInfo.room_id,
             avatarUrl: this.props.summaryInfo.profile.avatar_url,
-            name: this.props.summaryInfo.profile.name,
+            name: roomName,
         };
+
         let permalink = null;
         if (this.props.summaryInfo.profile && this.props.summaryInfo.profile.canonical_alias) {
             permalink = 'https://matrix.to/#/' + this.props.summaryInfo.profile.canonical_alias;
         }
+
         let roomNameNode = null;
         if (permalink) {
-            roomNameNode = <a href={permalink} onClick={this.onClick} >{this.props.summaryInfo.profile.name}</a>;
+            roomNameNode = <a href={permalink} onClick={this.onClick} >{ roomName }</a>;
         } else {
-            roomNameNode = <span>{this.props.summaryInfo.profile.name}</span>;
+            roomNameNode = <span>{ roomName }</span>;
         }
 
         const deleteButton = this.props.editing ?
@@ -202,13 +210,13 @@ const FeaturedRoom = React.createClass({
                 width="14"
                 height="14"
                 alt="Delete"
-                onClick={this.onDeleteClicked}/>
+                onClick={this.onDeleteClicked} />
             : <div />;
 
         return <AccessibleButton className="mx_GroupView_featuredThing" onClick={this.onClick}>
             <RoomAvatar oobData={oobData} width={64} height={64} />
-            <div className="mx_GroupView_featuredThing_name">{roomNameNode}</div>
-            {deleteButton}
+            <div className="mx_GroupView_featuredThing_name">{ roomNameNode }</div>
+            { deleteButton }
         </AccessibleButton>;
     },
 });
@@ -237,8 +245,9 @@ const RoleUserList = React.createClass({
             description: _t("Who would you like to add to this summary?"),
             placeholder: _t("Name or matrix ID"),
             button: _t("Add to summary"),
-            validAddressTypes: ['mx'],
+            validAddressTypes: ['mx-user-id'],
             groupId: this.props.groupId,
+            shouldOmitSelf: false,
             onFinished: (success, addrs) => {
                 if (!success) return;
                 const errorList = [];
@@ -271,9 +280,9 @@ const RoleUserList = React.createClass({
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const addButton = this.props.editing ?
             (<AccessibleButton className="mx_GroupView_featuredThings_addButton" onClick={this.onAddUsersClicked}>
-                 <TintableSvg src="img/icons-create-room.svg" width="64" height="64"/>
+                 <TintableSvg src="img/icons-create-room.svg" width="64" height="64" />
                  <div className="mx_GroupView_featuredThings_addButton_label">
-                     {_t('Add a User')}
+                     { _t('Add a User') }
                  </div>
              </AccessibleButton>) : <div />;
         const userNodes = this.props.users.map((u) => {
@@ -281,16 +290,16 @@ const RoleUserList = React.createClass({
                 key={u.user_id}
                 summaryInfo={u}
                 editing={this.props.editing}
-                groupId={this.props.groupId}/>;
+                groupId={this.props.groupId} />;
         });
         let roleHeader = <div />;
         if (this.props.role && this.props.role.profile) {
-            roleHeader = <div className="mx_GroupView_featuredThings_category">{this.props.role.profile.name}</div>;
+            roleHeader = <div className="mx_GroupView_featuredThings_category">{ this.props.role.profile.name }</div>;
         }
         return <div className="mx_GroupView_featuredThings_container">
-            {roleHeader}
-            {userNodes}
-            {addButton}
+            { roleHeader }
+            { userNodes }
+            { addButton }
         </div>;
     },
 });
@@ -342,7 +351,7 @@ const FeaturedUser = React.createClass({
         const name = this.props.summaryInfo.displayname || this.props.summaryInfo.user_id;
 
         const permalink = 'https://matrix.to/#/' + this.props.summaryInfo.user_id;
-        const userNameNode = <a href={permalink} onClick={this.onClick}>{name}</a>;
+        const userNameNode = <a href={permalink} onClick={this.onClick}>{ name }</a>;
         const httpUrl = MatrixClientPeg.get()
             .mxcUrlToHttp(this.props.summaryInfo.avatar_url, 64, 64);
 
@@ -353,13 +362,13 @@ const FeaturedUser = React.createClass({
                 width="14"
                 height="14"
                 alt="Delete"
-                onClick={this.onDeleteClicked}/>
+                onClick={this.onDeleteClicked} />
             : <div />;
 
         return <AccessibleButton className="mx_GroupView_featuredThing" onClick={this.onClick}>
             <BaseAvatar name={name} url={httpUrl} width={64} height={64} />
-            <div className="mx_GroupView_featuredThing_name">{userNameNode}</div>
-            {deleteButton}
+            <div className="mx_GroupView_featuredThing_name">{ userNameNode }</div>
+            { deleteButton }
         </AccessibleButton>;
     },
 });
@@ -625,7 +634,7 @@ export default React.createClass({
         const defaultCategoryNode = <CategoryRoomList
             rooms={defaultCategoryRooms}
             groupId={this.props.groupId}
-            editing={this.state.editing}/>;
+            editing={this.state.editing} />;
         const categoryRoomNodes = Object.keys(categoryRooms).map((catId) => {
             const cat = summary.rooms_section.categories[catId];
             return <CategoryRoomList
@@ -633,15 +642,15 @@ export default React.createClass({
                 rooms={categoryRooms[catId]}
                 category={cat}
                 groupId={this.props.groupId}
-                editing={this.state.editing}/>;
+                editing={this.state.editing} />;
         });
 
         return <div className="mx_GroupView_featuredThings">
             <div className="mx_GroupView_featuredThings_header">
-                {_t('Featured Rooms:')}
+                { _t('Featured Rooms:') }
             </div>
-            {defaultCategoryNode}
-            {categoryRoomNodes}
+            { defaultCategoryNode }
+            { categoryRoomNodes }
         </div>;
     },
 
@@ -666,7 +675,7 @@ export default React.createClass({
         const noRoleNode = <RoleUserList
             users={noRoleUsers}
             groupId={this.props.groupId}
-            editing={this.state.editing}/>;
+            editing={this.state.editing} />;
         const roleUserNodes = Object.keys(roleUsers).map((roleId) => {
             const role = summary.users_section.roles[roleId];
             return <RoleUserList
@@ -674,15 +683,15 @@ export default React.createClass({
                 users={roleUsers[roleId]}
                 role={role}
                 groupId={this.props.groupId}
-                editing={this.state.editing}/>;
+                editing={this.state.editing} />;
         });
 
         return <div className="mx_GroupView_featuredThings">
             <div className="mx_GroupView_featuredThings_header">
-                {_t('Featured Users:')}
+                { _t('Featured Users:') }
             </div>
-            {noRoleNode}
-            {roleUserNodes}
+            { noRoleNode }
+            { roleUserNodes }
         </div>;
     },
 
@@ -701,18 +710,18 @@ export default React.createClass({
 
             return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_invited">
                 <div className="mx_GroupView_membershipSection_description">
-                    {_t("%(inviter)s has invited you to join this group", {inviter: group.inviter.userId})}
+                    { _t("%(inviter)s has invited you to join this group", {inviter: group.inviter.userId}) }
                 </div>
                 <div className="mx_GroupView_membership_buttonContainer">
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                         onClick={this._onAcceptInviteClick}
                     >
-                        {_t("Accept")}
+                        { _t("Accept") }
                     </AccessibleButton>
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                         onClick={this._onRejectInviteClick}
                     >
-                        {_t("Decline")}
+                        { _t("Decline") }
                     </AccessibleButton>
                 </div>
             </div>;
@@ -733,13 +742,13 @@ export default React.createClass({
                     publicisedButton = <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                             onClick={this._onPubliciseOffClick}
                         >
-                            {_t("Unpublish")}
+                            { _t("Unpublish") }
                         </AccessibleButton>;
                 }
                 publicisedSection = <div className="mx_GroupView_membershipSubSection">
-                    {_t("This group is published on your profile")}
+                    { _t("This group is published on your profile") }
                     <div className="mx_GroupView_membership_buttonContainer">
-                        {publicisedButton}
+                        { publicisedButton }
                     </div>
                 </div>;
             } else {
@@ -747,13 +756,13 @@ export default React.createClass({
                     publicisedButton = <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                         onClick={this._onPubliciseOnClick}
                     >
-                        {_t("Publish")}
+                        { _t("Publish") }
                     </AccessibleButton>;
                 }
                 publicisedSection = <div className="mx_GroupView_membershipSubSection">
-                    {_t("This group is not published on your profile")}
+                    { _t("This group is not published on your profile") }
                     <div className="mx_GroupView_membership_buttonContainer">
-                        {publicisedButton}
+                        { publicisedButton }
                     </div>
                 </div>;
             }
@@ -761,17 +770,17 @@ export default React.createClass({
             return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_joined">
                 <div className="mx_GroupView_membershipSubSection">
                     <div className="mx_GroupView_membershipSection_description">
-                        {youAreAMemberText}
+                        { youAreAMemberText }
                     </div>
                     <div className="mx_GroupView_membership_buttonContainer">
                         <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                             onClick={this._onLeaveClick}
                         >
-                            {_t("Leave")}
+                            { _t("Leave") }
                         </AccessibleButton>
                     </div>
                 </div>
-                {publicisedSection}
+                { publicisedSection }
             </div>;
         }
 
@@ -811,15 +820,15 @@ export default React.createClass({
                 avatarNode = (
                     <div className="mx_GroupView_avatarPicker">
                         <label htmlFor="avatarInput" className="mx_GroupView_avatarPicker_label">
-                            {avatarImage}
+                            { avatarImage }
                         </label>
                         <div className="mx_GroupView_avatarPicker_edit">
                             <label htmlFor="avatarInput" className="mx_GroupView_avatarPicker_label">
                                 <img src="img/camera.svg"
-                                    alt={ _t("Upload avatar") } title={ _t("Upload avatar") }
+                                    alt={_t("Upload avatar")} title={_t("Upload avatar")}
                                     width="17" height="15" />
                             </label>
-                            <input id="avatarInput" className="mx_GroupView_uploadInput" type="file" onChange={this._onAvatarSelected}/>
+                            <input id="avatarInput" className="mx_GroupView_uploadInput" type="file" onChange={this._onAvatarSelected} />
                         </div>
                     </div>
                 );
@@ -839,13 +848,13 @@ export default React.createClass({
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                         onClick={this._onSaveClick} key="_saveButton"
                     >
-                        {_t('Save')}
+                        { _t('Save') }
                     </AccessibleButton>,
                 );
                 rightButtons.push(
-                    <AccessibleButton className='mx_GroupView_textButton' onClick={this._onCancelClick} key="_cancelButton">
-                        <img src="img/cancel.svg" className='mx_filterFlipColor'
-                            width="18" height="18" alt={_t("Cancel")}/>
+                    <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this._onCancelClick} key="_cancelButton">
+                        <img src="img/cancel.svg" className="mx_filterFlipColor"
+                            width="18" height="18" alt={_t("Cancel")} />
                     </AccessibleButton>,
                 );
                 roomBody = <div>
@@ -853,8 +862,8 @@ export default React.createClass({
                         onChange={this._onLongDescChange}
                         tabIndex="3"
                     />
-                    {this._getFeaturedRoomsNode()}
-                    {this._getFeaturedUsersNode()}
+                    { this._getFeaturedRoomsNode() }
+                    { this._getFeaturedUsersNode() }
                 </div>;
             } else {
                 const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;
@@ -865,41 +874,41 @@ export default React.createClass({
                 />;
                 if (summary.profile && summary.profile.name) {
                     nameNode = <div>
-                        <span>{summary.profile.name}</span>
+                        <span>{ summary.profile.name }</span>
                         <span className="mx_GroupView_header_groupid">
-                            ({this.props.groupId})
+                            ({ this.props.groupId })
                         </span>
                     </div>;
                 } else {
-                    nameNode = <span>{this.props.groupId}</span>;
+                    nameNode = <span>{ this.props.groupId }</span>;
                 }
-                shortDescNode = <span>{summary.profile.short_description}</span>;
+                shortDescNode = <span>{ summary.profile.short_description }</span>;
 
                 let description = null;
                 if (summary.profile && summary.profile.long_description) {
                     description = sanitizedHtmlNode(summary.profile.long_description);
                 }
                 roomBody = <div>
-                    {this._getMembershipSection()}
-                    <div className="mx_GroupView_groupDesc">{description}</div>
-                    {this._getFeaturedRoomsNode()}
-                    {this._getFeaturedUsersNode()}
+                    { this._getMembershipSection() }
+                    <div className="mx_GroupView_groupDesc">{ description }</div>
+                    { this._getFeaturedRoomsNode() }
+                    { this._getFeaturedUsersNode() }
                 </div>;
                 if (summary.user && summary.user.is_privileged) {
                     rightButtons.push(
                         <AccessibleButton className="mx_GroupHeader_button"
                             onClick={this._onEditClick} title={_t("Edit Group")} key="_editButton"
                         >
-                            <TintableSvg src="img/icons-settings-room.svg" width="16" height="16"/>
+                            <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
                         </AccessibleButton>,
                     );
                 }
                 if (this.props.collapsedRhs) {
                     rightButtons.push(
                         <AccessibleButton className="mx_GroupHeader_button"
-                            onClick={this._onShowRhsClick} title={ _t('Show panel') } key="_maximiseButton"
+                            onClick={this._onShowRhsClick} title={_t('Show panel')} key="_maximiseButton"
                         >
-                            <TintableSvg src="img/maximise.svg" width="10" height="16"/>
+                            <TintableSvg src="img/maximise.svg" width="10" height="16" />
                         </AccessibleButton>,
                     );
                 }
@@ -912,40 +921,40 @@ export default React.createClass({
                     <div className={classnames(headerClasses)}>
                         <div className="mx_GroupView_header_leftCol">
                             <div className="mx_GroupView_header_avatar">
-                                {avatarNode}
+                                { avatarNode }
                             </div>
                             <div className="mx_GroupView_header_info">
                                 <div className="mx_GroupView_header_name">
-                                    {nameNode}
+                                    { nameNode }
                                 </div>
                                 <div className="mx_GroupView_header_shortDesc">
-                                    {shortDescNode}
+                                    { shortDescNode }
                                 </div>
                             </div>
                         </div>
                         <div className="mx_GroupView_header_rightCol">
-                            {rightButtons}
+                            { rightButtons }
                         </div>
                     </div>
-                    {roomBody}
+                    { roomBody }
                 </div>
             );
         } else if (this.state.error) {
             if (this.state.error.httpStatus === 404) {
                 return (
                     <div className="mx_GroupView_error">
-                        Group {this.props.groupId} not found
+                        Group { this.props.groupId } not found
                     </div>
                 );
             } else {
                 let extraText;
                 if (this.state.error.errcode === 'M_UNRECOGNIZED') {
-                    extraText = <div>{_t('This Home server does not support groups')}</div>;
+                    extraText = <div>{ _t('This Home server does not support groups') }</div>;
                 }
                 return (
                     <div className="mx_GroupView_error">
-                        Failed to load {this.props.groupId}
-                        {extraText}
+                        Failed to load { this.props.groupId }
+                        { extraText }
                     </div>
                 );
             }

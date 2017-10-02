@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,19 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
+import sdk from '../../../index';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import React from 'react';
 
-module.exports = React.createClass({
-    displayName: 'LoginFooter',
+const GroupsButton = function(props) {
+    const ActionButton = sdk.getComponent('elements.ActionButton');
+    return (
+        <ActionButton action="view_my_groups"
+            label={_t("Groups")}
+            iconPath="img/icons-groups.svg"
+            size={props.size}
+            tooltip={props.tooltip}
+        />
+    );
+};
 
-    render: function() {
-        return (
-            <div className="mx_Login_links">
-                <a href="https://matrix.org">{ _t("powered by Matrix") }</a>
-            </div>
-        );
-    },
-});
+GroupsButton.propTypes = {
+    size: PropTypes.string,
+    tooltip: PropTypes.bool,
+};
+
+export default GroupsButton;

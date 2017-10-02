@@ -65,10 +65,10 @@ export default React.createClass({
             >
                 <div className="mx_Dialog_content">
                     <div className="mx_TextInputDialog_label">
-                        <label htmlFor="textinput"> {this.props.description} </label>
+                        <label htmlFor="textinput"> { this.props.description } </label>
                     </div>
                     <div>
-                        <input id="textinput" ref="textinput" className="mx_TextInputDialog_input" defaultValue={this.props.value} autoFocus={this.props.focus} size="64" onKeyDown={this.onKeyDown}/>
+                        <input id="textinput" ref="textinput" className="mx_TextInputDialog_input" defaultValue={this.props.value} autoFocus={this.props.focus} size="64" onKeyDown={this.onKeyDown} />
                     </div>
                 </div>
                 <div className="mx_Dialog_buttons">
@@ -76,7 +76,7 @@ export default React.createClass({
                         { _t("Cancel") }
                     </button>
                     <button className="mx_Dialog_primary" onClick={this.onOk}>
-                        {this.props.button}
+                        { this.props.button }
                     </button>
                 </div>
             </BaseDialog>

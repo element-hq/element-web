@@ -27,7 +27,7 @@ export function showGroupInviteDialog(groupId) {
         description: _t("Who would you like to add to this group?"),
         placeholder: _t("Name or matrix ID"),
         button: _t("Invite to Group"),
-        validAddressTypes: ['mx'],
+        validAddressTypes: ['mx-user-id'],
         onFinished: (success, addrs) => {
             if (!success) return;
 
@@ -45,7 +45,7 @@ export function showGroupAddRoomDialog(groupId) {
             placeholder: _t("Room name or alias"),
             button: _t("Add to group"),
             pickerType: 'room',
-            validAddressTypes: ['mx'],
+            validAddressTypes: ['mx-room-id'],
             onFinished: (success, addrs) => {
                 if (!success) return;
 

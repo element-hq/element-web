@@ -554,7 +554,6 @@
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device": "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device",
     "You have <a>disabled</a> URL previews by default.": "You have <a>disabled</a> URL previews by default.",
     "You have <a>enabled</a> URL previews by default.": "You have <a>enabled</a> URL previews by default.",
-    "You have entered an invalid contact. Try using their Matrix ID or email address.": "You have entered an invalid contact. Try using their Matrix ID or email address.",
     "You have no visible notifications": "You have no visible notifications",
     "You may wish to login with a different account, or add this email to this account.": "You may wish to login with a different account, or add this email to this account.",
     "you must be a": "you must be a",
@@ -894,5 +893,10 @@
     "Unpublish": "Unpublish",
     "This group is published on your profile": "This group is published on your profile",
     "Publish": "Publish",
-    "This group is not published on your profile": "This group is not published on your profile"
+    "This group is not published on your profile": "This group is not published on your profile",
+    "Matrix ID": "Matrix ID",
+    "Matrix Room ID": "Matrix Room ID",
+    "email address": "email address",
+    "Try using one of the following valid address types: %(validTypesList)s.": "Try using one of the following valid address types: %(validTypesList)s.",
+    "You have entered an invalid address.": "You have entered an invalid address."
 }

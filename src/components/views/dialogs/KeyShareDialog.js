@@ -126,17 +126,17 @@ export default React.createClass({
 
         return (
             <div>
-                <p>{text}</p>
+                <p>{ text }</p>
 
                 <div className="mx_Dialog_buttons">
                     <button onClick={this._onVerifyClicked}>
-                        {_t('Start verification')}
+                        { _t('Start verification') }
                     </button>
                     <button onClick={this._onShareClicked}>
-                        {_t('Share without verifying')}
+                        { _t('Share without verifying') }
                     </button>
                     <button onClick={this._onIgnoreClicked}>
-                        {_t('Ignore request')}
+                        { _t('Ignore request') }
                     </button>
                 </div>
             </div>
@@ -154,7 +154,7 @@ export default React.createClass({
         } else {
             content = (
                 <div>
-                    <p>{_t('Loading device info...')}</p>
+                    <p>{ _t('Loading device info...') }</p>
                     <Spinner />
                 </div>
             );
@@ -165,7 +165,7 @@ export default React.createClass({
                 onFinished={this.props.onFinished}
                 title={_t('Encryption key request')}
             >
-                {content}
+                { content }
             </BaseDialog>
         );
     },

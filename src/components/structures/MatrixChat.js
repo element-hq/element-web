@@ -853,7 +853,7 @@ module.exports = React.createClass({
             title: _t("Leave room"),
             description: (
                 <span>
-                {_t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name})}
+                { _t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name}) }
                 </span>
             ),
             onFinished: (shouldLeave) => {
@@ -1450,7 +1450,7 @@ module.exports = React.createClass({
                 return (
                     <div className="mx_MatrixChat_splash">
                         <Spinner />
-                        <a href="#" className="mx_MatrixChat_splashButtons" onClick={ this.onLogoutClick }>
+                        <a href="#" className="mx_MatrixChat_splashButtons" onClick={this.onLogoutClick}>
                         { _t('Logout') }
                         </a>
                     </div>
