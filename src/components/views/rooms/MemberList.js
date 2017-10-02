@@ -372,7 +372,7 @@ module.exports = React.createClass({
     },
 
     _getChildrenInvited: function(start, end) {
-        return this._makeMemberTiles(this.state.filteredInvitedMembers.slice(start, end));
+        return this._makeMemberTiles(this.state.filteredInvitedMembers.slice(start, end), 'invite');
     },
 
     _getChildCountInvited: function() {
