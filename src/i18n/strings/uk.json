@@ -110,5 +110,10 @@
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s змінив(ла) рівень доступу для %(powerLevelDiffText)s.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s змінив(ла) назву кімнати на %(roomName)s.",
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s видалив ім'я кімнати.",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s змінив тему на %(topic)s."
+    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s змінив тему на %(topic)s.",
+    "Email": "е-почта",
+    "Email address": "Адреса е-почти",
+    "Email address (optional)": "Адреса е-почти (не обов'язково)",
+    "Email, name or matrix ID": "Е-почта, ім'я або matrix ID",
+    "Failed to send email": "Помилка відправки  е-почти"
 }
