@@ -30,7 +30,7 @@
     "Failed to add tag %(tagName)s to room": "Falha ao adicionar %(tagName)s à sala",
     "Failed to change settings": "Falhou ao mudar as preferências",
     "Failed to forget room %(errCode)s": "Falhou ao esquecer a sala %(errCode)s",
-    "Failed to update keywords": "Falhou ao alterar as palavras-chave",
+    "Failed to update keywords": "Falha ao alterar as palavras-chave",
     "Failed to get protocol list from Home Server": "Falha em acessar a lista de protocolos do servidor padrão",
     "Failed to get public room list": "Falha ao acessar a lista pública de salas",
     "Failed to join the room": "Falhou ao entrar na sala",
