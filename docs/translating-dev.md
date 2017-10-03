@@ -8,9 +8,23 @@
 
 ## Translating strings vs. marking strings for translation
 
-Translating strings are done with the `_t()` function found in matrix-react-sdk/lib/languageHandler.js. It is recommended to call this function wherever you introduce a string constant which should be translated. However, translating can not be performed until after the translation system has been initialized. Thus, sometimes translation must be performed at a different location in the source code than where the string is introduced. This breaks some tooling and makes it difficult to find translatable strings. Therefore, there is the alternative `_td()` function which is used to mark strings for translation, without actually performig the translation (which must still be performed separately, and after the translation system has been initialized).
+Translating strings are done with the `_t()` function found in matrix-react-sdk/lib/languageHandler.js. It is recommended to call this function wherever you introduce a string constant which should be translated. However, translating can not be performed until after the translation system has been initialized. Thus, sometimes translation must be performed at a different location in the source code than where the string is introduced. This breaks some tooling and makes it difficult to find translatable strings. Therefore, there is the alternative `_td()` function which is used to mark strings for translation, without actually performing the translation (which must still be performed separately, and after the translation system has been initialized).
 
 Basically, whenever a translatable string is introduced, you should call either `_t()` immediately OR `_td()` and later `_t()`.
+
+Example:
+```
+// Module-level constant
+const COLORS = {
+    '#f8481c': _td('reddish orange'), // Can't call _t() here yet
+    '#fc2647': _td('pinky red') // Use _td() instead so the text is picked up for translation anyway
+}
+
+// Function that is called some time after i18n has been loaded
+function getColorName(hex) {
+    return _t(COLORS[hex]); // Perform actual translation here
+}
+```
 
 ## Adding new strings
 
@@ -27,7 +41,7 @@ Basically, whenever a translatable string is introduced, you should call either 
 
 ## Things to know/Style Guides
 
-- Do not use `_t()` inside ``getDefaultProps`` at the point where ``getDefaultProps`` is initialized when the translations aren't loaded yet and it causes missing translations. Use `_td()` instead and perform the actual translation later.
+- Do not use `_t()` inside ``getDefaultProps``: the translations aren't loaded when `getDefaultProps` is called, leading to missing translations. Use `_td()` to indicate that `_t()` will be called on the string later.
 - If using translated strings as constants, translated strings can't be in constants loaded at class-load time since the translations won't be loaded. Mark the strings using `_td()` instead and perform the actual translation later.
 - If a string is presented in the UI with punctuation like a full stop, include this in the translation strings, since punctuation varies between languages too.
 - Avoid "translation in parts", i.e. concatenating translated strings or using translated strings in variable substitutions. Context is important for translations, and translating partial strings this way is simply not always possible.
