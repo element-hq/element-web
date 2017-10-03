@@ -217,5 +217,6 @@
     "Invite to this group": "In diese Gruppe einladen",
     "Filter results": "Ergebnisse filtern",
     "You must specify an event type!": "Du musst einen Event-Typ spezifizieren!",
-    "Add room to this group": "Raum zu dieser Gruppe hinzufügen"
+    "Add room to this group": "Raum zu dieser Gruppe hinzufügen",
+    "Show message in desktop notification": "Nachricht in der Desktop-Benachrichtigung anzeigen"
 }
