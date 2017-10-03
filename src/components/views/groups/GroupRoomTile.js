@@ -67,9 +67,11 @@ const GroupRoomTile = React.createClass({
         e.stopPropagation();
         const groupId = this.props.groupId;
         const roomName = this.state.name;
+        const roomId = this.props.groupRoom.roomId;
         this.context.matrixClient
-            .removeRoomFromGroup(groupId, this.props.groupRoom.roomId)
+            .removeRoomFromGroup(groupId, roomId)
             .catch((err) => {
+                console.error(`Error whilst removing ${roomId} from ${groupId}`, err);
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Failed to remove room from group', '', ErrorDialog, {
                     title: _t("Failed to remove room from group"),
