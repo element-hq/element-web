@@ -221,8 +221,8 @@
     "Back": "Zurück",
     "Developer Tools": "Entwicklerwerkzeuge",
     "Failed to send custom event.": "Senden des benutzerdefinierten Events fehlgeschlagen.",
-    "Send Custom Event": "Sende benutzerdefiniertes Event",
-    "Send Custom State Event": "Sende benutzerdefiniertes Status-Event",
+    "Send Custom Event": "Benutzerdefiniertes Event senden",
+    "Send Custom State Event": "Benutzerdefiniertes Status-Event senden",
     "Explore Room State": "Erkunde Raum-Status",
     "Event sent!": "Event gesendet!",
     "Event Type": "Event-Typ",
@@ -230,5 +230,6 @@
     "State Key": "Status-Schlüssel",
     "Invite to this group": "In diese Gruppe einladen",
     "Filter results": "Ergebnisse filtern",
-    "You must specify an event type!": "Du musst einen Event-Typen spezifizieren!"
+    "You must specify an event type!": "Du musst einen Event-Typ spezifizieren!",
+    "Add room to this group": "Raum zu dieser Gruppe hinzufügen"
 }
