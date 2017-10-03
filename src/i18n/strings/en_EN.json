@@ -895,5 +895,7 @@
     "Matrix Room ID": "Matrix Room ID",
     "email address": "email address",
     "Try using one of the following valid address types: %(validTypesList)s.": "Try using one of the following valid address types: %(validTypesList)s.",
-    "You have entered an invalid address.": "You have entered an invalid address."
+    "You have entered an invalid address.": "You have entered an invalid address.",
+    "Failed to remove room from group": "Failed to remove room from group",
+    "Failed to remove '%(roomName)s' from %(groupId)s": "Failed to remove '%(roomName)s' from %(groupId)s"
 }

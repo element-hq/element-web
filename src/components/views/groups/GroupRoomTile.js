@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { GroupRoomType } from '../../../groups';
+import Modal from '../../../Modal';
 
 const GroupRoomTile = React.createClass({
     displayName: 'GroupRoomTile',
@@ -31,7 +32,19 @@ const GroupRoomTile = React.createClass({
     },
 
     getInitialState: function() {
-        return {};
+        return {
+            name: this.calculateRoomName(this.props.groupRoom),
+        };
+    },
+
+    componentWillReceiveProps: function(newProps) {
+        this.setState({
+            name: this.calculateRoomName(newProps.groupRoom),
+        });
+    },
+
+    calculateRoomName: function(groupRoom) {
+        return groupRoom.name || groupRoom.canonicalAlias || _t("Unnamed Room");
     },
 
     onClick: function(e) {
@@ -52,24 +65,29 @@ const GroupRoomTile = React.createClass({
     onDeleteClick: function(e) {
         e.preventDefault();
         e.stopPropagation();
+        const groupId = this.props.groupId;
+        const roomName = this.state.name;
         this.context.matrixClient
-            .removeRoomFromGroup(this.props.groupId, this.props.groupRoom.roomId);
+            .removeRoomFromGroup(groupId, this.props.groupRoom.roomId)
+            .catch((err) => {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createTrackedDialog('Failed to remove room from group', '', ErrorDialog, {
+                    title: _t("Failed to remove room from group"),
+                    description: _t("Failed to remove '%(roomName)s' from %(groupId)s", {groupId, roomName}),
+                });
+            });
     },
 
     render: function() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
-        const name = this.props.groupRoom.name ||
-            this.props.groupRoom.canonicalAlias ||
-            _t("Unnamed Room");
         const avatarUrl = this.context.matrixClient.mxcUrlToHttp(
             this.props.groupRoom.avatarUrl,
             36, 36, 'crop',
         );
 
         const av = (
-            <BaseAvatar name={name}
+            <BaseAvatar name={this.state.name}
                 width={36} height={36}
                 url={avatarUrl}
             />
@@ -81,7 +99,7 @@ const GroupRoomTile = React.createClass({
                     { av }
                 </div>
                 <div className="mx_GroupRoomTile_name">
-                    { name }
+                    { this.state.name }
                 </div>
                 <AccessibleButton className="mx_GroupRoomTile_delete" onClick={this.onDeleteClick}>
                     <img src="img/cancel-small.svg" />
