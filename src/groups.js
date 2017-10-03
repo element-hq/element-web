@@ -24,8 +24,7 @@ export const GroupMemberType = PropTypes.shape({
 
 export const GroupRoomType = PropTypes.shape({
     name: PropTypes.string,
-    // TODO: API doesn't return this yet
-    // roomId: PropTypes.string.isRequired,
+    roomId: PropTypes.string.isRequired,
     canonicalAlias: PropTypes.string,
     avatarUrl: PropTypes.string,
 });
@@ -41,6 +40,7 @@ export function groupMemberFromApiObject(apiObject) {
 export function groupRoomFromApiObject(apiObject) {
     return {
         name: apiObject.name,
+        roomId: apiObject.room_id,
         canonicalAlias: apiObject.canonical_alias,
         avatarUrl: apiObject.avatar_url,
     };

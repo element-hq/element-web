@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { GroupRoomType } from '../../../groups';
+import Modal from '../../../Modal';
 
 const GroupRoomTile = React.createClass({
     displayName: 'GroupRoomTile',
@@ -31,7 +32,35 @@ const GroupRoomTile = React.createClass({
     },
 
     getInitialState: function() {
-        return {};
+        return {
+            name: this.calculateRoomName(this.props.groupRoom),
+        };
+    },
+
+    componentWillReceiveProps: function(newProps) {
+        this.setState({
+            name: this.calculateRoomName(newProps.groupRoom),
+        });
+    },
+
+    calculateRoomName: function(groupRoom) {
+        return groupRoom.name || groupRoom.canonicalAlias || _t("Unnamed Room");
+    },
+
+    removeRoomFromGroup: function() {
+        const groupId = this.props.groupId;
+        const roomName = this.state.name;
+        const roomId = this.props.groupRoom.roomId;
+        this.context.matrixClient
+            .removeRoomFromGroup(groupId, roomId)
+            .catch((err) => {
+                console.error(`Error whilst removing ${roomId} from ${groupId}`, err);
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createTrackedDialog('Failed to remove room from group', '', ErrorDialog, {
+                    title: _t("Failed to remove room from group"),
+                    description: _t("Failed to remove '%(roomName)s' from %(groupId)s", {groupId, roomName}),
+                });
+            });
     },
 
     onClick: function(e) {
@@ -49,20 +78,34 @@ const GroupRoomTile = React.createClass({
         });
     },
 
+    onDeleteClick: function(e) {
+        const groupId = this.props.groupId;
+        const roomName = this.state.name;
+        e.preventDefault();
+        e.stopPropagation();
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createTrackedDialog('Confirm removal of group from room', '', QuestionDialog, {
+            title: _t("Are you sure you want to remove '%(roomName)s' from %(groupId)s?", {roomName, groupId}),
+            description: _t("Removing a room from the group will also remove it from the group page."),
+            button: _t("Remove"),
+            onFinished: (success) => {
+                if (success) {
+                    this.removeRoomFromGroup();
+                }
+            },
+        });
+    },
+
     render: function() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
-        const name = this.props.groupRoom.name ||
-            this.props.groupRoom.canonicalAlias ||
-            _t("Unnamed Room");
         const avatarUrl = this.context.matrixClient.mxcUrlToHttp(
             this.props.groupRoom.avatarUrl,
             36, 36, 'crop',
         );
 
         const av = (
-            <BaseAvatar name={name}
+            <BaseAvatar name={this.state.name}
                 width={36} height={36}
                 url={avatarUrl}
             />
@@ -74,8 +117,11 @@ const GroupRoomTile = React.createClass({
                     { av }
                 </div>
                 <div className="mx_GroupRoomTile_name">
-                    { name }
+                    { this.state.name }
                 </div>
+                <AccessibleButton className="mx_GroupRoomTile_delete" onClick={this.onDeleteClick}>
+                    <img src="img/cancel-small.svg" />
+                </AccessibleButton>
             </AccessibleButton>
         );
     },
