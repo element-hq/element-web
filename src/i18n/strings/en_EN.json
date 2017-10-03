@@ -897,5 +897,7 @@
     "Try using one of the following valid address types: %(validTypesList)s.": "Try using one of the following valid address types: %(validTypesList)s.",
     "You have entered an invalid address.": "You have entered an invalid address.",
     "Failed to remove room from group": "Failed to remove room from group",
-    "Failed to remove '%(roomName)s' from %(groupId)s": "Failed to remove '%(roomName)s' from %(groupId)s"
+    "Failed to remove '%(roomName)s' from %(groupId)s": "Failed to remove '%(roomName)s' from %(groupId)s",
+    "Are you sure you want to remove '%(roomName)s' from %(groupId)s?": "Are you sure you want to remove '%(roomName)s' from %(groupId)s?",
+    "Removing a room from the group will also remove it from the group page.": "Removing a room from the group will also remove it from the group page."
 }

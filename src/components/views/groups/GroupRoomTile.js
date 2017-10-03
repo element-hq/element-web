@@ -47,6 +47,22 @@ const GroupRoomTile = React.createClass({
         return groupRoom.name || groupRoom.canonicalAlias || _t("Unnamed Room");
     },
 
+    removeRoomFromGroup: function() {
+        const groupId = this.props.groupId;
+        const roomName = this.state.name;
+        const roomId = this.props.groupRoom.roomId;
+        this.context.matrixClient
+            .removeRoomFromGroup(groupId, roomId)
+            .catch((err) => {
+                console.error(`Error whilst removing ${roomId} from ${groupId}`, err);
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createTrackedDialog('Failed to remove room from group', '', ErrorDialog, {
+                    title: _t("Failed to remove room from group"),
+                    description: _t("Failed to remove '%(roomName)s' from %(groupId)s", {groupId, roomName}),
+                });
+            });
+    },
+
     onClick: function(e) {
         let roomId;
         let roomAlias;
@@ -63,21 +79,21 @@ const GroupRoomTile = React.createClass({
     },
 
     onDeleteClick: function(e) {
-        e.preventDefault();
-        e.stopPropagation();
         const groupId = this.props.groupId;
         const roomName = this.state.name;
-        const roomId = this.props.groupRoom.roomId;
-        this.context.matrixClient
-            .removeRoomFromGroup(groupId, roomId)
-            .catch((err) => {
-                console.error(`Error whilst removing ${roomId} from ${groupId}`, err);
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Failed to remove room from group', '', ErrorDialog, {
-                    title: _t("Failed to remove room from group"),
-                    description: _t("Failed to remove '%(roomName)s' from %(groupId)s", {groupId, roomName}),
-                });
-            });
+        e.preventDefault();
+        e.stopPropagation();
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        Modal.createTrackedDialog('Confirm removal of group from room', '', QuestionDialog, {
+            title: _t("Are you sure you want to remove '%(roomName)s' from %(groupId)s?", {roomName, groupId}),
+            description: _t("Removing a room from the group will also remove it from the group page."),
+            button: _t("Remove"),
+            onFinished: (success) => {
+                if (success) {
+                    this.removeRoomFromGroup();
+                }
+            },
+        });
     },
 
     render: function() {
