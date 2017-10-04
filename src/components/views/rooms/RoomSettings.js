@@ -631,6 +631,14 @@ module.exports = React.createClass({
 
         var self = this;
 
+        let relatedGroupsSection;
+        if (UserSettingsStore.isFeatureEnabled('feature_groups')) {
+            relatedGroupsSection = <RelatedGroupSettings ref="related_groups"
+                roomId={this.props.room.roomId}
+                canSetRelatedGroups={roomState.mayClientSendStateEvent("m.room.related_groups", cli)}
+                relatedGroupsEvent={this.props.room.currentState.getStateEvents('m.room.related_groups', '')} />;
+        }
+
         var userLevelsSection;
         if (Object.keys(user_levels).length) {
             userLevelsSection =
@@ -855,10 +863,7 @@ module.exports = React.createClass({
                     canonicalAliasEvent={this.props.room.currentState.getStateEvents('m.room.canonical_alias', '')}
                     aliasEvents={this.props.room.currentState.getStateEvents('m.room.aliases')} />
 
-                <RelatedGroupSettings ref="related_groups"
-                    roomId={this.props.room.roomId}
-                    canSetRelatedGroups={roomState.mayClientSendStateEvent("m.room.related_groups", cli)}
-                    relatedGroupsEvent={this.props.room.currentState.getStateEvents('m.room.related_groups', '')} />
+                { relatedGroupsSection }
 
                 <UrlPreviewSettings ref="url_preview_settings" room={this.props.room} />
 
