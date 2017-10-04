@@ -64,8 +64,7 @@ module.exports = React.createClass({
     },
 
     validateGroupId: function(groupId) {
-        const localDomain = this.context.matrixClient.getDomain();
-        if (!GROUP_ID_REGEX.test(groupId) || !groupId.endsWith(localDomain)) {
+        if (!GROUP_ID_REGEX.test(groupId)) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Invalid related group ID', '', ErrorDialog, {
                 title: _t('Invalid group ID'),
@@ -108,7 +107,6 @@ module.exports = React.createClass({
     render: function() {
         const localDomain = this.context.matrixClient.getDomain();
         const EditableItemList = sdk.getComponent('elements.EditableItemList');
-        console.info(this.state.newGroupsList);
         return (<div>
             <h3>{ _t('Related Groups') }</h3>
             <EditableItemList
