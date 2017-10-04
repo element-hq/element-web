@@ -30,19 +30,22 @@ const EditableItem = React.createClass({
         onChange: PropTypes.func,
         onRemove: PropTypes.func,
         onAdd: PropTypes.func,
+
+        addOnChange: PropTypes.bool,
     },
 
     onChange: function(value) {
         this.setState({ value });
         if (this.props.onChange) this.props.onChange(value, this.props.index);
+        if (this.props.addOnChange && this.props.onAdd) this.props.onAdd(value);
     },
 
     onRemove: function() {
-        this.props.onRemove(this.props.index);
+        if (this.props.onRemove) this.props.onRemove(this.props.index);
     },
 
     onAdd: function() {
-        this.props.onAdd(this.state.value);
+        if (this.props.onAdd) this.props.onAdd(this.state.value);
     },
 
     render: function() {
@@ -138,6 +141,7 @@ module.exports = React.createClass({
                 initialValue={this.props.newItem}
                 onAdd={this.onItemAdded}
                 onChange={this.onNewItemChanged}
+                addOnChange={true}
                 placeholder={this.props.placeholder}
             />
         </div>);
