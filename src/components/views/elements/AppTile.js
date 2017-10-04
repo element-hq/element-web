@@ -19,18 +19,19 @@ limitations under the License.
 import url from 'url';
 import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import PlatformPeg from '../../../PlatformPeg';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import sdk from '../../../index';
 import AppPermission from './AppPermission';
 import AppWarning from './AppWarning';
 import MessageSpinner from './MessageSpinner';
 import WidgetUtils from '../../../WidgetUtils';
+import dis from '../../../dispatcher';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
-const betaHelpMsg = 'This feature is currently experimental and is intended for beta testing only';
 
 export default React.createClass({
     displayName: 'AppTile',
@@ -44,6 +45,10 @@ export default React.createClass({
         // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
         // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
         fullWidth: React.PropTypes.bool,
+        // UserId of the current user
+        userId: React.PropTypes.string.isRequired,
+        // UserId of the entity that added / modified the widget
+        creatorUserId: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -59,7 +64,8 @@ export default React.createClass({
             loading: false,
             widgetUrl: this.props.url,
             widgetPermissionId: widgetPermissionId,
-            hasPermissionToLoad: Boolean(hasPermissionToLoad === 'true'),
+            // Assume that widget has permission to load if we are the user who added it to the room, or if explicitly granted by the user
+            hasPermissionToLoad: hasPermissionToLoad === 'true' || this.props.userId === this.props.creatorUserId,
             error: null,
             deleting: false,
         };
@@ -67,8 +73,17 @@ export default React.createClass({
 
     // Returns true if props.url is a scalar URL, typically https://scalar.vector.im/api
     isScalarUrl: function() {
-        const scalarUrl = SdkConfig.get().integrations_rest_url;
-        return scalarUrl && this.props.url.startsWith(scalarUrl);
+        let scalarUrls = SdkConfig.get().integrations_widgets_urls;
+        if (!scalarUrls || scalarUrls.length == 0) {
+            scalarUrls = [SdkConfig.get().integrations_rest_url];
+        }
+
+        for (let i = 0; i < scalarUrls.length; i++) {
+            if (this.props.url.startsWith(scalarUrls[i])) {
+                return true;
+            }
+        }
+        return false;
     },
 
     isMixedContent: function() {
@@ -113,6 +128,30 @@ export default React.createClass({
                 loading: false,
             });
         });
+        window.addEventListener('message', this._onMessage, false);
+    },
+
+    componentWillUnmount() {
+        window.removeEventListener('message', this._onMessage);
+    },
+
+    _onMessage(event) {
+        if (this.props.type !== 'jitsi') {
+            return;
+        }
+        if (!event.origin) {
+            event.origin = event.originalEvent.origin;
+        }
+
+        if (!this.state.widgetUrl.startsWith(event.origin)) {
+            return;
+        }
+
+        if (event.data.widgetAction === 'jitsi_iframe_loaded') {
+            const iframe = this.refs.appFrame.contentWindow
+                .document.querySelector('iframe[id^="jitsiConferenceFrame"]');
+            PlatformPeg.get().setupScreenSharingForIframe(iframe);
+        }
     },
 
     _canUserModify: function() {
@@ -122,7 +161,8 @@ export default React.createClass({
     _onEditClick: function(e) {
         console.log("Edit widget ID ", this.props.id);
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        const src = this._scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId, 'type_' + this.props.type);
+        const src = this._scalarClient.getScalarInterfaceUrlForRoom(
+            this.props.room.roomId, 'type_' + this.props.type, this.props.id);
         Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
             src: src,
         }, "mx_IntegrationsManager");
@@ -155,9 +195,9 @@ export default React.createClass({
     // These strings are translated at the point that they are inserted in to the DOM, in the render method
     _deleteWidgetLabel() {
         if (this._canUserModify()) {
-            return 'Delete widget';
+            return _td('Delete widget');
         }
-        return 'Revoke widget access';
+        return _td('Revoke widget access');
     },
 
     /* TODO -- Store permission in account data so that it is persisted across multiple devices */
@@ -177,9 +217,23 @@ export default React.createClass({
         let appTileName = "No name";
         if(this.props.name && this.props.name.trim()) {
             appTileName = this.props.name.trim();
-            appTileName = appTileName[0].toUpperCase() + appTileName.slice(1).toLowerCase();
         }
         return appTileName;
+    },
+
+    onClickMenuBar: function(ev) {
+        ev.preventDefault();
+
+        // Ignore clicks on menu bar children
+        if (ev.target !== this.refs.menu_bar) {
+            return;
+        }
+
+        // Toggle the view state of the apps drawer
+        dis.dispatch({
+            action: 'appsDrawer',
+            show: !this.props.show,
+        });
     },
 
     render: function() {
@@ -203,42 +257,46 @@ export default React.createClass({
             safeWidgetUrl = url.format(parsedWidgetUrl);
         }
 
-        if (this.state.loading) {
-            appTileBody = (
-                <div className='mx_AppTileBody mx_AppLoading'>
-                    <MessageSpinner msg='Loading...'/>
-                </div>
-            );
-        } else if (this.state.hasPermissionToLoad == true) {
-            if (this.isMixedContent()) {
+        if (this.props.show) {
+            if (this.state.loading) {
+                appTileBody = (
+                    <div className='mx_AppTileBody mx_AppLoading'>
+                        <MessageSpinner msg='Loading...' />
+                    </div>
+                );
+            } else if (this.state.hasPermissionToLoad == true) {
+                if (this.isMixedContent()) {
+                    appTileBody = (
+                        <div className="mx_AppTileBody">
+                            <AppWarning
+                                errorMsg="Error - Mixed content"
+                            />
+                        </div>
+                    );
+                } else {
+                    appTileBody = (
+                        <div className="mx_AppTileBody">
+                            <iframe
+                                ref="appFrame"
+                                src={safeWidgetUrl}
+                                allowFullScreen="true"
+                                sandbox={sandboxFlags}
+                            ></iframe>
+                        </div>
+                    );
+                }
+            } else {
+                const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
                 appTileBody = (
                     <div className="mx_AppTileBody">
-                        <AppWarning
-                            errorMsg="Error - Mixed content"
+                        <AppPermission
+                            isRoomEncrypted={isRoomEncrypted}
+                            url={this.state.widgetUrl}
+                            onPermissionGranted={this._grantWidgetPermission}
                         />
                     </div>
                 );
-            } else {
-                appTileBody = (
-                    <div className="mx_AppTileBody">
-                        <iframe
-                            ref="appFrame"
-                            src={safeWidgetUrl}
-                            allowFullScreen="true"
-                            sandbox={sandboxFlags}
-                        ></iframe>
-                    </div>
-                );
             }
-        } else {
-            appTileBody = (
-                <div className="mx_AppTileBody">
-                    <AppPermission
-                        url={this.state.widgetUrl}
-                        onPermissionGranted={this._grantWidgetPermission}
-                    />
-                </div>
-            );
         }
 
         // editing is done in scalar
@@ -253,21 +311,20 @@ export default React.createClass({
 
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
-                <div className="mx_AppTileMenuBar">
-                    {this.formatAppTileName()}
+                <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
+                    { this.formatAppTileName() }
                     <span className="mx_AppTileMenuBarWidgets">
-                        <span className="mx_Beta" alt={betaHelpMsg} title={betaHelpMsg}>&#946;</span>
-                        {/* Edit widget */}
-                        {showEditButton && <img
+                        { /* Edit widget */ }
+                        { showEditButton && <img
                             src="img/edit.svg"
                             className="mx_filterFlipColor mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
                             width="8" height="8"
                             alt={_t('Edit')}
                             title={_t('Edit')}
                             onClick={this._onEditClick}
-                        />}
+                        /> }
 
-                        {/* Delete widget */}
+                        { /* Delete widget */ }
                         <img src={deleteIcon}
                         className={deleteClasses}
                         width="8" height="8"
@@ -277,7 +334,7 @@ export default React.createClass({
                         />
                     </span>
                 </div>
-                {appTileBody}
+                { appTileBody }
             </div>
         );
     },

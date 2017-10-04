@@ -20,6 +20,8 @@ limitations under the License.
 //  - Drag and drop
 //  - File uploading - uploadFile()
 
+import shouldHideEvent from "../../shouldHideEvent";
+
 var React = require("react");
 var ReactDOM = require("react-dom");
 import Promise from 'bluebird';
@@ -45,6 +47,7 @@ import KeyCode from '../../KeyCode';
 import UserProvider from '../../autocomplete/UserProvider';
 
 import RoomViewStore from '../../stores/RoomViewStore';
+import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 
 let DEBUG = false;
 let debuglog = function() {};
@@ -120,6 +123,9 @@ module.exports = React.createClass({
             // store the error here.
             roomLoadError: null,
 
+            // Have we sent a request to join the room that we're waiting to complete?
+            joining: false,
+
             // this is true if we are fully scrolled-down, and are looking at
             // the end of the live timeline. It has the effect of hiding the
             // 'scroll to bottom' knob, among a couple of other things.
@@ -143,6 +149,8 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomMember.membership", this.onRoomMemberMembership);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
 
+        this._syncedSettings = UserSettingsStore.getSyncedSettings();
+
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._onRoomViewStoreUpdate(true);
@@ -152,6 +160,22 @@ module.exports = React.createClass({
         if (this.unmounted) {
             return;
         }
+
+        if (!initial && this.state.roomId !== RoomViewStore.getRoomId()) {
+            // RoomView explicitly does not support changing what room
+            // is being viewed: instead it should just be re-mounted when
+            // switching rooms. Therefore, if the room ID changes, we
+            // ignore this. We either need to do this or add code to handle
+            // saving the scroll position (otherwise we end up saving the
+            // scroll position against the wrong room).
+
+            // Given that doing the setState here would cause a bunch of
+            // unnecessary work, we just ignore the change since we know
+            // that if the current room ID has changed from what we thought
+            // it was, it means we're about to be unmounted.
+            return;
+        }
+
         const newState = {
             roomId: RoomViewStore.getRoomId(),
             roomAlias: RoomViewStore.getRoomAlias(),
@@ -159,15 +183,10 @@ module.exports = React.createClass({
             roomLoadError: RoomViewStore.getRoomLoadError(),
             joining: RoomViewStore.isJoining(),
             initialEventId: RoomViewStore.getInitialEventId(),
-            initialEventPixelOffset: RoomViewStore.getInitialEventPixelOffset(),
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
             forwardingEvent: RoomViewStore.getForwardingEvent(),
             shouldPeek: RoomViewStore.shouldPeek(),
         };
-
-        // finished joining, start waiting for a room and show a spinner. See onRoom.
-        newState.waitingForRoom = this.state.joining && !newState.joining &&
-                        !RoomViewStore.getJoinError();
 
         // Temporary logging to diagnose https://github.com/vector-im/riot-web/issues/4307
         console.log(
@@ -177,7 +196,6 @@ module.exports = React.createClass({
             'loading?', newState.roomLoading,
             'joining?', newState.joining,
             'initial?', initial,
-            'waiting?', newState.waitingForRoom,
             'shouldPeek?', newState.shouldPeek,
         );
 
@@ -185,6 +203,25 @@ module.exports = React.createClass({
         // the RoomView instance
         if (initial) {
             newState.room = MatrixClientPeg.get().getRoom(newState.roomId);
+            if (newState.room) {
+                newState.unsentMessageError = this._getUnsentMessageError(newState.room);
+                newState.showApps = this._shouldShowApps(newState.room);
+                this._onRoomLoaded(newState.room);
+            }
+        }
+
+        if (this.state.roomId === null && newState.roomId !== null) {
+            // Get the scroll state for the new room
+
+            // If an event ID wasn't specified, default to the one saved for this room
+            // in the scroll state store. Assume initialEventPixelOffset should be set.
+            if (!newState.initialEventId) {
+                const roomScrollState = RoomScrollStateStore.getScrollState(newState.roomId);
+                if (roomScrollState) {
+                    newState.initialEventId = roomScrollState.focussedEvent;
+                    newState.initialEventPixelOffset = roomScrollState.pixelOffset;
+                }
+            }
         }
 
         // Clear the search results when clicking a search result (which changes the
@@ -193,22 +230,20 @@ module.exports = React.createClass({
             newState.searchResults = null;
         }
 
-        // Store the scroll state for the previous room so that we can return to this
-        // position when viewing this room in future.
-        if (this.state.roomId !== newState.roomId) {
-            this._updateScrollMap(this.state.roomId);
-        }
+        this.setState(newState);
+        // At this point, newState.roomId could be null (e.g. the alias might not
+        // have been resolved yet) so anything called here must handle this case.
 
-        this.setState(newState, () => {
-            // At this point, this.state.roomId could be null (e.g. the alias might not
-            // have been resolved yet) so anything called here must handle this case.
-            if (initial) {
-                this._onHaveRoom();
-            }
-        });
+        // We pass the new state into this function for it to read: it needs to
+        // observe the new state but we don't want to put it in the setState
+        // callback because this would prevent the setStates from being batched,
+        // ie. cause it to render RoomView twice rather than the once that is necessary.
+        if (initial) {
+            this._setupRoom(newState.room, newState.roomId, newState.joining, newState.shouldPeek);
+        }
     },
 
-    _onHaveRoom: function() {
+    _setupRoom: function(room, roomId, joining, shouldPeek) {
         // if this is an unknown room then we're in one of three states:
         // - This is a room we can peek into (search engine) (we can /peek)
         // - This is a room we can publicly join or were invited to. (we can /join)
@@ -224,23 +259,15 @@ module.exports = React.createClass({
         // about it). We don't peek in the historical case where we were joined but are
         // now not joined because the js-sdk peeking API will clobber our historical room,
         // making it impossible to indicate a newly joined room.
-        const room = this.state.room;
-        if (room) {
-            this.setState({
-                unsentMessageError: this._getUnsentMessageError(room),
-                showApps: this._shouldShowApps(room),
-            });
-            this._onRoomLoaded(room);
-        }
-        if (!this.state.joining && this.state.roomId) {
+        if (!joining && roomId) {
             if (this.props.autoJoin) {
                 this.onJoinButtonClicked();
-            } else if (!room && this.state.shouldPeek) {
-                console.log("Attempting to peek into room %s", this.state.roomId);
+            } else if (!room && shouldPeek) {
+                console.log("Attempting to peek into room %s", roomId);
                 this.setState({
                     peekLoading: true,
                 });
-                MatrixClientPeg.get().peekInRoom(this.state.roomId).then((room) => {
+                MatrixClientPeg.get().peekInRoom(roomId).then((room) => {
                     this.setState({
                         room: room,
                         peekLoading: false,
@@ -336,7 +363,9 @@ module.exports = React.createClass({
         this.unmounted = true;
 
         // update the scroll map before we get unmounted
-        this._updateScrollMap(this.state.roomId);
+        if (this.state.roomId) {
+            RoomScrollStateStore.setScrollState(this.state.roomId, this._getScrollState());
+        }
 
         if (this.refs.roomView) {
             // disconnect the D&D event listeners from the room view. This
@@ -497,8 +526,7 @@ module.exports = React.createClass({
             // update unread count when scrolled up
             if (!this.state.searchResults && this.state.atEndOfLiveTimeline) {
                 // no change
-            }
-            else {
+            } else if (!shouldHideEvent(ev, this._syncedSettings)) {
                 this.setState((state, props) => {
                     return {numUnreadMessages: state.numUnreadMessages + 1};
                 });
@@ -614,25 +642,12 @@ module.exports = React.createClass({
         });
     },
 
-    _updateScrollMap(roomId) {
-        // No point updating scroll state if the room ID hasn't been resolved yet
-        if (!roomId) {
-            return;
-        }
-        dis.dispatch({
-            action: 'update_scroll_state',
-            room_id: roomId,
-            scroll_state: this._getScrollState(),
-        });
-    },
-
     onRoom: function(room) {
         if (!room || room.roomId !== this.state.roomId) {
             return;
         }
         this.setState({
             room: room,
-            waitingForRoom: false,
         }, () => {
             this._onRoomLoaded(room);
         });
@@ -688,14 +703,7 @@ module.exports = React.createClass({
 
     onRoomMemberMembership: function(ev, member, oldMembership) {
         if (member.userId == MatrixClientPeg.get().credentials.userId) {
-
-            if (member.membership === 'join') {
-                this.setState({
-                    waitingForRoom: false,
-                });
-            } else {
-                this.forceUpdate();
-            }
+            this.forceUpdate();
         }
     },
 
@@ -1445,10 +1453,6 @@ module.exports = React.createClass({
         const Loader = sdk.getComponent("elements.Spinner");
         const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
 
-        // Whether the preview bar spinner should be shown. We do this when joining or
-        // when waiting for a room to be returned by js-sdk when joining
-        const previewBarSpinner = this.state.joining || this.state.waitingForRoom;
-
         if (!this.state.room) {
             if (this.state.roomLoading || this.state.peekLoading) {
                 return (
@@ -1482,7 +1486,7 @@ module.exports = React.createClass({
                                             onRejectClick={ this.onRejectThreepidInviteButtonClicked }
                                             canPreview={ false } error={ this.state.roomLoadError }
                                             roomAlias={roomAlias}
-                                            spinner={previewBarSpinner}
+                                            spinner={this.state.joining}
                                             inviterName={inviterName}
                                             invitedEmail={invitedEmail}
                                             room={this.state.room}
@@ -1525,7 +1529,7 @@ module.exports = React.createClass({
                                             onRejectClick={ this.onRejectButtonClicked }
                                             inviterName={ inviterName }
                                             canPreview={ false }
-                                            spinner={previewBarSpinner}
+                                            spinner={this.state.joining}
                                             room={this.state.room}
                             />
                         </div>
@@ -1600,7 +1604,7 @@ module.exports = React.createClass({
                 <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
                                 onForgetClick={ this.onForgetClick }
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
-                                spinner={previewBarSpinner}
+                                spinner={this.state.joining}
                                 inviterName={inviterName}
                                 invitedEmail={invitedEmail}
                                 canPreview={this.state.canPeek}
@@ -1716,7 +1720,8 @@ module.exports = React.createClass({
         var messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
                 timelineSet={this.state.room.getUnfilteredTimelineSet()}
-                manageReadReceipts={!UserSettingsStore.getSyncedSetting('hideReadReceipts', false)}
+                showReadReceipts={!UserSettingsStore.getSyncedSetting('hideReadReceipts', false)}
+                manageReadReceipts={true}
                 manageReadMarkers={true}
                 hidden={hideMessagePanel}
                 highlightedEventId={highlightedEventId}

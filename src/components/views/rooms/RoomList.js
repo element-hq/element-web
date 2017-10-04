@@ -63,7 +63,6 @@ module.exports = React.createClass({
     propTypes: {
         ConferenceHandler: React.PropTypes.any,
         collapsed: React.PropTypes.bool.isRequired,
-        currentRoom: React.PropTypes.string,
         searchFilter: React.PropTypes.string,
     },
 
@@ -88,7 +87,9 @@ module.exports = React.createClass({
         cli.on("Room.receipt", this.onRoomReceipt);
         cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
+        cli.on("Event.decrypted", this.onEventDecrypted);
         cli.on("accountData", this.onAccountData);
+        cli.on("Group.myMembership", this._onGroupMyMembership);
 
         this.refreshRoomList();
 
@@ -155,7 +156,9 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
+            MatrixClientPeg.get().removeListener("Event.decrypted", this.onEventDecrypted);
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
+            MatrixClientPeg.get().removeListener("Group.myMembership", this._onGroupMyMembership);
         }
         // cancel any pending calls to the rate_limited_funcs
         this._delayedRefreshRoomList.cancelPendingCall();
@@ -224,10 +227,19 @@ module.exports = React.createClass({
         this._delayedRefreshRoomList();
     },
 
+    onEventDecrypted: function(ev) {
+        // An event being decrypted may mean we need to re-order the room list
+        this._delayedRefreshRoomList();
+    },
+
     onAccountData: function(ev) {
         if (ev.getType() == 'm.direct') {
             this._delayedRefreshRoomList();
         }
+    },
+
+    _onGroupMyMembership: function(group) {
+        this.forceUpdate();
     },
 
     _delayedRefreshRoomList: new rate_limited_func(function() {
@@ -544,8 +556,24 @@ module.exports = React.createClass({
         }
     },
 
+    _makeGroupInviteTiles() {
+        const ret = [];
+
+        const GroupInviteTile = sdk.getComponent('groups.GroupInviteTile');
+        for (const group of MatrixClientPeg.get().getGroups()) {
+            if (group.myMembership !== 'invite') continue;
+
+            ret.push(<GroupInviteTile key={group.groupId} group={group} />);
+        }
+
+        return ret;
+    },
+
     render: function() {
-        var RoomSubList = sdk.getComponent('structures.RoomSubList');
+        const RoomSubList = sdk.getComponent('structures.RoomSubList');
+
+        const inviteSectionExtraTiles = this._makeGroupInviteTiles();
+
         var self = this;
         return (
             <GeminiScrollbar className="mx_RoomList_scrollbar"
@@ -555,12 +583,15 @@ module.exports = React.createClass({
                              label={ _t('Invites') }
                              editable={ false }
                              order="recent"
+                             isInvite={true}
                              selectedRoom={ self.props.selectedRoom }
                              incomingCall={ self.state.incomingCall }
                              collapsed={ self.props.collapsed }
                              searchFilter={ self.props.searchFilter }
                              onHeaderClick={ self.onSubListHeaderClick }
-                             onShowMoreRooms={ self.onShowMoreRooms } />
+                             onShowMoreRooms={ self.onShowMoreRooms }
+                             extraTiles={ inviteSectionExtraTiles }
+                />
 
                 <RoomSubList list={ self.state.lists['m.favourite'] }
                              label={ _t('Favourites') }

@@ -65,7 +65,7 @@ module.exports = React.createClass({
         suppressFirstDateSeparator: React.PropTypes.bool,
 
         // whether to show read receipts
-        manageReadReceipts: React.PropTypes.bool,
+        showReadReceipts: React.PropTypes.bool,
 
         // true if updates to the event list should cause the scroll panel to
         // scroll down when we are at the bottom of the window. See ScrollPanel
@@ -241,6 +241,10 @@ module.exports = React.createClass({
 
     // TODO: Implement granular (per-room) hide options
     _shouldShowEvent: function(mxEv) {
+        if (mxEv.sender && MatrixClientPeg.get().isUserIgnored(mxEv.sender.userId)) {
+            return false; // ignored = no show (only happens if the ignore happens after an event was received)
+        }
+
         const EventTile = sdk.getComponent('rooms.EventTile');
         if (!EventTile.haveTileForEvent(mxEv)) {
             return false; // no tile = no show
@@ -339,6 +343,15 @@ module.exports = React.createClass({
                 for (;i + 1 < this.props.events.length; i++) {
                     const collapsedMxEv = this.props.events[i + 1];
 
+                    // Ignore redacted/hidden member events
+                    if (!this._shouldShowEvent(collapsedMxEv)) {
+                        // If this hidden event is the RM and in or at end of a MELS put RM after MELS.
+                        if (collapsedMxEv.getId() === this.props.readMarkerEventId) {
+                            readMarkerInMels = true;
+                        }
+                        continue;
+                    }
+
                     if (!isMembershipChange(collapsedMxEv) ||
                         this._wantsDateSeparator(this.props.events[i], collapsedMxEv.getDate())) {
                         break;
@@ -349,16 +362,16 @@ module.exports = React.createClass({
                         readMarkerInMels = true;
                     }
 
-                    // Ignore redacted/hidden member events
-                    if (!this._shouldShowEvent(collapsedMxEv)) {
-                        continue;
-                    }
-
                     summarisedEvents.push(collapsedMxEv);
                 }
 
+                let highlightInMels = false;
+
                 // At this point, i = the index of the last event in the summary sequence
                 let eventTiles = summarisedEvents.map((e) => {
+                    if (e.getId() === this.props.highlightedEventId) {
+                        highlightInMels = true;
+                    }
                     // In order to prevent DateSeparators from appearing in the expanded form
                     // of MemberEventListSummary, render each member event as if the previous
                     // one was itself. This way, the timestamp of the previous event === the
@@ -372,15 +385,13 @@ module.exports = React.createClass({
                     eventTiles = null;
                 }
 
-                ret.push(
-                    <MemberEventListSummary
-                        key={key}
-                        events={summarisedEvents}
-                        onToggle={this._onWidgetLoad} // Update scroll state
-                    >
-                            {eventTiles}
-                    </MemberEventListSummary>
-                );
+                ret.push(<MemberEventListSummary key={key}
+                    events={summarisedEvents}
+                    onToggle={this._onWidgetLoad} // Update scroll state
+                    startExpanded={highlightInMels}
+                >
+                        {eventTiles}
+                </MemberEventListSummary>);
 
                 if (readMarkerInMels) {
                     ret.push(this._getReadMarkerTile(visible));
@@ -487,7 +498,7 @@ module.exports = React.createClass({
         var scrollToken = mxEv.status ? undefined : eventId;
 
         var readReceipts;
-        if (this.props.manageReadReceipts) {
+        if (this.props.showReadReceipts) {
             readReceipts = this._getReadReceiptsForEvent(mxEv);
         }
         ret.push(
@@ -544,6 +555,9 @@ module.exports = React.createClass({
         room.getReceiptsForEvent(event).forEach((r) => {
             if (!r.userId || r.type !== "m.read" || r.userId === myUserId) {
                 return; // ignore non-read receipts and receipts from self.
+            }
+            if (MatrixClientPeg.get().isUserIgnored(r.userId)) {
+                return; // ignore ignored users
             }
             let member = room.getMember(r.userId);
             if (!member) {

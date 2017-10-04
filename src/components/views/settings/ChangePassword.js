@@ -208,7 +208,7 @@ module.exports = React.createClass({
         if (!this.state.cachedPassword) {
             currentPassword = <div className={rowClassName}>
                 <div className={rowLabelClassName}>
-                    <label htmlFor="passwordold">Current password</label>
+                    <label htmlFor="passwordold">{ _t('Current password') }</label>
                 </div>
                 <div className={rowInputClassName}>
                     <input id="passwordold" type="password" ref="old_input" />

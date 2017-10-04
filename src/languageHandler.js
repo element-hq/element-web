@@ -29,6 +29,12 @@ counterpart.setSeparator('|');
 // Fall back to English
 counterpart.setFallbackLocale('en');
 
+// Function which only purpose is to mark that a string is translatable
+// Does not actually do anything. It's helpful for automatic extraction of translatable strings
+export function _td(s) {
+    return s;
+}
+
 // The translation function. This is just a simple wrapper to counterpart,
 // but exists mostly because we must use the same counterpart instance
 // between modules (ie. here (react-sdk) and the app (riot-web), and if we
@@ -191,7 +197,7 @@ export function getAllLanguagesFromJson() {
 export function getLanguagesFromBrowser() {
     if (navigator.languages && navigator.languages.length) return navigator.languages;
     if (navigator.language) return [navigator.language];
-    return [navigator.userLanguage];
+    return [navigator.userLanguage || "en"];
 }
 
 /**
@@ -231,35 +237,31 @@ export function getCurrentLanguage() {
 }
 
 function getLangsJson() {
-    const deferred = Promise.defer();
-
-    request(
-        { method: "GET", url: i18nFolder + 'languages.json' },
-        (err, response, body) => {
-            if (err || response.status < 200 || response.status >= 300) {
-                deferred.reject({err: err, response: response});
-                return;
+    return new Promise((resolve, reject) => {
+        request(
+            { method: "GET", url: i18nFolder + 'languages.json' },
+            (err, response, body) => {
+                if (err || response.status < 200 || response.status >= 300) {
+                    reject({err: err, response: response});
+                    return;
+                }
+                resolve(JSON.parse(body));
             }
-            deferred.resolve(JSON.parse(body));
-        }
-    );
-    return deferred.promise;
+        );
+    });
 }
 
 function getLanguage(langPath) {
-    const deferred = Promise.defer();
-
-    let response_return = {};
-    request(
-        { method: "GET", url: langPath },
-        (err, response, body) => {
-            if (err || response.status < 200 || response.status >= 300) {
-                deferred.reject({err: err, response: response});
-                return;
+    return new Promise((resolve, reject) => {
+        request(
+            { method: "GET", url: langPath },
+            (err, response, body) => {
+                if (err || response.status < 200 || response.status >= 300) {
+                    reject({err: err, response: response});
+                    return;
+                }
+                resolve(JSON.parse(body));
             }
-
-            deferred.resolve(JSON.parse(body));
-        }
-    );
-    return deferred.promise;
+        );
+    });
 }

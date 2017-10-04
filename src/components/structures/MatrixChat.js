@@ -32,13 +32,12 @@ import dis from "../../dispatcher";
 import Modal from "../../Modal";
 import Tinter from "../../Tinter";
 import sdk from '../../index';
-import { showStartChatInviteDialog, showRoomInviteDialog } from '../../Invite';
+import { showStartChatInviteDialog, showRoomInviteDialog } from '../../RoomInvite';
 import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
 // LifecycleStore is not used but does listen to and dispatch actions
 require('../../stores/LifecycleStore');
-import RoomViewStore from '../../stores/RoomViewStore';
 import PageTypes from '../../PageTypes';
 
 import createRoom from "../../createRoom";
@@ -144,8 +143,8 @@ module.exports = React.createClass({
             // If we're trying to just view a user ID (i.e. /user URL), this is it
             viewUserId: null,
 
-            collapse_lhs: false,
-            collapse_rhs: false,
+            collapseLhs: false,
+            collapseRhs: false,
             leftOpacity: 1.0,
             middleOpacity: 1.0,
             rightOpacity: 1.0,
@@ -213,9 +212,6 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
-
-        this._roomViewStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdated);
-        this._onRoomViewStoreUpdated();
 
         if (!UserSettingsStore.getLocalSetting('analyticsOptOut', false)) Analytics.enable();
 
@@ -353,7 +349,6 @@ module.exports = React.createClass({
         UDEHandler.stopListening();
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
-        this._roomViewStoreToken.remove();
     },
 
     componentDidUpdate: function() {
@@ -439,7 +434,7 @@ module.exports = React.createClass({
                 break;
             case 'view_user':
                 // FIXME: ugly hack to expand the RightPanel and then re-dispatch.
-                if (this.state.collapse_rhs) {
+                if (this.state.collapseRhs) {
                     setTimeout(()=>{
                         dis.dispatch({
                             action: 'show_right_panel',
@@ -521,22 +516,22 @@ module.exports = React.createClass({
                 break;
             case 'hide_left_panel':
                 this.setState({
-                    collapse_lhs: true,
+                    collapseLhs: true,
                 });
                 break;
             case 'show_left_panel':
                 this.setState({
-                    collapse_lhs: false,
+                    collapseLhs: false,
                 });
                 break;
             case 'hide_right_panel':
                 this.setState({
-                    collapse_rhs: true,
+                    collapseRhs: true,
                 });
                 break;
             case 'show_right_panel':
                 this.setState({
-                    collapse_rhs: false,
+                    collapseRhs: false,
                 });
                 break;
             case 'ui_opacity': {
@@ -585,10 +580,6 @@ module.exports = React.createClass({
                 this.onSendEvent(payload.room_id, payload.event);
                 break;
         }
-    },
-
-    _onRoomViewStoreUpdated: function() {
-        this.setState({ currentRoomId: RoomViewStore.getRoomId() });
     },
 
     _setPage: function(pageType) {
@@ -677,10 +668,10 @@ module.exports = React.createClass({
         this.focusComposer = true;
 
         const newState = {
+            currentRoomId: roomInfo.room_id || null,
             page_type: PageTypes.RoomView,
             thirdPartyInvite: roomInfo.third_party_invite,
             roomOobData: roomInfo.oob_data,
-            autoJoin: roomInfo.auto_join,
         };
 
         if (roomInfo.room_alias) {
@@ -860,7 +851,7 @@ module.exports = React.createClass({
             title: _t("Leave room"),
             description: (
                 <span>
-                {_t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name})}
+                { _t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name}) }
                 </span>
             ),
             onFinished: (shouldLeave) => {
@@ -1000,8 +991,8 @@ module.exports = React.createClass({
         this.setStateForNewView({
             view: VIEWS.LOGIN,
             ready: false,
-            collapse_lhs: false,
-            collapse_rhs: false,
+            collapseLhs: false,
+            collapseRhs: false,
             currentRoomId: null,
             page_type: PageTypes.RoomDirectory,
         });
@@ -1066,10 +1057,13 @@ module.exports = React.createClass({
             self.setState({ready: true});
         });
         cli.on('Call.incoming', function(call) {
+            // we dispatch this synchronously to make sure that the event
+            // handlers on the call are set up immediately (so that if
+            // we get an immediate hangup, we don't get a stuck call)
             dis.dispatch({
                 action: 'incoming_call',
                 call: call,
-            });
+            }, true);
         });
         cli.on('Session.logged_out', function(call) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -1454,7 +1448,7 @@ module.exports = React.createClass({
                 return (
                     <div className="mx_MatrixChat_splash">
                         <Spinner />
-                        <a href="#" className="mx_MatrixChat_splashButtons" onClick={ this.onLogoutClick }>
+                        <a href="#" className="mx_MatrixChat_splashButtons" onClick={this.onLogoutClick}>
                         { _t('Logout') }
                         </a>
                     </div>

@@ -45,10 +45,10 @@ export default React.createClass({
         if (SdkConfig.get().bug_report_endpoint_url) {
             bugreport = (
                 <p>
-                {_tJsx(
+                { _tJsx(
                     "Otherwise, <a>click here</a> to send a bug report.",
-                    /<a>(.*?)<\/a>/, (sub) => <a onClick={this._sendBugReport} key="bugreport" href='#'>{sub}</a>,
-                )}
+                    /<a>(.*?)<\/a>/, (sub) => <a onClick={this._sendBugReport} key="bugreport" href='#'>{ sub }</a>,
+                ) }
                 </p>
             );
         }
@@ -57,19 +57,19 @@ export default React.createClass({
             <BaseDialog className="mx_ErrorDialog" onFinished={this.props.onFinished}
                     title={_t('Unable to restore session')}>
                 <div className="mx_Dialog_content">
-                    <p>{_t("We encountered an error trying to restore your previous session. If " +
+                    <p>{ _t("We encountered an error trying to restore your previous session. If " +
                     "you continue, you will need to log in again, and encrypted chat " +
-                    "history will be unreadable.")}</p>
+                    "history will be unreadable.") }</p>
 
-                    <p>{_t("If you have previously used a more recent version of Riot, your session " +
+                    <p>{ _t("If you have previously used a more recent version of Riot, your session " +
                     "may be incompatible with this version. Close this window and return " +
-                    "to the more recent version.")}</p>
+                    "to the more recent version.") }</p>
 
-                    {bugreport}
+                    { bugreport }
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={this._continueClicked}>
-                        {_t("Continue anyway")}
+                        { _t("Continue anyway") }
                     </button>
                 </div>
             </BaseDialog>

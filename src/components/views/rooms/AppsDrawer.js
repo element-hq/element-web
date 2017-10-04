@@ -28,6 +28,8 @@ import ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
 import WidgetUtils from '../../../WidgetUtils';
 
+// The maximum number of widgets that can be added in a room
+const MAX_WIDGETS = 2;
 
 module.exports = React.createClass({
     displayName: 'AppsDrawer',
@@ -51,25 +53,45 @@ module.exports = React.createClass({
         this.scalarClient = null;
         if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
             this.scalarClient = new ScalarAuthClient();
-            this.scalarClient.connect().done(() => {
+            this.scalarClient.connect().then(() => {
                 this.forceUpdate();
-                if (this.state.apps && this.state.apps.length < 1) {
-                    this.onClickAddWidget();
-                }
-            // TODO -- Handle Scalar errors
-            // },
-            // (err) => {
-            //     this.setState({
-            //         scalar_error: err,
-            //     });
+            }).catch((e) => {
+                console.log("Failed to connect to integrations server");
+                // TODO -- Handle Scalar errors
+                //     this.setState({
+                //         scalar_error: err,
+                //     });
             });
         }
+
+        this.dispatcherRef = dis.register(this.onAction);
     },
 
     componentWillUnmount: function() {
         ScalarMessaging.stopListening();
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
+        }
+        dis.unregister(this.dispatcherRef);
+    },
+
+    componentWillReceiveProps(newProps) {
+        // Room has changed probably, update apps
+        this._updateApps();
+    },
+
+    onAction: function(action) {
+        switch (action.action) {
+            case 'appsDrawer':
+                // When opening the app draw when there aren't any apps, auto-launch the
+                // integrations manager to skip the awkward click on "Add widget"
+                if (action.show) {
+                    const apps = this._getApps();
+                    if (apps.length === 0) {
+                        this._launchManageIntegrations();
+                    }
+                }
+                break;
         }
     },
 
@@ -93,7 +115,7 @@ module.exports = React.createClass({
         return pathTemplate;
     },
 
-    _initAppConfig: function(appId, app) {
+    _initAppConfig: function(appId, app, sender) {
         const user = MatrixClientPeg.get().getUser(this.props.userId);
         const params = {
             '$matrix_user_id': this.props.userId,
@@ -111,6 +133,7 @@ module.exports = React.createClass({
         app.id = appId;
         app.name = app.name || app.type;
         app.url = this.encodeUri(app.url, params);
+        app.creatorUserId = (sender && sender.userId) ? sender.userId : null;
 
         return app;
     },
@@ -131,18 +154,12 @@ module.exports = React.createClass({
         return appsStateEvents.filter((ev) => {
             return ev.getContent().type && ev.getContent().url;
         }).map((ev) => {
-            return this._initAppConfig(ev.getStateKey(), ev.getContent());
+            return this._initAppConfig(ev.getStateKey(), ev.getContent(), ev.sender);
         });
     },
 
     _updateApps: function() {
         const apps = this._getApps();
-        if (apps.length < 1) {
-            dis.dispatch({
-                action: 'appsDrawer',
-                show: false,
-            });
-        }
         this.setState({
             apps: apps,
         });
@@ -157,11 +174,7 @@ module.exports = React.createClass({
         }
     },
 
-    onClickAddWidget: function(e) {
-        if (e) {
-            e.preventDefault();
-        }
-
+    _launchManageIntegrations: function() {
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                 this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId, 'add_integ') :
@@ -169,6 +182,23 @@ module.exports = React.createClass({
         Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
             src: src,
         }, "mx_IntegrationsManager");
+    },
+
+    onClickAddWidget: function(e) {
+        e.preventDefault();
+        // Display a warning dialog if the max number of widgets have already been added to the room
+        const apps = this._getApps();
+        if (apps && apps.length >= MAX_WIDGETS) {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            const errorMsg = `The maximum number of ${MAX_WIDGETS} widgets have already been added to this room.`;
+            console.error(errorMsg);
+            Modal.createDialog(ErrorDialog, {
+                title: _t("Cannot add any more widgets"),
+                description: _t("The maximum permitted number of widgets have already been added to this room."),
+            });
+            return;
+        }
+        this._launchManageIntegrations();
     },
 
     render: function() {
@@ -183,24 +213,34 @@ module.exports = React.createClass({
                     fullWidth={arr.length<2 ? true : false}
                     room={this.props.room}
                     userId={this.props.userId}
+                    show={this.props.showApps}
+                    creatorUserId={app.creatorUserId}
                 />);
             });
 
-        const addWidget = this.state.apps && this.state.apps.length < 2 && this._canUserModify() &&
-            (<div onClick={this.onClickAddWidget}
-                            role="button"
-                            tabIndex="0"
-                            className="mx_AddWidget_button"
-                            title={_t('Add a widget')}>
-                            [+] {_t('Add a widget')}
-                        </div>);
+        let addWidget;
+        if (this.props.showApps &&
+            this._canUserModify()
+        ) {
+            addWidget = <div
+                onClick={this.onClickAddWidget}
+                role="button"
+                tabIndex="0"
+                className={this.state.apps.length<2 ?
+                    "mx_AddWidget_button mx_AddWidget_button_full_width" :
+                    "mx_AddWidget_button"
+                }
+                title={_t('Add a widget')}>
+                [+] { _t('Add a widget') }
+            </div>;
+        }
 
         return (
             <div className="mx_AppsDrawer">
                 <div id="apps" className="mx_AppsContainer">
-                    {apps}
+                    { apps }
                 </div>
-                {addWidget}
+                { this._canUserModify() && addWidget }
             </div>
         );
     },

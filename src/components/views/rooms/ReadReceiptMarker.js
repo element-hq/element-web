@@ -123,7 +123,19 @@ module.exports = React.createClass({
         }
 
         var newElement = ReactDOM.findDOMNode(this);
-        var startTopOffset = oldTop - newElement.offsetParent.getBoundingClientRect().top;
+        let startTopOffset;
+        if (!newElement.offsetParent) {
+            // this seems to happen sometimes for reasons I don't understand
+            // the docs for `offsetParent` say it may be null if `display` is
+            // `none`, but I can't see why that would happen.
+            console.warn(
+                `ReadReceiptMarker for ${this.props.member.userId} in ` +
+                `${this.props.member.roomId} has no offsetParent`,
+            );
+            startTopOffset = 0;
+        } else {
+            startTopOffset = oldTop - newElement.offsetParent.getBoundingClientRect().top;
+        }
 
         var startStyles = [];
         var enterTransitionOpts = [];
@@ -131,13 +143,12 @@ module.exports = React.createClass({
         if (oldInfo && oldInfo.left) {
             // start at the old height and in the old h pos
 
-            var leftOffset = oldInfo.left;
             startStyles.push({ top: startTopOffset+"px",
                                left: oldInfo.left+"px" });
 
             var reorderTransitionOpts = {
                 duration: 100,
-                easing: 'easeOut'
+                easing: 'easeOut',
             };
 
             enterTransitionOpts.push(reorderTransitionOpts);
@@ -175,7 +186,7 @@ module.exports = React.createClass({
         if (this.props.timestamp) {
             title = _t(
                 "Seen by %(userName)s at %(dateTime)s",
-                {userName: this.props.member.userId, dateTime: DateUtils.formatDate(new Date(this.props.timestamp), this.props.showTwelveHour)}
+                {userName: this.props.member.userId, dateTime: DateUtils.formatDate(new Date(this.props.timestamp), this.props.showTwelveHour)},
             );
         }
 

@@ -52,20 +52,20 @@ export default React.createClass({
 
         return (
             <BaseDialog className="mx_ConfirmUserActionDialog" onFinished={this.props.onFinished}
-                onEnterPressed={ this.onOk }
+                onEnterPressed={this.onOk}
                 title={title}
             >
                 <div className="mx_Dialog_content">
-                    {_t("Are you sure you wish to remove (delete) this event? " +
-                        "Note that if you delete a room name or topic change, it could undo the change.")}
+                    { _t("Are you sure you wish to remove (delete) this event? " +
+                        "Note that if you delete a room name or topic change, it could undo the change.") }
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className={confirmButtonClass} onClick={this.onOk}>
-                        {_t("Remove")}
+                        { _t("Remove") }
                     </button>
 
                     <button onClick={this.onCancel}>
-                        {_t("Cancel")}
+                        { _t("Cancel") }
                     </button>
                 </div>
             </BaseDialog>
