@@ -65,7 +65,9 @@ module.exports = React.createClass({
     },
 
     componentWillReceiveProps: function(nextProps) {
-        if (nextProps.initialValue !== this.props.initialValue) {
+        if (nextProps.initialValue !== this.props.initialValue ||
+            nextProps.initialValue !== this.value
+        ) {
             this.value = nextProps.initialValue;
             if (this.refs.editable_div) {
                 this.showPlaceholder(!this.value);

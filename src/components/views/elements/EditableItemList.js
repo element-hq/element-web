@@ -104,7 +104,7 @@ module.exports = React.createClass({
         if (value.length === 0) {
             this.onItemRemoved(index);
         } else {
-            this.onItemEdited(value, index);
+            this.props.onItemEdited(value, index);
         }
     },
 
