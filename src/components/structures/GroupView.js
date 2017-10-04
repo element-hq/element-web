@@ -27,7 +27,8 @@ import AccessibleButton from '../views/elements/AccessibleButton';
 import Modal from '../../Modal';
 import classnames from 'classnames';
 
-import GroupSummaryStore from '../../stores/GroupSummaryStore';
+import GroupStoreCache from '../../stores/GroupStoreCache';
+import GroupStore from '../../stores/GroupStore';
 
 const RoomSummaryType = PropTypes.shape({
     room_id: PropTypes.string.isRequired,
@@ -78,7 +79,7 @@ const CategoryRoomList = React.createClass({
                 if (!success) return;
                 const errorList = [];
                 Promise.all(addrs.map((addr) => {
-                    return this.context.groupSummaryStore
+                    return this.context.groupStore
                         .addRoomToGroupSummary(addr.address)
                         .catch(() => { errorList.push(addr.address); })
                         .reflect();
@@ -157,7 +158,7 @@ const FeaturedRoom = React.createClass({
     onDeleteClicked: function(e) {
         e.preventDefault();
         e.stopPropagation();
-        this.context.groupSummaryStore.removeRoomFromGroupSummary(
+        this.context.groupStore.removeRoomFromGroupSummary(
             this.props.summaryInfo.room_id,
         ).catch((err) => {
             console.error('Error whilst removing room from group summary', err);
@@ -252,7 +253,7 @@ const RoleUserList = React.createClass({
                 if (!success) return;
                 const errorList = [];
                 Promise.all(addrs.map((addr) => {
-                    return this.context.groupSummaryStore
+                    return this.context.groupStore
                         .addUserToGroupSummary(addr.address)
                         .catch(() => { errorList.push(addr.address); })
                         .reflect();
@@ -327,7 +328,7 @@ const FeaturedUser = React.createClass({
     onDeleteClicked: function(e) {
         e.preventDefault();
         e.stopPropagation();
-        this.context.groupSummaryStore.removeUserFromGroupSummary(
+        this.context.groupStore.removeUserFromGroupSummary(
             this.props.summaryInfo.user_id,
         ).catch((err) => {
             console.error('Error whilst removing user from group summary', err);
@@ -373,14 +374,14 @@ const FeaturedUser = React.createClass({
     },
 });
 
-const GroupSummaryContext = {
-    groupSummaryStore: React.PropTypes.instanceOf(GroupSummaryStore).isRequired,
+const GroupContext = {
+    groupStore: React.PropTypes.instanceOf(GroupStore).isRequired,
 };
 
-CategoryRoomList.contextTypes = GroupSummaryContext;
-FeaturedRoom.contextTypes = GroupSummaryContext;
-RoleUserList.contextTypes = GroupSummaryContext;
-FeaturedUser.contextTypes = GroupSummaryContext;
+CategoryRoomList.contextTypes = GroupContext;
+FeaturedRoom.contextTypes = GroupContext;
+RoleUserList.contextTypes = GroupContext;
+FeaturedUser.contextTypes = GroupContext;
 
 export default React.createClass({
     displayName: 'GroupView',
@@ -390,12 +391,12 @@ export default React.createClass({
     },
 
     childContextTypes: {
-        groupSummaryStore: React.PropTypes.instanceOf(GroupSummaryStore),
+        groupStore: React.PropTypes.instanceOf(GroupStore),
     },
 
     getChildContext: function() {
         return {
-            groupSummaryStore: this._groupSummaryStore,
+            groupStore: this._groupStore,
         };
     },
 
@@ -413,14 +414,14 @@ export default React.createClass({
 
     componentWillMount: function() {
         this._changeAvatarComponent = null;
-        this._initGroupSummaryStore(this.props.groupId);
+        this._initGroupStore(this.props.groupId);
 
         MatrixClientPeg.get().on("Group.myMembership", this._onGroupMyMembership);
     },
 
     componentWillUnmount: function() {
         MatrixClientPeg.get().removeListener("Group.myMembership", this._onGroupMyMembership);
-        this._groupSummaryStore.removeAllListeners();
+        this._groupStore.removeAllListeners();
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -429,7 +430,7 @@ export default React.createClass({
                 summary: null,
                 error: null,
             }, () => {
-                this._initGroupSummaryStore(newProps.groupId);
+                this._initGroupStore(newProps.groupId);
             });
         }
     },
@@ -440,17 +441,15 @@ export default React.createClass({
         this.setState({membershipBusy: false});
     },
 
-    _initGroupSummaryStore: function(groupId) {
-        this._groupSummaryStore = new GroupSummaryStore(
-            MatrixClientPeg.get(), this.props.groupId,
-        );
-        this._groupSummaryStore.on('update', () => {
+    _initGroupStore: function(groupId) {
+        this._groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), groupId);
+        this._groupStore.on('update', () => {
             this.setState({
-                summary: this._groupSummaryStore.getSummary(),
+                summary: this._groupStore.getSummary(),
                 error: null,
             });
         });
-        this._groupSummaryStore.on('error', (err) => {
+        this._groupStore.on('error', (err) => {
             this.setState({
                 summary: null,
                 error: err,
@@ -527,7 +526,7 @@ export default React.createClass({
                 editing: false,
                 summary: null,
             });
-            this._initGroupSummaryStore(this.props.groupId);
+            this._initGroupStore(this.props.groupId);
         }).catch((e) => {
             this.setState({
                 saving: false,
@@ -606,7 +605,7 @@ export default React.createClass({
         this.setState({
             publicityBusy: true,
         });
-        this._groupSummaryStore.setGroupPublicity(publicity).then(() => {
+        this._groupStore.setGroupPublicity(publicity).then(() => {
             this.setState({
                 publicityBusy: false,
             });
