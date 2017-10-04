@@ -183,15 +183,24 @@ export default class Flair extends React.Component {
         this.state = {
             profiles: [],
         };
+        this.onRoomStateEvents = this.onRoomStateEvents.bind(this);
     }
 
     componentWillUnmount() {
         this._unmounted = true;
+        this.context.matrixClient.removeListener('RoomState.events', this.onRoomStateEvents);
     }
 
     componentWillMount() {
         this._unmounted = false;
         if (UserSettingsStore.isFeatureEnabled('feature_groups') && groupSupport) {
+            this._generateAvatars();
+        }
+        this.context.matrixClient.on('RoomState.events', this.onRoomStateEvents);
+    }
+
+    onRoomStateEvents(event) {
+        if (event.getType() === 'm.room.related_groups' && groupSupport) {
             this._generateAvatars();
         }
     }
@@ -224,6 +233,21 @@ export default class Flair extends React.Component {
             }
             console.error('Could not get groups for user', this.props.userId, err);
         }
+        if (this.props.roomId && this.props.showRelated) {
+            const relatedGroupsEvent = this.context.matrixClient
+                .getRoom(this.props.roomId)
+                .currentState
+                .getStateEvents('m.room.related_groups', '');
+            const relatedGroups = relatedGroupsEvent ?
+                relatedGroupsEvent.getContent().groups || [] : [];
+            if (relatedGroups && relatedGroups.length > 0) {
+                groups = groups.filter((groupId) => {
+                    return relatedGroups.includes(groupId);
+                });
+            } else {
+                groups = [];
+            }
+        }
         if (!groups || groups.length === 0) {
             return;
         }
@@ -250,6 +274,12 @@ export default class Flair extends React.Component {
 
 Flair.propTypes = {
     userId: PropTypes.string,
+
+    // Whether to show only the flair associated with related groups of the given room,
+    // or all flair associated with a user.
+    showRelated: PropTypes.bool,
+    // The room that this flair will be displayed in. Optional. Only applies when showRelated = true.
+    roomId: PropTypes.string,
 };
 
 // TODO: We've decided that all components should follow this pattern, which means removing withMatrixClient and using
