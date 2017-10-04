@@ -902,5 +902,9 @@
     "Failed to remove room from group": "Failed to remove room from group",
     "Failed to remove '%(roomName)s' from %(groupId)s": "Failed to remove '%(roomName)s' from %(groupId)s",
     "Are you sure you want to remove '%(roomName)s' from %(groupId)s?": "Are you sure you want to remove '%(roomName)s' from %(groupId)s?",
-    "Removing a room from the group will also remove it from the group page.": "Removing a room from the group will also remove it from the group page."
+    "Removing a room from the group will also remove it from the group page.": "Removing a room from the group will also remove it from the group page.",
+    "Related Groups": "Related Groups",
+    "Related groups for this room:": "Related groups for this room:",
+    "This room has no related groups": "This room has no related groups",
+    "New group ID (e.g. +foo:%(localDomain)s)": "New group ID (e.g. +foo:%(localDomain)s)"
 }

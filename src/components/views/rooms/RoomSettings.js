@@ -287,6 +287,9 @@ module.exports = React.createClass({
             promises.push(ps);
         }
 
+        // related groups
+        promises.push(this.saveRelatedGroups());
+
         // encryption
         p = this.saveEnableEncryption();
         if (!p.isFulfilled()) {
@@ -302,6 +305,11 @@ module.exports = React.createClass({
     saveAliases: function() {
         if (!this.refs.alias_settings) { return [Promise.resolve()]; }
         return this.refs.alias_settings.saveSettings();
+    },
+
+    saveRelatedGroups: function() {
+        if (!this.refs.related_groups) { return Promise.resolve(); }
+        return this.refs.related_groups.saveSettings();
     },
 
     saveColor: function() {
@@ -590,6 +598,7 @@ module.exports = React.createClass({
         var AliasSettings = sdk.getComponent("room_settings.AliasSettings");
         var ColorSettings = sdk.getComponent("room_settings.ColorSettings");
         var UrlPreviewSettings = sdk.getComponent("room_settings.UrlPreviewSettings");
+        var RelatedGroupSettings = sdk.getComponent("room_settings.RelatedGroupSettings");
         var EditableText = sdk.getComponent('elements.EditableText');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
         var Loader = sdk.getComponent("elements.Spinner");
@@ -845,6 +854,11 @@ module.exports = React.createClass({
                     }
                     canonicalAliasEvent={this.props.room.currentState.getStateEvents('m.room.canonical_alias', '')}
                     aliasEvents={this.props.room.currentState.getStateEvents('m.room.aliases')} />
+
+                <RelatedGroupSettings ref="related_groups"
+                    roomId={this.props.room.roomId}
+                    canSetRelatedGroups={roomState.mayClientSendStateEvent("m.room.related_groups", cli)}
+                    relatedGroupsEvent={this.props.room.currentState.getStateEvents('m.room.related_groups', '')} />
 
                 <UrlPreviewSettings ref="url_preview_settings" room={this.props.room} />
 
