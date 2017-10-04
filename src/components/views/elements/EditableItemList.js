@@ -89,29 +89,15 @@ module.exports = React.createClass({
             onItemAdded: () => {},
             onItemEdited: () => {},
             onItemRemoved: () => {},
+            onNewItemChanged: () => {},
         };
     },
 
-    getInitialState: function() {
-        return {};
-    },
-
-    componentWillReceiveProps: function(nextProps) {
-    },
-
-    componentWillMount: function() {
-    },
-
-    componentDidMount: function() {
-    },
-
     onItemAdded: function(value) {
-        console.info('onItemAdded', value);
         this.props.onItemAdded(value);
     },
 
     onItemEdited: function(value, index) {
-        console.info('onItemEdited', value, index);
         if (value.length === 0) {
             this.onItemRemoved(index);
         } else {
@@ -120,7 +106,6 @@ module.exports = React.createClass({
     },
 
     onItemRemoved: function(index) {
-        console.info('onItemRemoved', index);
         this.props.onItemRemoved(index);
     },
 
@@ -142,8 +127,6 @@ module.exports = React.createClass({
 
         const label = this.props.items.length > 0 ?
             this.props.itemsLabel : this.props.noItemsLabel;
-
-        console.info('New item:', this.props.newItem);
 
         return (<div className="mx_EditableItemList">
             <div className="mx_EditableItemList_label">
