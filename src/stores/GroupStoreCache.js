@@ -18,17 +18,19 @@ import GroupStore from './GroupStore';
 
 class GroupStoreCache {
     constructor() {
-        this.groupStores = {};
+        this.groupStore = null;
     }
 
     getGroupStore(matrixClient, groupId) {
-        if (!this.groupStores[groupId]) {
-            this.groupStores[groupId] = new GroupStore(matrixClient, groupId);
+        if (!this.groupStore || this.groupStore._groupId !== groupId) {
+            // This effectively throws away the reference to any previous GroupStore,
+            // allowing it to be GCd once the components referencing it have stopped
+            // referencing it.
+            this.groupStore = new GroupStore(matrixClient, groupId);
         }
-        return this.groupStores[groupId];
+        return this.groupStore;
     }
 }
-
 
 let singletonGroupStoreCache = null;
 if (!singletonGroupStoreCache) {
