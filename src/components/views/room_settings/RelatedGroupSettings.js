@@ -14,11 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// import Promise from 'bluebird';
 import React from 'react';
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
-// var ObjectUtils = require("../../../ObjectUtils");
-// var MatrixClientPeg = require('../../../MatrixClientPeg');
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
