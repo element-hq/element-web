@@ -258,7 +258,6 @@ module.exports = React.createClass({
                 <div className="mx_RoomSettings_aliasLabel">
                     { _t('The main address for this room is') }: { canonical_alias_section }
                 </div>
-
                 <EditableItemList
                     className={"mx_RoomSettings_localAliases"}
                     items={this.state.domainToAliases[localDomain] || []}

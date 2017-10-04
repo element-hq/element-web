@@ -29,6 +29,12 @@ counterpart.setSeparator('|');
 // Fall back to English
 counterpart.setFallbackLocale('en');
 
+// Function which only purpose is to mark that a string is translatable
+// Does not actually do anything. It's helpful for automatic extraction of translatable strings
+export function _td(s) {
+    return s;
+}
+
 // The translation function. This is just a simple wrapper to counterpart,
 // but exists mostly because we must use the same counterpart instance
 // between modules (ie. here (react-sdk) and the app (riot-web), and if we
