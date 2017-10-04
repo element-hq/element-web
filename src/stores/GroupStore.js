@@ -17,9 +17,10 @@ limitations under the License.
 import EventEmitter from 'events';
 
 /**
- * Stores the group summary for a room and provides an API to change it
+ * Stores the group summary for a room and provides an API to change it and
+ * other useful group APIs may have an effect on the group summary.
  */
-export default class GroupSummaryStore extends EventEmitter {
+export default class GroupStore extends EventEmitter {
     constructor(matrixClient, groupId) {
         super();
         this._groupId = groupId;
@@ -43,6 +44,11 @@ export default class GroupSummaryStore extends EventEmitter {
 
     getSummary() {
         return this._summary;
+    }
+
+    addRoomToGroup(roomId) {
+        return this._matrixClient
+            .addRoomToGroup(this._groupId, roomId);
     }
 
     addRoomToGroupSummary(roomId, categoryId) {

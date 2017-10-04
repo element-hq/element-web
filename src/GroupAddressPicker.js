@@ -19,6 +19,7 @@ import sdk from './';
 import MultiInviter from './utils/MultiInviter';
 import { _t } from './languageHandler';
 import MatrixClientPeg from './MatrixClientPeg';
+import GroupStoreCache from './stores/GroupStoreCache';
 
 export function showGroupInviteDialog(groupId) {
     const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
@@ -86,10 +87,11 @@ function _onGroupInviteFinished(groupId, addrs) {
 }
 
 function _onGroupAddRoomFinished(groupId, addrs) {
+    const groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), groupId);
     const errorList = [];
     return Promise.all(addrs.map((addr) => {
-        return MatrixClientPeg.get()
-            .addRoomToGroup(groupId, addr.address)
+        return groupStore
+            .addRoomToGroup(addr.address)
             .catch(() => { errorList.push(addr.address); })
             .reflect();
     })).then(() => {
