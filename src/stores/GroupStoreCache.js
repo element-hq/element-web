@@ -22,7 +22,7 @@ class GroupStoreCache {
     }
 
     getGroupStore(matrixClient, groupId) {
-        if (!this.groupStore || this.groupStore._groupId !== groupId) {
+        if (!this.groupStore || this.groupStore.groupId !== groupId) {
             // This effectively throws away the reference to any previous GroupStore,
             // allowing it to be GCd once the components referencing it have stopped
             // referencing it.
