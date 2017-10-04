@@ -14,6 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_MyGroups {
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mx_MyGroups .mx_RoomHeader_simpleHeader {
+    margin-left: 0px;
+}
+
 .mx_MyGroups_joinCreateBox {
     display: table;
     margin-bottom: 30px;

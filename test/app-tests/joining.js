@@ -176,8 +176,9 @@ describe('joining a room', function () {
 
                 return Promise.delay(1);
             }).then(() => {
-                // We've joined, expect this to false
-                expect(roomView.state.joining).toBe(false);
+                // NB. we don't expect the 'joining' flag to reset at any point:
+                // it will stay set and we observe whether we have Room object for
+                // the room and whether our member event shows we're joined.
 
                 // now send the room down the /sync pipe
                 httpBackend.when('GET', '/sync').

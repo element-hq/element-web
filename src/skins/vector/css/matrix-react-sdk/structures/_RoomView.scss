@@ -76,6 +76,10 @@ limitations under the License.
     flex: 0 0 auto;
 }
 
+.mx_RoomView_auxPanel_apps {
+    max-width: 1920px ! important;
+}
+
 .mx_RoomView_topUnreadMessagesBar {
     order: 3;
 }
