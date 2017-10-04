@@ -18,7 +18,7 @@ import EventEmitter from 'events';
 
 /**
  * Stores the group summary for a room and provides an API to change it and
- * other useful group APIs may have an effect on the group summary.
+ * other useful group APIs that may have an effect on the group summary.
  */
 export default class GroupStore extends EventEmitter {
     constructor(matrixClient, groupId) {
