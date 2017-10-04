@@ -30,7 +30,7 @@ import SlashCommands from '../../../SlashCommands';
 import KeyCode from '../../../KeyCode';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import Analytics from '../../../Analytics';
 
 import dis from '../../../dispatcher';
@@ -1032,10 +1032,10 @@ export default class MessageComposerInput extends React.Component {
      buttons. */
     getSelectionInfo(editorState: EditorState) {
         const styleName = {
-            BOLD: 'bold',
-            ITALIC: 'italic',
-            STRIKETHROUGH: 'strike',
-            UNDERLINE: 'underline',
+            BOLD: _td('bold'),
+            ITALIC: _td('italic'),
+            STRIKETHROUGH: _td('strike'),
+            UNDERLINE: _td('underline'),
         };
 
         const originalStyle = editorState.getCurrentInlineStyle().toArray();
@@ -1044,10 +1044,10 @@ export default class MessageComposerInput extends React.Component {
             .filter((styleName) => !!styleName);
 
         const blockName = {
-            'code-block': 'code',
-            'blockquote': 'quote',
-            'unordered-list-item': 'bullet',
-            'ordered-list-item': 'numbullet',
+            'code-block': _td('code'),
+            'blockquote': _td('quote'),
+            'unordered-list-item': _td('bullet'),
+            'ordered-list-item': _td('numbullet'),
         };
         const originalBlockType = editorState.getCurrentContent()
             .getBlockForKey(editorState.getSelection().getStartKey())

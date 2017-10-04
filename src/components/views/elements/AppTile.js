@@ -23,7 +23,7 @@ import PlatformPeg from '../../../PlatformPeg';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import sdk from '../../../index';
 import AppPermission from './AppPermission';
 import AppWarning from './AppWarning';
@@ -195,9 +195,9 @@ export default React.createClass({
     // These strings are translated at the point that they are inserted in to the DOM, in the render method
     _deleteWidgetLabel() {
         if (this._canUserModify()) {
-            return 'Delete widget';
+            return _td('Delete widget');
         }
-        return 'Revoke widget access';
+        return _td('Revoke widget access');
     },
 
     /* TODO -- Store permission in account data so that it is persisted across multiple devices */
