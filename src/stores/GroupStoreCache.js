@@ -28,6 +28,7 @@ class GroupStoreCache {
             // referencing it.
             this.groupStore = new GroupStore(matrixClient, groupId);
         }
+        this.groupStore._fetchSummary();
         return this.groupStore;
     }
 }

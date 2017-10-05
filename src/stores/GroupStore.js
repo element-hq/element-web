@@ -26,12 +26,23 @@ export default class GroupStore extends EventEmitter {
         this.groupId = groupId;
         this._matrixClient = matrixClient;
         this._summary = {};
+        this._rooms = [];
         this._fetchSummary();
+        this._fetchRooms();
     }
 
     _fetchSummary() {
         this._matrixClient.getGroupSummary(this.groupId).then((resp) => {
             this._summary = resp;
+            this._notifyListeners();
+        }).catch((err) => {
+            this.emit('error', err);
+        });
+    }
+
+    _fetchRooms() {
+        this._matrixClient.getGroupRooms(this.groupId).then((resp) => {
+            this._rooms = resp.chunk;
             this._notifyListeners();
         }).catch((err) => {
             this.emit('error', err);
@@ -46,9 +57,22 @@ export default class GroupStore extends EventEmitter {
         return this._summary;
     }
 
+    getGroupRooms() {
+        return this._rooms;
+    }
+
     addRoomToGroup(roomId) {
         return this._matrixClient
-            .addRoomToGroup(this.groupId, roomId);
+            .addRoomToGroup(this.groupId, roomId)
+            .then(this._fetchRooms.bind(this));
+    }
+
+    removeRoomFromGroup(roomId) {
+        return this._matrixClient
+            .removeRoomFromGroup(this.groupId, roomId)
+            // Room might be in the summary, refresh just in case
+            .then(this._fetchSummary.bind(this))
+            .then(this._fetchRooms.bind(this));
     }
 
     addRoomToGroupSummary(roomId, categoryId) {
