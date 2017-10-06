@@ -243,7 +243,7 @@ function textForPowerEvent(event) {
         if (to !== from) {
             diff.push(
                 _t('%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s', {
-                    userId: userId,
+                    userId,
                     fromPowerLevel: Roles.textualPowerLevel(from, userDefault),
                     toPowerLevel: Roles.textualPowerLevel(to, userDefault),
                 }),
@@ -254,7 +254,7 @@ function textForPowerEvent(event) {
         return '';
     }
     return _t('%(senderName)s changed the power level of %(powerLevelDiffText)s.', {
-        senderName: senderName,
+        senderName,
         powerLevelDiffText: diff.join(", "),
     });
 }
