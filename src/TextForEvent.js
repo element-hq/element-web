@@ -291,12 +291,15 @@ function textForWidgetEvent(event) {
 
 const handlers = {
     'm.room.message': textForMessageEvent,
-    'm.room.name': textForRoomNameEvent,
-    'm.room.topic': textForTopicEvent,
-    'm.room.member': textForMemberEvent,
     'm.call.invite': textForCallInviteEvent,
     'm.call.answer': textForCallAnswerEvent,
     'm.call.hangup': textForCallHangupEvent,
+};
+
+const stateHandlers = {
+    'm.room.name': textForRoomNameEvent,
+    'm.room.topic': textForTopicEvent,
+    'm.room.member': textForMemberEvent,
     'm.room.third_party_invite': textForThreePidInviteEvent,
     'm.room.history_visibility': textForHistoryVisibilityEvent,
     'm.room.encryption': textForEncryptionEvent,
@@ -307,8 +310,8 @@ const handlers = {
 
 module.exports = {
     textForEvent: function(ev) {
-        const hdlr = handlers[ev.getType()];
-        if (!hdlr) return '';
-        return hdlr(ev);
+        const handler = ev.isState() ? stateHandlers[ev.getType()] : handlers[ev.getType()];
+        if (handler) return handler(ev);
+        return '';
     },
 };
