@@ -310,7 +310,7 @@ const stateHandlers = {
 
 module.exports = {
     textForEvent: function(ev) {
-        const handler = ev.isState() ? stateHandlers[ev.getType()] : handlers[ev.getType()];
+        const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
         if (handler) return handler(ev);
         return '';
     },
