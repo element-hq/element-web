@@ -639,7 +639,7 @@ module.exports = withMatrixClient(React.createClass({
         if (member.userId !== cli.getUserId()) {
             ignoreButton = (
                 <AccessibleButton onClick={this.onIgnoreToggle} className="mx_MemberInfo_field">
-                    {this.state.isIgnoring ? _t("Unignore") : _t("Ignore")}
+                    { this.state.isIgnoring ? _t("Unignore") : _t("Ignore") }
                 </AccessibleButton>
             );
 
@@ -658,7 +658,7 @@ module.exports = withMatrixClient(React.createClass({
 
                 readReceiptButton = (
                     <AccessibleButton onClick={onReadReceiptButton} className="mx_MemberInfo_field">
-                        Jump to read receipt
+                        { _t('Jump to read receipt') }
                     </AccessibleButton>
                 );
             }
