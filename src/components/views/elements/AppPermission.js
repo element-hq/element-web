@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import url from 'url';
 import { _t } from '../../../languageHandler';
+import SdkConfig from '../../../SdkConfig';
 
 export default class AppPermission extends React.Component {
     constructor(props) {
@@ -34,14 +35,21 @@ export default class AppPermission extends React.Component {
     }
 
     isScalarWurl(wurl) {
-        if (wurl && wurl.hostname && (
-            wurl.hostname === 'scalar.vector.im' ||
-            wurl.hostname === 'scalar-staging.riot.im' ||
-            wurl.hostname === 'scalar-develop.riot.im' ||
-            wurl.hostname === 'demo.riot.im' ||
-            wurl.hostname === 'localhost'
-        )) {
-            return true;
+        // Exit early if we've been given bad data
+        if (!wurl) {
+            return false;
+        }
+
+        let scalarUrls = SdkConfig.get().integrations_widgets_urls;
+        if (!scalarUrls || scalarUrls.length == 0) {
+            scalarUrls = [SdkConfig.get().integrations_rest_url];
+        }
+
+        const url = wurl.format();
+        for (const scalarUrl of scalarUrls) {
+            if (url.startsWith(scalarUrl)) {
+                return true;
+            }
         }
         return false;
     }
