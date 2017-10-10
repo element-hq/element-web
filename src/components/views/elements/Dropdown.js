@@ -26,6 +26,12 @@ class MenuOption extends React.Component {
         this._onClick = this._onClick.bind(this);
     }
 
+    getDefaultProps() {
+        return {
+            disabled: false,
+        }
+    }
+
     _onMouseEnter() {
         this.props.onMouseEnter(this.props.dropdownKey);
     }
@@ -153,6 +159,8 @@ export default class Dropdown extends React.Component {
     }
 
     _onInputClick(ev) {
+        if (this.props.disabled) return;
+
         if (!this.state.expanded) {
             this.setState({
                 expanded: true,
@@ -329,4 +337,6 @@ Dropdown.propTypes = {
     // in the dropped-down menu.
     getShortOption: React.PropTypes.func,
     value: React.PropTypes.string,
+    // negative for consistency with HTML
+    disabled: React.PropTypes.bool,
 }

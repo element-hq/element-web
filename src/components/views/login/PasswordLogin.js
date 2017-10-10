@@ -186,6 +186,17 @@ class PasswordLogin extends React.Component {
 
         const loginField = this.renderLoginField(this.state.loginType);
 
+        let matrixIdText = '';
+        if (this.props.hsUrl) {
+            try {
+                const parsedHsUrl = new URL(this.props.hsUrl);
+                matrixIdText = _t('%(serverName)s Matrix ID', {serverName: parsedHsUrl.hostname});
+            } catch (e) {
+                console.log(e);
+                // pass
+            }
+        }
+
         return (
             <div>
                 <form onSubmit={this.onSubmitForm}>
@@ -194,8 +205,9 @@ class PasswordLogin extends React.Component {
                     <Dropdown
                         className="mx_Login_type_dropdown"
                         value={this.state.loginType}
+                        disabled={matrixIdText === ''}
                         onOptionChange={this.onLoginTypeChange}>
-                            <span key={PasswordLogin.LOGIN_FIELD_MXID}>{ _t('my Matrix ID') }</span>
+                            <span key={PasswordLogin.LOGIN_FIELD_MXID}>{matrixIdText}</span>
                             <span key={PasswordLogin.LOGIN_FIELD_EMAIL}>{ _t('Email address') }</span>
                             <span key={PasswordLogin.LOGIN_FIELD_PHONE}>{ _t('Phone') }</span>
                     </Dropdown>
