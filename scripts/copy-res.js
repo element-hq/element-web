@@ -167,7 +167,7 @@ function genLangFile(lang, dest) {
                 );
             } catch (e) {
                 console.error("Failed: "+f, e);
-                return;
+                throw e;
             }
         }
     });
