@@ -312,6 +312,9 @@ module.exports = React.createClass({
             promises.push(ps);
         }
 
+        // related groups
+        promises.push(this.saveRelatedGroups());
+
         // encryption
         p = this.saveEnableEncryption();
         if (!p.isFulfilled()) {
@@ -327,6 +330,11 @@ module.exports = React.createClass({
     saveAliases: function() {
         if (!this.refs.alias_settings) { return [Promise.resolve()]; }
         return this.refs.alias_settings.saveSettings();
+    },
+
+    saveRelatedGroups: function() {
+        if (!this.refs.related_groups) { return Promise.resolve(); }
+        return this.refs.related_groups.saveSettings();
     },
 
     saveColor: function() {
@@ -417,11 +425,12 @@ module.exports = React.createClass({
 
     _yankValueFromEvent: function(stateEventType, keyName, defaultValue) {
         // E.g.("m.room.name","name") would yank the "name" content key from "m.room.name"
-        var event = this.props.room.currentState.getStateEvents(stateEventType, '');
+        const event = this.props.room.currentState.getStateEvents(stateEventType, '');
         if (!event) {
             return defaultValue;
         }
-        return event.getContent()[keyName] || defaultValue;
+        const content = event.getContent();
+        return keyName in content ? content[keyName] : defaultValue;
     },
 
     _onHistoryRadioToggle: function(ev) {
@@ -628,6 +637,7 @@ module.exports = React.createClass({
         var AliasSettings = sdk.getComponent("room_settings.AliasSettings");
         var ColorSettings = sdk.getComponent("room_settings.ColorSettings");
         var UrlPreviewSettings = sdk.getComponent("room_settings.UrlPreviewSettings");
+        var RelatedGroupSettings = sdk.getComponent("room_settings.RelatedGroupSettings");
         var EditableText = sdk.getComponent('elements.EditableText');
         var PowerSelector = sdk.getComponent('elements.PowerSelector');
         var Loader = sdk.getComponent("elements.Spinner");
@@ -661,6 +671,14 @@ module.exports = React.createClass({
         var canSetTag = !cli.isGuest();
 
         var self = this;
+
+        let relatedGroupsSection;
+        if (UserSettingsStore.isFeatureEnabled('feature_groups')) {
+            relatedGroupsSection = <RelatedGroupSettings ref="related_groups"
+                roomId={this.props.room.roomId}
+                canSetRelatedGroups={roomState.mayClientSendStateEvent("m.room.related_groups", cli)}
+                relatedGroupsEvent={this.props.room.currentState.getStateEvents('m.room.related_groups', '')} />;
+        }
 
         var userLevelsSection;
         if (Object.keys(user_levels).length) {
@@ -701,7 +719,7 @@ module.exports = React.createClass({
         }
 
         var unfederatableSection;
-        if (this._yankValueFromEvent("m.room.create", "m.federate") === false) {
+        if (this._yankValueFromEvent("m.room.create", "m.federate", true) === false) {
              unfederatableSection = (
                 <div className="mx_RoomSettings_powerLevel">
                 { _t('This room is not accessible by remote Matrix servers') }.
@@ -885,6 +903,8 @@ module.exports = React.createClass({
                     }
                     canonicalAliasEvent={this.props.room.currentState.getStateEvents('m.room.canonical_alias', '')}
                     aliasEvents={this.props.room.currentState.getStateEvents('m.room.aliases')} />
+
+                { relatedGroupsSection }
 
                 <UrlPreviewSettings ref="url_preview_settings" room={this.props.room} />
 

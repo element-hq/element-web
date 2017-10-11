@@ -17,20 +17,32 @@ limitations under the License.
 import EventEmitter from 'events';
 
 /**
- * Stores the group summary for a room and provides an API to change it
+ * Stores the group summary for a room and provides an API to change it and
+ * other useful group APIs that may have an effect on the group summary.
  */
-export default class GroupSummaryStore extends EventEmitter {
+export default class GroupStore extends EventEmitter {
     constructor(matrixClient, groupId) {
         super();
-        this._groupId = groupId;
+        this.groupId = groupId;
         this._matrixClient = matrixClient;
         this._summary = {};
+        this._rooms = [];
         this._fetchSummary();
+        this._fetchRooms();
     }
 
     _fetchSummary() {
-        this._matrixClient.getGroupSummary(this._groupId).then((resp) => {
+        this._matrixClient.getGroupSummary(this.groupId).then((resp) => {
             this._summary = resp;
+            this._notifyListeners();
+        }).catch((err) => {
+            this.emit('error', err);
+        });
+    }
+
+    _fetchRooms() {
+        this._matrixClient.getGroupRooms(this.groupId).then((resp) => {
+            this._rooms = resp.chunk;
             this._notifyListeners();
         }).catch((err) => {
             this.emit('error', err);
@@ -45,33 +57,51 @@ export default class GroupSummaryStore extends EventEmitter {
         return this._summary;
     }
 
+    getGroupRooms() {
+        return this._rooms;
+    }
+
+    addRoomToGroup(roomId) {
+        return this._matrixClient
+            .addRoomToGroup(this.groupId, roomId)
+            .then(this._fetchRooms.bind(this));
+    }
+
+    removeRoomFromGroup(roomId) {
+        return this._matrixClient
+            .removeRoomFromGroup(this.groupId, roomId)
+            // Room might be in the summary, refresh just in case
+            .then(this._fetchSummary.bind(this))
+            .then(this._fetchRooms.bind(this));
+    }
+
     addRoomToGroupSummary(roomId, categoryId) {
         return this._matrixClient
-            .addRoomToGroupSummary(this._groupId, roomId, categoryId)
+            .addRoomToGroupSummary(this.groupId, roomId, categoryId)
             .then(this._fetchSummary.bind(this));
     }
 
     addUserToGroupSummary(userId, roleId) {
         return this._matrixClient
-            .addUserToGroupSummary(this._groupId, userId, roleId)
+            .addUserToGroupSummary(this.groupId, userId, roleId)
             .then(this._fetchSummary.bind(this));
     }
 
     removeRoomFromGroupSummary(roomId) {
         return this._matrixClient
-            .removeRoomFromGroupSummary(this._groupId, roomId)
+            .removeRoomFromGroupSummary(this.groupId, roomId)
             .then(this._fetchSummary.bind(this));
     }
 
     removeUserFromGroupSummary(userId) {
         return this._matrixClient
-            .removeUserFromGroupSummary(this._groupId, userId)
+            .removeUserFromGroupSummary(this.groupId, userId)
             .then(this._fetchSummary.bind(this));
     }
 
     setGroupPublicity(isPublished) {
         return this._matrixClient
-            .setGroupPublicity(this._groupId, isPublished)
+            .setGroupPublicity(this.groupId, isPublished)
             .then(this._fetchSummary.bind(this));
     }
 }

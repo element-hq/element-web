@@ -117,7 +117,7 @@
     "Members only": "Только участники",
     "Mobile phone number": "Номер мобильного телефона",
     "Moderator": "Модератор",
-    "my Matrix ID": "мой Matrix ID",
+    "%(serverName)s Matrix ID": "%(serverName)s Matrix ID",
     "Name": "Имя",
     "Never send encrypted messages to unverified devices from this device": "Никогда не отправлять зашифрованные сообщения на непроверенные устройства с этого устройства",
     "Never send encrypted messages to unverified devices in this room from this device": "Никогда не отправлять зашифрованные сообщения на непроверенные устройства в этой комнате с этого устройства",

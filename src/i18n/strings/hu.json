@@ -293,7 +293,7 @@
     "Mobile phone number (optional)": "Mobill telefonszám (opcionális)",
     "Moderator": "Moderátor",
     "Must be viewing a room": "Meg kell nézni a szobát",
-    "my Matrix ID": "Matrix azonosítóm",
+    "%(serverName)s Matrix ID": "%(serverName)s Matrix azonosítóm",
     "Name": "Név",
     "Never send encrypted messages to unverified devices from this device": "Soha ne küldj titkosított üzenetet ellenőrizetlen eszközre erről az eszközről",
     "Never send encrypted messages to unverified devices in this room": "Soha ne küldj titkosított üzenetet ebből a szobából ellenőrizetlen eszközre",

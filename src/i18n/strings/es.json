@@ -379,7 +379,7 @@
     "Moderator": "Moderador",
     "Must be viewing a room": "Debe estar viendo una sala",
     "Mute": "Silenciar",
-    "my Matrix ID": "Mi ID de Matrix",
+    "%(serverName)s Matrix ID": "%(serverName)s ID de Matrix",
     "Name": "Nombre",
     "Never send encrypted messages to unverified devices from this device": "No enviar nunca mensajes cifrados, desde este dispositivo, a dispositivos sin verificar",
     "Never send encrypted messages to unverified devices in this room": "No enviar nunca mensajes cifrados a dispositivos no verificados, en esta sala",

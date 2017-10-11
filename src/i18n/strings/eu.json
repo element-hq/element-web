@@ -346,7 +346,6 @@
     "Missing room_id in request": "Gelaren ID-a falta da eskaeran",
     "Missing user_id in request": "Erabiltzailearen ID-a falta da eskaeran",
     "Mobile phone number": "Mugikorraren telefono zenbakia",
-    "my Matrix ID": "Nire Matrix ID-a",
     "Never send encrypted messages to unverified devices in this room": "Ez bidali inoiz zifratutako mezuak egiaztatu gabeko gailuetara gela honetan",
     "Never send encrypted messages to unverified devices in this room from this device": "Ez bidali inoiz zifratutako mezuak egiaztatu gabeko gailuetara gela honetan gailu honetatik",
     "New address (e.g. #foo:%(localDomain)s)": "Helbide berria (adib. #foo:%(localDomain)s)",

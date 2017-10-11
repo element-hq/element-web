@@ -136,24 +136,25 @@ module.exports = React.createClass({
         return ObjectUtils.getKeyValueArrayDiffs(oldAliases, this.state.domainToAliases);
     },
 
-    onAliasAdded: function(alias) {
+    onNewAliasChanged: function(value) {
+        this.setState({newAlias: value});
+    },
+
+    onLocalAliasAdded: function(alias) {
         if (!alias || alias.length === 0) return; // ignore attempts to create blank aliases
 
-        if (this.isAliasValid(alias)) {
-            // add this alias to the domain to aliases dict
-            var domain = alias.replace(/^.*?:/, '');
-            // XXX: do we need to deep copy aliases before editing it?
-            this.state.domainToAliases[domain] = this.state.domainToAliases[domain] || [];
-            this.state.domainToAliases[domain].push(alias);
-            this.setState({
-                domainToAliases: this.state.domainToAliases
-            });
+        const localDomain = MatrixClientPeg.get().getDomain();
+        if (this.isAliasValid(alias) && alias.endsWith(localDomain)) {
+            this.state.domainToAliases[localDomain] = this.state.domainToAliases[localDomain] || [];
+            this.state.domainToAliases[localDomain].push(alias);
 
-            // reset the add field
-            this.refs.add_alias.setValue(''); // FIXME
-        }
-        else {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            this.setState({
+                domainToAliases: this.state.domainToAliases,
+                // Reset the add field
+                newAlias: "",
+            });
+        } else {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Invalid alias format', '', ErrorDialog, {
                 title: _t('Invalid alias format'),
                 description: _t('\'%(alias)s\' is not a valid format for an alias', { alias: alias }),
@@ -161,15 +162,13 @@ module.exports = React.createClass({
         }
     },
 
-    onAliasChanged: function(domain, index, alias) {
+    onLocalAliasChanged: function(alias, index) {
         if (alias === "") return; // hit the delete button to delete please
-        var oldAlias;
-        if (this.isAliasValid(alias)) {
-            oldAlias = this.state.domainToAliases[domain][index];
-            this.state.domainToAliases[domain][index] = alias;
-        }
-        else {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        const localDomain = MatrixClientPeg.get().getDomain();
+        if (this.isAliasValid(alias) && alias.endsWith(localDomain)) {
+            this.state.domainToAliases[localDomain][index] = alias;
+        } else {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Invalid address format', '', ErrorDialog, {
                 title: _t('Invalid address format'),
                 description: _t('\'%(alias)s\' is not a valid format for an address', { alias: alias }),
@@ -177,15 +176,16 @@ module.exports = React.createClass({
         }
     },
 
-    onAliasDeleted: function(domain, index) {
+    onLocalAliasDeleted: function(index) {
+        const localDomain = MatrixClientPeg.get().getDomain();
         // It's a bit naughty to directly manipulate this.state, and React would
         // normally whine at you, but it can't see us doing the splice.  Given we
         // promptly setState anyway, it's just about acceptable.  The alternative
         // would be to arbitrarily deepcopy to a temp variable and then setState
         // that, but why bother when we can cut this corner.
-        var alias = this.state.domainToAliases[domain].splice(index, 1);
+        this.state.domainToAliases[localDomain].splice(index, 1);
         this.setState({
-            domainToAliases: this.state.domainToAliases
+            domainToAliases: this.state.domainToAliases,
         });
     },
 
@@ -198,6 +198,7 @@ module.exports = React.createClass({
     render: function() {
         var self = this;
         var EditableText = sdk.getComponent("elements.EditableText");
+        var EditableItemList = sdk.getComponent("elements.EditableItemList");
         var localDomain = MatrixClientPeg.get().getDomain();
 
         var canonical_alias_section;
@@ -257,58 +258,24 @@ module.exports = React.createClass({
                 <div className="mx_RoomSettings_aliasLabel">
                     { _t('The main address for this room is') }: { canonical_alias_section }
                 </div>
-                <div className="mx_RoomSettings_aliasLabel">
-                    { (this.state.domainToAliases[localDomain] &&
-                        this.state.domainToAliases[localDomain].length > 0)
-                      ? _t('Local addresses for this room:')
-                      : _t('This room has no local addresses') }
-                </div>
-                <div className="mx_RoomSettings_aliasesTable">
-                    { (this.state.domainToAliases[localDomain] || []).map((alias, i) => {
-                        var deleteButton;
-                        if (this.props.canSetAliases) {
-                            deleteButton = (
-                                <img src="img/cancel-small.svg" width="14" height="14"
-                                    alt={ _t('Delete') } onClick={ self.onAliasDeleted.bind(self, localDomain, i) } />
-                            );
-                        }
-                        return (
-                            <div className="mx_RoomSettings_aliasesTableRow" key={ i }>
-                                <EditableText
-                                    className="mx_RoomSettings_alias mx_RoomSettings_editable"
-                                    placeholderClassName="mx_RoomSettings_aliasPlaceholder"
-                                    placeholder={ _t('New address (e.g. #foo:%(localDomain)s)', { localDomain: localDomain}) }
-                                    blurToCancel={ false }
-                                    onValueChanged={ self.onAliasChanged.bind(self, localDomain, i) }
-                                    editable={ self.props.canSetAliases }
-                                    initialValue={ alias } />
-                                <div className="mx_RoomSettings_deleteAlias mx_filterFlipColor">
-                                     { deleteButton }
-                                </div>
-                            </div>
-                        );
-                    })}
-
-                    { this.props.canSetAliases ?
-                        <div className="mx_RoomSettings_aliasesTableRow" key="new">
-                            <EditableText
-                                ref="add_alias"
-                                className="mx_RoomSettings_alias mx_RoomSettings_editable"
-                                placeholderClassName="mx_RoomSettings_aliasPlaceholder"
-                                placeholder={ _t('New address (e.g. #foo:%(localDomain)s)', { localDomain: localDomain}) }
-                                blurToCancel={ false }
-                                onValueChanged={ self.onAliasAdded } />
-                            <div className="mx_RoomSettings_addAlias mx_filterFlipColor">
-                                 <img src="img/plus.svg" width="14" height="14" alt="Add"
-                                      onClick={ self.onAliasAdded.bind(self, undefined) }/>
-                            </div>
-                        </div> : ""
-                    }
-                </div>
+                <EditableItemList
+                    className={"mx_RoomSettings_localAliases"}
+                    items={this.state.domainToAliases[localDomain] || []}
+                    newItem={this.state.newAlias}
+                    onNewItemChanged={this.onNewAliasChanged}
+                    onItemAdded={this.onLocalAliasAdded}
+                    onItemEdited={this.onLocalAliasChanged}
+                    onItemRemoved={this.onLocalAliasDeleted}
+                    itemsLabel={_t('Local addresses for this room:')}
+                    noItemsLabel={_t('This room has no local addresses')}
+                    placeholder={_t(
+                        'New address (e.g. #foo:%(localDomain)s)', {localDomain: localDomain},
+                    )}
+                />
 
                 { remote_aliases_section }
 
             </div>
         );
-    }
+    },
 });
