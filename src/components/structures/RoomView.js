@@ -735,6 +735,17 @@ module.exports = React.createClass({
     _getUnsentMessageError: function(room) {
         const unsentMessages = this._getUnsentMessages(room);
         if (!unsentMessages.length) return "";
+
+        if (
+            unsentMessages.length === 1 &&
+            unsentMessages[0].error &&
+            unsentMessages[0].error.data &&
+            unsentMessages[0].error.data.error &&
+            unsentMessages[0].error.name !== "UnknownDeviceError"
+        ) {
+            return unsentMessages[0].error.data.error;
+        }
+
         for (const event of unsentMessages) {
             if (!event.error || event.error.name !== "UnknownDeviceError") {
                 return _t("Some of your messages have not been sent.");
