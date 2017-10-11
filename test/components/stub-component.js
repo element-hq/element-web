@@ -2,7 +2,7 @@
  */
 'use strict';
 
-var React = require('react');
+const React = require('react');
 
 module.exports = function(opts) {
     opts = opts || {};
@@ -12,8 +12,8 @@ module.exports = function(opts) {
 
     if (!opts.render) {
         opts.render = function() {
-            return <div>{this.displayName}</div>;
-        }
+            return <div>{ this.displayName }</div>;
+        };
     }
 
     return React.createClass(opts);

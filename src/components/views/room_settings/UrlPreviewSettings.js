@@ -15,11 +15,11 @@ limitations under the License.
 */
 
 import Promise from 'bluebird';
-var React = require('react');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var sdk = require("../../../index");
-var Modal = require("../../../Modal");
-var UserSettingsStore = require('../../../UserSettingsStore');
+const React = require('react');
+const MatrixClientPeg = require('../../../MatrixClientPeg');
+const sdk = require("../../../index");
+const Modal = require("../../../Modal");
+const UserSettingsStore = require('../../../UserSettingsStore');
 import { _t, _tJsx } from '../../../languageHandler';
 
 
@@ -31,11 +31,11 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        var cli = MatrixClientPeg.get();
-        var roomState = this.props.room.currentState;
+        const cli = MatrixClientPeg.get();
+        const roomState = this.props.room.currentState;
 
-        var roomPreviewUrls = this.props.room.currentState.getStateEvents('org.matrix.room.preview_urls', '');
-        var userPreviewUrls = this.props.room.getAccountData("org.matrix.room.preview_urls");
+        const roomPreviewUrls = this.props.room.currentState.getStateEvents('org.matrix.room.preview_urls', '');
+        const userPreviewUrls = this.props.room.getAccountData("org.matrix.room.preview_urls");
 
         return {
             globalDisableUrlPreview: (roomPreviewUrls && roomPreviewUrls.getContent().disable) || false,
@@ -49,37 +49,37 @@ module.exports = React.createClass({
     },
 
     saveSettings: function() {
-        var promises = [];
+        const promises = [];
 
         if (this.state.globalDisableUrlPreview !== this.originalState.globalDisableUrlPreview) {
             console.log("UrlPreviewSettings: Updating room's preview_urls state event");
             promises.push(
                 MatrixClientPeg.get().sendStateEvent(
                     this.props.room.roomId, "org.matrix.room.preview_urls", {
-                        disable: this.state.globalDisableUrlPreview
-                    }, ""
-                )
+                        disable: this.state.globalDisableUrlPreview,
+                    }, "",
+                ),
             );
         }
 
-        var content = undefined;
+        let content = undefined;
         if (this.state.userDisableUrlPreview !== this.originalState.userDisableUrlPreview) {
             console.log("UrlPreviewSettings: Disabling user's per-room preview_urls");
-            content = this.state.userDisableUrlPreview ? { disable : true } : {};
+            content = this.state.userDisableUrlPreview ? { disable: true } : {};
         }
 
         if (this.state.userEnableUrlPreview !== this.originalState.userEnableUrlPreview) {
             console.log("UrlPreviewSettings: Enabling user's per-room preview_urls");
             if (!content || content.disable === undefined) {
-                content = this.state.userEnableUrlPreview ? { disable : false } : {};
+                content = this.state.userEnableUrlPreview ? { disable: false } : {};
             }
         }
 
         if (content) {
             promises.push(
                 MatrixClientPeg.get().setRoomAccountData(
-                    this.props.room.roomId, "org.matrix.room.preview_urls", content
-                )
+                    this.props.room.roomId, "org.matrix.room.preview_urls", content,
+                ),
             );
         }
 
@@ -109,62 +109,59 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var self = this;
-        var roomState = this.props.room.currentState;
-        var cli = MatrixClientPeg.get();
+        const self = this;
+        const roomState = this.props.room.currentState;
+        const cli = MatrixClientPeg.get();
 
-        var maySetRoomPreviewUrls = roomState.mayClientSendStateEvent('org.matrix.room.preview_urls', cli);
-        var disableRoomPreviewUrls;
+        const maySetRoomPreviewUrls = roomState.mayClientSendStateEvent('org.matrix.room.preview_urls', cli);
+        let disableRoomPreviewUrls;
         if (maySetRoomPreviewUrls) {
             disableRoomPreviewUrls =
                 <label>
                     <input type="checkbox" ref="globalDisableUrlPreview"
-                           onChange={ this.onGlobalDisableUrlPreviewChange }
-                           checked={ this.state.globalDisableUrlPreview } />
-                    {_t("Disable URL previews by default for participants in this room")}
+                           onChange={this.onGlobalDisableUrlPreviewChange}
+                           checked={this.state.globalDisableUrlPreview} />
+                    { _t("Disable URL previews by default for participants in this room") }
                 </label>;
-        }
-        else {
+        } else {
             disableRoomPreviewUrls =
                 <label>
-                    {_t("URL previews are %(globalDisableUrlPreview)s by default for participants in this room.", {globalDisableUrlPreview: this.state.globalDisableUrlPreview ? _t("disabled") : _t("enabled")})}
+                    { _t("URL previews are %(globalDisableUrlPreview)s by default for participants in this room.", {globalDisableUrlPreview: this.state.globalDisableUrlPreview ? _t("disabled") : _t("enabled")}) }
                 </label>;
         }
 
         let urlPreviewText = null;
         if (UserSettingsStore.getUrlPreviewsDisabled()) {
             urlPreviewText = (
-                _tJsx("You have <a>disabled</a> URL previews by default.", /<a>(.*?)<\/a>/, (sub)=><a href="#/settings">{sub}</a>)
+                _tJsx("You have <a>disabled</a> URL previews by default.", /<a>(.*?)<\/a>/, (sub)=><a href="#/settings">{ sub }</a>)
             );
-        }
-        else {
+        } else {
             urlPreviewText = (
-                _tJsx("You have <a>enabled</a> URL previews by default.", /<a>(.*?)<\/a>/, (sub)=><a href="#/settings">{sub}</a>)
+                _tJsx("You have <a>enabled</a> URL previews by default.", /<a>(.*?)<\/a>/, (sub)=><a href="#/settings">{ sub }</a>)
             );
         }
 
         return (
             <div className="mx_RoomSettings_toggles">
-                <h3>{_t("URL Previews")}</h3>
+                <h3>{ _t("URL Previews") }</h3>
 
                 <label>
-                {urlPreviewText}
+                { urlPreviewText }
                 </label>
                 { disableRoomPreviewUrls }
                 <label>
                     <input type="checkbox" ref="userEnableUrlPreview"
-                           onChange={ this.onUserEnableUrlPreviewChange }
-                           checked={ this.state.userEnableUrlPreview } />
-                    {_t("Enable URL previews for this room (affects only you)")}
+                           onChange={this.onUserEnableUrlPreviewChange}
+                           checked={this.state.userEnableUrlPreview} />
+                    { _t("Enable URL previews for this room (affects only you)") }
                 </label>
                 <label>
                     <input type="checkbox" ref="userDisableUrlPreview"
-                           onChange={ this.onUserDisableUrlPreviewChange }
-                           checked={ this.state.userDisableUrlPreview } />
-                    {_t("Disable URL previews for this room (affects only you)")}
+                           onChange={this.onUserDisableUrlPreviewChange}
+                           checked={this.state.userDisableUrlPreview} />
+                    { _t("Disable URL previews for this room (affects only you)") }
                 </label>
             </div>
         );
-
-    }
+    },
 });

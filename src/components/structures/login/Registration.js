@@ -57,7 +57,7 @@ module.exports = React.createClass({
 
         // registration shouldn't know or care how login is done.
         onLoginClick: React.PropTypes.func.isRequired,
-        onCancelClick: React.PropTypes.func
+        onCancelClick: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -121,7 +121,7 @@ module.exports = React.createClass({
     },
 
     onServerConfigChange: function(config) {
-        let newState = {};
+        const newState = {};
         if (config.hsUrl !== undefined) {
             newState.hsUrl = config.hsUrl;
         }
@@ -195,7 +195,7 @@ module.exports = React.createClass({
 
                 this._rtsClient.getTeam(teamToken).then((team) => {
                     console.log(
-                        `User successfully registered with team ${team.name}`
+                        `User successfully registered with team ${team.name}`,
                     );
                     if (!team.rooms) {
                         return;
@@ -223,7 +223,7 @@ module.exports = React.createClass({
                 deviceId: response.device_id,
                 homeserverUrl: this._matrixClient.getHomeserverUrl(),
                 identityServerUrl: this._matrixClient.getIdentityServerUrl(),
-                accessToken: response.access_token
+                accessToken: response.access_token,
             }, teamToken);
         }).then((cli) => {
             return this._setupPushers(cli);
@@ -253,7 +253,7 @@ module.exports = React.createClass({
     },
 
     onFormValidationFailed: function(errCode) {
-        var errMsg;
+        let errMsg;
         switch (errCode) {
             case "RegistrationForm.ERR_PASSWORD_MISSING":
                 errMsg = _t('Missing password.');
@@ -282,7 +282,7 @@ module.exports = React.createClass({
                 break;
         }
         this.setState({
-            errorText: errMsg
+            errorText: errMsg,
         });
     },
 
@@ -316,7 +316,7 @@ module.exports = React.createClass({
             emailAddress: this.state.formVals.email,
             phoneCountry: this.state.formVals.phoneCountry,
             phoneNumber: this.state.formVals.phoneNumber,
-        }
+        };
     },
 
     render: function() {
@@ -346,7 +346,7 @@ module.exports = React.createClass({
         } else {
             let errorSection;
             if (this.state.errorText) {
-                errorSection = <div className="mx_Login_error">{this.state.errorText}</div>;
+                errorSection = <div className="mx_Login_error">{ this.state.errorText }</div>;
             }
             registerBody = (
                 <div>
@@ -362,7 +362,7 @@ module.exports = React.createClass({
                         onRegisterClick={this.onFormSubmit}
                         onTeamSelected={this.onTeamSelected}
                     />
-                    {errorSection}
+                    { errorSection }
                     <ServerConfig ref="serverConfig"
                         withToggleButton={true}
                         customHsUrl={this.props.customHsUrl}
@@ -380,7 +380,7 @@ module.exports = React.createClass({
         if (this.props.onCancelClick) {
             returnToAppJsx = (
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
-                    {_t('Return to app')}
+                    { _t('Return to app') }
                 </a>
             );
         }
@@ -393,15 +393,15 @@ module.exports = React.createClass({
                             this.state.teamSelected.domain + "/icon.png" :
                             null}
                     />
-                    <h2>{_t('Create an account')}</h2>
-                    {registerBody}
+                    <h2>{ _t('Create an account') }</h2>
+                    { registerBody }
                     <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
-                        {_t('I already have an account')}
+                        { _t('I already have an account') }
                     </a>
-                    {returnToAppJsx}
+                    { returnToAppJsx }
                     <LoginFooter />
                 </div>
             </div>
         );
-    }
+    },
 });

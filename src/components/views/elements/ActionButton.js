@@ -79,8 +79,8 @@ export default React.createClass({
                 onMouseLeave={this._onMouseLeave}
             >
                 <TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />
-                {tooltip}
+                { tooltip }
             </AccessibleButton>
         );
-    }
+    },
 });

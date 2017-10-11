@@ -17,10 +17,10 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sanitizeHtml = require('sanitize-html');
-var highlight = require('highlight.js');
-var linkifyMatrix = require('./linkify-matrix');
+const React = require('react');
+const sanitizeHtml = require('sanitize-html');
+const highlight = require('highlight.js');
+const linkifyMatrix = require('./linkify-matrix');
 import escape from 'lodash/escape';
 import emojione from 'emojione';
 import classNames from 'classnames';
@@ -66,8 +66,7 @@ function unicodeToImage(str) {
         if ( (typeof unicodeChar === 'undefined') || (unicodeChar === '') || (!(unicodeChar in emojione.jsEscapeMap)) ) {
             // if the unicodeChar doesnt exist just return the entire match
             return unicodeChar;
-        }
-        else {
+        } else {
             // get the unicode codepoint from the actual char
             unicode = emojione.jsEscapeMap[unicodeChar];
 
@@ -183,21 +182,19 @@ const sanitizeHtmlParams = {
             if (attribs.href) {
                 attribs.target = '_blank'; // by default
 
-                var m;
+                let m;
                 // FIXME: horrible duplication with linkify-matrix
                 m = attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN);
                 if (m) {
                     attribs.href = m[1];
                     delete attribs.target;
-                }
-                else {
+                } else {
                     m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
                     if (m) {
-                        var entity = m[1];
+                        const entity = m[1];
                         if (entity[0] === '@') {
                             attribs.href = '#/user/' + entity;
-                        }
-                        else if (entity[0] === '#' || entity[0] === '!') {
+                        } else if (entity[0] === '#' || entity[0] === '!') {
                             attribs.href = '#/room/' + entity;
                         }
                         delete attribs.target;
@@ -205,7 +202,7 @@ const sanitizeHtmlParams = {
                 }
             }
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
-            return { tagName: tagName, attribs : attribs };
+            return { tagName: tagName, attribs: attribs };
         },
         'img': function(tagName, attribs) {
             // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
@@ -224,7 +221,7 @@ const sanitizeHtmlParams = {
         'code': function(tagName, attribs) {
             if (typeof attribs.class !== 'undefined') {
                 // Filter out all classes other than ones starting with language- for syntax highlighting.
-                let classes = attribs.class.split(/\s+/).filter(function(cl) {
+                const classes = attribs.class.split(/\s+/).filter(function(cl) {
                     return cl.startsWith('language-');
                 });
                 attribs.class = classes.join(' ');
@@ -287,11 +284,11 @@ class BaseHighlighter {
      * TextHighlighter).
      */
     applyHighlights(safeSnippet, safeHighlights) {
-        var lastOffset = 0;
-        var offset;
-        var nodes = [];
+        let lastOffset = 0;
+        let offset;
+        let nodes = [];
 
-        var safeHighlight = safeHighlights[0];
+        const safeHighlight = safeHighlights[0];
         while ((offset = safeSnippet.toLowerCase().indexOf(safeHighlight.toLowerCase(), lastOffset)) >= 0) {
             // handle preamble
             if (offset > lastOffset) {
@@ -301,7 +298,7 @@ class BaseHighlighter {
 
             // do highlight. use the original string rather than safeHighlight
             // to preserve the original casing.
-            var endOffset = offset + safeHighlight.length;
+            const endOffset = offset + safeHighlight.length;
             nodes.push(this._processSnippet(safeSnippet.substring(offset, endOffset), true));
 
             lastOffset = endOffset;
@@ -319,8 +316,7 @@ class BaseHighlighter {
         if (safeHighlights[1]) {
             // recurse into this range to check for the next set of highlight matches
             return this.applyHighlights(safeSnippet, safeHighlights.slice(1));
-        }
-        else {
+        } else {
             // no more highlights to be found, just return the unhighlighted string
             return [this._processSnippet(safeSnippet, false)];
         }
@@ -341,7 +337,7 @@ class HtmlHighlighter extends BaseHighlighter {
             return snippet;
         }
 
-        var span = "<span class=\""+this.highlightClass+"\">"
+        let span = "<span class=\""+this.highlightClass+"\">"
             + snippet + "</span>";
 
         if (this.highlightLink) {
@@ -366,15 +362,15 @@ class TextHighlighter extends BaseHighlighter {
      * returns a React node
      */
     _processSnippet(snippet, highlight) {
-        var key = this._key++;
+        const key = this._key++;
 
-        var node =
-            <span key={key} className={highlight ? this.highlightClass : null }>
+        let node =
+            <span key={key} className={highlight ? this.highlightClass : null}>
                 { snippet }
             </span>;
 
         if (highlight && this.highlightLink) {
-            node = <a key={key} href={this.highlightLink}>{node}</a>;
+            node = <a key={key} href={this.highlightLink}>{ node }</a>;
         }
 
         return node;
@@ -393,20 +389,20 @@ class TextHighlighter extends BaseHighlighter {
 export function bodyToHtml(content, highlights, opts) {
     opts = opts || {};
 
-    var isHtml = (content.format === "org.matrix.custom.html");
-    let body = isHtml ? content.formatted_body : escape(content.body);
+    const isHtml = (content.format === "org.matrix.custom.html");
+    const body = isHtml ? content.formatted_body : escape(content.body);
 
     let bodyHasEmoji = false;
 
-    var safeBody;
+    let safeBody;
     // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
     // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
     // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
     // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
     try {
         if (highlights && highlights.length > 0) {
-            var highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
-            var safeHighlights = highlights.map(function(highlight) {
+            const highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
+            const safeHighlights = highlights.map(function(highlight) {
                 return sanitizeHtml(highlight, sanitizeHtmlParams);
             });
             // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeHtmlParams structure.
@@ -417,16 +413,15 @@ export function bodyToHtml(content, highlights, opts) {
         safeBody = sanitizeHtml(body, sanitizeHtmlParams);
         bodyHasEmoji = containsEmoji(body);
         if (bodyHasEmoji) safeBody = unicodeToImage(safeBody);
-    }
-    finally {
+    } finally {
         delete sanitizeHtmlParams.textFilter;
     }
 
     let emojiBody = false;
     if (bodyHasEmoji) {
         EMOJI_REGEX.lastIndex = 0;
-        let contentBodyTrimmed = content.body !== undefined ? content.body.trim() : '';
-        let match = EMOJI_REGEX.exec(contentBodyTrimmed);
+        const contentBodyTrimmed = content.body !== undefined ? content.body.trim() : '';
+        const match = EMOJI_REGEX.exec(contentBodyTrimmed);
         emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
     }
 
