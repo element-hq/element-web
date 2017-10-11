@@ -17,7 +17,7 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import React from 'react';
-import { _t, _tJsx } from '../../../languageHandler';
+import { _t, _tJsx, _td } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import SdkConfig from '../../../SdkConfig';
 import sdk from '../../../index';
@@ -33,6 +33,30 @@ import AccessibleButton from '../elements/AccessibleButton';
 function parseIntWithDefault(val, def) {
     var res = parseInt(val);
     return isNaN(res) ? def : res;
+}
+
+const plEventsToLabels = {
+    // These will be translated for us later.
+    "m.room.avatar": _td("To change the room's avatar, you must be a"),
+    "m.room.name": _td("To change the room's name, you must be a"),
+    "m.room.canonical_alias": _td("To change the room's main address, you must be a"),
+    "m.room.history_visibility": _td("To change the room's history visibility, you must be a"),
+    "m.room.power_levels": _td("To change the permissions in the room, you must be a"),
+    "m.room.topic": _td("To change the topic, you must be a"),
+
+    "im.vector.modular.widgets": _td("To modify widgets in the room, you must be a"),
+};
+
+const plEventsToShow = {
+    // If an event is listed here, it will be shown in the PL settings. Defaults will be calculated.
+    "m.room.avatar": {isState: true},
+    "m.room.name": {isState: true},
+    "m.room.canonical_alias": {isState: true},
+    "m.room.history_visibility": {isState: true},
+    "m.room.power_levels": {isState: true},
+    "m.room.topic": {isState: true},
+
+    "im.vector.modular.widgets": {isState: true},
 }
 
 const BannedUser = React.createClass({
@@ -372,6 +396,11 @@ module.exports = React.createClass({
         var powerLevels = this.props.room.currentState.getStateEvents('m.room.power_levels', '');
         powerLevels = powerLevels ? powerLevels.getContent() : {};
 
+        for (let key of Object.keys(this.refs).filter(k => k.startsWith("event_levels_"))) {
+            const eventType = key.substring("event_levels_".length);
+            powerLevels.events[eventType] = parseInt(this.refs[key].getValue());
+        }
+
         var newPowerLevels = {
             ban: parseInt(this.refs.ban.getValue()),
             kick: parseInt(this.refs.kick.getValue()),
@@ -550,6 +579,14 @@ module.exports = React.createClass({
         this.forceUpdate();
     },
 
+    _populateDefaultPlEvents: function(eventsSection, stateLevel, eventsLevel) {
+        for (let desiredEvent of Object.keys(plEventsToShow)) {
+            if (!(desiredEvent in eventsSection)) {
+                eventsSection[desiredEvent] = (plEventsToShow[desiredEvent].isState ? stateLevel : eventsLevel);
+            }
+        }
+    },
+
     _renderEncryptionSection: function() {
         var cli = MatrixClientPeg.get();
         var roomState = this.props.room.currentState;
@@ -620,6 +657,8 @@ module.exports = React.createClass({
         var send_level = parseIntWithDefault(power_levels.events_default, 0);
         var state_level = power_level_event ? parseIntWithDefault(power_levels.state_default, 50) : 0;
         var default_user_level = parseIntWithDefault(power_levels.users_default, 0);
+
+        this._populateDefaultPlEvents(events_levels, state_level, send_level);
 
         var current_user_level = user_levels[user_id];
         if (current_user_level === undefined) {
@@ -875,35 +914,39 @@ module.exports = React.createClass({
                         <PowerSelector ref="users_default" value={default_user_level} controlled={false} disabled={!can_change_levels || current_user_level < default_user_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To send messages') }, { _t('you must be a') } </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To send messages, you must be a') } </span>
                         <PowerSelector ref="events_default" value={send_level} controlled={false} disabled={!can_change_levels || current_user_level < send_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To invite users into the room') }, { _t('you must be a') } </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To invite users into the room, you must be a') } </span>
                         <PowerSelector ref="invite" value={invite_level} controlled={false} disabled={!can_change_levels || current_user_level < invite_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To configure the room') }, { _t('you must be a') } </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To configure the room, you must be a') } </span>
                         <PowerSelector ref="state_default" value={state_level} controlled={false} disabled={!can_change_levels || current_user_level < state_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To kick users') }, { _t('you must be a') } </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To kick users, you must be a') } </span>
                         <PowerSelector ref="kick" value={kick_level} controlled={false} disabled={!can_change_levels || current_user_level < kick_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To ban users') }, { _t('you must be a') } </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To ban users, you must be a') } </span>
                         <PowerSelector ref="ban" value={ban_level} controlled={false} disabled={!can_change_levels || current_user_level < ban_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
                     <div className="mx_RoomSettings_powerLevel">
-                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To remove other users\' messages') }, { _t('you must be a') } </span>
+                        <span className="mx_RoomSettings_powerLevelKey">{ _t('To remove other users\' messages, you must be a') } </span>
                         <PowerSelector ref="redact" value={redact_level} controlled={false} disabled={!can_change_levels || current_user_level < redact_level} onChange={this.onPowerLevelsChanged}/>
                     </div>
 
                     {Object.keys(events_levels).map(function(event_type, i) {
+                        let label = plEventsToLabels[event_type];
+                        if (label) label = _t(label);
+                        else label = _tJsx("To send events of type <eventType/>, you must be a", /<eventType\/>/, () => <code>{ event_type }</code>);
                         return (
                             <div className="mx_RoomSettings_powerLevel" key={event_type}>
-                                <span className="mx_RoomSettings_powerLevelKey">{ _t('To send events of type') } <code>{ event_type }</code>, { _t('you must be a') } </span>
-                                <PowerSelector value={ events_levels[event_type] } controlled={false} disabled={true} onChange={self.onPowerLevelsChanged}/>
+                                <span className="mx_RoomSettings_powerLevelKey">{ label } </span>
+                                <PowerSelector ref={"event_levels_"+event_type} value={ events_levels[event_type] } onChange={self.onPowerLevelsChanged}
+                                               controlled={false} disabled={!can_change_levels || current_user_level < events_levels[event_type]} />
                             </div>
                         );
                     })}
