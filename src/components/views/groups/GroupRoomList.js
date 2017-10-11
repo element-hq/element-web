@@ -17,6 +17,7 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
 import { groupRoomFromApiObject } from '../../../groups';
+import GroupStoreCache from '../../../stores/GroupStoreCache';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import PropTypes from 'prop-types';
 import {MatrixClient} from 'matrix-js-sdk';
@@ -34,7 +35,6 @@ export default React.createClass({
 
     getInitialState: function() {
         return {
-            fetching: false,
             rooms: null,
             truncateAt: INITIAL_LOAD_NUM_ROOMS,
             searchQuery: "",
@@ -43,21 +43,29 @@ export default React.createClass({
 
     componentWillMount: function() {
         this._unmounted = false;
+        this._initGroupStore(this.props.groupId);
+    },
+
+    _initGroupStore: function(groupId) {
+        this._groupStore = GroupStoreCache.getGroupStore(this.context.matrixClient, groupId);
+        this._groupStore.on('update', () => {
+            this._fetchRooms();
+        });
+        this._groupStore.on('error', (err) => {
+            console.error('Error in group store (listened to by GroupRoomList)', err);
+            this.setState({
+                rooms: null,
+            });
+        });
         this._fetchRooms();
     },
 
     _fetchRooms: function() {
-        this.setState({fetching: true});
-        this.context.matrixClient.getGroupRooms(this.props.groupId).then((result) => {
-            this.setState({
-                rooms: result.chunk.map((apiRoom) => {
-                    return groupRoomFromApiObject(apiRoom);
-                }),
-                fetching: false,
-            });
-        }).catch((e) => {
-            this.setState({fetching: false});
-            console.error("Failed to get group room list: ", e);
+        if (this._unmounted) return;
+        this.setState({
+            rooms: this._groupStore.getGroupRooms().map((apiRoom) => {
+                return groupRoomFromApiObject(apiRoom);
+            }),
         });
     },
 
@@ -110,12 +118,7 @@ export default React.createClass({
     },
 
     render: function() {
-        if (this.state.fetching) {
-            const Spinner = sdk.getComponent("elements.Spinner");
-            return (<div className="mx_GroupRoomList">
-                <Spinner />
-            </div>);
-        } else if (this.state.rooms === null) {
+        if (this.state.rooms === null) {
             return null;
         }
 
