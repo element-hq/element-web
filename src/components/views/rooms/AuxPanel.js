@@ -83,9 +83,9 @@ module.exports = React.createClass({
                 <div className="mx_RoomView_fileDropTarget">
                     <div className="mx_RoomView_fileDropTargetLabel"
                       title={_t("Drop File Here")}>
-                        <TintableSvg src="img/upload-big.svg" width="45" height="59"/>
-                        <br/>
-                        {_t("Drop file here to upload")}
+                        <TintableSvg src="img/upload-big.svg" width="45" height="59" />
+                        <br />
+                        { _t("Drop file here to upload") }
                     </div>
                 </div>
             );
@@ -99,23 +99,23 @@ module.exports = React.createClass({
                 supportedText = _t(" (unsupported)");
             } else {
                 joinNode = (<span>
-                    {_tJsx(
+                    { _tJsx(
                         "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.",
                         [/<voiceText>(.*?)<\/voiceText>/, /<videoText>(.*?)<\/videoText>/],
                         [
-                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}} href="#">{sub}</a>,
-                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video');}} href="#">{sub}</a>,
-                        ]
-                    )}
+                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}} href="#">{ sub }</a>,
+                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video');}} href="#">{ sub }</a>,
+                        ],
+                    ) }
                 </span>);
             }
             // XXX: the translation here isn't great: appending ' (unsupported)' is likely to not make sense in many languages,
             // but there are translations for this in the languages we do have so I'm leaving it for now.
             conferenceCallNotification = (
                 <div className="mx_RoomView_ongoingConfCallNotification">
-                    {_t("Ongoing conference call%(supportedText)s.", {supportedText: supportedText})}
+                    { _t("Ongoing conference call%(supportedText)s.", {supportedText: supportedText}) }
                     &nbsp;
-                    {joinNode}
+                    { joinNode }
                 </div>
             );
         }

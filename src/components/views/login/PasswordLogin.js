@@ -94,7 +94,7 @@ class PasswordLogin extends React.Component {
     onLoginTypeChange(loginType) {
         this.setState({
             loginType: loginType,
-            username: "" // Reset because email and username use the same state
+            username: "", // Reset because email and username use the same state
         });
     }
 
@@ -180,7 +180,7 @@ class PasswordLogin extends React.Component {
     }
 
     render() {
-        var forgotPasswordJsx;
+        let forgotPasswordJsx;
 
         if (this.props.onForgotPasswordClick) {
             forgotPasswordJsx = (
@@ -220,21 +220,21 @@ class PasswordLogin extends React.Component {
                         value={this.state.loginType}
                         disabled={matrixIdText === ''}
                         onOptionChange={this.onLoginTypeChange}>
-                            <span key={PasswordLogin.LOGIN_FIELD_MXID}>{matrixIdText}</span>
+                            <span key={PasswordLogin.LOGIN_FIELD_MXID}>{ matrixIdText }</span>
                             <span key={PasswordLogin.LOGIN_FIELD_EMAIL}>{ _t('Email address') }</span>
                             <span key={PasswordLogin.LOGIN_FIELD_PHONE}>{ _t('Phone') }</span>
                     </Dropdown>
                 </div>
-                {loginField}
+                { loginField }
                 <input className={pwFieldClass} ref={(e) => {this._passwordField = e;}} type="password"
                     name="password"
                     value={this.state.password} onChange={this.onPasswordChanged}
-                    placeholder={ _t('Password') }
+                    placeholder={_t('Password')}
                     disabled={matrixIdText === ''}
                 />
                 <br />
-                {forgotPasswordJsx}
-                <input className="mx_Login_submit" type="submit" value={ _t('Sign in') } disabled={matrixIdText === ''} />
+                { forgotPasswordJsx }
+                <input className="mx_Login_submit" type="submit" value={_t('Sign in')} disabled={matrixIdText === ''} />
                 </form>
             </div>
         );

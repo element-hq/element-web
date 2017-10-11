@@ -251,15 +251,15 @@ export default class Autocomplete extends React.Component {
 
             return completions.length > 0 ? (
                 <div key={i} className="mx_Autocomplete_ProviderSection">
-                    <EmojiText element="div" className="mx_Autocomplete_provider_name">{completionResult.provider.getName()}</EmojiText>
-                    {completionResult.provider.renderCompletions(completions)}
+                    <EmojiText element="div" className="mx_Autocomplete_provider_name">{ completionResult.provider.getName() }</EmojiText>
+                    { completionResult.provider.renderCompletions(completions) }
                 </div>
             ) : null;
         }).filter((completion) => !!completion);
 
         return !this.state.hide && renderedCompletions.length > 0 ? (
             <div className="mx_Autocomplete" ref={(e) => this.container = e}>
-                {renderedCompletions}
+                { renderedCompletions }
             </div>
         ) : null;
     }

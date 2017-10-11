@@ -107,24 +107,24 @@ export default React.createClass({
 
             let nameNode = null;
             if (address.displayName) {
-                nameNode = <div className={nameClasses}>{ address.displayName }</div>
+                nameNode = <div className={nameClasses}>{ address.displayName }</div>;
             }
 
             info = (
                 <div className="mx_AddressTile_mx">
                     <div className={emailClasses}>{ address.address }</div>
-                    {nameNode}
+                    { nameNode }
                 </div>
             );
         } else {
             error = true;
-            var unknownClasses = classNames({
+            const unknownClasses = classNames({
                 "mx_AddressTile_unknown": true,
                 "mx_AddressTile_justified": this.props.justified,
             });
 
             info = (
-                <div className={unknownClasses}>{_t("Unknown Address")}</div>
+                <div className={unknownClasses}>{ _t("Unknown Address") }</div>
             );
         }
 
@@ -151,5 +151,5 @@ export default React.createClass({
                 { dismiss }
             </div>
         );
-    }
+    },
 });
