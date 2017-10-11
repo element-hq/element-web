@@ -109,7 +109,7 @@ export function _tJsx(jsxText, patterns, subs) {
     }
 
     // The translation returns text so there's no XSS vector here (no unsafe HTML, no code execution)
-    const tJsxText = _t(jsxText);
+    const tJsxText = _t(jsxText, {interpolate: false});
     let output = [tJsxText];
     for (let i = 0; i < patterns.length; i++) {
         // convert the last element in 'output' into 3 elements (pre-text, sub function, post-text).
