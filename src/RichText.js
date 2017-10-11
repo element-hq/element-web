@@ -67,8 +67,14 @@ function unicodeToEmojiUri(str) {
             // if the unicodeChar doesnt exist just return the entire match
             return unicodeChar;
         } else {
+            // Remove variant selector VS16 (explicitly emoji) as it is unnecessary and leads to an incorrect URL below
+            if(unicodeChar.length == 2 && unicodeChar[1] == '\ufe0f') {
+                unicodeChar = unicodeChar[0];
+            }
+
             // get the unicode codepoint from the actual char
             unicode = emojione.jsEscapeMap[unicodeChar];
+
             return emojione.imagePathSVG+unicode+'.svg'+emojione.cacheBustParam;
         }
     });
