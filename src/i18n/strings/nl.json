@@ -753,7 +753,7 @@
     "Start chatting": "Start met praten",
     "Start Chatting": "Start Met Praten",
     "Click on the button below to start chatting!": "Klik op de knop hieronder om te starten met praten!",
-    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName heeft de ruimte avatar aangepast naar <img/>",
+    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s heeft de ruimte avatar aangepast naar <img/>",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s heeft de ruimte avatar verwijderd.",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s veranderde de avatar voor %(roomName)s",
     "Username available": "Gebruikersnaam beschikbaar",

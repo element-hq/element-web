@@ -626,7 +626,7 @@
     "Dec": "Dec.",
     "Set a display name:": "Iestatīt redzamo vārdu:",
     "This image cannot be displayed.": "Šo attēlu nav iespējams parādīt.",
-    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName nomainīja istabas attēlu uz <img/>",
+    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s nomainīja istabas attēlu uz <img/>",
     "Upload an avatar:": "Augšuplādē profila attēlu:",
     "This server does not support authentication with a phone number.": "Šis serveris neatbalsta autentifikāciju pēc telefona numura.",
     "Missing password.": "Trūkst parole.",

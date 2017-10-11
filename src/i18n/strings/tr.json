@@ -746,7 +746,7 @@
     "Start chatting": "Sohbeti başlat",
     "Start Chatting": "Sohbeti Başlat",
     "Click on the button below to start chatting!": "Sohbeti başlatmak için aşağıdaki butona tıklayın!",
-    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName odanın avatarını <img/> olarak çevirdi",
+    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s odanın avatarını <img/> olarak çevirdi",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s odanın avatarını kaldırdı.",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s  %(roomName)s için avatarı değiştirdi",
     "Username available": "Kullanıcı ismi uygun",

@@ -70,9 +70,9 @@ module.exports = React.createClass({
         // it sucks that _tJsx doesn't support normal _t substitutions :((
         return (
             <div className="mx_RoomAvatarEvent">
-                { _tJsx('$senderDisplayName changed the room avatar to <img/>',
+                { _tJsx('%(senderDisplayName)s changed the room avatar to <img/>',
                          [
-                            /\$senderDisplayName/,
+                            /%\(senderDisplayName\)s/,
                             /<img\/>/,
                          ],
                          [

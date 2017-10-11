@@ -744,7 +744,7 @@
     "Start chatting": "Hasi txateatzen",
     "Start Chatting": "Hasi txateatzen",
     "Click on the button below to start chatting!": "Egin klik beheko botoian txateatzen hasteko!",
-    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName erabiltzaileak gelaren abatarra aldatu du beste honetara: <img/>",
+    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s erabiltzaileak gelaren abatarra aldatu du beste honetara: <img/>",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s erabiltzaileak gelaren abatarra ezabatu du.",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s erabiltzaileak %(roomName)s gelaren abatarra aldatu du",
     "Username available": "Erabiltzaile-izena eskuragarri dago",

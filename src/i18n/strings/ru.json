@@ -712,7 +712,7 @@
     "Idle": "Неактивен",
     "Offline": "Не в сети",
     "Disable URL previews for this room (affects only you)": "Отключить предпросмотр URL-адресов для этой комнаты (влияет только на вас)",
-    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName сменил аватар комнаты на <img/>",
+    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s сменил аватар комнаты на <img/>",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s удалил аватар комнаты.",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s сменил аватар для %(roomName)s",
     "Create new room": "Создать новую комнату",
