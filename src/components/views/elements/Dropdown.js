@@ -302,6 +302,7 @@ export default class Dropdown extends React.Component {
 
         const dropdownClasses = {
             mx_Dropdown: true,
+            mx_Dropdown_disabled: this.props.disabled,
         };
         if (this.props.className) {
             dropdownClasses[this.props.className] = true;
