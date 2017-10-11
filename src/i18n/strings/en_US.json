@@ -607,7 +607,7 @@
     "Desktop specific": "Desktop specific",
     "Analytics": "Analytics",
     "Opt out of analytics": "Opt out of analytics",
-    "Banned by %(displayName)s (%(userId)s)": "Banned by %(displayName)s (%(userId)s)",
+    "Banned by %(displayName)s": "Banned by %(displayName)s",
     "Options": "Options",
     "Riot collects anonymous analytics to allow us to improve the application.": "Riot collects anonymous analytics to allow us to improve the application.",
     "Passphrases must match": "Passphrases must match",
