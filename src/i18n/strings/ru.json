@@ -262,7 +262,7 @@
     "Connectivity to the server has been lost.": "Связь с сервером потеряна.",
     "Sent messages will be stored until your connection has returned.": "Отправленные сообщения будут сохранены, пока соединение не восстановится.",
     "There are no visible files in this room": "В этой комнате нет видимых файлов",
-    "This doesn't look like a valid phone number.": "Это не похоже на допустимый телефонный номер.",
+    "This doesn't look like a valid phone number.": "Недопустимый номер телефона.",
     "Missing password.": "Отсутствует пароль.",
     "Set a display name:": "Введите отображаемое имя:",
     "Passwords don't match.": "Пароли не совпадают.",
