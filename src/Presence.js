@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var MatrixClientPeg = require("./MatrixClientPeg");
-var dis = require("./dispatcher");
+const MatrixClientPeg = require("./MatrixClientPeg");
+const dis = require("./dispatcher");
 
  // Time in ms after that a user is considered as unavailable/away
-var UNAVAILABLE_TIME_MS = 3 * 60 * 1000; // 3 mins
-var PRESENCE_STATES = ["online", "offline", "unavailable"];
+const UNAVAILABLE_TIME_MS = 3 * 60 * 1000; // 3 mins
+const PRESENCE_STATES = ["online", "offline", "unavailable"];
 
 class Presence {
 
@@ -71,14 +71,14 @@ class Presence {
         if (!this.running) {
             return;
         }
-        var old_state = this.state;
+        const old_state = this.state;
         this.state = newState;
 
         if (MatrixClientPeg.get().isGuest()) {
             return; // don't try to set presence when a guest; it won't work.
         }
 
-        var self = this;
+        const self = this;
         MatrixClientPeg.get().setPresence(this.state).done(function() {
             console.log("Presence: %s", newState);
         }, function(err) {
@@ -104,7 +104,7 @@ class Presence {
      * @private
      */
     _resetTimer() {
-        var self = this;
+        const self = this;
         this.setState("online");
         // Re-arm the timer
         clearTimeout(this.timer);

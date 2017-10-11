@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var MatrixClientPeg = require('./MatrixClientPeg');
+const MatrixClientPeg = require('./MatrixClientPeg');
 import UserSettingsStore from './UserSettingsStore';
 import shouldHideEvent from './shouldHideEvent';
-var sdk = require('./index');
+const sdk = require('./index');
 
 module.exports = {
     /**
@@ -34,17 +34,17 @@ module.exports = {
         } else if (ev.getType == 'm.room.message' && ev.getContent().msgtype == 'm.notify') {
             return false;
         }
-        var EventTile = sdk.getComponent('rooms.EventTile');
+        const EventTile = sdk.getComponent('rooms.EventTile');
         return EventTile.haveTileForEvent(ev);
     },
 
     doesRoomHaveUnreadMessages: function(room) {
-        var myUserId = MatrixClientPeg.get().credentials.userId;
+        const myUserId = MatrixClientPeg.get().credentials.userId;
 
         // get the most recent read receipt sent by our account.
         // N.B. this is NOT a read marker (RM, aka "read up to marker"),
         // despite the name of the method :((
-        var readUpToId = room.getEventReadUpTo(myUserId);
+        const readUpToId = room.getEventReadUpTo(myUserId);
 
         // as we don't send RRs for our own messages, make sure we special case that
         // if *we* sent the last message into the room, we consider it not unread!
@@ -54,8 +54,7 @@ module.exports = {
         //             https://github.com/vector-im/riot-web/issues/3363
         if (room.timeline.length &&
             room.timeline[room.timeline.length - 1].sender &&
-            room.timeline[room.timeline.length - 1].sender.userId === myUserId)
-        {
+            room.timeline[room.timeline.length - 1].sender.userId === myUserId) {
             return false;
         }
 
@@ -67,8 +66,8 @@ module.exports = {
 
         const syncedSettings = UserSettingsStore.getSyncedSettings();
         // Loop through messages, starting with the most recent...
-        for (var i = room.timeline.length - 1; i >= 0; --i) {
-            var ev = room.timeline[i];
+        for (let i = room.timeline.length - 1; i >= 0; --i) {
+            const ev = room.timeline[i];
 
             if (ev.getId() == readUpToId) {
                 // If we've read up to this event, there's nothing more recents
@@ -86,5 +85,5 @@ module.exports = {
         // is unread on the theory that false positives are better than
         // false negatives here.
         return true;
-    }
+    },
 };

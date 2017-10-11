@@ -138,7 +138,7 @@ export default class EmojiProvider extends AutocompleteProvider {
                 return {
                     completion: unicode,
                     component: (
-                        <PillCompletion title={shortname} initialComponent={<EmojiText style={{maxWidth: '1em'}}>{unicode}</EmojiText>} />
+                        <PillCompletion title={shortname} initialComponent={<EmojiText style={{maxWidth: '1em'}}>{ unicode }</EmojiText>} />
                     ),
                     range,
                 };
@@ -152,14 +152,13 @@ export default class EmojiProvider extends AutocompleteProvider {
     }
 
     static getInstance() {
-        if (instance == null)
-            {instance = new EmojiProvider();}
+        if (instance == null) {instance = new EmojiProvider();}
         return instance;
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
         return <div className="mx_Autocomplete_Completion_container_pill">
-            {completions}
+            { completions }
         </div>;
     }
 }

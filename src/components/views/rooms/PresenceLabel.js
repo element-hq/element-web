@@ -34,23 +34,23 @@ module.exports = React.createClass({
         currentlyActive: React.PropTypes.bool,
 
         // offline, online, etc
-        presenceState: React.PropTypes.string
+        presenceState: React.PropTypes.string,
     },
 
     getDefaultProps: function() {
         return {
             ago: -1,
-            presenceState: null
+            presenceState: null,
         };
     },
 
     getDuration: function(time) {
         if (!time) return;
-        var t = parseInt(time / 1000);
-        var s = t % 60;
-        var m = parseInt(t / 60) % 60;
-        var h = parseInt(t / (60 * 60)) % 24;
-        var d = parseInt(t / (60 * 60 * 24));
+        const t = parseInt(time / 1000);
+        const s = t % 60;
+        const m = parseInt(t / 60) % 60;
+        const h = parseInt(t / (60 * 60)) % 24;
+        const d = parseInt(t / (60 * 60 * 24));
         if (t < 60) {
             if (t < 0) {
                 return _t("for %(amount)ss", {amount: 0});
@@ -58,12 +58,12 @@ module.exports = React.createClass({
             return _t("for %(amount)ss", {amount: s});
         }
         if (t < 60 * 60) {
-            return  _t("for %(amount)sm", {amount: m});
+            return _t("for %(amount)sm", {amount: m});
         }
         if (t < 24 * 60 * 60) {
-            return  _t("for %(amount)sh", {amount: h});
+            return _t("for %(amount)sh", {amount: h});
         }
-        return  _t("for %(amount)sd", {amount: d});
+        return _t("for %(amount)sd", {amount: d});
     },
 
     getPrettyPresence: function(presence) {
@@ -75,20 +75,19 @@ module.exports = React.createClass({
 
     render: function() {
         if (this.props.activeAgo >= 0) {
-            let duration = this.getDuration(this.props.activeAgo);
-            let ago = this.props.currentlyActive || !duration ? "" : duration;
+            const duration = this.getDuration(this.props.activeAgo);
+            const ago = this.props.currentlyActive || !duration ? "" : duration;
             return (
                 <div className="mx_PresenceLabel">
                     { this.getPrettyPresence(this.props.presenceState) } { ago }
                 </div>
             );
-        }
-        else {
+        } else {
             return (
                 <div className="mx_PresenceLabel">
                     { this.getPrettyPresence(this.props.presenceState) }
                 </div>
             );
         }
-    }
+    },
 });

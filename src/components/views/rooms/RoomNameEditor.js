@@ -16,9 +16,9 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sdk = require('../../../index');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
+const React = require('react');
+const sdk = require('../../../index');
+const MatrixClientPeg = require('../../../MatrixClientPeg');
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
@@ -29,10 +29,10 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        var room = this.props.room;
-        var name = room.currentState.getStateEvents('m.room.name', '');
-        var myId = MatrixClientPeg.get().credentials.userId;
-        var defaultName = room.getDefaultRoomName(myId);
+        const room = this.props.room;
+        const name = room.currentState.getStateEvents('m.room.name', '');
+        const myId = MatrixClientPeg.get().credentials.userId;
+        const defaultName = room.getDefaultRoomName(myId);
 
         this._initialName = name ? name.getContent().name : '';
 
@@ -47,16 +47,16 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var EditableText = sdk.getComponent("elements.EditableText");
+        const EditableText = sdk.getComponent("elements.EditableText");
 
         return (
                 <div className="mx_RoomHeader_name">
                     <EditableText ref="editor"
                          className="mx_RoomHeader_nametext mx_RoomHeader_editable"
                          placeholderClassName="mx_RoomHeader_placeholder"
-                         placeholder={ this._placeholderName }
-                         blurToCancel={ false }
-                         initialValue={ this._initialName }
+                         placeholder={this._placeholderName}
+                         blurToCancel={false}
+                         initialValue={this._initialName}
                          dir="auto" />
                 </div>
         );

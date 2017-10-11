@@ -134,7 +134,7 @@ module.exports = React.createClass({
     },
 
     _onLoginAsGuestClick: function() {
-        var self = this;
+        const self = this;
         self.setState({
             busy: true,
             errorText: null,
@@ -156,7 +156,7 @@ module.exports = React.createClass({
             });
         }).finally(function() {
             self.setState({
-                busy: false
+                busy: false,
             });
         }).done();
     },
@@ -183,8 +183,8 @@ module.exports = React.createClass({
     },
 
     onServerConfigChange: function(config) {
-        var self = this;
-        let newState = {
+        const self = this;
+        const newState = {
             errorText: null, // reset err messages
         };
         if (config.hsUrl !== undefined) {
@@ -199,13 +199,13 @@ module.exports = React.createClass({
     },
 
     _initLoginLogic: function(hsUrl, isUrl) {
-        var self = this;
+        const self = this;
         hsUrl = hsUrl || this.state.enteredHomeserverUrl;
         isUrl = isUrl || this.state.enteredIdentityServerUrl;
 
-        var fallbackHsUrl = hsUrl == this.props.defaultHsUrl ? this.props.fallbackHsUrl : null;
+        const fallbackHsUrl = hsUrl == this.props.defaultHsUrl ? this.props.fallbackHsUrl : null;
 
-        var loginLogic = new Login(hsUrl, isUrl, fallbackHsUrl, {
+        const loginLogic = new Login(hsUrl, isUrl, fallbackHsUrl, {
             defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
         });
         this._loginLogic = loginLogic;
@@ -259,15 +259,15 @@ module.exports = React.createClass({
                     { _tJsx("Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. " +
                             "Either use HTTPS or <a>enable unsafe scripts</a>.",
                       /<a>(.*?)<\/a>/,
-                      (sub) => { return <a href="https://www.google.com/search?&q=enable%20unsafe%20scripts">{ sub }</a>; }
-                    )}
+                      (sub) => { return <a href="https://www.google.com/search?&q=enable%20unsafe%20scripts">{ sub }</a>; },
+                    ) }
                 </span>;
             } else {
                 errorText = <span>
                     { _tJsx("Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
                       /<a>(.*?)<\/a>/,
-                      (sub) => { return <a href={this.state.enteredHomeserverUrl}>{ sub }</a>; }
-                    )}
+                      (sub) => { return <a href={this.state.enteredHomeserverUrl}>{ sub }</a>; },
+                    ) }
                 </span>;
             }
         }
@@ -304,7 +304,7 @@ module.exports = React.createClass({
                 }
                 return (
                     <div>
-                    { _t('Sorry, this homeserver is using a login which is not recognised ')}({step})
+                    { _t('Sorry, this homeserver is using a login which is not recognised ') }({ step })
                     </div>
                 );
         }
@@ -334,19 +334,19 @@ module.exports = React.createClass({
         const ServerConfig = sdk.getComponent("login.ServerConfig");
         const loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
-        var loginAsGuestJsx;
+        let loginAsGuestJsx;
         if (this.props.enableGuest) {
             loginAsGuestJsx =
                 <a className="mx_Login_create" onClick={this._onLoginAsGuestClick} href="#">
-                    { _t('Login as guest')}
+                    { _t('Login as guest') }
                 </a>;
         }
 
-        var returnToAppJsx;
+        let returnToAppJsx;
         if (this.props.onCancelClick) {
             returnToAppJsx =
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
-                    { _t('Return to app')}
+                    { _t('Return to app') }
                 </a>;
         }
 
@@ -355,7 +355,7 @@ module.exports = React.createClass({
                 <div className="mx_Login_box">
                     <LoginHeader />
                     <div>
-                        <h2>{ _t('Sign in')}
+                        <h2>{ _t('Sign in') }
                             { loader }
                         </h2>
                         { this.componentForStep(this.state.currentFlow) }
@@ -366,12 +366,12 @@ module.exports = React.createClass({
                             defaultHsUrl={this.props.defaultHsUrl}
                             defaultIsUrl={this.props.defaultIsUrl}
                             onServerConfigChange={this.onServerConfigChange}
-                            delayTimeMs={1000}/>
+                            delayTimeMs={1000} />
                         <div className="mx_Login_error">
                                 { this.state.errorText }
                         </div>
                         <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
-                            { _t('Create an account')}
+                            { _t('Create an account') }
                         </a>
                         { loginAsGuestJsx }
                         { returnToAppJsx }
@@ -381,5 +381,5 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
-    }
+    },
 });

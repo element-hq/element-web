@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import Promise from 'bluebird';
-var React = require('react');
-var ObjectUtils = require("../../../ObjectUtils");
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var sdk = require("../../../index");
+const React = require('react');
+const ObjectUtils = require("../../../ObjectUtils");
+const MatrixClientPeg = require('../../../MatrixClientPeg');
+const sdk = require("../../../index");
 import { _t } from '../../../languageHandler';
-var Modal = require("../../../Modal");
+const Modal = require("../../../Modal");
 
 module.exports = React.createClass({
     displayName: 'AliasSettings',
@@ -30,14 +30,14 @@ module.exports = React.createClass({
         canSetCanonicalAlias: React.PropTypes.bool.isRequired,
         canSetAliases: React.PropTypes.bool.isRequired,
         aliasEvents: React.PropTypes.array, // [MatrixEvent]
-        canonicalAliasEvent: React.PropTypes.object // MatrixEvent
+        canonicalAliasEvent: React.PropTypes.object, // MatrixEvent
     },
 
     getDefaultProps: function() {
         return {
             canSetAliases: false,
             canSetCanonicalAlias: false,
-            aliasEvents: []
+            aliasEvents: [],
         };
     },
 
@@ -48,12 +48,12 @@ module.exports = React.createClass({
     recalculateState: function(aliasEvents, canonicalAliasEvent) {
         aliasEvents = aliasEvents || [];
 
-        var state = {
+        const state = {
             domainToAliases: {}, // { domain.com => [#alias1:domain.com, #alias2:domain.com] }
             remoteDomains: [], // [ domain.com, foobar.com ]
-            canonicalAlias: null // #canonical:domain.com
+            canonicalAlias: null, // #canonical:domain.com
         };
-        var localDomain = MatrixClientPeg.get().getDomain();
+        const localDomain = MatrixClientPeg.get().getDomain();
 
         state.domainToAliases = this.aliasEventsToDictionary(aliasEvents);
 
@@ -69,26 +69,26 @@ module.exports = React.createClass({
     },
 
     saveSettings: function() {
-        var promises = [];
+        let promises = [];
 
         // save new aliases for m.room.aliases
-        var aliasOperations = this.getAliasOperations();
-        for (var i = 0; i < aliasOperations.length; i++) {
-            var alias_operation = aliasOperations[i];
+        const aliasOperations = this.getAliasOperations();
+        for (let i = 0; i < aliasOperations.length; i++) {
+            const alias_operation = aliasOperations[i];
             console.log("alias %s %s", alias_operation.place, alias_operation.val);
             switch (alias_operation.place) {
                 case 'add':
                     promises.push(
                         MatrixClientPeg.get().createAlias(
-                            alias_operation.val, this.props.roomId
-                        )
+                            alias_operation.val, this.props.roomId,
+                        ),
                     );
                     break;
                 case 'del':
                     promises.push(
                         MatrixClientPeg.get().deleteAlias(
-                            alias_operation.val
-                        )
+                            alias_operation.val,
+                        ),
                     );
                     break;
                 default:
@@ -98,7 +98,7 @@ module.exports = React.createClass({
 
 
         // save new canonical alias
-        var oldCanonicalAlias = null;
+        let oldCanonicalAlias = null;
         if (this.props.canonicalAliasEvent) {
             oldCanonicalAlias = this.props.canonicalAliasEvent.getContent().alias;
         }
@@ -107,9 +107,9 @@ module.exports = React.createClass({
             promises = [Promise.all(promises).then(
                 MatrixClientPeg.get().sendStateEvent(
                     this.props.roomId, "m.room.canonical_alias", {
-                        alias: this.state.canonicalAlias
-                    }, ""
-                )
+                        alias: this.state.canonicalAlias,
+                    }, "",
+                ),
             )];
         }
 
@@ -117,7 +117,7 @@ module.exports = React.createClass({
     },
 
     aliasEventsToDictionary: function(aliasEvents) { // m.room.alias events
-        var dict = {};
+        const dict = {};
         aliasEvents.forEach((event) => {
             dict[event.getStateKey()] = (
                 (event.getContent().aliases || []).slice() // shallow-copy
@@ -132,7 +132,7 @@ module.exports = React.createClass({
     },
 
     getAliasOperations: function() {
-        var oldAliases = this.aliasEventsToDictionary(this.props.aliasEvents);
+        const oldAliases = this.aliasEventsToDictionary(this.props.aliasEvents);
         return ObjectUtils.getKeyValueArrayDiffs(oldAliases, this.state.domainToAliases);
     },
 
@@ -191,26 +191,26 @@ module.exports = React.createClass({
 
     onCanonicalAliasChange: function(event) {
         this.setState({
-            canonicalAlias: event.target.value
+            canonicalAlias: event.target.value,
         });
     },
 
     render: function() {
-        var self = this;
-        var EditableText = sdk.getComponent("elements.EditableText");
-        var EditableItemList = sdk.getComponent("elements.EditableItemList");
-        var localDomain = MatrixClientPeg.get().getDomain();
+        const self = this;
+        const EditableText = sdk.getComponent("elements.EditableText");
+        const EditableItemList = sdk.getComponent("elements.EditableItemList");
+        const localDomain = MatrixClientPeg.get().getDomain();
 
-        var canonical_alias_section;
+        let canonical_alias_section;
         if (this.props.canSetCanonicalAlias) {
             canonical_alias_section = (
-                <select onChange={this.onCanonicalAliasChange} defaultValue={ this.state.canonicalAlias }>
+                <select onChange={this.onCanonicalAliasChange} defaultValue={this.state.canonicalAlias}>
                     <option value="" key="unset">{ _t('not specified') }</option>
                     {
                         Object.keys(self.state.domainToAliases).map(function(domain, i) {
                             return self.state.domainToAliases[domain].map(function(alias, j) {
                                 return (
-                                    <option value={ alias } key={ i + "_" + j }>
+                                    <option value={alias} key={i + "_" + j}>
                                         { alias }
                                     </option>
                                 );
@@ -219,34 +219,33 @@ module.exports = React.createClass({
                     }
                 </select>
             );
-        }
-        else {
+        } else {
             canonical_alias_section = (
                 <b>{ this.state.canonicalAlias || _t('not set') }</b>
             );
         }
 
-        var remote_aliases_section;
+        let remote_aliases_section;
         if (this.state.remoteDomains.length) {
             remote_aliases_section = (
                 <div>
                     <div className="mx_RoomSettings_aliasLabel">
-                        {_t("Remote addresses for this room:")}
+                        { _t("Remote addresses for this room:") }
                     </div>
                     <div className="mx_RoomSettings_aliasesTable">
                         { this.state.remoteDomains.map((domain, i) => {
                             return this.state.domainToAliases[domain].map(function(alias, j) {
                                 return (
-                                    <div className="mx_RoomSettings_aliasesTableRow" key={ i + "_" + j }>
+                                    <div className="mx_RoomSettings_aliasesTableRow" key={i + "_" + j}>
                                         <EditableText
                                              className="mx_RoomSettings_alias mx_RoomSettings_editable"
-                                             blurToCancel={ false }
-                                             editable={ false }
-                                             initialValue={ alias } />
+                                             blurToCancel={false}
+                                             editable={false}
+                                             initialValue={alias} />
                                     </div>
                                 );
                             });
-                        })}
+                        }) }
                     </div>
                 </div>
             );
