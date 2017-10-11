@@ -17,7 +17,7 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import React from 'react';
-import { _t, _tJsx } from '../../../languageHandler';
+import { _t, _tJsx, _td } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import SdkConfig from '../../../SdkConfig';
 import sdk from '../../../index';
@@ -37,15 +37,14 @@ function parseIntWithDefault(val, def) {
 
 const plEventsToLabels = {
     // These will be translated for us later.
-    // TODO: _td() these when https://github.com/matrix-org/matrix-react-sdk/pull/1421 lands
-    "m.room.avatar": "To change the room's avatar, you must be a",
-    "m.room.name": "To change the room's name, you must be a",
-    "m.room.canonical_alias": "To change the room's main address, you must be a",
-    "m.room.history_visibility": "To change the room's history visibility, you must be a",
-    "m.room.power_levels": "To change the permissions in the room, you must be a",
-    "m.room.topic": "To change the topic, you must be a",
+    "m.room.avatar": _td("To change the room's avatar, you must be a"),
+    "m.room.name": _td("To change the room's name, you must be a"),
+    "m.room.canonical_alias": _td("To change the room's main address, you must be a"),
+    "m.room.history_visibility": _td("To change the room's history visibility, you must be a"),
+    "m.room.power_levels": _td("To change the permissions in the room, you must be a"),
+    "m.room.topic": _td("To change the topic, you must be a"),
 
-    "im.vector.modular.widgets": "To modify widgets in the room, you must be a",
+    "im.vector.modular.widgets": _td("To modify widgets in the room, you must be a"),
 };
 
 const plEventsToShow = {
