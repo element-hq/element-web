@@ -68,7 +68,7 @@ export default React.createClass({
                         <label htmlFor="textinput"> { this.props.description } </label>
                     </div>
                     <div>
-                        <input id="textinput" ref="textinput" className="mx_TextInputDialog_input" defaultValue={this.props.value} autoFocus={this.props.focus} size="64" onKeyDown={this.onKeyDown} />
+                        <input id="textinput" ref="textinput" className="mx_TextInputDialog_input" defaultValue={this.props.value} autoFocus={this.props.focus} size="64" />
                     </div>
                 </div>
                 <div className="mx_Dialog_buttons">

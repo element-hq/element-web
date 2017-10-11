@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var ReactDOM = require("react-dom");
-var ReactTestUtils = require('react-addons-test-utils');
-var expect = require('expect');
+const React = require('react');
+const ReactDOM = require("react-dom");
+const ReactTestUtils = require('react-addons-test-utils');
+const expect = require('expect');
 import Promise from 'bluebird';
 
-var sdk = require('matrix-react-sdk');
+const sdk = require('matrix-react-sdk');
 
-var ScrollPanel = sdk.getComponent('structures.ScrollPanel');
-var test_utils = require('test-utils');
+const ScrollPanel = sdk.getComponent('structures.ScrollPanel');
+const test_utils = require('test-utils');
 
-var Tester = React.createClass({
+const Tester = React.createClass({
     getInitialState: function() {
         return {
             tileKeys: [],
@@ -43,18 +43,18 @@ var Tester = React.createClass({
     },
 
     _onFillRequest: function(back) {
-        var dir = back ? 'b': 'f';
+        const dir = back ? 'b': 'f';
         console.log("FillRequest: " + dir);
         this.fillCounts[dir]++;
 
-        var handler = this._fillHandlers[dir];
-        var defer = this._fillDefers[dir];
+        const handler = this._fillHandlers[dir];
+        const defer = this._fillDefers[dir];
 
         // don't use the same handler twice
         this._fillHandlers[dir] = null;
         this._fillDefers[dir] = null;
 
-        var res;
+        let res;
         if (handler) {
             res = handler();
         } else {
@@ -74,17 +74,17 @@ var Tester = React.createClass({
     /* returns a promise which will resolve when the fill happens */
     awaitFill: function(dir) {
         console.log("ScrollPanel Tester: awaiting " + dir + " fill");
-        var defer = Promise.defer();
+        const defer = Promise.defer();
         this._fillDefers[dir] = defer;
         return defer.promise;
     },
 
     _onScroll: function(ev) {
-        var st = ev.target.scrollTop;
+        const st = ev.target.scrollTop;
         console.log("ScrollPanel Tester: scroll event; scrollTop: " + st);
         this.lastScrollEvent = st;
 
-        var d = this._scrollDefer;
+        const d = this._scrollDefer;
         if (d) {
             this._scrollDefer = null;
             d.resolve();
@@ -118,29 +118,29 @@ var Tester = React.createClass({
             <li key={key} data-scroll-tokens={key}>
                 <div style={{height: '98px', margin: '50px', border: '1px solid black',
                              backgroundColor: '#fff8dc' }}>
-                   {key}
+                   { key }
                 </div>
              </li>
          );
     },
 
     render: function() {
-        var tiles = this.state.tileKeys.map(this._mkTile);
+        const tiles = this.state.tileKeys.map(this._mkTile);
         console.log("rendering with " + tiles.length + " tiles");
         return (
             <ScrollPanel ref="sp"
-                onScroll={ this._onScroll }
-                onFillRequest={ this._onFillRequest }>
-                    {tiles}
+                onScroll={this._onScroll}
+                onFillRequest={this._onFillRequest}>
+                    { tiles }
             </ScrollPanel>
         );
     },
 });
 
 describe('ScrollPanel', function() {
-    var parentDiv;
-    var tester;
-    var scrollingDiv;
+    let parentDiv;
+    let tester;
+    let scrollingDiv;
 
     beforeEach(function(done) {
         test_utils.beforeEach(this);
@@ -153,7 +153,7 @@ describe('ScrollPanel', function() {
         parentDiv.style.overflow = 'hidden';
         document.body.appendChild(parentDiv);
 
-        tester = ReactDOM.render(<Tester/>, parentDiv);
+        tester = ReactDOM.render(<Tester />, parentDiv);
         expect(tester.fillCounts.b).toEqual(1);
         expect(tester.fillCounts.f).toEqual(1);
 
@@ -226,10 +226,10 @@ describe('ScrollPanel', function() {
     });
 
     it('should not get stuck in #528 workaround', function(done) {
-        var events = [];
+        let events = [];
         Promise.resolve().then(() => {
             // initialise with a bunch of events
-            for (var i = 0; i < 40; i++) {
+            for (let i = 0; i < 40; i++) {
                 events.push(i);
             }
             tester.setTileKeys(events);
@@ -259,7 +259,7 @@ describe('ScrollPanel', function() {
         }).then(() => {
             // Now, simulate hitting "scroll to bottom".
             events = [];
-            for (var i = 100; i < 120; i++) {
+            for (let i = 100; i < 120; i++) {
                 events.push(i);
             }
             tester.setTileKeys(events);

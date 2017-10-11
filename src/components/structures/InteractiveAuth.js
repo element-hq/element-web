@@ -107,7 +107,7 @@ export default React.createClass({
 
             const msg = error.message || error.toString();
             this.setState({
-                errorText: msg
+                errorText: msg,
             });
         }).done();
 
@@ -207,7 +207,7 @@ export default React.createClass({
         if (this.state.errorText) {
             error = (
                 <div className="error">
-                    {this.state.errorText}
+                    { this.state.errorText }
                 </div>
             );
         }
@@ -215,8 +215,8 @@ export default React.createClass({
         return (
             <div>
                 <div>
-                    {this._renderCurrentStage()}
-                    {error}
+                    { this._renderCurrentStage() }
+                    { error }
                 </div>
             </div>
         );

@@ -69,7 +69,7 @@ export default class CountryDropdown extends React.Component {
     }
 
     _flagImgForIso2(iso2) {
-        return <img src={`flags/${iso2}.png`}/>;
+        return <img src={`flags/${iso2}.png`} />;
     }
 
     _getShortOption(iso2) {
@@ -111,8 +111,8 @@ export default class CountryDropdown extends React.Component {
 
         const options = displayedCountries.map((country) => {
             return <div key={country.iso2}>
-                {this._flagImgForIso2(country.iso2)}
-                {country.name} <span>(+{country.prefix})</span>
+                { this._flagImgForIso2(country.iso2) }
+                { country.name } <span>(+{ country.prefix })</span>
             </div>;
         });
 
@@ -123,9 +123,9 @@ export default class CountryDropdown extends React.Component {
         return <Dropdown className={this.props.className + " left_aligned"}
             onOptionChange={this._onOptionChange} onSearchChange={this._onSearchChange}
             menuWidth={298} getShortOption={this._getShortOption}
-            value={value} searchEnabled={true}
+            value={value} searchEnabled={true} disabled={this.props.disabled}
         >
-            {options}
+            { options }
         </Dropdown>;
     }
 }
@@ -137,4 +137,5 @@ CountryDropdown.propTypes = {
     showPrefix: React.PropTypes.bool,
     onOptionChange: React.PropTypes.func.isRequired,
     value: React.PropTypes.string,
+    disabled: React.PropTypes.bool,
 };

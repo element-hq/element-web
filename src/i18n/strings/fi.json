@@ -245,7 +245,7 @@
     "Mobile phone number": "Matkapuhelinnumero",
     "Mobile phone number (optional)": "Matkapuhelinnumero (valinnainen)",
     "Moderator": "Moderaattori",
-    "my Matrix ID": "minun Matrix tunniste",
+    "%(serverName)s Matrix ID": "%(serverName)s Matrix tunniste",
     "Name": "Nimi",
     "New password": "Uusi salasana",
     "New passwords don't match": "Uudet salasanat eivät täsmää",

@@ -64,7 +64,7 @@ export default class EditableTextContainer extends React.Component {
                     errorString: error.toString(),
                     busy: false,
                 });
-            }
+            },
         );
     }
 
@@ -96,22 +96,22 @@ export default class EditableTextContainer extends React.Component {
                     errorString: error.toString(),
                     busy: false,
                 });
-            }
+            },
         );
     }
 
     render() {
         if (this.state.busy) {
-            var Loader = sdk.getComponent("elements.Spinner");
+            const Loader = sdk.getComponent("elements.Spinner");
             return (
                 <Loader />
             );
         } else if (this.state.errorString) {
             return (
-                <div className="error">{this.state.errorString}</div>
+                <div className="error">{ this.state.errorString }</div>
             );
         } else {
-            var EditableText = sdk.getComponent('elements.EditableText');
+            const EditableText = sdk.getComponent('elements.EditableText');
             return (
                 <EditableText initialValue={this.state.value}
                     placeholder={this.props.placeholder}

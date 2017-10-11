@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { GroupRoomType } from '../../../groups';
+import GroupStoreCache from '../../../stores/GroupStoreCache';
 import Modal from '../../../Modal';
 
 const GroupRoomTile = React.createClass({
@@ -49,10 +50,10 @@ const GroupRoomTile = React.createClass({
 
     removeRoomFromGroup: function() {
         const groupId = this.props.groupId;
+        const groupStore = GroupStoreCache.getGroupStore(this.context.matrixClient, groupId);
         const roomName = this.state.name;
         const roomId = this.props.groupRoom.roomId;
-        this.context.matrixClient
-            .removeRoomFromGroup(groupId, roomId)
+        groupStore.removeRoomFromGroup(roomId)
             .catch((err) => {
                 console.error(`Error whilst removing ${roomId} from ${groupId}`, err);
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");

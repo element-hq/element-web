@@ -28,10 +28,10 @@ import Modal from '../../../Modal';
 
 
 // A cached tinted copy of "img/download.svg"
-var tintedDownloadImageURL;
+let tintedDownloadImageURL;
 // Track a list of mounted MFileBody instances so that we can update
 // the "img/download.svg" when the tint changes.
-var nextMountId = 0;
+let nextMountId = 0;
 const mounts = {};
 
 /**
@@ -169,11 +169,11 @@ function computedStyle(element) {
         return "";
     }
     const style = window.getComputedStyle(element, null);
-    var cssText = style.cssText;
+    let cssText = style.cssText;
     if (cssText == "") {
         // Firefox doesn't implement ".cssText" for computed styles.
         // https://bugzilla.mozilla.org/show_bug.cgi?id=137687
-        for (var i = 0; i < style.length; i++) {
+        for (let i = 0; i < style.length; i++) {
             cssText += style[i] + ":";
             cssText += style.getPropertyValue(style[i]) + ";";
         }
@@ -202,7 +202,7 @@ module.exports = React.createClass({
      * @return {string} the human readable link text for the attachment.
      */
     presentableTextForFile: function(content) {
-        var linkText = _t("Attachment");
+        let linkText = _t("Attachment");
         if (content.body && content.body.length > 0) {
             // The content body should be the name of the file including a
             // file extension.
@@ -270,7 +270,7 @@ module.exports = React.createClass({
                 // Need to decrypt the attachment
                 // Wait for the user to click on the link before downloading
                 // and decrypting the attachment.
-                var decrypting = false;
+                let decrypting = false;
                 const decrypt = () => {
                     if (decrypting) {
                         return false;
@@ -328,14 +328,14 @@ module.exports = React.createClass({
                 <span className="mx_MFileBody">
                     <div className="mx_MImageBody_download">
                         <div style={{display: "none"}}>
-                            {/*
+                            { /*
                               * Add dummy copy of the "a" tag
                               * We'll use it to learn how the download link
                               * would have been styled if it was rendered inline.
-                              */}
-                            <a ref="dummyLink"/>
+                              */ }
+                            <a ref="dummyLink" />
                         </div>
-                        <iframe src={renderer_url} onLoad={onIframeLoad} ref="iframe"/>
+                        <iframe src={renderer_url} onLoad={onIframeLoad} ref="iframe" />
                     </div>
                 </span>
             );
@@ -356,13 +356,12 @@ module.exports = React.createClass({
                         </div>
                     </span>
                 );
-            }
-            else {
+            } else {
                 return (
                     <span className="mx_MFileBody">
                         <div className="mx_MImageBody_download">
                             <a href={contentUrl} download={fileName} target="_blank" rel="noopener">
-                                <img src={tintedDownloadImageURL} width="12" height="14" ref="downloadImage"/>
+                                <img src={tintedDownloadImageURL} width="12" height="14" ref="downloadImage" />
                                 { _t("Download %(text)s", { text: text }) }
                             </a>
                         </div>
@@ -370,7 +369,7 @@ module.exports = React.createClass({
                 );
             }
         } else {
-            var extra = text ? (': ' + text) : '';
+            const extra = text ? (': ' + text) : '';
             return <span className="mx_MFileBody">
                 { _t("Invalid file%(extra)s", { extra: extra }) }
             </span>;

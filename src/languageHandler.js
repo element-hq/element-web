@@ -100,26 +100,27 @@ export function _tJsx(jsxText, patterns, subs) {
         throw new Error(`_tJsx: programmer error. expected number of RegExps == number of Functions: ${subs.length} != ${patterns.length}`);
     }
     for (let i = 0; i < subs.length; i++) {
-        if (!patterns[i] instanceof RegExp) {
+        if (!(patterns[i] instanceof RegExp)) {
             throw new Error(`_tJsx: programmer error. expected RegExp for text: ${jsxText}`);
         }
-        if (!subs[i] instanceof Function) {
+        if (!(subs[i] instanceof Function)) {
             throw new Error(`_tJsx: programmer error. expected Function for text: ${jsxText}`);
         }
     }
 
     // The translation returns text so there's no XSS vector here (no unsafe HTML, no code execution)
     const tJsxText = _t(jsxText, {interpolate: false});
-    let output = [tJsxText];
+    const output = [tJsxText];
+
     for (let i = 0; i < patterns.length; i++) {
         // convert the last element in 'output' into 3 elements (pre-text, sub function, post-text).
         // Rinse and repeat for other patterns (using post-text).
-        let inputText = output.pop();
-        let match = inputText.match(patterns[i]);
+        const inputText = output.pop();
+        const match = inputText.match(patterns[i]);
         if (!match) {
             throw new Error(`_tJsx: translator error. expected translation to match regexp: ${patterns[i]}`);
         }
-        let capturedGroups = match.slice(1);
+        const capturedGroups = match.slice(1);
 
         // Return the raw translation before the *match* followed by the return value of sub() followed
         // by the raw translation after the *match* (not captured group).
@@ -159,7 +160,7 @@ export function setLanguage(preferredLangs) {
         }
         if (!langToUse) {
             // Fallback to en_EN if none is found
-            langToUse = 'en'
+            langToUse = 'en';
             console.error("Unable to find an appropriate language");
         }
 
@@ -177,16 +178,16 @@ export function setLanguage(preferredLangs) {
     }).then((langData) => {
         if (langData) counterpart.registerTranslations('en', langData);
     });
-};
+}
 
 export function getAllLanguagesFromJson() {
     return getLangsJson().then((langsObject) => {
-        var langs = [];
-        for (var langKey in langsObject) {
+        const langs = [];
+        for (const langKey in langsObject) {
             if (langsObject.hasOwnProperty(langKey)) {
                 langs.push({
                     'value': langKey,
-                    'label': langsObject[langKey].label
+                    'label': langsObject[langKey].label,
                 });
             }
         }
@@ -222,15 +223,15 @@ export function getNormalizedLanguageKeys(language) {
         }
     }
     return languageKeys;
-};
+}
 
 /**
  * Returns a language string with underscores replaced with
  * hyphens, and lowercased.
  */
 export function normalizeLanguageKey(language) {
-    return language.toLowerCase().replace("_","-");
-};
+    return language.toLowerCase().replace("_", "-");
+}
 
 export function getCurrentLanguage() {
     return counterpart.getLocale();
@@ -246,7 +247,7 @@ function getLangsJson() {
                     return;
                 }
                 resolve(JSON.parse(body));
-            }
+            },
         );
     });
 }
@@ -261,7 +262,7 @@ function getLanguage(langPath) {
                     return;
                 }
                 resolve(JSON.parse(body));
-            }
+            },
         );
     });
 }

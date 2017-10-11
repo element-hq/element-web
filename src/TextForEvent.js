@@ -243,7 +243,7 @@ function textForPowerEvent(event) {
         if (to !== from) {
             diff.push(
                 _t('%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s', {
-                    userId: userId,
+                    userId,
                     fromPowerLevel: Roles.textualPowerLevel(from, userDefault),
                     toPowerLevel: Roles.textualPowerLevel(to, userDefault),
                 }),
@@ -254,7 +254,7 @@ function textForPowerEvent(event) {
         return '';
     }
     return _t('%(senderName)s changed the power level of %(powerLevelDiffText)s.', {
-        senderName: senderName,
+        senderName,
         powerLevelDiffText: diff.join(", "),
     });
 }
@@ -291,12 +291,15 @@ function textForWidgetEvent(event) {
 
 const handlers = {
     'm.room.message': textForMessageEvent,
-    'm.room.name': textForRoomNameEvent,
-    'm.room.topic': textForTopicEvent,
-    'm.room.member': textForMemberEvent,
     'm.call.invite': textForCallInviteEvent,
     'm.call.answer': textForCallAnswerEvent,
     'm.call.hangup': textForCallHangupEvent,
+};
+
+const stateHandlers = {
+    'm.room.name': textForRoomNameEvent,
+    'm.room.topic': textForTopicEvent,
+    'm.room.member': textForMemberEvent,
     'm.room.third_party_invite': textForThreePidInviteEvent,
     'm.room.history_visibility': textForHistoryVisibilityEvent,
     'm.room.encryption': textForEncryptionEvent,
@@ -307,8 +310,8 @@ const handlers = {
 
 module.exports = {
     textForEvent: function(ev) {
-        const hdlr = handlers[ev.getType()];
-        if (!hdlr) return '';
-        return hdlr(ev);
+        const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
+        if (handler) return handler(ev);
+        return '';
     },
 };

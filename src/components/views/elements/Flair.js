@@ -265,7 +265,7 @@ export default class Flair extends React.Component {
             return <FlairAvatar key={index} groupProfile={profile} />;
         });
         return (
-            <span className="mx_Flair" style={{"marginLeft": "5px", "verticalAlign": "-3px"}}>
+            <span className="mx_Flair">
                 { avatars }
             </span>
         );
