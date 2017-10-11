@@ -801,6 +801,7 @@
     "This will allow you to reset your password and receive notifications.": "This will allow you to reset your password and receive notifications.",
     "To return to your account in future you need to set a password": "To return to your account in future you need to set a password",
     "Skip": "Skip",
+    "Banned by %(displayName)s": "Banned by %(displayName)s",
     "Start verification": "Start verification",
     "Share without verifying": "Share without verifying",
     "Ignore request": "Ignore request",

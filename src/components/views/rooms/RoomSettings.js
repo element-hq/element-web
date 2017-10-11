@@ -63,6 +63,7 @@ const BannedUser = React.createClass({
     propTypes: {
         canUnban: React.PropTypes.bool,
         member: React.PropTypes.object.isRequired, // js-sdk RoomMember
+        by: React.PropTypes.string.isRequired,
         reason: React.PropTypes.string,
     },
 
@@ -101,8 +102,10 @@ const BannedUser = React.createClass({
         return (
             <li>
                 { unbanButton }
-                <strong>{this.props.member.name}</strong> {this.props.member.userId}
-                {this.props.reason ? " " +_t('Reason') + ": " + this.props.reason : ""}
+                <span title={_t("Banned by %(displayName)s", {displayName: this.props.by})}>
+                    <strong>{this.props.member.name}</strong> {this.props.member.userId}
+                    {this.props.reason ? " " +_t('Reason') + ": " + this.props.reason : ""}
+                </span>
             </li>
         );
     },
@@ -709,8 +712,11 @@ module.exports = React.createClass({
                     <ul className="mx_RoomSettings_banned">
                         {banned.map(function(member) {
                             const banEvent = member.events.member.getContent();
+                            const sender = self.props.room.getMember(member.events.member.getSender());
+                            let bannedBy = member.events.member.getSender(); // start by falling back to mxid
+                            if (sender) bannedBy = sender.name;
                             return (
-                                <BannedUser key={member.userId} canUnban={canBanUsers} member={member} reason={banEvent.reason} />
+                                <BannedUser key={member.userId} canUnban={canBanUsers} member={member} reason={banEvent.reason} by={bannedBy} />
                             );
                         })}
                     </ul>
