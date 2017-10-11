@@ -16,10 +16,11 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const i = [1, 2, 3, 4, 5][Math.floor(Math.random() * 5)];
-const DEFAULT_LOGO_URI = "img/logos/riot-logo-" + i + ".svg";
+const DEFAULT_LOGO_URI = "img/logos/riot-im-logo-" + i + ".svg";
 
 module.exports = React.createClass({
     displayName: 'VectorLoginHeader',
@@ -27,7 +28,7 @@ module.exports = React.createClass({
         replaces: 'LoginHeader',
     },
     propTypes: {
-        icon: React.PropTypes.string,
+        icon: PropTypes.string,
     },
 
     render: function() {
