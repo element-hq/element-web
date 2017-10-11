@@ -773,15 +773,13 @@ module.exports = React.createClass({
             dis.dispatch({action: 'view_set_mxid'});
             return;
         }
-        const TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
-        Modal.createTrackedDialog('Create Room', '', TextInputDialog, {
-            title: _t('Create Room'),
-            description: _t('Room name (optional)'),
-            button: _t('Create Room'),
-            onFinished: (shouldCreate, name) => {
+        const CreateRoomDialog = sdk.getComponent('dialogs.CreateRoomDialog');
+        Modal.createTrackedDialog('Create Room', '', CreateRoomDialog, {
+            onFinished: (shouldCreate, name, noFederate) => {
                 if (shouldCreate) {
                     const createOpts = {};
                     if (name) createOpts.name = name;
+                    if (noFederate) createOpts.creation_content = {'m.federate': false};
                     createRoom({createOpts}).done();
                 }
             },
