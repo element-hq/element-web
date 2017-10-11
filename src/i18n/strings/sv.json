@@ -273,7 +273,7 @@
     "Moderator": "Moderator",
     "Must be viewing a room": "Du måste ha ett öppet rum",
     "Mute": "Dämpa",
-    "my Matrix ID": "mitt Matrix-ID",
+    "%(serverName)s Matrix ID": "%(serverName)s Matrix-ID",
     "Name": "Namn",
     "Never send encrypted messages to unverified devices from this device": "Skicka aldrig krypterade meddelanden till overifierade enheter från den här enheten",
     "Never send encrypted messages to unverified devices in this room": "Skicka aldrig krypterade meddelanden till overifierade enheter i det här rummet",

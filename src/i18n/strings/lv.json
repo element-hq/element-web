@@ -274,7 +274,7 @@
     "Moderator": "Moderators",
     "Must be viewing a room": "Jāapskata istaba",
     "Mute": "Apklusināt",
-    "my Matrix ID": "mans Matrix ID",
+    "%(serverName)s Matrix ID": "%(serverName)s Matrix ID",
     "Name": "Vārds",
     "Never send encrypted messages to unverified devices from this device": "Nekad nesūti no šīs ierīces šifrētas ziņas uz neverificētām ierīcēm",
     "Never send encrypted messages to unverified devices in this room": "Nekad nesūti šifrētas ziņas uz neverificētām ierīcēm šajā istabā",

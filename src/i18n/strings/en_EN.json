@@ -295,7 +295,6 @@
     "Moderator": "Moderator",
     "Must be viewing a room": "Must be viewing a room",
     "Mute": "Mute",
-    "my Matrix ID": "my Matrix ID",
     "Name": "Name",
     "Never send encrypted messages to unverified devices from this device": "Never send encrypted messages to unverified devices from this device",
     "Never send encrypted messages to unverified devices in this room": "Never send encrypted messages to unverified devices in this room",
@@ -908,5 +907,6 @@
     "This room has no related groups": "This room has no related groups",
     "New group ID (e.g. +foo:%(localDomain)s)": "New group ID (e.g. +foo:%(localDomain)s)",
     "Invites sent": "Invites sent",
-    "Your group invitations have been sent.": "Your group invitations have been sent."
+    "Your group invitations have been sent.": "Your group invitations have been sent.",
+    "%(serverName)s Matrix ID": "%(serverName)s Matrix ID"
 }

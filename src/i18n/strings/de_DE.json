@@ -146,7 +146,7 @@
     "Members only": "Nur Mitglieder",
     "Mobile phone number": "Mobiltelefonnummer",
     "Moderator": "Moderator",
-    "my Matrix ID": "meiner Matrix-ID",
+    "%(serverName)s Matrix ID": "%(serverName)s Matrix-ID",
     "Never send encrypted messages to unverified devices from this device": "Niemals verschlüsselte Nachrichten an unverifizierte Geräte von diesem Gerät aus versenden",
     "Never send encrypted messages to unverified devices in this room from this device": "Niemals verschlüsselte Nachrichten an unverifizierte Geräte in diesem Raum von diesem Gerät aus senden",
     "New password": "Neues Passwort",

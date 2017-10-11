@@ -363,7 +363,7 @@
     "Mobile phone number": "Numer telefonu komórkowego",
     "Mobile phone number (optional)": "Numer telefonu komórkowego (opcjonalne)",
     "Moderator": "Moderator",
-    "my Matrix ID": "mój Matrix ID",
+    "%(serverName)s Matrix ID": "%(serverName)s Matrix ID",
     "Name": "Imię",
     "Never send encrypted messages to unverified devices from this device": "Nigdy nie wysyłaj zaszyfrowanych wiadomości do niezweryfikowanych urządzeń z tego urządzenia",
     "Never send encrypted messages to unverified devices in this room": "Nigdy nie wysyłaj zaszyfrowanych wiadomości do niezweryfikowanych urządzeń w tym pokoju",

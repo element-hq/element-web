@@ -188,7 +188,6 @@
     "Failure to create room": "Δεν ήταν δυνατή η δημιουργία δωματίου",
     "Join Room": "Είσοδος σε δωμάτιο",
     "Moderator": "Συντονιστής",
-    "my Matrix ID": "το Matrix ID μου",
     "Name": "Όνομα",
     "New address (e.g. #foo:%(localDomain)s)": "Νέα διεύθυνση (e.g. #όνομα:%(localDomain)s)",
     "New password": "Νέος κωδικός πρόσβασης",

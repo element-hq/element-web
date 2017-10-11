@@ -290,6 +290,7 @@ module.exports = React.createClass({
                         onPhoneNumberChanged={this.onPhoneNumberChanged}
                         onForgotPasswordClick={this.props.onForgotPasswordClick}
                         loginIncorrect={this.state.loginIncorrect}
+                        hsUrl={this.state.enteredHomeserverUrl}
                     />
                 );
             case 'm.login.cas':

@@ -126,7 +126,7 @@
     "disabled": "uitgeschakeld",
     "Moderator": "Moderator",
     "Must be viewing a room": "Moet een ruimte weergeven",
-    "my Matrix ID": "mijn Matrix-ID",
+    "%(serverName)s Matrix ID": "%(serverName)s Matrix-ID",
     "Name": "Naam",
     "New password": "Nieuw wachtwoord",
     "none": "geen",
