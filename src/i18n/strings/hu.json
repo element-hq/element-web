@@ -194,5 +194,19 @@
     "Downloading update...": "Frissítés letöltése...",
     "Couldn't load home page": "Kezdőképernyő betöltése sikertelen",
     "Bug report sent": "Hibajelentés elküldve",
-    "Thank you!": "Köszönjük!"
+    "Thank you!": "Köszönjük!",
+    "Back": "Vissza",
+    "Developer Tools": "Fejlesztői eszközök",
+    "Failed to send custom event.": "Egyéni esemény elküldése nem sikerült.",
+    "Send Custom Event": "Egyéni esemény elküldése",
+    "Send Custom State Event": "Egyéni állapot esemény küldése",
+    "Explore Room State": "Szoba állapot felfedezése",
+    "Event sent!": "Esemény elküldve!",
+    "Event Type": "Esemény típusa",
+    "Event Content": "Esemény tartalma",
+    "State Key": "Állapot kulcs",
+    "Invite to this group": "Meghívás ebbe a csoportba",
+    "Filter results": "Találatok szűrése",
+    "You must specify an event type!": "Meg kell határoznod az esemény típusát!",
+    "Add room to this group": "Szoba hozzáadása ehhez a csoporthoz"
 }

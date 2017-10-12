@@ -105,5 +105,9 @@
     "No update available.": "No hi ha cap actualització disponible.",
     "Downloading update...": "Descarregant l'actualització...",
     "Welcome to Riot.im": "Benvingut a Riot.im",
-    "Chat with Riot Bot": "Conversa amb el Bot de Riot"
+    "Chat with Riot Bot": "Conversa amb el Bot de Riot",
+    "Back": "Enrere",
+    "Cancel Sending": "Cancel·la l'enviament",
+    "Collapse panel": "Col·lapsa el tauler",
+    "Developer Tools": "Eines de desenvolupador"
 }

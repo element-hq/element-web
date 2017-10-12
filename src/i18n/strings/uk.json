@@ -192,5 +192,21 @@
     "Error encountered (%(errorDetail)s).": "Трапилась помилка (%(errorDetail)s).",
     "No update available.": "Оновлення відсутні.",
     "Downloading update...": "Звантажується оновлення…",
-    "Couldn't load home page": "Не вдалось завантажити домівку"
+    "Couldn't load home page": "Не вдалось завантажити домівку",
+    "Back": "Назад",
+    "Bug report sent": "Звіт про помилки відправлений",
+    "Developer Tools": "Інструменти розробника",
+    "Failed to send custom event.": "Не вдалося відправити приватний захід.",
+    "Filter results": "Фільтр результатів",
+    "Send Custom Event": "Відправити приватний захід",
+    "Send Custom State Event": "Відправити статус приватного заходу",
+    "Explore Room State": "Перегляд статуса кімнати",
+    "You must specify an event type!": "Необхідно вказати тип захода!",
+    "Thank you!": "Дякую!",
+    "Event sent!": "Захід відправлено!",
+    "Event Type": "Тип західу",
+    "Event Content": "Зміст заходу",
+    "State Key": "Ключ стану",
+    "Invite to this group": "Запросити в цю групу",
+    "Add room to this group": "Додати кімнату в цю группу"
 }

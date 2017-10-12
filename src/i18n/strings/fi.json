@@ -193,5 +193,18 @@
     "Contributing code to Matrix and Riot": "Osallistu Matrix ja Riot kehitykseen",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s selaimella %(browserName)s käyttöjärjestelmällä %(osName)s",
     "There are advanced notifications which are not shown here": "On kehittyneitä ilmoituksia joita ei näytetä tässä",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Matrix-pohjainen hajautettu, salattu viestittely ja yhteistyö"
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Matrix-pohjainen hajautettu, salattu viestittely ja yhteistyö",
+    "Back": "Palaa",
+    "Developer Tools": "Kehitystyökalut",
+    "Failed to send custom event.": "Kustomoidun tapahtuman lähettäminen epäonnistui.",
+    "Filter results": "Suodata tuloksia",
+    "Send Custom Event": "Lähetä kustomoitu tapahtuma",
+    "Send Custom State Event": "Lähetä kustomoitu tilatapahtuma",
+    "Explore Room State": "Tutki huoneen tilaa",
+    "You must specify an event type!": "Sinun on määritettävä tapahtuman tyyppi!",
+    "Event sent!": "Tapahtuma lähetetty!",
+    "Event Type": "Tapahtuman tyyppi",
+    "Event Content": "Tapahtuman sisältö",
+    "State Key": "Tila-avain",
+    "Invite to this group": "Kutsu tähän ryhmään"
 }
