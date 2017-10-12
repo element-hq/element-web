@@ -26,8 +26,8 @@ module.exports = React.createClass({
         const msg = this.props.msg || "Loading...";
         return (
             <div className="mx_Spinner">
-                <div className="mx_Spinner_Msg">{msg}</div>&nbsp;
-                <img src="img/spinner.gif" width={w} height={h} className={imgClass}/>
+                <div className="mx_Spinner_Msg">{ msg }</div>&nbsp;
+                <img src="img/spinner.gif" width={w} height={h} className={imgClass} />
             </div>
         );
     },

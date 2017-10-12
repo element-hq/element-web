@@ -16,31 +16,31 @@ limitations under the License.
 
 function matrixLinkify(linkify) {
     // Text tokens
-    var TT = linkify.scanner.TOKENS;
+    const TT = linkify.scanner.TOKENS;
     // Multi tokens
-    var MT = linkify.parser.TOKENS;
-    var MultiToken = MT.Base;
-    var S_START = linkify.parser.start;
+    const MT = linkify.parser.TOKENS;
+    const MultiToken = MT.Base;
+    const S_START = linkify.parser.start;
 
     if (TT.UNDERSCORE === undefined) {
         throw new Error("linkify-matrix requires linkifyjs 2.1.1: this version is too old.");
     }
 
-    var ROOMALIAS = function(value) {
+    const ROOMALIAS = function(value) {
         MultiToken.call(this, value);
         this.type = 'roomalias';
         this.isLink = true;
     };
     ROOMALIAS.prototype = new MultiToken();
 
-    var S_HASH = new linkify.parser.State();
-    var S_HASH_NAME = new linkify.parser.State();
-    var S_HASH_NAME_COLON = new linkify.parser.State();
-    var S_HASH_NAME_COLON_DOMAIN = new linkify.parser.State();
-    var S_HASH_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
-    var S_ROOMALIAS = new linkify.parser.State(ROOMALIAS);
+    const S_HASH = new linkify.parser.State();
+    const S_HASH_NAME = new linkify.parser.State();
+    const S_HASH_NAME_COLON = new linkify.parser.State();
+    const S_HASH_NAME_COLON_DOMAIN = new linkify.parser.State();
+    const S_HASH_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
+    const S_ROOMALIAS = new linkify.parser.State(ROOMALIAS);
 
-    var roomname_tokens = [
+    const roomname_tokens = [
         TT.DOT,
         TT.PLUS,
         TT.NUM,
@@ -69,21 +69,21 @@ function matrixLinkify(linkify) {
     S_HASH_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_ROOMALIAS);
 
 
-    var USERID = function(value) {
+    const USERID = function(value) {
         MultiToken.call(this, value);
         this.type = 'userid';
         this.isLink = true;
     };
     USERID.prototype = new MultiToken();
 
-    var S_AT = new linkify.parser.State();
-    var S_AT_NAME = new linkify.parser.State();
-    var S_AT_NAME_COLON = new linkify.parser.State();
-    var S_AT_NAME_COLON_DOMAIN = new linkify.parser.State();
-    var S_AT_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
-    var S_USERID = new linkify.parser.State(USERID);
+    const S_AT = new linkify.parser.State();
+    const S_AT_NAME = new linkify.parser.State();
+    const S_AT_NAME_COLON = new linkify.parser.State();
+    const S_AT_NAME_COLON_DOMAIN = new linkify.parser.State();
+    const S_AT_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
+    const S_USERID = new linkify.parser.State(USERID);
 
-    var username_tokens = [
+    const username_tokens = [
         TT.DOT,
         TT.UNDERSCORE,
         TT.PLUS,
@@ -110,21 +110,21 @@ function matrixLinkify(linkify) {
     S_AT_NAME_COLON_DOMAIN_DOT.on(TT.TLD, S_USERID);
 
 
-    var GROUPID = function(value) {
+    const GROUPID = function(value) {
         MultiToken.call(this, value);
         this.type = 'groupid';
         this.isLink = true;
     };
     GROUPID.prototype = new MultiToken();
 
-    var S_PLUS = new linkify.parser.State();
-    var S_PLUS_NAME = new linkify.parser.State();
-    var S_PLUS_NAME_COLON = new linkify.parser.State();
-    var S_PLUS_NAME_COLON_DOMAIN = new linkify.parser.State();
-    var S_PLUS_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
-    var S_GROUPID = new linkify.parser.State(GROUPID);
+    const S_PLUS = new linkify.parser.State();
+    const S_PLUS_NAME = new linkify.parser.State();
+    const S_PLUS_NAME_COLON = new linkify.parser.State();
+    const S_PLUS_NAME_COLON_DOMAIN = new linkify.parser.State();
+    const S_PLUS_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
+    const S_GROUPID = new linkify.parser.State(GROUPID);
 
-    var groupid_tokens = [
+    const groupid_tokens = [
         TT.DOT,
         TT.UNDERSCORE,
         TT.PLUS,
@@ -156,7 +156,7 @@ matrixLinkify.onUserClick = function(e, userId) { e.preventDefault(); };
 matrixLinkify.onAliasClick = function(e, roomAlias) { e.preventDefault(); };
 matrixLinkify.onGroupClick = function(e, groupId) { e.preventDefault(); };
 
-var escapeRegExp = function(string) {
+const escapeRegExp = function(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 };
 
@@ -179,19 +179,19 @@ matrixLinkify.options = {
                 return {
                     click: function(e) {
                         matrixLinkify.onUserClick(e, href);
-                    }
+                    },
                 };
             case "roomalias":
                 return {
                     click: function(e) {
                         matrixLinkify.onAliasClick(e, href);
-                    }
+                    },
                 };
             case "groupid":
                 return {
                     click: function(e) {
                         matrixLinkify.onGroupClick(e, href);
-                    }
+                    },
                 };
         }
     },
@@ -211,11 +211,10 @@ matrixLinkify.options = {
                 }
                 m = href.match(matrixLinkify.MATRIXTO_URL_PATTERN);
                 if (m) {
-                    var entity = m[1];
+                    const entity = m[1];
                     if (entity[0] === '@') {
                         return '#/user/' + entity;
-                    }
-                    else if (entity[0] === '#' || entity[0] === '!') {
+                    } else if (entity[0] === '#' || entity[0] === '!') {
                         return '#/room/' + entity;
                     }
                 }
@@ -231,11 +230,9 @@ matrixLinkify.options = {
     target: function(href, type) {
         if (type === 'url') {
             if (href.match(matrixLinkify.VECTOR_URL_PATTERN) ||
-                href.match(matrixLinkify.MATRIXTO_URL_PATTERN))
-            {
+                href.match(matrixLinkify.MATRIXTO_URL_PATTERN)) {
                 return null;
-            }
-            else {
+            } else {
                 return '_blank';
             }
         }

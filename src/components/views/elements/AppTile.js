@@ -19,10 +19,11 @@ limitations under the License.
 import url from 'url';
 import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import PlatformPeg from '../../../PlatformPeg';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import sdk from '../../../index';
 import AppPermission from './AppPermission';
 import AppWarning from './AppWarning';
@@ -127,6 +128,30 @@ export default React.createClass({
                 loading: false,
             });
         });
+        window.addEventListener('message', this._onMessage, false);
+    },
+
+    componentWillUnmount() {
+        window.removeEventListener('message', this._onMessage);
+    },
+
+    _onMessage(event) {
+        if (this.props.type !== 'jitsi') {
+            return;
+        }
+        if (!event.origin) {
+            event.origin = event.originalEvent.origin;
+        }
+
+        if (!this.state.widgetUrl.startsWith(event.origin)) {
+            return;
+        }
+
+        if (event.data.widgetAction === 'jitsi_iframe_loaded') {
+            const iframe = this.refs.appFrame.contentWindow
+                .document.querySelector('iframe[id^="jitsiConferenceFrame"]');
+            PlatformPeg.get().setupScreenSharingForIframe(iframe);
+        }
     },
 
     _canUserModify: function() {
@@ -170,9 +195,9 @@ export default React.createClass({
     // These strings are translated at the point that they are inserted in to the DOM, in the render method
     _deleteWidgetLabel() {
         if (this._canUserModify()) {
-            return 'Delete widget';
+            return _td('Delete widget');
         }
-        return 'Revoke widget access';
+        return _td('Revoke widget access');
     },
 
     /* TODO -- Store permission in account data so that it is persisted across multiple devices */
@@ -236,7 +261,7 @@ export default React.createClass({
             if (this.state.loading) {
                 appTileBody = (
                     <div className='mx_AppTileBody mx_AppLoading'>
-                        <MessageSpinner msg='Loading...'/>
+                        <MessageSpinner msg='Loading...' />
                     </div>
                 );
             } else if (this.state.hasPermissionToLoad == true) {
@@ -287,19 +312,19 @@ export default React.createClass({
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
-                    {this.formatAppTileName()}
+                    { this.formatAppTileName() }
                     <span className="mx_AppTileMenuBarWidgets">
-                        {/* Edit widget */}
-                        {showEditButton && <img
+                        { /* Edit widget */ }
+                        { showEditButton && <img
                             src="img/edit.svg"
                             className="mx_filterFlipColor mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
                             width="8" height="8"
                             alt={_t('Edit')}
                             title={_t('Edit')}
                             onClick={this._onEditClick}
-                        />}
+                        /> }
 
-                        {/* Delete widget */}
+                        { /* Delete widget */ }
                         <img src={deleteIcon}
                         className={deleteClasses}
                         width="8" height="8"
@@ -309,7 +334,7 @@ export default React.createClass({
                         />
                     </span>
                 </div>
-                {appTileBody}
+                { appTileBody }
             </div>
         );
     },

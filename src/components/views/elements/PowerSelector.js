@@ -20,8 +20,8 @@ import React from 'react';
 import * as Roles from '../../../Roles';
 import { _t } from '../../../languageHandler';
 
-var LEVEL_ROLE_MAP = {};
-var reverseRoles = {};
+let LEVEL_ROLE_MAP = {};
+const reverseRoles = {};
 
 module.exports = React.createClass({
     displayName: 'PowerSelector',
@@ -46,7 +46,7 @@ module.exports = React.createClass({
             custom: (LEVEL_ROLE_MAP[this.props.value] === undefined),
         };
     },
-    
+
     componentWillMount: function() {
     	LEVEL_ROLE_MAP = Roles.levelRoleMap();
     	Object.keys(LEVEL_ROLE_MAP).forEach(function(key) {
@@ -72,7 +72,7 @@ module.exports = React.createClass({
     },
 
     getValue: function() {
-        var value;
+        let value;
         if (this.refs.select) {
             value = reverseRoles[this.refs.select.value];
             if (this.refs.custom) {
@@ -83,30 +83,27 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var customPicker;
+        let customPicker;
         if (this.state.custom) {
-            var input;
+            let input;
             if (this.props.disabled) {
                 input = <span>{ this.props.value }</span>;
-            }
-            else {
-                input = <input ref="custom" type="text" size="3" defaultValue={ this.props.value } onBlur={ this.onCustomBlur } onKeyDown={ this.onCustomKeyDown }/>;
+            } else {
+                input = <input ref="custom" type="text" size="3" defaultValue={this.props.value} onBlur={this.onCustomBlur} onKeyDown={this.onCustomKeyDown} />;
             }
             customPicker = <span> of { input }</span>;
         }
 
-        var selectValue;
+        let selectValue;
         if (this.state.custom) {
             selectValue = "Custom";
-        }
-        else {
+        } else {
             selectValue = LEVEL_ROLE_MAP[this.props.value] || "Custom";
         }
-        var select;
+        let select;
         if (this.props.disabled) {
             select = <span>{ selectValue }</span>;
-        }
-        else {
+        } else {
             // Each level must have a definition in LEVEL_ROLE_MAP
             const levels = [0, 50, 100];
             let options = levels.map((level) => {
@@ -115,18 +112,18 @@ module.exports = React.createClass({
                     // Give a userDefault (users_default in the power event) of 0 but
                     // because level !== undefined, this should never be used.
                     text: Roles.textualPowerLevel(level, 0),
-                }
+                };
             });
             options.push({ value: "Custom", text: _t("Custom level") });
             options = options.map((op) => {
-                return <option value={op.value} key={op.value}>{op.text}</option>;
+                return <option value={op.value} key={op.value}>{ op.text }</option>;
             });
 
             select =
                 <select ref="select"
-                        value={ this.props.controlled ? selectValue : undefined }
-                        defaultValue={ !this.props.controlled ? selectValue : undefined }
-                        onChange={ this.onSelectChange }>
+                        value={this.props.controlled ? selectValue : undefined}
+                        defaultValue={!this.props.controlled ? selectValue : undefined}
+                        onChange={this.onSelectChange}>
                     { options }
                 </select>;
         }
@@ -137,5 +134,5 @@ module.exports = React.createClass({
                 { customPicker }
             </span>
         );
-    }
+    },
 });

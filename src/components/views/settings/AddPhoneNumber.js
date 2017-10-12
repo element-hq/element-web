@@ -81,7 +81,7 @@ export default withMatrixClient(React.createClass({
             this._promptForMsisdnVerificationCode(resp.msisdn);
         }).catch((err) => {
             console.error("Unable to add phone number: " + err);
-            let msg = err.message;
+            const msg = err.message;
             Modal.createTrackedDialog('Add Phone Number Error', '', ErrorDialog, {
                 title: _t("Error"),
                 description: msg,
@@ -94,22 +94,22 @@ export default withMatrixClient(React.createClass({
         this.setState({msisdn_add_pending: true});
     },
 
-    _promptForMsisdnVerificationCode:function (msisdn, err) {
+    _promptForMsisdnVerificationCode: function(msisdn, err) {
         if (this._unmounted) return;
         const TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
-        let msgElements = [
-            <div key="_static" >{ _t("A text message has been sent to +%(msisdn)s. Please enter the verification code it contains", { msisdn: msisdn} ) }</div>
+        const msgElements = [
+            <div key="_static" >{ _t("A text message has been sent to +%(msisdn)s. Please enter the verification code it contains", { msisdn: msisdn} ) }</div>,
         ];
         if (err) {
             let msg = err.error;
             if (err.errcode == 'M_THREEPID_AUTH_FAILED') {
                 msg = _t("Incorrect verification code");
             }
-            msgElements.push(<div key="_error" className="error">{msg}</div>);
+            msgElements.push(<div key="_error" className="error">{ msg }</div>);
         }
         Modal.createTrackedDialog('Prompt for MSISDN Verification Code', '', TextInputDialog, {
             title: _t("Enter Code"),
-            description: <div>{msgElements}</div>,
+            description: <div>{ msgElements }</div>,
             button: _t("Submit"),
             onFinished: (should_verify, token) => {
                 if (!should_verify) {
@@ -128,7 +128,7 @@ export default withMatrixClient(React.createClass({
                     if (this._unmounted) return;
                     this.setState({msisdn_add_pending: false});
                 }).done();
-            }
+            },
         });
     },
 
@@ -146,7 +146,7 @@ export default withMatrixClient(React.createClass({
         return (
             <form className="mx_UserSettings_profileTableRow" onSubmit={this._onAddMsisdnSubmit}>
                 <div className="mx_UserSettings_profileLabelCell">
-                    <label>{_t('Phone')}</label>
+                    <label>{ _t('Phone') }</label>
                 </div>
                 <div className="mx_UserSettings_profileInputCell">
                     <div className="mx_UserSettings_phoneSection">
@@ -158,7 +158,7 @@ export default withMatrixClient(React.createClass({
                         <input type="text"
                             ref={this._collectAddMsisdnInput}
                             className="mx_UserSettings_phoneNumberField"
-                            placeholder={ _t('Add phone number') }
+                            placeholder={_t('Add phone number')}
                             value={this.state.phoneNumber}
                             onChange={this._onPhoneNumberChange}
                         />
@@ -169,5 +169,5 @@ export default withMatrixClient(React.createClass({
                 </div>
             </form>
         );
-    }
-}))
+    },
+}));

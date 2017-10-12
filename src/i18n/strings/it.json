@@ -3,7 +3,6 @@
     "Mute": "Silenzia",
     "Notifications": "Notifiche",
     "Operation failed": "Operazione fallita",
-    "Please Register": "Per favore registrati",
     "powered by Matrix": "offerto da Matrix",
     "Remove": "Rimuovi",
     "Search": "Cerca",
@@ -15,10 +14,8 @@
     "Close": "Chiudi",
     "Create new room": "Crea una nuova stanza",
     "Custom Server Options": "Opzioni Server Personalizzate",
-    "Direct Chat": "Chat Diretta",
     "Dismiss": "Scarta",
     "Error": "Errore",
-    "Failed to join the room": "Impossibile entrare nella stanza",
     "Favourite": "Preferito",
     "Sunday": "Domenica",
     "Monday": "Lunedì",
@@ -28,7 +25,6 @@
     "Friday": "Venerdì",
     "Saturday": "Sabato",
     "OK": "OK",
-    "Welcome page": "Pagina di benvenuto",
     "Drop here %(toAction)s": "Rilascia qui %(toAction)s",
     "Failed to change password. Is your password correct?": "Modifica password fallita. La tua password è corretta?",
     "Continue": "Continua",
@@ -42,7 +38,7 @@
     "Add email address": "Aggiungi indirizzo email",
     "Add phone number": "Aggiungi numero di telefono",
     "Admin": "Amministratore",
-    "Admin tools": "Strumenti di amministrazione",
+    "Admin Tools": "Strumenti di amministrazione",
     "VoIP": "VoIP",
     "No Microphones detected": "Nessun Microfono rilevato",
     "No Webcams detected": "Nessuna Webcam rilevata",
@@ -61,5 +57,6 @@
     "all room members, from the point they joined": "tutti i membri della stanza, dal punto in cui si sono uniti",
     "and": "e",
     "Add a widget": "Aggiungi un widget",
-    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Un messaggio di testo è stato inviato a +%(msisdn)s. Inserisci il codice di verifica che contiene"
+    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Un messaggio di testo è stato inviato a +%(msisdn)s. Inserisci il codice di verifica che contiene",
+    "and": "e"
 }

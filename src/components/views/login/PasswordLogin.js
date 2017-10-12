@@ -94,7 +94,7 @@ class PasswordLogin extends React.Component {
     onLoginTypeChange(loginType) {
         this.setState({
             loginType: loginType,
-            username: "" // Reset because email and username use the same state
+            username: "", // Reset because email and username use the same state
         });
     }
 
@@ -116,11 +116,17 @@ class PasswordLogin extends React.Component {
         this.props.onPasswordChanged(ev.target.value);
     }
 
-    renderLoginField(loginType) {
+    renderLoginField(loginType, disabled) {
+        const classes = {
+            mx_Login_field: true,
+            mx_Login_field_disabled: disabled,
+        };
+
         switch(loginType) {
             case PasswordLogin.LOGIN_FIELD_EMAIL:
+                classes.mx_Login_email = true;
                 return <input
-                    className="mx_Login_field mx_Login_email"
+                    className={classNames(classes)}
                     key="email_input"
                     type="text"
                     name="username" // make it a little easier for browser's remember-password
@@ -128,10 +134,12 @@ class PasswordLogin extends React.Component {
                     placeholder="joe@example.com"
                     value={this.state.username}
                     autoFocus
+                    disabled={disabled}
                 />;
             case PasswordLogin.LOGIN_FIELD_MXID:
+                classes.mx_Login_username = true;
                 return <input
-                    className="mx_Login_field mx_Login_username"
+                    className={classNames(classes)}
                     key="username_input"
                     type="text"
                     name="username" // make it a little easier for browser's remember-password
@@ -139,9 +147,12 @@ class PasswordLogin extends React.Component {
                     placeholder={_t('User name')}
                     value={this.state.username}
                     autoFocus
+                    disabled={disabled}
                 />;
             case PasswordLogin.LOGIN_FIELD_PHONE:
                 const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
+                classes.mx_Login_phoneNumberField = true;
+                classes.mx_Login_field_has_prefix = true;
                 return <div className="mx_Login_phoneSection">
                     <CountryDropdown
                         className="mx_Login_phoneCountry mx_Login_field_prefix"
@@ -150,9 +161,10 @@ class PasswordLogin extends React.Component {
                         value={this.state.phoneCountry}
                         isSmall={true}
                         showPrefix={true}
+                        disabled={disabled}
                     />
                     <input
-                        className="mx_Login_phoneNumberField mx_Login_field mx_Login_field_has_prefix"
+                        className={classNames(classes)}
                         ref="phoneNumber"
                         key="phone_input"
                         type="text"
@@ -161,13 +173,14 @@ class PasswordLogin extends React.Component {
                         placeholder={_t("Mobile phone number")}
                         value={this.state.phoneNumber}
                         autoFocus
+                        disabled={disabled}
                     />
                 </div>;
         }
     }
 
     render() {
-        var forgotPasswordJsx;
+        let forgotPasswordJsx;
 
         if (this.props.onForgotPasswordClick) {
             forgotPasswordJsx = (
@@ -177,14 +190,25 @@ class PasswordLogin extends React.Component {
             );
         }
 
+        let matrixIdText = '';
+        if (this.props.hsUrl) {
+            try {
+                const parsedHsUrl = new URL(this.props.hsUrl);
+                matrixIdText = _t('%(serverName)s Matrix ID', {serverName: parsedHsUrl.hostname});
+            } catch (e) {
+                // pass
+            }
+        }
+
         const pwFieldClass = classNames({
             mx_Login_field: true,
+            mx_Login_field_disabled: matrixIdText === '',
             error: this.props.loginIncorrect,
         });
 
         const Dropdown = sdk.getComponent('elements.Dropdown');
 
-        const loginField = this.renderLoginField(this.state.loginType);
+        const loginField = this.renderLoginField(this.state.loginType, matrixIdText === '');
 
         return (
             <div>
@@ -194,20 +218,23 @@ class PasswordLogin extends React.Component {
                     <Dropdown
                         className="mx_Login_type_dropdown"
                         value={this.state.loginType}
+                        disabled={matrixIdText === ''}
                         onOptionChange={this.onLoginTypeChange}>
-                            <span key={PasswordLogin.LOGIN_FIELD_MXID}>{ _t('my Matrix ID') }</span>
+                            <span key={PasswordLogin.LOGIN_FIELD_MXID}>{ matrixIdText }</span>
                             <span key={PasswordLogin.LOGIN_FIELD_EMAIL}>{ _t('Email address') }</span>
                             <span key={PasswordLogin.LOGIN_FIELD_PHONE}>{ _t('Phone') }</span>
                     </Dropdown>
                 </div>
-                {loginField}
+                { loginField }
                 <input className={pwFieldClass} ref={(e) => {this._passwordField = e;}} type="password"
                     name="password"
                     value={this.state.password} onChange={this.onPasswordChanged}
-                    placeholder={ _t('Password') } />
+                    placeholder={_t('Password')}
+                    disabled={matrixIdText === ''}
+                />
                 <br />
-                {forgotPasswordJsx}
-                <input className="mx_Login_submit" type="submit" value={ _t('Sign in') } />
+                { forgotPasswordJsx }
+                <input className="mx_Login_submit" type="submit" value={_t('Sign in')} disabled={matrixIdText === ''} />
                 </form>
             </div>
         );

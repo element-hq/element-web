@@ -129,17 +129,17 @@ module.exports = React.createClass({
         if (this.state.call && this.state.call.type === "voice" && this.props.showVoice) {
             const callRoom = MatrixClientPeg.get().getRoom(this.state.call.roomId);
             voice = (
-                <div className="mx_CallView_voice" onClick={ this.props.onClick }>
-                {_t("Active call (%(roomName)s)", {roomName: callRoom.name})}
+                <div className="mx_CallView_voice" onClick={this.props.onClick}>
+                { _t("Active call (%(roomName)s)", {roomName: callRoom.name}) }
                 </div>
             );
         }
 
         return (
             <div>
-                <VideoView ref="video" onClick={ this.props.onClick }
-                    onResize={ this.props.onResize }
-                    maxHeight={ this.props.maxVideoHeight }
+                <VideoView ref="video" onClick={this.props.onClick}
+                    onResize={this.props.onResize}
+                    maxHeight={this.props.maxVideoHeight}
                 />
                 { voice }
             </div>

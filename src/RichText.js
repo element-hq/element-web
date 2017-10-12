@@ -44,9 +44,9 @@ export const contentStateToHTML = (contentState: ContentState) => {
     return stateToHTML(contentState, {
         inlineStyles: {
             UNDERLINE: {
-                element: 'u'
-            }
-        }
+                element: 'u',
+            },
+        },
     });
 };
 
@@ -59,7 +59,7 @@ function unicodeToEmojiUri(str) {
     let replaceWith, unicode, alt;
     if ((!emojione.unicodeAlt) || (emojione.sprites)) {
         // if we are using the shortname as the alt tag then we need a reversed array to map unicode code point to shortnames
-        let mappedUnicode = emojione.mapUnicodeToShort();
+        const mappedUnicode = emojione.mapUnicodeToShort();
     }
 
     str = str.replace(emojione.regUnicode, function(unicodeChar) {
@@ -67,8 +67,14 @@ function unicodeToEmojiUri(str) {
             // if the unicodeChar doesnt exist just return the entire match
             return unicodeChar;
         } else {
+            // Remove variant selector VS16 (explicitly emoji) as it is unnecessary and leads to an incorrect URL below
+            if(unicodeChar.length == 2 && unicodeChar[1] == '\ufe0f') {
+                unicodeChar = unicodeChar[0];
+            }
+
             // get the unicode codepoint from the actual char
             unicode = emojione.jsEscapeMap[unicodeChar];
+
             return emojione.imagePathSVG+unicode+'.svg'+emojione.cacheBustParam;
         }
     });
@@ -90,14 +96,14 @@ function findWithRegex(regex, contentBlock: ContentBlock, callback: (start: numb
 }
 
 // Workaround for https://github.com/facebook/draft-js/issues/414
-let emojiDecorator = {
+const emojiDecorator = {
     strategy: (contentState, contentBlock, callback) => {
         findWithRegex(EMOJI_REGEX, contentBlock, callback);
     },
     component: (props) => {
-        let uri = unicodeToEmojiUri(props.children[0].props.text);
-        let shortname = emojione.toShort(props.children[0].props.text);
-        let style = {
+        const uri = unicodeToEmojiUri(props.children[0].props.text);
+        const shortname = emojione.toShort(props.children[0].props.text);
+        const style = {
             display: 'inline-block',
             width: '1em',
             maxHeight: '1em',
@@ -106,7 +112,7 @@ let emojiDecorator = {
             backgroundPosition: 'center center',
             overflow: 'hidden',
         };
-        return (<span title={shortname} style={style}><span style={{opacity: 0}}>{props.children}</span></span>);
+        return (<span title={shortname} style={style}><span style={{opacity: 0}}>{ props.children }</span></span>);
     },
 };
 
@@ -118,16 +124,16 @@ export function getScopedRTDecorators(scope: any): CompositeDecorator {
 }
 
 export function getScopedMDDecorators(scope: any): CompositeDecorator {
-    let markdownDecorators = ['HR', 'BOLD', 'ITALIC', 'CODE', 'STRIKETHROUGH'].map(
+    const markdownDecorators = ['HR', 'BOLD', 'ITALIC', 'CODE', 'STRIKETHROUGH'].map(
         (style) => ({
             strategy: (contentState, contentBlock, callback) => {
                 return findWithRegex(MARKDOWN_REGEX[style], contentBlock, callback);
             },
             component: (props) => (
                 <span className={"mx_MarkdownElement mx_Markdown_" + style}>
-                    {props.children}
+                    { props.children }
                 </span>
-            )
+            ),
         }));
 
     markdownDecorators.push({
@@ -136,9 +142,9 @@ export function getScopedMDDecorators(scope: any): CompositeDecorator {
         },
         component: (props) => (
             <a href="#" className="mx_MarkdownElement mx_Markdown_LINK">
-                {props.children}
+                { props.children }
             </a>
-        )
+        ),
     });
     // markdownDecorators.push(emojiDecorator);
     // TODO Consider renabling "syntax highlighting" when we can do it properly
@@ -161,7 +167,7 @@ export function modifyText(contentState: ContentState, rangeToReplace: Selection
     for (let currentKey = startKey;
             currentKey && currentKey !== endKey;
             currentKey = contentState.getKeyAfter(currentKey)) {
-        let blockText = getText(currentKey);
+        const blockText = getText(currentKey);
         text += blockText.substring(startOffset, blockText.length);
 
         // from now on, we'll take whole blocks
@@ -182,7 +188,7 @@ export function modifyText(contentState: ContentState, rangeToReplace: Selection
 export function selectionStateToTextOffsets(selectionState: SelectionState,
                                             contentBlocks: Array<ContentBlock>): {start: number, end: number} {
     let offset = 0, start = 0, end = 0;
-    for (let block of contentBlocks) {
+    for (const block of contentBlocks) {
         if (selectionState.getStartKey() === block.getKey()) {
             start = offset + selectionState.getStartOffset();
         }
@@ -259,7 +265,7 @@ export function attachImmutableEntitiesToEmoji(editorState: EditorState): Editor
                 .set('focusOffset', end);
             const emojiText = plainText.substring(start, end);
             newContentState = newContentState.createEntity(
-                'emoji', 'IMMUTABLE', { emojiUnicode: emojiText }
+                'emoji', 'IMMUTABLE', { emojiUnicode: emojiText },
             );
             const entityKey = newContentState.getLastCreatedEntityKey();
             newContentState = Modifier.replaceText(

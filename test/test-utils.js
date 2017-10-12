@@ -14,7 +14,7 @@ const MatrixEvent = jssdk.MatrixEvent;
  * @param {Mocha.Context} context  The test context
  */
 export function beforeEach(context) {
-    var desc = context.currentTest.fullTitle();
+    const desc = context.currentTest.fullTitle();
 
     console.log();
 
@@ -26,7 +26,7 @@ export function beforeEach(context) {
 
     console.log(desc);
     console.log(new Array(1 + desc.length).join("="));
-};
+}
 
 
 /**
@@ -40,16 +40,16 @@ export function beforeEach(context) {
  * @returns {sinon.Sandbox}; remember to call sandbox.restore afterwards.
  */
 export function stubClient() {
-    var sandbox = sinon.sandbox.create();
+    const sandbox = sinon.sandbox.create();
 
-    var client = createTestClient();
+    const client = createTestClient();
 
     // stub out the methods in MatrixClientPeg
     //
     // 'sandbox.restore()' doesn't work correctly on inherited methods,
     // so we do this for each method
-    var methods = ['get', 'unset', 'replaceUsingCreds'];
-    for (var i = 0; i < methods.length; i++) {
+    const methods = ['get', 'unset', 'replaceUsingCreds'];
+    for (let i = 0; i < methods.length; i++) {
         sandbox.stub(peg, methods[i]);
     }
     // MatrixClientPeg.get() is called a /lot/, so implement it with our own
@@ -128,7 +128,7 @@ export function mkEvent(opts) {
     if (!opts.type || !opts.content) {
         throw new Error("Missing .type or .content =>" + JSON.stringify(opts));
     }
-    var event = {
+    const event = {
         type: opts.type,
         room_id: opts.room,
         sender: opts.user,
@@ -139,14 +139,13 @@ export function mkEvent(opts) {
     };
     if (opts.skey) {
         event.state_key = opts.skey;
-    }
-    else if (["m.room.name", "m.room.topic", "m.room.create", "m.room.join_rules",
+    } else if (["m.room.name", "m.room.topic", "m.room.create", "m.room.join_rules",
          "m.room.power_levels", "m.room.topic",
          "com.example.state"].indexOf(opts.type) !== -1) {
         event.state_key = "";
     }
     return opts.event ? new MatrixEvent(event) : event;
-};
+}
 
 /**
  * Create an m.presence event.
@@ -157,7 +156,7 @@ export function mkPresence(opts) {
     if (!opts.user) {
         throw new Error("Missing user");
     }
-    var event = {
+    const event = {
         event_id: "$" + Math.random() + "-" + Math.random(),
         type: "m.presence",
         sender: opts.user,
@@ -165,11 +164,11 @@ export function mkPresence(opts) {
             avatar_url: opts.url,
             displayname: opts.name,
             last_active_ago: opts.ago,
-            presence: opts.presence || "offline"
-        }
+            presence: opts.presence || "offline",
+        },
     };
     return opts.event ? new MatrixEvent(event) : event;
-};
+}
 
 /**
  * Create an m.room.member event.
@@ -195,19 +194,19 @@ export function mkMembership(opts) {
         throw new Error("Missing .mship => " + JSON.stringify(opts));
     }
     opts.content = {
-        membership: opts.mship
+        membership: opts.mship,
     };
     if (opts.prevMship) {
         opts.prev_content = { membership: opts.prevMship };
     }
     if (opts.name) { opts.content.displayname = opts.name; }
     if (opts.url) { opts.content.avatar_url = opts.url; }
-    let e = mkEvent(opts);
+    const e = mkEvent(opts);
     if (opts.target) {
         e.target = opts.target;
     }
     return e;
-};
+}
 
 /**
  * Create an m.room.message event.
@@ -228,13 +227,13 @@ export function mkMessage(opts) {
     }
     opts.content = {
         msgtype: "m.text",
-        body: opts.msg
+        body: opts.msg,
     };
     return mkEvent(opts);
 }
 
 export function mkStubRoom(roomId = null) {
-    var stubTimeline = { getEvents: () => [] };
+    const stubTimeline = { getEvents: () => [] };
     return {
         roomId,
         getReceiptsForEvent: sinon.stub().returns([]),

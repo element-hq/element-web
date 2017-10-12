@@ -23,12 +23,13 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import AccessibleButton from '../elements/AccessibleButton';
 import Promise from 'bluebird';
 import { addressTypes, getAddressType } from '../../../UserAddress.js';
+import GroupStoreCache from '../../../stores/GroupStoreCache';
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
 
 module.exports = React.createClass({
-    displayName: "UserPickerDialog",
+    displayName: "AddressPickerDialog",
 
     propTypes: {
         title: PropTypes.string.isRequired,
@@ -40,6 +41,12 @@ module.exports = React.createClass({
         focus: PropTypes.bool,
         validAddressTypes: PropTypes.arrayOf(PropTypes.oneOf(addressTypes)),
         onFinished: PropTypes.func.isRequired,
+        groupId: PropTypes.string,
+        // The type of entity to search for. Default: 'user'.
+        pickerType: PropTypes.oneOf(['user', 'room']),
+        // Whether the current user should be included in the addresses returned. Only
+        // applicable when pickerType is `user`. Default: false.
+        includeSelf: PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -47,6 +54,8 @@ module.exports = React.createClass({
             value: "",
             focus: true,
             validAddressTypes: addressTypes,
+            pickerType: 'user',
+            includeSelf: false,
         };
     },
 
@@ -140,10 +149,22 @@ module.exports = React.createClass({
         // Only do search if there is something to search
         if (query.length > 0 && query != '@' && query.length >= 2) {
             this.queryChangedDebouncer = setTimeout(() => {
-                if (this.state.serverSupportsUserDirectory) {
-                    this._doUserDirectorySearch(query);
+                if (this.props.pickerType === 'user') {
+                    if (this.props.groupId) {
+                        this._doNaiveGroupSearch(query);
+                    } else if (this.state.serverSupportsUserDirectory) {
+                        this._doUserDirectorySearch(query);
+                    } else {
+                        this._doLocalSearch(query);
+                    }
+                } else if (this.props.pickerType === 'room') {
+                    if (this.props.groupId) {
+                        this._doNaiveGroupRoomSearch(query);
+                    } else {
+                        this._doRoomSearch(query);
+                    }
                 } else {
-                    this._doLocalSearch(query);
+                    console.error('Unknown pickerType', this.props.pickerType);
                 }
             }, QUERY_USER_DIRECTORY_DEBOUNCE_MS);
         } else {
@@ -183,6 +204,94 @@ module.exports = React.createClass({
             query: "",
         });
         if (this._cancelThreepidLookup) this._cancelThreepidLookup();
+    },
+
+    _doNaiveGroupSearch: function(query) {
+        const lowerCaseQuery = query.toLowerCase();
+        this.setState({
+            busy: true,
+            query,
+            searchError: null,
+        });
+        MatrixClientPeg.get().getGroupUsers(this.props.groupId).then((resp) => {
+            const results = [];
+            resp.chunk.forEach((u) => {
+                const userIdMatch = u.user_id.toLowerCase().includes(lowerCaseQuery);
+                const displayNameMatch = (u.displayname || '').toLowerCase().includes(lowerCaseQuery);
+                if (!(userIdMatch || displayNameMatch)) {
+                    return;
+                }
+                results.push({
+                    user_id: u.user_id,
+                    avatar_url: u.avatar_url,
+                    display_name: u.displayname,
+                });
+            });
+            this._processResults(results, query);
+        }).catch((err) => {
+            console.error('Error whilst searching group rooms: ', err);
+            this.setState({
+                searchError: err.errcode ? err.message : _t('Something went wrong!'),
+            });
+        }).done(() => {
+            this.setState({
+                busy: false,
+            });
+        });
+    },
+
+    _doNaiveGroupRoomSearch: function(query) {
+        const lowerCaseQuery = query.toLowerCase();
+        const groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), this.props.groupId);
+        const results = [];
+        groupStore.getGroupRooms().forEach((r) => {
+            const nameMatch = (r.name || '').toLowerCase().includes(lowerCaseQuery);
+            const topicMatch = (r.topic || '').toLowerCase().includes(lowerCaseQuery);
+            const aliasMatch = (r.canonical_alias || '').toLowerCase().includes(lowerCaseQuery);
+            if (!(nameMatch || topicMatch || aliasMatch)) {
+                return;
+            }
+            results.push({
+                room_id: r.room_id,
+                avatar_url: r.avatar_url,
+                name: r.name || r.canonical_alias,
+            });
+        });
+        this._processResults(results, query);
+        this.setState({
+            busy: false,
+        });
+    },
+
+    _doRoomSearch: function(query) {
+        const lowerCaseQuery = query.toLowerCase();
+        const rooms = MatrixClientPeg.get().getRooms();
+        const results = [];
+        rooms.forEach((room) => {
+            const nameEvent = room.currentState.getStateEvents('m.room.name', '');
+            const topicEvent = room.currentState.getStateEvents('m.room.topic', '');
+            const name = nameEvent ? nameEvent.getContent().name : '';
+            const canonicalAlias = room.getCanonicalAlias();
+            const topic = topicEvent ? topicEvent.getContent().topic : '';
+
+            const nameMatch = (name || '').toLowerCase().includes(lowerCaseQuery);
+            const aliasMatch = (canonicalAlias || '').toLowerCase().includes(lowerCaseQuery);
+            const topicMatch = (topic || '').toLowerCase().includes(lowerCaseQuery);
+            if (!(nameMatch || topicMatch || aliasMatch)) {
+                return;
+            }
+            const avatarEvent = room.currentState.getStateEvents('m.room.avatar', '');
+            const avatarUrl = avatarEvent ? avatarEvent.getContent().url : undefined;
+            results.push({
+                room_id: room.roomId,
+                avatar_url: avatarUrl,
+                name: name || canonicalAlias,
+            });
+        });
+        this._processResults(results, query);
+        this.setState({
+            busy: false,
+        });
     },
 
     _doUserDirectorySearch: function(query) {
@@ -245,17 +354,30 @@ module.exports = React.createClass({
 
     _processResults: function(results, query) {
         const queryList = [];
-        results.forEach((user) => {
-            if (user.user_id === MatrixClientPeg.get().credentials.userId) {
+        results.forEach((result) => {
+            if (result.room_id) {
+                queryList.push({
+                    addressType: 'mx-room-id',
+                    address: result.room_id,
+                    displayName: result.name,
+                    avatarMxc: result.avatar_url,
+                    isKnown: true,
+                });
                 return;
             }
+            if (!this.props.includeSelf &&
+                result.user_id === MatrixClientPeg.get().credentials.userId
+            ) {
+                return;
+            }
+
             // Return objects, structure of which is defined
             // by UserAddressType
             queryList.push({
-                addressType: 'mx',
-                address: user.user_id,
-                displayName: user.display_name,
-                avatarMxc: user.avatar_url,
+                addressType: 'mx-user-id',
+                address: result.user_id,
+                displayName: result.display_name,
+                avatarMxc: result.avatar_url,
                 isKnown: true,
             });
         });
@@ -291,14 +413,21 @@ module.exports = React.createClass({
             address: addressText,
             isKnown: false,
         };
-        if (addrType == null) {
+        if (!this.props.validAddressTypes.includes(addrType)) {
             this.setState({ error: true });
             return null;
-        } else if (addrType == 'mx') {
+        } else if (addrType == 'mx-user-id') {
             const user = MatrixClientPeg.get().getUser(addrObj.address);
             if (user) {
                 addrObj.displayName = user.displayName;
                 addrObj.avatarMxc = user.avatarUrl;
+                addrObj.isKnown = true;
+            }
+        } else if (addrType == 'mx-room-id') {
+            const room = MatrixClientPeg.get().getRoom(addrObj.address);
+            if (room) {
+                addrObj.displayName = room.name;
+                addrObj.avatarMxc = room.avatarUrl;
                 addrObj.isKnown = true;
             }
         }
@@ -360,7 +489,7 @@ module.exports = React.createClass({
             const AddressTile = sdk.getComponent("elements.AddressTile");
             for (let i = 0; i < this.state.userList.length; i++) {
                 query.push(
-                    <AddressTile key={i} address={this.state.userList[i]} canDismiss={true} onDismissed={ this.onDismissed(i) } />,
+                    <AddressTile key={i} address={this.state.userList[i]} canDismiss={true} onDismissed={this.onDismissed(i)} />,
                 );
             }
         }
@@ -382,23 +511,36 @@ module.exports = React.createClass({
         let error;
         let addressSelector;
         if (this.state.error) {
+            let tryUsing = '';
+            const validTypeDescriptions = this.props.validAddressTypes.map((t) => {
+                return {
+                    'mx-user-id': _t("Matrix ID"),
+                    'mx-room-id': _t("Matrix Room ID"),
+                    'email': _t("email address"),
+                }[t];
+            });
+            tryUsing = _t("Try using one of the following valid address types: %(validTypesList)s.", {
+                validTypesList: validTypeDescriptions.join(", "),
+            });
             error = <div className="mx_ChatInviteDialog_error">
-                {_t("You have entered an invalid contact. Try using their Matrix ID or email address.")}
+                { _t("You have entered an invalid address.") }
+                <br />
+                { tryUsing }
             </div>;
         } else if (this.state.searchError) {
-            error = <div className="mx_ChatInviteDialog_error">{this.state.searchError}</div>;
+            error = <div className="mx_ChatInviteDialog_error">{ this.state.searchError }</div>;
         } else if (
             this.state.query.length > 0 &&
             this.state.queryList.length === 0 &&
             !this.state.busy
         ) {
-            error = <div className="mx_ChatInviteDialog_error">{_t("No results")}</div>;
+            error = <div className="mx_ChatInviteDialog_error">{ _t("No results") }</div>;
         } else {
             addressSelector = (
                 <AddressSelector ref={(ref) => {this.addressSelector = ref;}}
-                    addressList={ this.state.queryList }
-                    onSelected={ this.onSelected }
-                    truncateAt={ TRUNCATE_QUERY_LIST }
+                    addressList={this.state.queryList}
+                    onSelected={this.onSelected}
+                    truncateAt={TRUNCATE_QUERY_LIST}
                 />
             );
         }
@@ -406,7 +548,7 @@ module.exports = React.createClass({
         return (
             <div className="mx_ChatInviteDialog" onKeyDown={this.onKeyDown}>
                 <div className="mx_Dialog_title">
-                    {this.props.title}
+                    { this.props.title }
                 </div>
                 <AccessibleButton className="mx_ChatInviteDialog_cancel"
                         onClick={this.onCancel} >
@@ -422,7 +564,7 @@ module.exports = React.createClass({
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={this.onButtonClick}>
-                        {this.props.button}
+                        { this.props.button }
                     </button>
                 </div>
             </div>

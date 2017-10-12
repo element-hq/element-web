@@ -36,7 +36,7 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <button className="mx_CreateRoomButton" onClick={this.onClick}>{_t("Create Room")}</button>
+            <button className="mx_CreateRoomButton" onClick={this.onClick}>{ _t("Create Room") }</button>
         );
-    }
+    },
 });

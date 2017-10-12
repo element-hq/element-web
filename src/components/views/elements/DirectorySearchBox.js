@@ -95,7 +95,7 @@ export default class DirectorySearchBox extends React.Component {
                     onChange={this._onChange} onKeyUp={this._onKeyUp}
                     placeholder={this.props.placeholder} autoFocus
                 />
-                {join_button}
+                { join_button }
                 <span className="mx_DirectorySearchBox_clear_wrapper">
                     <span className="mx_DirectorySearchBox_clear" onClick={this._onClearClick} />
                 </span>

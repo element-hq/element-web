@@ -45,7 +45,7 @@ const PROVIDERS = [
     EmojiProvider,
     CommandProvider,
     DuckDuckGoProvider,
-].map(completer => completer.getInstance());
+].map((completer) => completer.getInstance());
 
 // Providers will get rejected if they take longer than this.
 const PROVIDER_COMPLETION_TIMEOUT = 3000;

@@ -17,9 +17,9 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sdk = require('../../../index');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
+const React = require('react');
+const sdk = require('../../../index');
+const MatrixClientPeg = require('../../../MatrixClientPeg');
 
 import { _t, _tJsx } from '../../../languageHandler';
 
@@ -61,7 +61,7 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            busy: false
+            busy: false,
         };
     },
 
@@ -72,7 +72,7 @@ module.exports = React.createClass({
         if (this.props.inviterName && this.props.invitedEmail) {
             this.setState({busy: true});
             MatrixClientPeg.get().lookupThreePid(
-                'email', this.props.invitedEmail
+                'email', this.props.invitedEmail,
             ).finally(() => {
                 this.setState({busy: false});
             }).done((result) => {
@@ -90,10 +90,10 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var joinBlock, previewBlock;
+        let joinBlock, previewBlock;
 
         if (this.props.spinner || this.state.busy) {
-            var Spinner = sdk.getComponent("elements.Spinner");
+            const Spinner = sdk.getComponent("elements.Spinner");
             return (<div className="mx_RoomPreviewBar">
                 <Spinner />
             </div>);
@@ -110,11 +110,11 @@ module.exports = React.createClass({
         const banned = myMember && myMember.membership == 'ban';
 
         if (this.props.inviterName) {
-            var emailMatchBlock;
+            let emailMatchBlock;
             if (this.props.invitedEmail) {
                 if (this.state.threePidFetchError) {
                     emailMatchBlock = <div className="error">
-                        {_t("Unable to ascertain that the address this invite was sent to matches one associated with your account.")}
+                        { _t("Unable to ascertain that the address this invite was sent to matches one associated with your account.") }
                     </div>;
                 } else if (this.state.invitedEmailMxid != MatrixClientPeg.get().credentials.userId) {
                     emailMatchBlock =
@@ -123,10 +123,10 @@ module.exports = React.createClass({
                                 <img src="img/warning.svg" width="24" height="23" title= "/!\\" alt="/!\\" />
                             </div>
                             <div className="mx_RoomPreviewBar_warningText">
-                                {_t("This invitation was sent to an email address which is not associated with this account:")}
-                                <b><span className="email">{this.props.invitedEmail}</span></b>
-                                <br/>
-                                {_t("You may wish to login with a different account, or add this email to this account.")}
+                                { _t("This invitation was sent to an email address which is not associated with this account:") }
+                                <b><span className="email">{ this.props.invitedEmail }</span></b>
+                                <br />
+                                { _t("You may wish to login with a different account, or add this email to this account.") }
                             </div>
                         </div>;
                 }
@@ -141,53 +141,51 @@ module.exports = React.createClass({
                             'Would you like to <acceptText>accept</acceptText> or <declineText>decline</declineText> this invitation?',
                             [/<acceptText>(.*?)<\/acceptText>/, /<declineText>(.*?)<\/declineText>/],
                             [
-                                (sub) => <a onClick={ this.props.onJoinClick }>{sub}</a>,
-                                (sub) => <a onClick={ this.props.onRejectClick }>{sub}</a>
-                            ]
-                        )}
+                                (sub) => <a onClick={this.props.onJoinClick}>{ sub }</a>,
+                                (sub) => <a onClick={this.props.onRejectClick}>{ sub }</a>,
+                            ],
+                        ) }
                     </div>
-                    {emailMatchBlock}
+                    { emailMatchBlock }
                 </div>
             );
-
         } else if (kicked || banned) {
             const roomName = this._roomNameElement(_t('This room'));
             const kickerMember = this.props.room.currentState.getMember(
-                myMember.events.member.getSender()
+                myMember.events.member.getSender(),
             );
             const kickerName = kickerMember ?
                 kickerMember.name : myMember.events.member.getSender();
             let reason;
             if (myMember.events.member.getContent().reason) {
-                reason = <div>{_t("Reason: %(reasonText)s", {reasonText: myMember.events.member.getContent().reason})}</div>
+                reason = <div>{ _t("Reason: %(reasonText)s", {reasonText: myMember.events.member.getContent().reason}) }</div>;
             }
             let rejoinBlock;
             if (!banned) {
-                rejoinBlock = <div><a onClick={ this.props.onJoinClick }><b>{_t("Rejoin")}</b></a></div>;
+                rejoinBlock = <div><a onClick={this.props.onJoinClick}><b>{ _t("Rejoin") }</b></a></div>;
             }
 
             let actionText;
             if (kicked) {
                 actionText = _t("You have been kicked from %(roomName)s by %(userName)s.", {roomName: roomName, userName: kickerName});
-            }
-            else if (banned) {
+            } else if (banned) {
                 actionText = _t("You have been banned from %(roomName)s by %(userName)s.", {roomName: roomName, userName: kickerName});
             } // no other options possible due to the kicked || banned check above.
 
             joinBlock = (
                 <div>
                     <div className="mx_RoomPreviewBar_join_text">
-                        {actionText}
+                        { actionText }
                         <br />
-                        {reason}
-                        {rejoinBlock}
-                        <a onClick={ this.props.onForgetClick }><b>{_t("Forget room")}</b></a>
+                        { reason }
+                        { rejoinBlock }
+                        <a onClick={this.props.onForgetClick}><b>{ _t("Forget room") }</b></a>
                     </div>
                 </div>
             );
         } else if (this.props.error) {
-            var name = this.props.roomAlias || _t("This room");
-            var error;
+            const name = this.props.roomAlias || _t("This room");
+            let error;
             if (this.props.error.errcode == 'M_NOT_FOUND') {
                 error = _t("%(roomName)s does not exist.", {roomName: name});
             } else {
@@ -206,11 +204,11 @@ module.exports = React.createClass({
                 <div>
                     <div className="mx_RoomPreviewBar_join_text">
                         { _t('You are trying to access %(roomName)s.', {roomName: name}) }
-                        <br/>
+                        <br />
                         { _tJsx("<a>Click here</a> to join the discussion!",
                             /<a>(.*?)<\/a>/,
-                            (sub) => <a onClick={ this.props.onJoinClick }><b>{sub}</b></a>
-                        )}
+                            (sub) => <a onClick={this.props.onJoinClick}><b>{ sub }</b></a>,
+                        ) }
                     </div>
                 </div>
             );
@@ -232,5 +230,5 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
-    }
+    },
 });
