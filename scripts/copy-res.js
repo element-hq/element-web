@@ -160,10 +160,15 @@ function genLangFile(lang, dest) {
     let translations = {};
     [reactSdkFile, riotWebFile].forEach(function(f) {
         if (fs.existsSync(f)) {
-            Object.assign(
-                translations,
-                JSON.parse(fs.readFileSync(f).toString())
-            );
+            try {
+                Object.assign(
+                    translations,
+                    JSON.parse(fs.readFileSync(f).toString())
+                );
+            } catch (e) {
+                console.error("Failed: "+f, e);
+                throw e;
+            }
         }
     });
 
