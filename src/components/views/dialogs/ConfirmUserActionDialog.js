@@ -36,6 +36,7 @@ export default React.createClass({
         // group member object. Supply either this or 'member'
         groupMember: GroupMemberType,
         action: React.PropTypes.string.isRequired, // eg. 'Ban'
+        title: React.PropTypes.string.isRequired, // eg. 'Ban this user?'
 
         // Whether to display a text field for a reason
         // If true, the second argument to onFinished will
@@ -75,7 +76,6 @@ export default React.createClass({
         const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
         const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
 
-        const title = _t("%(actionVerb)s this person?", { actionVerb: this.props.action});
         const confirmButtonClass = classnames({
             'mx_Dialog_primary': true,
             'danger': this.props.danger,
@@ -113,7 +113,7 @@ export default React.createClass({
         return (
             <BaseDialog className="mx_ConfirmUserActionDialog" onFinished={this.props.onFinished}
                 onEnterPressed={this.onOk}
-                title={title}
+                title={this.props.title}
             >
                 <div className="mx_Dialog_content">
                     <div className="mx_ConfirmUserActionDialog_avatar">

@@ -247,11 +247,11 @@ module.exports = withMatrixClient(React.createClass({
 
     onKick: function() {
         const membership = this.props.member.membership;
-        const kickLabel = membership === "invite" ? _t("Disinvite") : _t("Kick");
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createTrackedDialog('Confirm User Action Dialog', 'onKick', ConfirmUserActionDialog, {
             member: this.props.member,
-            action: kickLabel,
+            action: membership === "invite" ? _t("Disinvite") : _t("Kick"),
+            title: membership === "invite" ? _t("Disinvite this user?") : _t("Kick this user?"),
             askReason: membership == "join",
             danger: true,
             onFinished: (proceed, reason) => {
@@ -285,6 +285,7 @@ module.exports = withMatrixClient(React.createClass({
         Modal.createTrackedDialog('Confirm User Action Dialog', 'onBanOrUnban', ConfirmUserActionDialog, {
             member: this.props.member,
             action: this.props.member.membership == 'ban' ? _t("Unban") : _t("Ban"),
+            title: this.props.member.membership == 'ban' ? _t("Unban this user?") : _t("Ban this user?"),
             askReason: this.props.member.membership != 'ban',
             danger: this.props.member.membership != 'ban',
             onFinished: (proceed, reason) => {

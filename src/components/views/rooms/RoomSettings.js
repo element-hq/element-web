@@ -72,6 +72,7 @@ const BannedUser = React.createClass({
         Modal.createTrackedDialog('Confirm User Action Dialog', 'onUnbanClick', ConfirmUserActionDialog, {
             member: this.props.member,
             action: _t('Unban'),
+            title: _t('Unban this user?'),
             danger: false,
             onFinished: (proceed) => {
                 if (!proceed) return;

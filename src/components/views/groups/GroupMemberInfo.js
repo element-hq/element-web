@@ -69,6 +69,7 @@ module.exports = withMatrixClient(React.createClass({
         Modal.createDialog(ConfirmUserActionDialog, {
             groupMember: this.props.groupMember,
             action: _t('Remove from group'),
+            title: _t('Remove this user from group?'),
             danger: true,
             onFinished: (proceed) => {
                 if (!proceed) return;
