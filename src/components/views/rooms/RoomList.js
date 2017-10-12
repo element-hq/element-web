@@ -34,27 +34,18 @@ const Receipt = require('../../../utils/Receipt');
 const HIDE_CONFERENCE_CHANS = true;
 
 function phraseForSection(section) {
-    // These would probably be better as individual strings,
-    // but for some reason we have translations for these strings
-    // as-is, so keeping it like this for now.
-    let verb;
     switch (section) {
         case 'm.favourite':
-            verb = _t('to favourite');
-            break;
+	    return _t('Drop here to favourite');
         case 'im.vector.fake.direct':
-            verb = _t('to tag direct chat');
-            break;
+	    return _t('Drop here to tag direct chat');
         case 'im.vector.fake.recent':
-            verb = _t('to restore');
-            break;
+	    return _t('Drop here to restore');
         case 'm.lowpriority':
-            verb = _t('to demote');
-            break;
+	    return _t('Drop here to demote');
         default:
             return _t('Drop here to tag %(section)s', {section: section});
     }
-    return _t('Drop here %(toAction)s', {toAction: verb});
 }
 
 module.exports = React.createClass({
