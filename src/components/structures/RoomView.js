@@ -283,6 +283,7 @@ module.exports = React.createClass({
                         // This is fine: the room just isn't peekable (we assume).
                         this.setState({
                             peekLoading: false,
+                            isPeeking: false,
                         });
                     } else {
                         throw err;
