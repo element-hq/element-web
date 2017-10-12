@@ -748,7 +748,8 @@ module.exports = React.createClass({
 
         for (const event of unsentMessages) {
             if (!event.error || event.error.name !== "UnknownDeviceError") {
-                return _t("Some of your messages have not been sent.");
+                if (unsentMessages.length > 1) return _t("Some of your messages have not been sent.");
+                return _t("Your message was not sent.");
             }
         }
         return _t("Message not sent due to unknown devices being present");
@@ -1570,6 +1571,7 @@ module.exports = React.createClass({
             isStatusAreaExpanded = this.state.statusBarVisible;
             statusBar = <RoomStatusBar
                 room={this.state.room}
+                numUnsentMessages={this._getUnsentMessages().length}
                 numUnreadMessages={this.state.numUnreadMessages}
                 unsentMessageError={this.state.unsentMessageError}
                 atEndOfLiveTimeline={this.state.atEndOfLiveTimeline}

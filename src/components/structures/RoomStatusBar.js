@@ -39,6 +39,9 @@ module.exports = React.createClass({
         // string to display when there are messages in the room which had errors on send
         unsentMessageError: React.PropTypes.string,
 
+        // the number of messages not sent.
+        numUnsentMessages: React.PropTypes.number,
+
         // this is true if we are fully scrolled-down, and are looking at
         // the end of the live timeline.
         atEndOfLiveTimeline: React.PropTypes.bool,
@@ -252,6 +255,8 @@ module.exports = React.createClass({
         }
 
         if (this.props.unsentMessageError) {
+            let resendStr = "<a>Resend message</a> or <a>cancel message</a> now.";
+            if (this.props.numUnsentMessages > 1) resendStr = "<a>Resend all</a> or <a>cancel all</a> now. You can also select individual messages to resend or cancel.";
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
                     <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ " />
@@ -259,7 +264,7 @@ module.exports = React.createClass({
                         { this.props.unsentMessageError }
                     </div>
                     <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                    { _tJsx("<a>Resend all</a> or <a>cancel all</a> now. You can also select individual messages to resend or cancel.",
+                    { _tJsx(resendStr,
                         [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
                         [
                             (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this.props.onResendAllClick}>{ sub }</a>,
