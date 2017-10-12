@@ -609,6 +609,7 @@
     "Room": "Room",
     "Copied!": "Copied!",
     "Failed to copy": "Failed to copy",
+    "There's no one else here! Would you like to <a>invite others</a> or <a>stop warning about the empty room</a>?": "There's no one else here! Would you like to <a>invite others</a> or <a>stop warning about the empty room</a>?",
     "Connectivity to the server has been lost.": "Connectivity to the server has been lost.",
     "Sent messages will be stored until your connection has returned.": "Sent messages will be stored until your connection has returned.",
     "<a>Resend all</a> or <a>cancel all</a> now. You can also select individual messages to resend or cancel.": "<a>Resend all</a> or <a>cancel all</a> now. You can also select individual messages to resend or cancel.",
