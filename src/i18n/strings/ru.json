@@ -889,5 +889,18 @@
     "You are no longer ignoring %(userId)s": "Вы больше не игнорируете %(userId)s",
     "Unignored user": "Неигнорируемый пользователь",
     "Ignored user": "Игнорируемый пользователь",
-    "Stops ignoring a user, showing their messages going forward": "Прекращает игнорирование пользователя, показывая их будущие сообщения"
+    "Stops ignoring a user, showing their messages going forward": "Прекращает игнорирование пользователя, показывая их будущие сообщения",
+    "Ignores a user, hiding their messages from you": "Игнорирует пользователя, скрывая сообщения от вас",
+    "Disable Emoji suggestions while typing": "Отключить предложения Emoji при наборе текста",
+    "Banned by %(displayName)s": "Запрещено %(displayName)s",
+    "Message removed by %(userId)s": "Сообщение удалено %(userId)s",
+    "To send messages, you must be a": "Для отправки сообщений необходимо быть",
+    "To invite users into the room, you must be a": "Чтобы пригласить пользователей в комнату, необходимо быть",
+    "To configure the room, you must be a": "Чтобы настроить комнату, необходимо быть",
+    "To kick users, you must be a": "Чтобы выкидывать пользователей, необходимо быть",
+    "To ban users, you must be a": "Чтобы банить пользователей, необходимо быть",
+    "To remove other users' messages, you must be a": "Чтобы удалять сообщения других пользователей, необходимо быть",
+    "To send events of type <eventType/>, you must be a": "Для отправки событий типа <eventType/>, необходимо быть",
+    "To change the room's avatar, you must be a": "Чтобы изменить аватар комнаты, необходимо быть",
+    "To change the room's name, you must be a": "Чтобы изменить имя комнаты, необходимо быть"
 }
