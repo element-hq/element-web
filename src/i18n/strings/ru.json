@@ -877,5 +877,17 @@
     "%(weekDayName)s, %(monthName)s %(day)s": "%(weekDayName)s, %(monthName)s %(day)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "Copied!": "Скопировано!",
-    "Failed to copy": "Не удалось скопировать"
+    "Failed to copy": "Не удалось скопировать",
+    "Advanced options": "Дополнительные параметры",
+    "Block users on other matrix homeservers from joining this room": "Блокировать пользователей, входящих в эту комнату с других серверов matrix",
+    "This setting cannot be changed later!": "Этот параметр нельзя изменить позднее!",
+    "Ignored Users": "Игнорируемые пользователи",
+    "Ignore": "Игнорировать",
+    "Unignore": "Перестать игнорировать",
+    "User Options": "Параметры пользователя",
+    "You are now ignoring %(userId)s": "Теперь вы игнорируете %(userId)s",
+    "You are no longer ignoring %(userId)s": "Вы больше не игнорируете %(userId)s",
+    "Unignored user": "Неигнорируемый пользователь",
+    "Ignored user": "Игнорируемый пользователь",
+    "Stops ignoring a user, showing their messages going forward": "Прекращает игнорирование пользователя, показывая их будущие сообщения"
 }
