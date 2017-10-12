@@ -233,7 +233,7 @@ export default class Autocomplete extends React.Component {
                 const componentPosition = position;
                 position++;
 
-                const onMouseOver = () => this.setSelection(componentPosition);
+                const onMouseMove = () => this.setSelection(componentPosition);
                 const onClick = () => {
                     this.setSelection(componentPosition);
                     this.onCompletionClicked();
@@ -243,7 +243,7 @@ export default class Autocomplete extends React.Component {
                     key: i,
                     ref: `completion${position - 1}`,
                     className,
-                    onMouseOver,
+                    onMouseMove,
                     onClick,
                 });
             });
