@@ -825,5 +825,9 @@
     "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s-widget toegevoegd door %(senderName)s",
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s-widget verwijderd door %(senderName)s",
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Robot-check is momenteel niet beschikbaar op de desktop - gebruik in plaats daarvan een <a>webbrowser</a>",
-    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s-widget aangepast door %(senderName)s"
+    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s-widget aangepast door %(senderName)s",
+    "%(weekDayName)s, %(monthName)s %(day)s": "%(weekDayName)s %(day)s %(monthName)s",
+    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s %(day)s %(monthName)s %(fullYear)s",
+    "Copied!": "Gekopieerd!",
+    "Failed to copy": "Kopiëren mislukt"
 }

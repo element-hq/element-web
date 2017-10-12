@@ -117,6 +117,7 @@ module.exports = React.createClass({
             guestsCanJoin: false,
             canPeek: false,
             showApps: false,
+            isPeeking: false,
 
             // error object, as from the matrix client/server API
             // If we failed to load information about the room,
@@ -266,6 +267,7 @@ module.exports = React.createClass({
                 console.log("Attempting to peek into room %s", roomId);
                 this.setState({
                     peekLoading: true,
+                    isPeeking: true, // this will change to false if peeking fails
                 });
                 MatrixClientPeg.get().peekInRoom(roomId).then((room) => {
                     this.setState({
@@ -274,6 +276,11 @@ module.exports = React.createClass({
                     });
                     this._onRoomLoaded(room);
                 }, (err) => {
+                    // Stop peeking if anything went wrong
+                    this.setState({
+                        isPeeking: false,
+                    });
+                    
                     // This won't necessarily be a MatrixError, but we duck-type
                     // here and say if it's got an 'errcode' key with the right value,
                     // it means we can't peek.
@@ -290,6 +297,7 @@ module.exports = React.createClass({
         } else if (room) {
             // Stop peeking because we have joined this room previously
             MatrixClientPeg.get().stopPeeking();
+            this.setState({isPeeking: false});
         }
     },
 
@@ -735,6 +743,17 @@ module.exports = React.createClass({
     _getUnsentMessageError: function(room) {
         const unsentMessages = this._getUnsentMessages(room);
         if (!unsentMessages.length) return "";
+
+        if (
+            unsentMessages.length === 1 &&
+            unsentMessages[0].error &&
+            unsentMessages[0].error.data &&
+            unsentMessages[0].error.data.error &&
+            unsentMessages[0].error.name !== "UnknownDeviceError"
+        ) {
+            return unsentMessages[0].error.data.error;
+        }
+
         for (const event of unsentMessages) {
             if (!event.error || event.error.name !== "UnknownDeviceError") {
                 return _t("Some of your messages have not been sent.");
@@ -1717,8 +1736,8 @@ module.exports = React.createClass({
             <TimelinePanel ref={this._gatherTimelinePanelRef}
                 timelineSet={this.state.room.getUnfilteredTimelineSet()}
                 showReadReceipts={!UserSettingsStore.getSyncedSetting('hideReadReceipts', false)}
-                manageReadReceipts={true}
-                manageReadMarkers={true}
+                manageReadReceipts={!this.state.isPeeking}
+                manageReadMarkers={!this.state.isPeeking}
                 hidden={hideMessagePanel}
                 highlightedEventId={highlightedEventId}
                 eventId={this.state.initialEventId}

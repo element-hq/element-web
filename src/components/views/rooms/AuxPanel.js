@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -128,15 +129,12 @@ module.exports = React.createClass({
             />
         );
 
-        let appsDrawer = null;
-        if(UserSettingsStore.isFeatureEnabled('matrix_apps')) {
-            appsDrawer = <AppsDrawer ref="appsDrawer"
-                room={this.props.room}
-                userId={this.props.userId}
-                maxHeight={this.props.maxHeight}
-                showApps={this.props.showApps}
-            />;
-        }
+        const appsDrawer = <AppsDrawer ref="appsDrawer"
+            room={this.props.room}
+            userId={this.props.userId}
+            maxHeight={this.props.maxHeight}
+            showApps={this.props.showApps}
+        />;
 
         return (
             <div className="mx_RoomView_auxPanel" style={{maxHeight: this.props.maxHeight}} >
