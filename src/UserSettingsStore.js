@@ -200,7 +200,7 @@ export default {
 
         if (sdkConfigValue === 'enable') {
             return true;
-        } else if (sdkConfigValue === 'enable') {
+        } else if (sdkConfigValue === 'disable') {
             return false;
         } else if (sdkConfigValue === 'labs') {
             if (!MatrixClientPeg.get().isGuest()) {
