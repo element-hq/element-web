@@ -204,6 +204,8 @@ export default {
             return false;
         } else if (sdkConfigValue === 'labs') {
             if (!MatrixClientPeg.get().isGuest()) {
+                // Make it explicit that guests get the defaults (although they shouldn't
+                // have been able to ever toggle the flags anyway)
                 const userValue = localStorage.getItem(`mx_labs_feature_${featureId}`);
                 if (userValue !== null) {
                     return userValue === 'true';
