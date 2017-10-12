@@ -194,5 +194,19 @@
     "Set Password": "設定密碼",
     "Couldn't load home page": "無法載入首頁",
     "Bug report sent": "已傳送臭蟲回報",
-    "Thank you!": "感謝您！"
+    "Thank you!": "感謝您！",
+    "Back": "返回",
+    "Developer Tools": "開發者工具",
+    "Failed to send custom event.": "傳送自訂式件失敗。",
+    "Send Custom Event": "傳送自訂事件",
+    "Send Custom State Event": "傳送自訂狀態事件",
+    "Explore Room State": "探索聊天室狀態",
+    "Event sent!": "事件已傳送！",
+    "Event Type": "事件類型",
+    "Event Content": "事件內容",
+    "State Key": "狀態金鑰",
+    "Invite to this group": "邀請進入此群組",
+    "Filter results": "過濾結果",
+    "You must specify an event type!": "您必須指定事件類型！",
+    "Add room to this group": "新增聊天室到此群組"
 }
