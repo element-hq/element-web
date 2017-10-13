@@ -37,6 +37,12 @@ const RoomDetailRow = React.createClass({
         });
     },
 
+    onTopicClick: function(ev) {
+        // When clicking a link in the topic, prevent the event being propagated
+        // to `onClick`.
+        ev.stopPropagation();
+    },
+
     render: function() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
@@ -68,7 +74,7 @@ const RoomDetailRow = React.createClass({
                 <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
                 { perms }
                 <div className="mx_RoomDirectory_topic"
-                     onClick={function(e) { e.stopPropagation(); }}
+                     onClick={this.onTopicClick}
                      dangerouslySetInnerHTML={{ __html: topic }} />
                 <div className="mx_RoomDirectory_alias">{ getDisplayAliasForRoom(room) }</div>
             </td>
