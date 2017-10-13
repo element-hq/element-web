@@ -926,5 +926,10 @@
     "You have entered an invalid address.": "Du hast eine ungültige Adresse eingegeben.",
     "Matrix ID": "Matrix-ID",
     "This group is not published on your profile": "Diese Gruppe wird nicht in deinem Profil angezeigt",
-    "Which rooms would you like to add to this group?": "Welche Räume möchtest du zu dieser Gruppe hinzufügen?"
+    "Which rooms would you like to add to this group?": "Welche Räume möchtest du zu dieser Gruppe hinzufügen?",
+    "Advanced options": "Erweiterte Optionen",
+    "Block users on other matrix homeservers from joining this room": "Blockiere Nutzer anderer Matrix-Heimserver die diesen Raum betreten wollen",
+    "This setting cannot be changed later!": "Diese Einstellung kann nicht nachträglich geändert werden!",
+    "Unignore": "Entignorieren",
+    "User Options": "Benutzer-Optionen"
 }
