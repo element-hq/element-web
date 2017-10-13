@@ -902,7 +902,7 @@
     "Failed to copy": "Kopieren fehlgeschlagen",
     "Ignored Users": "Ignorierte Benutzer",
     "Ignore": "Ignorieren",
-    "You are now ignoring %(userId)s": "%(userId)s wird jetzt ignoriert",
+    "You are now ignoring %(userId)s": "Du ignorierst jetzt %(userId)s",
     "You are no longer ignoring %(userId)s": "%(userId)s wird nicht mehr ignoriert",
     "Message removed by %(userId)s": "Nachricht wurde von %(userId)s entfernt",
     "Filter group members": "Gruppen-Mitglieder filtern",
