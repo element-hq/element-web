@@ -30,7 +30,7 @@ import classnames from 'classnames';
 import GroupStoreCache from '../../stores/GroupStoreCache';
 import GroupStore from '../../stores/GroupStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
-
+import GeminiScrollbar from 'react-gemini-scrollbar';
 
 const RoomSummaryType = PropTypes.shape({
     room_id: PropTypes.string.isRequired,
@@ -821,7 +821,6 @@ export default React.createClass({
         const GroupAvatar = sdk.getComponent("avatars.GroupAvatar");
         const Loader = sdk.getComponent("elements.Spinner");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
-        const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
 
         if (this.state.summary === null && this.state.error === null || this.state.saving) {
             return <Loader />;
@@ -969,12 +968,9 @@ export default React.createClass({
                             { rightButtons }
                         </div>
                     </div>
-                    <ScrollPanel className="mx_GroupView_body"
-                        stickyBottom={false}
-                        startAtBottom={false}
-                    >
+                    <GeminiScrollbar className="mx_GroupView_body">
                         { bodyNodes }
-                    </ScrollPanel>
+                    </GeminiScrollbar>
                 </div>
             );
         } else if (this.state.error) {
