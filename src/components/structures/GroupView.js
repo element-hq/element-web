@@ -108,7 +108,9 @@ const CategoryRoomList = React.createClass({
     render: function() {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const addButton = this.props.editing ?
-            (<AccessibleButton className="mx_GroupView_featuredThings_addButton" onClick={this.onAddRoomsToSummaryClicked}>
+            (<AccessibleButton className="mx_GroupView_featuredThings_addButton"
+                onClick={this.onAddRoomsToSummaryClicked}
+            >
                 <TintableSvg src="img/icons-create-room.svg" width="64" height="64" />
                 <div className="mx_GroupView_featuredThings_addButton_label">
                     { _t('Add a Room') }
