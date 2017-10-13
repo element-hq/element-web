@@ -166,7 +166,7 @@ module.exports = React.createClass({
         } else if (this.state.progress === "sent_email") {
             resetPasswordJsx = (
                 <div>
-                    { _t('An email has been sent to') } { this.state.email }. { _t("Once you've followed the link it contains, click below") }.
+                    { _t("An email has been sent to %(emailAddress)s. Once you've followed the link it contains, click below.", { emailAddress: this.state.email }) }
                     <br />
                     <input className="mx_Login_submit" type="button" onClick={this.onVerify}
                         value={_t('I have verified my email address')} />
