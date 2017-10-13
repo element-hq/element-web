@@ -193,7 +193,7 @@ export default {
     isFeatureEnabled: function(featureId: string): boolean {
         const featuresConfig = SdkConfig.get()['features'];
 
-        let sdkConfigValue = 'labs';
+        let sdkConfigValue = 'disable';
         if (featuresConfig && featuresConfig[featureId] !== undefined) {
             sdkConfigValue = featuresConfig[featureId];
         }
