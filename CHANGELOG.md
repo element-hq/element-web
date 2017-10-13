@@ -1,3 +1,136 @@
+Changes in [0.10.7-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.7-rc.1) (2017-10-13)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.6...v0.10.7-rc.1)
+
+ * Add warm fuzzy dialog for inviting users to a group
+   [\#1459](https://github.com/matrix-org/matrix-react-sdk/pull/1459)
+ * enable/disable features in config.json
+   [\#1468](https://github.com/matrix-org/matrix-react-sdk/pull/1468)
+ * Update from Weblate.
+   [\#1469](https://github.com/matrix-org/matrix-react-sdk/pull/1469)
+ * Don't send RR or RM when peeking at a room
+   [\#1463](https://github.com/matrix-org/matrix-react-sdk/pull/1463)
+ * Fix bug that inserted emoji when typing
+   [\#1467](https://github.com/matrix-org/matrix-react-sdk/pull/1467)
+ * Ignore VS16 char in RTE
+   [\#1458](https://github.com/matrix-org/matrix-react-sdk/pull/1458)
+ * Show failures when sending messages
+   [\#1460](https://github.com/matrix-org/matrix-react-sdk/pull/1460)
+ * Run eslint --fix
+   [\#1461](https://github.com/matrix-org/matrix-react-sdk/pull/1461)
+ * Show who banned the user on hover
+   [\#1441](https://github.com/matrix-org/matrix-react-sdk/pull/1441)
+ * Enhancements to room power level settings
+   [\#1440](https://github.com/matrix-org/matrix-react-sdk/pull/1440)
+ * Added TextInputWithCheckbox dialog
+   [\#868](https://github.com/matrix-org/matrix-react-sdk/pull/868)
+ * Make it clearer which HS you're logging into
+   [\#1456](https://github.com/matrix-org/matrix-react-sdk/pull/1456)
+ * Remove redundant stale onKeyDown
+   [\#1451](https://github.com/matrix-org/matrix-react-sdk/pull/1451)
+ * Only allow event state event handlers on state events
+   [\#1453](https://github.com/matrix-org/matrix-react-sdk/pull/1453)
+ * Modify the group store to include group rooms
+   [\#1452](https://github.com/matrix-org/matrix-react-sdk/pull/1452)
+ * Factor-out GroupStore and create GroupStoreCache
+   [\#1449](https://github.com/matrix-org/matrix-react-sdk/pull/1449)
+ * Put related groups UI behind groups labs flag
+   [\#1448](https://github.com/matrix-org/matrix-react-sdk/pull/1448)
+ * Restrict Flair in the timeline to related groups of the room
+   [\#1447](https://github.com/matrix-org/matrix-react-sdk/pull/1447)
+ * Implement UI for editing related groups of a room
+   [\#1446](https://github.com/matrix-org/matrix-react-sdk/pull/1446)
+ * Fix a couple of bugs with EditableItemList
+   [\#1445](https://github.com/matrix-org/matrix-react-sdk/pull/1445)
+ * Factor out EditableItemList from AliasSettings
+   [\#1444](https://github.com/matrix-org/matrix-react-sdk/pull/1444)
+ * Add dummy translation function to mark translatable strings
+   [\#1421](https://github.com/matrix-org/matrix-react-sdk/pull/1421)
+ * Implement button to remove a room from a group
+   [\#1438](https://github.com/matrix-org/matrix-react-sdk/pull/1438)
+ * Fix showing 3pid invites in member list
+   [\#1443](https://github.com/matrix-org/matrix-react-sdk/pull/1443)
+ * Add button to get to MyGroups (view_my_groups or path #/groups)
+   [\#1435](https://github.com/matrix-org/matrix-react-sdk/pull/1435)
+ * Add eslint rule to disallow spaces inside of curly braces
+   [\#1436](https://github.com/matrix-org/matrix-react-sdk/pull/1436)
+ * Fix ability to invite existing mx users
+   [\#1437](https://github.com/matrix-org/matrix-react-sdk/pull/1437)
+ * Construct address picker message using provided `validAddressTypes`
+   [\#1434](https://github.com/matrix-org/matrix-react-sdk/pull/1434)
+ * Fix GroupView summary rooms displaying without avatars
+   [\#1433](https://github.com/matrix-org/matrix-react-sdk/pull/1433)
+ * Implement adding rooms to a group (or group summary) by room ID
+   [\#1432](https://github.com/matrix-org/matrix-react-sdk/pull/1432)
+ * Give flair avatars a tooltip = the group ID
+   [\#1431](https://github.com/matrix-org/matrix-react-sdk/pull/1431)
+ * Fix ability to feature self in a group summary
+   [\#1430](https://github.com/matrix-org/matrix-react-sdk/pull/1430)
+ * Implement "Add room to group" feature
+   [\#1429](https://github.com/matrix-org/matrix-react-sdk/pull/1429)
+ * Fix group membership publicity
+   [\#1428](https://github.com/matrix-org/matrix-react-sdk/pull/1428)
+ * Add support for Jitsi screensharing in electron app
+   [\#1355](https://github.com/matrix-org/matrix-react-sdk/pull/1355)
+ * Delint and DRY TextForEvent
+   [\#1424](https://github.com/matrix-org/matrix-react-sdk/pull/1424)
+ * Bust the flair caches after 30mins
+   [\#1427](https://github.com/matrix-org/matrix-react-sdk/pull/1427)
+ * Show displayname / avatar in group member info
+   [\#1426](https://github.com/matrix-org/matrix-react-sdk/pull/1426)
+ * Create GroupSummaryStore for storing group summary stuff
+   [\#1418](https://github.com/matrix-org/matrix-react-sdk/pull/1418)
+ * Add status & toggle for publicity
+   [\#1419](https://github.com/matrix-org/matrix-react-sdk/pull/1419)
+ * MemberList: show 100 more on overflow tile click
+   [\#1417](https://github.com/matrix-org/matrix-react-sdk/pull/1417)
+ * Fix NPE in MemberList
+   [\#1425](https://github.com/matrix-org/matrix-react-sdk/pull/1425)
+ * Fix incorrect variable in string
+   [\#1422](https://github.com/matrix-org/matrix-react-sdk/pull/1422)
+ * apply i18n _t to string which has already been translated
+   [\#1420](https://github.com/matrix-org/matrix-react-sdk/pull/1420)
+ * Make the invite section a truncatedlist too
+   [\#1416](https://github.com/matrix-org/matrix-react-sdk/pull/1416)
+ * Implement removal function of features users/rooms
+   [\#1415](https://github.com/matrix-org/matrix-react-sdk/pull/1415)
+ * Allow TruncatedList to get children via a callback
+   [\#1412](https://github.com/matrix-org/matrix-react-sdk/pull/1412)
+ * Experimental: Lazy load user autocomplete entries
+   [\#1413](https://github.com/matrix-org/matrix-react-sdk/pull/1413)
+ * Show displayname & avatar url in group member list
+   [\#1414](https://github.com/matrix-org/matrix-react-sdk/pull/1414)
+ * De-lint TruncatedList
+   [\#1411](https://github.com/matrix-org/matrix-react-sdk/pull/1411)
+ * Remove unneeded strings
+   [\#1409](https://github.com/matrix-org/matrix-react-sdk/pull/1409)
+ * Clean on prerelease
+   [\#1410](https://github.com/matrix-org/matrix-react-sdk/pull/1410)
+ * Redesign membership section in GroupView
+   [\#1408](https://github.com/matrix-org/matrix-react-sdk/pull/1408)
+ * Implement adding rooms to the group summary
+   [\#1406](https://github.com/matrix-org/matrix-react-sdk/pull/1406)
+ * Honour the is_privileged flag in GroupView
+   [\#1407](https://github.com/matrix-org/matrix-react-sdk/pull/1407)
+ * Update when a group arrives
+   [\#1405](https://github.com/matrix-org/matrix-react-sdk/pull/1405)
+ * Implement `view_group` dispatch when clicking flair
+   [\#1404](https://github.com/matrix-org/matrix-react-sdk/pull/1404)
+ * GroupView: Add a User
+   [\#1402](https://github.com/matrix-org/matrix-react-sdk/pull/1402)
+ * Track action button click event
+   [\#1403](https://github.com/matrix-org/matrix-react-sdk/pull/1403)
+ * Separate sender profile into elements with classes
+   [\#1401](https://github.com/matrix-org/matrix-react-sdk/pull/1401)
+ * Fix ugly integration button, use hover to show error
+   [\#1399](https://github.com/matrix-org/matrix-react-sdk/pull/1399)
+ * Fix promise error in flair
+   [\#1400](https://github.com/matrix-org/matrix-react-sdk/pull/1400)
+ * Flair!
+   [\#1351](https://github.com/matrix-org/matrix-react-sdk/pull/1351)
+ * Group Membership UI
+   [\#1328](https://github.com/matrix-org/matrix-react-sdk/pull/1328)
+
 Changes in [0.10.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.6) (2017-09-21)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.5...v0.10.6)
