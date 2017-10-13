@@ -1,3 +1,8 @@
+Changes in [0.12.7-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.12.7-rc.2) (2017-10-13)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7-rc.1...v0.12.7-rc.2)
+
+
 Changes in [0.12.7-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.7-rc.1) (2017-10-13)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.6...v0.12.7-rc.1)
