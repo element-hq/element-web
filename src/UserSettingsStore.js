@@ -43,7 +43,7 @@ export default {
         if (enableLabs) {
             labsFeatures = FEATURES;
         } else {
-            labsFeatures.filter((f) => {
+            labsFeatures = FEATURES.filter((f) => {
                 const sdkConfigValue = featuresConfig[f.id];
                 if (sdkConfigValue === 'labs') {
                     return true;
