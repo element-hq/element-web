@@ -36,12 +36,21 @@ export default {
     getLabsFeatures() {
         const featuresConfig = SdkConfig.get()['features'] || {};
 
-        return FEATURES.filter((f) => {
-            const sdkConfigValue = featuresConfig[f.id];
-            if (!['enable', 'disable'].includes(sdkConfigValue)) {
-                return true;
-            }
-        }).map((f) => {
+        // The old flag: honourned for backwards compat
+        const enableLabs = SdkConfig.get()['enableLabs'];
+
+        let labsFeatures;
+        if (enableLabs) {
+            labsFeatures = FEATURES;
+        } else {
+            labsFeatures = FEATURES.filter((f) => {
+                const sdkConfigValue = featuresConfig[f.id];
+                if (sdkConfigValue === 'labs') {
+                    return true;
+                }
+            });
+        }
+        return labsFeatures.map((f) => {
             return f.id;
         });
     },
@@ -193,7 +202,10 @@ export default {
     isFeatureEnabled: function(featureId: string): boolean {
         const featuresConfig = SdkConfig.get()['features'];
 
-        let sdkConfigValue = 'labs';
+        // The old flag: honourned for backwards compat
+        const enableLabs = SdkConfig.get()['enableLabs'];
+
+        let sdkConfigValue = enableLabs ? 'labs' : 'disable';
         if (featuresConfig && featuresConfig[featureId] !== undefined) {
             sdkConfigValue = featuresConfig[featureId];
         }
