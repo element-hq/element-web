@@ -29,6 +29,8 @@ import classnames from 'classnames';
 
 import GroupStoreCache from '../../stores/GroupStoreCache';
 import GroupStore from '../../stores/GroupStore';
+import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
+
 
 const RoomSummaryType = PropTypes.shape({
     room_id: PropTypes.string.isRequired,
@@ -64,7 +66,7 @@ const CategoryRoomList = React.createClass({
         editing: PropTypes.bool.isRequired,
     },
 
-    onAddRoomsClicked: function(ev) {
+    onAddRoomsToSummaryClicked: function(ev) {
         ev.preventDefault();
         const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
         Modal.createTrackedDialog('Add Rooms to Group Summary', '', AddressPickerDialog, {
@@ -106,7 +108,7 @@ const CategoryRoomList = React.createClass({
     render: function() {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const addButton = this.props.editing ?
-            (<AccessibleButton className="mx_GroupView_featuredThings_addButton" onClick={this.onAddRoomsClicked}>
+            (<AccessibleButton className="mx_GroupView_featuredThings_addButton" onClick={this.onAddRoomsToSummaryClicked}>
                 <TintableSvg src="img/icons-create-room.svg" width="64" height="64" />
                 <div className="mx_GroupView_featuredThings_addButton_label">
                     { _t('Add a Room') }
@@ -450,6 +452,7 @@ export default React.createClass({
             });
         });
         this._groupStore.on('error', (err) => {
+            console.error(err);
             this.setState({
                 summary: null,
                 error: err,
@@ -601,6 +604,10 @@ export default React.createClass({
         this._setPublicity(true);
     },
 
+    _onAddRoomsClick: function() {
+        showGroupAddRoomDialog(this.props.groupId);
+    },
+
     _setPublicity: function(publicity) {
         this.setState({
             publicityBusy: true,
@@ -610,6 +617,28 @@ export default React.createClass({
                 publicityBusy: false,
             });
         });
+    },
+
+    _getRoomsNode: function() {
+        const RoomDetailList = sdk.getComponent('rooms.RoomDetailList');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const TintableSvg = sdk.getComponent('elements.TintableSvg');
+        const addButton = this.state.editing ?
+            (<AccessibleButton onClick={this._onAddRoomsClick} >
+                <div className="mx_GroupView_rooms_header_addButton" >
+                    <TintableSvg src="img/icons-room-add.svg" width="24" height="24" />
+                </div>
+                <div className="mx_GroupView_rooms_header_addButton_label">
+                    { _t('Add rooms to this group') }
+                </div>
+            </AccessibleButton>) : <div />;
+        return <div className="mx_GroupView_rooms">
+            <div className="mx_GroupView_rooms_header">
+                <h3>Rooms</h3>
+                { addButton }
+            </div>
+            <RoomDetailList rooms={this._groupStore.getGroupRooms()} />
+        </div>;
     },
 
     _getFeaturedRoomsNode: function() {
@@ -790,6 +819,7 @@ export default React.createClass({
         const GroupAvatar = sdk.getComponent("avatars.GroupAvatar");
         const Loader = sdk.getComponent("elements.Spinner");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
 
         if (this.state.summary === null && this.state.error === null || this.state.saving) {
             return <Loader />;
@@ -799,7 +829,7 @@ export default React.createClass({
             let avatarNode;
             let nameNode;
             let shortDescNode;
-            let roomBody;
+            let bodyNodes = [];
             const rightButtons = [];
             const headerClasses = {
                 mx_GroupView_header: true,
@@ -856,14 +886,15 @@ export default React.createClass({
                             width="18" height="18" alt={_t("Cancel")} />
                     </AccessibleButton>,
                 );
-                roomBody = <div>
-                    <textarea className="mx_GroupView_editLongDesc" value={this.state.profileForm.long_description}
+                bodyNodes = [
+                    <textarea className="mx_GroupView_editLongDesc"
+                        value={this.state.profileForm.long_description}
                         onChange={this._onLongDescChange}
                         tabIndex="3"
-                    />
-                    { this._getFeaturedRoomsNode() }
-                    { this._getFeaturedUsersNode() }
-                </div>;
+                        key="editLongDesc"
+                    />,
+                    this._getRoomsNode(),
+                ];
             } else {
                 const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;
                 avatarNode = <GroupAvatar
@@ -881,18 +912,19 @@ export default React.createClass({
                 } else {
                     nameNode = <span>{ this.props.groupId }</span>;
                 }
-                shortDescNode = <span>{ summary.profile.short_description }</span>;
+                if (summary.profile && summary.profile.short_description) {
+                    shortDescNode = <span>{ summary.profile.short_description }</span>;
+                }
 
                 let description = null;
                 if (summary.profile && summary.profile.long_description) {
                     description = sanitizedHtmlNode(summary.profile.long_description);
                 }
-                roomBody = <div>
-                    { this._getMembershipSection() }
-                    <div className="mx_GroupView_groupDesc">{ description }</div>
-                    { this._getFeaturedRoomsNode() }
-                    { this._getFeaturedUsersNode() }
-                </div>;
+                bodyNodes = [
+                    this._getMembershipSection(),
+                    <div key="groupDesc" className="mx_GroupView_groupDesc">{ description }</div>,
+                    this._getRoomsNode(),
+                ];
                 if (summary.user && summary.user.is_privileged) {
                     rightButtons.push(
                         <AccessibleButton className="mx_GroupHeader_button"
@@ -935,7 +967,12 @@ export default React.createClass({
                             { rightButtons }
                         </div>
                     </div>
-                    { roomBody }
+                    <ScrollPanel className="mx_GroupView_body"
+                        stickyBottom={false}
+                        startAtBottom={false}
+                    >
+                        { bodyNodes }
+                    </ScrollPanel>
                 </div>
             );
         } else if (this.state.error) {

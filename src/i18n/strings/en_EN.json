@@ -917,5 +917,6 @@
     "Related groups for this room:": "Related groups for this room:",
     "This room has no related groups": "This room has no related groups",
     "New group ID (e.g. +foo:%(localDomain)s)": "New group ID (e.g. +foo:%(localDomain)s)",
-    "%(serverName)s Matrix ID": "%(serverName)s Matrix ID"
+    "%(serverName)s Matrix ID": "%(serverName)s Matrix ID",
+    "Add rooms to this group": "Add rooms to this group"
 }
