@@ -38,7 +38,8 @@ export default {
 
         return FEATURES.filter((f) => {
             const sdkConfigValue = featuresConfig[f.id];
-            if (!['enable', 'disable'].includes(sdkConfigValue)) {
+
+            if (sdkConfigValue === 'labs') {
                 return true;
             }
         }).map((f) => {
