@@ -1,3 +1,14 @@
+Changes in [0.10.7-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.7-rc.2) (2017-10-13)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.7-rc.1...v0.10.7-rc.2)
+
+ * Honour the (now legacy) enableLabs flag
+   [\#1473](https://github.com/matrix-org/matrix-react-sdk/pull/1473)
+ * Don't show labs features by default
+   [\#1472](https://github.com/matrix-org/matrix-react-sdk/pull/1472)
+ * Make features disabled by default
+   [\#1470](https://github.com/matrix-org/matrix-react-sdk/pull/1470)
+
 Changes in [0.10.7-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.7-rc.1) (2017-10-13)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.6...v0.10.7-rc.1)
