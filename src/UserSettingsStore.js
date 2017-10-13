@@ -36,13 +36,21 @@ export default {
     getLabsFeatures() {
         const featuresConfig = SdkConfig.get()['features'] || {};
 
-        return FEATURES.filter((f) => {
-            const sdkConfigValue = featuresConfig[f.id];
+        // The old flag: honourned for backwards compat
+        const enableLabs = SdkConfig.get()['enableLabs'];
 
-            if (sdkConfigValue === 'labs') {
-                return true;
-            }
-        }).map((f) => {
+        let labsFeatures;
+        if (enableLabs) {
+            labsFeatures = FEATURES;
+        } else {
+            labsFeatures.filter((f) => {
+                const sdkConfigValue = featuresConfig[f.id];
+                if (sdkConfigValue === 'labs') {
+                    return true;
+                }
+            });
+        }
+        return labsFeatures.map((f) => {
             return f.id;
         });
     },
