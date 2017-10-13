@@ -36,9 +36,16 @@ export default {
     getLabsFeatures() {
         const featuresConfig = SdkConfig.get()['features'] || {};
 
+        // The old flag: honourned for backwards compat
+        const enableLabs = SdkConfig.get()['enableLabs'];
+
         return FEATURES.filter((f) => {
+            if (enableLabs) {
+                return true;
+            }
+
             const sdkConfigValue = featuresConfig[f.id];
-            if (!['enable', 'disable'].includes(sdkConfigValue)) {
+            if (sdkConfigValue === 'labs') {
                 return true;
             }
         }).map((f) => {
