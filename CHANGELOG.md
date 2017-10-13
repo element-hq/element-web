@@ -1,3 +1,10 @@
+Changes in [0.12.7-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.12.7-rc.3) (2017-10-13)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7-rc.2...v0.12.7-rc.3)
+
+ * Hide the join group button
+   [\#5275](https://github.com/vector-im/riot-web/pull/5275)
+
 Changes in [0.12.7-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.12.7-rc.2) (2017-10-13)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7-rc.1...v0.12.7-rc.2)
