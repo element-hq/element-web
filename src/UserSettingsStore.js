@@ -202,7 +202,10 @@ export default {
     isFeatureEnabled: function(featureId: string): boolean {
         const featuresConfig = SdkConfig.get()['features'];
 
-        let sdkConfigValue = 'disable';
+        // The old flag: honourned for backwards compat
+        const enableLabs = SdkConfig.get()['enableLabs'];
+
+        let sdkConfigValue = enableLabs ? 'labs' : 'disable';
         if (featuresConfig && featuresConfig[featureId] !== undefined) {
             sdkConfigValue = featuresConfig[featureId];
         }
