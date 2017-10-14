@@ -64,7 +64,10 @@ module.exports = React.createClass({
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
 
         const canRedact = room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId);
-        const canPin = room.currentState.mayClientSendStateEvent('m.room.pinned_events', cli);
+        let canPin = room.currentState.mayClientSendStateEvent('m.room.pinned_events', cli);
+
+        // HACK: Intentionally say we can't pin if the user doesn't want to use the functionality
+        if (!UserSettingsStore.isFeatureEnabled("feature_pinning")) canPin = false;
 
         this.setState({canRedact, canPin});
     },
