@@ -150,8 +150,16 @@ module.exports = React.createClass({
 
         var eventMeta;
         if(showEventMeta) {
+            // Figure out the sender, defaulting to mxid
+            let sender = this.props.mxEvent.getSender();
+            const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+            if (room) {
+                const member = room.getMember(sender);
+                if (member) sender = member.name;
+            }
+
             eventMeta = (<div className="mx_ImageView_metadata">
-                { _t('Uploaded on %(date)s by %(user)s', {date: DateUtils.formatDate(new Date(this.props.mxEvent.getTs())), user: this.props.mxEvent.getSender()}) }
+                { _t('Uploaded on %(date)s by %(user)s', {date: DateUtils.formatDate(new Date(this.props.mxEvent.getTs())), user: sender}) }
             </div>);
         }
 
