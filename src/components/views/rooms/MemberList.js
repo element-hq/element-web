@@ -302,6 +302,7 @@ module.exports = React.createClass({
             const m = this.memberDict[userId];
 
             if (query) {
+                query = query.toLowerCase();
                 const matchesName = m.name.toLowerCase().indexOf(query) !== -1;
                 const matchesId = m.userId.toLowerCase().indexOf(query) !== -1;
 
@@ -399,7 +400,7 @@ module.exports = React.createClass({
             <form autoComplete="off">
                 <input className="mx_MemberList_query" id="mx_MemberList_query" type="text"
                         onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={_t('Filter room members')} />
+                        placeholder={ _t('Filter room members') } />
             </form>
         );
 
@@ -412,9 +413,9 @@ module.exports = React.createClass({
                             getChildren={this._getChildrenJoined}
                             getChildCount={this._getChildCountJoined}
                     />
-                    { invitedSection }
+                    {invitedSection}
                 </GeminiScrollbar>
             </div>
         );
-    },
+    }
 });
