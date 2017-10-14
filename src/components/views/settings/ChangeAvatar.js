@@ -53,6 +53,10 @@ module.exports = React.createClass({
         };
     },
 
+    componentWillMount: function() {
+        MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
+    },
+
     componentWillReceiveProps: function(newProps) {
         if (this.avatarSet) {
             // don't clobber what the user has just set
@@ -61,6 +65,24 @@ module.exports = React.createClass({
         this.setState({
             avatarUrl: newProps.initialAvatarUrl,
         });
+    },
+
+    componentWillUnmount: function() {
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
+        }
+    },
+
+    onRoomStateEvents: function(ev) {
+        if (ev.getRoomId() !== this.props.room.roomId || ev.getType() !== 'm.room.avatar'
+            || ev.getSender() !== MatrixClientPeg.get().getUserId()) {
+            return;
+        }
+
+        if (!ev.getContent().url) {
+            this.avatarSet = false;
+            this.setState({}); // force update
+        }
     },
 
     setAvatarFromFile: function(file) {
