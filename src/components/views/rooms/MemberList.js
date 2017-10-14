@@ -187,7 +187,7 @@ module.exports = React.createClass({
             const user_id = all_user_ids[i];
             const m = all_members[user_id];
 
-            if (m.membership == 'join' || m.membership == 'invite') {
+            if (m.membership === 'join' || m.membership === 'invite') {
                 if ((ConferenceHandler && !ConferenceHandler.isConferenceUser(user_id)) || !ConferenceHandler) {
                     to_display.push(user_id);
                     ++count;
@@ -311,7 +311,7 @@ module.exports = React.createClass({
                 }
             }
 
-            return m.membership == membership;
+            return m.membership === membership;
         });
     },
 
