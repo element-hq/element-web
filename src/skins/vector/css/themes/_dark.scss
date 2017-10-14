@@ -131,6 +131,9 @@ $progressbar-color: #000;
 }
 
 // markdown overrides:
+.mx_EventTile_content .markdown-body pre:hover {
+    border-color: #808080 !important; // inverted due to rules below
+}
 .mx_EventTile_content .markdown-body {
     pre, code {
         filter: invert(1);

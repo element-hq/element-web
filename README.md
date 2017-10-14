@@ -115,7 +115,9 @@ You can configure the app by copying `config.sample.json` to
    addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
    for more details.  Currently the only public matrix identity servers are https://matrix.org
    and https://vector.im.  In future identity servers will be decentralised.
-1. `integrations_ui_url`: URL to the web interface for the integrations server.
+1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
+   server is not Riot and normally not your Home Server either. The integration server settings
+   may be left blank to disable integrations.
 1. `integrations_rest_url`: URL to the REST interface for the integrations server.
 1. `roomDirectory`: config for the public room directory. This section is optional.
 1. `roomDirectory.servers`: List of other Home Servers' directories to include in the drop

@@ -6,6 +6,7 @@
     "integrations_rest_url": "https://scalar.vector.im/api",
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
     "enableLabs": true,
+    "default_federate": true,
     "roomDirectory": {
         "servers": [
             "matrix.org"
