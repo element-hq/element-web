@@ -128,7 +128,7 @@ export default class NetworkDropdown extends React.Component {
     }
 
     _getMenuOptions() {
-        const options = [];
+        const options = []; // {name, elem}
 
         let servers = [];
         if (this.props.config.servers) {
@@ -172,8 +172,12 @@ export default class NetworkDropdown extends React.Component {
                 }
             }
         }
-
-        return options;
+        // Sort by name and return the element.
+        return options.sort((itemA, itemB) => {
+          return itemA.name.localeCompare(itemB.name);
+        }).map((item) => {
+          return item.elem;
+        });
     }
 
     _makeMenuOption(server, instance, includeAll, handleClicks) {
@@ -204,11 +208,11 @@ export default class NetworkDropdown extends React.Component {
         }
 
         const click_handler = handleClicks ? this.onMenuOptionClick.bind(this, server, instance, includeAll) : null;
-
-        return <div key={key} className="mx_NetworkDropdown_networkoption" onClick={click_handler}>
+        const elem = <div key={key} className="mx_NetworkDropdown_networkoption" onClick={click_handler}>
             {icon}
             <span className="mx_NetworkDropdown_menu_network">{name}</span>
-        </div>
+        </div>;
+        return {name, elem};
     }
 
     render() {
@@ -228,7 +232,7 @@ export default class NetworkDropdown extends React.Component {
             const instance = instanceForInstanceId(this.props.protocols, this.state.selectedInstanceId);
             current_value = this._makeMenuOption(
                 this.state.selectedServer, instance, this.state.includeAll, false
-            );
+            ).elem;
         }
 
         return <div className="mx_NetworkDropdown" ref={this.collectRoot}>
