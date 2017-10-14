@@ -98,6 +98,17 @@ export default {
         Notifier.setEnabled(enable);
     },
 
+    getEnableNotificationBody: function() {
+        return Notifier.isBodyEnabled();
+    },
+
+    setEnableNotificationBody: function(enable) {
+        if (!Notifier.supportsDesktopNotifications()) {
+            return;
+        }
+        Notifier.setBodyEnabled(enable);
+    },
+
     getEnableAudioNotifications: function() {
         return Notifier.isAudioEnabled();
     },
