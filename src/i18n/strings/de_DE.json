@@ -530,7 +530,7 @@
     "%(oneUser)sleft left and rejoined": "%(oneUser)sging und trat erneut bei",
     "%(severalUsers)srejected their invitations %(repeats)s times": "%(severalUsers)shaben ihre Einladung %(repeats)s-mal abgelehnt",
     "%(oneUser)srejected their invitation %(repeats)s times": "%(oneUser)shat die Einladung %(repeats)s mal abgelehnt",
-    "%(severalUsers)srejected their invitations": "%(severalUsers)shaben ihre Einladung abgelehnt",
+    "%(severalUsers)srejected their invitations": "%(severalUsers)shaben ihre Einladungen abgelehnt",
     "%(oneUser)srejected their invitation": "%(oneUser)shat die Einladung abgelehnt",
     "%(severalUsers)shad their invitations withdrawn %(repeats)s times": "%(severalUsers)swurden die ursprünglichen Einladungen %(repeats)s mal wieder entzogen",
     "%(oneUser)shad their invitation withdrawn %(repeats)s times": "%(oneUser)swurde die Einladung %(repeats)s mal wieder entzogen",
@@ -990,5 +990,6 @@
     "This room has no related groups": "Dieser Raum hat keine zugehörigen Gruppen",
     "New group ID (e.g. +foo:%(localDomain)s)": "Neue Gruppen-ID (z.B. +foo:%(localDomain)s)",
     "Invites sent": "Einladungen gesendet",
-    "Your group invitations have been sent.": "Deine Gruppen-Einladungen wurden gesendet."
+    "Your group invitations have been sent.": "Deine Gruppen-Einladungen wurden gesendet.",
+    "Remove avatar": "Profilbild entfernen"
 }
