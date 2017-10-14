@@ -1324,7 +1324,7 @@ module.exports = React.createClass({
 
                     <div className="mx_UserSettings_avatarPicker">
                         <div className="mx_UserSettings_avatarPicker_remove" onClick={this.onAvatarRemoveClick}>
-                            <img src="img/cancel.svg" width="15"
+                            <img src="img/cancel.svg" width="15" height="15"
                                  alt={_t("Remove avatar")} title={_t("Remove avatar")} />
                         </div>
                         <div onClick={this.onAvatarPickerClick} className="mx_UserSettings_avatarPicker_imgContainer">
