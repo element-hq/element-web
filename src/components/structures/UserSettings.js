@@ -117,7 +117,7 @@ const SETTINGS_LABELS = [
     {
         id: 'TextualBody.disableBigEmoji',
         label: _td('Disable big emoji in chat'),
-    }
+    },
 /*
     {
         id: 'useFixedWidthFont',
