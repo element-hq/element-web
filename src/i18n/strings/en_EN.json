@@ -788,7 +788,7 @@
     "Start chatting": "Start chatting",
     "Start Chatting": "Start Chatting",
     "Click on the button below to start chatting!": "Click on the button below to start chatting!",
-    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName changed the room avatar to <img/>",
+    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s changed the room avatar to <img/>",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s removed the room avatar.",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s changed the avatar for %(roomName)s",
     "Username available": "Username available",

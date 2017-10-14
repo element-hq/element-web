@@ -637,7 +637,7 @@
     "for %(amount)sm": "depuis %(amount)sm",
     "for %(amount)sh": "depuis %(amount)sh",
     "for %(amount)sd": "depuis %(amount)sj",
-    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName a changé l’avatar du salon en <img/>",
+    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s a changé l’avatar du salon en <img/>",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s a supprimé l'avatar du salon.",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s a changé l’avatar de %(roomName)s",
     "Device already verified!": "Appareil déjà vérifié !",
