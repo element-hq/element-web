@@ -81,7 +81,7 @@ const Notifier = {
         }
 
         const avatarUrl = ev.sender ? Avatar.avatarUrlForMember(
-            ev.sender, 40, 40, 'crop'
+            ev.sender, 40, 40, 'crop',
         ) : null;
 
         const notif = plaf.displayNotification(title, msg, avatarUrl, room);
@@ -303,7 +303,7 @@ const Notifier = {
                 this._playAudioNotification(ev, room);
             }
         }
-    }
+    },
 };
 
 if (!global.mxNotifier) {

@@ -19,6 +19,7 @@ import sdk from './';
 import MultiInviter from './utils/MultiInviter';
 import { _t } from './languageHandler';
 import MatrixClientPeg from './MatrixClientPeg';
+import GroupStoreCache from './stores/GroupStoreCache';
 
 export function showGroupInviteDialog(groupId) {
     const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
@@ -75,6 +76,13 @@ function _onGroupInviteFinished(groupId, addrs) {
                 title: _t("Failed to invite the following users to %(groupId)s:", {groupId: groupId}),
                 description: errorList.join(", "),
             });
+        } else {
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            Modal.createTrackedDialog('Group invitations sent', '', QuestionDialog, {
+                title: _t("Invites sent"),
+                description: _t("Your group invitations have been sent."),
+                hasCancelButton: false,
+            });
         }
     }).catch((err) => {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -86,10 +94,11 @@ function _onGroupInviteFinished(groupId, addrs) {
 }
 
 function _onGroupAddRoomFinished(groupId, addrs) {
+    const groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), groupId);
     const errorList = [];
     return Promise.all(addrs.map((addr) => {
-        return MatrixClientPeg.get()
-            .addRoomToGroup(groupId, addr.address)
+        return groupStore
+            .addRoomToGroup(addr.address)
             .catch(() => { errorList.push(addr.address); })
             .reflect();
     })).then(() => {

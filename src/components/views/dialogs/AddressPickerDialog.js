@@ -23,6 +23,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import AccessibleButton from '../elements/AccessibleButton';
 import Promise from 'bluebird';
 import { addressTypes, getAddressType } from '../../../UserAddress.js';
+import GroupStoreCache from '../../../stores/GroupStoreCache';
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -241,31 +242,24 @@ module.exports = React.createClass({
 
     _doNaiveGroupRoomSearch: function(query) {
         const lowerCaseQuery = query.toLowerCase();
-        MatrixClientPeg.get().getGroupRooms(this.props.groupId).then((resp) => {
-            const results = [];
-            resp.chunk.forEach((r) => {
-                const nameMatch = (r.name || '').toLowerCase().includes(lowerCaseQuery);
-                const topicMatch = (r.topic || '').toLowerCase().includes(lowerCaseQuery);
-                const aliasMatch = (r.canonical_alias || '').toLowerCase().includes(lowerCaseQuery);
-                if (!(nameMatch || topicMatch || aliasMatch)) {
-                    return;
-                }
-                results.push({
-                    room_id: r.room_id,
-                    avatar_url: r.avatar_url,
-                    name: r.name || r.canonical_alias,
-                });
+        const groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), this.props.groupId);
+        const results = [];
+        groupStore.getGroupRooms().forEach((r) => {
+            const nameMatch = (r.name || '').toLowerCase().includes(lowerCaseQuery);
+            const topicMatch = (r.topic || '').toLowerCase().includes(lowerCaseQuery);
+            const aliasMatch = (r.canonical_alias || '').toLowerCase().includes(lowerCaseQuery);
+            if (!(nameMatch || topicMatch || aliasMatch)) {
+                return;
+            }
+            results.push({
+                room_id: r.room_id,
+                avatar_url: r.avatar_url,
+                name: r.name || r.canonical_alias,
             });
-            this._processResults(results, query);
-        }).catch((err) => {
-            console.error('Error whilst searching group users: ', err);
-            this.setState({
-                searchError: err.errcode ? err.message : _t('Something went wrong!'),
-            });
-        }).done(() => {
-            this.setState({
-                busy: false,
-            });
+        });
+        this._processResults(results, query);
+        this.setState({
+            busy: false,
         });
     },
 

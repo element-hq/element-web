@@ -17,39 +17,39 @@ limitations under the License.
 'use strict';
 
 
-var React = require('react');
-var classNames = require("classnames");
+const React = require('react');
+const classNames = require("classnames");
 import { _t } from '../../../languageHandler';
-var Modal = require('../../../Modal');
+const Modal = require('../../../Modal');
 
-var sdk = require('../../../index');
-var TextForEvent = require('../../../TextForEvent');
+const sdk = require('../../../index');
+const TextForEvent = require('../../../TextForEvent');
 import withMatrixClient from '../../../wrappers/withMatrixClient';
 
-var ContextualMenu = require('../../structures/ContextualMenu');
+const ContextualMenu = require('../../structures/ContextualMenu');
 import dis from '../../../dispatcher';
 
-var ObjectUtils = require('../../../ObjectUtils');
+const ObjectUtils = require('../../../ObjectUtils');
 
-var eventTileTypes = {
+const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
-    'm.room.member' : 'messages.TextualEvent',
-    'm.call.invite' : 'messages.TextualEvent',
-    'm.call.answer' : 'messages.TextualEvent',
-    'm.call.hangup' : 'messages.TextualEvent',
-    'm.room.name'   : 'messages.TextualEvent',
-    'm.room.avatar' : 'messages.RoomAvatarEvent',
-    'm.room.topic'  : 'messages.TextualEvent',
-    'm.room.third_party_invite' : 'messages.TextualEvent',
-    'm.room.history_visibility' : 'messages.TextualEvent',
-    'm.room.encryption' : 'messages.TextualEvent',
-    'm.room.power_levels' : 'messages.TextualEvent',
+    'm.room.member': 'messages.TextualEvent',
+    'm.call.invite': 'messages.TextualEvent',
+    'm.call.answer': 'messages.TextualEvent',
+    'm.call.hangup': 'messages.TextualEvent',
+    'm.room.name': 'messages.TextualEvent',
+    'm.room.avatar': 'messages.RoomAvatarEvent',
+    'm.room.topic': 'messages.TextualEvent',
+    'm.room.third_party_invite': 'messages.TextualEvent',
+    'm.room.history_visibility': 'messages.TextualEvent',
+    'm.room.encryption': 'messages.TextualEvent',
+    'm.room.power_levels': 'messages.TextualEvent',
     'm.room.pinned_events' : 'messages.TextualEvent',
 
     'im.vector.modular.widgets': 'messages.TextualEvent',
 };
 
-var MAX_READ_AVATARS = 5;
+const MAX_READ_AVATARS = 5;
 
 // Our component structure for EventTiles on the timeline is:
 //
@@ -178,7 +178,7 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     componentWillUnmount: function() {
-        var client = this.props.matrixClient;
+        const client = this.props.matrixClient;
         client.removeListener("deviceVerificationChanged",
                               this.onDeviceVerificationChanged);
         this.props.mxEvent.removeListener("Event.decrypted", this._onDecrypted);
@@ -205,20 +205,20 @@ module.exports = withMatrixClient(React.createClass({
 
         const verified = await this.props.matrixClient.isEventSenderVerified(mxEvent);
         this.setState({
-            verified: verified
+            verified: verified,
         });
     },
 
     _propsEqual: function(objA, objB) {
-        var keysA = Object.keys(objA);
-        var keysB = Object.keys(objB);
+        const keysA = Object.keys(objA);
+        const keysB = Object.keys(objB);
 
         if (keysA.length !== keysB.length) {
             return false;
         }
 
-        for (var i = 0; i < keysA.length; i++) {
-            var key = keysA[i];
+        for (let i = 0; i < keysA.length; i++) {
+            const key = keysA[i];
 
             if (!objB.hasOwnProperty(key)) {
                 return false;
@@ -226,8 +226,8 @@ module.exports = withMatrixClient(React.createClass({
 
             // need to deep-compare readReceipts
             if (key == 'readReceipts') {
-                var rA = objA[key];
-                var rB = objB[key];
+                const rA = objA[key];
+                const rB = objB[key];
                 if (rA === rB) {
                     continue;
                 }
@@ -239,7 +239,7 @@ module.exports = withMatrixClient(React.createClass({
                 if (rA.length !== rB.length) {
                     return false;
                 }
-                for (var j = 0; j < rA.length; j++) {
+                for (let j = 0; j < rA.length; j++) {
                     if (rA[j].roomMember.userId !== rB[j].roomMember.userId) {
                         return false;
                     }
@@ -254,12 +254,11 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     shouldHighlight: function() {
-        var actions = this.props.matrixClient.getPushActionsForEvent(this.props.mxEvent);
+        const actions = this.props.matrixClient.getPushActionsForEvent(this.props.mxEvent);
         if (!actions || !actions.tweaks) { return false; }
 
         // don't show self-highlights from another of our clients
-        if (this.props.mxEvent.getSender() === this.props.matrixClient.credentials.userId)
-        {
+        if (this.props.mxEvent.getSender() === this.props.matrixClient.credentials.userId) {
             return false;
         }
 
@@ -267,13 +266,13 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     onEditClicked: function(e) {
-        var MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
-        var buttonRect = e.target.getBoundingClientRect();
+        const MessageContextMenu = sdk.getComponent('context_menus.MessageContextMenu');
+        const buttonRect = e.target.getBoundingClientRect();
 
         // The window X and Y offsets are to adjust position when zoomed in to page
-        var x = buttonRect.right + window.pageXOffset;
-        var y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
-        var self = this;
+        const x = buttonRect.right + window.pageXOffset;
+        const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
+        const self = this;
         ContextualMenu.createMenu(MessageContextMenu, {
             chevronOffset: 10,
             mxEvent: this.props.mxEvent,
@@ -282,19 +281,18 @@ module.exports = withMatrixClient(React.createClass({
             eventTileOps: this.refs.tile && this.refs.tile.getEventTileOps ? this.refs.tile.getEventTileOps() : undefined,
             onFinished: function() {
                 self.setState({menu: false});
-            }
+            },
         });
         this.setState({menu: true});
     },
 
     toggleAllReadAvatars: function() {
         this.setState({
-            allReadAvatars: !this.state.allReadAvatars
+            allReadAvatars: !this.state.allReadAvatars,
         });
     },
 
     getReadAvatars: function() {
-
         // return early if there are no read receipts
         if (!this.props.readReceipts || this.props.readReceipts.length === 0) {
             return (<span className="mx_EventTile_readAvatars"></span>);
@@ -305,11 +303,11 @@ module.exports = withMatrixClient(React.createClass({
         const receiptOffset = 15;
         let left = 0;
 
-        var receipts = this.props.readReceipts || [];
-        for (var i = 0; i < receipts.length; ++i) {
-            var receipt = receipts[i];
+        const receipts = this.props.readReceipts || [];
+        for (let i = 0; i < receipts.length; ++i) {
+            const receipt = receipts[i];
 
-            var hidden = true;
+            let hidden = true;
             if ((i < MAX_READ_AVATARS) || this.state.allReadAvatars) {
                 hidden = false;
             }
@@ -320,7 +318,7 @@ module.exports = withMatrixClient(React.createClass({
             // else set it proportional to index
             left = (hidden ? MAX_READ_AVATARS - 1 : i) * -receiptOffset;
 
-            var userId = receipt.roomMember.userId;
+            const userId = receipt.roomMember.userId;
             var readReceiptInfo;
 
             if (this.props.readReceiptMap) {
@@ -341,12 +339,12 @@ module.exports = withMatrixClient(React.createClass({
                     onClick={this.toggleAllReadAvatars}
                     timestamp={receipt.ts}
                     showTwelveHour={this.props.isTwelveHour}
-                />
+                />,
             );
         }
-        var remText;
+        let remText;
         if (!this.state.allReadAvatars) {
-            var remainder = receipts.length - MAX_READ_AVATARS;
+            const remainder = receipts.length - MAX_READ_AVATARS;
             if (remainder > 0) {
                 remText = <span className="mx_EventTile_readAvatarRemainder"
                     onClick={this.toggleAllReadAvatars}
@@ -370,7 +368,7 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     onCryptoClicked: function(e) {
-        var event = this.props.mxEvent;
+        const event = this.props.mxEvent;
 
         Modal.createTrackedDialogAsync('Encrypted Event Dialog', '', (cb) => {
             require(['../../../async-components/views/dialogs/EncryptedEventDialog'], cb);
@@ -397,12 +395,12 @@ module.exports = withMatrixClient(React.createClass({
 
 
         if (ev.getContent().msgtype === 'm.bad.encrypted') {
-            return <E2ePadlockUndecryptable {...props}/>;
+            return <E2ePadlockUndecryptable {...props} />;
         } else if (ev.isEncrypted()) {
             if (this.state.verified) {
-                return <E2ePadlockVerified {...props}/>;
+                return <E2ePadlockVerified {...props} />;
             } else {
-                return <E2ePadlockUnverified {...props}/>;
+                return <E2ePadlockUnverified {...props} />;
             }
         } else {
             // XXX: if the event is being encrypted (ie eventSendStatus ===
@@ -413,7 +411,7 @@ module.exports = withMatrixClient(React.createClass({
             // open padlock
             const e2eEnabled = this.props.matrixClient.isRoomEncrypted(ev.getRoomId());
             if (e2eEnabled) {
-                return <E2ePadlockUnencrypted {...props}/>;
+                return <E2ePadlockUnencrypted {...props} />;
             }
         }
 
@@ -422,27 +420,27 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     render: function() {
-        var MessageTimestamp = sdk.getComponent('messages.MessageTimestamp');
-        var SenderProfile = sdk.getComponent('messages.SenderProfile');
-        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        const MessageTimestamp = sdk.getComponent('messages.MessageTimestamp');
+        const SenderProfile = sdk.getComponent('messages.SenderProfile');
+        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
 
         //console.log("EventTile showUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
-        var content = this.props.mxEvent.getContent();
-        var msgtype = content.msgtype;
-        var eventType = this.props.mxEvent.getType();
+        const content = this.props.mxEvent.getContent();
+        const msgtype = content.msgtype;
+        const eventType = this.props.mxEvent.getType();
 
         // Info messages are basically information about commands processed on a room
-        var isInfoMessage = (eventType !== 'm.room.message');
+        const isInfoMessage = (eventType !== 'm.room.message');
 
-        var EventTileType = sdk.getComponent(eventTileTypes[eventType]);
+        const EventTileType = sdk.getComponent(eventTileTypes[eventType]);
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!EventTileType) {
             throw new Error("Event type not supported");
         }
 
-        var isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
+        const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
         const isRedacted = (eventType === 'm.room.message') && this.props.isRedacted;
 
         const classes = classNames({
@@ -469,9 +467,9 @@ module.exports = withMatrixClient(React.createClass({
             this.props.mxEvent.getRoomId() + "/" +
             this.props.mxEvent.getId();
 
-        var readAvatars = this.getReadAvatars();
+        const readAvatars = this.getReadAvatars();
 
-        var avatar, sender;
+        let avatar, sender;
         let avatarSize;
         let needsSenderProfile;
 
@@ -509,15 +507,14 @@ module.exports = withMatrixClient(React.createClass({
                 if (msgtype === 'm.image') aux = _t('sent an image');
                 else if (msgtype === 'm.video') aux = _t('sent a video');
                 else if (msgtype === 'm.file') aux = _t('uploaded a file');
-                sender = <SenderProfile onClick={ this.onSenderProfileClick } mxEvent={this.props.mxEvent} enableFlair={!aux} aux={aux} />;
-            }
-            else {
+                sender = <SenderProfile onClick={this.onSenderProfileClick} mxEvent={this.props.mxEvent} enableFlair={!aux} aux={aux} />;
+            } else {
                 sender = <SenderProfile mxEvent={this.props.mxEvent} enableFlair={true} />;
             }
         }
 
         const editButton = (
-            <span className="mx_EventTile_editButton" title={ _t("Options") } onClick={this.onEditClicked} />
+            <span className="mx_EventTile_editButton" title={_t("Options")} onClick={this.onEditClicked} />
         );
 
         const timestamp = this.props.mxEvent.getTs() ?
@@ -528,13 +525,13 @@ module.exports = withMatrixClient(React.createClass({
             return (
                 <div className={classes}>
                     <div className="mx_EventTile_roomName">
-                        <a href={ permalink } onClick={this.onPermalinkClicked}>
+                        <a href={permalink} onClick={this.onPermalinkClicked}>
                             { room ? room.name : '' }
                         </a>
                     </div>
                     <div className="mx_EventTile_senderDetails">
                         { avatar }
-                        <a href={ permalink } onClick={this.onPermalinkClicked}>
+                        <a href={permalink} onClick={this.onPermalinkClicked}>
                             { sender }
                             { timestamp }
                         </a>
@@ -549,8 +546,7 @@ module.exports = withMatrixClient(React.createClass({
                     </div>
                 </div>
             );
-        }
-        else if (this.props.tileShape === "file_grid") {
+        } else if (this.props.tileShape === "file_grid") {
             return (
                 <div className={classes}>
                     <div className="mx_EventTile_line" >
@@ -564,7 +560,7 @@ module.exports = withMatrixClient(React.createClass({
                     </div>
                     <a
                         className="mx_EventTile_senderDetailsLink"
-                        href={ permalink }
+                        href={permalink}
                         onClick={this.onPermalinkClicked}
                     >
                         <div className="mx_EventTile_senderDetails">
@@ -574,8 +570,7 @@ module.exports = withMatrixClient(React.createClass({
                     </a>
                 </div>
             );
-        }
-        else {
+        } else {
             return (
                 <div className={classes}>
                     <div className="mx_EventTile_msgOption">
@@ -584,7 +579,7 @@ module.exports = withMatrixClient(React.createClass({
                     { avatar }
                     { sender }
                     <div className="mx_EventTile_line">
-                        <a href={ permalink } onClick={this.onPermalinkClicked}>
+                        <a href={permalink} onClick={this.onPermalinkClicked}>
                             { timestamp }
                         </a>
                         { this._renderE2EPadlock() }

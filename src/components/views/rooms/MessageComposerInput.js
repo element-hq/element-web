@@ -30,7 +30,7 @@ import SlashCommands from '../../../SlashCommands';
 import KeyCode from '../../../KeyCode';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import Analytics from '../../../Analytics';
 
 import dis from '../../../dispatcher';
@@ -224,7 +224,7 @@ export default class MessageComposerInput extends React.Component {
 
                 return (
                     <a href={url} data-offset-key={entityProps.offsetKey}>
-                        {entityProps.children}
+                        { entityProps.children }
                     </a>
                 );
             },
@@ -286,7 +286,7 @@ export default class MessageComposerInput extends React.Component {
                 /// XXX: Not doing rich-text quoting from formatted-body because draft-js
                 /// has regressed such that when links are quoted, errors are thrown. See
                 /// https://github.com/vector-im/riot-web/issues/4756.
-                let body = escape(payload.text);
+                const body = escape(payload.text);
                 if (body) {
                     let content = RichText.htmlToContentState(`<blockquote>${body}</blockquote>`);
                     if (!this.state.isRichtextEnabled) {
@@ -464,7 +464,7 @@ export default class MessageComposerInput extends React.Component {
             // autocomplete will probably have different completions to show.
             if (
                 !state.editorState.getSelection().equals(
-                    this.state.editorState.getSelection()
+                    this.state.editorState.getSelection(),
                 )
                 && state.editorState.getCurrentContent().getPlainText() ===
                 this.state.editorState.getCurrentContent().getPlainText()
@@ -974,7 +974,6 @@ export default class MessageComposerInput extends React.Component {
                 editorState = EditorState.forceSelection(editorState,
                     editorState.getSelection());
                 this.setState({editorState});
-
             }
             return false;
         }
@@ -1032,10 +1031,10 @@ export default class MessageComposerInput extends React.Component {
      buttons. */
     getSelectionInfo(editorState: EditorState) {
         const styleName = {
-            BOLD: 'bold',
-            ITALIC: 'italic',
-            STRIKETHROUGH: 'strike',
-            UNDERLINE: 'underline',
+            BOLD: _td('bold'),
+            ITALIC: _td('italic'),
+            STRIKETHROUGH: _td('strike'),
+            UNDERLINE: _td('underline'),
         };
 
         const originalStyle = editorState.getCurrentInlineStyle().toArray();
@@ -1044,10 +1043,10 @@ export default class MessageComposerInput extends React.Component {
             .filter((styleName) => !!styleName);
 
         const blockName = {
-            'code-block': 'code',
-            'blockquote': 'quote',
-            'unordered-list-item': 'bullet',
-            'ordered-list-item': 'numbullet',
+            'code-block': _td('code'),
+            'blockquote': _td('quote'),
+            'unordered-list-item': _td('bullet'),
+            'ordered-list-item': _td('numbullet'),
         };
         const originalBlockType = editorState.getCurrentContent()
             .getBlockForKey(editorState.getSelection().getStartKey())
@@ -1134,12 +1133,12 @@ export default class MessageComposerInput extends React.Component {
                         onConfirm={this.setDisplayedCompletion}
                         onSelectionChange={this.setDisplayedCompletion}
                         query={this.getAutocompleteQuery(content)}
-                        selection={selection}/>
+                        selection={selection} />
                 </div>
                 <div className={className}>
                     <img className="mx_MessageComposer_input_markdownIndicator mx_filterFlipColor"
                          onMouseDown={this.onMarkdownToggleClicked}
-                         title={ this.state.isRichtextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
+                         title={this.state.isRichtextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
                          src={`img/button-md-${!this.state.isRichtextEnabled}.png`} />
                     <Editor ref="editor"
                             dir="auto"
@@ -1157,7 +1156,7 @@ export default class MessageComposerInput extends React.Component {
                             onUpArrow={this.onUpArrow}
                             onDownArrow={this.onDownArrow}
                             onEscape={this.onEscape}
-                            spellCheck={true}/>
+                            spellCheck={true} />
                 </div>
             </div>
         );

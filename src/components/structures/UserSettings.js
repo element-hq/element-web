@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,7 +33,7 @@ const AddThreepid = require('../../AddThreepid');
 const SdkConfig = require('../../SdkConfig');
 import Analytics from '../../Analytics';
 import AccessibleButton from '../views/elements/AccessibleButton';
-import { _t } from '../../languageHandler';
+import { _t, _td } from '../../languageHandler';
 import * as languageHandler from '../../languageHandler';
 import * as FormattingUtils from '../../utils/FormattingUtils';
 
@@ -63,55 +64,59 @@ const gHVersionLabel = function(repo, token='') {
 const SETTINGS_LABELS = [
     {
         id: 'autoplayGifsAndVideos',
-        label: 'Autoplay GIFs and videos',
+        label: _td('Autoplay GIFs and videos'),
     },
     {
         id: 'hideReadReceipts',
-        label: 'Hide read receipts',
+        label: _td('Hide read receipts'),
     },
     {
         id: 'dontSendTypingNotifications',
-        label: "Don't send typing notifications",
+        label: _td("Don't send typing notifications"),
     },
     {
         id: 'alwaysShowTimestamps',
-        label: 'Always show message timestamps',
+        label: _td('Always show message timestamps'),
     },
     {
         id: 'showTwelveHourTimestamps',
-        label: 'Show timestamps in 12 hour format (e.g. 2:30pm)',
+        label: _td('Show timestamps in 12 hour format (e.g. 2:30pm)'),
     },
     {
         id: 'hideJoinLeaves',
-        label: 'Hide join/leave messages (invites/kicks/bans unaffected)',
+        label: _td('Hide join/leave messages (invites/kicks/bans unaffected)'),
     },
     {
         id: 'hideAvatarDisplaynameChanges',
-        label: 'Hide avatar and display name changes',
+        label: _td('Hide avatar and display name changes'),
     },
     {
         id: 'useCompactLayout',
-        label: 'Use compact timeline layout',
+        label: _td('Use compact timeline layout'),
     },
     {
         id: 'hideRedactions',
-        label: 'Hide removed messages',
+        label: _td('Hide removed messages'),
     },
     {
         id: 'enableSyntaxHighlightLanguageDetection',
-        label: 'Enable automatic language detection for syntax highlighting',
+        label: _td('Enable automatic language detection for syntax highlighting'),
     },
     {
         id: 'MessageComposerInput.autoReplaceEmoji',
-        label: 'Automatically replace plain text Emoji',
+        label: _td('Automatically replace plain text Emoji'),
     },
     {
         id: 'MessageComposerInput.dontSuggestEmoji',
-        label: 'Disable Emoji suggestions while typing',
+        label: _td('Disable Emoji suggestions while typing'),
     },
     {
         id: 'Pill.shouldHidePillAvatar',
-        label: 'Hide avatars in user and room mentions',
+        label: _td('Hide avatars in user and room mentions'),
+    },
+    {
+        id: 'TextualBody.disableBigEmoji',
+        label: _td('Disable big emoji in chat'),
     },
 /*
     {
@@ -124,7 +129,7 @@ const SETTINGS_LABELS = [
 const ANALYTICS_SETTINGS_LABELS = [
     {
         id: 'analyticsOptOut',
-        label: 'Opt out of analytics',
+        label: _td('Opt out of analytics'),
         fn: function(checked) {
             Analytics[checked ? 'disable' : 'enable']();
         },
@@ -134,7 +139,7 @@ const ANALYTICS_SETTINGS_LABELS = [
 const WEBRTC_SETTINGS_LABELS = [
     {
         id: 'webRtcForceTURN',
-        label: 'Disable Peer-to-Peer for 1:1 calls',
+        label: _td('Disable Peer-to-Peer for 1:1 calls'),
     },
 ];
 
@@ -143,7 +148,7 @@ const WEBRTC_SETTINGS_LABELS = [
 const CRYPTO_SETTINGS_LABELS = [
     {
         id: 'blacklistUnverifiedDevices',
-        label: 'Never send encrypted messages to unverified devices from this device',
+        label: _td('Never send encrypted messages to unverified devices from this device'),
         fn: function(checked) {
             MatrixClientPeg.get().setGlobalBlacklistUnverifiedDevices(checked);
         },
@@ -166,12 +171,12 @@ const CRYPTO_SETTINGS_LABELS = [
 const THEMES = [
     {
         id: 'theme',
-        label: 'Light theme',
+        label: _td('Light theme'),
         value: 'light',
     },
     {
         id: 'theme',
-        label: 'Dark theme',
+        label: _td('Dark theme'),
         value: 'dark',
     },
 ];
@@ -212,9 +217,6 @@ module.exports = React.createClass({
         // The brand string given when creating email pushers
         brand: React.PropTypes.string,
 
-        // True to show the 'labs' section of experimental features
-        enableLabs: React.PropTypes.bool,
-
         // The base URL to use in the referral link. Defaults to window.location.origin.
         referralBaseUrl: React.PropTypes.string,
 
@@ -226,7 +228,6 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             onClose: function() {},
-            enableLabs: true,
         };
     },
 
@@ -424,6 +425,11 @@ module.exports = React.createClass({
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
         });
+    },
+
+    onAvatarRemoveClick: function() {
+        MatrixClientPeg.get().setAvatarUrl(null);
+        this.setState({avatarUrl: null}); // the avatar update will complete async for us
     },
 
     onLogoutClicked: function(ev) {
@@ -793,7 +799,7 @@ module.exports = React.createClass({
                    onChange={onChange}
             />
             <label htmlFor={setting.id + "_" + setting.value}>
-                { setting.label }
+                { _t(setting.label) }
             </label>
         </div>;
     },
@@ -923,34 +929,25 @@ module.exports = React.createClass({
     },
 
     _renderLabs: function() {
-        // default to enabled if undefined
-        if (this.props.enableLabs === false) return null;
-        UserSettingsStore.doTranslations();
-
         const features = [];
-        UserSettingsStore.LABS_FEATURES.forEach((feature) => {
-            // This feature has an override and will be set to the default, so do not
-            // show it here.
-            if (feature.override) {
-                return;
-            }
+        UserSettingsStore.getLabsFeatures().forEach((featureId) => {
             // TODO: this ought to be a separate component so that we don't need
             // to rebind the onChange each time we render
             const onChange = (e) => {
-                UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked);
+                UserSettingsStore.setFeatureEnabled(featureId, e.target.checked);
                 this.forceUpdate();
             };
 
             features.push(
-                <div key={feature.id} className="mx_UserSettings_toggle">
+                <div key={featureId} className="mx_UserSettings_toggle">
                     <input
                         type="checkbox"
-                        id={feature.id}
-                        name={feature.id}
-                        defaultChecked={UserSettingsStore.isFeatureEnabled(feature.id)}
+                        id={featureId}
+                        name={featureId}
+                        defaultChecked={UserSettingsStore.isFeatureEnabled(featureId)}
                         onChange={onChange}
                     />
-                    <label htmlFor={feature.id}>{ feature.name }</label>
+                    <label htmlFor={featureId}>{ UserSettingsStore.translatedNameForFeature(featureId) }</label>
                 </div>);
         });
 
@@ -1330,7 +1327,11 @@ module.exports = React.createClass({
                     </div>
 
                     <div className="mx_UserSettings_avatarPicker">
-                        <div onClick={this.onAvatarPickerClick}>
+                        <div className="mx_UserSettings_avatarPicker_remove" onClick={this.onAvatarRemoveClick}>
+                            <img src="img/cancel.svg" width="15" height="15"
+                                 alt={_t("Remove avatar")} title={_t("Remove avatar")} />
+                        </div>
+                        <div onClick={this.onAvatarPickerClick} className="mx_UserSettings_avatarPicker_imgContainer">
                             <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
                                 showUploadSection={false} className="mx_UserSettings_avatarPicker_img" />
                         </div>

@@ -43,6 +43,10 @@ module.exports = React.createClass({
         // the end of the live timeline.
         atEndOfLiveTimeline: React.PropTypes.bool,
 
+        // This is true when the user is alone in the room, but has also sent a message.
+        // Used to suggest to the user to invite someone
+        sentMessageAndIsAlone: React.PropTypes.bool,
+
         // true if there is an active call in this room (means we show
         // the 'Active Call' text in the status bar if there is nothing
         // more interesting)
@@ -59,6 +63,14 @@ module.exports = React.createClass({
         // callback for when the user clicks on the 'cancel all' button in the
         // 'unsent messages' bar
         onCancelAllClick: React.PropTypes.func,
+
+        // callback for when the user clicks on the 'invite others' button in the
+        // 'you are alone' bar
+        onInviteClick: React.PropTypes.func,
+
+        // callback for when the user clicks on the 'stop warning me' button in the
+        // 'you are alone' bar
+        onStopWarningClick: React.PropTypes.func,
 
         // callback for when the user clicks on the 'scroll to bottom' button
         onScrollToBottomClick: React.PropTypes.func,
@@ -103,7 +115,7 @@ module.exports = React.createClass({
 
     componentWillUnmount: function() {
         // we may have entirely lost our client as we're logging out before clicking login on the guest bar...
-        var client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener("sync", this.onSyncStateChange);
             client.removeListener("RoomMember.typing", this.onRoomMemberTyping);
@@ -115,7 +127,7 @@ module.exports = React.createClass({
             return;
         }
         this.setState({
-            syncState: state
+            syncState: state,
         });
     },
 
@@ -126,7 +138,7 @@ module.exports = React.createClass({
     },
 
     // Check whether current size is greater than 0, if yes call props.onVisible
-    _checkSize: function () {
+    _checkSize: function() {
         if (this.props.onVisible && this._getSize()) {
             this.props.onVisible();
         }
@@ -140,7 +152,8 @@ module.exports = React.createClass({
             (this.state.usersTyping.length > 0) ||
             this.props.numUnreadMessages ||
             !this.props.atEndOfLiveTimeline ||
-            this.props.hasActiveCall
+            this.props.hasActiveCall ||
+            this.props.sentMessageAndIsAlone
         ) {
             return STATUS_BAR_EXPANDED;
         } else if (this.props.unsentMessageError) {
@@ -157,9 +170,9 @@ module.exports = React.createClass({
         if (this.props.numUnreadMessages) {
             return (
                 <div className="mx_RoomStatusBar_scrollDownIndicator"
-                        onClick={ this.props.onScrollToBottomClick }>
+                        onClick={this.props.onScrollToBottomClick}>
                     <img src="img/newmessages.svg" width="24" height="24"
-                        alt=""/>
+                        alt="" />
                 </div>
             );
         }
@@ -167,18 +180,18 @@ module.exports = React.createClass({
         if (!this.props.atEndOfLiveTimeline) {
             return (
                 <div className="mx_RoomStatusBar_scrollDownIndicator"
-                        onClick={ this.props.onScrollToBottomClick }>
+                        onClick={this.props.onScrollToBottomClick}>
                     <img src="img/scrolldown.svg" width="24" height="24"
-                        alt={ _t("Scroll to bottom of page") }
-                        title={ _t("Scroll to bottom of page") }/>
+                        alt={_t("Scroll to bottom of page")}
+                        title={_t("Scroll to bottom of page")} />
                 </div>
             );
         }
 
         if (this.props.hasActiveCall) {
-            var TintableSvg = sdk.getComponent("elements.TintableSvg");
+            const TintableSvg = sdk.getComponent("elements.TintableSvg");
             return (
-                <TintableSvg src="img/sound-indicator.svg" width="23" height="20"/>
+                <TintableSvg src="img/sound-indicator.svg" width="23" height="20" />
             );
         }
 
@@ -189,7 +202,7 @@ module.exports = React.createClass({
         if (wantPlaceholder) {
             return (
                 <div className="mx_RoomStatusBar_typingIndicatorAvatars">
-                    {this._renderTypingIndicatorAvatars(this.props.whoIsTypingLimit)}
+                    { this._renderTypingIndicatorAvatars(this.props.whoIsTypingLimit) }
                 </div>
             );
         }
@@ -221,8 +234,8 @@ module.exports = React.createClass({
         if (othersCount > 0) {
             avatars.push(
                 <span className="mx_RoomStatusBar_typingIndicatorRemaining" key="others">
-                    +{othersCount}
-                </span>
+                    +{ othersCount }
+                </span>,
             );
         }
 
@@ -240,12 +253,12 @@ module.exports = React.createClass({
         if (this.state.syncState === "ERROR") {
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
-                    <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
+                    <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ " />
                     <div className="mx_RoomStatusBar_connectionLostBar_title">
-                        {_t('Connectivity to the server has been lost.')}
+                        { _t('Connectivity to the server has been lost.') }
                     </div>
                     <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                        {_t('Sent messages will be stored until your connection has returned.')}
+                        { _t('Sent messages will be stored until your connection has returned.') }
                     </div>
                 </div>
             );
@@ -254,18 +267,18 @@ module.exports = React.createClass({
         if (this.props.unsentMessageError) {
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
-                    <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
+                    <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ " />
                     <div className="mx_RoomStatusBar_connectionLostBar_title">
                         { this.props.unsentMessageError }
                     </div>
                     <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                    {_tJsx("<a>Resend all</a> or <a>cancel all</a> now. You can also select individual messages to resend or cancel.",
+                    { _tJsx("<a>Resend all</a> or <a>cancel all</a> now. You can also select individual messages to resend or cancel.",
                         [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
                         [
-                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={ this.props.onResendAllClick }>{sub}</a>,
-                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={ this.props.onCancelAllClick }>{sub}</a>,
-                        ]
-                    )}
+                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this.props.onResendAllClick}>{ sub }</a>,
+                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={this.props.onCancelAllClick}>{ sub }</a>,
+                        ],
+                    ) }
                     </div>
                 </div>
             );
@@ -275,24 +288,24 @@ module.exports = React.createClass({
         // set when you've scrolled up
         if (this.props.numUnreadMessages) {
             // MUST use var name "count" for pluralization to kick in
-            var unreadMsgs = _t("%(count)s new messages", {count: this.props.numUnreadMessages});
+            const unreadMsgs = _t("%(count)s new messages", {count: this.props.numUnreadMessages});
 
             return (
                 <div className="mx_RoomStatusBar_unreadMessagesBar"
-                        onClick={ this.props.onScrollToBottomClick }>
-                    {unreadMsgs}
+                        onClick={this.props.onScrollToBottomClick}>
+                    { unreadMsgs }
                 </div>
             );
         }
 
         const typingString = WhoIsTyping.whoIsTypingString(
             this.state.usersTyping,
-            this.props.whoIsTypingLimit
+            this.props.whoIsTypingLimit,
         );
         if (typingString) {
             return (
                 <div className="mx_RoomStatusBar_typingBar">
-                    <EmojiText>{typingString}</EmojiText>
+                    <EmojiText>{ typingString }</EmojiText>
                 </div>
             );
         }
@@ -300,7 +313,22 @@ module.exports = React.createClass({
         if (this.props.hasActiveCall) {
             return (
                 <div className="mx_RoomStatusBar_callBar">
-                    <b>{_t('Active call')}</b>
+                    <b>{ _t('Active call') }</b>
+                </div>
+            );
+        }
+
+        // If you're alone in the room, and have sent a message, suggest to invite someone
+        if (this.props.sentMessageAndIsAlone) {
+            return (
+                <div className="mx_RoomStatusBar_isAlone">
+                    { _tJsx("There's no one else here! Would you like to <a>invite others</a> or <a>stop warning about the empty room</a>?",
+                        [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
+                        [
+                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="invite" onClick={this.props.onInviteClick}>{ sub }</a>,
+                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="nowarn" onClick={this.props.onStopWarningClick}>{ sub }</a>,
+                        ],
+                    ) }
                 </div>
             );
         }
@@ -310,15 +338,15 @@ module.exports = React.createClass({
 
 
     render: function() {
-        var content = this._getContent();
-        var indicator = this._getIndicator(this.state.usersTyping.length > 0);
+        const content = this._getContent();
+        const indicator = this._getIndicator(this.state.usersTyping.length > 0);
 
         return (
             <div className="mx_RoomStatusBar">
                 <div className="mx_RoomStatusBar_indicator">
-                    {indicator}
+                    { indicator }
                 </div>
-                {content}
+                { content }
             </div>
         );
     },

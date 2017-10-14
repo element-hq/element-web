@@ -95,7 +95,7 @@ class MatrixClientPeg {
         opts.pendingEventOrdering = "detached";
 
         try {
-            let promise = this.matrixClient.store.startup();
+            const promise = this.matrixClient.store.startup();
             console.log(`MatrixClientPeg: waiting for MatrixClient store to initialise`);
             await promise;
         } catch(err) {
@@ -136,7 +136,7 @@ class MatrixClientPeg {
     }
 
     _createClient(creds: MatrixClientCreds) {
-        var opts = {
+        const opts = {
             baseUrl: creds.homeserverUrl,
             idBaseUrl: creds.identityServerUrl,
             accessToken: creds.accessToken,
@@ -153,8 +153,8 @@ class MatrixClientPeg {
 
         this.matrixClient.setGuest(Boolean(creds.guest));
 
-        var notifTimelineSet = new EventTimelineSet(null, {
-            timelineSupport: true
+        const notifTimelineSet = new EventTimelineSet(null, {
+            timelineSupport: true,
         });
         // XXX: what is our initial pagination token?! it somehow needs to be synchronised with /sync.
         notifTimelineSet.getLiveTimeline().setPaginationToken("", EventTimeline.BACKWARDS);

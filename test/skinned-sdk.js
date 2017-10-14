@@ -13,12 +13,12 @@
 // default
 require('babel-polyfill');
 
-var sdk = require("../src/index");
+const sdk = require("../src/index");
 
-var skin = require('../src/component-index.js');
-var stubComponent = require('./components/stub-component.js');
+const skin = require('../src/component-index.js');
+const stubComponent = require('./components/stub-component.js');
 
-var components = skin.components;
+const components = skin.components;
 components['structures.LeftPanel'] = stubComponent();
 components['structures.RightPanel'] = stubComponent();
 components['structures.RoomDirectory'] = stubComponent();

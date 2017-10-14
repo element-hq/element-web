@@ -52,7 +52,7 @@ export default class DevicesPanel extends React.Component {
             },
             (error) => {
                 if (this._unmounted) { return; }
-                var errtxt;
+                let errtxt;
                 if (error.httpStatus == 404) {
                     // 404 probably means the HS doesn't yet support the API.
                     errtxt = _t("Your home server does not support device management.");
@@ -61,7 +61,7 @@ export default class DevicesPanel extends React.Component {
                     errtxt = _t("Unable to load device list");
                 }
                 this.setState({deviceLoadError: errtxt});
-            }
+            },
         );
     }
 
@@ -89,14 +89,14 @@ export default class DevicesPanel extends React.Component {
         const removed_id = device.device_id;
         this.setState((state, props) => {
             const newDevices = state.devices.filter(
-                d => { return d.device_id != removed_id; }
+                (d) => { return d.device_id != removed_id; },
             );
             return { devices: newDevices };
         });
     }
 
     _renderDevice(device) {
-        var DevicesPanelEntry = sdk.getComponent('settings.DevicesPanelEntry');
+        const DevicesPanelEntry = sdk.getComponent('settings.DevicesPanelEntry');
         return (
             <DevicesPanelEntry key={device.device_id} device={device}
                onDeleted={()=>{this._onDeviceDeleted(device);}} />
@@ -110,7 +110,7 @@ export default class DevicesPanel extends React.Component {
             const classes = classNames(this.props.className, "error");
             return (
                 <div className={classes}>
-                    {this.state.deviceLoadError}
+                    { this.state.deviceLoadError }
                 </div>
             );
         }
@@ -119,7 +119,7 @@ export default class DevicesPanel extends React.Component {
         if (devices === undefined) {
             // still loading
             const classes = this.props.className;
-            return <Spinner className={classes}/>;
+            return <Spinner className={classes} />;
         }
 
         devices.sort(this._deviceCompare);
@@ -128,12 +128,12 @@ export default class DevicesPanel extends React.Component {
         return (
             <div className={classes}>
                 <div className="mx_DevicesPanel_header">
-                    <div className="mx_DevicesPanel_deviceId">{_t("Device ID")}</div>
-                    <div className="mx_DevicesPanel_deviceName">{_t("Device Name")}</div>
-                    <div className="mx_DevicesPanel_deviceLastSeen">{_t("Last seen")}</div>
+                    <div className="mx_DevicesPanel_deviceId">{ _t("Device ID") }</div>
+                    <div className="mx_DevicesPanel_deviceName">{ _t("Device Name") }</div>
+                    <div className="mx_DevicesPanel_deviceLastSeen">{ _t("Last seen") }</div>
                     <div className="mx_DevicesPanel_deviceButtons"></div>
                 </div>
-                {devices.map(this._renderDevice)}
+                { devices.map(this._renderDevice) }
             </div>
         );
     }

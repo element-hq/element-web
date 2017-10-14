@@ -18,7 +18,7 @@ import Modal from '../../../Modal';
 import React from 'react';
 import sdk from '../../../index';
 
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 
 /**
  * Dialog which asks the user whether they want to share their keys with
@@ -116,11 +116,11 @@ export default React.createClass({
 
         let text;
         if (this.state.wasNewDevice) {
-            text = "You added a new device '%(displayName)s', which is"
-                + " requesting encryption keys.";
+            text = _td("You added a new device '%(displayName)s', which is"
+                + " requesting encryption keys.");
         } else {
-            text = "Your unverified device '%(displayName)s' is requesting"
-                + " encryption keys.";
+            text = _td("Your unverified device '%(displayName)s' is requesting"
+                + " encryption keys.");
         }
         text = _t(text, {displayName: displayName});
 

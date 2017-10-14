@@ -16,9 +16,9 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var Avatar = require('../../../Avatar');
-var sdk = require("../../../index");
+const React = require('react');
+const Avatar = require('../../../Avatar');
+const sdk = require("../../../index");
 const dispatcher = require("../../../dispatcher");
 
 module.exports = React.createClass({
@@ -63,14 +63,14 @@ module.exports = React.createClass({
             imageUrl: Avatar.avatarUrlForMember(props.member,
                                          props.width,
                                          props.height,
-                                         props.resizeMethod)
+                                         props.resizeMethod),
         };
     },
 
     render: function() {
-        var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        var {member, onClick, viewUserOnClick, ...otherProps} = this.props;
+        let {member, onClick, viewUserOnClick, ...otherProps} = this.props;
 
         if (viewUserOnClick) {
             onClick = () => {
@@ -83,7 +83,7 @@ module.exports = React.createClass({
 
         return (
             <BaseAvatar {...otherProps} name={this.state.name} title={this.state.title}
-                idName={member.userId} url={this.state.imageUrl} onClick={onClick}/>
+                idName={member.userId} url={this.state.imageUrl} onClick={onClick} />
         );
-    }
+    },
 });
