@@ -129,6 +129,10 @@ module.exports = React.createClass({
         }).done();
     },
 
+    onAvatarRemoveClick: function() {
+        MatrixClientPeg.get().sendStateEvent(this.props.room.roomId, 'm.room.avatar', {url: null}, '');
+    },
+
     onShowRhsClick: function(ev) {
         dis.dispatch({ action: 'show_right_panel' });
     },
@@ -268,10 +272,14 @@ module.exports = React.createClass({
                     <div className="mx_RoomHeader_avatarPicker_edit">
                         <label htmlFor="avatarInput" ref="file_label">
                             <img src="img/camera.svg"
-                                alt={_t("Upload avatar")} title={_t("Upload avatar")}
-                                width="17" height="15" />
+                                 alt={_t("Upload avatar")} title={_t("Upload avatar")}
+                                 width="17" height="15" />
                         </label>
                         <input id="avatarInput" type="file" onChange={this.onAvatarSelected} />
+                    </div>
+                    <div className="mx_RoomHeader_avatarPicker_remove" onClick={this.onAvatarRemoveClick}>
+                        <img src="img/cancel.svg" width="10"
+                             alt={_t("Remove avatar")} title={_t("Remove avatar")} />
                     </div>
                 </div>
             );

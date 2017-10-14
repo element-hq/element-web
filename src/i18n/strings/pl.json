@@ -771,7 +771,7 @@
     "for %(amount)sd": "%(amount)s dni",
     "Idle": "Bezczynny",
     "Check for update": "Sprawdź aktualizacje",
-    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName zmienił awatar pokoju na <img/>",
+    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s zmienił awatar pokoju na <img/>",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s usunął awatar pokoju.",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s zmienił awatar %(roomName)s",
     "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.": "To będzie twoja nazwa konta na <span></span> serwerze domowym; możesz też wybrać <a>inny serwer</a>.",

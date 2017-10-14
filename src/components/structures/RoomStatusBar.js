@@ -43,6 +43,10 @@ module.exports = React.createClass({
         // the end of the live timeline.
         atEndOfLiveTimeline: React.PropTypes.bool,
 
+        // This is true when the user is alone in the room, but has also sent a message.
+        // Used to suggest to the user to invite someone
+        sentMessageAndIsAlone: React.PropTypes.bool,
+
         // true if there is an active call in this room (means we show
         // the 'Active Call' text in the status bar if there is nothing
         // more interesting)
@@ -59,6 +63,14 @@ module.exports = React.createClass({
         // callback for when the user clicks on the 'cancel all' button in the
         // 'unsent messages' bar
         onCancelAllClick: React.PropTypes.func,
+
+        // callback for when the user clicks on the 'invite others' button in the
+        // 'you are alone' bar
+        onInviteClick: React.PropTypes.func,
+
+        // callback for when the user clicks on the 'stop warning me' button in the
+        // 'you are alone' bar
+        onStopWarningClick: React.PropTypes.func,
 
         // callback for when the user clicks on the 'scroll to bottom' button
         onScrollToBottomClick: React.PropTypes.func,
@@ -140,7 +152,8 @@ module.exports = React.createClass({
             (this.state.usersTyping.length > 0) ||
             this.props.numUnreadMessages ||
             !this.props.atEndOfLiveTimeline ||
-            this.props.hasActiveCall
+            this.props.hasActiveCall ||
+            this.props.sentMessageAndIsAlone
         ) {
             return STATUS_BAR_EXPANDED;
         } else if (this.props.unsentMessageError) {
@@ -301,6 +314,21 @@ module.exports = React.createClass({
             return (
                 <div className="mx_RoomStatusBar_callBar">
                     <b>{ _t('Active call') }</b>
+                </div>
+            );
+        }
+
+        // If you're alone in the room, and have sent a message, suggest to invite someone
+        if (this.props.sentMessageAndIsAlone) {
+            return (
+                <div className="mx_RoomStatusBar_isAlone">
+                    { _tJsx("There's no one else here! Would you like to <a>invite others</a> or <a>stop warning about the empty room</a>?",
+                        [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
+                        [
+                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="invite" onClick={this.props.onInviteClick}>{ sub }</a>,
+                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="nowarn" onClick={this.props.onStopWarningClick}>{ sub }</a>,
+                        ],
+                    ) }
                 </div>
             );
         }

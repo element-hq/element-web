@@ -354,7 +354,9 @@ module.exports = React.createClass({
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
 
-        let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {});
+        let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
+            disableBigEmoji: UserSettingsStore.getSyncedSetting('TextualBody.disableBigEmoji', false),
+        });
 
         if (this.props.highlightLink) {
             body = <a href={this.props.highlightLink}>{ body }</a>;
