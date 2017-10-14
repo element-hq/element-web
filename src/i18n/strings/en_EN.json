@@ -632,6 +632,7 @@
     "quote": "quote",
     "bullet": "bullet",
     "numbullet": "numbullet",
+    "Remove avatar": "Remove avatar",
     "%(severalUsers)sjoined %(repeats)s times": "%(severalUsers)sjoined %(repeats)s times",
     "%(oneUser)sjoined %(repeats)s times": "%(oneUser)sjoined %(repeats)s times",
     "%(severalUsers)sjoined": "%(severalUsers)sjoined",
