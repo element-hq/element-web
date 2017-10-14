@@ -385,10 +385,9 @@ class TextHighlighter extends BaseHighlighter {
      * highlights: optional list of words to highlight, ordered by longest word first
      *
      * opts.highlightLink: optional href to add to highlighted words
+     * opts.disableBigEmoji: optional argument to disable the big emoji class.
      */
-export function bodyToHtml(content, highlights, opts) {
-    opts = opts || {};
-
+export function bodyToHtml(content, highlights, opts={}) {
     const isHtml = (content.format === "org.matrix.custom.html");
     const body = isHtml ? content.formatted_body : escape(content.body);
 
@@ -418,7 +417,7 @@ export function bodyToHtml(content, highlights, opts) {
     }
 
     let emojiBody = false;
-    if (bodyHasEmoji) {
+    if (!opts.disableBigEmoji && bodyHasEmoji) {
         EMOJI_REGEX.lastIndex = 0;
         const contentBodyTrimmed = content.body !== undefined ? content.body.trim() : '';
         const match = EMOJI_REGEX.exec(contentBodyTrimmed);
