@@ -38,7 +38,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
     }
 
     async getCompletions(query: string, selection: {start: number, end: number}) {
-        let {command, range} = this.getCurrentCommand(query, selection);
+        const {command, range} = this.getCurrentCommand(query, selection);
         if (!query || !command) {
             return [];
         }
@@ -47,7 +47,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
             method: 'GET',
         });
         const json = await response.json();
-        let results = json.Results.map(result => {
+        const results = json.Results.map((result) => {
             return {
                 completion: result.Text,
                 component: (
@@ -105,7 +105,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
 
     renderCompletions(completions: [React.Component]): ?React.Component {
         return <div className="mx_Autocomplete_Completion_container_block">
-            {completions}
+            { completions }
         </div>;
     }
 }

@@ -18,11 +18,11 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from '../../../languageHandler';
-var MatrixClientPeg = require("../../../MatrixClientPeg");
-var sdk = require('../../../index');
-var GeminiScrollbar = require('react-gemini-scrollbar');
-var rate_limited_func = require('../../../ratelimitedfunc');
-var CallHandler = require("../../../CallHandler");
+const MatrixClientPeg = require("../../../MatrixClientPeg");
+const sdk = require('../../../index');
+const GeminiScrollbar = require('react-gemini-scrollbar');
+const rate_limited_func = require('../../../ratelimitedfunc');
+const CallHandler = require("../../../CallHandler");
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -49,7 +49,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        var cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
         cli.on("RoomMember.name", this.onRoomMemberName);
         cli.on("RoomState.events", this.onRoomStateEvent);
@@ -62,7 +62,7 @@ module.exports = React.createClass({
     },
 
     componentWillUnmount: function() {
-        var cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.get();
         if (cli) {
             cli.removeListener("RoomState.members", this.onRoomStateMember);
             cli.removeListener("RoomMember.name", this.onRoomMemberName);
@@ -109,7 +109,7 @@ module.exports = React.createClass({
         // member tile and re-render it. This is more efficient than every tile
         // evar attaching their own listener.
         // console.log("explicit presence from " + user.userId);
-        var tile = this.refs[user.userId];
+        const tile = this.refs[user.userId];
         if (tile) {
             this._updateList(); // reorder the membership list
         }
@@ -146,18 +146,18 @@ module.exports = React.createClass({
         const newState = {
             members: this.roomMembers(),
         };
-        newState.filteredJoinedMembers = this._filterMembers(newState.members, 'join');
-        newState.filteredInvitedMembers = this._filterMembers(newState.members, 'invite');
+        newState.filteredJoinedMembers = this._filterMembers(newState.members, 'join', this.state.searchQuery);
+        newState.filteredInvitedMembers = this._filterMembers(newState.members, 'invite', this.state.searchQuery);
         this.setState(newState);
     }, 500),
 
     getMemberDict: function() {
         if (!this.props.roomId) return {};
-        var cli = MatrixClientPeg.get();
-        var room = cli.getRoom(this.props.roomId);
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(this.props.roomId);
         if (!room) return {};
 
-        var all_members = room.currentState.members;
+        const all_members = room.currentState.members;
 
         Object.keys(all_members).map(function(userId) {
             // work around a race where you might have a room member object
@@ -175,19 +175,19 @@ module.exports = React.createClass({
     },
 
     roomMembers: function() {
-        var all_members = this.memberDict || {};
-        var all_user_ids = Object.keys(all_members);
-        var ConferenceHandler = CallHandler.getConferenceHandler();
+        const all_members = this.memberDict || {};
+        const all_user_ids = Object.keys(all_members);
+        const ConferenceHandler = CallHandler.getConferenceHandler();
 
         all_user_ids.sort(this.memberSort);
 
-        var to_display = [];
-        var count = 0;
-        for (var i = 0; i < all_user_ids.length; ++i) {
-            var user_id = all_user_ids[i];
-            var m = all_members[user_id];
+        const to_display = [];
+        let count = 0;
+        for (let i = 0; i < all_user_ids.length; ++i) {
+            const user_id = all_user_ids[i];
+            const m = all_members[user_id];
 
-            if (m.membership == 'join' || m.membership == 'invite') {
+            if (m.membership === 'join' || m.membership === 'invite') {
                 if ((ConferenceHandler && !ConferenceHandler.isConferenceUser(user_id)) || !ConferenceHandler) {
                     to_display.push(user_id);
                     ++count;
@@ -233,8 +233,7 @@ module.exports = React.createClass({
     memberString: function(member) {
         if (!member) {
             return "(null)";
-        }
-        else {
+        } else {
             return "(" + member.name + ", " + member.powerLevel + ", " + member.user.lastActiveAgo + ", " + member.user.currentlyActive + ")";
         }
     },
@@ -248,10 +247,10 @@ module.exports = React.createClass({
             // ...and then alphabetically.
             // We could tiebreak instead by "last recently spoken in this room" if we wanted to.
 
-            var memberA = this.memberDict[userIdA];
-            var memberB = this.memberDict[userIdB];
-            var userA = memberA.user;
-            var userB = memberB.user;
+            const memberA = this.memberDict[userIdA];
+            const memberB = this.memberDict[userIdB];
+            const userA = memberA.user;
+            const userB = memberB.user;
 
             // if (!userA || !userB) {
             //     console.log("comparing " + memberA.name + " user=" + memberA.user + " with " + memberB.name + " user=" + memberB.user);
@@ -269,15 +268,13 @@ module.exports = React.createClass({
                     // console.log(memberA + " and " + memberB + " have same power level");
                     if (memberA.name && memberB.name) {
                         // console.log("comparing names: " + memberA.name + " and " + memberB.name);
-                        var nameA = memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name;
-                        var nameB = memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name;
+                        const nameA = memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name;
+                        const nameB = memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name;
                         return nameA.localeCompare(nameB);
-                    }
-                    else {
+                    } else {
                         return 0;
                     }
-                }
-                else {
+                } else {
                     // console.log("comparing power: " + memberA.powerLevel + " and " + memberB.powerLevel);
                     return memberB.powerLevel - memberA.powerLevel;
                 }
@@ -305,6 +302,7 @@ module.exports = React.createClass({
             const m = this.memberDict[userId];
 
             if (query) {
+                query = query.toLowerCase();
                 const matchesName = m.name.toLowerCase().indexOf(query) !== -1;
                 const matchesId = m.userId.toLowerCase().indexOf(query) !== -1;
 
@@ -313,7 +311,7 @@ module.exports = React.createClass({
                 }
             }
 
-            return m.membership == membership;
+            return m.membership === membership;
         });
     },
 
@@ -336,25 +334,25 @@ module.exports = React.createClass({
             // The HS may have already converted these into m.room.member invites so
             // we shouldn't add them if the 3pid invite state key (token) is in the
             // member invite (content.third_party_invite.signed.token)
-            var room = MatrixClientPeg.get().getRoom(this.props.roomId);
-            var EntityTile = sdk.getComponent("rooms.EntityTile");
+            const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+            const EntityTile = sdk.getComponent("rooms.EntityTile");
             if (room) {
                 room.currentState.getStateEvents("m.room.third_party_invite").forEach(
                 function(e) {
                     // any events without these keys are not valid 3pid invites, so we ignore them
-                    var required_keys = ['key_validity_url', 'public_key', 'display_name'];
-                    for (var i = 0; i < required_keys.length; ++i) {
+                    const required_keys = ['key_validity_url', 'public_key', 'display_name'];
+                    for (let i = 0; i < required_keys.length; ++i) {
                         if (e.getContent()[required_keys[i]] === undefined) return;
                     }
 
                     // discard all invites which have a m.room.member event since we've
                     // already added them.
-                    var memberEvent = room.currentState.getInviteForThreePidToken(e.getStateKey());
+                    const memberEvent = room.currentState.getInviteForThreePidToken(e.getStateKey());
                     if (memberEvent) {
                         return;
                     }
                     memberList.push(
-                        <EntityTile key={e.getStateKey()} name={e.getContent().display_name} suppressOnHover={true} />
+                        <EntityTile key={e.getStateKey()} name={e.getContent().display_name} suppressOnHover={true} />,
                     );
                 });
             }
@@ -402,7 +400,7 @@ module.exports = React.createClass({
             <form autoComplete="off">
                 <input className="mx_MemberList_query" id="mx_MemberList_query" type="text"
                         onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={ _t('Filter room members') } />
+                        placeholder={_t('Filter room members')} />
             </form>
         );
 
@@ -415,9 +413,9 @@ module.exports = React.createClass({
                             getChildren={this._getChildrenJoined}
                             getChildCount={this._getChildCountJoined}
                     />
-                    {invitedSection}
+                    { invitedSection }
                 </GeminiScrollbar>
             </div>
         );
-    }
+    },
 });

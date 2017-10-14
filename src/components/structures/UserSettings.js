@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -113,6 +114,10 @@ const SETTINGS_LABELS = [
         id: 'Pill.shouldHidePillAvatar',
         label: _td('Hide avatars in user and room mentions'),
     },
+    {
+        id: 'TextualBody.disableBigEmoji',
+        label: _td('Disable big emoji in chat'),
+    },
 /*
     {
         id: 'useFixedWidthFont',
@@ -212,9 +217,6 @@ module.exports = React.createClass({
         // The brand string given when creating email pushers
         brand: React.PropTypes.string,
 
-        // True to show the 'labs' section of experimental features
-        enableLabs: React.PropTypes.bool,
-
         // The base URL to use in the referral link. Defaults to window.location.origin.
         referralBaseUrl: React.PropTypes.string,
 
@@ -226,7 +228,6 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             onClose: function() {},
-            enableLabs: true,
         };
     },
 
@@ -424,6 +425,11 @@ module.exports = React.createClass({
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
         });
+    },
+
+    onAvatarRemoveClick: function() {
+        MatrixClientPeg.get().setAvatarUrl(null);
+        this.setState({avatarUrl: null}); // the avatar update will complete async for us
     },
 
     onLogoutClicked: function(ev) {
@@ -923,34 +929,25 @@ module.exports = React.createClass({
     },
 
     _renderLabs: function() {
-        // default to enabled if undefined
-        if (this.props.enableLabs === false) return null;
-        UserSettingsStore.doTranslations();
-
         const features = [];
-        UserSettingsStore.LABS_FEATURES.forEach((feature) => {
-            // This feature has an override and will be set to the default, so do not
-            // show it here.
-            if (feature.override) {
-                return;
-            }
+        UserSettingsStore.getLabsFeatures().forEach((featureId) => {
             // TODO: this ought to be a separate component so that we don't need
             // to rebind the onChange each time we render
             const onChange = (e) => {
-                UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked);
+                UserSettingsStore.setFeatureEnabled(featureId, e.target.checked);
                 this.forceUpdate();
             };
 
             features.push(
-                <div key={feature.id} className="mx_UserSettings_toggle">
+                <div key={featureId} className="mx_UserSettings_toggle">
                     <input
                         type="checkbox"
-                        id={feature.id}
-                        name={feature.id}
-                        defaultChecked={UserSettingsStore.isFeatureEnabled(feature.id)}
+                        id={featureId}
+                        name={featureId}
+                        defaultChecked={UserSettingsStore.isFeatureEnabled(featureId)}
                         onChange={onChange}
                     />
-                    <label htmlFor={feature.id}>{ feature.name }</label>
+                    <label htmlFor={featureId}>{ UserSettingsStore.translatedNameForFeature(featureId) }</label>
                 </div>);
         });
 
@@ -1330,7 +1327,11 @@ module.exports = React.createClass({
                     </div>
 
                     <div className="mx_UserSettings_avatarPicker">
-                        <div onClick={this.onAvatarPickerClick}>
+                        <div className="mx_UserSettings_avatarPicker_remove" onClick={this.onAvatarRemoveClick}>
+                            <img src="img/cancel.svg" width="15" height="15"
+                                 alt={_t("Remove avatar")} title={_t("Remove avatar")} />
+                        </div>
+                        <div onClick={this.onAvatarPickerClick} className="mx_UserSettings_avatarPicker_imgContainer">
                             <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
                                 showUploadSection={false} className="mx_UserSettings_avatarPicker_img" />
                         </div>

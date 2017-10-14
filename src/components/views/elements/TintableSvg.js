@@ -16,9 +16,9 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var ReactDOM = require("react-dom");
-var Tinter = require("../../../Tinter");
+const React = require('react');
+const ReactDOM = require("react-dom");
+const Tinter = require("../../../Tinter");
 
 var TintableSvg = React.createClass({
     displayName: 'TintableSvg',
@@ -63,16 +63,16 @@ var TintableSvg = React.createClass({
 
     render: function() {
         return (
-            <object className={ "mx_TintableSvg " + (this.props.className ? this.props.className : "") }
+            <object className={"mx_TintableSvg " + (this.props.className ? this.props.className : "")}
                     type="image/svg+xml"
-                    data={ this.props.src }
-                    width={ this.props.width }
-                    height={ this.props.height }
-                    onLoad={ this.onLoad }
+                    data={this.props.src}
+                    width={this.props.width}
+                    height={this.props.height}
+                    onLoad={this.onLoad}
                     tabIndex="-1"
                 />
         );
-    }
+    },
 });
 
 // Register with the Tinter so that we will be told if the tint changes

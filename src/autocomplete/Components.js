@@ -30,13 +30,13 @@ export class TextualCompletion extends React.Component {
             subtitle,
             description,
             className,
-            ...restProps,
+            ...restProps
         } = this.props;
         return (
             <div className={classNames('mx_Autocomplete_Completion_block', className)} {...restProps}>
-                <span className="mx_Autocomplete_Completion_title">{title}</span>
-                <span className="mx_Autocomplete_Completion_subtitle">{subtitle}</span>
-                <span className="mx_Autocomplete_Completion_description">{description}</span>
+                <span className="mx_Autocomplete_Completion_title">{ title }</span>
+                <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
+                <span className="mx_Autocomplete_Completion_description">{ description }</span>
             </div>
         );
     }
@@ -56,14 +56,14 @@ export class PillCompletion extends React.Component {
             description,
             initialComponent,
             className,
-            ...restProps,
+            ...restProps
         } = this.props;
         return (
             <div className={classNames('mx_Autocomplete_Completion_pill', className)} {...restProps}>
-                {initialComponent}
-                <span className="mx_Autocomplete_Completion_title">{title}</span>
-                <span className="mx_Autocomplete_Completion_subtitle">{subtitle}</span>
-                <span className="mx_Autocomplete_Completion_description">{description}</span>
+                { initialComponent }
+                <span className="mx_Autocomplete_Completion_title">{ title }</span>
+                <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
+                <span className="mx_Autocomplete_Completion_description">{ description }</span>
             </div>
         );
     }

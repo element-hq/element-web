@@ -59,7 +59,7 @@ export default class UserProvider extends AutocompleteProvider {
         if (this.users === null) this._makeUsers();
 
         let completions = [];
-        let {command, range} = this.getCurrentCommand(query, selection, force);
+        const {command, range} = this.getCurrentCommand(query, selection, force);
         if (command) {
             completions = this.matcher.match(command[0]).map((user) => {
                 const displayName = (user.name || user.userId || '').replace(' (IRC)', ''); // FIXME when groups are done
@@ -71,7 +71,7 @@ export default class UserProvider extends AutocompleteProvider {
                     href: 'https://matrix.to/#/' + user.userId,
                     component: (
                         <PillCompletion
-                            initialComponent={<MemberAvatar member={user} width={24} height={24}/>}
+                            initialComponent={<MemberAvatar member={user} width={24} height={24} />}
                             title={displayName}
                             description={user.userId} />
                     ),
@@ -132,7 +132,7 @@ export default class UserProvider extends AutocompleteProvider {
 
     renderCompletions(completions: [React.Component]): ?React.Component {
         return <div className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate">
-            {completions}
+            { completions }
         </div>;
     }
 
