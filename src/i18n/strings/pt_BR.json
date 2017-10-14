@@ -696,7 +696,7 @@
     "for %(amount)sd": "por %(amount)sd",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s removeu a imagem da sala.",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s alterou a imagem da sala %(roomName)s",
-    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName alterou a imagem da sala para <img/>",
+    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s alterou a imagem da sala para <img/>",
     "Missing Media Permissions, click here to request.": "Faltam permissões para uso de mídia no seu computador. Clique aqui para solicitá-las.",
     "No Microphones detected": "Não foi detectado nenhum microfone",
     "No Webcams detected": "Não foi detectada nenhuma Webcam",

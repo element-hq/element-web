@@ -723,7 +723,7 @@
     "Start chatting": "Csevegés indítása",
     "Start Chatting": "Csevegés indítása",
     "Click on the button below to start chatting!": "Csevegés indításához kattints a gombra alább!",
-    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName megváltoztatta a szoba avatar képét: <img/>",
+    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s megváltoztatta a szoba avatar képét: <img/>",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s törölte a szoba avatar képét.",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s megváltoztatta %(roomName)s szoba avatar képét",
     "Username available": "Szabad felhasználói név",
