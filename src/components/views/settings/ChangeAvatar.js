@@ -74,6 +74,10 @@ module.exports = React.createClass({
     },
 
     onRoomStateEvents: function(ev) {
+        if (!this.props.room) {
+            return;
+        }
+
         if (ev.getRoomId() !== this.props.room.roomId || ev.getType() !== 'm.room.avatar'
             || ev.getSender() !== MatrixClientPeg.get().getUserId()) {
             return;
