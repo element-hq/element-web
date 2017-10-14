@@ -146,8 +146,8 @@ module.exports = React.createClass({
         const newState = {
             members: this.roomMembers(),
         };
-        newState.filteredJoinedMembers = this._filterMembers(newState.members, 'join');
-        newState.filteredInvitedMembers = this._filterMembers(newState.members, 'invite');
+        newState.filteredJoinedMembers = this._filterMembers(newState.members, 'join', this.state.searchQuery);
+        newState.filteredInvitedMembers = this._filterMembers(newState.members, 'invite', this.state.searchQuery);
         this.setState(newState);
     }, 500),
 
