@@ -129,8 +129,8 @@ export const PasswordAuthEntry = React.createClass({
 
         return (
             <div>
-                <p>{_t("To continue, please enter your password.")}</p>
-                <p>{_t("Password:")}</p>
+                <p>{ _t("To continue, please enter your password.") }</p>
+                <p>{ _t("Password:") }</p>
                 <form onSubmit={this._onSubmit}>
                     <input
                         ref="passwordField"
@@ -139,11 +139,11 @@ export const PasswordAuthEntry = React.createClass({
                         type="password"
                     />
                     <div className="mx_button_row">
-                        {submitButtonOrSpinner}
+                        { submitButtonOrSpinner }
                     </div>
                 </form>
                 <div className="error">
-                    {this.props.errorText}
+                    { this.props.errorText }
                 </div>
             </div>
         );
@@ -178,14 +178,14 @@ export const RecaptchaAuthEntry = React.createClass({
         }
 
         const CaptchaForm = sdk.getComponent("views.login.CaptchaForm");
-        var sitePublicKey = this.props.stageParams.public_key;
+        const sitePublicKey = this.props.stageParams.public_key;
         return (
             <div>
                 <CaptchaForm sitePublicKey={sitePublicKey}
                     onCaptchaResponse={this._onCaptchaResponse}
                 />
                 <div className="error">
-                    {this.props.errorText}
+                    { this.props.errorText }
                 </div>
             </div>
         );
@@ -256,8 +256,8 @@ export const EmailIdentityAuthEntry = React.createClass({
         } else {
             return (
                 <div>
-                    <p>{_t("An email has been sent to")} <i>{this.props.inputs.emailAddress}</i></p>
-                    <p>{_t("Please check your email to continue registration.")}</p>
+                    <p>{ _t("An email has been sent to") } <i>{ this.props.inputs.emailAddress }</i></p>
+                    <p>{ _t("Please check your email to continue registration.") }</p>
                 </div>
             );
         }
@@ -333,12 +333,12 @@ export const MsisdnAuthEntry = React.createClass({
             });
 
         this.props.matrixClient.submitMsisdnToken(
-            this._sid, this.props.clientSecret, this.state.token
+            this._sid, this.props.clientSecret, this.state.token,
         ).then((result) => {
             if (result.success) {
                 const idServerParsedUrl = url.parse(
                     this.props.matrixClient.getIdentityServerUrl(),
-                )
+                );
                 this.props.submitAuthDict({
                     type: MsisdnAuthEntry.LOGIN_TYPE,
                     threepid_creds: {
@@ -370,8 +370,8 @@ export const MsisdnAuthEntry = React.createClass({
             });
             return (
                 <div>
-                    <p>{_t("A text message has been sent to")} +<i>{this._msisdn}</i></p>
-                    <p>{_t("Please enter the code it contains:")}</p>
+                    <p>{ _t("A text message has been sent to") } +<i>{ this._msisdn }</i></p>
+                    <p>{ _t("Please enter the code it contains:") }</p>
                     <div className="mx_InteractiveAuthEntryComponents_msisdnWrapper">
                         <form onSubmit={this._onFormSubmit}>
                             <input type="text"
@@ -386,7 +386,7 @@ export const MsisdnAuthEntry = React.createClass({
                             />
                         </form>
                         <div className="error">
-                            {this.state.errorText}
+                            { this.state.errorText }
                         </div>
                     </div>
                 </div>
@@ -421,9 +421,9 @@ export const FallbackAuthEntry = React.createClass({
     },
 
     _onShowFallbackClick: function() {
-        var url = this.props.matrixClient.getFallbackAuthUrl(
+        const url = this.props.matrixClient.getFallbackAuthUrl(
             this.props.loginType,
-            this.props.authSessionId
+            this.props.authSessionId,
         );
         this._popupWindow = window.open(url);
     },
@@ -440,9 +440,9 @@ export const FallbackAuthEntry = React.createClass({
     render: function() {
         return (
             <div>
-                <a onClick={this._onShowFallbackClick}>{_t("Start authentication")}</a>
+                <a onClick={this._onShowFallbackClick}>{ _t("Start authentication") }</a>
                 <div className="error">
-                    {this.props.errorText}
+                    { this.props.errorText }
                 </div>
             </div>
         );
@@ -457,7 +457,7 @@ const AuthEntryComponents = [
 ];
 
 export function getEntryComponentForLoginType(loginType) {
-    for (var c of AuthEntryComponents) {
+    for (const c of AuthEntryComponents) {
         if (c.LOGIN_TYPE == loginType) {
             return c;
         }

@@ -35,12 +35,12 @@ export default class LanguageDropdown extends React.Component {
         this.state = {
             searchQuery: '',
             langs: null,
-        }
+        };
     }
 
     componentWillMount() {
         languageHandler.getAllLanguagesFromJson().then((langs) => {
-            langs.sort(function(a, b){
+            langs.sort(function(a, b) {
                 if(a.label < b.label) return -1;
                 if(a.label > b.label) return 1;
                 return 0;
@@ -89,7 +89,7 @@ export default class LanguageDropdown extends React.Component {
 
         const options = displayedLanguages.map((language) => {
             return <div key={language.value}>
-                {language.label}
+                { language.label }
             </div>;
         });
 
@@ -108,8 +108,8 @@ export default class LanguageDropdown extends React.Component {
             onOptionChange={this.props.onOptionChange} onSearchChange={this._onSearchChange}
             searchEnabled={true} value={value}
         >
-            {options}
-        </Dropdown>
+            { options }
+        </Dropdown>;
     }
 }
 

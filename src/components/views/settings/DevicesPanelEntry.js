@@ -69,7 +69,7 @@ export default class DevicesPanelEntry extends React.Component {
             }
 
             // pop up an interactive auth dialog
-            var InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
+            const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
             Modal.createTrackedDialog('Delete Device Dialog', '', InteractiveAuthDialog, {
                 title: _t("Authentication"),
@@ -101,7 +101,7 @@ export default class DevicesPanelEntry extends React.Component {
                 this.props.onDeleted();
                 if (this._unmounted) { return; }
                 this.setState({ deleting: false });
-            }
+            },
         );
     }
 
@@ -129,7 +129,7 @@ export default class DevicesPanelEntry extends React.Component {
 
         let deleteButton;
         if (this.state.deleteError) {
-            deleteButton = <div className="error">{this.state.deleteError}</div>;
+            deleteButton = <div className="error">{ this.state.deleteError }</div>;
         } else {
             deleteButton = (
                 <div className="mx_textButton"
@@ -139,15 +139,15 @@ export default class DevicesPanelEntry extends React.Component {
             );
         }
 
-        var myDeviceClass = '';
+        let myDeviceClass = '';
         if (device.device_id === MatrixClientPeg.get().getDeviceId()) {
             myDeviceClass = " mx_DevicesPanel_myDevice";
         }
 
         return (
-            <div className={ "mx_DevicesPanel_device" + myDeviceClass }>
+            <div className={"mx_DevicesPanel_device" + myDeviceClass}>
                 <div className="mx_DevicesPanel_deviceId">
-                    {device.device_id}
+                    { device.device_id }
                 </div>
                 <div className="mx_DevicesPanel_deviceName">
                     <EditableTextContainer initialValue={device.display_name}
@@ -156,10 +156,10 @@ export default class DevicesPanelEntry extends React.Component {
                     />
                 </div>
                 <div className="mx_DevicesPanel_lastSeen">
-                    {lastSeen}
+                    { lastSeen }
                 </div>
                 <div className="mx_DevicesPanel_deviceButtons">
-                    {deleteButton}
+                    { deleteButton }
                 </div>
             </div>
         );

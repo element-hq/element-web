@@ -25,6 +25,7 @@ import {PillCompletion} from './Components';
 import type {SelectionRange, Completion} from './Autocompleter';
 import _uniq from 'lodash/uniq';
 import _sortBy from 'lodash/sortBy';
+import UserSettingsStore from '../UserSettingsStore';
 
 import EmojiData from '../stripped-emoji.json';
 
@@ -96,6 +97,10 @@ export default class EmojiProvider extends AutocompleteProvider {
     }
 
     async getCompletions(query: string, selection: SelectionRange) {
+        if (UserSettingsStore.getSyncedSetting("MessageComposerInput.dontSuggestEmoji")) {
+            return []; // don't give any suggestions if the user doesn't want them
+        }
+
         const EmojiText = sdk.getComponent('views.elements.EmojiText');
 
         let completions = [];
@@ -133,7 +138,7 @@ export default class EmojiProvider extends AutocompleteProvider {
                 return {
                     completion: unicode,
                     component: (
-                        <PillCompletion title={shortname} initialComponent={<EmojiText style={{maxWidth: '1em'}}>{unicode}</EmojiText>} />
+                        <PillCompletion title={shortname} initialComponent={<EmojiText style={{maxWidth: '1em'}}>{ unicode }</EmojiText>} />
                     ),
                     range,
                 };
@@ -147,14 +152,13 @@ export default class EmojiProvider extends AutocompleteProvider {
     }
 
     static getInstance() {
-        if (instance == null)
-            {instance = new EmojiProvider();}
+        if (instance == null) {instance = new EmojiProvider();}
         return instance;
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
         return <div className="mx_Autocomplete_Completion_container_pill">
-            {completions}
+            { completions }
         </div>;
     }
 }

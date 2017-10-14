@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import classnames from 'classnames';
 
 export default React.createClass({
     displayName: 'QuestionDialog',
@@ -25,6 +27,7 @@ export default React.createClass({
         description: React.PropTypes.node,
         extraButtons: React.PropTypes.node,
         button: React.PropTypes.string,
+        danger: React.PropTypes.bool,
         focus: React.PropTypes.bool,
         onFinished: React.PropTypes.func.isRequired,
     },
@@ -36,6 +39,7 @@ export default React.createClass({
             extraButtons: null,
             focus: true,
             hasCancelButton: true,
+            danger: false,
         };
     },
 
@@ -51,23 +55,27 @@ export default React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const cancelButton = this.props.hasCancelButton ? (
             <button onClick={this.onCancel}>
-                {_t("Cancel")}
+                { _t("Cancel") }
             </button>
         ) : null;
+        const buttonClasses = classnames({
+            mx_Dialog_primary: true,
+            danger: this.props.danger,
+        });
         return (
             <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished}
-                onEnterPressed={ this.onOk }
+                onEnterPressed={this.onOk}
                 title={this.props.title}
             >
                 <div className="mx_Dialog_content">
-                    {this.props.description}
+                    { this.props.description }
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.onOk} autoFocus={this.props.focus}>
-                        {this.props.button || _t('OK')}
+                    <button className={buttonClasses} onClick={this.onOk} autoFocus={this.props.focus}>
+                        { this.props.button || _t('OK') }
                     </button>
-                    {this.props.extraButtons}
-                    {cancelButton}
+                    { this.props.extraButtons }
+                    { cancelButton }
                 </div>
             </BaseDialog>
         );

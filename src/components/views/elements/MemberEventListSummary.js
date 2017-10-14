@@ -34,11 +34,13 @@ module.exports = React.createClass({
         threshold: React.PropTypes.number,
         // Called when the MELS expansion is toggled
         onToggle: React.PropTypes.func,
+        // Whether or not to begin with state.expanded=true
+        startExpanded: React.PropTypes.bool,
     },
 
     getInitialState: function() {
         return {
-            expanded: false,
+            expanded: Boolean(this.props.startExpanded),
         };
     },
 
@@ -94,12 +96,12 @@ module.exports = React.createClass({
             // Transform into consecutive repetitions of the same transition (like 5
             // consecutive 'joined_and_left's)
             const coalescedTransitions = this._coalesceRepeatedTransitions(
-                canonicalTransitions
+                canonicalTransitions,
             );
 
             const descs = coalescedTransitions.map((t) => {
                 return this._getDescriptionForTransition(
-                    t.transitionType, plural, t.repeats
+                    t.transitionType, plural, t.repeats,
                 );
             });
 
@@ -117,7 +119,7 @@ module.exports = React.createClass({
         return (
             <span className="mx_TextualEvent mx_MemberEventListSummary_summary">
                 <EmojiText>
-                    {summaries.join(", ")}
+                    { summaries.join(", ") }
                 </EmojiText>
             </span>
         );
@@ -368,7 +370,7 @@ module.exports = React.createClass({
      */
     _renderCommaSeparatedList(items, itemLimit) {
         const remaining = itemLimit === undefined ? 0 : Math.max(
-            items.length - itemLimit, 0
+            items.length - itemLimit, 0,
         );
         if (items.length === 0) {
             return "";
@@ -376,7 +378,7 @@ module.exports = React.createClass({
             return items[0];
         } else if (remaining) {
             items = items.slice(0, itemLimit);
-            return (remaining > 1) 
+            return (remaining > 1)
                 ? _t("%(items)s and %(remaining)s others", { items: items.join(', '), remaining: remaining } )
                 : _t("%(items)s and one other", { items: items.join(', ') });
         } else {
@@ -392,8 +394,8 @@ module.exports = React.createClass({
             );
         });
         return (
-            <span className="mx_MemberEventListSummary_avatars" onClick={ this._toggleSummary }>
-                {avatars}
+            <span className="mx_MemberEventListSummary_avatars" onClick={this._toggleSummary}>
+                { avatars }
             </span>
         );
     },
@@ -417,19 +419,15 @@ module.exports = React.createClass({
             case 'join':
                 if (e.mxEvent.getPrevContent().membership === 'join') {
                     if (e.mxEvent.getContent().displayname !==
-                        e.mxEvent.getPrevContent().displayname)
-                    {
+                        e.mxEvent.getPrevContent().displayname) {
                         return 'changed_name';
-                    }
-                    else if (e.mxEvent.getContent().avatar_url !==
-                        e.mxEvent.getPrevContent().avatar_url)
-                    {
+                    } else if (e.mxEvent.getContent().avatar_url !==
+                        e.mxEvent.getPrevContent().avatar_url) {
                         return 'changed_avatar';
                     }
                     // console.log("MELS ignoring duplicate membership join event");
                     return null;
-                }
-                else {
+                } else {
                     return 'joined';
                 }
             case 'leave':
@@ -481,7 +479,7 @@ module.exports = React.createClass({
                     firstEvent.index < aggregateIndices[seq]) {
                         aggregateIndices[seq] = firstEvent.index;
                 }
-            }
+            },
         );
 
         return {
@@ -492,7 +490,7 @@ module.exports = React.createClass({
 
     render: function() {
         const eventsToRender = this.props.events;
-        const eventIds = eventsToRender.map(e => e.getId()).join(',');
+        const eventIds = eventsToRender.map((e) => e.getId()).join(',');
         const fewEvents = eventsToRender.length < this.props.threshold;
         const expanded = this.state.expanded || fewEvents;
 
@@ -504,7 +502,7 @@ module.exports = React.createClass({
         if (fewEvents) {
             return (
                 <div className="mx_MemberEventListSummary" data-scroll-tokens={eventIds}>
-                    {expandedEvents}
+                    { expandedEvents }
                 </div>
             );
         }
@@ -540,7 +538,7 @@ module.exports = React.createClass({
 
         // Sort types by order of lowest event index within sequence
         const orderedTransitionSequences = Object.keys(aggregate.names).sort(
-            (seq1, seq2) => aggregate.indices[seq1] > aggregate.indices[seq2]
+            (seq1, seq2) => aggregate.indices[seq1] > aggregate.indices[seq2],
         );
 
         let summaryContainer = null;
@@ -548,24 +546,24 @@ module.exports = React.createClass({
             summaryContainer = (
                 <div className="mx_EventTile_line">
                     <div className="mx_EventTile_info">
-                        {this._renderAvatars(avatarMembers)}
-                        {this._renderSummary(aggregate.names, orderedTransitionSequences)}
+                        { this._renderAvatars(avatarMembers) }
+                        { this._renderSummary(aggregate.names, orderedTransitionSequences) }
                     </div>
                 </div>
             );
         }
         const toggleButton = (
             <div className={"mx_MemberEventListSummary_toggle"} onClick={this._toggleSummary}>
-                {expanded ? 'collapse' : 'expand'}
+                { expanded ? 'collapse' : 'expand' }
             </div>
         );
 
         return (
             <div className="mx_MemberEventListSummary" data-scroll-tokens={eventIds}>
-                {toggleButton}
-                {summaryContainer}
-                {expanded ? <div className="mx_MemberEventListSummary_line">&nbsp;</div> : null}
-                {expandedEvents}
+                { toggleButton }
+                { summaryContainer }
+                { expanded ? <div className="mx_MemberEventListSummary_line">&nbsp;</div> : null }
+                { expandedEvents }
             </div>
         );
     },

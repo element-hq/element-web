@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,10 +17,10 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sanitizeHtml = require('sanitize-html');
-var highlight = require('highlight.js');
-var linkifyMatrix = require('./linkify-matrix');
+const React = require('react');
+const sanitizeHtml = require('sanitize-html');
+const highlight = require('highlight.js');
+const linkifyMatrix = require('./linkify-matrix');
 import escape from 'lodash/escape';
 import emojione from 'emojione';
 import classNames from 'classnames';
@@ -31,13 +32,33 @@ emojione.imagePathPNG = 'emojione/png/';
 // Use SVGs for emojis
 emojione.imageType = 'svg';
 
+// Anything outside the basic multilingual plane will be a surrogate pair
+const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
+// And there a bunch more symbol characters that emojione has within the
+// BMP, so this includes the ranges from 'letterlike symbols' to
+// 'miscellaneous symbols and arrows' which should catch all of them
+// (with plenty of false positives, but that's OK)
+const SYMBOL_PATTERN = /([\u2100-\u2bff])/;
+
+// And this is emojione's complete regex
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp+"+", "gi");
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
+
+/*
+ * Return true if the given string contains emoji
+ * Uses a much, much simpler regex than emojione's so will give false
+ * positives, but useful for fast-path testing strings to see if they
+ * need emojification.
+ * unicodeToImage uses this function.
+ */
+export function containsEmoji(str) {
+    return SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str);
+}
 
 /* modified from https://github.com/Ranks/emojione/blob/master/lib/js/emojione.js
  * because we want to include emoji shortnames in title text
  */
-export function unicodeToImage(str) {
+function unicodeToImage(str) {
     let replaceWith, unicode, alt, short, fname;
     const mappedUnicode = emojione.mapUnicodeToShort();
 
@@ -45,8 +66,7 @@ export function unicodeToImage(str) {
         if ( (typeof unicodeChar === 'undefined') || (unicodeChar === '') || (!(unicodeChar in emojione.jsEscapeMap)) ) {
             // if the unicodeChar doesnt exist just return the entire match
             return unicodeChar;
-        }
-        else {
+        } else {
             // get the unicode codepoint from the actual char
             unicode = emojione.jsEscapeMap[unicodeChar];
 
@@ -127,7 +147,7 @@ export function processHtmlForSending(html: string): string {
  * of that HTML.
  */
 export function sanitizedHtmlNode(insaneHtml) {
-    const saneHtml =  sanitizeHtml(insaneHtml, sanitizeHtmlParams);
+    const saneHtml = sanitizeHtml(insaneHtml, sanitizeHtmlParams);
 
     return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" />;
 }
@@ -136,7 +156,7 @@ const sanitizeHtmlParams = {
     allowedTags: [
         'font', // custom to matrix for IRC-style font coloring
         'del', // for markdown
-        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol', 'sup', 'sub',
         'nl', 'li', 'b', 'i', 'u', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
         'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'span', 'img',
     ],
@@ -162,21 +182,19 @@ const sanitizeHtmlParams = {
             if (attribs.href) {
                 attribs.target = '_blank'; // by default
 
-                var m;
+                let m;
                 // FIXME: horrible duplication with linkify-matrix
                 m = attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN);
                 if (m) {
                     attribs.href = m[1];
                     delete attribs.target;
-                }
-                else {
+                } else {
                     m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
                     if (m) {
-                        var entity = m[1];
+                        const entity = m[1];
                         if (entity[0] === '@') {
                             attribs.href = '#/user/' + entity;
-                        }
-                        else if (entity[0] === '#' || entity[0] === '!') {
+                        } else if (entity[0] === '#' || entity[0] === '!') {
                             attribs.href = '#/room/' + entity;
                         }
                         delete attribs.target;
@@ -184,7 +202,7 @@ const sanitizeHtmlParams = {
                 }
             }
             attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
-            return { tagName: tagName, attribs : attribs };
+            return { tagName: tagName, attribs: attribs };
         },
         'img': function(tagName, attribs) {
             // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
@@ -203,7 +221,7 @@ const sanitizeHtmlParams = {
         'code': function(tagName, attribs) {
             if (typeof attribs.class !== 'undefined') {
                 // Filter out all classes other than ones starting with language- for syntax highlighting.
-                let classes = attribs.class.split(/\s+/).filter(function(cl) {
+                const classes = attribs.class.split(/\s+/).filter(function(cl) {
                     return cl.startsWith('language-');
                 });
                 attribs.class = classes.join(' ');
@@ -266,11 +284,11 @@ class BaseHighlighter {
      * TextHighlighter).
      */
     applyHighlights(safeSnippet, safeHighlights) {
-        var lastOffset = 0;
-        var offset;
-        var nodes = [];
+        let lastOffset = 0;
+        let offset;
+        let nodes = [];
 
-        var safeHighlight = safeHighlights[0];
+        const safeHighlight = safeHighlights[0];
         while ((offset = safeSnippet.toLowerCase().indexOf(safeHighlight.toLowerCase(), lastOffset)) >= 0) {
             // handle preamble
             if (offset > lastOffset) {
@@ -280,7 +298,7 @@ class BaseHighlighter {
 
             // do highlight. use the original string rather than safeHighlight
             // to preserve the original casing.
-            var endOffset = offset + safeHighlight.length;
+            const endOffset = offset + safeHighlight.length;
             nodes.push(this._processSnippet(safeSnippet.substring(offset, endOffset), true));
 
             lastOffset = endOffset;
@@ -298,8 +316,7 @@ class BaseHighlighter {
         if (safeHighlights[1]) {
             // recurse into this range to check for the next set of highlight matches
             return this.applyHighlights(safeSnippet, safeHighlights.slice(1));
-        }
-        else {
+        } else {
             // no more highlights to be found, just return the unhighlighted string
             return [this._processSnippet(safeSnippet, false)];
         }
@@ -320,7 +337,7 @@ class HtmlHighlighter extends BaseHighlighter {
             return snippet;
         }
 
-        var span = "<span class=\""+this.highlightClass+"\">"
+        let span = "<span class=\""+this.highlightClass+"\">"
             + snippet + "</span>";
 
         if (this.highlightLink) {
@@ -345,15 +362,15 @@ class TextHighlighter extends BaseHighlighter {
      * returns a React node
      */
     _processSnippet(snippet, highlight) {
-        var key = this._key++;
+        const key = this._key++;
 
-        var node =
-            <span key={key} className={highlight ? this.highlightClass : null }>
+        let node =
+            <span key={key} className={highlight ? this.highlightClass : null}>
                 { snippet }
             </span>;
 
         if (highlight && this.highlightLink) {
-            node = <a key={key} href={this.highlightLink}>{node}</a>;
+            node = <a key={key} href={this.highlightLink}>{ node }</a>;
         }
 
         return node;
@@ -368,22 +385,23 @@ class TextHighlighter extends BaseHighlighter {
      * highlights: optional list of words to highlight, ordered by longest word first
      *
      * opts.highlightLink: optional href to add to highlighted words
+     * opts.disableBigEmoji: optional argument to disable the big emoji class.
      */
-export function bodyToHtml(content, highlights, opts) {
-    opts = opts || {};
+export function bodyToHtml(content, highlights, opts={}) {
+    const isHtml = (content.format === "org.matrix.custom.html");
+    const body = isHtml ? content.formatted_body : escape(content.body);
 
-    var isHtml = (content.format === "org.matrix.custom.html");
-    let body = isHtml ? content.formatted_body : escape(content.body);
+    let bodyHasEmoji = false;
 
-    var safeBody;
+    let safeBody;
     // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
     // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
     // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
     // by an attempt to search for 'foobar'.  Then again, the search query probably wouldn't work either
     try {
         if (highlights && highlights.length > 0) {
-            var highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
-            var safeHighlights = highlights.map(function(highlight) {
+            const highlighter = new HtmlHighlighter("mx_EventTile_searchHighlight", opts.highlightLink);
+            const safeHighlights = highlights.map(function(highlight) {
                 return sanitizeHtml(highlight, sanitizeHtmlParams);
             });
             // XXX: hacky bodge to temporarily apply a textFilter to the sanitizeHtmlParams structure.
@@ -392,17 +410,19 @@ export function bodyToHtml(content, highlights, opts) {
             };
         }
         safeBody = sanitizeHtml(body, sanitizeHtmlParams);
-        safeBody = unicodeToImage(safeBody);
-        safeBody = addCodeCopyButton(safeBody);
-    }
-    finally {
+        bodyHasEmoji = containsEmoji(body);
+        if (bodyHasEmoji) safeBody = unicodeToImage(safeBody);
+    } finally {
         delete sanitizeHtmlParams.textFilter;
     }
 
-    EMOJI_REGEX.lastIndex = 0;
-    let contentBodyTrimmed = content.body !== undefined ? content.body.trim() : '';
-    let match = EMOJI_REGEX.exec(contentBodyTrimmed);
-    let emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
+    let emojiBody = false;
+    if (!opts.disableBigEmoji && bodyHasEmoji) {
+        EMOJI_REGEX.lastIndex = 0;
+        const contentBodyTrimmed = content.body !== undefined ? content.body.trim() : '';
+        const match = EMOJI_REGEX.exec(contentBodyTrimmed);
+        emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length;
+    }
 
     const className = classNames({
         'mx_EventTile_body': true,
@@ -410,23 +430,6 @@ export function bodyToHtml(content, highlights, opts) {
         'markdown-body': isHtml,
     });
     return <span className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" />;
-}
-
-function addCodeCopyButton(safeBody) {
-    // Adds 'copy' buttons to pre blocks
-    // Note that this only manipulates the markup to add the buttons:
-    // we need to add the event handlers once the nodes are in the DOM
-    // since we can't save functions in the markup.
-    // This is done in TextualBody
-    const el = document.createElement("div");
-    el.innerHTML = safeBody;
-    const codeBlocks = Array.from(el.getElementsByTagName("pre"));
-    codeBlocks.forEach(p => {
-        const button = document.createElement("span");
-        button.className = "mx_EventTile_copyButton";
-        p.appendChild(button);
-    });
-    return el.innerHTML;
 }
 
 export function emojifyText(text) {

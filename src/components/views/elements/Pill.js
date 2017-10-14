@@ -167,7 +167,7 @@ const Pill = React.createClass({
                         userId = member.userId;
                         linkText = member.rawDisplayName.replace(' (IRC)', ''); // FIXME when groups are done
                         if (this.props.shouldShowPillAvatar) {
-                            avatar = <MemberAvatar member={member} width={16} height={16}/>;
+                            avatar = <MemberAvatar member={member} width={16} height={16} />;
                         }
                         pillClass = 'mx_UserPill';
                         href = null;
@@ -180,7 +180,7 @@ const Pill = React.createClass({
                 if (room) {
                     linkText = (room ? getDisplayAliasForRoom(room) : null) || resource;
                     if (this.props.shouldShowPillAvatar) {
-                        avatar = <RoomAvatar room={room} width={16} height={16}/>;
+                        avatar = <RoomAvatar room={room} width={16} height={16} />;
                     }
                     pillClass = 'mx_RoomPill';
                 }
@@ -195,12 +195,12 @@ const Pill = React.createClass({
         if (this.state.pillType) {
             return this.props.inMessage ?
                 <a className={classes} href={href} onClick={onClick} title={resource} data-offset-key={this.props.offsetKey}>
-                    {avatar}
-                    {linkText}
+                    { avatar }
+                    { linkText }
                 </a> :
                 <span className={classes} title={resource} data-offset-key={this.props.offsetKey}>
-                    {avatar}
-                    {linkText}
+                    { avatar }
+                    { linkText }
                 </span>;
         } else {
             // Deliberately render nothing if the URL isn't recognised

@@ -59,8 +59,8 @@ export default class Login {
     }
 
     getFlows() {
-        var self = this;
-        var client = this._createTemporaryClient();
+        const self = this;
+        const client = this._createTemporaryClient();
         return client.loginFlows().then(function(result) {
             self._flows = result.flows;
             self._currentFlowIndex = 0;
@@ -77,12 +77,12 @@ export default class Login {
     getCurrentFlowStep() {
         // technically the flow can have multiple steps, but no one does this
         // for login so we can ignore it.
-        var flowStep = this._flows[this._currentFlowIndex];
+        const flowStep = this._flows[this._currentFlowIndex];
         return flowStep ? flowStep.type : null;
     }
 
     loginAsGuest() {
-        var client = this._createTemporaryClient();
+        const client = this._createTemporaryClient();
         return client.registerGuest({
             body: {
                 initial_device_display_name: this._defaultDeviceDisplayName,
@@ -94,7 +94,7 @@ export default class Login {
                 accessToken: creds.access_token,
                 homeserverUrl: this._hsUrl,
                 identityServerUrl: this._isUrl,
-                guest: true
+                guest: true,
             };
         }, (error) => {
             throw error;
@@ -149,12 +149,12 @@ export default class Login {
                 identityServerUrl: self._isUrl,
                 userId: data.user_id,
                 deviceId: data.device_id,
-                accessToken: data.access_token
+                accessToken: data.access_token,
             });
         }, function(error) {
             if (error.httpStatus === 403) {
                 if (self._fallbackHsUrl) {
-                    var fbClient = Matrix.createClient({
+                    const fbClient = Matrix.createClient({
                         baseUrl: self._fallbackHsUrl,
                         idBaseUrl: this._isUrl,
                     });
@@ -165,7 +165,7 @@ export default class Login {
                             identityServerUrl: self._isUrl,
                             userId: data.user_id,
                             deviceId: data.device_id,
-                            accessToken: data.access_token
+                            accessToken: data.access_token,
                         });
                     }, function(fallback_error) {
                         // throw the original error

@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,27 +18,51 @@ limitations under the License.
 import Promise from 'bluebird';
 import MatrixClientPeg from './MatrixClientPeg';
 import Notifier from './Notifier';
-import { _t } from './languageHandler';
+import { _t, _td } from './languageHandler';
+import SdkConfig from './SdkConfig';
 
 /*
  * TODO: Make things use this. This is all WIP - see UserSettings.js for usage.
  */
 
+const FEATURES = [
+    {
+        id: 'feature_groups',
+        name: _td("Groups"),
+    },
+];
+
 export default {
-    LABS_FEATURES: [
-        {
-            name: "-",
-            id: 'matrix_apps',
-            default: true,
+    getLabsFeatures() {
+        const featuresConfig = SdkConfig.get()['features'] || {};
 
-            // XXX: Always use default, ignore localStorage and remove from labs
-            override: true,
-        },
-    ],
+        // The old flag: honourned for backwards compat
+        const enableLabs = SdkConfig.get()['enableLabs'];
 
-    // horrible but it works. The locality makes this somewhat more palatable.
-    doTranslations: function() {
-        this.LABS_FEATURES[0].name = _t("Matrix Apps");
+        let labsFeatures;
+        if (enableLabs) {
+            labsFeatures = FEATURES;
+        } else {
+            labsFeatures = FEATURES.filter((f) => {
+                const sdkConfigValue = featuresConfig[f.id];
+                if (sdkConfigValue === 'labs') {
+                    return true;
+                }
+            });
+        }
+        return labsFeatures.map((f) => {
+            return f.id;
+        });
+    },
+
+    translatedNameForFeature(featureId) {
+        const feature = FEATURES.filter((f) => {
+            return f.id === featureId;
+        })[0];
+
+        if (feature === undefined) return null;
+
+        return _t(feature.name);
     },
 
     loadProfileInfo: function() {
@@ -185,33 +210,33 @@ export default {
         localStorage.setItem('mx_local_settings', JSON.stringify(settings));
     },
 
-    getFeatureById(feature: string) {
-        for (let i = 0; i < this.LABS_FEATURES.length; i++) {
-            const f = this.LABS_FEATURES[i];
-            if (f.id === feature) {
-                return f;
-            }
-        }
-        return null;
-    },
-
     isFeatureEnabled: function(featureId: string): boolean {
-        // Disable labs for guests.
-        if (MatrixClientPeg.get().isGuest()) return false;
+        const featuresConfig = SdkConfig.get()['features'];
 
-        const feature = this.getFeatureById(featureId);
-        if (!feature) {
-            console.warn(`Unknown feature "${featureId}"`);
+        // The old flag: honourned for backwards compat
+        const enableLabs = SdkConfig.get()['enableLabs'];
+
+        let sdkConfigValue = enableLabs ? 'labs' : 'disable';
+        if (featuresConfig && featuresConfig[featureId] !== undefined) {
+            sdkConfigValue = featuresConfig[featureId];
+        }
+
+        if (sdkConfigValue === 'enable') {
+            return true;
+        } else if (sdkConfigValue === 'disable') {
+            return false;
+        } else if (sdkConfigValue === 'labs') {
+            if (!MatrixClientPeg.get().isGuest()) {
+                // Make it explicit that guests get the defaults (although they shouldn't
+                // have been able to ever toggle the flags anyway)
+                const userValue = localStorage.getItem(`mx_labs_feature_${featureId}`);
+                return userValue === 'true';
+            }
+            return false;
+        } else {
+            console.warn(`Unknown features config for ${featureId}: ${sdkConfigValue}`);
             return false;
         }
-        // Return the default if this feature has an override to be the default value or
-        // if the feature has never been toggled and is therefore not in localStorage
-        if (Object.keys(feature).includes('override') ||
-            localStorage.getItem(`mx_labs_feature_${featureId}`) === null
-        ) {
-            return feature.default;
-        }
-        return localStorage.getItem(`mx_labs_feature_${featureId}`) === 'true';
     },
 
     setFeatureEnabled: function(featureId: string, enabled: boolean) {

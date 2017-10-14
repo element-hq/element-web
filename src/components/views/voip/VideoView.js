@@ -110,13 +110,13 @@ module.exports = React.createClass({
         const maxVideoHeight = fullscreenElement ? null : this.props.maxHeight;
 
         return (
-            <div className="mx_VideoView" ref={this.setContainer} onClick={ this.props.onClick }>
+            <div className="mx_VideoView" ref={this.setContainer} onClick={this.props.onClick}>
                 <div className="mx_VideoView_remoteVideoFeed">
                     <VideoFeed ref="remote" onResize={this.props.onResize}
                         maxHeight={maxVideoHeight} />
                 </div>
                 <div className="mx_VideoView_localVideoFeed">
-                    <VideoFeed ref="local"/>
+                    <VideoFeed ref="local" />
                 </div>
             </div>
         );

@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -81,10 +82,6 @@ export default React.createClass({
         // stash the MatrixClient in case we log out before we are unmounted
         this._matrixClient = this.props.matrixClient;
 
-        // _scrollStateMap is a map from room id to the scroll state returned by
-        // RoomView.getScrollState()
-        this._scrollStateMap = {};
-
         CallMediaHandler.loadDevices();
 
         document.addEventListener('keydown', this._onKeyDown);
@@ -116,10 +113,6 @@ export default React.createClass({
         return Boolean(MatrixClientPeg.get());
     },
 
-    getScrollStateForRoom: function(roomId) {
-        return this._scrollStateMap[roomId];
-    },
-
     canResetTimelineInRoom: function(roomId) {
         if (!this.refs.roomView) {
             return true;
@@ -138,6 +131,9 @@ export default React.createClass({
             this.setState({
                 useCompactLayout: event.getContent().useCompactLayout,
             });
+        }
+        if (event.getType() === "m.ignored_user_list") {
+            dis.dispatch({action: "ignore_state_changed"});
         }
     },
 
@@ -169,7 +165,7 @@ export default React.createClass({
             case KeyCode.UP:
             case KeyCode.DOWN:
                 if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey) {
-                    let action = ev.keyCode == KeyCode.UP ?
+                    const action = ev.keyCode == KeyCode.UP ?
                         'view_prev_room' : 'view_next_room';
                     dis.dispatch({action: action});
                     handled = true;
@@ -211,8 +207,7 @@ export default React.createClass({
     _onScrollKeyPressed: function(ev) {
         if (this.refs.roomView) {
             this.refs.roomView.handleScrollKey(ev);
-        }
-        else if (this.refs.roomDirectory) {
+        } else if (this.refs.roomDirectory) {
             this.refs.roomDirectory.handleScrollKey(ev);
         }
     },
@@ -246,22 +241,20 @@ export default React.createClass({
                         eventPixelOffset={this.props.initialEventPixelOffset}
                         key={this.props.currentRoomId || 'roomview'}
                         opacity={this.props.middleOpacity}
-                        collapsedRhs={this.props.collapse_rhs}
+                        collapsedRhs={this.props.collapseRhs}
                         ConferenceHandler={this.props.ConferenceHandler}
-                        scrollStateMap={this._scrollStateMap}
                     />;
-                if (!this.props.collapse_rhs) right_panel = <RightPanel roomId={this.props.currentRoomId} opacity={this.props.rightOpacity} />;
+                if (!this.props.collapseRhs) right_panel = <RightPanel roomId={this.props.currentRoomId} opacity={this.props.rightOpacity} />;
                 break;
 
             case PageTypes.UserSettings:
                 page_element = <UserSettings
                     onClose={this.props.onUserSettingsClose}
                     brand={this.props.config.brand}
-                    enableLabs={this.props.config.enableLabs}
                     referralBaseUrl={this.props.config.referralBaseUrl}
                     teamToken={this.props.teamToken}
                 />;
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.rightOpacity}/>;
+                if (!this.props.collapseRhs) right_panel = <RightPanel opacity={this.props.rightOpacity} />;
                 break;
 
             case PageTypes.MyGroups:
@@ -271,9 +264,9 @@ export default React.createClass({
             case PageTypes.CreateRoom:
                 page_element = <CreateRoom
                     onRoomCreated={this.props.onRoomCreated}
-                    collapsedRhs={this.props.collapse_rhs}
+                    collapsedRhs={this.props.collapseRhs}
                 />;
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.rightOpacity}/>;
+                if (!this.props.collapseRhs) right_panel = <RightPanel opacity={this.props.rightOpacity} />;
                 break;
 
             case PageTypes.RoomDirectory:
@@ -306,8 +299,9 @@ export default React.createClass({
             case PageTypes.GroupView:
                 page_element = <GroupView
                     groupId={this.props.currentGroupId}
+                    collapsedRhs={this.props.collapseRhs}
                 />;
-                //right_panel = <RightPanel opacity={this.props.rightOpacity} />;
+                if (!this.props.collapseRhs) right_panel = <RightPanel groupId={this.props.currentGroupId} opacity={this.props.rightOpacity} />;
                 break;
         }
 
@@ -325,7 +319,7 @@ export default React.createClass({
             topBar = <MatrixToolbar />;
         }
 
-        var bodyClasses = 'mx_MatrixChat';
+        let bodyClasses = 'mx_MatrixChat';
         if (topBar) {
             bodyClasses += ' mx_MatrixChat_toolbarShowing';
         }
@@ -335,17 +329,17 @@ export default React.createClass({
 
         return (
             <div className='mx_MatrixChat_wrapper'>
-                {topBar}
+                { topBar }
                 <div className={bodyClasses}>
                     <LeftPanel
                         selectedRoom={this.props.currentRoomId}
-                        collapsed={this.props.collapse_lhs || false}
+                        collapsed={this.props.collapseLhs || false}
                         opacity={this.props.leftOpacity}
                     />
                     <main className='mx_MatrixChat_middlePanel'>
-                        {page_element}
+                        { page_element }
                     </main>
-                    {right_panel}
+                    { right_panel }
                 </div>
             </div>
         );
