@@ -252,6 +252,16 @@ input.mx_UserSettings_phoneNumberField {
     display: none;
 }
 
+.mx_UserSettings_avatarPicker_imgContainer {
+    display: inline-block;
+}
+
+.mx_UserSettings_avatarPicker_remove {
+    display: inline-block;
+    float: right;
+    margin-right: -15px;
+}
+
 .mx_UserSettings_advanced_spoiler,
 .mx_UserSettings_link {
     cursor: pointer;
