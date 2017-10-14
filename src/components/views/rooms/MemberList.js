@@ -400,7 +400,7 @@ module.exports = React.createClass({
             <form autoComplete="off">
                 <input className="mx_MemberList_query" id="mx_MemberList_query" type="text"
                         onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={ _t('Filter room members') } />
+                        placeholder={_t('Filter room members')} />
             </form>
         );
 
@@ -413,9 +413,9 @@ module.exports = React.createClass({
                             getChildren={this._getChildrenJoined}
                             getChildCount={this._getChildCountJoined}
                     />
-                    {invitedSection}
+                    { invitedSection }
                 </GeminiScrollbar>
             </div>
         );
-    }
+    },
 });
