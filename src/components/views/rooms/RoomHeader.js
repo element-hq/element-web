@@ -31,6 +31,7 @@ import linkifyMatrix from '../../../linkify-matrix';
 import AccessibleButton from '../elements/AccessibleButton';
 import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
+import UserSettingsStore from "../../../UserSettingsStore";
 
 linkifyMatrix(linkify);
 
@@ -300,7 +301,7 @@ module.exports = React.createClass({
                 </AccessibleButton>;
         }
 
-        if (this.props.onPinnedClick) {
+        if (this.props.onPinnedClick && UserSettingsStore.isFeatureEnabled('feature_pinning')) {
             pinnedEventsButton =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onPinnedClick} title={_t("Pinned Messages")}>
                     <TintableSvg src="img/icons-pin.svg" width="16" height="16" />
