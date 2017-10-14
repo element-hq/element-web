@@ -289,6 +289,7 @@
     "matrix-react-sdk version:": "matrix-react-sdk version:",
     "Matrix Apps": "Matrix Apps",
     "Members only": "Members only",
+    "Disable big emoji in chat": "Disable big emoji in chat",
     "Disable Emoji suggestions while typing": "Disable Emoji suggestions while typing",
     "Message not sent due to unknown devices being present": "Message not sent due to unknown devices being present",
     "Missing room_id in request": "Missing room_id in request",
@@ -633,6 +634,7 @@
     "quote": "quote",
     "bullet": "bullet",
     "numbullet": "numbullet",
+    "Remove avatar": "Remove avatar",
     "%(severalUsers)sjoined %(repeats)s times": "%(severalUsers)sjoined %(repeats)s times",
     "%(oneUser)sjoined %(repeats)s times": "%(oneUser)sjoined %(repeats)s times",
     "%(severalUsers)sjoined": "%(severalUsers)sjoined",
@@ -918,5 +920,7 @@
     "Related groups for this room:": "Related groups for this room:",
     "This room has no related groups": "This room has no related groups",
     "New group ID (e.g. +foo:%(localDomain)s)": "New group ID (e.g. +foo:%(localDomain)s)",
+    "Invites sent": "Invites sent",
+    "Your group invitations have been sent.": "Your group invitations have been sent.",
     "%(serverName)s Matrix ID": "%(serverName)s Matrix ID"
 }

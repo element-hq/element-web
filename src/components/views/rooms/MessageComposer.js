@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -285,18 +286,16 @@ export default class MessageComposer extends React.Component {
         }
 
         // Apps
-        if (UserSettingsStore.isFeatureEnabled('matrix_apps')) {
-            if (this.props.showApps) {
-                hideAppsButton =
-                    <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title={_t("Hide Apps")}>
-                        <TintableSvg src="img/icons-hide-apps.svg" width="35" height="35" />
-                    </div>;
-            } else {
-                showAppsButton =
-                    <div key="show_apps" className="mx_MessageComposer_apps" onClick={this.onShowAppsClick} title={_t("Show Apps")}>
-                        <TintableSvg src="img/icons-show-apps.svg" width="35" height="35" />
-                    </div>;
-            }
+        if (this.props.showApps) {
+            hideAppsButton =
+                <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title={_t("Hide Apps")}>
+                    <TintableSvg src="img/icons-hide-apps.svg" width="35" height="35" />
+                </div>;
+        } else {
+            showAppsButton =
+                <div key="show_apps" className="mx_MessageComposer_apps" onClick={this.onShowAppsClick} title={_t("Show Apps")}>
+                    <TintableSvg src="img/icons-show-apps.svg" width="35" height="35" />
+                </div>;
         }
 
         const canSendMessages = this.props.room.currentState.maySendMessage(
