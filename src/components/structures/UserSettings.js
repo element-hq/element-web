@@ -114,6 +114,10 @@ const SETTINGS_LABELS = [
         id: 'Pill.shouldHidePillAvatar',
         label: _td('Hide avatars in user and room mentions'),
     },
+    {
+        id: 'TextualBody.disableBigEmoji',
+        label: _td('Disable big emoji in chat'),
+    },
 /*
     {
         id: 'useFixedWidthFont',

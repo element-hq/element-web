@@ -289,6 +289,7 @@
     "matrix-react-sdk version:": "matrix-react-sdk version:",
     "Matrix Apps": "Matrix Apps",
     "Members only": "Members only",
+    "Disable big emoji in chat": "Disable big emoji in chat",
     "Disable Emoji suggestions while typing": "Disable Emoji suggestions while typing",
     "Message not sent due to unknown devices being present": "Message not sent due to unknown devices being present",
     "Missing room_id in request": "Missing room_id in request",
