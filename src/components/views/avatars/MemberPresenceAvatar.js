@@ -111,10 +111,10 @@ module.exports = React.createClass({
 
         const avatarNode = (
             <MemberAvatar member={this.props.member} width={this.props.width} height={this.props.height}
-                          resizeMethod={this.props.resizeMethod}/>
+                          resizeMethod={this.props.resizeMethod} />
         );
         let statusNode = (
-            <span className={"mx_MemberPresenceAvatar_status mx_MemberPresenceAvatar_status_" + this.state.status}/>
+            <span className={"mx_MemberPresenceAvatar_status mx_MemberPresenceAvatar_status_" + this.state.status} />
         );
 
         // LABS: Disable presence management functions for now
@@ -125,15 +125,15 @@ module.exports = React.createClass({
 
         let avatar = (
             <div className="mx_MemberPresenceAvatar">
-                {avatarNode}
-                {statusNode}
+                { avatarNode }
+                { statusNode }
             </div>
         );
         if (onClickFn) {
             avatar = (
                 <AccessibleButton onClick={onClickFn} className="mx_MemberPresenceAvatar" element="div">
-                    {avatarNode}
-                    {statusNode}
+                    { avatarNode }
+                    { statusNode }
                 </AccessibleButton>
             );
         }
