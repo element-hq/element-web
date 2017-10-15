@@ -34,6 +34,10 @@ const FEATURES = [
         id: 'feature_pinning',
         name: _td("Message Pinning"),
     },
+    {
+        id: 'feature_presence_management',
+        name: _td("Presence Management"),
+    },
 ];
 
 export default {

@@ -22,6 +22,7 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import AccessibleButton from '../elements/AccessibleButton';
 import Presence from "../../../Presence";
 import dispatcher from "../../../dispatcher";
+import UserSettingsStore from "../../../UserSettingsStore";
 
 module.exports = React.createClass({
     displayName: 'MemberPresenceAvatar',
@@ -112,9 +113,15 @@ module.exports = React.createClass({
             <MemberAvatar member={this.props.member} width={this.props.width} height={this.props.height}
                           resizeMethod={this.props.resizeMethod}/>
         );
-        const statusNode = (
+        let statusNode = (
             <span className={"mx_MemberPresenceAvatar_status mx_MemberPresenceAvatar_status_" + this.state.status}/>
         );
+
+        // LABS: Disable presence management functions for now
+        if (!UserSettingsStore.isFeatureEnabled("feature_presence_management")) {
+            statusNode = null;
+            onClickFn = null;
+        }
 
         let avatar = (
             <div className="mx_MemberPresenceAvatar">
