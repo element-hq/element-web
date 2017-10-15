@@ -19,6 +19,7 @@
 import React from 'react';
 import sdk from '../../../index';
 import Flair from '../elements/Flair.js';
+import { _tJsx } from '../../../languageHandler';
 
 export default function SenderProfile(props) {
     const EmojiText = sdk.getComponent('elements.EmojiText');
@@ -26,27 +27,44 @@ export default function SenderProfile(props) {
     const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
     const {msgtype} = mxEvent.getContent();
 
+    // Display sender name by default if nothing else is given
+    const text = props.text ? props.text : '%(senderName)s';
+
     if (msgtype === 'm.emote') {
         return <span />; // emote message must include the name so don't duplicate it
     }
 
+    // Name + flair
+    const nameElem = [
+        <EmojiText className="mx_SenderProfile_name">{ name || '' }</EmojiText>,
+        props.enableFlair ?
+            <Flair
+                userId={mxEvent.getSender()}
+                roomId={mxEvent.getRoomId()}
+                showRelated={true} />
+            : null,
+    ]
+
+    if(props.text) {
+        // Replace senderName, and wrap surrounding text in spans with the right class
+        content = _tJsx(props.text, /^(.*)\%\(senderName\)s(.*)$/m, (p1, p2) => [
+            p1 ? <span className='mx_SenderProfile_aux'>{p1}</span> : null,
+            nameElem,
+            p2 ? <span className='mx_SenderProfile_aux'>{p2}</span> : null,
+        ]);
+    } else {
+        content = nameElem;
+    }
+
     return (
         <div className="mx_SenderProfile" dir="auto" onClick={props.onClick}>
-            <EmojiText className="mx_SenderProfile_name">{ name || '' }</EmojiText>
-            { props.enableFlair ?
-                <Flair
-                    userId={mxEvent.getSender()}
-                    roomId={mxEvent.getRoomId()}
-                    showRelated={true} />
-                : null
-            }
-            { props.aux ? <EmojiText className="mx_SenderProfile_aux"> { props.aux }</EmojiText> : null }
+            { content }
         </div>
     );
 }
 
 SenderProfile.propTypes = {
     mxEvent: React.PropTypes.object.isRequired, // event whose sender we're showing
-    aux: React.PropTypes.string, // stuff to go after the sender name, if anything
+    text: React.PropTypes.string, // Text to show. Defaults to sender name
     onClick: React.PropTypes.func,
 };
