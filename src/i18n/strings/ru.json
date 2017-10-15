@@ -976,5 +976,6 @@
     "email address": "адрес email",
     "Try using one of the following valid address types: %(validTypesList)s.": "Попробуйте использовать один из следующих допустимых типов адресов: %(validTypesList)s.",
     "You have entered an invalid address.": "Введен неправильный адрес.",
-    "Failed to remove room from group": "Не удалось удалить комнату из группы"
+    "Failed to remove room from group": "Не удалось удалить комнату из группы",
+    "Add rooms to this group": "Добавить комнаты в эту группу"
 }
