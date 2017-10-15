@@ -868,21 +868,21 @@ module.exports = React.createClass({
                                     disabled={!roomState.mayClientSendStateEvent("m.room.history_visibility", cli)}
                                     checked={historyVisibility === "shared"}
                                     onChange={this._onHistoryRadioToggle} />
-                            { _t('Members only since the point in time of selecting this option') })
+                            { _t('Members only (since the point in time of selecting this option)') }
                         </label>
                         <label>
                             <input type="radio" name="historyVis" value="invited"
                                     disabled={!roomState.mayClientSendStateEvent("m.room.history_visibility", cli)}
                                     checked={historyVisibility === "invited"}
                                     onChange={this._onHistoryRadioToggle} />
-                            { _t('Members only since they were invited') })
+                            { _t('Members only (since they were invited)') }
                         </label>
                         <label >
                             <input type="radio" name="historyVis" value="joined"
                                     disabled={!roomState.mayClientSendStateEvent("m.room.history_visibility", cli)}
                                     checked={historyVisibility === "joined"}
                                     onChange={this._onHistoryRadioToggle} />
-                            { _t('Members only since they joined') })
+                            { _t('Members only (since they joined)') }
                         </label>
                     </div>
                 </div>
