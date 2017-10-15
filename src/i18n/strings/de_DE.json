@@ -994,8 +994,8 @@
     "Remove avatar": "Profilbild entfernen",
     "Disable big emoji in chat": "Große Emojis im Chat deaktiveren",
     "There's no one else here! Would you like to <a>invite others</a> or <a>stop warning about the empty room</a>?": "Sonst ist hier niemand! Möchtest Du <a>Benutzer einladen</a> oder die <a>Warnungen über den leeren Raum deaktivieren</a>?",
-    "Pinned Messages": "Angepinnte Nachrichten",
-    "%(senderName)s changed the pinned messages for the room.": "%(senderName)s änderte eine angepinnte Nachricht für diesen Raum.",
+    "Pinned Messages": "Angeheftete Nachrichten",
+    "%(senderName)s changed the pinned messages for the room.": "%(senderName)s hat die angehefteten Nachrichten für diesen Raum geändert.",
     "Jump to read receipt": "Zur Lesebestätigung springen",
     "Message Pinning": "Nachricht-Anheftung"
 }
