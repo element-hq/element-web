@@ -80,10 +80,10 @@ module.exports = React.createClass({
 
                 <MemberAvatar member={sender} width={avatarSize} height={avatarSize} />
                 <span className="mx_PinnedEventTile_sender">
-                    {sender.name}
+                    { sender.name }
                 </span>
                 <MessageEvent mxEvent={this.props.mxEvent} className="mx_PinnedEventTile_body" />
             </div>
         );
-    }
+    },
 });
