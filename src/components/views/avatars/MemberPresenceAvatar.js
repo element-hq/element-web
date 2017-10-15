@@ -23,6 +23,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import Presence from "../../../Presence";
 import dispatcher from "../../../dispatcher";
 import UserSettingsStore from "../../../UserSettingsStore";
+import * as ContextualMenu from "../../structures/ContextualMenu";
 
 module.exports = React.createClass({
     displayName: 'MemberPresenceAvatar',
@@ -44,8 +45,10 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         const presenceState = this.props.member.user.presence;
+        const presenceMessage = this.props.member.user.presenceStatusMsg;
         return {
             status: presenceState,
+            message: presenceMessage,
         };
     },
 
@@ -78,27 +81,38 @@ module.exports = React.createClass({
         });
     },
 
-    onClick: function() {
-        if (Presence.getState() === "online") {
-            Presence.setState("unavailable", "This is a message", true);
-        } else {
-            Presence.stopMaintainingStatus();
-        }
-        console.log("CLICK");
+    onStatusChange: function(newStatus) {
+        console.log(this.state);
+        console.log(newStatus);
+    },
 
-        const presenceState = this.props.member.user.presence;
-        const presenceLastActiveAgo = this.props.member.user.lastActiveAgo;
-        const presenceLastTs = this.props.member.user.lastPresenceTs;
-        const presenceCurrentlyActive = this.props.member.user.currentlyActive;
-        const presenceMessage = this.props.member.user.presenceStatusMsg;
+    onClick: function(e) {
+        const PresenceContextMenu = sdk.getComponent('context_menus.PresenceContextMenu');
+        const elementRect = e.target.getBoundingClientRect();
 
-        console.log({
-            presenceState,
-            presenceLastActiveAgo,
-            presenceLastTs,
-            presenceCurrentlyActive,
-            presenceMessage,
+        // The window X and Y offsets are to adjust position when zoomed in to page
+        const x = (elementRect.left + window.pageXOffset) - (elementRect.width / 2) + 3;
+        const chevronOffset = 12;
+        let y = elementRect.top + (elementRect.height / 2) + window.pageYOffset;
+        y = y - (chevronOffset + 4); // where 4 is 1/4 the height of the chevron
+
+        const self = this;
+        ContextualMenu.createMenu(PresenceContextMenu, {
+            chevronOffset: chevronOffset,
+            chevronFace: 'bottom',
+            left: x,
+            top: y,
+            menuWidth: 300,
+            currentStatus: this.state.status,
+            onChange: this.onStatusChange,
         });
+
+        e.stopPropagation();
+        // const presenceState = this.props.member.user.presence;
+        // const presenceLastActiveAgo = this.props.member.user.lastActiveAgo;
+        // const presenceLastTs = this.props.member.user.lastPresenceTs;
+        // const presenceCurrentlyActive = this.props.member.user.currentlyActive;
+        // const presenceMessage = this.props.member.user.presenceStatusMsg;
     },
 
     render: function() {
