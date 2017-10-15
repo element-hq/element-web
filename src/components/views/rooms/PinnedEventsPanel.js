@@ -92,10 +92,10 @@ module.exports = React.createClass({
             <div className="mx_PinnedEventsPanel">
                 <div className="mx_PinnedEventsPanel_body">
                     <AccessibleButton className="mx_PinnedEventsPanel_cancel" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" /></AccessibleButton>
-                    <h3 className="mx_PinnedEventsPanel_header">{_t("Pinned Messages")}</h3>
+                    <h3 className="mx_PinnedEventsPanel_header">{ _t("Pinned Messages") }</h3>
                     { tiles }
                 </div>
             </div>
         );
-    }
+    },
 });
