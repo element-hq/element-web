@@ -30,6 +30,10 @@ const FEATURES = [
         id: 'feature_groups',
         name: _td("Groups"),
     },
+    {
+        id: 'feature_pinning',
+        name: _td("Message Pinning"),
+    },
 ];
 
 export default {
