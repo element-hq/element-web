@@ -82,8 +82,10 @@ module.exports = React.createClass({
     },
 
     onStatusChange: function(newStatus) {
-        console.log(this.state);
-        console.log(newStatus);
+        Presence.stopMaintainingStatus();
+        if (newStatus === "online") {
+            Presence.setState(newStatus);
+        } else Presence.setState(newStatus, null, true);
     },
 
     onClick: function(e) {
@@ -96,13 +98,12 @@ module.exports = React.createClass({
         let y = elementRect.top + (elementRect.height / 2) + window.pageYOffset;
         y = y - (chevronOffset + 4); // where 4 is 1/4 the height of the chevron
 
-        const self = this;
         ContextualMenu.createMenu(PresenceContextMenu, {
             chevronOffset: chevronOffset,
             chevronFace: 'bottom',
             left: x,
             top: y,
-            menuWidth: 300,
+            menuWidth: 125,
             currentStatus: this.state.status,
             onChange: this.onStatusChange,
         });
