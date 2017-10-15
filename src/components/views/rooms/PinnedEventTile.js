@@ -47,7 +47,8 @@ module.exports = React.createClass({
             const index = pinned.indexOf(this.props.mxEvent.getId());
             if (index !== -1) {
                 pinned.splice(index, 1);
-                MatrixClientPeg.get().sendStateEvent(this.props.mxRoom.roomId, 'm.room.pinned_events', {pinned}, '').then(() => {
+                MatrixClientPeg.get().sendStateEvent(this.props.mxRoom.roomId, 'm.room.pinned_events', {pinned}, '')
+                .then(() => {
                     if (this.props.onUnpinned) this.props.onUnpinned();
                 });
             } else if (this.props.onUnpinned) this.props.onUnpinned();
