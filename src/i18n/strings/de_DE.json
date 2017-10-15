@@ -991,5 +991,6 @@
     "New group ID (e.g. +foo:%(localDomain)s)": "Neue Gruppen-ID (z.B. +foo:%(localDomain)s)",
     "Invites sent": "Einladungen gesendet",
     "Your group invitations have been sent.": "Deine Gruppen-Einladungen wurden gesendet.",
-    "Remove avatar": "Profilbild entfernen"
+    "Remove avatar": "Profilbild entfernen",
+    "Disable big emoji in chat": "Deaktiviere vergrößertes Emoji im Chat"
 }
