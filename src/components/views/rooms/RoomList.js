@@ -36,13 +36,13 @@ const HIDE_CONFERENCE_CHANS = true;
 function phraseForSection(section) {
     switch (section) {
         case 'm.favourite':
-	    return _t('Drop here to favourite');
+            return _t('Drop here to favourite');
         case 'im.vector.fake.direct':
-	    return _t('Drop here to tag direct chat');
+            return _t('Drop here to tag direct chat');
         case 'im.vector.fake.recent':
-	    return _t('Drop here to restore');
+            return _t('Drop here to restore');
         case 'm.lowpriority':
-	    return _t('Drop here to demote');
+            return _t('Drop here to demote');
         default:
             return _t('Drop here to tag %(section)s', {section: section});
     }
