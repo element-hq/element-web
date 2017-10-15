@@ -43,26 +43,40 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             canRedact: false,
+            canPin: false,
         };
     },
 
     componentWillMount: function() {
-        MatrixClientPeg.get().on('RoomMember.powerLevel', this._checkCanRedact);
-        this._checkCanRedact();
+        MatrixClientPeg.get().on('RoomMember.powerLevel', this._checkPermissions);
+        this._checkPermissions();
     },
 
     componentWillUnmount: function() {
         const cli = MatrixClientPeg.get();
         if (cli) {
-            cli.removeListener('RoomMember.powerLevel', this._checkCanRedact);
+            cli.removeListener('RoomMember.powerLevel', this._checkPermissions);
         }
     },
 
-    _checkCanRedact: function() {
+    _checkPermissions: function() {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
+
         const canRedact = room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId);
-        this.setState({canRedact});
+        let canPin = room.currentState.mayClientSendStateEvent('m.room.pinned_events', cli);
+
+        // HACK: Intentionally say we can't pin if the user doesn't want to use the functionality
+        if (!UserSettingsStore.isFeatureEnabled("feature_pinning")) canPin = false;
+
+        this.setState({canRedact, canPin});
+    },
+
+    _isPinned: function() {
+        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        const pinnedEvent = room.currentState.getStateEvents('m.room.pinned_events', '');
+        if (!pinnedEvent) return false;
+        return pinnedEvent.getContent().pinned.includes(this.props.mxEvent.getId());
     },
 
     onResendClick: function() {
@@ -122,6 +136,28 @@ module.exports = React.createClass({
         this.closeMenu();
     },
 
+    onPinClick: function() {
+        MatrixClientPeg.get().getStateEvent(this.props.mxEvent.getRoomId(), 'm.room.pinned_events', '')
+            .catch(e => {
+                // Intercept the Event Not Found error and fall through the promise chain with no event.
+                if (e.errcode === "M_NOT_FOUND") return null;
+                throw e;
+            })
+            .then(event => {
+                const eventIds = (event ? event.pinned : []) || [];
+                if (!eventIds.includes(this.props.mxEvent.getId())) {
+                    // Not pinned - add
+                    eventIds.push(this.props.mxEvent.getId());
+                } else {
+                    // Pinned - remove
+                    eventIds.splice(eventIds.indexOf(this.props.mxEvent.getId()), 1);
+                }
+
+                MatrixClientPeg.get().sendStateEvent(this.props.mxEvent.getRoomId(), 'm.room.pinned_events', {pinned: eventIds}, '');
+            });
+        this.closeMenu();
+    },
+
     closeMenu: function() {
         if (this.props.onFinished) this.props.onFinished();
     },
@@ -147,6 +183,7 @@ module.exports = React.createClass({
         let redactButton;
         let cancelButton;
         let forwardButton;
+        let pinButton;
         let viewSourceButton;
         let viewClearSourceButton;
         let unhidePreviewButton;
@@ -186,6 +223,14 @@ module.exports = React.createClass({
                         { _t('Forward Message') }
                     </div>
                 );
+
+                if (this.state.canPin) {
+                    pinButton = (
+                        <div className="mx_MessageContextMenu_field" onClick={this.onPinClick}>
+                            {this._isPinned() ? _t('Unpin Message') : _t('Pin Message')}
+                        </div>
+                    );
+                }
             }
         }
 
@@ -246,6 +291,7 @@ module.exports = React.createClass({
                 {redactButton}
                 {cancelButton}
                 {forwardButton}
+                {pinButton}
                 {viewSourceButton}
                 {viewClearSourceButton}
                 {unhidePreviewButton}
