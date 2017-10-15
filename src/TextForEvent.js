@@ -259,6 +259,11 @@ function textForPowerEvent(event) {
     });
 }
 
+function textForPinnedEvent(event) {
+    const senderName = event.getSender();
+    return _t("%(senderName)s changed the pinned messages for the room.", {senderName});
+}
+
 function textForWidgetEvent(event) {
     const senderName = event.getSender();
     const {name: prevName, type: prevType, url: prevUrl} = event.getPrevContent();
@@ -304,6 +309,7 @@ const stateHandlers = {
     'm.room.history_visibility': textForHistoryVisibilityEvent,
     'm.room.encryption': textForEncryptionEvent,
     'm.room.power_levels': textForPowerEvent,
+    'm.room.pinned_events': textForPinnedEvent,
 
     'im.vector.modular.widgets': textForWidgetEvent,
 };

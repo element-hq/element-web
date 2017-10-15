@@ -114,6 +114,10 @@ const SETTINGS_LABELS = [
         id: 'Pill.shouldHidePillAvatar',
         label: _td('Hide avatars in user and room mentions'),
     },
+    {
+        id: 'TextualBody.disableBigEmoji',
+        label: _td('Disable big emoji in chat'),
+    },
 /*
     {
         id: 'useFixedWidthFont',
@@ -421,6 +425,11 @@ module.exports = React.createClass({
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
         });
+    },
+
+    onAvatarRemoveClick: function() {
+        MatrixClientPeg.get().setAvatarUrl(null);
+        this.setState({avatarUrl: null}); // the avatar update will complete async for us
     },
 
     onLogoutClicked: function(ev) {
@@ -1318,7 +1327,11 @@ module.exports = React.createClass({
                     </div>
 
                     <div className="mx_UserSettings_avatarPicker">
-                        <div onClick={this.onAvatarPickerClick}>
+                        <div className="mx_UserSettings_avatarPicker_remove" onClick={this.onAvatarRemoveClick}>
+                            <img src="img/cancel.svg" width="15" height="15"
+                                 alt={_t("Remove avatar")} title={_t("Remove avatar")} />
+                        </div>
+                        <div onClick={this.onAvatarPickerClick} className="mx_UserSettings_avatarPicker_imgContainer">
                             <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
                                 showUploadSection={false} className="mx_UserSettings_avatarPicker_img" />
                         </div>

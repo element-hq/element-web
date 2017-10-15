@@ -31,6 +31,7 @@ import linkifyMatrix from '../../../linkify-matrix';
 import AccessibleButton from '../elements/AccessibleButton';
 import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
+import UserSettingsStore from "../../../UserSettingsStore";
 
 linkifyMatrix(linkify);
 
@@ -45,6 +46,7 @@ module.exports = React.createClass({
         inRoom: React.PropTypes.bool,
         collapsedRhs: React.PropTypes.bool,
         onSettingsClick: React.PropTypes.func,
+        onPinnedClick: React.PropTypes.func,
         onSaveClick: React.PropTypes.func,
         onSearchClick: React.PropTypes.func,
         onLeaveClick: React.PropTypes.func,
@@ -129,6 +131,10 @@ module.exports = React.createClass({
         }).done();
     },
 
+    onAvatarRemoveClick: function() {
+        MatrixClientPeg.get().sendStateEvent(this.props.room.roomId, 'm.room.avatar', {url: null}, '');
+    },
+
     onShowRhsClick: function(ev) {
         dis.dispatch({ action: 'show_right_panel' });
     },
@@ -172,6 +178,7 @@ module.exports = React.createClass({
         let spinner = null;
         let saveButton = null;
         let settingsButton = null;
+        let pinnedEventsButton = null;
 
         let canSetRoomName;
         let canSetRoomAvatar;
@@ -268,10 +275,14 @@ module.exports = React.createClass({
                     <div className="mx_RoomHeader_avatarPicker_edit">
                         <label htmlFor="avatarInput" ref="file_label">
                             <img src="img/camera.svg"
-                                alt={_t("Upload avatar")} title={_t("Upload avatar")}
-                                width="17" height="15" />
+                                 alt={_t("Upload avatar")} title={_t("Upload avatar")}
+                                 width="17" height="15" />
                         </label>
                         <input id="avatarInput" type="file" onChange={this.onAvatarSelected} />
+                    </div>
+                    <div className="mx_RoomHeader_avatarPicker_remove" onClick={this.onAvatarRemoveClick}>
+                        <img src="img/cancel.svg" width="10"
+                             alt={_t("Remove avatar")} title={_t("Remove avatar")} />
                     </div>
                 </div>
             );
@@ -287,6 +298,13 @@ module.exports = React.createClass({
             settingsButton =
                 <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onSettingsClick} title={_t("Settings")}>
                     <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
+                </AccessibleButton>;
+        }
+
+        if (this.props.onPinnedClick && UserSettingsStore.isFeatureEnabled('feature_pinning')) {
+            pinnedEventsButton =
+                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onPinnedClick} title={_t("Pinned Messages")}>
+                    <TintableSvg src="img/icons-pin.svg" width="16" height="16" />
                 </AccessibleButton>;
         }
 
@@ -334,6 +352,7 @@ module.exports = React.createClass({
             rightRow =
                 <div className="mx_RoomHeader_rightRow">
                     { settingsButton }
+                    { pinnedEventsButton }
                     { manageIntegsButton }
                     { forgetButton }
                     { searchButton }

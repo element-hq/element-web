@@ -626,22 +626,49 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     _renderUserOptions: function() {
-        // Only allow the user to ignore the user if its not ourselves
+        const cli = this.props.matrixClient;
+        const member = this.props.member;
+
         let ignoreButton = null;
-        if (this.props.member.userId !== this.props.matrixClient.getUserId()) {
+        let readReceiptButton = null;
+
+        // Only allow the user to ignore the user if its not ourselves
+        // same goes for jumping to read receipt
+        if (member.userId !== cli.getUserId()) {
             ignoreButton = (
                 <AccessibleButton onClick={this.onIgnoreToggle} className="mx_MemberInfo_field">
                     { this.state.isIgnoring ? _t("Unignore") : _t("Ignore") }
                 </AccessibleButton>
             );
+
+            if (member.roomId) {
+                const room = cli.getRoom(member.roomId);
+                const eventId = room.getEventReadUpTo(member.userId);
+
+                const onReadReceiptButton = function() {
+                    dis.dispatch({
+                        action: 'view_room',
+                        highlighted: true,
+                        event_id: eventId,
+                        room_id: member.roomId,
+                    });
+                };
+
+                readReceiptButton = (
+                    <AccessibleButton onClick={onReadReceiptButton} className="mx_MemberInfo_field">
+                        { _t('Jump to read receipt') }
+                    </AccessibleButton>
+                );
+            }
         }
 
-        if (!ignoreButton) return null;
+        if (!ignoreButton && !readReceiptButton) return null;
 
         return (
             <div>
                 <h3>{ _t("User Options") }</h3>
                 <div className="mx_MemberInfo_buttons">
+                    { readReceiptButton }
                     { ignoreButton }
                 </div>
             </div>

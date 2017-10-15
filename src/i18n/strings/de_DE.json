@@ -728,7 +728,7 @@
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and device %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "WARNUNG: SCHLÜSSEL-VERIFIZIERUNG FEHLGESCHLAGEN! Der Signatur-Schlüssel für %(userId)s und das Gerät %(deviceId)s ist \"%(fprint)s\", welcher nicht mit dem bereitgestellten Schlüssel \"%(fingerprint)s\" übereinstimmt. Dies kann bedeuten, dass deine Kommunikation abgehört wird!",
     "You have <a>disabled</a> URL previews by default.": "Du hast die URL-Vorschau standardmäßig <a>deaktiviert</a>.",
     "You have <a>enabled</a> URL previews by default.": "Du hast die URL-Vorschau standardmäßig <a>aktiviert</a>.",
-    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName hat das Raum-Bild geändert zu <img/>",
+    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s hat das Raum-Bild geändert zu <img/>",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s hat das Raum-Bild für %(roomName)s geändert",
     "Hide removed messages": "Gelöschte Nachrichten verbergen",
     "Start new chat": "Neuen Chat starten",

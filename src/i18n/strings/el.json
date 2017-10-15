@@ -639,7 +639,7 @@
     "Disable URL previews by default for participants in this room": "Απενεργοποίηση της προεπισκόπησης συνδέσμων για όλους τους συμμετέχοντες στο δωμάτιο",
     "Disable URL previews for this room (affects only you)": "Απενεργοποίηση της προεπισκόπησης συνδέσμων για αυτό το δωμάτιο (επηρεάζει μόνο εσάς)",
     " (unsupported)": " (μη υποστηριζόμενο)",
-    "$senderDisplayName changed the room avatar to <img/>": "Ο $senderDisplayName άλλαξε την εικόνα του δωματίου σε <img/>",
+    "%(senderDisplayName)s changed the room avatar to <img/>": "Ο %(senderDisplayName)s άλλαξε την εικόνα του δωματίου σε <img/>",
     "Missing Media Permissions, click here to request.": "Λείπουν τα δικαιώματα πολύμεσων, κάντε κλικ για να ζητήσετε.",
     "You may need to manually permit Riot to access your microphone/webcam": "Μπορεί να χρειαστεί να ορίσετε χειροκίνητα την πρόσβαση του Riot στο μικρόφωνο/κάμερα",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Δεν είναι δυνατή η σύνδεση στον διακομιστή - παρακαλούμε ελέγξτε την συνδεσιμότητα, βεβαιωθείτε ότι το <a>πιστοποιητικό SSL</a> του διακομιστή είναι έμπιστο και ότι κάποιο πρόσθετο περιηγητή δεν αποτρέπει τα αιτήματα.",

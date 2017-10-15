@@ -743,7 +743,7 @@
     "Start chatting": "이야기하기",
     "Start Chatting": "이야기하기",
     "Click on the button below to start chatting!": "이야기하려면 아래 버튼을 누르세요!",
-    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName님이 방 아바타를 <img/>로 바꾸셨어요",
+    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s님이 방 아바타를 <img/>로 바꾸셨어요",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s님이 방 아바타를 지우셨어요.",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s가 %(roomName)s 방의 아바타를 바꾸셨어요",
     "Username available": "쓸 수 있는 사용자 이름",

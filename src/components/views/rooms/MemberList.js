@@ -146,8 +146,8 @@ module.exports = React.createClass({
         const newState = {
             members: this.roomMembers(),
         };
-        newState.filteredJoinedMembers = this._filterMembers(newState.members, 'join');
-        newState.filteredInvitedMembers = this._filterMembers(newState.members, 'invite');
+        newState.filteredJoinedMembers = this._filterMembers(newState.members, 'join', this.state.searchQuery);
+        newState.filteredInvitedMembers = this._filterMembers(newState.members, 'invite', this.state.searchQuery);
         this.setState(newState);
     }, 500),
 
@@ -187,7 +187,7 @@ module.exports = React.createClass({
             const user_id = all_user_ids[i];
             const m = all_members[user_id];
 
-            if (m.membership == 'join' || m.membership == 'invite') {
+            if (m.membership === 'join' || m.membership === 'invite') {
                 if ((ConferenceHandler && !ConferenceHandler.isConferenceUser(user_id)) || !ConferenceHandler) {
                     to_display.push(user_id);
                     ++count;
@@ -302,6 +302,7 @@ module.exports = React.createClass({
             const m = this.memberDict[userId];
 
             if (query) {
+                query = query.toLowerCase();
                 const matchesName = m.name.toLowerCase().indexOf(query) !== -1;
                 const matchesId = m.userId.toLowerCase().indexOf(query) !== -1;
 
@@ -310,7 +311,7 @@ module.exports = React.createClass({
                 }
             }
 
-            return m.membership == membership;
+            return m.membership === membership;
         });
     },
 
