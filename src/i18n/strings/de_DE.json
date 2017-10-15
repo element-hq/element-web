@@ -218,5 +218,10 @@
     "Filter results": "Ergebnisse filtern",
     "You must specify an event type!": "Du musst einen Event-Typ spezifizieren!",
     "Add room to this group": "Raum zu dieser Gruppe hinzufügen",
-    "Show message in desktop notification": "Nachricht in der Desktop-Benachrichtigung anzeigen"
+    "Show message in desktop notification": "Nachricht in der Desktop-Benachrichtigung anzeigen",
+    "Pin Message": "Nachricht anheften",
+    "Unpin Message": "Nachricht nicht mehr anheften",
+    "Jump to message": "Springe zur Nachricht",
+    "No pinned messages.": "Keine angehefteten Nachrichten.",
+    "Loading...": "Lade..."
 }
