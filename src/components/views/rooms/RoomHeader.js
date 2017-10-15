@@ -31,6 +31,7 @@ import linkifyMatrix from '../../../linkify-matrix';
 import AccessibleButton from '../elements/AccessibleButton';
 import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
+import UserSettingsStore from "../../../UserSettingsStore";
 
 linkifyMatrix(linkify);
 
@@ -45,6 +46,7 @@ module.exports = React.createClass({
         inRoom: React.PropTypes.bool,
         collapsedRhs: React.PropTypes.bool,
         onSettingsClick: React.PropTypes.func,
+        onPinnedClick: React.PropTypes.func,
         onSaveClick: React.PropTypes.func,
         onSearchClick: React.PropTypes.func,
         onLeaveClick: React.PropTypes.func,
@@ -176,6 +178,7 @@ module.exports = React.createClass({
         let spinner = null;
         let saveButton = null;
         let settingsButton = null;
+        let pinnedEventsButton = null;
 
         let canSetRoomName;
         let canSetRoomAvatar;
@@ -298,6 +301,13 @@ module.exports = React.createClass({
                 </AccessibleButton>;
         }
 
+        if (this.props.onPinnedClick && UserSettingsStore.isFeatureEnabled('feature_pinning')) {
+            pinnedEventsButton =
+                <AccessibleButton className="mx_RoomHeader_button" onClick={this.props.onPinnedClick} title={_t("Pinned Messages")}>
+                    <TintableSvg src="img/icons-pin.svg" width="16" height="16" />
+                </AccessibleButton>;
+        }
+
 //        var leave_button;
 //        if (this.props.onLeaveClick) {
 //            leave_button =
@@ -342,6 +352,7 @@ module.exports = React.createClass({
             rightRow =
                 <div className="mx_RoomHeader_rightRow">
                     { settingsButton }
+                    { pinnedEventsButton }
                     { manageIntegsButton }
                     { forgetButton }
                     { searchButton }
