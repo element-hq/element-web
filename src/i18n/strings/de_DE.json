@@ -992,5 +992,6 @@
     "Invites sent": "Einladungen gesendet",
     "Your group invitations have been sent.": "Deine Gruppen-Einladungen wurden gesendet.",
     "Remove avatar": "Profilbild entfernen",
-    "Disable big emoji in chat": "Deaktiviere vergrößertes Emoji im Chat"
+    "Disable big emoji in chat": "Große Emojis im Chat deaktiveren",
+    "There's no one else here! Would you like to <a>invite others</a> or <a>stop warning about the empty room</a>?": "Sonst ist hier niemand! Möchtest Du <a>Benutzer einladen</a> oder die <a>Warnungen über den leeren Raum deaktivieren</a>?"
 }
