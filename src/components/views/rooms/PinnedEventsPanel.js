@@ -71,6 +71,25 @@ module.exports = React.createClass({
                 this.setState({ loading: false, pinned });
             });
         }
+
+        this._updateReadState();
+    },
+
+    _updateReadState: function() {
+        const pinnedEvents = this.props.room.currentState.getStateEvents("m.room.pinned_events", "");
+        if (!pinnedEvents) return; // nothing to read
+
+        let lastReadEvent = null;
+        const readPinsEvent = this.props.room.getAccountData("im.vector.room.read_pins");
+        if (readPinsEvent) {
+            lastReadEvent = readPinsEvent.getContent().last_read_id;
+        }
+
+        if (lastReadEvent !== pinnedEvents.getId()) {
+            MatrixClientPeg.get().setRoomAccountData(this.props.room.roomId, "im.vector.room.read_pins", {
+                last_read_id: pinnedEvents.getId(),
+            });
+        }
     },
 
     _getPinnedTiles: function() {
