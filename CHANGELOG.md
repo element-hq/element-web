@@ -1,3 +1,9 @@
+Changes in [0.10.7](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.7) (2017-10-16)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.7-rc.3...v0.10.7)
+
+ * Update to latest js-sdk
+
 Changes in [0.10.7-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.7-rc.3) (2017-10-13)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.7-rc.2...v0.10.7-rc.3)
