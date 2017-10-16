@@ -56,6 +56,8 @@ limitations under the License.
     overflow: hidden;
     font-size: 14px;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 135px;
 }
 
 .mx_EntityTile_details {
@@ -66,8 +68,6 @@ limitations under the License.
 
 .mx_EntityTile_name_hover {
     font-size: 13px;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .mx_EntityTile_chevron {
