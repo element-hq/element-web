@@ -997,5 +997,6 @@
     "Pinned Messages": "Angeheftete Nachrichten",
     "%(senderName)s changed the pinned messages for the room.": "%(senderName)s hat die angehefteten Nachrichten für diesen Raum geändert.",
     "Jump to read receipt": "Zur Lesebestätigung springen",
-    "Message Pinning": "Nachricht-Anheftung"
+    "Message Pinning": "Nachricht-Anheftung",
+    "Add rooms to this group": "Füge Räume zu dieser Gruppe hinzu"
 }
