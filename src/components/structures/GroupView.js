@@ -70,7 +70,7 @@ const CategoryRoomList = React.createClass({
         ev.preventDefault();
         const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
         Modal.createTrackedDialog('Add Rooms to Group Summary', '', AddressPickerDialog, {
-            title: _t('Add rooms to the group summary'),
+            title: _t('Add rooms to the community summary'),
             description: _t("Which rooms would you like to add to this summary?"),
             placeholder: _t("Room name or alias"),
             button: _t("Add to summary"),
@@ -246,7 +246,7 @@ const RoleUserList = React.createClass({
         ev.preventDefault();
         const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
         Modal.createTrackedDialog('Add Users to Group Summary', '', AddressPickerDialog, {
-            title: _t('Add users to the group summary'),
+            title: _t('Add users to the community summary'),
             description: _t("Who would you like to add to this summary?"),
             placeholder: _t("Name or matrix ID"),
             button: _t("Add to summary"),
@@ -267,7 +267,7 @@ const RoleUserList = React.createClass({
                     }
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog(
-                        'Failed to add the following users to the group summary',
+                        'Failed to add the following users to the community summary',
                         '', ErrorDialog,
                     {
                         title: _t(
@@ -339,7 +339,7 @@ const FeaturedUser = React.createClass({
             const displayName = this.props.summaryInfo.displayname || this.props.summaryInfo.user_id;
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog(
-                'Failed to remove user from group summary',
+                'Failed to remove user from community summary',
                 '', ErrorDialog,
             {
                 title: _t(
@@ -537,10 +537,10 @@ export default React.createClass({
                 saving: false,
             });
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            console.error("Failed to save group profile", e);
+            console.error("Failed to save community profile", e);
             Modal.createTrackedDialog('Failed to update group', '', ErrorDialog, {
                 title: _t('Error'),
-                description: _t('Failed to update group'),
+                description: _t('Failed to update community'),
             });
         }).done();
     },
@@ -576,7 +576,7 @@ export default React.createClass({
     _onLeaveClick: function() {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createTrackedDialog('Leave Group', '', QuestionDialog, {
-            title: _t("Leave Group"),
+            title: _t("Leave Community"),
             description: _t("Leave %(groupName)s?", {groupName: this.props.groupId}),
             button: _t("Leave"),
             danger: true,
@@ -631,12 +631,12 @@ export default React.createClass({
                     <TintableSvg src="img/icons-room-add.svg" width="24" height="24" />
                 </div>
                 <div className="mx_GroupView_rooms_header_addButton_label">
-                    { _t('Add rooms to this group') }
+                    { _t('Add rooms to this community') }
                 </div>
             </AccessibleButton>) : <div />;
         return <div className="mx_GroupView_rooms">
             <div className="mx_GroupView_rooms_header">
-                <h3>Rooms</h3>
+                <h3>{ _t('Rooms') }</h3>
                 { addButton }
             </div>
             <RoomDetailList rooms={this._groupStore.getGroupRooms()} />
@@ -740,7 +740,7 @@ export default React.createClass({
 
             return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_invited">
                 <div className="mx_GroupView_membershipSection_description">
-                    { _t("%(inviter)s has invited you to join this group", {inviter: group.inviter.userId}) }
+                    { _t("%(inviter)s has invited you to join this community", {inviter: group.inviter.userId}) }
                 </div>
                 <div className="mx_GroupView_membership_buttonContainer">
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
@@ -756,9 +756,9 @@ export default React.createClass({
                 </div>
             </div>;
         } else if (group.myMembership === 'join') {
-            let youAreAMemberText = _t("You are a member of this group");
+            let youAreAMemberText = _t("You are a member of this community");
             if (this.state.summary.user && this.state.summary.user.is_privileged) {
-                youAreAMemberText = _t("You are an administrator of this group");
+                youAreAMemberText = _t("You are an administrator of this community");
             }
 
             let publicisedButton;
@@ -776,7 +776,7 @@ export default React.createClass({
                         </AccessibleButton>;
                 }
                 publicisedSection = <div className="mx_GroupView_membershipSubSection">
-                    { _t("This group is published on your profile") }
+                    { _t("This community is published on your profile") }
                     <div className="mx_GroupView_membership_buttonContainer">
                         { publicisedButton }
                     </div>
@@ -790,7 +790,7 @@ export default React.createClass({
                     </AccessibleButton>;
                 }
                 publicisedSection = <div className="mx_GroupView_membershipSubSection">
-                    { _t("This group is not published on your profile") }
+                    { _t("This community is not published on your profile") }
                     <div className="mx_GroupView_membership_buttonContainer">
                         { publicisedButton }
                     </div>
@@ -865,7 +865,7 @@ export default React.createClass({
                 nameNode = <input type="text"
                     value={this.state.profileForm.name}
                     onChange={this._onNameChange}
-                    placeholder={_t('Group Name')}
+                    placeholder={_t('Community Name')}
                     tabIndex="1"
                 />;
                 shortDescNode = <input type="text"
@@ -929,7 +929,7 @@ export default React.createClass({
                 if (summary.user && summary.user.is_privileged) {
                     rightButtons.push(
                         <AccessibleButton className="mx_GroupHeader_button"
-                            onClick={this._onEditClick} title={_t("Edit Group")} key="_editButton"
+                            onClick={this._onEditClick} title={_t("Edit Community")} key="_editButton"
                         >
                             <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
                         </AccessibleButton>,
@@ -977,17 +977,17 @@ export default React.createClass({
             if (this.state.error.httpStatus === 404) {
                 return (
                     <div className="mx_GroupView_error">
-                        Group { this.props.groupId } not found
+                        { _t('Community (%groupId)s not found', {groupId: this.props.groupId}) }
                     </div>
                 );
             } else {
                 let extraText;
                 if (this.state.error.errcode === 'M_UNRECOGNIZED') {
-                    extraText = <div>{ _t('This Home server does not support groups') }</div>;
+                    extraText = <div>{ _t('This Home server does not support communities') }</div>;
                 }
                 return (
                     <div className="mx_GroupView_error">
-                        Failed to load { this.props.groupId }
+                        { _t('Failed to load %(groupId)', {groupId: this.props.groupId }) }
                         { extraText }
                     </div>
                 );
