@@ -35,7 +35,9 @@ export default withMatrixClient(React.createClass({
     getInitialState: function() {
         return {
             fetching: false,
+            fetchingInvitedMembers: false,
             members: null,
+            invitedMembers: null,
             truncateAt: INITIAL_LOAD_NUM_MEMBERS,
         };
     },
@@ -46,7 +48,10 @@ export default withMatrixClient(React.createClass({
     },
 
     _fetchMembers: function() {
-        this.setState({fetching: true});
+        this.setState({
+            fetching: true,
+            fetchingInvitedMembers: true,
+        });
         this.props.matrixClient.getGroupUsers(this.props.groupId).then((result) => {
             this.setState({
                 members: result.chunk.map((apiMember) => {
@@ -57,6 +62,18 @@ export default withMatrixClient(React.createClass({
         }).catch((e) => {
             this.setState({fetching: false});
             console.error("Failed to get group member list: " + e);
+        });
+
+        this.props.matrixClient.getGroupInvitedUsers(this.props.groupId).then((result) => {
+            this.setState({
+                invitedMembers: result.chunk.map((apiMember) => {
+                    return groupMemberFromApiObject(apiMember);
+                }),
+                fetchingInvitedMembers: false,
+            });
+        }).catch((e) => {
+            this.setState({fetchingInvitedMembers: false});
+            console.error("Failed to get group invited member list: " + e);
         });
     },
 
@@ -83,11 +100,10 @@ export default withMatrixClient(React.createClass({
         this.setState({ searchQuery: ev.target.value });
     },
 
-    makeGroupMemberTiles: function(query) {
+    makeGroupMemberTiles: function(query, memberList) {
         const GroupMemberTile = sdk.getComponent("groups.GroupMemberTile");
+        const TruncatedList = sdk.getComponent("elements.TruncatedList");
         query = (query || "").toLowerCase();
-
-        let memberList = this.state.members;
         if (query) {
             memberList = memberList.filter((m) => {
                 const matchesName = m.displayname.toLowerCase().indexOf(query) !== -1;
@@ -118,17 +134,19 @@ export default withMatrixClient(React.createClass({
             }
         });
 
-        return memberList;
+        return <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
+            createOverflowElement={this._createOverflowTile}
+        >
+            { memberList }
+        </TruncatedList>;
     },
 
     render: function() {
-        if (this.state.fetching) {
+        if (this.state.fetching || this.state.fetchingInvitedMembers) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return (<div className="mx_MemberList">
                 <Spinner />
             </div>);
-        } else if (this.state.members === null) {
-            return null;
         }
 
         const inputBox = (
@@ -139,15 +157,21 @@ export default withMatrixClient(React.createClass({
             </form>
         );
 
-        const TruncatedList = sdk.getComponent("elements.TruncatedList");
+        const joined = this.state.members ? <div className="mx_MemberList_joined">
+            { this.makeGroupMemberTiles(this.state.searchQuery, this.state.members) }
+        </div> : <div />;
+
+        const invited = this.state.invitedMembers ? <div className="mx_MemberList_invited">
+            <h2>{ _t("Invited") }</h2>
+            { this.makeGroupMemberTiles(this.state.searchQuery, this.state.invitedMembers) }
+        </div> : <div />;
+
         return (
             <div className="mx_MemberList">
                 { inputBox }
-                <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
-                    <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
-                            createOverflowElement={this._createOverflowTile}>
-                        { this.makeGroupMemberTiles(this.state.searchQuery) }
-                    </TruncatedList>
+                <GeminiScrollbar autoshow={true} className="mx_MemberList_outerWrapper">
+                    { joined }
+                    { invited }
                 </GeminiScrollbar>
             </div>
         );
