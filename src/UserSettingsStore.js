@@ -30,6 +30,10 @@ const FEATURES = [
         id: 'feature_groups',
         name: _td("Communities"),
     },
+    {
+        id: 'feature_pinning',
+        name: _td("Message Pinning"),
+    },
 ];
 
 export default {
@@ -96,6 +100,17 @@ export default {
             return;
         }
         Notifier.setEnabled(enable);
+    },
+
+    getEnableNotificationBody: function() {
+        return Notifier.isBodyEnabled();
+    },
+
+    setEnableNotificationBody: function(enable) {
+        if (!Notifier.supportsDesktopNotifications()) {
+            return;
+        }
+        Notifier.setBodyEnabled(enable);
     },
 
     getEnableAudioNotifications: function() {

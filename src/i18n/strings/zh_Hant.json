@@ -228,7 +228,7 @@
     "Idle": "閒置",
     "Offline": "下線",
     "Disable URL previews for this room (affects only you)": "在這個房間禁止URL預覽（只影響你）",
-    "$senderDisplayName changed the room avatar to <img/>": "$senderDisplayName 更改了聊天室的圖像為 <img/>",
+    "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s 更改了聊天室的圖像為 <img/>",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s 移除了聊天室圖片。",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s 更改了聊天室 %(roomName)s　圖像",
     "Cancel": "取消",
