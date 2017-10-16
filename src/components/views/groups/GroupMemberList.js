@@ -36,6 +36,7 @@ export default withMatrixClient(React.createClass({
         return {
             fetching: false,
             members: null,
+            invited_members: null,
             truncateAt: INITIAL_LOAD_NUM_MEMBERS,
         };
     },
@@ -57,6 +58,18 @@ export default withMatrixClient(React.createClass({
         }).catch((e) => {
             this.setState({fetching: false});
             console.error("Failed to get group member list: " + e);
+        });
+
+        this.props.matrixClient.getGroupInvitedUsers(this.props.groupId).then((result) => {
+            this.setState({
+                invited_members: result.chunk.map((apiMember) => {
+                    return groupMemberFromApiObject(apiMember);
+                }),
+                fetching: false,
+            });
+        }).catch((e) => {
+            this.setState({fetching: false});
+            console.error("Failed to get group invited member list: " + e);
         });
     },
 
@@ -83,11 +96,9 @@ export default withMatrixClient(React.createClass({
         this.setState({ searchQuery: ev.target.value });
     },
 
-    makeGroupMemberTiles: function(query) {
+    makeGroupMemberTiles: function(query, memberList) {
         const GroupMemberTile = sdk.getComponent("groups.GroupMemberTile");
         query = (query || "").toLowerCase();
-
-        let memberList = this.state.members;
         if (query) {
             memberList = memberList.filter((m) => {
                 const matchesName = m.displayname.toLowerCase().indexOf(query) !== -1;
@@ -143,11 +154,22 @@ export default withMatrixClient(React.createClass({
         return (
             <div className="mx_MemberList">
                 { inputBox }
-                <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
-                    <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
-                            createOverflowElement={this._createOverflowTile}>
-                        { this.makeGroupMemberTiles(this.state.searchQuery) }
-                    </TruncatedList>
+                <GeminiScrollbar autoshow={true} className="mx_MemberList_outerWrapper">
+                    <div className="mx_MemberList_joined">
+                        <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
+                                createOverflowElement={this._createOverflowTile}>
+                            { this.makeGroupMemberTiles(this.state.searchQuery, this.state.members) }
+                        </TruncatedList>
+                    </div>
+                    <div className="mx_MemberList_invited">
+                        <h2>{ _t("Invited") }</h2>
+                        <div className="mx_MemberList_wrapper">
+                            <TruncatedList truncateAt={this.state.truncateAt}
+                                    createOverflowElement={this._createOverflowTile}>
+                                { this.makeGroupMemberTiles(this.state.searchQuery, this.state.invited_members) }
+                            </TruncatedList>
+                        </div>
+                    </div>
                 </GeminiScrollbar>
             </div>
         );
