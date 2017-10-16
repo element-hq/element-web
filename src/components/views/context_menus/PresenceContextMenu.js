@@ -34,6 +34,7 @@ const PresenceContextMenuOption = React.createClass({
     },
 
     onClick: function() {
+        if (this.isCurrent) return;
         this.props.onChange(this.props.forStatus);
     },
 
