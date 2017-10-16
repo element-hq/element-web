@@ -1,3 +1,9 @@
+Changes in [0.12.7](https://github.com/vector-im/riot-web/releases/tag/v0.12.7) (2017-10-16)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7-rc.3...v0.12.7)
+
+ * Released versions of react-sdk & js-sdk
+
 Changes in [0.12.7-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.12.7-rc.3) (2017-10-13)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7-rc.2...v0.12.7-rc.3)
