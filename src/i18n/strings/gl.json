@@ -219,7 +219,6 @@
     "Set Password": "Establecer contrasinal",
     "Couldn't load home page": "Non se cargou a páxina de inicio",
     "Invite to this group": "Convidar a este grupo",
-    "Add room to this group": "Engadir sala a este grupo",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Pode que os configurase nun cliente diferente de Riot. Non pode establecelos desde Riot pero aínda así aplicaranse",
     "Riot/Android &amp; matrix-android-sdk chat": "Chat para Riot/Android &amp; matrix-android-sdk"
 }
