@@ -216,6 +216,5 @@
     "State Key": "Status-Schlüssel",
     "Invite to this group": "In diese Gruppe einladen",
     "Filter results": "Ergebnisse filtern",
-    "You must specify an event type!": "Du musst einen Event-Typ spezifizieren!",
-    "Add room to this group": "Raum zu dieser Gruppe hinzufügen"
+    "You must specify an event type!": "Du musst einen Event-Typ spezifizieren!"
 }

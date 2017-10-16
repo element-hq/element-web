@@ -330,7 +330,7 @@ module.exports = React.createClass({
                     <div className="mx_RightPanel_icon" >
                         <TintableSvg src="img/icons-room-add.svg" width="35" height="35" />
                     </div>
-                    <div className="mx_RightPanel_message">{ _t('Add room to this group') }</div>
+                    <div className="mx_RightPanel_message">{ _t('Add rooms to this group') }</div>
                 </AccessibleButton>
             );
         }
