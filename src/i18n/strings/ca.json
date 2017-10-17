@@ -61,5 +61,7 @@
     "Thursday": "Dijous",
     "Friday": "Divendres",
     "Saturday": "Dissabte",
-    "OK": "D'acord"
+    "OK": "D'acord",
+    "a room": "una sala",
+    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "S'ha enviat un missatge de text a +%(msisdn)s. Entreu si us plau el codi de verificació que conté"
 }
