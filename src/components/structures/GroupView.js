@@ -600,22 +600,15 @@ export default React.createClass({
         });
     },
 
-    _onPubliciseOffClick: function() {
-        this._setPublicity(false);
-    },
-
-    _onPubliciseOnClick: function() {
-        this._setPublicity(true);
-    },
-
     _onAddRoomsClick: function() {
         showGroupAddRoomDialog(this.props.groupId);
     },
 
-    _setPublicity: function(publicity) {
+    _onPublicityToggle: function() {
         this.setState({
             publicityBusy: true,
         });
+        const publicity = !this.state.isGroupPublicised;
         this._groupStore.setGroupPublicity(publicity).then(() => {
             this.setState({
                 publicityBusy: false,
@@ -739,7 +732,6 @@ export default React.createClass({
                     <Spinner />
                 </div>;
             }
-
             return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_invited">
                 <div className="mx_GroupView_membershipSubSection">
                     <div className="mx_GroupView_membershipSection_description">
@@ -760,81 +752,93 @@ export default React.createClass({
                 </div>
             </div>;
         } else if (group.myMembership === 'join' && this.state.editing) {
-            let youAreAMemberText = _t("You are a member of this group");
-            if (this.state.summary.user && this.state.summary.user.is_privileged) {
-                youAreAMemberText = _t("You are an administrator of this group");
-            }
-
-            let publicisedButton;
-            if (this.state.publicityBusy) {
-                publicisedButton = <Spinner />;
-            }
-
-            let publicisedSection;
-            if (this.state.summary.user && this.state.summary.user.is_publicised) {
-                if (!this.state.publicityBusy) {
-                    publicisedButton = <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
-                            onClick={this._onPubliciseOffClick}
-                        >
-                            { _t("Unpublish") }
-                        </AccessibleButton>;
-                }
-                publicisedSection = <div className="mx_GroupView_membershipSubSection">
-                    { _t("This group is published on your profile") }
-                    <div className="mx_GroupView_membership_buttonContainer">
-                        { publicisedButton }
-                    </div>
-                </div>;
-            } else {
-                if (!this.state.publicityBusy) {
-                    publicisedButton = <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
-                        onClick={this._onPubliciseOnClick}
-                    >
-                        { _t("Publish") }
-                    </AccessibleButton>;
-                }
-                publicisedSection = <div className="mx_GroupView_membershipSubSection">
-                    { _t("This group is not published on your profile") }
-                    <div className="mx_GroupView_membership_buttonContainer">
-                        { publicisedButton }
-                    </div>
-                </div>;
-            }
-
+            const leaveButtonTooltip = this.state.isUserPrivileged ?
+                _t("You are a member of this group") :
+                _t("You are an administrator of this group");
+            const leaveButtonClasses = classnames({
+                "mx_RoomHeader_textButton": true,
+                "mx_GroupView_textButton": true,
+                "mx_GroupView_leaveButton": true,
+                "mx_RoomHeader_textButton_danger": this.state.isUserPrivileged,
+            });
             return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_joined">
                 <div className="mx_GroupView_membershipSubSection">
-                    <div className="mx_GroupView_membershipSection_description">
-                        { youAreAMemberText }
-                    </div>
+                    { /* Empty div for flex alignment */ }
+                    <div />
                     <div className="mx_GroupView_membership_buttonContainer">
-                        <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
+                        <AccessibleButton
+                            className={leaveButtonClasses}
                             onClick={this._onLeaveClick}
+                            title={leaveButtonTooltip}
                         >
                             { _t("Leave") }
                         </AccessibleButton>
                     </div>
                 </div>
-                { publicisedSection }
             </div>;
         }
-
         return null;
+    },
+
+    _getMemberSettingsSection: function() {
+        return <div className="mx_GroupView_memberSettings">
+            <h3> { _t("Community Member Settings") } </h3>
+            <div className="mx_GroupView_memberSettings_toggle">
+                <input type="checkbox"
+                    onClick={this._onPublicityToggle}
+                    checked={this.state.isGroupPublicised}
+                    tabIndex="3"
+                    id="isGroupPublicised"
+                />
+                <label htmlFor="isGroupPublicised"
+                    onClick={this._onPublicityToggle}
+                >
+                    { _t("Publish this community on your profile") }
+                </label>
+            </div>
+        </div>;
+    },
+
+    _getLongDescriptionNode: function() {
+        const summary = this.state.summary;
+        let description = null;
+        if (summary.profile && summary.profile.long_description) {
+            description = sanitizedHtmlNode(summary.profile.long_description);
+        }
+        return this.state.editing && this.state.isUserPrivileged ?
+            <div className="mx_GroupView_groupDesc">
+                <h3> { _t("Long Description (HTML)") } </h3>
+                <textarea
+                    value={this.state.profileForm.long_description}
+                    onChange={this._onLongDescChange}
+                    tabIndex="4"
+                    key="editLongDesc"
+                />
+            </div> :
+            <div className="mx_GroupView_groupDesc">
+                { description }
+            </div>;
     },
 
     render: function() {
         const GroupAvatar = sdk.getComponent("avatars.GroupAvatar");
-        const Loader = sdk.getComponent("elements.Spinner");
+        const Spinner = sdk.getComponent("elements.Spinner");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         if (this.state.summary === null && this.state.error === null || this.state.saving) {
-            return <Loader />;
+            return <Spinner />;
         } else if (this.state.summary) {
             const summary = this.state.summary;
 
             let avatarNode;
             let nameNode;
             let shortDescNode;
-            let bodyNodes = [];
+            const bodyNodes = [
+                this._getMembershipSection(),
+                this.state.editing ? this._getMemberSettingsSection() : null,
+                this._getLongDescriptionNode(),
+                this._getRoomsNode(),
+            ];
             const rightButtons = [];
             const headerClasses = {
                 mx_GroupView_header: true,
@@ -842,7 +846,7 @@ export default React.createClass({
             if (this.state.editing) {
                 let avatarImage;
                 if (this.state.uploadingAvatar) {
-                    avatarImage = <Loader />;
+                    avatarImage = <Spinner />;
                 } else {
                     const GroupAvatar = sdk.getComponent('avatars.GroupAvatar');
                     avatarImage = <GroupAvatar groupId={this.props.groupId}
@@ -891,16 +895,6 @@ export default React.createClass({
                             width="18" height="18" alt={_t("Cancel")} />
                     </AccessibleButton>,
                 );
-                bodyNodes = [
-                    this._getMembershipSection(),
-                    <textarea className="mx_GroupView_editLongDesc"
-                        value={this.state.profileForm.long_description}
-                        onChange={this._onLongDescChange}
-                        tabIndex="3"
-                        key="editLongDesc"
-                    />,
-                    this._getRoomsNode(),
-                ];
             } else {
                 const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;
                 avatarNode = <GroupAvatar
@@ -921,25 +915,13 @@ export default React.createClass({
                 if (summary.profile && summary.profile.short_description) {
                     shortDescNode = <span>{ summary.profile.short_description }</span>;
                 }
-
-                let description = null;
-                if (summary.profile && summary.profile.long_description) {
-                    description = sanitizedHtmlNode(summary.profile.long_description);
-                }
-                bodyNodes = [
-                    this._getMembershipSection(),
-                    <div key="groupDesc" className="mx_GroupView_groupDesc">{ description }</div>,
-                    this._getRoomsNode(),
-                ];
-                if (summary.user && summary.user.is_privileged) {
-                    rightButtons.push(
-                        <AccessibleButton className="mx_GroupHeader_button"
-                            onClick={this._onEditClick} title={_t("Edit Group")} key="_editButton"
-                        >
-                            <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
-                        </AccessibleButton>,
-                    );
-                }
+                rightButtons.push(
+                    <AccessibleButton className="mx_GroupHeader_button"
+                        onClick={this._onEditClick} title={_t("Community Settings")} key="_editButton"
+                    >
+                        <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
+                    </AccessibleButton>,
+                );
                 if (this.props.collapsedRhs) {
                     rightButtons.push(
                         <AccessibleButton className="mx_GroupHeader_button"
