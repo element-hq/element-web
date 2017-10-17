@@ -739,20 +739,22 @@ export default React.createClass({
             }
 
             return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_invited">
-                <div className="mx_GroupView_membershipSection_description">
-                    { _t("%(inviter)s has invited you to join this group", {inviter: group.inviter.userId}) }
-                </div>
-                <div className="mx_GroupView_membership_buttonContainer">
-                    <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
-                        onClick={this._onAcceptInviteClick}
-                    >
-                        { _t("Accept") }
-                    </AccessibleButton>
-                    <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
-                        onClick={this._onRejectInviteClick}
-                    >
-                        { _t("Decline") }
-                    </AccessibleButton>
+                <div className="mx_GroupView_membershipSubSection">
+                    <div className="mx_GroupView_membershipSection_description">
+                        { _t("%(inviter)s has invited you to join this group", {inviter: group.inviter.userId}) }
+                    </div>
+                    <div className="mx_GroupView_membership_buttonContainer">
+                        <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
+                            onClick={this._onAcceptInviteClick}
+                        >
+                            { _t("Accept") }
+                        </AccessibleButton>
+                        <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
+                            onClick={this._onRejectInviteClick}
+                        >
+                            { _t("Decline") }
+                        </AccessibleButton>
+                    </div>
                 </div>
             </div>;
         } else if (group.myMembership === 'join') {
