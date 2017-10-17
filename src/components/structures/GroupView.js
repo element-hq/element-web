@@ -524,8 +524,15 @@ export default React.createClass({
     },
 
     _onSaveClick: function() {
+        const newGroupProfile = this.state.profileForm;
+        // Synapse is not expecting `null`, so map unset values to the empty string
+        Object.keys(newGroupProfile).forEach((k) => {
+            if (!newGroupProfile[k]) {
+                newGroupProfile[k] = '';
+            }
+        });
         this.setState({saving: true});
-        MatrixClientPeg.get().setGroupProfile(this.props.groupId, this.state.profileForm).then((result) => {
+        MatrixClientPeg.get().setGroupProfile(this.props.groupId, newGroupProfile).then((result) => {
             this.setState({
                 saving: false,
                 editing: false,
