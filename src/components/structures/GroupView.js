@@ -890,6 +890,7 @@ export default React.createClass({
                     </AccessibleButton>,
                 );
                 bodyNodes = [
+                    this._getMembershipSection(),
                     <textarea className="mx_GroupView_editLongDesc"
                         value={this.state.profileForm.long_description}
                         onChange={this._onLongDescChange}
