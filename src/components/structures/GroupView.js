@@ -757,7 +757,7 @@ export default React.createClass({
                     </div>
                 </div>
             </div>;
-        } else if (group.myMembership === 'join') {
+        } else if (group.myMembership === 'join' && this.state.editing) {
             let youAreAMemberText = _t("You are a member of this group");
             if (this.state.summary.user && this.state.summary.user.is_privileged) {
                 youAreAMemberText = _t("You are an administrator of this group");
