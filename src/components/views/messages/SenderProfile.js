@@ -27,30 +27,29 @@ export default function SenderProfile(props) {
     const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
     const {msgtype} = mxEvent.getContent();
 
-    // Display sender name by default if nothing else is given
-    const text = props.text ? props.text : '%(senderName)s';
-
     if (msgtype === 'm.emote') {
         return <span />; // emote message must include the name so don't duplicate it
     }
 
     // Name + flair
     const nameElem = [
-        <EmojiText className="mx_SenderProfile_name">{ name || '' }</EmojiText>,
+        <EmojiText key='name' className="mx_SenderProfile_name">{ name || '' }</EmojiText>,
         props.enableFlair ?
-            <Flair
+            <Flair key='flair'
                 userId={mxEvent.getSender()}
                 roomId={mxEvent.getRoomId()}
                 showRelated={true} />
             : null,
-    ]
+    ];
+
+    let content = '';
 
     if(props.text) {
         // Replace senderName, and wrap surrounding text in spans with the right class
         content = _tJsx(props.text, /^(.*)\%\(senderName\)s(.*)$/m, (p1, p2) => [
-            p1 ? <span className='mx_SenderProfile_aux'>{p1}</span> : null,
+            p1 ? <span className='mx_SenderProfile_aux'>{ p1 }</span> : null,
             nameElem,
-            p2 ? <span className='mx_SenderProfile_aux'>{p2}</span> : null,
+            p2 ? <span className='mx_SenderProfile_aux'>{ p2 }</span> : null,
         ]);
     } else {
         content = nameElem;
