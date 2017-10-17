@@ -448,8 +448,16 @@ export default React.createClass({
     _initGroupStore: function(groupId) {
         this._groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), groupId);
         this._groupStore.on('update', () => {
+            const summary = this._groupStore.getSummary();
+            if (summary.profile) {
+                // Default profile fields should be "" for later sending to the server (which
+                // requires that the fields are strings, not null)
+                ["avatar_url", "long_description", "name", "short_description"].forEach((k) => {
+                    summary.profile[k] = summary.profile[k] || "";
+                });
+            }
             this.setState({
-                summary: this._groupStore.getSummary(),
+                summary,
                 error: null,
             });
         });
@@ -524,15 +532,8 @@ export default React.createClass({
     },
 
     _onSaveClick: function() {
-        const newGroupProfile = this.state.profileForm;
-        // Synapse is not expecting `null`, so map unset values to the empty string
-        Object.keys(newGroupProfile).forEach((k) => {
-            if (!newGroupProfile[k]) {
-                newGroupProfile[k] = '';
-            }
-        });
         this.setState({saving: true});
-        MatrixClientPeg.get().setGroupProfile(this.props.groupId, newGroupProfile).then((result) => {
+        MatrixClientPeg.get().setGroupProfile(this.props.groupId, this.state.profileForm).then((result) => {
             this.setState({
                 saving: false,
                 editing: false,
