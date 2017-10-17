@@ -450,6 +450,8 @@ export default React.createClass({
         this._groupStore.on('update', () => {
             this.setState({
                 summary: this._groupStore.getSummary(),
+                isGroupPublicised: this._groupStore.getGroupPublicity(),
+                isUserPrivileged: this._groupStore.isUserPrivileged(),
                 error: null,
             });
         });
