@@ -65,7 +65,7 @@ function getTKey(arg) {
 }
 
 function getTranslations(file) {
-    const tree = flowParser.parse(fs.readFileSync(file, { encoding: 'utf8' }), FLOW_PARSER_OPTS)
+    const tree = flowParser.parse(fs.readFileSync(file, { encoding: 'utf8' }), FLOW_PARSER_OPTS);
 
     const trs = new Set();
 
