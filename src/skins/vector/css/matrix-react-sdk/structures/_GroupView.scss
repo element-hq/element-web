@@ -54,6 +54,23 @@ limitations under the License.
     pointer-events: none;
 }
 
+.mx_GroupView_editable {
+    border-bottom: 1px solid $strong-input-border-color ! important;
+    min-width: 150px;
+    cursor: text;
+}
+
+.mx_GroupView_editable:focus {
+    border-bottom: 1px solid $accent-color ! important;
+    outline: none;
+    box-shadow: none;
+}
+
+.mx_GroupView_header_name:hover div:not(.mx_GroupView_editable) {
+    color: $accent-color;
+    cursor: pointer;
+}
+
 .mx_GroupView_avatarPicker {
     position: relative;
 }
@@ -101,10 +118,6 @@ limitations under the License.
     /* why isn't text-overflow working? */
     text-overflow: ellipsis;
     border-bottom: 1px solid transparent;
-}
-
-.mx_GroupView_header_name input, .mx_GroupView_header_shortDesc input {
-    width: 400px;
 }
 
 .mx_GroupView_header_shortDesc {
