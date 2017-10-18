@@ -32,10 +32,7 @@ const estreeWalker = require('estree-walker');
 
 const TRANSLATIONS_FUNCS = ['_t', '_td', '_tJsx'];
 
-// A selection of plural variants to put in the base file: other langauges
-// with more types of plural will have more, but they will just be in the file
-// for that language.
-const COUNTSTRINGS = ['one', 'other'];
+const INPUT_TRANSLATIONS_FILE = 'src/i18n/strings/en_EN.json';
 
 const FLOW_PARSER_OPTS = {
   esproposal_class_instance_fields: true,
@@ -91,8 +88,12 @@ function getTranslations(file) {
                 }
 
                 if (isPlural) {
-                    for (const s of COUNTSTRINGS) {
-                        trs.add(tKey + "|" + s);
+                    trs.add(tKey + "|other");
+                    const plurals = enPlurals[tKey];
+                    if (plurals) {
+                        for (const pluralType of Object.keys(plurals)) {
+                            trs.add(tKey + "|" + pluralType);
+                        }
                     }
                 } else {
                     trs.add(tKey);
@@ -102,6 +103,21 @@ function getTranslations(file) {
     });
 
     return trs;
+}
+
+// gather en_EN plural strings from the input translations file:
+// the en_EN strings are all in the source with the exception of
+// pluralised strings, which we need to pull in from elsewhere.
+const inputTranslationsRaw = JSON.parse(fs.readFileSync(INPUT_TRANSLATIONS_FILE, { encoding: 'utf8' }));
+const enPlurals = {};
+
+for (const key of Object.keys(inputTranslationsRaw)) {
+    const parts = key.split("|");
+    if (parts.length > 1) {
+        const plurals = enPlurals[parts[0]] || {};
+        plurals[parts[1]] = inputTranslationsRaw[key];
+        enPlurals[parts[0]] = plurals;
+    }
 }
 
 const translatables = new Set();
@@ -124,6 +140,9 @@ walk.walkSync("src", {
 const trObj = {};
 for (const tr of translatables) {
     trObj[tr] = tr;
+    if (tr.includes("|")) {
+        trObj[tr] = inputTranslationsRaw[tr];
+    }
 }
 
 fs.writeFileSync(
