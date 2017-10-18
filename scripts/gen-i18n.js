@@ -76,6 +76,8 @@ function getTranslations(file) {
                 TRANSLATIONS_FUNCS.includes(node.callee.name)
             ) {
                 const tKey = getTKey(node.arguments[0]);
+                // This happens whenever we call _t with non-literals (ie. whenever we've
+                // had to use a _td to compensate) so is expected.
                 if (tKey === null) return;
 
                 let isPlural = false;
