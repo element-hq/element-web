@@ -998,5 +998,7 @@
     "%(senderName)s changed the pinned messages for the room.": "%(senderName)s hat die angehefteten Nachrichten für diesen Raum geändert.",
     "Jump to read receipt": "Zur Lesebestätigung springen",
     "Message Pinning": "Nachricht-Anheftung",
-    "Add rooms to this group": "Füge Räume zu dieser Gruppe hinzu"
+    "Add rooms to this group": "Füge Räume zu dieser Gruppe hinzu",
+    "Publish this community on your profile": "Veröffentliche diese Community in deinem Profil",
+    "Long Description (HTML)": "Lange Beschreibung (HTML)"
 }
