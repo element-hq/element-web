@@ -977,5 +977,19 @@
     "Try using one of the following valid address types: %(validTypesList)s.": "Попробуйте использовать один из следующих допустимых типов адресов: %(validTypesList)s.",
     "You have entered an invalid address.": "Введен неправильный адрес.",
     "Failed to remove room from group": "Не удалось удалить комнату из группы",
-    "Add rooms to this group": "Добавить комнаты в эту группу"
+    "Add rooms to this group": "Добавить комнаты в эту группу",
+    "Unpin Message": "Открепить сообщение",
+    "Jump to message": "Перейти к сообщению",
+    "No pinned messages.": "Нет прикрепленных сообщений.",
+    "Loading...": "Загрузка...",
+    "Unnamed room": "Комната без названия",
+    "World readable": "Доступно всем",
+    "Guests can join": "Гости могут присоединиться",
+    "No rooms to show": "Нет комнат для отображения",
+    "Invalid group ID": "Недопустимый ID группы",
+    "'%(groupId)s' is not a valid group ID": "'%(groupId)s' это недействительный ID группы",
+    "Community Member Settings": "Настройки участников сообщества",
+    "Publish this community on your profile": "Опубликовать это сообщество в вашем профиле",
+    "Long Description (HTML)": "Длинное описание (HTML)",
+    "Community Settings": "Настройки сообщества"
 }
