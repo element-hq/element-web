@@ -94,13 +94,30 @@ function _onGroupInviteFinished(groupId, addrs) {
 }
 
 function _onGroupAddRoomFinished(groupId, addrs) {
-    const groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), groupId);
+    const matrixClient = MatrixClientPeg.get();
+    const groupStore = GroupStoreCache.getGroupStore(matrixClient, groupId);
     const errorList = [];
     return Promise.all(addrs.map((addr) => {
         return groupStore
             .addRoomToGroup(addr.address)
             .catch(() => { errorList.push(addr.address); })
-            .reflect();
+            .then(() => {
+                const roomId = addr.address;
+                const room = matrixClient.getRoom(roomId);
+                // Can the user change related groups?
+                if (!room || !room.currentState.mayClientSendStateEvent("m.room.related_groups", matrixClient)) {
+                    return;
+                }
+                // Get the related groups
+                const relatedGroupsEvent = room.currentState.getStateEvents('m.room.related_groups', '');
+                const groups = relatedGroupsEvent ? relatedGroupsEvent.getContent().groups || [] : [];
+
+                // Add this group as related
+                if (!groups.includes(groupId)) {
+                    groups.push(groupId);
+                    return MatrixClientPeg.get().sendStateEvent(roomId, 'm.room.related_groups', {groups}, '');
+                }
+            }).reflect();
     })).then(() => {
         if (errorList.length === 0) {
             return;
