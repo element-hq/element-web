@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 /**
- * Regenerates the translations base file by walking the source tree and
+ * Regenerates the translations en_EN file by walking the source tree and
  * parsing each file with flow-parser. Emits a JSON file with the
  * translatable strings mapped to themselves in the order they appeared
  * in the files and grouped by the file they appeared in.
