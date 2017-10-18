@@ -96,6 +96,7 @@ limitations under the License.
     width: 100%;
     flex: 1;
     word-break: break-word;
+    overflow: auto;
 }
 
 .mx_MessageComposer_input .DraftEditor-root .DraftEditor-editorContainer {
@@ -106,7 +107,6 @@ limitations under the License.
 .mx_MessageComposer_input .public-DraftEditor-content {
     max-height: 120px;
     min-height: 21px;
-    overflow: auto;
 }
 
 .mx_MessageComposer_input blockquote {
