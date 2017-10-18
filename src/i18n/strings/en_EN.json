@@ -927,5 +927,9 @@
     "%(serverName)s Matrix ID": "%(serverName)s Matrix ID",
     "Add rooms to this group": "Add rooms to this group",
     "Invites sent": "Invites sent",
-    "Your group invitations have been sent.": "Your group invitations have been sent."
+    "Your group invitations have been sent.": "Your group invitations have been sent.",
+    "Publish this community on your profile": "Publish this community on your profile",
+    "Community Member Settings": "Community Member Settings",
+    "Long Description (HTML)": "Long Description (HTML)",
+    "Community Settings": "Community Settings"
 }
