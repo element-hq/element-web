@@ -899,7 +899,7 @@ export default React.createClass({
                      initialValue={this.state.profileForm.short_description}
                      onValueChanged={this._onShortDescChange}
                      tabIndex="2"
-                     dir="auto" />
+                     dir="auto" />;
 
                 rightButtons.push(
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
