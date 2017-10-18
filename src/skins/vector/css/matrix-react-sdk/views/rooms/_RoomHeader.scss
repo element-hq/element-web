@@ -60,6 +60,10 @@ limitations under the License.
     padding-right: 12px;
 }
 
+.mx_RoomHeader_textButton_danger {
+    background-color: $warning-color;
+}
+
 .mx_RoomHeader_cancelButton {
     order: 2;
     cursor: pointer;
@@ -138,8 +142,15 @@ limitations under the License.
 .mx_RoomHeader_name,
 .mx_RoomHeader_avatar,
 .mx_RoomHeader_avatarPicker,
-.mx_RoomHeader_avatarPicker_edit {
+.mx_RoomHeader_avatarPicker_edit,
+.mx_RoomHeader_avatarPicker_remove {
     cursor: pointer;
+}
+
+.mx_RoomHeader_avatarPicker_remove {
+    position: absolute;
+    top: 10px;
+    left: 45px;
 }
 
 .mx_RoomHeader_name:hover div:not(.mx_RoomHeader_editable) {

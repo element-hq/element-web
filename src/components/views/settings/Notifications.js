@@ -116,6 +116,11 @@ module.exports = React.createClass({
         UserSettingsStore.setEnableNotifications(event.target.checked);
     },
 
+    onEnableDesktopNotificationBodyChange: function(event) {
+        UserSettingsStore.setEnableNotificationBody(event.target.checked);
+        this.forceUpdate();
+    },
+
     onEnableEmailNotificationsChange: function(address, event) {
         var emailPusherPromise;
         if (event.target.checked) {
@@ -131,7 +136,7 @@ module.exports = React.createClass({
             this._refreshFromServer();
         }, (error) => {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Error saving email notification preferences', '', ErrorDialog, {
                 title: _t('Error saving email notification preferences'),
                 description: _t('An error occurred whilst saving your email notification preferences.'),
             });
@@ -175,7 +180,7 @@ module.exports = React.createClass({
         }
 
         var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
-        Modal.createDialog(TextInputDialog, {
+        Modal.createTrackedDialog('Keywords Dialog', '', TextInputDialog, {
             title: _t('Keywords'),
             description: _t('Enter keywords separated by a comma:'),
             button: _t('OK'),
@@ -241,7 +246,7 @@ module.exports = React.createClass({
             }, function(error) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Failed to change settings: " + error);
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Failed to change settings', '', ErrorDialog, {
                     title: _t('Failed to change settings'),
                     description: ((error && error.message) ? error.message : _t('Operation failed')),
                     onFinished: self._refreshFromServer
@@ -311,7 +316,7 @@ module.exports = React.createClass({
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Can't update user notification settings: " + error);
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Can\'t update user notifcation settings', '', ErrorDialog, {
                 title: _t('Can\'t update user notification settings'),
                 description: ((error && error.message) ? error.message : _t('Operation failed')),
                 onFinished: self._refreshFromServer
@@ -353,7 +358,7 @@ module.exports = React.createClass({
         var onError = function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to update keywords: " + error);
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to update keywords', '', ErrorDialog, {
                 title: _t('Failed to update keywords'),
                 description: ((error && error.message) ? error.message : _t('Operation failed')),
                 onFinished: self._refreshFromServer
@@ -827,6 +832,21 @@ module.exports = React.createClass({
                         <div className="mx_UserNotifSettings_labelCell">
                             <label htmlFor="enableDesktopNotifications">
                                 { _t('Enable desktop notifications') }
+                            </label>
+                        </div>
+                    </div>
+
+                    <div className="mx_UserNotifSettings_tableRow">
+                        <div className="mx_UserNotifSettings_inputCell">
+                            <input id="enableDesktopNotificationBody"
+                                ref="enableDesktopNotificationBody"
+                                type="checkbox"
+                                checked={ UserSettingsStore.getEnableNotificationBody() }
+                                onChange={ this.onEnableDesktopNotificationBodyChange } />
+                        </div>
+                        <div className="mx_UserNotifSettings_labelCell">
+                            <label htmlFor="enableDesktopNotificationBody">
+                                { _t('Show message in desktop notification') }
                             </label>
                         </div>
                     </div>

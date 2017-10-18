@@ -8,6 +8,12 @@
     display: inline-block;
     height: 20px;
     line-height: 20px;
+    padding-left: 5px;
+}
+
+.mx_EventTile_body .mx_UserPill,
+.mx_EventTile_body .mx_RoomPill {
+    cursor: pointer;
 }
 
 /* More specific to override `.markdown-body a` color */
@@ -35,9 +41,8 @@
 .mx_UserPill .mx_BaseAvatar,
 .mx_RoomPill .mx_BaseAvatar {
     position: relative;
+    left: -3px;
     top: 2px;
-    margin-left: 2px;
-    margin-right: 2px;
 }
 
 .mx_Markdown_BOLD {

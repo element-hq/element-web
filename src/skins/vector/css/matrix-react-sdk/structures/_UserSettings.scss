@@ -80,6 +80,16 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_UserSettings_button.mx_UserSettings_buttonSmall {
+    height: 36px;
+    padding: 4px;
+    padding-left: 7px;
+    padding-right: 7px;
+    font-size: 12px;
+    margin-right: 5px;
+    line-height: 12px;
+}
+
 .mx_UserSettings_button.danger {
     background-color: $warning-color;
 }
@@ -240,6 +250,16 @@ input.mx_UserSettings_phoneNumberField {
 
 .mx_UserSettings_avatarPicker_edit > input {
     display: none;
+}
+
+.mx_UserSettings_avatarPicker_imgContainer {
+    display: inline-block;
+}
+
+.mx_UserSettings_avatarPicker_remove {
+    display: inline-block;
+    float: right;
+    margin-right: -15px;
 }
 
 .mx_UserSettings_advanced_spoiler,

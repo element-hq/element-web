@@ -67,6 +67,10 @@ limitations under the License.
     margin-bottom: 14px;
 }
 
+.mx_Login_field_disabled {
+    opacity: 0.3;
+}
+
 .mx_Login_fieldLabel {
     margin-top: -10px;
     margin-left: 8px;
@@ -85,6 +89,10 @@ limitations under the License.
     background-color: $accent-color;
     font-size: 15px;
     color: $accent-fg-color;
+}
+
+.mx_Login_submit:disabled {
+    opacity: 0.3;
 }
 
 .mx_Login_label {
@@ -265,3 +273,16 @@ limitations under the License.
     margin: 3px;
     vertical-align: top;
 }
+
+.mx_Login_language {
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 60%;
+}
+
+.mx_Login_language_div {
+  display: flex;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+

@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import sdk from 'matrix-react-sdk';
 import SdkConfig from 'matrix-react-sdk/lib/SdkConfig';
+import Modal from 'matrix-react-sdk/lib/Modal';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 export default class BugReportDialog extends React.Component {
@@ -64,8 +65,13 @@ export default class BugReportDialog extends React.Component {
                 progressCallback: this._sendProgressCallback,
             }).then(() => {
                 if (!this._unmounted) {
-                    this.setState({ busy: false, progress: null });
                     this.props.onFinished(false);
+                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                    Modal.createTrackedDialog('Bug report sent', '', QuestionDialog, {
+                        title: _t('Bug report sent'),
+                        description: _t('Thank you!'),
+                        hasCancelButton: false,
+                    });
                 }
             }, (err) => {
                 if (!this._unmounted) {

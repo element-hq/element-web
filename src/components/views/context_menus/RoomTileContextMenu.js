@@ -21,7 +21,7 @@ import Promise from 'bluebird';
 import React from 'react';
 import classNames from 'classnames';
 import sdk from 'matrix-react-sdk';
-import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import { _t, _td } from 'matrix-react-sdk/lib/languageHandler';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import DMRoomMap from 'matrix-react-sdk/lib/utils/DMRoomMap';
@@ -70,7 +70,7 @@ module.exports = React.createClass({
                         };
                     }).catch(function(err) {
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                        Modal.createDialog(ErrorDialog, {
+                        Modal.createTrackedDialog('Failed to remove tag from room 1', '', ErrorDialog, {
                             title: _t('Failed to remove tag %(tagName)s from room', {tagName: tagNameOff}),
                             description: ((err && err.message) ? err.message : _t('Operation failed')),
                         });
@@ -87,7 +87,7 @@ module.exports = React.createClass({
                         };
                     }).catch(function(err) {
                         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                        Modal.createDialog(ErrorDialog, {
+                        Modal.createTrackedDialog('Failed to remove tag from room 2', '', ErrorDialog, {
                             title: _t('Failed to remove tag %(tagName)s from room', {tagName: tagNameOn}),
                             description: ((err && err.message) ? err.message : _t('Operation failed')),
                         });
@@ -148,7 +148,7 @@ module.exports = React.createClass({
             };
         }, (err) => {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to set Direct Message status of room', '', ErrorDialog, {
                 title: _t('Failed to set Direct Message status of room'),
                 description: ((err && err.message) ? err.message : _t('Operation failed')),
             });
@@ -185,9 +185,9 @@ module.exports = React.createClass({
         MatrixClientPeg.get().forget(this.props.room.roomId).done(function() {
             dis.dispatch({ action: 'view_next_room' });
         }, function(err) {
-            var errCode = err.errcode || "unknown error code";
+            var errCode = err.errcode || _td("unknown error code");
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to forget room', '', ErrorDialog, {
                 title: _t('Failed to forget room %(errCode)s', {errCode: errCode}),
                 description: ((err && err.message) ? err.message : _t('Operation failed')),
             });
