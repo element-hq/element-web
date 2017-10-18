@@ -134,9 +134,7 @@ limitations under the License.
     top: 5px;
 }
 
-.mx_GroupView_body {
-    display: flex;
-    flex-direction: column;
+.mx_GroupView_body  {
     flex-grow: 1;
 }
 
@@ -181,7 +179,6 @@ limitations under the License.
 }
 
 .mx_GroupView_membershipSection {
-    margin-bottom: 11px;
     color: $greyed-fg-color;
 }
 
@@ -201,6 +198,23 @@ limitations under the License.
     margin-right: 0px;
     margin-top: 0px;
     margin-left: 8px;
+}
+
+.mx_GroupView_memberSettings_toggle label {
+    cursor: pointer;
+    user-select: none;
+}
+
+.mx_GroupView_memberSettings h3 {
+    text-transform: uppercase;
+    color: $h3-color;
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.mx_GroupView_memberSettings input {
+    margin-right: 6px;
 }
 
 .mx_GroupView_featuredThings {
@@ -260,7 +274,11 @@ limitations under the License.
     display: none;
 }
 
-.mx_GroupView_editLongDesc {
-    width: 100%;
+.mx_GroupView_body .gm-scroll-view > *{
+    margin: 0px 50px 11px 68px;
+}
+
+.mx_GroupView_groupDesc textarea {
+    width: 50%;
     height: 150px;
 }

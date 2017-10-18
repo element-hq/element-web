@@ -60,6 +60,10 @@ limitations under the License.
     padding-right: 12px;
 }
 
+.mx_RoomHeader_textButton_danger {
+    background-color: $warning-color;
+}
+
 .mx_RoomHeader_cancelButton {
     order: 2;
     cursor: pointer;
