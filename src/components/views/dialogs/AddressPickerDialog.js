@@ -489,7 +489,12 @@ module.exports = React.createClass({
             const AddressTile = sdk.getComponent("elements.AddressTile");
             for (let i = 0; i < this.state.userList.length; i++) {
                 query.push(
-                    <AddressTile key={i} address={this.state.userList[i]} canDismiss={true} onDismissed={this.onDismissed(i)} />,
+                    <AddressTile
+                        key={i}
+                        address={this.state.userList[i]}
+                        canDismiss={true}
+                        onDismissed={this.onDismissed(i)}
+                        showAddress={this.props.pickerType === 'user'} />,
                 );
             }
         }
@@ -539,6 +544,7 @@ module.exports = React.createClass({
             addressSelector = (
                 <AddressSelector ref={(ref) => {this.addressSelector = ref;}}
                     addressList={this.state.queryList}
+                    showAddress={this.props.pickerType === 'user'}
                     onSelected={this.onSelected}
                     truncateAt={TRUNCATE_QUERY_LIST}
                 />

@@ -448,8 +448,16 @@ export default React.createClass({
     _initGroupStore: function(groupId) {
         this._groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), groupId);
         this._groupStore.on('update', () => {
+            const summary = this._groupStore.getSummary();
+            if (summary.profile) {
+                // Default profile fields should be "" for later sending to the server (which
+                // requires that the fields are strings, not null)
+                ["avatar_url", "long_description", "name", "short_description"].forEach((k) => {
+                    summary.profile[k] = summary.profile[k] || "";
+                });
+            }
             this.setState({
-                summary: this._groupStore.getSummary(),
+                summary,
                 isGroupPublicised: this._groupStore.getGroupPublicity(),
                 isUserPrivileged: this._groupStore.isUserPrivileged(),
                 error: null,
