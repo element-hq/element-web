@@ -71,7 +71,6 @@ function getTranslations(file) {
 
     estreeWalker.walk(tree, {
         enter: function(node, parent) {
-            //console.log(node);
             if (
                 node.type == 'CallExpression' &&
                 TRANSLATIONS_FUNCS.includes(node.callee.name)
