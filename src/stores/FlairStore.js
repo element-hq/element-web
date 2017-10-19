@@ -138,6 +138,8 @@ class FlairStore extends EventEmitter {
         this._groupProfiles[groupId] = {
             groupId,
             avatarUrl: profile.avatar_url,
+            name: profile.name,
+            shortDescription: profile.short_description,
         };
         setTimeout(() => {
             delete this._groupProfiles[groupId];
