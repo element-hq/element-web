@@ -1000,5 +1000,17 @@
     "Message Pinning": "Nachricht-Anheftung",
     "Add rooms to this group": "Füge Räume zu dieser Gruppe hinzu",
     "Publish this community on your profile": "Veröffentliche diese Community in deinem Profil",
-    "Long Description (HTML)": "Lange Beschreibung (HTML)"
+    "Long Description (HTML)": "Lange Beschreibung (HTML)",
+    "Jump to message": "Springe zur Nachricht",
+    "No pinned messages.": "Keine angepinnten Nachrichten.",
+    "Loading...": "Lade...",
+    "Unpin Message": "Nachricht losheften",
+    "Unnamed room": "Unbenannter Raum",
+    "World readable": "Lesbar für die Welt",
+    "Guests can join": "Gäste können beitreten",
+    "No rooms to show": "Keine Räume anzuzeigen",
+    "Invalid group ID": "Ungültige Gruppen-ID",
+    "'%(groupId)s' is not a valid group ID": "'%(groupId)s' ist keine valide Gruppen-ID",
+    "Community Settings": "Community-Einstellungen",
+    "Community Member Settings": "Community-Mitglieder-Einstellungen"
 }
