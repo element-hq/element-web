@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /*
 Copyright 2017 New Vector Ltd
 
@@ -34,6 +36,13 @@ const TRANSLATIONS_FUNCS = ['_t', '_td', '_tJsx'];
 
 const INPUT_TRANSLATIONS_FILE = 'src/i18n/strings/en_EN.json';
 
+// NB. The sync version of walk is broken for single files so we walk
+// all of res rather than just res/home.html.
+// https://git.daplie.com/Daplie/node-walk/merge_requests/1 fixes it,
+// or if we get bored waiting for it to be merged, we could switch
+// to a project that's actively maintained.
+const SEARCH_PATHS = ['src', 'res'];
+
 const FLOW_PARSER_OPTS = {
   esproposal_class_instance_fields: true,
   esproposal_class_static_fields: true,
@@ -64,7 +73,7 @@ function getTKey(arg) {
     return null;
 }
 
-function getTranslations(file) {
+function getTranslationsJs(file) {
     const tree = flowParser.parse(fs.readFileSync(file, { encoding: 'utf8' }), FLOW_PARSER_OPTS);
 
     const trs = new Set();
@@ -106,6 +115,20 @@ function getTranslations(file) {
     return trs;
 }
 
+function getTranslationsOther(file) {
+    const contents = fs.readFileSync(file, { encoding: 'utf8' });
+
+    const trs = new Set();
+
+    // Taken from riot-web src/components/structures/HomePage.js
+    const translationsRegex = /_t\(['"]([\s\S]*?)['"]\)/mg;
+    let matches;
+    while (matches = translationsRegex.exec(contents)) {
+        trs.add(matches[1]);
+    }
+    return trs;
+}
+
 // gather en_EN plural strings from the input translations file:
 // the en_EN strings are all in the source with the exception of
 // pluralised strings, which we need to pull in from elsewhere.
@@ -123,20 +146,32 @@ for (const key of Object.keys(inputTranslationsRaw)) {
 
 const translatables = new Set();
 
-walk.walkSync("src", {
+const walkOpts = {
     listeners: {
         file: function(root, fileStats, next) {
-            if (!fileStats.name.endsWith('.js')) return;
-
             const fullPath = path.join(root, fileStats.name);
-            const trs = getTranslations(fullPath);
+
+            let ltrs;
+            if (fileStats.name.endsWith('.js')) {
+                trs = getTranslationsJs(fullPath);
+            } else if (fileStats.name.endsWith('.html')) {
+                trs = getTranslationsOther(fullPath);
+            } else {
+                return;
+            }
             console.log(`${fullPath} (${trs.size} strings)`);
             for (const tr of trs.values()) {
                 translatables.add(tr);
             }
         },
     }
-});
+};
+
+for (const path of SEARCH_PATHS) {
+    if (fs.existsSync(path)) {
+        walk.walkSync(path, walkOpts);
+    }
+}
 
 const trObj = {};
 for (const tr of translatables) {
