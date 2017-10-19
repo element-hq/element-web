@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1"
-	 id="svg4196" inkscape:version="0.48.4 r9939" sodipodi:docname="lukes-icons-room.svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg"
-	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 25 25"
+	 id="svg4196" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 25 25"
 	 style="enable-background:new 0 0 25 25;" xml:space="preserve">
 <style type="text/css">
-	.st1{fill:none;stroke-linecap:round;stroke-miterlimit:10;}
+	.st1{opacity:0.7;}
+	.st2{fill:none;stroke-linecap:round;}
 </style>
-<path id="Oval-1-Copy-7" fill="#76CFA6" d="M12.5,25C19.4,25,25,19.4,25,12.5S19.4,0,12.5,0S0,5.6,0,12.5S5.6,25,12.5,25z"/>
-<g>
-	<g>
-		<g>
-			<line class="st1" stroke="#ffffff" x1="8.9" y1="8.3" x2="8.9" y2="19.5"/>
-			<line class="st1" stroke="#ffffff" x1="12.9" y1="8.3" x2="12.9" y2="19.5"/>
+<g id="icons_people" transform="translate(50.000000, 725.000000)">
+	<path id="Oval-1-Copy-7" fill="#76CFA6" d="M-37.5-700c6.9,0,12.5-5.6,12.5-12.5S-30.6-725-37.5-725S-50-719.4-50-712.5
+		S-44.4-700-37.5-700z"/>
+	<g id="text3879" transform="matrix(1.0243293,0,0,0.97624855,-24.996028,0.15844144)">
+		<g id="Group-3" transform="translate(14.4375,3.9375)" class="st1">
+			<path id="Line" class="st2" stroke="#ffffff" d="M-23.2-733.8h4.6"/>
+			<path id="path3142" class="st2" stroke="#ffffff" d="M-20.9-736.2v4.8"/>
 		</g>
-		<g>
-			<line class="st1" stroke="#ffffff" x1="5.3" y1="15.9" x2="16.6" y2="15.9"/>
-			<line class="st1" stroke="#ffffff" x1="5.3" y1="11.9" x2="16.6" y2="11.9"/>
-		</g>
-	</g>
-	<g>
-		<line class="st1" stroke="#ffffff" x1="17.9" y1="5.5" x2="17.9" y2="9"/>
-		<line class="st1" stroke="#ffffff" x1="16.2" y1="7.3" x2="19.7" y2="7.3"/>
+		<path id="path3002" fill="#ffffff" d="M-11.4-731.3l-0.5,2.6h2.2v1h-2.4l-0.7,3.3h-1.1l0.7-3.3
+			h-2.3l-0.6,3.3h-1.1l0.6-3.3h-2v-1h2.2l0.5-2.6H-18v-1h2.3l0.6-3.4h1.1l-0.6,3.4h2.4l0.7-3.4h1l-0.7,3.4h2v1H-11.4 M-15.3-728.7
+			h2.3l0.5-2.6h-2.3L-15.3-728.7"/>
 	</g>
 </g>
 </svg>
