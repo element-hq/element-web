@@ -687,7 +687,7 @@
     "Community Name": "Community Name",
     "Description": "Description",
     "Community Settings": "Community Settings",
-    "Community (%groupId)s not found": "Community (%groupId)s not found",
+    "Community %(groupId)s not found": "Community %(groupId)s not found",
     "This Home server does not support communities": "This Home server does not support communities",
     "Failed to load %(groupId)": "Failed to load %(groupId)",
     "Reject invitation": "Reject invitation",

@@ -878,7 +878,7 @@ export default React.createClass({
                         </div>
                     </div>
                 );
-          
+
                 const EditableText = sdk.getComponent("elements.EditableText");
 
                 nameNode = <EditableText ref="nameEditor"
@@ -982,7 +982,7 @@ export default React.createClass({
             if (this.state.error.httpStatus === 404) {
                 return (
                     <div className="mx_GroupView_error">
-                        { _t('Community (%groupId)s not found', {groupId: this.props.groupId}) }
+                        { _t('Community %(groupId)s not found', {groupId: this.props.groupId}) }
                     </div>
                 );
             } else {
