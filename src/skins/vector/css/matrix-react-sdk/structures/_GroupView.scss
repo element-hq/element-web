@@ -173,6 +173,10 @@ limitations under the License.
     display: inline-block;
 }
 
+.mx_GroupView_rooms_header_addButton object {
+    pointer-events: none;
+}
+
 .mx_GroupView_rooms_header_addButton_label {
     display: inline-block;
     vertical-align: top;
