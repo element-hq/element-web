@@ -28,7 +28,17 @@ const path = require('path');
 
 const I18NDIR = 'src/i18n/strings';
 
-const enStrings = JSON.parse(fs.readFileSync(path.join(I18NDIR, 'en_EN.json')));
+const enStringsRaw = JSON.parse(fs.readFileSync(path.join(I18NDIR, 'en_EN.json')));
+
+const enStrings = new Set();
+for (const str of Object.keys(enStringsRaw)) {
+    const parts = str.split('|');
+    if (parts.length > 1) {
+        enStrings.add(parts[0]);
+    } else {
+        enStrings.add(str);
+    }
+}
 
 for (const filename of fs.readdirSync(I18NDIR)) {
     if (filename === 'en_EN.json') continue;
@@ -38,7 +48,9 @@ for (const filename of fs.readdirSync(I18NDIR)) {
     const trs = JSON.parse(fs.readFileSync(path.join(I18NDIR, filename)));
     const oldLen = Object.keys(trs).length;
     for (const tr of Object.keys(trs)) {
-        if (enStrings[tr] === undefined) {
+        const parts = tr.split('|');
+        const trKey = parts.length > 1 ? parts[0] : tr;
+        if (!enStrings.has(trKey)) {
             delete trs[tr];
         }
     }
