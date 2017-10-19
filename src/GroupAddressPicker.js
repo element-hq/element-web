@@ -22,10 +22,20 @@ import MatrixClientPeg from './MatrixClientPeg';
 import GroupStoreCache from './stores/GroupStoreCache';
 
 export function showGroupInviteDialog(groupId) {
+    const description = <div>
+        <div>{ _t("Who would you like to add to this community?") }</div>
+        <div className="warning">
+            { _t(
+                "Warning: any person you add to a community will be publicly "+
+                "visible to anyone who knows the community ID",
+            ) }
+        </div>
+    </div>;
+
     const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
     Modal.createTrackedDialog('Group Invite', '', AddressPickerDialog, {
         title: _t("Invite new community members"),
-        description: _t("Who would you like to add to this community?"),
+        description: description,
         placeholder: _t("Name or matrix ID"),
         button: _t("Invite to Community"),
         validAddressTypes: ['mx-user-id'],
@@ -39,10 +49,20 @@ export function showGroupInviteDialog(groupId) {
 
 export function showGroupAddRoomDialog(groupId) {
     return new Promise((resolve, reject) => {
+        const description = <div>
+            <div>{ _t("Which rooms would you like to add to this community?") }</div>
+            <div className="warning">
+                { _t(
+                    "Warning: any room you add to a community will be publicly "+
+                    "visible to anyone who knows the community ID",
+                ) }
+            </div>
+        </div>;
+
         const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
         Modal.createTrackedDialog('Add Rooms to Group', '', AddressPickerDialog, {
             title: _t("Add rooms to the community"),
-            description: _t("Which rooms would you like to add to this community?"),
+            description: description,
             placeholder: _t("Room name or alias"),
             button: _t("Add to community"),
             pickerType: 'room',
