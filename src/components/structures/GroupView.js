@@ -743,7 +743,7 @@ export default React.createClass({
             return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_invited">
                 <div className="mx_GroupView_membershipSubSection">
                     <div className="mx_GroupView_membershipSection_description">
-                        { _t("%(inviter)s has invited you to join this group", {inviter: group.inviter.userId}) }
+                        { _t("%(inviter)s has invited you to join this community", {inviter: group.inviter.userId}) }
                     </div>
                     <div className="mx_GroupView_membership_buttonContainer">
                         <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
@@ -761,8 +761,8 @@ export default React.createClass({
             </div>;
         } else if (group.myMembership === 'join' && this.state.editing) {
             const leaveButtonTooltip = this.state.isUserPrivileged ?
-                _t("You are a member of this group") :
-                _t("You are an administrator of this group");
+                _t("You are a member of this community") :
+                _t("You are an administrator of this community");
             const leaveButtonClasses = classnames({
                 "mx_RoomHeader_textButton": true,
                 "mx_GroupView_textButton": true,
