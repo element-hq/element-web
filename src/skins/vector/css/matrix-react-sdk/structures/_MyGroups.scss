@@ -57,3 +57,49 @@ limitations under the License.
 .mx_MyGroups_content {
     clear: left;
 }
+
+.mx_MyGroups_joinedGroups {
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+    justify-content: space-between;
+}
+
+.mx_MyGroups_joinedGroups .mx_GroupTile {
+    width: 300px;
+    height: 75px;
+    margin-bottom: 15px;
+    margin-right: 10px;
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+}
+
+.mx_GroupTile_profile {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.mx_GroupTile_profile h3.mx_GroupTile_name {
+    margin: 0px;
+    font-size: 15px;
+}
+
+.mx_GroupTile_profile .mx_GroupTile_groupId {
+    font-size: 13px;
+}
+
+.mx_GroupTile_profile .mx_GroupTile_desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-size: 13px;
+    max-height: 36px;
+    overflow: hidden;
+}
+
+.mx_GroupTile_profile .mx_GroupTile_groupId {
+    opacity: 0.7;
+}
