@@ -71,7 +71,7 @@ export default React.createClass({
 
             if (!/^[a-zA-Z0-9]*$/.test(groupId)) {
                 error = _t("Community IDs may only contain alphanumeric characters");
-            } else  if (domain !== MatrixClientPeg.get().getDomain()) {
+            } else if (domain !== MatrixClientPeg.get().getDomain()) {
                 error = _t(
                     "It is currently only possible to create communities on your own home server: "+
                     "use a community ID ending with %(domain)s",
