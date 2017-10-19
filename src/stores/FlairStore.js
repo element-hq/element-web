@@ -147,8 +147,7 @@ class FlairStore extends EventEmitter {
     }
 }
 
-let singletonFlairStore = null;
-if (!singletonFlairStore) {
-    singletonFlairStore = new FlairStore();
+if (global.singletonFlairStore === undefined) {
+    global.singletonFlairStore = new FlairStore();
 }
-module.exports = singletonFlairStore;
+export default global.singletonFlairStore;
