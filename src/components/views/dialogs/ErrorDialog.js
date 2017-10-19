@@ -63,11 +63,11 @@ export default React.createClass({
             <BaseDialog className="mx_ErrorDialog" onFinished={this.props.onFinished}
                     title={this.props.title || _t('Error')}>
                 <div className="mx_Dialog_content">
-                    {this.props.description || _t('An error has occurred.')}
+                    { this.props.description || _t('An error has occurred.') }
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button ref="button" className="mx_Dialog_primary" onClick={this.props.onFinished}>
-                        {this.props.button || _t('OK')}
+                        { this.props.button || _t('OK') }
                     </button>
                 </div>
             </BaseDialog>

@@ -65,7 +65,7 @@ module.exports = React.createClass({
         suppressFirstDateSeparator: React.PropTypes.bool,
 
         // whether to show read receipts
-        manageReadReceipts: React.PropTypes.bool,
+        showReadReceipts: React.PropTypes.bool,
 
         // true if updates to the event list should cause the scroll panel to
         // scroll down when we are at the bottom of the window. See ScrollPanel
@@ -154,15 +154,15 @@ module.exports = React.createClass({
     //   0: read marker is within the window
     //  +1: read marker is below the window
     getReadMarkerPosition: function() {
-        var readMarker = this.refs.readMarkerNode;
-        var messageWrapper = this.refs.scrollPanel;
+        const readMarker = this.refs.readMarkerNode;
+        const messageWrapper = this.refs.scrollPanel;
 
         if (!readMarker || !messageWrapper) {
             return null;
         }
 
-        var wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
-        var readMarkerRect = readMarker.getBoundingClientRect();
+        const wrapperRect = ReactDOM.findDOMNode(messageWrapper).getBoundingClientRect();
+        const readMarkerRect = readMarker.getBoundingClientRect();
 
         // the read-marker pretends to have zero height when it is actually
         // two pixels high; +2 here to account for that.
@@ -241,6 +241,10 @@ module.exports = React.createClass({
 
     // TODO: Implement granular (per-room) hide options
     _shouldShowEvent: function(mxEv) {
+        if (mxEv.sender && MatrixClientPeg.get().isUserIgnored(mxEv.sender.userId)) {
+            return false; // ignored = no show (only happens if the ignore happens after an event was received)
+        }
+
         const EventTile = sdk.getComponent('rooms.EventTile');
         if (!EventTile.haveTileForEvent(mxEv)) {
             return false; // no tile = no show
@@ -258,7 +262,7 @@ module.exports = React.createClass({
 
         this.eventNodes = {};
 
-        var i;
+        let i;
 
         // first figure out which is the last event in the list which we're
         // actually going to show; this allows us to behave slightly
@@ -268,9 +272,9 @@ module.exports = React.createClass({
         // a local echo, to manage the read-marker.
         let lastShownEvent;
 
-        var lastShownNonLocalEchoIndex = -1;
+        let lastShownNonLocalEchoIndex = -1;
         for (i = this.props.events.length-1; i >= 0; i--) {
-            var mxEv = this.props.events[i];
+            const mxEv = this.props.events[i];
             if (!this._shouldShowEvent(mxEv)) {
                 continue;
             }
@@ -288,12 +292,12 @@ module.exports = React.createClass({
             break;
         }
 
-        var ret = [];
+        const ret = [];
 
-        var prevEvent = null; // the last event we showed
+        let prevEvent = null; // the last event we showed
 
         // assume there is no read marker until proven otherwise
-        var readMarkerVisible = false;
+        let readMarkerVisible = false;
 
         // if the readmarker has moved, cancel any active ghost.
         if (this.currentReadMarkerEventId && this.props.readMarkerEventId &&
@@ -305,16 +309,16 @@ module.exports = React.createClass({
         const isMembershipChange = (e) => e.getType() === 'm.room.member';
 
         for (i = 0; i < this.props.events.length; i++) {
-            let mxEv = this.props.events[i];
-            let eventId = mxEv.getId();
-            let last = (mxEv === lastShownEvent);
+            const mxEv = this.props.events[i];
+            const eventId = mxEv.getId();
+            const last = (mxEv === lastShownEvent);
 
             const wantTile = this._shouldShowEvent(mxEv);
 
             // Wrap consecutive member events in a ListSummary, ignore if redacted
             if (isMembershipChange(mxEv) && wantTile) {
                 let readMarkerInMels = false;
-                let ts1 = mxEv.getTs();
+                const ts1 = mxEv.getTs();
                 // Ensure that the key of the MemberEventListSummary does not change with new
                 // member events. This will prevent it from being re-created unnecessarily, and
                 // instead will allow new props to be provided. In turn, the shouldComponentUpdate
@@ -326,7 +330,7 @@ module.exports = React.createClass({
                 const key = "membereventlistsummary-" + (prevEvent ? mxEv.getId() : "initial");
 
                 if (this._wantsDateSeparator(prevEvent, mxEv.getDate())) {
-                    let dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1} showTwelveHour={this.props.isTwelveHour}/></li>;
+                    const dateSeparator = <li key={ts1+'~'}><DateSeparator key={ts1+'~'} ts={ts1} showTwelveHour={this.props.isTwelveHour} /></li>;
                     ret.push(dateSeparator);
                 }
 
@@ -335,7 +339,7 @@ module.exports = React.createClass({
                     readMarkerInMels = true;
                 }
 
-                let summarisedEvents = [mxEv];
+                const summarisedEvents = [mxEv];
                 for (;i + 1 < this.props.events.length; i++) {
                     const collapsedMxEv = this.props.events[i + 1];
 
@@ -361,8 +365,13 @@ module.exports = React.createClass({
                     summarisedEvents.push(collapsedMxEv);
                 }
 
+                let highlightInMels = false;
+
                 // At this point, i = the index of the last event in the summary sequence
                 let eventTiles = summarisedEvents.map((e) => {
+                    if (e.getId() === this.props.highlightedEventId) {
+                        highlightInMels = true;
+                    }
                     // In order to prevent DateSeparators from appearing in the expanded form
                     // of MemberEventListSummary, render each member event as if the previous
                     // one was itself. This way, the timestamp of the previous event === the
@@ -376,15 +385,13 @@ module.exports = React.createClass({
                     eventTiles = null;
                 }
 
-                ret.push(
-                    <MemberEventListSummary
-                        key={key}
-                        events={summarisedEvents}
-                        onToggle={this._onWidgetLoad} // Update scroll state
-                    >
-                            {eventTiles}
-                    </MemberEventListSummary>
-                );
+                ret.push(<MemberEventListSummary key={key}
+                    events={summarisedEvents}
+                    onToggle={this._onWidgetLoad} // Update scroll state
+                    startExpanded={highlightInMels}
+                >
+                        { eventTiles }
+                </MemberEventListSummary>);
 
                 if (readMarkerInMels) {
                     ret.push(this._getReadMarkerTile(visible));
@@ -401,7 +408,7 @@ module.exports = React.createClass({
                 prevEvent = mxEv;
             }
 
-            var isVisibleReadMarker = false;
+            let isVisibleReadMarker = false;
 
             if (eventId == this.props.readMarkerEventId) {
                 var visible = this.props.readMarkerVisible;
@@ -441,10 +448,10 @@ module.exports = React.createClass({
     _getTilesForEvent: function(prevEvent, mxEv, last) {
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
-        var ret = [];
+        const ret = [];
 
         // is this a continuation of the previous message?
-        var continuation = false;
+        let continuation = false;
 
         if (prevEvent !== null
                 && prevEvent.sender && mxEv.sender
@@ -469,8 +476,8 @@ module.exports = React.createClass({
 
         // local echoes have a fake date, which could even be yesterday. Treat them
         // as 'today' for the date separators.
-        var ts1 = mxEv.getTs();
-        var eventDate = mxEv.getDate();
+        let ts1 = mxEv.getTs();
+        let eventDate = mxEv.getDate();
         if (mxEv.status) {
             eventDate = new Date();
             ts1 = eventDate.getTime();
@@ -478,20 +485,20 @@ module.exports = React.createClass({
 
         // do we need a date separator since the last event?
         if (this._wantsDateSeparator(prevEvent, eventDate)) {
-            var dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} showTwelveHour={this.props.isTwelveHour}/></li>;
+            const dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} showTwelveHour={this.props.isTwelveHour} /></li>;
             ret.push(dateSeparator);
             continuation = false;
         }
 
-        var eventId = mxEv.getId();
-        var highlight = (eventId == this.props.highlightedEventId);
+        const eventId = mxEv.getId();
+        const highlight = (eventId == this.props.highlightedEventId);
 
         // we can't use local echoes as scroll tokens, because their event IDs change.
         // Local echos have a send "status".
-        var scrollToken = mxEv.status ? undefined : eventId;
+        const scrollToken = mxEv.status ? undefined : eventId;
 
-        var readReceipts;
-        if (this.props.manageReadReceipts) {
+        let readReceipts;
+        if (this.props.showReadReceipts) {
             readReceipts = this._getReadReceiptsForEvent(mxEv);
         }
         ret.push(
@@ -508,8 +515,8 @@ module.exports = React.createClass({
                         eventSendStatus={mxEv.status}
                         tileShape={this.props.tileShape}
                         isTwelveHour={this.props.isTwelveHour}
-                        last={last} isSelectedEvent={highlight}/>
-                </li>
+                        last={last} isSelectedEvent={highlight} />
+                </li>,
         );
 
         return ret;
@@ -544,12 +551,15 @@ module.exports = React.createClass({
         if (!room) {
             return null;
         }
-        let receipts = [];
+        const receipts = [];
         room.getReceiptsForEvent(event).forEach((r) => {
             if (!r.userId || r.type !== "m.read" || r.userId === myUserId) {
                 return; // ignore non-read receipts and receipts from self.
             }
-            let member = room.getMember(r.userId);
+            if (MatrixClientPeg.get().isUserIgnored(r.userId)) {
+                return; // ignore ignored users
+            }
+            const member = room.getMember(r.userId);
             if (!member) {
                 return; // ignore unknown user IDs
             }
@@ -565,7 +575,7 @@ module.exports = React.createClass({
     },
 
     _getReadMarkerTile: function(visible) {
-        var hr;
+        let hr;
         if (visible) {
             hr = <hr className="mx_RoomView_myReadMarker"
                     style={{opacity: 1, width: '99%'}}
@@ -575,7 +585,7 @@ module.exports = React.createClass({
         return (
             <li key="_readupto" ref="readMarkerNode"
                   className="mx_RoomView_myReadMarker_container">
-                {hr}
+                { hr }
             </li>
         );
     },
@@ -594,7 +604,7 @@ module.exports = React.createClass({
     },
 
     _getReadMarkerGhostTile: function() {
-        var hr = <hr className="mx_RoomView_myReadMarker"
+        const hr = <hr className="mx_RoomView_myReadMarker"
                   style={{opacity: 1, width: '99%'}}
                   ref={this._startAnimation}
             />;
@@ -605,7 +615,7 @@ module.exports = React.createClass({
         return (
             <li key={"_readuptoghost_"+this.currentGhostEventId}
                   className="mx_RoomView_myReadMarker_container">
-                {hr}
+                { hr }
             </li>
         );
     },
@@ -617,7 +627,7 @@ module.exports = React.createClass({
     // once dynamic content in the events load, make the scrollPanel check the
     // scroll offsets.
     _onWidgetLoad: function() {
-        var scrollPanel = this.refs.scrollPanel;
+        const scrollPanel = this.refs.scrollPanel;
         if (scrollPanel) {
             scrollPanel.forceUpdate();
         }
@@ -628,9 +638,9 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var ScrollPanel = sdk.getComponent("structures.ScrollPanel");
-        var Spinner = sdk.getComponent("elements.Spinner");
-        var topSpinner, bottomSpinner;
+        const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
+        const Spinner = sdk.getComponent("elements.Spinner");
+        let topSpinner, bottomSpinner;
         if (this.props.backPaginating) {
             topSpinner = <li key="_topSpinner"><Spinner /></li>;
         }
@@ -638,25 +648,25 @@ module.exports = React.createClass({
             bottomSpinner = <li key="_bottomSpinner"><Spinner /></li>;
         }
 
-        var style = this.props.hidden ? { display: 'none' } : {};
+        const style = this.props.hidden ? { display: 'none' } : {};
         style.opacity = this.props.opacity;
 
-        var className = this.props.className + " mx_fadable";
+        let className = this.props.className + " mx_fadable";
         if (this.props.alwaysShowTimestamps) {
             className += " mx_MessagePanel_alwaysShowTimestamps";
         }
 
         return (
-            <ScrollPanel ref="scrollPanel" className={ className }
-                    onScroll={ this.props.onScroll }
-                    onResize={ this.onResize }
-                    onFillRequest={ this.props.onFillRequest }
-                    onUnfillRequest={ this.props.onUnfillRequest }
-                    style={ style }
-                    stickyBottom={ this.props.stickyBottom }>
-                {topSpinner}
-                {this._getEventTiles()}
-                {bottomSpinner}
+            <ScrollPanel ref="scrollPanel" className={className}
+                    onScroll={this.props.onScroll}
+                    onResize={this.onResize}
+                    onFillRequest={this.props.onFillRequest}
+                    onUnfillRequest={this.props.onUnfillRequest}
+                    style={style}
+                    stickyBottom={this.props.stickyBottom}>
+                { topSpinner }
+                { this._getEventTiles() }
+                { bottomSpinner }
             </ScrollPanel>
         );
     },

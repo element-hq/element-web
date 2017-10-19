@@ -15,23 +15,22 @@ limitations under the License.
 */
 
 'use strict';
-var React = require('react');
-var sdk = require('../../../index');
-var MatrixClientPeg = require("../../../MatrixClientPeg");
+const React = require('react');
+const sdk = require('../../../index');
+const MatrixClientPeg = require("../../../MatrixClientPeg");
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'ChangeDisplayName',
 
     _getDisplayName: function() {
-        var cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.get();
         return cli.getProfileInfo(cli.credentials.userId).then(function(result) {
-            var displayname = result.displayname;
+            let displayname = result.displayname;
             if (!displayname) {
                 if (MatrixClientPeg.get().isGuest()) {
                     displayname = "Guest " + MatrixClientPeg.get().getUserIdLocalpart();
-                }
-                else {
+                } else {
                     displayname = MatrixClientPeg.get().getUserIdLocalpart();
                 }
             }
@@ -42,14 +41,14 @@ module.exports = React.createClass({
     },
 
     _changeDisplayName: function(new_displayname) {
-        var cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.get();
         return cli.setDisplayName(new_displayname).catch(function(e) {
             throw new Error("Failed to set display name");
         });
     },
 
     render: function() {
-        var EditableTextContainer = sdk.getComponent('elements.EditableTextContainer');
+        const EditableTextContainer = sdk.getComponent('elements.EditableTextContainer');
         return (
             <EditableTextContainer
                 getInitialValue={this._getDisplayName}
@@ -57,5 +56,5 @@ module.exports = React.createClass({
                 blurToSubmit={true}
                 onSubmit={this._changeDisplayName} />
         );
-    }
+    },
 });

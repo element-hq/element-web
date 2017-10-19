@@ -28,9 +28,9 @@ function DeviceListEntry(props) {
 
     return (
         <li>
-            <DeviceVerifyButtons device={ device } userId={ userId } />
+            <DeviceVerifyButtons device={device} userId={userId} />
             { device.deviceId }
-            <br/>
+            <br />
             { device.getDisplayName() }
         </li>
     );
@@ -48,13 +48,13 @@ function UserUnknownDeviceList(props) {
     const {userId, userDevices} = props;
 
     const deviceListEntries = Object.keys(userDevices).map((deviceId) =>
-       <DeviceListEntry key={ deviceId } userId={ userId }
-           device={ userDevices[deviceId] } />,
+       <DeviceListEntry key={deviceId} userId={userId}
+           device={userDevices[deviceId]} />,
     );
 
     return (
         <ul className="mx_UnknownDeviceDialog_deviceList">
-            {deviceListEntries}
+            { deviceListEntries }
         </ul>
     );
 }
@@ -71,13 +71,13 @@ function UnknownDeviceList(props) {
     const {devices} = props;
 
     const userListEntries = Object.keys(devices).map((userId) =>
-        <li key={ userId }>
+        <li key={userId}>
             <p>{ userId }:</p>
-            <UserUnknownDeviceList userId={ userId } userDevices={ devices[userId] } />
+            <UserUnknownDeviceList userId={userId} userDevices={devices[userId]} />
         </li>,
     );
 
-    return <ul>{userListEntries}</ul>;
+    return <ul>{ userListEntries }</ul>;
 }
 
 UnknownDeviceList.propTypes = {
@@ -120,17 +120,17 @@ export default React.createClass({
         if (blacklistUnverified) {
             warning = (
                 <h4>
-                    {_t("You are currently blacklisting unverified devices; to send " +
-                    "messages to these devices you must verify them.")}
+                    { _t("You are currently blacklisting unverified devices; to send " +
+                    "messages to these devices you must verify them.") }
                 </h4>
             );
         } else {
             warning = (
                 <div>
                     <p>
-                        {_t("We recommend you go through the verification process " +
+                        { _t("We recommend you go through the verification process " +
                             "for each device to confirm they belong to their legitimate owner, " +
-                            "but you can resend the message without verifying if you prefer.")}
+                            "but you can resend the message without verifying if you prefer.") }
                     </p>
                 </div>
             );
@@ -149,22 +149,22 @@ export default React.createClass({
             >
                 <GeminiScrollbar autoshow={false} className="mx_Dialog_content">
                     <h4>
-                        {_t('"%(RoomName)s" contains devices that you haven\'t seen before.', {RoomName: this.props.room.name})}
+                        { _t('"%(RoomName)s" contains devices that you haven\'t seen before.', {RoomName: this.props.room.name}) }
                     </h4>
                     { warning }
-                    {_t("Unknown devices")}:
+                    { _t("Unknown devices") }:
 
                     <UnknownDeviceList devices={this.props.devices} />
                 </GeminiScrollbar>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" autoFocus={ true }
+                    <button className="mx_Dialog_primary" autoFocus={true}
                             onClick={() => {
                                 this.props.onFinished();
                                 Resend.resendUnsentEvents(this.props.room);
                             }}>
-                        {_t("Send anyway")}
+                        { _t("Send anyway") }
                     </button>
-                    <button className="mx_Dialog_primary" autoFocus={ true }
+                    <button className="mx_Dialog_primary" autoFocus={true}
                             onClick={() => {
                                 // XXX: temporary logging to try to diagnose
                                 // https://github.com/vector-im/riot-web/issues/3148

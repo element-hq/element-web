@@ -30,7 +30,7 @@ export default React.createClass({
 
     getInitialState: function() {
         return {
-            device: this.props.device
+            device: this.props.device,
         };
     },
 
@@ -60,37 +60,37 @@ export default React.createClass({
 
     onUnverifyClick: function() {
         MatrixClientPeg.get().setDeviceVerified(
-            this.props.userId, this.state.device.deviceId, false
+            this.props.userId, this.state.device.deviceId, false,
         );
     },
 
     onBlacklistClick: function() {
         MatrixClientPeg.get().setDeviceBlocked(
-            this.props.userId, this.state.device.deviceId, true
+            this.props.userId, this.state.device.deviceId, true,
         );
     },
 
     onUnblacklistClick: function() {
         MatrixClientPeg.get().setDeviceBlocked(
-            this.props.userId, this.state.device.deviceId, false
+            this.props.userId, this.state.device.deviceId, false,
         );
     },
 
     render: function() {
-        var blacklistButton = null, verifyButton = null;
+        let blacklistButton = null, verifyButton = null;
 
         if (this.state.device.isBlocked()) {
             blacklistButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unblacklist"
                   onClick={this.onUnblacklistClick}>
-                    {_t("Unblacklist")}
+                    { _t("Unblacklist") }
                 </button>
             );
         } else {
             blacklistButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_blacklist"
                   onClick={this.onBlacklistClick}>
-                    {_t("Blacklist")}
+                    { _t("Blacklist") }
                 </button>
             );
         }
@@ -99,14 +99,14 @@ export default React.createClass({
             verifyButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unverify"
                   onClick={this.onUnverifyClick}>
-                    {_t("Unverify")}
+                    { _t("Unverify") }
                 </button>
             );
         } else {
             verifyButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_verify"
                   onClick={this.onVerifyClick}>
-                    {_t("Verify...")}
+                    { _t("Verify...") }
                 </button>
             );
         }

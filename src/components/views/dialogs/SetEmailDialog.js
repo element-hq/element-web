@@ -130,10 +130,10 @@ export default React.createClass({
 
         const emailInput = this.state.emailBusy ? <Spinner /> : <EditableText
             className="mx_SetEmailDialog_email_input"
-            placeholder={ _t("Email address") }
+            placeholder={_t("Email address")}
             placeholderClassName="mx_SetEmailDialog_email_input_placeholder"
-            blurToCancel={ false }
-            onValueChanged={ this.onEmailAddressChanged } />;
+            blurToCancel={false}
+            onValueChanged={this.onEmailAddressChanged} />;
 
         return (
             <BaseDialog className="mx_SetEmailDialog"

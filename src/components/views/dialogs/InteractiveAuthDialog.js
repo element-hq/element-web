@@ -48,7 +48,7 @@ export default React.createClass({
     getInitialState: function() {
         return {
             authError: null,
-        }
+        };
     },
 
     _onAuthFinished: function(success, result) {
@@ -73,12 +73,12 @@ export default React.createClass({
         if (this.state.authError) {
             content = (
                 <div>
-                    <div>{this.state.authError.message || this.state.authError.toString()}</div>
+                    <div>{ this.state.authError.message || this.state.authError.toString() }</div>
                     <br />
                     <AccessibleButton onClick={this._onDismissClick}
                         className="mx_UserSettings_button"
                     >
-                        {_t("Dismiss")}
+                        { _t("Dismiss") }
                     </AccessibleButton>
                 </div>
             );
@@ -100,7 +100,7 @@ export default React.createClass({
                 onFinished={this.props.onFinished}
                 title={this.state.authError ? 'Error' : (this.props.title || _t('Authentication'))}
             >
-                {content}
+                { content }
             </BaseDialog>
         );
     },

@@ -191,8 +191,8 @@ module.exports = React.createClass({
         if (this.state.error !== null) {
             return (
                 <span className="mx_MImageBody" ref="body">
-                    <img src="img/warning.svg" width="16" height="16"/>
-                    {_t("Error decrypting image")}
+                    <img src="img/warning.svg" width="16" height="16" />
+                    { _t("Error decrypting image") }
                 </span>
             );
         }
@@ -210,7 +210,7 @@ module.exports = React.createClass({
                     }}>
                         <img src="img/spinner.gif" alt={content.body} width="32" height="32" style={{
                             "margin": "auto",
-                        }}/>
+                        }} />
                     </div>
                 </span>
             );
@@ -227,7 +227,7 @@ module.exports = React.createClass({
         if (thumbUrl) {
             return (
                 <span className="mx_MImageBody" ref="body">
-                    <a href={contentUrl} onClick={ this.onClick }>
+                    <a href={contentUrl} onClick={this.onClick}>
                         <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
                             alt={content.body}
                             onMouseEnter={this.onImageEnter}
@@ -239,13 +239,13 @@ module.exports = React.createClass({
         } else if (content.body) {
             return (
                 <span className="mx_MImageBody">
-                    {_t("Image '%(Body)s' cannot be displayed.", {Body: content.body})}
+                    { _t("Image '%(Body)s' cannot be displayed.", {Body: content.body}) }
                 </span>
             );
         } else {
             return (
                 <span className="mx_MImageBody">
-                    {_t("This image cannot be displayed.")}
+                    { _t("This image cannot be displayed.") }
                 </span>
             );
         }

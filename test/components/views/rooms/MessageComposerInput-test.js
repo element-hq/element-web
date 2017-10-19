@@ -57,7 +57,7 @@ describe('MessageComposerInput', () => {
             }
             sandbox.restore();
             done();
-        })
+        });
     });
 
     // XXX this fails

@@ -136,13 +136,13 @@ export default React.createClass({
                             ) }
                         </p>
                         <div className='error'>
-                            {this.state.errStr}
+                            { this.state.errStr }
                         </div>
                         <div className='mx_E2eKeysDialog_inputTable'>
                             <div className='mx_E2eKeysDialog_inputRow'>
                                 <div className='mx_E2eKeysDialog_inputLabel'>
                                     <label htmlFor='passphrase1'>
-                                        {_t("Enter passphrase")}
+                                        { _t("Enter passphrase") }
                                     </label>
                                 </div>
                                 <div className='mx_E2eKeysDialog_inputCell'>
@@ -155,7 +155,7 @@ export default React.createClass({
                             <div className='mx_E2eKeysDialog_inputRow'>
                                 <div className='mx_E2eKeysDialog_inputLabel'>
                                     <label htmlFor='passphrase2'>
-                                        {_t("Confirm passphrase")}
+                                        { _t("Confirm passphrase") }
                                     </label>
                                 </div>
                                 <div className='mx_E2eKeysDialog_inputCell'>
@@ -172,7 +172,7 @@ export default React.createClass({
                              disabled={disableForm}
                         />
                         <button onClick={this._onCancelClick} disabled={disableForm}>
-                            {_t("Cancel")}
+                            { _t("Cancel") }
                         </button>
                     </div>
                 </form>

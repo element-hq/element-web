@@ -226,7 +226,7 @@ export default React.createClass({
         let usernameIndicator = null;
         let usernameBusyIndicator = null;
         if (this.state.usernameBusy) {
-            usernameBusyIndicator = <Spinner w="24" h="24"/>;
+            usernameBusyIndicator = <Spinner w="24" h="24" />;
         } else {
             const usernameAvailable = this.state.username &&
                 this.state.usernameCheckSupport && !this.state.usernameError;
@@ -275,17 +275,17 @@ export default React.createClass({
                                 /<a>(.*?)<\/a>/,
                             ],
                             [
-                                (sub) => <span>{this.props.homeserverUrl}</span>,
-                                (sub) => <a href="#" onClick={this.props.onDifferentServerClicked}>{sub}</a>,
+                                (sub) => <span>{ this.props.homeserverUrl }</span>,
+                                (sub) => <a href="#" onClick={this.props.onDifferentServerClicked}>{ sub }</a>,
                             ],
-                        )}
+                        ) }
                     </p>
                     <p>
                         { _tJsx(
                             'If you already have a Matrix account you can <a>log in</a> instead.',
                             /<a>(.*?)<\/a>/,
-                            [(sub) => <a href="#" onClick={this.props.onLoginClick}>{sub}</a>],
-                        )}
+                            [(sub) => <a href="#" onClick={this.props.onLoginClick}>{ sub }</a>],
+                        ) }
                     </p>
                     { auth }
                     { authErrorIndicator }

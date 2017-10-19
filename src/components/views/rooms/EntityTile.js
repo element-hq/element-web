@@ -16,18 +16,18 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
 
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var sdk = require('../../../index');
+const MatrixClientPeg = require('../../../MatrixClientPeg');
+const sdk = require('../../../index');
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
 
 
-var PRESENCE_CLASS = {
+const PRESENCE_CLASS = {
     "offline": "mx_EntityTile_offline",
     "online": "mx_EntityTile_online",
-    "unavailable": "mx_EntityTile_unavailable"
+    "unavailable": "mx_EntityTile_unavailable",
 };
 
 
@@ -62,7 +62,7 @@ module.exports = React.createClass({
         showInviteButton: React.PropTypes.bool,
         shouldComponentUpdate: React.PropTypes.func,
         onClick: React.PropTypes.func,
-        suppressOnHover: React.PropTypes.bool
+        suppressOnHover: React.PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -73,13 +73,13 @@ module.exports = React.createClass({
             presenceLastActiveAgo: 0,
             presenceLastTs: 0,
             showInviteButton: false,
-            suppressOnHover: false
+            suppressOnHover: false,
         };
     },
 
     getInitialState: function() {
         return {
-            hover: false
+            hover: false,
         };
     },
 
@@ -98,38 +98,39 @@ module.exports = React.createClass({
 
     render: function() {
         const presenceClass = presenceClassForMember(
-            this.props.presenceState, this.props.presenceLastActiveAgo
+            this.props.presenceState, this.props.presenceLastActiveAgo,
         );
 
-        var mainClassName = "mx_EntityTile ";
+        let mainClassName = "mx_EntityTile ";
         mainClassName += presenceClass + (this.props.className ? (" " + this.props.className) : "");
-        var nameEl;
+        let nameEl;
         const {name} = this.props;
 
         const EmojiText = sdk.getComponent('elements.EmojiText');
         if (this.state.hover && !this.props.suppressOnHover) {
-            var activeAgo = this.props.presenceLastActiveAgo ?
+            const activeAgo = this.props.presenceLastActiveAgo ?
                 (Date.now() - (this.props.presenceLastTs - this.props.presenceLastActiveAgo)) : -1;
 
             mainClassName += " mx_EntityTile_hover";
-            var PresenceLabel = sdk.getComponent("rooms.PresenceLabel");
+            const PresenceLabel = sdk.getComponent("rooms.PresenceLabel");
             nameEl = (
                 <div className="mx_EntityTile_details">
-                    <img className="mx_EntityTile_chevron" src="img/member_chevron.png" width="8" height="12"/>
-                    <EmojiText element="div" className="mx_EntityTile_name_hover" dir="auto">{name}</EmojiText>
-                    <PresenceLabel activeAgo={ activeAgo }
+                    <img className="mx_EntityTile_chevron" src="img/member_chevron.png" width="8" height="12" />
+                    <EmojiText element="div" className="mx_EntityTile_name mx_EntityTile_name_hover" dir="auto">
+                        { name }
+                    </EmojiText>
+                    <PresenceLabel activeAgo={activeAgo}
                         currentlyActive={this.props.presenceCurrentlyActive}
                         presenceState={this.props.presenceState} />
                 </div>
             );
-        }
-        else {
+        } else {
             nameEl = (
-                <EmojiText element="div" className="mx_EntityTile_name" dir="auto">{name}</EmojiText>
+                <EmojiText element="div" className="mx_EntityTile_name" dir="auto">{ name }</EmojiText>
             );
         }
 
-        var inviteButton;
+        let inviteButton;
         if (this.props.showInviteButton) {
             inviteButton = (
                 <div className="mx_EntityTile_invite">
@@ -138,25 +139,25 @@ module.exports = React.createClass({
             );
         }
 
-        var power;
-        var powerLevel = this.props.powerLevel;
+        let power;
+        const powerLevel = this.props.powerLevel;
         if (powerLevel >= 50 && powerLevel < 99) {
-            power = <img src="img/mod.svg" className="mx_EntityTile_power" width="16" height="17" alt={_t("Moderator")}/>;
+            power = <img src="img/mod.svg" className="mx_EntityTile_power" width="16" height="17" alt={_t("Moderator")} />;
         }
         if (powerLevel >= 99) {
-            power = <img src="img/admin.svg" className="mx_EntityTile_power" width="16" height="17" alt={_t("Admin")}/>;
+            power = <img src="img/admin.svg" className="mx_EntityTile_power" width="16" height="17" alt={_t("Admin")} />;
         }
 
 
-        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
-        var av = this.props.avatarJsx || <BaseAvatar name={this.props.name} width={36} height={36} />;
+        const av = this.props.avatarJsx || <BaseAvatar name={this.props.name} width={36} height={36} />;
 
         return (
-            <AccessibleButton className={mainClassName} title={ this.props.title }
-                    onClick={ this.props.onClick } onMouseEnter={ this.mouseEnter }
-                    onMouseLeave={ this.mouseLeave }>
+            <AccessibleButton className={mainClassName} title={this.props.title}
+                    onClick={this.props.onClick} onMouseEnter={this.mouseEnter}
+                    onMouseLeave={this.mouseLeave}>
                 <div className="mx_EntityTile_avatar">
                     { av }
                     { power }
@@ -165,5 +166,5 @@ module.exports = React.createClass({
                 { inviteButton }
             </AccessibleButton>
         );
-    }
+    },
 });

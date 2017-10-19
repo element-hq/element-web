@@ -1,9 +1,9 @@
-var Velocity = require('velocity-vector');
+const Velocity = require('velocity-vector');
 
 // courtesy of https://github.com/julianshapiro/velocity/issues/283
 // We only use easeOutBounce (easeInBounce is just sort of nonsensical)
 function bounce( p ) {
-    var pow2,
+    let pow2,
         bounce = 4;
 
     while ( p < ( ( pow2 = Math.pow( 2, --bounce ) ) - 1 ) / 11 ) {

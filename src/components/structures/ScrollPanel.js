@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require("react");
-var ReactDOM = require("react-dom");
-var GeminiScrollbar = require('react-gemini-scrollbar');
+const React = require("react");
+const ReactDOM = require("react-dom");
+const GeminiScrollbar = require('react-gemini-scrollbar');
 import Promise from 'bluebird';
-var KeyCode = require('../../KeyCode');
+const KeyCode = require('../../KeyCode');
 
-var DEBUG_SCROLL = false;
+const DEBUG_SCROLL = false;
 // var DEBUG_SCROLL = true;
 
 // The amount of extra scroll distance to allow prior to unfilling.
@@ -148,6 +148,7 @@ module.exports = React.createClass({
             onFillRequest: function(backwards) { return Promise.resolve(false); },
             onUnfillRequest: function(backwards, scrollToken) {},
             onScroll: function() {},
+            onResize: function() {},
         };
     },
 
@@ -157,7 +158,7 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        this.checkFillState();
+        this.checkScroll();
     },
 
     componentDidUpdate: function() {
@@ -178,7 +179,7 @@ module.exports = React.createClass({
     },
 
     onScroll: function(ev) {
-        var sn = this._getScrollNode();
+        const sn = this._getScrollNode();
         debuglog("Scroll event: offset now:", sn.scrollTop,
                  "_lastSetScroll:", this._lastSetScroll);
 
@@ -238,7 +239,7 @@ module.exports = React.createClass({
     // about whether the the content is scrolled down right now, irrespective of
     // whether it will stay that way when the children update.
     isAtBottom: function() {
-        var sn = this._getScrollNode();
+        const sn = this._getScrollNode();
 
         // there seems to be some bug with flexbox/gemini/chrome/richvdh's
         // understanding of the box model, wherein the scrollNode ends up 2
@@ -281,7 +282,7 @@ module.exports = React.createClass({
     //   |#########|                                       |
     //   `---------'                                       -
     _getExcessHeight: function(backwards) {
-        var sn = this._getScrollNode();
+        const sn = this._getScrollNode();
         if (backwards) {
             return sn.scrollTop - sn.clientHeight - UNPAGINATION_PADDING;
         } else {
@@ -295,7 +296,7 @@ module.exports = React.createClass({
             return;
         }
 
-        var sn = this._getScrollNode();
+        const sn = this._getScrollNode();
 
         // if there is less than a screenful of messages above or below the
         // viewport, try to get some more messages.
@@ -377,7 +378,7 @@ module.exports = React.createClass({
 
     // check if there is already a pending fill request. If not, set one off.
     _maybeFill: function(backwards) {
-        var dir = backwards ? 'b' : 'f';
+        const dir = backwards ? 'b' : 'f';
         if (this._pendingFillRequests[dir]) {
             debuglog("ScrollPanel: Already a "+dir+" fill in progress - not starting another");
             return;
@@ -470,8 +471,8 @@ module.exports = React.createClass({
      * mult: -1 to page up, +1 to page down
      */
     scrollRelative: function(mult) {
-        var scrollNode = this._getScrollNode();
-        var delta = mult * scrollNode.clientHeight * 0.5;
+        const scrollNode = this._getScrollNode();
+        const delta = mult * scrollNode.clientHeight * 0.5;
         this._setScrollTop(scrollNode.scrollTop + delta);
         this._saveScrollState();
     },
@@ -535,7 +536,7 @@ module.exports = React.createClass({
         this.scrollState = {
             stuckAtBottom: false,
             trackedScrollToken: scrollToken,
-            pixelOffset: pixelOffset
+            pixelOffset: pixelOffset,
         };
 
         // ... then make it so.
@@ -546,10 +547,10 @@ module.exports = React.createClass({
     // given offset in the window. A helper for _restoreSavedScrollState.
     _scrollToToken: function(scrollToken, pixelOffset) {
         /* find the dom node with the right scrolltoken */
-        var node;
-        var messages = this.refs.itemlist.children;
-        for (var i = messages.length-1; i >= 0; --i) {
-            var m = messages[i];
+        let node;
+        const messages = this.refs.itemlist.children;
+        for (let i = messages.length-1; i >= 0; --i) {
+            const m = messages[i];
             // 'data-scroll-tokens' is a DOMString of comma-separated scroll tokens
             // There might only be one scroll token
             if (m.dataset.scrollTokens &&
@@ -564,10 +565,10 @@ module.exports = React.createClass({
             return;
         }
 
-        var scrollNode = this._getScrollNode();
-        var wrapperRect = ReactDOM.findDOMNode(this).getBoundingClientRect();
-        var boundingRect = node.getBoundingClientRect();
-        var scrollDelta = boundingRect.bottom + pixelOffset - wrapperRect.bottom;
+        const scrollNode = this._getScrollNode();
+        const wrapperRect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+        const boundingRect = node.getBoundingClientRect();
+        const scrollDelta = boundingRect.bottom + pixelOffset - wrapperRect.bottom;
 
         debuglog("ScrollPanel: scrolling to token '" + scrollToken + "'+" +
                  pixelOffset + " (delta: "+scrollDelta+")");
@@ -575,7 +576,6 @@ module.exports = React.createClass({
         if(scrollDelta != 0) {
             this._setScrollTop(scrollNode.scrollTop + scrollDelta);
         }
-
     },
 
     _saveScrollState: function() {
@@ -585,16 +585,16 @@ module.exports = React.createClass({
             return;
         }
 
-        var itemlist = this.refs.itemlist;
-        var wrapperRect = ReactDOM.findDOMNode(this).getBoundingClientRect();
-        var messages = itemlist.children;
+        const itemlist = this.refs.itemlist;
+        const wrapperRect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+        const messages = itemlist.children;
         let newScrollState = null;
 
-        for (var i = messages.length-1; i >= 0; --i) {
-            var node = messages[i];
+        for (let i = messages.length-1; i >= 0; --i) {
+            const node = messages[i];
             if (!node.dataset.scrollTokens) continue;
 
-            var boundingRect = node.getBoundingClientRect();
+            const boundingRect = node.getBoundingClientRect();
             newScrollState = {
                 stuckAtBottom: false,
                 trackedScrollToken: node.dataset.scrollTokens.split(',')[0],
@@ -619,8 +619,8 @@ module.exports = React.createClass({
     },
 
     _restoreSavedScrollState: function() {
-        var scrollState = this.scrollState;
-        var scrollNode = this._getScrollNode();
+        const scrollState = this.scrollState;
+        const scrollNode = this._getScrollNode();
 
         if (scrollState.stuckAtBottom) {
             this._setScrollTop(Number.MAX_VALUE);
@@ -631,9 +631,9 @@ module.exports = React.createClass({
     },
 
     _setScrollTop: function(scrollTop) {
-        var scrollNode = this._getScrollNode();
+        const scrollNode = this._getScrollNode();
 
-        var prevScroll = scrollNode.scrollTop;
+        const prevScroll = scrollNode.scrollTop;
 
         // FF ignores attempts to set scrollTop to very large numbers
         scrollNode.scrollTop = Math.min(scrollTop, scrollNode.scrollHeight);
@@ -676,7 +676,7 @@ module.exports = React.createClass({
                 className={this.props.className} style={this.props.style}>
                     <div className="mx_RoomView_messageListWrapper">
                         <ol ref="itemlist" className="mx_RoomView_MessageList" aria-live="polite">
-                            {this.props.children}
+                            { this.props.children }
                         </ol>
                     </div>
                 </GeminiScrollbar>

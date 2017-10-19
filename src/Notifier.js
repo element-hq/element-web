@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -79,10 +80,11 @@ const Notifier = {
             if (ev.getContent().body) msg = ev.getContent().body;
         }
 
-        const avatarUrl = ev.sender ? Avatar.avatarUrlForMember(
-            ev.sender, 40, 40, 'crop'
-        ) : null;
+        if (!this.isBodyEnabled()) {
+            msg = '';
+        }
 
+        const avatarUrl = ev.sender ? Avatar.avatarUrlForMember(ev.sender, 40, 40, 'crop') : null;
         const notif = plaf.displayNotification(title, msg, avatarUrl, room);
 
         // if displayNotification returns non-null,  the platform supports
@@ -96,17 +98,16 @@ const Notifier = {
     _playAudioNotification: function(ev, room) {
         const e = document.getElementById("messageAudio");
         if (e) {
-            e.load();
             e.play();
         }
     },
 
     start: function() {
-        this.boundOnRoomTimeline = this.onRoomTimeline.bind(this);
+        this.boundOnEvent = this.onEvent.bind(this);
         this.boundOnSyncStateChange = this.onSyncStateChange.bind(this);
         this.boundOnRoomReceipt = this.onRoomReceipt.bind(this);
         this.boundOnEventDecrypted = this.onEventDecrypted.bind(this);
-        MatrixClientPeg.get().on('Room.timeline', this.boundOnRoomTimeline);
+        MatrixClientPeg.get().on('event', this.boundOnEvent);
         MatrixClientPeg.get().on('Room.receipt', this.boundOnRoomReceipt);
         MatrixClientPeg.get().on('Event.decrypted', this.boundOnEventDecrypted);
         MatrixClientPeg.get().on("sync", this.boundOnSyncStateChange);
@@ -116,7 +117,7 @@ const Notifier = {
 
     stop: function() {
         if (MatrixClientPeg.get() && this.boundOnRoomTimeline) {
-            MatrixClientPeg.get().removeListener('Room.timeline', this.boundOnRoomTimeline);
+            MatrixClientPeg.get().removeListener('Event', this.boundOnEvent);
             MatrixClientPeg.get().removeListener('Room.receipt', this.boundOnRoomReceipt);
             MatrixClientPeg.get().removeListener('Event.decrypted', this.boundOnEventDecrypted);
             MatrixClientPeg.get().removeListener('sync', this.boundOnSyncStateChange);
@@ -195,6 +196,19 @@ const Notifier = {
         return enabled === 'true';
     },
 
+    setBodyEnabled: function(enable) {
+        if (!global.localStorage) return;
+        global.localStorage.setItem('notifications_body_enabled', enable ? 'true' : 'false');
+    },
+
+    isBodyEnabled: function() {
+        if (!global.localStorage) return true;
+        const enabled = global.localStorage.getItem('notifications_body_enabled');
+        // default to true if the popups are enabled
+        if (enabled === null) return this.isEnabled();
+        return enabled === 'true';
+    },
+
     setAudioEnabled: function(enable) {
         if (!global.localStorage) return;
         global.localStorage.setItem('audio_notifications_enabled',
@@ -247,12 +261,9 @@ const Notifier = {
         }
     },
 
-    onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
-        if (toStartOfTimeline) return;
-        if (!room) return;
+    onEvent: function(ev) {
         if (!this.isSyncing) return; // don't alert for any messages initially
         if (ev.sender && ev.sender.userId === MatrixClientPeg.get().credentials.userId) return;
-        if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
 
         // If it's an encrypted event and the type is still 'm.room.encrypted',
         // it hasn't yet been decrypted, so wait until it is.
@@ -306,7 +317,7 @@ const Notifier = {
                 this._playAudioNotification(ev, room);
             }
         }
-    }
+    },
 };
 
 if (!global.mxNotifier) {

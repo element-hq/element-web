@@ -31,9 +31,9 @@ module.exports = React.createClass({
     },
 
     onAvatarClick: function(name) {
-        var httpUrl = MatrixClientPeg.get().mxcUrlToHttp(this.props.mxEvent.getContent().url);
-        var ImageView = sdk.getComponent("elements.ImageView");
-        var params = {
+        const httpUrl = MatrixClientPeg.get().mxcUrlToHttp(this.props.mxEvent.getContent().url);
+        const ImageView = sdk.getComponent("elements.ImageView");
+        const params = {
             src: httpUrl,
             name: name,
         };
@@ -41,12 +41,12 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var ev = this.props.mxEvent;
-        var senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-        var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        const ev = this.props.mxEvent;
+        const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        var room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        var name = _t('%(senderDisplayName)s changed the avatar for %(roomName)s', {
+        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        const name = _t('%(senderDisplayName)s changed the avatar for %(roomName)s', {
                 senderDisplayName: senderDisplayName,
                 roomName: room ? room.name : '',
         });
@@ -59,31 +59,31 @@ module.exports = React.createClass({
             );
         }
 
-        var url = ContentRepo.getHttpUriForMxc(
+        const url = ContentRepo.getHttpUriForMxc(
                     MatrixClientPeg.get().getHomeserverUrl(),
                     ev.getContent().url,
                     Math.ceil(14 * window.devicePixelRatio),
                     Math.ceil(14 * window.devicePixelRatio),
-                    'crop'
+                    'crop',
                 );
 
         // it sucks that _tJsx doesn't support normal _t substitutions :((
         return (
             <div className="mx_RoomAvatarEvent">
-                { _tJsx('$senderDisplayName changed the room avatar to <img/>',
+                { _tJsx('%(senderDisplayName)s changed the room avatar to <img/>',
                          [
-                            /\$senderDisplayName/,
+                            /%\(senderDisplayName\)s/,
                             /<img\/>/,
                          ],
                          [
                             (sub) => senderDisplayName,
                             (sub) =>
                                 <AccessibleButton key="avatar" className="mx_RoomAvatarEvent_avatar"
-                                                  onClick={ this.onAvatarClick.bind(this, name) }>
-                                    <BaseAvatar width={14} height={14} url={ url }
-                                                name={ name } />
+                                                  onClick={this.onAvatarClick.bind(this, name)}>
+                                    <BaseAvatar width={14} height={14} url={url}
+                                                name={name} />
                                 </AccessibleButton>,
-                         ]
+                         ],
                     )
                 }
             </div>

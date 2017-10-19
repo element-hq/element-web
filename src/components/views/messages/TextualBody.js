@@ -31,6 +31,7 @@ import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import UserSettingsStore from "../../../UserSettingsStore";
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import ContextualMenu from '../../structures/ContextualMenu';
 import {RoomMember} from 'matrix-js-sdk';
 import classNames from 'classnames';
 
@@ -72,12 +73,16 @@ module.exports = React.createClass({
         textArea.value = text;
         document.body.appendChild(textArea);
         textArea.select();
+
+        let successful = false;
         try {
-            const successful = document.execCommand('copy');
+            successful = document.execCommand('copy');
         } catch (err) {
             console.log('Unable to copy');
         }
+
         document.body.removeChild(textArea);
+        return successful;
     },
 
     componentDidMount: function() {
@@ -99,10 +104,10 @@ module.exports = React.createClass({
                     if (this._unmounted) return;
                     for (let i = 0; i < blocks.length; i++) {
                         if (UserSettingsStore.getSyncedSetting("enableSyntaxHighlightLanguageDetection", false)) {
-                            highlight.highlightBlock(blocks[i])
+                            highlight.highlightBlock(blocks[i]);
                         } else {
                             // Only syntax highlight if there's a class starting with language-
-                            let classes = blocks[i].className.split(/\s+/).filter(function (cl) {
+                            const classes = blocks[i].className.split(/\s+/).filter(function(cl) {
                                 return cl.startsWith('language-');
                             });
 
@@ -113,14 +118,7 @@ module.exports = React.createClass({
                     }
                 }, 10);
             }
-            // add event handlers to the 'copy code' buttons
-            const buttons = ReactDOM.findDOMNode(this).getElementsByClassName("mx_EventTile_copyButton");
-            for (let i = 0; i < buttons.length; i++) {
-                buttons[i].onclick = (e) => {
-                    const copyCode = buttons[i].parentNode.getElementsByTagName("code")[0];
-                    this.copyToClipboard(copyCode.textContent);
-                };
-            }
+            this._addCodeCopyButton();
         }
     },
 
@@ -148,7 +146,7 @@ module.exports = React.createClass({
         //console.log("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
         if (this.props.showUrlPreview && !this.state.links.length) {
-            var links = this.findLinks(this.refs.content.children);
+            let links = this.findLinks(this.refs.content.children);
             if (links.length) {
                 // de-dup the links (but preserve ordering)
                 const seen = new Set();
@@ -162,7 +160,7 @@ module.exports = React.createClass({
 
                 // lazy-load the hidden state of the preview widget from localstorage
                 if (global.localStorage) {
-                    var hidden = global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
+                    const hidden = global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
                     this.setState({ widgetHidden: hidden });
                 }
             }
@@ -199,21 +197,18 @@ module.exports = React.createClass({
     },
 
     findLinks: function(nodes) {
-        var links = [];
+        let links = [];
 
-        for (var i = 0; i < nodes.length; i++) {
-            var node = nodes[i];
-            if (node.tagName === "A" && node.getAttribute("href"))
-            {
+        for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
+            if (node.tagName === "A" && node.getAttribute("href")) {
                 if (this.isLinkPreviewable(node)) {
                     links.push(node.getAttribute("href"));
                 }
-            }
-            else if (node.tagName === "PRE" || node.tagName === "CODE" ||
+            } else if (node.tagName === "PRE" || node.tagName === "CODE" ||
                     node.tagName === "BLOCKQUOTE") {
                 continue;
-            }
-            else if (node.children && node.children.length) {
+            } else if (node.children && node.children.length) {
                 links = links.concat(this.findLinks(node.children));
             }
         }
@@ -223,8 +218,7 @@ module.exports = React.createClass({
     isLinkPreviewable: function(node) {
         // don't try to preview relative links
         if (!node.getAttribute("href").startsWith("http://") &&
-            !node.getAttribute("href").startsWith("https://"))
-        {
+            !node.getAttribute("href").startsWith("https://")) {
             return false;
         }
 
@@ -233,13 +227,11 @@ module.exports = React.createClass({
         // or from a full foo.bar/baz style schemeless URL) - or be a markdown-style
         // link, in which case we check the target text differs from the link value.
         // TODO: make this configurable?
-        if (node.textContent.indexOf("/") > -1)
-        {
+        if (node.textContent.indexOf("/") > -1) {
             return true;
-        }
-        else {
-            var url = node.getAttribute("href");
-            var host = url.match(/^https?:\/\/(.*?)(\/|$)/)[1];
+        } else {
+            const url = node.getAttribute("href");
+            const host = url.match(/^https?:\/\/(.*?)(\/|$)/)[1];
 
             // never preview matrix.to links (if anything we should give a smart
             // preview of the room/user they point to: nobody needs to be reminded
@@ -249,12 +241,38 @@ module.exports = React.createClass({
             if (node.textContent.toLowerCase().trim().startsWith(host.toLowerCase())) {
                 // it's a "foo.pl" style link
                 return false;
-            }
-            else {
+            } else {
                 // it's a [foo bar](http://foo.com) style link
                 return true;
             }
         }
+    },
+
+    _addCodeCopyButton() {
+        // Add 'copy' buttons to pre blocks
+        ReactDOM.findDOMNode(this).querySelectorAll('.mx_EventTile_body pre').forEach((p) => {
+            const button = document.createElement("span");
+            button.className = "mx_EventTile_copyButton";
+            button.onclick = (e) => {
+                const copyCode = button.parentNode.getElementsByTagName("code")[0];
+                const successful = this.copyToClipboard(copyCode.textContent);
+
+                const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
+                const buttonRect = e.target.getBoundingClientRect();
+
+                // The window X and Y offsets are to adjust position when zoomed in to page
+                const x = buttonRect.right + window.pageXOffset;
+                const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
+                const {close} = ContextualMenu.createMenu(GenericTextContextMenu, {
+                    chevronOffset: 10,
+                    left: x,
+                    top: y,
+                    message: successful ? _t('Copied!') : _t('Failed to copy'),
+                });
+                e.target.onmouseout = close;
+            };
+            p.appendChild(button);
+        });
     },
 
     onCancelClick: function(event) {
@@ -289,7 +307,7 @@ module.exports = React.createClass({
 
             getInnerText: () => {
                 return this.refs.content.innerText;
-            }
+            },
         };
     },
 
@@ -303,28 +321,28 @@ module.exports = React.createClass({
         // the window.open command occurs in the same stack frame as the onClick callback.
 
         // Go fetch a scalar token
-        let scalarClient = new ScalarAuthClient();
+        const scalarClient = new ScalarAuthClient();
         scalarClient.connect().then(() => {
-            let completeUrl = scalarClient.getStarterLink(starterLink);
-            let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            let integrationsUrl = SdkConfig.get().integrations_ui_url;
+            const completeUrl = scalarClient.getStarterLink(starterLink);
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            const integrationsUrl = SdkConfig.get().integrations_ui_url;
             Modal.createTrackedDialog('Add an integration', '', QuestionDialog, {
                 title: _t("Add an Integration"),
                 description:
                     <div>
-                        {_t("You are about to be taken to a third-party site so you can " +
+                        { _t("You are about to be taken to a third-party site so you can " +
                             "authenticate your account for use with %(integrationsUrl)s. " +
-                            "Do you wish to continue?", { integrationsUrl: integrationsUrl })}
+                            "Do you wish to continue?", { integrationsUrl: integrationsUrl }) }
                     </div>,
                 button: _t("Continue"),
                 onFinished: function(confirmed) {
                     if (!confirmed) {
                         return;
                     }
-                    let width = window.screen.width > 1024 ? 1024 : window.screen.width;
-                    let height = window.screen.height > 800 ? 800 : window.screen.height;
-                    let left = (window.screen.width - width) / 2;
-                    let top = (window.screen.height - height) / 2;
+                    const width = window.screen.width > 1024 ? 1024 : window.screen.width;
+                    const height = window.screen.height > 800 ? 800 : window.screen.height;
+                    const left = (window.screen.width - width) / 2;
+                    const top = (window.screen.height - height) / 2;
                     window.open(completeUrl, '_blank', `height=${height}, width=${width}, top=${top}, left=${left},`);
                 },
             });
@@ -333,28 +351,29 @@ module.exports = React.createClass({
 
     render: function() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
-        var mxEvent = this.props.mxEvent;
-        var content = mxEvent.getContent();
+        const mxEvent = this.props.mxEvent;
+        const content = mxEvent.getContent();
 
-        var body = HtmlUtils.bodyToHtml(content, this.props.highlights, {});
+        let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
+            disableBigEmoji: UserSettingsStore.getSyncedSetting('TextualBody.disableBigEmoji', false),
+        });
 
         if (this.props.highlightLink) {
-            body = <a href={ this.props.highlightLink }>{ body }</a>;
-        }
-        else if (content.data && typeof content.data["org.matrix.neb.starter_link"] === "string") {
-            body = <a href="#" onClick={ this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"]) }>{ body }</a>;
+            body = <a href={this.props.highlightLink}>{ body }</a>;
+        } else if (content.data && typeof content.data["org.matrix.neb.starter_link"] === "string") {
+            body = <a href="#" onClick={this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"])}>{ body }</a>;
         }
 
-        var widgets;
+        let widgets;
         if (this.state.links.length && !this.state.widgetHidden && this.props.showUrlPreview) {
-            var LinkPreviewWidget = sdk.getComponent('rooms.LinkPreviewWidget');
+            const LinkPreviewWidget = sdk.getComponent('rooms.LinkPreviewWidget');
             widgets = this.state.links.map((link)=>{
                 return <LinkPreviewWidget
-                            key={ link }
-                            link={ link }
-                            mxEvent={ this.props.mxEvent }
-                            onCancelClick={ this.onCancelClick }
-                            onWidgetLoad={ this.props.onWidgetLoad }/>;
+                            key={link}
+                            link={link}
+                            mxEvent={this.props.mxEvent}
+                            onCancelClick={this.onCancelClick}
+                            onWidgetLoad={this.props.onWidgetLoad} />;
             });
         }
 
@@ -368,7 +387,7 @@ module.exports = React.createClass({
                             className="mx_MEmoteBody_sender"
                             onClick={this.onEmoteSenderClick}
                         >
-                            {name}
+                            { name }
                         </EmojiText>
                         &nbsp;
                         { body }

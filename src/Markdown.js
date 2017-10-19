@@ -17,7 +17,7 @@ limitations under the License.
 import commonmark from 'commonmark';
 import escape from 'lodash/escape';
 
-const ALLOWED_HTML_TAGS = ['del', 'u'];
+const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u'];
 
 // These types of node are definitely text
 const TEXT_NODES = ['text', 'softbreak', 'linebreak', 'paragraph', 'document'];
@@ -48,7 +48,7 @@ function html_if_tag_allowed(node) {
  * or false if it is only a single line.
  */
 function is_multi_line(node) {
-    var par = node;
+    let par = node;
     while (par.parent) {
         par = par.parent;
     }
@@ -143,7 +143,7 @@ export default class Markdown {
             if (isMultiLine) this.cr();
             html_if_tag_allowed.call(this, node);
             if (isMultiLine) this.cr();
-        }
+        };
 
         return renderer.render(this.parsed);
     }
@@ -178,7 +178,7 @@ export default class Markdown {
         renderer.html_block = function(node) {
             this.lit(node.literal);
             if (is_multi_line(node) && node.next) this.lit('\n\n');
-        }
+        };
 
         return renderer.render(this.parsed);
     }

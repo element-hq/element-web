@@ -16,12 +16,12 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
 
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var sdk = require('../../../index');
-var dis = require('../../../dispatcher');
-var Modal = require("../../../Modal");
+const MatrixClientPeg = require('../../../MatrixClientPeg');
+const sdk = require('../../../index');
+const dis = require('../../../dispatcher');
+const Modal = require("../../../Modal");
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
@@ -68,16 +68,16 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        var EntityTile = sdk.getComponent('rooms.EntityTile');
+        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+        const EntityTile = sdk.getComponent('rooms.EntityTile');
 
-        var member = this.props.member;
-        var name = this._getDisplayName();
-        var active = -1;
-        var presenceState = member.user ? member.user.presence : null;
+        const member = this.props.member;
+        const name = this._getDisplayName();
+        const active = -1;
+        const presenceState = member.user ? member.user.presence : null;
 
-        var av = (
+        const av = (
             <MemberAvatar member={member} width={36} height={36} />
         );
 
@@ -88,11 +88,11 @@ module.exports = React.createClass({
 
         return (
             <EntityTile {...this.props} presenceState={presenceState}
-                presenceLastActiveAgo={ member.user ? member.user.lastActiveAgo : 0 }
-                presenceLastTs={ member.user ? member.user.lastPresenceTs : 0 }
-                presenceCurrentlyActive={ member.user ? member.user.currentlyActive : false }
+                presenceLastActiveAgo={member.user ? member.user.lastActiveAgo : 0}
+                presenceLastTs={member.user ? member.user.lastPresenceTs : 0}
+                presenceCurrentlyActive={member.user ? member.user.currentlyActive : false}
                 avatarJsx={av} title={this.getPowerLabel()} onClick={this.onClick}
                 name={name} powerLevel={this.props.member.powerLevel} />
         );
-    }
+    },
 });

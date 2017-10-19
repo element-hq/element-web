@@ -39,7 +39,7 @@ const GroupTile = React.createClass({
     },
 
     render: function() {
-        return <a onClick={this.onClick} href="#">{this.props.groupId}</a>;
+        return <a onClick={this.onClick} href="#">{ this.props.groupId }</a>;
     },
 });
 
@@ -63,7 +63,7 @@ export default withMatrixClient(React.createClass({
 
     _onCreateGroupClick: function() {
         const CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog");
-        Modal.createTrackedDialog('Create Group', '', CreateGroupDialog);
+        Modal.createTrackedDialog('Create Community', '', CreateGroupDialog);
     },
 
     _fetch: function() {
@@ -90,51 +90,51 @@ export default withMatrixClient(React.createClass({
                 );
             });
             content = <div>
-                <div>{_t('You are a member of these groups:')}</div>
-                {groupNodes}
+                <div>{ _t('You are a member of these communities:') }</div>
+                { groupNodes }
             </div>;
         } else if (this.state.error) {
             content = <div className="mx_MyGroups_error">
-                {_t('Error whilst fetching joined groups')}
+                { _t('Error whilst fetching joined communities') }
             </div>;
         } else {
             content = <Loader />;
         }
 
         return <div className="mx_MyGroups">
-            <SimpleRoomHeader title={ _t("Groups") } />
+            <SimpleRoomHeader title={_t("Communities")} icon="img/icons-groups.svg" />
             <div className='mx_MyGroups_joinCreateBox'>
                 <div className="mx_MyGroups_createBox">
                     <div className="mx_MyGroups_joinCreateHeader">
-                        {_t('Create a new group')}
+                        { _t('Create a new community') }
                     </div>
                     <AccessibleButton className='mx_MyGroups_joinCreateButton' onClick={this._onCreateGroupClick}>
                         <TintableSvg src="img/icons-create-room.svg" width="50" height="50" />
                     </AccessibleButton>
-                    {_t(
-                        'Create a group to represent your community! '+
+                    { _t(
+                        'Create a community to represent your community! '+
                         'Define a set of rooms and your own custom homepage '+
                         'to mark out your space in the Matrix universe.',
-                    )}
+                    ) }
                 </div>
                 <div className="mx_MyGroups_joinBox">
                     <div className="mx_MyGroups_joinCreateHeader">
-                        {_t('Join an existing group')}
+                        { _t('Join an existing community') }
                     </div>
                     <AccessibleButton className='mx_MyGroups_joinCreateButton' onClick={this._onJoinGroupClick}>
                         <TintableSvg src="img/icons-create-room.svg" width="50" height="50" />
                     </AccessibleButton>
-                    {_tJsx(
-                        'To join an exisitng group you\'ll have to '+
-                        'know its group identifier; this will look '+
+                    { _tJsx(
+                        'To join an existing community you\'ll have to '+
+                        'know its community identifier; this will look '+
                         'something like <i>+example:matrix.org</i>.',
                         /<i>(.*)<\/i>/,
-                        (sub) => <i>{sub}</i>,
-                    )}
+                        (sub) => <i>{ sub }</i>,
+                    ) }
                 </div>
             </div>
             <div className="mx_MyGroups_content">
-                {content}
+                { content }
             </div>
         </div>;
     },
