@@ -992,7 +992,7 @@ export default React.createClass({
                 }
                 return (
                     <div className="mx_GroupView_error">
-                        { _t('Failed to load %(groupId)', {groupId: this.props.groupId }) }
+                        { _t('Failed to load %(groupId)s', {groupId: this.props.groupId }) }
                         { extraText }
                     </div>
                 );
