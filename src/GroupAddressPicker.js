@@ -24,10 +24,10 @@ import GroupStoreCache from './stores/GroupStoreCache';
 export function showGroupInviteDialog(groupId) {
     const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
     Modal.createTrackedDialog('Group Invite', '', AddressPickerDialog, {
-        title: _t("Invite new group members"),
-        description: _t("Who would you like to add to this group?"),
+        title: _t("Invite new community members"),
+        description: _t("Who would you like to add to this community?"),
         placeholder: _t("Name or matrix ID"),
-        button: _t("Invite to Group"),
+        button: _t("Invite to Community"),
         validAddressTypes: ['mx-user-id'],
         onFinished: (success, addrs) => {
             if (!success) return;
@@ -41,10 +41,10 @@ export function showGroupAddRoomDialog(groupId) {
     return new Promise((resolve, reject) => {
         const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
         Modal.createTrackedDialog('Add Rooms to Group', '', AddressPickerDialog, {
-            title: _t("Add rooms to the group"),
-            description: _t("Which rooms would you like to add to this group?"),
+            title: _t("Add rooms to the community"),
+            description: _t("Which rooms would you like to add to this community?"),
             placeholder: _t("Room name or alias"),
-            button: _t("Add to group"),
+            button: _t("Add to community"),
             pickerType: 'room',
             validAddressTypes: ['mx-room-id'],
             onFinished: (success, addrs) => {
@@ -80,14 +80,14 @@ function _onGroupInviteFinished(groupId, addrs) {
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             Modal.createTrackedDialog('Group invitations sent', '', QuestionDialog, {
                 title: _t("Invites sent"),
-                description: _t("Your group invitations have been sent."),
+                description: _t("Your community invitations have been sent."),
                 hasCancelButton: false,
             });
         }
     }).catch((err) => {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Failed to invite users to group', '', ErrorDialog, {
-            title: _t("Failed to invite users group"),
+            title: _t("Failed to invite users to community"),
             description: _t("Failed to invite users to %(groupId)s", {groupId: groupId}),
         });
     });

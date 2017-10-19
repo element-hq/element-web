@@ -153,7 +153,7 @@ export default withMatrixClient(React.createClass({
             <form autoComplete="off">
                 <input className="mx_GroupMemberList_query" id="mx_GroupMemberList_query" type="text"
                         onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={_t('Filter group members')} />
+                        placeholder={_t('Filter community members')} />
             </form>
         );
 
