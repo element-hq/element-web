@@ -21,10 +21,6 @@ import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 
-// We match fairly liberally and leave it up to the server to reject if
-// there are invalid characters etc.
-const GROUP_REGEX = /^\+(.*?):(.*)$/;
-
 export default React.createClass({
     displayName: 'CreateGroupDialog',
     propTypes: {
@@ -150,7 +146,7 @@ export default React.createClass({
                                     onBlur={this._onGroupIdBlur}
                                     value={this.state.groupId}
                                 />
-                                <span>:{MatrixClientPeg.get().getDomain()}</span>
+                                <span>:{ MatrixClientPeg.get().getDomain() }</span>
                             </div>
                         </div>
                         <div className="error">
