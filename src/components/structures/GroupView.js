@@ -490,15 +490,15 @@ export default React.createClass({
         });
     },
 
-    _onNameChange: function(e) {
-        const newProfileForm = Object.assign(this.state.profileForm, { name: e.target.value });
+    _onNameChange: function(value) {
+        const newProfileForm = Object.assign(this.state.profileForm, { name: value });
         this.setState({
             profileForm: newProfileForm,
         });
     },
 
-    _onShortDescChange: function(e) {
-        const newProfileForm = Object.assign(this.state.profileForm, { short_description: e.target.value });
+    _onShortDescChange: function(value) {
+        const newProfileForm = Object.assign(this.state.profileForm, { short_description: value });
         this.setState({
             profileForm: newProfileForm,
         });
@@ -878,18 +878,29 @@ export default React.createClass({
                         </div>
                     </div>
                 );
-                nameNode = <input type="text"
-                    value={this.state.profileForm.name}
-                    onChange={this._onNameChange}
-                    placeholder={_t('Group Name')}
-                    tabIndex="1"
-                />;
-                shortDescNode = <input type="text"
-                    value={this.state.profileForm.short_description}
-                    onChange={this._onShortDescChange}
-                    placeholder={_t('Description')}
-                    tabIndex="2"
-                />;
+
+                const EditableText = sdk.getComponent("elements.EditableText");
+
+                nameNode = <EditableText ref="nameEditor"
+                     className="mx_GroupView_editable"
+                     placeholderClassName="mx_GroupView_placeholder"
+                     placeholder={_t("Group Name")}
+                     blurToCancel={false}
+                     initialValue={this.state.profileForm.name}
+                     onValueChanged={this._onNameChange}
+                     tabIndex="1"
+                     dir="auto" />;
+
+                shortDescNode = <EditableText ref="descriptionEditor"
+                     className="mx_GroupView_editable"
+                     placeholderClassName="mx_GroupView_placeholder"
+                     placeholder={_t("Description")}
+                     blurToCancel={false}
+                     initialValue={this.state.profileForm.short_description}
+                     onValueChanged={this._onShortDescChange}
+                     tabIndex="2"
+                     dir="auto" />;
+
                 rightButtons.push(
                     <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
                         onClick={this._onSaveClick} key="_saveButton"
@@ -911,17 +922,17 @@ export default React.createClass({
                     width={48} height={48}
                 />;
                 if (summary.profile && summary.profile.name) {
-                    nameNode = <div>
+                    nameNode = <div onClick={this._onEditClick}>
                         <span>{ summary.profile.name }</span>
                         <span className="mx_GroupView_header_groupid">
                             ({ this.props.groupId })
                         </span>
                     </div>;
                 } else {
-                    nameNode = <span>{ this.props.groupId }</span>;
+                    nameNode = <span onClick={this._onEditClick}>{ this.props.groupId }</span>;
                 }
                 if (summary.profile && summary.profile.short_description) {
-                    shortDescNode = <span>{ summary.profile.short_description }</span>;
+                    shortDescNode = <span onClick={this._onEditClick}>{ summary.profile.short_description }</span>;
                 }
                 rightButtons.push(
                     <AccessibleButton className="mx_GroupHeader_button"
