@@ -112,7 +112,6 @@ export default class Flair extends React.Component {
                 .getRoom(this.props.roomId)
                 .currentState
                 .getStateEvents('m.room.related_groups', '');
-            console.info('relatedGroupsEvent', relatedGroupsEvent);
             const relatedGroups = relatedGroupsEvent ?
                 relatedGroupsEvent.getContent().groups || [] : [];
             if (relatedGroups && relatedGroups.length > 0) {

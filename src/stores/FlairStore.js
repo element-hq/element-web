@@ -49,8 +49,6 @@ class FlairStore extends EventEmitter {
             //  }
         };
 
-        // this._fetchRooms();
-
         this._debounceTimeoutID = null;
     }
 
