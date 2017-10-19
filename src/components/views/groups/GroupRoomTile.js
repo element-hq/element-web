@@ -58,7 +58,7 @@ const GroupRoomTile = React.createClass({
                 console.error(`Error whilst removing ${roomId} from ${groupId}`, err);
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Failed to remove room from group', '', ErrorDialog, {
-                    title: _t("Failed to remove room from group"),
+                    title: _t("Failed to remove room from community"),
                     description: _t("Failed to remove '%(roomName)s' from %(groupId)s", {groupId, roomName}),
                 });
             });
@@ -87,7 +87,7 @@ const GroupRoomTile = React.createClass({
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createTrackedDialog('Confirm removal of group from room', '', QuestionDialog, {
             title: _t("Are you sure you want to remove '%(roomName)s' from %(groupId)s?", {roomName, groupId}),
-            description: _t("Removing a room from the group will also remove it from the group page."),
+            description: _t("Removing a room from the community will also remove it from the community page."),
             button: _t("Remove"),
             onFinished: (success) => {
                 if (success) {

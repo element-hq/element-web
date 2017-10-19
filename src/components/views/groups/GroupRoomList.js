@@ -126,7 +126,7 @@ export default React.createClass({
             <form autoComplete="off">
                 <input className="mx_GroupRoomList_query" id="mx_GroupRoomList_query" type="text"
                         onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={_t('Filter group rooms')} />
+                        placeholder={_t('Filter community rooms')} />
             </form>
         );
 

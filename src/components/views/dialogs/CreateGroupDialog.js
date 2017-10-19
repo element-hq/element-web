@@ -62,15 +62,15 @@ export default React.createClass({
         let error = null;
         if (parsedGroupId === null) {
             error = _t(
-                "Group IDs must be of the form +localpart:%(domain)s",
+                "Community IDs must be of the form +localpart:%(domain)s",
                 {domain: MatrixClientPeg.get().getDomain()},
             );
         } else {
             const domain = parsedGroupId[1];
             if (domain !== MatrixClientPeg.get().getDomain()) {
                 error = _t(
-                    "It is currently only possible to create groups on your own home server: "+
-                    "use a group ID ending with %(domain)s",
+                    "It is currently only possible to create communities on your own home server: "+
+                    "use a community ID ending with %(domain)s",
                     {domain: MatrixClientPeg.get().getDomain()},
                 );
             }
@@ -150,13 +150,13 @@ export default React.createClass({
         return (
             <BaseDialog className="mx_CreateGroupDialog" onFinished={this.props.onFinished}
                 onEnterPressed={this._onFormSubmit}
-                title={_t('Create Group')}
+                title={_t('Create Community')}
             >
                 <form onSubmit={this._onFormSubmit}>
                     <div className="mx_Dialog_content">
                         <div className="mx_CreateGroupDialog_inputRow">
                             <div className="mx_CreateGroupDialog_label">
-                                <label htmlFor="groupname">{ _t('Group Name') }</label>
+                                <label htmlFor="groupname">{ _t('Community Name') }</label>
                             </div>
                             <div>
                                 <input id="groupname" className="mx_CreateGroupDialog_input"
@@ -169,7 +169,7 @@ export default React.createClass({
                         </div>
                         <div className="mx_CreateGroupDialog_inputRow">
                             <div className="mx_CreateGroupDialog_label">
-                                <label htmlFor="groupid">{ _t('Group ID') }</label>
+                                <label htmlFor="groupid">{ _t('Community ID') }</label>
                             </div>
                             <div>
                                 <input id="groupid" className="mx_CreateGroupDialog_input"
