@@ -590,7 +590,7 @@
     "Community Name": "Community Name",
     "Example": "Example",
     "Community ID": "Community ID",
-    "+example:%(domain)s": "+example:%(domain)s",
+    "example": "example",
     "Create": "Create",
     "Create Room": "Create Room",
     "Room name (optional)": "Room name (optional)",
