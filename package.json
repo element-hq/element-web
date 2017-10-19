@@ -29,6 +29,7 @@
     "reskindex": "reskindex -h src/header",
     "reskindex:watch": "reskindex -h src/header -w",
     "i18n": "matrix-gen-i18n",
+    "prunei18n": "matrix-prune-i18n",
     "build:res": "node scripts/copy-res.js",
     "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
     "build:compile": "npm run reskindex && babel --source-maps -d lib src",
