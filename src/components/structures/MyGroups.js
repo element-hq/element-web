@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import {MatrixClient} from 'matrix-js-sdk';
 import sdk from '../../index';
 import { _t, _tJsx } from '../../languageHandler';
 import withMatrixClient from '../../wrappers/withMatrixClient';
@@ -23,11 +24,29 @@ import dis from '../../dispatcher';
 import PropTypes from 'prop-types';
 import Modal from '../../Modal';
 
+import FlairStore from '../../stores/FlairStore';
+
 const GroupTile = React.createClass({
     displayName: 'GroupTile',
 
     propTypes: {
         groupId: PropTypes.string.isRequired,
+    },
+
+    contextTypes: {
+        matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
+    },
+
+    getInitialState() {
+        return {
+            profile: null,
+        };
+    },
+
+    componentWillMount: function() {
+        FlairStore.getGroupProfileCached(this.context.matrixClient, this.props.groupId).then((profile) => {
+            this.setState({profile});
+        });
     },
 
     onClick: function(e) {
@@ -39,7 +58,21 @@ const GroupTile = React.createClass({
     },
 
     render: function() {
-        return <a onClick={this.onClick} href="#">{ this.props.groupId }</a>;
+        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+        const profile = this.state.profile || {};
+        const name = profile.name || this.props.groupId;
+        const desc = profile.shortDescription;
+        const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(profile.avatarUrl, 50, 50) : null;
+        return <AccessibleButton className="mx_GroupTile" onClick={this.onClick}>
+            <div className="mx_GroupTile_avatar">
+                <BaseAvatar name={name} url={httpUrl} width={50} height={50} />
+            </div>
+            <div className="mx_GroupTile_profile">
+                <h3 className="mx_GroupTile_name">{ name }</h3>
+                <div className="mx_GroupTile_desc">{ desc }</div>
+                <div className="mx_GroupTile_groupId">{ this.props.groupId }</div>
+            </div>
+        </AccessibleButton>;
     },
 });
 
@@ -83,14 +116,9 @@ export default withMatrixClient(React.createClass({
         if (this.state.groups) {
             const groupNodes = [];
             this.state.groups.forEach((g) => {
-                groupNodes.push(
-                    <div key={g}>
-                        <GroupTile groupId={g} />
-                    </div>,
-                );
+                groupNodes.push(<GroupTile groupId={g} />);
             });
-            content = <div>
-                <div>{ _t('You are a member of these communities:') }</div>
+            content = <div className="mx_MyGroups_joinedGroups">
                 { groupNodes }
             </div>;
         } else if (this.state.error) {
@@ -134,6 +162,7 @@ export default withMatrixClient(React.createClass({
                 </div>
             </div>
             <div className="mx_MyGroups_content">
+                <h3>{ _t('Your Communities') }</h3>
                 { content }
             </div>
         </div>;
