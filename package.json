@@ -33,6 +33,7 @@
   "scripts": {
     "reskindex": "node scripts/reskindex.js -h header",
     "reskindex:watch": "node scripts/reskindex.js -h header -w",
+    "i18n": "node scripts/gen-i18n.js",
     "build": "npm run reskindex && babel src -d lib --source-maps --copy-files",
     "build:watch": "babel src -w -d lib --source-maps --copy-files",
     "emoji-data-strip": "node scripts/emoji-data-strip.js",
