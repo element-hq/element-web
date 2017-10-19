@@ -110,7 +110,7 @@ module.exports = React.createClass({
 
         let idx = 0;
         const initial = name[0];
-        if ((initial === '@' || initial === '#') && name[1]) {
+        if ((initial === '@' || initial === '#' || initial === '+') && name[1]) {
             idx++;
         }
 

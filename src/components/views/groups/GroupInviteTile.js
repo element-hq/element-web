@@ -38,19 +38,17 @@ export default React.createClass({
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const EmojiText = sdk.getComponent('elements.EmojiText');
 
-        const av = (
-            <BaseAvatar name={this.props.group.name} width={24} height={24}
-                url={this.props.group.avatarUrl}
-            />
-        );
+        const groupName = this.props.group.name || this.props.group.groupId;
+
+        const av = <BaseAvatar name={groupName} width={24} height={24} url={this.props.group.avatarUrl} />;
 
         const label = <EmojiText
             element="div"
-            title={this.props.group.name}
+            title={groupName}
             className="mx_GroupInviteTile_name"
             dir="auto"
         >
-            { this.props.group.name }
+            { groupName }
         </EmojiText>;
 
         const badge = <div className="mx_GroupInviteTile_badge">!</div>;
