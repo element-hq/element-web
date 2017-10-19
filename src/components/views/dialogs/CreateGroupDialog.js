@@ -21,10 +21,6 @@ import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 
-// We match fairly liberally and leave it up to the server to reject if
-// there are invalid characters etc.
-const GROUP_REGEX = /^\+(.*?):(.*)$/;
-
 export default React.createClass({
     displayName: 'CreateGroupDialog',
     propTypes: {
@@ -58,26 +54,9 @@ export default React.createClass({
     },
 
     _checkGroupId: function(e) {
-        const parsedGroupId = this._parseGroupId(this.state.groupId);
         let error = null;
-        if (parsedGroupId === null) {
-            error = _t(
-                "Community IDs must be of the form +localpart:%(domain)s",
-                {domain: MatrixClientPeg.get().getDomain()},
-            );
-        } else {
-            const groupId = parsedGroupId[0];
-            const domain = parsedGroupId[1];
-
-            if (!/^[a-zA-Z0-9]*$/.test(groupId)) {
-                error = _t("Community IDs may only contain alphanumeric characters");
-            } else if (domain !== MatrixClientPeg.get().getDomain()) {
-                error = _t(
-                    "It is currently only possible to create communities on your own home server: "+
-                    "use a community ID ending with %(domain)s",
-                    {domain: MatrixClientPeg.get().getDomain()},
-                );
-            }
+        if (!/^[a-zA-Z0-9]*$/.test(this.state.groupId)) {
+            error = _t("Community IDs may only contain alphanumeric characters");
         }
         this.setState({
             groupIdError: error,
@@ -90,14 +69,13 @@ export default React.createClass({
 
         if (this._checkGroupId()) return;
 
-        const parsedGroupId = this._parseGroupId(this.state.groupId);
         const profile = {};
         if (this.state.groupName !== '') {
             profile.name = this.state.groupName;
         }
         this.setState({creating: true});
         MatrixClientPeg.get().createGroup({
-            localpart: parsedGroupId[0],
+            localpart: this.state.groupId,
             profile: profile,
         }).then((result) => {
             dis.dispatch({
@@ -114,22 +92,6 @@ export default React.createClass({
 
     _onCancel: function() {
         this.props.onFinished(false);
-    },
-
-    /**
-     * Parse a string that may be a group ID
-     * If the string is a valid group ID, return a list of [localpart, domain],
-     * otherwise return null.
-     *
-     * @param {string} groupId The ID of the group
-     * @return {string[]} array of localpart, domain
-     */
-    _parseGroupId: function(groupId) {
-        const matches = GROUP_REGEX.exec(this.state.groupId);
-        if (!matches || matches.length < 3) {
-            return null;
-        }
-        return [matches[1], matches[2]];
     },
 
     render: function() {
@@ -176,13 +138,15 @@ export default React.createClass({
                                 <label htmlFor="groupid">{ _t('Community ID') }</label>
                             </div>
                             <div>
+                                <span>+</span>
                                 <input id="groupid" className="mx_CreateGroupDialog_input"
-                                    size="64"
-                                    placeholder={_t('+example:%(domain)s', {domain: MatrixClientPeg.get().getDomain()})}
+                                    size="32"
+                                    placeholder={_t('example')}
                                     onChange={this._onGroupIdChange}
                                     onBlur={this._onGroupIdBlur}
                                     value={this.state.groupId}
                                 />
+                                <span>:{ MatrixClientPeg.get().getDomain() }</span>
                             </div>
                         </div>
                         <div className="error">
