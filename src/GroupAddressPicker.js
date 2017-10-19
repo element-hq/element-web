@@ -23,9 +23,12 @@ import GroupStoreCache from './stores/GroupStoreCache';
 
 export function showGroupInviteDialog(groupId) {
     const description = <div>
-        <div>{_t("Who would you like to add to this community?")}</div>
+        <div>{ _t("Who would you like to add to this community?") }</div>
         <div className="warning">
-            {_t("Warning: any person you add to a community will be publicly visible to anyone who knows the community ID")}
+            { _t(
+                "Warning: any person you add to a community will be publicly "+
+                "visible to anyone who knows the community ID",
+            ) }
         </div>
     </div>;
 
@@ -47,9 +50,12 @@ export function showGroupInviteDialog(groupId) {
 export function showGroupAddRoomDialog(groupId) {
     return new Promise((resolve, reject) => {
         const description = <div>
-            <div>{_t("Which rooms would you like to add to this community?")}</div>
+            <div>{ _t("Which rooms would you like to add to this community?") }</div>
             <div className="warning">
-                {_t("Warning: any room you add to a community will be publicly visible to anyone who knows the community ID")}
+                { _t(
+                    "Warning: any room you add to a community will be publicly "+
+                    "visible to anyone who knows the community ID",
+                ) }
             </div>
         </div>;
 
