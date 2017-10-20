@@ -857,5 +857,12 @@
     "Community Member Settings": "Настройки участников сообщества",
     "Publish this community on your profile": "Опубликовать это сообщество в вашем профиле",
     "Long Description (HTML)": "Длинное описание (HTML)",
-    "Community Settings": "Настройки сообщества"
+    "Community Settings": "Настройки сообщества",
+    "Invite to Community": "Пригласить в сообщество",
+    "Add to community": "Добавить к сообществу",
+    "Add rooms to the community": "Добавить комнату к сообществу",
+    "Which rooms would you like to add to this community?": "Какую комнату хотели бы вы добавить к этому сообществу?",
+    "Who would you like to add to this community?": "Кого бы вы хотели добавить в это сообщество?",
+    "Invite new community members": "Пригласить новых членов сообщества",
+    "Warning: any person you add to a community will be publicly visible to anyone who knows the community ID": "Внимание: любой человек, которого вы добавляете в сообщество, будет общедоступным для всех, кто знает ID сообщества"
 }
