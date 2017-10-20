@@ -35,6 +35,7 @@ const estreeWalker = require('estree-walker');
 const TRANSLATIONS_FUNCS = ['_t', '_td', '_tJsx'];
 
 const INPUT_TRANSLATIONS_FILE = 'src/i18n/strings/en_EN.json';
+const OUTPUT_FILE = 'src/i18n/strings/en_EN.json';
 
 // NB. The sync version of walk is broken for single files so we walk
 // all of res rather than just res/home.html.
@@ -73,6 +74,41 @@ function getTKey(arg) {
     return null;
 }
 
+function getFormatStrings(str) {
+    // Match anything that starts with %
+    // We could make a regex that matched the full placeholder, but this
+    // would just not match invalid placeholders and so wouldn't help us
+    // detect the invalid ones.
+    // Also note that for simplicity, this just matches a % character and then
+    // anything up to the next % character (or a single %, or end of string).
+    const formatStringRe = /%([^%]+|%|$)/g;
+    const formatStrings = new Set();
+
+    let match;
+    while ( (match = formatStringRe.exec(str)) !== null) {
+        const placeholder = match[1]; // Minus the leading '%'
+        if (placeholder === '%') continue; // Literal % is %%
+
+        const placeholderMatch = placeholder.match(/^\((.*?)\)(.)/);
+        if (placeholderMatch === null) {
+            throw new Error("Invalid format specifier: '"+match[0]+"'");
+        }
+        if (placeholderMatch.length < 3) {
+            throw new Error("Malformed format specifier");
+        }
+        const placeHolderName = placeholderMatch[1];
+        const placeHolderFormat = placeholderMatch[2];
+
+        if (placeHolderFormat !== 's') {
+            throw new Error(`'${placeHolderFormat}' used as format character: you probably didn't mean this`);
+        }
+
+        formatStrings.add(placeHolderName);
+    }
+
+    return formatStrings;
+}
+
 function getTranslationsJs(file) {
     const tree = flowParser.parse(fs.readFileSync(file, { encoding: 'utf8' }), FLOW_PARSER_OPTS);
 
@@ -88,6 +124,28 @@ function getTranslationsJs(file) {
                 // This happens whenever we call _t with non-literals (ie. whenever we've
                 // had to use a _td to compensate) so is expected.
                 if (tKey === null) return;
+
+                // check the format string against the args
+                // We only check _t: _tJsx is much more complex and _td has no args
+                if (node.callee.name === '_t') {
+                    try {
+                        const placeholders = getFormatStrings(tKey);
+                        for (const placeholder of placeholders) {
+                            if (node.arguments.length < 2) {
+                                throw new Error(`Placeholder found ('${placeholder}') but no substitutions given`);
+                            }
+                            const value = getObjectValue(node.arguments[1], placeholder);
+                            if (value === null) {
+                                throw new Error(`No value found for placeholder '${placeholder}'`);
+                            }
+                        }
+                    } catch (e) {
+                        console.log();
+                        console.error(`ERROR: ${file}:${node.loc.start.line} ${tKey}`);
+                        console.error(e);
+                        process.exit(1);
+                    }
+                }
 
                 let isPlural = false;
                 if (node.arguments.length > 1 && node.arguments[1].type == 'ObjectExpression') {
@@ -182,7 +240,9 @@ for (const tr of translatables) {
 }
 
 fs.writeFileSync(
-    "src/i18n/strings/en_EN.json",
+    OUTPUT_FILE,
     JSON.stringify(trObj, translatables.values(), 4) + "\n"
 );
 
+console.log();
+console.log(`Wrote ${translatables.size} strings to ${OUTPUT_FILE}`);
