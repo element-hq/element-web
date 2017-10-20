@@ -323,14 +323,14 @@ module.exports = React.createClass({
                     <div className="mx_RightPanel_icon" >
                         <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
                     </div>
-                    <div className="mx_RightPanel_message">{ _t('Invite to this group') }</div>
+                    <div className="mx_RightPanel_message">{ _t('Invite to this community') }</div>
                 </AccessibleButton>
             ) : (
                 <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
                     <div className="mx_RightPanel_icon" >
                         <TintableSvg src="img/icons-room-add.svg" width="35" height="35" />
                     </div>
-                    <div className="mx_RightPanel_message">{ _t('Add room to this group') }</div>
+                    <div className="mx_RightPanel_message">{ _t('Add rooms to this community') }</div>
                 </AccessibleButton>
             );
         }
