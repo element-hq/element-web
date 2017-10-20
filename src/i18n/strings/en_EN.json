@@ -60,7 +60,7 @@
     "Today": "Today",
     "Yesterday": "Yesterday",
     "Custom Server Options": "Custom Server Options",
-    "customServer_text": "customServer_text",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.",
     "Dismiss": "Dismiss",
     "powered by Matrix": "powered by Matrix",
     "You are not receiving desktop notifications": "You are not receiving desktop notifications",
