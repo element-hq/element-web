@@ -699,7 +699,7 @@
     "For security, this session has been signed out. Please sign in again.": "For security, this session has been signed out. Please sign in again.",
     "Logout": "Logout",
     "Your Communities": "Your Communities",
-    "You're currently not a member of any communities.": "You're currently not a member of any communities.",
+    "You're not currently a member of any communities.": "You're not currently a member of any communities.",
     "Error whilst fetching joined communities": "Error whilst fetching joined communities",
     "Create a new community": "Create a new community",
     "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.": "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.",

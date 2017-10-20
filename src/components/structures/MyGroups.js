@@ -127,7 +127,7 @@ export default withMatrixClient(React.createClass({
                 </div> :
                 <div className="mx_MyGroups_placeholder">
                     { _t(
-                        "You're currently not a member of any communities.",
+                        "You're not currently a member of any communities.",
                     ) }
                 </div>;
         } else if (this.state.error) {
