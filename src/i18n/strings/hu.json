@@ -208,5 +208,11 @@
     "You must specify an event type!": "Meg kell határoznod az esemény típusát!",
     "Show message in desktop notification": "Üzenetek megmutatása az asztali értesítésekben",
     "Pin Message": "Üzenet kitűzése",
-    "Unpin Message": "Üzenet levétele"
+    "Unpin Message": "Üzenet levétele",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Bejelentkezhetsz más Matrix szerverbe ha használhatod a saját szerver opciót és megadod egy másik szerver URL-jét.<br/>Ezzel egy másik szerveren egy már meglévő fiókot tudsz használni.<br/><br/>Beállíthatsz egyedi azonosító szervert de akkor nem tudsz másokat e-mail cím alapján meghívni és téged sem tudnak.",
+    "Edit": "Szerkeszt",
+    "Register": "Regisztrál",
+    "Rooms": "Szobák",
+    "Invite to this community": "Meghívás ebbe a közösségbe",
+    "Add rooms to this community": "Szobák hozzáadása ehhez a közösséghez"
 }
