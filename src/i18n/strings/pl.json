@@ -97,7 +97,6 @@
     "Send logs": "Wyślij logi",
     "Sorry, your browser is <b>not</b> able to run Riot.": "Przepraszamy, Twoja przeglądarka <b>nie jest w stanie</b> uruchomić Riot.",
     "powered by Matrix": "napędzany przez Matrix",
-    "Redact": "Zredaguj",
     "Reject": "Odrzuć",
     "Remove": "Usuń",
     "remove %(name)s from the directory.": "usuń %(name)s z katalogu.",
@@ -206,6 +205,5 @@
     "Event sent!": "Wydarzenie wysłane!",
     "Event Type": "Typ wydarzenia",
     "Event Content": "Zawartość wydarzenia",
-    "State Key": "Klucz stanu",
-    "Invite to this group": "Zaproś do tej grupy"
+    "State Key": "Klucz stanu"
 }

@@ -121,7 +121,6 @@
     "Notify me for anything else": "所有消息都通知我",
     "Permalink": "永久連結",
     "Please install <a href=\"https://www.google.com/chrome\">Chrome</a> or <a href=\"https://getfirefox.com\">Firefox</a> for the best experience.": "諘安裝 <a href=\"https://www.google.com/chrome\">Chrome</a> 或 <a href=\"https://getfirefox.com\">Firefox</a> 來取得最佳體驗。",
-    "Redact": "纂輯\t",
     "Reject": "拒絕",
     "Remove %(name)s from the directory?": "自目錄中移除 %(name)s？",
     "remove %(name)s from the directory.": "自目錄中移除 %(name)s。",
@@ -205,14 +204,9 @@
     "Event Type": "事件類型",
     "Event Content": "事件內容",
     "State Key": "狀態金鑰",
-    "Invite to this group": "邀請進入此群組",
     "Filter results": "過濾結果",
     "You must specify an event type!": "您必須指定事件類型！",
-    "Add room to this group": "新增聊天室到此群組",
     "Show message in desktop notification": "在桌面通知中顯示訊息",
     "Pin Message": "釘選訊息",
-    "Unpin Message": "取消釘選訊息",
-    "Jump to message": "跳到訊息",
-    "No pinned messages.": "沒有已釘選的訊息。",
-    "Loading...": "正在載入……"
+    "Unpin Message": "取消釘選訊息"
 }
