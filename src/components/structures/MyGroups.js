@@ -118,9 +118,18 @@ export default withMatrixClient(React.createClass({
             this.state.groups.forEach((g) => {
                 groupNodes.push(<GroupTile groupId={g} />);
             });
-            content = <div className="mx_MyGroups_joinedGroups">
-                { groupNodes }
-            </div>;
+            content = groupNodes.length > 0 ?
+                <div>
+                    <h3>{ _t('Your Communities') }</h3>
+                    <div className="mx_MyGroups_joinedGroups">
+                        { groupNodes }
+                    </div>
+                </div> :
+                <div className="mx_MyGroups_placeholder">
+                    { _t(
+                        "You're not currently a member of any communities.",
+                    ) }
+                </div>;
         } else if (this.state.error) {
             content = <div className="mx_MyGroups_error">
                 { _t('Error whilst fetching joined communities') }
@@ -131,38 +140,40 @@ export default withMatrixClient(React.createClass({
 
         return <div className="mx_MyGroups">
             <SimpleRoomHeader title={_t("Communities")} icon="img/icons-groups.svg" />
-            <div className='mx_MyGroups_joinCreateBox'>
-                <div className="mx_MyGroups_createBox">
-                    <div className="mx_MyGroups_joinCreateHeader">
-                        { _t('Create a new community') }
-                    </div>
-                    <AccessibleButton className='mx_MyGroups_joinCreateButton' onClick={this._onCreateGroupClick}>
+            <div className='mx_MyGroups_header'>
+                <div className="mx_MyGroups_headerCard">
+                    <AccessibleButton className='mx_MyGroups_headerCard_button' onClick={this._onCreateGroupClick}>
                         <TintableSvg src="img/icons-create-room.svg" width="50" height="50" />
                     </AccessibleButton>
-                    { _t(
-                        'Create a community to represent your community! '+
-                        'Define a set of rooms and your own custom homepage '+
-                        'to mark out your space in the Matrix universe.',
-                    ) }
+                    <div className="mx_MyGroups_headerCard_content">
+                        <div className="mx_MyGroups_headerCard_header">
+                            { _t('Create a new community') }
+                        </div>
+                        { _t(
+                            'Create a community to group together users and rooms! ' +
+                            'Build a custom homepage to mark out your space in the Matrix universe.',
+                        ) }
+                    </div>
                 </div>
-                <div className="mx_MyGroups_joinBox">
-                    <div className="mx_MyGroups_joinCreateHeader">
-                        { _t('Join an existing community') }
-                    </div>
-                    <AccessibleButton className='mx_MyGroups_joinCreateButton' onClick={this._onJoinGroupClick}>
+                <div className="mx_MyGroups_joinBox mx_MyGroups_headerCard">
+                    <AccessibleButton className='mx_MyGroups_headerCard_button' onClick={this._onJoinGroupClick}>
                         <TintableSvg src="img/icons-create-room.svg" width="50" height="50" />
                     </AccessibleButton>
-                    { _tJsx(
-                        'To join an existing community you\'ll have to '+
-                        'know its community identifier; this will look '+
-                        'something like <i>+example:matrix.org</i>.',
-                        /<i>(.*)<\/i>/,
-                        (sub) => <i>{ sub }</i>,
-                    ) }
+                    <div className="mx_MyGroups_headerCard_content">
+                        <div className="mx_MyGroups_headerCard_header">
+                            { _t('Join an existing community') }
+                        </div>
+                        { _tJsx(
+                            'To join an existing community you\'ll have to '+
+                            'know its community identifier; this will look '+
+                            'something like <i>+example:matrix.org</i>.',
+                            /<i>(.*)<\/i>/,
+                            (sub) => <i>{ sub }</i>,
+                        ) }
+                    </div>
                 </div>
             </div>
             <div className="mx_MyGroups_content">
-                <h3>{ _t('Your Communities') }</h3>
                 { content }
             </div>
         </div>;
