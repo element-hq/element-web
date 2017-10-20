@@ -207,5 +207,12 @@
     "State Key": "狀態金鑰",
     "Invite to this group": "邀請進入此群組",
     "Filter results": "過濾結果",
-    "You must specify an event type!": "您必須指定事件類型！"
+    "You must specify an event type!": "您必須指定事件類型！",
+    "Add room to this group": "新增聊天室到此群組",
+    "Show message in desktop notification": "在桌面通知中顯示訊息",
+    "Pin Message": "釘選訊息",
+    "Unpin Message": "取消釘選訊息",
+    "Jump to message": "跳到訊息",
+    "No pinned messages.": "沒有已釘選的訊息。",
+    "Loading...": "正在載入……"
 }

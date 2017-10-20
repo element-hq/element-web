@@ -12,8 +12,8 @@
     "Directory": "Raum-Verzeichnis",
     "#example:": "#beispiel:",
     "Search for a room": "Nach einem Raum suchen",
-    "No rooms to show": "Keine Räume gefunden",
-    "World readable": "Alle können mitlesen",
+    "No rooms to show": "Keine Räume anzuzeigen",
+    "World readable": "Lesbar für die Welt",
     "Guests can join": "Gäste können beitreten",
     "You are not receiving desktop notifications": "Du erhältst keine Desktop-Benachrichtigungen",
     "Enable them now": "Aktiviere diese jetzt",
@@ -216,5 +216,12 @@
     "State Key": "Status-Schlüssel",
     "Invite to this group": "In diese Gruppe einladen",
     "Filter results": "Ergebnisse filtern",
-    "You must specify an event type!": "Du musst einen Event-Typ spezifizieren!"
+    "You must specify an event type!": "Du musst einen Event-Typ spezifizieren!",
+    "Add room to this group": "Raum zu dieser Gruppe hinzufügen",
+    "Show message in desktop notification": "Nachricht in der Desktop-Benachrichtigung anzeigen",
+    "Pin Message": "Nachricht anheften",
+    "Unpin Message": "Nachricht losheften",
+    "Jump to message": "Zur Nachricht springen",
+    "No pinned messages.": "Keine angehefteten Nachrichten.",
+    "Loading...": "Lade..."
 }

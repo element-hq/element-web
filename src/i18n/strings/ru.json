@@ -214,5 +214,12 @@
     "State Key": "Ключ состояния",
     "Invite to this group": "Пригласить в эту группу",
     "Filter results": "Фильтрация результатов",
-    "You must specify an event type!": "Необходимо указать тип мероприятия!"
+    "You must specify an event type!": "Необходимо указать тип мероприятия!",
+    "Add room to this group": "Добавить комнату в эту группу",
+    "Show message in desktop notification": "Показывать сообщение в уведомлении на рабочем столе",
+    "Pin Message": "Закрепить сообщение",
+    "Unpin Message": "Открепить сообщение",
+    "Jump to message": "Перейти к сообщению",
+    "No pinned messages.": "Нет прикрепленных сообщений.",
+    "Loading...": "Загрузка..."
 }
