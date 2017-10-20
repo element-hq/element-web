@@ -1,13 +1,39 @@
-/* Open Sans lacks combining diacritics, so these will fall through
-   to the next font.  Helevetica's diacritics however do not combine
-   nicely with Open Sans (on OSX, at least) and result in a huge
-   horizontal mess.  Arial empirically gets it right, hence prioritising
-   Arial here. */
-$font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+@font-face {
+    font-family:PostGrotesk-Medium;
+    src:url(../fonts/PostGrotesk-Medium.eot);
+    src:url(../fonts/PostGrotesk-Medium.eot?#iefix) format("embedded-opentype"),url(../fonts/PostGrotesk-Medium.woff) format("woff"),url(../fonts/PostGrotesk-Medium.svg#PostGrotesk-Medium) format("svg");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family:PostGrotesk-Book;
+    src:url(../fonts/PostGrotesk-Book.eot);
+    src:url(../fonts/PostGrotesk-Book.eot?#iefix) format("embedded-opentype"),url(../fonts/PostGrotesk-Book.woff) format("woff"),url(../fonts/PostGrotesk-Book.svg#PostGrotesk-Book) format("svg");
+    font-weight: 400;
+    font-style: normal;
+}
+
+// We deliberately prioritise Arial over Helvetica here due to diacritic problems (see _base.scss)
+// N.B. that the status.im website uses:
+// font-family:PostGrotesk-Book,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+// ...but can't be bothered to work out how the apple fonts & segoe interact, so keepingn it simple for now.
+
+$font-family: PostGrotesk-Book, Arial, Helvetica, Sans-Serif;
 
 // typical text (dark-on-white in light skin)
-$primary-fg-color: #454545;
-$primary-bg-color: #ffffff;
+$primary-fg-color: #70808D;
+$primary-bg-color: #EEF2F5;
+
+// ***** Status theme specifics ******
+$header-color: #49555F;
+$header-font-family: PostGrotesk-Medium, Arial, Helvetica, Sans-Serif;
+
+h1,h2,h3,h4,h5 {
+    color: $header-color;
+    font-family: $header-font-family;
+    font-weight: 400 ! important;
+}
 
 // used for dialog box text
 $light-fg-color: #747474;
