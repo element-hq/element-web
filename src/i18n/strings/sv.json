@@ -82,7 +82,6 @@
     "Please install <a href=\"https://www.google.com/chrome\">Chrome</a> or <a href=\"https://getfirefox.com\">Firefox</a> for the best experience.": "Installera <a href=\"https://www.google.com/chrome\">Chrome</a> eller <a href=\"https://getfirefox.com\">Firefox</a> för den bästa upplevelsen.",
     "powered by Matrix": "drivs av Matrix",
     "Quote": "Citera",
-    "Redact": "Dra tillbaka",
     "Reject": "Avvisa",
     "Remove %(name)s from the directory?": "Ta bort %(name)s från katalogen?",
     "Remove": "Ta bort",
@@ -197,6 +196,5 @@
     "Thank you!": "Tack!",
     "Back": "Tillbaka",
     "Filter results": "Filtrera resultaten",
-    "Explore Room State": "Utforska rumläget",
-    "Invite to this group": "Bjud in till denna grupp"
+    "Explore Room State": "Utforska rumläget"
 }

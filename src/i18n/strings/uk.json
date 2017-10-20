@@ -84,7 +84,6 @@
     "Please install <a href=\"https://www.google.com/chrome\">Chrome</a> or <a href=\"https://getfirefox.com\">Firefox</a> for the best experience.": "Для більшої зручності у використанні встановіть, будь ласка, <a href=\"https://www.google.com/chrome\">Chrome</a> або <a href=\"https://getfirefox.com\">Firefox</a>.",
     "powered by Matrix": "працює на Matrix",
     "Quote": "Цитувати",
-    "Redact": "Видалити",
     "Reject": "Відмовитись",
     "Remove %(name)s from the directory?": "Прибрати %(name)s з каталогу?",
     "Remove": "Прибрати",
@@ -206,6 +205,5 @@
     "Event sent!": "Захід відправлено!",
     "Event Type": "Тип західу",
     "Event Content": "Зміст заходу",
-    "State Key": "Ключ стану",
-    "Invite to this group": "Запросити в цю групу"
+    "State Key": "Ключ стану"
 }
