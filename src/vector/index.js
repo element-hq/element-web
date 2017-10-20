@@ -281,6 +281,23 @@ async function loadApp() {
         configError = e;
     }
 
+    // as quickly as we possibly can, set a default theme...
+    const styleElements = Object.create(null);
+    let a;
+    for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
+        const href = a.getAttribute("href");
+        // shouldn't we be using the 'title' tag rather than the href?
+        const match = href.match(/^bundles\/.*\/theme-(.*)\.css$/);
+        if (match) {
+            if (match[1] === (configJson.default_theme || 'light')) {
+                // remove the alternative flag off the stylesheet
+                a.setAttribute("rel", "stylesheet");
+            }
+        }
+    }
+    // XXX: do we also need to call MatrixChat.setTheme here to do any random fixups (e.g. svg tint)
+
+
     if (window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser')) {
         console.log('User has previously accepted risks in using an unsupported browser');
         validBrowser = true;

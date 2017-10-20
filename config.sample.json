@@ -7,6 +7,7 @@
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
     "enableLabs": true,
     "default_federate": true,
+    "default_theme": "light",
     "roomDirectory": {
         "servers": [
             "matrix.org"
