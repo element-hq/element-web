@@ -902,5 +902,7 @@
     "To join an existing community you'll have to know its community identifier; this will look something like <i>+example:matrix.org</i>.": "Ahhoz hogy csatlakozni tudj egy meglévő közösséghez ismerned kell a közösségi azonosítót ami például így nézhet ki: <i>+pelda:matrix.org</i>.",
     "example": "példa",
     "Failed to load %(groupId)s": "Nem sikerült betölteni: %(groupId)s",
-    "Your Communities": "Közösségeid"
+    "Your Communities": "Közösségeid",
+    "You're not currently a member of any communities.": "Nem vagy tagja egyetlen közösségnek sem.",
+    "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.": "Készíts közösséget hogy egybegyűjtsd a felhasználókat és szobákat! Készíts egy saját kezdőlapot amivel meghatározhatod magad a Matrix univerzumában."
 }
