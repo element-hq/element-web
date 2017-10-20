@@ -888,7 +888,7 @@ module.exports = React.createClass({
      */
     _onSetTheme: function(theme) {
         if (!theme) {
-            theme = 'light';
+            theme = this.props.config.default_theme || 'light';
         }
 
         // look for the stylesheet elements.

@@ -179,6 +179,11 @@ const THEMES = [
         label: _td('Dark theme'),
         value: 'dark',
     },
+    {
+        id: 'theme',
+        label: _td('Status.im theme'),
+        value: 'status',
+    },
 ];
 
 const IgnoredUser = React.createClass({
@@ -279,7 +284,7 @@ module.exports = React.createClass({
 
         const syncedSettings = UserSettingsStore.getSyncedSettings();
         if (!syncedSettings.theme) {
-            syncedSettings.theme = 'light';
+            syncedSettings.theme = SdkConfig.get().default_theme || 'light';
         }
         this._syncedSettings = syncedSettings;
 
