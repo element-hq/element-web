@@ -17,40 +17,70 @@ limitations under the License.
 // overrides for mx_Login* specific to Status.
 // Ideally this would be all Status prefixes for a Status specific version of the component
 // but given we're not doing Status as a dedicated 'skin' yet...
-.mx_Login {
-    width: 100%;
-    height: 100%;
 
-    display: flex;
+.mx_Login {
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-
-    overflow: auto;
-}
-
-.mx_Login h2 {
-    color: $primary-fg-color;
-    font-weight: 300;
-    margin-top: 32px;
-    margin-bottom: 20px;
 }
 
 .mx_Login_box {
-    width: 300px;
-    min-height: 450px;
-    padding-top: 50px;
-    padding-bottom: 50px;
-    margin: auto;
+    width: 350px;
+    min-height: initial;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    padding-left: 33px;
+    padding-right: 33px;
+    border-radius: 8px;
+    margin: initial;
+    background-color: $form-bg-color;
+    box-shadow: 0px 5px 16px 0px rgba(25,12,46,0.16);    
+    position: relative;
 }
 
 .mx_Login_logo {
-    text-align: center;
-    height: 150px;
-    margin-bottom: 45px;
+    background-color: #fff;
+    width: 74px;
+    height: 74px;
+    border-radius: 37px;
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);
+    position: absolute;
+    top: -36px;
+    left: 50%;
+    margin-left: -36px;
 }
 
 .mx_Login_logo img {
-    max-height: 100%
+    width: 36px;
+    height: 36px;
+    padding: 19px;
+}
+
+.mx_Login_box h2 {
+    text-align: center;
+    color: $form-fg-color;
+    font-size: 25px;
+}
+
+.mx_LoginPageHeader_brand {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+}
+
+.mx_LoginPageHeader_title {
+    text-align: center;
+    margin-top: 90px;
+    margin-bottom: 50px;
+}
+
+.mx_LoginPageHeader_title h1 {
+    font-size: 29px;
+    margin-bottom: 3px;
+}
+
+.mx_LoginPageHeader_subtitle {
+    font-size: 18px;
 }
 
 .mx_Login_support {

@@ -25,7 +25,7 @@ $font-family: PostGrotesk-Book, Arial, Helvetica, Sans-Serif;
 $primary-fg-color: #70808D;
 $primary-bg-color: #EEF2F5;
 
-// ***** Status theme specifics ******
+// ***** Start of Status theme specifics ******
 $header-color: #49555F;
 $header-font-family: PostGrotesk-Medium, Arial, Helvetica, Sans-Serif;
 
@@ -34,6 +34,11 @@ h1,h2,h3,h4,h5 {
     font-family: $header-font-family;
     font-weight: 400 ! important;
 }
+
+$form-bg-color: #4360DF;
+$form-fg-color: #ffffff;
+
+// ***** End of Status theme specifics ******
 
 // used for dialog box text
 $light-fg-color: #747474;

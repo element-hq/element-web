@@ -18,6 +18,7 @@ limitations under the License.
 
 var React = require('react');
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 
 module.exports = React.createClass({
     displayName: 'VectorLoginFooter',
@@ -26,6 +27,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        if (UserSettingsStore.getTheme() === 'status') return <div/>;
+        
         return (
             <div className="mx_Login_links">
                 <a href="https://medium.com/@RiotChat">blog</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
