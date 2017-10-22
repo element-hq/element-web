@@ -329,13 +329,17 @@ module.exports = React.createClass({
 
     render: function() {
         const Loader = sdk.getComponent("elements.Spinner");
+        const LoginPageHeader = sdk.getComponent("login.LoginPageHeader");
+        const LoginPageFooter = sdk.getComponent("login.LoginPageFooter");
         const LoginHeader = sdk.getComponent("login.LoginHeader");
         const LoginFooter = sdk.getComponent("login.LoginFooter");
         const ServerConfig = sdk.getComponent("login.ServerConfig");
         const loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
+        const theme = UserSettingsStore.getTheme();
+
         let loginAsGuestJsx;
-        if (this.props.enableGuest) {
+        if (this.props.enableGuest && theme !== 'status') {
             loginAsGuestJsx =
                 <a className="mx_Login_create" onClick={this._onLoginAsGuestClick} href="#">
                     { _t('Login as guest') }
@@ -343,42 +347,49 @@ module.exports = React.createClass({
         }
 
         let returnToAppJsx;
-        if (this.props.onCancelClick) {
+        if (this.props.onCancelClick && theme !== 'status') {
             returnToAppJsx =
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
                     { _t('Return to app') }
                 </a>;
         }
 
+        let serverConfig;
+        if (theme !== 'status') {
+            serverConfig = <ServerConfig ref="serverConfig"
+                withToggleButton={true}
+                customHsUrl={this.props.customHsUrl}
+                customIsUrl={this.props.customIsUrl}
+                defaultHsUrl={this.props.defaultHsUrl}
+                defaultIsUrl={this.props.defaultIsUrl}
+                onServerConfigChange={this.onServerConfigChange}
+                delayTimeMs={1000} />;
+        }
+
         return (
             <div className="mx_Login">
+                <LoginPageHeader />
                 <div className="mx_Login_box">
                     <LoginHeader />
                     <div>
-                        <h2>{ _t('Sign in') }
+                        <h2>{ theme !== 'status' ? _t('Sign in') : _t('Sign in to get started') }
                             { loader }
                         </h2>
-                        { this.componentForStep(this.state.currentFlow) }
-                        <ServerConfig ref="serverConfig"
-                            withToggleButton={true}
-                            customHsUrl={this.props.customHsUrl}
-                            customIsUrl={this.props.customIsUrl}
-                            defaultHsUrl={this.props.defaultHsUrl}
-                            defaultIsUrl={this.props.defaultIsUrl}
-                            onServerConfigChange={this.onServerConfigChange}
-                            delayTimeMs={1000} />
                         <div className="mx_Login_error">
                                 { this.state.errorText }
                         </div>
+                        { this.componentForStep(this.state.currentFlow) }
+                        { serverConfig }
                         <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
                             { _t('Create an account') }
                         </a>
                         { loginAsGuestJsx }
                         { returnToAppJsx }
-                        { this._renderLanguageSetting() }
+                        { theme !== 'status' ? this._renderLanguageSetting() : '' }
                         <LoginFooter />
                     </div>
                 </div>
+                <LoginPageFooter />
             </div>
         );
     },
