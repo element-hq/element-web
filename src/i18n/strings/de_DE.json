@@ -904,5 +904,6 @@
     "To join an existing community you'll have to know its community identifier; this will look something like <i>+example:matrix.org</i>.": "Um einer bereits bestehenden Community beitreten zu können, musst dir deren Community-ID bekannt sein. Diese sieht z. B. aus wie <i>+example:matrix.org</i>.",
     "Your Communities": "Deine Communities",
     "You're not currently a member of any communities.": "Du bist aktuell kein Mitglied einer Community.",
-    "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.": "Erzeuge eine Community um Nutzer und Räume zu gruppieren! Erzeuge eine angepasste Homepage um dein Revier im Matrix-Universum zu markieren."
+    "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.": "Erzeuge eine Community um Nutzer und Räume zu gruppieren! Erzeuge eine angepasste Homepage um dein Revier im Matrix-Universum zu markieren.",
+    "Something went wrong whilst creating your community": "Beim Erstellen deiner Community ist ein Fehler aufgetreten"
 }
