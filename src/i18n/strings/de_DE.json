@@ -902,5 +902,7 @@
     "Create a community to represent your community! Define a set of rooms and your own custom homepage to mark out your space in the Matrix universe.": "Erzeuge eine Community um deine Community zu repräsentieren! Definiere eine Menge von Räumen und deine eigene angepasste Startseite um dein Revier im Matrix-Universum zu markieren.",
     "Join an existing community": "Trete einer existierenden Community bei",
     "To join an existing community you'll have to know its community identifier; this will look something like <i>+example:matrix.org</i>.": "Um einer existierenden Community beizutreten, musst du die Community-ID kennen. Diese sieht z.B. aus wie <i>+example:matrix.org</i>.",
-    "Your Communities": "Deine Communities"
+    "Your Communities": "Deine Communities",
+    "You're not currently a member of any communities.": "Du bist aktuell kein Mitglied einer Community.",
+    "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.": "Erzeuge eine Community um Nutzer und Räume zu gruppieren! Erzeuge eine angepasste Homepage um dein Revier im Matrix-Universum zu markieren."
 }
