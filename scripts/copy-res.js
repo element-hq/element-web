@@ -45,7 +45,7 @@ const COPY_LIST = [
     ["res/home/**", "webapp/home"],
     ["res/{media,vector-icons}/**", "webapp"],
     ["res/flags/*", "webapp/flags/"],
-    ["src/skins/vector/{fonts,img}/**", "webapp"],
+    ["src/skins/vector/{fonts,img,themes}/**", "webapp"],
     ["node_modules/emojione/assets/svg/*", "webapp/emojione/svg/"],
     ["node_modules/emojione/assets/png/*", "webapp/emojione/png/"],
     ["./config.json", "webapp", { directwatch: 1 }],
