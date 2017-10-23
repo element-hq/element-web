@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import EventEmitter from 'events';
+import { groupMemberFromApiObject, groupRoomFromApiObject } from '../groups';
 
 /**
  * Stores the group summary for a room and provides an API to change it and
@@ -29,6 +30,29 @@ export default class GroupStore extends EventEmitter {
         this._rooms = [];
         this._fetchSummary();
         this._fetchRooms();
+        this._fetchMembers();
+    }
+
+    _fetchMembers() {
+        this._matrixClient.getGroupUsers(this.groupId).then((result) => {
+            this._members = result.chunk.map((apiMember) => {
+                return groupMemberFromApiObject(apiMember);
+            });
+            this._notifyListeners();
+        }).catch((err) => {
+            console.error("Failed to get group member list: " + err);
+            this.emit('error', err);
+        });
+
+        this._matrixClient.getGroupInvitedUsers(this.groupId).then((result) => {
+            this._invitedMembers = result.chunk.map((apiMember) => {
+                return groupMemberFromApiObject(apiMember);
+            });
+            this._notifyListeners();
+        }).catch((err) => {
+            console.error("Failed to get group invited member list: " + err);
+            this.emit('error', err);
+        });
     }
 
     _fetchSummary() {
@@ -42,7 +66,9 @@ export default class GroupStore extends EventEmitter {
 
     _fetchRooms() {
         this._matrixClient.getGroupRooms(this.groupId).then((resp) => {
-            this._rooms = resp.chunk;
+            this._rooms = resp.chunk.map((apiRoom) => {
+                return groupRoomFromApiObject(apiRoom);
+            });
             this._notifyListeners();
         }).catch((err) => {
             this.emit('error', err);
@@ -59,6 +85,14 @@ export default class GroupStore extends EventEmitter {
 
     getGroupRooms() {
         return this._rooms;
+    }
+
+    getGroupMembers( ) {
+        return this._members;
+    }
+
+    getGroupInvitedMembers( ) {
+        return this._invitedMembers;
     }
 
     getGroupPublicity() {
@@ -81,6 +115,11 @@ export default class GroupStore extends EventEmitter {
             // Room might be in the summary, refresh just in case
             .then(this._fetchSummary.bind(this))
             .then(this._fetchRooms.bind(this));
+    }
+
+    inviteUserToGroup(userId) {
+        return this._matrixClient.inviteUserToGroup(this.groupId, userId)
+            .then(this._fetchMembers.bind(this));
     }
 
     addRoomToGroupSummary(roomId, categoryId) {

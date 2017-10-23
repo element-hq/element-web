@@ -96,13 +96,6 @@ function _onGroupInviteFinished(groupId, addrs) {
                 title: _t("Failed to invite the following users to %(groupId)s:", {groupId: groupId}),
                 description: errorList.join(", "),
             });
-        } else {
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            Modal.createTrackedDialog('Group invitations sent', '', QuestionDialog, {
-                title: _t("Invites sent"),
-                description: _t("Your community invitations have been sent."),
-                hasCancelButton: false,
-            });
         }
     }).catch((err) => {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");

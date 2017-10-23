@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
-import { groupMemberFromApiObject } from '../../../groups';
+import GroupStoreCache from '../../../stores/GroupStoreCache';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import PropTypes from 'prop-types';
 import withMatrixClient from '../../../wrappers/withMatrixClient';
@@ -27,15 +27,16 @@ const INITIAL_LOAD_NUM_MEMBERS = 30;
 export default withMatrixClient(React.createClass({
     displayName: 'GroupMemberList',
 
-    propTypes: {
+    contextTypes: {
         matrixClient: PropTypes.object.isRequired,
+    },
+
+    propTypes: {
         groupId: PropTypes.string.isRequired,
     },
 
     getInitialState: function() {
         return {
-            fetching: false,
-            fetchingInvitedMembers: false,
             members: null,
             invitedMembers: null,
             truncateAt: INITIAL_LOAD_NUM_MEMBERS,
@@ -44,36 +45,23 @@ export default withMatrixClient(React.createClass({
 
     componentWillMount: function() {
         this._unmounted = false;
-        this._fetchMembers();
+        this._initGroupStore(this.props.groupId);
+    },
+
+    _initGroupStore: function(groupId) {
+        this._groupStore = GroupStoreCache.getGroupStore(this.context.matrixClient, groupId);
+        this._groupStore.on('update', () => {
+            this._fetchMembers();
+        });
+        this._groupStore.on('error', (err) => {
+            console.error(err);
+        });
     },
 
     _fetchMembers: function() {
         this.setState({
-            fetching: true,
-            fetchingInvitedMembers: true,
-        });
-        this.props.matrixClient.getGroupUsers(this.props.groupId).then((result) => {
-            this.setState({
-                members: result.chunk.map((apiMember) => {
-                    return groupMemberFromApiObject(apiMember);
-                }),
-                fetching: false,
-            });
-        }).catch((e) => {
-            this.setState({fetching: false});
-            console.error("Failed to get group member list: " + e);
-        });
-
-        this.props.matrixClient.getGroupInvitedUsers(this.props.groupId).then((result) => {
-            this.setState({
-                invitedMembers: result.chunk.map((apiMember) => {
-                    return groupMemberFromApiObject(apiMember);
-                }),
-                fetchingInvitedMembers: false,
-            });
-        }).catch((e) => {
-            this.setState({fetchingInvitedMembers: false});
-            console.error("Failed to get group invited member list: " + e);
+            members: this._groupStore.getGroupMembers(),
+            invitedMembers: this._groupStore.getGroupInvitedMembers(),
         });
     },
 
