@@ -81,7 +81,7 @@ export default class GranularSettingStore {
      */
     static getAccountSetting(name) {
         const handlers = GranularSettingStore._getHandlers('account');
-        const initFn = settingClass => new settingClass('account', name);
+        const initFn = (SettingClass) => new SettingClass('account', name);
         return GranularSettingStore._iterateHandlers(handlers, initFn);
     }
 
@@ -94,7 +94,7 @@ export default class GranularSettingStore {
      */
     static getRoomSetting(name, roomId) {
         const handlers = GranularSettingStore._getHandlers('room');
-        const initFn = settingClass => new settingClass('room', name, roomId);
+        const initFn = (SettingClass) => new SettingClass('room', name, roomId);
         return GranularSettingStore._iterateHandlers(handlers, initFn);
     }
 
@@ -110,7 +110,7 @@ export default class GranularSettingStore {
 
             // Try to read the value of the setting. If we get nothing for a value,
             // then try the next handler. Otherwise, return the value early.
-            return Promise.resolve(setting.getValue()).then(value => {
+            return Promise.resolve(setting.getValue()).then((value) => {
                 if (!value) return wrapperFn();
                 return value;
             });
@@ -131,7 +131,8 @@ export default class GranularSettingStore {
         const handler = GranularSettingStore._getHandler('account', level);
         if (!handler) throw new Error("Missing account setting handler for " + name + " at " + level);
 
-        const setting = new handler.settingClass('account', name);
+        const SettingClass = handler.settingClass;
+        const setting = new SettingClass('account', name);
         return Promise.resolve(setting.setValue(content));
     }
 
@@ -150,7 +151,8 @@ export default class GranularSettingStore {
         const handler = GranularSettingStore._getHandler('room', level);
         if (!handler) throw new Error("Missing room setting handler for " + name + " at " + level);
 
-        const setting = new handler.settingClass('room', name, roomId);
+        const SettingClass = handler.settingClass;
+        const setting = new SettingClass('room', name, roomId);
         return Promise.resolve(setting.setValue(content));
     }
 
@@ -164,7 +166,8 @@ export default class GranularSettingStore {
         const handler = GranularSettingStore._getHandler('account', level);
         if (!handler) return false;
 
-        const setting = new handler.settingClass('account', name);
+        const SettingClass = handler.settingClass;
+        const setting = new SettingClass('account', name);
         return setting.canSetValue();
     }
 
@@ -180,7 +183,8 @@ export default class GranularSettingStore {
         const handler = GranularSettingStore._getHandler('room', level);
         if (!handler) return false;
 
-        const setting = new handler.settingClass('room', name, roomId);
+        const SettingClass = handler.settingClass;
+        const setting = new SettingClass('room', name, roomId);
         return setting.canSetValue();
     }
 
@@ -219,11 +223,11 @@ export default class GranularSettingStore {
     }
 
     static _getHandlersAtLevel(level) {
-        return PRIORITY_MAP.filter(h => h.level === level && h.settingClass.isSupported());
+        return PRIORITY_MAP.filter((h) => h.level === level && h.settingClass.isSupported());
     }
 
     static _getHandlers(type) {
-        return PRIORITY_MAP.filter(h => {
+        return PRIORITY_MAP.filter((h) => {
             if (!h.types.includes(type)) return false;
             if (!h.settingClass.isSupported()) return false;
 
@@ -233,7 +237,7 @@ export default class GranularSettingStore {
 
     static _getHandler(type, level) {
         const handlers = GranularSettingStore._getHandlers(type);
-        return handlers.filter(h => h.level === level)[0];
+        return handlers.filter((h) => h.level === level)[0];
     }
 }
 
@@ -253,7 +257,7 @@ class DefaultSetting {
     }
 
     getValue() {
-        for (let setting of SETTINGS) {
+        for (const setting of SETTINGS) {
             if (setting.type === this.type && setting.name === this.name) {
                 return setting.defaults;
             }
