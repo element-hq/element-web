@@ -16,7 +16,6 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
-import { groupRoomFromApiObject } from '../../../groups';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import PropTypes from 'prop-types';
@@ -63,9 +62,7 @@ export default React.createClass({
     _fetchRooms: function() {
         if (this._unmounted) return;
         this.setState({
-            rooms: this._groupStore.getGroupRooms().map((apiRoom) => {
-                return groupRoomFromApiObject(apiRoom);
-            }),
+            rooms: this._groupStore.getGroupRooms(),
         });
     },
 
