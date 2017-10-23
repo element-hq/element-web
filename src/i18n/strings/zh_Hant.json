@@ -239,7 +239,7 @@
     "Device ID:": "裝置 ID:",
     "device id: ": "裝置 ID： ",
     "Reason": "原因",
-    "Register": "注冊",
+    "Register": "註冊",
     "Default server": "預設伺服器",
     "Custom server": "自定的伺服器",
     "Home server URL": "自家伺服器網址",
@@ -774,5 +774,6 @@
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "機器人檢查目前在桌面端不可用 ── 請使用<a>網路瀏覽器</a>",
     "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s 小工具已被 %(senderName)s 修改",
     "Copied!": "已複製！",
-    "Failed to copy": "複製失敗"
+    "Failed to copy": "複製失敗",
+    "Add rooms to this community": "新增聊天室到此社群"
 }
