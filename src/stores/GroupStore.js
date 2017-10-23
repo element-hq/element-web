@@ -16,6 +16,7 @@ limitations under the License.
 
 import EventEmitter from 'events';
 import { groupMemberFromApiObject, groupRoomFromApiObject } from '../groups';
+import FlairStore from './FlairStore';
 
 /**
  * Stores the group summary for a room and provides an API to change it and
@@ -149,6 +150,7 @@ export default class GroupStore extends EventEmitter {
     setGroupPublicity(isPublished) {
         return this._matrixClient
             .setGroupPublicity(this.groupId, isPublished)
+            .then(() => { FlairStore.invalidatePublicisedGroups(this._matrixClient.credentials.userId); })
             .then(this._fetchSummary.bind(this));
     }
 }
