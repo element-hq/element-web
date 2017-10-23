@@ -177,7 +177,9 @@ const trObj = {};
 for (const tr of translatables) {
     trObj[tr] = tr;
     if (tr.includes("|")) {
-        trObj[tr] = inputTranslationsRaw[tr];
+        if (inputTranslationsRaw[tr]) {
+            trObj[tr] = inputTranslationsRaw[tr];
+        }
     }
 }
 
