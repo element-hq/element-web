@@ -49,27 +49,28 @@ const PRIORITY_MAP = [
 ];
 
 /**
- * Controls and manages Granular Settings through use of localStorage, account data,
- * and room state. Granular Settings are user settings that can have overrides at
- * particular levels, notably the device, account, and room level. With the topmost
- * level being the preferred setting, the override procedure is:
- * - localstorage (per-device)
- * - room account data (per-account in room)
- * - account data (per-account)
- * - room state event (per-room)
- * - default (defined by Riot)
+ * Controls and manages application settings at different levels through a variety of
+ * backends. Settings may be overridden at each level to provide the user with more
+ * options for customization and tailoring of their experience. These levels are most
+ * notably at the device, room, and account levels. The preferred order of levels is:
+ * - per-device
+ * - per-account in a particular room
+ * - per-account
+ * - per-room
+ * - defaults (as defined here)
  *
  * There are two types of settings: Account and Room.
  *
- * Account Settings use the same override procedure described above, but drop the room
- * account data and room state event checks. Account Settings are best used for things
- * like which theme the user would prefer.
+ * Account Settings use the same preferences described above, but do not look at the
+ * per-account in a particular room or the per-room levels. Account Settings are best
+ * used for things like which theme the user would prefer.
  *
- * Room Settings use the exact override procedure described above. Room Settings are
- * best suited for settings which room administrators may want to define a default
- * for members of the room, such as the case is with URL previews. Room Settings may
- * also elect to not allow the room state event check, allowing for per-room settings
- * that are not defaulted by the room administrator.
+ * Room settings use the exact preferences described above. Room Settings are best
+ * suited for settings which room administrators may want to define a default for the
+ * room members, or where users may want an individual room to be different. Using the
+ * setting definitions, particular preferences may be excluded to prevent, for example,
+ * room administrators from defining that all messages should have timestamps when the
+ * user may not want that. An example of a Room Setting would be URL previews.
  */
 export default class GranularSettingStore {
     /**
