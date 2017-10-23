@@ -85,7 +85,7 @@ function getFormatStrings(str) {
     const formatStrings = new Set();
 
     let match;
-    while ( (match = formatStringRe.exec(str)) !== null) {
+    while ( (match = formatStringRe.exec(str) ) !== null) {
         const placeholder = match[1]; // Minus the leading '%'
         if (placeholder === '%') continue; // Literal % is %%
 
@@ -96,14 +96,14 @@ function getFormatStrings(str) {
         if (placeholderMatch.length < 3) {
             throw new Error("Malformed format specifier");
         }
-        const placeHolderName = placeholderMatch[1];
-        const placeHolderFormat = placeholderMatch[2];
+        const placeholderName = placeholderMatch[1];
+        const placeholderFormat = placeholderMatch[2];
 
-        if (placeHolderFormat !== 's') {
-            throw new Error(`'${placeHolderFormat}' used as format character: you probably didn't mean this`);
+        if (placeholderFormat !== 's') {
+            throw new Error(`'${placeholderFormat}' used as format character: you probably meant 's'`);
         }
 
-        formatStrings.add(placeHolderName);
+        formatStrings.add(placeholderName);
     }
 
     return formatStrings;
@@ -142,7 +142,6 @@ function getTranslationsJs(file) {
                     } catch (e) {
                         console.log();
                         console.error(`ERROR: ${file}:${node.loc.start.line} ${tKey}`);
-                        console.error(e);
                         process.exit(1);
                     }
                 }
