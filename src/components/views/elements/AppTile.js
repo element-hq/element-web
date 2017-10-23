@@ -180,7 +180,7 @@ export default React.createClass({
                     <div>
                  { _t("Deleting a widget removes it for all users in this room - are you sure you want to delete this widget?") }
                     </div>,
-                button: _t("OK"),
+                button: _t("Delete widget"),
                 onFinished: (confirmed) => {
                     if (confirmed) {
                         console.log("Delete widget %s", this.props.id);
