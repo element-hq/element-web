@@ -85,7 +85,7 @@ function getFormatStrings(str) {
     const formatStrings = new Set();
 
     let match;
-    while ( (match = formatStringRe.exec(str) ) !== null) {
+    while ( (match = formatStringRe.exec(str)) !== null ) {
         const placeholder = match[1]; // Minus the leading '%'
         if (placeholder === '%') continue; // Literal % is %%
 
