@@ -63,9 +63,9 @@ module.exports = React.createClass({
     validateGroupId: function(groupId) {
         if (!GROUP_ID_REGEX.test(groupId)) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Invalid related group ID', '', ErrorDialog, {
-                title: _t('Invalid group ID'),
-                description: _t('\'%(groupId)s\' is not a valid group ID', { groupId }),
+            Modal.createTrackedDialog('Invalid related community ID', '', ErrorDialog, {
+                title: _t('Invalid community ID'),
+                description: _t('\'%(groupId)s\' is not a valid community ID', { groupId }),
             });
             return false;
         }
@@ -105,7 +105,7 @@ module.exports = React.createClass({
         const localDomain = this.context.matrixClient.getDomain();
         const EditableItemList = sdk.getComponent('elements.EditableItemList');
         return (<div>
-            <h3>{ _t('Related Groups') }</h3>
+            <h3>{ _t('Related Communities') }</h3>
             <EditableItemList
                 items={this.state.newGroupsList}
                 className={"mx_RelatedGroupSettings"}
@@ -114,10 +114,10 @@ module.exports = React.createClass({
                 onItemAdded={this.onGroupAdded}
                 onItemEdited={this.onGroupEdited}
                 onItemRemoved={this.onGroupDeleted}
-                itemsLabel={_t('Related groups for this room:')}
-                noItemsLabel={_t('This room has no related groups')}
+                itemsLabel={_t('Related communities for this room:')}
+                noItemsLabel={_t('This room has no related communities')}
                 placeholder={_t(
-                    'New group ID (e.g. +foo:%(localDomain)s)', {localDomain},
+                    'New community ID (e.g. +foo:%(localDomain)s)', {localDomain},
                 )}
             />
         </div>);

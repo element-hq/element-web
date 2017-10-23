@@ -68,8 +68,8 @@ module.exports = withMatrixClient(React.createClass({
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
             groupMember: this.props.groupMember,
-            action: _t('Remove from group'),
-            title: _t('Remove this user from group?'),
+            action: _t('Remove from community'),
+            title: _t('Remove this user from community?'),
             danger: true,
             onFinished: (proceed) => {
                 if (!proceed) return;
@@ -87,7 +87,7 @@ module.exports = withMatrixClient(React.createClass({
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Failed to remove user from group', '', ErrorDialog, {
                         title: _t('Error'),
-                        description: _t('Failed to remove user from group'),
+                        description: _t('Failed to remove user from community'),
                     });
                 }).finally(() => {
                     this.setState({removingUser: false});
@@ -129,7 +129,7 @@ module.exports = withMatrixClient(React.createClass({
             kickButton = (
                 <AccessibleButton className="mx_MemberInfo_field"
                         onClick={this._onKick}>
-                    { _t('Remove from group') }
+                    { _t('Remove from community') }
                 </AccessibleButton>
             );
 

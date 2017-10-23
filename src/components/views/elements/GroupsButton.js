@@ -22,7 +22,7 @@ const GroupsButton = function(props) {
     const ActionButton = sdk.getComponent('elements.ActionButton');
     return (
         <ActionButton action="view_my_groups"
-            label={_t("Groups")}
+            label={_t("Communities")}
             iconPath="img/icons-groups.svg"
             size={props.size}
             tooltip={props.tooltip}

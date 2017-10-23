@@ -21,10 +21,6 @@ import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 
-// We match fairly liberally and leave it up to the server to reject if
-// there are invalid characters etc.
-const GROUP_REGEX = /^\+(.*?):(.*)$/;
-
 export default React.createClass({
     displayName: 'CreateGroupDialog',
     propTypes: {
@@ -58,22 +54,9 @@ export default React.createClass({
     },
 
     _checkGroupId: function(e) {
-        const parsedGroupId = this._parseGroupId(this.state.groupId);
         let error = null;
-        if (parsedGroupId === null) {
-            error = _t(
-                "Group IDs must be of the form +localpart:%(domain)s",
-                {domain: MatrixClientPeg.get().getDomain()},
-            );
-        } else {
-            const domain = parsedGroupId[1];
-            if (domain !== MatrixClientPeg.get().getDomain()) {
-                error = _t(
-                    "It is currently only possible to create groups on your own home server: "+
-                    "use a group ID ending with %(domain)s",
-                    {domain: MatrixClientPeg.get().getDomain()},
-                );
-            }
+        if (!/^[a-zA-Z0-9]*$/.test(this.state.groupId)) {
+            error = _t("Community IDs may only contain alphanumeric characters");
         }
         this.setState({
             groupIdError: error,
@@ -86,14 +69,13 @@ export default React.createClass({
 
         if (this._checkGroupId()) return;
 
-        const parsedGroupId = this._parseGroupId(this.state.groupId);
         const profile = {};
         if (this.state.groupName !== '') {
             profile.name = this.state.groupName;
         }
         this.setState({creating: true});
         MatrixClientPeg.get().createGroup({
-            localpart: parsedGroupId[0],
+            localpart: this.state.groupId,
             profile: profile,
         }).then((result) => {
             dis.dispatch({
@@ -112,22 +94,6 @@ export default React.createClass({
         this.props.onFinished(false);
     },
 
-    /**
-     * Parse a string that may be a group ID
-     * If the string is a valid group ID, return a list of [localpart, domain],
-     * otherwise return null.
-     *
-     * @param {string} groupId The ID of the group
-     * @return {string[]} array of localpart, domain
-     */
-    _parseGroupId: function(groupId) {
-        const matches = GROUP_REGEX.exec(this.state.groupId);
-        if (!matches || matches.length < 3) {
-            return null;
-        }
-        return [matches[1], matches[2]];
-    },
-
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const Spinner = sdk.getComponent('elements.Spinner');
@@ -142,7 +108,7 @@ export default React.createClass({
             // rather than displaying what the server gives us, but synapse doesn't give
             // any yet.
             createErrorNode = <div className="error">
-                <div>{ _t('Room creation failed') }</div>
+                <div>{ _t('Something went wrong whilst creating your community') }</div>
                 <div>{ this.state.createError.message }</div>
             </div>;
         }
@@ -150,13 +116,13 @@ export default React.createClass({
         return (
             <BaseDialog className="mx_CreateGroupDialog" onFinished={this.props.onFinished}
                 onEnterPressed={this._onFormSubmit}
-                title={_t('Create Group')}
+                title={_t('Create Community')}
             >
                 <form onSubmit={this._onFormSubmit}>
                     <div className="mx_Dialog_content">
                         <div className="mx_CreateGroupDialog_inputRow">
                             <div className="mx_CreateGroupDialog_label">
-                                <label htmlFor="groupname">{ _t('Group Name') }</label>
+                                <label htmlFor="groupname">{ _t('Community Name') }</label>
                             </div>
                             <div>
                                 <input id="groupname" className="mx_CreateGroupDialog_input"
@@ -169,16 +135,18 @@ export default React.createClass({
                         </div>
                         <div className="mx_CreateGroupDialog_inputRow">
                             <div className="mx_CreateGroupDialog_label">
-                                <label htmlFor="groupid">{ _t('Group ID') }</label>
+                                <label htmlFor="groupid">{ _t('Community ID') }</label>
                             </div>
                             <div>
+                                <span>+</span>
                                 <input id="groupid" className="mx_CreateGroupDialog_input"
-                                    size="64"
-                                    placeholder={_t('+example:%(domain)s', {domain: MatrixClientPeg.get().getDomain()})}
+                                    size="32"
+                                    placeholder={_t('example')}
                                     onChange={this._onGroupIdChange}
                                     onBlur={this._onGroupIdBlur}
                                     value={this.state.groupId}
                                 />
+                                <span>:{ MatrixClientPeg.get().getDomain() }</span>
                             </div>
                         </div>
                         <div className="error">
