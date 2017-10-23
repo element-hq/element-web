@@ -918,6 +918,7 @@ export default React.createClass({
                 avatarNode = <GroupAvatar
                     groupId={this.props.groupId}
                     groupAvatarUrl={groupAvatarUrl}
+                    onClick={this._onEditClick}
                     width={48} height={48}
                 />;
                 if (summary.profile && summary.profile.name) {
