@@ -67,8 +67,9 @@ limitations under the License.
 }
 
 .mx_EventTile .mx_SenderProfile .mx_Flair img {
-    vertical-align: -3px;
+    vertical-align: -2px;
     margin-right: 2px;
+    border-radius: 8px;
 }
 
 .mx_EventTile .mx_MessageTimestamp {
