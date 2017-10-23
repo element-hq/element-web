@@ -40,7 +40,7 @@ export default {
     getLabsFeatures() {
         const featuresConfig = SdkConfig.get()['features'] || {};
 
-        // The old flag: honourned for backwards compat
+        // The old flag: honoured for backwards compatibility
         const enableLabs = SdkConfig.get()['enableLabs'];
 
         let labsFeatures;
@@ -217,7 +217,7 @@ export default {
     isFeatureEnabled: function(featureId: string): boolean {
         const featuresConfig = SdkConfig.get()['features'];
 
-        // The old flag: honourned for backwards compat
+        // The old flag: honoured for backwards compatibility
         const enableLabs = SdkConfig.get()['enableLabs'];
 
         let sdkConfigValue = enableLabs ? 'labs' : 'disable';
