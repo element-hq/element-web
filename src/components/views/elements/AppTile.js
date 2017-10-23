@@ -176,11 +176,8 @@ export default React.createClass({
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             Modal.createTrackedDialog('Delete Widget', '', QuestionDialog, {
                 title: _t("Delete Widget"),
-                description:
-                    <div>
-                 { _t("Deleting a widget removes it for all users in this room - " +
-                 "Are you sure you want to delete this widget?") }
-                    </div>,
+                description: _t("Deleting a widget removes it for all users in this room." +
+                " Are you sure you want to delete this widget?"),
                 button: _t("Delete widget"),
                 onFinished: (confirmed) => {
                     if (!confirmed) {

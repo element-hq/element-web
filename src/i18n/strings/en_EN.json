@@ -202,7 +202,7 @@
     "Failed to delete device": "Failed to delete device",
     "Delete": "Delete",
     "Delete Widget": "Delete Widget",
-    "Deleting a widget removes it for all users in this room - are you sure you want to delete this widget?": "Deleting a widget removes it for all users in this room - are you sure you want to delete this widget?",
+    "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?",
     "Disable Notifications": "Disable Notifications",
     "Enable Notifications": "Enable Notifications",
     "Cannot add any more widgets": "Cannot add any more widgets",
