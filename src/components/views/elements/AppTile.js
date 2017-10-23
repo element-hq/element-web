@@ -183,21 +183,19 @@ export default React.createClass({
                     </div>,
                 button: _t("Delete widget"),
                 onFinished: (confirmed) => {
-                    if (confirmed) {
-                        console.log("Delete widget %s", this.props.id);
-                        this.setState({deleting: true});
-                        MatrixClientPeg.get().sendStateEvent(
-                            this.props.room.roomId,
-                            'im.vector.modular.widgets',
-                            {}, // empty content
-                            this.props.id,
-                        ).then(() => {
-                            console.log('Deleted widget');
-                        }, (e) => {
-                            console.error('Failed to delete widget', e);
-                            this.setState({deleting: false});
-                        });
+                    if (!confirmed) {
+                        return;
                     }
+                    this.setState({deleting: true});
+                    MatrixClientPeg.get().sendStateEvent(
+                        this.props.room.roomId,
+                        'im.vector.modular.widgets',
+                        {}, // empty content
+                        this.props.id,
+                    ).catch((e) => {
+                        console.error('Failed to delete widget', e);
+                        this.setState({deleting: false});
+                    });
                 },
             });
         } else {
