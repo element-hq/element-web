@@ -58,7 +58,7 @@
     "No update available.": "Není dostupná žádná aktualizace.",
     "Downloading update...": "Stahování aktualizace...",
     "Welcome to Riot.im": "Vítá vás Riot.im",
-    "Enable desktop notifications": "Zapnout upozornění na desktopu",
+    "Enable desktop notifications": "Zapnout upozornění na ploše",
     "Enable email notifications": "Zapnout upozornění přes e-mail",
     "Enable notifications for this account": "Zapnout upozornění na tomto účtu",
     "#example": "#příklad",
@@ -202,5 +202,17 @@
     "You must specify an event type!": "Musíte určit typ události!",
     "Event sent!": "Událost odeslána!",
     "Failed to send custom event.": "Nepodařilo se odeslat vlastní událost.",
-    "Send Custom Event": "Odeslat vlastní událost"
+    "Send Custom Event": "Odeslat vlastní událost",
+    "Show message in desktop notification": "Zobrazovat zprávu v upozornění na ploše",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Přes vlastní serverové volby se můžete přihlásit k dalším Matrix serverům tak, že zadáte jinou adresu domovského serveru.<br/>Díky tomu můžete v Riotu používat Matrix účet z jiného domovského serveru.<br/><br/>Můžete nastavit i vlastní server identit, ale pak už nebudete moci zvát ani být zván/a skrze e-mailovou adresu.",
+    "Edit": "Upravit",
+    "Pin Message": "Připíchnout zprávu",
+    "Register": "Zaregistrovat",
+    "Rooms": "Místnosti",
+    "Invite to this community": "Pozvat do této komunity",
+    "Add rooms to this community": "Přidat místnosti do této komunity",
+    "State Key": "Stavový klíč",
+    "Send Custom State Event": "Poslat vlastní stavovou událost",
+    "Explore Room State": "Prohlížet stav místnosti",
+    "Unpin Message": "Odepnout zprávu"
 }
