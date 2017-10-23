@@ -478,5 +478,14 @@
     "Failed to invite the following users to the %(roomName)s room:": "Do místnosti %(roomName)s se nepodařilo pozvat následující uživatele:",
     "You need to be logged in.": "Musíte být přihlášen/a.",
     "You are now ignoring %(userId)s": "Nyní ignorujete %(userId)s",
-    "You are no longer ignoring %(userId)s": "Už neignorujete %(userId)s"
+    "You are no longer ignoring %(userId)s": "Už neignorujete %(userId)s",
+    "Add rooms to this community": "Přidat místnosti do této komunity",
+    "Unpin Message": "Odepnout zprávu",
+    "Ignored user": "Ignorovaný uživatel",
+    "Unignored user": "Odignorovaný uživatel",
+    "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and device %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "VAROVÁNÍ: OVĚŘENÍ KLÍČE SELHALO! Podepisovací klíč uživatele %(userId)s a zařízení %(deviceId)s je \"%(fprint)s\", což nesouhlasí s dodaným klíčem \"%(fingerprint)s\". Toto může znamenat, že vaše komunikace je odposlouchávána!",
+    "Reason": "Důvod",
+    "VoIP conference started.": "VoIP konference započata.",
+    "VoIP conference finished.": "VoIP konference ukončena.",
+    "%(targetName)s left the room.": "%(targetName)s opustil/a místnost."
 }
