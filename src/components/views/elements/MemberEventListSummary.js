@@ -106,7 +106,7 @@ module.exports = React.createClass({
 
             const desc = this._renderCommaSeparatedList(descs);
 
-            return nameList + " " + desc;
+            return _t('%(nameList)s %(transitionList)s', { nameList: nameList, transitionList: desc });
         });
 
         if (!summaries) {
