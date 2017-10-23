@@ -237,7 +237,7 @@ class RoomStateExplorer extends React.Component {
         if (this.state.eventType === null) {
             Object.keys(this.roomStateEvents).forEach((evType) => {
                 // Skip this entry if does not contain search query
-                if (this.state.query && !evType.includes(this.state.query)) return;
+                if (this.state.query && !evType.toLowerCase().includes(this.state.query.toLocaleLowerCase())) return;
 
                 const stateGroup = this.roomStateEvents[evType];
                 const stateKeys = Object.keys(stateGroup);
@@ -258,7 +258,7 @@ class RoomStateExplorer extends React.Component {
             const stateGroup = this.roomStateEvents[evType];
             Object.keys(stateGroup).forEach((stateKey) => {
                 // Skip this entry if does not contain search query
-                if (this.state.query && !stateKey.includes(this.state.query)) return;
+                if (this.state.query && !stateKey.toLowerCase().includes(this.state.query.toLocaleLowerCase())) return;
 
                 const ev = stateGroup[stateKey];
                 rows.push(<button className="mx_DevTools_RoomStateExplorer_button" key={stateKey}
