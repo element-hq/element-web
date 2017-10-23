@@ -127,7 +127,7 @@ export default class Flair extends React.Component {
         }
         const profiles = await this._getGroupProfiles(groups);
         if (!this.unmounted) {
-            this.setState({profiles});
+            this.setState({profiles: profiles.filter((profile) => {return profile.avatarUrl;})});
         }
     }
 
