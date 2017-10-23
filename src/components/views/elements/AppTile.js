@@ -178,7 +178,8 @@ export default React.createClass({
                 title: _t("Delete Widget"),
                 description:
                     <div>
-                 { _t("Deleting a widget removes it for all users in this room - are you sure you want to delete this widget?") }
+                 { _t("Deleting a widget removes it for all users in this room - " +
+                 "Are you sure you want to delete this widget?") }
                     </div>,
                 button: _t("Delete widget"),
                 onFinished: (confirmed) => {
