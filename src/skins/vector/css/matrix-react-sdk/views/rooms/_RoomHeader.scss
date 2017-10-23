@@ -149,8 +149,8 @@ limitations under the License.
 
 .mx_RoomHeader_avatarPicker_remove {
     position: absolute;
-    top: 10px;
-    left: 45px;
+    top: -11px;
+    right: -9px;
 }
 
 .mx_RoomHeader_name:hover div:not(.mx_RoomHeader_editable) {
@@ -198,8 +198,12 @@ limitations under the License.
     object-fit: cover;
 }
 
+.mx_RoomHeader_avatarPicker {
+    margin-top: 23px;
+    position: relative;
+}
+
 .mx_RoomHeader_avatarPicker_edit {
-    position: absolute;
     margin-left: 16px;
     margin-top: 4px;
 }
