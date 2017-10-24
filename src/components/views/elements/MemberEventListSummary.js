@@ -302,7 +302,7 @@ module.exports = React.createClass({
             return "";
         } else if (items.length === 1) {
             return items[0];
-        } else if (remaining >= 0) {
+        } else if (remaining > 0) {
             items = items.slice(0, itemLimit);
             return _t("%(items)s and %(count)s others", { items: items.join(', '), count: remaining } )
         } else {
