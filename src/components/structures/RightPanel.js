@@ -351,7 +351,12 @@ module.exports = React.createClass({
         }
 
         return (
-            <aside className={classes} style={{ opacity: this.props.opacity }}>
+            <aside className={classes}
+                style={{
+                    opacity: this.props.opacity,
+                    pointerEvents: this.props.opacity < 1.0 ? 'none' : undefined,
+                }}
+            >
                 <div className="mx_RightPanel_header">
                     <div className="mx_RightPanel_headerButtonGroup">
                         {headerButtons}

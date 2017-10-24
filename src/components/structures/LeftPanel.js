@@ -182,8 +182,15 @@ var LeftPanel = React.createClass({
         }
 
         return (
-            <aside className={classes} style={{ opacity: this.props.opacity }}
-                   onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
+            <aside className={classes}
+                style={{
+                    opacity: this.props.opacity,
+                    pointerEvents: this.props.opacity < 1.0 ? 'none' : undefined,
+                }}
+                onKeyDown={ this._onKeyDown }
+                onFocus={ this._onFocus }
+                onBlur={ this._onBlur }
+            >
                 { topBox }
                 <CallPreview ConferenceHandler={VectorConferenceHandler} />
                 <RoomList
