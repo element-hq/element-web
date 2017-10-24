@@ -208,7 +208,7 @@
     "You must specify an event type!": "Du musst einen Event-Typ spezifizieren!",
     "Show message in desktop notification": "Nachricht in der Desktop-Benachrichtigung anzeigen",
     "Pin Message": "Nachricht anheften",
-    "Unpin Message": "Nachricht lösen",
+    "Unpin Message": "Nachricht nicht mehr anheften",
     "Add rooms to this community": "Räume zu dieser Community hinzufügen",
     "Edit": "Editieren",
     "Register": "Registrieren",
