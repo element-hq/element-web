@@ -318,7 +318,10 @@ module.exports = React.createClass({
         }
 
         if (this.props.groupId) {
-            inviteGroup = this.state.phase === this.Phase.GroupMemberList ? (
+            inviteGroup =  [
+                this.Phase.GroupMemberInfo,
+                this.Phase.GroupMemberList,
+            ].includes(this.state.phase) ? (
                 <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
                     <div className="mx_RightPanel_icon" >
                         <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
