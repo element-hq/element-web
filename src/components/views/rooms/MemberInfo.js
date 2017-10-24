@@ -91,7 +91,7 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     componentWillReceiveProps: function(newProps) {
-        if (this.props.member.userId != newProps.member.userId) {
+        if (this.props.member.userId !== newProps.member.userId) {
             this._updateStateForNewMember(newProps.member);
         }
     },
@@ -122,12 +122,12 @@ module.exports = withMatrixClient(React.createClass({
     _disambiguateDevices: function(devices) {
         const names = Object.create(null);
         for (let i = 0; i < devices.length; i++) {
-            var name = devices[i].getDisplayName();
+            const name = devices[i].getDisplayName();
             const indexList = names[name] || [];
             indexList.push(i);
             names[name] = indexList;
         }
-        for (name in names) {
+        for (const name in names) {
             if (names[name].length > 1) {
                 names[name].forEach((j)=>{
                     devices[j].ambiguous = true;
@@ -141,7 +141,7 @@ module.exports = withMatrixClient(React.createClass({
             return;
         }
 
-        if (userId == this.props.member.userId) {
+        if (userId === this.props.member.userId) {
             // no need to re-download the whole thing; just update our copy of
             // the list.
 
@@ -187,7 +187,7 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     onAccountData: function(ev) {
-        if (ev.getType() == 'm.direct') {
+        if (ev.getType() === 'm.direct') {
             this.forceUpdate();
         }
     },
@@ -242,7 +242,9 @@ module.exports = withMatrixClient(React.createClass({
             ignoredUsers.push(this.props.member.userId);
         }
 
-        this.props.matrixClient.setIgnoredUsers(ignoredUsers).then(() => this.setState({isIgnoring: !this.state.isIgnoring}));
+        this.props.matrixClient.setIgnoredUsers(ignoredUsers).then(() => {
+            return this.setState({isIgnoring: !this.state.isIgnoring});
+        });
     },
 
     onKick: function() {
@@ -252,7 +254,7 @@ module.exports = withMatrixClient(React.createClass({
         Modal.createTrackedDialog('Confirm User Action Dialog', 'onKick', ConfirmUserActionDialog, {
             member: this.props.member,
             action: kickLabel,
-            askReason: membership == "join",
+            askReason: membership === "join",
             danger: true,
             onFinished: (proceed, reason) => {
                 if (!proceed) return;
@@ -284,15 +286,15 @@ module.exports = withMatrixClient(React.createClass({
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createTrackedDialog('Confirm User Action Dialog', 'onBanOrUnban', ConfirmUserActionDialog, {
             member: this.props.member,
-            action: this.props.member.membership == 'ban' ? _t("Unban") : _t("Ban"),
-            askReason: this.props.member.membership != 'ban',
-            danger: this.props.member.membership != 'ban',
+            action: this.props.member.membership === 'ban' ? _t("Unban") : _t("Ban"),
+            askReason: this.props.member.membership !== 'ban',
+            danger: this.props.member.membership !== 'ban',
             onFinished: (proceed, reason) => {
                 if (!proceed) return;
 
                 this.setState({ updating: this.state.updating + 1 });
                 let promise;
-                if (this.props.member.membership == 'ban') {
+                if (this.props.member.membership === 'ban') {
                     promise = this.props.matrixClient.unban(
                         this.props.member.roomId, this.props.member.userId,
                     );
@@ -327,15 +329,11 @@ module.exports = withMatrixClient(React.createClass({
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
         const room = this.props.matrixClient.getRoom(roomId);
-        if (!room) {
-            return;
-        }
-        const powerLevelEvent = room.currentState.getStateEvents(
-            "m.room.power_levels", "",
-        );
-        if (!powerLevelEvent) {
-            return;
-        }
+        if (!room) return;
+
+        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
+        if (!powerLevelEvent) return;
+
         const isMuted = this.state.muted;
         const powerLevels = powerLevelEvent.getContent();
         const levelToSend = (
@@ -350,7 +348,7 @@ module.exports = withMatrixClient(React.createClass({
         }
         level = parseInt(level);
 
-        if (level !== NaN) {
+        if (!isNaN(level)) {
             this.setState({ updating: this.state.updating + 1 });
             this.props.matrixClient.setPowerLevel(roomId, target, level, powerLevelEvent).then(
                 function() {
@@ -375,19 +373,14 @@ module.exports = withMatrixClient(React.createClass({
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
         const room = this.props.matrixClient.getRoom(roomId);
-        if (!room) {
-            return;
-        }
-        const powerLevelEvent = room.currentState.getStateEvents(
-            "m.room.power_levels", "",
-        );
-        if (!powerLevelEvent) {
-            return;
-        }
+        if (!room) return;
+
+        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
+        if (!powerLevelEvent) return;
+
         const me = room.getMember(this.props.matrixClient.credentials.userId);
-        if (!me) {
-            return;
-        }
+        if (!me) return;
+
         const defaultLevel = powerLevelEvent.getContent().users_default;
         let modLevel = me.powerLevel - 1;
         if (modLevel > 50 && defaultLevel < 50) modLevel = 50; // try to stick with the vector level defaults
@@ -400,7 +393,7 @@ module.exports = withMatrixClient(React.createClass({
                 // get out of sync if we force setState here!
                 console.log("Mod toggle success");
             }, function(err) {
-                if (err.errcode == 'M_GUEST_ACCESS_FORBIDDEN') {
+                if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN') {
                     dis.dispatch({action: 'view_set_mxid'});
                 } else {
                     console.error("Toggle moderator error:" + err);
@@ -436,7 +429,6 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     onPowerChange: function(powerLevel) {
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
         const room = this.props.matrixClient.getRoom(roomId);
@@ -497,19 +489,14 @@ module.exports = withMatrixClient(React.createClass({
             modifyLevel: false,
         };
         const room = this.props.matrixClient.getRoom(member.roomId);
-        if (!room) {
-            return defaultPerms;
-        }
-        const powerLevels = room.currentState.getStateEvents(
-            "m.room.power_levels", "",
-        );
-        if (!powerLevels) {
-            return defaultPerms;
-        }
+        if (!room) return defaultPerms;
+
+        const powerLevels = room.currentState.getStateEvents("m.room.power_levels", "");
+        if (!powerLevels) return defaultPerms;
+
         const me = room.getMember(this.props.matrixClient.credentials.userId);
-        if (!me) {
-            return defaultPerms;
-        }
+        if (!me) return defaultPerms;
+
         const them = member;
         return {
             can: this._calculateCanPermissions(
@@ -550,9 +537,8 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     _isMuted: function(member, powerLevelContent) {
-        if (!powerLevelContent || !member) {
-            return false;
-        }
+        if (!powerLevelContent || !member) return false;
+
         const levelToSend = (
             (powerLevelContent.events ? powerLevelContent.events["m.room.message"] : null) ||
             powerLevelContent.events_default
@@ -568,14 +554,15 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     onMemberAvatarClick: function() {
-        const avatarUrl = this.props.member.user ? this.props.member.user.avatarUrl : this.props.member.events.member.getContent().avatar_url;
+        const member = this.props.member;
+        const avatarUrl = member.user ? member.user.avatarUrl : member.events.member.getContent().avatar_url;
         if(!avatarUrl) return;
 
         const httpUrl = this.props.matrixClient.mxcUrlToHttp(avatarUrl);
         const ImageView = sdk.getComponent("elements.ImageView");
         const params = {
             src: httpUrl,
-            name: this.props.member.name,
+            name: member.name,
         };
 
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
@@ -589,9 +576,7 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     _renderDevices: function() {
-        if (!this._enableDevices) {
-            return null;
-        }
+        if (!this._enableDevices) return null;
 
         const devices = this.state.devices;
         const MemberDeviceInfo = sdk.getComponent('rooms.MemberDeviceInfo');
@@ -675,7 +660,13 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     render: function() {
-        let startChat, kickButton, banButton, muteButton, giveModButton, spinner;
+        let startChat;
+        let kickButton;
+        let banButton;
+        let muteButton;
+        let giveModButton;
+        let spinner;
+
         if (this.props.member.userId !== this.props.matrixClient.credentials.userId) {
             const dmRoomMap = new DMRoomMap(this.props.matrixClient);
             const dmRooms = dmRoomMap.getDMRoomsForUserId(this.props.member.userId);
@@ -689,7 +680,7 @@ module.exports = withMatrixClient(React.createClass({
                     const me = room.getMember(this.props.matrixClient.credentials.userId);
                     const highlight = (
                         room.getUnreadNotificationCount('highlight') > 0 ||
-                        me.membership == "invite"
+                        me.membership === "invite"
                     );
                     tiles.push(
                         <RoomTile key={room.roomId} room={room}
@@ -697,7 +688,7 @@ module.exports = withMatrixClient(React.createClass({
                             selected={false}
                             unread={Unread.doesRoomHaveUnreadMessages(room)}
                             highlight={highlight}
-                            isInvite={me.membership == "invite"}
+                            isInvite={me.membership === "invite"}
                             onClick={this.onRoomTileClick}
                         />,
                     );
@@ -742,7 +733,7 @@ module.exports = withMatrixClient(React.createClass({
         }
         if (this.state.can.ban) {
             let label = _t("Ban");
-            if (this.props.member.membership == 'ban') {
+            if (this.props.member.membership === 'ban') {
                 label = _t("Unban");
             }
             banButton = (
@@ -788,11 +779,15 @@ module.exports = withMatrixClient(React.createClass({
 
         const memberName = this.props.member.name;
 
+        let presenceState;
+        let presenceLastActiveAgo;
+        let presenceCurrentlyActive;
+
         if (this.props.member.user) {
-            var presenceState = this.props.member.user.presence;
-            var presenceLastActiveAgo = this.props.member.user.lastActiveAgo;
-            const presenceLastTs = this.props.member.user.lastPresenceTs;
-            var presenceCurrentlyActive = this.props.member.user.currentlyActive;
+            presenceState = this.props.member.user.presence;
+            presenceLastActiveAgo = this.props.member.user.lastActiveAgo;
+            // const presenceLastTs = this.props.member.user.lastPresenceTs;
+            presenceCurrentlyActive = this.props.member.user.currentlyActive;
         }
 
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
