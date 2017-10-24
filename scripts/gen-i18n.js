@@ -232,9 +232,14 @@ for (const path of SEARCH_PATHS) {
 
 const trObj = {};
 for (const tr of translatables) {
-    trObj[tr] = tr;
-    if (tr.includes("|") && inputTranslationsRaw[tr]) {
-        trObj[tr] = inputTranslationsRaw[tr];
+    if (tr.includes("|")) {
+        if (inputTranslationsRaw[tr]) {
+            trObj[tr] = inputTranslationsRaw[tr];
+        } else {
+            trObj[tr] = tr.split("|")[0];
+        }
+    } else {
+        trObj[tr] = tr;
     }
 }
 
