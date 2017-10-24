@@ -904,5 +904,7 @@
     "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.": "Создайте сообщество для объединения пользователей и комнат! Создайте собственную домашнюю страницу, чтобы выделить свое пространство во вселенной Matrix.",
     "Join an existing community": "Присоединиться к существующему сообществу",
     "To join an existing community you'll have to know its community identifier; this will look something like <i>+example:matrix.org</i>.": "Чтобы присоединиться к существующему сообществу, вам нужно знать его ID; это будет выглядеть примерно так<i>+primer:matrix.org</i>.",
-    "Something went wrong whilst creating your community": "При создании сообщества что-то пошло не так"
+    "Something went wrong whilst creating your community": "При создании сообщества что-то пошло не так",
+    "%(names)s and %(count)s others are typing|other": "%(names)s и %(count)s другие печатают",
+    "And %(count)s more...|other": "И %(count)s больше..."
 }
