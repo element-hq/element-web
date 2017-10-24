@@ -905,5 +905,7 @@
     "Your Communities": "Deine Communities",
     "You're not currently a member of any communities.": "Du bist aktuell kein Mitglied einer Community.",
     "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.": "Erzeuge eine Community um Nutzer und Räume zu gruppieren! Erzeuge eine angepasste Homepage um dein Revier im Matrix-Universum zu markieren.",
-    "Something went wrong whilst creating your community": "Beim Erstellen deiner Community ist ein Fehler aufgetreten"
+    "Something went wrong whilst creating your community": "Beim Erstellen deiner Community ist ein Fehler aufgetreten",
+    "%(names)s and %(count)s others are typing|other": "%(names)s und %(count)s weitere schreiben",
+    "And %(count)s more...|other": "Und %(count)s weitere..."
 }
