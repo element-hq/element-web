@@ -72,6 +72,13 @@ class RoomViewStore extends Store {
             case 'view_room':
                 this._viewRoom(payload);
                 break;
+            case 'view_my_groups':
+            case 'view_group':
+                this._setState({
+                    roomId: null,
+                    roomAlias: null,
+                });
+                break;
             case 'view_room_error':
                 this._viewRoomError(payload);
                 break;

@@ -481,6 +481,10 @@ export default React.createClass({
             editing: true,
             profileForm: Object.assign({}, this.state.summary.profile),
         });
+        dis.dispatch({
+            action: 'ui_opacity',
+            sideOpacity: 0.3,
+        });
     },
 
     _onCancelClick: function() {
@@ -488,6 +492,7 @@ export default React.createClass({
             editing: false,
             profileForm: null,
         });
+        dis.dispatch({action: 'ui_opacity'});
     },
 
     _onNameChange: function(value) {
@@ -535,12 +540,16 @@ export default React.createClass({
 
     _onSaveClick: function() {
         this.setState({saving: true});
-        MatrixClientPeg.get().setGroupProfile(this.props.groupId, this.state.profileForm).then((result) => {
+        const savePromise = this.state.isUserPrivileged ?
+            MatrixClientPeg.get().setGroupProfile(this.props.groupId, this.state.profileForm) :
+            Promise.resolve();
+        savePromise.then((result) => {
             this.setState({
                 saving: false,
                 editing: false,
                 summary: null,
             });
+            dis.dispatch({action: 'ui_opacity'});
             this._initGroupStore(this.props.groupId);
         }).catch((e) => {
             this.setState({
@@ -624,23 +633,40 @@ export default React.createClass({
         });
     },
 
+    _getGroupSection: function() {
+        const groupSettingsSectionClasses = classnames({
+            "mx_GroupView_group": this.state.editing,
+            "mx_GroupView_group_disabled": this.state.editing && !this.state.isUserPrivileged,
+        });
+
+        const header = this.state.editing ? <h2> { _t('Community Settings') } </h2> : <div />;
+        return <div className={groupSettingsSectionClasses}>
+            { header }
+            { this._getLongDescriptionNode() }
+            { this._getRoomsNode() }
+        </div>;
+    },
+
     _getRoomsNode: function() {
         const RoomDetailList = sdk.getComponent('rooms.RoomDetailList');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
-        const addButton = this.state.editing ?
-            (<AccessibleButton onClick={this._onAddRoomsClick} >
-                <div className="mx_GroupView_rooms_header_addButton" >
+
+        const addRoomRow = this.state.editing ?
+            (<AccessibleButton className="mx_GroupView_rooms_header_addRow"
+                onClick={this._onAddRoomsClick}
+            >
+                <div className="mx_GroupView_rooms_header_addRow_button">
                     <TintableSvg src="img/icons-room-add.svg" width="24" height="24" />
                 </div>
-                <div className="mx_GroupView_rooms_header_addButton_label">
+                <div className="mx_GroupView_rooms_header_addRow_label">
                     { _t('Add rooms to this community') }
                 </div>
             </AccessibleButton>) : <div />;
         return <div className="mx_GroupView_rooms">
             <div className="mx_GroupView_rooms_header">
                 <h3>{ _t('Rooms') }</h3>
-                { addButton }
+                { addRoomRow }
             </div>
             <RoomDetailList rooms={this._groupStore.getGroupRooms()} />
         </div>;
@@ -790,7 +816,7 @@ export default React.createClass({
 
     _getMemberSettingsSection: function() {
         return <div className="mx_GroupView_memberSettings">
-            <h3> { _t("Community Member Settings") } </h3>
+            <h2> { _t("Community Member Settings") } </h2>
             <div className="mx_GroupView_memberSettings_toggle">
                 <input type="checkbox"
                     onClick={this._onPublicityToggle}
@@ -813,8 +839,13 @@ export default React.createClass({
         if (summary.profile && summary.profile.long_description) {
             description = sanitizedHtmlNode(summary.profile.long_description);
         }
-        return this.state.editing && this.state.isUserPrivileged ?
-            <div className="mx_GroupView_groupDesc">
+        const groupDescEditingClasses = classnames({
+            "mx_GroupView_groupDesc": true,
+            "mx_GroupView_groupDesc_disabled": !this.state.isUserPrivileged,
+        });
+
+        return this.state.editing ?
+            <div className={groupDescEditingClasses}>
                 <h3> { _t("Long Description (HTML)") } </h3>
                 <textarea
                     value={this.state.profileForm.long_description}
@@ -844,14 +875,10 @@ export default React.createClass({
             const bodyNodes = [
                 this._getMembershipSection(),
                 this.state.editing ? this._getMemberSettingsSection() : null,
-                this._getLongDescriptionNode(),
-                this._getRoomsNode(),
+                this._getGroupSection(),
             ];
             const rightButtons = [];
-            const headerClasses = {
-                mx_GroupView_header: true,
-            };
-            if (this.state.editing) {
+            if (this.state.editing && this.state.isUserPrivileged) {
                 let avatarImage;
                 if (this.state.uploadingAvatar) {
                     avatarImage = <Spinner />;
@@ -900,19 +927,6 @@ export default React.createClass({
                      onValueChanged={this._onShortDescChange}
                      tabIndex="2"
                      dir="auto" />;
-                rightButtons.push(
-                    <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
-                        onClick={this._onSaveClick} key="_saveButton"
-                    >
-                        { _t('Save') }
-                    </AccessibleButton>,
-                );
-                rightButtons.push(
-                    <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this._onCancelClick} key="_cancelButton">
-                        <img src="img/cancel.svg" className="mx_filterFlipColor"
-                            width="18" height="18" alt={_t("Cancel")} />
-                    </AccessibleButton>,
-                );
             } else {
                 const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;
                 avatarNode = <GroupAvatar
@@ -934,6 +948,22 @@ export default React.createClass({
                 if (summary.profile && summary.profile.short_description) {
                     shortDescNode = <span onClick={this._onEditClick}>{ summary.profile.short_description }</span>;
                 }
+            }
+            if (this.state.editing) {
+                rightButtons.push(
+                    <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
+                        onClick={this._onSaveClick} key="_saveButton"
+                    >
+                        { _t('Save') }
+                    </AccessibleButton>,
+                );
+                rightButtons.push(
+                    <AccessibleButton className="mx_RoomHeader_cancelButton" onClick={this._onCancelClick} key="_cancelButton">
+                        <img src="img/cancel.svg" className="mx_filterFlipColor"
+                            width="18" height="18" alt={_t("Cancel")} />
+                    </AccessibleButton>,
+                );
+            } else {
                 rightButtons.push(
                     <AccessibleButton className="mx_GroupHeader_button"
                         onClick={this._onEditClick} title={_t("Community Settings")} key="_editButton"
@@ -950,9 +980,12 @@ export default React.createClass({
                         </AccessibleButton>,
                     );
                 }
-
-                headerClasses.mx_GroupView_header_view = true;
             }
+
+            const headerClasses = {
+                mx_GroupView_header: true,
+                mx_GroupView_header_view: !this.state.editing,
+            };
 
             return (
                 <div className="mx_GroupView">
