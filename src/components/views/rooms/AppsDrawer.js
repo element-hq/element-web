@@ -81,12 +81,12 @@ module.exports = React.createClass({
     },
 
     onAction: function(action) {
+        const widgetStateKey = this.props.room.roomId + "_show_widget_drawer";
         switch (action.action) {
             case 'appsDrawer':
                 // When opening the app drawer when there aren't any apps,
                 // auto-launch the integrations manager to skip the awkward
                 // click on "Add widget"
-                let widgetStateKey = this.props.room.roomId + "_show_widget_drawer";
                 if (action.show) {
                     const apps = this._getApps();
                     if (apps.length === 0) {
