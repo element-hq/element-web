@@ -59,6 +59,7 @@ export default withMatrixClient(React.createClass({
     },
 
     _fetchMembers: function() {
+        if (this._unmounted) return;
         this.setState({
             members: this._groupStore.getGroupMembers(),
             invitedMembers: this._groupStore.getGroupInvitedMembers(),
@@ -105,9 +106,9 @@ export default withMatrixClient(React.createClass({
             });
         }
 
-        memberList = memberList.map((m) => {
+        memberList = memberList.map((m, index) => {
             return (
-                <GroupMemberTile key={m.userId} groupId={this.props.groupId} member={m} />
+                <GroupMemberTile key={index} groupId={this.props.groupId} member={m} />
             );
         });
 
