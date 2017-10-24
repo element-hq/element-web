@@ -29,13 +29,17 @@ $primary-bg-color: #EEF2F5;
 $header-color: #49555F;
 $header-font-family: PostGrotesk-Medium, Arial, Helvetica, Sans-Serif;
 
+$footer-color: #8D99A4;
+
 h1,h2,h3,h4,h5 {
     color: $header-color;
     font-family: $header-font-family;
     font-weight: 400 ! important;
 }
 
-$form-bg-color: #4360DF;
+$callout-color: #4360DF; // or #4957b8 from status.im homepage
+
+$form-bg-color: $callout-color;
 $form-fg-color: #ffffff;
 
 // ***** End of Status theme specifics ******
