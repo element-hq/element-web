@@ -545,7 +545,7 @@ module.exports = withMatrixClient(React.createClass({
         can.ban = me.powerLevel >= powerLevels.ban;
         can.mute = me.powerLevel >= editPowerLevel;
         can.toggleMod = me.powerLevel > them.powerLevel && them.powerLevel >= levelToSend;
-        can.modifyLevel = me.powerLevel > them.powerLevel;
+        can.modifyLevel = me.powerLevel > them.powerLevel && me.powerLevel >= editPowerLevel;
         return can;
     },
 
@@ -814,7 +814,9 @@ module.exports = withMatrixClient(React.createClass({
                             { this.props.member.userId }
                         </div>
                         <div className="mx_MemberInfo_profileField">
-                            { _t("Level:") } <b><PowerSelector controlled={true} value={parseInt(this.props.member.powerLevel)} disabled={!this.state.can.modifyLevel} onChange={this.onPowerChange} /></b>
+                            { _t("Level:") } <b>
+                                <PowerSelector controlled={true} value={parseInt(this.props.member.powerLevel)} disabled={!this.state.can.modifyLevel} onChange={this.onPowerChange} />
+                            </b>
                         </div>
                         <div className="mx_MemberInfo_profileField">
                             <PresenceLabel activeAgo={presenceLastActiveAgo}
