@@ -106,12 +106,11 @@ export default withMatrixClient(React.createClass({
             });
         }
 
-        memberList = memberList.map((m, index) => {
-            return (
-                <GroupMemberTile key={index} groupId={this.props.groupId} member={m} />
-            );
+        const uniqueMembers = {};
+        memberList.forEach((m) => {
+            if (!uniqueMembers[m.userId]) uniqueMembers[m.userId] = m;
         });
-
+        memberList = Object.keys(uniqueMembers).map((userId) => uniqueMembers[userId]);
         memberList.sort((a, b) => {
             // TODO: should put admins at the top: we don't yet have that info
             if (a < b) {
@@ -123,10 +122,16 @@ export default withMatrixClient(React.createClass({
             }
         });
 
+        const memberTiles = memberList.map((m) => {
+            return (
+                <GroupMemberTile key={m.userId} groupId={this.props.groupId} member={m} />
+            );
+        });
+
         return <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
             createOverflowElement={this._createOverflowTile}
         >
-            { memberList }
+            { memberTiles }
         </TruncatedList>;
     },
 
