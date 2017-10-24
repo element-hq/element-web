@@ -629,6 +629,7 @@ module.exports = withMatrixClient(React.createClass({
         const member = this.props.member;
 
         let ignoreButton = null;
+        let insertPillButton = null;
         let readReceiptButton = null;
 
         // Only allow the user to ignore the user if its not ourselves
@@ -653,21 +654,35 @@ module.exports = withMatrixClient(React.createClass({
                     });
                 };
 
+                const onInsertPillButton = function() {
+                    dis.dispatch({
+                        action: 'insert_mention',
+                        user_id: member.userId,
+                    });
+                };
+
                 readReceiptButton = (
                     <AccessibleButton onClick={onReadReceiptButton} className="mx_MemberInfo_field">
                         { _t('Jump to read receipt') }
                     </AccessibleButton>
                 );
+
+                insertPillButton = (
+                    <AccessibleButton onClick={onInsertPillButton} className={"mx_MemberInfo_field"}>
+                        { _t('Mention') }
+                    </AccessibleButton>
+                );
             }
         }
 
-        if (!ignoreButton && !readReceiptButton) return null;
+        if (!ignoreButton && !readReceiptButton && !insertPillButton) return null;
 
         return (
             <div>
                 <h3>{ _t("User Options") }</h3>
                 <div className="mx_MemberInfo_buttons">
                     { readReceiptButton }
+                    { insertPillButton }
                     { ignoreButton }
                 </div>
             </div>
