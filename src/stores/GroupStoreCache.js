@@ -33,8 +33,7 @@ class GroupStoreCache {
     }
 }
 
-let singletonGroupStoreCache = null;
-if (!singletonGroupStoreCache) {
-    singletonGroupStoreCache = new GroupStoreCache();
+if (global.singletonGroupStoreCache === undefined) {
+    global.singletonGroupStoreCache = new GroupStoreCache();
 }
-module.exports = singletonGroupStoreCache;
+export default global.singletonGroupStoreCache;
