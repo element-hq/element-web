@@ -249,6 +249,7 @@
     "Level:": "Level:",
     "and %(count)s others...|other": "and %(count)s others...",
     "and %(count)s others...|one": "and one other...",
+    "Invite": "Invite",
     "Invited": "Invited",
     "Filter room members": "Filter room members",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (power %(powerLevelNumber)s)",
