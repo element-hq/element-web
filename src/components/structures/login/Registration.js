@@ -322,6 +322,7 @@ module.exports = React.createClass({
     render: function() {
         const LoginHeader = sdk.getComponent('login.LoginHeader');
         const LoginFooter = sdk.getComponent('login.LoginFooter');
+        const LoginPage = sdk.getComponent('login.LoginPage');
         const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
         const Spinner = sdk.getComponent("elements.Spinner");
         const ServerConfig = sdk.getComponent('views.login.ServerConfig');
@@ -385,7 +386,7 @@ module.exports = React.createClass({
             );
         }
         return (
-            <div className="mx_Login">
+            <LoginPage>
                 <div className="mx_Login_box">
                     <LoginHeader
                         icon={this.state.teamSelected ?
@@ -401,7 +402,7 @@ module.exports = React.createClass({
                     { returnToAppJsx }
                     <LoginFooter />
                 </div>
-            </div>
+            </LoginPage>
         );
     },
 });

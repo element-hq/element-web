@@ -59,9 +59,10 @@ module.exports = React.createClass({
     render: function() {
         const ChangeDisplayName = sdk.getComponent('settings.ChangeDisplayName');
         const ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
+        const LoginPage = sdk.getComponent('login.LoginPage');
         const LoginHeader = sdk.getComponent('login.LoginHeader');
         return (
-            <div className="mx_Login">
+            <LoginPage>
                 <div className="mx_Login_box">
                     <LoginHeader />
                     <div className="mx_Login_profile">
@@ -74,7 +75,7 @@ module.exports = React.createClass({
                         { this.state.errorString }
                     </div>
                 </div>
-            </div>
+            </LoginPage>
         );
     },
 });

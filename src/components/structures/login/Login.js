@@ -329,8 +329,7 @@ module.exports = React.createClass({
 
     render: function() {
         const Loader = sdk.getComponent("elements.Spinner");
-        const LoginPageHeader = sdk.getComponent("login.LoginPageHeader");
-        const LoginPageFooter = sdk.getComponent("login.LoginPageFooter");
+        const LoginPage = sdk.getComponent("login.LoginPage");
         const LoginHeader = sdk.getComponent("login.LoginHeader");
         const LoginFooter = sdk.getComponent("login.LoginFooter");
         const ServerConfig = sdk.getComponent("login.ServerConfig");
@@ -367,8 +366,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className="mx_Login">
-                <LoginPageHeader />
+            <LoginPage>
                 <div className="mx_Login_box">
                     <LoginHeader />
                     <div>
@@ -389,8 +387,7 @@ module.exports = React.createClass({
                         <LoginFooter />
                     </div>
                 </div>
-                <LoginPageFooter />
-            </div>
+            </LoginPage>
         );
     },
 });
