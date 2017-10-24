@@ -110,6 +110,7 @@ module.exports = React.createClass({
                 items={this.state.newGroupsList}
                 className={"mx_RelatedGroupSettings"}
                 newItem={this.state.newGroupId}
+                canEdit={this.props.canSetRelatedRooms}
                 onNewItemChanged={this.onNewGroupChanged}
                 onItemAdded={this.onGroupAdded}
                 onItemEdited={this.onGroupEdited}

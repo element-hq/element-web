@@ -19,7 +19,6 @@ import Promise from 'bluebird';
 import React from 'react';
 import { _t, _tJsx, _td } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import SdkConfig from '../../../SdkConfig';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
 import ObjectUtils from '../../../ObjectUtils';
