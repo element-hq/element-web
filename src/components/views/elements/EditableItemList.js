@@ -80,7 +80,7 @@ module.exports = React.createClass({
     displayName: 'EditableItemList',
 
     propTypes: {
-        items: PropTypes.arrayOf(PropTypes. string).isRequired,
+        items: PropTypes.arrayOf(PropTypes.string).isRequired,
         onNewItemChanged: PropTypes.func,
         onItemAdded: PropTypes.func,
         onItemEdited: PropTypes.func,
