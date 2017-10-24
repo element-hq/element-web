@@ -25,15 +25,28 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
 
 function getDisplayAliasForRoom(room) {
-    return room.canonical_alias || (room.aliases ? room.aliases[0] : "");
+    return room.canonicalAlias || (room.aliases ? room.aliases[0] : "");
 }
 
 const RoomDetailRow = React.createClass({
+    propTypes: PropTypes.shape({
+        name: PropTypes.string,
+        topic: PropTypes.string,
+        roomId: PropTypes.string,
+        avatarUrl: PropTypes.string,
+        numJoinedMembers: PropTypes.number,
+        canonicalAlias: PropTypes.string,
+        aliases: PropTypes.arrayOf(PropTypes.string),
+
+        worldReadable: PropTypes.bool,
+        guestCanJoin: PropTypes.bool,
+    }),
+
     onClick: function(ev) {
         ev.preventDefault();
         dis.dispatch({
             action: 'view_room',
-            room_id: this.props.room.room_id,
+            room_id: this.props.room.roomId,
         });
     },
 
@@ -50,10 +63,10 @@ const RoomDetailRow = React.createClass({
         const name = room.name || getDisplayAliasForRoom(room) || _t('Unnamed room');
         const topic = linkifyString(sanitizeHtml(room.topic || ''));
 
-        const guestRead = room.world_readable ? (
+        const guestRead = room.worldReadable ? (
                 <div className="mx_RoomDirectory_perm">{ _t('World readable') }</div>
             ) : <div />;
-        const guestJoin = room.guest_can_join ? (
+        const guestJoin = room.guestCanJoin ? (
                 <div className="mx_RoomDirectory_perm">{ _t('Guests can join') }</div>
             ) : <div />;
 
@@ -62,13 +75,13 @@ const RoomDetailRow = React.createClass({
             { guestJoin }
         </div>) : <div />;
 
-        return <tr key={room.room_id} onClick={this.onClick}>
+        return <tr key={room.roomId} onClick={this.onClick}>
             <td className="mx_RoomDirectory_roomAvatar">
                 <BaseAvatar width={24} height={24} resizeMethod='crop'
                     name={name} idName={name}
                     url={ContentRepo.getHttpUriForMxc(
                             MatrixClientPeg.get().getHomeserverUrl(),
-                            room.avatar_url, 24, 24, "crop")} />
+                            room.avatarUrl, 24, 24, "crop")} />
             </td>
             <td className="mx_RoomDirectory_roomDescription">
                 <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
@@ -79,7 +92,7 @@ const RoomDetailRow = React.createClass({
                 <div className="mx_RoomDirectory_alias">{ getDisplayAliasForRoom(room) }</div>
             </td>
             <td className="mx_RoomDirectory_roomMemberCount">
-                { room.num_joined_members }
+                { room.numJoinedMembers }
             </td>
         </tr>;
     },
@@ -92,13 +105,14 @@ export default React.createClass({
         rooms: PropTypes.arrayOf(PropTypes.shape({
             name: PropTypes.string,
             topic: PropTypes.string,
-            room_id: PropTypes.string,
-            num_joined_members: PropTypes.number,
-            canonical_alias: PropTypes.string,
+            roomId: PropTypes.string,
+            avatarUrl: PropTypes.string,
+            numJoinedMembers: PropTypes.number,
+            canonicalAlias: PropTypes.string,
             aliases: PropTypes.arrayOf(PropTypes.string),
 
-            world_readable: PropTypes.bool,
-            guest_can_join: PropTypes.bool,
+            worldReadable: PropTypes.bool,
+            guestCanJoin: PropTypes.bool,
         })),
     },
 
