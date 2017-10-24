@@ -493,7 +493,7 @@
     "%(senderName)s removed their profile picture.": "%(senderName)s odstranil/a svůj profilový obrázek.",
     "%(targetName)s rejected the invitation.": "%(targetName)s odmítl/a pozvání.",
     "Communities": "Komunity",
-    "Message Pinning": "Připínání zpráv",
+    "Message Pinning": "Připíchnutí zprávy",
     "Your browser does not support the required cryptography extensions": "Váš prohlížeč nepodporuje požadovaná kryptografická rozšíření",
     "Do you want to set an email address?": "Chcete nastavit e-mailovou adresu?",
     "New Password": "Nové heslo",
@@ -508,5 +508,16 @@
     "code": "kód",
     "quote": "citace",
     "bullet": "odrážka",
-    "numbullet": "číselný seznam"
+    "numbullet": "číselný seznam",
+    "No pinned messages.": "Žádné připíchnuté zprávy.",
+    "Pinned Messages": "Připíchnuté zprávy",
+    "%(senderName)s removed their display name (%(oldDisplayName)s).": "%(senderName)s odstranil/a svoje zobrazované jméno (%(oldDisplayName)s).",
+    "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s odvolal/a pozvánku pro %(targetName)s.",
+    "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s učinil/a budoucí historii místnosti viditelnou všem členům, a to od chvíle jejich pozvání.",
+    "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s učinil/a budoucí historii místnosti viditelnou všem členům, a to od chvíle jejich vstupu do místnosti.",
+    "%(senderName)s made future room history visible to all room members.": "%(senderName)s učinil/a budoucí historii místnosti viditelnou všem členům.",
+    "%(senderName)s made future room history visible to anyone.": "%(senderName)s učinil/a budoucí historii místnosti viditelnou komukoliv.",
+    "%(senderName)s changed the pinned messages for the room.": "%(senderName)s změnil/a připíchnuté zprávy této místnosti.",
+    "%(names)s and %(count)s others are typing|other": "%(names)s a %(count)s další píší",
+    "Authentication check failed: incorrect password?": "Kontrola ověření selhala: špatné heslo?"
 }
