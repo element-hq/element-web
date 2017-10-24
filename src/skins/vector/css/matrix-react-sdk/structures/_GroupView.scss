@@ -159,8 +159,12 @@ limitations under the License.
     user-select: none;
 }
 
-.mx_GroupView_rooms_header h3 {
-    margin-bottom: 10px
+.mx_GroupView h3 {
+    text-transform: uppercase;
+    color: $h3-color;
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 10px;
 }
 
 .mx_GroupView_rooms_header .mx_AccessibleButton {
@@ -169,15 +173,24 @@ limitations under the License.
     height: 24px;
 }
 
-.mx_GroupView_rooms_header_addButton {
-    display: inline-block;
+.mx_GroupView_group {
+    border-top: 1px solid $primary-hairline-color;
 }
 
-.mx_GroupView_rooms_header_addButton object {
+.mx_GroupView_group_disabled {
+    opacity: 0.3;
     pointer-events: none;
 }
 
-.mx_GroupView_rooms_header_addButton_label {
+.mx_GroupView_rooms_header_addRow_button {
+    display: inline-block;
+}
+
+.mx_GroupView_rooms_header_addRow_button object {
+    pointer-events: none;
+}
+
+.mx_GroupView_rooms_header_addRow_label {
     display: inline-block;
     vertical-align: top;
     line-height: 24px;
@@ -220,14 +233,6 @@ limitations under the License.
 .mx_GroupView_memberSettings_toggle label {
     cursor: pointer;
     user-select: none;
-}
-
-.mx_GroupView_memberSettings h3 {
-    text-transform: uppercase;
-    color: $h3-color;
-    font-weight: 600;
-    font-size: 13px;
-    margin-bottom: 10px;
 }
 
 .mx_GroupView_memberSettings input {
