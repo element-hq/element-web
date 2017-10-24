@@ -302,11 +302,9 @@ module.exports = React.createClass({
             return "";
         } else if (items.length === 1) {
             return items[0];
-        } else if (remaining) {
+        } else if (remaining >= 0) {
             items = items.slice(0, itemLimit);
-            return (remaining > 1)
-                ? _t("%(items)s and %(remaining)s others", { items: items.join(', '), remaining: remaining } )
-                : _t("%(items)s and one other", { items: items.join(', ') });
+            return _t("%(items)s and %(count)s others", { items: items.join(', '), count: remaining } )
         } else {
             const lastItem = items.pop();
             return _t("%(items)s and %(lastItem)s", { items: items.join(', '), lastItem: lastItem });
