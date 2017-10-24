@@ -83,14 +83,25 @@ module.exports = React.createClass({
     onAction: function(action) {
         switch (action.action) {
             case 'appsDrawer':
-                // When opening the app draw when there aren't any apps, auto-launch the
-                // integrations manager to skip the awkward click on "Add widget"
+                // When opening the app drawer when there aren't any apps,
+                // auto-launch the integrations manager to skip the awkward
+                // click on "Add widget"
+                let widgetStateKey = this.props.room.roomId + "_show_widget_drawer";
                 if (action.show) {
                     const apps = this._getApps();
                     if (apps.length === 0) {
                         this._launchManageIntegrations();
                     }
+
+                    localStorage.removeItem(widgetStateKey);
+                } else {
+                    // Store hidden state of widget
+                    // Don't show if previously hidden
+                    console.warn("Storing hidden widget state for room - ",
+                        this.props.room.roomId);
+                    localStorage.setItem(widgetStateKey, false);
                 }
+
                 break;
         }
     },

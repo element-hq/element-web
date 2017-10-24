@@ -281,7 +281,7 @@ module.exports = React.createClass({
                     this.setState({
                         isPeeking: false,
                     });
-                    
+
                     // This won't necessarily be a MatrixError, but we duck-type
                     // here and say if it's got an 'errcode' key with the right value,
                     // it means we can't peek.
@@ -304,6 +304,20 @@ module.exports = React.createClass({
 
     _shouldShowApps: function(room) {
         if (!BROWSER_SUPPORTS_SANDBOX) return false;
+
+        // Check if user has prompted to close this app before
+        // If so, do not show apps
+        let showWidget = localStorage.getItem(
+            room.roomId + "_show_widget_drawer");
+
+        console.warn(room);
+        console.warn("Key is: " + room.roomId + "_show_widget_drawer");
+        console.warn("showWidget is: " + showWidget);
+
+        if (showWidget == "false") {
+            console.warn("We're blocking the widget from loading.");
+            return false;
+        }
 
         const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
         // any valid widget = show apps
