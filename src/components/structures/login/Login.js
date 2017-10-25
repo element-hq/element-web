@@ -354,6 +354,7 @@ module.exports = React.createClass({
         }
 
         let serverConfig;
+        let header;
         if (theme !== 'status') {
             serverConfig = <ServerConfig ref="serverConfig"
                 withToggleButton={true}
@@ -363,6 +364,13 @@ module.exports = React.createClass({
                 defaultIsUrl={this.props.defaultIsUrl}
                 onServerConfigChange={this.onServerConfigChange}
                 delayTimeMs={1000} />;
+
+            header = <h2>{ _t('Sign in') }</h2>;
+        }
+        else {
+            if (!this.state.errorText) {
+                header = <h2>{ _t('Sign in to get started') }</h2>;
+            }
         }
 
         return (
@@ -370,11 +378,9 @@ module.exports = React.createClass({
                 <div className="mx_Login_box">
                     <LoginHeader />
                     <div>
-                        <h2>{ theme !== 'status' ? _t('Sign in') : _t('Sign in to get started') }
-                            { loader }
-                        </h2>
+                        { header }
                         <div className="mx_Login_error">
-                                { this.state.errorText }
+                            { this.state.errorText }
                         </div>
                         { this.componentForStep(this.state.currentFlow) }
                         { serverConfig }
