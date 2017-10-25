@@ -28,13 +28,14 @@ module.exports = React.createClass({
             return (
                 <div className="mx_StatusLogin">
                     <div className="mx_StatusLogin_brand">
-                        <img src="themes/status/img/logo.svg" alt="Status" width="221" height="53"/>
+                        <img src="themes/status/img/logo.svg" alt="Status" width="221" height="53" />
                     </div>
                     <div className="mx_StatusLogin_content">
                         <div className="mx_StatusLogin_header">
                             <h1>Status Community Chat</h1>
                             <div className="mx_StatusLogin_subtitle">
-                                A safer, decentralised communication platform <a href="https://riot.im">powered by Riot</a>
+                                A safer, decentralised communication
+                                platform <a href="https://riot.im">powered by Riot</a>
                             </div>
                         </div>
                         { this.props.children }
@@ -47,7 +48,8 @@ module.exports = React.createClass({
                 </div>
             );
         }
-        else {
+        else
+        {
             return (
                 <div className="mx_Login">
                     { this.props.children }
