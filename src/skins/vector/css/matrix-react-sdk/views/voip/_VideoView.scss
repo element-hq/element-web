@@ -42,5 +42,8 @@ limitations under the License.
 .mx_VideoView_localVideoFeed video {
     width: auto;
     height: 100%;
+}
+
+.mx_VideoView_localVideoFeed.mx_VideoView_localVideoFeed_flipped video {
     transform: scale(-1, 1);
 }
