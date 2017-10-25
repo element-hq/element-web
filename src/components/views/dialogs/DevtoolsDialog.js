@@ -57,7 +57,7 @@ class SendCustomEvent extends React.Component {
     _buttons() {
         return <div className="mx_Dialog_buttons">
             <button onClick={this.onBack}>{ _t('Back') }</button>
-            {!this.state.message && <button onClick={this._send}>{ _t('Send') }</button>}
+            { !this.state.message && <button onClick={this._send}>{ _t('Send') }</button> }
         </div>;
     }
 
@@ -83,7 +83,7 @@ class SendCustomEvent extends React.Component {
     }
 
     _additionalFields() {
-        return <div/>;
+        return <div />;
     }
 
     _onChange(e) {
@@ -94,15 +94,15 @@ class SendCustomEvent extends React.Component {
         if (this.state.message) {
             return <div>
                 <div className="mx_Dialog_content">
-                    {this.state.message}
+                    { this.state.message }
                 </div>
-                {this._buttons()}
+                { this._buttons() }
             </div>;
         }
 
         return <div>
             <div className="mx_Dialog_content">
-                {this._additionalFields()}
+                { this._additionalFields() }
                 <div className="mx_TextInputDialog_label">
                     <label htmlFor="eventType"> { _t('Event Type') } </label>
                 </div>
@@ -117,7 +117,7 @@ class SendCustomEvent extends React.Component {
                     <textarea id="evContent" onChange={this._onChange} value={this.state.input_evContent} className="mx_TextInputDialog_input" cols="63" rows="5" />
                 </div>
             </div>
-            {this._buttons()}
+            { this._buttons() }
         </div>;
     }
 }
@@ -223,7 +223,7 @@ class RoomStateExplorer extends React.Component {
         if (this.state.event) {
             return <div className="mx_ViewSource">
                 <div className="mx_Dialog_content">
-                    <pre>{JSON.stringify(this.state.event.event, null, 2)}</pre>
+                    <pre>{ JSON.stringify(this.state.event.event, null, 2) }</pre>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.onBack}>{ _t('Back') }</button>
@@ -237,7 +237,7 @@ class RoomStateExplorer extends React.Component {
         if (this.state.eventType === null) {
             Object.keys(this.roomStateEvents).forEach((evType) => {
                 // Skip this entry if does not contain search query
-                if (this.state.query && !evType.includes(this.state.query)) return;
+                if (this.state.query && !evType.toLowerCase().includes(this.state.query.toLowerCase())) return;
 
                 const stateGroup = this.roomStateEvents[evType];
                 const stateKeys = Object.keys(stateGroup);
@@ -258,7 +258,7 @@ class RoomStateExplorer extends React.Component {
             const stateGroup = this.roomStateEvents[evType];
             Object.keys(stateGroup).forEach((stateKey) => {
                 // Skip this entry if does not contain search query
-                if (this.state.query && !stateKey.includes(this.state.query)) return;
+                if (this.state.query && !stateKey.toLowerCase().includes(this.state.query.toLowerCase())) return;
 
                 const ev = stateGroup[stateKey];
                 rows.push(<button className="mx_DevTools_RoomStateExplorer_button" key={stateKey}
@@ -271,7 +271,7 @@ class RoomStateExplorer extends React.Component {
         return <div>
             <div className="mx_Dialog_content">
                 <input onChange={this.onQuery} placeholder={_t('Filter results')} size="64" className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query" value={this.state.query} />
-                {rows}
+                { rows }
             </div>
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
