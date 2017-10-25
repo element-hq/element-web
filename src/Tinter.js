@@ -1,5 +1,6 @@
 /*
 Copyright 2015 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,6 +14,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+import UserSettingsStore from './UserSettingsStore';
 
 // FIXME: these vars should be bundled up and attached to
 // module.exports otherwise this will break when included by both
@@ -178,8 +181,11 @@ module.exports = {
         }
 
         if (!primaryColor) {
-            primaryColor = "#76CFA6"; // Vector green
-            secondaryColor = "#EAF5F0"; // Vector light green
+            const theme = UserSettingsStore.getTheme();
+            // FIXME: get this out of the theme CSS itself somehow?
+            // we could store it in a string CSS attrib somewhere we could sniff...
+            primaryColor = theme === 'status' ? "#6CC1F6" : "#76CFA6"; // Vector green
+            secondaryColor = theme === 'status' ? "#586C7B" : "#EAF5F0"; // Vector light green
         }
 
         if (!secondaryColor) {
