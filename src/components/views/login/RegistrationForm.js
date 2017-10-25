@@ -22,6 +22,7 @@ import Email from '../../../email';
 import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
+import UserSettingsStore from '../../../UserSettingsStore';
 
 const FIELD_EMAIL = 'field_email';
 const FIELD_PHONE_COUNTRY = 'field_phone_country';
@@ -305,29 +306,34 @@ module.exports = React.createClass({
             }
         }
 
+        const theme = UserSettingsStore.getTheme();
+
         const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
-        const phoneSection = (
-            <div className="mx_Login_phoneSection">
-                <CountryDropdown ref="phone_country" onOptionChange={this._onPhoneCountryChange}
-                    className="mx_Login_phoneCountry mx_Login_field_prefix"
-                    value={this.state.phoneCountry}
-                    isSmall={true}
-                    showPrefix={true}
-                />
-                <input type="text" ref="phoneNumber"
-                    placeholder={_t("Mobile phone number (optional)")}
-                    defaultValue={this.props.defaultPhoneNumber}
-                    className={this._classForField(
-                        FIELD_PHONE_NUMBER,
-                        'mx_Login_phoneNumberField',
-                        'mx_Login_field',
-                        'mx_Login_field_has_prefix',
-                    )}
-                    onBlur={function() {self.validateField(FIELD_PHONE_NUMBER);}}
-                    value={self.state.phoneNumber}
-                />
-            </div>
-        );
+        let phoneSection;
+        if (theme !== "status") {
+            phoneSection = (
+                <div className="mx_Login_phoneSection">
+                    <CountryDropdown ref="phone_country" onOptionChange={this._onPhoneCountryChange}
+                        className="mx_Login_phoneCountry mx_Login_field_prefix"
+                        value={this.state.phoneCountry}
+                        isSmall={true}
+                        showPrefix={true}
+                    />
+                    <input type="text" ref="phoneNumber"
+                        placeholder={_t("Mobile phone number (optional)")}
+                        defaultValue={this.props.defaultPhoneNumber}
+                        className={this._classForField(
+                            FIELD_PHONE_NUMBER,
+                            'mx_Login_phoneNumberField',
+                            'mx_Login_field',
+                            'mx_Login_field_has_prefix',
+                        )}
+                        onBlur={function() {self.validateField(FIELD_PHONE_NUMBER);}}
+                        value={self.state.phoneNumber}
+                    />
+                </div>
+            );
+        }
 
         const registerButton = (
             <input className="mx_Login_submit" type="submit" value={_t("Register")} />

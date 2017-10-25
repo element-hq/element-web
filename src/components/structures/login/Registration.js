@@ -26,6 +26,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import RegistrationForm from '../../views/login/RegistrationForm';
 import RtsClient from '../../../RtsClient';
 import { _t } from '../../../languageHandler';
+import UserSettingsStore from '../../../UserSettingsStore';
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -327,6 +328,8 @@ module.exports = React.createClass({
         const Spinner = sdk.getComponent("elements.Spinner");
         const ServerConfig = sdk.getComponent('views.login.ServerConfig');
 
+        const theme = UserSettingsStore.getTheme();
+
         let registerBody;
         if (this.state.doingUIAuth) {
             registerBody = (
@@ -345,9 +348,19 @@ module.exports = React.createClass({
         } else if (this.state.busy || this.state.teamServerBusy) {
             registerBody = <Spinner />;
         } else {
-            let errorSection;
-            if (this.state.errorText) {
-                errorSection = <div className="mx_Login_error">{ this.state.errorText }</div>;
+            let serverConfigSection;
+            if (theme !== 'status') {
+                serverConfigSection = (
+                    <ServerConfig ref="serverConfig"
+                        withToggleButton={true}
+                        customHsUrl={this.props.customHsUrl}
+                        customIsUrl={this.props.customIsUrl}
+                        defaultHsUrl={this.props.defaultHsUrl}
+                        defaultIsUrl={this.props.defaultIsUrl}
+                        onServerConfigChange={this.onServerConfigChange}
+                        delayTimeMs={1000}
+                    />
+                );
             }
             registerBody = (
                 <div>
@@ -363,16 +376,7 @@ module.exports = React.createClass({
                         onRegisterClick={this.onFormSubmit}
                         onTeamSelected={this.onTeamSelected}
                     />
-                    { errorSection }
-                    <ServerConfig ref="serverConfig"
-                        withToggleButton={true}
-                        customHsUrl={this.props.customHsUrl}
-                        customIsUrl={this.props.customIsUrl}
-                        defaultHsUrl={this.props.defaultHsUrl}
-                        defaultIsUrl={this.props.defaultIsUrl}
-                        onServerConfigChange={this.onServerConfigChange}
-                        delayTimeMs={1000}
-                    />
+                    { serverConfigSection }
                 </div>
             );
         }
@@ -385,6 +389,17 @@ module.exports = React.createClass({
                 </a>
             );
         }
+
+        let header;
+        let errorText;
+        if (theme === 'status' && this.state.errorText) {
+            header = <div className="mx_Login_error">{ this.state.errorText }</div>;
+        }
+        else {
+            header = <h2>{ _t('Create an account') }</h2>;
+            errorText = <div className="mx_Login_error">{ this.state.errorText }</div>;
+        }
+
         return (
             <LoginPage>
                 <div className="mx_Login_box">
@@ -394,11 +409,12 @@ module.exports = React.createClass({
                             this.state.teamSelected.domain + "/icon.png" :
                             null}
                     />
-                    <h2>{ _t('Create an account') }</h2>
+                    { header }
                     { registerBody }
                     <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
-                        { _t('I already have an account') }
+                        { theme === 'status' ? _t('Sign in') : _t('I already have an account') }
                     </a>
+                    { errorText }
                     { returnToAppJsx }
                     <LoginFooter />
                 </div>
