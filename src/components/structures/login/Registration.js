@@ -397,7 +397,9 @@ module.exports = React.createClass({
         }
         else {
             header = <h2>{ _t('Create an account') }</h2>;
-            errorText = <div className="mx_Login_error">{ this.state.errorText }</div>;
+            if (this.state.errorText) {
+                errorText = <div className="mx_Login_error">{ this.state.errorText }</div>;
+            }
         }
 
         return (

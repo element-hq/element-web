@@ -373,15 +373,22 @@ module.exports = React.createClass({
             }
         }
 
+        let errorTextSection;
+        if (this.state.errorText) {
+            errorTextSection = (
+                <div className="mx_Login_error">
+                    { this.state.errorText }
+                </div>
+            );
+        }
+
         return (
             <LoginPage>
                 <div className="mx_Login_box">
                     <LoginHeader />
                     <div>
                         { header }
-                        <div className="mx_Login_error">
-                            { this.state.errorText }
-                        </div>
+                        { errorTextSection }
                         { this.componentForStep(this.state.currentFlow) }
                         { serverConfig }
                         <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
