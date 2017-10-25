@@ -18,6 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
@@ -345,13 +346,16 @@ module.exports = React.createClass({
             );
         }
 
-        let classes = "mx_RightPanel mx_fadable";
-        if (this.props.collapsed) {
-            classes += " collapsed";
-        }
+        let classes = classNames(
+            "mx_RightPanel", "mx_fadable",
+            {
+                "collapsed": this.props.collapsed,
+                "mx_fadable_faded": this.props.disabled,
+            }
+        );
 
         return (
-            <aside className={classes} style={{ opacity: this.props.opacity }}>
+            <aside className={classes}>
                 <div className="mx_RightPanel_header">
                     <div className="mx_RightPanel_headerButtonGroup">
                         {headerButtons}
