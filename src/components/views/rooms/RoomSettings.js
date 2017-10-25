@@ -158,9 +158,9 @@ module.exports = React.createClass({
         });
 
         dis.dispatch({
-            action: 'ui_opacity',
-            sideOpacity: 0.3,
-            middleOpacity: 0.3,
+            action: 'panel_disable',
+            sideDisabled: true,
+            middleDisabled: true,
         });
     },
 
@@ -171,9 +171,9 @@ module.exports = React.createClass({
         }
 
         dis.dispatch({
-            action: 'ui_opacity',
-            sideOpacity: 1.0,
-            middleOpacity: 1.0,
+            action: 'panel_disable',
+            sideDisabled: false,
+            middleDisabled: false,
         });
     },
 
