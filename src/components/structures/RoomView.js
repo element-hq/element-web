@@ -281,7 +281,7 @@ module.exports = React.createClass({
                     this.setState({
                         isPeeking: false,
                     });
-                    
+
                     // This won't necessarily be a MatrixError, but we duck-type
                     // here and say if it's got an 'errcode' key with the right value,
                     // it means we can't peek.
@@ -1697,7 +1697,7 @@ module.exports = React.createClass({
                     onResize={this.onChildResize}
                     uploadFile={this.uploadFile}
                     callState={this.state.callState}
-                    opacity={this.props.opacity}
+                    disabled={this.props.disabled}
                     showApps={this.state.showApps}
                 />;
         }
@@ -1753,12 +1753,17 @@ module.exports = React.createClass({
         let hideMessagePanel = false;
 
         if (this.state.searchResults) {
+            const searchResultsClasses = classNames(
+                "mx_RoomView_messagePanel", "mx_RoomView_searchResultsPanel", "mx_fadable",
+                {
+                    "mx_fadable_faded": this.props.disabled,
+                },
+            );
             searchResultsPanel = (
                 <ScrollPanel ref="searchResultsPanel"
-                    className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
+                    className={searchResultsClasses}
                     onFillRequest={this.onSearchResultsFillRequest}
                     onResize={this.onSearchResultsResize}
-                    style={{ opacity: this.props.opacity }}
                 >
                     <li className={scrollheader_classes}></li>
                     { this.getSearchResultTiles() }
@@ -1789,15 +1794,21 @@ module.exports = React.createClass({
                 onScroll={this.onMessageListScroll}
                 onReadMarkerUpdated={this._updateTopUnreadMessagesBar}
                 showUrlPreview = {this.state.showUrlPreview}
-                opacity={this.props.opacity}
+                disabled={this.props.disabled}
                 className="mx_RoomView_messagePanel"
             />);
 
         let topUnreadMessagesBar = null;
         if (this.state.showTopUnreadMessagesBar) {
             const TopUnreadMessagesBar = sdk.getComponent('rooms.TopUnreadMessagesBar');
+            const topUnreadMessagesBarClasses = classNames(
+                "mx_RoomView_topUnreadMessagesBar", "mx_fadable",
+                {
+                    "mx_fadable_faded": this.props.disabled,
+                },
+            );
             topUnreadMessagesBar = (
-                <div className="mx_RoomView_topUnreadMessagesBar mx_fadable" style={{ opacity: this.props.opacity }}>
+                <div className={topUnreadMessagesBarClasses}>
                     <TopUnreadMessagesBar
                        onScrollUpClick={this.jumpToReadMarker}
                        onCloseClick={this.forgetReadMarker}
@@ -1805,10 +1816,13 @@ module.exports = React.createClass({
                 </div>
             );
         }
-        let statusBarAreaClass = "mx_RoomView_statusArea mx_fadable";
-        if (isStatusAreaExpanded) {
-            statusBarAreaClass += " mx_RoomView_statusArea_expanded";
-        }
+        const statusBarAreaClass = classNames(
+            "mx_RoomView_statusArea", "mx_fadable",
+            {
+                "mx_RoomView_statusArea_expanded": isStatusAreaExpanded,
+                "mx_fadable_faded": this.props.disabled,
+            },
+        );
 
         return (
             <div className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref="roomView">
@@ -1830,7 +1844,7 @@ module.exports = React.createClass({
                 { topUnreadMessagesBar }
                 { messagePanel }
                 { searchResultsPanel }
-                <div className={statusBarAreaClass} style={{opacity: this.props.opacity}}>
+                <div className={statusBarAreaClass}>
                     <div className="mx_RoomView_statusAreaBox">
                         <div className="mx_RoomView_statusAreaBox_line"></div>
                         { statusBar }

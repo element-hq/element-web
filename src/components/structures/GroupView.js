@@ -482,8 +482,8 @@ export default React.createClass({
             profileForm: Object.assign({}, this.state.summary.profile),
         });
         dis.dispatch({
-            action: 'ui_opacity',
-            sideOpacity: 0.3,
+            action: 'panel_disable',
+            sideDisabled: true,
         });
     },
 
@@ -492,7 +492,7 @@ export default React.createClass({
             editing: false,
             profileForm: null,
         });
-        dis.dispatch({action: 'ui_opacity'});
+        dis.dispatch({action: 'panel_disable'});
     },
 
     _onNameChange: function(value) {
@@ -549,7 +549,7 @@ export default React.createClass({
                 editing: false,
                 summary: null,
             });
-            dis.dispatch({action: 'ui_opacity'});
+            dis.dispatch({action: 'panel_disable'});
             this._initGroupStore(this.props.groupId);
         }).catch((e) => {
             this.setState({

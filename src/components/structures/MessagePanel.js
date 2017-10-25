@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 import UserSettingsStore from '../../UserSettingsStore';
 import shouldHideEvent from '../../shouldHideEvent';
 import dis from "../../dispatcher";
@@ -78,8 +79,8 @@ module.exports = React.createClass({
         // callback which is called when more content is needed.
         onFillRequest: React.PropTypes.func,
 
-        // opacity for dynamic UI fading effects
-        opacity: React.PropTypes.number,
+        // whether to display as faded and uninteractable
+        disabled: React.PropTypes.bool,
 
         // className for the panel
         className: React.PropTypes.string.isRequired,
@@ -649,12 +650,14 @@ module.exports = React.createClass({
         }
 
         const style = this.props.hidden ? { display: 'none' } : {};
-        style.opacity = this.props.opacity;
 
-        let className = this.props.className + " mx_fadable";
-        if (this.props.alwaysShowTimestamps) {
-            className += " mx_MessagePanel_alwaysShowTimestamps";
-        }
+        const className = classNames(
+            this.props.className, "mx_fadable",
+            {
+                "mx_MessagePanel_alwaysShowTimestamps": this.props.alwaysShowTimestamps,
+                "mx_fadable_faded": this.props.disabled,
+            },
+        );
 
         return (
             <ScrollPanel ref="scrollPanel" className={className}
