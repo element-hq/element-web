@@ -786,7 +786,6 @@ module.exports = withMatrixClient(React.createClass({
         if (this.props.member.user) {
             presenceState = this.props.member.user.presence;
             presenceLastActiveAgo = this.props.member.user.lastActiveAgo;
-            // const presenceLastTs = this.props.member.user.lastPresenceTs;
             presenceCurrentlyActive = this.props.member.user.currentlyActive;
         }
 
