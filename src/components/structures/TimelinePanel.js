@@ -89,9 +89,6 @@ var TimelinePanel = React.createClass({
         // callback which is called when the read-up-to mark is updated.
         onReadMarkerUpdated: React.PropTypes.func,
 
-        // whether to display as faded and uninteractable
-        disabled: React.PropTypes.bool,
-
         // maximum number of events to show in a timeline
         timelineCap: React.PropTypes.number,
 
@@ -1157,7 +1154,6 @@ var TimelinePanel = React.createClass({
                           onScroll={this.onMessageListScroll}
                           onFillRequest={this.onMessageListFillRequest}
                           onUnfillRequest={this.onMessageListUnfillRequest}
-                          disabled={this.props.disabled}
                           isTwelveHour={this.state.isTwelveHour}
                           alwaysShowTimestamps={this.state.alwaysShowTimestamps}
                           className={this.props.className}

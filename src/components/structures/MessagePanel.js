@@ -79,9 +79,6 @@ module.exports = React.createClass({
         // callback which is called when more content is needed.
         onFillRequest: React.PropTypes.func,
 
-        // whether to display as faded and uninteractable
-        disabled: React.PropTypes.bool,
-
         // className for the panel
         className: React.PropTypes.string.isRequired,
 
@@ -652,10 +649,9 @@ module.exports = React.createClass({
         const style = this.props.hidden ? { display: 'none' } : {};
 
         const className = classNames(
-            this.props.className, "mx_fadable",
+            this.props.className,
             {
                 "mx_MessagePanel_alwaysShowTimestamps": this.props.alwaysShowTimestamps,
-                "mx_fadable_faded": this.props.disabled,
             },
         );
 

@@ -1753,15 +1753,9 @@ module.exports = React.createClass({
         let hideMessagePanel = false;
 
         if (this.state.searchResults) {
-            const searchResultsClasses = classNames(
-                "mx_RoomView_messagePanel", "mx_RoomView_searchResultsPanel", "mx_fadable",
-                {
-                    "mx_fadable_faded": this.props.disabled,
-                },
-            );
             searchResultsPanel = (
                 <ScrollPanel ref="searchResultsPanel"
-                    className={searchResultsClasses}
+                    className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
                     onFillRequest={this.onSearchResultsFillRequest}
                     onResize={this.onSearchResultsResize}
                 >
@@ -1794,21 +1788,14 @@ module.exports = React.createClass({
                 onScroll={this.onMessageListScroll}
                 onReadMarkerUpdated={this._updateTopUnreadMessagesBar}
                 showUrlPreview = {this.state.showUrlPreview}
-                disabled={this.props.disabled}
                 className="mx_RoomView_messagePanel"
             />);
 
         let topUnreadMessagesBar = null;
         if (this.state.showTopUnreadMessagesBar) {
             const TopUnreadMessagesBar = sdk.getComponent('rooms.TopUnreadMessagesBar');
-            const topUnreadMessagesBarClasses = classNames(
-                "mx_RoomView_topUnreadMessagesBar", "mx_fadable",
-                {
-                    "mx_fadable_faded": this.props.disabled,
-                },
-            );
             topUnreadMessagesBar = (
-                <div className={topUnreadMessagesBarClasses}>
+                <div className="mx_RoomView_topUnreadMessagesBar">
                     <TopUnreadMessagesBar
                        onScrollUpClick={this.jumpToReadMarker}
                        onCloseClick={this.forgetReadMarker}
@@ -1817,9 +1804,15 @@ module.exports = React.createClass({
             );
         }
         const statusBarAreaClass = classNames(
-            "mx_RoomView_statusArea", "mx_fadable",
+            "mx_RoomView_statusArea",
             {
                 "mx_RoomView_statusArea_expanded": isStatusAreaExpanded,
+            },
+        );
+
+        const fadableSectionClasses = classNames(
+            "mx_RoomView_body", "mx_fadable",
+            {
                 "mx_fadable_faded": this.props.disabled,
             },
         );
@@ -1841,16 +1834,18 @@ module.exports = React.createClass({
                     onLeaveClick={(myMember && myMember.membership === "join") ? this.onLeaveClick : null}
                 />
                 { auxPanel }
-                { topUnreadMessagesBar }
-                { messagePanel }
-                { searchResultsPanel }
-                <div className={statusBarAreaClass}>
-                    <div className="mx_RoomView_statusAreaBox">
-                        <div className="mx_RoomView_statusAreaBox_line"></div>
-                        { statusBar }
+                <div className={fadableSectionClasses}>
+                    { topUnreadMessagesBar }
+                    { messagePanel }
+                    { searchResultsPanel }
+                    <div className={statusBarAreaClass}>
+                        <div className="mx_RoomView_statusAreaBox">
+                            <div className="mx_RoomView_statusAreaBox_line"></div>
+                            { statusBar }
+                        </div>
                     </div>
+                    { messageComposer }
                 </div>
-                { messageComposer }
             </div>
         );
     },
