@@ -45,6 +45,12 @@ rageshake.init().then(() => {
     console.error("Failed to initialise rageshake: " + err);
 });
 
+window.addEventListener('beforeunload', (e) => {
+    console.log('riot-web closing');
+    // try to flush the logs to indexeddb
+    rageshake.flush();
+});
+
 
  // add React and ReactPerf to the global namespace, to make them easier to
  // access via the console
@@ -59,11 +65,12 @@ var sdk = require("matrix-react-sdk");
 const PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
-var UpdateChecker = require("./updater");
-var q = require('q');
+import Promise from 'bluebird';
 var request = require('browser-request');
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
+// Also import _t directly so we can call it just `_t` as this is what gen-i18n.js expects
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 import url from 'url';
 
@@ -182,11 +189,11 @@ var makeRegistrationUrl = function(params) {
 
 window.addEventListener('hashchange', onHashChange);
 
-function getConfig() {
-    let deferred = q.defer();
+function getConfig(configJsonFilename) {
+    let deferred = Promise.defer();
 
     request(
-        { method: "GET", url: "config.json" },
+        { method: "GET", url: configJsonFilename },
         (err, response, body) => {
             if (err || response.status < 200 || response.status >= 300) {
                 // Lack of a config isn't an error, we should
@@ -216,18 +223,16 @@ function getConfig() {
     return deferred.promise;
 }
 
-function onLoadCompleted() {
+function onTokenLoginCompleted() {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
     // clear them.
-    if (window.location.search) {
-        var parsedUrl = url.parse(window.location.href);
-        parsedUrl.search = "";
-        var formatted = url.format(parsedUrl);
-        console.log("Redirecting to " + formatted + " to drop loginToken " +
-                    "from queryparams");
-        window.location.href = formatted;
-    }
+    var parsedUrl = url.parse(window.location.href);
+    parsedUrl.search = "";
+    var formatted = url.format(parsedUrl);
+    console.log("Redirecting to " + formatted + " to drop loginToken " +
+                "from queryparams");
+    window.location.href = formatted;
 }
 
 async function loadApp() {
@@ -245,23 +250,33 @@ async function loadApp() {
 
     if (!preventRedirect) {
         if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-            if (confirm(languageHandler._t("Riot is not supported on mobile web. Install the app?"))) {
+            if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
                 window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
                 return;
             }
         }
         else if (/Android/.test(navigator.userAgent)) {
-            if (confirm(languageHandler._t("Riot is not supported on mobile web. Install the app?"))) {
+            if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
                 window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
                 return;
             }
         }
     }
 
+    // Load the config file. First try to load up a domain-specific config of the
+    // form "config.$domain.json" and if that fails, fall back to config.json.
     let configJson;
     let configError;
     try {
-        configJson = await getConfig();
+        try {
+            configJson = await getConfig(`config.${document.domain}.json`);
+            // 404s succeed with an empty json config, so check that there are keys
+            if (Object.keys(configJson).length === 0) {
+                throw new Error(); // throw to enter the catch
+            }
+        } catch (e) {
+            configJson = await getConfig("config.json");
+        }
     } catch (e) {
         configError = e;
     }
@@ -277,7 +292,9 @@ async function loadApp() {
             Unable to load config file: please refresh the page to try again.
         </div>, document.getElementById('matrixchat'));
     } else if (validBrowser) {
-        UpdateChecker.start();
+        const platform = PlatformPeg.get();
+        platform.startUpdater();
+
         const MatrixChat = sdk.getComponent('structures.MatrixChat');
         window.matrixChat = ReactDOM.render(
             <MatrixChat
@@ -288,9 +305,9 @@ async function loadApp() {
                 realQueryParams={params}
                 startingFragmentQueryParams={fragparts.params}
                 enableGuest={true}
-                onLoadCompleted={onLoadCompleted}
+                onTokenLoginCompleted={onTokenLoginCompleted}
                 initialScreenAfterLogin={getScreenFromLocation(window.location)}
-                defaultDeviceDisplayName={PlatformPeg.get().getDefaultDeviceDisplayName()}
+                defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
             />,
             document.getElementById('matrixchat')
         );

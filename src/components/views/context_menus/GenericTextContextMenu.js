@@ -1,5 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
+Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,17 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+'use strict';
 
-var POKE_RATE_MS = 10 * 60 * 1000; // 10 min
+import React from 'react';
+import PropTypes from 'prop-types';
 
-module.exports = {
-    start: function() {
-        module.exports.poll();
-        setInterval(module.exports.poll, POKE_RATE_MS);
-    },
+export default class GenericTextContextMenu extends React.Component {
+    static PropTypes = {
+        message: PropTypes.string.isRequired,
+    };
 
-    poll: function() {
-        PlatformPeg.get().pollForUpdate();
+    render() {
+        return <div>{ this.props.message }</div>;
     }
-};
+}

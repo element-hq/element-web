@@ -140,11 +140,6 @@ limitations under the License.
     cursor: pointer;
 }
 
-.mx_RoomStatusBar_tabCompleteBar {
-    padding-top: 10px;
-    color: $primary-fg-color;
-}
-
 .mx_RoomStatusBar_typingBar {
     height: 50px;
     line-height: 50px;
@@ -155,24 +150,14 @@ limitations under the License.
     display: block;
 }
 
-.mx_RoomStatusBar_tabCompleteWrapper {
-    display: flex;
-    height: 26px;
-}
+.mx_RoomStatusBar_isAlone {
+    height: 50px;
+    line-height: 50px;
 
-.mx_RoomStatusBar_tabCompleteWrapper .mx_TabCompleteBar {
-    flex: 1 1 auto;
-}
-
-.mx_RoomStatusBar_tabCompleteEol {
-    flex: 0 0 auto;
-    color: $accent-color;
-}
-
-.mx_RoomStatusBar_tabCompleteEol object {
-    vertical-align: middle;
-    margin-right: 8px;
-    margin-top: -2px;
+    color: $primary-fg-color;
+    opacity: 0.5;
+    overflow-y: hidden;
+    display: block;
 }
 
 .mx_MatrixChat_useCompactLayout {

@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 var React = require('react');
 import { _t, _tJsx } from 'matrix-react-sdk/lib/languageHandler';
-var q = require("q");
+import Promise from 'bluebird';
 var sdk = require('matrix-react-sdk');
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 var UserSettingsStore = require('matrix-react-sdk/lib/UserSettingsStore');
@@ -116,6 +116,11 @@ module.exports = React.createClass({
         UserSettingsStore.setEnableNotifications(event.target.checked);
     },
 
+    onEnableDesktopNotificationBodyChange: function(event) {
+        UserSettingsStore.setEnableNotificationBody(event.target.checked);
+        this.forceUpdate();
+    },
+
     onEnableEmailNotificationsChange: function(address, event) {
         var emailPusherPromise;
         if (event.target.checked) {
@@ -131,7 +136,7 @@ module.exports = React.createClass({
             this._refreshFromServer();
         }, (error) => {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Error saving email notification preferences', '', ErrorDialog, {
                 title: _t('Error saving email notification preferences'),
                 description: _t('An error occurred whilst saving your email notification preferences.'),
             });
@@ -175,7 +180,7 @@ module.exports = React.createClass({
         }
 
         var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
-        Modal.createDialog(TextInputDialog, {
+        Modal.createTrackedDialog('Keywords Dialog', '', TextInputDialog, {
             title: _t('Keywords'),
             description: _t('Enter keywords separated by a comma:'),
             button: _t('OK'),
@@ -236,12 +241,12 @@ module.exports = React.createClass({
                 }
             }
 
-            q.all(deferreds).done(function() {
+            Promise.all(deferreds).done(function() {
                 self._refreshFromServer();
             }, function(error) {
                 var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Failed to change settings: " + error);
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Failed to change settings', '', ErrorDialog, {
                     title: _t('Failed to change settings'),
                     description: ((error && error.message) ? error.message : _t('Operation failed')),
                     onFinished: self._refreshFromServer
@@ -306,12 +311,12 @@ module.exports = React.createClass({
             }
         }
 
-        q.all(deferreds).done(function(resps) {
+        Promise.all(deferreds).done(function(resps) {
             self._refreshFromServer();
         }, function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Can't update user notification settings: " + error);
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Can\'t update user notifcation settings', '', ErrorDialog, {
                 title: _t('Can\'t update user notification settings'),
                 description: ((error && error.message) ? error.message : _t('Operation failed')),
                 onFinished: self._refreshFromServer
@@ -353,7 +358,7 @@ module.exports = React.createClass({
         var onError = function(error) {
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to update keywords: " + error);
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to update keywords', '', ErrorDialog, {
                 title: _t('Failed to update keywords'),
                 description: ((error && error.message) ? error.message : _t('Operation failed')),
                 onFinished: self._refreshFromServer
@@ -361,7 +366,7 @@ module.exports = React.createClass({
         }
 
         // Then, add the new ones
-        q.all(removeDeferreds).done(function(resps) {
+        Promise.all(removeDeferreds).done(function(resps) {
             var deferreds = [];
 
             var pushRuleVectorStateKind = self.state.vectorContentRules.vectorState;
@@ -399,7 +404,7 @@ module.exports = React.createClass({
                 }
             }
 
-            q.all(deferreds).done(function(resps) {
+            Promise.all(deferreds).done(function(resps) {
                 self._refreshFromServer();
             }, onError);
         }, onError);
@@ -431,7 +436,9 @@ module.exports = React.createClass({
                             'global', kind, LEGACY_RULES[rule.rule_id], portLegacyActions(rule.actions)
                         ).then( function() {
                             return cli.deletePushRule('global', kind, rule.rule_id);
-                        })
+                        }).catch( (e) => {
+                            console.warn(`Error when porting legacy rule: ${e}`);
+                        });
                     }(kind, rule));
                 }
             }
@@ -440,7 +447,7 @@ module.exports = React.createClass({
         if (needsUpdate.length > 0) {
             // If some of the rules need to be ported then wait for the porting
             // to happen and then fetch the rules again.
-            return q.allSettled(needsUpdate).then( function() {
+            return Promise.all(needsUpdate).then( function() {
                 return cli.getPushRules();
             });
         } else {
@@ -594,7 +601,7 @@ module.exports = React.createClass({
             self.setState({pushers: resp.pushers});
         });
 
-        q.all([pushRulesPromise, pushersPromise]).then(function() {
+        Promise.all([pushRulesPromise, pushersPromise]).then(function() {
             self.setState({
                 phase: self.phases.DISPLAY
             });
@@ -825,6 +832,21 @@ module.exports = React.createClass({
                         <div className="mx_UserNotifSettings_labelCell">
                             <label htmlFor="enableDesktopNotifications">
                                 { _t('Enable desktop notifications') }
+                            </label>
+                        </div>
+                    </div>
+
+                    <div className="mx_UserNotifSettings_tableRow">
+                        <div className="mx_UserNotifSettings_inputCell">
+                            <input id="enableDesktopNotificationBody"
+                                ref="enableDesktopNotificationBody"
+                                type="checkbox"
+                                checked={ UserSettingsStore.getEnableNotificationBody() }
+                                onChange={ this.onEnableDesktopNotificationBodyChange } />
+                        </div>
+                        <div className="mx_UserNotifSettings_labelCell">
+                            <label htmlFor="enableDesktopNotificationBody">
+                                { _t('Show message in desktop notification') }
                             </label>
                         </div>
                     </div>

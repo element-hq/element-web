@@ -1,6 +1,6 @@
 "use strict";
 
-var q = require('q');
+import Promise from 'bluebird';
 
 /**
  * Perform common actions before each test case, e.g. printing the test case
@@ -28,28 +28,33 @@ export function browserSupportsWebRTC() {
 }
 
 export function deleteIndexedDB(dbName) {
-    return new q.Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         if (!window.indexedDB) {
             resolve();
             return;
         }
 
-        console.log(`Removing indexeddb instance: ${dbName}`);
+        const startTime = Date.now();
+        console.log(`${startTime}: Removing indexeddb instance: ${dbName}`);
         const req = window.indexedDB.deleteDatabase(dbName);
 
         req.onblocked = () => {
-            console.log(`can't yet delete indexeddb because it is open elsewhere`);
+            console.log(`${Date.now()}: can't yet delete indexeddb ${dbName} because it is open elsewhere`);
         };
 
         req.onerror = (ev) => {
             reject(new Error(
-                "unable to delete indexeddb: " + ev.target.error,
+                `${Date.now()}: unable to delete indexeddb ${dbName}: ${ev.target.error}`,
             ));
         };
 
         req.onsuccess = () => {
-            console.log(`Removed indexeddb instance: ${dbName}`);
+            const now = Date.now();
+            console.log(`${now}: Removed indexeddb instance: ${dbName} in ${now-startTime} ms`);
             resolve();
         };
+    }).catch((e) => {
+        console.error(`${Date.now()}: Error removing indexeddb instance ${dbName}: ${e}`);
+        throw e;
     });
 }

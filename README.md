@@ -16,13 +16,13 @@ released version of Riot:
 
 1. Download the latest version from https://github.com/vector-im/riot-web/releases
 1. Untar the tarball on your web server
-1. Move (or symlink) the vector-x.x.x directory to an appropriate name
+1. Move (or symlink) the riot-x.x.x directory to an appropriate name
 1. If desired, copy `config.sample.json` to `config.json` and edit it
    as desired. See below for details.
 1. Enter the URL into your browser and log into Riot!
 
 Releases are signed by PGP, and can be checked against the public key
-at https://riot.im/packages/keys/riot-master.asc
+at https://riot.im/packages/keys/riot.asc
 
 Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
@@ -62,7 +62,7 @@ to build.
 1. If you're using the `develop` branch, install the develop versions of the
    dependencies, as the released ones will be too old:
    ```
-   scripts/fetch-develop-deps.sh
+   scripts/fetch-develop.deps.sh
    ```
    Whenever you git pull on riot-web you will also probably need to force an update
    to these dependencies - the simplest way is to re-run the script, but you can also
@@ -81,7 +81,7 @@ to build.
    npm run build
    ```
    However, we recommend setting up a proper development environment (see "Setting
-   up a development environment" below) if you want to run your own copy of the
+   up a dev environment" below) if you want to run your own copy of the
    `develop` branch, as it makes it much easier to keep these dependencies
    up-to-date.  Or just use https://riot.im/develop - the continuous integration
    release of the develop branch.
@@ -115,7 +115,9 @@ You can configure the app by copying `config.sample.json` to
    addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
    for more details.  Currently the only public matrix identity servers are https://matrix.org
    and https://vector.im.  In future identity servers will be decentralised.
-1. `integrations_ui_url`: URL to the web interface for the integrations server.
+1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
+   server is not Riot and normally not your Home Server either. The integration server settings
+   may be left blank to disable integrations.
 1. `integrations_rest_url`: URL to the REST interface for the integrations server.
 1. `roomDirectory`: config for the public room directory. This section is optional.
 1. `roomDirectory.servers`: List of other Home Servers' directories to include in the drop
@@ -253,7 +255,6 @@ Finally, build and start Riot itself:
 1. `rm -r node_modules/matrix-react-sdk; ln -s ../../matrix-react-sdk node_modules/`
 1. `npm start`
 1. Wait a few seconds for the initial build to finish; you should see something like:
-
     ```
     Hash: b0af76309dd56d7275c8
     Version: webpack 1.12.14
@@ -282,18 +283,33 @@ If any of these steps error with, `file table overflow`, you are probably on a m
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
 You'll need to do this in each new terminal you open before building Riot.
 
-How to add a new translation?
-=============================
+Running the tests
+-----------------
+
+There are a number of application-level tests in the `tests` directory; these
+are designed to run in a browser instance under the control of
+[karma](https://karma-runner.github.io). To run them:
+
+* Make sure you have Chrome installed (a recent version, like 59)
+* Make sure you have `matrix-js-sdk` and `matrix-react-sdk` installed and
+  built, as above
+* `npm run test`
+
+The above will run the tests under Chrome in a `headless` mode.
+
+You can also tell karma to run the tests in a loop (every time the source
+changes), in an instance of Chrome on your desktop, with `npm run
+test-multi`. This also gives you the option of running the tests in 'debug'
+mode, which is useful for stepping through the tests in the developer tools.
+
+Translations
+============
+
+To add a new translation, head to the [translating doc](docs/translating.md).
+
+For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 
 [<img src="https://translate.riot.im/widgets/riot-web/-/multi-auto.svg" alt="translationsstatus" width="340">](https://translate.riot.im/engage/riot-web/?utm_source=widget)
-
-
-Head to the [translating doc](docs/translating.md)
-
-Adding Strings to the translations (Developer Guide)
-====================================================
-
-Head to the [translating dev doc](docs/translating-dev.md)
 
 Triaging issues
 ===============

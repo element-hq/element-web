@@ -9,24 +9,28 @@
 // This could readily be automated, but it's nice to explicitly
 // control when we languages are available.
 const INCLUDE_LANGS = [
+    {'value': 'da', 'label': 'Dansk'},
+    {'value': 'de_DE', 'label': 'Deutsch'},
     {'value': 'en_EN', 'label': 'English'},
     {'value': 'en_US', 'label': 'English (US)'},
-    {'value': 'da', 'label': 'Dansk'},
     {'value': 'el', 'label': 'Ελληνικά'},
     {'value': 'eo', 'label': 'Esperanto'},
-    {'value': 'nl', 'label': 'Nederlands'},
-    {'value': 'de_DE', 'label': 'Deutsch'},
+    {'value': 'es', 'label': 'Español'},
+    {'value': 'eu', 'label': 'Euskal'},
+    {'value': 'fi', 'label': 'Suomi'},
     {'value': 'fr', 'label': 'Français'},
     {'value': 'hu', 'label': 'Magyar'},
     {'value': 'ko', 'label': '한국어'},
+    {'value': 'lv', 'label': 'Latviešu'},
     {'value': 'nb_NO', 'label': 'Norwegian Bokmål'},
+    {'value': 'nl', 'label': 'Nederlands'},
     {'value': 'pl', 'label': 'Polski'},
     {'value': 'pt', 'label': 'Português'},
     {'value': 'pt_BR', 'label': 'Português do Brasil'},
     {'value': 'ru', 'label': 'Русский'},
     {'value': 'sv', 'label': 'Svenska'},
-    {'value': 'es', 'label': 'Español'},
     {'value': 'th', 'label': 'ไทย'},
+    {'value': 'te', 'label': 'తెలుగు'},
     {'value': 'tr', 'label': 'Türk'},
     {'value': 'zh_Hans', 'label': '简体中文'}, // simplified chinese
     {'value': 'zh_Hant', 'label': '繁體中文'}, // traditional chinese
@@ -153,15 +157,23 @@ function genLangFile(lang, dest) {
     const reactSdkFile = 'node_modules/matrix-react-sdk/src/i18n/strings/' + lang + '.json';
     const riotWebFile = 'src/i18n/strings/' + lang + '.json';
 
-    const translations = {};
+    let translations = {};
     [reactSdkFile, riotWebFile].forEach(function(f) {
         if (fs.existsSync(f)) {
-            Object.assign(
-                translations,
-                JSON.parse(fs.readFileSync(f).toString())
-            );
+            try {
+                Object.assign(
+                    translations,
+                    JSON.parse(fs.readFileSync(f).toString())
+                );
+            } catch (e) {
+                console.error("Failed: "+f, e);
+                throw e;
+            }
         }
     });
+
+    translations = weblateToCounterpart(translations)
+
     fs.writeFileSync(dest + lang + '.json', JSON.stringify(translations, null, 4));
     if (verbose) {
         console.log("Generated language file: " + lang);
@@ -188,6 +200,40 @@ function genLangList() {
     if (verbose) {
         console.log("Generated languages.json");
     }
+}
+
+/**
+ * Convert translation key from weblate format
+ * (which only supports a single level) to counterpart
+ * which requires object values for 'count' translations.
+ *
+ * eg.
+ *     "there are %(count)s badgers|one": "a badger",
+ *     "there are %(count)s badgers|other": "%(count)s badgers"
+ *   becomes
+ *     "there are %(count)s badgers": {
+ *         "one": "a badger",
+ *         "other": "%(count)s badgers"
+ *     }
+ */
+function weblateToCounterpart(inTrs) {
+    const outTrs = {};
+
+    for (const key of Object.keys(inTrs)) {
+        const keyParts = key.split('|', 2);
+        if (keyParts.length === 2) {
+            let obj = outTrs[keyParts[0]];
+            if (obj === undefined) {
+                obj = {};
+                outTrs[keyParts[0]] = obj;
+            }
+            obj[keyParts[1]] = inTrs[key];
+        } else {
+            outTrs[key] = inTrs[key];
+        }
+    }
+
+    return outTrs;
 }
 
 genLangList();

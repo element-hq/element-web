@@ -28,7 +28,7 @@ var linkify = require('linkifyjs');
 var linkifyString = require('linkifyjs/string');
 var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
 var sanitizeHtml = require('sanitize-html');
-var q = require('q');
+import Promise from 'bluebird';
 
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
@@ -73,6 +73,7 @@ module.exports = React.createClass({
             this.protocols = response;
             this.setState({protocolsLoading: false});
         }, (err) => {
+            console.warn(`error loading thirdparty protocols: ${err}`);
             this.setState({protocolsLoading: false});
             if (MatrixClientPeg.get().isGuest()) {
                 // Guests currently aren't allowed to use this API, so
@@ -81,24 +82,24 @@ module.exports = React.createClass({
                 return;
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to get protocol list from Home Server', '', ErrorDialog, {
                 title: _t('Failed to get protocol list from Home Server'),
                 description: _t('The Home Server may be too old to support third party networks'),
             });
         });
 
         // dis.dispatch({
-        //     action: 'ui_opacity',
-        //     sideOpacity: 0.3,
-        //     middleOpacity: 0.3,
+        //     action: 'panel_disable',
+        //     sideDisabled: true,
+        //     middleDisabled: true,
         // });
     },
 
     componentWillUnmount: function() {
         // dis.dispatch({
-        //     action: 'ui_opacity',
-        //     sideOpacity: 1.0,
-        //     middleOpacity: 1.0,
+        //     action: 'panel_disable',
+        //     sideDisabled: false,
+        //     middleDisabled: false,
         // });
         if (this.filterTimeout) {
             clearTimeout(this.filterTimeout);
@@ -116,7 +117,7 @@ module.exports = React.createClass({
     },
 
     getMoreRooms: function() {
-        if (!MatrixClientPeg.get()) return q();
+        if (!MatrixClientPeg.get()) return Promise.resolve();
 
         const my_filter_string = this.state.filterString;
         const my_server = this.state.roomServer;
@@ -177,7 +178,7 @@ module.exports = React.createClass({
             this.setState({ loading: false });
             console.error("Failed to get publicRooms: %s", JSON.stringify(err));
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
+            Modal.createTrackedDialog('Failed to get public room list', '', ErrorDialog, {
                 title: _t('Failed to get public room list'),
                 description: ((err && err.message) ? err.message : _t('The server may be unavailable or overloaded'))
             });
@@ -205,7 +206,7 @@ module.exports = React.createClass({
             desc = _t('Remove %(name)s from the directory?', {name: name});
         }
 
-        Modal.createDialog(QuestionDialog, {
+        Modal.createTrackedDialog('Remove from Directory', '', QuestionDialog, {
             title: _t('Remove from Directory'),
             description: desc,
             onFinished: (should_delete) => {
@@ -226,7 +227,7 @@ module.exports = React.createClass({
                     modal.close();
                     this.refreshRoomList();
                     console.error("Failed to " + step + ": " + err);
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('Remove from Directory Error', '', ErrorDialog, {
                         title: _t('Error'),
                         description: ((err && err.message) ? err.message : _t('The server may be unavailable or overloaded'))
                     });
@@ -265,7 +266,7 @@ module.exports = React.createClass({
     },
 
     onFillRequest: function(backwards) {
-        if (backwards || !this.nextBatch) return q(false);
+        if (backwards || !this.nextBatch) return Promise.resolve(false);
 
         return this.getMoreRooms();
     },
@@ -315,7 +316,7 @@ module.exports = React.createClass({
             const fields = protocolName ? this._getFieldsForThirdPartyLocation(alias, this.protocols[protocolName], instance) : null;
             if (!fields) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Unable to join network', '', ErrorDialog, {
                     title: _t('Unable to join network'),
                     description: _t('Riot does not know how to join a room on this network'),
                 });
@@ -326,14 +327,14 @@ module.exports = React.createClass({
                     this.showRoomAlias(resp[0].alias);
                 } else {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createDialog(ErrorDialog, {
+                    Modal.createTrackedDialog('Room not found', '', ErrorDialog, {
                         title: _t('Room not found'),
                         description: _t('Couldn\'t find a matching Matrix room'),
                     });
                 }
             }, (e) => {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
+                Modal.createTrackedDialog('Fetching third party location failed', '', ErrorDialog, {
                     title: _t('Fetching third party location failed'),
                     description: _t('Unable to look up room ID from server'),
                 });
