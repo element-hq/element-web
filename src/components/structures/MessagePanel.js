@@ -353,7 +353,7 @@ module.exports = React.createClass({
                     }
 
                     if (!isMembershipChange(collapsedMxEv) ||
-                        this._wantsDateSeparator(this.props.events[i], collapsedMxEv.getDate())) {
+                        this._wantsDateSeparator(mxEv, collapsedMxEv.getDate())) {
                         break;
                     }
 
@@ -376,9 +376,7 @@ module.exports = React.createClass({
                     // of MemberEventListSummary, render each member event as if the previous
                     // one was itself. This way, the timestamp of the previous event === the
                     // timestamp of the current event, and no DateSeperator is inserted.
-                    const ret = this._getTilesForEvent(e, e, e === lastShownEvent);
-                    prevEvent = e;
-                    return ret;
+                    return this._getTilesForEvent(e, e, e === lastShownEvent);
                 }).reduce((a, b) => a.concat(b));
 
                 if (eventTiles.length === 0) {
@@ -397,6 +395,7 @@ module.exports = React.createClass({
                     ret.push(this._getReadMarkerTile(visible));
                 }
 
+                prevEvent = mxEv;
                 continue;
             }
 
