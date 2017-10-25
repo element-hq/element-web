@@ -172,18 +172,29 @@ export default React.createClass({
     */
     _onDeleteClick: function() {
         if (this._canUserModify()) {
-            console.log("Delete widget %s", this.props.id);
-            this.setState({deleting: true});
-            MatrixClientPeg.get().sendStateEvent(
-                this.props.room.roomId,
-                'im.vector.modular.widgets',
-                {}, // empty content
-                this.props.id,
-            ).then(() => {
-                console.log('Deleted widget');
-            }, (e) => {
-                console.error('Failed to delete widget', e);
-                this.setState({deleting: false});
+            // Show delete confirmation dialog
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            Modal.createTrackedDialog('Delete Widget', '', QuestionDialog, {
+                title: _t("Delete Widget"),
+                description: _t(
+                    "Deleting a widget removes it for all users in this room." +
+                    " Are you sure you want to delete this widget?"),
+                button: _t("Delete widget"),
+                onFinished: (confirmed) => {
+                    if (!confirmed) {
+                        return;
+                    }
+                    this.setState({deleting: true});
+                    MatrixClientPeg.get().sendStateEvent(
+                        this.props.room.roomId,
+                        'im.vector.modular.widgets',
+                        {}, // empty content
+                        this.props.id,
+                    ).catch((e) => {
+                        console.error('Failed to delete widget', e);
+                        this.setState({deleting: false});
+                    });
+                },
             });
         } else {
             console.log("Revoke widget permissions - %s", this.props.id);
@@ -305,7 +316,7 @@ export default React.createClass({
         let deleteIcon = 'img/cancel.svg';
         let deleteClasses = 'mx_filterFlipColor mx_AppTileMenuBarWidget';
         if(this._canUserModify()) {
-            deleteIcon = 'img/cancel-red.svg';
+            deleteIcon = 'img/icon-delete-pink.svg';
             deleteClasses += ' mx_AppTileMenuBarWidgetDelete';
         }
 
