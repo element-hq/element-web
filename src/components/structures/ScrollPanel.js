@@ -148,6 +148,7 @@ module.exports = React.createClass({
             onFillRequest: function(backwards) { return Promise.resolve(false); },
             onUnfillRequest: function(backwards, scrollToken) {},
             onScroll: function() {},
+            onResize: function() {},
         };
     },
 

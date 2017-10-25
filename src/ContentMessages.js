@@ -99,23 +99,17 @@ function loadImageElement(imageFile) {
 
     // Load the file into an html element
     const img = document.createElement("img");
+    const objectUrl = URL.createObjectURL(imageFile);
+    img.src = objectUrl;
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        img.src = e.target.result;
-
-        // Once ready, create a thumbnail
-        img.onload = function() {
-            deferred.resolve(img);
-        };
-        img.onerror = function(e) {
-            deferred.reject(e);
-        };
+    // Once ready, create a thumbnail
+    img.onload = function() {
+        URL.revokeObjectURL(objectUrl);
+        deferred.resolve(img);
     };
-    reader.onerror = function(e) {
+    img.onerror = function(e) {
         deferred.reject(e);
     };
-    reader.readAsDataURL(imageFile);
 
     return deferred.promise;
 }

@@ -13,7 +13,6 @@
     "Enable encryption": "暗号会話開始",
     "Encryption is enabled in this room": "この部屋の発言は暗号化されています",
     "Favourite": "お気に入り",
-    "favourite": "お気に入り",
     "Favourites": "お気に入り",
     "Hide read receipts": "発言を読んでも既読状態にしない",
     "Invited": "招待中",
@@ -30,13 +29,6 @@
     "Settings": "設定",
     "Start chat": "対話開始",
     "New Password": "新しいパスワード",
-    "Sunday": "日曜日",
-    "Monday": "月曜日",
-    "Tuesday": "火曜日",
-    "Wednesday": "水曜日",
-    "Thursday": "木曜日",
-    "Friday": "金曜日",
-    "Saturday": "土曜日",
     "Failed to change password. Is your password correct?": "パスワード変更に失敗しました。パスワードは正しいですか?",
     "Only people who have been invited": "この部屋に招待された人のみ参加可能",
     "Hide removed messages": "削除された発言の印を表示しない",
@@ -65,6 +57,5 @@
     "No Webcams detected": "カメラが見つかりません",
     "Microphone": "マイク",
     "Camera": "カメラ",
-    "%(names)s and %(count)s others are typing": "%(names)s と、他 %(count)s 名が入力中",
     "Are you sure?": "本当によろしいですか？"
 }

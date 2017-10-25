@@ -371,7 +371,7 @@ export default class MessageComposer extends React.Component {
         );
 
         return (
-            <div className="mx_MessageComposer mx_fadable" style={{ opacity: this.props.opacity }}>
+            <div className="mx_MessageComposer">
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
                         { controls }
@@ -409,9 +409,6 @@ MessageComposer.propTypes = {
 
     // callback when a file to upload is chosen
     uploadFile: React.PropTypes.func.isRequired,
-
-    // opacity for dynamic UI fading effects
-    opacity: React.PropTypes.number,
 
     // string representing the current room app drawer state
     showApps: React.PropTypes.bool,

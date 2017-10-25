@@ -17,13 +17,6 @@
     "Dismiss": "Scarta",
     "Error": "Errore",
     "Favourite": "Preferito",
-    "Sunday": "Domenica",
-    "Monday": "Lunedì",
-    "Tuesday": "Martedì",
-    "Wednesday": "Mercoledì",
-    "Thursday": "Giovedì",
-    "Friday": "Venerdì",
-    "Saturday": "Sabato",
     "OK": "OK",
     "Drop here %(toAction)s": "Rilascia qui %(toAction)s",
     "Failed to change password. Is your password correct?": "Modifica password fallita. La tua password è corretta?",
@@ -52,11 +45,6 @@
     "Always show message timestamps": "Mostra sempre il timestamps dei messaggi",
     "Authentication": "Autenticazione",
     "Alias (optional)": "Alias (opzionale)",
-    "all room members": "Tutti i membri della stanza",
-    "all room members, from the point they are invited": "Tutti i membri della stanza, dal punto in cui sono stati/e invitati/e",
-    "all room members, from the point they joined": "tutti i membri della stanza, dal punto in cui si sono uniti",
-    "and": "e",
     "Add a widget": "Aggiungi un widget",
-    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Un messaggio di testo è stato inviato a +%(msisdn)s. Inserisci il codice di verifica che contiene",
-    "and": "e"
+    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Un messaggio di testo è stato inviato a +%(msisdn)s. Inserisci il codice di verifica che contiene"
 }

@@ -28,6 +28,7 @@ export default React.createClass({
         width: PropTypes.number,
         height: PropTypes.number,
         resizeMethod: PropTypes.string,
+        onClick: PropTypes.func,
     },
 
     getDefaultProps: function() {
