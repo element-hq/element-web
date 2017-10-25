@@ -78,7 +78,7 @@ $group-alert-color: #774f7e;
 $preview-bar-bg-color: #f7f7f7;
 
 // left-panel style muted accent color
-$secondary-accent-color: #eaf5f0;
+$secondary-accent-color: #586C7B;
 
 // used by RoomDirectory permissions
 $plinth-bg-color: $secondary-accent-color;
@@ -137,12 +137,13 @@ $rte-room-pill-color: #aaa;
 
 // ********************
 
-$roomtile-name-color: rgba(69, 69, 69, 0.8);
-$roomtile-selected-bg-color: rgba(255, 255, 255, 0.8);
-$roomtile-focused-bg-color: rgba(255, 255, 255, 0.9);
+$roomtile-name-color: #ffffff;
+$roomtile-selected-bg-color: #465561;
+$roomtile-focused-bg-color: #6d8597;
 
-$roomsublist-label-fg-color: $h3-color;
-$roomsublist-label-bg-color: #d3efe1;
+$roomsublist-label-fg-color: #ffffff;
+$roomsublist-label-bg-color: $secondary-accent-color;
+$roomsublist-chevron-color: #ffffff;
 
 // ********************
 
@@ -183,4 +184,37 @@ $progressbar-color: #000;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: $accent-fg-color;
+}
+
+.mx_RoomSubList_label {
+    font-size: 13px;
+    font-family: $header-font-family;
+    letter-spacing: 1px;    
+}
+
+// FIXME: all these ! importants are horrid - we should instead go and define
+// variables or something.
+.mx_SearchBox_search {
+    color: #fff ! important;
+}
+
+.mx_SearchBox_search::-webkit-input-placeholder  {
+    color: rgba(255, 255, 255, 0.6) ! important;
+}
+
+.mx_SearchBox_search::-moz-placeholder  {
+    color: rgba(255, 255, 255, 0.6) ! important;
+}
+
+.mx_RoomList_emptySubListTip {
+    font-size: 14px ! important;
+    border: 1.5px dashed rgba(0,0,0,0.2) ! important;
+    color: #fff ! important;
+    background-color: transparent ! important;
+    border-radius: 6px ! important;
+    margin-left: 6px ! important;
+    margin-right: 6px ! important;
+    margin-top: 8px ! important;
+    margin-bottom: 7px ! important;
+    padding: 8px ! important;
 }

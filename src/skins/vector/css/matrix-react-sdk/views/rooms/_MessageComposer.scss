@@ -138,7 +138,7 @@ limitations under the License.
     max-height: 120px;
     overflow: auto;
     /* needed for FF */
-    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    font-family: $font-family;
 }
 
 /* hack for FF as vertical alignment of custom placeholder text is broken */
@@ -175,6 +175,8 @@ limitations under the License.
 .mx_MessageComposer_formatting {
     cursor: pointer;
     margin: 0 11px;
+    width: 24px;
+    height: 18px;
 }
 
 .mx_MessageComposer_formatbar_wrapper {
