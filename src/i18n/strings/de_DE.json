@@ -81,7 +81,7 @@
     "Source URL": "Quell-URL",
     "Unable to look up room ID from server": "Es ist nicht möglich, die Raum-ID auf dem Server nachzuschlagen",
     "Unhide Preview": "Vorschau wieder anzeigen",
-    "Uploaded on %(date)s by %(user)s": "Hochgeladen am %(date)s von %(user)s",
+    "Uploaded on %(date)s by %(user)s": "Hochgeladen: %(date)s von %(user)s",
     "View Decrypted Source": "Entschlüsselten Quellcode ansehen",
     "View Source": "Quellcode ansehen",
     "You cannot delete this image. (%(code)s)": "Das Bild kann nicht gelöscht werden. (%(code)s)",
