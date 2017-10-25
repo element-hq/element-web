@@ -240,11 +240,13 @@ export default React.createClass({
                         oobData={this.props.roomOobData}
                         eventPixelOffset={this.props.initialEventPixelOffset}
                         key={this.props.currentRoomId || 'roomview'}
-                        opacity={this.props.middleOpacity}
+                        disabled={this.props.middleDisabled}
                         collapsedRhs={this.props.collapseRhs}
                         ConferenceHandler={this.props.ConferenceHandler}
                     />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel roomId={this.props.currentRoomId} opacity={this.props.rightOpacity} />;
+                if (!this.props.collapseRhs) {
+                    right_panel = <RightPanel roomId={this.props.currentRoomId} disabled={this.props.rightDisabled} />;
+                }
                 break;
 
             case PageTypes.UserSettings:
@@ -254,7 +256,7 @@ export default React.createClass({
                     referralBaseUrl={this.props.config.referralBaseUrl}
                     teamToken={this.props.teamToken}
                 />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel opacity={this.props.rightOpacity} />;
+                if (!this.props.collapseRhs) right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
 
             case PageTypes.MyGroups:
@@ -266,7 +268,7 @@ export default React.createClass({
                     onRoomCreated={this.props.onRoomCreated}
                     collapsedRhs={this.props.collapseRhs}
                 />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel opacity={this.props.rightOpacity} />;
+                if (!this.props.collapseRhs) right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
 
             case PageTypes.RoomDirectory:
@@ -294,14 +296,14 @@ export default React.createClass({
 
             case PageTypes.UserView:
                 page_element = null; // deliberately null for now
-                right_panel = <RightPanel opacity={this.props.rightOpacity} />;
+                right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
             case PageTypes.GroupView:
                 page_element = <GroupView
                     groupId={this.props.currentGroupId}
                     collapsedRhs={this.props.collapseRhs}
                 />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel groupId={this.props.currentGroupId} opacity={this.props.rightOpacity} />;
+                if (!this.props.collapseRhs) right_panel = <RightPanel groupId={this.props.currentGroupId} disabled={this.props.rightDisabled} />;
                 break;
         }
 
@@ -334,7 +336,7 @@ export default React.createClass({
                     <LeftPanel
                         selectedRoom={this.props.currentRoomId}
                         collapsed={this.props.collapseLhs || false}
-                        opacity={this.props.leftOpacity}
+                        disabled={this.props.leftDisabled}
                     />
                     <main className='mx_MatrixChat_middlePanel'>
                         { page_element }

@@ -89,9 +89,6 @@ var TimelinePanel = React.createClass({
         // callback which is called when the read-up-to mark is updated.
         onReadMarkerUpdated: React.PropTypes.func,
 
-        // opacity for dynamic UI fading effects
-        opacity: React.PropTypes.number,
-
         // maximum number of events to show in a timeline
         timelineCap: React.PropTypes.number,
 
@@ -1157,7 +1154,6 @@ var TimelinePanel = React.createClass({
                           onScroll={this.onMessageListScroll}
                           onFillRequest={this.onMessageListFillRequest}
                           onUnfillRequest={this.onMessageListUnfillRequest}
-                          opacity={this.props.opacity}
                           isTwelveHour={this.state.isTwelveHour}
                           alwaysShowTimestamps={this.state.alwaysShowTimestamps}
                           className={this.props.className}

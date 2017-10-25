@@ -116,7 +116,6 @@ const FilePanel = React.createClass({
                     timelineSet={this.state.timelineSet}
                     showUrlPreview = {false}
                     tileShape="file_grid"
-                    opacity={this.props.opacity}
                     empty={_t('There are no visible files in this room')}
                 />
             );
