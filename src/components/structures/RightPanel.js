@@ -249,6 +249,11 @@ module.exports = React.createClass({
             }
         }
 
+        const isPhaseGroup = [
+            this.Phase.GroupMemberInfo,
+            this.Phase.GroupMemberList
+        ].includes(this.state.phase);
+
         let headerButtons = [];
         if (this.props.roomId) {
             headerButtons = [
@@ -272,7 +277,7 @@ module.exports = React.createClass({
         } else if (this.props.groupId) {
             headerButtons = [
                 <HeaderButton key="_groupMembersButton" title={_t('Members')} iconSrc="img/icons-people.svg"
-                    isHighlighted={this.state.phase === this.Phase.GroupMemberList}
+                    isHighlighted={isPhaseGroup}
                     clickPhase={this.Phase.GroupMemberList}
                     analytics={['Right Panel', 'Group Member List Button', 'click']}
                 />,
@@ -326,10 +331,7 @@ module.exports = React.createClass({
         if (this.props.groupId &&
             GroupStoreCache.getGroupStore(this.context.matrixClient, this.props.groupId).isUserPrivileged()
         ) {
-            inviteGroup =  [
-                this.Phase.GroupMemberInfo,
-                this.Phase.GroupMemberList,
-            ].includes(this.state.phase) ? (
+            inviteGroup = isPhaseGroup ? (
                 <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
                     <div className="mx_RightPanel_icon" >
                         <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
