@@ -787,8 +787,8 @@ export default React.createClass({
             </div>;
         } else if (group.myMembership === 'join' && this.state.editing) {
             const leaveButtonTooltip = this.state.isUserPrivileged ?
-                _t("You are a member of this community") :
-                _t("You are an administrator of this community");
+                _t("You are an administrator of this community") :
+                _t("You are a member of this community");
             const leaveButtonClasses = classnames({
                 "mx_RoomHeader_textButton": true,
                 "mx_GroupView_textButton": true,
