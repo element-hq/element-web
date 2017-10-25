@@ -54,6 +54,10 @@ limitations under the License.
         font-size: 18px;
     }
 
+    .mx_StatusLogin_subtitle a {
+        color: $riot-link-color;
+    }
+
     .mx_StatusLogin_footer {
         margin-top: 30px;
         margin-bottom: 30px;
@@ -73,22 +77,22 @@ limitations under the License.
         letter-spacing: 1px;
         font-size: 13px;
         text-transform: uppercase;
-        text-decoration: none;
     }
 
     // overrides of .mx_Login
 
     .mx_Login_box {
-        width: 350px;
+        width: 330px;
         min-height: initial;
-        padding-top: 20px;
-        padding-bottom: 10px;
-        padding-left: 33px;
-        padding-right: 33px;
+        padding-top: 40px;
+        padding-bottom: 20px;
+        padding-left: 10px;
+        padding-right: 10px;
         border-radius: 8px;
         background-color: $form-bg-color;
         box-shadow: 0px 5px 16px 0px rgba(25,12,46,0.16);    
         position: relative;
+        text-align: center;
     }
 
     .mx_Login_logo {
@@ -123,13 +127,29 @@ limitations under the License.
     }
 
     .mx_Login_field {
-        width: 280px;
-        border-radius: 3px;
-        border: 1px solid $strong-input-border-color;
+        width: 260px;
+        height: 27px;
+        padding: 9px 20px 9px 20px;
+        border-radius: 10px;
+        text-align: left;
+        border: none;
+        background-color: $form-field-bg-color;
+        color: $form-field-fg-color;
         font-weight: 300;
-        font-size: 13px;
-        padding: 9px;
+        font-size: 15px;
         margin-bottom: 14px;
+    }
+
+    .mx_Login_field::-webkit-input-placeholder {
+        font-family: $font-family;
+        color: $form-field-fg-color;
+        opacity: 0.6;
+    }
+
+    .mx_Login_field::-moz-placeholder {
+        font-family: $font-family;
+        color: $form-field-fg-color;
+        opacity: 0.6;        
     }
 
     .mx_Login_field_disabled {
@@ -145,15 +165,10 @@ limitations under the License.
     }
 
     .mx_Login_submit {
-        margin-top: 35px;
-        margin-bottom: 24px;
-        width: 100%;
-        border-radius: 40px;
-        height: 40px;
-        border: 0px;
-        background-color: $accent-color;
-        font-size: 15px;
-        color: $accent-fg-color;
+        @mixin mx_DialogButton;
+        width: 200px;
+        margin-top: 13px;
+        margin-bottom: 18px;
     }
 
     .mx_Login_submit:disabled {
@@ -174,18 +189,19 @@ limitations under the License.
         display: block;
         text-align: center;
         width: 100%;
-        font-size: 13px;
-        opacity: 0.8;
+        font-size: 15px;
+        opacity: 1.0;
     }
 
     .mx_Login_create:link {
-        color: $primary-fg-color;
+        color: $form-fg-color;
     }
 
     .mx_Login_links {
         display: block;
         text-align: center;
-        margin-top: 15px;
+        margin-top: 10px;
+        margin-bottom: 10px;
         width: 100%;
         font-size: 13px;
         opacity: 0.8;
@@ -202,12 +218,13 @@ limitations under the License.
     }
 
     .mx_Login_forgot {
+        display: block;
         font-size: 13px;
         opacity: 0.8;
     }
 
     .mx_Login_forgot:link {
-        color: $primary-fg-color;
+        color: $form-fg-color;
     }
 
     .mx_Login_loader {
@@ -228,13 +245,12 @@ limitations under the License.
 
     .mx_Login_error {
         color: $warning-color;
-        font-weight: bold;
+        font-size: 18px;
+        width: 250px;
+        margin: auto;
         text-align: center;
-    /*
-        height: 24px;
-    */
         margin-top: 12px;
-        margin-bottom: 12px;
+        margin-bottom: 16px;
     }
 
     .mx_Login_type_container {
@@ -286,10 +302,8 @@ limitations under the License.
     }
 
     .mx_Login_username {
-        height: 16px;
         flex-shrink: 1;
         min-width: 0px;
-        border-radius: 3px;
     }
 
     .mx_Login_phoneNumberField {

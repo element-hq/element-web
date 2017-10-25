@@ -31,6 +31,12 @@ $header-font-family: PostGrotesk-Medium, Arial, Helvetica, Sans-Serif;
 
 $footer-color: #8D99A4;
 
+$riot-link-color: #A26988;
+
+a {
+    text-decoration: none;
+}
+
 h1,h2,h3,h4,h5 {
     color: $header-color;
     font-family: $header-font-family;
@@ -42,7 +48,11 @@ $callout-color: #4360DF; // or #4957b8 from status.im homepage
 $form-bg-color: $callout-color;
 $form-fg-color: #ffffff;
 
+$form-field-bg-color: rgba(244, 242, 247, 0.12);
+$form-field-fg-color: #ffffff;
+
 // ***** End of Status theme specifics ******
+
 
 // used for dialog box text
 $light-fg-color: #747474;
@@ -52,14 +62,14 @@ $focus-bg-color: #dddddd;
 
 // button UI (white-on-green in light skin)
 $accent-fg-color: #ffffff;
-$accent-color: #76CFA6;
+$accent-color: #6CC1F6;
 
 $selection-fg-color: $primary-bg-color;
 
 $focus-brightness: 125%;
 
 // red warning colour
-$warning-color: #ff0064;
+$warning-color: #F69E98;
 $mention-user-pill-bg-color: #ff0064;
 $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
@@ -162,3 +172,15 @@ $lightbox-border-color: #ffffff;
 
 // unused?
 $progressbar-color: #000;
+
+@define-mixin mx_DialogButton {
+    border-radius: 8px;
+    height: 45px;
+    border: 1px solid rgba(199, 206, 209, 0.12);
+    background-color: $accent-color;
+    font-size: 13px;
+    font-family: $header-font-family;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: $accent-fg-color;
+}
