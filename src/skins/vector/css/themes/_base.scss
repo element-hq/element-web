@@ -130,3 +130,27 @@ $lightbox-border-color: #ffffff;
 
 // unused?
 $progressbar-color: #000;
+
+// ***** Mixins! *****
+
+@define-mixin mx_DialogButton {
+    vertical-align: middle;
+    border: 0px;
+    border-radius: 36px;
+    height: 33px;
+    font-weight: 400;
+    font-size: 16px;
+    color: $accent-fg-color;
+    background-color: $accent-color;
+    width: auto;
+    padding: 7px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    cursor: pointer;
+    display: inline-block;
+}
+
+@define-mixin mx_DialogButton_small {
+    @mixin mx_DialogButton;
+    height: auto;
+}

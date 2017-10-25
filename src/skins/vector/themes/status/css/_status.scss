@@ -96,7 +96,7 @@ $event-selected-color: #f7f7f7;
 $primary-hairline-color: #e5e5e5;
 
 // used for the border of input text fields
-$input-border-color: #f0f0f0;
+$input-border-color: #c9cfd4;
 
 // apart from login forms, which have stronger border
 $strong-input-border-color: #c7c7c7;
@@ -178,7 +178,6 @@ $progressbar-color: #000;
 
 @define-mixin mx_DialogButton {
     border-radius: 8px;
-    height: 45px;
     border: 1px solid rgba(199, 206, 209, 0.12);
     background-color: $accent-color;
     font-size: 13px;
@@ -186,6 +185,22 @@ $progressbar-color: #000;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: $accent-fg-color;
+    cursor: pointer;
+    outline: none;
+    padding: 14px;
+    box-sizing: border-box;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    display: inline-block;
+}
+
+@define-mixin mx_DialogButton_small {
+    @mixin mx_DialogButton;
+    height: auto;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 .mx_RoomSubList_label {
@@ -219,4 +234,9 @@ $progressbar-color: #000;
     margin-top: 8px ! important;
     margin-bottom: 7px ! important;
     padding: 8px ! important;
+}
+
+.mx_RoomDirectory_perm {
+    font-family: $header-font-family ! important;
+    background-color: #fff ! important;
 }
