@@ -282,10 +282,15 @@ module.exports = React.createClass({
             }
             const avatarEvent = room.currentState.getStateEvents('m.room.avatar', '');
             const avatarUrl = avatarEvent ? avatarEvent.getContent().url : undefined;
+            const aliasEvents = room.currentState.getStateEvents('m.room.aliases');
+            const aliases = aliasEvents.map((ev) => ev.getContent().aliases).reduce((a, b) => {
+                return a.concat(b);
+            }, []);
+
             results.push({
                 room_id: room.roomId,
                 avatar_url: avatarUrl,
-                name: name || canonicalAlias,
+                name: name || canonicalAlias || aliases[0] || _t('Unnamed Room'),
             });
         });
         this._processResults(results, query);
