@@ -205,7 +205,5 @@
     "Event sent!": "Evento inviato!",
     "Event Type": "Tipo di Evento",
     "Event Content": "Contenuto dell'Evento",
-    "State Key": "Chiave dello Stato",
-    "Invite to this group": "Invita in questo gruppo",
-    "Add room to this group": "Aggiungi stanza a questo gruppo"
+    "State Key": "Chiave dello Stato"
 }

@@ -19,6 +19,9 @@ limitations under the License.
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .mx_GroupView_error {
@@ -27,15 +30,15 @@ limitations under the License.
 
 .mx_GroupView_header {
     max-width: 960px;
-    margin: auto;
-    height: 70px;
+    min-height: 70px;
     align-items: center;
     display: flex;
-    margin-bottom: 20px;
+    padding-bottom: 10px;
 }
 
 .mx_GroupView_header_view {
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid $primary-hairline-color;
+    padding-bottom: 0px;
 }
 
 .mx_GroupView_header_avatar, .mx_GroupView_header_info {
@@ -51,6 +54,23 @@ limitations under the License.
 .mx_GroupHeader_button object {
     // prevents clicks from being swallowed by svg in 'object' tag
     pointer-events: none;
+}
+
+.mx_GroupView_editable {
+    border-bottom: 1px solid $strong-input-border-color ! important;
+    min-width: 150px;
+    cursor: text;
+}
+
+.mx_GroupView_editable:focus {
+    border-bottom: 1px solid $accent-color ! important;
+    outline: none;
+    box-shadow: none;
+}
+
+.mx_GroupView_header_name:hover div:not(.mx_GroupView_editable) {
+    color: $accent-color;
+    cursor: pointer;
 }
 
 .mx_GroupView_avatarPicker {
@@ -102,10 +122,6 @@ limitations under the License.
     border-bottom: 1px solid transparent;
 }
 
-.mx_GroupView_header_name input, .mx_GroupView_header_shortDesc input {
-    width: 400px;
-}
-
 .mx_GroupView_header_shortDesc {
     vertical-align: bottom;
     float: left;
@@ -133,10 +149,68 @@ limitations under the License.
     top: 5px;
 }
 
+.mx_GroupView_body  {
+    flex-grow: 1;
+}
+
+.mx_GroupView_rooms {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+    user-select: none;
+}
+
+.mx_GroupView h3 {
+    text-transform: uppercase;
+    color: $h3-color;
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.mx_GroupView_rooms_header .mx_AccessibleButton {
+    padding-left: 14px;
+    margin-bottom: 14px;
+    height: 24px;
+}
+
+.mx_GroupView_group {
+    border-top: 1px solid $primary-hairline-color;
+}
+
+.mx_GroupView_group_disabled {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.mx_GroupView_rooms_header_addRow_button {
+    display: inline-block;
+}
+
+.mx_GroupView_rooms_header_addRow_button object {
+    pointer-events: none;
+}
+
+.mx_GroupView_rooms_header_addRow_label {
+    display: inline-block;
+    vertical-align: top;
+    line-height: 24px;
+    padding-left: 28px;
+    color: $accent-color;
+}
+
+.mx_GroupView_rooms .mx_RoomDetailList {
+    flex-grow: 1;
+    border-top: 1px solid $primary-hairline-color;
+    padding-top: 10px;
+}
+
+.mx_GroupView .mx_RoomView_messageListWrapper {
+    justify-content: flex-start;
+}
+
 .mx_GroupView_membershipSection {
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 11px;
     color: $greyed-fg-color;
 }
 
@@ -156,6 +230,15 @@ limitations under the License.
     margin-right: 0px;
     margin-top: 0px;
     margin-left: 8px;
+}
+
+.mx_GroupView_memberSettings_toggle label {
+    cursor: pointer;
+    user-select: none;
+}
+
+.mx_GroupView_memberSettings input {
+    margin-right: 6px;
 }
 
 .mx_GroupView_featuredThings {
@@ -215,7 +298,11 @@ limitations under the License.
     display: none;
 }
 
-.mx_GroupView_editLongDesc {
-    width: 100%;
+.mx_GroupView_body .gm-scroll-view > *{
+    margin: 0px 50px 11px 68px;
+}
+
+.mx_GroupView_groupDesc textarea {
+    width: 50%;
     height: 150px;
 }
