@@ -27,7 +27,7 @@ module.exports = React.createClass({
 
     propTypes: {
         roomId: React.PropTypes.string.isRequired,
-        canSetRelatedRooms: React.PropTypes.bool.isRequired,
+        canSetRelatedGroups: React.PropTypes.bool.isRequired,
         relatedGroupsEvent: React.PropTypes.instanceOf(MatrixEvent),
     },
 
@@ -37,7 +37,7 @@ module.exports = React.createClass({
 
     getDefaultProps: function() {
         return {
-            canSetRelatedRooms: false,
+            canSetRelatedGroups: false,
         };
     },
 
@@ -110,6 +110,7 @@ module.exports = React.createClass({
                 items={this.state.newGroupsList}
                 className={"mx_RelatedGroupSettings"}
                 newItem={this.state.newGroupId}
+                canEdit={this.props.canSetRelatedGroups}
                 onNewItemChanged={this.onNewGroupChanged}
                 onItemAdded={this.onGroupAdded}
                 onItemEdited={this.onGroupEdited}
