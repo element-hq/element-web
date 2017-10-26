@@ -305,17 +305,12 @@ module.exports = React.createClass({
     _shouldShowApps: function(room) {
         if (!BROWSER_SUPPORTS_SANDBOX) return false;
 
-        // Check if user has prompted to close this app before
-        // If so, do not show apps
-        let showWidget = localStorage.getItem(
-            room.roomId + "_show_widget_drawer");
+        // Check if user has previously chosen to hide the app drawer for this
+        // room. If so, do not show apps
+        let hideWidgetDrawer = localStorage.getItem(
+            room.roomId + "_hide_widget_drawer");
 
-        console.warn(room);
-        console.warn("Key is: " + room.roomId + "_show_widget_drawer");
-        console.warn("showWidget is: " + showWidget);
-
-        if (showWidget == "false") {
-            console.warn("We're blocking the widget from loading.");
+        if (hideWidgetDrawer === "true") {
             return false;
         }
 

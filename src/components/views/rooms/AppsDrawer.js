@@ -81,7 +81,7 @@ module.exports = React.createClass({
     },
 
     onAction: function(action) {
-        const widgetStateKey = this.props.room.roomId + "_show_widget_drawer";
+        const hideWidgetKey = this.props.room.roomId + "_hide_widget_drawer";
         switch (action.action) {
             case 'appsDrawer':
                 // When opening the app drawer when there aren't any apps,
@@ -93,13 +93,11 @@ module.exports = React.createClass({
                         this._launchManageIntegrations();
                     }
 
-                    localStorage.removeItem(widgetStateKey);
+                    localStorage.removeItem(hideWidgetKey);
                 } else {
                     // Store hidden state of widget
                     // Don't show if previously hidden
-                    console.warn("Storing hidden widget state for room - ",
-                        this.props.room.roomId);
-                    localStorage.setItem(widgetStateKey, false);
+                    localStorage.setItem(hideWidgetKey, true);
                 }
 
                 break;
