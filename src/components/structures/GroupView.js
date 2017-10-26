@@ -482,8 +482,8 @@ export default React.createClass({
             profileForm: Object.assign({}, this.state.summary.profile),
         });
         dis.dispatch({
-            action: 'ui_opacity',
-            sideOpacity: 0.3,
+            action: 'panel_disable',
+            sideDisabled: true,
         });
     },
 
@@ -492,7 +492,7 @@ export default React.createClass({
             editing: false,
             profileForm: null,
         });
-        dis.dispatch({action: 'ui_opacity'});
+        dis.dispatch({action: 'panel_disable'});
     },
 
     _onNameChange: function(value) {
@@ -549,7 +549,7 @@ export default React.createClass({
                 editing: false,
                 summary: null,
             });
-            dis.dispatch({action: 'ui_opacity'});
+            dis.dispatch({action: 'panel_disable'});
             this._initGroupStore(this.props.groupId);
         }).catch((e) => {
             this.setState({
@@ -787,8 +787,8 @@ export default React.createClass({
             </div>;
         } else if (group.myMembership === 'join' && this.state.editing) {
             const leaveButtonTooltip = this.state.isUserPrivileged ?
-                _t("You are a member of this community") :
-                _t("You are an administrator of this community");
+                _t("You are an administrator of this community") :
+                _t("You are a member of this community");
             const leaveButtonClasses = classnames({
                 "mx_RoomHeader_textButton": true,
                 "mx_GroupView_textButton": true,
@@ -964,13 +964,15 @@ export default React.createClass({
                     </AccessibleButton>,
                 );
             } else {
-                rightButtons.push(
-                    <AccessibleButton className="mx_GroupHeader_button"
-                        onClick={this._onEditClick} title={_t("Community Settings")} key="_editButton"
-                    >
-                        <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
-                    </AccessibleButton>,
-                );
+                if (summary.user && summary.user.membership === 'join') {
+                    rightButtons.push(
+                        <AccessibleButton className="mx_GroupHeader_button"
+                            onClick={this._onEditClick} title={_t("Community Settings")} key="_editButton"
+                        >
+                            <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
+                        </AccessibleButton>,
+                    );
+                }
                 if (this.props.collapsedRhs) {
                     rightButtons.push(
                         <AccessibleButton className="mx_GroupHeader_button"

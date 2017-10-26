@@ -25,7 +25,10 @@ module.exports = React.createClass({
     render: function() {
         let tooltip = _t("Removed or unknown message type");
         if (this.props.mxEvent.isRedacted()) {
-            tooltip = _t("Message removed by %(userId)s", {userId: this.props.mxEvent.getSender()});
+            const redactedBecauseUserId = this.props.mxEvent.getUnsigned().redacted_because.sender;
+            tooltip = redactedBecauseUserId ?
+                _t("Message removed by %(userId)s", { userId: redactedBecauseUserId }) :
+                _t("Message removed");
         }
 
         const text = this.props.mxEvent.getContent().body;

@@ -262,6 +262,7 @@ module.exports = React.createClass({
                     items={this.state.domainToAliases[localDomain] || []}
                     newItem={this.state.newAlias}
                     onNewItemChanged={this.onNewAliasChanged}
+                    canEdit={this.props.canSetAliases}
                     onItemAdded={this.onLocalAliasAdded}
                     onItemEdited={this.onLocalAliasChanged}
                     onItemRemoved={this.onLocalAliasDeleted}
