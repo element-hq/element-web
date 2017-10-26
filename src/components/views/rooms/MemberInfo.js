@@ -621,6 +621,7 @@ module.exports = withMatrixClient(React.createClass({
         const member = this.props.member;
 
         let ignoreButton = null;
+        let insertPillButton = null;
         let inviteUserButton = null;
         let readReceiptButton = null;
 
@@ -646,9 +647,22 @@ module.exports = withMatrixClient(React.createClass({
                     });
                 };
 
+                const onInsertPillButton = function() {
+                    dis.dispatch({
+                        action: 'insert_mention',
+                        user_id: member.userId,
+                    });
+                };
+
                 readReceiptButton = (
                     <AccessibleButton onClick={onReadReceiptButton} className="mx_MemberInfo_field">
                         { _t('Jump to read receipt') }
+                    </AccessibleButton>
+                );
+
+                insertPillButton = (
+                    <AccessibleButton onClick={onInsertPillButton} className={"mx_MemberInfo_field"}>
+                        { _t('Mention') }
                     </AccessibleButton>
                 );
             }
@@ -675,13 +689,14 @@ module.exports = withMatrixClient(React.createClass({
             }
         }
 
-        if (!ignoreButton && !readReceiptButton && !inviteUserButton) return null;
+        if (!ignoreButton && !readReceiptButton && !insertPillButton && !inviteUserButton) return null;
 
         return (
             <div>
                 <h3>{ _t("User Options") }</h3>
                 <div className="mx_MemberInfo_buttons">
                     { readReceiptButton }
+                    { insertPillButton }
                     { ignoreButton }
                     { inviteUserButton }
                 </div>
