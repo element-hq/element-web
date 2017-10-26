@@ -26,7 +26,7 @@
         if (match) {
             var title = match[1].charAt(0).toUpperCase() + match[1].slice(1);
         %>
-           <link rel="alternate stylesheet" title="<%= title %>"
+           <link rel="<% if (match[1] !== 'status') { %>alternate<% } %> stylesheet" title="<%= title %>"
                href="<%= file %>">
         <% } else { %>
            <link rel="stylesheet" href="<%= file %>">
