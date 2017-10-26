@@ -223,7 +223,8 @@ $progressbar-color: #000;
     color: rgba(255, 255, 255, 0.6) ! important;
 }
 
-.mx_RoomList_emptySubListTip {
+.mx_RoomList_emptySubListTip,
+.mx_RoomDropTarget {
     font-size: 14px ! important;
     border: 1.5px dashed rgba(0,0,0,0.2) ! important;
     color: #fff ! important;
