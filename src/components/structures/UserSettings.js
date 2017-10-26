@@ -181,7 +181,7 @@ const THEMES = [
     },
     {
         id: 'theme',
-        label: 'Status.im theme',
+        label: _td('Status.im theme'),
         value: 'status',
     },
 ];
