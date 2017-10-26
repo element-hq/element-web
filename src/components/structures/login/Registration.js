@@ -382,6 +382,8 @@ module.exports = React.createClass({
         }
 
         let returnToAppJsx;
+        /*
+        // with the advent of ILAG I don't think we need this any more
         if (this.props.onCancelClick) {
             returnToAppJsx = (
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
@@ -389,6 +391,7 @@ module.exports = React.createClass({
                 </a>
             );
         }
+        */
 
         let header;
         let errorText;
@@ -402,6 +405,15 @@ module.exports = React.createClass({
             }
         }
 
+        let signIn;
+        if (!this.state.doingUIAuth) {
+            signIn = (
+                <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
+                    { theme === 'status' ? _t('Sign in') : _t('I already have an account') }
+                </a>
+            );
+        }
+
         return (
             <LoginPage>
                 <div className="mx_Login_box">
@@ -413,9 +425,7 @@ module.exports = React.createClass({
                     />
                     { header }
                     { registerBody }
-                    <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
-                        { theme === 'status' ? _t('Sign in') : _t('I already have an account') }
-                    </a>
+                    { signIn }
                     { errorText }
                     { returnToAppJsx }
                     <LoginFooter />

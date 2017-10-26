@@ -346,12 +346,15 @@ module.exports = React.createClass({
         }
 
         let returnToAppJsx;
-        if (this.props.onCancelClick && theme !== 'status') {
+        /*
+        // with the advent of ILAG I don't think we need this any more
+        if (this.props.onCancelClick) {
             returnToAppJsx =
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
                     { _t('Return to app') }
                 </a>;
         }
+        */
 
         let serverConfig;
         let header;
