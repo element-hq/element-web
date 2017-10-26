@@ -123,7 +123,7 @@ module.exports = React.createClass({
             password: this.refs.password.value.trim(),
             email: email,
             phoneCountry: this.state.phoneCountry,
-            phoneNumber: this.refs.phoneNumber.value.trim(),
+            phoneNumber: this.refs.phoneNumber ? this.refs.phoneNumber.value.trim() : '',
         });
 
         if (promise) {
@@ -181,7 +181,7 @@ module.exports = React.createClass({
                 this.markFieldValid(field_id, emailValid, "RegistrationForm.ERR_EMAIL_INVALID");
                 break;
             case FIELD_PHONE_NUMBER:
-                const phoneNumber = this.refs.phoneNumber.value;
+                const phoneNumber = this.refs.phoneNumber ? this.refs.phoneNumber.value : '';
                 const phoneNumberValid = phoneNumber === '' || phoneNumberLooksValid(phoneNumber);
                 this.markFieldValid(field_id, phoneNumberValid, "RegistrationForm.ERR_PHONE_NUMBER_INVALID");
                 break;
