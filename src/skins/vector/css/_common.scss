@@ -205,11 +205,10 @@ textarea {
     margin-right: 8px;
 
     // flip colours for the secondary ones
+    font-weight: 600;
+    border: 1px solid $accent-color ! important;
     color: $accent-color;
     background-color: $accent-fg-color;
-
-    /* align images in buttons (eg spinners) */
-    vertical-align: middle;
 }
 
 .mx_Dialog button:focus, .mx_Dialog input[type="submit"]:focus {

@@ -137,12 +137,12 @@ $progressbar-color: #000;
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {
+    /* align images in buttons (eg spinners) */
     vertical-align: middle;
     border: 0px;
     border-radius: 36px;
-    height: 33px;
-    font-weight: 400;
-    font-size: 16px;
+    font-family: $font-family;
+    font-size: 14px;
     color: $accent-fg-color;
     background-color: $accent-color;
     width: auto;
@@ -155,5 +155,6 @@ $progressbar-color: #000;
 
 @define-mixin mx_DialogButton_small {
     @mixin mx_DialogButton;
-    height: auto;
+    font-size: 15px;
+    padding: 0px 1.5em 0px 1.5em;
 }

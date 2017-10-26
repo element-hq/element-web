@@ -177,6 +177,8 @@ $lightbox-border-color: #ffffff;
 $progressbar-color: #000;
 
 @define-mixin mx_DialogButton {
+    /* align images in buttons (eg spinners) */
+    vertical-align: middle;
     border-radius: 8px;
     border: 1px solid rgba(199, 206, 209, 0.12);
     background-color: $accent-color;
