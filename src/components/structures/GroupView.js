@@ -964,13 +964,15 @@ export default React.createClass({
                     </AccessibleButton>,
                 );
             } else {
-                rightButtons.push(
-                    <AccessibleButton className="mx_GroupHeader_button"
-                        onClick={this._onEditClick} title={_t("Community Settings")} key="_editButton"
-                    >
-                        <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
-                    </AccessibleButton>,
-                );
+                if (summary.user && summary.user.membership === 'join') {
+                    rightButtons.push(
+                        <AccessibleButton className="mx_GroupHeader_button"
+                            onClick={this._onEditClick} title={_t("Community Settings")} key="_editButton"
+                        >
+                            <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
+                        </AccessibleButton>,
+                    );
+                }
                 if (this.props.collapsedRhs) {
                     rightButtons.push(
                         <AccessibleButton className="mx_GroupHeader_button"
