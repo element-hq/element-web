@@ -47,9 +47,7 @@ module.exports = React.createClass({
                     </div>
                 </div>
             );
-        }
-        else
-        {
+        } else {
             return (
                 <div className="mx_Login">
                     { this.props.children }

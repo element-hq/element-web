@@ -188,9 +188,7 @@ export default {
         }
         if (!syncedSettings || !syncedSettings.theme) {
             theme = (SdkConfig.get() ? SdkConfig.get().default_theme : undefined) || 'light';
-        }
-        else
-        {
+        } else {
             theme = syncedSettings.theme;
         }
         return theme;
