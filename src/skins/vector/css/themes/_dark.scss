@@ -104,7 +104,8 @@ $event-sending-color: #888;
 $event-notsent-color: #f44;
 
 // event redaction
-$event-redacted-img: url('../../img/redacted-dark.jpg');
+$event-redacted-fg-color: #606060;
+$event-redacted-border-color: #000000;
 
 // event timestamp
 $event-timestamp-color: #acacac;
