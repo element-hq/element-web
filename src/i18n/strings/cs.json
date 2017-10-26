@@ -138,7 +138,7 @@
     "Uploading report": "Nahrávám hlášení",
     "View Decrypted Source": "Zobrazit dešifrovaný zdroj",
     "When I'm invited to a room": "Pokud jsem pozván do místnosti",
-    "World readable": "Viditelné pro všechny",
+    "World readable": "Světu čitelné",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Snad jste je nastavili v jiném klientu než Riot. V Riotu je nemůžete upravit, ale přesto platí",
     "Error encountered (%(errorDetail)s).": "Nastala chyba (%(errorDetail)s).",
     "You need to be using HTTPS to place a screen-sharing call.": "Pro uskutečnění hovoru se sdílením obrazovky musíte používat HTTPS.",
