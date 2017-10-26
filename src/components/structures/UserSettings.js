@@ -205,7 +205,7 @@ const IgnoredUser = React.createClass({
     render: function() {
         return (
             <li>
-                <AccessibleButton onClick={this._onUnignoreClick} className="mx_UserSettings_button mx_UserSettings_buttonSmall">
+                <AccessibleButton onClick={this._onUnignoreClick} className="mx_textButton">
                     { _t("Unignore") }
                 </AccessibleButton>
                 { this.props.userId }
