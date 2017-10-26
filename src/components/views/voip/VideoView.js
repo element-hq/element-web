@@ -113,7 +113,7 @@ module.exports = React.createClass({
         const maxVideoHeight = fullscreenElement ? null : this.props.maxHeight;
         const localVideoFeedClasses = classNames("mx_VideoView_localVideoFeed",
             { "mx_VideoView_localVideoFeed_flipped":
-                UserSettingsStore.getSyncedSetting('VideoView.flipVideoHorizontally'),
+                UserSettingsStore.getSyncedSetting('VideoView.flipVideoHorizontally', false),
             },
         );
         return (
