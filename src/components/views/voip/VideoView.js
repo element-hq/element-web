@@ -112,7 +112,9 @@ module.exports = React.createClass({
                  document.webkitFullscreenElement);
         const maxVideoHeight = fullscreenElement ? null : this.props.maxHeight;
         const localVideoFeedClasses = classNames("mx_VideoView_localVideoFeed",
-            {"mx_VideoView_localVideoFeed_flipped": UserSettingsStore.getSyncedSetting}
+            { "mx_VideoView_localVideoFeed_flipped":
+                UserSettingsStore.getSyncedSetting('VideoView.flipVideoHorizontally'),
+            },
         );
         return (
             <div className="mx_VideoView" ref={this.setContainer} onClick={this.props.onClick}>
