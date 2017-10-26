@@ -152,6 +152,7 @@
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s widget removed by %(senderName)s",
     "Communities": "Communities",
     "Message Pinning": "Message Pinning",
+    "Mention": "Mention",
     "%(displayName)s is typing": "%(displayName)s is typing",
     "%(names)s and one other are typing": "%(names)s and one other are typing",
     "%(names)s and %(count)s others are typing|other": "%(names)s and %(count)s others are typing",
