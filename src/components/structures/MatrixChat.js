@@ -276,6 +276,9 @@ module.exports = React.createClass({
         this._windowWidth = 10000;
         this.handleResize();
         window.addEventListener('resize', this.handleResize);
+
+        // check we have the right tint applied for this theme
+        Tinter.tint();
     },
 
     componentDidMount: function() {
