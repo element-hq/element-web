@@ -133,8 +133,9 @@ module.exports = React.createClass({
                         { p["og:description"] }
                     </div>
                 </div>
-                <img className="mx_LinkPreviewWidget_cancel" src="img/cancel.svg" width="18" height="18"
-                     onClick={this.props.onCancelClick} />
+                <img className="mx_LinkPreviewWidget_cancel mx_filterFlipColor"
+                    src="img/cancel.svg" width="18" height="18"
+                    onClick={this.props.onCancelClick} />
             </div>
         );
     },
