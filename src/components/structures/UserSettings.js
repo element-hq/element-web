@@ -118,6 +118,10 @@ const SETTINGS_LABELS = [
         id: 'TextualBody.disableBigEmoji',
         label: _td('Disable big emoji in chat'),
     },
+    {
+        id: 'VideoView.flipVideoHorizontally',
+        label: _td('Mirror local video feed'),
+    },
 /*
     {
         id: 'useFixedWidthFont',
