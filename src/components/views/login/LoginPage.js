@@ -42,7 +42,7 @@ module.exports = React.createClass({
                         <div className="mx_StatusLogin_footer">
                             <p>This channel is for our development community.</p>
                             <p>Interested in SNT and discussions on the cryptocurrency market?</p>
-                            <p><a href="#" className="mx_StatusLogin_footer_cta">Join Telegram Chat</a></p>
+                            <p><a href="https://t.me/StatusNetworkChat" className="mx_StatusLogin_footer_cta">Join Telegram Chat</a></p>
                         </div>
                     </div>
                 </div>
