@@ -42,11 +42,11 @@ class FlairAvatar extends React.Component {
 
     render() {
         const httpUrl = this.context.matrixClient.mxcUrlToHttp(
-            this.props.groupProfile.avatarUrl, 14, 14, 'scale', false);
+            this.props.groupProfile.avatarUrl, 16, 16, 'scale', false);
         return <img
             src={httpUrl}
-            width="14px"
-            height="14px"
+            width="16"
+            height="16"
             onClick={this.onClick}
             title={this.props.groupProfile.groupId} />;
     }
