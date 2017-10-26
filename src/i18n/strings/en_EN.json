@@ -755,6 +755,7 @@
     "Disable Emoji suggestions while typing": "Disable Emoji suggestions while typing",
     "Hide avatars in user and room mentions": "Hide avatars in user and room mentions",
     "Disable big emoji in chat": "Disable big emoji in chat",
+    "Mirror local video feed": "Mirror local video feed",
     "Opt out of analytics": "Opt out of analytics",
     "Disable Peer-to-Peer for 1:1 calls": "Disable Peer-to-Peer for 1:1 calls",
     "Never send encrypted messages to unverified devices from this device": "Never send encrypted messages to unverified devices from this device",
