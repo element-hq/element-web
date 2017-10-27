@@ -39,7 +39,7 @@
     "Expand panel": "Розгорнути панель",
     "Failed to add tag %(tagName)s to room": "Не вдалось додати до кімнати мітку %(tagName)s",
     "Failed to change settings": "Не вдалось змінити налаштування",
-    "Failed to forget room %(errCode)s": "Не вдалось забути кімнату %(errCode)s",
+    "Failed to forget room %(errCode)s": "Не вдалось видалити кімнату %(errCode)s",
     "Failed to update keywords": "Не вдалось оновити ключові слова",
     "Failed to get protocol list from Home Server": "Не вдалось отримати перелік протоколів з Домашнього серверу",
     "Failed to get public room list": "Не вдалось отримати перелік прилюдних кімнат",
@@ -190,7 +190,7 @@
     "Checking for an update...": "Перевірка оновлень…",
     "Error encountered (%(errorDetail)s).": "Трапилась помилка (%(errorDetail)s).",
     "No update available.": "Оновлення відсутні.",
-    "Downloading update...": "Звантажується оновлення…",
+    "Downloading update...": "Звантаженя оновлення…",
     "Couldn't load home page": "Не вдалось завантажити домівку",
     "Back": "Назад",
     "Bug report sent": "Звіт про помилки відправлений",
@@ -205,5 +205,13 @@
     "Event sent!": "Захід відправлено!",
     "Event Type": "Тип західу",
     "Event Content": "Зміст заходу",
-    "State Key": "Ключ стану"
+    "State Key": "Ключ стану",
+    "Show message in desktop notification": "Показати повідомлення в сповіщення на робочому столі",
+    "Edit": "Редактувати",
+    "Unpin Message": "Відкріпити повідомлення",
+    "Pin Message": "Прикріпити повідомлення",
+    "Register": "Зарегіструватись",
+    "Rooms": "Кімнати",
+    "Invite to this community": "Запросити в це суспільство",
+    "Add rooms to this community": "Добавити кімнати в це суспільство"
 }
