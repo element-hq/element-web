@@ -96,5 +96,9 @@
     "Email address": "Адреса е-почти",
     "Email address (optional)": "Адреса е-почти (не обов'язково)",
     "Email, name or matrix ID": "Е-почта, ім'я або matrix ID",
-    "Failed to send email": "Помилка відправки  е-почти"
+    "Failed to send email": "Помилка відправки  е-почти",
+    "Edit": "Редактувати",
+    "Unpin Message": "Відкріпити повідомлення",
+    "Register": "Зарегіструватись",
+    "Rooms": "Кімнати"
 }
