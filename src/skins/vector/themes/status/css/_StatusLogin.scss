@@ -91,7 +91,7 @@ limitations under the License.
     .mx_Login_box {
         width: 330px;
         min-height: initial;
-        padding-top: 40px;
+        padding-top: 50px;
         padding-bottom: 20px;
         padding-left: 10px;
         padding-right: 10px;
@@ -126,6 +126,7 @@ limitations under the License.
         text-align: center;
         color: $form-fg-color;
         font-size: 25px;
+        margin-top: 5px;
         margin-bottom: 24px;
     }
 
@@ -170,7 +171,8 @@ limitations under the License.
     }
 
     .mx_Login_submit {
-        width: 200px;
+        min-width: 200px;
+        width: auto;
         margin-top: 13px;
         margin-bottom: 10px;
     }
