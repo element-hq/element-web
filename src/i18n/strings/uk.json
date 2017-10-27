@@ -6,7 +6,7 @@
     "Dismiss": "Відхилити",
     "Drop here %(toAction)s": "Кидайте сюди %(toAction)s",
     "Error": "Помилка",
-    "Failed to forget room %(errCode)s": "Не вдалось забути кімнату %(errCode)s",
+    "Failed to forget room %(errCode)s": "Не вдалось видалити кімнату %(errCode)s",
     "Favourite": "Вибране",
     "Mute": "Стишити",
     "Notifications": "Сповіщення",
@@ -100,5 +100,6 @@
     "Edit": "Редактувати",
     "Unpin Message": "Відкріпити повідомлення",
     "Register": "Зарегіструватись",
-    "Rooms": "Кімнати"
+    "Rooms": "Кімнати",
+    "Add rooms to this community": "Добавити кімнати в це суспільство"
 }
