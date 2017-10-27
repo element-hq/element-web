@@ -15,15 +15,15 @@ limitations under the License.
 */
 
 'use strict';
-var React = require('react');
+const React = require('react');
 import { _t, _tJsx } from 'matrix-react-sdk/lib/languageHandler';
 import Promise from 'bluebird';
-var sdk = require('matrix-react-sdk');
-var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-var UserSettingsStore = require('matrix-react-sdk/lib/UserSettingsStore');
-var Modal = require('matrix-react-sdk/lib/Modal');
+const sdk = require('matrix-react-sdk');
+const MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
+const UserSettingsStore = require('matrix-react-sdk/lib/UserSettingsStore');
+const Modal = require('matrix-react-sdk/lib/Modal');
 
-var notifications = require('../../../notifications');
+const notifications = require('../../../notifications');
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -31,17 +31,17 @@ var notifications = require('../../../notifications');
 // TODO: this component also does a lot of direct poking into this.state, which
 // is VERY NAUGHTY.
 
-var NotificationUtils = notifications.NotificationUtils;
-var VectorPushRulesDefinitions = notifications.VectorPushRulesDefinitions;
-var PushRuleVectorState = notifications.PushRuleVectorState;
-var ContentRules = notifications.ContentRules;
+const NotificationUtils = notifications.NotificationUtils;
+const VectorPushRulesDefinitions = notifications.VectorPushRulesDefinitions;
+const PushRuleVectorState = notifications.PushRuleVectorState;
+const ContentRules = notifications.ContentRules;
 
 /**
  * Rules that Vector used to set in order to override the actions of default rules.
  * These are used to port peoples existing overrides to match the current API.
  * These can be removed and forgotten once everyone has moved to the new client.
  */
-var LEGACY_RULES = {
+const LEGACY_RULES = {
     "im.vector.rule.contains_display_name": ".m.rule.contains_display_name",
     "im.vector.rule.room_one_to_one": ".m.rule.room_one_to_one",
     "im.vector.rule.room_message": ".m.rule.message",
@@ -51,7 +51,7 @@ var LEGACY_RULES = {
 };
 
 function portLegacyActions(actions) {
-    var decoded = NotificationUtils.decodeActions(actions);
+    const decoded = NotificationUtils.decodeActions(actions);
     if (decoded !== null) {
         return NotificationUtils.encodeActions(decoded);
     } else {
@@ -62,7 +62,7 @@ function portLegacyActions(actions) {
 }
 
 module.exports = React.createClass({
-    displayName: 'Notififications',
+    displayName: 'Notifications',
 
     phases: {
         LOADING: "LOADING", // The component is loading or sending data to the hs
@@ -102,7 +102,7 @@ module.exports = React.createClass({
     },
 
     onEnableNotificationsChange: function(event) {
-        var self = this;
+        const self = this;
         this.setState({
             phase: this.phases.LOADING
         });
@@ -117,20 +117,20 @@ module.exports = React.createClass({
     },
 
     onEnableEmailNotificationsChange: function(address, event) {
-        var emailPusherPromise;
+        let emailPusherPromise;
         if (event.target.checked) {
-            var data = {}
+            const data = {}
             data['brand'] = this.props.brand || 'Riot';
             emailPusherPromise = UserSettingsStore.addEmailPusher(address, data);
         } else {
-            var emailPusher = UserSettingsStore.getEmailPusher(this.state.pushers, address);
+            const emailPusher = UserSettingsStore.getEmailPusher(this.state.pushers, address);
             emailPusher.kind = null;
             emailPusherPromise = MatrixClientPeg.get().setPusher(emailPusher);
         }
         emailPusherPromise.done(() => {
             this._refreshFromServer();
         }, (error) => {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Error saving email notification preferences', '', ErrorDialog, {
                 title: _t('Error saving email notification preferences'),
                 description: _t('An error occurred whilst saving your email notification preferences.'),
@@ -140,14 +140,14 @@ module.exports = React.createClass({
 
     onNotifStateButtonClicked: function(event) {
         // FIXME: use .bind() rather than className metadata here surely
-        var vectorRuleId = event.target.className.split("-")[0];
-        var newPushRuleVectorState = event.target.className.split("-")[1];
+        const vectorRuleId = event.target.className.split("-")[0];
+        const newPushRuleVectorState = event.target.className.split("-")[1];
 
         if ("_keywords" === vectorRuleId) {
             this._setKeywordsPushRuleVectorState(newPushRuleVectorState)
         }
         else {
-            var rule = this.getRule(vectorRuleId);
+            const rule = this.getRule(vectorRuleId);
             if (rule) {
                 this._setPushRuleVectorState(rule, newPushRuleVectorState);
             }
@@ -155,12 +155,12 @@ module.exports = React.createClass({
     },
 
     onKeywordsClicked: function(event) {
-        var self = this;
+        const self = this;
 
         // Compute the keywords list to display
-        var keywords = [];
-        for (var i in this.state.vectorContentRules.rules) {
-            var rule = this.state.vectorContentRules.rules[i];
+        let keywords = [];
+        for (let i in this.state.vectorContentRules.rules) {
+            const rule = this.state.vectorContentRules.rules[i];
             keywords.push(rule.pattern);
         }
         if (keywords.length) {
@@ -174,7 +174,7 @@ module.exports = React.createClass({
             keywords = "";
         }
 
-        var TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
+        const TextInputDialog = sdk.getComponent("dialogs.TextInputDialog");
         Modal.createTrackedDialog('Keywords Dialog', '', TextInputDialog, {
             title: _t('Keywords'),
             description: _t('Enter keywords separated by a comma:'),
@@ -183,8 +183,8 @@ module.exports = React.createClass({
             onFinished: function onFinished(should_leave, newValue) {
 
                 if (should_leave && newValue !== keywords) {
-                    var newKeywords = newValue.split(',');
-                    for (var i in newKeywords) {
+                    let newKeywords = newValue.split(',');
+                    for (let i in newKeywords) {
                         newKeywords[i] = newKeywords[i].trim();
                     }
 
@@ -203,8 +203,8 @@ module.exports = React.createClass({
     },
 
     getRule: function(vectorRuleId) {
-        for (var i in this.state.vectorPushRules) {
-            var rule = this.state.vectorPushRules[i];
+        for (let i in this.state.vectorPushRules) {
+            const rule = this.state.vectorPushRules[i];
             if (rule.vectorRuleId === vectorRuleId) {
                 return rule;
             }
@@ -218,13 +218,13 @@ module.exports = React.createClass({
                 phase: this.phases.LOADING
             });
 
-            var self = this;
-            var cli = MatrixClientPeg.get();
-            var deferreds = [];
-            var ruleDefinition = VectorPushRulesDefinitions[rule.vectorRuleId];
+            const self = this;
+            const cli = MatrixClientPeg.get();
+            const deferreds = [];
+            const ruleDefinition = VectorPushRulesDefinitions[rule.vectorRuleId];
 
             if (rule.rule) {
-                var actions = ruleDefinition.vectorStateToActions[newPushRuleVectorState];
+                const actions = ruleDefinition.vectorStateToActions[newPushRuleVectorState];
 
                 if (!actions) {
                     // The new state corresponds to disabling the rule.
@@ -239,7 +239,7 @@ module.exports = React.createClass({
             Promise.all(deferreds).done(function() {
                 self._refreshFromServer();
             }, function(error) {
-                var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 console.error("Failed to change settings: " + error);
                 Modal.createTrackedDialog('Failed to change settings', '', ErrorDialog, {
                     title: _t('Failed to change settings'),
@@ -257,19 +257,19 @@ module.exports = React.createClass({
             return;
         }
 
-        var self = this;
-        var cli = MatrixClientPeg.get();
+        const self = this;
+        const cli = MatrixClientPeg.get();
 
         this.setState({
             phase: this.phases.LOADING
         });
 
         // Update all rules in self.state.vectorContentRules
-        var deferreds = [];
-        for (var i in this.state.vectorContentRules.rules) {
-            var rule = this.state.vectorContentRules.rules[i];
+        const deferreds = [];
+        for (let i in this.state.vectorContentRules.rules) {
+            const rule = this.state.vectorContentRules.rules[i];
 
-            var enabled, actions;
+            let enabled, actions;
             switch (newPushRuleVectorState) {
                 case PushRuleVectorState.ON:
                     if (rule.actions.length !== 1) {
@@ -309,7 +309,7 @@ module.exports = React.createClass({
         Promise.all(deferreds).done(function(resps) {
             self._refreshFromServer();
         }, function(error) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Can't update user notification settings: " + error);
             Modal.createTrackedDialog('Can\'t update user notifcation settings', '', ErrorDialog, {
                 title: _t('Can\'t update user notification settings'),
@@ -324,14 +324,14 @@ module.exports = React.createClass({
             phase: this.phases.LOADING
         });
 
-        var self = this;
-        var cli = MatrixClientPeg.get();
-        var removeDeferreds = [];
+        const self = this;
+        const cli = MatrixClientPeg.get();
+        const removeDeferreds = [];
 
         // Remove per-word push rules of keywords that are no more in the list
-        var vectorContentRulesPatterns = [];
-        for (var i in self.state.vectorContentRules.rules) {
-            var rule = self.state.vectorContentRules.rules[i];
+        const vectorContentRulesPatterns = [];
+        for (let i in self.state.vectorContentRules.rules) {
+            const rule = self.state.vectorContentRules.rules[i];
 
             vectorContentRulesPatterns.push(rule.pattern);
 
@@ -342,16 +342,16 @@ module.exports = React.createClass({
 
         // If the keyword is part of `externalContentRules`, remove the rule
         // before recreating it in the right Vector path
-        for (var i in self.state.externalContentRules) {
-            var rule = self.state.externalContentRules[i];
+        for (let i in self.state.externalContentRules) {
+            const rule = self.state.externalContentRules[i];
 
             if (newKeywords.indexOf(rule.pattern) >= 0) {
                 removeDeferreds.push(cli.deletePushRule('global', rule.kind, rule.rule_id));
             }
         }
 
-        var onError = function(error) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        const onError = function(error) {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             console.error("Failed to update keywords: " + error);
             Modal.createTrackedDialog('Failed to update keywords', '', ErrorDialog, {
                 title: _t('Failed to update keywords'),
@@ -362,9 +362,9 @@ module.exports = React.createClass({
 
         // Then, add the new ones
         Promise.all(removeDeferreds).done(function(resps) {
-            var deferreds = [];
+            const deferreds = [];
 
-            var pushRuleVectorStateKind = self.state.vectorContentRules.vectorState;
+            let pushRuleVectorStateKind = self.state.vectorContentRules.vectorState;
             if (pushRuleVectorStateKind === PushRuleVectorState.OFF) {
                 // When the current global keywords rule is OFF, we need to look at
                 // the flavor of rules in 'vectorContentRules' to apply the same actions
@@ -379,8 +379,8 @@ module.exports = React.createClass({
                 }
             }
 
-            for (var i in newKeywords) {
-                var keyword = newKeywords[i];
+            for (let i in newKeywords) {
+                const keyword = newKeywords[i];
 
                 if (vectorContentRulesPatterns.indexOf(keyword) < 0) {
                     if (self.state.vectorContentRules.vectorState !== PushRuleVectorState.OFF) {
@@ -407,31 +407,31 @@ module.exports = React.createClass({
 
     // Create a push rule but disabled
     _addDisabledPushRule: function(scope, kind, ruleId, body) {
-        var cli = MatrixClientPeg.get();
-        return cli.addPushRule(scope, kind, ruleId, body).then(function() {
-            return cli.setPushRuleEnabled(scope, kind, ruleId, false);
-        });
+        const cli = MatrixClientPeg.get();
+        return cli.addPushRule(scope, kind, ruleId, body).then(() =>
+            cli.setPushRuleEnabled(scope, kind, ruleId, false)
+        );
     },
 
     // Check if any legacy im.vector rules need to be ported to the new API
     // for overriding the actions of default rules.
     _portRulesToNewAPI: function(rulesets) {
-        var self = this;
-        var needsUpdate = [];
-        var cli = MatrixClientPeg.get();
+        const self = this;
+        const needsUpdate = [];
+        const cli = MatrixClientPeg.get();
 
-        for (var kind in rulesets.global) {
-            var ruleset = rulesets.global[kind];
-            for (var i = 0; i < ruleset.length; ++i) {
-                var rule = ruleset[i];
+        for (let kind in rulesets.global) {
+            const ruleset = rulesets.global[kind];
+            for (let i = 0; i < ruleset.length; ++i) {
+                const rule = ruleset[i];
                 if (rule.rule_id in LEGACY_RULES) {
                     console.log("Porting legacy rule", rule);
                     needsUpdate.push( function(kind, rule) {
                         return cli.setPushRuleActions(
                             'global', kind, LEGACY_RULES[rule.rule_id], portLegacyActions(rule.actions)
-                        ).then( function() {
-                            return cli.deletePushRule('global', kind, rule.rule_id);
-                        }).catch( (e) => {
+                        ).then(() => 
+                            cli.deletePushRule('global', kind, rule.rule_id)
+                        ).catch( (e) => {
                             console.warn(`Error when porting legacy rule: ${e}`);
                         });
                     }(kind, rule));
@@ -442,9 +442,9 @@ module.exports = React.createClass({
         if (needsUpdate.length > 0) {
             // If some of the rules need to be ported then wait for the porting
             // to happen and then fetch the rules again.
-            return Promise.all(needsUpdate).then( function() {
-                return cli.getPushRules();
-            });
+            return Promise.all(needsUpdate).then(() => 
+                cli.getPushRules()
+            );
         } else {
             // Otherwise return the rules that we already have.
             return rulesets;
@@ -452,15 +452,14 @@ module.exports = React.createClass({
     },
 
     _refreshFromServer: function() {
-        var self = this;
-        var pushRulesPromise = MatrixClientPeg.get().getPushRules().then(self._portRulesToNewAPI).then(function(rulesets) {
-            //console.log("resolving pushRulesPromise");
+        const self = this;
+        const pushRulesPromise = MatrixClientPeg.get().getPushRules().then(self._portRulesToNewAPI).then(function(rulesets) {
 
             /// XXX seriously? wtf is this?
             MatrixClientPeg.get().pushRules = rulesets;
 
             // Get homeserver default rules and triage them by categories
-            var rule_categories = {
+            const rule_categories = {
                 // The master rule (all notifications disabling)
                 '.m.rule.master': 'master',
 
@@ -478,12 +477,12 @@ module.exports = React.createClass({
             };
 
             // HS default rules
-            var defaultRules = {master: [], vector: {}, others: []};
+            const defaultRules = {master: [], vector: {}, others: []};
 
-            for (var kind in rulesets.global) {
-                for (var i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
-                    var r = rulesets.global[kind][i];
-                    var cat = rule_categories[r.rule_id];
+            for (let kind in rulesets.global) {
+                for (let i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
+                    const r = rulesets.global[kind][i];
+                    const cat = rule_categories[r.rule_id];
                     r.kind = kind;
 
                     if (r.rule_id[0] === '.') {
@@ -506,7 +505,7 @@ module.exports = React.createClass({
             }
 
             // parse the keyword rules into our state
-            var contentRules = ContentRules.parseContentRules(rulesets);
+            const contentRules = ContentRules.parseContentRules(rulesets);
             self.state.vectorContentRules = {
                 vectorState: contentRules.vectorState,
                 rules: contentRules.rules,
@@ -517,7 +516,7 @@ module.exports = React.createClass({
             self.state.vectorPushRules = [];
             self.state.externalPushRules = [];
 
-            var vectorRuleIds = [
+            const vectorRuleIds = [
                 '.m.rule.contains_display_name',
                 '.m.rule.contains_user_name',
                 '_keywords',
@@ -528,8 +527,8 @@ module.exports = React.createClass({
                 '.m.rule.call',
                 '.m.rule.suppress_notices'
             ];
-            for (var i in vectorRuleIds) {
-                var vectorRuleId = vectorRuleIds[i];
+            for (let i in vectorRuleIds) {
+                const vectorRuleId = vectorRuleIds[i];
 
                 if (vectorRuleId === '_keywords') {
                     // keywords needs a special handling
@@ -541,9 +540,8 @@ module.exports = React.createClass({
                             <span>
                             { _tJsx('Messages containing <span>keywords</span>',
                                 /<span>(.*?)<\/span>/,
-                                (sub) => {
-                                    return <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>{sub}</span>;
-                                }
+                                (sub) =>
+                                    <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>{sub}</span>
                             )}
                             </span>
                         ),
@@ -551,10 +549,10 @@ module.exports = React.createClass({
                     });
                 }
                 else {
-                    var ruleDefinition = VectorPushRulesDefinitions[vectorRuleId];
-                    var rule = defaultRules.vector[vectorRuleId];
+                    const ruleDefinition = VectorPushRulesDefinitions[vectorRuleId];
+                    const rule = defaultRules.vector[vectorRuleId];
 
-                    var vectorState = ruleDefinition.ruleToVectorState(rule);
+                    const vectorState = ruleDefinition.ruleToVectorState(rule);
 
                     //console.log("Refreshing vectorPushRules for " + vectorRuleId +", "+ ruleDefinition.description +", " + rule +", " + vectorState);
 
@@ -574,14 +572,14 @@ module.exports = React.createClass({
             }
 
             // Build the rules not managed by Vector UI
-            var otherRulesDescriptions = {
+            const otherRulesDescriptions = {
                 '.m.rule.message': _t('Notify for all other messages/rooms'),
                 '.m.rule.fallback': _t('Notify me for anything else'),
             };
 
-            for (var i in defaultRules.others) {
-                var rule = defaultRules.others[i];
-                var ruleDescription = otherRulesDescriptions[rule.rule_id];
+            for (let i in defaultRules.others) {
+                const rule = defaultRules.others[i];
+                const ruleDescription = otherRulesDescriptions[rule.rule_id];
 
                 // Show enabled default rules that was modified by the user
                 if (ruleDescription && rule.enabled && !rule.default) {
@@ -591,8 +589,7 @@ module.exports = React.createClass({
             }
         });
 
-        var pushersPromise = MatrixClientPeg.get().getPushers().then(function(resp) {
-            //console.log("resolving pushersPromise");
+        const pushersPromise = MatrixClientPeg.get().getPushers().then(function(resp) {
             self.setState({pushers: resp.pushers});
         });
 
@@ -618,7 +615,7 @@ module.exports = React.createClass({
     },
 
     _updatePushRuleActions: function(rule, actions, enabled) {
-        var cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.get();
 
         return cli.setPushRuleActions(
             'global', rule.kind, rule.rule_id, actions
@@ -664,9 +661,9 @@ module.exports = React.createClass({
     },
 
     renderNotifRulesTableRows: function() {
-        var rows = [];
-        for (var i in this.state.vectorPushRules) {
-            var rule = this.state.vectorPushRules[i];
+        const rows = [];
+        for (let i in this.state.vectorPushRules) {
+            const rule = this.state.vectorPushRules[i];
             //console.log("rendering: " + rule.description + ", " + rule.vectorRuleId + ", " + rule.vectorState);
             rows.push(this.renderNotifRulesTableRow(rule.description, rule.vectorRuleId, rule.vectorState));
         }
@@ -692,30 +689,32 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var self = this;
-
-        var spinner;
+        const self = this;
+        
+        let spinner;
         if (this.state.phase === this.phases.LOADING) {
-            var Loader = sdk.getComponent("elements.Spinner");
+            const Loader = sdk.getComponent("elements.Spinner");
             spinner = <Loader />;
         }
-
+        
+        let masterPushRuleDiv;
         if (this.state.masterPushRule) {
-            var masterPushRuleDiv = (
+            masterPushRuleDiv = (
                 <div className="mx_UserNotifSettings_tableRow">
-                        <div className="mx_UserNotifSettings_inputCell">
-                            <input id="enableNotifications"
-                                ref="enableNotifications"
-                                type="checkbox"
-                                checked={ !this.state.masterPushRule.enabled }
-                                onChange={ this.onEnableNotificationsChange } />
-                        </div>
-                        <div className="mx_UserNotifSettings_labelCell">
-                            <label htmlFor="enableNotifications">
-                                { _t('Enable notifications for this account') }
-                            </label>
-                        </div>
+                    <div className="mx_UserNotifSettings_inputCell">
+                        <input id="enableNotifications"
+                            ref="enableNotifications"
+                            type="checkbox"
+                            checked={ !this.state.masterPushRule.enabled }
+                            onChange={ this.onEnableNotificationsChange } 
+                        />
                     </div>
+                    <div className="mx_UserNotifSettings_labelCell">
+                        <label htmlFor="enableNotifications">
+                            { _t('Enable notifications for this account') }
+                        </label>
+                    </div>
+                </div>
             );
         }
 
@@ -743,29 +742,29 @@ module.exports = React.createClass({
             // This only supports the first email address in your profile for now
             emailNotificationsRow = this.emailNotificationsRow(
                 emailThreepids[0].address,
-                _t('Enable email notifications') + ' (' + emailThreepids[0].address + ')'
+                `${_t('Enable email notifications')} (${emailThreepids[0].address})`
             );
         }
 
         // Build external push rules
-        var externalRules = [];
-        for (var i in this.state.externalPushRules) {
-            var rule = this.state.externalPushRules[i];
+        const externalRules = [];
+        for (let i in this.state.externalPushRules) {
+            const rule = this.state.externalPushRules[i];
             externalRules.push(<li>{ _t(rule.description) }</li>);
         }
 
         // Show keywords not displayed by the vector UI as a single external push rule
-        var externalKeyWords = [];
-        for (var i in this.state.externalContentRules) {
-            var rule = this.state.externalContentRules[i];
-            externalKeyWords.push(rule.pattern);
+        let externalKeywords = [];
+        for (let i in this.state.externalContentRules) {
+            const rule = this.state.externalContentRules[i];
+            externalKeywords.push(rule.pattern);
         }
-        if (externalKeyWords.length) {
-            externalKeyWords = externalKeyWords.join(", ");
-            externalRules.push(<li>{ _t('Notifications on the following keywords follow rules which can’t be displayed here:') } { externalKeyWords }</li>);
+        if (externalKeywords.length) {
+            externalKeywords = externalKeywords.join(", ");
+            externalRules.push(<li>{ _t('Notifications on the following keywords follow rules which can’t be displayed here:') } { externalKeywords }</li>);
         }
 
-        var devicesSection;
+        let devicesSection;
         if (this.state.pushers === undefined) {
             devicesSection = <div className="error">{ _t('Unable to fetch notification target list') }</div>
         } else if (this.state.pushers.length == 0) {
@@ -773,8 +772,8 @@ module.exports = React.createClass({
         } else {
             // TODO: It would be great to be able to delete pushers from here too,
             // and this wouldn't be hard to add.
-            var rows = [];
-            for (var i = 0; i < this.state.pushers.length; ++i) {
+            const rows = [];
+            for (let i = 0; i < this.state.pushers.length; ++i) {
                 rows.push(<tr key={ i }>
                     <td>{this.state.pushers[i].app_display_name}</td>
                     <td>{this.state.pushers[i].device_display_name}</td>
@@ -793,7 +792,7 @@ module.exports = React.createClass({
             </div>);
         }
 
-        var advancedSettings;
+        let advancedSettings;
         if (externalRules.length) {
             advancedSettings = (
                 <div>
