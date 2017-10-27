@@ -99,14 +99,27 @@ export default React.createClass({
     },
 
     componentWillMount: function() {
+        window.addEventListener('message', this._onMessage, false);
+        this.updateWidgetContent();
+    },
+
+    // Update widget content
+    updateWidgetContent() {
+        this.setScalarToken();
+        this.setState({
+            loading: true,
+        });
+    },
+
+    // Adds a scalar token to the widget URL, if required
+    setScalarToken() {
         if (!this.isScalarUrl()) {
             return;
         }
         // Fetch the token before loading the iframe as we need to mangle the URL
-        this.setState({
-            loading: true,
-        });
-        this._scalarClient = new ScalarAuthClient();
+        if(! this._scalarClient) {
+            this._scalarClient = new ScalarAuthClient();
+        }
         this._scalarClient.getScalarToken().done((token) => {
             // Append scalar_token as a query param
             this._scalarClient.scalarToken = token;
@@ -128,11 +141,14 @@ export default React.createClass({
                 loading: false,
             });
         });
-        window.addEventListener('message', this._onMessage, false);
     },
 
     componentWillUnmount() {
         window.removeEventListener('message', this._onMessage);
+    },
+
+    componentWillReceiveProps(nextProps) {
+        console.warn("Apptile", this.id, "got new props", this.url, nextProps.url);
     },
 
     _onMessage(event) {
