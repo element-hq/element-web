@@ -910,8 +910,8 @@
     "And %(count)s more...|other": "Und %(count)s weitere...",
     "Delete Widget": "Widget löschen",
     "Message removed": "Nachricht entfernt",
-    "Mention": "Erwähnung",
-    "Invite": "Einladung",
+    "Mention": "Erwähnen",
+    "Invite": "Einladen",
     "Remove this room from the community": "Entferne diesen Raum von der Community",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Das Löschen eines Widgets entfernt es für alle Nutzer in diesem Raum. Bist du sicher, dass du dieses Widget löschen willst?",
     "Mirror local video feed": "Spiegele lokalen Video-Feed"
