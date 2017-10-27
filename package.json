@@ -81,6 +81,7 @@
     "sanitize-html": "^1.14.1",
     "text-encoding-utf-8": "^1.0.1",
     "url": "^0.11.0",
+    "url-search-params": "^0.10.0",
     "velocity-vector": "vector-im/velocity#059e3b2",
     "whatwg-fetch": "^1.0.0"
   },
