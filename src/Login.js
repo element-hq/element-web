@@ -143,6 +143,48 @@ export default class Login {
         Object.assign(loginParams, legacyParams);
 
         const client = this._createTemporaryClient();
+
+        const tryFallbackHs = (originalError) => {
+            const fbClient = Matrix.createClient({
+                baseUrl: self._fallbackHsUrl,
+                idBaseUrl: this._isUrl,
+            });
+
+            return fbClient.login('m.login.password', loginParams).then(function(data) {
+                return Promise.resolve({
+                    homeserverUrl: self._fallbackHsUrl,
+                    identityServerUrl: self._isUrl,
+                    userId: data.user_id,
+                    deviceId: data.device_id,
+                    accessToken: data.access_token,
+                });
+            }).catch((fallback_error) => {
+                // throw the original error
+                throw originalError;
+            });
+        };
+        const tryLowercaseUsername = (originalError) => {
+            const loginParamsLowercase = Object.assign({}, loginParams, {
+                user: username.toLowerCase(),
+                identifier: {
+                    user: username.toLowerCase(),
+                },
+            });
+            return client.login('m.login.password', loginParamsLowercase).then(function(data) {
+                return Promise.resolve({
+                    homeserverUrl: self._hsUrl,
+                    identityServerUrl: self._isUrl,
+                    userId: data.user_id,
+                    deviceId: data.device_id,
+                    accessToken: data.access_token,
+                });
+            }).catch((fallback_error) => {
+                // throw the original error
+                throw originalError;
+            });
+        };
+
+        let originalLoginError = null;
         return client.login('m.login.password', loginParams).then(function(data) {
             return Promise.resolve({
                 homeserverUrl: self._hsUrl,
@@ -151,29 +193,23 @@ export default class Login {
                 deviceId: data.device_id,
                 accessToken: data.access_token,
             });
-        }, function(error) {
+        }).catch((error) => {
+            originalLoginError = error;
             if (error.httpStatus === 403) {
                 if (self._fallbackHsUrl) {
-                    const fbClient = Matrix.createClient({
-                        baseUrl: self._fallbackHsUrl,
-                        idBaseUrl: this._isUrl,
-                    });
-
-                    return fbClient.login('m.login.password', loginParams).then(function(data) {
-                        return Promise.resolve({
-                            homeserverUrl: self._fallbackHsUrl,
-                            identityServerUrl: self._isUrl,
-                            userId: data.user_id,
-                            deviceId: data.device_id,
-                            accessToken: data.access_token,
-                        });
-                    }, function(fallback_error) {
-                        // throw the original error
-                        throw error;
-                    });
+                    return tryFallbackHs(originalLoginError);
                 }
             }
-            throw error;
+            throw originalLoginError;
+        }).catch((error) => {
+            if (
+                error.httpStatus === 403 &&
+                loginParams.identifier.type === 'm.id.user' &&
+                username.search(/[A-Z]/) > -1
+            ) {
+                return tryLowercaseUsername(originalLoginError);
+            }
+            throw originalLoginError;
         });
     }
 
