@@ -256,3 +256,10 @@ $progressbar-color: #000;
     font-family: $header-font-family ! important;
     background-color: #fff ! important;
 }
+
+.mx_RoomTile_badge,
+.mx_RoomSubList_badge {
+    height: 12px ! important;
+    padding-top: 1px ! important;
+    padding-bottom: 1px ! important;
+}
