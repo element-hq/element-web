@@ -77,6 +77,13 @@ limitations under the License.
         letter-spacing: 1px;
         font-size: 13px;
         text-transform: uppercase;
+        opacity: 1.0;
+        transition: opacity .2s ease;        
+    }
+
+    .mx_StatusLogin_footer_cta:hover {
+        opacity: 0.5;
+        text-decoration: none;
     }
 
     // overrides of .mx_Login
