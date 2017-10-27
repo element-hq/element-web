@@ -120,8 +120,11 @@ const GroupRoomTile = React.createClass({
                 <div className="mx_GroupRoomTile_name">
                     { this.state.name }
                 </div>
-                <AccessibleButton className="mx_GroupRoomTile_delete" onClick={this.onDeleteClick}>
-                    <img src="img/cancel-small.svg" />
+                <AccessibleButton className="mx_GroupRoomTile_delete"
+                    onClick={this.onDeleteClick}
+                    tooltip={_t("Remove this room from the community")}
+                >
+                    <img src="img/cancel.svg" width="15" height="15" className="mx_filterFlipColor" />
                 </AccessibleButton>
             </AccessibleButton>
         );

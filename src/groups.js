@@ -43,5 +43,9 @@ export function groupRoomFromApiObject(apiObject) {
         roomId: apiObject.room_id,
         canonicalAlias: apiObject.canonical_alias,
         avatarUrl: apiObject.avatar_url,
+        topic: apiObject.topic,
+        numJoinedMembers: apiObject.num_joined_members,
+        worldReadable: apiObject.world_readable,
+        guestCanJoin: apiObject.guest_can_join,
     };
 }

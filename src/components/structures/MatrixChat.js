@@ -145,9 +145,9 @@ module.exports = React.createClass({
 
             collapseLhs: false,
             collapseRhs: false,
-            leftOpacity: 1.0,
-            middleOpacity: 1.0,
-            rightOpacity: 1.0,
+            leftDisabled: false,
+            middleDisabled: false,
+            rightDisabled: false,
 
             version: null,
             newVersion: null,
@@ -537,12 +537,11 @@ module.exports = React.createClass({
                     collapseRhs: false,
                 });
                 break;
-            case 'ui_opacity': {
-                const sideDefault = payload.sideOpacity >= 0.0 ? payload.sideOpacity : 1.0;
+            case 'panel_disable': {
                 this.setState({
-                    leftOpacity: payload.leftOpacity >= 0.0 ? payload.leftOpacity : sideDefault,
-                    middleOpacity: payload.middleOpacity || 1.0,
-                    rightOpacity: payload.rightOpacity >= 0.0 ? payload.rightOpacity : sideDefault,
+                    leftDisabled: payload.leftDisabled || payload.sideDisabled || false,
+                    middleDisabled: payload.middleDisabled || false,
+                    rightDisabled: payload.rightDisabled || payload.sideDisabled || false,
                 });
                 break; }
             case 'set_theme':

@@ -84,7 +84,9 @@ module.exports = React.createClass({
         onNewItemChanged: PropTypes.func,
         onItemAdded: PropTypes.func,
         onItemEdited: PropTypes.func,
-        onItemRemoved: PropTypes. func,
+        onItemRemoved: PropTypes.func,
+
+        canEdit: PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -136,14 +138,16 @@ module.exports = React.createClass({
                 { label }
             </div>
             { editableItems }
-            <EditableItem
-                key={-1}
-                initialValue={this.props.newItem}
-                onAdd={this.onItemAdded}
-                onChange={this.onNewItemChanged}
-                addOnChange={true}
-                placeholder={this.props.placeholder}
-            />
+            { this.props.canEdit ?
+                <EditableItem
+                    key={-1}
+                    initialValue={this.props.newItem}
+                    onAdd={this.onItemAdded}
+                    onChange={this.onNewItemChanged}
+                    addOnChange={true}
+                    placeholder={this.props.placeholder}
+                /> : <div />
+            }
         </div>);
     },
 });

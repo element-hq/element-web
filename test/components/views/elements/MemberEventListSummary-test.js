@@ -88,6 +88,9 @@ describe('MemberEventListSummary', function() {
         sandbox = testUtils.stubClient();
 
         languageHandler.setLanguage('en').done(done);
+        languageHandler.setMissingEntryGenerator(function(key) {
+            return key.split('|', 2)[1];
+        });
     });
 
     afterEach(function() {

@@ -108,7 +108,7 @@ export default React.createClass({
             // rather than displaying what the server gives us, but synapse doesn't give
             // any yet.
             createErrorNode = <div className="error">
-                <div>{ _t('Room creation failed') }</div>
+                <div>{ _t('Something went wrong whilst creating your community') }</div>
                 <div>{ this.state.createError.message }</div>
             </div>;
         }

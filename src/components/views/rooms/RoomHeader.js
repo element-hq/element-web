@@ -281,8 +281,11 @@ module.exports = React.createClass({
                         <input id="avatarInput" type="file" onChange={this.onAvatarSelected} />
                     </div>
                     <div className="mx_RoomHeader_avatarPicker_remove" onClick={this.onAvatarRemoveClick}>
-                        <img src="img/cancel.svg" width="10"
-                             alt={_t("Remove avatar")} title={_t("Remove avatar")} />
+                        <img src="img/cancel.svg"
+                            className="mx_filterFlipColor"
+                            width="10"
+                            alt={_t("Remove avatar")}
+                            title={_t("Remove avatar")} />
                     </div>
                 </div>
             );
