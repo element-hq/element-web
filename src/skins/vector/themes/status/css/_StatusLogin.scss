@@ -213,7 +213,7 @@ limitations under the License.
     .mx_Login_error {
         color: $warning-color;
         font-size: 18px;
-        width: 250px;
+        width: 300px;
         height: 44px;
         display: flex;
         justify-content: center;
@@ -222,6 +222,11 @@ limitations under the License.
         text-align: center;
         margin-top: 12px;
         margin-bottom: 16px;
+    }
+
+    .mx_Login_smallError {
+        font-size: 13px;
+        line-height: initial;
     }
 
 }
