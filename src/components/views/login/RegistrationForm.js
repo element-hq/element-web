@@ -274,10 +274,13 @@ module.exports = React.createClass({
     render: function() {
         const self = this;
 
+        const theme = UserSettingsStore.getTheme();
+        const emailPlaceholder = theme === 'status' ? _t("Email address") : _t("Email address (optional)");
+
         const emailSection = (
             <div>
                 <input type="text" ref="email"
-                    autoFocus={true} placeholder={_t("Email address (optional)")}
+                    autoFocus={true} placeholder={ emailPlaceholder }
                     defaultValue={this.props.defaultEmail}
                     className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
                     onBlur={function() {self.validateField(FIELD_EMAIL);}}
@@ -305,8 +308,6 @@ module.exports = React.createClass({
                 );
             }
         }
-
-        const theme = UserSettingsStore.getTheme();
 
         const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
         let phoneSection;
