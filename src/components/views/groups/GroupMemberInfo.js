@@ -174,7 +174,7 @@ module.exports = withMatrixClient(React.createClass({
             <div className="mx_MemberInfo">
                 <GeminiScrollbar autoshow={true}>
                     <AccessibleButton className="mx_MemberInfo_cancel"onClick={this._onCancel}>
-                        <img src="img/cancel.svg" width="18" height="18" />
+                        <img src="img/cancel.svg" width="18" height="18" className="mx_filterFlipColor" />
                     </AccessibleButton>
                     <div className="mx_MemberInfo_avatar">
                         { avatar }

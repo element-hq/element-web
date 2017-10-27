@@ -50,11 +50,8 @@ export default withMatrixClient(React.createClass({
 
     _initGroupStore: function(groupId) {
         this._groupStore = GroupStoreCache.getGroupStore(this.context.matrixClient, groupId);
-        this._groupStore.on('update', () => {
+        this._groupStore.registerListener(() => {
             this._fetchMembers();
-        });
-        this._groupStore.on('error', (err) => {
-            console.error(err);
         });
     },
 

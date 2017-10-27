@@ -447,7 +447,7 @@ export default React.createClass({
 
     _initGroupStore: function(groupId) {
         this._groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), groupId);
-        this._groupStore.on('update', () => {
+        this._groupStore.registerListener(() => {
             const summary = this._groupStore.getSummary();
             if (summary.profile) {
                 // Default profile fields should be "" for later sending to the server (which
@@ -464,7 +464,6 @@ export default React.createClass({
             });
         });
         this._groupStore.on('error', (err) => {
-            console.error(err);
             this.setState({
                 summary: null,
                 error: err,
@@ -964,13 +963,15 @@ export default React.createClass({
                     </AccessibleButton>,
                 );
             } else {
-                rightButtons.push(
-                    <AccessibleButton className="mx_GroupHeader_button"
-                        onClick={this._onEditClick} title={_t("Community Settings")} key="_editButton"
-                    >
-                        <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
-                    </AccessibleButton>,
-                );
+                if (summary.user && summary.user.membership === 'join') {
+                    rightButtons.push(
+                        <AccessibleButton className="mx_GroupHeader_button"
+                            onClick={this._onEditClick} title={_t("Community Settings")} key="_editButton"
+                        >
+                            <TintableSvg src="img/icons-settings-room.svg" width="16" height="16" />
+                        </AccessibleButton>,
+                    );
+                }
                 if (this.props.collapsedRhs) {
                     rightButtons.push(
                         <AccessibleButton className="mx_GroupHeader_button"

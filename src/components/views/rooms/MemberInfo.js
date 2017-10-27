@@ -39,6 +39,7 @@ import { findReadReceiptFromUserId } from '../../../utils/Receipt';
 import withMatrixClient from '../../../wrappers/withMatrixClient';
 import AccessibleButton from '../elements/AccessibleButton';
 import GeminiScrollbar from 'react-gemini-scrollbar';
+import RoomViewStore from '../../../stores/RoomViewStore';
 
 
 module.exports = withMatrixClient(React.createClass({
@@ -81,6 +82,7 @@ module.exports = withMatrixClient(React.createClass({
         cli.on("Room.receipt", this.onRoomReceipt);
         cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
+        cli.on("RoomMember.membership", this.onRoomMemberMembership);
         cli.on("accountData", this.onAccountData);
 
         this._checkIgnoreState();
@@ -107,6 +109,7 @@ module.exports = withMatrixClient(React.createClass({
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("RoomState.events", this.onRoomStateEvents);
             client.removeListener("RoomMember.name", this.onRoomMemberName);
+            client.removeListener("RoomMember.membership", this.onRoomMemberMembership);
             client.removeListener("accountData", this.onAccountData);
         }
         if (this._cancelDeviceList) {
@@ -184,6 +187,10 @@ module.exports = withMatrixClient(React.createClass({
 
     onRoomMemberName: function(ev, member) {
         this.forceUpdate();
+    },
+
+    onRoomMemberMembership: function(ev, member) {
+        if (this.props.member.userId === member.userId) this.forceUpdate();
     },
 
     onAccountData: function(ev) {
@@ -615,6 +622,8 @@ module.exports = withMatrixClient(React.createClass({
         const member = this.props.member;
 
         let ignoreButton = null;
+        let insertPillButton = null;
+        let inviteUserButton = null;
         let readReceiptButton = null;
 
         // Only allow the user to ignore the user if its not ourselves
@@ -639,22 +648,58 @@ module.exports = withMatrixClient(React.createClass({
                     });
                 };
 
+                const onInsertPillButton = function() {
+                    dis.dispatch({
+                        action: 'insert_mention',
+                        user_id: member.userId,
+                    });
+                };
+
                 readReceiptButton = (
                     <AccessibleButton onClick={onReadReceiptButton} className="mx_MemberInfo_field">
                         { _t('Jump to read receipt') }
                     </AccessibleButton>
                 );
+
+                insertPillButton = (
+                    <AccessibleButton onClick={onInsertPillButton} className={"mx_MemberInfo_field"}>
+                        { _t('Mention') }
+                    </AccessibleButton>
+                );
+            }
+
+            if (!member || !member.membership || member.membership === 'leave') {
+                const roomId = member && member.roomId ? member.roomId : RoomViewStore.getRoomId();
+                const onInviteUserButton = async () => {
+                    try {
+                        await cli.invite(roomId, member.userId);
+                    } catch (err) {
+                        const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
+                        Modal.createTrackedDialog('Failed to invite', '', ErrorDialog, {
+                            title: _t('Failed to invite'),
+                            description: ((err && err.message) ? err.message : "Operation failed"),
+                        });
+                    }
+                };
+
+                inviteUserButton = (
+                    <AccessibleButton onClick={onInviteUserButton} className="mx_MemberInfo_field">
+                        { _t('Invite') }
+                    </AccessibleButton>
+                );
             }
         }
 
-        if (!ignoreButton && !readReceiptButton) return null;
+        if (!ignoreButton && !readReceiptButton && !insertPillButton && !inviteUserButton) return null;
 
         return (
             <div>
                 <h3>{ _t("User Options") }</h3>
                 <div className="mx_MemberInfo_buttons">
                     { readReceiptButton }
+                    { insertPillButton }
                     { ignoreButton }
+                    { inviteUserButton }
                 </div>
             </div>
         );
@@ -760,9 +805,6 @@ module.exports = withMatrixClient(React.createClass({
             </AccessibleButton>;
         }
 
-        // TODO: we should have an invite button if this MemberInfo is showing a user who isn't actually in the current room yet
-        // e.g. clicking on a linkified userid in a room
-
         let adminTools;
         if (kickButton || banButton || muteButton || giveModButton) {
             adminTools =
@@ -790,9 +832,29 @@ module.exports = withMatrixClient(React.createClass({
             presenceCurrentlyActive = this.props.member.user.currentlyActive;
         }
 
+        let roomMemberDetails = null;
+
+        if (this.props.member.roomId) { // is in room
+            const PowerSelector = sdk.getComponent('elements.PowerSelector');
+            const PresenceLabel = sdk.getComponent('rooms.PresenceLabel');
+            roomMemberDetails = <div>
+                <div className="mx_MemberInfo_profileField">
+                    { _t("Level:") } <b>
+                        <PowerSelector controlled={true}
+                            value={parseInt(this.props.member.powerLevel)}
+                            disabled={!this.state.can.modifyLevel}
+                            onChange={this.onPowerChange} />
+                    </b>
+                </div>
+                <div className="mx_MemberInfo_profileField">
+                    <PresenceLabel activeAgo={presenceLastActiveAgo}
+                        currentlyActive={presenceCurrentlyActive}
+                        presenceState={presenceState} />
+                </div>
+            </div>;
+        }
+
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-        const PowerSelector = sdk.getComponent('elements.PowerSelector');
-        const PresenceLabel = sdk.getComponent('rooms.PresenceLabel');
         const EmojiText = sdk.getComponent('elements.EmojiText');
         return (
             <div className="mx_MemberInfo">
@@ -808,16 +870,7 @@ module.exports = withMatrixClient(React.createClass({
                         <div className="mx_MemberInfo_profileField">
                             { this.props.member.userId }
                         </div>
-                        <div className="mx_MemberInfo_profileField">
-                            { _t("Level:") } <b>
-                                <PowerSelector controlled={true} value={parseInt(this.props.member.powerLevel)} disabled={!this.state.can.modifyLevel} onChange={this.onPowerChange} />
-                            </b>
-                        </div>
-                        <div className="mx_MemberInfo_profileField">
-                            <PresenceLabel activeAgo={presenceLastActiveAgo}
-                                currentlyActive={presenceCurrentlyActive}
-                                presenceState={presenceState} />
-                        </div>
+                        { roomMemberDetails }
                     </div>
 
                     { this._renderUserOptions() }

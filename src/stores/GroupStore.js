@@ -29,9 +29,10 @@ export default class GroupStore extends EventEmitter {
         this._matrixClient = matrixClient;
         this._summary = {};
         this._rooms = [];
-        this._fetchSummary();
-        this._fetchRooms();
-        this._fetchMembers();
+
+        this.on('error', (err) => {
+            console.error(`GroupStore for ${this.groupId} encountered error`, err);
+        });
     }
 
     _fetchMembers() {
@@ -51,6 +52,10 @@ export default class GroupStore extends EventEmitter {
             });
             this._notifyListeners();
         }).catch((err) => {
+            // Invited users not visible to non-members
+            if (err.httpStatus === 403) {
+                return;
+            }
             console.error("Failed to get group invited member list: " + err);
             this.emit('error', err);
         });
@@ -78,6 +83,17 @@ export default class GroupStore extends EventEmitter {
 
     _notifyListeners() {
         this.emit('update');
+    }
+
+    registerListener(fn) {
+        this.on('update', fn);
+        this._fetchSummary();
+        this._fetchRooms();
+        this._fetchMembers();
+    }
+
+    unregisterListener(fn) {
+        this.removeListener('update', fn);
     }
 
     getSummary() {
