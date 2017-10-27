@@ -907,5 +907,8 @@
     "Create a community to group together users and rooms! Build a custom homepage to mark out your space in the Matrix universe.": "Készíts közösséget hogy egybegyűjtsd a felhasználókat és szobákat! Készíts egy saját kezdőlapot amivel meghatározhatod magad a Matrix univerzumában.",
     "%(names)s and %(count)s others are typing|other": "%(names)s és még %(count)s felhasználó gépel",
     "And %(count)s more...|other": "És még %(count)s...",
-    "Something went wrong whilst creating your community": "Valami nem sikerült a közösség létrehozásánál"
+    "Something went wrong whilst creating your community": "Valami nem sikerült a közösség létrehozásánál",
+    "Mention": "Említ",
+    "Invite": "Meghív",
+    "Message removed": "Üzenet eltávolítva"
 }
