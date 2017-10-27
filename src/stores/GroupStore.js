@@ -29,9 +29,10 @@ export default class GroupStore extends EventEmitter {
         this._matrixClient = matrixClient;
         this._summary = {};
         this._rooms = [];
-        this._fetchSummary();
-        this._fetchRooms();
-        this._fetchMembers();
+
+        this.on('error', (err) => {
+            console.error(`GroupStore for ${this.groupId} encountered error`, err);
+        });
     }
 
     _fetchMembers() {
@@ -78,6 +79,13 @@ export default class GroupStore extends EventEmitter {
 
     _notifyListeners() {
         this.emit('update');
+    }
+
+    registerListener(fn) {
+        this.on('update', fn);
+        this._fetchSummary();
+        this._fetchRooms();
+        this._fetchMembers();
     }
 
     getSummary() {

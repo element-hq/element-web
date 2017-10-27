@@ -447,7 +447,7 @@ export default React.createClass({
 
     _initGroupStore: function(groupId) {
         this._groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), groupId);
-        this._groupStore.on('update', () => {
+        this._groupStore.registerListener(() => {
             const summary = this._groupStore.getSummary();
             if (summary.profile) {
                 // Default profile fields should be "" for later sending to the server (which
@@ -464,7 +464,6 @@ export default React.createClass({
             });
         });
         this._groupStore.on('error', (err) => {
-            console.error(err);
             this.setState({
                 summary: null,
                 error: err,
