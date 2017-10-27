@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 import url from 'url';
+import URLSearchParams from 'url-search-params';
 import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import PlatformPeg from '../../../PlatformPeg';
@@ -51,28 +52,32 @@ export default React.createClass({
         creatorUserId: React.PropTypes.string,
     },
 
-    getDefaultProps: function() {
+    getDefaultProps() {
         return {
             url: "",
         };
     },
 
-    getInitialState: function() {
-        const widgetPermissionId = [this.props.room.roomId, encodeURIComponent(this.props.url)].join('_');
-        const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
-        return {
-            loading: false,
-            widgetUrl: this.props.url,
-            widgetPermissionId: widgetPermissionId,
-            // Assume that widget has permission to load if we are the user who added it to the room, or if explicitly granted by the user
-            hasPermissionToLoad: hasPermissionToLoad === 'true' || this.props.userId === this.props.creatorUserId,
-            error: null,
-            deleting: false,
-        };
+    _getInitialState() {
+      const widgetPermissionId = [this.props.room.roomId, encodeURIComponent(this.props.url)].join('_');
+      const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
+      return {
+          loading: true,
+          widgetUrl: this.props.url,
+          widgetPermissionId: widgetPermissionId,
+          // Assume that widget has permission to load if we are the user who added it to the room, or if explicitly granted by the user
+          hasPermissionToLoad: hasPermissionToLoad === 'true' || this.props.userId === this.props.creatorUserId,
+          error: null,
+          deleting: false,
+      };
+    },
+
+    getInitialState() {
+      return this._getInitialState();
     },
 
     // Returns true if props.url is a scalar URL, typically https://scalar.vector.im/api
-    isScalarUrl: function() {
+    isScalarUrl() {
         let scalarUrls = SdkConfig.get().integrations_widgets_urls;
         if (!scalarUrls || scalarUrls.length == 0) {
             scalarUrls = [SdkConfig.get().integrations_rest_url];
@@ -86,7 +91,7 @@ export default React.createClass({
         return false;
     },
 
-    isMixedContent: function() {
+    isMixedContent() {
         const parentContentProtocol = window.location.protocol;
         const u = url.parse(this.props.url);
         const childContentProtocol = u.protocol;
@@ -98,17 +103,16 @@ export default React.createClass({
         return false;
     },
 
-    componentWillMount: function() {
+    componentWillMount() {
         window.addEventListener('message', this._onMessage, false);
         this.updateWidgetContent();
     },
 
     // Update widget content
     updateWidgetContent() {
+        this.setState(this._getInitialState());
+        // Set scalar token on the wUrl, if needed
         this.setScalarToken();
-        this.setState({
-            loading: true,
-        });
     },
 
     // Adds a scalar token to the widget URL, if required
@@ -121,13 +125,13 @@ export default React.createClass({
             this._scalarClient = new ScalarAuthClient();
         }
         this._scalarClient.getScalarToken().done((token) => {
-            // Append scalar_token as a query param
+            // Append scalar_token as a query param if not already present
             this._scalarClient.scalarToken = token;
             const u = url.parse(this.props.url);
-            if (!u.search) {
-                u.search = "?scalar_token=" + encodeURIComponent(token);
-            } else {
-                u.search += "&scalar_token=" + encodeURIComponent(token);
+            const params = new URLSearchParams(u.search);
+            if (!params.get('scalar_token')) {
+                params.set('scalar_token', encodeURIComponent(token));
+                u.search = params.toString();
             }
 
             this.setState({
@@ -147,8 +151,10 @@ export default React.createClass({
         window.removeEventListener('message', this._onMessage);
     },
 
-    componentWillReceiveProps(nextProps) {
-        console.warn("Apptile", this.id, "got new props", this.url, nextProps.url);
+    componentDidUpdate(prevProps) {
+        if (prevProps.url !== this.props.url) {
+            this.updateWidgetContent();
+        }
     },
 
     _onMessage(event) {
@@ -170,11 +176,11 @@ export default React.createClass({
         }
     },
 
-    _canUserModify: function() {
+    _canUserModify() {
         return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
     },
 
-    _onEditClick: function(e) {
+    _onEditClick(e) {
         console.log("Edit widget ID ", this.props.id);
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         const src = this._scalarClient.getScalarInterfaceUrlForRoom(
@@ -186,7 +192,7 @@ export default React.createClass({
 
     /* If user has permission to modify widgets, delete the widget, otherwise revoke access for the widget to load in the user's browser
     */
-    _onDeleteClick: function() {
+    _onDeleteClick() {
         if (this._canUserModify()) {
             // Show delete confirmation dialog
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
@@ -218,6 +224,10 @@ export default React.createClass({
         }
     },
 
+    _onLoaded() {
+        this.setState({loading: false});
+    },
+
     // Widget labels to render, depending upon user permissions
     // These strings are translated at the point that they are inserted in to the DOM, in the render method
     _deleteWidgetLabel() {
@@ -240,7 +250,7 @@ export default React.createClass({
         this.setState({hasPermissionToLoad: false});
     },
 
-    formatAppTileName: function() {
+    formatAppTileName() {
         let appTileName = "No name";
         if(this.props.name && this.props.name.trim()) {
             appTileName = this.props.name.trim();
@@ -248,7 +258,7 @@ export default React.createClass({
         return appTileName;
     },
 
-    onClickMenuBar: function(ev) {
+    onClickMenuBar(ev) {
         ev.preventDefault();
 
         // Ignore clicks on menu bar children
@@ -263,7 +273,7 @@ export default React.createClass({
         });
     },
 
-    render: function() {
+    render() {
         let appTileBody;
 
         // Don't render widget if it is in the process of being deleted
@@ -349,6 +359,7 @@ export default React.createClass({
                             alt={_t('Edit')}
                             title={_t('Edit')}
                             onClick={this._onEditClick}
+                            onLoad={this._onLoaded}
                         /> }
 
                         { /* Delete widget */ }
