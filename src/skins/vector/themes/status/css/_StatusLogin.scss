@@ -203,7 +203,10 @@ limitations under the License.
         font-size: 15px;
     }
 
-    .mx_Login_forgot:link {
+    .mx_Login_forgot:link,
+    .mx_Login_forgot:hover,
+    .mx_Login_forgot:visited
+    {
         color: $form-fg-color;
     }
 
