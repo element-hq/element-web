@@ -14,16 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-const React = require('react');
-import { _t, _tJsx } from 'matrix-react-sdk/lib/languageHandler';
+import React from 'react';
 import Promise from 'bluebird';
-const sdk = require('matrix-react-sdk');
-const MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-const UserSettingsStore = require('matrix-react-sdk/lib/UserSettingsStore');
-const Modal = require('matrix-react-sdk/lib/Modal');
-
-const notifications = require('../../../notifications');
+import sdk from 'matrix-react-sdk';
+import { _t, _tJsx } from 'matrix-react-sdk/lib/languageHandler';
+import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
+import Modal from 'matrix-react-sdk/lib/Modal';
+import {
+    NotificationUtils, 
+    VectorPushRulesDefinitions, 
+    PushRuleVectorState, 
+    ContentRules
+} from '../../../notifications';
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -31,10 +34,6 @@ const notifications = require('../../../notifications');
 // TODO: this component also does a lot of direct poking into this.state, which
 // is VERY NAUGHTY.
 
-const NotificationUtils = notifications.NotificationUtils;
-const VectorPushRulesDefinitions = notifications.VectorPushRulesDefinitions;
-const PushRuleVectorState = notifications.PushRuleVectorState;
-const ContentRules = notifications.ContentRules;
 
 /**
  * Rules that Vector used to set in order to override the actions of default rules.
