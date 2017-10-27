@@ -52,6 +52,10 @@ export default class GroupStore extends EventEmitter {
             });
             this._notifyListeners();
         }).catch((err) => {
+            // Invited users not visible to non-members
+            if (err.httpStatus === 403) {
+                return;
+            }
             console.error("Failed to get group invited member list: " + err);
             this.emit('error', err);
         });
