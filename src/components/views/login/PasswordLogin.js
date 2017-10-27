@@ -122,6 +122,8 @@ class PasswordLogin extends React.Component {
             mx_Login_field_disabled: disabled,
         };
 
+        const theme = UserSettingsStore.getTheme();
+
         switch(loginType) {
             case PasswordLogin.LOGIN_FIELD_EMAIL:
                 classes.mx_Login_email = true;
@@ -144,7 +146,7 @@ class PasswordLogin extends React.Component {
                     type="text"
                     name="username" // make it a little easier for browser's remember-password
                     onChange={this.onUsernameChanged}
-                    placeholder={_t('User name')}
+                    placeholder={theme === 'status' ? "Username on matrix.status.im" : _t("User name")}
                     value={this.state.username}
                     autoFocus
                     disabled={disabled}

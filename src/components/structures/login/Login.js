@@ -105,7 +105,17 @@ module.exports = React.createClass({
             if (error.httpStatus == 400 && usingEmail) {
                 errorText = _t('This Home Server does not support login using email address.');
             } else if (error.httpStatus === 401 || error.httpStatus === 403) {
-                errorText = _t('Incorrect username and/or password.');
+                const theme = UserSettingsStore.getTheme();
+                if (theme === "status") {
+                    errorText = (
+                        <div>
+                            <div>Incorrect username and/or password.</div>
+                            <div className="mx_Login_smallError">Please note you are logging into the matrix.status.im server, not matrix.org.</div>
+                        </div>
+                    );
+                } else {
+                    errorText = _t('Incorrect username and/or password.');   
+                }
             } else {
                 // other errors, not specific to doing a password login
                 errorText = this._errorTextFromError(error);
