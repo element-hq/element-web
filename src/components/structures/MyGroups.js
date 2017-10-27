@@ -62,7 +62,9 @@ const GroupTile = React.createClass({
         const profile = this.state.profile || {};
         const name = profile.name || this.props.groupId;
         const desc = profile.shortDescription;
-        const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(profile.avatarUrl, 50, 50) : null;
+        const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(
+            profile.avatarUrl, 50, 50, "crop",
+        ) : null;
         return <AccessibleButton className="mx_GroupTile" onClick={this.onClick}>
             <div className="mx_GroupTile_avatar">
                 <BaseAvatar name={name} url={httpUrl} width={50} height={50} />
