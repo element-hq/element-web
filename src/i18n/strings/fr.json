@@ -95,7 +95,7 @@
     "Unable to join network": "Impossible de rejoindre le réseau",
     "Unable to look up room ID from server": "Impossible de récupérer l'ID du salon sur le serveur",
     "Unhide Preview": "Dévoiler l'aperçu",
-    "Unnamed room": "Salon anonyme",
+    "Unnamed room": "Salon sans nom",
     "Uploaded on %(date)s by %(user)s": "Téléchargé le %(date)s par %(user)s",
     "View Decrypted Source": "Voir la source déchiffrée",
     "When I'm invited to a room": "Quand je suis invité dans un salon",
@@ -205,5 +205,6 @@
     "Send Custom Event": "Envoyer l'événement personnalisé",
     "Send Custom State Event": "Envoyer l'événement d'état personnalisé",
     "Explore Room State": "Parcourir l'état du salon",
-    "State Key": "Clé d'état"
+    "State Key": "Clé d'état",
+    "Unpin Message": "Dépingler le message"
 }
