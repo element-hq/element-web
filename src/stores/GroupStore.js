@@ -92,6 +92,10 @@ export default class GroupStore extends EventEmitter {
         this._fetchMembers();
     }
 
+    unregisterListener(fn) {
+        this.removeListener('update', fn);
+    }
+
     getSummary() {
         return this._summary;
     }
