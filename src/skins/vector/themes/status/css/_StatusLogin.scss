@@ -191,22 +191,11 @@ limitations under the License.
         opacity: 1.0;
     }
 
-    .mx_Login_create:link {
+    .mx_Login_create:link,
+    .mx_Login_create:hover,
+    .mx_Login_create:visited
+    {
         color: $form-fg-color;
-    }
-
-    .mx_Login_links {
-        display: block;
-        text-align: center;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        width: 100%;
-        font-size: 13px;
-        opacity: 0.8;
-    }
-
-    .mx_Login_links a:link {
-       color: $primary-fg-color;
     }
 
     .mx_Login_forgot {
