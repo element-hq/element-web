@@ -158,7 +158,7 @@ export default class Login {
                     deviceId: data.device_id,
                     accessToken: data.access_token,
                 });
-            }, function(fallback_error) {
+            }).catch((fallback_error) => {
                 // throw the original error
                 throw originalError;
             });
@@ -172,13 +172,13 @@ export default class Login {
             });
             return client.login('m.login.password', loginParamsLowercase).then(function(data) {
                 return Promise.resolve({
-                    homeserverUrl: self._fallbackHsUrl,
+                    homeserverUrl: self._hsUrl,
                     identityServerUrl: self._isUrl,
                     userId: data.user_id,
                     deviceId: data.device_id,
                     accessToken: data.access_token,
                 });
-            }, function(fallback_error) {
+            }).catch((fallback_error) => {
                 // throw the original error
                 throw originalError;
             });
