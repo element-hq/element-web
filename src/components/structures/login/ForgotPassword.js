@@ -17,13 +17,14 @@ limitations under the License.
 
 'use strict';
 
-const React = require('react');
+import React from 'react';
 import { _t } from '../../../languageHandler';
-const sdk = require('../../../index');
-const Modal = require("../../../Modal");
-const MatrixClientPeg = require('../../../MatrixClientPeg');
+import sdk from '../../../index';
+import Modal from "../../../Modal";
+import MatrixClientPeg from "../../../MatrixClientPeg";
 
-const PasswordReset = require("../../../PasswordReset");
+import PasswordReset from "../../../PasswordReset";
+import UserSettingsStore from "../../../UserSettingsStore";
 
 module.exports = React.createClass({
     displayName: 'ForgotPassword',
@@ -183,6 +184,22 @@ module.exports = React.createClass({
                 </div>
             );
         } else {
+            let theme = UserSettingsStore.getTheme();
+
+            let serverConfigSection;
+            if (theme !== 'status') {
+                serverConfigSection = (
+                    <ServerConfig ref="serverConfig"
+                        withToggleButton={true}
+                        defaultHsUrl={this.props.defaultHsUrl}
+                        defaultIsUrl={this.props.defaultIsUrl}
+                        customHsUrl={this.props.customHsUrl}
+                        customIsUrl={this.props.customIsUrl}
+                        onServerConfigChange={this.onServerConfigChange}
+                        delayTimeMs={0} />
+                );
+            }
+
             resetPasswordJsx = (
             <div>
                 <div className="mx_Login_prompt">
@@ -210,16 +227,7 @@ module.exports = React.createClass({
                         <br />
                         <input className="mx_Login_submit" type="submit" value={_t('Send Reset Email')} />
                     </form>
-                    <ServerConfig ref="serverConfig"
-                        withToggleButton={true}
-                        defaultHsUrl={this.props.defaultHsUrl}
-                        defaultIsUrl={this.props.defaultIsUrl}
-                        customHsUrl={this.props.customHsUrl}
-                        customIsUrl={this.props.customIsUrl}
-                        onServerConfigChange={this.onServerConfigChange}
-                        delayTimeMs={0} />
-                    <div className="mx_Login_error">
-                    </div>
+                    { serverConfigSection }
                     <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
                         { _t('Return to login screen') }
                     </a>
