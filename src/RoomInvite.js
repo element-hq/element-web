@@ -184,8 +184,8 @@ function _getDirectMessageRooms(addr) {
     const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
     const dmRooms = dmRoomMap.getDMRoomsForUserId(addr);
     const rooms = [];
-    dmRooms.forEach(dmRoom => {
-        let room = MatrixClientPeg.get().getRoom(dmRoom);
+    dmRooms.forEach((dmRoom) => {
+        const room = MatrixClientPeg.get().getRoom(dmRoom);
         if (room) {
             const me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (me.membership == 'join') {
