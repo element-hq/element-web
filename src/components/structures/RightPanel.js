@@ -100,6 +100,7 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         const cli = this.context.matrixClient;
         cli.on("RoomState.members", this.onRoomStateMember);
+        this._initGroupStore(this.props.groupId);
     },
 
     componentWillUnmount: function() {
@@ -107,18 +108,40 @@ module.exports = React.createClass({
         if (this.context.matrixClient) {
             this.context.matrixClient.removeListener("RoomState.members", this.onRoomStateMember);
         }
+        this._unregisterGroupStore();
     },
 
     getInitialState: function() {
-        if (this.props.groupId) {
-            return {
-                phase: this.Phase.GroupMemberList,
-            };
-        } else {
-            return {
-                phase: this.Phase.RoomMemberList,
-            };
+        return {
+            phase: this.props.groupId ? this.Phase.GroupMemberList : this.Phase.RoomMemberList,
+            isUserPrivilegedInGroup: null,
         }
+    },
+
+    componentWillReceiveProps(newProps) {
+        if (newProps.groupId !== this.props.groupId) {
+            this._unregisterGroupStore();
+            this._initGroupStore(newProps.groupId);
+        }
+    },
+
+    _initGroupStore(groupId) {
+        this._groupStore = GroupStoreCache.getGroupStore(
+            this.context.matrixClient, this.props.groupId,
+        );
+        this._groupStore.registerListener(this.onGroupStoreUpdated);
+    },
+
+    _unregisterGroupStore() {
+        if (this._groupStore) {
+            this._groupStore.unregisterListener(this.onGroupStoreUpdated);
+        }
+    },
+
+    onGroupStoreUpdated: function(){
+        this.setState({
+            isUserPrivilegedInGroup: this._groupStore.isUserPrivileged(),
+        });
     },
 
     onCollapseClick: function() {
@@ -328,9 +351,7 @@ module.exports = React.createClass({
             panel = <div className="mx_RightPanel_blank"></div>;
         }
 
-        if (this.props.groupId &&
-            GroupStoreCache.getGroupStore(this.context.matrixClient, this.props.groupId).isUserPrivileged()
-        ) {
+        if (this.props.groupId && this.state.isUserPrivilegedInGroup) {
             inviteGroup = isPhaseGroup ? (
                 <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
                     <div className="mx_RightPanel_icon" >
