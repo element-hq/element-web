@@ -165,10 +165,14 @@ limitations under the License.
         opacity: 0.3;
     }
 
+    .mx_Login_prompt {
+        font-size: 16px;
+    }
+
     .mx_Login_submit {
         width: 200px;
         margin-top: 13px;
-        margin-bottom: 18px;
+        margin-bottom: 10px;
     }
 
     .mx_Login_submit:disabled {
@@ -176,6 +180,7 @@ limitations under the License.
     }
 
     .mx_Login_create {
+        margin-top: 10px;
         display: block;
         text-align: center;
         width: 100%;
