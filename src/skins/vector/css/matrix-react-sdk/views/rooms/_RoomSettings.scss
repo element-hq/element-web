@@ -26,6 +26,12 @@ limitations under the License.
     position: relative;
     margin-right: 8px;
 }
+
+.mx_RoomSettings_leaveButton:hover,
+.mx_RoomSettings_unbanButton:hover {
+    @mixin mx_DialogButton_hover;
+}
+
 .mx_RoomSettings_integrationsButton_error {
     position: relative;
     cursor: not-allowed;

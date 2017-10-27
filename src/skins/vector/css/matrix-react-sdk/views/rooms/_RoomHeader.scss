@@ -48,6 +48,10 @@ limitations under the License.
     order: 2;
 }
 
+.mx_RoomHeader_textButton:hover {
+    @mixin mx_DialogButton_hover;
+}
+
 .mx_RoomHeader_textButton_danger {
     background-color: $warning-color;
 }

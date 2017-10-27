@@ -154,6 +154,9 @@ $progressbar-color: #000;
     display: inline-block;
 }
 
+@define-mixin mx_DialogButton_hover {
+}
+
 @define-mixin mx_DialogButton_small {
     @mixin mx_DialogButton;
     font-size: 15px;

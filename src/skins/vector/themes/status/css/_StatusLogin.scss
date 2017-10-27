@@ -102,7 +102,7 @@ limitations under the License.
         width: 74px;
         height: 74px;
         border-radius: 37px;
-        box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);
+        box-shadow: 0px 5px 16px 0px rgba(0,0,0,0.2);
         position: absolute;
         top: -36px;
         left: 50%;
@@ -134,6 +134,12 @@ limitations under the License.
         font-weight: 300;
         font-size: 15px;
         margin-bottom: 14px;
+        transition: background-color .2s ease;
+    }
+
+    .mx_Login_field:focus {
+        border: 1px solid transparent;
+        background-color: $form-field-bg-hover-color;
     }
 
     .mx_Login_field::-webkit-input-placeholder {
@@ -190,8 +196,7 @@ limitations under the License.
 
     .mx_Login_forgot {
         display: block;
-        font-size: 13px;
-        opacity: 0.8;
+        font-size: 15px;
     }
 
     .mx_Login_forgot:link {

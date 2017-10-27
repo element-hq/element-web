@@ -37,6 +37,10 @@ a {
     text-decoration: none;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
 h1,h2,h3,h4,h5 {
     color: $header-color;
     font-family: $header-font-family;
@@ -49,6 +53,7 @@ $form-bg-color: $callout-color;
 $form-fg-color: #ffffff;
 
 $form-field-bg-color: rgba(244, 242, 247, 0.12);
+$form-field-bg-hover-color: rgba(255, 255, 255, 0.2);
 $form-field-fg-color: #ffffff;
 
 // ***** End of Status theme specifics ******
@@ -63,6 +68,7 @@ $focus-bg-color: #dddddd;
 // button UI (white-on-green in light skin)
 $accent-fg-color: #ffffff;
 $accent-color: #6CC1F6;
+$accent-hover-color: #84cfff;
 
 $selection-fg-color: $primary-bg-color;
 
@@ -195,6 +201,11 @@ $progressbar-color: #000;
     padding-left: 1.5em;
     padding-right: 1.5em;
     display: inline-block;
+    transition: background-color .2s ease;
+}
+
+@define-mixin mx_DialogButton_hover {
+    background-color: $accent-hover-color;
 }
 
 @define-mixin mx_DialogButton_small {

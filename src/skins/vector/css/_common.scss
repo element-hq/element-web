@@ -211,6 +211,10 @@ textarea {
     background-color: $accent-fg-color;
 }
 
+.mx_Dialog button:hover, .mx_Dialog input[type="submit"]:hover {
+    @mixin mx_DialogButton_hover;
+}
+
 .mx_Dialog button:focus, .mx_Dialog input[type="submit"]:focus {
     filter: brightness($focus-brightness);
 }
@@ -275,6 +279,10 @@ textarea {
 
 .mx_textButton {
     @mixin mx_DialogButton_small;    
+}
+
+.mx_textButton:hover {
+    @mixin mx_DialogButton_hover;
 }
 
 .mx_button_row {

@@ -69,6 +69,10 @@ limitations under the License.
     margin: auto;
 }
 
+.mx_UserSettings_button:hover {
+    @mixin mx_DialogButton_hover;
+}
+
 .mx_UserSettings_button.danger {
     background-color: $warning-color;
 }

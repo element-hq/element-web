@@ -85,6 +85,10 @@ limitations under the License.
     margin-bottom: 24px;
 }
 
+.mx_Login_submit:hover {
+    @mixin mx_DialogButton_hover;
+}
+
 .mx_Login_submit:disabled {
     opacity: 0.3;
 }
@@ -131,8 +135,7 @@ limitations under the License.
 }
 
 .mx_Login_forgot {
-    font-size: 13px;
-    opacity: 0.8;
+    font-size: 15px;
 }
 
 .mx_Login_forgot:link {
