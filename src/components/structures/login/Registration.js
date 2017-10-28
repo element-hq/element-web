@@ -303,7 +303,9 @@ module.exports = React.createClass({
         } : {};
 
         return this._matrixClient.register(
-            this.state.formVals.username.toLowerCase(),
+            (this.state.formVals.username ?
+                this.state.formVals.username.toLowerCase() : 
+                this.state.formVals.username),
             this.state.formVals.password,
             undefined, // session id: included in the auth dict already
             auth,
