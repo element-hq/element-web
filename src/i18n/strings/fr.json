@@ -780,7 +780,7 @@
     "Invite new community members": "Inviter de nouveaux membres dans cette communauté",
     "Name or matrix ID": "Nom ou identifiant matrix",
     "Which rooms would you like to add to this community?": "Quels salons souhaitez-vous ajouter à cette communauté ?",
-    "Warning: any room you add to a community will be publicly visible to anyone who knows the community ID": "Attention : tout salon ajouté à une communauté est visible par quiconque connaissant l'identifiant de communauté",
+    "Warning: any room you add to a community will be publicly visible to anyone who knows the community ID": "Attention : tout salon ajouté à une communauté est visible par quiconque connaissant l'identifiant de la communauté",
     "Add rooms to the community": "Ajouter des salons à la communauté",
     "Room name or alias": "Nom du salon ou alias",
     "Add to community": "Ajouter à la communauté",
@@ -796,7 +796,7 @@
     "Communities": "Communautés",
     "Message Pinning": "Épingler un message",
     "Mention": "Mentionner",
-    "Unignore": "Cessez d'ignorer",
+    "Unignore": "Ne plus ignorer",
     "Ignore": "Ignorer",
     "Invite": "Inviter",
     "User Options": "Options d'utilisateur",
@@ -816,7 +816,7 @@
     "To change the room's history visibility, you must be a": "Pour changer la visibilité de l'historique d'un salon, vous devez être un",
     "To change the permissions in the room, you must be a": "Pour changer les autorisations du salon, vous devez être un",
     "To change the topic, you must be a": "Pour changer le sujet, vous devez être un",
-    "To modify widgets in the room, you must be a": "Pour modifier les widgets vous devez être un",
+    "To modify widgets in the room, you must be a": "Pour modifier les widgets, vous devez être un",
     "Banned by %(displayName)s": "Banni par %(displayName)s",
     "To send messages, you must be a": "Pour envoyer des messages, vous devez être un"
 }
