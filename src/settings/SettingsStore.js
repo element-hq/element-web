@@ -59,9 +59,9 @@ const SETTINGS = {
 };
 
 // Convert the above into simpler formats for the handlers
-let defaultSettings = {};
-let featureNames = [];
-for (let key of Object.keys(SETTINGS)) {
+const defaultSettings = {};
+const featureNames = [];
+for (const key of Object.keys(SETTINGS)) {
     defaultSettings[key] = SETTINGS[key].defaults;
     if (SETTINGS[key].isFeature) featureNames.push(key);
 }
@@ -132,12 +132,7 @@ export default class SettingsStore {
             throw new Error("Setting " + settingName + " is not a feature");
         }
 
-        // Synchronously get the setting value (which should be {enabled: true/false})
-        const value = Promise.coroutine(function* () {
-            return yield SettingsStore.getValue(settingName, roomId);
-        })();
-
-        return value;
+        return SettingsStore.getValue(settingName, roomId);
     }
 
     /**
@@ -149,7 +144,7 @@ export default class SettingsStore {
      */
     static getValue(settingName, roomId) {
         const levelOrder = [
-            'device', 'room-device', 'room-account', 'account', 'room', 'config', 'default'
+            'device', 'room-device', 'room-account', 'account', 'room', 'config', 'default',
         ];
 
         if (SettingsStore.isFeature(settingName)) {
@@ -161,7 +156,7 @@ export default class SettingsStore {
 
         const handlers = SettingsStore._getHandlers(settingName);
 
-        for (let level of levelOrder) {
+        for (const level of levelOrder) {
             let handler = handlers[level];
             if (!handler) continue;
 
