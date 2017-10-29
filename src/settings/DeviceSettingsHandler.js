@@ -1,0 +1,90 @@
+/*
+Copyright 2017 Travis Ralston
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+import Promise from 'bluebird';
+import SettingsHandler from "./SettingsHandler";
+import MatrixClientPeg from "../MatrixClientPeg";
+
+/**
+ * Gets and sets settings at the "device" level for the current device.
+ * This handler does not make use of the roomId parameter. This handler
+ * will special-case features to support legacy settings.
+ */
+export default class DeviceSettingsHandler extends SettingsHandler {
+    /**
+     * Creates a new device settings handler
+     * @param {string[]} featureNames The names of known features.
+     */
+    constructor(featureNames) {
+        super();
+        this._featureNames = featureNames;
+    }
+
+    getValue(settingName, roomId) {
+        if (this._featureNames.includes(settingName)) {
+            return Promise.resolve(this._readFeature(settingName));
+        }
+
+        const value = localStorage.getItem(this._getKey(settingName));
+        if (!value) return Promise.reject();
+        return Promise.resolve(value);
+    }
+
+    setValue(settingName, roomId, newValue) {
+        if (this._featureNames.includes(settingName)) {
+            return Promise.resolve(this._writeFeature(settingName));
+        }
+
+        if (newValue === null) {
+            localStorage.removeItem(this._getKey(settingName));
+        } else {
+            localStorage.setItem(this._getKey(settingName), newValue);
+        }
+
+        return Promise.resolve();
+    }
+
+    canSetValue(settingName, roomId) {
+        return true; // It's their device, so they should be able to
+    }
+
+    isSupported() {
+        return !!localStorage;
+    }
+
+    _getKey(settingName) {
+        return "mx_setting_" + settingName;
+    }
+
+    // Note: features intentionally don't use the same key as settings to avoid conflicts
+    // and to be backwards compatible.
+
+    _readFeature(featureName) {
+        if (MatrixClientPeg.get() && MatrixClientPeg.get().isGuest()) {
+            // Guests should not have any labs features enabled.
+            return {enabled: false};
+        }
+
+        const value = localStorage.getItem("mx_labs_feature_" + featureName);
+        const enabled = value === "true";
+
+        return {enabled};
+    }
+
+    _writeFeature(featureName, enabled) {
+        localStorage.setItem("mx_labs_feature_" + featureName, enabled);
+    }
+}

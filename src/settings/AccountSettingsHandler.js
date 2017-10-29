@@ -1,0 +1,47 @@
+/*
+Copyright 2017 Travis Ralston
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+import Promise from 'bluebird';
+import SettingsHandler from "./SettingsHandler";
+import MatrixClientPeg from '../MatrixClientPeg';
+
+/**
+ * Gets and sets settings at the "account" level for the current user.
+ * This handler does not make use of the roomId parameter.
+ */
+export default class AccountSettingHandler extends SettingsHandler {
+    getValue(settingName, roomId) {
+        const value = MatrixClientPeg.get().getAccountData(this._getEventType(settingName));
+        if (!value) return Promise.reject();
+        return Promise.resolve(value);
+    }
+
+    setValue(settingName, roomId, newValue) {
+        return MatrixClientPeg.get().setAccountData(this._getEventType(settingName), newValue);
+    }
+
+    canSetValue(settingName, roomId) {
+        return true; // It's their account, so they should be able to
+    }
+
+    isSupported() {
+        return !!MatrixClientPeg.get();
+    }
+
+    _getEventType(settingName) {
+        return "im.vector.setting." + settingName;
+    }
+}
