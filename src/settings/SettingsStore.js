@@ -27,13 +27,13 @@ import SdkConfig from "../SdkConfig";
 
 // Preset levels for room-based settings (eg: URL previews).
 // Doesn't include 'room' because most settings don't need it. Use .concat('room') to add.
-const LEVELS_PRESET_ROOM = ['device', 'room-device', 'room-account', 'account'];
+const LEVELS_PRESET_ROOM = ['device', 'room-device', 'room-account', 'account', 'config'];
 
 // Preset levels for account-based settings (eg: interface language).
-const LEVELS_PRESET_ACCOUNT = ['device', 'account'];
+const LEVELS_PRESET_ACCOUNT = ['device', 'account', 'config'];
 
 // Preset levels for features (labs) settings.
-const LEVELS_PRESET_FEATURE = ['device'];
+const LEVELS_PRESET_FEATURE = ['device', 'config'];
 
 const SETTINGS = {
     // EXAMPLE SETTING:
@@ -51,8 +51,9 @@ const SETTINGS = {
     //         "room-account",  // Affects the current room for the current account
     //         "account",       // Affects the current account
     //         "room",          // Affects the current room (controlled by room admins)
+    //         "config",        // Affects the current application
     //
-    //         // "default" and "config" are always supported and do not get listed here.
+    //         // "default" is always supported and does not get listed here.
     //     ],
     //
     //     // Optional. Any data type.
@@ -191,7 +192,7 @@ const SETTINGS = {
         supportedLevels: ['device'],
         default: false,
         label: _td('Never send encrypted messages to unverified devices from this device'),
-    }
+    },
 };
 
 // Convert the above into simpler formats for the handlers
@@ -413,6 +414,9 @@ export default class SettingsStore {
             if (!LEVEL_HANDLERS[level]) throw new Error("Unexpected level " + level);
             handlers[level] = LEVEL_HANDLERS[level];
         }
+
+        // Always support 'default'
+        if (!handlers['default']) handlers['default'] = LEVEL_HANDLERS['default'];
 
         return handlers;
     }
