@@ -126,16 +126,8 @@ const CRYPTO_SETTINGS_LABELS = [
 // packaged up in a single directory, and/or located at the application layer.
 // But for now for expedience we just hardcode them here.
 const THEMES = [
-    {
-        id: 'theme',
-        label: _td('Light theme'),
-        value: 'light',
-    },
-    {
-        id: 'theme',
-        label: _td('Dark theme'),
-        value: 'dark',
-    },
+    { label: _td('Light theme'), value: 'light' },
+    { label: _td('Dark theme'), value: 'dark' },
 ];
 
 const IgnoredUser = React.createClass({
@@ -719,12 +711,11 @@ module.exports = React.createClass({
         return <div className="mx_UserSettings_toggle" key={setting.id}>
             <input id={setting.id}
                    type="checkbox"
-                   // TODO: {Travis} Support atLevel=account
-                   defaultChecked={SettingsStore.getValue(setting.id)}
+                   defaultChecked={SettingsStore.getValueAt("account", setting.id)}
                    onChange={onChange}
             />
             <label htmlFor={setting.id}>
-                { SettingsStore.getDisplayName(setting.id) }
+                { setting.label || SettingsStore.getDisplayName(setting.id) }
             </label>
         </div>;
     },
@@ -734,23 +725,22 @@ module.exports = React.createClass({
         // to rebind the onChange each time we render
         const onChange = (e) => {
             if (e.target.checked) {
-                SettingsStore.setValue(setting.id, null, "account", setting.value);
+                SettingsStore.setValue("theme", null, "account", setting.value);
             }
             dis.dispatch({
                 action: 'set_theme',
                 value: setting.value,
             });
         };
-        return <div className="mx_UserSettings_toggle" key={setting.id + "_" + setting.value}>
-            <input id={setting.id + "_" + setting.value}
+        return <div className="mx_UserSettings_toggle" key={"theme_" + setting.value}>
+            <input id={"theme_" + setting.value}
                    type="radio"
-                   name={setting.id}
+                   name="theme"
                    value={setting.value}
-                   // TODO: {Travis} Support atLevel=account
-                   checked={SettingsStore.getValue(setting.id) === setting.value}
+                   checked={SettingsStore.getValueAt("account", "theme") === setting.value}
                    onChange={onChange}
             />
-            <label htmlFor={setting.id + "_" + setting.value}>
+            <label htmlFor={"theme_" + setting.value}>
                 { _t(setting.label) }
             </label>
         </div>;

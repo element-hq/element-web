@@ -292,6 +292,28 @@ export default class SettingsStore {
     }
 
     /**
+     * Gets a setting's value at the given level.
+     * @param {"device"|"room-device"|"room-account"|"account"|"room"} level The lvel to
+     * look at.
+     * @param {string} settingName The name of the setting to read.
+     * @param {String} roomId The room ID to read the setting value in, may be null.
+     * @return {*} The value, or null if not found.
+     */
+    static getValueAt(level, settingName, roomId=null) {
+        // We specifically handle features as they have the possibility of being forced on.
+        if (SettingsStore.isFeature(settingName)) {
+            const configValue = SettingsStore._getFeatureState(settingName);
+            if (configValue === "enable") return true;
+            if (configValue === "disable") return false;
+            // else let it fall through the default process
+        }
+
+        const handler = SettingsStore._getHandler(settingName, level);
+        if (!handler) return null;
+        return handler.getValue(settingName, roomId);
+    }
+
+    /**
      * Sets the value for a setting. The room ID is optional if the setting is not being
      * set for a particular room, otherwise it should be supplied. The value may be null
      * to indicate that the level should no longer have an override.
