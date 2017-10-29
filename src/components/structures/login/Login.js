@@ -22,8 +22,8 @@ import { _t, _tJsx } from '../../../languageHandler';
 import * as languageHandler from '../../../languageHandler';
 import sdk from '../../../index';
 import Login from '../../../Login';
-import UserSettingsStore from '../../../UserSettingsStore';
 import PlatformPeg from '../../../PlatformPeg';
+import SettingsStore from "../../../settings/SettingsStore";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9\(\)\-\s]*$/;
@@ -312,7 +312,7 @@ module.exports = React.createClass({
 
     _onLanguageChange: function(newLang) {
         if(languageHandler.getCurrentLanguage() !== newLang) {
-            UserSettingsStore.setLocalSetting('language', newLang);
+            SettingsStore.setValue("language", null, "device", newLang);
             PlatformPeg.get().reload();
         }
     },

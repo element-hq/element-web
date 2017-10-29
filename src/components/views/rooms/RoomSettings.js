@@ -23,7 +23,6 @@ import sdk from '../../../index';
 import Modal from '../../../Modal';
 import ObjectUtils from '../../../ObjectUtils';
 import dis from '../../../dispatcher';
-import UserSettingsStore from '../../../UserSettingsStore';
 import AccessibleButton from '../elements/AccessibleButton';
 import SettingsStore from "../../../settings/SettingsStore";
 
@@ -370,7 +369,8 @@ module.exports = React.createClass({
     },
 
     _isRoomBlacklistUnverified: function() {
-        const blacklistUnverifiedDevicesPerRoom = UserSettingsStore.getLocalSettings().blacklistUnverifiedDevicesPerRoom;
+        // TODO: {Travis} Use generic blacklistUnverifiedDevices
+        const blacklistUnverifiedDevicesPerRoom = SettingsStore.getValue("blacklistUnverifiedDevicesPerRoom");
         if (blacklistUnverifiedDevicesPerRoom) {
             return blacklistUnverifiedDevicesPerRoom[this.props.room.roomId];
         }
@@ -378,9 +378,10 @@ module.exports = React.createClass({
     },
 
     _setRoomBlacklistUnverified: function(value) {
-        const blacklistUnverifiedDevicesPerRoom = UserSettingsStore.getLocalSettings().blacklistUnverifiedDevicesPerRoom || {};
+        // TODO: {Travis} Use generic blacklistUnverifiedDevices
+        const blacklistUnverifiedDevicesPerRoom = SettingsStore.getValue("blacklistUnverifiedDevicesPerRoom");
         blacklistUnverifiedDevicesPerRoom[this.props.room.roomId] = value;
-        UserSettingsStore.setLocalSetting('blacklistUnverifiedDevicesPerRoom', blacklistUnverifiedDevicesPerRoom);
+        SettingsStore.setValue("blacklistUnverifiedDevicesPerRoom", null, "device", blacklistUnverifiedDevicesPerRoom);
 
         this.props.room.setBlacklistUnverifiedDevices(value);
     },
@@ -591,7 +592,7 @@ module.exports = React.createClass({
         const cli = MatrixClientPeg.get();
         const roomState = this.props.room.currentState;
         const isEncrypted = cli.isRoomEncrypted(this.props.room.roomId);
-        const isGlobalBlacklistUnverified = UserSettingsStore.getLocalSettings().blacklistUnverifiedDevices;
+        const isGlobalBlacklistUnverified = SettingsStore.getValue("blacklistUnverifiedDevices");
         const isRoomBlacklistUnverified = this._isRoomBlacklistUnverified();
 
         const settings =

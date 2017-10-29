@@ -136,21 +136,4 @@ export default {
             disable: disabled,
         });
     },
-
-    getLocalSettings: function() {
-        const localSettingsString = localStorage.getItem('mx_local_settings') || '{}';
-        return JSON.parse(localSettingsString);
-    },
-
-    getLocalSetting: function(type, defaultValue = null) {
-        const settings = this.getLocalSettings();
-        return settings.hasOwnProperty(type) ? settings[type] : defaultValue;
-    },
-
-    setLocalSetting: function(type, value) {
-        const settings = this.getLocalSettings();
-        settings[type] = value;
-        // FIXME: handle errors
-        localStorage.setItem('mx_local_settings', JSON.stringify(settings));
-    },
 };

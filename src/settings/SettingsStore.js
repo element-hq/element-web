@@ -157,6 +157,41 @@ const SETTINGS = {
         supportedLevels: LEVELS_PRESET_ACCOUNT,
         default: "light",
     },
+    "webRtcForceTURN": {
+        supportedLevels: ['device'],
+        default: false,
+        displayName: _td('Disable Peer-to-Peer for 1:1 calls'),
+    },
+    "webrtc_audioinput": {
+        supportedLevels: ['device'],
+    },
+    "webrtc_videoinput": {
+        supportedLevels: ['device'],
+    },
+    "language": {
+        supportedLevels: ['device'],
+        default: "en"
+    },
+    "analyticsOptOut": {
+        supportedLevels: ['device'],
+        default: false,
+        displayName: _td('Opt out of analytics'),
+    },
+    "autocompleteDelay": {
+        supportedLevels: ['device'],
+        default: 200,
+    },
+    "blacklistUnverifiedDevicesPerRoom": {
+        // TODO: {Travis} Write a migration path to support blacklistUnverifiedDevices
+        supportedLevels: ['device'],
+        default: {},
+    },
+    "blacklistUnverifiedDevices": {
+        // TODO: {Travis} Write a migration path to support blacklistUnverifiedDevices
+        supportedLevels: ['device'],
+        default: false,
+        label: _td('Never send encrypted messages to unverified devices from this device'),
+    }
 };
 
 // Convert the above into simpler formats for the handlers

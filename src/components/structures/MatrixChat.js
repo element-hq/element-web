@@ -22,7 +22,6 @@ import React from 'react';
 import Matrix from "matrix-js-sdk";
 
 import Analytics from "../../Analytics";
-import UserSettingsStore from '../../UserSettingsStore';
 import MatrixClientPeg from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
@@ -44,6 +43,7 @@ import createRoom from "../../createRoom";
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
 import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
+import SettingsStore from "../../settings/SettingsStore";
 
 /** constants for MatrixChat.state.view */
 const VIEWS = {
@@ -213,7 +213,7 @@ module.exports = React.createClass({
     componentWillMount: function() {
         SdkConfig.put(this.props.config);
 
-        if (!UserSettingsStore.getLocalSetting('analyticsOptOut', false)) Analytics.enable();
+        if (!SettingsStore.getValue("analyticsOptOut")) Analytics.enable();
 
         // Used by _viewRoom before getting state from sync
         this.firstSyncComplete = false;

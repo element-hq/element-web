@@ -80,41 +80,26 @@ const SIMPLE_SETTINGS = [
 
 // TODO: {Travis} Consider making generic setting handler to support `label` and `fn` optionally (backed by SettingsStore)
 
-// TODO: {Travis} Convert
 const ANALYTICS_SETTINGS_LABELS = [
     {
         id: 'analyticsOptOut',
-        label: _td('Opt out of analytics'),
         fn: function(checked) {
             Analytics[checked ? 'disable' : 'enable']();
         },
     },
 ];
 
-// TODO: {Travis} Convert
 const WEBRTC_SETTINGS_LABELS = [
-    {
-        id: 'webRtcForceTURN',
-        label: _td('Disable Peer-to-Peer for 1:1 calls'),
-    },
+    { id: 'webRtcForceTURN' },
 ];
 
-// TODO: {Travis} Convert
-// Warning: Each "label" string below must be added to i18n/strings/en_EN.json,
-// since they will be translated when rendered.
 const CRYPTO_SETTINGS_LABELS = [
     {
         id: 'blacklistUnverifiedDevices',
-        label: _td('Never send encrypted messages to unverified devices from this device'),
         fn: function(checked) {
             MatrixClientPeg.get().setGlobalBlacklistUnverifiedDevices(checked);
         },
     },
-    // XXX: this is here for documentation; the actual setting is managed via RoomSettings
-    // {
-    //     id: 'blacklistUnverifiedDevicesPerRoom'
-    //     label: 'Never send encrypted messages to unverified devices in this room',
-    // }
 ];
 
 // Enumerate the available themes, with a nice human text label.
@@ -226,8 +211,6 @@ module.exports = React.createClass({
         });
         this._refreshFromServer();
 
-        this._localSettings = UserSettingsStore.getLocalSettings();
-
         if (PlatformPeg.get().isElectron()) {
             const {ipcRenderer} = require('electron');
 
@@ -298,8 +281,8 @@ module.exports = React.createClass({
             if (this._unmounted) return;
             this.setState({
                 mediaDevices,
-                activeAudioInput: this._localSettings['webrtc_audioinput'],
-                activeVideoInput: this._localSettings['webrtc_videoinput'],
+                activeAudioInput: SettingsStore.getValueAt("device", 'webrtc_audioinput'),
+                activeVideoInput: SettingsStore.getValueAt("device", 'webrtc_videoinput'),
             });
         });
     },
@@ -631,7 +614,7 @@ module.exports = React.createClass({
 
     onLanguageChange: function(newLang) {
         if(this.state.language !== newLang) {
-            UserSettingsStore.setLocalSetting('language', newLang);
+            SettingsStore.setValue("language", null, "device", newLang);
             this.setState({
                 language: newLang,
             });
@@ -654,7 +637,7 @@ module.exports = React.createClass({
         // TODO: this ought to be a separate component so that we don't need
         // to rebind the onChange each time we render
         const onChange = (e) =>
-            UserSettingsStore.setLocalSetting('autocompleteDelay', + e.target.value);
+            SettingsStore.setValue("autocompleteDelay", null, "device", e.target.value);
         return (
             <div>
                 <h3>{ _t("User Interface") }</h3>
@@ -669,7 +652,7 @@ module.exports = React.createClass({
                             <td>
                                 <input
                                     type="number"
-                                    defaultValue={UserSettingsStore.getLocalSetting('autocompleteDelay', 200)}
+                                    defaultValue={SettingsStore.getValueAt("device", "autocompleteDelay")}
                                     onChange={onChange}
                                 />
                             </td>
@@ -699,6 +682,7 @@ module.exports = React.createClass({
          UserSettingsStore.setUrlPreviewsDisabled(e.target.checked);
     },
 
+    // TODO: {Travis} Make this a component (<CheckboxSetting name='' [label]='' [fn]=() level=''>)
     _renderSyncedSetting: function(setting) {
         // TODO: this ought to be a separate component so that we don't need
         // to rebind the onChange each time we render
@@ -715,11 +699,13 @@ module.exports = React.createClass({
                    onChange={onChange}
             />
             <label htmlFor={setting.id}>
-                { setting.label || SettingsStore.getDisplayName(setting.id) }
+                { setting.label ? _t(setting.label) : SettingsStore.getDisplayName(setting.id) }
             </label>
         </div>;
     },
 
+    // TODO: {Travis} Make this a component (<RadioSetting name='' [label]='' [fn]=() level='' group='theme'>)
+    // {Travis} Maybe make that part of CheckboxSetting somehow?
     _renderThemeSelector: function(setting) {
         // TODO: this ought to be a separate component so that we don't need
         // to rebind the onChange each time we render
@@ -811,22 +797,23 @@ module.exports = React.createClass({
         } else return (<div />);
     },
 
+    // TODO: {Travis} Make this a component (<CheckboxSetting name='' [label]='' [fn]=() level=''>)
     _renderLocalSetting: function(setting) {
         // TODO: this ought to be a separate component so that we don't need
         // to rebind the onChange each time we render
         const onChange = (e) => {
-            UserSettingsStore.setLocalSetting(setting.id, e.target.checked);
+            SettingsStore.setValue(setting.id, null, "device", e.target.checked);
             if (setting.fn) setting.fn(e.target.checked);
         };
 
         return <div className="mx_UserSettings_toggle" key={setting.id}>
             <input id={setting.id}
                    type="checkbox"
-                   defaultChecked={this._localSettings[setting.id]}
+                   defaultChecked={SettingsStore.getValueAt("device", setting.id)}
                    onChange={onChange}
             />
             <label htmlFor={setting.id}>
-                { _t(setting.label) }
+                { setting.label ? _t(setting.label) : SettingsStore.getDisplayName(setting.id) }
             </label>
         </div>;
     },

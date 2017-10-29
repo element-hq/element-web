@@ -19,8 +19,7 @@ import request from 'browser-request';
 import counterpart from 'counterpart';
 import Promise from 'bluebird';
 import React from 'react';
-
-import UserSettingsStore from './UserSettingsStore';
+import SettingsStore from "./settings/SettingsStore";
 
 const i18nFolder = 'i18n/';
 
@@ -168,7 +167,7 @@ export function setLanguage(preferredLangs) {
     }).then((langData) => {
         counterpart.registerTranslations(langToUse, langData);
         counterpart.setLocale(langToUse);
-        UserSettingsStore.setLocalSetting('language', langToUse);
+        SettingsStore.setValue("language", null, "device", langToUse);
         console.log("set language to " + langToUse);
 
         // Set 'en' as fallback language:
