@@ -32,9 +32,7 @@ export default class DefaultSettingsHandler extends SettingsHandler {
     }
 
     getValue(settingName, roomId) {
-        const value = this._defaults[settingName];
-        if (!value) return Promise.reject();
-        return Promise.resolve(value);
+        return this._defaults[settingName];
     }
 
     setValue(settingName, roomId, newValue) {

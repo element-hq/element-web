@@ -25,8 +25,8 @@ import SdkConfig from "../SdkConfig";
 export default class ConfigSettingsHandler extends SettingsHandler {
     getValue(settingName, roomId) {
         const settingsConfig = SdkConfig.get()["settingDefaults"];
-        if (!settingsConfig || !settingsConfig[settingName]) return Promise.reject();
-        return Promise.resolve(settingsConfig[settingName]);
+        if (!settingsConfig || !settingsConfig[settingName]) return null;
+        return settingsConfig[settingName];
     }
 
     setValue(settingName, roomId, newValue) {

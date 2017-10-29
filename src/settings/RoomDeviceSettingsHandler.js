@@ -24,14 +24,15 @@ import SettingsHandler from "./SettingsHandler";
 export default class RoomDeviceSettingsHandler extends SettingsHandler {
     getValue(settingName, roomId) {
         const value = localStorage.getItem(this._getKey(settingName, roomId));
-        if (!value) return Promise.reject();
-        return Promise.resolve(value);
+        if (!value) return null;
+        return JSON.parse(value).value;
     }
 
     setValue(settingName, roomId, newValue) {
         if (newValue === null) {
             localStorage.removeItem(this._getKey(settingName, roomId));
         } else {
+            newValue = JSON.stringify({value: newValue});
             localStorage.setItem(this._getKey(settingName, roomId), newValue);
         }
 

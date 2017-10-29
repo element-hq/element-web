@@ -24,13 +24,13 @@ import MatrixClientPeg from '../MatrixClientPeg';
  */
 export default class AccountSettingHandler extends SettingsHandler {
     getValue(settingName, roomId) {
-        const value = MatrixClientPeg.get().getAccountData(this._getEventType(settingName));
-        if (!value) return Promise.reject();
-        return Promise.resolve(value);
+        return this._getSettings()[settingName];
     }
 
     setValue(settingName, roomId, newValue) {
-        return MatrixClientPeg.get().setAccountData(this._getEventType(settingName), newValue);
+        const content = this._getSettings();
+        content[settingName] = newValue;
+        return MatrixClientPeg.get().setAccountData("im.vector.web.settings", content);
     }
 
     canSetValue(settingName, roomId) {
@@ -41,7 +41,9 @@ export default class AccountSettingHandler extends SettingsHandler {
         return !!MatrixClientPeg.get();
     }
 
-    _getEventType(settingName) {
-        return "im.vector.setting." + settingName;
+    _getSettings() {
+        const event = MatrixClientPeg.get().getAccountData("im.vector.web.settings");
+        if (!event || !event.getContent()) return {};
+        return event.getContent();
     }
 }

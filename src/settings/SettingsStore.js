@@ -137,7 +137,7 @@ export default class SettingsStore {
             return yield SettingsStore.getValue(settingName, roomId);
         })();
 
-        return value.enabled;
+        return value;
     }
 
     /**
@@ -145,7 +145,7 @@ export default class SettingsStore {
      * be applied to any particular room, otherwise it should be supplied.
      * @param {string} settingName The name of the setting to read the value of.
      * @param {String} roomId The room ID to read the setting value in, may be null.
-     * @return {Promise<*>} Resolves to the value for the setting. May result in null.
+     * @return {*} The value, or null if not found
      */
     static getValue(settingName, roomId) {
         const levelOrder = [
@@ -154,36 +154,22 @@ export default class SettingsStore {
 
         if (SettingsStore.isFeature(settingName)) {
             const configValue = SettingsStore._getFeatureState(settingName);
-            if (configValue === "enable") return Promise.resolve({enabled: true});
-            if (configValue === "disable") return Promise.resolve({enabled: false});
+            if (configValue === "enable") return true;
+            if (configValue === "disable") return false;
             // else let it fall through the default process
         }
 
         const handlers = SettingsStore._getHandlers(settingName);
 
-        // This wrapper function allows for iterating over the levelOrder to find a suitable
-        // handler that is supported by the setting. It does this by building the promise chain
-        // on the fly, wrapping the rejection from handler.getValue() to try the next handler.
-        // If the last handler also rejects the getValue() call, then this wrapper will convert
-        // the reply to `null` as per our contract to the caller.
-        let index = 0;
-        const wrapperFn = () => {
-            // Find the next handler that we can use
-            let handler = null;
-            while (!handler && index < levelOrder.length) {
-                handler = handlers[levelOrder[index++]];
-            }
+        for (let level of levelOrder) {
+            let handler = handlers[level];
+            if (!handler) continue;
 
-            // No handler == no reply (happens when the last available handler rejects)
-            if (!handler) return null;
-
-            // Get the value and see if the handler will reject us (meaning it doesn't have
-            // a value for us).
             const value = handler.getValue(settingName, roomId);
-            return value.then(null, () => wrapperFn()); // pass success through
-        };
-
-        return wrapperFn();
+            if (!value) continue;
+            return value;
+        }
+        return null;
     }
 
     /**
@@ -194,7 +180,7 @@ export default class SettingsStore {
      * @param {String} roomId The room ID to change the value in, may be null.
      * @param {"device"|"room-device"|"room-account"|"account"|"room"} level The level
      * to change the value at.
-     * @param {Object} value The new value of the setting, may be null.
+     * @param {*} value The new value of the setting, may be null.
      * @return {Promise} Resolves when the setting has been changed.
      */
     static setValue(settingName, roomId, level, value) {

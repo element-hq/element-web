@@ -35,12 +35,13 @@ export default class DeviceSettingsHandler extends SettingsHandler {
 
     getValue(settingName, roomId) {
         if (this._featureNames.includes(settingName)) {
-            return Promise.resolve(this._readFeature(settingName));
+            return this._readFeature(settingName);
         }
 
         const value = localStorage.getItem(this._getKey(settingName));
-        if (!value) return Promise.reject();
-        return Promise.resolve(value);
+        if (!value) return null;
+
+        return JSON.parse(value).value;
     }
 
     setValue(settingName, roomId, newValue) {
@@ -51,6 +52,7 @@ export default class DeviceSettingsHandler extends SettingsHandler {
         if (newValue === null) {
             localStorage.removeItem(this._getKey(settingName));
         } else {
+            newValue = JSON.stringify({value: newValue});
             localStorage.setItem(this._getKey(settingName), newValue);
         }
 
@@ -79,9 +81,7 @@ export default class DeviceSettingsHandler extends SettingsHandler {
         }
 
         const value = localStorage.getItem("mx_labs_feature_" + featureName);
-        const enabled = value === "true";
-
-        return {enabled};
+        return value === "true";
     }
 
     _writeFeature(featureName, enabled) {

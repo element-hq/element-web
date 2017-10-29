@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 import SettingsHandler from "./SettingsHandler";
 import MatrixClientPeg from '../MatrixClientPeg';
 
@@ -23,34 +22,33 @@ import MatrixClientPeg from '../MatrixClientPeg';
  */
 export default class RoomSettingsHandler extends SettingsHandler {
     getValue(settingName, roomId) {
-        const room = MatrixClientPeg.get().getRoom(roomId);
-        if (!room) return Promise.reject();
-
-        const event = room.currentState.getStateEvents(this._getEventType(settingName), "");
-        if (!event || !event.getContent()) return Promise.reject();
-        return Promise.resolve(event.getContent());
+        return this._getSettings(roomId)[settingName];
     }
 
     setValue(settingName, roomId, newValue) {
-        return MatrixClientPeg.get().sendStateEvent(
-            roomId, this._getEventType(settingName), newValue, ""
-        );
+        const content = this._getSettings(roomId);
+        content[settingName] = newValue;
+        return MatrixClientPeg.get().sendStateEvent(roomId, "im.vector.web.settings", content, "");
     }
 
     canSetValue(settingName, roomId) {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(roomId);
-        const eventType = this._getEventType(settingName);
 
         if (!room) return false;
-        return room.currentState.maySendStateEvent(eventType, cli.getUserId());
+        return room.currentState.maySendStateEvent("im.vector.web.settings", cli.getUserId());
     }
 
     isSupported() {
         return !!MatrixClientPeg.get();
     }
 
-    _getEventType(settingName) {
-        return "im.vector.setting." + settingName;
+    _getSettings(roomId) {
+        const room = MatrixClientPeg.get().getRoom(roomId);
+        if (!room) return {};
+
+        const event = room.currentState.getStateEvents("im.vector.web.settings");
+        if (!event || !event.getContent()) return {};
+        return event.getContent();
     }
 }

@@ -42,7 +42,7 @@ export default class SettingsHandler {
      * able to set the value prior to calling this.
      * @param {string} settingName The name of the setting to change.
      * @param {String} roomId The room ID to set the value in, may be null.
-     * @param {Object} newValue The new value for the setting, may be null.
+     * @param {*} newValue The new value for the setting, may be null.
      * @return {Promise} Resolves when the setting has been saved.
      */
     setValue(settingName, roomId, newValue) {
