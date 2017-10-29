@@ -38,10 +38,7 @@ export default class DeviceSettingsHandler extends SettingsHandler {
             return this._readFeature(settingName);
         }
 
-        const value = localStorage.getItem(this._getKey(settingName));
-        if (!value) return null;
-
-        return JSON.parse(value).value;
+        return this._getSettings()[settingName];
     }
 
     setValue(settingName, roomId, newValue) {
@@ -50,12 +47,9 @@ export default class DeviceSettingsHandler extends SettingsHandler {
             return Promise.resolve();
         }
 
-        if (newValue === null) {
-            localStorage.removeItem(this._getKey(settingName));
-        } else {
-            newValue = JSON.stringify({value: newValue});
-            localStorage.setItem(this._getKey(settingName), newValue);
-        }
+        const settings = this._getSettings();
+        settings[settingName] = newValue;
+        localStorage.setItem("mx_local_settings", JSON.stringify(settings));
 
         return Promise.resolve();
     }
@@ -68,8 +62,10 @@ export default class DeviceSettingsHandler extends SettingsHandler {
         return !!localStorage;
     }
 
-    _getKey(settingName) {
-        return "mx_setting_" + settingName;
+    _getSettings() {
+        const value = localStorage.getItem("mx_local_settings");
+        if (!value) return {};
+        return JSON.parse(value);
     }
 
     // Note: features intentionally don't use the same key as settings to avoid conflicts
