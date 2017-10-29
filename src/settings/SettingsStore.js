@@ -38,8 +38,11 @@ const LEVELS_PRESET_FEATURE = ['device'];
 const SETTINGS = {
     // EXAMPLE SETTING:
     // "my-setting": {
-    //     isFeature: false, // optional
+    //     // Required by features, optional otherwise
+    //     isFeature: false,
     //     displayName: _td("Cool Name"),
+    //
+    //     // Required.
     //     supportedLevels: [
     //         // The order does not matter.
     //
@@ -51,6 +54,8 @@ const SETTINGS = {
     //
     //         // "default" and "config" are always supported and do not get listed here.
     //     ],
+    //
+    //     // Optional. Any data type.
     //     default: {
     //         your: "value",
     //     },
@@ -65,8 +70,93 @@ const SETTINGS = {
         displayName: _td("Message Pinning"),
         supportedLevels: LEVELS_PRESET_FEATURE,
     },
-
-    // TODO: Populate this
+    "MessageComposerInput.dontSuggestEmoji": {
+        supportedLevels: LEVELS_PRESET_ACCOUNT,
+        default: false,
+        displayName: _td('Disable Emoji suggestions while typing'),
+    },
+    "useCompactLayout": {
+        supportedLevels: LEVELS_PRESET_ACCOUNT,
+        default: false,
+        displayName: _td('Use compact timeline layout'),
+    },
+    "hideRedactions": {
+        supportedLevels: LEVELS_PRESET_ROOM.concat("room"),
+        default: false,
+        displayName: _td('Hide removed messages'),
+    },
+    "hideJoinLeaves": {
+        supportedLevels: LEVELS_PRESET_ROOM.concat("room"),
+        default: false,
+        displayName: _td('Hide join/leave messages (invites/kicks/bans unaffected)'),
+    },
+    "hideAvatarDisplaynameChanges": {
+        supportedLevels: LEVELS_PRESET_ROOM.concat("room"),
+        default: false,
+        displayName: _td('Hide avatar and display name changes'),
+    },
+    "hideReadReceipts": {
+        supportedLevels: LEVELS_PRESET_ROOM,
+        default: false,
+        displayName: _td('Hide read receipts'),
+    },
+    "showTwelveHourTimestamps": {
+        supportedLevels: LEVELS_PRESET_ACCOUNT,
+        default: false,
+        displayName: _td('Show timestamps in 12 hour format (e.g. 2:30pm)'),
+    },
+    "alwaysShowTimestamps": {
+        supportedLevels: LEVELS_PRESET_ACCOUNT,
+        default: false,
+        displayName: _td('Always show message timestamps'),
+    },
+    "autoplayGifsAndVideos": {
+        supportedLevels: LEVELS_PRESET_ACCOUNT,
+        default: false,
+        displayName: _td('Autoplay GIFs and videos'),
+    },
+    "enableSyntaxHighlightLanguageDetection": {
+        supportedLevels: LEVELS_PRESET_ACCOUNT,
+        default: false,
+        displayName: _td('Enable automatic language detection for syntax highlighting'),
+    },
+    "Pill.shouldHidePillAvatar": {
+        supportedLevels: LEVELS_PRESET_ACCOUNT,
+        default: false,
+        displayName: _td('Hide avatars in user and room mentions'),
+    },
+    "TextualBody.disableBigEmoji": {
+        supportedLevels: LEVELS_PRESET_ACCOUNT,
+        default: false,
+        displayName: _td('Disable big emoji in chat'),
+    },
+    "MessageComposerInput.isRichTextEnabled": {
+        supportedLevels: LEVELS_PRESET_ACCOUNT,
+        default: false,
+    },
+    "MessageComposer.showFormatting": {
+        supportedLevels: LEVELS_PRESET_ACCOUNT,
+        default: false,
+    },
+    "dontSendTypingNotifications": {
+        supportedLevels: LEVELS_PRESET_ACCOUNT,
+        default: false,
+        displayName: _td("Don't send typing notifications"),
+    },
+    "MessageComposerInput.autoReplaceEmoji": {
+        supportedLevels: LEVELS_PRESET_ACCOUNT,
+        default: false,
+        displayName: _td('Automatically replace plain text Emoji'),
+    },
+    "VideoView.flipVideoHorizontally": {
+        supportedLevels: LEVELS_PRESET_ACCOUNT,
+        default: false,
+        displayName: _td('Mirror local video feed'),
+    },
+    "theme": {
+        supportedLevels: LEVELS_PRESET_ACCOUNT,
+        default: "light",
+    },
 };
 
 // Convert the above into simpler formats for the handlers
@@ -176,7 +266,7 @@ export default class SettingsStore {
      * @param {String} roomId The room ID to read the setting value in, may be null.
      * @return {*} The value, or null if not found
      */
-    static getValue(settingName, roomId) {
+    static getValue(settingName, roomId = null) {
         const levelOrder = [
             'device', 'room-device', 'room-account', 'account', 'room', 'config', 'default',
         ];
@@ -195,7 +285,7 @@ export default class SettingsStore {
             if (!handler) continue;
 
             const value = handler.getValue(settingName, roomId);
-            if (!value) continue;
+            if (value === null || value === undefined) continue;
             return value;
         }
         return null;

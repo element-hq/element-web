@@ -58,80 +58,29 @@ const gHVersionLabel = function(repo, token='') {
     return <a target="_blank" rel="noopener" href={url}>{ token }</a>;
 };
 
-// Enumerate some simple 'flip a bit' UI settings (if any).
-// 'id' gives the key name in the im.vector.web.settings account data event
-// 'label' is how we describe it in the UI.
-// Warning: Each "label" string below must be added to i18n/strings/en_EN.json,
-// since they will be translated when rendered.
-const SETTINGS_LABELS = [
-    {
-        id: 'autoplayGifsAndVideos',
-        label: _td('Autoplay GIFs and videos'),
-    },
-    {
-        id: 'hideReadReceipts',
-        label: _td('Hide read receipts'),
-    },
-    {
-        id: 'dontSendTypingNotifications',
-        label: _td("Don't send typing notifications"),
-    },
-    {
-        id: 'alwaysShowTimestamps',
-        label: _td('Always show message timestamps'),
-    },
-    {
-        id: 'showTwelveHourTimestamps',
-        label: _td('Show timestamps in 12 hour format (e.g. 2:30pm)'),
-    },
-    {
-        id: 'hideJoinLeaves',
-        label: _td('Hide join/leave messages (invites/kicks/bans unaffected)'),
-    },
-    {
-        id: 'hideAvatarDisplaynameChanges',
-        label: _td('Hide avatar and display name changes'),
-    },
-    {
-        id: 'useCompactLayout',
-        label: _td('Use compact timeline layout'),
-    },
-    {
-        id: 'hideRedactions',
-        label: _td('Hide removed messages'),
-    },
-    {
-        id: 'enableSyntaxHighlightLanguageDetection',
-        label: _td('Enable automatic language detection for syntax highlighting'),
-    },
-    {
-        id: 'MessageComposerInput.autoReplaceEmoji',
-        label: _td('Automatically replace plain text Emoji'),
-    },
-    {
-        id: 'MessageComposerInput.dontSuggestEmoji',
-        label: _td('Disable Emoji suggestions while typing'),
-    },
-    {
-        id: 'Pill.shouldHidePillAvatar',
-        label: _td('Hide avatars in user and room mentions'),
-    },
-    {
-        id: 'TextualBody.disableBigEmoji',
-        label: _td('Disable big emoji in chat'),
-    },
-    {
-        id: 'VideoView.flipVideoHorizontally',
-        label: _td('Mirror local video feed'),
-    },
-/*
-    {
-        id: 'useFixedWidthFont',
-        label: 'Use fixed width font',
-    },
-*/
+// Enumerate some simple 'flip a bit' UI settings (if any). The strings provided here
+// must be settings defined in SettingsStore.
+const SIMPLE_SETTINGS = [
+    { id: "autoplayGifsAndVideos" },
+    { id: "hideReadReceipts" },
+    { id: "dontSendTypingNotifications" },
+    { id: "alwaysShowTimestamps" },
+    { id: "showTwelveHourTimestamps" },
+    { id: "hideJoinLeaves" },
+    { id: "hideAvatarDisplaynameChanges" },
+    { id: "useCompactLayout" },
+    { id: "hideRedactions" },
+    { id: "enableSyntaxHighlightLanguageDetection" },
+    { id: "MessageComposerInput.autoReplaceEmoji" },
+    { id: "MessageComposerInput.dontSuggestEmoji" },
+    { id: "Pill.shouldHidePillAvatar" },
+    { id: "TextualBody.disableBigEmoji" },
+    { id: "VideoView.flipVideoHorizontally" },
 ];
 
+// TODO: {Travis} Consider making generic setting handler to support `label` and `fn` optionally (backed by SettingsStore)
+
+// TODO: {Travis} Convert
 const ANALYTICS_SETTINGS_LABELS = [
     {
         id: 'analyticsOptOut',
@@ -142,6 +91,7 @@ const ANALYTICS_SETTINGS_LABELS = [
     },
 ];
 
+// TODO: {Travis} Convert
 const WEBRTC_SETTINGS_LABELS = [
     {
         id: 'webRtcForceTURN',
@@ -149,6 +99,7 @@ const WEBRTC_SETTINGS_LABELS = [
     },
 ];
 
+// TODO: {Travis} Convert
 // Warning: Each "label" string below must be added to i18n/strings/en_EN.json,
 // since they will be translated when rendered.
 const CRYPTO_SETTINGS_LABELS = [
@@ -282,12 +233,6 @@ module.exports = React.createClass({
             middleDisabled: true,
         });
         this._refreshFromServer();
-
-        const syncedSettings = UserSettingsStore.getSyncedSettings();
-        if (!syncedSettings.theme) {
-            syncedSettings.theme = 'light';
-        }
-        this._syncedSettings = syncedSettings;
 
         this._localSettings = UserSettingsStore.getLocalSettings();
 
@@ -723,7 +668,7 @@ module.exports = React.createClass({
                 <h3>{ _t("User Interface") }</h3>
                 <div className="mx_UserSettings_section">
                     { this._renderUrlPreviewSelector() }
-                    { SETTINGS_LABELS.map( this._renderSyncedSetting ) }
+                    { SIMPLE_SETTINGS.map( this._renderSyncedSetting ) }
                     { THEMES.map( this._renderThemeSelector ) }
                     <table>
                         <tbody>
@@ -767,18 +712,19 @@ module.exports = React.createClass({
         // to rebind the onChange each time we render
 
         const onChange = (e) => {
-            UserSettingsStore.setSyncedSetting(setting.id, e.target.checked);
+            SettingsStore.setValue(setting.id, null, "account", e.target.checked);
             if (setting.fn) setting.fn(e.target.checked);
         };
 
         return <div className="mx_UserSettings_toggle" key={setting.id}>
             <input id={setting.id}
                    type="checkbox"
-                   defaultChecked={this._syncedSettings[setting.id]}
+                   // TODO: {Travis} Support atLevel=account
+                   defaultChecked={SettingsStore.getValue(setting.id)}
                    onChange={onChange}
             />
             <label htmlFor={setting.id}>
-                { _t(setting.label) }
+                { SettingsStore.getDisplayName(setting.id) }
             </label>
         </div>;
     },
@@ -788,8 +734,7 @@ module.exports = React.createClass({
         // to rebind the onChange each time we render
         const onChange = (e) => {
             if (e.target.checked) {
-                this._syncedSettings[setting.id] = setting.value;
-                UserSettingsStore.setSyncedSetting(setting.id, setting.value);
+                SettingsStore.setValue(setting.id, null, "account", setting.value);
             }
             dis.dispatch({
                 action: 'set_theme',
@@ -801,7 +746,8 @@ module.exports = React.createClass({
                    type="radio"
                    name={setting.id}
                    value={setting.value}
-                   checked={this._syncedSettings[setting.id] === setting.value}
+                   // TODO: {Travis} Support atLevel=account
+                   checked={SettingsStore.getValue(setting.id) === setting.value}
                    onChange={onChange}
             />
             <label htmlFor={setting.id + "_" + setting.value}>

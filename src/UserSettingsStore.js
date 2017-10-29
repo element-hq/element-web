@@ -137,23 +137,6 @@ export default {
         });
     },
 
-    getSyncedSettings: function() {
-        const event = MatrixClientPeg.get().getAccountData('im.vector.web.settings');
-        return event ? event.getContent() : {};
-    },
-
-    getSyncedSetting: function(type, defaultValue = null) {
-        const settings = this.getSyncedSettings();
-        return settings.hasOwnProperty(type) ? settings[type] : defaultValue;
-    },
-
-    setSyncedSetting: function(type, value) {
-        const settings = this.getSyncedSettings();
-        settings[type] = value;
-        // FIXME: handle errors
-        return MatrixClientPeg.get().setAccountData('im.vector.web.settings', settings);
-    },
-
     getLocalSettings: function() {
         const localSettingsString = localStorage.getItem('mx_local_settings') || '{}';
         return JSON.parse(localSettingsString);

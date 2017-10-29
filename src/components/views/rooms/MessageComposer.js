@@ -22,7 +22,7 @@ import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import Autocomplete from './Autocomplete';
-import UserSettingsStore from '../../../UserSettingsStore';
+import SettingsStore from "../../../settings/SettingsStore";
 
 
 export default class MessageComposer extends React.Component {
@@ -49,10 +49,10 @@ export default class MessageComposer extends React.Component {
             inputState: {
                 style: [],
                 blockType: null,
-                isRichtextEnabled: UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false),
+                isRichtextEnabled: SettingsStore.getValue('MessageComposerInput.isRichTextEnabled'),
                 wordCount: 0,
             },
-            showFormatting: UserSettingsStore.getSyncedSetting('MessageComposer.showFormatting', false),
+            showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
         };
     }
 
@@ -226,7 +226,7 @@ export default class MessageComposer extends React.Component {
     }
 
     onToggleFormattingClicked() {
-        UserSettingsStore.setSyncedSetting('MessageComposer.showFormatting', !this.state.showFormatting);
+        SettingsStore.setValue("MessageComposer.showFormatting", null, "account", !this.state.showFormatting);
         this.setState({showFormatting: !this.state.showFormatting});
     }
 
