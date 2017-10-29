@@ -15,6 +15,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import SettingsStore from "../../settings/SettingsStore";
+
 const React = require('react');
 const ReactDOM = require('react-dom');
 const sdk = require('../../index');
@@ -934,11 +936,11 @@ module.exports = React.createClass({
 
     _renderLabs: function() {
         const features = [];
-        UserSettingsStore.getLabsFeatures().forEach((featureId) => {
+        SettingsStore.getLabsFeatures().forEach((featureId) => {
             // TODO: this ought to be a separate component so that we don't need
             // to rebind the onChange each time we render
             const onChange = (e) => {
-                UserSettingsStore.setFeatureEnabled(featureId, e.target.checked);
+                SettingsStore.setFeatureEnabled(featureId, e.target.checked);
                 this.forceUpdate();
             };
 
@@ -948,10 +950,10 @@ module.exports = React.createClass({
                         type="checkbox"
                         id={featureId}
                         name={featureId}
-                        defaultChecked={UserSettingsStore.isFeatureEnabled(featureId)}
+                        defaultChecked={SettingsStore.isFeatureEnabled(featureId)}
                         onChange={onChange}
                     />
-                    <label htmlFor={featureId}>{ UserSettingsStore.translatedNameForFeature(featureId) }</label>
+                    <label htmlFor={featureId}>{ SettingsStore.getDisplayName(featureId) }</label>
                 </div>);
         });
 

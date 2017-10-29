@@ -46,7 +46,8 @@ export default class DeviceSettingsHandler extends SettingsHandler {
 
     setValue(settingName, roomId, newValue) {
         if (this._featureNames.includes(settingName)) {
-            return Promise.resolve(this._writeFeature(settingName));
+            this._writeFeature(settingName, newValue);
+            return Promise.resolve();
         }
 
         if (newValue === null) {

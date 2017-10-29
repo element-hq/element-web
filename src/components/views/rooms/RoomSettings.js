@@ -25,6 +25,7 @@ import ObjectUtils from '../../../ObjectUtils';
 import dis from '../../../dispatcher';
 import UserSettingsStore from '../../../UserSettingsStore';
 import AccessibleButton from '../elements/AccessibleButton';
+import SettingsStore from "../../../settings/SettingsStore";
 
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
@@ -671,7 +672,7 @@ module.exports = React.createClass({
         const self = this;
 
         let relatedGroupsSection;
-        if (UserSettingsStore.isFeatureEnabled('feature_groups')) {
+        if (SettingsStore.isFeatureEnabled('feature_groups')) {
             relatedGroupsSection = <RelatedGroupSettings ref="related_groups"
                 roomId={this.props.room.roomId}
                 canSetRelatedGroups={roomState.mayClientSendStateEvent("m.room.related_groups", cli)}

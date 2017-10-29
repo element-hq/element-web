@@ -25,50 +25,7 @@ import SdkConfig from './SdkConfig';
  * TODO: Make things use this. This is all WIP - see UserSettings.js for usage.
  */
 
-const FEATURES = [
-    {
-        id: 'feature_groups',
-        name: _td("Communities"),
-    },
-    {
-        id: 'feature_pinning',
-        name: _td("Message Pinning"),
-    },
-];
-
 export default {
-    getLabsFeatures() {
-        const featuresConfig = SdkConfig.get()['features'] || {};
-
-        // The old flag: honoured for backwards compatibility
-        const enableLabs = SdkConfig.get()['enableLabs'];
-
-        let labsFeatures;
-        if (enableLabs) {
-            labsFeatures = FEATURES;
-        } else {
-            labsFeatures = FEATURES.filter((f) => {
-                const sdkConfigValue = featuresConfig[f.id];
-                if (sdkConfigValue === 'labs') {
-                    return true;
-                }
-            });
-        }
-        return labsFeatures.map((f) => {
-            return f.id;
-        });
-    },
-
-    translatedNameForFeature(featureId) {
-        const feature = FEATURES.filter((f) => {
-            return f.id === featureId;
-        })[0];
-
-        if (feature === undefined) return null;
-
-        return _t(feature.name);
-    },
-
     loadProfileInfo: function() {
         const cli = MatrixClientPeg.get();
         return cli.getProfileInfo(cli.credentials.userId);
@@ -212,38 +169,5 @@ export default {
         settings[type] = value;
         // FIXME: handle errors
         localStorage.setItem('mx_local_settings', JSON.stringify(settings));
-    },
-
-    isFeatureEnabled: function(featureId: string): boolean {
-        const featuresConfig = SdkConfig.get()['features'];
-
-        // The old flag: honoured for backwards compatibility
-        const enableLabs = SdkConfig.get()['enableLabs'];
-
-        let sdkConfigValue = enableLabs ? 'labs' : 'disable';
-        if (featuresConfig && featuresConfig[featureId] !== undefined) {
-            sdkConfigValue = featuresConfig[featureId];
-        }
-
-        if (sdkConfigValue === 'enable') {
-            return true;
-        } else if (sdkConfigValue === 'disable') {
-            return false;
-        } else if (sdkConfigValue === 'labs') {
-            if (!MatrixClientPeg.get().isGuest()) {
-                // Make it explicit that guests get the defaults (although they shouldn't
-                // have been able to ever toggle the flags anyway)
-                const userValue = localStorage.getItem(`mx_labs_feature_${featureId}`);
-                return userValue === 'true';
-            }
-            return false;
-        } else {
-            console.warn(`Unknown features config for ${featureId}: ${sdkConfigValue}`);
-            return false;
-        }
-    },
-
-    setFeatureEnabled: function(featureId: string, enabled: boolean) {
-        localStorage.setItem(`mx_labs_feature_${featureId}`, enabled);
     },
 };

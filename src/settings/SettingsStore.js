@@ -36,23 +36,34 @@ const LEVELS_PRESET_ACCOUNT = ['device', 'account'];
 const LEVELS_PRESET_FEATURE = ['device'];
 
 const SETTINGS = {
-    "my-setting": {
-        isFeature: false, // optional
-        displayName: _td("Cool Name"),
-        supportedLevels: [
-            // The order does not matter.
-
-            "device",        // Affects the current device only
-            "room-device",   // Affects the current room on the current device
-            "room-account",  // Affects the current room for the current account
-            "account",       // Affects the current account
-            "room",          // Affects the current room (controlled by room admins)
-
-            // "default" and "config" are always supported and do not get listed here.
-        ],
-        defaults: {
-            your: "value",
-        },
+    // EXAMPLE SETTING:
+    // "my-setting": {
+    //     isFeature: false, // optional
+    //     displayName: _td("Cool Name"),
+    //     supportedLevels: [
+    //         // The order does not matter.
+    //
+    //         "device",        // Affects the current device only
+    //         "room-device",   // Affects the current room on the current device
+    //         "room-account",  // Affects the current room for the current account
+    //         "account",       // Affects the current account
+    //         "room",          // Affects the current room (controlled by room admins)
+    //
+    //         // "default" and "config" are always supported and do not get listed here.
+    //     ],
+    //     default: {
+    //         your: "value",
+    //     },
+    // },
+    "feature_groups": {
+        isFeature: true,
+        displayName: _td("Communities"),
+        supportedLevels: LEVELS_PRESET_FEATURE,
+    },
+    "feature_pinning": {
+        isFeature: true,
+        displayName: _td("Message Pinning"),
+        supportedLevels: LEVELS_PRESET_FEATURE,
     },
 
     // TODO: Populate this
@@ -62,7 +73,7 @@ const SETTINGS = {
 const defaultSettings = {};
 const featureNames = [];
 for (const key of Object.keys(SETTINGS)) {
-    defaultSettings[key] = SETTINGS[key].defaults;
+    defaultSettings[key] = SETTINGS[key].default;
     if (SETTINGS[key].isFeature) featureNames.push(key);
 }
 
@@ -111,6 +122,19 @@ export default class SettingsStore {
     }
 
     /**
+     * Returns a list of all available labs feature names
+     * @returns {string[]} The list of available feature names
+     */
+    static getLabsFeatures() {
+        const possibleFeatures = Object.keys(SETTINGS).filter((s) => SettingsStore.isFeature(s));
+
+        const enableLabs = SdkConfig.get()["enableLabs"];
+        if (enableLabs) return possibleFeatures;
+
+        return possibleFeatures.filter((s) => SettingsStore._getFeatureState(s) === "labs");
+    }
+
+    /**
      * Determines if a setting is also a feature.
      * @param {string} settingName The setting to look up.
      * @return {boolean} True if the setting is a feature.
@@ -133,6 +157,16 @@ export default class SettingsStore {
         }
 
         return SettingsStore.getValue(settingName, roomId);
+    }
+
+    /**
+     * Sets a feature as enabled or disabled on the current device.
+     * @param {string} settingName The name of the setting.
+     * @param {boolean} value True to enable the feature, false otherwise.
+     * @returns {Promise} Resolves when the setting has been set.
+     */
+    static setFeatureEnabled(settingName, value) {
+        return SettingsStore.setValue(settingName, null, "device", value);
     }
 
     /**
@@ -228,7 +262,7 @@ export default class SettingsStore {
         if (!SETTINGS[settingName]) return {};
 
         const handlers = {};
-        for (let level of SETTINGS[settingName].supportedLevels) {
+        for (const level of SETTINGS[settingName].supportedLevels) {
             if (!LEVEL_HANDLERS[level]) throw new Error("Unexpected level " + level);
             handlers[level] = LEVEL_HANDLERS[level];
         }
@@ -246,7 +280,7 @@ export default class SettingsStore {
         }
 
         const allowedStates = ['enable', 'disable', 'labs'];
-        if (!allowedStates.contains(featureState)) {
+        if (!allowedStates.includes(featureState)) {
             console.warn("Feature state '" + featureState + "' is invalid for " + settingName);
             featureState = "disable"; // to prevent accidental features.
         }
