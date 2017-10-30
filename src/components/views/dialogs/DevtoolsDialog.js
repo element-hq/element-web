@@ -55,12 +55,12 @@ class GenericEditor extends DevtoolsComponent {
     }
 
     textInput(id, label) {
-        return <div className="mx_UserSettings_profileTableRow">
-            <div className="mx_UserSettings_profileLabelCell">
-                <label htmlFor="displayName">{ label }</label>
+        return <div className="mx_DevTools_inputRow">
+            <div className="mx_DevTools_inputLabelCell">
+                <label htmlFor={id}>{ label }</label>
             </div>
-            <div className="mx_UserSettings_profileInputCell">
-                <input id={id} onChange={this._onChange} value={this.state[id]} className="mx_EditableText" size="32" />
+            <div className="mx_DevTools_inputCell">
+                <input id={id} onChange={this._onChange} value={this.state[id]} size="32" />
             </div>
         </div>;
     }
@@ -148,8 +148,8 @@ class SendCustomEvent extends GenericEditor {
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 { !this.state.message && <button onClick={this._send}>{ _t('Send') }</button> }
                 { !this.state.message && !this.props.forceStateEvent && <div style={{float: "right"}}>
-                    <input id="isStateEvent" className="tgl tgl-flip" type="checkbox" onChange={this._onChange} checked={this.state.isStateEvent} />
-                    <label className="tgl-btn" data-tg-off="Event" data-tg-on="State Event" htmlFor="isStateEvent" />
+                    <input id="isStateEvent" className="mx_DevTools_tgl mx_DevTools_tgl-flip" type="checkbox" onChange={this._onChange} checked={this.state.isStateEvent} />
+                    <label className="mx_DevTools_tgl-btn" data-tg-off="Event" data-tg-on="State Event" htmlFor="isStateEvent" />
                 </div> }
             </div>
         </div>;
@@ -233,8 +233,8 @@ class SendAccountData extends GenericEditor {
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 { !this.state.message && <button onClick={this._send}>{ _t('Send') }</button> }
                 { !this.state.message && <div style={{float: "right"}}>
-                    <input id="isRoomAccountData" className="tgl tgl-flip" type="checkbox" onChange={this._onChange} checked={this.state.isRoomAccountData} disabled={this.props.forceMode} />
-                    <label className="tgl-btn" data-tg-off="Account Data" data-tg-on="Room Data" htmlFor="isRoomAccountData" />
+                    <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip" type="checkbox" onChange={this._onChange} checked={this.state.isRoomAccountData} disabled={this.props.forceMode} />
+                    <label className="mx_DevTools_tgl-btn" data-tg-off="Account Data" data-tg-on="Room Data" htmlFor="isRoomAccountData" />
                 </div> }
             </div>
         </div>;
@@ -489,8 +489,8 @@ class AccountDataExplorer extends DevtoolsComponent {
             <div className="mx_Dialog_buttons">
                 <button onClick={this.onBack}>{ _t('Back') }</button>
                 { !this.state.message && <div style={{float: "right"}}>
-                    <input id="isRoomAccountData" className="tgl tgl-flip" type="checkbox" onChange={this._onChange} checked={this.state.isRoomAccountData} />
-                    <label className="tgl-btn" data-tg-off="Account Data" data-tg-on="Room Data" htmlFor="isRoomAccountData" />
+                    <input id="isRoomAccountData" className="mx_DevTools_tgl mx_DevTools_tgl-flip" type="checkbox" onChange={this._onChange} checked={this.state.isRoomAccountData} />
+                    <label className="mx_DevTools_tgl-btn" data-tg-off="Account Data" data-tg-on="Room Data" htmlFor="isRoomAccountData" />
                 </div> }
             </div>
         </div>;
@@ -557,19 +557,26 @@ export default class DevtoolsDialog extends React.Component {
 
         if (this.state.mode) {
             body = <div>
-                <div style={{float: 'left'}}>{ this.state.mode.getLabel() }</div>
-                <div style={{float: 'right'}}>Room ID: { this.props.roomId }</div>
-                <div style={{clear: 'both'}} />
+                <div className="mx_DevTools_label_left">{ this.state.mode.getLabel() }</div>
+                <div className="mx_DevTools_label_right">Room ID: { this.props.roomId }</div>
+                <div className="mx_DevTools_label_bottom" />
                 <this.state.mode onBack={this.onBack} />
             </div>;
         } else {
+            const classes = "mx_DevTools_RoomStateExplorer_button";
             body = <div>
-                <div className="mx_Dialog_content">
-                    <div>Room ID: { this.props.roomId }</div>
-                    { Entries.map((Entry) => {
-                        const label = Entry.getLabel();
-                        return <button key={label} onClick={this._setMode(Entry)}>{ _t(label) }</button>;
-                    }) }
+                <div>
+                    <div className="mx_DevTools_label_left">{ _t('Toolbox') }</div>
+                    <div className="mx_DevTools_label_right">Room ID: { this.props.roomId }</div>
+                    <div className="mx_DevTools_label_bottom" />
+
+                    <div className="mx_Dialog_content">
+                        { Entries.map((Entry) => {
+                            const label = Entry.getLabel();
+                            const onClick = this._setMode(Entry);
+                            return <button className={classes} key={label} onClick={onClick}>{ label }</button>;
+                        }) }
+                    </div>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.onCancel}>{ _t('Cancel') }</button>

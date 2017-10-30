@@ -18,7 +18,51 @@ limitations under the License.
     margin-bottom: 10px;
 }
 
-.tgl {
+.mx_DevTools_label_left {
+    float: left;
+}
+
+.mx_DevTools_label_right {
+    float: right;
+}
+
+.mx_DevTools_label_bottom {
+    clear: both;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.mx_DevTools_inputRow
+{
+    display: table-row;
+}
+
+.mx_DevTools_inputLabelCell
+{
+    padding-bottom: 21px;
+    display: table-cell;
+    font-weight: bold;
+    padding-right: 24px;
+}
+
+.mx_DevTools_inputCell {
+    display: table-cell;
+    padding-bottom: 21px;
+    width: 240px;
+}
+
+.mx_DevTools_inputCell input
+{
+    display: inline-block;
+    border: 0;
+    border-bottom: 1px solid $input-underline-color;
+    padding: 0;
+    width: 240px;
+    color: $input-fg-color;
+    font-family: 'Open Sans', Helvetica, Arial, Sans-Serif;
+    font-size: 16px;
+}
+
+.mx_DevTools_tgl {
     display: none;
 
     // add default box-sizing for this scope
@@ -28,14 +72,14 @@ limitations under the License.
     & *,
     & *:after,
     & *:before,
-    & + .tgl-btn {
+    & + .mx_DevTools_tgl-btn {
         box-sizing: border-box;
         &::selection {
             background: none;
         }
     }
 
-    + .tgl-btn {
+    + .mx_DevTools_tgl-btn {
         outline: 0;
         display: block;
         width: 7em;
@@ -61,13 +105,13 @@ limitations under the License.
         }
     }
 
-    &:checked + .tgl-btn:after {
+    &:checked + .mx_DevTools_tgl-btn:after {
         left: 50%;
     }
 }
 
-.tgl-flip {
-    + .tgl-btn {
+.mx_DevTools_tgl-flip {
+    + .mx_DevTools_tgl-btn {
         padding: 2px;
         transition: all .2s ease;
         font-family: sans-serif;
@@ -104,7 +148,7 @@ limitations under the License.
         }
     }
 
-    &:checked + .tgl-btn {
+    &:checked + .mx_DevTools_tgl-btn {
         &:before {
             transform: rotateY(180deg);
         }
