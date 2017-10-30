@@ -18,6 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
@@ -99,6 +100,7 @@ module.exports = React.createClass({
         this.dispatcherRef = dis.register(this.onAction);
         const cli = this.context.matrixClient;
         cli.on("RoomState.members", this.onRoomStateMember);
+        this._initGroupStore(this.props.groupId);
     },
 
     componentWillUnmount: function() {
@@ -106,18 +108,40 @@ module.exports = React.createClass({
         if (this.context.matrixClient) {
             this.context.matrixClient.removeListener("RoomState.members", this.onRoomStateMember);
         }
+        this._unregisterGroupStore();
     },
 
     getInitialState: function() {
-        if (this.props.groupId) {
-            return {
-                phase: this.Phase.GroupMemberList,
-            };
-        } else {
-            return {
-                phase: this.Phase.RoomMemberList,
-            };
+        return {
+            phase: this.props.groupId ? this.Phase.GroupMemberList : this.Phase.RoomMemberList,
+            isUserPrivilegedInGroup: null,
         }
+    },
+
+    componentWillReceiveProps(newProps) {
+        if (newProps.groupId !== this.props.groupId) {
+            this._unregisterGroupStore();
+            this._initGroupStore(newProps.groupId);
+        }
+    },
+
+    _initGroupStore(groupId) {
+        this._groupStore = GroupStoreCache.getGroupStore(
+            this.context.matrixClient, this.props.groupId,
+        );
+        this._groupStore.registerListener(this.onGroupStoreUpdated);
+    },
+
+    _unregisterGroupStore() {
+        if (this._groupStore) {
+            this._groupStore.unregisterListener(this.onGroupStoreUpdated);
+        }
+    },
+
+    onGroupStoreUpdated: function(){
+        this.setState({
+            isUserPrivilegedInGroup: this._groupStore.isUserPrivileged(),
+        });
     },
 
     onCollapseClick: function() {
@@ -248,6 +272,11 @@ module.exports = React.createClass({
             }
         }
 
+        const isPhaseGroup = [
+            this.Phase.GroupMemberInfo,
+            this.Phase.GroupMemberList
+        ].includes(this.state.phase);
+
         let headerButtons = [];
         if (this.props.roomId) {
             headerButtons = [
@@ -271,7 +300,7 @@ module.exports = React.createClass({
         } else if (this.props.groupId) {
             headerButtons = [
                 <HeaderButton key="_groupMembersButton" title={_t('Members')} iconSrc="img/icons-people.svg"
-                    isHighlighted={this.state.phase === this.Phase.GroupMemberList}
+                    isHighlighted={isPhaseGroup}
                     clickPhase={this.Phase.GroupMemberList}
                     analytics={['Right Panel', 'Group Member List Button', 'click']}
                 />,
@@ -322,13 +351,8 @@ module.exports = React.createClass({
             panel = <div className="mx_RightPanel_blank"></div>;
         }
 
-        if (this.props.groupId &&
-            GroupStoreCache.getGroupStore(this.context.matrixClient, this.props.groupId).isUserPrivileged()
-        ) {
-            inviteGroup =  [
-                this.Phase.GroupMemberInfo,
-                this.Phase.GroupMemberList,
-            ].includes(this.state.phase) ? (
+        if (this.props.groupId && this.state.isUserPrivilegedInGroup) {
+            inviteGroup = isPhaseGroup ? (
                 <AccessibleButton className="mx_RightPanel_invite" onClick={ this.onInviteButtonClick } >
                     <div className="mx_RightPanel_icon" >
                         <TintableSvg src="img/icon-invite-people.svg" width="35" height="35" />
@@ -345,13 +369,16 @@ module.exports = React.createClass({
             );
         }
 
-        let classes = "mx_RightPanel mx_fadable";
-        if (this.props.collapsed) {
-            classes += " collapsed";
-        }
+        let classes = classNames(
+            "mx_RightPanel", "mx_fadable",
+            {
+                "collapsed": this.props.collapsed,
+                "mx_fadable_faded": this.props.disabled,
+            }
+        );
 
         return (
-            <aside className={classes} style={{ opacity: this.props.opacity }}>
+            <aside className={classes}>
                 <div className="mx_RightPanel_header">
                     <div className="mx_RightPanel_headerButtonGroup">
                         {headerButtons}
