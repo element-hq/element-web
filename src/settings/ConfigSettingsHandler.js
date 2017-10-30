@@ -24,7 +24,8 @@ import SdkConfig from "../SdkConfig";
  */
 export default class ConfigSettingsHandler extends SettingsHandler {
     getValue(settingName, roomId) {
-        const settingsConfig = SdkConfig.get()["settingDefaults"];
+        const config = SdkConfig.get() || {};
+        const settingsConfig = config["settingDefaults"];
         if (!settingsConfig || !settingsConfig[settingName]) return null;
         return settingsConfig[settingName];
     }

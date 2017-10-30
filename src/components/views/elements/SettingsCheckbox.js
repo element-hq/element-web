@@ -64,7 +64,7 @@ module.exports = React.createClass({
                        value={this.props.value}
                        checked={val === this.props.value}
                        onChange={this.onChange}
-                       />
+                />
             );
         }
 
