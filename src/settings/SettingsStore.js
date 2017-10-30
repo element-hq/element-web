@@ -214,6 +214,10 @@ const LEVEL_HANDLERS = {
     "default": new DefaultSettingsHandler(defaultSettings),
 };
 
+const LEVEL_ORDER = [
+    'device', 'room-device', 'room-account', 'account', 'room', 'config', 'default',
+];
+
 /**
  * Controls and manages application settings by providing varying levels at which the
  * setting value may be specified. The levels are then used to determine what the setting
@@ -304,9 +308,20 @@ export default class SettingsStore {
      * @return {*} The value, or null if not found
      */
     static getValue(settingName, roomId = null) {
-        const levelOrder = [
-            'device', 'room-device', 'room-account', 'account', 'room', 'config', 'default',
-        ];
+        return SettingsStore.getValueAt(LEVEL_ORDER[0], settingName, roomId);
+    }
+
+    /**
+     * Gets a setting's value at a particular level, ignoring all levels that are more specific.
+     * @param {"device"|"room-device"|"room-account"|"account"|"room"} level The level to
+     * look at.
+     * @param {string} settingName The name of the setting to read.
+     * @param {String} roomId The room ID to read the setting value in, may be null.
+     * @return {*} The value, or null if not found.
+     */
+    static getValueAt(level, settingName, roomId = null) {
+        const minIndex = LEVEL_ORDER.indexOf(level);
+        if (minIndex === -1) throw new Error("Level " + level + " is not prioritized");
 
         if (SettingsStore.isFeature(settingName)) {
             const configValue = SettingsStore._getFeatureState(settingName);
@@ -317,37 +332,16 @@ export default class SettingsStore {
 
         const handlers = SettingsStore._getHandlers(settingName);
 
-        for (const level of levelOrder) {
-            let handler = handlers[level];
+        for (let i = minIndex; i < LEVEL_ORDER.length; i++) {
+            let handler = handlers[LEVEL_ORDER[i]];
             if (!handler) continue;
 
             const value = handler.getValue(settingName, roomId);
             if (value === null || value === undefined) continue;
             return value;
         }
+
         return null;
-    }
-
-    /**
-     * Gets a setting's value at the given level.
-     * @param {"device"|"room-device"|"room-account"|"account"|"room"} level The lvel to
-     * look at.
-     * @param {string} settingName The name of the setting to read.
-     * @param {String} roomId The room ID to read the setting value in, may be null.
-     * @return {*} The value, or null if not found.
-     */
-    static getValueAt(level, settingName, roomId=null) {
-        // We specifically handle features as they have the possibility of being forced on.
-        if (SettingsStore.isFeature(settingName)) {
-            const configValue = SettingsStore._getFeatureState(settingName);
-            if (configValue === "enable") return true;
-            if (configValue === "disable") return false;
-            // else let it fall through the default process
-        }
-
-        const handler = SettingsStore._getHandler(settingName, level);
-        if (!handler) return null;
-        return handler.getValue(settingName, roomId);
     }
 
     /**
