@@ -884,6 +884,7 @@ export default React.createClass({
                 } else {
                     const GroupAvatar = sdk.getComponent('avatars.GroupAvatar');
                     avatarImage = <GroupAvatar groupId={this.props.groupId}
+                        groupName={this.state.profileForm.name}
                         groupAvatarUrl={this.state.profileForm.avatar_url}
                         width={48} height={48} resizeMethod='crop'
                     />;
@@ -928,9 +929,11 @@ export default React.createClass({
                      dir="auto" />;
             } else {
                 const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;
+                const groupName = summary.profile ? summary.profile.name : null;
                 avatarNode = <GroupAvatar
                     groupId={this.props.groupId}
                     groupAvatarUrl={groupAvatarUrl}
+                    groupName={groupName}
                     onClick={this._onEditClick}
                     width={48} height={48}
                 />;
