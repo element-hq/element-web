@@ -618,5 +618,9 @@
     "Banned by %(displayName)s": "Vykázán/a uživatelem %(displayName)s",
     "Privacy warning": "Výstraha o utajení",
     "Never send encrypted messages to unverified devices in this room from this device": "Nikdy z tohoto zařízení neposílat šifrované zprávy neověřeným zařízením v této místnosti",
-    "Privileged Users": "Privilegovaní uživatelé"
+    "Privileged Users": "Privilegovaní uživatelé",
+    "No users have specific privileges in this room": "Žádní uživatelé v této místnosti nemají zvláštní privilegia",
+    "Tagged as: ": "Oštítkováno jako: ",
+    "To link to a room it must have <a>an address</a>.": "Aby šlo odkazovat na místnost, musí mít <a>adresu</a>.",
+    "Publish this room to the public in %(domain)s's room directory?": "Zapsat tuto místnost do veřejného adresáře místností na %(domain)s?"
 }
