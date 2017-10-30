@@ -24,6 +24,7 @@ export default React.createClass({
 
     propTypes: {
         groupId: PropTypes.string,
+        groupName: PropTypes.string,
         groupAvatarUrl: PropTypes.string,
         width: PropTypes.number,
         height: PropTypes.number,
@@ -57,7 +58,7 @@ export default React.createClass({
 
         return (
             <BaseAvatar
-                name={this.props.groupId[1]}
+                name={this.props.groupName || this.props.groupId[1]}
                 idName={this.props.groupId}
                 url={this.getGroupAvatarUrl()}
                 {...otherProps}
