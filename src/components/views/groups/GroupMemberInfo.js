@@ -37,6 +37,7 @@ module.exports = React.createClass({
     propTypes: {
         groupId: PropTypes.string,
         groupMember: GroupMemberType,
+        isInvited: PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -72,6 +73,9 @@ module.exports = React.createClass({
 
     onGroupStoreUpdated: function() {
         this.setState({
+            isUserInvited: this._groupStore.getGroupInvitedMembers().some(
+                (m) => m.userId === this.props.groupMember.userId,
+            ),
             isUserPrivilegedInGroup: this._groupStore.isUserPrivileged(),
         });
     },
@@ -80,7 +84,7 @@ module.exports = React.createClass({
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
             groupMember: this.props.groupMember,
-            action: _t('Remove from community'),
+            action: this.state.isUserInvited ? _t('Disinvite') : _t('Remove from community'),
             danger: true,
             onFinished: (proceed) => {
                 if (!proceed) return;
@@ -98,7 +102,9 @@ module.exports = React.createClass({
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Failed to remove user from group', '', ErrorDialog, {
                         title: _t('Error'),
-                        description: _t('Failed to remove user from community'),
+                        description: this.state.isUserInvited ?
+                            _t('Failed to withdraw invitation') :
+                            _t('Failed to remove user from community'),
                     });
                 }).finally(() => {
                     this.setState({removingUser: false});
@@ -133,7 +139,7 @@ module.exports = React.createClass({
             const kickButton = (
                 <AccessibleButton className="mx_MemberInfo_field"
                         onClick={this._onKick}>
-                    { _t('Remove from community') }
+                    { this.state.isUserInvited ? _t('Disinvite') : _t('Remove from community') }
                 </AccessibleButton>
             );
 
