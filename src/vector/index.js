@@ -77,7 +77,7 @@ import {parseQs, parseQsFromFragment} from './url_utils';
 import Platform from './platform';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import SettingsStore from "../../../matrix-react-sdk/src/settings/SettingsStore";
+import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
 
 var lastLocationHashSet = null;
 
