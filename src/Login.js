@@ -210,6 +210,9 @@ export default class Login {
                 return tryLowercaseUsername(originalLoginError);
             }
             throw originalLoginError;
+        }).catch((error) => {
+            console.log("Login failed", error);
+            throw error;
         });
     }
 
