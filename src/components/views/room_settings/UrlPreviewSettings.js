@@ -28,6 +28,11 @@ module.exports = React.createClass({
         room: React.PropTypes.object,
     },
 
+    saveSettings: function() {
+        // TODO: {Travis} move toggle logic here instead of being 'live'
+        return [];
+    },
+
     render: function() {
         const SettingsCheckbox = sdk.getComponent("elements.SettingsCheckbox");
         const roomId = this.props.room.roomId;
@@ -43,6 +48,7 @@ module.exports = React.createClass({
             );
         }
 
+        // TODO: {Travis} This needs to be an explicit true/false for "room" only.
         let previewsForRoom = null;
         if (SettingsStore.canSetValue("urlPreviewsEnabled", roomId, "room")) {
             previewsForRoom = (
