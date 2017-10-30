@@ -61,6 +61,7 @@ const gHVersionLabel = function(repo, token='') {
 // Enumerate some simple 'flip a bit' UI settings (if any). The strings provided here
 // must be settings defined in SettingsStore.
 const SIMPLE_SETTINGS = [
+    { id: "urlPreviewsEnabled" },
     { id: "autoplayGifsAndVideos" },
     { id: "hideReadReceipts" },
     { id: "dontSendTypingNotifications" },
@@ -640,7 +641,6 @@ module.exports = React.createClass({
             <div>
                 <h3>{ _t("User Interface") }</h3>
                 <div className="mx_UserSettings_section">
-                    { this._renderUrlPreviewSelector() }
                     { SIMPLE_SETTINGS.map( this._renderSyncedSetting ) }
                     { THEMES.map( this._renderThemeSelector ) }
                     <table>
@@ -661,23 +661,6 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
-    },
-
-    _renderUrlPreviewSelector: function() {
-        return <div className="mx_UserSettings_toggle">
-            <input id="urlPreviewsDisabled"
-                   type="checkbox"
-                   defaultChecked={UserSettingsStore.getUrlPreviewsDisabled()}
-                   onChange={this._onPreviewsDisabledChanged}
-            />
-            <label htmlFor="urlPreviewsDisabled">
-                { _t("Disable inline URL previews by default") }
-            </label>
-        </div>;
-    },
-
-    _onPreviewsDisabledChanged: function(e) {
-         UserSettingsStore.setUrlPreviewsDisabled(e.target.checked);
     },
 
     _renderSyncedSetting: function(setting) {

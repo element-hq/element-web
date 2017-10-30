@@ -194,6 +194,15 @@ const SETTINGS = {
         default: false,
         displayName: _td('Never send encrypted messages to unverified devices from this device'),
     },
+    "urlPreviewsEnabled": {
+        supportedLevels: LEVELS_PRESET_ROOM.concat("room"),
+        default: true,
+        displayName: {
+            "default": _td('Enable inline URL previews by default'),
+            "room-account": _td("Enable URL previews for this room (only affects you)"),
+            "room": _td("Enable URL previews by default for participants in this room"),
+        },
+    },
 };
 
 // Convert the above into simpler formats for the handlers
@@ -245,11 +254,20 @@ export default class SettingsStore {
     /**
      * Gets the translated display name for a given setting
      * @param {string} settingName The setting to look up.
+     * @param {"device"|"room-device"|"room-account"|"account"|"room"|"config"|"default"} atLevel
+     * The level to get the display name for; Defaults to 'default'.
      * @return {String} The display name for the setting, or null if not found.
      */
-    static getDisplayName(settingName) {
+    static getDisplayName(settingName, atLevel = "default") {
         if (!SETTINGS[settingName] || !SETTINGS[settingName].displayName) return null;
-        return _t(SETTINGS[settingName].displayName);
+
+        let displayName = SETTINGS[settingName].displayName;
+        if (displayName instanceof Object) {
+            if (displayName[atLevel]) displayName = displayName[atLevel];
+            else displayName = displayName["default"];
+        }
+
+        return _t(displayName);
     }
 
     /**
@@ -362,7 +380,7 @@ export default class SettingsStore {
         }
 
         if (!handler.canSetValue(settingName, roomId)) {
-            throw new Error("User cannot set " + settingName + " at level " + level);
+            throw new Error("User cannot set " + settingName + " at " + level + " in " + roomId);
         }
 
         return handler.setValue(settingName, roomId, value);

@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 import SettingsHandler from "./SettingsHandler";
 import MatrixClientPeg from '../MatrixClientPeg';
 
@@ -24,10 +23,23 @@ import MatrixClientPeg from '../MatrixClientPeg';
  */
 export default class AccountSettingHandler extends SettingsHandler {
     getValue(settingName, roomId) {
+        // Special case URL previews
+        if (settingName === "urlPreviewsEnabled") {
+            const content = this._getSettings("org.matrix.preview_urls");
+            return !content['disable'];
+        }
+
         return this._getSettings()[settingName];
     }
 
     setValue(settingName, roomId, newValue) {
+        // Special case URL previews
+        if (settingName === "urlPreviewsEnabled") {
+            const content = this._getSettings("org.matrix.preview_urls");
+            content['disable'] = !newValue;
+            return MatrixClientPeg.get().setAccountData("org.matrix.preview_urls", content);
+        }
+
         const content = this._getSettings();
         content[settingName] = newValue;
         return MatrixClientPeg.get().setAccountData("im.vector.web.settings", content);
@@ -41,8 +53,8 @@ export default class AccountSettingHandler extends SettingsHandler {
         return !!MatrixClientPeg.get();
     }
 
-    _getSettings() {
-        const event = MatrixClientPeg.get().getAccountData("im.vector.web.settings");
+    _getSettings(eventType = "im.vector.web.settings") {
+        const event = MatrixClientPeg.get().getAccountData(eventType);
         if (!event || !event.getContent()) return {};
         return event.getContent();
     }

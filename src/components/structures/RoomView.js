@@ -614,38 +614,8 @@ module.exports = React.createClass({
     },
 
     _updatePreviewUrlVisibility: function(room) {
-        // console.log("_updatePreviewUrlVisibility");
-
-        // check our per-room overrides
-        const roomPreviewUrls = room.getAccountData("org.matrix.room.preview_urls");
-        if (roomPreviewUrls && roomPreviewUrls.getContent().disable !== undefined) {
-            this.setState({
-                showUrlPreview: !roomPreviewUrls.getContent().disable,
-            });
-            return;
-        }
-
-        // check our global disable override
-        const userRoomPreviewUrls = MatrixClientPeg.get().getAccountData("org.matrix.preview_urls");
-        if (userRoomPreviewUrls && userRoomPreviewUrls.getContent().disable) {
-            this.setState({
-                showUrlPreview: false,
-            });
-            return;
-        }
-
-        // check the room state event
-        const roomStatePreviewUrls = room.currentState.getStateEvents('org.matrix.room.preview_urls', '');
-        if (roomStatePreviewUrls && roomStatePreviewUrls.getContent().disable) {
-            this.setState({
-                showUrlPreview: false,
-            });
-            return;
-        }
-
-        // otherwise, we assume they're on.
         this.setState({
-            showUrlPreview: true,
+            showUrlPreview: SettingsStore.getValue("urlPreviewsEnabled", room.roomId),
         });
     },
 

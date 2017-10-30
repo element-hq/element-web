@@ -44,7 +44,7 @@ module.exports = React.createClass({
         let val = SettingsStore.getValueAt(this.props.level, this.props.name, this.props.roomId);
 
         let label = this.props.label;
-        if (!label) label = SettingsStore.getDisplayName(this.props.name);
+        if (!label) label = SettingsStore.getDisplayName(this.props.name, this.props.level);
         else label = _t(label);
 
         let id = this.props.name;

@@ -124,16 +124,4 @@ export default {
             append: true,  // We always append for email pushers since we don't want to stop other accounts notifying to the same email address
         });
     },
-
-    getUrlPreviewsDisabled: function() {
-        const event = MatrixClientPeg.get().getAccountData('org.matrix.preview_urls');
-        return (event && event.getContent().disable);
-    },
-
-    setUrlPreviewsDisabled: function(disabled) {
-        // FIXME: handle errors
-        return MatrixClientPeg.get().setAccountData('org.matrix.preview_urls', {
-            disable: disabled,
-        });
-    },
 };
