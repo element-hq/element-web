@@ -69,12 +69,10 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className="mx_SettingCheckbox">
+            <label>
                 { checkbox }
-                <label htmlFor={id}>
-                    { label }
-                </label>
-            </div>
+                { label }
+            </label>
         );
     },
 });
