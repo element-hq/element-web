@@ -47,16 +47,16 @@ module.exports = React.createClass({
         if (!label) label = SettingsStore.getDisplayName(this.props.name, this.props.level);
         else label = _t(label);
 
-        let id = this.props.name;
+        // We generate a relatively complex ID to avoid conflicts
+        const id = this.props.name + "_" + this.props.group + "_" + this.props.value + "_" + this.props.level;
         let checkbox = (
-            <input id={this.props.name}
+            <input id={id}
                    type="checkbox"
                    defaultChecked={val}
                    onChange={this.onChange}
             />
         );
         if (this.props.group) {
-            id = this.props.group + '_' + this.props.name;
             checkbox = (
                 <input id={id}
                        type="radio"
