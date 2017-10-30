@@ -78,8 +78,6 @@ const SIMPLE_SETTINGS = [
     { id: "VideoView.flipVideoHorizontally" },
 ];
 
-// TODO: {Travis} Consider making generic setting handler to support `label` and `fn` optionally (backed by SettingsStore)
-
 const ANALYTICS_SETTINGS_LABELS = [
     {
         id: 'analyticsOptOut',
@@ -682,54 +680,31 @@ module.exports = React.createClass({
          UserSettingsStore.setUrlPreviewsDisabled(e.target.checked);
     },
 
-    // TODO: {Travis} Make this a component (<CheckboxSetting name='' [label]='' [fn]=() level=''>)
     _renderSyncedSetting: function(setting) {
-        // TODO: this ought to be a separate component so that we don't need
-        // to rebind the onChange each time we render
-
-        const onChange = (e) => {
-            SettingsStore.setValue(setting.id, null, "account", e.target.checked);
-            if (setting.fn) setting.fn(e.target.checked);
-        };
-
-        return <div className="mx_UserSettings_toggle" key={setting.id}>
-            <input id={setting.id}
-                   type="checkbox"
-                   defaultChecked={SettingsStore.getValueAt("account", setting.id)}
-                   onChange={onChange}
-            />
-            <label htmlFor={setting.id}>
-                { setting.label ? _t(setting.label) : SettingsStore.getDisplayName(setting.id) }
-            </label>
-        </div>;
+        const SettingsCheckbox = sdk.getComponent("elements.SettingsCheckbox");
+        return (
+            <div className="mx_UserSettings_toggle" key={setting.id}>
+                <SettingsCheckbox name={setting.id}
+                                  label={setting.label}
+                                  level="account"
+                                  onChange={setting.fn} />
+            </div>
+        );
     },
 
-    // TODO: {Travis} Make this a component (<RadioSetting name='' [label]='' [fn]=() level='' group='theme'>)
-    // {Travis} Maybe make that part of CheckboxSetting somehow?
     _renderThemeSelector: function(setting) {
-        // TODO: this ought to be a separate component so that we don't need
-        // to rebind the onChange each time we render
-        const onChange = (e) => {
-            if (e.target.checked) {
-                SettingsStore.setValue("theme", null, "account", setting.value);
-            }
-            dis.dispatch({
-                action: 'set_theme',
-                value: setting.value,
-            });
-        };
-        return <div className="mx_UserSettings_toggle" key={"theme_" + setting.value}>
-            <input id={"theme_" + setting.value}
-                   type="radio"
-                   name="theme"
-                   value={setting.value}
-                   checked={SettingsStore.getValueAt("account", "theme") === setting.value}
-                   onChange={onChange}
-            />
-            <label htmlFor={"theme_" + setting.value}>
-                { _t(setting.label) }
-            </label>
-        </div>;
+        const SettingsCheckbox = sdk.getComponent("elements.SettingsCheckbox");
+        const onChange = (v) => dis.dispatch({action: 'set_theme', value: setting.value});
+        return (
+            <div className="mx_UserSettings_toggle" key={setting.id + '_' + setting.value}>
+                <SettingsCheckbox name="theme"
+                                  label={setting.label}
+                                  level="account"
+                                  onChange={onChange}
+                                  group="theme"
+                                  value={setting.value} />
+            </div>
+        );
     },
 
     _renderCryptoInfo: function() {
@@ -797,25 +772,16 @@ module.exports = React.createClass({
         } else return (<div />);
     },
 
-    // TODO: {Travis} Make this a component (<CheckboxSetting name='' [label]='' [fn]=() level=''>)
     _renderLocalSetting: function(setting) {
-        // TODO: this ought to be a separate component so that we don't need
-        // to rebind the onChange each time we render
-        const onChange = (e) => {
-            SettingsStore.setValue(setting.id, null, "device", e.target.checked);
-            if (setting.fn) setting.fn(e.target.checked);
-        };
-
-        return <div className="mx_UserSettings_toggle" key={setting.id}>
-            <input id={setting.id}
-                   type="checkbox"
-                   defaultChecked={SettingsStore.getValueAt("device", setting.id)}
-                   onChange={onChange}
-            />
-            <label htmlFor={setting.id}>
-                { setting.label ? _t(setting.label) : SettingsStore.getDisplayName(setting.id) }
-            </label>
-        </div>;
+        const SettingsCheckbox = sdk.getComponent("elements.SettingsCheckbox");
+        return (
+            <div className="mx_UserSettings_toggle" key={setting.id}>
+                <SettingsCheckbox name={setting.id}
+                                  label={setting.label}
+                                  level="device"
+                                  onChange={setting.fn} />
+            </div>
+        );
     },
 
     _renderDevicesPanel: function() {

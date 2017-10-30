@@ -159,7 +159,7 @@ const SETTINGS = {
         default: "light",
     },
     "webRtcForceTURN": {
-        supportedLevels: ['device'],
+        supportedLevels: ['device', 'config'],
         default: false,
         displayName: _td('Disable Peer-to-Peer for 1:1 calls'),
     },
@@ -170,28 +170,29 @@ const SETTINGS = {
         supportedLevels: ['device'],
     },
     "language": {
-        supportedLevels: ['device'],
+        supportedLevels: ['device', 'config'],
         default: "en"
     },
     "analyticsOptOut": {
-        supportedLevels: ['device'],
+        supportedLevels: ['device', 'config'],
         default: false,
         displayName: _td('Opt out of analytics'),
     },
     "autocompleteDelay": {
-        supportedLevels: ['device'],
+        supportedLevels: ['device', 'config'],
         default: 200,
     },
     "blacklistUnverifiedDevicesPerRoom": {
         // TODO: {Travis} Write a migration path to support blacklistUnverifiedDevices
         supportedLevels: ['device'],
         default: {},
+        displayName: _td('Never send encrypted messages to unverified devices from this device'),
     },
     "blacklistUnverifiedDevices": {
         // TODO: {Travis} Write a migration path to support blacklistUnverifiedDevices
         supportedLevels: ['device'],
         default: false,
-        label: _td('Never send encrypted messages to unverified devices from this device'),
+        displayName: _td('Never send encrypted messages to unverified devices from this device'),
     },
 };
 
