@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
-import MatrixClient from 'matrix-js-sdk';
+import { MatrixClient } from 'matrix-js-sdk';
 import Analytics from 'matrix-react-sdk/lib/Analytics';
 import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
