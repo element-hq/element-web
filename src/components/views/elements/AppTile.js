@@ -317,6 +317,7 @@ export default React.createClass({
                                 src={safeWidgetUrl}
                                 allowFullScreen="true"
                                 sandbox={sandboxFlags}
+                                onLoad={this._onLoaded}
                             ></iframe>
                         </div>
                     );
@@ -358,7 +359,6 @@ export default React.createClass({
                             alt={_t('Edit')}
                             title={_t('Edit')}
                             onClick={this._onEditClick}
-                            onLoad={this._onLoaded}
                         /> }
 
                         { /* Delete widget */ }
