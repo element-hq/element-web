@@ -108,7 +108,6 @@ export default React.createClass({
         this.updateWidgetContent();
     },
 
-    // Update widget content
     updateWidgetContent() {
         this.setState(this._getInitialState());
         // Set scalar token on the wUrl, if needed
