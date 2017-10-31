@@ -58,22 +58,28 @@ export default React.createClass({
         };
     },
 
-    _getInitialState() {
-      const widgetPermissionId = [this.props.room.roomId, encodeURIComponent(this.props.url)].join('_');
+
+    /**
+     * Set initial component state when the App wUrl (widget URL) is being updated
+     * @param  {Object} props The component props *must* be passed (rather than using this.props) so that it can be called with future props, e.g. from componentWillReceiveProps.
+     * @return {Object} Updated component state to be set with setState
+     */
+    _getNewUrlState(props) {
+      const widgetPermissionId = [props.room.roomId, encodeURIComponent(props.url)].join('_');
       const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
       return {
           loading: true,
-          widgetUrl: this.props.url,
+          widgetUrl: props.url,
           widgetPermissionId: widgetPermissionId,
           // Assume that widget has permission to load if we are the user who added it to the room, or if explicitly granted by the user
-          hasPermissionToLoad: hasPermissionToLoad === 'true' || this.props.userId === this.props.creatorUserId,
+          hasPermissionToLoad: hasPermissionToLoad === 'true' || props.userId === props.creatorUserId,
           error: null,
           deleting: false,
       };
     },
 
     getInitialState() {
-      return this._getInitialState();
+      return this._getNewUrlState(this.props);
     },
 
     // Returns true if props.url is a scalar URL, typically https://scalar.vector.im/api
@@ -109,7 +115,7 @@ export default React.createClass({
     },
 
     updateWidgetContent() {
-        this.setState(this._getInitialState());
+        this.setState(this._getNewUrlState());
         // Set scalar token on the wUrl, if needed
         this.setScalarToken();
     },
@@ -150,9 +156,9 @@ export default React.createClass({
         window.removeEventListener('message', this._onMessage);
     },
 
-    componentDidUpdate(prevProps) {
-        if (prevProps.url !== this.props.url) {
-            this.updateWidgetContent();
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.url !== this.props.url) {
+            this.updateWidgetContent(nextProps);
         }
     },
 
