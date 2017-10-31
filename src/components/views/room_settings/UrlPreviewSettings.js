@@ -34,7 +34,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const SettingsCheckbox = sdk.getComponent("elements.SettingsCheckbox");
+        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
         const roomId = this.props.room.roomId;
 
         let previewsForAccount = null;
@@ -53,7 +53,7 @@ module.exports = React.createClass({
         if (SettingsStore.canSetValue("urlPreviewsEnabled", roomId, "room")) {
             previewsForRoom = (
                 <label>
-                    <SettingsCheckbox name="urlPreviewsEnabled"
+                    <SettingsFlag name="urlPreviewsEnabled"
                                       level="room"
                                       roomId={this.props.room.roomId}
                                       isExplicit={true} />
@@ -68,7 +68,7 @@ module.exports = React.createClass({
         }
 
         let previewsForRoomAccount = (
-            <SettingsCheckbox name="urlPreviewsEnabled"
+            <SettingsFlag name="urlPreviewsEnabled"
                               level="room-account"
                               roomId={this.props.room.roomId}
             />

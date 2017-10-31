@@ -664,10 +664,10 @@ module.exports = React.createClass({
     },
 
     _renderSyncedSetting: function(setting) {
-        const SettingsCheckbox = sdk.getComponent("elements.SettingsCheckbox");
+        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
         return (
             <div className="mx_UserSettings_toggle" key={setting.id}>
-                <SettingsCheckbox name={setting.id}
+                <SettingsFlag name={setting.id}
                                   label={setting.label}
                                   level="account"
                                   onChange={setting.fn} />
@@ -676,11 +676,11 @@ module.exports = React.createClass({
     },
 
     _renderThemeSelector: function(setting) {
-        const SettingsCheckbox = sdk.getComponent("elements.SettingsCheckbox");
+        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
         const onChange = (v) => dis.dispatch({action: 'set_theme', value: setting.value});
         return (
             <div className="mx_UserSettings_toggle" key={setting.id + '_' + setting.value}>
-                <SettingsCheckbox name="theme"
+                <SettingsFlag name="theme"
                                   label={setting.label}
                                   level="account"
                                   onChange={onChange}
@@ -756,10 +756,10 @@ module.exports = React.createClass({
     },
 
     _renderLocalSetting: function(setting) {
-        const SettingsCheckbox = sdk.getComponent("elements.SettingsCheckbox");
+        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
         return (
             <div className="mx_UserSettings_toggle" key={setting.id}>
-                <SettingsCheckbox name={setting.id}
+                <SettingsFlag name={setting.id}
                                   label={setting.label}
                                   level="device"
                                   onChange={setting.fn} />

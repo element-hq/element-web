@@ -19,7 +19,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
-    displayName: 'SettingsCheckbox',
+    displayName: 'SettingsFlag',
     propTypes: {
         name: React.PropTypes.string.isRequired,
         level: React.PropTypes.string.isRequired,
