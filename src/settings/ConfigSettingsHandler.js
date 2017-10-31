@@ -25,6 +25,12 @@ import SdkConfig from "../SdkConfig";
 export default class ConfigSettingsHandler extends SettingsHandler {
     getValue(settingName, roomId) {
         const config = SdkConfig.get() || {};
+
+        // Special case themes
+        if (settingName === "theme") {
+            return config["default_theme"];
+        }
+
         const settingsConfig = config["settingDefaults"];
         if (!settingsConfig || !settingsConfig[settingName]) return null;
         return settingsConfig[settingName];
