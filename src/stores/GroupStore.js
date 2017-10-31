@@ -23,6 +23,14 @@ import FlairStore from './FlairStore';
  * other useful group APIs that may have an effect on the group summary.
  */
 export default class GroupStore extends EventEmitter {
+
+    static STATE_KEY = {
+        GroupMembers: 'GroupMembers',
+        GroupInvitedMembers: 'GroupInvitedMembers',
+        Summary: 'Summary',
+        GroupRooms: 'GroupRooms',
+    };
+
     constructor(matrixClient, groupId) {
         super();
         this.groupId = groupId;
@@ -43,7 +51,7 @@ export default class GroupStore extends EventEmitter {
             this._members = result.chunk.map((apiMember) => {
                 return groupMemberFromApiObject(apiMember);
             });
-            this._ready['GroupStore.GroupMembers'] = true;
+            this._ready[GroupStore.STATE_KEY.GroupMembers] = true;
             this._notifyListeners();
         }).catch((err) => {
             console.error("Failed to get group member list: " + err);
@@ -54,7 +62,7 @@ export default class GroupStore extends EventEmitter {
             this._invitedMembers = result.chunk.map((apiMember) => {
                 return groupMemberFromApiObject(apiMember);
             });
-            this._ready['GroupStore.GroupInvitedMembers'] = true;
+            this._ready[GroupStore.STATE_KEY.GroupInvitedMembers] = true;
             this._notifyListeners();
         }).catch((err) => {
             // Invited users not visible to non-members
@@ -69,7 +77,7 @@ export default class GroupStore extends EventEmitter {
     _fetchSummary() {
         this._matrixClient.getGroupSummary(this.groupId).then((resp) => {
             this._summary = resp;
-            this._ready['GroupStore.Summary'] = true;
+            this._ready[GroupStore.STATE_KEY.Summary] = true;
             this._notifyListeners();
         }).catch((err) => {
             this.emit('error', err);
@@ -81,7 +89,7 @@ export default class GroupStore extends EventEmitter {
             this._rooms = resp.chunk.map((apiRoom) => {
                 return groupRoomFromApiObject(apiRoom);
             });
-            this._ready['GroupStore.GroupRooms'] = true;
+            this._ready[GroupStore.STATE_KEY.GroupRooms] = true;
             this._notifyListeners();
         }).catch((err) => {
             this.emit('error', err);

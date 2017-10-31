@@ -462,11 +462,11 @@ export default React.createClass({
             }
             this.setState({
                 summary,
-                summaryLoading: !this._groupStore.isStateReady('GroupStore.Summary'),
+                summaryLoading: !this._groupStore.isStateReady(GroupStore.STATE_KEY.Summary),
                 isGroupPublicised: this._groupStore.getGroupPublicity(),
                 isUserPrivileged: this._groupStore.isUserPrivileged(),
                 groupRooms: this._groupStore.getGroupRooms(),
-                groupRoomsLoading: !this._groupStore.isStateReady('GroupStore.GroupRooms'),
+                groupRoomsLoading: !this._groupStore.isStateReady(GroupStore.STATE_KEY.GroupRooms),
                 isUserMember: this._groupStore.getGroupMembers().some(
                     (m) => m.userId === MatrixClientPeg.get().credentials.userId,
                 ),
