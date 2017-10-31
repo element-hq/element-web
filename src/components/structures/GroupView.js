@@ -407,6 +407,10 @@ export default React.createClass({
     getInitialState: function() {
         return {
             summary: null,
+            isGroupPublicised: null,
+            isUserPrivileged: null,
+            groupRooms: null,
+            groupRoomsLoading: null,
             error: null,
             editing: false,
             saving: false,
@@ -458,8 +462,11 @@ export default React.createClass({
             }
             this.setState({
                 summary,
+                summaryLoading: !this._groupStore.isStateReady(GroupStore.STATE_KEY.Summary),
                 isGroupPublicised: this._groupStore.getGroupPublicity(),
                 isUserPrivileged: this._groupStore.isUserPrivileged(),
+                groupRooms: this._groupStore.getGroupRooms(),
+                groupRoomsLoading: !this._groupStore.isStateReady(GroupStore.STATE_KEY.GroupRooms),
                 isUserMember: this._groupStore.getGroupMembers().some(
                     (m) => m.userId === MatrixClientPeg.get().credentials.userId,
                 ),
@@ -653,6 +660,7 @@ export default React.createClass({
         const RoomDetailList = sdk.getComponent('rooms.RoomDetailList');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
+        const Spinner = sdk.getComponent('elements.Spinner');
 
         const addRoomRow = this.state.editing ?
             (<AccessibleButton className="mx_GroupView_rooms_header_addRow"
@@ -670,7 +678,10 @@ export default React.createClass({
                 <h3>{ _t('Rooms') }</h3>
                 { addRoomRow }
             </div>
-            <RoomDetailList rooms={this._groupStore.getGroupRooms()} />
+            { this.state.groupRoomsLoading ?
+                <Spinner /> :
+                <RoomDetailList rooms={this.state.groupRooms} />
+            }
         </div>;
     },
 
@@ -866,7 +877,7 @@ export default React.createClass({
         const Spinner = sdk.getComponent("elements.Spinner");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        if (this.state.summary === null && this.state.error === null || this.state.saving) {
+        if (this.state.summaryLoading && this.state.error === null || this.state.saving) {
             return <Spinner />;
         } else if (this.state.summary) {
             const summary = this.state.summary;
