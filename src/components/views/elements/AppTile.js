@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 import url from 'url';
-import URLSearchParams from 'url-search-params';
+import qs from 'querystring';
 import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import PlatformPeg from '../../../PlatformPeg';
@@ -127,10 +127,10 @@ export default React.createClass({
             // Append scalar_token as a query param if not already present
             this._scalarClient.scalarToken = token;
             const u = url.parse(this.props.url);
-            const params = new URLSearchParams(u.search);
-            if (!params.get('scalar_token')) {
-                params.set('scalar_token', encodeURIComponent(token));
-                u.search = params.toString();
+            const params = qs(u.search);
+            if (!params.scalar_token) {
+                params.scalar_token = encodeURIComponent(token);
+                u.search = qs.stringify(params);
             }
 
             this.setState({
