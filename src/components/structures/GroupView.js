@@ -407,6 +407,10 @@ export default React.createClass({
     getInitialState: function() {
         return {
             summary: null,
+            isGroupPublicised: null,
+            isUserPrivileged: null,
+            groupRooms: null,
+            groupRoomsLoading: null,
             error: null,
             editing: false,
             saving: false,
@@ -458,8 +462,11 @@ export default React.createClass({
             }
             this.setState({
                 summary,
+                summaryLoading: !this._groupStore.isStateReady('GroupStore.Summary'),
                 isGroupPublicised: this._groupStore.getGroupPublicity(),
                 isUserPrivileged: this._groupStore.isUserPrivileged(),
+                groupRooms: this._groupStore.getGroupRooms(),
+                groupRoomsLoading: !this._groupStore.isStateReady('GroupStore.GroupRooms'),
                 error: null,
             });
         });
@@ -667,7 +674,7 @@ export default React.createClass({
                 <h3>{ _t('Rooms') }</h3>
                 { addRoomRow }
             </div>
-            <RoomDetailList rooms={this._groupStore.getGroupRooms()} />
+            <RoomDetailList rooms={this.state.groupRooms} loading={this.state.groupRoomsLoading} />
         </div>;
     },
 
@@ -863,7 +870,7 @@ export default React.createClass({
         const Spinner = sdk.getComponent("elements.Spinner");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        if (this.state.summary === null && this.state.error === null || this.state.saving) {
+        if (this.state.summaryLoading && this.state.error === null || this.state.saving) {
             return <Spinner />;
         } else if (this.state.summary) {
             const summary = this.state.summary;

@@ -29,6 +29,9 @@ export default class GroupStore extends EventEmitter {
         this._matrixClient = matrixClient;
         this._summary = {};
         this._rooms = [];
+        this._members = [];
+        this._invitedMembers = [];
+        this._ready = {};
 
         this.on('error', (err) => {
             console.error(`GroupStore for ${this.groupId} encountered error`, err);
@@ -40,6 +43,7 @@ export default class GroupStore extends EventEmitter {
             this._members = result.chunk.map((apiMember) => {
                 return groupMemberFromApiObject(apiMember);
             });
+            this._ready['GroupStore.GroupMembers'] = true;
             this._notifyListeners();
         }).catch((err) => {
             console.error("Failed to get group member list: " + err);
@@ -50,6 +54,7 @@ export default class GroupStore extends EventEmitter {
             this._invitedMembers = result.chunk.map((apiMember) => {
                 return groupMemberFromApiObject(apiMember);
             });
+            this._ready['GroupStore.GroupInvitedMembers'] = true;
             this._notifyListeners();
         }).catch((err) => {
             // Invited users not visible to non-members
@@ -64,6 +69,7 @@ export default class GroupStore extends EventEmitter {
     _fetchSummary() {
         this._matrixClient.getGroupSummary(this.groupId).then((resp) => {
             this._summary = resp;
+            this._ready['GroupStore.Summary'] = true;
             this._notifyListeners();
         }).catch((err) => {
             this.emit('error', err);
@@ -75,6 +81,7 @@ export default class GroupStore extends EventEmitter {
             this._rooms = resp.chunk.map((apiRoom) => {
                 return groupRoomFromApiObject(apiRoom);
             });
+            this._ready['GroupStore.GroupRooms'] = true;
             this._notifyListeners();
         }).catch((err) => {
             this.emit('error', err);
@@ -87,6 +94,8 @@ export default class GroupStore extends EventEmitter {
 
     registerListener(fn) {
         this.on('update', fn);
+        // Call to set initial state (before fetching starts)
+        this.emit('update');
         this._fetchSummary();
         this._fetchRooms();
         this._fetchMembers();
@@ -94,6 +103,10 @@ export default class GroupStore extends EventEmitter {
 
     unregisterListener(fn) {
         this.removeListener('update', fn);
+    }
+
+    isStateReady(id) {
+        return this._ready[id];
     }
 
     getSummary() {
