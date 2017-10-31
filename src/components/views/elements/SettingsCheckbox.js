@@ -26,6 +26,7 @@ module.exports = React.createClass({
         roomId: React.PropTypes.string, // for per-room settings
         label: React.PropTypes.string, // untranslated
         onChange: React.PropTypes.func,
+        isExplicit: React.PropTypes.bool,
 
         // If group is supplied, then this will create a radio button instead.
         group: React.PropTypes.string,
@@ -41,7 +42,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        let val = SettingsStore.getValueAt(this.props.level, this.props.name, this.props.roomId);
+        const val = SettingsStore.getValueAt(this.props.level, this.props.name, this.props.roomId, this.props.isExplicit);
+        const canChange = SettingsStore.canSetValue(this.props.name, this.props.roomId, this.props.level);
 
         let label = this.props.label;
         if (!label) label = SettingsStore.getDisplayName(this.props.name, this.props.level);
@@ -54,6 +56,7 @@ module.exports = React.createClass({
                    type="checkbox"
                    defaultChecked={val}
                    onChange={this.onChange}
+                   disabled={!canChange}
             />
         );
         if (this.props.group) {
@@ -64,6 +67,7 @@ module.exports = React.createClass({
                        value={this.props.value}
                        checked={val === this.props.value}
                        onChange={this.onChange}
+                       disabled={!canChange}
                 />
             );
         }

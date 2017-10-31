@@ -36,7 +36,7 @@ export default class RoomSettingsHandler extends SettingsHandler {
         if (settingName === "urlPreviewsEnabled") {
             const content = this._getSettings(roomId, "org.matrix.room.preview_urls");
             content['disable'] = !newValue;
-            return MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.preview_urls", content);
+            return MatrixClientPeg.get().sendStateEvent(roomId, "org.matrix.room.preview_urls", content);
         }
 
         const content = this._getSettings(roomId);

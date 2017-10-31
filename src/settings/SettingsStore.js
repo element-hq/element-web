@@ -335,9 +335,11 @@ export default class SettingsStore {
      * look at.
      * @param {string} settingName The name of the setting to read.
      * @param {String} roomId The room ID to read the setting value in, may be null.
+     * @param {boolean} explicit If true, this method will not consider other levels, just the one
+     * provided. Defaults to false.
      * @return {*} The value, or null if not found.
      */
-    static getValueAt(level, settingName, roomId = null) {
+    static getValueAt(level, settingName, roomId = null, explicit = false) {
         const minIndex = LEVEL_ORDER.indexOf(level);
         if (minIndex === -1) throw new Error("Level " + level + " is not prioritized");
 
@@ -349,6 +351,12 @@ export default class SettingsStore {
         }
 
         const handlers = SettingsStore._getHandlers(settingName);
+
+        if (explicit) {
+            let handler = handlers[level];
+            if (!handler) return null;
+            return handler.getValue(settingName, roomId);
+        }
 
         for (let i = minIndex; i < LEVEL_ORDER.length; i++) {
             let handler = handlers[LEVEL_ORDER[i]];
@@ -378,6 +386,8 @@ export default class SettingsStore {
         if (!handler) {
             throw new Error("Setting " + settingName + " does not have a handler for " + level);
         }
+
+        console.log("Setting " + settingName +" in " + roomId +" at " + level +" to " + value);
 
         if (!handler.canSetValue(settingName, roomId)) {
             throw new Error("User cannot set " + settingName + " at " + level + " in " + roomId);

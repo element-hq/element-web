@@ -55,7 +55,8 @@ module.exports = React.createClass({
                 <label>
                     <SettingsCheckbox name="urlPreviewsEnabled"
                                       level="room"
-                                      roomId={this.props.room.roomId} />
+                                      roomId={this.props.room.roomId}
+                                      isExplicit={true} />
                 </label>
             );
         } else {
