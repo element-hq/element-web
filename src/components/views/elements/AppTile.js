@@ -120,7 +120,7 @@ export default React.createClass({
             return;
         }
         // Fetch the token before loading the iframe as we need to mangle the URL
-        if(! this._scalarClient) {
+        if (!this._scalarClient) {
             this._scalarClient = new ScalarAuthClient();
         }
         this._scalarClient.getScalarToken().done((token) => {
