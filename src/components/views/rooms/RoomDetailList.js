@@ -113,8 +113,6 @@ export default React.createClass({
 
             worldReadable: PropTypes.bool,
             guestCanJoin: PropTypes.bool,
-
-            loading: PropTypes.bool,
         })),
     },
 
@@ -126,10 +124,6 @@ export default React.createClass({
     },
 
     render() {
-        const Spinner = sdk.getComponent('elements.Spinner');
-        if (this.props.loading) {
-            return <Spinner />;
-        }
         const rows = this.getRows();
         let rooms;
         if (rows.length == 0) {

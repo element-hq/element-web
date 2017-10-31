@@ -657,6 +657,7 @@ export default React.createClass({
         const RoomDetailList = sdk.getComponent('rooms.RoomDetailList');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
+        const Spinner = sdk.getComponent('elements.Spinner');
 
         const addRoomRow = this.state.editing ?
             (<AccessibleButton className="mx_GroupView_rooms_header_addRow"
@@ -674,7 +675,10 @@ export default React.createClass({
                 <h3>{ _t('Rooms') }</h3>
                 { addRoomRow }
             </div>
-            <RoomDetailList rooms={this.state.groupRooms} loading={this.state.groupRoomsLoading} />
+            { this.state.groupRoomsLoading ?
+                <Spinner /> :
+                <RoomDetailList rooms={this.state.groupRooms} />
+            }
         </div>;
     },
 
