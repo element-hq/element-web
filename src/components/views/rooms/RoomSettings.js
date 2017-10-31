@@ -595,6 +595,7 @@ module.exports = React.createClass({
         const isGlobalBlacklistUnverified = SettingsStore.getValue("blacklistUnverifiedDevices");
         const isRoomBlacklistUnverified = this._isRoomBlacklistUnverified();
 
+        // TODO: {Travis} Convert to blacklistUnverifiedDevices with SettingsFlag
         const settings =
             <label>
                 <input type="checkbox" ref="blacklistUnverified"

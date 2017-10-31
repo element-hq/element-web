@@ -387,8 +387,6 @@ export default class SettingsStore {
             throw new Error("Setting " + settingName + " does not have a handler for " + level);
         }
 
-        console.log("Setting " + settingName +" in " + roomId +" at " + level +" to " + value);
-
         if (!handler.canSetValue(settingName, roomId)) {
             throw new Error("User cannot set " + settingName + " at " + level + " in " + roomId);
         }

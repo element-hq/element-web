@@ -79,7 +79,8 @@ const SIMPLE_SETTINGS = [
     { id: "VideoView.flipVideoHorizontally" },
 ];
 
-const ANALYTICS_SETTINGS_LABELS = [
+// These settings must be defined in SettingsStore
+const ANALYTICS_SETTINGS = [
     {
         id: 'analyticsOptOut',
         fn: function(checked) {
@@ -88,11 +89,13 @@ const ANALYTICS_SETTINGS_LABELS = [
     },
 ];
 
-const WEBRTC_SETTINGS_LABELS = [
+// These settings must be defined in SettingsStore
+const WEBRTC_SETTINGS = [
     { id: 'webRtcForceTURN' },
 ];
 
-const CRYPTO_SETTINGS_LABELS = [
+// These settings must be defined in SettingsStore
+const CRYPTO_SETTINGS = [
     {
         id: 'blacklistUnverifiedDevices',
         fn: function(checked) {
@@ -102,9 +105,8 @@ const CRYPTO_SETTINGS_LABELS = [
 ];
 
 // Enumerate the available themes, with a nice human text label.
-// 'id' gives the key name in the im.vector.web.settings account data event
-// 'value' is the value for that key in the event
 // 'label' is how we describe it in the UI.
+// 'value' is the value for the theme setting
 //
 // XXX: Ideally we would have a theme manifest or something and they'd be nicely
 // packaged up in a single directory, and/or located at the application layer.
@@ -613,7 +615,8 @@ module.exports = React.createClass({
 
     onLanguageChange: function(newLang) {
         if(this.state.language !== newLang) {
-            SettingsStore.setValue("language", null, "device", newLang);
+            // We intentionally promote this to the account level at this point
+            SettingsStore.setValue("language", null, "account", newLang);
             this.setState({
                 language: newLang,
             });
@@ -641,8 +644,8 @@ module.exports = React.createClass({
             <div>
                 <h3>{ _t("User Interface") }</h3>
                 <div className="mx_UserSettings_section">
-                    { SIMPLE_SETTINGS.map( this._renderSyncedSetting ) }
-                    { THEMES.map( this._renderThemeSelector ) }
+                    { SIMPLE_SETTINGS.map( this._renderAccountSetting ) }
+                    { THEMES.map( this._renderThemeOption ) }
                     <table>
                         <tbody>
                         <tr>
@@ -663,7 +666,7 @@ module.exports = React.createClass({
         );
     },
 
-    _renderSyncedSetting: function(setting) {
+    _renderAccountSetting: function(setting) {
         const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
         return (
             <div className="mx_UserSettings_toggle" key={setting.id}>
@@ -675,7 +678,7 @@ module.exports = React.createClass({
         );
     },
 
-    _renderThemeSelector: function(setting) {
+    _renderThemeOption: function(setting) {
         const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
         const onChange = (v) => dis.dispatch({action: 'set_theme', value: setting.value});
         return (
@@ -729,7 +732,7 @@ module.exports = React.createClass({
                     { importExportButtons }
                 </div>
                 <div className="mx_UserSettings_section">
-                    { CRYPTO_SETTINGS_LABELS.map( this._renderLocalSetting ) }
+                    { CRYPTO_SETTINGS.map( this._renderDeviceSetting ) }
                 </div>
             </div>
         );
@@ -755,7 +758,7 @@ module.exports = React.createClass({
         } else return (<div />);
     },
 
-    _renderLocalSetting: function(setting) {
+    _renderDeviceSetting: function(setting) {
         const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
         return (
             <div className="mx_UserSettings_toggle" key={setting.id}>
@@ -801,7 +804,7 @@ module.exports = React.createClass({
             <h3>{ _t('Analytics') }</h3>
             <div className="mx_UserSettings_section">
                 { _t('Riot collects anonymous analytics to allow us to improve the application.') }
-                { ANALYTICS_SETTINGS_LABELS.map( this._renderLocalSetting ) }
+                { ANALYTICS_SETTINGS.map( this._renderDeviceSetting ) }
             </div>
         </div>;
     },
@@ -918,6 +921,8 @@ module.exports = React.createClass({
         const settings = this.state.electron_settings;
         if (!settings) return;
 
+        // TODO: This should probably be a granular setting, but it only applies to electron
+        // and ends up being get/set outside of matrix anyways (local system setting).
         return <div>
             <h3>{ _t('Desktop specific') }</h3>
             <div className="mx_UserSettings_section">
@@ -1040,7 +1045,7 @@ module.exports = React.createClass({
         return <div>
             <h3>{ _t('VoIP') }</h3>
             <div className="mx_UserSettings_section">
-                { WEBRTC_SETTINGS_LABELS.map(this._renderLocalSetting) }
+                { WEBRTC_SETTINGS.map(this._renderDeviceSetting) }
                 { this._renderWebRtcDeviceSettings() }
             </div>
         </div>;
