@@ -913,5 +913,7 @@
     "Mirror local video feed": "Зеркальное отображение видео",
     "Invite": "Пригласить",
     "Remove this room from the community": "Удалить эту комнату из сообщества",
-    "Mention": "Упоминание"
+    "Mention": "Упоминание",
+    "Failed to withdraw invitation": "Не удалось отозвать приглашение",
+    "Community IDs may only contain characters a-z, 0-9, or '=_-./'": "ID сообществ могут содержать только символы a-z, 0-9, или '=_-./'"
 }
