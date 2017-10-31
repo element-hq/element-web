@@ -467,6 +467,9 @@ export default React.createClass({
                 isUserPrivileged: this._groupStore.isUserPrivileged(),
                 groupRooms: this._groupStore.getGroupRooms(),
                 groupRoomsLoading: !this._groupStore.isStateReady('GroupStore.GroupRooms'),
+                isUserMember: this._groupStore.getGroupMembers().some(
+                    (m) => m.userId === MatrixClientPeg.get().credentials.userId,
+                ),
                 error: null,
             });
         });
@@ -939,27 +942,28 @@ export default React.createClass({
                      tabIndex="2"
                      dir="auto" />;
             } else {
+                const onGroupHeaderItemClick = this.state.isUserMember ? this._onEditClick : null;
                 const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;
                 const groupName = summary.profile ? summary.profile.name : null;
                 avatarNode = <GroupAvatar
                     groupId={this.props.groupId}
                     groupAvatarUrl={groupAvatarUrl}
                     groupName={groupName}
-                    onClick={this._onEditClick}
+                    onClick={onGroupHeaderItemClick}
                     width={48} height={48}
                 />;
                 if (summary.profile && summary.profile.name) {
-                    nameNode = <div onClick={this._onEditClick}>
+                    nameNode = <div onClick={onGroupHeaderItemClick}>
                         <span>{ summary.profile.name }</span>
                         <span className="mx_GroupView_header_groupid">
                             ({ this.props.groupId })
                         </span>
                     </div>;
                 } else {
-                    nameNode = <span onClick={this._onEditClick}>{ this.props.groupId }</span>;
+                    nameNode = <span onClick={onGroupHeaderItemClick}>{ this.props.groupId }</span>;
                 }
                 if (summary.profile && summary.profile.short_description) {
-                    shortDescNode = <span onClick={this._onEditClick}>{ summary.profile.short_description }</span>;
+                    shortDescNode = <span onClick={onGroupHeaderItemClick}>{ summary.profile.short_description }</span>;
                 }
             }
             if (this.state.editing) {
@@ -1000,6 +1004,7 @@ export default React.createClass({
             const headerClasses = {
                 mx_GroupView_header: true,
                 mx_GroupView_header_view: !this.state.editing,
+                mx_GroupView_header_isUserMember: this.state.isUserMember,
             };
 
             return (
