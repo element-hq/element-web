@@ -914,5 +914,7 @@
     "Remove this room from the community": "A szoba törlése a közösségből",
     "Delete Widget": "Kisalkalmazás törlése",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "A kisalkalmazás törlése minden felhasználót érint a szobában. Tényleg törölni szeretnéd?",
-    "Mirror local video feed": "Helyi videó folyam tükrözése"
+    "Mirror local video feed": "Helyi videó folyam tükrözése",
+    "Failed to withdraw invitation": "Nem sikerült visszavonni a meghívót",
+    "Community IDs may only contain characters a-z, 0-9, or '=_-./'": "A közösségi azonosítók csak az alábbi karaktereket tartalmazhatják: a-z, 0-9 vagy '=_-./'"
 }
