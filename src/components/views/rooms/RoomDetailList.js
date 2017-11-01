@@ -29,18 +29,20 @@ function getDisplayAliasForRoom(room) {
 }
 
 const RoomDetailRow = React.createClass({
-    propTypes: PropTypes.shape({
-        name: PropTypes.string,
-        topic: PropTypes.string,
-        roomId: PropTypes.string,
-        avatarUrl: PropTypes.string,
-        numJoinedMembers: PropTypes.number,
-        canonicalAlias: PropTypes.string,
-        aliases: PropTypes.arrayOf(PropTypes.string),
+    propTypes: {
+        room: PropTypes.shape({
+            name: PropTypes.string,
+            topic: PropTypes.string,
+            roomId: PropTypes.string,
+            avatarUrl: PropTypes.string,
+            numJoinedMembers: PropTypes.number,
+            canonicalAlias: PropTypes.string,
+            aliases: PropTypes.arrayOf(PropTypes.string),
 
-        worldReadable: PropTypes.bool,
-        guestCanJoin: PropTypes.bool,
-    }),
+            worldReadable: PropTypes.bool,
+            guestCanJoin: PropTypes.bool,
+        }),
+    },
 
     onClick: function(ev) {
         ev.preventDefault();
