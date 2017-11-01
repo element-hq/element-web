@@ -19,18 +19,3 @@ limitations under the License.
     color: $primary-fg-color;
     cursor: pointer;
 }
-
-.mx_GroupRoomTile_delete {
-    opacity: 0.4;
-    position: absolute;
-    top: 6px;
-    right: 10px;
-    cursor: pointer;
-
-    display: none;
-}
-
-.mx_GroupRoomTile:hover > .mx_GroupRoomTile_delete {
-    display: initial;
-}
-
