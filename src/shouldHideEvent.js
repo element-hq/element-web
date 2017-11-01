@@ -54,8 +54,7 @@ export default function shouldHideEvent(ev, syncedSettings) {
             && (/* eventDiff.isJoin ||
                 eventDiff.isPart ||
                 eventDiff.isDisplaynameChange || */
-                eventDiff.isAvatarChange))
-        {
+                eventDiff.isAvatarChange)) {
             return true;
         }
 
