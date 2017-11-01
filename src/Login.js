@@ -159,6 +159,7 @@ export default class Login {
                     accessToken: data.access_token,
                 });
             }).catch((fallback_error) => {
+                console.log("fallback HS login failed", fallback_error);
                 // throw the original error
                 throw originalError;
             });
@@ -179,6 +180,7 @@ export default class Login {
                     accessToken: data.access_token,
                 });
             }).catch((fallback_error) => {
+                console.log("Lowercase username login failed", fallback_error);
                 // throw the original error
                 throw originalError;
             });
@@ -210,6 +212,9 @@ export default class Login {
                 return tryLowercaseUsername(originalLoginError);
             }
             throw originalLoginError;
+        }).catch((error) => {
+            console.log("Login failed", error);
+            throw error;
         });
     }
 
