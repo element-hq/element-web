@@ -129,7 +129,11 @@ class FlairStore extends EventEmitter {
         }
         const updatedUserGroups = resp.users;
         usersInFlight.forEach((userId) => {
-            this._usersPending[userId].resolve(updatedUserGroups[userId] || []);
+            if (this._usersPending[userId]) {
+                this._usersPending[userId].resolve(updatedUserGroups[userId] || []);
+            } else {
+                console.error("Promise vanished for resolving groups for " + userId);
+            }
         });
     }
 
