@@ -407,6 +407,10 @@ export default React.createClass({
     getInitialState: function() {
         return {
             summary: null,
+            isGroupPublicised: null,
+            isUserPrivileged: null,
+            groupRooms: null,
+            groupRoomsLoading: null,
             error: null,
             editing: false,
             saving: false,
@@ -458,8 +462,14 @@ export default React.createClass({
             }
             this.setState({
                 summary,
+                summaryLoading: !this._groupStore.isStateReady(GroupStore.STATE_KEY.Summary),
                 isGroupPublicised: this._groupStore.getGroupPublicity(),
                 isUserPrivileged: this._groupStore.isUserPrivileged(),
+                groupRooms: this._groupStore.getGroupRooms(),
+                groupRoomsLoading: !this._groupStore.isStateReady(GroupStore.STATE_KEY.GroupRooms),
+                isUserMember: this._groupStore.getGroupMembers().some(
+                    (m) => m.userId === MatrixClientPeg.get().credentials.userId,
+                ),
                 error: null,
             });
         });
@@ -650,6 +660,7 @@ export default React.createClass({
         const RoomDetailList = sdk.getComponent('rooms.RoomDetailList');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
+        const Spinner = sdk.getComponent('elements.Spinner');
 
         const addRoomRow = this.state.editing ?
             (<AccessibleButton className="mx_GroupView_rooms_header_addRow"
@@ -667,7 +678,10 @@ export default React.createClass({
                 <h3>{ _t('Rooms') }</h3>
                 { addRoomRow }
             </div>
-            <RoomDetailList rooms={this._groupStore.getGroupRooms()} />
+            { this.state.groupRoomsLoading ?
+                <Spinner /> :
+                <RoomDetailList rooms={this.state.groupRooms} />
+            }
         </div>;
     },
 
@@ -863,7 +877,7 @@ export default React.createClass({
         const Spinner = sdk.getComponent("elements.Spinner");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        if (this.state.summary === null && this.state.error === null || this.state.saving) {
+        if (this.state.summaryLoading && this.state.error === null || this.state.saving) {
             return <Spinner />;
         } else if (this.state.summary) {
             const summary = this.state.summary;
@@ -884,6 +898,7 @@ export default React.createClass({
                 } else {
                     const GroupAvatar = sdk.getComponent('avatars.GroupAvatar');
                     avatarImage = <GroupAvatar groupId={this.props.groupId}
+                        groupName={this.state.profileForm.name}
                         groupAvatarUrl={this.state.profileForm.avatar_url}
                         width={48} height={48} resizeMethod='crop'
                     />;
@@ -927,25 +942,28 @@ export default React.createClass({
                      tabIndex="2"
                      dir="auto" />;
             } else {
+                const onGroupHeaderItemClick = this.state.isUserMember ? this._onEditClick : null;
                 const groupAvatarUrl = summary.profile ? summary.profile.avatar_url : null;
+                const groupName = summary.profile ? summary.profile.name : null;
                 avatarNode = <GroupAvatar
                     groupId={this.props.groupId}
                     groupAvatarUrl={groupAvatarUrl}
-                    onClick={this._onEditClick}
+                    groupName={groupName}
+                    onClick={onGroupHeaderItemClick}
                     width={48} height={48}
                 />;
                 if (summary.profile && summary.profile.name) {
-                    nameNode = <div onClick={this._onEditClick}>
+                    nameNode = <div onClick={onGroupHeaderItemClick}>
                         <span>{ summary.profile.name }</span>
                         <span className="mx_GroupView_header_groupid">
                             ({ this.props.groupId })
                         </span>
                     </div>;
                 } else {
-                    nameNode = <span onClick={this._onEditClick}>{ this.props.groupId }</span>;
+                    nameNode = <span onClick={onGroupHeaderItemClick}>{ this.props.groupId }</span>;
                 }
                 if (summary.profile && summary.profile.short_description) {
-                    shortDescNode = <span onClick={this._onEditClick}>{ summary.profile.short_description }</span>;
+                    shortDescNode = <span onClick={onGroupHeaderItemClick}>{ summary.profile.short_description }</span>;
                 }
             }
             if (this.state.editing) {
@@ -986,6 +1004,7 @@ export default React.createClass({
             const headerClasses = {
                 mx_GroupView_header: true,
                 mx_GroupView_header_view: !this.state.editing,
+                mx_GroupView_header_isUserMember: this.state.isUserMember,
             };
 
             return (
