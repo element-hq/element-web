@@ -19,7 +19,7 @@ import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 
 function getRedactedUrl() {
-    const redactedHash = window.location.hash.replace(/#\/(room|user)\/(.+)/, "#/$1/<redacted>");
+    const redactedHash = window.location.hash.replace(/#\/(group|room|user)\/(.+)/, "#/$1/<redacted>");
     // hardcoded url to make piwik happy
     return 'https://riot.im/app/' + redactedHash;
 }
