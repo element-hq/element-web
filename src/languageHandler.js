@@ -252,6 +252,26 @@ function getLangsJson() {
     });
 }
 
+function weblateToCounterpart(inTrs) {
+    const outTrs = {};
+
+    for (const key of Object.keys(inTrs)) {
+        const keyParts = key.split('|', 2);
+        if (keyParts.length === 2) {
+            let obj = outTrs[keyParts[0]];
+            if (obj === undefined) {
+                obj = {};
+                outTrs[keyParts[0]] = obj;
+            }
+            obj[keyParts[1]] = inTrs[key];
+        } else {
+            outTrs[key] = inTrs[key];
+        }
+    }
+
+    return outTrs;
+}
+
 function getLanguage(langPath) {
     return new Promise((resolve, reject) => {
         request(
@@ -261,7 +281,7 @@ function getLanguage(langPath) {
                     reject({err: err, response: response});
                     return;
                 }
-                resolve(JSON.parse(body));
+                resolve(weblateToCounterpart(JSON.parse(body)));
             },
         );
     });
