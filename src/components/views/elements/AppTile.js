@@ -58,28 +58,28 @@ export default React.createClass({
         };
     },
 
-
     /**
      * Set initial component state when the App wUrl (widget URL) is being updated
      * @param  {Object} props The component props *must* be passed (rather than using this.props) so that it can be called with future props, e.g. from componentWillReceiveProps.
      * @return {Object} Updated component state to be set with setState
      */
     _getNewUrlState(props) {
-      const widgetPermissionId = [props.room.roomId, encodeURIComponent(props.url)].join('_');
-      const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
-      return {
-          loading: true,
-          widgetUrl: props.url,
-          widgetPermissionId: widgetPermissionId,
-          // Assume that widget has permission to load if we are the user who added it to the room, or if explicitly granted by the user
-          hasPermissionToLoad: hasPermissionToLoad === 'true' || props.userId === props.creatorUserId,
-          error: null,
-          deleting: false,
-      };
+        const widgetPermissionId = [props.room.roomId, encodeURIComponent(props.url)].join('_');
+        const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
+        return {
+            initialising: true,   // True while we are mangling the widget URL
+            loading: true,        // True while the iframe content is loading
+            widgetUrl: props.url,
+            widgetPermissionId: widgetPermissionId,
+            // Assume that widget has permission to load if we are the user who added it to the room, or if explicitly granted by the user
+            hasPermissionToLoad: hasPermissionToLoad === 'true' || props.userId === props.creatorUserId,
+            error: null,
+            deleting: false,
+        };
     },
 
     getInitialState() {
-      return this._getNewUrlState(this.props);
+        return this._getNewUrlState(this.props);
     },
 
     /**
@@ -119,21 +119,24 @@ export default React.createClass({
 
     componentWillMount() {
         window.addEventListener('message', this._onMessage, false);
-        this.updateWidgetContent();
-    },
-
-    updateWidgetContent() {
-        this.setState(this._getNewUrlState());
-        // Set scalar token on the wUrl, if needed
         this.setScalarToken();
     },
 
-    // Adds a scalar token to the widget URL, if required
+    /**
+     * Adds a scalar token to the widget URL, if required
+     * Component initialisation is only complete when this function has resolved
+     */
     setScalarToken() {
         if (!this.isScalarUrl(this.props.url)) {
+            this.setState({
+                error: null,
+                widgetUrl: this.props.url,
+                initialising: false,
+            });
             return;
         }
-        // Fetch the token before loading the iframe as we need to mangle the URL
+
+        // Fetch the token before loading the iframe as we need it to mangle the URL
         if (!this._scalarClient) {
             this._scalarClient = new ScalarAuthClient();
         }
@@ -150,12 +153,12 @@ export default React.createClass({
             this.setState({
                 error: null,
                 widgetUrl: u.format(),
-                loading: false,
+                initialising: false,
             });
         }, (err) => {
             this.setState({
                 error: err.message,
-                loading: false,
+                initialising: false,
             });
         });
     },
@@ -166,7 +169,8 @@ export default React.createClass({
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.url !== this.props.url) {
-            this.updateWidgetContent(nextProps);
+            this._getNewUrlState(nextProps);
+            this.setScalarToken();
         }
     },
 
@@ -308,24 +312,26 @@ export default React.createClass({
         }
 
         if (this.props.show) {
-            if (this.state.loading) {
+            if (this.state.initialising) {
                 appTileBody = (
                     <div className='mx_AppTileBody mx_AppLoading'>
                         <MessageSpinner msg='Loading...' />
                     </div>
                 );
             } else if (this.state.hasPermissionToLoad == true) {
+                const loadingElement = (
+                    <div className="mx_AppTileBody">
+                        <AppWarning
+                            errorMsg="Error - Mixed content"
+                        />
+                    </div>
+                );
                 if (this.isMixedContent()) {
-                    appTileBody = (
-                        <div className="mx_AppTileBody">
-                            <AppWarning
-                                errorMsg="Error - Mixed content"
-                            />
-                        </div>
-                    );
+                    appTileBody = loadingElement;
                 } else {
                     appTileBody = (
-                        <div className="mx_AppTileBody">
+                        <div className={this.loading ? 'mx_AppTileBody mx_AppLoading' : 'mx_AppTileBody'}>
+                            { this.loading && Element }
                             <iframe
                                 ref="appFrame"
                                 src={safeWidgetUrl}
