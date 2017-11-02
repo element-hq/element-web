@@ -33,7 +33,7 @@ const GroupRoomTile = React.createClass({
         dis.dispatch({
             action: 'view_group_room',
             groupId: this.props.groupId,
-            groupRoom: this.props.groupRoom,
+            groupRoomId: this.props.groupRoom.roomId,
         });
     },
 
