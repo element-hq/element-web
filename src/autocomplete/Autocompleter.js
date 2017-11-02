@@ -23,7 +23,6 @@ import DuckDuckGoProvider from './DuckDuckGoProvider';
 import RoomProvider from './RoomProvider';
 import UserProvider from './UserProvider';
 import EmojiProvider from './EmojiProvider';
-import NotifProvider from './NotifProvider';
 import Promise from 'bluebird';
 
 export type SelectionRange = {
@@ -45,7 +44,6 @@ const PROVIDERS = [
     UserProvider,
     RoomProvider,
     EmojiProvider,
-    NotifProvider,
     CommandProvider,
     DuckDuckGoProvider,
 ];
