@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import PropTypes from 'prop-types';
+import { _t } from './languageHandler.js';
 
 export const GroupMemberType = PropTypes.shape({
     userId: PropTypes.string.isRequired,
@@ -23,6 +24,7 @@ export const GroupMemberType = PropTypes.shape({
 });
 
 export const GroupRoomType = PropTypes.shape({
+    displayname: PropTypes.string,
     name: PropTypes.string,
     roomId: PropTypes.string.isRequired,
     canonicalAlias: PropTypes.string,
@@ -39,6 +41,7 @@ export function groupMemberFromApiObject(apiObject) {
 
 export function groupRoomFromApiObject(apiObject) {
     return {
+        displayname: apiObject.name || apiObject.canonical_alias || _t("Unnamed Room"),
         name: apiObject.name,
         roomId: apiObject.room_id,
         canonicalAlias: apiObject.canonical_alias,

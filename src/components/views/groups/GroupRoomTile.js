@@ -16,13 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import {MatrixClient} from 'matrix-js-sdk';
-import { _t } from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { GroupRoomType } from '../../../groups';
-import GroupStoreCache from '../../../stores/GroupStoreCache';
-import Modal from '../../../Modal';
 
 const GroupRoomTile = React.createClass({
     displayName: 'GroupRoomTile',
@@ -32,68 +29,11 @@ const GroupRoomTile = React.createClass({
         groupRoom: GroupRoomType.isRequired,
     },
 
-    getInitialState: function() {
-        return {
-            name: this.calculateRoomName(this.props.groupRoom),
-        };
-    },
-
-    componentWillReceiveProps: function(newProps) {
-        this.setState({
-            name: this.calculateRoomName(newProps.groupRoom),
-        });
-    },
-
-    calculateRoomName: function(groupRoom) {
-        return groupRoom.name || groupRoom.canonicalAlias || _t("Unnamed Room");
-    },
-
-    removeRoomFromGroup: function() {
-        const groupId = this.props.groupId;
-        const groupStore = GroupStoreCache.getGroupStore(this.context.matrixClient, groupId);
-        const roomName = this.state.name;
-        const roomId = this.props.groupRoom.roomId;
-        groupStore.removeRoomFromGroup(roomId)
-            .catch((err) => {
-                console.error(`Error whilst removing ${roomId} from ${groupId}`, err);
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createTrackedDialog('Failed to remove room from group', '', ErrorDialog, {
-                    title: _t("Failed to remove room from community"),
-                    description: _t("Failed to remove '%(roomName)s' from %(groupId)s", {groupId, roomName}),
-                });
-            });
-    },
-
     onClick: function(e) {
-        let roomId;
-        let roomAlias;
-        if (this.props.groupRoom.canonicalAlias) {
-            roomAlias = this.props.groupRoom.canonicalAlias;
-        } else {
-            roomId = this.props.groupRoom.roomId;
-        }
         dis.dispatch({
-            action: 'view_room',
-            room_id: roomId,
-            room_alias: roomAlias,
-        });
-    },
-
-    onDeleteClick: function(e) {
-        const groupId = this.props.groupId;
-        const roomName = this.state.name;
-        e.preventDefault();
-        e.stopPropagation();
-        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        Modal.createTrackedDialog('Confirm removal of group from room', '', QuestionDialog, {
-            title: _t("Are you sure you want to remove '%(roomName)s' from %(groupId)s?", {roomName, groupId}),
-            description: _t("Removing a room from the community will also remove it from the community page."),
-            button: _t("Remove"),
-            onFinished: (success) => {
-                if (success) {
-                    this.removeRoomFromGroup();
-                }
-            },
+            action: 'view_group_room',
+            groupId: this.props.groupId,
+            groupRoom: this.props.groupRoom,
         });
     },
 
@@ -106,7 +46,7 @@ const GroupRoomTile = React.createClass({
         );
 
         const av = (
-            <BaseAvatar name={this.state.name}
+            <BaseAvatar name={this.props.groupRoom.displayname}
                 width={36} height={36}
                 url={avatarUrl}
             />
@@ -118,14 +58,8 @@ const GroupRoomTile = React.createClass({
                     { av }
                 </div>
                 <div className="mx_GroupRoomTile_name">
-                    { this.state.name }
+                    { this.props.groupRoom.displayname }
                 </div>
-                <AccessibleButton className="mx_GroupRoomTile_delete"
-                    onClick={this.onDeleteClick}
-                    tooltip={_t("Remove this room from the community")}
-                >
-                    <img src="img/cancel.svg" width="15" height="15" className="mx_filterFlipColor" />
-                </AccessibleButton>
             </AccessibleButton>
         );
     },
