@@ -141,9 +141,15 @@ export default class GroupStore extends EventEmitter {
         return this._summary.user ? this._summary.user.is_privileged : null;
     }
 
-    addRoomToGroup(roomId) {
+    addRoomToGroup(roomId, isPublic) {
         return this._matrixClient
-            .addRoomToGroup(this.groupId, roomId)
+            .addRoomToGroup(this.groupId, roomId, isPublic)
+            .then(this._fetchRooms.bind(this));
+    }
+
+    updateGroupRoomAssociation(roomId, isPublic) {
+        return this._matrixClient
+            .updateGroupRoomAssociation(this.groupId, roomId, isPublic)
             .then(this._fetchRooms.bind(this));
     }
 
