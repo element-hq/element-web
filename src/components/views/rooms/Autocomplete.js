@@ -62,7 +62,7 @@ export default class Autocomplete extends React.Component {
     componentWillReceiveProps(newProps, state) {
         if (this.props.room.roomId !== newProps.room.roomId) {
             this.autocompleter.destroy();
-            this.autocompleter = new Autocompleter();
+            this.autocompleter = new Autocompleter(newProps.room);
         }
 
         // Query hasn't changed so don't try to complete it
