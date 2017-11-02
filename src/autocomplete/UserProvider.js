@@ -60,7 +60,7 @@ export default class UserProvider extends AutocompleteProvider {
     _onRoomTimeline(ev, room, toStartOfTimeline, removed, data) {
         if (!room) return;
         if (removed) return;
-        if (room.roomId != this.room.roomId) return;
+        if (room.roomId !== this.room.roomId) return;
 
         // ignore events from filtered timelines
         if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
