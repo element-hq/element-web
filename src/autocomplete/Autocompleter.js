@@ -1,5 +1,6 @@
 /*
 Copyright 2016 Aviral Dasgupta
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@ import DuckDuckGoProvider from './DuckDuckGoProvider';
 import RoomProvider from './RoomProvider';
 import UserProvider from './UserProvider';
 import EmojiProvider from './EmojiProvider';
+import NotifProvider from './NotifProvider';
 import Promise from 'bluebird';
 
 export type SelectionRange = {
@@ -43,6 +45,7 @@ const PROVIDERS = [
     UserProvider,
     RoomProvider,
     EmojiProvider,
+    NotifProvider,
     CommandProvider,
     DuckDuckGoProvider,
 ];
