@@ -85,6 +85,8 @@ module.exports = React.createClass({
         Modal.createDialog(ConfirmUserActionDialog, {
             groupMember: this.props.groupMember,
             action: this.state.isUserInvited ? _t('Disinvite') : _t('Remove from community'),
+            title: this.state.isUserInvited ? _t('Disinvite this user from community?')
+                                            : _t('Remove this user from community?'),
             danger: true,
             onFinished: (proceed) => {
                 if (!proceed) return;
