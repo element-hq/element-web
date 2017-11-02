@@ -30,6 +30,7 @@ export default class AutocompleteProvider {
     }
 
     destroy() {
+        // stub
     }
 
     /**
