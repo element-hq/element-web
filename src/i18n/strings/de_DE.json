@@ -921,7 +921,7 @@
     "%(senderName)s sent a video": "%(senderName)s hat ein Video gesendet",
     "%(senderName)s uploaded a file": "%(senderName)s hat eine Datei hochgeladen",
     "You have been banned from this room by %(userName)s.": "%(userName)s hat dich aus diesem Raum verbannt.",
-    "%(nameList)s %(transitionList)s": "",
+    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
     "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)shaben den Raum %(count)s-mal betreten",
     "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)shaben den Raum betreten",
     "%(oneUser)sjoined %(count)s times|other": "%(oneUser)shat den Raum %(count)s-mal betreten",
@@ -990,5 +990,9 @@
     "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)shat den Namen geändert",
     "%(items)s and %(count)s others|other": "%(items)s und %(count)s andere",
     "%(items)s and %(count)s others|one": "%(items)s und ein anderer",
-    "An email has been sent to %(emailAddress)s. Once you've followed the link it contains, click below.": "Eine E-Mail wurde an %(emailAddress)s gesendet. Folge dem in der E-Mail enthaltenen Link und klicke dann unten."
+    "An email has been sent to %(emailAddress)s. Once you've followed the link it contains, click below.": "Eine E-Mail wurde an %(emailAddress)s gesendet. Folge dem in der E-Mail enthaltenen Link und klicke dann unten.",
+    "The visibility of '%(roomName)s' in %(groupId)s could not be updated.": "Die Sichtbarkeit von '%(roomName)s' in %(groupId)s konnte nicht aktualisiert werden.",
+    "Visibility in Room List": "Sichtbarkeit in Raum-Liste",
+    "Visible to everyone": "Für jeden sichtbar",
+    "Only visible to community members": "Nur für Community-Mitglieder sichtbar"
 }
