@@ -25,8 +25,6 @@ import {TextualCompletion} from './Components';
 const DDG_REGEX = /\/ddg\s+(.+)$/g;
 const REFERRER = 'vector';
 
-let instance = null;
-
 export default class DuckDuckGoProvider extends AutocompleteProvider {
     constructor() {
         super(DDG_REGEX);
@@ -94,13 +92,6 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
 
     getName() {
         return '🔍 ' + _t('Results from DuckDuckGo');
-    }
-
-    static getInstance(): DuckDuckGoProvider {
-        if (instance == null) {
-            instance = new DuckDuckGoProvider();
-        }
-        return instance;
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {

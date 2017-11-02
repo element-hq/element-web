@@ -27,8 +27,6 @@ import _sortBy from 'lodash/sortBy';
 
 const ROOM_REGEX = /(?=#)(\S*)/g;
 
-let instance = null;
-
 function score(query, space) {
     const index = space.indexOf(query);
     if (index === -1) {
@@ -94,14 +92,6 @@ export default class RoomProvider extends AutocompleteProvider {
 
     getName() {
         return '💬 ' + _t('Rooms');
-    }
-
-    static getInstance() {
-        if (instance == null) {
-            instance = new RoomProvider();
-        }
-
-        return instance;
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {

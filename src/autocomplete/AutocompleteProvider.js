@@ -28,6 +28,9 @@ export default class AutocompleteProvider {
         }
     }
 
+    destroy() {
+    }
+
     /**
      * Of the matched commands in the query, returns the first that contains or is contained by the selection, or null.
      */

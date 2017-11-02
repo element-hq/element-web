@@ -109,8 +109,6 @@ const COMMANDS = [
 
 const COMMAND_RE = /(^\/\w*)/g;
 
-let instance = null;
-
 export default class CommandProvider extends AutocompleteProvider {
     constructor() {
         super(COMMAND_RE);
@@ -140,12 +138,6 @@ export default class CommandProvider extends AutocompleteProvider {
 
     getName() {
         return '*️⃣ ' + _t('Commands');
-    }
-
-    static getInstance(): CommandProvider {
-        if (instance === null) instance = new CommandProvider();
-
-        return instance;
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {

@@ -1130,10 +1130,12 @@ export default class MessageComposerInput extends React.Component {
                 <div className="mx_MessageComposer_autocomplete_wrapper">
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
+                        room={this.props.room}
                         onConfirm={this.setDisplayedCompletion}
                         onSelectionChange={this.setDisplayedCompletion}
                         query={this.getAutocompleteQuery(content)}
-                        selection={selection} />
+                        selection={selection}
+                    />
                 </div>
                 <div className={className}>
                     <img className="mx_MessageComposer_input_markdownIndicator mx_filterFlipColor"

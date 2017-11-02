@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import flatMap from 'lodash/flatMap';
 import isEqual from 'lodash/isEqual';
@@ -8,7 +9,7 @@ import type {Completion} from '../../../autocomplete/Autocompleter';
 import Promise from 'bluebird';
 import UserSettingsStore from '../../../UserSettingsStore';
 
-import {getCompletions} from '../../../autocomplete/Autocompleter';
+import Autocompleter from '../../../autocomplete/Autocompleter';
 
 const COMPOSER_SELECTED = 0;
 
@@ -17,6 +18,7 @@ export default class Autocomplete extends React.Component {
     constructor(props) {
         super(props);
 
+        this.autocompleter = new Autocompleter(props.room);
         this.completionPromise = null;
         this.hide = this.hide.bind(this);
         this.onCompletionClicked = this.onCompletionClicked.bind(this);
@@ -41,12 +43,21 @@ export default class Autocomplete extends React.Component {
     }
 
     componentWillReceiveProps(newProps, state) {
+        if (this.props.room.roomId !== newProps.room.roomId) {
+            this.autocompleter.destroy();
+            this.autocompleter = new Autocompleter();
+        }
+
         // Query hasn't changed so don't try to complete it
         if (newProps.query === this.props.query) {
             return;
         }
 
         this.complete(newProps.query, newProps.selection);
+    }
+
+    componentWillUnmount() {
+        this.autocompleter.destroy();
     }
 
     complete(query, selection) {
@@ -83,7 +94,7 @@ export default class Autocomplete extends React.Component {
     }
 
     processQuery(query, selection) {
-        return getCompletions(
+        return this.autocompleter.getCompletions(
             query, selection, this.state.forceComplete,
         ).then((completions) => {
             // Only ever process the completions for the most recent query being processed
@@ -267,8 +278,11 @@ export default class Autocomplete extends React.Component {
 
 Autocomplete.propTypes = {
     // the query string for which to show autocomplete suggestions
-    query: React.PropTypes.string.isRequired,
+    query: PropTypes.string.isRequired,
 
     // method invoked with range and text content when completion is confirmed
-    onConfirm: React.PropTypes.func.isRequired,
+    onConfirm: PropTypes.func.isRequired,
+
+    // The room in which we're autocompleting
+    room: PropTypes.object,
 };

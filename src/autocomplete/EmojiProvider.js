@@ -70,8 +70,6 @@ const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sor
     };
 });
 
-let instance = null;
-
 function score(query, space) {
     const index = space.indexOf(query);
     if (index === -1) {
@@ -149,11 +147,6 @@ export default class EmojiProvider extends AutocompleteProvider {
 
     getName() {
         return '😃 ' + _t('Emoji');
-    }
-
-    static getInstance() {
-        if (instance == null) {instance = new EmojiProvider();}
-        return instance;
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
