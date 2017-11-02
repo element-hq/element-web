@@ -994,5 +994,6 @@
     "The visibility of '%(roomName)s' in %(groupId)s could not be updated.": "%(roomName)s szoba láthatóságát nem lehet frissíteni ebben a közösségben: %(groupId)s",
     "Visibility in Room List": "Láthatóság a szoba listában",
     "Visible to everyone": "Mindenki számára látható",
-    "Only visible to community members": "Csak a közösség számára látható"
+    "Only visible to community members": "Csak a közösség számára látható",
+    "Community Invites": "Közösségi meghívók"
 }
