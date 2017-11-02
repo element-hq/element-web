@@ -25,6 +25,7 @@ import sdk from '../../../index';
 import type {Completion} from '../../../autocomplete/Autocompleter';
 import Promise from 'bluebird';
 import UserSettingsStore from '../../../UserSettingsStore';
+import { Room } from 'matrix-js-sdk';
 
 import Autocompleter from '../../../autocomplete/Autocompleter';
 
@@ -301,5 +302,5 @@ Autocomplete.propTypes = {
     onConfirm: PropTypes.func.isRequired,
 
     // The room in which we're autocompleting
-    room: PropTypes.object,
+    room: PropTypes.instanceOf(Room),
 };
