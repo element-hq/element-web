@@ -189,7 +189,9 @@ module.exports = React.createClass({
                                 checked={this.state.groupRoom.isPublic}
                                 onClick={this._changeGroupRoomPublicity}
                             />
-                            { _t('Visible to everyone') }
+                            <div className="mx_MemberInfo_label_text">
+                                { _t('Visible to everyone') }
+                            </div>
                         </label>
                     </div>
                     <div>
@@ -199,7 +201,9 @@ module.exports = React.createClass({
                                 checked={!this.state.groupRoom.isPublic}
                                 onClick={this._changeGroupRoomPublicity}
                             />
-                            { _t('Only visible to group members') }
+                            <div className="mx_MemberInfo_label_text">
+                                { _t('Only visible to community members') }
+                            </div>
                         </label>
                     </div>
                 </div>;

@@ -506,7 +506,7 @@
     "The visibility of '%(roomName)s' in %(groupId)s could not be updated.": "The visibility of '%(roomName)s' in %(groupId)s could not be updated.",
     "Visibility in Room List": "Visibility in Room List",
     "Visible to everyone": "Visible to everyone",
-    "Only visible to group members": "Only visible to group members",
+    "Only visible to community members": "Only visible to community members",
     "Filter community rooms": "Filter community rooms",
     "Unknown Address": "Unknown Address",
     "NOTE: Apps are not end-to-end encrypted": "NOTE: Apps are not end-to-end encrypted",
