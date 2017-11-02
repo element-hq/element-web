@@ -66,7 +66,7 @@ export default class Autocompleter {
     }
 
     async getCompletions(query: string, selection: SelectionRange, force: boolean = false): Array<Completion> {
-        /* Note: That this waits for all providers to return is *intentional*
+        /* Note: This intentionally waits for all providers to return,
          otherwise, we run into a condition where new completions are displayed
          while the user is interacting with the list, which makes it difficult
          to predict whether an action will actually do what is intended
