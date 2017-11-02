@@ -205,7 +205,6 @@ module.exports = React.createClass({
                 } else if (this.props.groupId) {
                     this.setState({
                         phase: this.Phase.GroupMemberList,
-                        groupId: payload.groupId,
                         member: payload.member,
                     });
                 }
@@ -213,13 +212,20 @@ module.exports = React.createClass({
         } else if (payload.action === "view_group") {
             this.setState({
                 phase: this.Phase.GroupMemberList,
-                groupId: payload.groupId,
                 member: null,
+            });
+        } else if (payload.action === "view_group_room") {
+            this.setState({
+                phase: this.Phase.GroupRoomInfo,
+                groupRoom: payload.groupRoom,
+            });
+        } else if (payload.action === "view_group_room_list") {
+            this.setState({
+                phase: this.Phase.GroupRoomList,
             });
         } else if (payload.action === "view_group_user") {
             this.setState({
                 phase: this.Phase.GroupMemberInfo,
-                groupId: payload.groupId,
                 member: payload.member,
             });
         } else if (payload.action === "view_room") {
@@ -242,6 +248,7 @@ module.exports = React.createClass({
         const GroupMemberList = sdk.getComponent('groups.GroupMemberList');
         const GroupMemberInfo = sdk.getComponent('groups.GroupMemberInfo');
         const GroupRoomList = sdk.getComponent('groups.GroupRoomList');
+        const GroupRoomInfo = sdk.getComponent('groups.GroupRoomInfo');
 
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
@@ -340,6 +347,11 @@ module.exports = React.createClass({
                     groupMember={this.state.member}
                     groupId={this.props.groupId}
                     key={this.state.member.user_id} />;
+            } else if (this.state.phase == this.Phase.GroupRoomInfo) {
+                panel = <GroupRoomInfo
+                    groupRoom={this.state.groupRoom}
+                    groupId={this.props.groupId}
+                    key={this.state.groupRoom.roomId} />;
             } else if (this.state.phase == this.Phase.NotificationPanel) {
                 panel = <NotificationPanel />;
             } else if (this.state.phase == this.Phase.FilePanel) {
