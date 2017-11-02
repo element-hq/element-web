@@ -82,15 +82,23 @@ export default React.createClass({
       return this._getNewUrlState(this.props);
     },
 
-    // Returns true if props.url is a scalar URL, typically https://scalar.vector.im/api
-    isScalarUrl() {
+    /**
+     * Returns true if specified url is a scalar URL, typically https://scalar.vector.im/api
+     * @param  {[type]}  url URL to check
+     * @return {Boolean} True if specified URL is a scalar URL
+     */
+    isScalarUrl(url) {
+        if (!url) {
+            return false;
+        }
+
         let scalarUrls = SdkConfig.get().integrations_widgets_urls;
         if (!scalarUrls || scalarUrls.length == 0) {
             scalarUrls = [SdkConfig.get().integrations_rest_url];
         }
 
         for (let i = 0; i < scalarUrls.length; i++) {
-            if (this.props.url.startsWith(scalarUrls[i])) {
+            if (url.startsWith(scalarUrls[i])) {
                 return true;
             }
         }
@@ -122,7 +130,7 @@ export default React.createClass({
 
     // Adds a scalar token to the widget URL, if required
     setScalarToken() {
-        if (!this.isScalarUrl()) {
+        if (!this.isScalarUrl(this.props.url)) {
             return;
         }
         // Fetch the token before loading the iframe as we need to mangle the URL
