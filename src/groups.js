@@ -50,5 +50,6 @@ export function groupRoomFromApiObject(apiObject) {
         numJoinedMembers: apiObject.num_joined_members,
         worldReadable: apiObject.world_readable,
         guestCanJoin: apiObject.guest_can_join,
+        isPublic: apiObject.is_public !== false,
     };
 }

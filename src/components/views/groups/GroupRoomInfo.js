@@ -21,7 +21,6 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import { GroupRoomType } from '../../../groups';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
@@ -34,13 +33,15 @@ module.exports = React.createClass({
 
     propTypes: {
         groupId: PropTypes.string,
-        groupRoom: GroupRoomType,
+        groupRoomId: PropTypes.string,
     },
 
     getInitialState: function() {
         return {
-            removingRoom: false,
             isUserPrivilegedInGroup: null,
+            groupRoom: null,
+            groupRoomPublicityLoading: false,
+            groupRoomRemoveLoading: false,
         };
     },
 
@@ -53,6 +54,10 @@ module.exports = React.createClass({
             this._unregisterGroupStore();
             this._initGroupStore(newProps.groupId);
         }
+    },
+
+    componentWillUnmount() {
+        this._unregisterGroupStore();
     },
 
     _initGroupStore(groupId) {
@@ -68,15 +73,24 @@ module.exports = React.createClass({
         }
     },
 
+    _updateGroupRoom() {
+        this.setState({
+            groupRoom: this._groupStore.getGroupRooms().find(
+                (r) => r.roomId === this.props.groupRoomId,
+            ),
+        });
+    },
+
     onGroupStoreUpdated: function() {
         this.setState({
             isUserPrivilegedInGroup: this._groupStore.isUserPrivileged(),
         });
+        this._updateGroupRoom();
     },
 
     _onRemove: function(e) {
         const groupId = this.props.groupId;
-        const roomName = this.props.groupRoom.displayname;
+        const roomName = this.state.groupRoom.displayname;
         e.preventDefault();
         e.stopPropagation();
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
@@ -86,9 +100,9 @@ module.exports = React.createClass({
             button: _t("Remove"),
             onFinished: (proceed) => {
                 if (!proceed) return;
-                this.setState({removingRoom: true});
+                this.setState({groupRoomRemoveLoading: true});
                 const groupId = this.props.groupId;
-                const roomId = this.props.groupRoom.roomId;
+                const roomId = this.props.groupRoomId;
                 this._groupStore.removeRoomFromGroup(roomId).then(() => {
                     dis.dispatch({
                         action: "view_group_room_list",
@@ -103,7 +117,7 @@ module.exports = React.createClass({
                         ),
                     });
                 }).finally(() => {
-                    this.setState({removingRoom: false});
+                    this.setState({groupRoomRemoveLoading: false});
                 });
             },
         });
@@ -115,13 +129,41 @@ module.exports = React.createClass({
         });
     },
 
+    _changeGroupRoomPublicity(e) {
+        const isPublic = e.target.value === "public";
+        this.setState({
+            groupRoomPublicityLoading: true,
+        });
+        const groupId = this.props.groupId;
+        const roomId = this.props.groupRoomId;
+        const roomName = this.state.groupRoom.displayname;
+        this._groupStore.updateGroupRoomAssociation(roomId, isPublic).catch((err) => {
+            console.error(`Error whilst changing visibility of ${roomId} in ${groupId} to ${isPublic}`, err);
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog('Failed to remove room from group', '', ErrorDialog, {
+                title: _t("Something went wrong!"),
+                description: _t(
+                    "The visibility of '%(roomName)s' in %(groupId)s could not be updated.",
+                    {roomName, groupId},
+                ),
+            });
+        }).finally(() => {
+            this.setState({
+                groupRoomPublicityLoading: false,
+            });
+        });
+    },
+
     render: function() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const EmojiText = sdk.getComponent('elements.EmojiText');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        if (this.state.removingRoom) {
+        const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
+        if (this.state.groupRoomRemoveLoading || !this.state.groupRoom) {
             const Spinner = sdk.getComponent("elements.Spinner");
-            return <Spinner />;
+            return <div className="mx_MemberInfo">
+                <Spinner />
+            </div>;
         }
 
         let adminTools;
@@ -134,20 +176,46 @@ module.exports = React.createClass({
                             { _t('Remove from community') }
                         </AccessibleButton>
                     </div>
+                    <h3>
+                        { _t('Visibility in Room List') }
+                        { this.state.groupRoomPublicityLoading ?
+                            <InlineSpinner /> : <div />
+                        }
+                    </h3>
+                    <div>
+                        <label>
+                            <input type="radio"
+                                value="public"
+                                checked={this.state.groupRoom.isPublic}
+                                onClick={this._changeGroupRoomPublicity}
+                            />
+                            { _t('Visible to everyone') }
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <input type="radio"
+                                value="private"
+                                checked={!this.state.groupRoom.isPublic}
+                                onClick={this._changeGroupRoomPublicity}
+                            />
+                            { _t('Only visible to group members') }
+                        </label>
+                    </div>
                 </div>;
         }
 
         const avatarUrl = this.context.matrixClient.mxcUrlToHttp(
-            this.props.groupRoom.avatarUrl,
+            this.state.groupRoom.avatarUrl,
             36, 36, 'crop',
         );
 
-        const groupRoomName = this.props.groupRoom.displayname;
+        const groupRoomName = this.state.groupRoom.displayname;
         const avatar = <BaseAvatar name={groupRoomName} width={36} height={36} url={avatarUrl} />;
         return (
             <div className="mx_MemberInfo">
                 <GeminiScrollbar autoshow={true}>
-                    <AccessibleButton className="mx_MemberInfo_cancel"onClick={this._onCancel}>
+                    <AccessibleButton className="mx_MemberInfo_cancel" onClick={this._onCancel}>
                         <img src="img/cancel.svg" width="18" height="18" className="mx_filterFlipColor" />
                     </AccessibleButton>
                     <div className="mx_MemberInfo_avatar">
@@ -158,7 +226,7 @@ module.exports = React.createClass({
 
                     <div className="mx_MemberInfo_profile">
                         <div className="mx_MemberInfo_profileField">
-                            { this.props.groupRoom.canonical_alias }
+                            { this.state.groupRoom.canonical_alias }
                         </div>
                     </div>
 
