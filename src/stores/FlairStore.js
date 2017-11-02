@@ -66,7 +66,7 @@ class FlairStore extends EventEmitter {
         }
 
         // Bulk lookup ongoing, return promise to resolve/reject
-        if (this._usersPending[userId]) {
+        if (this._usersPending[userId] || this._usersInFlight[userId]) {
             return this._usersPending[userId].prom;
         }
 
@@ -91,7 +91,7 @@ class FlairStore extends EventEmitter {
             console.error('Could not get groups for user', this.props.userId, err);
             throw err;
         }).finally(() => {
-            delete this._usersPending[userId];
+            delete this._usersInFlight[userId];
         });
 
         // This debounce will allow consecutive requests for the public groups of users that
@@ -113,23 +113,25 @@ class FlairStore extends EventEmitter {
     }
 
     async _batchedGetPublicGroups(matrixClient) {
-        // Take the userIds from the keys of this._usersPending
-        const usersInFlight = Object.keys(this._usersPending);
+        // Move users pending to users in flight
+        this._usersInFlight = this._usersPending;
+        this._usersPending = {};
+
         let resp = {
             users: [],
         };
         try {
-            resp = await matrixClient.getPublicisedGroups(usersInFlight);
+            resp = await matrixClient.getPublicisedGroups(Object.keys(this._usersInFlight));
         } catch (err) {
             // Propagate the same error to all usersInFlight
-            usersInFlight.forEach((userId) => {
-                this._usersPending[userId].reject(err);
+            Object.keys(this._usersInFlight).forEach((userId) => {
+                this._usersInFlight[userId].reject(err);
             });
             return;
         }
         const updatedUserGroups = resp.users;
-        usersInFlight.forEach((userId) => {
-            this._usersPending[userId].resolve(updatedUserGroups[userId] || []);
+        Object.keys(this._usersInFlight).forEach((userId) => {
+            this._usersInFlight[userId].resolve(updatedUserGroups[userId] || []);
         });
     }
 

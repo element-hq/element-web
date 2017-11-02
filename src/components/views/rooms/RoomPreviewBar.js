@@ -83,10 +83,8 @@ module.exports = React.createClass({
         }
     },
 
-    _roomNameElement: function(fallback) {
-        fallback = fallback || _t('a room');
-        const name = this.props.room ? this.props.room.name : (this.props.room_alias || "");
-        return name ? name : fallback;
+    _roomNameElement: function() {
+        return this.props.room ? this.props.room.name : (this.props.room_alias || "");
     },
 
     render: function() {
@@ -150,7 +148,7 @@ module.exports = React.createClass({
                 </div>
             );
         } else if (kicked || banned) {
-            const roomName = this._roomNameElement(_t('This room'));
+            const roomName = this._roomNameElement();
             const kickerMember = this.props.room.currentState.getMember(
                 myMember.events.member.getSender(),
             );
@@ -167,9 +165,17 @@ module.exports = React.createClass({
 
             let actionText;
             if (kicked) {
-                actionText = _t("You have been kicked from %(roomName)s by %(userName)s.", {roomName: roomName, userName: kickerName});
+                if(roomName) {
+                    actionText = _t("You have been kicked from %(roomName)s by %(userName)s.", {roomName: roomName, userName: kickerName});
+                } else {
+                    actionText = _t("You have been kicked from this room by %(userName)s.", {userName: kickerName});
+                }
             } else if (banned) {
-                actionText = _t("You have been banned from %(roomName)s by %(userName)s.", {roomName: roomName, userName: kickerName});
+                if(roomName) {
+                    actionText = _t("You have been banned from %(roomName)s by %(userName)s.", {roomName: roomName, userName: kickerName});
+                } else {
+                    actionText = _t("You have been banned from this room by %(userName)s.", {userName: kickerName});
+                }
             } // no other options possible due to the kicked || banned check above.
 
             joinBlock = (
@@ -203,7 +209,7 @@ module.exports = React.createClass({
             joinBlock = (
                 <div>
                     <div className="mx_RoomPreviewBar_join_text">
-                        { _t('You are trying to access %(roomName)s.', {roomName: name}) }
+                        { name ? _t('You are trying to access %(roomName)s.', {roomName: name}) : _t('You are trying to access a room.') }
                         <br />
                         { _tJsx("<a>Click here</a> to join the discussion!",
                             /<a>(.*?)<\/a>/,
