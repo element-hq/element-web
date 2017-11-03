@@ -33,7 +33,7 @@ limitations under the License.
     background-color: $primary-bg-color;
 }
 
-.mx_CreateGroupDialog_input.has_prefix.has_suffix {
+.mx_CreateGroupDialog_input_hasPrefixAndSuffix {
     border-radius: 0px;
 }
 
@@ -41,8 +41,8 @@ limitations under the License.
     display: flex;
 }
 
-.mx_CreateGroupDialog_input_prefix,
-.mx_CreateGroupDialog_input_suffix {
+.mx_CreateGroupDialog_prefix,
+.mx_CreateGroupDialog_suffix {
     height: 35px;
     padding: 0px 5px;
     line-height: 37px;
@@ -51,12 +51,12 @@ limitations under the License.
     text-align: center;
 }
 
-.mx_CreateGroupDialog_input_prefix {
+.mx_CreateGroupDialog_prefix {
     border-right: 0px;
     border-radius: 3px 0px 0px 3px;
 }
 
-.mx_CreateGroupDialog_input_suffix {
+.mx_CreateGroupDialog_suffix {
     border-left: 0px;
     border-radius: 0px 3px 3px 0px;
 }
