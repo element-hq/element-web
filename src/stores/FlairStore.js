@@ -49,7 +49,7 @@ class FlairStore extends EventEmitter {
             //  }
         };
         this._usersInFlight = {
-            // see _usersPending
+            // This has the same schema as _usersPending
         };
 
         this._debounceTimeoutID = null;
