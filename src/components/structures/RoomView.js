@@ -44,8 +44,6 @@ const Rooms = require('../../Rooms');
 
 import KeyCode from '../../KeyCode';
 
-import UserProvider from '../../autocomplete/UserProvider';
-
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 
@@ -541,12 +539,6 @@ module.exports = React.createClass({
                 });
             }
         }
-
-        // update the tab complete list as it depends on who most recently spoke,
-        // and that has probably just changed
-        if (ev.sender) {
-            UserProvider.getInstance().onUserSpoke(ev.sender);
-        }
     },
 
     onRoomName: function(room) {
@@ -568,7 +560,6 @@ module.exports = React.createClass({
         this._warnAboutEncryption(room);
         this._calculatePeekRules(room);
         this._updatePreviewUrlVisibility(room);
-        UserProvider.getInstance().setUserListFromRoom(room);
     },
 
     _warnAboutEncryption: function(room) {
@@ -721,9 +712,6 @@ module.exports = React.createClass({
         // a member state changed in this room
         // refresh the conf call notification state
         this._updateConfCallNotification();
-
-        // refresh the tab complete list
-        UserProvider.getInstance().setUserListFromRoom(this.state.room);
 
         // if we are now a member of the room, where we were not before, that
         // means we have finished joining a room we were previously peeking
