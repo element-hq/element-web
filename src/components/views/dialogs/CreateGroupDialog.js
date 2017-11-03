@@ -137,16 +137,19 @@ export default React.createClass({
                             <div className="mx_CreateGroupDialog_label">
                                 <label htmlFor="groupid">{ _t('Community ID') }</label>
                             </div>
-                            <div>
-                                <span>+</span>
-                                <input id="groupid" className="mx_CreateGroupDialog_input"
+                            <div className="mx_CreateGroupDialog_input_group">
+                                <span className="mx_CreateGroupDialog_prefix">+</span>
+                                <input id="groupid"
+                                    className="mx_CreateGroupDialog_input mx_CreateGroupDialog_input_hasPrefixAndSuffix"
                                     size="32"
                                     placeholder={_t('example')}
                                     onChange={this._onGroupIdChange}
                                     onBlur={this._onGroupIdBlur}
                                     value={this.state.groupId}
                                 />
-                                <span>:{ MatrixClientPeg.get().getDomain() }</span>
+                                <span className="mx_CreateGroupDialog_suffix">
+                                    :{ MatrixClientPeg.get().getDomain() }
+                                </span>
                             </div>
                         </div>
                         <div className="error">
