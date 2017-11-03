@@ -326,6 +326,7 @@
     "Drop here to tag %(section)s": "Drop here to tag %(section)s",
     "Press <StartChatButton> to start a chat with someone": "Press <StartChatButton> to start a chat with someone",
     "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory",
+    "Community Invites": "Community Invites",
     "Invites": "Invites",
     "Favourites": "Favourites",
     "People": "People",
