@@ -555,13 +555,23 @@ module.exports = React.createClass({
     render: function() {
         const RoomSubList = sdk.getComponent('structures.RoomSubList');
 
-        const inviteSectionExtraTiles = this._makeGroupInviteTiles();
-
         const self = this;
         return (
             <GeminiScrollbar className="mx_RoomList_scrollbar"
                  autoshow={true} onScroll={self._whenScrolling} ref="gemscroll">
             <div className="mx_RoomList">
+                <RoomSubList list={[]}
+                             extraTiles={this._makeGroupInviteTiles()}
+                             label={_t('Community Invites')}
+                             editable={false}
+                             order="recent"
+                             isInvite={true}
+                             collapsed={self.props.collapsed}
+                             searchFilter={self.props.searchFilter}
+                             onHeaderClick={self.onSubListHeaderClick}
+                             onShowMoreRooms={self.onShowMoreRooms}
+                />
+
                 <RoomSubList list={self.state.lists['im.vector.fake.invite']}
                              label={_t('Invites')}
                              editable={false}
@@ -573,7 +583,6 @@ module.exports = React.createClass({
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
                              onShowMoreRooms={self.onShowMoreRooms}
-                             extraTiles={inviteSectionExtraTiles}
                 />
 
                 <RoomSubList list={self.state.lists['m.favourite']}

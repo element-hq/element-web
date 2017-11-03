@@ -44,21 +44,21 @@ export default React.createClass({
 
         const label = <EmojiText
             element="div"
-            title={groupName}
-            className="mx_GroupInviteTile_name"
+            title={this.props.group.groupId}
+            className="mx_RoomTile_name"
             dir="auto"
         >
             { groupName }
         </EmojiText>;
 
-        const badge = <div className="mx_GroupInviteTile_badge">!</div>;
+        const badge = <div className="mx_RoomSubList_badge mx_RoomSubList_badgeHighlight">!</div>;
 
         return (
-            <AccessibleButton className="mx_GroupInviteTile" onClick={this.onClick}>
-                <div className="mx_GroupInviteTile_avatarContainer">
+            <AccessibleButton className="mx_RoomTile mx_RoomTile_highlight" onClick={this.onClick}>
+                <div className="mx_RoomTile_avatar">
                     { av }
                 </div>
-                <div className="mx_GroupInviteTile_nameContainer">
+                <div className="mx_RoomTile_nameContainer">
                     { label }
                     { badge }
                 </div>
