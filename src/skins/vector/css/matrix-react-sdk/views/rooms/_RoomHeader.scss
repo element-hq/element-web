@@ -232,3 +232,17 @@ limitations under the License.
 .mx_RoomHeader_voipButtons {
     margin-top: 18px;
 }
+
+.mx_RoomHeader_pinnedButton {
+    position: relative;
+}
+
+.mx_RoomHeader_unreadPinsIndicator {
+    position: absolute;
+    right: 0;
+    bottom: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 8px;
+    background-color: $warning-color;
+}
