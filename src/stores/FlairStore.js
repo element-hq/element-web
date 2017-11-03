@@ -48,6 +48,9 @@ class FlairStore extends EventEmitter {
             //      reject: () => {}
             //  }
         };
+        this._usersInFlight = {
+            // see _usersPending
+        };
 
         this._debounceTimeoutID = null;
     }
