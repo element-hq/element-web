@@ -128,12 +128,16 @@ class FlairStore extends EventEmitter {
         } catch (err) {
             // Propagate the same error to all usersInFlight
             Object.keys(this._usersInFlight).forEach((userId) => {
+                // The promise should always exist for userId, but do a null-check anyway
+                if (!this._usersInFlight[userId]) return;
                 this._usersInFlight[userId].reject(err);
             });
             return;
         }
         const updatedUserGroups = resp.users;
         Object.keys(this._usersInFlight).forEach((userId) => {
+            // The promise should always exist for userId, but do a null-check anyway
+            if (!this._usersInFlight[userId]) return;
             this._usersInFlight[userId].resolve(updatedUserGroups[userId] || []);
         });
     }
