@@ -194,6 +194,9 @@ module.exports = React.createClass({
                     node.parentNode.replaceChild(pillContainer, node);
                     // Pills within pills aren't going to go well, so move on
                     pillified = true;
+
+                    // update the current node with one that's now taken its place
+                    node = pillContainer;
                 }
             } else if (node.nodeType == Node.TEXT_NODE) {
                 const Pill = sdk.getComponent('elements.Pill');
