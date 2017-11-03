@@ -18,6 +18,9 @@ limitations under the License.
     max-width: 960px;
     margin-left: auto;
     margin-right: auto;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .mx_MyGroups .mx_RoomHeader_simpleHeader {
@@ -61,10 +64,21 @@ limitations under the License.
 /* Until the button is wired up */
 .mx_MyGroups_joinBox {
     visibility: hidden;
+    height: 0px;
+    margin: 0px;
 }
 
 .mx_MyGroups_content {
     margin-left: 2px;
+
+    flex: 1 0 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.mx_MyGroups_content h3 {
+    margin-bottom: 10px;
 }
 
 .mx_MyGroups_placeholder {
@@ -75,19 +89,22 @@ limitations under the License.
     text-align: center;
 }
 
-.mx_MyGroups_joinedGroups {
+.mx_MyGroups_joinedGroups .gm-scroll-view {
+    border-top: 1px solid $primary-hairline-color;
+    overflow-x: hidden;
+
     display: flex;
     flex-direction: row;
     flex-flow: wrap;
-    justify-content: space-around;
+    align-content: flex-start;
 }
 
-.mx_MyGroups_joinedGroups .mx_GroupTile {
+.mx_MyGroups_joinedGroups .gm-scroll-view .mx_GroupTile {
     min-width: 300px;
-    flex: 1 0 25%;
+    max-width: 33%;
+    flex: 1 0 300px;
     height: 75px;
-    margin-bottom: 15px;
-    margin-right: 10px;
+    margin: 10px 0px;
     display: flex;
     align-items: flex-start;
     cursor: pointer;
@@ -98,6 +115,12 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.mx_GroupTile_profile h3.mx_GroupTile_name,
+.mx_GroupTile_profile .mx_GroupTile_groupId,
+.mx_GroupTile_profile .mx_GroupTile_desc {
+    padding-right: 10px;
 }
 
 .mx_GroupTile_profile h3.mx_GroupTile_name {
