@@ -1,5 +1,5 @@
 /*
-Copyright 2017 New Vector Ltd
+Copyright 2017 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,8 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_GroupRoomTile {
-    position: relative;
-    color: $primary-fg-color;
-    cursor: pointer;
-}
+const React = require('react');
+
+module.exports = React.createClass({
+    displayName: 'InlineSpinner',
+
+    render: function() {
+        var w = this.props.w || 16;
+        var h = this.props.h || 16;
+        var imgClass = this.props.imgClassName || "";
+
+        return (
+            <div className="mx_InlineSpinner">
+                <img src="img/spinner.gif" width={w} height={h} className={imgClass}/>
+            </div>
+        );
+    }
+});

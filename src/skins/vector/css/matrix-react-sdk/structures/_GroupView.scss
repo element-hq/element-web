@@ -204,6 +204,7 @@ limitations under the License.
     flex-grow: 1;
     border-top: 1px solid $primary-hairline-color;
     padding-top: 10px;
+    word-break: break-word;
 }
 
 .mx_GroupView .mx_RoomView_messageListWrapper {
