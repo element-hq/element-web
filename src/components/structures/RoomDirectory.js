@@ -409,7 +409,7 @@ module.exports = React.createClass({
 
             perms = null;
             if (guestRead || guestJoin) {
-                perms = <div className="mx_RoomDirectory_perms">{guestRead} {guestJoin}</div>;
+                perms = <div className="mx_RoomDirectory_perms">{guestRead}{guestJoin}</div>;
             }
 
             var topic = rooms[i].topic || '';
