@@ -246,10 +246,14 @@ var RoomSubList = React.createClass({
     roomNotificationCount: function(truncateAt) {
         var self = this;
 
+        if (this.props.isInvite) {
+            return [0, true];
+        }
+
         return this.props.list.reduce(function(result, room, index) {
             if (truncateAt === undefined || index >= truncateAt) {
                 var roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
-                var highlight = room.getUnreadNotificationCount('highlight') > 0 || self.props.isInvite;
+                var highlight = room.getUnreadNotificationCount('highlight') > 0;
                 var notificationCount = room.getUnreadNotificationCount();
 
                 const notifBadges = notificationCount > 0 && self._shouldShowNotifBadge(roomNotifState);
@@ -394,7 +398,8 @@ var RoomSubList = React.createClass({
         var subListNotifCount = subListNotifications[0];
         var subListNotifHighlight = subListNotifications[1];
 
-        var roomCount = this.props.list.length > 0 ? this.props.list.length : '';
+        var totalTiles = this.props.list.length + (this.props.extraTiles || []).length;
+        var roomCount = totalTiles > 0 ? totalTiles : '';
 
         var chevronClasses = classNames({
             'mx_RoomSubList_chevron': true,
