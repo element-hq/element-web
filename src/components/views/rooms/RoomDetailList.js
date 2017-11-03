@@ -49,6 +49,7 @@ const RoomDetailRow = React.createClass({
         dis.dispatch({
             action: 'view_room',
             room_id: this.props.room.roomId,
+            room_alias: this.props.room.canonicalAlias || (this.props.room.aliases || [])[0],
         });
     },
 
