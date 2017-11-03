@@ -64,6 +64,11 @@ limitations under the License.
 /* Until the button is wired up */
 .mx_MyGroups_joinBox {
     visibility: hidden;
+
+    /* When joinBox wraps onto its own row, it should take up zero height so
+       that there isn't an awkward gap between MyGroups_createBox and
+       MyGroups_content.
+    */
     height: 0px;
     margin: 0px;
 }
