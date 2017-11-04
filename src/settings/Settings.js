@@ -28,13 +28,21 @@ const LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG = ['device', 'config'];
 export const SETTINGS = {
     // EXAMPLE SETTING:
     // "my-setting": {
-    //     // Required by features, optional otherwise
+    //     // Must be set to true for features. Default is 'false'.
     //     isFeature: false,
     //
-    //     // Recommended.
+    //     // Display names are strongly recommended for clarity.
     //     displayName: _td("Cool Name"),
     //
-    //     // Required.
+    //     // Display name can also be an object for different levels.
+    //     //displayName: {
+    //     //    "device": _td("Name for when the setting is used at 'device'"),
+    //     //    "room": _td("Name for when the setting is used at 'room'"),
+    //     //    "default": _td("The name for all other levels"),
+    //     //}
+    //
+    //     // The supported levels are required. Preferably, use the preset arrays
+    //     // at the top of this file to define this rather than a custom array.
     //     supportedLevels: [
     //         // The order does not matter.
     //
@@ -48,7 +56,9 @@ export const SETTINGS = {
     //         // "default" is always supported and does not get listed here.
     //     ],
     //
-    //     // Optional. Any data type.
+    //     // Required. Can be any data type. The value specified here should match
+    //     // the data being stored (ie: if a boolean is used, the setting should
+    //     // represent a boolean).
     //     default: {
     //         your: "value",
     //     },
@@ -57,11 +67,13 @@ export const SETTINGS = {
         isFeature: true,
         displayName: _td("Communities"),
         supportedLevels: LEVELS_FEATURE,
+        default: false,
     },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
         supportedLevels: LEVELS_FEATURE,
+        default: false,
     },
     "MessageComposerInput.dontSuggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -157,9 +169,11 @@ export const SETTINGS = {
     },
     "webrtc_audioinput": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: null,
     },
     "webrtc_videoinput": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: null,
     },
     "language": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
