@@ -19,6 +19,7 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import AccessibleButton from "../elements/AccessibleButton";
 import PinnedEventTile from "./PinnedEventTile";
 import { _t } from '../../../languageHandler';
+import PinningUtils from "../../../utils/PinningUtils";
 
 module.exports = React.createClass({
     displayName: 'PinnedEventsPanel',
@@ -61,12 +62,7 @@ module.exports = React.createClass({
 
             Promise.all(promises).then((contexts) => {
                 // Filter out the messages before we try to render them
-                const pinned = contexts.filter((context) => {
-                    if (!context) return false; // no context == not applicable for the room
-                    if (context.event.getType() !== "m.room.message") return false;
-                    if (context.event.isRedacted()) return false;
-                    return true;
-                });
+                const pinned = contexts.filter((context) => PinningUtils.isPinnable(context.event));
 
                 this.setState({ loading: false, pinned });
             });

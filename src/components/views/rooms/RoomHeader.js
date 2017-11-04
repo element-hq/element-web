@@ -167,6 +167,13 @@ module.exports = React.createClass({
         return true;
     },
 
+    _hasPins: function() {
+        const currentPinEvent = this.props.room.currentState.getStateEvents("m.room.pinned_events", '');
+        if (!currentPinEvent) return false;
+
+        return !(currentPinEvent.getContent().pinned && currentPinEvent.getContent().pinned.length <= 0);
+    },
+
     /**
      * After editing the settings, get the new name for the room
      *
@@ -333,14 +340,17 @@ module.exports = React.createClass({
         }
 
         if (this.props.onPinnedClick && UserSettingsStore.isFeatureEnabled('feature_pinning')) {
-            let newPinsNotification = null;
+            let pinsIndicator = null;
             if (this._hasUnreadPins()) {
-                newPinsNotification = (<div className="mx_RoomHeader_unreadPinsIndicator"></div>);
+                pinsIndicator = (<div className="mx_RoomHeader_pinsIndicator mx_RoomHeader_pinsIndicatorUnread" />);
+            } else if (this._hasPins()) {
+                pinsIndicator = (<div className="mx_RoomHeader_pinsIndicator" />);
             }
+
             pinnedEventsButton =
                 <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_pinnedButton"
                                   onClick={this.props.onPinnedClick} title={_t("Pinned Messages")}>
-                    { newPinsNotification }
+                    { pinsIndicator }
                     <TintableSvg src="img/icons-pin.svg" width="16" height="16" />
                 </AccessibleButton>;
         }
