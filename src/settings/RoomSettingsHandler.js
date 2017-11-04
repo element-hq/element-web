@@ -48,8 +48,11 @@ export default class RoomSettingsHandler extends SettingsHandler {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(roomId);
 
+        let eventType = "im.vector.web.settings";
+        if (settingName === "urlPreviewsEnabled") eventType = "org.matrix.room.preview_urls";
+
         if (!room) return false;
-        return room.currentState.maySendStateEvent("im.vector.web.settings", cli.getUserId());
+        return room.currentState.maySendStateEvent(eventType, cli.getUserId());
     }
 
     isSupported() {
