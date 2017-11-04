@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -116,6 +117,19 @@ textarea {
 .gm-scrollbar.-horizontal:active {
     height: 8px;
     transition: height 120ms ease-out ! important;
+}
+
+// These are magic constants which are excluded from tinting, to let themes
+// (which only have CSS, unlike skins) tell the app what their non-tinted
+// colourscheme is by inspecting the stylesheet DOM.
+//
+// They are not used for layout!!
+#mx_theme_accentColor {
+    color: $accent-color;
+}
+
+#mx_theme_secondaryAccentColor {
+    color: $secondary-accent-color;
 }
 
 .mx_Dialog_wrapper {
