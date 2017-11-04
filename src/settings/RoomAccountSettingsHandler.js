@@ -28,6 +28,13 @@ export default class RoomAccountSettingsHandler extends SettingsHandler {
             return !content['disable'];
         }
 
+        // Special case room color
+        if (settingName === "roomColor") {
+            // The event content should already be in an appropriate format, we just need
+            // to get the right value.
+            return this._getSettings(roomId, "org.matrix.room.color_scheme");
+        }
+
         return this._getSettings(roomId)[settingName];
     }
 
@@ -37,6 +44,12 @@ export default class RoomAccountSettingsHandler extends SettingsHandler {
             const content = this._getSettings(roomId, "org.matrix.room.preview_urls");
             content['disable'] = !newValue;
             return MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.preview_urls", content);
+        }
+
+        // Special case room color
+        if (settingName === "roomColor") {
+            // The new value should match our requirements, we just need to store it in the right place.
+            return MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.color_scheme", newValue);
         }
 
         const content = this._getSettings(roomId);

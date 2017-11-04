@@ -209,4 +209,12 @@ export const SETTINGS = {
         },
         default: true,
     },
+    "roomColor": {
+        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
+        displayName: _td("Room Colour"),
+        default: {
+            primary_color: null, // Hex string, eg: #000000
+            secondary_color: null, // Hex string, eg: #000000
+        },
+    },
 };
