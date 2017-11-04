@@ -214,5 +214,8 @@
     "Register": "Регистрация",
     "Rooms": "Комнаты",
     "Invite to this community": "Пригласить в это сообщество",
-    "Add rooms to this community": "Добавить комнаты в это сообщество"
+    "Add rooms to this community": "Добавить комнаты в это сообщество",
+    "Toolbox": "Панель инструментов",
+    "Send Account Data": "Отправить данные аккаунта",
+    "Explore Account Data": "Просмотр данных аккаунта"
 }
