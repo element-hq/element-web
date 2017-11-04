@@ -23,11 +23,12 @@ import UserSettingsStore from './UserSettingsStore';
 
 const DEBUG = 0;
 
-// The colour keys to be replaced as referred to in CSS
+// The default colour keys to be replaced as referred to in CSS
+// (should be overridden by .mx_theme_accentColor and .mx_theme_secondaryAccentColor)
 const keyRgb = [
     "rgb(118, 207, 166)", // Vector Green
     "rgb(234, 245, 240)", // Vector Light Green
-    "rgb(211, 239, 225)", // BottomLeftMenu overlay (20% Vector Green)
+    "rgb(211, 239, 225)", // Unused: BottomLeftMenu (20% Green overlaid on Light Green)
 ];
 
 // Some algebra workings for calculating the tint % of Vector Green & Light Green
@@ -41,7 +42,7 @@ const keyRgb = [
 const keyHex = [
     "#76CFA6", // Vector Green
     "#EAF5F0", // Vector Light Green
-    "#D3EFE1", // BottomLeftMenu overlay (20% Vector Green overlaid on Vector Light Green)
+    "#D3EFE1", // Unused: BottomLeftMenu (20% Green overlaid on Light Green)
     "#FFFFFF", // white highlights of the SVGs (for switching to dark theme)
 ];
 
@@ -80,7 +81,20 @@ const svgAttrs = [
 let cached = false;
 
 function calcCssFixups() {
-    if (DEBUG) console.log("calcSvgFixups start");
+    if (DEBUG) console.log("calcCssFixups start");
+
+    // update keyRgb from the current theme CSS itself, if it defines it
+    if (document.getElementById('mx_theme_accentColor')) {
+        keyRgb[0] = window.getComputedStyle(
+            document.getElementById('mx_theme_accentColor')
+        ).color;
+    }
+    if (document.getElementById('mx_theme_secondaryAccentColor')) {
+        keyRgb[1] = window.getComputedStyle(
+            document.getElementById('mx_theme_secondaryAccentColor')
+        ).color;
+    }
+
     for (let i = 0; i < document.styleSheets.length; i++) {
         const ss = document.styleSheets[i];
         if (!ss) continue; // well done safari >:(
@@ -103,13 +117,22 @@ function calcCssFixups() {
         // Iterating through the CSS looking for matches to hack on feels
         // pretty horrible anyway. And what if the application skin doesn't use
         // Vector Green as its primary color?
+        // --richvdh
+
+        // Yes, tinting assumes that you are using the Riot skin for now.
+        // The right solution will be to move the CSS over to react-sdk.
+        // And yes, the default assets for the base skin might as well use
+        // Vector Green as any other colour.
+        // --matthew
 
         if (ss.href && !ss.href.match(/\/bundle.*\.css$/)) continue;
-
+        if (ss.disabled) continue;
         if (!ss.cssRules) continue;
+
         for (let j = 0; j < ss.cssRules.length; j++) {
             const rule = ss.cssRules[j];
             if (!rule.style) continue;
+            if (rule.selectorText && rule.selectorText.match(/#mx_theme/)) continue;
             for (let k = 0; k < cssAttrs.length; k++) {
                 const attr = cssAttrs[k];
                 for (let l = 0; l < keyRgb.length; l++) {
@@ -124,7 +147,7 @@ function calcCssFixups() {
             }
         }
     }
-    if (DEBUG) console.log("calcSvgFixups end");
+    if (DEBUG) console.log("calcCssFixups end");
 }
 
 function applyCssFixups() {
@@ -174,6 +197,10 @@ module.exports = {
         tintables.push(tintable);
     },
 
+    getKeyRgb: function() {
+        return keyRgb;
+    },
+
     tint: function(primaryColor, secondaryColor, tertiaryColor) {
         if (!cached) {
             calcCssFixups();
@@ -182,10 +209,8 @@ module.exports = {
 
         if (!primaryColor) {
             const theme = UserSettingsStore.getTheme();
-            // FIXME: get this out of the theme CSS itself somehow?
-            // we could store it in a string CSS attrib somewhere we could sniff...
-            primaryColor = theme === 'status' ? "#6CC1F6" : "#76CFA6"; // Vector green
-            secondaryColor = theme === 'status' ? "#586C7B" : "#EAF5F0"; // Vector light green
+            primaryColor = keyRgb[0];
+            secondaryColor = keyRgb[1];
         }
 
         if (!secondaryColor) {
