@@ -164,10 +164,11 @@ export default class SettingsStore {
      * be applied to any particular room, otherwise it should be supplied.
      * @param {string} settingName The name of the setting to read the value of.
      * @param {String} roomId The room ID to read the setting value in, may be null.
+     * @param {boolean} excludeDefault True to disable using the default value.
      * @return {*} The value, or null if not found
      */
-    static getValue(settingName, roomId = null) {
-        return SettingsStore.getValueAt(LEVEL_ORDER[0], settingName, roomId);
+    static getValue(settingName, roomId = null, excludeDefault = false) {
+        return SettingsStore.getValueAt(LEVEL_ORDER[0], settingName, roomId, false, excludeDefault);
     }
 
     /**
@@ -178,9 +179,10 @@ export default class SettingsStore {
      * @param {String} roomId The room ID to read the setting value in, may be null.
      * @param {boolean} explicit If true, this method will not consider other levels, just the one
      * provided. Defaults to false.
+     * @param {boolean} excludeDefault True to disable using the default value.
      * @return {*} The value, or null if not found.
      */
-    static getValueAt(level, settingName, roomId = null, explicit = false) {
+    static getValueAt(level, settingName, roomId = null, explicit = false, excludeDefault = false) {
         const minIndex = LEVEL_ORDER.indexOf(level);
         if (minIndex === -1) throw new Error("Level " + level + " is not prioritized");
 
@@ -207,6 +209,7 @@ export default class SettingsStore {
         for (let i = minIndex; i < LEVEL_ORDER.length; i++) {
             let handler = handlers[LEVEL_ORDER[i]];
             if (!handler) continue;
+            if (excludeDefault && LEVEL_ORDER[i] === "default") continue;
 
             const value = handler.getValue(settingName, roomId);
             if (value === null || value === undefined) continue;

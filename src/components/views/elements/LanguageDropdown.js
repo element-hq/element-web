@@ -55,8 +55,7 @@ export default class LanguageDropdown extends React.Component {
             // If no value is given, we start with the first
             // country selected, but our parent component
             // doesn't know this, therefore we do this.
-            // TODO: {Travis} Ensure the default is *not* used for this check. It should try and use the browser.
-            const language = SettingsStore.getValue("language");
+            const language = SettingsStore.getValue("language", null, /*excludeDefault:*/true);
             if (language) {
               this.props.onOptionChange(language);
             }else {
@@ -97,8 +96,7 @@ export default class LanguageDropdown extends React.Component {
 
         // default value here too, otherwise we need to handle null / undefined
         // values between mounting and the initial value propgating
-        // TODO: {Travis} Ensure the default is *not* used for this check. It should try and use the browser.
-        let language = SettingsStore.getValue("language");
+        let language = SettingsStore.getValue("language", null, /*excludeDefault:*/true);
         let value = null;
         if (language) {
           value = this.props.value || language;
