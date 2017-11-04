@@ -157,9 +157,9 @@ module.exports = React.createClass({
 
         const readPinsEvent = this.props.room.getAccountData("im.vector.room.read_pins");
         if (readPinsEvent) {
-            const lastReadEvent = readPinsEvent.getContent().last_read_id;
-            if (lastReadEvent) {
-                return currentPinEvent.getId() !== lastReadEvent;
+            const readStateEvents = readPinsEvent.getContent().event_ids;
+            if (readStateEvents) {
+                return !readStateEvents.includes(currentPinEvent.getId());
             }
         }
 

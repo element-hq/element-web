@@ -79,21 +79,22 @@ module.exports = React.createClass({
         const pinnedEvents = this.props.room.currentState.getStateEvents("m.room.pinned_events", "");
         if (!pinnedEvents) return; // nothing to read
 
-        let lastReadEvent = null;
+        let readStateEvents = null;
         const readPinsEvent = this.props.room.getAccountData("im.vector.room.read_pins");
-        if (readPinsEvent) {
-            lastReadEvent = readPinsEvent.getContent().last_read_id;
+        if (readPinsEvent && readPinsEvent.getContent()) {
+            readStateEvents = readPinsEvent.getContent().event_ids || [];
         }
 
-        if (lastReadEvent !== pinnedEvents.getId()) {
+        if (!readStateEvents.includes(pinnedEvents.getId())) {
+            readStateEvents.push(pinnedEvents.getId());
             MatrixClientPeg.get().setRoomAccountData(this.props.room.roomId, "im.vector.room.read_pins", {
-                last_read_id: pinnedEvents.getId(),
+                event_ids: readStateEvents,
             });
         }
     },
 
     _getPinnedTiles: function() {
-        if (this.state.pinned.length == 0) {
+        if (this.state.pinned.length === 0) {
             return (<div>{ _t("No pinned messages.") }</div>);
         }
 
