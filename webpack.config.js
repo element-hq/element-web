@@ -20,6 +20,8 @@ module.exports = {
         // CSS themes
         "theme-light": "./src/skins/vector/css/themes/light.scss",
         "theme-dark": "./src/skins/vector/css/themes/dark.scss",
+        "theme-contrastlight": "./src/skins/vector/css/themes/contrastlight.scss",
+        "theme-contrastlightcondensed": "./src/skins/vector/css/themes/contrastlightcondensed.scss"
     },
     module: {
         preLoaders: [
