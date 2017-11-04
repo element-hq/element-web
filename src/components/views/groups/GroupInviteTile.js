@@ -38,29 +38,27 @@ export default React.createClass({
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const EmojiText = sdk.getComponent('elements.EmojiText');
 
-        const av = (
-            <BaseAvatar name={this.props.group.name} width={24} height={24}
-                url={this.props.group.avatarUrl}
-            />
-        );
+        const groupName = this.props.group.name || this.props.group.groupId;
+
+        const av = <BaseAvatar name={groupName} width={24} height={24} url={this.props.group.avatarUrl} />;
 
         const label = <EmojiText
             element="div"
-            title={this.props.group.name}
-            className="mx_GroupInviteTile_name"
+            title={this.props.group.groupId}
+            className="mx_RoomTile_name"
             dir="auto"
         >
-            { this.props.group.name }
+            { groupName }
         </EmojiText>;
 
-        const badge = <div className="mx_GroupInviteTile_badge">!</div>;
+        const badge = <div className="mx_RoomSubList_badge mx_RoomSubList_badgeHighlight">!</div>;
 
         return (
-            <AccessibleButton className="mx_GroupInviteTile" onClick={this.onClick}>
-                <div className="mx_GroupInviteTile_avatarContainer">
+            <AccessibleButton className="mx_RoomTile mx_RoomTile_highlight" onClick={this.onClick}>
+                <div className="mx_RoomTile_avatar">
                     { av }
                 </div>
-                <div className="mx_GroupInviteTile_nameContainer">
+                <div className="mx_RoomTile_nameContainer">
                     { label }
                     { badge }
                 </div>

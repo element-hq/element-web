@@ -1,6 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -109,8 +110,6 @@ const COMMANDS = [
 
 const COMMAND_RE = /(^\/\w*)/g;
 
-let instance = null;
-
 export default class CommandProvider extends AutocompleteProvider {
     constructor() {
         super(COMMAND_RE);
@@ -140,12 +139,6 @@ export default class CommandProvider extends AutocompleteProvider {
 
     getName() {
         return '*️⃣ ' + _t('Commands');
-    }
-
-    static getInstance(): CommandProvider {
-        if (instance === null) instance = new CommandProvider();
-
-        return instance;
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {

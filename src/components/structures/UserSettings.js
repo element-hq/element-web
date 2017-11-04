@@ -118,6 +118,10 @@ const SETTINGS_LABELS = [
         id: 'TextualBody.disableBigEmoji',
         label: _td('Disable big emoji in chat'),
     },
+    {
+        id: 'VideoView.flipVideoHorizontally',
+        label: _td('Mirror local video feed'),
+    },
 /*
     {
         id: 'useFixedWidthFont',
@@ -271,9 +275,9 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomMember.membership", this._onInviteStateChange);
 
         dis.dispatch({
-            action: 'ui_opacity',
-            sideOpacity: 0.3,
-            middleOpacity: 0.3,
+            action: 'panel_disable',
+            sideDisabled: true,
+            middleDisabled: true,
         });
         this._refreshFromServer();
 
@@ -311,9 +315,9 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         this._unmounted = true;
         dis.dispatch({
-            action: 'ui_opacity',
-            sideOpacity: 1.0,
-            middleOpacity: 1.0,
+            action: 'panel_disable',
+            sideDisabled: false,
+            middleDisabled: false,
         });
         dis.unregister(this.dispatcherRef);
         const cli = MatrixClientPeg.get();
@@ -1328,8 +1332,11 @@ module.exports = React.createClass({
 
                     <div className="mx_UserSettings_avatarPicker">
                         <div className="mx_UserSettings_avatarPicker_remove" onClick={this.onAvatarRemoveClick}>
-                            <img src="img/cancel.svg" width="15" height="15"
-                                 alt={_t("Remove avatar")} title={_t("Remove avatar")} />
+                            <img src="img/cancel.svg"
+                                width="15" height="15"
+                                className="mx_filterFlipColor"
+                                alt={_t("Remove avatar")}
+                                title={_t("Remove avatar")} />
                         </div>
                         <div onClick={this.onAvatarPickerClick} className="mx_UserSettings_avatarPicker_imgContainer">
                             <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}

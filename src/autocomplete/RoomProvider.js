@@ -1,6 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,8 +27,6 @@ import sdk from '../index';
 import _sortBy from 'lodash/sortBy';
 
 const ROOM_REGEX = /(?=#)(\S*)/g;
-
-let instance = null;
 
 function score(query, space) {
     const index = space.indexOf(query);
@@ -94,14 +93,6 @@ export default class RoomProvider extends AutocompleteProvider {
 
     getName() {
         return '💬 ' + _t('Rooms');
-    }
-
-    static getInstance() {
-        if (instance == null) {
-            instance = new RoomProvider();
-        }
-
-        return instance;
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
