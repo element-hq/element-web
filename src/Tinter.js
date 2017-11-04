@@ -80,85 +80,6 @@ const svgAttrs = [
 
 let cached = false;
 
-function calcCssFixups() {
-    if (DEBUG) console.log("calcCssFixups start");
-
-    // update keyRgb from the current theme CSS itself, if it defines it
-    if (document.getElementById('mx_theme_accentColor')) {
-        keyRgb[0] = window.getComputedStyle(
-            document.getElementById('mx_theme_accentColor')
-        ).color;
-    }
-    if (document.getElementById('mx_theme_secondaryAccentColor')) {
-        keyRgb[1] = window.getComputedStyle(
-            document.getElementById('mx_theme_secondaryAccentColor')
-        ).color;
-    }
-
-    for (let i = 0; i < document.styleSheets.length; i++) {
-        const ss = document.styleSheets[i];
-        if (!ss) continue; // well done safari >:(
-        // Chromium apparently sometimes returns null here; unsure why.
-        // see $14534907369972FRXBx:matrix.org in HQ
-        // ...ah, it's because there's a third party extension like
-        // privacybadger inserting its own stylesheet in there with a
-        // resource:// URI or something which results in a XSS error.
-        // See also #vector:matrix.org/$145357669685386ebCfr:matrix.org
-        // ...except some browsers apparently return stylesheets without
-        // hrefs, which we have no choice but ignore right now
-
-        // XXX seriously? we are hardcoding the name of vector's CSS file in
-        // here?
-        //
-        // Why do we need to limit it to vector's CSS file anyway - if there
-        // are other CSS files affecting the doc don't we want to apply the
-        // same transformations to them?
-        //
-        // Iterating through the CSS looking for matches to hack on feels
-        // pretty horrible anyway. And what if the application skin doesn't use
-        // Vector Green as its primary color?
-        // --richvdh
-
-        // Yes, tinting assumes that you are using the Riot skin for now.
-        // The right solution will be to move the CSS over to react-sdk.
-        // And yes, the default assets for the base skin might as well use
-        // Vector Green as any other colour.
-        // --matthew
-
-        if (ss.href && !ss.href.match(/\/bundle.*\.css$/)) continue;
-        if (ss.disabled) continue;
-        if (!ss.cssRules) continue;
-
-        for (let j = 0; j < ss.cssRules.length; j++) {
-            const rule = ss.cssRules[j];
-            if (!rule.style) continue;
-            if (rule.selectorText && rule.selectorText.match(/#mx_theme/)) continue;
-            for (let k = 0; k < cssAttrs.length; k++) {
-                const attr = cssAttrs[k];
-                for (let l = 0; l < keyRgb.length; l++) {
-                    if (rule.style[attr] === keyRgb[l]) {
-                        cssFixups.push({
-                            style: rule.style,
-                            attr: attr,
-                            index: l,
-                        });
-                    }
-                }
-            }
-        }
-    }
-    if (DEBUG) console.log("calcCssFixups end");
-}
-
-function applyCssFixups() {
-    if (DEBUG) console.log("applyCssFixups start");
-    for (let i = 0; i < cssFixups.length; i++) {
-        const cssFixup = cssFixups[i];
-        cssFixup.style[cssFixup.attr] = colors[cssFixup.index];
-    }
-    if (DEBUG) console.log("applyCssFixups end");
-}
-
 function hexToRgb(color) {
     if (color[0] === '#') color = color.slice(1);
     if (color.length === 3) {
@@ -203,7 +124,7 @@ module.exports = {
 
     tint: function(primaryColor, secondaryColor, tertiaryColor) {
         if (!cached) {
-            calcCssFixups();
+            this.calcCssFixups();
             cached = true;
         }
 
@@ -245,7 +166,7 @@ module.exports = {
         if (DEBUG) console.log("Tinter.tint");
 
         // go through manually fixing up the stylesheets.
-        applyCssFixups();
+        this.applyCssFixups();
 
         // tell all the SVGs to go fix themselves up
         // we don't do this as a dispatch otherwise it will visually lag
@@ -265,6 +186,85 @@ module.exports = {
         tintables.forEach(function(tintable) {
             tintable();
         });
+    },
+
+    calcCssFixups: function() {
+        if (DEBUG) console.log("calcCssFixups start");
+
+        // update keyRgb from the current theme CSS itself, if it defines it
+        if (document.getElementById('mx_theme_accentColor')) {
+            keyRgb[0] = window.getComputedStyle(
+                document.getElementById('mx_theme_accentColor')
+            ).color;
+        }
+        if (document.getElementById('mx_theme_secondaryAccentColor')) {
+            keyRgb[1] = window.getComputedStyle(
+                document.getElementById('mx_theme_secondaryAccentColor')
+            ).color;
+        }
+
+        for (let i = 0; i < document.styleSheets.length; i++) {
+            const ss = document.styleSheets[i];
+            if (!ss) continue; // well done safari >:(
+            // Chromium apparently sometimes returns null here; unsure why.
+            // see $14534907369972FRXBx:matrix.org in HQ
+            // ...ah, it's because there's a third party extension like
+            // privacybadger inserting its own stylesheet in there with a
+            // resource:// URI or something which results in a XSS error.
+            // See also #vector:matrix.org/$145357669685386ebCfr:matrix.org
+            // ...except some browsers apparently return stylesheets without
+            // hrefs, which we have no choice but ignore right now
+
+            // XXX seriously? we are hardcoding the name of vector's CSS file in
+            // here?
+            //
+            // Why do we need to limit it to vector's CSS file anyway - if there
+            // are other CSS files affecting the doc don't we want to apply the
+            // same transformations to them?
+            //
+            // Iterating through the CSS looking for matches to hack on feels
+            // pretty horrible anyway. And what if the application skin doesn't use
+            // Vector Green as its primary color?
+            // --richvdh
+
+            // Yes, tinting assumes that you are using the Riot skin for now.
+            // The right solution will be to move the CSS over to react-sdk.
+            // And yes, the default assets for the base skin might as well use
+            // Vector Green as any other colour.
+            // --matthew
+
+            if (ss.href && !ss.href.match(/\/bundle.*\.css$/)) continue;
+            if (ss.disabled) continue;
+            if (!ss.cssRules) continue;
+
+            for (let j = 0; j < ss.cssRules.length; j++) {
+                const rule = ss.cssRules[j];
+                if (!rule.style) continue;
+                if (rule.selectorText && rule.selectorText.match(/#mx_theme/)) continue;
+                for (let k = 0; k < cssAttrs.length; k++) {
+                    const attr = cssAttrs[k];
+                    for (let l = 0; l < keyRgb.length; l++) {
+                        if (rule.style[attr] === keyRgb[l]) {
+                            cssFixups.push({
+                                style: rule.style,
+                                attr: attr,
+                                index: l,
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        if (DEBUG) console.log("calcCssFixups end");
+    },
+
+    applyCssFixups: function() {
+        if (DEBUG) console.log("applyCssFixups start");
+        for (let i = 0; i < cssFixups.length; i++) {
+            const cssFixup = cssFixups[i];
+            cssFixup.style[cssFixup.attr] = colors[cssFixup.index];
+        }
+        if (DEBUG) console.log("applyCssFixups end");
     },
 
     // XXX: we could just move this all into TintableSvg, but as it's so similar
@@ -299,7 +299,9 @@ module.exports = {
                 for (let k = 0; k < svgAttrs.length; k++) {
                     const attr = svgAttrs[k];
                     for (let l = 0; l < keyHex.length; l++) {
-                        if (tag.getAttribute(attr) && tag.getAttribute(attr).toUpperCase() === keyHex[l]) {
+                        if (tag.getAttribute(attr) &&
+                            tag.getAttribute(attr).toUpperCase() === keyHex[l]) 
+                        {
                             fixups.push({
                                 node: tag,
                                 attr: attr,
