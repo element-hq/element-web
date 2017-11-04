@@ -152,6 +152,11 @@ export default class SettingsStore {
      * @returns {Promise} Resolves when the setting has been set.
      */
     static setFeatureEnabled(settingName, value) {
+        // Verify that the setting is actually a setting
+        if (!SETTINGS[settingName]) {
+            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
+        }
+
         return SettingsStore.setValue(settingName, null, "device", value);
     }
 
@@ -179,6 +184,11 @@ export default class SettingsStore {
     static getValueAt(level, settingName, roomId = null, explicit = false) {
         const minIndex = LEVEL_ORDER.indexOf(level);
         if (minIndex === -1) throw new Error("Level " + level + " is not prioritized");
+
+        // Verify that the setting is actually a setting
+        if (!SETTINGS[settingName]) {
+            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
+        }
 
         if (SettingsStore.isFeature(settingName)) {
             const configValue = SettingsStore._getFeatureState(settingName);
@@ -219,6 +229,11 @@ export default class SettingsStore {
      * @return {Promise} Resolves when the setting has been changed.
      */
     static setValue(settingName, roomId, level, value) {
+        // Verify that the setting is actually a setting
+        if (!SETTINGS[settingName]) {
+            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
+        }
+
         const handler = SettingsStore._getHandler(settingName, level);
         if (!handler) {
             throw new Error("Setting " + settingName + " does not have a handler for " + level);
@@ -242,6 +257,11 @@ export default class SettingsStore {
      * @return {boolean} True if the user may set the setting, false otherwise.
      */
     static canSetValue(settingName, roomId, level) {
+        // Verify that the setting is actually a setting
+        if (!SETTINGS[settingName]) {
+            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
+        }
+
         const handler = SettingsStore._getHandler(settingName, level);
         if (!handler) return false;
         return handler.canSetValue(settingName, roomId);
