@@ -68,7 +68,7 @@ limitations under the License.
     box-shadow: none;
 }
 
-.mx_GroupView_header_name:hover div:not(.mx_GroupView_editable) {
+.mx_GroupView_header_isUserMember .mx_GroupView_header_name:hover div:not(.mx_GroupView_editable) {
     color: $accent-color;
     cursor: pointer;
 }
@@ -204,6 +204,7 @@ limitations under the License.
     flex-grow: 1;
     border-top: 1px solid $primary-hairline-color;
     padding-top: 10px;
+    word-break: break-word;
 }
 
 .mx_GroupView .mx_RoomView_messageListWrapper {

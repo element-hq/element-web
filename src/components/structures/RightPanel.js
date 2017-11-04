@@ -22,7 +22,7 @@ import classNames from 'classnames';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
-import MatrixClient from 'matrix-js-sdk';
+import { MatrixClient } from 'matrix-js-sdk';
 import Analytics from 'matrix-react-sdk/lib/Analytics';
 import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
 import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
@@ -90,6 +90,7 @@ module.exports = React.createClass({
         RoomMemberList: 'RoomMemberList',
         GroupMemberList: 'GroupMemberList',
         GroupRoomList: 'GroupRoomList',
+        GroupRoomInfo: 'GroupRoomInfo',
         FilePanel: 'FilePanel',
         NotificationPanel: 'NotificationPanel',
         RoomMemberInfo: 'RoomMemberInfo',
@@ -205,7 +206,6 @@ module.exports = React.createClass({
                 } else if (this.props.groupId) {
                     this.setState({
                         phase: this.Phase.GroupMemberList,
-                        groupId: payload.groupId,
                         member: payload.member,
                     });
                 }
@@ -213,13 +213,20 @@ module.exports = React.createClass({
         } else if (payload.action === "view_group") {
             this.setState({
                 phase: this.Phase.GroupMemberList,
-                groupId: payload.groupId,
                 member: null,
+            });
+        } else if (payload.action === "view_group_room") {
+            this.setState({
+                phase: this.Phase.GroupRoomInfo,
+                groupRoomId: payload.groupRoomId,
+            });
+        } else if (payload.action === "view_group_room_list") {
+            this.setState({
+                phase: this.Phase.GroupRoomList,
             });
         } else if (payload.action === "view_group_user") {
             this.setState({
                 phase: this.Phase.GroupMemberInfo,
-                groupId: payload.groupId,
                 member: payload.member,
             });
         } else if (payload.action === "view_room") {
@@ -242,6 +249,7 @@ module.exports = React.createClass({
         const GroupMemberList = sdk.getComponent('groups.GroupMemberList');
         const GroupMemberInfo = sdk.getComponent('groups.GroupMemberInfo');
         const GroupRoomList = sdk.getComponent('groups.GroupRoomList');
+        const GroupRoomInfo = sdk.getComponent('groups.GroupRoomInfo');
 
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
@@ -305,7 +313,7 @@ module.exports = React.createClass({
                     analytics={['Right Panel', 'Group Member List Button', 'click']}
                 />,
                 <HeaderButton key="_roomsButton" title={_t('Rooms')} iconSrc="img/icons-room.svg"
-                    isHighlighted={this.state.phase === this.Phase.GroupRoomList}
+                    isHighlighted={[this.Phase.GroupRoomList, this.Phase.GroupRoomInfo].includes(this.state.phase)}
                     clickPhase={this.Phase.GroupRoomList}
                     analytics={['Right Panel', 'Group Room List Button', 'click']}
                 />,
@@ -340,6 +348,11 @@ module.exports = React.createClass({
                     groupMember={this.state.member}
                     groupId={this.props.groupId}
                     key={this.state.member.user_id} />;
+            } else if (this.state.phase == this.Phase.GroupRoomInfo) {
+                panel = <GroupRoomInfo
+                    groupRoomId={this.state.groupRoomId}
+                    groupId={this.props.groupId}
+                    key={this.state.groupRoomId} />;
             } else if (this.state.phase == this.Phase.NotificationPanel) {
                 panel = <NotificationPanel />;
             } else if (this.state.phase == this.Phase.FilePanel) {
