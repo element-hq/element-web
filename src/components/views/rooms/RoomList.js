@@ -34,27 +34,18 @@ const Receipt = require('../../../utils/Receipt');
 const HIDE_CONFERENCE_CHANS = true;
 
 function phraseForSection(section) {
-    // These would probably be better as individual strings,
-    // but for some reason we have translations for these strings
-    // as-is, so keeping it like this for now.
-    let verb;
     switch (section) {
         case 'm.favourite':
-            verb = _t('to favourite');
-            break;
+            return _t('Drop here to favourite');
         case 'im.vector.fake.direct':
-            verb = _t('to tag direct chat');
-            break;
+            return _t('Drop here to tag direct chat');
         case 'im.vector.fake.recent':
-            verb = _t('to restore');
-            break;
+            return _t('Drop here to restore');
         case 'm.lowpriority':
-            verb = _t('to demote');
-            break;
+            return _t('Drop here to demote');
         default:
             return _t('Drop here to tag %(section)s', {section: section});
     }
-    return _t('Drop here %(toAction)s', {toAction: verb});
 }
 
 module.exports = React.createClass({
@@ -564,13 +555,23 @@ module.exports = React.createClass({
     render: function() {
         const RoomSubList = sdk.getComponent('structures.RoomSubList');
 
-        const inviteSectionExtraTiles = this._makeGroupInviteTiles();
-
         const self = this;
         return (
             <GeminiScrollbar className="mx_RoomList_scrollbar"
                  autoshow={true} onScroll={self._whenScrolling} ref="gemscroll">
             <div className="mx_RoomList">
+                <RoomSubList list={[]}
+                             extraTiles={this._makeGroupInviteTiles()}
+                             label={_t('Community Invites')}
+                             editable={false}
+                             order="recent"
+                             isInvite={true}
+                             collapsed={self.props.collapsed}
+                             searchFilter={self.props.searchFilter}
+                             onHeaderClick={self.onSubListHeaderClick}
+                             onShowMoreRooms={self.onShowMoreRooms}
+                />
+
                 <RoomSubList list={self.state.lists['im.vector.fake.invite']}
                              label={_t('Invites')}
                              editable={false}
@@ -582,7 +583,6 @@ module.exports = React.createClass({
                              searchFilter={self.props.searchFilter}
                              onHeaderClick={self.onSubListHeaderClick}
                              onShowMoreRooms={self.onShowMoreRooms}
-                             extraTiles={inviteSectionExtraTiles}
                 />
 
                 <RoomSubList list={self.state.lists['m.favourite']}

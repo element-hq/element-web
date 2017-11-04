@@ -184,7 +184,8 @@ module.exports = React.createClass({
         });
     },
 
-    onClickChange: function() {
+    onClickChange: function(ev) {
+        ev.preventDefault();
         const oldPassword = this.state.cachedPassword || this.refs.old_input.value;
         const newPassword = this.refs.new_input.value;
         const confirmPassword = this.refs.confirm_input.value;

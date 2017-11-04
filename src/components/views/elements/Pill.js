@@ -37,11 +37,20 @@ const Pill = React.createClass({
         isMessagePillUrl: (url) => {
             return !!REGEX_LOCAL_MATRIXTO.exec(url);
         },
+        roomNotifPos: (text) => {
+            return text.indexOf("@room");
+        },
+        roomNotifLen: () => {
+            return "@room".length;
+        },
         TYPE_USER_MENTION: 'TYPE_USER_MENTION',
         TYPE_ROOM_MENTION: 'TYPE_ROOM_MENTION',
+        TYPE_AT_ROOM_MENTION: 'TYPE_AT_ROOM_MENTION', // '@room' mention
     },
 
     props: {
+        // The Type of this Pill. If url is given, this is auto-detected.
+        type: PropTypes.string,
         // The URL to pillify (no validation is done, see isPillUrl and isMessagePillUrl)
         url: PropTypes.string,
         // Whether the pill is in a message
@@ -72,14 +81,20 @@ const Pill = React.createClass({
             regex = REGEX_LOCAL_MATRIXTO;
         }
 
-        // Default to the empty array if no match for simplicity
-        // resource and prefix will be undefined instead of throwing
-        const matrixToMatch = regex.exec(nextProps.url) || [];
+        let matrixToMatch;
+        let resourceId;
+        let prefix;
 
-        const resourceId = matrixToMatch[1]; // The room/user ID
-        const prefix = matrixToMatch[2]; // The first character of prefix
+        if (nextProps.url) {
+            // Default to the empty array if no match for simplicity
+            // resource and prefix will be undefined instead of throwing
+            matrixToMatch = regex.exec(nextProps.url) || [];
 
-        const pillType = {
+            resourceId = matrixToMatch[1]; // The room/user ID
+            prefix = matrixToMatch[2]; // The first character of prefix
+        }
+
+        const pillType = this.props.type || {
             '@': Pill.TYPE_USER_MENTION,
             '#': Pill.TYPE_ROOM_MENTION,
             '!': Pill.TYPE_ROOM_MENTION,
@@ -88,6 +103,10 @@ const Pill = React.createClass({
         let member;
         let room;
         switch (pillType) {
+            case Pill.TYPE_AT_ROOM_MENTION: {
+                room = nextProps.room;
+            }
+                break;
             case Pill.TYPE_USER_MENTION: {
                 const localMember = nextProps.room.getMember(resourceId);
                 member = localMember;
@@ -160,6 +179,17 @@ const Pill = React.createClass({
         let href = this.props.url;
         let onClick;
         switch (this.state.pillType) {
+            case Pill.TYPE_AT_ROOM_MENTION: {
+                const room = this.props.room;
+                if (room) {
+                    linkText = "@room";
+                    if (this.props.shouldShowPillAvatar) {
+                        avatar = <RoomAvatar room={room} width={16} height={16} />;
+                    }
+                    pillClass = 'mx_AtRoomPill';
+                }
+            }
+                break;
             case Pill.TYPE_USER_MENTION: {
                     // If this user is not a member of this room, default to the empty member
                     const member = this.state.member;
