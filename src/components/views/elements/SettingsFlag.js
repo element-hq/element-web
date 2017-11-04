@@ -27,22 +27,45 @@ module.exports = React.createClass({
         label: React.PropTypes.string, // untranslated
         onChange: React.PropTypes.func,
         isExplicit: React.PropTypes.bool,
+        manualSave: React.PropTypes.bool,
 
         // If group is supplied, then this will create a radio button instead.
         group: React.PropTypes.string,
         value: React.PropTypes.any, // the value for the radio button
     },
 
+    getInitialState: function() {
+        return {
+            value: SettingsStore.getValueAt(
+                this.props.level,
+                this.props.name,
+                this.props.roomId,
+                this.props.isExplicit,
+            ),
+        };
+    },
+
     onChange: function(e) {
         if (this.props.group && !e.target.checked) return;
 
         const newState = this.props.group ? this.props.value : e.target.checked;
-        SettingsStore.setValue(this.props.name, this.props.roomId, this.props.level, newState);
+        if (!this.props.manualSave) this.save(newState);
+        else this.setState({ value: newState });
         if (this.props.onChange) this.props.onChange(newState);
     },
 
+    save: function(val = null) {
+        SettingsStore.setValue(this.props.name, this.props.roomId, this.props.level, val ? val : this.state.value);
+    },
+
     render: function() {
-        const val = SettingsStore.getValueAt(this.props.level, this.props.name, this.props.roomId, this.props.isExplicit);
+        const value = this.props.manualSave ? this.state.value : SettingsStore.getValueAt(
+            this.props.level,
+            this.props.name,
+            this.props.roomId,
+            this.props.isExplicit,
+        );
+
         const canChange = SettingsStore.canSetValue(this.props.name, this.props.roomId, this.props.level);
 
         let label = this.props.label;
@@ -54,7 +77,7 @@ module.exports = React.createClass({
         let checkbox = (
             <input id={id}
                    type="checkbox"
-                   defaultChecked={val}
+                   defaultChecked={value}
                    onChange={this.onChange}
                    disabled={!canChange}
             />
@@ -65,7 +88,7 @@ module.exports = React.createClass({
                        type="radio"
                        name={this.props.group}
                        value={this.props.value}
-                       checked={val === this.props.value}
+                       checked={value === this.props.value}
                        onChange={this.onChange}
                        disabled={!canChange}
                 />

@@ -29,8 +29,7 @@ module.exports = React.createClass({
     },
 
     saveSettings: function() {
-        // TODO: {Travis} move toggle logic here instead of being 'live'
-        return [];
+        return [this.refs.urlPreviewsRoom.save(), this.refs.urlPreviewsSelf.save()];
     },
 
     render: function() {
@@ -48,15 +47,16 @@ module.exports = React.createClass({
             );
         }
 
-        // TODO: {Travis} This needs to be an explicit true/false for "room" only.
         let previewsForRoom = null;
         if (SettingsStore.canSetValue("urlPreviewsEnabled", roomId, "room")) {
             previewsForRoom = (
                 <label>
                     <SettingsFlag name="urlPreviewsEnabled"
-                                      level={SettingLevel.ROOM}
-                                      roomId={this.props.room.roomId}
-                                      isExplicit={true} />
+                                  level={SettingLevel.ROOM}
+                                  roomId={this.props.room.roomId}
+                                  isExplicit={true}
+                                  manualSave={true}
+                                  ref="urlPreviewsRoom" />
                 </label>
             );
         } else {
@@ -69,8 +69,10 @@ module.exports = React.createClass({
 
         let previewsForRoomAccount = (
             <SettingsFlag name="urlPreviewsEnabled"
-                              level={SettingLevel.ROOM_ACCOUNT}
-                              roomId={this.props.room.roomId}
+                          level={SettingLevel.ROOM_ACCOUNT}
+                          roomId={this.props.room.roomId}
+                          manualSave={true}
+                          ref="urlPreviewsSelf"
             />
         );
 

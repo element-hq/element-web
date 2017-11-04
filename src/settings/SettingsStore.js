@@ -41,7 +41,6 @@ export const SettingLevel = {
     DEFAULT: "default",
 };
 
-
 // Convert the settings to easier to manage objects for the handlers
 const defaultSettings = {};
 const featureNames = [];
