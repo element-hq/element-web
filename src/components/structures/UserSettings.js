@@ -15,7 +15,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import SettingsStore from "../../settings/SettingsStore";
+import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 
 const React = require('react');
 const ReactDOM = require('react-dom');
@@ -282,8 +282,8 @@ module.exports = React.createClass({
             if (this._unmounted) return;
             this.setState({
                 mediaDevices,
-                activeAudioInput: SettingsStore.getValueAt("device", 'webrtc_audioinput'),
-                activeVideoInput: SettingsStore.getValueAt("device", 'webrtc_videoinput'),
+                activeAudioInput: SettingsStore.getValueAt(SettingLevel.DEVICE, 'webrtc_audioinput'),
+                activeVideoInput: SettingsStore.getValueAt(SettingLevel.DEVICE, 'webrtc_videoinput'),
             });
         });
     },
@@ -616,7 +616,7 @@ module.exports = React.createClass({
     onLanguageChange: function(newLang) {
         if(this.state.language !== newLang) {
             // We intentionally promote this to the account level at this point
-            SettingsStore.setValue("language", null, "account", newLang);
+            SettingsStore.setValue("language", null, SettingLevel.ACCOUNT, newLang);
             this.setState({
                 language: newLang,
             });
@@ -639,7 +639,7 @@ module.exports = React.createClass({
         // TODO: this ought to be a separate component so that we don't need
         // to rebind the onChange each time we render
         const onChange = (e) =>
-            SettingsStore.setValue("autocompleteDelay", null, "device", e.target.value);
+            SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.value);
         return (
             <div>
                 <h3>{ _t("User Interface") }</h3>
@@ -653,7 +653,7 @@ module.exports = React.createClass({
                             <td>
                                 <input
                                     type="number"
-                                    defaultValue={SettingsStore.getValueAt("device", "autocompleteDelay")}
+                                    defaultValue={SettingsStore.getValueAt(SettingLevel.DEVICE, "autocompleteDelay")}
                                     onChange={onChange}
                                 />
                             </td>
@@ -672,7 +672,7 @@ module.exports = React.createClass({
             <div className="mx_UserSettings_toggle" key={setting.id}>
                 <SettingsFlag name={setting.id}
                                   label={setting.label}
-                                  level="account"
+                                  level={SettingLevel.ACCOUNT}
                                   onChange={setting.fn} />
             </div>
         );
@@ -685,7 +685,7 @@ module.exports = React.createClass({
             <div className="mx_UserSettings_toggle" key={setting.id + '_' + setting.value}>
                 <SettingsFlag name="theme"
                                   label={setting.label}
-                                  level="account"
+                                  level={SettingLevel.ACCOUNT}
                                   onChange={onChange}
                                   group="theme"
                                   value={setting.value} />
@@ -764,7 +764,7 @@ module.exports = React.createClass({
             <div className="mx_UserSettings_toggle" key={setting.id}>
                 <SettingsFlag name={setting.id}
                                   label={setting.label}
-                                  level="device"
+                                  level={SettingLevel.DEVICE}
                                   onChange={setting.fn} />
             </div>
         );

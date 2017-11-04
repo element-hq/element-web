@@ -48,10 +48,12 @@ export default {
         // TODO
     },
 
+    // TODO: {Travis} Granular setting
     getEnableNotifications: function() {
         return Notifier.isEnabled();
     },
 
+    // TODO: {Travis} Granular setting
     setEnableNotifications: function(enable) {
         if (!Notifier.supportsDesktopNotifications()) {
             return;
@@ -59,10 +61,12 @@ export default {
         Notifier.setEnabled(enable);
     },
 
+    // TODO: {Travis} Granular setting
     getEnableNotificationBody: function() {
         return Notifier.isBodyEnabled();
     },
 
+    // TODO: {Travis} Granular setting
     setEnableNotificationBody: function(enable) {
         if (!Notifier.supportsDesktopNotifications()) {
             return;
@@ -70,10 +74,12 @@ export default {
         Notifier.setBodyEnabled(enable);
     },
 
+    // TODO: {Travis} Granular setting
     getEnableAudioNotifications: function() {
         return Notifier.isAudioEnabled();
     },
 
+    // TODO: {Travis} Granular setting
     setEnableAudioNotifications: function(enable) {
         Notifier.setAudioEnabled(enable);
     },

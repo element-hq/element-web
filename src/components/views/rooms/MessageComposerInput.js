@@ -49,7 +49,7 @@ const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
 const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g');
 
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
-import SettingsStore from "../../../settings/SettingsStore";
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
 const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
@@ -535,7 +535,7 @@ export default class MessageComposerInput extends React.Component {
             editorState: this.createEditorState(enabled, contentState),
             isRichtextEnabled: enabled,
         });
-        SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, "account", enabled);
+        SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
     }
 
     handleKeyCommand = (command: string): boolean => {

@@ -44,7 +44,7 @@ export default class RoomDeviceSettingsHandler extends SettingsHandler {
     }
 
     isSupported() {
-        return !!localStorage;
+        return localStorage !== undefined && localStorage !== null;
     }
 
     _getKey(settingName, roomId) {

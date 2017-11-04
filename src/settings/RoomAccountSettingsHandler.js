@@ -46,11 +46,14 @@ export default class RoomAccountSettingsHandler extends SettingsHandler {
 
     canSetValue(settingName, roomId) {
         const room = MatrixClientPeg.get().getRoom(roomId);
-        return !!room; // If they have the room, they can set their own account data
+
+        // If they have the room, they can set their own account data
+        return room !== undefined && room !== null;
     }
 
     isSupported() {
-        return !!MatrixClientPeg.get();
+        const cli = MatrixClientPeg.get();
+        return cli !== undefined && cli !== null;
     }
 
     _getSettings(roomId, eventType = "im.vector.settings") {

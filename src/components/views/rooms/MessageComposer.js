@@ -22,7 +22,7 @@ import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import Autocomplete from './Autocomplete';
-import SettingsStore from "../../../settings/SettingsStore";
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 
 export default class MessageComposer extends React.Component {
@@ -226,7 +226,7 @@ export default class MessageComposer extends React.Component {
     }
 
     onToggleFormattingClicked() {
-        SettingsStore.setValue("MessageComposer.showFormatting", null, "account", !this.state.showFormatting);
+        SettingsStore.setValue("MessageComposer.showFormatting", null, SettingLevel.DEVICE, !this.state.showFormatting);
         this.setState({showFormatting: !this.state.showFormatting});
     }
 

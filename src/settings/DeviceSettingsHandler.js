@@ -59,7 +59,7 @@ export default class DeviceSettingsHandler extends SettingsHandler {
     }
 
     isSupported() {
-        return !!localStorage;
+        return localStorage !== undefined && localStorage !== null;
     }
 
     _getSettings() {

@@ -24,7 +24,7 @@ import Modal from '../../../Modal';
 import ObjectUtils from '../../../ObjectUtils';
 import dis from '../../../dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
-import SettingsStore from "../../../settings/SettingsStore";
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
@@ -382,7 +382,7 @@ module.exports = React.createClass({
         // TODO: {Travis} Use generic blacklistUnverifiedDevices
         const blacklistUnverifiedDevicesPerRoom = SettingsStore.getValue("blacklistUnverifiedDevicesPerRoom");
         blacklistUnverifiedDevicesPerRoom[this.props.room.roomId] = value;
-        SettingsStore.setValue("blacklistUnverifiedDevicesPerRoom", null, "device", blacklistUnverifiedDevicesPerRoom);
+        SettingsStore.setValue("blacklistUnverifiedDevicesPerRoom", null, SettingLevel.DEVICE, blacklistUnverifiedDevicesPerRoom);
 
         this.props.room.setBlacklistUnverifiedDevices(value);
     },

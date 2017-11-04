@@ -18,7 +18,7 @@ limitations under the License.
 const React = require('react');
 const sdk = require("../../../index");
 import { _t, _tJsx } from '../../../languageHandler';
-import SettingsStore from "../../../settings/SettingsStore";
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 
 module.exports = React.createClass({
@@ -38,7 +38,7 @@ module.exports = React.createClass({
         const roomId = this.props.room.roomId;
 
         let previewsForAccount = null;
-        if (SettingsStore.getValueAt("account", "urlPreviewsEnabled")) {
+        if (SettingsStore.getValueAt(SettingLevel.ACCOUNT, "urlPreviewsEnabled")) {
             previewsForAccount = (
                 _tJsx("You have <a>enabled</a> URL previews by default.", /<a>(.*?)<\/a>/, (sub)=><a href="#/settings">{ sub }</a>)
             );
@@ -54,14 +54,14 @@ module.exports = React.createClass({
             previewsForRoom = (
                 <label>
                     <SettingsFlag name="urlPreviewsEnabled"
-                                      level="room"
+                                      level={SettingLevel.ROOM}
                                       roomId={this.props.room.roomId}
                                       isExplicit={true} />
                 </label>
             );
         } else {
             let str = "URL previews are enabled by default for participants in this room.";
-            if (!SettingsStore.getValueAt("room", "urlPreviewsEnabled")) {
+            if (!SettingsStore.getValueAt(SettingLevel.ROOM, "urlPreviewsEnabled")) {
                 str = "URL previews are disabled by default for participants in this room.";
             }
             previewsForRoom = (<label>{ _t(str) }</label>);
@@ -69,7 +69,7 @@ module.exports = React.createClass({
 
         let previewsForRoomAccount = (
             <SettingsFlag name="urlPreviewsEnabled"
-                              level="room-account"
+                              level={SettingLevel.ROOM_ACCOUNT}
                               roomId={this.props.room.roomId}
             />
         );

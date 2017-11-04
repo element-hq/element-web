@@ -22,190 +22,27 @@ import RoomAccountSettingsHandler from "./RoomAccountSettingsHandler";
 import AccountSettingsHandler from "./AccountSettingsHandler";
 import RoomSettingsHandler from "./RoomSettingsHandler";
 import ConfigSettingsHandler from "./ConfigSettingsHandler";
-import {_t, _td} from '../languageHandler';
+import {_t} from '../languageHandler';
 import SdkConfig from "../SdkConfig";
+import {SETTINGS} from "./Settings";
 
-// Preset levels for room-based settings (eg: URL previews).
-// Doesn't include 'room' because most settings don't need it. Use .concat('room') to add.
-const LEVELS_PRESET_ROOM = ['device', 'room-device', 'room-account', 'account', 'config'];
-
-// Preset levels for account-based settings (eg: interface language).
-const LEVELS_PRESET_ACCOUNT = ['device', 'account', 'config'];
-
-// Preset levels for features (labs) settings.
-const LEVELS_PRESET_FEATURE = ['device', 'config'];
-
-const SETTINGS = {
-    // EXAMPLE SETTING:
-    // "my-setting": {
-    //     // Required by features, optional otherwise
-    //     isFeature: false,
-    //     displayName: _td("Cool Name"),
-    //
-    //     // Required.
-    //     supportedLevels: [
-    //         // The order does not matter.
-    //
-    //         "device",        // Affects the current device only
-    //         "room-device",   // Affects the current room on the current device
-    //         "room-account",  // Affects the current room for the current account
-    //         "account",       // Affects the current account
-    //         "room",          // Affects the current room (controlled by room admins)
-    //         "config",        // Affects the current application
-    //
-    //         // "default" is always supported and does not get listed here.
-    //     ],
-    //
-    //     // Optional. Any data type.
-    //     default: {
-    //         your: "value",
-    //     },
-    // },
-    "feature_groups": {
-        isFeature: true,
-        displayName: _td("Communities"),
-        supportedLevels: LEVELS_PRESET_FEATURE,
-    },
-    "feature_pinning": {
-        isFeature: true,
-        displayName: _td("Message Pinning"),
-        supportedLevels: LEVELS_PRESET_FEATURE,
-    },
-    "MessageComposerInput.dontSuggestEmoji": {
-        supportedLevels: LEVELS_PRESET_ACCOUNT,
-        default: false,
-        displayName: _td('Disable Emoji suggestions while typing'),
-    },
-    "useCompactLayout": {
-        supportedLevels: LEVELS_PRESET_ACCOUNT,
-        default: false,
-        displayName: _td('Use compact timeline layout'),
-    },
-    "hideRedactions": {
-        supportedLevels: LEVELS_PRESET_ROOM.concat("room"),
-        default: false,
-        displayName: _td('Hide removed messages'),
-    },
-    "hideJoinLeaves": {
-        supportedLevels: LEVELS_PRESET_ROOM.concat("room"),
-        default: false,
-        displayName: _td('Hide join/leave messages (invites/kicks/bans unaffected)'),
-    },
-    "hideAvatarDisplaynameChanges": {
-        supportedLevels: LEVELS_PRESET_ROOM.concat("room"),
-        default: false,
-        displayName: _td('Hide avatar and display name changes'),
-    },
-    "hideReadReceipts": {
-        supportedLevels: LEVELS_PRESET_ROOM,
-        default: false,
-        displayName: _td('Hide read receipts'),
-    },
-    "showTwelveHourTimestamps": {
-        supportedLevels: LEVELS_PRESET_ACCOUNT,
-        default: false,
-        displayName: _td('Show timestamps in 12 hour format (e.g. 2:30pm)'),
-    },
-    "alwaysShowTimestamps": {
-        supportedLevels: LEVELS_PRESET_ACCOUNT,
-        default: false,
-        displayName: _td('Always show message timestamps'),
-    },
-    "autoplayGifsAndVideos": {
-        supportedLevels: LEVELS_PRESET_ACCOUNT,
-        default: false,
-        displayName: _td('Autoplay GIFs and videos'),
-    },
-    "enableSyntaxHighlightLanguageDetection": {
-        supportedLevels: LEVELS_PRESET_ACCOUNT,
-        default: false,
-        displayName: _td('Enable automatic language detection for syntax highlighting'),
-    },
-    "Pill.shouldHidePillAvatar": {
-        supportedLevels: LEVELS_PRESET_ACCOUNT,
-        default: false,
-        displayName: _td('Hide avatars in user and room mentions'),
-    },
-    "TextualBody.disableBigEmoji": {
-        supportedLevels: LEVELS_PRESET_ACCOUNT,
-        default: false,
-        displayName: _td('Disable big emoji in chat'),
-    },
-    "MessageComposerInput.isRichTextEnabled": {
-        supportedLevels: LEVELS_PRESET_ACCOUNT,
-        default: false,
-    },
-    "MessageComposer.showFormatting": {
-        supportedLevels: LEVELS_PRESET_ACCOUNT,
-        default: false,
-    },
-    "dontSendTypingNotifications": {
-        supportedLevels: LEVELS_PRESET_ACCOUNT,
-        default: false,
-        displayName: _td("Don't send typing notifications"),
-    },
-    "MessageComposerInput.autoReplaceEmoji": {
-        supportedLevels: LEVELS_PRESET_ACCOUNT,
-        default: false,
-        displayName: _td('Automatically replace plain text Emoji'),
-    },
-    "VideoView.flipVideoHorizontally": {
-        supportedLevels: LEVELS_PRESET_ACCOUNT,
-        default: false,
-        displayName: _td('Mirror local video feed'),
-    },
-    "theme": {
-        supportedLevels: LEVELS_PRESET_ACCOUNT,
-        default: "light",
-    },
-    "webRtcForceTURN": {
-        supportedLevels: ['device', 'config'],
-        default: false,
-        displayName: _td('Disable Peer-to-Peer for 1:1 calls'),
-    },
-    "webrtc_audioinput": {
-        supportedLevels: ['device'],
-    },
-    "webrtc_videoinput": {
-        supportedLevels: ['device'],
-    },
-    "language": {
-        supportedLevels: ['device', 'config'],
-        default: "en"
-    },
-    "analyticsOptOut": {
-        supportedLevels: ['device', 'config'],
-        default: false,
-        displayName: _td('Opt out of analytics'),
-    },
-    "autocompleteDelay": {
-        supportedLevels: ['device', 'config'],
-        default: 200,
-    },
-    "blacklistUnverifiedDevicesPerRoom": {
-        // TODO: {Travis} Write a migration path to support blacklistUnverifiedDevices
-        supportedLevels: ['device'],
-        default: {},
-        displayName: _td('Never send encrypted messages to unverified devices from this device'),
-    },
-    "blacklistUnverifiedDevices": {
-        // TODO: {Travis} Write a migration path to support blacklistUnverifiedDevices
-        supportedLevels: ['device'],
-        default: false,
-        displayName: _td('Never send encrypted messages to unverified devices from this device'),
-    },
-    "urlPreviewsEnabled": {
-        supportedLevels: LEVELS_PRESET_ROOM.concat("room"),
-        default: true,
-        displayName: {
-            "default": _td('Enable inline URL previews by default'),
-            "room-account": _td("Enable URL previews for this room (only affects you)"),
-            "room": _td("Enable URL previews by default for participants in this room"),
-        },
-    },
+/**
+ * Represents the various setting levels supported by the SettingsStore.
+ */
+export const SettingLevel = {
+    // Note: This enum is not used in this class or in the Settings file
+    // This should always be used elsewhere in the project.
+    DEVICE: "device",
+    ROOM_DEVICE: "room-device",
+    ROOM_ACCOUNT: "room-account",
+    ACCOUNT: "account",
+    ROOM: "room",
+    CONFIG: "config",
+    DEFAULT: "default",
 };
 
-// Convert the above into simpler formats for the handlers
+
+// Convert the settings to easier to manage objects for the handlers
 const defaultSettings = {};
 const featureNames = [];
 for (const key of Object.keys(SETTINGS)) {

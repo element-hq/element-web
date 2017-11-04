@@ -15,7 +15,7 @@
 */
 
 import * as Matrix from 'matrix-js-sdk';
-import SettingsStore from "./settings/SettingsStore";
+import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
 
 export default {
     getDevices: function() {
@@ -51,12 +51,12 @@ export default {
     },
 
     setAudioInput: function(deviceId) {
-        SettingsStore.setValue("webrtc_audioinput", null, "device", deviceId);
+        SettingsStore.setValue("webrtc_audioinput", null, SettingLevel.DEVICE, deviceId);
         Matrix.setMatrixCallAudioInput(deviceId);
     },
 
     setVideoInput: function(deviceId) {
-        SettingsStore.setValue("webrtc_videoinput", null, "device", deviceId);
+        SettingsStore.setValue("webrtc_videoinput", null, SettingLevel.DEVICE, deviceId);
         Matrix.setMatrixCallVideoInput(deviceId);
     },
 };
