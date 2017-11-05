@@ -261,11 +261,11 @@ export default class SettingsStore {
             throw new Error("User cannot set " + settingName + " at " + level + " in " + roomId);
         }
 
-        return handler.setValue(settingName, roomId, value).finally((() => {
+        return handler.setValue(settingName, roomId, value).finally(() => {
             const controller = SETTINGS[settingName].controller;
             if (!controller) return;
             controller.onChange(level, roomId, value);
-        }));
+        });
     }
 
     /**

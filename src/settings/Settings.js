@@ -15,6 +15,11 @@ limitations under the License.
 */
 
 import {_td} from '../languageHandler';
+import {
+    AudioNotificationsEnabledController,
+    NotificationBodyEnabledController,
+    NotificationsEnabledController,
+} from "./controllers/NotificationControllers";
 
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
@@ -219,17 +224,17 @@ export const SETTINGS = {
     "notificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
-        //controller: new NotificationsEnabledController(),
+        controller: new NotificationsEnabledController(),
     },
     "notificationBodyEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: false,
-        //controller: new NotificationBodyEnabledController(),
+        default: true,
+        controller: new NotificationBodyEnabledController(),
     },
     "audioNotificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: false,
-        //controller: new AudioNotificationsEnabledController(),
+        default: true,
+        controller: new AudioNotificationsEnabledController(),
     },
     "notificationToolbarHidden": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

@@ -14,36 +14,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-//import SettingController from "./SettingController";
+import SettingController from "./SettingController";
 
-// export class NotificationsEnabledController extends SettingController {
-//     getValueOverride(level, roomId, calculatedValue) {
-//         const Notifier = require('../../Notifier'); // avoids cyclical references
-//
-//         return calculatedValue && Notifier.isPossible();
-//     }
-//
-//     onChange(level, roomId, newValue) {
-//         const Notifier = require('../../Notifier'); // avoids cyclical references
-//
-//         if (Notifier.supportsDesktopNotifications()) {
-//             Notifier.setBodyEnabled(newValue);
-//         }
-//     }
-// }
-//
-// export class NotificationBodyEnabledController extends SettingController {
-//     getValueOverride(level, roomId, calculatedValue) {
-//         const Notifier = require('../../Notifier'); // avoids cyclical references
-//
-//         return calculatedValue && Notifier.isEnabled();
-//     }
-// }
-//
-// export class AudioNotificationsEnabledController extends SettingController {
-//     getValueOverride(level, roomId, calculatedValue) {
-//         const Notifier = require('../../Notifier'); // avoids cyclical references
-//
-//         return calculatedValue && Notifier.isEnabled();
-//     }
-// }
+export class NotificationsEnabledController extends SettingController {
+    getValueOverride(level, roomId, calculatedValue) {
+        const Notifier = require('../../Notifier'); // avoids cyclical references
+
+        return calculatedValue && Notifier.isPossible();
+    }
+
+    onChange(level, roomId, newValue) {
+        const Notifier = require('../../Notifier'); // avoids cyclical references
+
+        if (Notifier.supportsDesktopNotifications()) {
+            Notifier.setEnabled(newValue);
+        }
+    }
+}
+
+export class NotificationBodyEnabledController extends SettingController {
+    getValueOverride(level, roomId, calculatedValue) {
+        const Notifier = require('../../Notifier'); // avoids cyclical references
+
+        return calculatedValue && Notifier.isEnabled();
+    }
+}
+
+export class AudioNotificationsEnabledController extends SettingController {
+    getValueOverride(level, roomId, calculatedValue) {
+        const Notifier = require('../../Notifier'); // avoids cyclical references
+
+        return calculatedValue && Notifier.isEnabled();
+    }
+}
