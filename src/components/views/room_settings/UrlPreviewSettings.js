@@ -29,7 +29,10 @@ module.exports = React.createClass({
     },
 
     saveSettings: function() {
-        return [this.refs.urlPreviewsRoom.save(), this.refs.urlPreviewsSelf.save()];
+        const promises = [];
+        if (this.refs.urlPreviewsRoom) promises.push(this.refs.urlPreviewsRoom.save());
+        if (this.refs.urlPrviewsSelf) promises.push(this.refs.urlPreviewsSelf.save());
+        return promises;
     },
 
     render: function() {

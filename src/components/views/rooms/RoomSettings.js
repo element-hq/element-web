@@ -309,9 +309,9 @@ module.exports = React.createClass({
         }
 
         // url preview settings
-        const ps = this.saveUrlPreviewSettings();
+        let ps = this.saveUrlPreviewSettings();
         if (ps.length > 0) {
-            promises.push(ps);
+            ps.map(p => promises.push(p));
         }
 
         // related groups
