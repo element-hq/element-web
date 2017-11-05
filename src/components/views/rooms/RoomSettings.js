@@ -363,28 +363,11 @@ module.exports = React.createClass({
     },
 
     saveBlacklistUnverifiedDevicesPerRoom: function() {
-        if (!this.refs.blacklistUnverified) return;
-        if (this._isRoomBlacklistUnverified() !== this.refs.blacklistUnverified.checked) {
-            this._setRoomBlacklistUnverified(this.refs.blacklistUnverified.checked);
-        }
-    },
-
-    _isRoomBlacklistUnverified: function() {
-        // TODO: {Travis} Use generic blacklistUnverifiedDevices
-        const blacklistUnverifiedDevicesPerRoom = SettingsStore.getValue("blacklistUnverifiedDevicesPerRoom");
-        if (blacklistUnverifiedDevicesPerRoom) {
-            return blacklistUnverifiedDevicesPerRoom[this.props.room.roomId];
-        }
-        return false;
-    },
-
-    _setRoomBlacklistUnverified: function(value) {
-        // TODO: {Travis} Use generic blacklistUnverifiedDevices
-        const blacklistUnverifiedDevicesPerRoom = SettingsStore.getValue("blacklistUnverifiedDevicesPerRoom");
-        blacklistUnverifiedDevicesPerRoom[this.props.room.roomId] = value;
-        SettingsStore.setValue("blacklistUnverifiedDevicesPerRoom", null, SettingLevel.DEVICE, blacklistUnverifiedDevicesPerRoom);
-
-        this.props.room.setBlacklistUnverifiedDevices(value);
+        if (!this.refs.blacklistUnverifiedDevices) return;
+        this.refs.blacklistUnverifiedDevices.save().then(() => {
+            const value = SettingsStore.getValue("blacklistUnverifiedDevices", this.props.room.roomId);
+            this.props.room.setBlacklistUnverifiedDevices(value);
+        });
     },
 
     _hasDiff: function(strA, strB) {
@@ -590,20 +573,20 @@ module.exports = React.createClass({
     },
 
     _renderEncryptionSection: function() {
+        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
+
         const cli = MatrixClientPeg.get();
         const roomState = this.props.room.currentState;
         const isEncrypted = cli.isRoomEncrypted(this.props.room.roomId);
-        const isGlobalBlacklistUnverified = SettingsStore.getValue("blacklistUnverifiedDevices");
-        const isRoomBlacklistUnverified = this._isRoomBlacklistUnverified();
 
-        // TODO: {Travis} Convert to blacklistUnverifiedDevices with SettingsFlag
-        const settings =
-            <label>
-                <input type="checkbox" ref="blacklistUnverified"
-                       defaultChecked={isGlobalBlacklistUnverified || isRoomBlacklistUnverified}
-                       disabled={isGlobalBlacklistUnverified || (this.refs.encrypt && !this.refs.encrypt.checked)} />
-                { _t('Never send encrypted messages to unverified devices in this room from this device') }.
-            </label>;
+        const settings = (
+            <SettingsFlag name="blacklistUnverifiedDevices"
+                          level={SettingLevel.ROOM_DEVICE}
+                          roomId={this.props.room.roomId}
+                          manualSave={true}
+                          ref="blacklistUnverifiedDevices"
+            />
+        );
 
         if (!isEncrypted && roomState.mayClientSendStateEvent("m.room.encryption", cli)) {
             return (

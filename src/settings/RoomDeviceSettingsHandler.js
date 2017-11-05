@@ -23,12 +23,30 @@ import SettingsHandler from "./SettingsHandler";
  */
 export default class RoomDeviceSettingsHandler extends SettingsHandler {
     getValue(settingName, roomId) {
-        const value = localStorage.getItem(this._getKey(settingName, roomId));
-        if (!value) return null;
-        return JSON.parse(value).value;
+        // Special case blacklist setting to use legacy values
+        if (settingName === "blacklistUnverifiedDevices") {
+            const value = this._read("mx_local_settings");
+            if (value && value['blacklistUnverifiedDevicesPerRoom']) {
+                return value['blacklistUnverifiedDevicesPerRoom'][roomId];
+            }
+        }
+
+        const value = this._read(this._getKey(settingName, roomId));
+        if (value) return value.value;
+        return null;
     }
 
     setValue(settingName, roomId, newValue) {
+        // Special case blacklist setting for legacy structure
+        if (settingName === "blacklistUnverifiedDevices") {
+            let value = this._read("mx_local_settings");
+            if (!value) value = {};
+            if (!value["blacklistUnverifiedDevicesPerRoom"]) value["blacklistUnverifiedDevicesPerRoom"] = {};
+            value["blacklistUnverifiedDevicesPerRoom"][roomId] = newValue;
+            localStorage.setItem("mx_local_settings", JSON.stringify(value));
+            return Promise.resolve();
+        }
+
         if (newValue === null) {
             localStorage.removeItem(this._getKey(settingName, roomId));
         } else {
@@ -45,6 +63,12 @@ export default class RoomDeviceSettingsHandler extends SettingsHandler {
 
     isSupported() {
         return localStorage !== undefined && localStorage !== null;
+    }
+
+    _read(key) {
+        const rawValue = localStorage.getItem(key);
+        if (!rawValue) return null;
+        return JSON.parse(rawValue);
     }
 
     _getKey(settingName, roomId) {

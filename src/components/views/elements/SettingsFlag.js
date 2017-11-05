@@ -55,7 +55,12 @@ module.exports = React.createClass({
     },
 
     save: function(val = null) {
-        SettingsStore.setValue(this.props.name, this.props.roomId, this.props.level, val ? val : this.state.value);
+        return SettingsStore.setValue(
+            this.props.name,
+            this.props.roomId,
+            this.props.level,
+            val ? val : this.state.value
+        );
     },
 
     render: function() {

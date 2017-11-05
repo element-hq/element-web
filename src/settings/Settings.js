@@ -188,16 +188,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: 200,
     },
-    "blacklistUnverifiedDevicesPerRoom": {
-        // TODO: {Travis} Write a migration path to support blacklistUnverifiedDevices
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td('Never send encrypted messages to unverified devices from this device'),
-        default: {},
-    },
     "blacklistUnverifiedDevices": {
-        // TODO: {Travis} Write a migration path to support blacklistUnverifiedDevices
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td('Never send encrypted messages to unverified devices from this device'),
+        displayName: {
+            "default": _td('Never send encrypted messages to unverified devices from this device'),
+            "room-device": _td('Never send encrypted messages to unverified devices in this room from this device'),
+        },
         default: false,
     },
     "urlPreviewsEnabled": {
