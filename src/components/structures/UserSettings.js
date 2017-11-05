@@ -763,9 +763,9 @@ module.exports = React.createClass({
         return (
             <div className="mx_UserSettings_toggle" key={setting.id}>
                 <SettingsFlag name={setting.id}
-                                  label={setting.label}
-                                  level={SettingLevel.DEVICE}
-                                  onChange={setting.fn} />
+                              label={setting.label}
+                              level={SettingLevel.DEVICE}
+                              onChange={setting.fn} />
             </div>
         );
     },

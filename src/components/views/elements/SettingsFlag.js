@@ -54,12 +54,12 @@ module.exports = React.createClass({
         if (this.props.onChange) this.props.onChange(newState);
     },
 
-    save: function(val = null) {
+    save: function(val = undefined) {
         return SettingsStore.setValue(
             this.props.name,
             this.props.roomId,
             this.props.level,
-            val ? val : this.state.value
+            val !== undefined ? val : this.state.value
         );
     },
 
