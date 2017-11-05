@@ -59,7 +59,7 @@ module.exports = React.createClass({
             this.props.name,
             this.props.roomId,
             this.props.level,
-            val !== undefined ? val : this.state.value
+            val !== undefined ? val : this.state.value,
         );
     },
 

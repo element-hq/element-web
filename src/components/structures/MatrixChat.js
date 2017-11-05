@@ -1118,7 +1118,7 @@ module.exports = React.createClass({
         if (cli.isCryptoEnabled()) {
             const blacklistEnabled = SettingsStore.getValueAt(
                 SettingLevel.DEVICE,
-                "blacklistUnverifiedDevices"
+                "blacklistUnverifiedDevices",
             );
             cli.setGlobalBlacklistUnverifiedDevices(blacklistEnabled);
         }

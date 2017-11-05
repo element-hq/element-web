@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import Promise from "bluebird";
+
 /**
  * Represents the base class for all level handlers. This class performs no logic
  * and should be overridden.
@@ -28,7 +30,8 @@ export default class SettingsHandler {
      * @returns {*} The setting value, or null if not found.
      */
     getValue(settingName, roomId) {
-        throw new Error("Operation not possible: getValue was not overridden");
+        console.error("Invalid operation: getValue was not overridden");
+        return null;
     }
 
     /**
@@ -43,7 +46,8 @@ export default class SettingsHandler {
      * @returns {Promise} Resolves when the setting has been saved.
      */
     setValue(settingName, roomId, newValue) {
-        throw new Error("Operation not possible: setValue was not overridden");
+        console.error("Invalid operation: setValue was not overridden");
+        return Promise.reject();
     }
 
     /**

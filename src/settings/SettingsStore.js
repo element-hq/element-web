@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 import DeviceSettingsHandler from "./handlers/DeviceSettingsHandler";
 import RoomDeviceSettingsHandler from "./handlers/RoomDeviceSettingsHandler";
 import DefaultSettingsHandler from "./handlers/DefaultSettingsHandler";
@@ -210,14 +209,14 @@ export default class SettingsStore {
         const handlers = SettingsStore._getHandlers(settingName);
 
         if (explicit) {
-            let handler = handlers[level];
+            const handler = handlers[level];
             if (!handler) return SettingsStore._tryControllerOverride(settingName, level, roomId, null);
             const value = handler.getValue(settingName, roomId);
             return SettingsStore._tryControllerOverride(settingName, level, roomId, value);
         }
 
         for (let i = minIndex; i < LEVEL_ORDER.length; i++) {
-            let handler = handlers[LEVEL_ORDER[i]];
+            const handler = handlers[LEVEL_ORDER[i]];
             if (!handler) continue;
             if (excludeDefault && LEVEL_ORDER[i] === "default") continue;
 

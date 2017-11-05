@@ -18,7 +18,6 @@ limitations under the License.
 import React from 'react';
 
 import sdk from '../../../index';
-import UserSettingsStore from '../../../UserSettingsStore';
 import * as languageHandler from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 
