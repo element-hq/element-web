@@ -101,5 +101,7 @@
     "Unpin Message": "Відкріпити повідомлення",
     "Register": "Зарегіструватись",
     "Rooms": "Кімнати",
-    "Add rooms to this community": "Добавити кімнати в це суспільство"
+    "Add rooms to this community": "Добавити кімнати в це суспільство",
+    "This email address is already in use": "Ця адреса елект. почти вже використовується",
+    "This phone number is already in use": "Цей телефонний номер вже використовується"
 }
