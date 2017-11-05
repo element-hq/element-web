@@ -62,7 +62,6 @@ describe('MessagePanel', function() {
         client.credentials = {userId: '@me:here'};
 
         // HACK: We assume all settings want to be disabled
-        // TODO: {Travis} Run the tests to verify this works
         SettingsStore.getValue = sinon.stub().returns(false);
     });
 

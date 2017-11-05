@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import Promise from "bluebird";
 import SettingsHandler from "./SettingsHandler";
 
 /**
@@ -51,7 +52,8 @@ export default class LocalEchoWrapper extends SettingsHandler {
         const cacheRoomId = roomId ? roomId : "UNDEFINED"; // avoid weird keys
         bySetting[cacheRoomId] = newValue;
 
-        return this._handler.setValue(settingName, roomId, newValue).finally(() => {
+        const handlerPromise = this._handler.setValue(settingName, roomId, newValue);
+        return Promise.resolve(handlerPromise).finally(() => {
             delete bySetting[cacheRoomId];
         });
     }

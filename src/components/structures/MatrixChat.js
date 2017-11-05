@@ -1096,12 +1096,14 @@ module.exports = React.createClass({
             krh.handleKeyRequestCancellation(req);
         });
         cli.on("Room", (room) => {
-            const blacklistEnabled = SettingsStore.getValueAt(
-                SettingLevel.ROOM_DEVICE,
-                "blacklistUnverifiedDevices",
-                room.roomId,
-            );
-            room.setBlacklistUnverifiedDevices(blacklistEnabled);
+            if (MatrixClientPeg.get().isCryptoEnabled()) {
+                const blacklistEnabled = SettingsStore.getValueAt(
+                    SettingLevel.ROOM_DEVICE,
+                    "blacklistUnverifiedDevices",
+                    room.roomId,
+                );
+                room.setBlacklistUnverifiedDevices(blacklistEnabled);
+            }
         });
     },
 
@@ -1113,11 +1115,13 @@ module.exports = React.createClass({
     _onClientStarted: function() {
         const cli = MatrixClientPeg.get();
 
-        const blacklistEnabled = SettingsStore.getValueAt(
-            SettingLevel.DEVICE,
-            "blacklistUnverifiedDevices"
-        );
-        cli.setGlobalBlacklistUnverifiedDevices(blacklistEnabled);
+        if (cli.isCryptoEnabled()) {
+            const blacklistEnabled = SettingsStore.getValueAt(
+                SettingLevel.DEVICE,
+                "blacklistUnverifiedDevices"
+            );
+            cli.setGlobalBlacklistUnverifiedDevices(blacklistEnabled);
+        }
     },
 
     showScreen: function(screen, params) {
