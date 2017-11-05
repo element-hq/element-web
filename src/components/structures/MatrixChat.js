@@ -43,7 +43,7 @@ import createRoom from "../../createRoom";
 import * as UDEHandler from '../../UnknownDeviceErrorHandler';
 import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
-import SettingsStore from "../../settings/SettingsStore";
+import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 
 /** constants for MatrixChat.state.view */
 const VIEWS = {
@@ -565,6 +565,9 @@ module.exports = React.createClass({
                     // listener we set below fires.
                     this._onWillStartClient();
                 });
+                break;
+            case 'client_started':
+                this._onClientStarted();
                 break;
             case 'new_version':
                 this.onVersion(
@@ -1092,6 +1095,29 @@ module.exports = React.createClass({
         cli.on("crypto.roomKeyRequestCancellation", (req) => {
             krh.handleKeyRequestCancellation(req);
         });
+        cli.on("Room", (room) => {
+            const blacklistEnabled = SettingsStore.getValueAt(
+                SettingLevel.ROOM_DEVICE,
+                "blacklistUnverifiedDevices",
+                room.roomId,
+            );
+            room.setBlacklistUnverifiedDevices(blacklistEnabled);
+        });
+    },
+
+    /**
+     * Called shortly after the matrix client has started. Useful for
+     * setting up anything that requires the client to be started.
+     * @private
+     */
+    _onClientStarted: function() {
+        const cli = MatrixClientPeg.get();
+
+        const blacklistEnabled = SettingsStore.getValueAt(
+            SettingLevel.DEVICE,
+            "blacklistUnverifiedDevices"
+        );
+        cli.setGlobalBlacklistUnverifiedDevices(blacklistEnabled);
     },
 
     showScreen: function(screen, params) {
