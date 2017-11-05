@@ -25,6 +25,7 @@ import ConfigSettingsHandler from "./ConfigSettingsHandler";
 import {_t} from '../languageHandler';
 import SdkConfig from "../SdkConfig";
 import {SETTINGS} from "./Settings";
+import LocalEchoWrapper from "./LocalEchoWrapper";
 
 /**
  * Represents the various setting levels supported by the SettingsStore.
@@ -58,6 +59,11 @@ const LEVEL_HANDLERS = {
     "config": new ConfigSettingsHandler(),
     "default": new DefaultSettingsHandler(defaultSettings),
 };
+
+// Wrap all the handlers with local echo
+for (const key of Object.keys(LEVEL_HANDLERS)) {
+    LEVEL_HANDLERS[key] = new LocalEchoWrapper(LEVEL_HANDLERS[key]);
+}
 
 const LEVEL_ORDER = [
     'device', 'room-device', 'room-account', 'account', 'room', 'config', 'default',
