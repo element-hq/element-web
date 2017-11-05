@@ -15,8 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import UserSettingsStore from './UserSettingsStore';
-
 // FIXME: these vars should be bundled up and attached to
 // module.exports otherwise this will break when included by both
 // react-sdk and apps layered on top.
@@ -122,6 +120,10 @@ module.exports = {
         return keyRgb;
     },
 
+    getCurrentColors: function() {
+        return colors;
+    },
+
     tint: function(primaryColor, secondaryColor, tertiaryColor) {
         if (!cached) {
             this.calcCssFixups();
@@ -129,7 +131,6 @@ module.exports = {
         }
 
         if (!primaryColor) {
-            const theme = UserSettingsStore.getTheme();
             primaryColor = keyRgb[0];
             secondaryColor = keyRgb[1];
         }
@@ -190,6 +191,8 @@ module.exports = {
 
     calcCssFixups: function() {
         if (DEBUG) console.log("calcCssFixups start");
+
+        cssFixups.length = 0;
 
         // update keyRgb from the current theme CSS itself, if it defines it
         if (document.getElementById('mx_theme_accentColor')) {

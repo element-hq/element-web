@@ -920,6 +920,8 @@ module.exports = React.createClass({
         styleElements[theme].disabled = false;
 
         Tinter.calcCssFixups();
+        const colors = Tinter.getCurrentColors();
+        Tinter.tint(colors[0], colors[1]);
 
         if (theme === 'dark') {
             // abuse the tinter to change all the SVG's #fff to #2d2d2d
