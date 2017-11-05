@@ -161,6 +161,9 @@ export default class SettingsStore {
         if (!SETTINGS[settingName]) {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
         }
+        if (!SettingsStore.isFeature(settingName)) {
+            throw new Error("Setting " + settingName + " is not a feature");
+        }
 
         return SettingsStore.setValue(settingName, null, "device", value);
     }
@@ -261,7 +264,7 @@ export default class SettingsStore {
             throw new Error("User cannot set " + settingName + " at " + level + " in " + roomId);
         }
 
-        return handler.setValue(settingName, roomId, value).finally(() => {
+        return handler.setValue(settingName, roomId, value).then(() => {
             const controller = SETTINGS[settingName].controller;
             if (!controller) return;
             controller.onChange(level, roomId, value);
