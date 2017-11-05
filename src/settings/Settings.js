@@ -189,7 +189,7 @@ export const SETTINGS = {
         default: 200,
     },
     "blacklistUnverifiedDevices": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        supportedLevels: ['device', 'room-device'],
         displayName: {
             "default": _td('Never send encrypted messages to unverified devices from this device'),
             "room-device": _td('Never send encrypted messages to unverified devices in this room from this device'),

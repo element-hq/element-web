@@ -365,7 +365,11 @@ module.exports = React.createClass({
     saveBlacklistUnverifiedDevicesPerRoom: function() {
         if (!this.refs.blacklistUnverifiedDevices) return;
         this.refs.blacklistUnverifiedDevices.save().then(() => {
-            const value = SettingsStore.getValue("blacklistUnverifiedDevices", this.props.room.roomId);
+            const value = SettingsStore.getValueAt(
+                SettingLevel.ROOM_DEVICE,
+                "blacklistUnverifiedDevices",
+                this.props.room.roomId,
+            );
             this.props.room.setBlacklistUnverifiedDevices(value);
         });
     },
@@ -579,7 +583,7 @@ module.exports = React.createClass({
         const roomState = this.props.room.currentState;
         const isEncrypted = cli.isRoomEncrypted(this.props.room.roomId);
 
-        const settings = (
+        let settings = (
             <SettingsFlag name="blacklistUnverifiedDevices"
                           level={SettingLevel.ROOM_DEVICE}
                           roomId={this.props.room.roomId}
@@ -587,6 +591,21 @@ module.exports = React.createClass({
                           ref="blacklistUnverifiedDevices"
             />
         );
+
+        const deviceBlacklisting = SettingsStore.getValueAt(
+            SettingLevel.DEVICE,
+            "blacklistUnverifiedDevices",
+            this.props.room.roomId,
+            /*explicit=*/true
+        );
+        if (deviceBlacklisting === true) {
+            settings = (
+                <label>
+                    <input type="checkbox" disabled={true} checked={true} />
+                    { SettingsStore.getDisplayName("blacklistUnverifiedDevices", SettingLevel.ROOM_DEVICE) }
+                </label>
+            );
+        }
 
         if (!isEncrypted && roomState.mayClientSendStateEvent("m.room.encryption", cli)) {
             return (
