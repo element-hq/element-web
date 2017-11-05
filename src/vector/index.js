@@ -294,8 +294,8 @@ async function loadApp() {
         const match = href.match(/^bundles\/.*\/theme-(.*)\.css$/);
         if (match) {
             if (match[1] === (configJson.default_theme || 'light')) {
-                // remove the alternative flag off the stylesheet
-                a.setAttribute("rel", "stylesheet");
+                // remove the disabled flag off the stylesheet
+                a.removeAttribute("disabled");
             }
         }
     }
