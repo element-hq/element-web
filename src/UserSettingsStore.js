@@ -17,9 +17,6 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import MatrixClientPeg from './MatrixClientPeg';
-import Notifier from './Notifier';
-import { _t, _td } from './languageHandler';
-import SdkConfig from './SdkConfig';
 
 /*
  * TODO: Make things use this. This is all WIP - see UserSettings.js for usage.
@@ -46,42 +43,6 @@ export default {
 
     saveThreePids: function(threePids) {
         // TODO
-    },
-
-    // TODO: {Travis} Granular setting
-    getEnableNotifications: function() {
-        return Notifier.isEnabled();
-    },
-
-    // TODO: {Travis} Granular setting
-    setEnableNotifications: function(enable) {
-        if (!Notifier.supportsDesktopNotifications()) {
-            return;
-        }
-        Notifier.setEnabled(enable);
-    },
-
-    // TODO: {Travis} Granular setting
-    getEnableNotificationBody: function() {
-        return Notifier.isBodyEnabled();
-    },
-
-    // TODO: {Travis} Granular setting
-    setEnableNotificationBody: function(enable) {
-        if (!Notifier.supportsDesktopNotifications()) {
-            return;
-        }
-        Notifier.setBodyEnabled(enable);
-    },
-
-    // TODO: {Travis} Granular setting
-    getEnableAudioNotifications: function() {
-        return Notifier.isAudioEnabled();
-    },
-
-    // TODO: {Travis} Granular setting
-    setEnableAudioNotifications: function(enable) {
-        Notifier.setAudioEnabled(enable);
     },
 
     changePassword: function(oldPassword, newPassword) {

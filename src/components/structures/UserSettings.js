@@ -415,10 +415,6 @@ module.exports = React.createClass({
         dis.dispatch({action: 'password_changed'});
     },
 
-    onEnableNotificationsChange: function(event) {
-        UserSettingsStore.setEnableNotifications(event.target.checked);
-    },
-
     _onAddEmailEditFinished: function(value, shouldSubmit) {
         if (!shouldSubmit) return;
         this._addEmail();

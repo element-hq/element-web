@@ -15,24 +15,17 @@ limitations under the License.
 */
 
 import SettingsHandler from "./SettingsHandler";
-import MatrixClientPeg from '../MatrixClientPeg';
+import MatrixClientPeg from '../../MatrixClientPeg';
 
 /**
- * Gets and sets settings at the "room-account" level for the current user.
+ * Gets and sets settings at the "room" level.
  */
-export default class RoomAccountSettingsHandler extends SettingsHandler {
+export default class RoomSettingsHandler extends SettingsHandler {
     getValue(settingName, roomId) {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {
             const content = this._getSettings(roomId, "org.matrix.room.preview_urls");
             return !content['disable'];
-        }
-
-        // Special case room color
-        if (settingName === "roomColor") {
-            // The event content should already be in an appropriate format, we just need
-            // to get the right value.
-            return this._getSettings(roomId, "org.matrix.room.color_scheme");
         }
 
         return this._getSettings(roomId)[settingName];
@@ -43,25 +36,23 @@ export default class RoomAccountSettingsHandler extends SettingsHandler {
         if (settingName === "urlPreviewsEnabled") {
             const content = this._getSettings(roomId, "org.matrix.room.preview_urls");
             content['disable'] = !newValue;
-            return MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.preview_urls", content);
-        }
-
-        // Special case room color
-        if (settingName === "roomColor") {
-            // The new value should match our requirements, we just need to store it in the right place.
-            return MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.color_scheme", newValue);
+            return MatrixClientPeg.get().sendStateEvent(roomId, "org.matrix.room.preview_urls", content);
         }
 
         const content = this._getSettings(roomId);
         content[settingName] = newValue;
-        return MatrixClientPeg.get().setRoomAccountData(roomId, "im.vector.web.settings", content);
+        return MatrixClientPeg.get().sendStateEvent(roomId, "im.vector.web.settings", content, "");
     }
 
     canSetValue(settingName, roomId) {
-        const room = MatrixClientPeg.get().getRoom(roomId);
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(roomId);
 
-        // If they have the room, they can set their own account data
-        return room !== undefined && room !== null;
+        let eventType = "im.vector.web.settings";
+        if (settingName === "urlPreviewsEnabled") eventType = "org.matrix.room.preview_urls";
+
+        if (!room) return false;
+        return room.currentState.maySendStateEvent(eventType, cli.getUserId());
     }
 
     isSupported() {
@@ -69,11 +60,10 @@ export default class RoomAccountSettingsHandler extends SettingsHandler {
         return cli !== undefined && cli !== null;
     }
 
-    _getSettings(roomId, eventType = "im.vector.settings") {
+    _getSettings(roomId, eventType = "im.vector.web.settings") {
         const room = MatrixClientPeg.get().getRoom(roomId);
         if (!room) return {};
-
-        const event = room.getAccountData(eventType);
+        const event = room.currentState.getStateEvents(eventType, "");
         if (!event || !event.getContent()) return {};
         return event.getContent();
     }

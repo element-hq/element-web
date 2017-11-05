@@ -62,6 +62,9 @@ export const SETTINGS = {
     //     default: {
     //         your: "value",
     //     },
+    //
+    //     // Optional settings controller. See SettingsController for more information.
+    //     controller: new MySettingController(),
     // },
     "feature_groups": {
         isFeature: true,
@@ -212,5 +215,24 @@ export const SETTINGS = {
             primary_color: null, // Hex string, eg: #000000
             secondary_color: null, // Hex string, eg: #000000
         },
+    },
+    "notificationsEnabled": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+        //controller: new NotificationsEnabledController(),
+    },
+    "notificationBodyEnabled": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+        //controller: new NotificationBodyEnabledController(),
+    },
+    "audioNotificationsEnabled": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+        //controller: new AudioNotificationsEnabledController(),
+    },
+    "notificationToolbarHidden": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
     },
 };

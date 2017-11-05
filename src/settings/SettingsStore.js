@@ -15,17 +15,17 @@ limitations under the License.
 */
 
 import Promise from 'bluebird';
-import DeviceSettingsHandler from "./DeviceSettingsHandler";
-import RoomDeviceSettingsHandler from "./RoomDeviceSettingsHandler";
-import DefaultSettingsHandler from "./DefaultSettingsHandler";
-import RoomAccountSettingsHandler from "./RoomAccountSettingsHandler";
-import AccountSettingsHandler from "./AccountSettingsHandler";
-import RoomSettingsHandler from "./RoomSettingsHandler";
-import ConfigSettingsHandler from "./ConfigSettingsHandler";
+import DeviceSettingsHandler from "./handlers/DeviceSettingsHandler";
+import RoomDeviceSettingsHandler from "./handlers/RoomDeviceSettingsHandler";
+import DefaultSettingsHandler from "./handlers/DefaultSettingsHandler";
+import RoomAccountSettingsHandler from "./handlers/RoomAccountSettingsHandler";
+import AccountSettingsHandler from "./handlers/AccountSettingsHandler";
+import RoomSettingsHandler from "./handlers/RoomSettingsHandler";
+import ConfigSettingsHandler from "./handlers/ConfigSettingsHandler";
 import {_t} from '../languageHandler';
 import SdkConfig from "../SdkConfig";
 import {SETTINGS} from "./Settings";
-import LocalEchoWrapper from "./LocalEchoWrapper";
+import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
 
 /**
  * Represents the various setting levels supported by the SettingsStore.
@@ -208,8 +208,9 @@ export default class SettingsStore {
 
         if (explicit) {
             let handler = handlers[level];
-            if (!handler) return null;
-            return handler.getValue(settingName, roomId);
+            if (!handler) return SettingsStore._tryControllerOverride(settingName, level, roomId, null);
+            const value = handler.getValue(settingName, roomId);
+            return SettingsStore._tryControllerOverride(settingName, level, roomId, value);
         }
 
         for (let i = minIndex; i < LEVEL_ORDER.length; i++) {
@@ -219,10 +220,19 @@ export default class SettingsStore {
 
             const value = handler.getValue(settingName, roomId);
             if (value === null || value === undefined) continue;
-            return value;
+            return SettingsStore._tryControllerOverride(settingName, level, roomId, value);
         }
 
-        return null;
+        return SettingsStore._tryControllerOverride(settingName, level, roomId, null);
+    }
+
+    static _tryControllerOverride(settingName, level, roomId, calculatedValue) {
+        const controller = SETTINGS[settingName].controller;
+        if (!controller) return calculatedValue;
+
+        const actualValue = controller.getValueOverride(level, roomId, calculatedValue);
+        if (actualValue !== undefined && actualValue !== null) return actualValue;
+        return calculatedValue;
     }
 
     /**
@@ -251,7 +261,11 @@ export default class SettingsStore {
             throw new Error("User cannot set " + settingName + " at " + level + " in " + roomId);
         }
 
-        return handler.setValue(settingName, roomId, value);
+        return handler.setValue(settingName, roomId, value).finally((() => {
+            const controller = SETTINGS[settingName].controller;
+            if (!controller) return;
+            controller.onChange(level, roomId, value);
+        }));
     }
 
     /**

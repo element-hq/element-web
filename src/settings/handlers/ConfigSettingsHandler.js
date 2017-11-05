@@ -16,7 +16,7 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import SettingsHandler from "./SettingsHandler";
-import SdkConfig from "../SdkConfig";
+import SdkConfig from "../../SdkConfig";
 
 /**
  * Gets and sets settings at the "config" level. This handler does not make use of the

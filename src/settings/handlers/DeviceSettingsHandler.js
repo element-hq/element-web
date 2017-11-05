@@ -16,7 +16,7 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import SettingsHandler from "./SettingsHandler";
-import MatrixClientPeg from "../MatrixClientPeg";
+import MatrixClientPeg from "../../MatrixClientPeg";
 
 /**
  * Gets and sets settings at the "device" level for the current device.
@@ -38,12 +38,38 @@ export default class DeviceSettingsHandler extends SettingsHandler {
             return this._readFeature(settingName);
         }
 
+        // Special case notifications
+        if (settingName === "notificationsEnabled") {
+            return localStorage.getItem("notifications_enabled") === "true";
+        } else if (settingName === "notificationBodyEnabled") {
+            return localStorage.getItem("notifications_body_enabled") === "true";
+        } else if (settingName === "audioNotificationsEnabled") {
+            return localStorage.getItem("audio_notifications_enabled") === "true";
+        } else if (settingName === "notificationToolbarHidden") {
+            return localStorage.getItem("notifications_hidden") === "true";
+        }
+
         return this._getSettings()[settingName];
     }
 
     setValue(settingName, roomId, newValue) {
         if (this._featureNames.includes(settingName)) {
             this._writeFeature(settingName, newValue);
+            return Promise.resolve();
+        }
+
+        // Special case notifications
+        if (settingName === "notificationsEnabled") {
+            localStorage.setItem("notifications_enabled", newValue);
+            return Promise.resolve();
+        } else if (settingName === "notificationBodyEnabled") {
+            localStorage.setItem("notifications_body_enabled", newValue);
+            return Promise.resolve();
+        } else if (settingName === "audioNotificationsEnabled") {
+            localStorage.setItem("audio_notifications_enabled", newValue);
+            return Promise.resolve();
+        } else if (settingName === "notificationToolbarHidden") {
+            localStorage.setItem("notifications_hidden", newValue);
             return Promise.resolve();
         }
 
