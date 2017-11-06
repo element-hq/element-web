@@ -702,6 +702,7 @@
     "You are a member of this community": "You are a member of this community",
     "Community Member Settings": "Community Member Settings",
     "Publish this community on your profile": "Publish this community on your profile",
+    "Your community hasn't got a Long Description, a HTML page to show to community members.<br />Click here to open settings and give it one!": "Your community hasn't got a Long Description, a HTML page to show to community members.<br />Click here to open settings and give it one!",
     "Long Description (HTML)": "Long Description (HTML)",
     "<h1>HTML for your community's page</h1>\n<p>\n    Use the Long Description to introduce new members to the community, or distribute some important <a href=\"https://about.riot.im\">links</a>.\n</p> \n<p> \n    You can even use \"img\" tags, but only for images reachable from MXC URLs.\n</p>\n": "<h1>HTML for your community's page</h1>\n<p>\n    Use the Long Description to introduce new members to the community, or distribute some important <a href=\"https://about.riot.im\">links</a>.\n</p> \n<p> \n    You can even use \"img\" tags, but only for images reachable from MXC URLs.\n</p>\n",
     "Description": "Description",

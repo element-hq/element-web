@@ -22,7 +22,7 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
-import { _t } from '../../languageHandler';
+import { _t, _tJsx } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import Modal from '../../Modal';
 import classnames from 'classnames';
@@ -856,6 +856,18 @@ export default React.createClass({
         let description = null;
         if (summary.profile && summary.profile.long_description) {
             description = sanitizedHtmlNode(summary.profile.long_description);
+        } else if (this.state.isUserPrivileged) {
+            description = <div
+                className="mx_GroupView_groupDesc_placeholder"
+                onClick={this._onEditClick}
+            >
+                { _tJsx(
+                    'Your community hasn\'t got a Long Description, a HTML page to show to community members.<br />' +
+                    'Click here to open settings and give it one!',
+                    [/<br \/>/],
+                    [(sub) => <br />])
+                }
+            </div>;
         }
         const groupDescEditingClasses = classnames({
             "mx_GroupView_groupDesc": true,
