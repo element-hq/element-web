@@ -392,6 +392,8 @@ export default React.createClass({
 
     propTypes: {
         groupId: PropTypes.string.isRequired,
+        // Whether this is the first time the group admin is viewing the group
+        groupIsNew: PropTypes.bool,
     },
 
     childContextTypes: {
@@ -422,7 +424,7 @@ export default React.createClass({
 
     componentWillMount: function() {
         this._changeAvatarComponent = null;
-        this._initGroupStore(this.props.groupId);
+        this._initGroupStore(this.props.groupId, true);
 
         MatrixClientPeg.get().on("Group.myMembership", this._onGroupMyMembership);
     },
@@ -449,7 +451,7 @@ export default React.createClass({
         this.setState({membershipBusy: false});
     },
 
-    _initGroupStore: function(groupId) {
+    _initGroupStore: function(groupId, firstInit) {
         this._groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), groupId);
         this._groupStore.registerListener(() => {
             const summary = this._groupStore.getSummary();
@@ -472,6 +474,9 @@ export default React.createClass({
                 ),
                 error: null,
             });
+            if (this.props.groupIsNew && firstInit) {
+                this._onEditClick();
+            }
         });
         this._groupStore.on('error', (err) => {
             this.setState({

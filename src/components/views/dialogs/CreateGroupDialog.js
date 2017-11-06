@@ -81,6 +81,7 @@ export default React.createClass({
             dis.dispatch({
                 action: 'view_group',
                 group_id: result.group_id,
+                group_is_new: true,
             });
             this.props.onFinished(true);
         }).catch((e) => {
