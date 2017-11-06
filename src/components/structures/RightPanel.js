@@ -127,8 +127,9 @@ module.exports = React.createClass({
     },
 
     _initGroupStore(groupId) {
+        if (!groupId) return;
         this._groupStore = GroupStoreCache.getGroupStore(
-            this.context.matrixClient, this.props.groupId,
+            this.context.matrixClient, groupId,
         );
         this._groupStore.registerListener(this.onGroupStoreUpdated);
     },
