@@ -867,6 +867,16 @@ export default React.createClass({
                 <h3> { _t("Long Description (HTML)") } </h3>
                 <textarea
                     value={this.state.profileForm.long_description}
+                    placeholder={_t(
+                        '<h1>HTML for your community\'s page</h1>\n' +
+                        '<p>\n' +
+                        '    Use the Long Description to introduce ' +
+                        'new members to the community, or distribute ' +
+                        'some important <a href="https://about.riot.im">links</a>.\n' +
+                        '</p> \n' +
+                        '<p> \n' +
+                        '    You can even use "img" tags, but only for images reachable from MXC URLs.\n' +
+                        '</p>\n')}
                     onChange={this._onLongDescChange}
                     tabIndex="4"
                     key="editLongDesc"

@@ -703,6 +703,7 @@
     "Community Member Settings": "Community Member Settings",
     "Publish this community on your profile": "Publish this community on your profile",
     "Long Description (HTML)": "Long Description (HTML)",
+    "<h1>HTML for your community's page</h1>\n<p>\n    Use the Long Description to introduce new members to the community, or distribute some important <a href=\"https://about.riot.im\">links</a>.\n</p> \n<p> \n    You can even use \"img\" tags, but only for images reachable from MXC URLs.\n</p>\n": "<h1>HTML for your community's page</h1>\n<p>\n    Use the Long Description to introduce new members to the community, or distribute some important <a href=\"https://about.riot.im\">links</a>.\n</p> \n<p> \n    You can even use \"img\" tags, but only for images reachable from MXC URLs.\n</p>\n",
     "Description": "Description",
     "Community %(groupId)s not found": "Community %(groupId)s not found",
     "This Home server does not support communities": "This Home server does not support communities",
