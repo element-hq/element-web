@@ -22,7 +22,7 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
-import { _t, _tJsx } from '../../languageHandler';
+import { _t, _td, _tJsx } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import Modal from '../../Modal';
 import classnames from 'classnames';
@@ -31,6 +31,17 @@ import GroupStoreCache from '../../stores/GroupStoreCache';
 import GroupStore from '../../stores/GroupStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GeminiScrollbar from 'react-gemini-scrollbar';
+
+const LONG_DESC_PLACEHOLDER = _td(`
+<h1>HTML for your community's page</h1>
+<p>
+    Use the long description to introduce new members to the community, or distribute
+    some important <a href="foo">links</a>
+</p>
+<p>
+    You can even use 'img' tags
+</p>
+`);
 
 const RoomSummaryType = PropTypes.shape({
     room_id: PropTypes.string.isRequired,
@@ -879,16 +890,7 @@ export default React.createClass({
                 <h3> { _t("Long Description (HTML)") } </h3>
                 <textarea
                     value={this.state.profileForm.long_description}
-                    placeholder={_t(
-                        '<h1>HTML for your community\'s page</h1>\n' +
-                        '<p>\n' +
-                        '    Use the Long Description to introduce ' +
-                        'new members to the community, or distribute ' +
-                        'some important <a href="https://about.riot.im">links</a>.\n' +
-                        '</p> \n' +
-                        '<p> \n' +
-                        '    You can even use "img" tags, but only for images reachable from MXC URLs.\n' +
-                        '</p>\n')}
+                    placeholder={_t(LONG_DESC_PLACEHOLDER)}
                     onChange={this._onLongDescChange}
                     tabIndex="4"
                     key="editLongDesc"
