@@ -60,7 +60,7 @@ const ZWS_CODE = 8203;
 const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
 
 const ENTITY_TYPES = {
-    AT_ROOM_PILL = 'ATROOMPILL',
+    AT_ROOM_PILL: 'ATROOMPILL',
 };
 
 function stateToMarkdown(state) {
