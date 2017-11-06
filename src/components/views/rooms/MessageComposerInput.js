@@ -59,7 +59,9 @@ const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 const ZWS_CODE = 8203;
 const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
 
-const ATROOMPILL_ENTITY_TYPE = 'ATROOMPILL';
+const ENTITY_TYPES = {
+    AT_ROOM_PILL = 'ATROOMPILL',
+};
 
 function stateToMarkdown(state) {
     return __stateToMarkdown(state)
@@ -199,7 +201,7 @@ export default class MessageComposerInput extends React.Component {
                     entityKey !== null &&
                     (
                         contentState.getEntity(entityKey).getType() === 'LINK' ||
-                        contentState.getEntity(entityKey).getType() === ATROOMPILL_ENTITY_TYPE
+                        contentState.getEntity(entityKey).getType() === ENTITY_TYPES.AT_ROOM_PILL
                     )
                 );
             }, callback,
@@ -221,7 +223,7 @@ export default class MessageComposerInput extends React.Component {
                 const Pill = sdk.getComponent('elements.Pill');
                 const type = entityProps.contentState.getEntity(entityProps.entityKey).getType();
                 const {url} = entityProps.contentState.getEntity(entityProps.entityKey).getData();
-                if (type === ATROOMPILL_ENTITY_TYPE) {
+                if (type === ENTITY_TYPES.AT_ROOM_PILL) {
                     return <Pill
                         type={Pill.TYPE_AT_ROOM_MENTION}
                         room={this.props.room}
@@ -1004,7 +1006,7 @@ export default class MessageComposerInput extends React.Component {
             });
             entityKey = contentState.getLastCreatedEntityKey();
         } else if (completion === '@room') {
-            contentState = contentState.createEntity(ATROOMPILL_ENTITY_TYPE, 'IMMUTABLE', {
+            contentState = contentState.createEntity(ENTITY_TYPES.AT_ROOM_PILL, 'IMMUTABLE', {
                 isCompletion: true,
             });
             entityKey = contentState.getLastCreatedEntityKey();
