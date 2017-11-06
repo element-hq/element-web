@@ -33,6 +33,9 @@ export default class GroupStore extends EventEmitter {
 
     constructor(matrixClient, groupId) {
         super();
+        if (!groupId) {
+            throw new Error('GroupStore needs a valid groupId to be created');
+        }
         this.groupId = groupId;
         this._matrixClient = matrixClient;
         this._summary = {};
