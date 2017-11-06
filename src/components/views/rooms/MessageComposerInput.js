@@ -58,6 +58,9 @@ const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
 const ZWS_CODE = 8203;
 const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
+
+const ATROOMPILL_ENTITY_TYPE = 'ATROOMPILL';
+
 function stateToMarkdown(state) {
     return __stateToMarkdown(state)
         .replace(
@@ -188,13 +191,16 @@ export default class MessageComposerInput extends React.Component {
         this.client = MatrixClientPeg.get();
     }
 
-    findLinkEntities(contentState: ContentState, contentBlock: ContentBlock, callback) {
+    findPillEntities(contentState: ContentState, contentBlock: ContentBlock, callback) {
         contentBlock.findEntityRanges(
             (character) => {
                 const entityKey = character.getEntity();
                 return (
                     entityKey !== null &&
-                    contentState.getEntity(entityKey).getType() === 'LINK'
+                    (
+                        contentState.getEntity(entityKey).getType() === 'LINK' ||
+                        contentState.getEntity(entityKey).getType() === ATROOMPILL_ENTITY_TYPE
+                    )
                 );
             }, callback,
         );
@@ -210,11 +216,19 @@ export default class MessageComposerInput extends React.Component {
                 RichText.getScopedMDDecorators(this.props);
         const shouldShowPillAvatar = !UserSettingsStore.getSyncedSetting("Pill.shouldHidePillAvatar", false);
         decorators.push({
-            strategy: this.findLinkEntities.bind(this),
+            strategy: this.findPillEntities.bind(this),
             component: (entityProps) => {
                 const Pill = sdk.getComponent('elements.Pill');
+                const type = entityProps.contentState.getEntity(entityProps.entityKey).getType();
                 const {url} = entityProps.contentState.getEntity(entityProps.entityKey).getData();
-                if (Pill.isPillUrl(url)) {
+                if (type === ATROOMPILL_ENTITY_TYPE) {
+                    return <Pill
+                        type={Pill.TYPE_AT_ROOM_MENTION}
+                        room={this.props.room}
+                        offsetKey={entityProps.offsetKey}
+                        shouldShowPillAvatar={shouldShowPillAvatar}
+                    />;
+                } else if (Pill.isPillUrl(url)) {
                     return <Pill
                         url={url}
                         room={this.props.room}
@@ -784,7 +798,7 @@ export default class MessageComposerInput extends React.Component {
             const pt = contentState.getBlocksAsArray().map((block) => {
                 let blockText = block.getText();
                 let offset = 0;
-                this.findLinkEntities(contentState, block, (start, end) => {
+                this.findPillEntities(contentState, block, (start, end) => {
                     const entity = contentState.getEntity(block.getEntityAt(start));
                     if (entity.getType() !== 'LINK') {
                         return;
@@ -986,6 +1000,11 @@ export default class MessageComposerInput extends React.Component {
         if (href) {
             contentState = contentState.createEntity('LINK', 'IMMUTABLE', {
                 url: href,
+                isCompletion: true,
+            });
+            entityKey = contentState.getLastCreatedEntityKey();
+        } else if (completion === '@room') {
+            contentState = contentState.createEntity(ATROOMPILL_ENTITY_TYPE, 'IMMUTABLE', {
                 isCompletion: true,
             });
             entityKey = contentState.getLastCreatedEntityKey();
