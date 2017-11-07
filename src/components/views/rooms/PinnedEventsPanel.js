@@ -19,6 +19,7 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import AccessibleButton from "../elements/AccessibleButton";
 import PinnedEventTile from "./PinnedEventTile";
 import { _t } from '../../../languageHandler';
+import PinningUtils from "../../../utils/PinningUtils";
 
 module.exports = React.createClass({
     displayName: 'PinnedEventsPanel',
@@ -61,20 +62,39 @@ module.exports = React.createClass({
 
             Promise.all(promises).then((contexts) => {
                 // Filter out the messages before we try to render them
-                const pinned = contexts.filter((context) => {
-                    if (!context) return false; // no context == not applicable for the room
-                    if (context.event.getType() !== "m.room.message") return false;
-                    if (context.event.isRedacted()) return false;
-                    return true;
-                });
+                const pinned = contexts.filter((context) => PinningUtils.isPinnable(context.event));
 
                 this.setState({ loading: false, pinned });
+            });
+        }
+
+        this._updateReadState();
+    },
+
+    _updateReadState: function() {
+        const pinnedEvents = this.props.room.currentState.getStateEvents("m.room.pinned_events", "");
+        if (!pinnedEvents) return; // nothing to read
+
+        let readStateEvents = null;
+        const readPinsEvent = this.props.room.getAccountData("im.vector.room.read_pins");
+        if (readPinsEvent && readPinsEvent.getContent()) {
+            readStateEvents = readPinsEvent.getContent().event_ids || [];
+        }
+
+        if (!readStateEvents.includes(pinnedEvents.getId())) {
+            readStateEvents.push(pinnedEvents.getId());
+
+            // Only keep the last 10 event IDs to avoid infinite growth
+            readStateEvents = readStateEvents.reverse().splice(0, 10).reverse();
+
+            MatrixClientPeg.get().setRoomAccountData(this.props.room.roomId, "im.vector.room.read_pins", {
+                event_ids: readStateEvents,
             });
         }
     },
 
     _getPinnedTiles: function() {
-        if (this.state.pinned.length == 0) {
+        if (this.state.pinned.length === 0) {
             return (<div>{ _t("No pinned messages.") }</div>);
         }
 
