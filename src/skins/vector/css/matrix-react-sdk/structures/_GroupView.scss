@@ -175,13 +175,19 @@ limitations under the License.
     height: 24px;
 }
 
-.mx_GroupView_group {
+.mx_GroupView_editing {
     border-top: 1px solid $primary-hairline-color;
 }
 
-.mx_GroupView_group_disabled {
+.mx_GroupView_editing_disabled {
     opacity: 0.3;
     pointer-events: none;
+}
+
+.mx_GroupView_editing .mx_RoomDirectory_table {
+    cursor: initial;
+    pointer-events: none;
+    opacity: 0.7;
 }
 
 .mx_GroupView_rooms_header_addRow_button {
