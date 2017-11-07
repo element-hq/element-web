@@ -301,6 +301,7 @@ export default React.createClass({
             case PageTypes.GroupView:
                 page_element = <GroupView
                     groupId={this.props.currentGroupId}
+                    isNew={this.props.currentGroupIsNew}
                     collapsedRhs={this.props.collapseRhs}
                 />;
                 if (!this.props.collapseRhs) right_panel = <RightPanel groupId={this.props.currentGroupId} disabled={this.props.rightDisabled} />;

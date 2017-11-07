@@ -208,7 +208,7 @@ const sanitizeHtmlParams = {
             // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
             // because transformTags is used _before_ we filter by allowedSchemesByTag and
             // we don't want to allow images with `https?` `src`s.
-            if (!attribs.src.startsWith('mxc://')) {
+            if (!attribs.src || !attribs.src.startsWith('mxc://')) {
                 return { tagName, attribs: {}};
             }
             attribs.src = MatrixClientPeg.get().mxcUrlToHttp(

@@ -23,6 +23,7 @@ import sanitizeHtml from 'sanitize-html';
 import { ContentRepo } from 'matrix-js-sdk';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 function getDisplayAliasForRoom(room) {
     return room.canonicalAlias || (room.aliases ? room.aliases[0] : "");
@@ -117,6 +118,8 @@ export default React.createClass({
             worldReadable: PropTypes.bool,
             guestCanJoin: PropTypes.bool,
         })),
+
+        className: PropTypes.string,
     },
 
     getRows: function() {
@@ -138,7 +141,7 @@ export default React.createClass({
                 </tbody>
             </table>;
         }
-        return <div className="mx_RoomDetailList">
+        return <div className={classNames("mx_RoomDetailList", this.props.className)}>
             { rooms }
         </div>;
     },

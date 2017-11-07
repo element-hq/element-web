@@ -301,6 +301,15 @@ module.exports = React.createClass({
     _shouldShowApps: function(room) {
         if (!BROWSER_SUPPORTS_SANDBOX) return false;
 
+        // Check if user has previously chosen to hide the app drawer for this
+        // room. If so, do not show apps
+        let hideWidgetDrawer = localStorage.getItem(
+            room.roomId + "_hide_widget_drawer");
+
+        if (hideWidgetDrawer === "true") {
+            return false;
+        }
+
         const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
         // any valid widget = show apps
         for (let i = 0; i < appsStateEvents.length; i++) {
