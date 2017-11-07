@@ -661,6 +661,14 @@ export default React.createClass({
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
         const Spinner = sdk.getComponent('elements.Spinner');
+        const ToolTipButton = sdk.getComponent('elements.ToolTipButton');
+
+        const roomsHelpNode = this.state.editing ? <ToolTipButton helpText={
+            _t(
+                'These rooms are displayed to community members on the community page. '+
+                'Community members can join the rooms by clicking on them.',
+            )
+        } /> : <div />;
 
         const addRoomRow = this.state.editing ?
             (<AccessibleButton className="mx_GroupView_rooms_header_addRow"
@@ -675,7 +683,10 @@ export default React.createClass({
             </AccessibleButton>) : <div />;
         return <div className="mx_GroupView_rooms">
             <div className="mx_GroupView_rooms_header">
-                <h3>{ _t('Rooms') }</h3>
+                <h3>
+                    { _t('Rooms') }
+                    { roomsHelpNode }
+                </h3>
                 { addRoomRow }
             </div>
             { this.state.groupRoomsLoading ?
