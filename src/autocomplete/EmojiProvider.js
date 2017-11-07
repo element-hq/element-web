@@ -1,6 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -69,8 +70,6 @@ const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sor
         _orderBy: index,
     };
 });
-
-let instance = null;
 
 function score(query, space) {
     const index = space.indexOf(query);
@@ -149,11 +148,6 @@ export default class EmojiProvider extends AutocompleteProvider {
 
     getName() {
         return '😃 ' + _t('Emoji');
-    }
-
-    static getInstance() {
-        if (instance == null) {instance = new EmojiProvider();}
-        return instance;
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
