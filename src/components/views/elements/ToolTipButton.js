@@ -18,38 +18,38 @@ import React from 'react';
 import sdk from '../../../index';
 
 module.exports = React.createClass({
-    displayName: 'ToolTip',
+    displayName: 'ToolTipButton',
 
     getInitialState: function() {
         return {
             hover: false,
-        }
+        };
     },
 
     onMouseOver: function() {
         this.setState({
             hover: true,
-        })
+        });
     },
 
     onMouseOut: function() {
         this.setState({
             hover: false,
-        })
+        });
     },
 
     render: function() {
-        var RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
+        const RoomTooltip = sdk.getComponent("rooms.RoomTooltip");
         const tip = this.state.hover ? <RoomTooltip
-            className="mx_ToolTip_container"
-            tooltipClassName="mx_ToolTip_helpText"
+            className="mx_ToolTipButton_container"
+            tooltipClassName="mx_ToolTipButton_helpText"
             label={this.props.helpText}
         /> : <div />;
         return (
-            <div className="mx_ToolTip"onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} >
+            <div className="mx_ToolTipButton"onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} >
                 ?
                 { tip }
             </div>
         );
-    }
+    },
 });

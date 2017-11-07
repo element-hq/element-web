@@ -661,9 +661,9 @@ export default React.createClass({
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
         const Spinner = sdk.getComponent('elements.Spinner');
-        const ToolTip = sdk.getComponent('elements.ToolTip');
+        const ToolTipButton = sdk.getComponent('elements.ToolTipButton');
 
-        const roomsHelpNode = this.state.editing ? <ToolTip helpText={
+        const roomsHelpNode = this.state.editing ? <ToolTipButton helpText={
             _t(
                 'These rooms are displayed to community members on the community page. '+
                 'Community members can join the rooms by clicking on them.',
