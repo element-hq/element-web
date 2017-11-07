@@ -48,8 +48,9 @@ function UserUnknownDeviceList(props) {
     const {userId, userDevices} = props;
 
     const deviceListEntries = Object.keys(userDevices).map((deviceId) =>
-       <DeviceListEntry key={deviceId} userId={userId}
-           device={userDevices[deviceId]} />,
+        <DeviceListEntry key={deviceId} userId={userId}
+            device={userDevices[deviceId]}
+        />,
     );
 
     return (
@@ -92,26 +93,60 @@ export default React.createClass({
     propTypes: {
         room: React.PropTypes.object.isRequired,
 
-        // map from userid -> deviceid -> deviceinfo
-        devices: React.PropTypes.object.isRequired,
         onFinished: React.PropTypes.func.isRequired,
     },
 
-    componentDidMount: function() {
-        // Given we've now shown the user the unknown device, it is no longer
-        // unknown to them. Therefore mark it as 'known'.
-        Object.keys(this.props.devices).forEach((userId) => {
-            Object.keys(this.props.devices[userId]).map((deviceId) => {
-                MatrixClientPeg.get().setDeviceKnown(userId, deviceId, true);
-            });
+    componentWillMount: function() {
+        this._unmounted = false;
+
+        const roomMembers = this.props.room.getJoinedMembers().map((m) => {
+            return m.userId;
         });
 
-        // XXX: temporary logging to try to diagnose
-        // https://github.com/vector-im/riot-web/issues/3148
-        console.log('Opening UnknownDeviceDialog');
+        this.setState({
+            // map from userid -> deviceid -> deviceinfo
+            devices: null,
+        });
+        MatrixClientPeg.get().downloadKeys(roomMembers, false).then((devices) => {
+            if (this._unmounted) return;
+
+            const unknownDevices = {};
+            // This is all devices in this room, so find the unknown ones.
+            Object.keys(devices).forEach((userId) => {
+                Object.keys(devices[userId]).map((deviceId) => {
+                    const device = devices[userId][deviceId];
+
+                    if (device.isUnverified() && !device.isKnown()) {
+                        if (unknownDevices[userId] === undefined) {
+                            unknownDevices[userId] = {};
+                        }
+                        unknownDevices[userId][deviceId] = device;
+                    }
+
+                    // Given we've now shown the user the unknown device, it is no longer
+                    // unknown to them. Therefore mark it as 'known'.
+                    if (!device.isKnown()) {
+                        MatrixClientPeg.get().setDeviceKnown(userId, deviceId, true);
+                    }
+                });
+            });
+
+            this.setState({
+                devices: unknownDevices,
+            });
+        });
+    },
+
+    componentWillUnmount: function() {
+        this._unmounted = true;
     },
 
     render: function() {
+        if (this.state.devices === null) {
+            const Spinner = sdk.getComponent("elements.Spinner");
+            return <Spinner />;
+        }
+
         const client = MatrixClientPeg.get();
         const blacklistUnverified = client.getGlobalBlacklistUnverifiedDevices() ||
               this.props.room.getBlacklistUnverifiedDevices();
@@ -154,7 +189,7 @@ export default React.createClass({
                     { warning }
                     { _t("Unknown devices") }:
 
-                    <UnknownDeviceList devices={this.props.devices} />
+                    <UnknownDeviceList devices={this.state.devices} />
                 </GeminiScrollbar>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" autoFocus={true}
