@@ -83,6 +83,10 @@ module.exports = React.createClass({
 
         if (!readStateEvents.includes(pinnedEvents.getId())) {
             readStateEvents.push(pinnedEvents.getId());
+
+            // Only keep the last 10 event IDs to avoid infinite growth
+            readStateEvents = readStateEvents.reverse().splice(0, 10).reverse();
+
             MatrixClientPeg.get().setRoomAccountData(this.props.room.roomId, "im.vector.room.read_pins", {
                 event_ids: readStateEvents,
             });
