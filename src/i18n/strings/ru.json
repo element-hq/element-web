@@ -924,7 +924,7 @@
     "Kick this user?": "Выгнать этого пользователя?",
     "Unban this user?": "Разблокировать этого пользователя?",
     "Ban this user?": "Заблокировать этого пользователя?",
-    "Drop here to favourite": "",
+    "Drop here to favourite": "Перетащите сюда для добавления в избранные",
     "You have been kicked from this room by %(userName)s.": "%(userName)s выгнал(а) вас из этой комнаты.",
     "You have been banned from this room by %(userName)s.": "%(userName)s заблокировал(а) вас в этой комнате.",
     "You are trying to access a room.": "Вы пытаетесь получить доступ к комнате.",
@@ -978,5 +978,9 @@
     "%(oneUser)schanged their avatar %(count)s times|one": "%(oneUser)s изменил(а) свой аватар",
     "%(items)s and %(count)s others|other": "%(items)s и %(count)s других",
     "%(items)s and %(count)s others|one": "%(items)s и один другой",
-    "An email has been sent to %(emailAddress)s. Once you've followed the link it contains, click below.": "Сообщение отправлено на %(emailAddress)s. После перехода по ссылке в отправленном вам письме, щелкните ниже."
+    "An email has been sent to %(emailAddress)s. Once you've followed the link it contains, click below.": "Сообщение отправлено на %(emailAddress)s. После перехода по ссылке в отправленном вам письме, щелкните ниже.",
+    "Room Notification": "Уведомления комнаты",
+    "Drop here to tag direct chat": "Перетащите сюда, чтобы отметить как прямой чат",
+    "Drop here to restore": "Перетащиет сюда для восстановления",
+    "Drop here to demote": "Перетащите сюда для понижения"
 }
