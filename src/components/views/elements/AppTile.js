@@ -144,7 +144,7 @@ export default React.createClass({
             // Append scalar_token as a query param if not already present
             this._scalarClient.scalarToken = token;
             const u = url.parse(this.props.url);
-            const params = qs(u.search);
+            const params = qs.parse(u.search);
             if (!params.scalar_token) {
                 params.scalar_token = encodeURIComponent(token);
                 u.search = qs.stringify(params);
