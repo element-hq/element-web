@@ -97,6 +97,8 @@ export default React.createClass({
     },
 
     componentWillMount: function() {
+        this._unmounted = false;
+
         const roomMembers = this.props.room.getJoinedMembers().map((m) => {
             return m.userId;
         });
@@ -106,6 +108,8 @@ export default React.createClass({
             devices: null,
         });
         MatrixClientPeg.get().downloadKeys(roomMembers, false).then((devices) => {
+            if (this._unmounted) return;
+
             const unknownDevices = {};
             // This is all devices in this room, so find the unknown ones.
             Object.keys(devices).forEach((userId) => {
@@ -131,6 +135,10 @@ export default React.createClass({
                 devices: unknownDevices,
             });
         });
+    },
+
+    componentWillUnmount: function() {
+        this._unmounted = true;
     },
 
     render: function() {
