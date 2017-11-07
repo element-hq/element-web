@@ -575,7 +575,7 @@ export default React.createClass({
 
     _onAcceptInviteClick: function() {
         this.setState({membershipBusy: true});
-        MatrixClientPeg.get().acceptGroupInvite(this.props.groupId).then(() => {
+        this._groupStore.acceptGroupInvite().then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
         }).catch((e) => {
             this.setState({membershipBusy: false});

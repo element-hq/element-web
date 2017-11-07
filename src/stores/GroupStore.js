@@ -169,6 +169,12 @@ export default class GroupStore extends EventEmitter {
             .then(this._fetchMembers.bind(this));
     }
 
+    acceptGroupInvite() {
+        return this._matrixClient.acceptGroupInvite(this.groupId)
+            // The user might be able to see more rooms now
+            .then(this._fetchRooms.bind(this));
+    }
+
     addRoomToGroupSummary(roomId, categoryId) {
         return this._matrixClient
             .addRoomToGroupSummary(this.groupId, roomId, categoryId)

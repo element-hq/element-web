@@ -34,6 +34,8 @@ module.exports = React.createClass({
     propTypes: {
         title: PropTypes.string.isRequired,
         description: PropTypes.node,
+        // Extra node inserted after picker input, dropdown and errors
+        extraNode: PropTypes.node,
         value: PropTypes.string,
         placeholder: PropTypes.string,
         roomId: PropTypes.string,
@@ -574,6 +576,7 @@ module.exports = React.createClass({
                     <div className="mx_ChatInviteDialog_inputContainer">{ query }</div>
                     { error }
                     { addressSelector }
+                    { this.props.extraNode }
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button className="mx_Dialog_primary" onClick={this.onButtonClick}>
