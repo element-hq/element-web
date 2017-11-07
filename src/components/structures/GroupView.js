@@ -32,8 +32,8 @@ import GroupStore from '../../stores/GroupStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
-const LONG_DESC_PLACEHOLDER = _td(`
-<h1>HTML for your community's page</h1>
+const LONG_DESC_PLACEHOLDER = _td(
+`<h1>HTML for your community's page</h1>
 <p>
     Use the long description to introduce new members to the community, or distribute
     some important <a href="foo">links</a>
