@@ -1000,5 +1000,6 @@
     "These rooms are displayed to community members on the community page. Community members can join the rooms by clicking on them.": "Ezek a szobák megjelennek a közösség tagjainak a közösségi oldalon. A közösség tagjai kattintással csatlakozhatnak a szobákhoz.",
     "Your community hasn't got a Long Description, a HTML page to show to community members.<br />Click here to open settings and give it one!": "A közösségednek nincs bő leírása, HTML oldala ami megjelenik a közösség tagjainak.<br />A létrehozáshoz kattints ide!",
     "Notify the whole room": "Az egész szoba értesítése",
-    "Room Notification": "Szoba értesítések"
+    "Room Notification": "Szoba értesítések",
+    "Show these rooms to non-members on the community page and room list?": "Mutassuk meg ezeket a szobákat kívülállóknak a közösségi oldalon és a szobák listájában?"
 }
