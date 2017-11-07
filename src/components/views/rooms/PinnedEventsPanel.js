@@ -75,7 +75,7 @@ module.exports = React.createClass({
         const pinnedEvents = this.props.room.currentState.getStateEvents("m.room.pinned_events", "");
         if (!pinnedEvents) return; // nothing to read
 
-        let readStateEvents = null;
+        let readStateEvents = [];
         const readPinsEvent = this.props.room.getAccountData("im.vector.room.read_pins");
         if (readPinsEvent && readPinsEvent.getContent()) {
             readStateEvents = readPinsEvent.getContent().event_ids || [];
