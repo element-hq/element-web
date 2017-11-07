@@ -46,7 +46,7 @@ module.exports = React.createClass({
             label={this.props.helpText}
         /> : <div />;
         return (
-            <div className="mx_ToolTipButton"onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} >
+            <div className="mx_ToolTipButton" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} >
                 ?
                 { tip }
             </div>
