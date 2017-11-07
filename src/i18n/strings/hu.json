@@ -995,5 +995,10 @@
     "Visibility in Room List": "Láthatóság a szoba listában",
     "Visible to everyone": "Mindenki számára látható",
     "Only visible to community members": "Csak a közösség számára látható",
-    "Community Invites": "Közösségi meghívók"
+    "Community Invites": "Közösségi meghívók",
+    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even use 'img' tags\n</p>\n": "<h1>HTML a közösségi oldalhoz</h1>\n<p>\n    Használj hosszú leírást az tagok közösségbe való bemutatásához vagy terjessz\n   hasznos  <a href=\"foo\">linkeket</a>\n</p>\n<p>\n    Még 'img' tagokat is használhatsz\n</p>\n",
+    "These rooms are displayed to community members on the community page. Community members can join the rooms by clicking on them.": "Ezek a szobák megjelennek a közösség tagjainak a közösségi oldalon. A közösség tagjai kattintással csatlakozhatnak a szobákhoz.",
+    "Your community hasn't got a Long Description, a HTML page to show to community members.<br />Click here to open settings and give it one!": "A közösségednek nincs bő leírása, HTML oldala ami megjelenik a közösség tagjainak.<br />A létrehozáshoz kattints ide!",
+    "Notify the whole room": "Az egész szoba értesítése",
+    "Room Notification": "Szoba értesítések"
 }
