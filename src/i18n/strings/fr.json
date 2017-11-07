@@ -991,5 +991,7 @@
     "Visibility in Room List": "Visibilité dans la liste des salons",
     "Visible to everyone": "Visible pour tout le monde",
     "Only visible to community members": "Visible uniquement par les membres de la communauté",
-    "Community Invites": "Invitations de communauté"
+    "Community Invites": "Invitations de communauté",
+    "Notify the whole room": "Notifier tout le salon",
+    "Room Notification": "Notification du salon"
 }
