@@ -681,6 +681,10 @@ export default React.createClass({
                     { _t('Add rooms to this community') }
                 </div>
             </AccessibleButton>) : <div />;
+        const roomDetailListClassName = classnames({
+            "mx_fadable": true,
+            "mx_fadable_faded": this.state.editing,
+        });
         return <div className="mx_GroupView_rooms">
             <div className="mx_GroupView_rooms_header">
                 <h3>
@@ -691,7 +695,9 @@ export default React.createClass({
             </div>
             { this.state.groupRoomsLoading ?
                 <Spinner /> :
-                <RoomDetailList rooms={this.state.groupRooms} />
+                <RoomDetailList
+                    rooms={this.state.groupRooms}
+                    className={roomDetailListClassName} />
             }
         </div>;
     },
