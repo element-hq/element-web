@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ToolTip {
+.mx_ToolTipButton {
     display: inline-block;
     width: 11px;
     height: 11px;
@@ -33,17 +33,17 @@ limitations under the License.
     cursor: pointer;
 }
 
-.mx_ToolTip:hover {
+.mx_ToolTipButton:hover {
     opacity: 1.0;
 }
 
-.mx_ToolTip_container {
+.mx_ToolTipButton_container {
     position: relative;
     top: -18px;
     left: 4px;
 }
 
-.mx_ToolTip_helpText {
+.mx_ToolTipButton_helpText {
     width: 200px;
     text-align: center;
     line-height: 17px !important;
