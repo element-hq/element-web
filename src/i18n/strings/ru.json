@@ -982,5 +982,8 @@
     "Room Notification": "Уведомления комнаты",
     "Drop here to tag direct chat": "Перетащите сюда, чтобы отметить как прямой чат",
     "Drop here to restore": "Перетащиет сюда для восстановления",
-    "Drop here to demote": "Перетащите сюда для понижения"
+    "Drop here to demote": "Перетащите сюда для понижения",
+    "Community Invites": "Приглашения в сообщества",
+    "Notify the whole room": "Уведомить всю комнату",
+    "These rooms are displayed to community members on the community page. Community members can join the rooms by clicking on them.": "Эти комнаты отображаются для участников сообщества на странице сообщества. Участники сообщества могут присоединиться к комнатам, щелкнув на них."
 }
