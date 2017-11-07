@@ -304,6 +304,18 @@ limitations under the License.
 }
 
 .mx_GroupView_groupDesc textarea {
-    width: 50%;
+    width: 100%;
+    max-width: 100%;
     height: 150px;
+}
+
+.mx_GroupView_groupDesc_placeholder {
+    background-color: $info-plinth-bg-color;
+    color: $info-plinth-fg-color;
+    border-radius: 10px;
+    text-align: center;
+
+    cursor: pointer;
+    padding: 100px 20px;
+    margin: 20px 0px;
 }
