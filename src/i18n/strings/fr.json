@@ -993,5 +993,6 @@
     "Only visible to community members": "Visible uniquement par les membres de la communauté",
     "Community Invites": "Invitations de communauté",
     "Notify the whole room": "Notifier tout le salon",
-    "Room Notification": "Notification du salon"
+    "Room Notification": "Notification du salon",
+    "These rooms are displayed to community members on the community page. Community members can join the rooms by clicking on them.": "Ces salons sont affichés aux membres de la communauté sur la page de la communauté. Les membres de la communauté peuvent rejoindre ces salons en cliquant dessus."
 }
