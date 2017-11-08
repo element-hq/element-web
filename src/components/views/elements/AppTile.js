@@ -321,9 +321,7 @@ export default React.createClass({
             } else if (this.state.hasPermissionToLoad == true) {
                 const loadingElement = (
                     <div className="mx_AppTileBody">
-                        <AppWarning
-                            errorMsg="Error - Mixed content"
-                        />
+                        <AppWarning errorMsg="Error - Mixed content" />
                     </div>
                 );
                 if (this.isMixedContent()) {
