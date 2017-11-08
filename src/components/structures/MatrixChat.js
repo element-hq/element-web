@@ -922,7 +922,7 @@ module.exports = React.createClass({
         });
         styleElements[theme].disabled = false;
 
-        Tinter.calcCssFixups();
+        Tinter.setTheme(theme);
         const colors = Tinter.getCurrentColors();
         Tinter.tint(colors[0], colors[1]);
 

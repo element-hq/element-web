@@ -15,69 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// FIXME: these vars should be bundled up and attached to
-// module.exports otherwise this will break when included by both
-// react-sdk and apps layered on top.
-
 const DEBUG = 0;
 
-// The default colour keys to be replaced as referred to in CSS
-// (should be overridden by .mx_theme_accentColor and .mx_theme_secondaryAccentColor)
-const keyRgb = [
-    "rgb(118, 207, 166)", // Vector Green
-    "rgb(234, 245, 240)", // Vector Light Green
-    "rgb(211, 239, 225)", // Unused: BottomLeftMenu (20% Green overlaid on Light Green)
-];
-
-// Some algebra workings for calculating the tint % of Vector Green & Light Green
-// x * 118 + (1 - x) * 255 = 234
-// x * 118 + 255 - 255 * x = 234
-// x * 118 - x * 255 = 234 - 255
-// (255 - 118) x = 255 - 234
-// x = (255 - 234) / (255 - 118) = 0.16
-
-// The colour keys to be replaced as referred to in SVGs
-const keyHex = [
-    "#76CFA6", // Vector Green
-    "#EAF5F0", // Vector Light Green
-    "#D3EFE1", // Unused: BottomLeftMenu (20% Green overlaid on Light Green)
-    "#FFFFFF", // white highlights of the SVGs (for switching to dark theme)
-];
-
-// cache of our replacement colours
-// defaults to our keys.
-const colors = [
-    keyHex[0],
-    keyHex[1],
-    keyHex[2],
-    keyHex[3],
-];
-
-const cssFixups = [
-    // {
-    //     style: a style object that should be fixed up taken from a stylesheet
-    //     attr: name of the attribute to be clobbered, e.g. 'color'
-    //     index: ordinal of primary, secondary or tertiary
-    // }
-];
-
-// CSS attributes to be fixed up
-const cssAttrs = [
-    "color",
-    "backgroundColor",
-    "borderColor",
-    "borderTopColor",
-    "borderBottomColor",
-    "borderLeftColor",
-];
-
-const svgAttrs = [
-    "fill",
-    "stroke",
-];
-
-let cached = false;
-
+// utility to turn #rrggbb into [red,green,blue]
 function hexToRgb(color) {
     if (color[0] === '#') color = color.slice(1);
     if (color.length === 3) {
@@ -92,15 +32,77 @@ function hexToRgb(color) {
     return [r, g, b];
 }
 
+// utility to turn [red,green,blue] into #rrggbb
 function rgbToHex(rgb) {
     const val = (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
     return '#' + (0x1000000 + val).toString(16).slice(1);
 }
 
-// List of functions to call when the tint changes.
-const tintables = [];
+class Tinter {
+    constructor() {
+        // The default colour keys to be replaced as referred to in CSS
+        // (should be overridden by .mx_theme_accentColor and .mx_theme_secondaryAccentColor)
+        this.keyRgb = [
+            "rgb(118, 207, 166)", // Vector Green
+            "rgb(234, 245, 240)", // Vector Light Green
+            "rgb(211, 239, 225)", // Unused: BottomLeftMenu (20% Green overlaid on Light Green)
+        ];
 
-module.exports = {
+        // Some algebra workings for calculating the tint % of Vector Green & Light Green
+        // x * 118 + (1 - x) * 255 = 234
+        // x * 118 + 255 - 255 * x = 234
+        // x * 118 - x * 255 = 234 - 255
+        // (255 - 118) x = 255 - 234
+        // x = (255 - 234) / (255 - 118) = 0.16
+
+        // The colour keys to be replaced as referred to in SVGs
+        this.keyHex = [
+            "#76CFA6", // Vector Green
+            "#EAF5F0", // Vector Light Green
+            "#D3EFE1", // Unused: BottomLeftMenu (20% Green overlaid on Light Green)
+            "#FFFFFF", // white highlights of the SVGs (for switching to dark theme)
+        ];
+
+        // cache of our replacement colours
+        // defaults to our keys.
+        this.colors = [
+            this.keyHex[0],
+            this.keyHex[1],
+            this.keyHex[2],
+            this.keyHex[3],
+        ];
+
+        this.cssFixups = [
+            // { theme: {
+            //      style: a style object that should be fixed up taken from a stylesheet
+            //      attr: name of the attribute to be clobbered, e.g. 'color'
+            //      index: ordinal of primary, secondary or tertiary
+            //   },
+            // }
+        ];
+
+        // CSS attributes to be fixed up
+        this.cssAttrs = [
+            "color",
+            "backgroundColor",
+            "borderColor",
+            "borderTopColor",
+            "borderBottomColor",
+            "borderLeftColor",
+        ];
+
+        this.svgAttrs = [
+            "fill",
+            "stroke",
+        ];
+
+        // List of functions to call when the tint changes.
+        this.tintables = [];
+
+        // the currently loaded theme (if any)
+        this.theme = undefined;
+    }
+
     /**
      * Register a callback to fire when the tint changes.
      * This is used to rewrite the tintable SVGs with the new tint.
@@ -112,27 +114,24 @@ module.exports = {
      *
      * @param {Function} tintable Function to call when the tint changes.
      */
-    registerTintable: function(tintable) {
-        tintables.push(tintable);
-    },
+    registerTintable(tintable) {
+        this.tintables.push(tintable);
+    }
 
-    getKeyRgb: function() {
-        return keyRgb;
-    },
+    getKeyRgb() {
+        return this.keyRgb;
+    }
 
-    getCurrentColors: function() {
-        return colors;
-    },
+    getCurrentColors() {
+        return this.colors;
+    }
 
-    tint: function(primaryColor, secondaryColor, tertiaryColor) {
-        if (!cached) {
-            this.calcCssFixups();
-            cached = true;
-        }
+    tint(primaryColor, secondaryColor, tertiaryColor) {
+        this.calcCssFixups();
 
         if (!primaryColor) {
-            primaryColor = keyRgb[0];
-            secondaryColor = keyRgb[1];
+            primaryColor = this.keyRgb[0];
+            secondaryColor = this.keyRgb[1];
         }
 
         if (!secondaryColor) {
@@ -154,15 +153,15 @@ module.exports = {
             tertiaryColor = rgbToHex(rgb1);
         }
 
-        if (colors[0] === primaryColor &&
-            colors[1] === secondaryColor &&
-            colors[2] === tertiaryColor) {
+        if (this.colors[0] === primaryColor &&
+            this.colors[1] === secondaryColor &&
+            this.colors[2] === tertiaryColor) {
             return;
         }
 
-        colors[0] = primaryColor;
-        colors[1] = secondaryColor;
-        colors[2] = tertiaryColor;
+        this.colors[0] = primaryColor;
+        this.colors[1] = secondaryColor;
+        this.colors[2] = tertiaryColor;
 
         if (DEBUG) console.log("Tinter.tint");
 
@@ -171,40 +170,51 @@ module.exports = {
 
         // tell all the SVGs to go fix themselves up
         // we don't do this as a dispatch otherwise it will visually lag
-        tintables.forEach(function(tintable) {
+        this.tintables.forEach(function(tintable) {
             tintable();
         });
-    },
+    }
 
-    tintSvgWhite: function(whiteColor) {
+    tintSvgWhite(whiteColor) {
         if (!whiteColor) {
-            whiteColor = colors[3];
+            whiteColor = this.colors[3];
         }
-        if (colors[3] === whiteColor) {
+        if (this.colors[3] === whiteColor) {
             return;
         }
-        colors[3] = whiteColor;
-        tintables.forEach(function(tintable) {
+        this.colors[3] = whiteColor;
+        this.tintables.forEach(function(tintable) {
             tintable();
         });
-    },
+    }
 
-    calcCssFixups: function() {
-        if (DEBUG) console.log("calcCssFixups start");
-
-        cssFixups.length = 0;
+    setTheme(theme) { 
+        this.theme = theme;
 
         // update keyRgb from the current theme CSS itself, if it defines it
         if (document.getElementById('mx_theme_accentColor')) {
-            keyRgb[0] = window.getComputedStyle(
+            this.keyRgb[0] = window.getComputedStyle(
                 document.getElementById('mx_theme_accentColor')
             ).color;
         }
         if (document.getElementById('mx_theme_secondaryAccentColor')) {
-            keyRgb[1] = window.getComputedStyle(
+            this.keyRgb[1] = window.getComputedStyle(
                 document.getElementById('mx_theme_secondaryAccentColor')
             ).color;
         }
+
+        this.calcCssFixups();
+    }
+
+    calcCssFixups() {
+        // cache our fixups
+        if (this.cssFixups[this.theme]) return;
+
+        if (DEBUG) console.trace("calcCssFixups start for " + this.theme + " (checking " +
+                                 document.styleSheets.length + 
+                                 " stylesheets)");
+
+        this.cssFixups[this.theme] = [];
 
         for (let i = 0; i < document.styleSheets.length; i++) {
             const ss = document.styleSheets[i];
@@ -236,7 +246,7 @@ module.exports = {
             // Vector Green as any other colour.
             // --matthew
 
-            if (ss.href && !ss.href.match(/\/bundle.*\.css$/)) continue;
+            if (ss.href && !ss.href.match(new RegExp('/theme-' + this.theme + '.css$'))) continue;
             if (ss.disabled) continue;
             if (!ss.cssRules) continue;
 
@@ -244,11 +254,11 @@ module.exports = {
                 const rule = ss.cssRules[j];
                 if (!rule.style) continue;
                 if (rule.selectorText && rule.selectorText.match(/#mx_theme/)) continue;
-                for (let k = 0; k < cssAttrs.length; k++) {
-                    const attr = cssAttrs[k];
-                    for (let l = 0; l < keyRgb.length; l++) {
-                        if (rule.style[attr] === keyRgb[l]) {
-                            cssFixups.push({
+                for (let k = 0; k < this.cssAttrs.length; k++) {
+                    const attr = this.cssAttrs[k];
+                    for (let l = 0; l < this.keyRgb.length; l++) {
+                        if (rule.style[attr] === this.keyRgb[l]) {
+                            this.cssFixups[this.theme].push({
                                 style: rule.style,
                                 attr: attr,
                                 index: l,
@@ -258,22 +268,26 @@ module.exports = {
                 }
             }
         }
-        if (DEBUG) console.log("calcCssFixups end");
-    },
+        if (DEBUG) console.log("calcCssFixups end (" +
+                               this.cssFixups[this.theme].length + 
+                               " fixups)");
+    }
 
-    applyCssFixups: function() {
-        if (DEBUG) console.log("applyCssFixups start");
-        for (let i = 0; i < cssFixups.length; i++) {
-            const cssFixup = cssFixups[i];
-            cssFixup.style[cssFixup.attr] = colors[cssFixup.index];
+    applyCssFixups() {
+        if (DEBUG) console.log("applyCssFixups start (" + 
+                               this.cssFixups[this.theme].length + 
+                               " fixups)");
+        for (let i = 0; i < this.cssFixups[this.theme].length; i++) {
+            const cssFixup = this.cssFixups[this.theme][i];
+            cssFixup.style[cssFixup.attr] = this.colors[cssFixup.index];
         }
         if (DEBUG) console.log("applyCssFixups end");
-    },
+    }
 
     // XXX: we could just move this all into TintableSvg, but as it's so similar
     // to the CSS fixup stuff in Tinter (just that the fixups are stored in TintableSvg)
     // keeping it here for now.
-    calcSvgFixups: function(svgs) {
+    calcSvgFixups(svgs) {
         // go through manually fixing up SVG colours.
         // we could do this by stylesheets, but keeping the stylesheets
         // updated would be a PITA, so just brute-force search for the
@@ -299,11 +313,11 @@ module.exports = {
             const tags = svgDoc.getElementsByTagName("*");
             for (let j = 0; j < tags.length; j++) {
                 const tag = tags[j];
-                for (let k = 0; k < svgAttrs.length; k++) {
-                    const attr = svgAttrs[k];
-                    for (let l = 0; l < keyHex.length; l++) {
+                for (let k = 0; k < this.svgAttrs.length; k++) {
+                    const attr = this.svgAttrs[k];
+                    for (let l = 0; l < this.keyHex.length; l++) {
                         if (tag.getAttribute(attr) &&
-                            tag.getAttribute(attr).toUpperCase() === keyHex[l]) 
+                            tag.getAttribute(attr).toUpperCase() === this.keyHex[l]) 
                         {
                             fixups.push({
                                 node: tag,
@@ -318,14 +332,19 @@ module.exports = {
         if (DEBUG) console.log("calcSvgFixups end");
 
         return fixups;
-    },
+    }
 
-    applySvgFixups: function(fixups) {
+    applySvgFixups(fixups) {
         if (DEBUG) console.log("applySvgFixups start for " + fixups);
         for (let i = 0; i < fixups.length; i++) {
             const svgFixup = fixups[i];
-            svgFixup.node.setAttribute(svgFixup.attr, colors[svgFixup.index]);
+            svgFixup.node.setAttribute(svgFixup.attr, this.colors[svgFixup.index]);
         }
         if (DEBUG) console.log("applySvgFixups end");
-    },
-};
+    }
+}
+
+if (global.singletonTinter === undefined) {
+    global.singletonTinter = new Tinter();
+}
+export default global.singletonTinter;
