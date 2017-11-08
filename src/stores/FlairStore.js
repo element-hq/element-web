@@ -69,8 +69,12 @@ class FlairStore extends EventEmitter {
         }
 
         // Bulk lookup ongoing, return promise to resolve/reject
-        if (this._usersPending[userId] || this._usersInFlight[userId]) {
+        if (this._usersPending[userId]) {
             return this._usersPending[userId].prom;
+        }
+        // User has been moved from pending to in-flight
+        if (this._usersInFlight[userId]) {
+            return this._usersInFlight[userId].prom;
         }
 
         this._usersPending[userId] = {};
