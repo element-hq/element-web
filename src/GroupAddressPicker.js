@@ -49,20 +49,26 @@ export function showGroupInviteDialog(groupId) {
 
 export function showGroupAddRoomDialog(groupId) {
     return new Promise((resolve, reject) => {
+        let addRoomsPublicly = false;
+        const onCheckboxClicked = (e) => {
+            addRoomsPublicly = e.target.checked;
+        };
         const description = <div>
             <div>{ _t("Which rooms would you like to add to this community?") }</div>
-            <div className="warning">
-                { _t(
-                    "Warning: any room you add to a community will be publicly "+
-                    "visible to anyone who knows the community ID",
-                ) }
-            </div>
         </div>;
+
+        const checkboxContainer = <label className="mx_GroupAddressPicker_checkboxContainer">
+            <input type="checkbox" onClick={onCheckboxClicked} />
+            <div>
+                { _t("Show these rooms to non-members on the community page and room list?") }
+            </div>
+        </label>;
 
         const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
         Modal.createTrackedDialog('Add Rooms to Group', '', AddressPickerDialog, {
             title: _t("Add rooms to the community"),
             description: description,
+            extraNode: checkboxContainer,
             placeholder: _t("Room name or alias"),
             button: _t("Add to community"),
             pickerType: 'room',
@@ -70,7 +76,7 @@ export function showGroupAddRoomDialog(groupId) {
             onFinished: (success, addrs) => {
                 if (!success) return;
 
-                _onGroupAddRoomFinished(groupId, addrs).then(resolve, reject);
+                _onGroupAddRoomFinished(groupId, addrs, addRoomsPublicly).then(resolve, reject);
             },
         });
     });
@@ -106,13 +112,13 @@ function _onGroupInviteFinished(groupId, addrs) {
     });
 }
 
-function _onGroupAddRoomFinished(groupId, addrs) {
+function _onGroupAddRoomFinished(groupId, addrs, addRoomsPublicly) {
     const matrixClient = MatrixClientPeg.get();
     const groupStore = GroupStoreCache.getGroupStore(matrixClient, groupId);
     const errorList = [];
     return Promise.all(addrs.map((addr) => {
         return groupStore
-            .addRoomToGroup(addr.address)
+            .addRoomToGroup(addr.address, addRoomsPublicly)
             .catch(() => { errorList.push(addr.address); })
             .then(() => {
                 const roomId = addr.address;
