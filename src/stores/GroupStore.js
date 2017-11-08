@@ -172,7 +172,9 @@ export default class GroupStore extends EventEmitter {
     acceptGroupInvite() {
         return this._matrixClient.acceptGroupInvite(this.groupId)
             // The user might be able to see more rooms now
-            .then(this._fetchRooms.bind(this));
+            .then(this._fetchRooms.bind(this))
+            // The user should now appear as a member
+            .then(this._fetchMembers.bind(this));
     }
 
     addRoomToGroupSummary(roomId, categoryId) {
