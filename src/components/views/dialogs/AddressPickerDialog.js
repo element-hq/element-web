@@ -271,21 +271,18 @@ module.exports = React.createClass({
         const results = [];
         rooms.forEach((room) => {
             const nameEvent = room.currentState.getStateEvents('m.room.name', '');
-            const topicEvent = room.currentState.getStateEvents('m.room.topic', '');
             const name = nameEvent ? nameEvent.getContent().name : '';
             const canonicalAlias = room.getCanonicalAlias();
             const aliasEvents = room.currentState.getStateEvents('m.room.aliases');
             const aliases = aliasEvents.map((ev) => ev.getContent().aliases).reduce((a, b) => {
                 return a.concat(b);
             }, []);
-            const topic = topicEvent ? topicEvent.getContent().topic : '';
 
             const nameMatch = (name || '').toLowerCase().includes(lowerCaseQuery);
             const aliasMatch = aliases.some((alias) =>
                 (alias || '').toLowerCase().includes(lowerCaseQuery),
             );
-            const topicMatch = (topic || '').toLowerCase().includes(lowerCaseQuery);
-            if (!(nameMatch || topicMatch || aliasMatch)) {
+            if (!(nameMatch || aliasMatch)) {
                 return;
             }
             const avatarEvent = room.currentState.getStateEvents('m.room.avatar', '');
