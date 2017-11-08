@@ -998,5 +998,8 @@
     "Community Invites": "Community-Einladungen",
     "Notify the whole room": "Den gesamten Raum benachrichtigen",
     "Room Notification": "Raum-Benachrichtigung",
-    "These rooms are displayed to community members on the community page. Community members can join the rooms by clicking on them.": "Diese Räume werden Community-Mitgliedern auf der Community-Seite angezeigt. Community-Mitglieder können diesen Räumen beitreten, indem sie auf diese klicken."
+    "These rooms are displayed to community members on the community page. Community members can join the rooms by clicking on them.": "Diese Räume werden Community-Mitgliedern auf der Community-Seite angezeigt. Community-Mitglieder können diesen Räumen beitreten, indem sie auf diese klicken.",
+    "Show these rooms to non-members on the community page and room list?": "Sollen diese Räume Nicht-Mitgliedern auf der Community-Seite und Raum-Liste gezeigt werden?",
+    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even use 'img' tags\n</p>\n": "<h1>HTML für deine Community-Seite</h1>\n<p>\n    Nutze die lange Beschreibung um neuen Mitgliedern diese Community zu beschreiben\n    oder um einige wichtige Informationen oder <a href=\"foo\">Links</a> festzuhalten.\n</p>\n<p>\n    Du kannst auch 'img'-Tags (HTML) verwenden\n</p>\n",
+    "Your community hasn't got a Long Description, a HTML page to show to community members.<br />Click here to open settings and give it one!": "Deine Community hat noch keine lange Beschreibung oder eine HTML-Seite die Community-Mitgliedern gezeigt wird.<br />Klicke hier um die Einstellungen zu öffnen und ihr eine zu geben!"
 }
