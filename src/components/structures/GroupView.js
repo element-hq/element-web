@@ -812,7 +812,7 @@ export default React.createClass({
                 ) : null;
 
             let inviterName = group.inviter.userId;
-            if(this.state.inviterProfile) {
+            if (this.state.inviterProfile) {
                 inviterName = this.state.inviterProfile.displayName || group.inviter.userId;
             }
             return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_invited">
