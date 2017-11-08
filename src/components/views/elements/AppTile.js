@@ -312,24 +312,24 @@ export default React.createClass({
         }
 
         if (this.props.show) {
+            const loadingElement = (
+                <div className='mx_AppTileBody mx_AppLoading'>
+                    <MessageSpinner msg='Loading...' />
+                </div>
+            );
             if (this.state.initialising) {
-                appTileBody = (
-                    <div className='mx_AppTileBody mx_AppLoading'>
-                        <MessageSpinner msg='Loading...' />
-                    </div>
-                );
+                appTileBody = loadingElement;
             } else if (this.state.hasPermissionToLoad == true) {
-                const loadingElement = (
-                    <div className="mx_AppTileBody">
-                        <AppWarning errorMsg="Error - Mixed content" />
-                    </div>
-                );
                 if (this.isMixedContent()) {
-                    appTileBody = loadingElement;
+                    appTileBody = (
+                        <div className="mx_AppTileBody">
+                            <AppWarning errorMsg="Error - Mixed content" />
+                        </div>
+                    );
                 } else {
                     appTileBody = (
-                        <div className={this.loading ? 'mx_AppTileBody mx_AppLoading' : 'mx_AppTileBody'}>
-                            { this.loading && Element }
+                        <div className={this.state.loading ? 'mx_AppTileBody mx_AppLoading' : 'mx_AppTileBody'}>
+                            { this.loading && loadingElement }
                             <iframe
                                 ref="appFrame"
                                 src={safeWidgetUrl}
