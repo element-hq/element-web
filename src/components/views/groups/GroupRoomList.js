@@ -94,7 +94,7 @@ export default React.createClass({
         let roomList = this.state.rooms;
         if (query) {
             roomList = roomList.filter((room) => {
-                const matchesName = (room.name || "").toLowerCase().include(query);
+                const matchesName = (room.name || "").toLowerCase().includes(query);
                 const matchesAlias = (room.canonicalAlias || "").toLowerCase().includes(query);
                 return matchesName || matchesAlias;
             });

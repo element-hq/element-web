@@ -33,6 +33,9 @@ export default class GroupStore extends EventEmitter {
 
     constructor(matrixClient, groupId) {
         super();
+        if (!groupId) {
+            throw new Error('GroupStore needs a valid groupId to be created');
+        }
         this.groupId = groupId;
         this._matrixClient = matrixClient;
         this._summary = {};
@@ -164,6 +167,12 @@ export default class GroupStore extends EventEmitter {
     inviteUserToGroup(userId) {
         return this._matrixClient.inviteUserToGroup(this.groupId, userId)
             .then(this._fetchMembers.bind(this));
+    }
+
+    acceptGroupInvite() {
+        return this._matrixClient.acceptGroupInvite(this.groupId)
+            // The user might be able to see more rooms now
+            .then(this._fetchRooms.bind(this));
     }
 
     addRoomToGroupSummary(roomId, categoryId) {

@@ -36,6 +36,7 @@ export function groupMemberFromApiObject(apiObject) {
         userId: apiObject.user_id,
         displayname: apiObject.displayname,
         avatarUrl: apiObject.avatar_url,
+        isPrivileged: apiObject.is_privileged,
     };
 }
 

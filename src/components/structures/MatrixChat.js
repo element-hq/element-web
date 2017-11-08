@@ -493,7 +493,10 @@ module.exports = React.createClass({
             case 'view_group':
                 {
                     const groupId = payload.group_id;
-                    this.setState({currentGroupId: groupId});
+                    this.setState({
+                        currentGroupId: groupId,
+                        currentGroupIsNew: payload.group_is_new,
+                    });
                     this._setPage(PageTypes.GroupView);
                     this.notifyNewScreen('group/' + groupId);
                 }
