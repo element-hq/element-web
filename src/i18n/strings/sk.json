@@ -170,7 +170,7 @@
     "Decline": "Odmietnuť",
     "Accept": "Prijať",
     "Error": "Chyba",
-    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Na číslo +%(msisdn)s bola odoslaná textová správa, ktorá obsahuje overovací kód. Prosím zadajte tento overovací kód.",
+    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Na číslo +%(msisdn)s bola odoslaná textová správa, ktorá obsahuje overovací kód. Prosím zadajte tento overovací kód",
     "Incorrect verification code": "Nesprávny overovací kód",
     "Enter Code": "Vložte kód",
     "Submit": "Odoslať",
@@ -470,7 +470,7 @@
     "An email has been sent to %(emailAddress)s": "Na adresu %(emailAddress)s bola odoslaná správa",
     "Please check your email to continue registration.": "Prosím, skontrolujte si emaily, aby ste mohli pokračovať v registrácii.",
     "Token incorrect": "Nesprávny token",
-    "A text message has been sent to %(msisdn)s": "Na číslo %(msisdn)s bola odoslaná textová správa.",
+    "A text message has been sent to %(msisdn)s": "Na číslo %(msisdn)s bola odoslaná textová správa",
     "Please enter the code it contains:": "Prosím, zadajte kód z tejto správy:",
     "Start authentication": "Spustiť overenie",
     "powered by Matrix": "Poháňa Matrix",
@@ -847,7 +847,7 @@
     "An email has been sent to %(emailAddress)s. Once you've followed the link it contains, click below.": "Na adresu %(emailAddress)s bola odoslaná správa. Potom, čo prejdete na odkaz z tejto správy, kliknite nižšie.",
     "I have verified my email address": "Overil som si emailovú adresu",
     "Your password has been reset": "Vaše heslo bolo obnovené",
-    "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device": "Boli ste odhlásení na všetkych zariadeniach a nebudete viac dostávať okamžité oznámenia. Oznámenia znovu povolíte tak, že sa opätovne prihlásite na každom zariadení.",
+    "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device": "Boli ste odhlásení na všetkych zariadeniach a nebudete viac dostávať okamžité oznámenia. Oznámenia znovu povolíte tak, že sa opätovne prihlásite na každom zariadení",
     "Return to login screen": "Vrátiť sa na prihlasovaciu obrazovku",
     "To reset your password, enter the email address linked to your account": "Ak chcete obnoviť vaše heslo, zadajte emailovú adresu prepojenú s vašim účtom",
     "New password": "Nové heslo",
@@ -861,7 +861,7 @@
     "Error: Problem communicating with the given homeserver.": "Chyba: Nie je možné komunikovať so zadaným domovským serverom.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "K domovskému serveru nie je možné pripojiť sa použitím protokolu HTTP keďže v adresnom riadku prehliadača máte HTTPS adresu. Použite protokol HTTPS alebo <a>povolte nezabezpečené skripty</a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Nie je možné pripojiť sa k domovskému serveru - skontrolujte prosím funkčnosť vašeho pripojenia na internet, uistite sa že <a>certifikát  domovského servera</a> je dôverihodný, a že žiaden doplnok nainštalovaný v prehliadači nemôže blokovať požiadavky.",
-    "Sorry, this homeserver is using a login which is not recognised ": "Prepáčte, tento domovský server používa neznámy spôsob prihlasovania",
+    "Sorry, this homeserver is using a login which is not recognised ": "Prepáčte, tento domovský server používa neznámy spôsob prihlasovania ",
     "Login as guest": "Prihlásiť sa ako hosť",
     "Return to app": "Vrátiť sa do aplikácie",
     "Failed to fetch avatar URL": "Nepodarilo sa získať URL adresu avatara",
@@ -925,5 +925,6 @@
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Tento proces vás prevedie importom šifrovacích kľúčov, ktoré ste si v minulosti exportovali v inom Matrix klientovi. Po úspešnom importe budete v tomto klientovi môcť dešifrovať všetky správy, ktoré ste mohli dešifrovať v spomínanom klientovi.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Exportovaný súbor je chránený heslom. Súbor môžete importovať len ak zadáte zodpovedajúce heslo.",
     "File to import": "Importovať zo súboru",
-    "Import": "Importovať"
+    "Import": "Importovať",
+    "Show these rooms to non-members on the community page and room list?": "Zobrazovať tieto miestnosti na domovskej stránke komunity a v zozname miestností aj pre nečlenov?"
 }
