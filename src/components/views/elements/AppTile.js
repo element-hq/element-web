@@ -329,7 +329,7 @@ export default React.createClass({
                 } else {
                     appTileBody = (
                         <div className={this.state.loading ? 'mx_AppTileBody mx_AppLoading' : 'mx_AppTileBody'}>
-                            { this.loading && loadingElement }
+                            { this.state.loading && loadingElement }
                             <iframe
                                 ref="appFrame"
                                 src={safeWidgetUrl}
