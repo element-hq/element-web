@@ -985,5 +985,6 @@
     "Drop here to demote": "Перетащите сюда для понижения",
     "Community Invites": "Приглашения в сообщества",
     "Notify the whole room": "Уведомить всю комнату",
-    "These rooms are displayed to community members on the community page. Community members can join the rooms by clicking on them.": "Эти комнаты отображаются для участников сообщества на странице сообщества. Участники сообщества могут присоединиться к комнатам, щелкнув на них."
+    "These rooms are displayed to community members on the community page. Community members can join the rooms by clicking on them.": "Эти комнаты отображаются для участников сообщества на странице сообщества. Участники сообщества могут присоединиться к комнатам, щелкнув на них.",
+    "Show these rooms to non-members on the community page and room list?": "Следует ли показывать эти комнаты посторонним на странице сообщества и в комнате?"
 }
