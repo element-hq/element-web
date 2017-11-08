@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AppsDrawer {
-    margin-bottom: 3px;
-}
+// .mx_AppsDrawer {
+// }
 
 .mx_AppsContainer {
     display: flex;
@@ -69,6 +68,10 @@ limitations under the License.
     // display: inline-block;
 }
 
+.mx_AppTile, .mx_AppTileFullWidth {
+    margin-bottom: 3px;
+}
+
 .mx_AppTileMenuBar {
     // height: 15px;
     margin: 0;
@@ -116,8 +119,8 @@ limitations under the License.
     display: block;
 }
 
-.mx_CloseAppWidget {
-}
+// .mx_CloseAppWidget {
+// }
 
 .mx_AppTileMenuBarWidgetPadding {
     margin-right: 5px;
