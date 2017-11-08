@@ -28,9 +28,13 @@ $warning-color: #ff0064;
 $mention-user-pill-bg-color: #ff0064;
 $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
-// groups
-$group-my-groups-placeholder-bg: #f7f7f7;
-$group-my-groups-placeholder-fg: #888;
+// pinned events indicator
+$pinned-unread-color: #ff0064; // $warning-color
+$pinned-color: #888;
+
+// informational plinth
+$info-plinth-bg-color: #f7f7f7;
+$info-plinth-fg-color: #888;
 
 $preview-bar-bg-color: #f7f7f7;
 

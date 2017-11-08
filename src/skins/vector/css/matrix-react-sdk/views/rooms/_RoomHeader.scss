@@ -229,12 +229,16 @@ limitations under the License.
     position: relative;
 }
 
-.mx_RoomHeader_unreadPinsIndicator {
+.mx_RoomHeader_pinsIndicator {
     position: absolute;
     right: 0;
     bottom: 4px;
     width: 8px;
     height: 8px;
     border-radius: 8px;
-    background-color: $warning-color;
+    background-color: $pinned-color;
+}
+
+.mx_RoomHeader_pinsIndicatorUnread {
+    background-color: $pinned-unread-color;
 }

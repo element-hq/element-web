@@ -60,9 +60,8 @@ limitations under the License.
 }
 
 .mx_ChatInviteDialog_error {
-    position: absolute;
+    margin-top: 10px;
     color: $warning-color;
-    line-height: 36px;
 }
 
 .mx_ChatInviteDialog_cancel {
