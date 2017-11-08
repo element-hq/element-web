@@ -270,6 +270,7 @@ module.exports = React.createClass({
         const rooms = MatrixClientPeg.get().getRooms();
         const results = [];
         rooms.forEach((room) => {
+            let rank = Infinity;
             const nameEvent = room.currentState.getStateEvents('m.room.name', '');
             const name = nameEvent ? nameEvent.getContent().name : '';
             const canonicalAlias = room.getCanonicalAlias();
@@ -279,22 +280,43 @@ module.exports = React.createClass({
             }, []);
 
             const nameMatch = (name || '').toLowerCase().includes(lowerCaseQuery);
-            const aliasMatch = aliases.some((alias) =>
-                (alias || '').toLowerCase().includes(lowerCaseQuery),
-            );
+            let aliasMatch = false;
+            let shortestMatchingAliasLength = Infinity;
+            aliases.forEach((alias) => {
+                if ((alias || '').toLowerCase().includes(lowerCaseQuery)) {
+                    aliasMatch = true;
+                    if (shortestMatchingAliasLength > alias.length) {
+                        shortestMatchingAliasLength = alias.length;
+                    }
+                }
+            });
+
             if (!(nameMatch || aliasMatch)) {
                 return;
             }
+
+            if (aliasMatch) {
+                // A shorter matching alias will give a better rank
+                rank = shortestMatchingAliasLength;
+            }
+
             const avatarEvent = room.currentState.getStateEvents('m.room.avatar', '');
             const avatarUrl = avatarEvent ? avatarEvent.getContent().url : undefined;
 
             results.push({
+                rank,
                 room_id: room.roomId,
                 avatar_url: avatarUrl,
                 name: name || canonicalAlias || aliases[0] || _t('Unnamed Room'),
             });
         });
-        this._processResults(results, query);
+
+        // Sort by rank ascending (a high rank being less relevant)
+        const sortedResults = results.sort((a, b) => {
+            return a.rank - b.rank;
+        });
+
+        this._processResults(sortedResults, query);
         this.setState({
             busy: false,
         });
