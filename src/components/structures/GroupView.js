@@ -417,6 +417,7 @@ export default React.createClass({
             uploadingAvatar: false,
             membershipBusy: false,
             publicityBusy: false,
+            inviterProfile: null,
         };
     },
 
