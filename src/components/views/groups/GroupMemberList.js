@@ -110,7 +110,19 @@ export default withMatrixClient(React.createClass({
         memberList = Object.keys(uniqueMembers).map((userId) => uniqueMembers[userId]);
         // Descending sort on isPrivileged = true = 1 to isPrivileged = false = 0
         memberList.sort((a, b) => {
-            return b.isPrivileged - a.isPrivileged;
+            if (a.isPrivileged === b.isPrivileged) {
+                const aName = a.displayname || a.userId;
+                const bName = b.displayname || b.userId;
+                if (aName < bName) {
+                    return -1;
+                } else if (aName > bName) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } else {
+                return a.isPrivileged ? -1 : 1;
+            }
         });
 
         const memberTiles = memberList.map((m) => {
