@@ -108,15 +108,9 @@ export default withMatrixClient(React.createClass({
             if (!uniqueMembers[m.userId]) uniqueMembers[m.userId] = m;
         });
         memberList = Object.keys(uniqueMembers).map((userId) => uniqueMembers[userId]);
+        // Descending sort on isPrivileged = true = 1 to isPrivileged = false = 0
         memberList.sort((a, b) => {
-            // TODO: should put admins at the top: we don't yet have that info
-            if (a < b) {
-                return -1;
-            } else if (a > b) {
-                return 1;
-            } else {
-                return 0;
-            }
+            return b.isPrivileged - a.isPrivileged;
         });
 
         const memberTiles = memberList.map((m) => {
