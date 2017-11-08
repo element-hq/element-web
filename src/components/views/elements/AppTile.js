@@ -59,20 +59,20 @@ export default React.createClass({
     },
 
     /**
-     * Set initial component state when the App wUrl (widget URL) is being updated
-     * @param  {Object} props The component props *must* be passed (rather than using this.props) so that it can be called with future props, e.g. from componentWillReceiveProps.
+     * Set initial component state when the App wUrl (widget URL) is being updated. Component props *must* be passed (rather than relying on this.props).
+     * @param  {Object} newProps The new properties of the component
      * @return {Object} Updated component state to be set with setState
      */
-    _getNewUrlState(props) {
-        const widgetPermissionId = [props.room.roomId, encodeURIComponent(props.url)].join('_');
+    _getNewUrlState(newProps) {
+        const widgetPermissionId = [newProps.room.roomId, encodeURIComponent(newProps.url)].join('_');
         const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
         return {
             initialising: true,   // True while we are mangling the widget URL
             loading: true,        // True while the iframe content is loading
-            widgetUrl: props.url,
+            widgetUrl: newProps.url,
             widgetPermissionId: widgetPermissionId,
             // Assume that widget has permission to load if we are the user who added it to the room, or if explicitly granted by the user
-            hasPermissionToLoad: hasPermissionToLoad === 'true' || props.userId === props.creatorUserId,
+            hasPermissionToLoad: hasPermissionToLoad === 'true' || newProps.userId === newProps.creatorUserId,
             error: null,
             deleting: false,
         };
