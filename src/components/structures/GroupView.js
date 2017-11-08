@@ -22,7 +22,7 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
-import { _t } from '../../languageHandler';
+import { _t, _td, _tJsx } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import Modal from '../../Modal';
 import classnames from 'classnames';
@@ -31,6 +31,17 @@ import GroupStoreCache from '../../stores/GroupStoreCache';
 import GroupStore from '../../stores/GroupStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GeminiScrollbar from 'react-gemini-scrollbar';
+
+const LONG_DESC_PLACEHOLDER = _td(
+`<h1>HTML for your community's page</h1>
+<p>
+    Use the long description to introduce new members to the community, or distribute
+    some important <a href="foo">links</a>
+</p>
+<p>
+    You can even use 'img' tags
+</p>
+`);
 
 const RoomSummaryType = PropTypes.shape({
     room_id: PropTypes.string.isRequired,
@@ -392,6 +403,8 @@ export default React.createClass({
 
     propTypes: {
         groupId: PropTypes.string.isRequired,
+        // Whether this is the first time the group admin is viewing the group
+        groupIsNew: PropTypes.bool,
     },
 
     childContextTypes: {
@@ -423,7 +436,7 @@ export default React.createClass({
 
     componentWillMount: function() {
         this._changeAvatarComponent = null;
-        this._initGroupStore(this.props.groupId);
+        this._initGroupStore(this.props.groupId, true);
 
         MatrixClientPeg.get().on("Group.myMembership", this._onGroupMyMembership);
     },
@@ -450,12 +463,11 @@ export default React.createClass({
         this.setState({membershipBusy: false});
     },
 
-    _initGroupStore: function(groupId) {
+    _initGroupStore: function(groupId, firstInit) {
         const group = MatrixClientPeg.get().getGroup(groupId);
         if (group && group.inviter && group.inviter.userId) {
             this._fetchInviterProfile(group.inviter.userId);
         }
-
         this._groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), groupId);
         this._groupStore.registerListener(() => {
             const summary = this._groupStore.getSummary();
@@ -478,6 +490,9 @@ export default React.createClass({
                 ),
                 error: null,
             });
+            if (this.props.groupIsNew && firstInit) {
+                this._onEditClick();
+            }
         });
         this._groupStore.on('error', (err) => {
             this.setState({
@@ -687,6 +702,14 @@ export default React.createClass({
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
         const Spinner = sdk.getComponent('elements.Spinner');
+        const ToolTipButton = sdk.getComponent('elements.ToolTipButton');
+
+        const roomsHelpNode = this.state.editing ? <ToolTipButton helpText={
+            _t(
+                'These rooms are displayed to community members on the community page. '+
+                'Community members can join the rooms by clicking on them.',
+            )
+        } /> : <div />;
 
         const addRoomRow = this.state.editing ?
             (<AccessibleButton className="mx_GroupView_rooms_header_addRow"
@@ -699,14 +722,23 @@ export default React.createClass({
                     { _t('Add rooms to this community') }
                 </div>
             </AccessibleButton>) : <div />;
+        const roomDetailListClassName = classnames({
+            "mx_fadable": true,
+            "mx_fadable_faded": this.state.editing,
+        });
         return <div className="mx_GroupView_rooms">
             <div className="mx_GroupView_rooms_header">
-                <h3>{ _t('Rooms') }</h3>
+                <h3>
+                    { _t('Rooms') }
+                    { roomsHelpNode }
+                </h3>
                 { addRoomRow }
             </div>
             { this.state.groupRoomsLoading ?
                 <Spinner /> :
-                <RoomDetailList rooms={this.state.groupRooms} />
+                <RoomDetailList
+                    rooms={this.state.groupRooms}
+                    className={roomDetailListClassName} />
             }
         </div>;
     },
@@ -894,6 +926,18 @@ export default React.createClass({
         let description = null;
         if (summary.profile && summary.profile.long_description) {
             description = sanitizedHtmlNode(summary.profile.long_description);
+        } else if (this.state.isUserPrivileged) {
+            description = <div
+                className="mx_GroupView_groupDesc_placeholder"
+                onClick={this._onEditClick}
+            >
+                { _tJsx(
+                    'Your community hasn\'t got a Long Description, a HTML page to show to community members.<br />' +
+                    'Click here to open settings and give it one!',
+                    [/<br \/>/],
+                    [(sub) => <br />])
+                }
+            </div>;
         }
         const groupDescEditingClasses = classnames({
             "mx_GroupView_groupDesc": true,
@@ -905,6 +949,7 @@ export default React.createClass({
                 <h3> { _t("Long Description (HTML)") } </h3>
                 <textarea
                     value={this.state.profileForm.long_description}
+                    placeholder={_t(LONG_DESC_PLACEHOLDER)}
                     onChange={this._onLongDescChange}
                     tabIndex="4"
                     key="editLongDesc"
