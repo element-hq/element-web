@@ -78,6 +78,7 @@ import {parseQs, parseQsFromFragment} from './url_utils';
 import Platform from './platform';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import Tinter from 'matrix-react-sdk/lib/Tinter';
 
 var lastLocationHashSet = null;
 
@@ -288,19 +289,25 @@ async function loadApp() {
     // as quickly as we possibly can, set a default theme...
     const styleElements = Object.create(null);
     let a;
+    const theme = configJson.default_theme || 'light';
     for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
         const href = a.getAttribute("href");
         // shouldn't we be using the 'title' tag rather than the href?
         const match = href.match(/^bundles\/.*\/theme-(.*)\.css$/);
         if (match) {
-            if (match[1] === (configJson.default_theme || 'light')) {
+            if (match[1] === theme) {
                 // remove the disabled flag off the stylesheet
                 a.removeAttribute("disabled");
+
+                // in case the Tinter.tint() in MatrixChat fires before the
+                // CSS has actually loaded (which in practice happens)
+                a.onload = () => { 
+                    Tinter.setTheme(theme);
+                    Tinter.tint();
+                };
             }
         }
     }
-    // XXX: do we also need to call MatrixChat.setTheme here to do any random fixups (e.g. svg tint)
-
 
     if (window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser')) {
         console.log('User has previously accepted risks in using an unsupported browser');
