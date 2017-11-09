@@ -150,9 +150,9 @@ export default class GroupStore extends EventEmitter {
             .then(this._fetchRooms.bind(this));
     }
 
-    updateGroupRoomAssociation(roomId, isPublic) {
+    updateGroupRoomVisibility(roomId, isPublic) {
         return this._matrixClient
-            .updateGroupRoomAssociation(this.groupId, roomId, isPublic)
+            .updateGroupRoomVisibility(this.groupId, roomId, isPublic)
             .then(this._fetchRooms.bind(this));
     }
 
