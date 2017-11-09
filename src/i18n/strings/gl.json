@@ -205,5 +205,17 @@
     "Set Password": "Establecer contrasinal",
     "Couldn't load home page": "Non se cargou a páxina de inicio",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Pode que os configurase nun cliente diferente de Riot. Non pode establecelos desde Riot pero aínda así aplicaranse",
-    "Riot/Android &amp; matrix-android-sdk chat": "Chat para Riot/Android &amp; matrix-android-sdk"
+    "Riot/Android &amp; matrix-android-sdk chat": "Chat para Riot/Android &amp; matrix-android-sdk",
+    "Show message in desktop notification": "Mostrar mensaxe nas notificacións de escritorio",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Vostede pode utilizar as opcións de servidor personalizado para conectarse a outros servidores Matrix indicando o enderezo URL do Servidor.</br>Esto permítelle utilizar Riot con unha conta Matrix existente en outro servidor.<br/><br/>Tamén pode indicar un servidor de identidade pero non poderá convidar a usarias polo seu enderezo de correo electrónico, o ser convidada vostede por correo electrónico.",
+    "Toolbox": "Ferramentas",
+    "Edit": "Editar",
+    "Send Account Data": "Enviar datos da conta",
+    "Explore Account Data": "Explorar datos da conta",
+    "Unpin Message": "Non fixar mensaxe",
+    "Pin Message": "Fixar mensaxe",
+    "Register": "Rexistrar",
+    "Rooms": "Salas",
+    "Invite to this community": "Convidar a esta comunidade",
+    "Add rooms to this community": "Engadir salas a esta comunidade"
 }
