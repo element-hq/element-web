@@ -191,13 +191,17 @@ export default class SettingsStore {
      * @return {*} The value, or null if not found.
      */
     static getValueAt(level, settingName, roomId = null, explicit = false, excludeDefault = false) {
-        const minIndex = LEVEL_ORDER.indexOf(level);
-        if (minIndex === -1) throw new Error("Level " + level + " is not prioritized");
-
         // Verify that the setting is actually a setting
         if (!SETTINGS[settingName]) {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
         }
+
+        const setting = SETTINGS[settingName];
+        const levelOrder = (setting.supportedLevelsAreOrdered ? setting.supportedLevels : LEVEL_ORDER);
+        if (!levelOrder.includes("default")) levelOrder.push("default"); // always include default
+
+        const minIndex = levelOrder.indexOf(level);
+        if (minIndex === -1) throw new Error("Level " + level + " is not prioritized");
 
         if (SettingsStore.isFeature(settingName)) {
             const configValue = SettingsStore._getFeatureState(settingName);
@@ -215,10 +219,10 @@ export default class SettingsStore {
             return SettingsStore._tryControllerOverride(settingName, level, roomId, value);
         }
 
-        for (let i = minIndex; i < LEVEL_ORDER.length; i++) {
-            const handler = handlers[LEVEL_ORDER[i]];
+        for (let i = minIndex; i < levelOrder.length; i++) {
+            const handler = handlers[levelOrder[i]];
             if (!handler) continue;
-            if (excludeDefault && LEVEL_ORDER[i] === "default") continue;
+            if (excludeDefault && levelOrder[i] === "default") continue;
 
             const value = handler.getValue(settingName, roomId);
             if (value === null || value === undefined) continue;

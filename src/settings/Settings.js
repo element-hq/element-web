@@ -70,6 +70,11 @@ export const SETTINGS = {
     //
     //     // Optional settings controller. See SettingsController for more information.
     //     controller: new MySettingController(),
+    //
+    //     // Optional flag to make supportedLevels be respected as the order to handle
+    //     // settings. The first element is treated as "most preferred". The "default"
+    //     // level is always appended to the end.
+    //     supportedLevelsAreOrdered: false,
     // },
     "feature_groups": {
         isFeature: true,
@@ -197,7 +202,10 @@ export const SETTINGS = {
         default: 200,
     },
     "blacklistUnverifiedDevices": {
-        supportedLevels: ['device', 'room-device'],
+        // We specifically want to have room-device > device so that users may set a device default
+        // with a per-room override.
+        supportedLevels: ['room-device', 'device'],
+        supportedLevelsAreOrdered: true,
         displayName: {
             "default": _td('Never send encrypted messages to unverified devices from this device'),
             "room-device": _td('Never send encrypted messages to unverified devices in this room from this device'),

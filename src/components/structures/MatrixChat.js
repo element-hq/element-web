@@ -1104,6 +1104,7 @@ module.exports = React.createClass({
                     SettingLevel.ROOM_DEVICE,
                     "blacklistUnverifiedDevices",
                     room.roomId,
+                    /*explicit=*/true,
                 );
                 room.setBlacklistUnverifiedDevices(blacklistEnabled);
             }

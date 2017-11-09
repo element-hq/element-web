@@ -147,9 +147,12 @@ export default React.createClass({
             return <Spinner />;
         }
 
+        // The global value is treated as a default for when rooms don't specify a value.
         const client = MatrixClientPeg.get();
-        const blacklistUnverified = client.getGlobalBlacklistUnverifiedDevices() ||
-              this.props.room.getBlacklistUnverifiedDevices();
+        let blacklistUnverified = client.getGlobalBlacklistUnverifiedDevices();
+        if (this.props.room.getBlacklistUnverifiedDevices() !== null) {
+            blacklistUnverified = this.props.room.getBlacklistUnverifiedDevices();
+        }
 
         let warning;
         if (blacklistUnverified) {
