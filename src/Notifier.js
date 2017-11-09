@@ -211,15 +211,15 @@ const Notifier = {
         });
 
         // update the info to localStorage for persistent settings
-        if (persistent && SettingsStore.isLevelSupported(SettingLevel.DEVICE)) {
-            return SettingsStore.setValue("notificationToolbarHidden", null, SettingLevel.DEVICE, hidden);
+        if (persistent && global.localStorage) {
+            global.localStorage.setItem("notifications_hidden", hidden);
         }
     },
 
     isToolbarHidden: function() {
         // Check localStorage for any such meta data
-        if (SettingsStore.isLevelSupported(SettingLevel.DEVICE)) {
-            return SettingsStore.getValue("notificationToolbarHidden");
+        if (global.localStorage) {
+            return global.localStorage.getItem("notifications_hidden") === "true";
         }
 
         return this.toolbarHidden;

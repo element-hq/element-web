@@ -45,8 +45,6 @@ export default class DeviceSettingsHandler extends SettingsHandler {
             return localStorage.getItem("notifications_body_enabled") === "true";
         } else if (settingName === "audioNotificationsEnabled") {
             return localStorage.getItem("audio_notifications_enabled") === "true";
-        } else if (settingName === "notificationToolbarHidden") {
-            return localStorage.getItem("notifications_hidden") === "true";
         }
 
         return this._getSettings()[settingName];
@@ -67,9 +65,6 @@ export default class DeviceSettingsHandler extends SettingsHandler {
             return Promise.resolve();
         } else if (settingName === "audioNotificationsEnabled") {
             localStorage.setItem("audio_notifications_enabled", newValue);
-            return Promise.resolve();
-        } else if (settingName === "notificationToolbarHidden") {
-            localStorage.setItem("notifications_hidden", newValue);
             return Promise.resolve();
         }
 
