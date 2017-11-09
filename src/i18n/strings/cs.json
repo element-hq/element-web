@@ -214,5 +214,8 @@
     "State Key": "Stavový klíč",
     "Send Custom State Event": "Poslat vlastní stavovou událost",
     "Explore Room State": "Prohlížet stav místnosti",
-    "Unpin Message": "Odepnout zprávu"
+    "Unpin Message": "Odepnout zprávu",
+    "Toolbox": "Sada nástrojů",
+    "Send Account Data": "Poslat data o účtu",
+    "Explore Account Data": "Prozkoumat data o účtu"
 }
