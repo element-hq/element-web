@@ -208,5 +208,14 @@
     "You must specify an event type!": "您必須指定事件類型！",
     "Show message in desktop notification": "在桌面通知中顯示訊息",
     "Pin Message": "釘選訊息",
-    "Unpin Message": "取消釘選訊息"
+    "Unpin Message": "取消釘選訊息",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "您可以使用自訂的伺服器選項，並指定不同的家伺服器 URL 來登入其他的 Matrix 伺服器。<br/>這讓您可以在不同的伺服器上以既有的 Matrix 帳號使用 Riot。<br/><br/>您也可以設定一個自訂的識別伺服器，但您可能無法透過電子郵件地址來邀請使用者，或是讓別人透過電子郵件邀請您。",
+    "Edit": "編輯",
+    "Register": "註冊",
+    "Rooms": "聊天室",
+    "Invite to this community": "邀請至此社群",
+    "Add rooms to this community": "新增聊天室到此社群",
+    "Toolbox": "工具箱",
+    "Send Account Data": "傳送帳號資料",
+    "Explore Account Data": "探索帳號資料"
 }
