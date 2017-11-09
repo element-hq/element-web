@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -97,18 +98,19 @@ export default React.createClass({
         onFinished: React.PropTypes.func.isRequired,
     },
 
-    componentDidMount: function() {
-        // Given we've now shown the user the unknown device, it is no longer
-        // unknown to them. Therefore mark it as 'known'.
+    _onSendAnywayClicked: function() {
+        // Mark the devices as known so messages get encrypted to them
         Object.keys(this.props.devices).forEach((userId) => {
             Object.keys(this.props.devices[userId]).map((deviceId) => {
                 MatrixClientPeg.get().setDeviceKnown(userId, deviceId, true);
             });
         });
+        this.props.onFinished();
+        Resend.resendUnsentEvents(this.props.room);
+    },
 
-        // XXX: temporary logging to try to diagnose
-        // https://github.com/vector-im/riot-web/issues/3148
-        console.log('Opening UnknownDeviceDialog');
+    _onDismissClicked: function() {
+        this.props.onFinished();
     },
 
     render: function() {
@@ -139,12 +141,7 @@ export default React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog className='mx_UnknownDeviceDialog'
-                onFinished={() => {
-                            // XXX: temporary logging to try to diagnose
-                            // https://github.com/vector-im/riot-web/issues/3148
-                            console.log("UnknownDeviceDialog closed by escape");
-                            this.props.onFinished();
-                }}
+                onFinished={this.props.onFinished}
                 title={_t('Room contains unknown devices')}
             >
                 <GeminiScrollbar autoshow={false} className="mx_Dialog_content">
@@ -157,21 +154,13 @@ export default React.createClass({
                     <UnknownDeviceList devices={this.props.devices} />
                 </GeminiScrollbar>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" autoFocus={true}
-                            onClick={() => {
-                                this.props.onFinished();
-                                Resend.resendUnsentEvents(this.props.room);
-                            }}>
+                    <button onClick={this._onSendAnywayClicked}>
                         { _t("Send anyway") }
                     </button>
                     <button className="mx_Dialog_primary" autoFocus={true}
-                            onClick={() => {
-                                // XXX: temporary logging to try to diagnose
-                                // https://github.com/vector-im/riot-web/issues/3148
-                                console.log("UnknownDeviceDialog closed by OK");
-                                this.props.onFinished();
-                            }}>
-                        OK
+                        onClick={this._onDismissClicked}
+                    >
+                        {_t("Dismiss")}
                     </button>
                 </div>
             </BaseDialog>

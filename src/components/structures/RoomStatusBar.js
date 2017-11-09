@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,15 +17,25 @@ limitations under the License.
 
 import React from 'react';
 import { _t, _tJsx } from '../../languageHandler';
+import Matrix from 'matrix-js-sdk';
 import sdk from '../../index';
 import WhoIsTyping from '../../WhoIsTyping';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import MemberAvatar from '../views/avatars/MemberAvatar';
+import Resend from '../../Resend';
+import Modal from '../../Modal';
 
 const HIDE_DEBOUNCE_MS = 10000;
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
 const STATUS_BAR_EXPANDED_LARGE = 2;
+
+function getUnsentMessages(room) {
+    if (!room) { return []; }
+    return room.getPendingEvents().filter(function(ev) {
+        return ev.status === Matrix.EventStatus.NOT_SENT;
+    });
+};
 
 module.exports = React.createClass({
     displayName: 'RoomStatusBar',
@@ -35,9 +46,6 @@ module.exports = React.createClass({
 
         // the number of messages which have arrived since we've been scrolled up
         numUnreadMessages: React.PropTypes.number,
-
-        // string to display when there are messages in the room which had errors on send
-        unsentMessageError: React.PropTypes.string,
 
         // this is true if we are fully scrolled-down, and are looking at
         // the end of the live timeline.
@@ -99,12 +107,14 @@ module.exports = React.createClass({
         return {
             syncState: MatrixClientPeg.get().getSyncState(),
             usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
+            unsentMessages: [],
         };
     },
 
     componentWillMount: function() {
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
+        MatrixClientPeg.get().on("Room.localEchoUpdated", this.onRoomLocalEchoUpdated);
 
         this._checkSize();
     },
@@ -119,6 +129,7 @@ module.exports = React.createClass({
         if (client) {
             client.removeListener("sync", this.onSyncStateChange);
             client.removeListener("RoomMember.typing", this.onRoomMemberTyping);
+            client.removeListener("Room.localEchoUpdated", this.onRoomLocalEchoUpdated);
         }
     },
 
@@ -134,6 +145,57 @@ module.exports = React.createClass({
     onRoomMemberTyping: function(ev, member) {
         this.setState({
             usersTyping: WhoIsTyping.usersTypingApartFromMeAndIgnored(this.props.room),
+        });
+    },
+
+    _onResendAllClick: function() {
+        Resend.resendUnsentEvents(this.props.room);
+    },
+
+    _onCancelAllClick: function() {
+        Resend.cancelUnsentEvents(this.props.room);
+    },
+
+    _onShowDevicesClick: function() {
+        this._getUnknownDevices().then((unknownDevices) => {
+            const UnknownDeviceDialog = sdk.getComponent('dialogs.UnknownDeviceDialog');
+            Modal.createTrackedDialog('Unknown Device Dialog', '', UnknownDeviceDialog, {
+                room: this.props.room,
+                devices: unknownDevices,
+            }, 'mx_Dialog_unknownDevice');
+        });
+    },
+
+    _getUnknownDevices: function() {
+        const roomMembers = this.props.room.getJoinedMembers().map((m) => {
+            return m.userId;
+        });
+        return MatrixClientPeg.get().downloadKeys(roomMembers, false).then((devices) => {
+            if (this._unmounted) return;
+
+            const unknownDevices = {};
+            // This is all devices in this room, so find the unknown ones.
+            Object.keys(devices).forEach((userId) => {
+                Object.keys(devices[userId]).map((deviceId) => {
+                    const device = devices[userId][deviceId];
+
+                    if (device.isUnverified() && !device.isKnown()) {
+                        if (unknownDevices[userId] === undefined) {
+                            unknownDevices[userId] = {};
+                        }
+                        unknownDevices[userId][deviceId] = device;
+                    }
+                });
+            });
+            return unknownDevices;
+        });
+    },
+
+    onRoomLocalEchoUpdated: function(event, room, oldEventId, oldStatus) {
+        if (room.roomId !== this.props.room.roomId) return;
+
+        this.setState({
+            unsentMessages: getUnsentMessages(this.props.room),
         });
     },
 
@@ -156,7 +218,7 @@ module.exports = React.createClass({
             this.props.sentMessageAndIsAlone
         ) {
             return STATUS_BAR_EXPANDED;
-        } else if (this.props.unsentMessageError) {
+        } else if (this.state.unsentMessages.length > 0) {
             return STATUS_BAR_EXPANDED_LARGE;
         }
         return STATUS_BAR_HIDDEN;
@@ -242,6 +304,60 @@ module.exports = React.createClass({
         return avatars;
     },
 
+    _getUnsentMessageContent: function(room) {
+        const unsentMessages = this.state.unsentMessages;
+        if (!unsentMessages.length) return null;
+
+        let title;
+        let content;
+
+        const hasUDE = unsentMessages.some((m) => {
+            return m.error && m.error.name === "UnknownDeviceError";
+        });
+
+        if (hasUDE) {
+            title = _t("Message not sent due to unknown devices being present");
+            content = _tJsx(
+                "<a>Show devices</a> or <a>cancel all</a>.",
+                [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
+                [
+                    (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this._onShowDevicesClick}>{ sub }</a>,
+                    (sub) => <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={this._onCancelAllClick}>{ sub }</a>,
+                ],
+            );
+        } else {
+            if (
+                unsentMessages.length === 1 &&
+                unsentMessages[0].error &&
+                unsentMessages[0].error.data &&
+                unsentMessages[0].error.data.error
+            ) {
+                title = unsentMessages[0].error.data.error;
+            } else {
+                title = _t("Some of your messages have not been sent.");
+            }
+            content = _tJsx(
+                "<a>Resend all</a> or <a>cancel all</a> now. "+
+                "You can also select individual messages to resend or cancel.",
+                [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
+                [
+                    (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this._onResendAllClick}>{ sub }</a>,
+                    (sub) => <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={this._onCancelAllClick}>{ sub }</a>,
+                ],
+            );
+        }
+
+        return <div className="mx_RoomStatusBar_connectionLostBar">
+            <img src="img/warning.svg" width="24" height="23" title={_t("Warning")} alt={_t("Warning")} />
+            <div className="mx_RoomStatusBar_connectionLostBar_title">
+                { title }
+            </div>
+            <div className="mx_RoomStatusBar_connectionLostBar_desc">
+                { content }
+            </div>
+        </div>;
+    },
+
     // return suitable content for the main (text) part of the status bar.
     _getContent: function() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
@@ -264,24 +380,8 @@ module.exports = React.createClass({
             );
         }
 
-        if (this.props.unsentMessageError) {
-            return (
-                <div className="mx_RoomStatusBar_connectionLostBar">
-                    <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ " />
-                    <div className="mx_RoomStatusBar_connectionLostBar_title">
-                        { this.props.unsentMessageError }
-                    </div>
-                    <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                    { _tJsx("<a>Resend all</a> or <a>cancel all</a> now. You can also select individual messages to resend or cancel.",
-                        [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
-                        [
-                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this.props.onResendAllClick}>{ sub }</a>,
-                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={this.props.onCancelAllClick}>{ sub }</a>,
-                        ],
-                    ) }
-                    </div>
-                </div>
-            );
+        if (this.state.unsentMessages.length > 0) {
+            return this._getUnsentMessageContent();
         }
 
         // unread count trumps who is typing since the unread count is only
