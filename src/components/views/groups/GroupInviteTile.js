@@ -45,7 +45,7 @@ export default React.createClass({
         const label = <EmojiText
             element="div"
             title={this.props.group.groupId}
-            className="mx_RoomTile_name"
+            className="mx_RoomTile_name mx_RoomTile_badgeShown"
             dir="auto"
         >
             { groupName }
