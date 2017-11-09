@@ -89,6 +89,7 @@ export default React.createClass({
      */
     isScalarUrl(url) {
         if (!url) {
+            console.error('Scalar URL check failed. No URL specified');
             return false;
         }
 
@@ -128,6 +129,7 @@ export default React.createClass({
      */
     setScalarToken() {
         if (!this.isScalarUrl(this.props.url)) {
+            console.warn('Non-scalar widget, not setting scalar token!', url);
             this.setState({
                 error: null,
                 widgetUrl: this.props.url,
@@ -147,7 +149,9 @@ export default React.createClass({
             const params = qs.parse(u.query);
             if (!params.scalar_token) {
                 params.scalar_token = encodeURIComponent(token);
-                u.query = qs.stringify(params);
+                // u.search must be set to undefined, so that u.format() uses query paramerters - https://nodejs.org/docs/latest/api/url.html#url_url_format_url_options
+                u.search = undefined;
+                u.query = params;
             }
 
             this.setState({
@@ -156,6 +160,7 @@ export default React.createClass({
                 initialising: false,
             });
         }, (err) => {
+            console.error("Failed to get scalar_token", err);
             this.setState({
                 error: err.message,
                 initialising: false,
