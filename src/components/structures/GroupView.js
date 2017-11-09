@@ -430,6 +430,7 @@ export default React.createClass({
             uploadingAvatar: false,
             membershipBusy: false,
             publicityBusy: false,
+            inviterProfile: null,
         };
     },
 
@@ -463,6 +464,10 @@ export default React.createClass({
     },
 
     _initGroupStore: function(groupId, firstInit) {
+        const group = MatrixClientPeg.get().getGroup(groupId);
+        if (group && group.inviter && group.inviter.userId) {
+            this._fetchInviterProfile(group.inviter.userId);
+        }
         this._groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), groupId);
         this._groupStore.registerListener(() => {
             const summary = this._groupStore.getSummary();
@@ -493,6 +498,26 @@ export default React.createClass({
             this.setState({
                 summary: null,
                 error: err,
+            });
+        });
+    },
+
+    _fetchInviterProfile(userId) {
+        this.setState({
+            inviterProfileBusy: true,
+        });
+        MatrixClientPeg.get().getProfileInfo(userId).then((resp) => {
+            this.setState({
+                inviterProfile: {
+                    avatarUrl: resp.avatar_url,
+                    displayName: resp.displayname,
+                },
+            });
+        }).catch((e) => {
+            console.error('Error getting group inviter profile', e);
+        }).finally(() => {
+            this.setState({
+                inviterProfileBusy: false,
             });
         });
     },
@@ -591,7 +616,7 @@ export default React.createClass({
 
     _onAcceptInviteClick: function() {
         this.setState({membershipBusy: true});
-        MatrixClientPeg.get().acceptGroupInvite(this.props.groupId).then(() => {
+        this._groupStore.acceptGroupInvite().then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
         }).catch((e) => {
             this.setState({membershipBusy: false});
@@ -802,20 +827,37 @@ export default React.createClass({
 
     _getMembershipSection: function() {
         const Spinner = sdk.getComponent("elements.Spinner");
+        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
         const group = MatrixClientPeg.get().getGroup(this.props.groupId);
         if (!group) return null;
 
         if (group.myMembership === 'invite') {
-            if (this.state.membershipBusy) {
+            if (this.state.membershipBusy || this.state.inviterProfileBusy) {
                 return <div className="mx_GroupView_membershipSection">
                     <Spinner />
                 </div>;
             }
+            const httpInviterAvatar = this.state.inviterProfile ?
+                MatrixClientPeg.get().mxcUrlToHttp(
+                    this.state.inviterProfile.avatarUrl, 36, 36,
+                ) : null;
+
+            let inviterName = group.inviter.userId;
+            if (this.state.inviterProfile) {
+                inviterName = this.state.inviterProfile.displayName || group.inviter.userId;
+            }
             return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_invited">
                 <div className="mx_GroupView_membershipSubSection">
                     <div className="mx_GroupView_membershipSection_description">
-                        { _t("%(inviter)s has invited you to join this community", {inviter: group.inviter.userId}) }
+                        <BaseAvatar url={httpInviterAvatar}
+                            name={inviterName}
+                            width={36}
+                            height={36}
+                        />
+                        { _t("%(inviter)s has invited you to join this community", {
+                            inviter: inviterName,
+                        }) }
                     </div>
                     <div className="mx_GroupView_membership_buttonContainer">
                         <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
