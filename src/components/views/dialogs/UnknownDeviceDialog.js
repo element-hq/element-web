@@ -20,6 +20,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import Resend from '../../../Resend';
 import { _t } from '../../../languageHandler';
+import SettingsStore from "../../../settings/SettingsStore";
 
 function DeviceListEntry(props) {
     const {userId, device} = props;
@@ -147,15 +148,8 @@ export default React.createClass({
             return <Spinner />;
         }
 
-        // The global value is treated as a default for when rooms don't specify a value.
-        const client = MatrixClientPeg.get();
-        let blacklistUnverified = client.getGlobalBlacklistUnverifiedDevices();
-        if (this.props.room.getBlacklistUnverifiedDevices() !== null) {
-            blacklistUnverified = this.props.room.getBlacklistUnverifiedDevices();
-        }
-
         let warning;
-        if (blacklistUnverified) {
+        if (SettingsStore.getValue("blacklistUnverifiedDevices", this.props.room.roomId)) {
             warning = (
                 <h4>
                     { _t("You are currently blacklisting unverified devices; to send " +
