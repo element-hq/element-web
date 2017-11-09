@@ -104,10 +104,11 @@ export default React.createClass({
             name = this.props.member.name;
             userId = this.props.member.userId;
         } else {
-            // we don't get this info from the API yet
-            avatar = <BaseAvatar name={this.props.groupMember.userId} width={48} height={48} />;
-            name = this.props.groupMember.userId;
+            const httpAvatarUrl = this.props.groupMember.avatarUrl ?
+                this.props.matrixClient.mxcUrlToHttp(this.props.groupMember.avatarUrl, 48, 48) : null;
+            name = this.props.groupMember.displayname || this.props.groupMember.userId;
             userId = this.props.groupMember.userId;
+            avatar = <BaseAvatar name={name} url={httpAvatarUrl} width={48} height={48} />;
         }
 
         return (

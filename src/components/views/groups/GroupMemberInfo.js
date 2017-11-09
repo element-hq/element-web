@@ -83,6 +83,7 @@ module.exports = React.createClass({
     _onKick: function() {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
+            matrixClient: this.context.matrixClient,
             groupMember: this.props.groupMember,
             action: this.state.isUserInvited ? _t('Disinvite') : _t('Remove from community'),
             title: this.state.isUserInvited ? _t('Disinvite this user from community?')
