@@ -1331,13 +1331,6 @@ module.exports = React.createClass({
         cli.sendEvent(roomId, event.getType(), event.getContent()).done(() => {
             dis.dispatch({action: 'message_sent'});
         }, (err) => {
-            if (err.name === 'UnknownDeviceError') {
-                dis.dispatch({
-                    action: 'unknown_device_error',
-                    err: err,
-                    room: cli.getRoom(roomId),
-                });
-            }
             dis.dispatch({action: 'message_send_failed'});
         });
     },

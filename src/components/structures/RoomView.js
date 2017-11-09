@@ -932,11 +932,7 @@ module.exports = React.createClass({
             file, this.state.room.roomId, MatrixClientPeg.get(),
         ).done(undefined, (error) => {
             if (error.name === "UnknownDeviceError") {
-                dis.dispatch({
-                    action: 'unknown_device_error',
-                    err: error,
-                    room: this.state.room,
-                });
+                // Let the staus bar handle this
                 return;
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");

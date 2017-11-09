@@ -74,13 +74,6 @@ function onSendMessageFailed(err, room) {
     // XXX: temporary logging to try to diagnose
     // https://github.com/vector-im/riot-web/issues/3148
     console.log('MessageComposer got send failure: ' + err.name + '('+err+')');
-    if (err.name === "UnknownDeviceError") {
-        dis.dispatch({
-            action: 'unknown_device_error',
-            err: err,
-            room: room,
-        });
-    }
     dis.dispatch({
         action: 'message_send_failed',
     });
