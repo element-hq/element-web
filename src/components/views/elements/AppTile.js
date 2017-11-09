@@ -176,6 +176,10 @@ export default React.createClass({
         if (nextProps.url !== this.props.url) {
             this._getNewUrlState(nextProps);
             this.setScalarToken();
+        } else if (nextProps.show && !this.props.show) {
+            this.setState({
+                loading: true,
+            });
         }
     },
 
