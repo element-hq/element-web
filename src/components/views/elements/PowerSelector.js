@@ -18,7 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import * as Roles from '../../../Roles';
-import { _t } from '../../../languageHandler';
+import { _t, _tJsx } from '../../../languageHandler';
 
 let LEVEL_ROLE_MAP = {};
 const reverseRoles = {};
@@ -85,13 +85,11 @@ module.exports = React.createClass({
     render: function() {
         let customPicker;
         if (this.state.custom) {
-            let input;
             if (this.props.disabled) {
-                input = <span>{ this.props.value }</span>;
+                customPicker = <span>{ _tJsx('Custom of <span/>', [/<span\/>/], [(sub) => <span>{ this.props.value }</span>]) }</span>;
             } else {
-                input = <input ref="custom" type="text" size="3" defaultValue={this.props.value} onBlur={this.onCustomBlur} onKeyDown={this.onCustomKeyDown} />;
+                customPicker = <span><input ref="custom" type="text" size="3" defaultValue={this.props.value} onBlur={this.onCustomBlur} onKeyDown={this.onCustomKeyDown} /></span>;
             }
-            customPicker = <span> of { input }</span>;
         }
 
         let selectValue;
@@ -102,7 +100,9 @@ module.exports = React.createClass({
         }
         let select;
         if (this.props.disabled) {
-            select = <span>{ selectValue }</span>;
+            if (!this.state.custom) {
+                select = <span>{ selectValue }</span>;
+            }
         } else {
             // Each level must have a definition in LEVEL_ROLE_MAP
             const levels = [0, 50, 100];
