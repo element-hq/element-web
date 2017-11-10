@@ -63,7 +63,7 @@ export default React.createClass({
      * @param  {Object} newProps The new properties of the component
      * @return {Object} Updated component state to be set with setState
      */
-    _getNewUrlState(newProps) {
+    _getNewState(newProps) {
         const widgetPermissionId = [newProps.room.roomId, encodeURIComponent(newProps.url)].join('_');
         const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
         return {
@@ -79,7 +79,7 @@ export default React.createClass({
     },
 
     getInitialState() {
-        return this._getNewUrlState(this.props);
+        return this._getNewState(this.props);
     },
 
     /**
@@ -176,7 +176,7 @@ export default React.createClass({
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.url !== this.props.url) {
-            this._getNewUrlState(nextProps);
+            this._getNewState(nextProps);
             this.setScalarToken();
         } else if (nextProps.show && !this.props.show) {
             this.setState({
