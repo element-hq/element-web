@@ -1,3 +1,10 @@
+Changes in [0.11.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.11.0-rc.2) (2017-11-10)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.11.0-rc.1...v0.11.0-rc.2)
+
+ * Make groups a fully-fleged baked-in feature
+   [\#1603](https://github.com/matrix-org/matrix-react-sdk/pull/1603)
+
 Changes in [0.11.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.11.0-rc.1) (2017-11-10)
 ===============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.7...v0.11.0-rc.1)
