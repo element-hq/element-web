@@ -74,6 +74,17 @@ const VIEWS = {
     LOGGED_IN: 6,
 };
 
+// Actions that are redirected through the onboarding process prior to being
+// re-dispatched. NOTE: some actions are non-trivial and would require
+// re-factoring to be included in this list in future.
+const ONBOARDING_FLOW_STARTERS = [
+    'view_user_settings',
+    'view_create_chat',
+    'view_create_room',
+    'view_my_groups',
+    'view_group',
+];
+
 module.exports = React.createClass({
     // we export this so that the integration tests can use it :-S
     statics: {
@@ -377,6 +388,22 @@ module.exports = React.createClass({
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
+        // Start the onboarding process for certain actions
+        if (MatrixClientPeg.get() && MatrixClientPeg.get().isGuest() &&
+            ONBOARDING_FLOW_STARTERS.includes(payload.action)
+        ) {
+            // This will cause `payload` to be dispatched later, once a
+            // sync has reached the "prepared" state. Setting a matrix ID
+            // will cause a full login and sync and finally the deferred
+            // action will be dispatched.
+            dis.dispatch({
+                action: 'do_after_sync_prepared',
+                deferred_action: payload,
+            });
+            dis.dispatch({action: 'view_set_mxid'});
+            return;
+        }
+
         switch (payload.action) {
             case 'logout':
                 Lifecycle.logout();
@@ -466,16 +493,6 @@ module.exports = React.createClass({
                 this._viewIndexedRoom(payload.roomIndex);
                 break;
             case 'view_user_settings':
-                if (MatrixClientPeg.get().isGuest()) {
-                    dis.dispatch({
-                        action: 'do_after_sync_prepared',
-                        deferred_action: {
-                            action: 'view_user_settings',
-                        },
-                    });
-                    dis.dispatch({action: 'view_set_mxid'});
-                    break;
-                }
                 this._setPage(PageTypes.UserSettings);
                 this.notifyNewScreen('settings');
                 break;
@@ -512,7 +529,7 @@ module.exports = React.createClass({
                 this._chatCreateOrReuse(payload.user_id, payload.go_home_on_cancel);
                 break;
             case 'view_create_chat':
-                this._createChat();
+                showStartChatInviteDialog();
                 break;
             case 'view_invite':
                 showRoomInviteDialog(payload.roomId);
@@ -753,31 +770,7 @@ module.exports = React.createClass({
         }).close;
     },
 
-    _createChat: function() {
-        if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({
-                action: 'do_after_sync_prepared',
-                deferred_action: {
-                    action: 'view_create_chat',
-                },
-            });
-            dis.dispatch({action: 'view_set_mxid'});
-            return;
-        }
-        showStartChatInviteDialog();
-    },
-
     _createRoom: function() {
-        if (MatrixClientPeg.get().isGuest()) {
-            dis.dispatch({
-                action: 'do_after_sync_prepared',
-                deferred_action: {
-                    action: 'view_create_room',
-                },
-            });
-            dis.dispatch({action: 'view_set_mxid'});
-            return;
-        }
         const CreateRoomDialog = sdk.getComponent('dialogs.CreateRoomDialog');
         Modal.createTrackedDialog('Create Room', '', CreateRoomDialog, {
             onFinished: (shouldCreate, name, noFederate) => {

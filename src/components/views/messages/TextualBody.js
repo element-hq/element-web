@@ -224,7 +224,7 @@ module.exports = React.createClass({
                 if (roomNotifTextNodes.length > 0) {
                     const pushProcessor = new PushProcessor(MatrixClientPeg.get());
                     const atRoomRule = pushProcessor.getPushRuleById(".m.rule.roomnotif");
-                    if (pushProcessor.ruleMatchesEvent(atRoomRule, this.props.mxEvent)) {
+                    if (atRoomRule && pushProcessor.ruleMatchesEvent(atRoomRule, this.props.mxEvent)) {
                         // Now replace all those nodes with Pills
                         for (const roomNotifTextNode of roomNotifTextNodes) {
                             const pillContainer = document.createElement('span');

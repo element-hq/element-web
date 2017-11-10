@@ -27,10 +27,6 @@ import SdkConfig from './SdkConfig';
 
 const FEATURES = [
     {
-        id: 'feature_groups',
-        name: _td("Communities"),
-    },
-    {
         id: 'feature_pinning',
         name: _td("Message Pinning"),
     },

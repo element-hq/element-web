@@ -1,0 +1,18 @@
+{
+    "This email address is already in use": "Este enderezo de correo xa está a ser utilizado",
+    "This phone number is already in use": "Este número de teléfono xa está a ser utilizado",
+    "Failed to verify email address: make sure you clicked the link in the email": "Fallo na verificación do enderezo de correo: asegúrese de ter picado na ligazón do correo",
+    "The remote side failed to pick up": "O interlocutor non respondeu",
+    "Unable to capture screen": "Non se puido pillar a pantalla",
+    "Existing Call": "Chamada existente",
+    "You are already in a call.": "Xa está nunha chamada.",
+    "VoIP is unsupported": "VoIP non admitida",
+    "You cannot place VoIP calls in this browser.": "Non pode establecer chamadas VoIP en este navegador.",
+    "You cannot place a call with yourself.": "Non pode chamarse a vostede mesma.",
+    "Conference calls are not supported in this client": "Non pode establecer chamadas de Reunión en este cliente",
+    "Conference calls are not supported in encrypted rooms": "Nas salas cifradas non se pode establecer Chamadas de Reunión",
+    "Warning!": "Aviso!",
+    "Conference calling is in development and may not be reliable.": "As chamadas de Reunión poderían non ser totalmente estables xa que están en desenvolvemento.",
+    "Failed to set up conference call": "Fallo ao establecer a chamada de reunión",
+    "Conference call failed.": "Fallo na chamada de reunión."
+}
