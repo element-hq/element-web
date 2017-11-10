@@ -168,7 +168,7 @@ limitations under the License.
 .mx_RoomHeader_topic {
     vertical-align: bottom;
     float: left;
-    max-height: 42px;
+    max-height: 38px;
     color: $settings-grey-fg-color;
     font-weight: 300;
     font-size: 13px;
@@ -177,6 +177,7 @@ limitations under the License.
     overflow: hidden;
     text-overflow: ellipsis;
     border-bottom: 1px solid transparent;
+    column-width: 960px;
 }
 
 .mx_RoomHeader_avatar {

@@ -205,5 +205,7 @@
     "Event sent!": "Evento inviato!",
     "Event Type": "Tipo di Evento",
     "Event Content": "Contenuto dell'Evento",
-    "State Key": "Chiave dello Stato"
+    "State Key": "Chiave dello Stato",
+    "Show message in desktop notification": "Mostra i messaggi nelle notifiche desktop",
+    "Edit": "Modifica"
 }
