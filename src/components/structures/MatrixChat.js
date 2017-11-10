@@ -386,7 +386,7 @@ module.exports = React.createClass({
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
         // Start the onboarding process for certain actions
-        if (MatrixClientPeg.get().isGuest() &&
+        if (MatrixClientPeg.get() && MatrixClientPeg.get().isGuest() &&
             ONBOARDING_FLOW_STARTERS.includes(payload.action)
         ) {
             // This will cause `payload` to be dispatched later, once a
