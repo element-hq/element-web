@@ -45,7 +45,6 @@ limitations under the License.
 
 .mx_EventTile .mx_SenderProfile {
     color: $primary-fg-color;
-    opacity: 0.5;
     font-size: 14px;
     display: block; /* anti-zalgo, with overflow hidden */
     overflow-y: hidden;
@@ -55,6 +54,22 @@ limitations under the License.
     padding-top: 0px;
     margin: 0px;
     line-height: 22px;
+}
+
+.mx_EventTile .mx_SenderProfile .mx_SenderProfile_name,
+.mx_EventTile .mx_SenderProfile .mx_SenderProfile_aux {
+    opacity: 0.5;
+}
+
+.mx_EventTile .mx_SenderProfile .mx_Flair {
+    opacity: 0.7;
+    margin-left: 5px;
+}
+
+.mx_EventTile .mx_SenderProfile .mx_Flair img {
+    vertical-align: -2px;
+    margin-right: 2px;
+    border-radius: 8px;
 }
 
 .mx_EventTile .mx_MessageTimestamp {

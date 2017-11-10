@@ -1,0 +1,166 @@
+/*
+Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_DevTools_RoomStateExplorer_button, .mx_DevTools_RoomStateExplorer_query {
+    margin-bottom: 10px;
+}
+
+.mx_DevTools_label_left {
+    float: left;
+}
+
+.mx_DevTools_label_right {
+    float: right;
+}
+
+.mx_DevTools_label_bottom {
+    clear: both;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.mx_DevTools_inputRow
+{
+    display: table-row;
+}
+
+.mx_DevTools_inputLabelCell
+{
+    padding-bottom: 21px;
+    display: table-cell;
+    font-weight: bold;
+    padding-right: 24px;
+}
+
+.mx_DevTools_inputCell {
+    display: table-cell;
+    padding-bottom: 21px;
+    width: 240px;
+}
+
+.mx_DevTools_inputCell input
+{
+    display: inline-block;
+    border: 0;
+    border-bottom: 1px solid $input-underline-color;
+    padding: 0;
+    width: 240px;
+    color: $input-fg-color;
+    font-family: 'Open Sans', Helvetica, Arial, Sans-Serif;
+    font-size: 16px;
+}
+
+.mx_DevTools_tgl {
+    display: none;
+
+    // add default box-sizing for this scope
+    &,
+    &:after,
+    &:before,
+    & *,
+    & *:after,
+    & *:before,
+    & + .mx_DevTools_tgl-btn {
+        box-sizing: border-box;
+        &::selection {
+            background: none;
+        }
+    }
+
+    + .mx_DevTools_tgl-btn {
+        outline: 0;
+        display: block;
+        width: 7em;
+        height: 2em;
+        position: relative;
+        cursor: pointer;
+        user-select: none;
+        &:after,
+        &:before {
+            position: relative;
+            display: block;
+            content: "";
+            width: 50%;
+            height: 100%;
+        }
+
+        &:after {
+            left: 0;
+        }
+
+        &:before {
+            display: none;
+        }
+    }
+
+    &:checked + .mx_DevTools_tgl-btn:after {
+        left: 50%;
+    }
+}
+
+.mx_DevTools_tgl-flip {
+    + .mx_DevTools_tgl-btn {
+        padding: 2px;
+        transition: all .2s ease;
+        font-family: sans-serif;
+        perspective: 100px;
+        &:after,
+        &:before {
+            display: inline-block;
+            transition: all .4s ease;
+            width: 100%;
+            text-align: center;
+            position: absolute;
+            line-height: 2em;
+            font-weight: bold;
+            color: #fff;
+            top: 0;
+            left: 0;
+            backface-visibility: hidden;
+            border-radius: 4px;
+        }
+
+        &:after {
+            content: attr(data-tg-on);
+            background: #02C66F;
+            transform: rotateY(-180deg);
+        }
+
+        &:before {
+            background: #FF3A19;
+            content: attr(data-tg-off);
+        }
+
+        &:active:before {
+            transform: rotateY(-20deg);
+        }
+    }
+
+    &:checked + .mx_DevTools_tgl-btn {
+        &:before {
+            transform: rotateY(180deg);
+        }
+
+        &:after {
+            transform: rotateY(0);
+            left: 0;
+            background: #7FC6A6;
+        }
+
+        &:active:after {
+            transform: rotateY(20deg);
+        }
+    }
+}

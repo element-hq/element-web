@@ -1,3 +1,162 @@
+Changes in [0.12.7](https://github.com/vector-im/riot-web/releases/tag/v0.12.7) (2017-10-16)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7-rc.3...v0.12.7)
+
+ * Released versions of react-sdk & js-sdk
+
+Changes in [0.12.7-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.12.7-rc.3) (2017-10-13)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7-rc.2...v0.12.7-rc.3)
+
+ * Hide the join group button
+   [\#5275](https://github.com/vector-im/riot-web/pull/5275)
+
+Changes in [0.12.7-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.12.7-rc.2) (2017-10-13)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7-rc.1...v0.12.7-rc.2)
+
+
+Changes in [0.12.7-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.7-rc.1) (2017-10-13)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.6...v0.12.7-rc.1)
+
+ * switch to new logos, and use import rather than VAR
+   [\#5203](https://github.com/vector-im/riot-web/pull/5203)
+ * Clarify what an integrations server is
+   [\#5266](https://github.com/vector-im/riot-web/pull/5266)
+ * Update from Weblate.
+   [\#5269](https://github.com/vector-im/riot-web/pull/5269)
+ * Remove trailing comma in JSON
+   [\#5167](https://github.com/vector-im/riot-web/pull/5167)
+ * Added default_federate property
+   [\#3849](https://github.com/vector-im/riot-web/pull/3849)
+ * CSS for greying out login form
+   [\#5197](https://github.com/vector-im/riot-web/pull/5197)
+ * Fix bug that made sub list placeholders not show for ILAG etc.
+   [\#5164](https://github.com/vector-im/riot-web/pull/5164)
+ * Factor out EditableItemList component from AliasSettings
+   [\#5161](https://github.com/vector-im/riot-web/pull/5161)
+ * Mark and remove some translations
+   [\#5110](https://github.com/vector-im/riot-web/pull/5110)
+ * CSS for "remove" button on GroupRoomTile
+   [\#5141](https://github.com/vector-im/riot-web/pull/5141)
+ * Create basic icon for the GroupRoomList tab and adding rooms to groups
+   [\#5140](https://github.com/vector-im/riot-web/pull/5140)
+ * Add button to get to MyGroups
+   [\#5131](https://github.com/vector-im/riot-web/pull/5131)
+ * Remove `key` prop pass-thru on HeaderButton
+   [\#5137](https://github.com/vector-im/riot-web/pull/5137)
+ * Implement "Add room to group" feature
+   [\#5125](https://github.com/vector-im/riot-web/pull/5125)
+ * Add Jitsi screensharing support in electron app
+   [\#4967](https://github.com/vector-im/riot-web/pull/4967)
+ * Refactor right panel header buttons
+   [\#5117](https://github.com/vector-im/riot-web/pull/5117)
+ * CSS for publicity status & toggle button
+   [\#5104](https://github.com/vector-im/riot-web/pull/5104)
+ * CSS for "X" in top right of features users/rooms
+   [\#5103](https://github.com/vector-im/riot-web/pull/5103)
+ * Include Finnish translation
+   [\#5051](https://github.com/vector-im/riot-web/pull/5051)
+ * Redesign membership section of GroupView
+   [\#5096](https://github.com/vector-im/riot-web/pull/5096)
+ * Make --config accept globs
+   [\#5090](https://github.com/vector-im/riot-web/pull/5090)
+ * CSS for GroupView: Add a User
+   [\#5093](https://github.com/vector-im/riot-web/pull/5093)
+ * T3chguy/devtools 1
+   [\#5074](https://github.com/vector-im/riot-web/pull/5074)
+ * Alter opacity for flair
+   [\#5085](https://github.com/vector-im/riot-web/pull/5085)
+ * Fix ugly integ button
+   [\#5082](https://github.com/vector-im/riot-web/pull/5082)
+ * Group Membership UI
+   [\#4830](https://github.com/vector-im/riot-web/pull/4830)
+
+Changes in [0.12.6](https://github.com/vector-im/riot-web/releases/tag/v0.12.6) (2017-09-21)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.5...v0.12.6)
+
+ * Use matrix-js-sdk v0.8.4 to fix build
+
+Changes in [0.12.5](https://github.com/vector-im/riot-web/releases/tag/v0.12.5) (2017-09-21)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.4...v0.12.5)
+
+ * Use react-sdk v0.10.5 to fix build
+
+Changes in [0.12.4](https://github.com/vector-im/riot-web/releases/tag/v0.12.4) (2017-09-20)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.4-rc.1...v0.12.4)
+
+ * No changes
+
+Changes in [0.12.4-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.4-rc.1) (2017-09-19)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3...v0.12.4-rc.1)
+
+ * Fix test for new behaviour of 'joining' flag
+   [\#5053](https://github.com/vector-im/riot-web/pull/5053)
+ * fix really dumb blunder/typo preventing system from going to sleep.
+   [\#5080](https://github.com/vector-im/riot-web/pull/5080)
+ * T3chguy/devtools
+   [\#4735](https://github.com/vector-im/riot-web/pull/4735)
+ * CSS for unignore button in UserSettings
+   [\#5042](https://github.com/vector-im/riot-web/pull/5042)
+ * Fix alias on home page for identity room
+   [\#5044](https://github.com/vector-im/riot-web/pull/5044)
+ * generic contextual menu for tooltip/responses
+   [\#4989](https://github.com/vector-im/riot-web/pull/4989)
+ * Update from Weblate.
+   [\#5018](https://github.com/vector-im/riot-web/pull/5018)
+ * Avoid re-rendering RoomList on room switch
+   [\#5015](https://github.com/vector-im/riot-web/pull/5015)
+ * Fix menu on change keyboard language issue #4345
+   [\#4623](https://github.com/vector-im/riot-web/pull/4623)
+ * Make isInvite default to false
+   [\#4999](https://github.com/vector-im/riot-web/pull/4999)
+ * Revert "Implement sticky date separators"
+   [\#4991](https://github.com/vector-im/riot-web/pull/4991)
+ * Implement sticky date separators
+   [\#4939](https://github.com/vector-im/riot-web/pull/4939)
+
+Changes in [0.12.3](https://github.com/vector-im/riot-web/releases/tag/v0.12.3) (2017-09-06)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3-rc.3...v0.12.3)
+
+ * No changes
+
+Changes in [0.12.3-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.12.3-rc.3) (2017-09-05)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3-rc.2...v0.12.3-rc.3)
+
+ * Fix plurals in translations
+   [\#4971](https://github.com/vector-im/riot-web/pull/4971)
+ * Update from Weblate.
+   [\#4968](https://github.com/vector-im/riot-web/pull/4968)
+
+Changes in [0.12.3-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.12.3-rc.2) (2017-09-05)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3-rc.1...v0.12.3-rc.2)
+
+ * New react-sdk version to pull in new translations and fix some translation bugs.
+
+
+Changes in [0.12.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.3-rc.1) (2017-09-01)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.2...v0.12.3-rc.1)
+
+ * Fix overflowing login/register buttons on some languages issue #4804
+   [\#4858](https://github.com/vector-im/riot-web/pull/4858)
+ * Update vector-im to riot-im on Login
+   [\#4943](https://github.com/vector-im/riot-web/pull/4943)
+ * lets let people know that the bug report actually sent properly :)
+   [\#4910](https://github.com/vector-im/riot-web/pull/4910)
+ * another s/vector/riot/ in README
+   [\#4934](https://github.com/vector-im/riot-web/pull/4934)
+ * fix two room list regressions
+   [\#4907](https://github.com/vector-im/riot-web/pull/4907)
+
 Changes in [0.12.2](https://github.com/vector-im/riot-web/releases/tag/v0.12.2) (2017-08-24)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.1...v0.12.2)

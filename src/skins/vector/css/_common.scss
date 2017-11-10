@@ -38,8 +38,8 @@ body {
     -webkit-font-smoothing: subpixel-antialiased;
 }
 
-div.error {
-    color: red;
+div.error, div.warning {
+    color: $warning-color;
 }
 
 h2 {
@@ -85,6 +85,11 @@ textarea {
 .mx_fadable {
     opacity: 1;
     transition: opacity 0.2s ease-in-out;
+}
+
+.mx_fadable.mx_fadable_faded {
+    opacity: 0.3;
+    pointer-events: none;
 }
 
 /* XXX: critical hack to GeminiScrollbar to allow them to work in FF 42 and Chrome 48.

@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AppsDrawer {
-    margin-bottom: 3px;
-}
+// .mx_AppsDrawer {
+// }
 
 .mx_AppsContainer {
     display: flex;
@@ -51,11 +50,13 @@ limitations under the License.
 .mx_AppTile {
     max-width: 960px;
     width: 50%;
-    margin: 0 5px 2px 0;
+    margin-right: 5px;
     border: 1px solid $primary-hairline-color;
     border-radius: 2px;
-    // height: 350px;
-    // display: inline-block;
+}
+
+.mx_AppTile:last-child {
+    margin-right: 1px;
 }
 
 .mx_AppTile_non_native {
@@ -73,12 +74,16 @@ limitations under the License.
     // display: inline-block;
 }
 
+.mx_AppTile, .mx_AppTileFullWidth {
+    margin-top: 3px;
+}
+
 .mx_AppTileMenuBar {
     // height: 15px;
     margin: 0;
     padding: 2px 10px;
     // background-color: $e2e-verified-color;
-    // border-bottom: 1px solid $primary-hairline-color;
+    border-bottom: 1px solid $primary-hairline-color;
     font-size: 10px;
 }
 
@@ -120,8 +125,8 @@ limitations under the License.
     display: block;
 }
 
-.mx_CloseAppWidget {
-}
+// .mx_CloseAppWidget {
+// }
 
 .mx_AppTileMenuBarWidgetPadding {
     margin-right: 5px;
@@ -238,4 +243,8 @@ form.mx_Custom_Widget_Form div {
     justify-content: center;
     align-items: center;
     font-weight: bold;
+}
+
+.mx_AppLoading iframe {
+  display: none;
 }

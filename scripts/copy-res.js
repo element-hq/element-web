@@ -17,6 +17,7 @@ const INCLUDE_LANGS = [
     {'value': 'eo', 'label': 'Esperanto'},
     {'value': 'es', 'label': 'Español'},
     {'value': 'eu', 'label': 'Euskal'},
+    {'value': 'fi', 'label': 'Suomi'},
     {'value': 'fr', 'label': 'Français'},
     {'value': 'hu', 'label': 'Magyar'},
     {'value': 'ko', 'label': '한국어'},
@@ -156,15 +157,23 @@ function genLangFile(lang, dest) {
     const reactSdkFile = 'node_modules/matrix-react-sdk/src/i18n/strings/' + lang + '.json';
     const riotWebFile = 'src/i18n/strings/' + lang + '.json';
 
-    const translations = {};
+    let translations = {};
     [reactSdkFile, riotWebFile].forEach(function(f) {
         if (fs.existsSync(f)) {
-            Object.assign(
-                translations,
-                JSON.parse(fs.readFileSync(f).toString())
-            );
+            try {
+                Object.assign(
+                    translations,
+                    JSON.parse(fs.readFileSync(f).toString())
+                );
+            } catch (e) {
+                console.error("Failed: "+f, e);
+                throw e;
+            }
         }
     });
+
+    translations = weblateToCounterpart(translations)
+
     fs.writeFileSync(dest + lang + '.json', JSON.stringify(translations, null, 4));
     if (verbose) {
         console.log("Generated language file: " + lang);
@@ -191,6 +200,40 @@ function genLangList() {
     if (verbose) {
         console.log("Generated languages.json");
     }
+}
+
+/**
+ * Convert translation key from weblate format
+ * (which only supports a single level) to counterpart
+ * which requires object values for 'count' translations.
+ *
+ * eg.
+ *     "there are %(count)s badgers|one": "a badger",
+ *     "there are %(count)s badgers|other": "%(count)s badgers"
+ *   becomes
+ *     "there are %(count)s badgers": {
+ *         "one": "a badger",
+ *         "other": "%(count)s badgers"
+ *     }
+ */
+function weblateToCounterpart(inTrs) {
+    const outTrs = {};
+
+    for (const key of Object.keys(inTrs)) {
+        const keyParts = key.split('|', 2);
+        if (keyParts.length === 2) {
+            let obj = outTrs[keyParts[0]];
+            if (obj === undefined) {
+                obj = {};
+                outTrs[keyParts[0]] = obj;
+            }
+            obj[keyParts[1]] = inTrs[key];
+        } else {
+            outTrs[key] = inTrs[key];
+        }
+    }
+
+    return outTrs;
 }
 
 genLangList();

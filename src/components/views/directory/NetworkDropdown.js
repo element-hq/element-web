@@ -150,7 +150,21 @@ export default class NetworkDropdown extends React.Component {
                 if (this.props.protocols) {
                     for (const proto of Object.keys(this.props.protocols)) {
                         if (!this.props.protocols[proto].instances) continue;
-                        for (const instance of this.props.protocols[proto].instances) {
+
+                        const sortedInstances = this.props.protocols[proto].instances;
+                        sortedInstances.sort(function(x, y) {
+                            const a = x.desc
+                            const b = y.desc
+                            if (a < b) {
+                                return -1;
+                            } else if (a > b) {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
+                        });
+
+                        for (const instance of sortedInstances) {
                             if (!instance.instance_id) continue;
                             options.push(this._makeMenuOption(server, instance, false));
                         }

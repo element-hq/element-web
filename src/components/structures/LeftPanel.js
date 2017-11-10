@@ -19,6 +19,7 @@ limitations under the License.
 import React from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import classNames from 'classnames';
 import KeyCode from 'matrix-react-sdk/lib/KeyCode';
 import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
@@ -30,13 +31,14 @@ import VectorConferenceHandler from '../../VectorConferenceHandler';
 var LeftPanel = React.createClass({
     displayName: 'LeftPanel',
 
+    // NB. If you add props, don't forget to update
+    // shouldComponentUpdate!
     propTypes: {
         collapsed: React.PropTypes.bool.isRequired,
     },
 
     getInitialState: function() {
         return {
-            showCallElement: null,
             searchFilter: '',
         };
     },
@@ -45,26 +47,25 @@ var LeftPanel = React.createClass({
         this.focusedElement = null;
     },
 
-    componentDidMount: function() {
-        this.dispatcherRef = dis.register(this.onAction);
-    },
-
-    componentWillReceiveProps: function(newProps) {
-        this._recheckCallElement(newProps.selectedRoom);
-    },
-
-    componentWillUnmount: function() {
-        dis.unregister(this.dispatcherRef);
-    },
-
-    onAction: function(payload) {
-        switch (payload.action) {
-            // listen for call state changes to prod the render method, which
-            // may hide the global CallView if the call it is tracking is dead
-            case 'call_state':
-                this._recheckCallElement(this.props.selectedRoom);
-                break;
+    shouldComponentUpdate: function(nextProps, nextState) {
+        // MatrixChat will update whenever the user switches
+        // rooms, but propagating this change all the way down
+        // the react tree is quite slow, so we cut this off
+        // here. The RoomTiles listen for the room change
+        // events themselves to know when to update.
+        // We just need to update if any of these things change.
+        if (
+            this.props.collapsed !== nextProps.collapsed ||
+            this.props.disabled !== nextProps.disabled
+        ) {
+            return true;
         }
+
+        if (this.state.searchFilter !== nextState.searchFilter) {
+            return true;
+        }
+
+        return false;
     },
 
     _onFocus: function(ev) {
@@ -152,32 +153,10 @@ var LeftPanel = React.createClass({
         }
     },
 
-    _recheckCallElement: function(selectedRoomId) {
-        // if we aren't viewing a room with an ongoing call, but there is an
-        // active call, show the call element - we need to do this to make
-        // audio/video not crap out
-        var activeCall = CallHandler.getAnyActiveCall();
-        var callForRoom = CallHandler.getCallForRoom(selectedRoomId);
-        var showCall = (activeCall && activeCall.call_state === 'connected' && !callForRoom);
-        this.setState({
-            showCallElement: showCall
-        });
-    },
-
     onHideClick: function() {
         dis.dispatch({
             action: 'hide_left_panel',
         });
-    },
-
-    onCallViewClick: function() {
-        var call = CallHandler.getAnyActiveCall();
-        if (call) {
-            dis.dispatch({
-                action: 'view_room',
-                room_id: call.groupRoomId || call.roomId,
-            });
-        }
     },
 
     onSearch: function(term) {
@@ -185,41 +164,32 @@ var LeftPanel = React.createClass({
     },
 
     render: function() {
-        var RoomList = sdk.getComponent('rooms.RoomList');
-        var BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
+        const RoomList = sdk.getComponent('rooms.RoomList');
+        const BottomLeftMenu = sdk.getComponent('structures.BottomLeftMenu');
+        const CallPreview = sdk.getComponent('voip.CallPreview');
 
-        var topBox;
+        let topBox;
         if (MatrixClientPeg.get().isGuest()) {
-            var LoginBox = sdk.getComponent('structures.LoginBox');
+            const LoginBox = sdk.getComponent('structures.LoginBox');
             topBox = <LoginBox collapsed={ this.props.collapsed }/>;
-        }
-        else {
-            var SearchBox = sdk.getComponent('structures.SearchBox');
+        } else {
+            const SearchBox = sdk.getComponent('structures.SearchBox');
             topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
         }
 
-        var classes = "mx_LeftPanel mx_fadable";
-        if (this.props.collapsed) {
-            classes += " collapsed";
-        }
-
-        var callPreview;
-        if (this.state.showCallElement && !this.props.collapsed) {
-            var CallView = sdk.getComponent('voip.CallView');
-            callPreview = (
-                <CallView
-                    className="mx_LeftPanel_callView" showVoice={true} onClick={this.onCallViewClick}
-                    ConferenceHandler={VectorConferenceHandler} />
-            );
-        }
+        let classes = classNames(
+            "mx_LeftPanel", "mx_fadable",
+            {
+                "collapsed": this.props.collapsed,
+                "mx_fadable_faded": this.props.disabled,
+            }
+        );
 
         return (
-            <aside className={classes} style={{ opacity: this.props.opacity }}
-                   onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
+            <aside className={classes} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
                 { topBox }
-                { callPreview }
+                <CallPreview ConferenceHandler={VectorConferenceHandler} />
                 <RoomList
-                    selectedRoom={this.props.selectedRoom}
                     collapsed={this.props.collapsed}
                     searchFilter={this.state.searchFilter}
                     ConferenceHandler={VectorConferenceHandler} />

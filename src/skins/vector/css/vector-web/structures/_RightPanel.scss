@@ -78,6 +78,7 @@ limitations under the License.
 
 .mx_RightPanel .mx_MemberList,
 .mx_RightPanel .mx_MemberInfo,
+.mx_RightPanel .mx_GroupRoomList,
 .mx_RightPanel_blank {
     order: 2;
     flex: 1 1 0;
@@ -93,20 +94,17 @@ limitations under the License.
 }
 
 .mx_RightPanel_footer .mx_RightPanel_invite {
-    line-height: 35px;
     font-size: 14px;
 	color: $primary-fg-color;
     padding-top: 13px;
     padding-left: 5px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 .collapsed .mx_RightPanel_footer .mx_RightPanel_invite {
     display: none;
-}
-
-.mx_RightPanel_invite .mx_RightPanel_icon {
-    display: inline-block;
 }
 
 .mx_RightPanel_invite .mx_RightPanel_icon object {
@@ -114,9 +112,8 @@ limitations under the License.
 }
 
 .mx_RightPanel_invite .mx_RightPanel_message {
-    display: inline-block;
-    vertical-align: top;
-    padding-left: 10px
+    padding-left: 10px;
+    line-height: 18px;
 }
 
 .mx_MatrixChat_useCompactLayout {

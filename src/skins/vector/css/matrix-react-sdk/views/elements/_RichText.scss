@@ -3,7 +3,8 @@
 // --Matthew
 
 .mx_UserPill,
-.mx_RoomPill {
+.mx_RoomPill,
+.mx_AtRoomPill {
     border-radius: 16px;
     display: inline-block;
     height: 20px;
@@ -24,7 +25,9 @@
     padding-right: 5px;
 }
 
-.mx_EventTile_highlight .mx_EventTile_content .markdown-body a.mx_UserPill_me {
+.mx_EventTile_highlight .mx_EventTile_content .markdown-body a.mx_UserPill_me,
+.mx_EventTile_content .mx_AtRoomPill,
+.mx_MessageComposer_input .mx_AtRoomPill {
     color: $accent-fg-color;
     background-color: $mention-user-pill-bg-color;
     padding-right: 5px;
@@ -39,7 +42,8 @@
 }
 
 .mx_UserPill .mx_BaseAvatar,
-.mx_RoomPill .mx_BaseAvatar {
+.mx_RoomPill .mx_BaseAvatar,
+.mx_AtRoomPill .mx_BaseAvatar {
     position: relative;
     left: -3px;
     top: 2px;

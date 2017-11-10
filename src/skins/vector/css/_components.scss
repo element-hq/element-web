@@ -20,7 +20,10 @@
 @import "./matrix-react-sdk/views/dialogs/_ChatInviteDialog.scss";
 @import "./matrix-react-sdk/views/dialogs/_ConfirmUserActionDialog.scss";
 @import "./matrix-react-sdk/views/dialogs/_CreateGroupDialog.scss";
+@import "./matrix-react-sdk/views/dialogs/_CreateRoomDialog.scss";
 @import "./matrix-react-sdk/views/dialogs/_EncryptedEventDialog.scss";
+@import "./matrix-react-sdk/views/dialogs/_GroupAddressPicker.scss";
+@import "./matrix-react-sdk/views/dialogs/_QuestionDialog.scss";
 @import "./matrix-react-sdk/views/dialogs/_SetMxIdDialog.scss";
 @import "./matrix-react-sdk/views/dialogs/_UnknownDeviceDialog.scss";
 @import "./matrix-react-sdk/views/elements/_AccessibleButton.scss";
@@ -28,10 +31,13 @@
 @import "./matrix-react-sdk/views/elements/_AddressTile.scss";
 @import "./matrix-react-sdk/views/elements/_DirectorySearchBox.scss";
 @import "./matrix-react-sdk/views/elements/_Dropdown.scss";
+@import "./matrix-react-sdk/views/elements/_EditableItemList.scss";
 @import "./matrix-react-sdk/views/elements/_MemberEventListSummary.scss";
 @import "./matrix-react-sdk/views/elements/_ProgressBar.scss";
 @import "./matrix-react-sdk/views/elements/_RichText.scss";
 @import "./matrix-react-sdk/views/elements/_RoleButton.scss";
+@import "./matrix-react-sdk/views/elements/_ToolTipButton.scss";
+@import "./matrix-react-sdk/views/groups/_GroupRoomList.scss";
 @import "./matrix-react-sdk/views/login/_InteractiveAuthEntryComponents.scss";
 @import "./matrix-react-sdk/views/login/_ServerConfig.scss";
 @import "./matrix-react-sdk/views/messages/_MEmoteBody.scss";
@@ -50,6 +56,8 @@
 @import "./matrix-react-sdk/views/rooms/_MemberInfo.scss";
 @import "./matrix-react-sdk/views/rooms/_MemberList.scss";
 @import "./matrix-react-sdk/views/rooms/_MessageComposer.scss";
+@import "./matrix-react-sdk/views/rooms/_PinnedEventTile.scss";
+@import "./matrix-react-sdk/views/rooms/_PinnedEventsPanel.scss";
 @import "./matrix-react-sdk/views/rooms/_PresenceLabel.scss";
 @import "./matrix-react-sdk/views/rooms/_RoomHeader.scss";
 @import "./matrix-react-sdk/views/rooms/_RoomList.scss";
@@ -74,10 +82,12 @@
 @import "./vector-web/views/context_menus/_MessageContextMenu.scss";
 @import "./vector-web/views/context_menus/_RoomTileContextMenu.scss";
 @import "./vector-web/views/dialogs/_ChangelogDialog.scss";
+@import "./vector-web/views/dialogs/_DevtoolsDialog.scss";
 @import "./vector-web/views/dialogs/_SetEmailDialog.scss";
 @import "./vector-web/views/dialogs/_SetPasswordDialog.scss";
 @import "./vector-web/views/directory/_NetworkDropdown.scss";
 @import "./vector-web/views/elements/_ImageView.scss";
+@import "./vector-web/views/elements/_InlineSpinner.scss";
 @import "./vector-web/views/elements/_Spinner.scss";
 @import "./vector-web/views/globals/_MatrixToolbar.scss";
 @import "./vector-web/views/messages/_DateSeparator.scss";
