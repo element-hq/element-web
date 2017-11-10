@@ -43,18 +43,22 @@ class FlairAvatar extends React.Component {
     render() {
         const httpUrl = this.context.matrixClient.mxcUrlToHttp(
             this.props.groupProfile.avatarUrl, 16, 16, 'scale', false);
+        const tooltip = this.props.groupProfile.name ?
+            `${this.props.groupProfile.name} (${this.props.groupProfile.groupId})`:
+            this.props.groupProfile.groupId;
         return <img
             src={httpUrl}
             width="16"
             height="16"
             onClick={this.onClick}
-            title={this.props.groupProfile.groupId} />;
+            title={tooltip} />;
     }
 }
 
 FlairAvatar.propTypes = {
     groupProfile: PropTypes.shape({
         groupId: PropTypes.string.isRequired,
+        name: PropTypes.string,
         avatarUrl: PropTypes.string.isRequired,
     }),
 };
