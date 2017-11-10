@@ -89,6 +89,9 @@ limitations under the License.
 
 .mx_AppTileMenuBarWidgets {
     float: right;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 .mx_AppTileMenuBarWidget {
     // pointer-events: none;
