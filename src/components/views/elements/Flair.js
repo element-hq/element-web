@@ -58,7 +58,7 @@ class FlairAvatar extends React.Component {
 FlairAvatar.propTypes = {
     groupProfile: PropTypes.shape({
         groupId: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
+        name: PropTypes.string,
         avatarUrl: PropTypes.string.isRequired,
     }),
 };
