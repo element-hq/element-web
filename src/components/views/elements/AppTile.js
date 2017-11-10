@@ -128,6 +128,8 @@ export default React.createClass({
      * Component initialisation is only complete when this function has resolved
      */
     setScalarToken() {
+        this.setState({initialising: true});
+
         if (!this.isScalarUrl(this.props.url)) {
             console.warn('Non-scalar widget, not setting scalar token!', url);
             this.setState({
