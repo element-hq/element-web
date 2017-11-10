@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 import url from 'url';
-import qs from 'qs';
+import qs from 'querystring';
 import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import PlatformPeg from '../../../PlatformPeg';

@@ -74,7 +74,7 @@
     "matrix-js-sdk": "0.8.5",
     "optimist": "^0.6.1",
     "prop-types": "^15.5.8",
-    "qs": "^6.5.1",
+    "querystring": "^0.2.0",
     "react": "^15.4.0",
     "react-addons-css-transition-group": "15.3.2",
     "react-dom": "^15.4.0",
