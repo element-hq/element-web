@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import classnames from 'classnames';
@@ -35,6 +36,8 @@ export default React.createClass({
         member: React.PropTypes.object,
         // group member object. Supply either this or 'member'
         groupMember: GroupMemberType,
+        // needed if a group member is specified
+        matrixClient: React.PropTypes.instanceOf(MatrixClient),
         action: React.PropTypes.string.isRequired, // eg. 'Ban'
         title: React.PropTypes.string.isRequired, // eg. 'Ban this user?'
 
