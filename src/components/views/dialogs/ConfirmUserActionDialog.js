@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import classnames from 'classnames';
@@ -35,6 +36,8 @@ export default React.createClass({
         member: React.PropTypes.object,
         // group member object. Supply either this or 'member'
         groupMember: GroupMemberType,
+        // needed if a group member is specified
+        matrixClient: React.PropTypes.instanceOf(MatrixClient),
         action: React.PropTypes.string.isRequired, // eg. 'Ban'
         title: React.PropTypes.string.isRequired, // eg. 'Ban this user?'
 
@@ -104,10 +107,11 @@ export default React.createClass({
             name = this.props.member.name;
             userId = this.props.member.userId;
         } else {
-            // we don't get this info from the API yet
-            avatar = <BaseAvatar name={this.props.groupMember.userId} width={48} height={48} />;
-            name = this.props.groupMember.userId;
+            const httpAvatarUrl = this.props.groupMember.avatarUrl ?
+                this.props.matrixClient.mxcUrlToHttp(this.props.groupMember.avatarUrl, 48, 48) : null;
+            name = this.props.groupMember.displayname || this.props.groupMember.userId;
             userId = this.props.groupMember.userId;
+            avatar = <BaseAvatar name={name} url={httpAvatarUrl} width={48} height={48} />;
         }
 
         return (
