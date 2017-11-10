@@ -59,7 +59,8 @@ export default React.createClass({
     },
 
     /**
-     * Set initial component state when the App wUrl (widget URL) is being updated. Component props *must* be passed (rather than relying on this.props).
+     * Set initial component state when the App wUrl (widget URL) is being updated.
+     * Component props *must* be passed (rather than relying on this.props).
      * @param  {Object} newProps The new properties of the component
      * @return {Object} Updated component state to be set with setState
      */
@@ -71,7 +72,8 @@ export default React.createClass({
             loading: true,        // True while the iframe content is loading
             widgetUrl: newProps.url,
             widgetPermissionId: widgetPermissionId,
-            // Assume that widget has permission to load if we are the user who added it to the room, or if explicitly granted by the user
+            // Assume that widget has permission to load if we are the user who
+            // added it to the room, or if explicitly granted by the user
             hasPermissionToLoad: hasPermissionToLoad === 'true' || newProps.userId === newProps.creatorUserId,
             error: null,
             deleting: false,
@@ -218,7 +220,8 @@ export default React.createClass({
         }, "mx_IntegrationsManager");
     },
 
-    /* If user has permission to modify widgets, delete the widget, otherwise revoke access for the widget to load in the user's browser
+    /* If user has permission to modify widgets, delete the widget,
+     * otherwise revoke access for the widget to load in the user's browser
     */
     _onDeleteClick() {
         if (this._canUserModify()) {
