@@ -1,3 +1,10 @@
+Changes in [0.13.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.13.0-rc.2) (2017-11-10)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.0-rc.1...v0.13.0-rc.2)
+
+ * Make groups a fully-fleged baked-in feature
+   [\#5566](https://github.com/vector-im/riot-web/pull/5566)
+
 Changes in [0.13.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.13.0-rc.1) (2017-11-10)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7...v0.13.0-rc.1)
