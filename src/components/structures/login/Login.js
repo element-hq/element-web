@@ -24,6 +24,7 @@ import sdk from '../../../index';
 import Login from '../../../Login';
 import UserSettingsStore from '../../../UserSettingsStore';
 import PlatformPeg from '../../../PlatformPeg';
+import SdkConfig from '../../../SdkConfig';
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9\(\)\-\s]*$/;
@@ -105,12 +106,17 @@ module.exports = React.createClass({
             if (error.httpStatus == 400 && usingEmail) {
                 errorText = _t('This Home Server does not support login using email address.');
             } else if (error.httpStatus === 401 || error.httpStatus === 403) {
-                const theme = UserSettingsStore.getTheme();
-                if (theme === "status") {
+                if (SdkConfig.get().disable_custom_urls) {
                     errorText = (
                         <div>
-                            <div>Incorrect username and/or password.</div>
-                            <div className="mx_Login_smallError">Please note you are logging into the matrix.status.im server, not matrix.org.</div>
+                            <div>{ _t('Incorrect username and/or password.') }</div>
+                            <div className="mx_Login_smallError">
+                                { _t('Please note you are logging into the %(hs)s server, not matrix.org.',
+                                    {
+                                        hs: this.props.defaultHsUrl.replace(/^https?:\/\//, '')
+                                    })
+                                }
+                            </div>
                         </div>
                     );
                 } else {
@@ -345,10 +351,8 @@ module.exports = React.createClass({
         const ServerConfig = sdk.getComponent("login.ServerConfig");
         const loader = this.state.busy ? <div className="mx_Login_loader"><Loader /></div> : null;
 
-        const theme = UserSettingsStore.getTheme();
-
         let loginAsGuestJsx;
-        if (this.props.enableGuest && theme !== 'status') {
+        if (this.props.enableGuest) {
             loginAsGuestJsx =
                 <a className="mx_Login_create" onClick={this._onLoginAsGuestClick} href="#">
                     { _t('Login as guest') }
@@ -366,9 +370,7 @@ module.exports = React.createClass({
         }
         */
 
-        let serverConfig;
-        let header;
-        if (theme !== 'status') {
+        if (!SdkConfig.get().disable_custom_urls) {
             serverConfig = <ServerConfig ref="serverConfig"
                 withToggleButton={true}
                 customHsUrl={this.props.customHsUrl}
@@ -377,7 +379,14 @@ module.exports = React.createClass({
                 defaultIsUrl={this.props.defaultIsUrl}
                 onServerConfigChange={this.onServerConfigChange}
                 delayTimeMs={1000} />;
+        }
 
+        let serverConfig;
+        let header;
+
+        // FIXME: remove status.im theme tweaks
+        const theme = UserSettingsStore.getTheme();
+        if (theme !== "status") {
             header = <h2>{ _t('Sign in') }</h2>;
         }
         else {
@@ -409,7 +418,7 @@ module.exports = React.createClass({
                         </a>
                         { loginAsGuestJsx }
                         { returnToAppJsx }
-                        { theme !== 'status' ? this._renderLanguageSetting() : '' }
+                        { !SdkConfig.get().disable_login_language_selector ? this._renderLanguageSetting() : '' }
                         <LoginFooter />
                     </div>
                 </div>

@@ -928,5 +928,7 @@
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.",
     "File to import": "File to import",
     "Import": "Import",
-    "Status.im theme": "Status.im theme"
+    "Status.im theme": "Status.im theme",
+    "Please note you are logging into the %(hs)s server, not matrix.org.": "Please note you are logging into the %(hs)s server, not matrix.org.",
+    "Username on %(hs)s": "Username on %(hs)s"
 }

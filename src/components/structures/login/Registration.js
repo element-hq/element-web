@@ -27,6 +27,7 @@ import RegistrationForm from '../../views/login/RegistrationForm';
 import RtsClient from '../../../RtsClient';
 import { _t } from '../../../languageHandler';
 import UserSettingsStore from '../../../UserSettingsStore';
+import SdkConfig from '../../../SdkConfig';
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -351,7 +352,7 @@ module.exports = React.createClass({
             registerBody = <Spinner />;
         } else {
             let serverConfigSection;
-            if (theme !== 'status') {
+            if (!SdkConfig.get().disable_custom_urls) {
                 serverConfigSection = (
                     <ServerConfig ref="serverConfig"
                         withToggleButton={true}
@@ -397,6 +398,7 @@ module.exports = React.createClass({
 
         let header;
         let errorText;
+        // FIXME: remove hardcoded Status team tweaks at some point
         if (theme === 'status' && this.state.errorText) {
             header = <div className="mx_Login_error">{ this.state.errorText }</div>;
         }

@@ -23,6 +23,7 @@ import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import UserSettingsStore from '../../../UserSettingsStore';
+import SdkConfig from '../../../SdkConfig';
 
 const FIELD_EMAIL = 'field_email';
 const FIELD_PHONE_COUNTRY = 'field_phone_country';
@@ -275,6 +276,7 @@ module.exports = React.createClass({
         const self = this;
 
         const theme = UserSettingsStore.getTheme();
+        // FIXME: remove hardcoded Status team tweaks at some point
         const emailPlaceholder = theme === 'status' ? _t("Email address") : _t("Email address (optional)");
 
         const emailSection = (
@@ -311,7 +313,7 @@ module.exports = React.createClass({
 
         const CountryDropdown = sdk.getComponent('views.login.CountryDropdown');
         let phoneSection;
-        if (theme !== "status") {
+        if (!SdkConfig.get().disable_3pid_login) {
             phoneSection = (
                 <div className="mx_Login_phoneSection">
                     <CountryDropdown ref="phone_country" onOptionChange={this._onPhoneCountryChange}

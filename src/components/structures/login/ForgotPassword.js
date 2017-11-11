@@ -24,7 +24,6 @@ import Modal from "../../../Modal";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 
 import PasswordReset from "../../../PasswordReset";
-import UserSettingsStore from "../../../UserSettingsStore";
 
 module.exports = React.createClass({
     displayName: 'ForgotPassword',
@@ -184,10 +183,8 @@ module.exports = React.createClass({
                 </div>
             );
         } else {
-            let theme = UserSettingsStore.getTheme();
-
             let serverConfigSection;
-            if (theme !== 'status') {
+            if (!config.disable_custom_urls) {
                 serverConfigSection = (
                     <ServerConfig ref="serverConfig"
                         withToggleButton={true}

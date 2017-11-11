@@ -24,6 +24,7 @@ module.exports = React.createClass({
     displayName: 'LoginPage',
 
     render: function() {
+        // FIXME: this should be turned into a proper skin with a StatusLoginPage component
         if (UserSettingsStore.getTheme() === 'status') {
             return (
                 <div className="mx_StatusLogin">
