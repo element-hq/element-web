@@ -107,7 +107,7 @@ module.exports = React.createClass({
         return {
             syncState: MatrixClientPeg.get().getSyncState(),
             usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
-            unsentMessages: [],
+            unsentMessages: getUnsentMessages(this.props.room),
         };
     },
 
