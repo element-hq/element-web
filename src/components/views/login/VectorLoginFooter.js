@@ -27,6 +27,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        // FIXME: replace this with a proper Status skin
         if (UserSettingsStore.getTheme() === 'status') return <div/>;
         
         return (

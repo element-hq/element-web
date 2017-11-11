@@ -332,7 +332,7 @@ async function loadApp() {
                 config={configJson}
                 realQueryParams={params}
                 startingFragmentQueryParams={fragparts.params}
-                enableGuest={true}
+                enableGuest={!configJson.disable_guests}
                 onTokenLoginCompleted={onTokenLoginCompleted}
                 initialScreenAfterLogin={getScreenFromLocation(window.location)}
                 defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
