@@ -176,6 +176,20 @@ export default {
         });
     },
 
+    getTheme: function() {
+        let syncedSettings;
+        let theme;
+        if (MatrixClientPeg.get()) {
+            syncedSettings = this.getSyncedSettings();
+        }
+        if (!syncedSettings || !syncedSettings.theme) {
+            theme = (SdkConfig.get() ? SdkConfig.get().default_theme : undefined) || 'light';
+        } else {
+            theme = syncedSettings.theme;
+        }
+        return theme;
+    },
+
     getSyncedSettings: function() {
         const event = MatrixClientPeg.get().getAccountData('im.vector.web.settings');
         return event ? event.getContent() : {};
