@@ -21,7 +21,6 @@ import MatrixClientPeg from './MatrixClientPeg';
 /*
  * TODO: Make things use this. This is all WIP - see UserSettings.js for usage.
  */
-
 export default {
     loadProfileInfo: function() {
         const cli = MatrixClientPeg.get();

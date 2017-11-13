@@ -662,13 +662,11 @@ module.exports = React.createClass({
 
         const self = this;
 
-        let relatedGroupsSection;
-        if (SettingsStore.isFeatureEnabled('feature_groups')) {
-            relatedGroupsSection = <RelatedGroupSettings ref="related_groups"
-                roomId={this.props.room.roomId}
-                canSetRelatedGroups={roomState.mayClientSendStateEvent("m.room.related_groups", cli)}
-                relatedGroupsEvent={this.props.room.currentState.getStateEvents('m.room.related_groups', '')} />;
-        }
+        const relatedGroupsSection = <RelatedGroupSettings ref="related_groups"
+            roomId={this.props.room.roomId}
+            canSetRelatedGroups={roomState.mayClientSendStateEvent("m.room.related_groups", cli)}
+            relatedGroupsEvent={this.props.room.currentState.getStateEvents('m.room.related_groups', '')}
+        />;
 
         let userLevelsSection;
         if (Object.keys(user_levels).length) {
