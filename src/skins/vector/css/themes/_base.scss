@@ -1,3 +1,9 @@
+/* Open Sans lacks combining diacritics, so these will fall through
+   to the next font.  Helevetica's diacritics however do not combine
+   nicely with Open Sans (on OSX, at least) and result in a huge
+   horizontal mess.  Arial empirically gets it right, hence prioritising
+   Arial here. */
+$font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
 
 // typical text (dark-on-white in light skin)
 $primary-fg-color: #454545;
@@ -65,6 +71,7 @@ $menu-border-color: rgba(187, 187, 187, 0.5);
 $menu-bg-color: #f6f6f6;
 
 $avatar-initial-color: #ffffff;
+$avatar-bg-color: #ffffff;
 
 $h3-color: #3d3b39;
 
@@ -98,6 +105,9 @@ $roomtile-focused-bg-color: rgba(255, 255, 255, 0.9);
 
 $roomsublist-label-fg-color: $h3-color;
 $roomsublist-label-bg-color: #d3efe1;
+$roomsublist-chevron-color: $accent-color;
+
+$panel-divider-color: rgba(118, 207, 166, 0.2);
 
 // ********************
 
@@ -107,7 +117,8 @@ $event-sending-color: #ddd;
 $event-notsent-color: #f44;
 
 // event redaction
-$event-redacted-img: url('../../img/redacted.jpg');
+$event-redacted-fg-color: #e2e2e2;
+$event-redacted-border-color: #cccccc;
 
 // event timestamp
 $event-timestamp-color: #acacac;
@@ -127,3 +138,31 @@ $lightbox-border-color: #ffffff;
 
 // unused?
 $progressbar-color: #000;
+
+// ***** Mixins! *****
+
+@define-mixin mx_DialogButton {
+    /* align images in buttons (eg spinners) */
+    vertical-align: middle;
+    border: 0px;
+    border-radius: 36px;
+    font-family: $font-family;
+    font-size: 14px;
+    color: $accent-fg-color;
+    background-color: $accent-color;
+    width: auto;
+    padding: 7px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    cursor: pointer;
+    display: inline-block;
+}
+
+@define-mixin mx_DialogButton_hover {
+}
+
+@define-mixin mx_DialogButton_small {
+    @mixin mx_DialogButton;
+    font-size: 15px;
+    padding: 0px 1.5em 0px 1.5em;
+}
