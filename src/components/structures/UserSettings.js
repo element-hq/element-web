@@ -114,6 +114,7 @@ const CRYPTO_SETTINGS = [
 const THEMES = [
     { label: _td('Light theme'), value: 'light' },
     { label: _td('Dark theme'), value: 'dark' },
+    { label: _td('Status.im theme'), value: 'status' },
 ];
 
 const IgnoredUser = React.createClass({
@@ -135,7 +136,7 @@ const IgnoredUser = React.createClass({
     render: function() {
         return (
             <li>
-                <AccessibleButton onClick={this._onUnignoreClick} className="mx_UserSettings_button mx_UserSettings_buttonSmall">
+                <AccessibleButton onClick={this._onUnignoreClick} className="mx_textButton">
                     { _t("Unignore") }
                 </AccessibleButton>
                 { this.props.userId }

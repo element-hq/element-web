@@ -26,7 +26,7 @@ import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 const ROOM_COLORS = [
     // magic room default values courtesy of Ribot
-    ["#76cfa6", "#eaf5f0"],
+    [Tinter.getKeyRgb()[0], Tinter.getKeyRgb()[1]],
     ["#81bddb", "#eaf1f4"],
     ["#bd79cb", "#f3eaf5"],
     ["#c65d94", "#f5eaef"],
