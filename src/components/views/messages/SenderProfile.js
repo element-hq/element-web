@@ -52,9 +52,13 @@ export default function SenderProfile(props) {
 
     return (
         <div className="mx_SenderProfile" dir="auto" onClick={props.onClick}>
-            { content.props.children[0] ? <span className='mx_SenderProfile_aux'>{ content.props.children[0] }</span> : '' }
+            { content.props.children[0] ?
+                <span className='mx_SenderProfile_aux'>{ content.props.children[0] }</span> : ''
+            }
             { content.props.children[1] }
-            { content.props.children[2] ? <span className='mx_SenderProfile_aux'>{ content.props.children[2] }</span> : '' }
+            { content.props.children[2] ?
+                <span className='mx_SenderProfile_aux'>{ content.props.children[2] }</span> : ''
+            }
         </div>
     );
 }
