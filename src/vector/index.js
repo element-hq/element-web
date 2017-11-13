@@ -251,20 +251,28 @@ async function loadApp() {
 
     if (!preventRedirect) {
         if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-            window.location = "https://status.im/join-riot.html";
-            return;
-            /*if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
-                window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
+            if (UserSettingsStore.getTheme() === 'status') {
+                window.location = "https://status.im/join-riot.html";
                 return;
-            }*/
+            }
+            else {
+                if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
+                    window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
+                    return;
+                }
+            }
         }
         else if (/Android/.test(navigator.userAgent)) {
-            window.location = "https://status.im/join-riot.html";
-            return;
-            /*if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
-                window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
+            if (UserSettingsStore.getTheme() === 'status') {
+                window.location = "https://status.im/join-riot.html";
                 return;
-            }*/
+            }
+            else {
+                if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
+                    window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
+                    return;
+                }
+            }
         }
     }
 
