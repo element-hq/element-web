@@ -26,17 +26,13 @@ limitations under the License.
 }
 
 .mx_MemberDeviceInfo_textButton {
-    color: $accent-fg-color;
-    background-color: $accent-color;
-    border-radius: 17px;
-    text-align: center;
-    padding-left: 1em;
-    padding-right: 1em;
-    border: 0px;
-    font-size: 14px;
-    cursor: pointer;
+    @mixin mx_DialogButton_small;
     margin: 2px;
     flex: 1;
+}
+
+.mx_MemberDeviceInfo_textButton:hover {
+    @mixin mx_DialogButton_hover;
 }
 
 .mx_MemberDeviceInfo_deviceId {

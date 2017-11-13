@@ -129,7 +129,7 @@ limitations under the License.
     height: 0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 6px solid $accent-color;
+    border-top: 6px solid $roomsublist-chevron-color;
 }
 
 .mx_RoomSubList_chevronUp {
@@ -137,14 +137,14 @@ limitations under the License.
     height: 0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-bottom: 6px solid $accent-color;
+    border-bottom: 6px solid $roomsublist-chevron-color;
 }
 
 .mx_RoomSubList_chevronRight {
     width: 0;
     height: 0;
     border-top: 5px solid transparent;
-    border-left: 6px solid $accent-color;
+    border-left: 6px solid $roomsublist-chevron-color;
     border-bottom: 5px solid transparent;
 }
 

@@ -49,7 +49,7 @@ limitations under the License.
 .mx_LeftPanel .mx_BottomLeftMenu {
     order: 3;
 
-    border-top: 1px solid rgba(118, 207, 166, 0.2);
+    border-top: 1px solid $panel-divider-color;
     margin-left: 16px; /* gutter */
     margin-right: 16px; /* gutter */
     flex: 0 0 60px;
