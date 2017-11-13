@@ -252,7 +252,7 @@ async function loadApp() {
     if (!preventRedirect) {
         if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
             // FIXME: ugly status hardcoding
-            if (UserSettingsStore.getTheme() === 'status') {
+            if (SettingsStore.getValue("theme") === 'status') {
                 window.location = "https://status.im/join-riot.html";
                 return;
             }
@@ -265,7 +265,7 @@ async function loadApp() {
         }
         else if (/Android/.test(navigator.userAgent)) {
             // FIXME: ugly status hardcoding
-            if (UserSettingsStore.getTheme() === 'status') {
+            if (SettingsStore.getValue("theme") === 'status') {
                 window.location = "https://status.im/join-riot.html";
                 return;
             }
