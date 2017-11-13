@@ -385,7 +385,7 @@ module.exports = React.createClass({
         let header;
 
         // FIXME: remove status.im theme tweaks
-        const theme = UserSettingsStore.getTheme();
+        const theme = SettingsStore.getValue("theme");
         if (theme !== "status") {
             header = <h2>{ _t('Sign in') }</h2>;
         }
