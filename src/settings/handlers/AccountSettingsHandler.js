@@ -29,7 +29,16 @@ export default class AccountSettingHandler extends SettingsHandler {
             return !content['disable'];
         }
 
-        return this._getSettings()[settingName];
+        let preferredValue = this._getSettings()[settingName];
+
+        if (preferredValue === null || preferredValue === undefined) {
+            // Honour the old setting on read only
+            if (settingName === "hideAvatarChanges" || settingName === "hideDisplaynameChanges") {
+                preferredValue = this._getSettings()["hideAvatarDisplaynameChanges"]
+            }
+        }
+
+        return preferredValue;
     }
 
     setValue(settingName, roomId, newValue) {

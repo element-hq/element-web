@@ -47,8 +47,8 @@ export default function shouldHideEvent(ev) {
 
     if (eventDiff.isMemberEvent) {
         if (isEnabled('hideJoinLeaves') && (eventDiff.isJoin || eventDiff.isPart)) return true;
-        const isMemberAvatarDisplaynameChange = eventDiff.isAvatarChange || eventDiff.isDisplaynameChange;
-        if (isEnabled('hideAvatarDisplaynameChanges') && isMemberAvatarDisplaynameChange) return true;
+        if (isEnabled('hideAvatarChanges') && eventDiff.isAvatarChange) return true;
+        if (isEnabled('hideDisplaynameChanges') && eventDiff.isDisplaynameChange) return true;
     }
 
     return false;

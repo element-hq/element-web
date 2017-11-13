@@ -102,9 +102,14 @@ export const SETTINGS = {
         displayName: _td('Hide join/leave messages (invites/kicks/bans unaffected)'),
         default: false,
     },
-    "hideAvatarDisplaynameChanges": {
+    "hideAvatarChanges": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: _td('Hide avatar and display name changes'),
+        displayName: _td('Hide avatar changes'),
+        default: false,
+    },
+    "hideDisplaynameChanges": {
+        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
+        displayName: _td('Hide display name changes'),
         default: false,
     },
     "hideReadReceipts": {
