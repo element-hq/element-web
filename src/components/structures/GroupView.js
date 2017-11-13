@@ -435,14 +435,15 @@ export default React.createClass({
     },
 
     componentWillMount: function() {
+        this._matrixClient = MatrixClientPeg.get();
+        this._matrixClient.on("Group.myMembership", this._onGroupMyMembership);
+
         this._changeAvatarComponent = null;
         this._initGroupStore(this.props.groupId, true);
-
-        MatrixClientPeg.get().on("Group.myMembership", this._onGroupMyMembership);
     },
 
     componentWillUnmount: function() {
-        MatrixClientPeg.get().removeListener("Group.myMembership", this._onGroupMyMembership);
+        this._matrixClient.removeListener("Group.myMembership", this._onGroupMyMembership);
         this._groupStore.removeAllListeners();
     },
 
@@ -464,11 +465,11 @@ export default React.createClass({
     },
 
     _initGroupStore: function(groupId, firstInit) {
-        const group = MatrixClientPeg.get().getGroup(groupId);
+        const group = this._matrixClient.getGroup(groupId);
         if (group && group.inviter && group.inviter.userId) {
             this._fetchInviterProfile(group.inviter.userId);
         }
-        this._groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), groupId);
+        this._groupStore = GroupStoreCache.getGroupStore(this._matrixClient, groupId);
         this._groupStore.registerListener(() => {
             const summary = this._groupStore.getSummary();
             if (summary.profile) {
@@ -486,7 +487,7 @@ export default React.createClass({
                 groupRooms: this._groupStore.getGroupRooms(),
                 groupRoomsLoading: !this._groupStore.isStateReady(GroupStore.STATE_KEY.GroupRooms),
                 isUserMember: this._groupStore.getGroupMembers().some(
-                    (m) => m.userId === MatrixClientPeg.get().credentials.userId,
+                    (m) => m.userId === this._matrixClient.credentials.userId,
                 ),
                 error: null,
             });
@@ -506,7 +507,7 @@ export default React.createClass({
         this.setState({
             inviterProfileBusy: true,
         });
-        MatrixClientPeg.get().getProfileInfo(userId).then((resp) => {
+        this._matrixClient.getProfileInfo(userId).then((resp) => {
             this.setState({
                 inviterProfile: {
                     avatarUrl: resp.avatar_url,
@@ -571,7 +572,7 @@ export default React.createClass({
         if (!file) return;
 
         this.setState({uploadingAvatar: true});
-        MatrixClientPeg.get().uploadContent(file).then((url) => {
+        this._matrixClient.uploadContent(file).then((url) => {
             const newProfileForm = Object.assign(this.state.profileForm, { avatar_url: url });
             this.setState({
                 uploadingAvatar: false,
@@ -591,7 +592,7 @@ export default React.createClass({
     _onSaveClick: function() {
         this.setState({saving: true});
         const savePromise = this.state.isUserPrivileged ?
-            MatrixClientPeg.get().setGroupProfile(this.props.groupId, this.state.profileForm) :
+            this._matrixClient.setGroupProfile(this.props.groupId, this.state.profileForm) :
             Promise.resolve();
         savePromise.then((result) => {
             this.setState({
@@ -630,7 +631,7 @@ export default React.createClass({
 
     _onRejectInviteClick: function() {
         this.setState({membershipBusy: true});
-        MatrixClientPeg.get().leaveGroup(this.props.groupId).then(() => {
+        this._matrixClient.leaveGroup(this.props.groupId).then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
         }).catch((e) => {
             this.setState({membershipBusy: false});
@@ -653,7 +654,7 @@ export default React.createClass({
                 if (!confirmed) return;
 
                 this.setState({membershipBusy: true});
-                MatrixClientPeg.get().leaveGroup(this.props.groupId).then(() => {
+                this._matrixClient.leaveGroup(this.props.groupId).then(() => {
                     // don't reset membershipBusy here: wait for the membership change to come down the sync
                 }).catch((e) => {
                     this.setState({membershipBusy: false});
@@ -829,7 +830,7 @@ export default React.createClass({
         const Spinner = sdk.getComponent("elements.Spinner");
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        const group = MatrixClientPeg.get().getGroup(this.props.groupId);
+        const group = this._matrixClient.getGroup(this.props.groupId);
         if (!group) return null;
 
         if (group.myMembership === 'invite') {
@@ -839,7 +840,7 @@ export default React.createClass({
                 </div>;
             }
             const httpInviterAvatar = this.state.inviterProfile ?
-                MatrixClientPeg.get().mxcUrlToHttp(
+                this._matrixClient.mxcUrlToHttp(
                     this.state.inviterProfile.avatarUrl, 36, 36,
                 ) : null;
 
