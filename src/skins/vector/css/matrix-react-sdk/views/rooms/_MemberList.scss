@@ -49,7 +49,7 @@ limitations under the License.
 .mx_MemberList_query,
 .mx_GroupMemberList_query,
 .mx_GroupRoomList_query {
-    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    font-family: $font-family;
     border-radius: 3px;
     border: 1px solid $input-border-color;
     padding: 9px;

@@ -28,7 +28,7 @@ limitations under the License.
 {
     height: 26px;
     font-size: 14px;
-    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    font-family: $font-family;
     padding-left: 12px;
     padding-right: 12px;
     margin: 0 !important;
@@ -60,9 +60,8 @@ limitations under the License.
 }
 
 .mx_ChatInviteDialog_error {
-    position: absolute;
+    margin-top: 10px;
     color: $warning-color;
-    line-height: 36px;
 }
 
 .mx_ChatInviteDialog_cancel {

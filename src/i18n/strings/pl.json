@@ -205,5 +205,14 @@
     "Event sent!": "Wydarzenie wysłane!",
     "Event Type": "Typ wydarzenia",
     "Event Content": "Zawartość wydarzenia",
-    "State Key": "Klucz stanu"
+    "State Key": "Klucz stanu",
+    "Toolbox": "Przybornik",
+    "Edit": "Edycja",
+    "Show message in desktop notification": "Pokaż wiadomość w notyfikacji na pulpicie",
+    "Unpin Message": "Odepnij Wiadomość",
+    "Pin Message": "Przypnij Wiadomość",
+    "Register": "Rejestracja",
+    "Rooms": "Pokoje",
+    "Invite to this community": "Zaproś do tej społeczności",
+    "Add rooms to this community": "Dodaj pokoje do tej społeczności"
 }

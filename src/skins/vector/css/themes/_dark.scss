@@ -21,7 +21,7 @@ $focus-brightness: 200%;
 $warning-color: #ff0064;
 
 // groups
-$group-my-groups-placeholder-bg: #454545;
+$info-plinth-bg-color: #454545;
 
 $other-user-pill-bg-color: rgba(255, 255, 255, 0.1);
 
@@ -60,6 +60,7 @@ $menu-border-color: rgba(187, 187, 187, 0.5);
 $menu-bg-color: #373737;
 
 $avatar-initial-color: #2d2d2d;
+$avatar-bg-color: #ffffff;
 
 $h3-color: $primary-fg-color;
 
@@ -92,6 +93,9 @@ $roomtile-focused-bg-color: rgba(255, 255, 255, 0.2);
 
 $roomsublist-label-fg-color: $h3-color;
 $roomsublist-label-bg-color: #454545;
+$roomsublist-chevron-color: $accent-color;
+
+$panel-divider-color: rgba(118, 207, 166, 0.2);
 
 // ********************
 
@@ -101,7 +105,8 @@ $event-sending-color: #888;
 $event-notsent-color: #f44;
 
 // event redaction
-$event-redacted-img: url('../../img/redacted-dark.jpg');
+$event-redacted-fg-color: #606060;
+$event-redacted-border-color: #000000;
 
 // event timestamp
 $event-timestamp-color: #acacac;

@@ -78,6 +78,7 @@ import Platform from './platform';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
+import Tinter from 'matrix-react-sdk/lib/Tinter';
 
 var lastLocationHashSet = null;
 
@@ -250,15 +251,29 @@ async function loadApp() {
 
     if (!preventRedirect) {
         if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-            if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
-                window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
+            // FIXME: ugly status hardcoding
+            if (UserSettingsStore.getTheme() === 'status') {
+                window.location = "https://status.im/join-riot.html";
                 return;
+            }
+            else {
+                if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
+                    window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
+                    return;
+                }
             }
         }
         else if (/Android/.test(navigator.userAgent)) {
-            if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
-                window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
+            // FIXME: ugly status hardcoding
+            if (UserSettingsStore.getTheme() === 'status') {
+                window.location = "https://status.im/join-riot.html";
                 return;
+            }
+            else {
+                if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
+                    window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
+                    return;
+                }
             }
         }
     }
@@ -279,6 +294,29 @@ async function loadApp() {
         }
     } catch (e) {
         configError = e;
+    }
+
+    // as quickly as we possibly can, set a default theme...
+    const styleElements = Object.create(null);
+    let a;
+    const theme = configJson.default_theme || 'light';
+    for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
+        const href = a.getAttribute("href");
+        // shouldn't we be using the 'title' tag rather than the href?
+        const match = href.match(/^bundles\/.*\/theme-(.*)\.css$/);
+        if (match) {
+            if (match[1] === theme) {
+                // remove the disabled flag off the stylesheet
+                a.removeAttribute("disabled");
+
+                // in case the Tinter.tint() in MatrixChat fires before the
+                // CSS has actually loaded (which in practice happens)
+                a.onload = () => { 
+                    Tinter.setTheme(theme);
+                    Tinter.tint();
+                };
+            }
+        }
     }
 
     if (window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser')) {
@@ -304,7 +342,7 @@ async function loadApp() {
                 config={configJson}
                 realQueryParams={params}
                 startingFragmentQueryParams={fragparts.params}
-                enableGuest={true}
+                enableGuest={!configJson.disable_guests}
                 onTokenLoginCompleted={onTokenLoginCompleted}
                 initialScreenAfterLogin={getScreenFromLocation(window.location)}
                 defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}

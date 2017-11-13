@@ -42,22 +42,14 @@ limitations under the License.
 }
 
 .mx_RoomHeader_textButton {
-    height: 36px;
-    background-color: $accent-color;
-    border-radius: 36px;
+    @mixin mx_DialogButton;
     margin-right: 8px;
-    color: $accent-fg-color;
-    line-height: 34px;
-    margin-top: -2px;
-    text-align: center;
+    margin-top: -5px;
     order: 2;
-    cursor: pointer;
+}
 
-/*
-    flex: 0 0 90px;
-*/
-    padding-left: 12px;
-    padding-right: 12px;
+.mx_RoomHeader_textButton:hover {
+    @mixin mx_DialogButton_hover;
 }
 
 .mx_RoomHeader_textButton_danger {
@@ -176,7 +168,7 @@ limitations under the License.
 .mx_RoomHeader_topic {
     vertical-align: bottom;
     float: left;
-    max-height: 42px;
+    max-height: 38px;
     color: $settings-grey-fg-color;
     font-weight: 300;
     font-size: 13px;
@@ -185,6 +177,7 @@ limitations under the License.
     overflow: hidden;
     text-overflow: ellipsis;
     border-bottom: 1px solid transparent;
+    column-width: 960px;
 }
 
 .mx_RoomHeader_avatar {
@@ -237,12 +230,16 @@ limitations under the License.
     position: relative;
 }
 
-.mx_RoomHeader_unreadPinsIndicator {
+.mx_RoomHeader_pinsIndicator {
     position: absolute;
     right: 0;
     bottom: 4px;
     width: 8px;
     height: 8px;
     border-radius: 8px;
-    background-color: $warning-color;
+    background-color: $pinned-color;
+}
+
+.mx_RoomHeader_pinsIndicatorUnread {
+    background-color: $pinned-unread-color;
 }

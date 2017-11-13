@@ -170,9 +170,6 @@ module.exports = React.createClass({
         const GroupsButton = sdk.getComponent('elements.GroupsButton');
         const SettingsButton = sdk.getComponent('elements.SettingsButton');
 
-        const groupsButton =  SettingsStore.isFeatureEnabled('feature_groups') ?
-            <GroupsButton tooltip={true} /> : null;
-
         return (
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
@@ -186,12 +183,12 @@ module.exports = React.createClass({
                     <div ref={this._collectCreateRoomButton}>
                         <CreateRoomButton tooltip={true} />
                     </div>
-                    { groupsButton }
+                    <GroupsButton tooltip={true} />
                     <span className="mx_BottomLeftMenu_settings">
                         <SettingsButton tooltip={true} />
                     </span>
                 </div>
             </div>
         );
-    }
+    },
 });

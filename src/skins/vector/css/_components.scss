@@ -22,6 +22,7 @@
 @import "./matrix-react-sdk/views/dialogs/_CreateGroupDialog.scss";
 @import "./matrix-react-sdk/views/dialogs/_CreateRoomDialog.scss";
 @import "./matrix-react-sdk/views/dialogs/_EncryptedEventDialog.scss";
+@import "./matrix-react-sdk/views/dialogs/_GroupAddressPicker.scss";
 @import "./matrix-react-sdk/views/dialogs/_QuestionDialog.scss";
 @import "./matrix-react-sdk/views/dialogs/_SetMxIdDialog.scss";
 @import "./matrix-react-sdk/views/dialogs/_UnknownDeviceDialog.scss";
@@ -35,6 +36,7 @@
 @import "./matrix-react-sdk/views/elements/_ProgressBar.scss";
 @import "./matrix-react-sdk/views/elements/_RichText.scss";
 @import "./matrix-react-sdk/views/elements/_RoleButton.scss";
+@import "./matrix-react-sdk/views/elements/_ToolTipButton.scss";
 @import "./matrix-react-sdk/views/groups/_GroupRoomList.scss";
 @import "./matrix-react-sdk/views/login/_InteractiveAuthEntryComponents.scss";
 @import "./matrix-react-sdk/views/login/_ServerConfig.scss";
