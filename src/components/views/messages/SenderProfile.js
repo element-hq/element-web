@@ -19,7 +19,7 @@
 import React from 'react';
 import sdk from '../../../index';
 import Flair from '../elements/Flair.js';
-import { _tJsx } from '../../../languageHandler';
+import { _t, substitute } from '../../../languageHandler';
 
 export default function SenderProfile(props) {
     const EmojiText = sdk.getComponent('elements.EmojiText');
@@ -42,22 +42,19 @@ export default function SenderProfile(props) {
             : null,
     ];
 
-    let content = '';
-
+    let content;
     if(props.text) {
-        // Replace senderName, and wrap surrounding text in spans with the right class
-        content = _tJsx(props.text, /^(.*)\%\(senderName\)s(.*)$/m, (p1, p2) => [
-            p1 ? <span className='mx_SenderProfile_aux'>{ p1 }</span> : null,
-            nameElem,
-            p2 ? <span className='mx_SenderProfile_aux'>{ p2 }</span> : null,
-        ]);
+        content = _t(props.text, { senderName: () => nameElem });
     } else {
-        content = nameElem;
+        // There is nothing to translate here, so call substitute() instead
+        content = substitute('%(senderName)s', { senderName: () => nameElem });
     }
 
     return (
         <div className="mx_SenderProfile" dir="auto" onClick={props.onClick}>
-            { content }
+            { content.props.children[0] ? <span className='mx_SenderProfile_aux'>{ content.props.children[0] }</span> : '' }
+            { content.props.children[1] }
+            { content.props.children[2] ? <span className='mx_SenderProfile_aux'>{ content.props.children[2] }</span> : '' }
         </div>
     );
 }

@@ -15,13 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import { _t, _tJsx } from '../../languageHandler';
+import { _t } from '../../languageHandler';
 import sdk from '../../index';
 import WhoIsTyping from '../../WhoIsTyping';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import MemberAvatar from '../views/avatars/MemberAvatar';
 
-const HIDE_DEBOUNCE_MS = 10000;
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
 const STATUS_BAR_EXPANDED_LARGE = 2;
@@ -272,12 +271,16 @@ module.exports = React.createClass({
                         { this.props.unsentMessageError }
                     </div>
                     <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                    { _tJsx("<a>Resend all</a> or <a>cancel all</a> now. You can also select individual messages to resend or cancel.",
-                        [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
-                        [
-                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this.props.onResendAllClick}>{ sub }</a>,
-                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={this.props.onCancelAllClick}>{ sub }</a>,
-                        ],
+                    {
+                        _t("<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. " +
+                           "You can also select individual messages to resend or cancel.",
+                            {},
+                            {
+                                'resendText': (sub) =>
+                                    <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this.props.onResendAllClick}>{ sub }</a>,
+                                'cancelText': (sub) =>
+                                    <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={this.props.onCancelAllClick}>{ sub }</a>,
+                            },
                     ) }
                     </div>
                 </div>
@@ -322,12 +325,15 @@ module.exports = React.createClass({
         if (this.props.sentMessageAndIsAlone) {
             return (
                 <div className="mx_RoomStatusBar_isAlone">
-                    { _tJsx("There's no one else here! Would you like to <a>invite others</a> or <a>stop warning about the empty room</a>?",
-                        [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
-                        [
-                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="invite" onClick={this.props.onInviteClick}>{ sub }</a>,
-                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="nowarn" onClick={this.props.onStopWarningClick}>{ sub }</a>,
-                        ],
+                    { _t("There's no one else here! Would you like to <inviteText>invite others</inviteText> " +
+                            "or <nowarnText>stop warning about the empty room</nowarnText>?",
+                        {},
+                        {
+                            'inviteText': (sub) =>
+                                <a className="mx_RoomStatusBar_resend_link" key="invite" onClick={this.props.onInviteClick}>{ sub }</a>,
+                            'nowarnText': (sub) =>
+                                <a className="mx_RoomStatusBar_resend_link" key="nowarn" onClick={this.props.onStopWarningClick}>{ sub }</a>,
+                        },
                     ) }
                 </div>
             );

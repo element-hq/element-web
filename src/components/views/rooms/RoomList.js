@@ -18,12 +18,10 @@ limitations under the License.
 'use strict';
 const React = require("react");
 const ReactDOM = require("react-dom");
-import { _t, _tJsx } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 const GeminiScrollbar = require('react-gemini-scrollbar');
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const CallHandler = require('../../../CallHandler');
-const RoomListSorter = require("../../../RoomListSorter");
-const Unread = require('../../../Unread');
 const dis = require("../../../dispatcher");
 const sdk = require('../../../index');
 const rate_limited_func = require('../../../ratelimitedfunc');
@@ -486,28 +484,25 @@ module.exports = React.createClass({
         const RoomDirectoryButton = sdk.getComponent('elements.RoomDirectoryButton');
         const CreateRoomButton = sdk.getComponent('elements.CreateRoomButton');
 
-        const TintableSvg = sdk.getComponent('elements.TintableSvg');
         switch (section) {
             case 'im.vector.fake.direct':
                 return <div className="mx_RoomList_emptySubListTip">
-                    { _tJsx(
+                    { _t(
                         "Press <StartChatButton> to start a chat with someone",
-                        [/<StartChatButton>/],
-                        [
-                            (sub) => <StartChatButton size="16" callout={true} />,
-                        ],
+                        {},
+                        { 'StartChatButton': () => <StartChatButton size="16" callout={true} /> },
                     ) }
                 </div>;
             case 'im.vector.fake.recent':
                 return <div className="mx_RoomList_emptySubListTip">
-                    { _tJsx(
+                    { _t(
                         "You're not in any rooms yet! Press <CreateRoomButton> to make a room or"+
                         " <RoomDirectoryButton> to browse the directory",
-                        [/<CreateRoomButton>/, /<RoomDirectoryButton>/],
-                        [
-                            (sub) => <CreateRoomButton size="16" callout={true} />,
-                            (sub) => <RoomDirectoryButton size="16" callout={true} />,
-                        ],
+                        {},
+                        {
+                            'CreateRoomButton': () => <CreateRoomButton size="16" callout={true} />,
+                            'RoomDirectoryButton': () => <RoomDirectoryButton size="16" callout={true} />,
+                        },
                     ) }
                 </div>;
         }

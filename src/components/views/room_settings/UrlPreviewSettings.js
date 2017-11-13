@@ -14,13 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from 'bluebird';
 const React = require('react');
 const MatrixClientPeg = require('../../../MatrixClientPeg');
-const sdk = require("../../../index");
-const Modal = require("../../../Modal");
 const UserSettingsStore = require('../../../UserSettingsStore');
-import { _t, _tJsx } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 
 
 module.exports = React.createClass({
@@ -31,9 +28,6 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        const cli = MatrixClientPeg.get();
-        const roomState = this.props.room.currentState;
-
         const roomPreviewUrls = this.props.room.currentState.getStateEvents('org.matrix.room.preview_urls', '');
         const userPreviewUrls = this.props.room.getAccountData("org.matrix.room.preview_urls");
 
@@ -109,7 +103,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const self = this;
         const roomState = this.props.room.currentState;
         const cli = MatrixClientPeg.get();
 
@@ -133,11 +126,11 @@ module.exports = React.createClass({
         let urlPreviewText = null;
         if (UserSettingsStore.getUrlPreviewsDisabled()) {
             urlPreviewText = (
-                _tJsx("You have <a>disabled</a> URL previews by default.", /<a>(.*?)<\/a>/, (sub)=><a href="#/settings">{ sub }</a>)
+                _t("You have <a>disabled</a> URL previews by default.", {}, { 'a': (sub)=><a href="#/settings">{ sub }</a> })
             );
         } else {
             urlPreviewText = (
-                _tJsx("You have <a>enabled</a> URL previews by default.", /<a>(.*?)<\/a>/, (sub)=><a href="#/settings">{ sub }</a>)
+                _t("You have <a>enabled</a> URL previews by default.", {}, { 'a': (sub)=><a href="#/settings">{ sub }</a> })
             );
         }
 
