@@ -20,9 +20,6 @@ import React from 'react';
 import * as Roles from '../../../Roles';
 import { _t } from '../../../languageHandler';
 
-let LEVEL_ROLE_MAP = {};
-const reverseRoles = {};
-
 module.exports = React.createClass({
     displayName: 'PowerSelector',
 
@@ -43,15 +40,23 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            custom: (LEVEL_ROLE_MAP[this.props.value] === undefined),
+            levelRoleMap: {},
+            reverseRoles: {},
         };
     },
 
     componentWillMount: function() {
-    	LEVEL_ROLE_MAP = Roles.levelRoleMap();
-    	Object.keys(LEVEL_ROLE_MAP).forEach(function(key) {
-			reverseRoles[LEVEL_ROLE_MAP[key]] = key;
-		});
+        // This needs to be done now because levelRoleMap has translated strings
+        const levelRoleMap = Roles.levelRoleMap();
+        const reverseRoles = {};
+        Object.keys(levelRoleMap).forEach(function(key) {
+            reverseRoles[levelRoleMap[key]] = key;
+        });
+        this.setState({
+            levelRoleMap,
+            reverseRoles,
+            custom: levelRoleMap[this.props.value] === undefined,
+        });
     },
 
     onSelectChange: function(event) {
@@ -74,7 +79,7 @@ module.exports = React.createClass({
     getValue: function() {
         let value;
         if (this.refs.select) {
-            value = reverseRoles[this.refs.select.value];
+            value = this.state.reverseRoles[this.refs.select.value];
             if (this.refs.custom) {
                 if (value === undefined) value = parseInt( this.refs.custom.value );
             }
@@ -98,17 +103,17 @@ module.exports = React.createClass({
         if (this.state.custom) {
             selectValue = "Custom";
         } else {
-            selectValue = LEVEL_ROLE_MAP[this.props.value] || "Custom";
+            selectValue = this.state.levelRoleMap[this.props.value] || "Custom";
         }
         let select;
         if (this.props.disabled) {
             select = <span>{ selectValue }</span>;
         } else {
-            // Each level must have a definition in LEVEL_ROLE_MAP
+            // Each level must have a definition in this.state.levelRoleMap
             const levels = [0, 50, 100];
             let options = levels.map((level) => {
                 return {
-                    value: LEVEL_ROLE_MAP[level],
+                    value: this.state.levelRoleMap[level],
                     // Give a userDefault (users_default in the power event) of 0 but
                     // because level !== undefined, this should never be used.
                     text: Roles.textualPowerLevel(level, 0),
