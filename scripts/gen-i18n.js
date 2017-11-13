@@ -32,7 +32,7 @@ const walk = require('walk');
 const flowParser = require('flow-parser');
 const estreeWalker = require('estree-walker');
 
-const TRANSLATIONS_FUNCS = ['_t', '_td', '_tJsx'];
+const TRANSLATIONS_FUNCS = ['_t', '_td'];
 
 const INPUT_TRANSLATIONS_FILE = 'src/i18n/strings/en_EN.json';
 const OUTPUT_FILE = 'src/i18n/strings/en_EN.json';
@@ -126,7 +126,7 @@ function getTranslationsJs(file) {
                 if (tKey === null) return;
 
                 // check the format string against the args
-                // We only check _t: _tJsx is much more complex and _td has no args
+                // We only check _t: _td has no args
                 if (node.callee.name === '_t') {
                     try {
                         const placeholders = getFormatStrings(tKey);
@@ -139,6 +139,22 @@ function getTranslationsJs(file) {
                                 throw new Error(`No value found for placeholder '${placeholder}'`);
                             }
                         }
+
+                        // Validate tag replacements
+                        if (node.arguments.length > 2) {
+                            const tagMap = node.arguments[2];
+                            for (const prop of tagMap.properties) {
+                                if (prop.key.type === 'Literal') {
+                                    const tag = prop.key.value;
+                                    // RegExp same as in src/languageHandler.js
+                                    const regexp = new RegExp(`(<${tag}>(.*?)<\\/${tag}>|<${tag}>|<${tag}\\s*\\/>)`);
+                                    if (!tKey.match(regexp)) {
+                                        throw new Error(`No match for ${regexp} in ${tKey}`);
+                                    }
+                                }
+                            }
+                        }
+
                     } catch (e) {
                         console.log();
                         console.error(`ERROR: ${file}:${node.loc.start.line} ${tKey}`);
