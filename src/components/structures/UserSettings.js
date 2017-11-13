@@ -183,6 +183,11 @@ const THEMES = [
         label: _td('Dark theme'),
         value: 'dark',
     },
+    {
+        id: 'theme',
+        label: _td('Status.im theme'),
+        value: 'status',
+    },
 ];
 
 const IgnoredUser = React.createClass({
@@ -204,7 +209,7 @@ const IgnoredUser = React.createClass({
     render: function() {
         return (
             <li>
-                <AccessibleButton onClick={this._onUnignoreClick} className="mx_UserSettings_button mx_UserSettings_buttonSmall">
+                <AccessibleButton onClick={this._onUnignoreClick} className="mx_textButton">
                     { _t("Unignore") }
                 </AccessibleButton>
                 { this.props.userId }
@@ -283,7 +288,7 @@ module.exports = React.createClass({
 
         const syncedSettings = UserSettingsStore.getSyncedSettings();
         if (!syncedSettings.theme) {
-            syncedSettings.theme = 'light';
+            syncedSettings.theme = SdkConfig.get().default_theme || 'light';
         }
         this._syncedSettings = syncedSettings;
 

@@ -41,6 +41,23 @@ export default function shouldHideEvent(ev, syncedSettings) {
     const eventDiff = memberEventDiff(ev);
 
     if (eventDiff.isMemberEvent) {
+        // XXX: horrific hack for Status until granular settings lands, where these
+        // can then be added into room state
+        if (['!YkNaCvrOXIQKPMhUHC:status.im', // #announcements:status.im
+             '!TSECabqXwnmkYVTfdX:status.im', // #general:status.im
+             '!FhCoxZbSjazJYFlCOY:status.im', // #dev-status:status.im
+             '!hHZWxpKcmFSjXcFHZC:status.im', // #news-articles:status.im
+             '!gIfSnanKtRcKDpUcmR:status.im', // #introductions:status.im
+             '!eGsKellGrAmpROBwXT:status.im', // #book-club:status.im
+             '!AqnfKJOcxeeuMOcqRL:status.im', // #music:status.im
+            ].includes(ev.getRoomId())
+            && (/* eventDiff.isJoin ||
+                eventDiff.isPart ||
+                eventDiff.isDisplaynameChange || */
+                eventDiff.isAvatarChange)) {
+            return true;
+        }
+
         if (syncedSettings['hideJoinLeaves'] && (eventDiff.isJoin || eventDiff.isPart)) return true;
         const isMemberAvatarDisplaynameChange = eventDiff.isAvatarChange || eventDiff.isDisplaynameChange;
         if (syncedSettings['hideAvatarDisplaynameChanges'] && isMemberAvatarDisplaynameChange) return true;
