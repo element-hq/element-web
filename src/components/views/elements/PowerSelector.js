@@ -25,6 +25,11 @@ module.exports = React.createClass({
 
     propTypes: {
         value: React.PropTypes.number.isRequired,
+        // The maximum value that can be set with the power selector
+        maxValue: React.PropTypes.number.isRequired,
+
+        // Default user power level for the room
+        usersDefault: React.PropTypes.number.isRequired,
 
         // if true, the <select/> should be a 'controlled' form element and updated by React
         // to reflect the current value, rather than left freeform.
@@ -42,21 +47,48 @@ module.exports = React.createClass({
         return {
             levelRoleMap: {},
             reverseRoles: {},
+            // List of power levels to show in the drop-down
+            options: [],
+        };
+    },
+
+    getDefaultProps: function() {
+        return {
+            maxValue: Infinity,
+            usersDefault: 0,
         };
     },
 
     componentWillMount: function() {
+        this._initStateFromProps(this.props, true);
+    },
+
+    componentWillReceiveProps: function(newProps) {
+        this._initStateFromProps(newProps);
+    },
+
+    _initStateFromProps: function(newProps, initial) {
         // This needs to be done now because levelRoleMap has translated strings
-        const levelRoleMap = Roles.levelRoleMap();
+        const levelRoleMap = Roles.levelRoleMap(newProps.usersDefault);
         const reverseRoles = {};
         Object.keys(levelRoleMap).forEach(function(key) {
             reverseRoles[levelRoleMap[key]] = key;
         });
+        const options = Object.keys(levelRoleMap).filter((l) => {
+            return l === undefined || l <= newProps.maxValue;
+        });
+
         this.setState({
             levelRoleMap,
             reverseRoles,
-            custom: levelRoleMap[this.props.value] === undefined,
+            options,
         });
+
+        if (initial) {
+            this.setState({
+                custom: levelRoleMap[newProps.value] === undefined,
+            });
+        }
     },
 
     onSelectChange: function(event) {
@@ -94,7 +126,14 @@ module.exports = React.createClass({
             if (this.props.disabled) {
                 input = <span>{ this.props.value }</span>;
             } else {
-                input = <input ref="custom" type="text" size="3" defaultValue={this.props.value} onBlur={this.onCustomBlur} onKeyDown={this.onCustomKeyDown} />;
+                input = <input
+                    ref="custom"
+                    type="text"
+                    size="3"
+                    defaultValue={this.props.value}
+                    onBlur={this.onCustomBlur}
+                    onKeyDown={this.onCustomKeyDown}
+                />;
             }
             customPicker = <span> of { input }</span>;
         }
@@ -110,13 +149,10 @@ module.exports = React.createClass({
             select = <span>{ selectValue }</span>;
         } else {
             // Each level must have a definition in this.state.levelRoleMap
-            const levels = [0, 50, 100];
-            let options = levels.map((level) => {
+            let options = this.state.options.map((level) => {
                 return {
                     value: this.state.levelRoleMap[level],
-                    // Give a userDefault (users_default in the power event) of 0 but
-                    // because level !== undefined, this should never be used.
-                    text: Roles.textualPowerLevel(level, 0),
+                    text: Roles.textualPowerLevel(level, this.props.usersDefault),
                 };
             });
             options.push({ value: "Custom", text: _t("Custom level") });
