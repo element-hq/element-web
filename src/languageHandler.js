@@ -37,7 +37,7 @@ export function _td(s) {
 
 // Wrapper for counterpart's translation function so that it handles nulls and undefineds properly
 // Takes the same arguments as counterpart.translate()
-function safe_counterpart_translate(...args) {
+function safeCounterpartTranslate(...args) {
     // Horrible hack to avoid https://github.com/vector-im/riot-web/issues/4191
     // The interpolation library that counterpart uses does not support undefined/null
     // values and instead will throw an error. This is a problem since everywhere else
@@ -48,11 +48,11 @@ function safe_counterpart_translate(...args) {
     if (args[1] && typeof args[1] === 'object') {
         Object.keys(args[1]).forEach((k) => {
             if (args[1][k] === undefined) {
-                console.warn("safe_counterpart_translate called with undefined interpolation name: " + k);
+                console.warn("safeCounterpartTranslate called with undefined interpolation name: " + k);
                 args[1][k] = 'undefined';
             }
             if (args[1][k] === null) {
-                console.warn("safe_counterpart_translate called with null interpolation name: " + k);
+                console.warn("safeCounterpartTranslate called with null interpolation name: " + k);
                 args[1][k] = 'null';
             }
         });
@@ -83,7 +83,7 @@ export function _t(text, variables, tags) {
     const args = Object.assign({ interpolate: false }, variables);
 
     // The translation returns text so there's no XSS vector here (no unsafe HTML, no code execution)
-    const translated = safe_counterpart_translate(text, args);
+    const translated = safeCounterpartTranslate(text, args);
 
     return substitute(translated, variables, tags);
 }
@@ -142,7 +142,15 @@ export function replaceByRegexes(text, mapping) {
         const match = inputText.match(regexp);
         if (!match) {
             output.push(inputText); // Push back input
-            continue; // Missing matches is entirely possible, because translation might change things
+
+            // Missing matches is entirely possible because you might choose to show some variables only in the case
+            // of e.g. plurals. It's still a bit suspicious, and could be due to an error, so log it.
+            // However, not showing count is so common that it's not worth logging. And other commonly unused variables
+            // here, if there are any.
+            if (regexpString !== '%\\(count\\)s') {
+                console.log(`Could not find ${regexp} in ${inputText}`);
+            }
+            continue;
         }
         const capturedGroups = match.slice(2);
 
