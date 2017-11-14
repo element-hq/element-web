@@ -381,12 +381,12 @@ export default React.createClass({
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
-                    { this.formatAppTileName() }
+                    <b>{ this.formatAppTileName() }</b>
                     <span className="mx_AppTileMenuBarWidgets">
                         { /* Edit widget */ }
                         { showEditButton && <img
-                            src="img/edit.svg"
-                            className="mx_filterFlipColor mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
+                            src="img/edit_green.svg"
+                            className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
                             width="8" height="8"
                             alt={_t('Edit')}
                             title={_t('Edit')}
