@@ -288,7 +288,9 @@ module.exports = React.createClass({
         this.handleResize();
         window.addEventListener('resize', this.handleResize);
 
-        // check we have the right tint applied for this theme
+        // check we have the right tint applied for this theme.
+        // N.B. we don't call the whole of setTheme() here as we may be
+        // racing with the theme CSS download finishing from index.js
         Tinter.tint();
     },
 
@@ -909,15 +911,34 @@ module.exports = React.createClass({
         // disable all of them first, then enable the one we want. Chrome only
         // bothers to do an update on a true->false transition, so this ensures
         // that we get exactly one update, at the right time.
+        //
+        // ^ This comment was true when we used to use alternative stylesheets
+        // for the CSS.  Nowadays we just set them all as disabled in index.html
+        // and enable them as needed.  It might be cleaner to disable them all
+        // at the same time to prevent loading two themes simultaneously and
+        // having them interact badly... but this causes a flash of unstyled app
+        // which is even uglier.  So we don't.
 
-        Object.values(styleElements).forEach((a) => {
-            a.disabled = true;
-        });
         styleElements[theme].disabled = false;
 
-        Tinter.setTheme(theme);
-        const colors = Tinter.getCurrentColors();
-        Tinter.tint(colors[0], colors[1]);
+        let switchTheme = function() {
+            const colors = Tinter.getCurrentColors();
+            Object.values(styleElements).forEach((a) => {
+                if (a == styleElements[theme]) return;
+                a.disabled = true;
+            });
+            Tinter.setTheme(theme);
+            Tinter.tint(colors[0], colors[1]);
+        };
+
+        if (styleElements[theme].complete) {
+            switchTheme();
+        }
+        else {
+            styleElements[theme].onload = () => { 
+                switchTheme();
+            };
+        }
 
         if (theme === 'dark') {
             // abuse the tinter to change all the SVG's #fff to #2d2d2d
