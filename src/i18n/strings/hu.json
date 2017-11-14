@@ -1007,5 +1007,6 @@
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Figyelem, a %(hs)s szerverre jelentkezel be és nem a matrix.org szerverre.",
     "Username on %(hs)s": "Felhasználónév a %(hs)s szerveren",
     "Restricted": "Korlátozott",
-    "Custom of %(powerLevel)s": "Egyedi beállítás: %(powerLevel)s"
+    "Custom of %(powerLevel)s": "Egyedi beállítás: %(powerLevel)s",
+    "Presence Management": "Jelenlét menedzsment"
 }
