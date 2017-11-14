@@ -926,5 +926,9 @@
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Exportovaný súbor je chránený heslom. Súbor môžete importovať len ak zadáte zodpovedajúce heslo.",
     "File to import": "Importovať zo súboru",
     "Import": "Importovať",
-    "Show these rooms to non-members on the community page and room list?": "Zobrazovať tieto miestnosti na domovskej stránke komunity a v zozname miestností aj pre nečlenov?"
+    "Show these rooms to non-members on the community page and room list?": "Zobrazovať tieto miestnosti na domovskej stránke komunity a v zozname miestností aj pre nečlenov?",
+    "Sign in to get started": "Začnite prihlásením sa",
+    "Status.im theme": "Téma status.im",
+    "Please note you are logging into the %(hs)s server, not matrix.org.": "Všimnite si: Práve sa prihlasujete na server %(hs)s, nie na server matrix.org.",
+    "Username on %(hs)s": "Meno používateľa na servery %(hs)s"
 }
