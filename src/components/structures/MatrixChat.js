@@ -921,7 +921,7 @@ module.exports = React.createClass({
 
         styleElements[theme].disabled = false;
 
-        let switchTheme = function() {
+        const switchTheme = function() {
             const colors = Tinter.getCurrentColors();
             Object.values(styleElements).forEach((a) => {
                 if (a == styleElements[theme]) return;
@@ -933,9 +933,8 @@ module.exports = React.createClass({
 
         if (styleElements[theme].complete) {
             switchTheme();
-        }
-        else {
-            styleElements[theme].onload = () => { 
+        } else {
+            styleElements[theme].onload = () => {
                 switchTheme();
             };
         }
