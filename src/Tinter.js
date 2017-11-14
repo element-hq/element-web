@@ -101,6 +101,9 @@ class Tinter {
 
         // the currently loaded theme (if any)
         this.theme = undefined;
+
+        // whether to force a tint (e.g. after changing theme)
+        this.forceTint = false;
     }
 
     /**
@@ -153,11 +156,14 @@ class Tinter {
             tertiaryColor = rgbToHex(rgb1);
         }
 
-        if (this.colors[0] === primaryColor &&
+        if (this.forceTint == false &&
+            this.colors[0] === primaryColor &&
             this.colors[1] === secondaryColor &&
             this.colors[2] === tertiaryColor) {
             return;
         }
+
+        this.forceTint = false;
 
         this.colors[0] = primaryColor;
         this.colors[1] = secondaryColor;
@@ -204,6 +210,7 @@ class Tinter {
         }
 
         this.calcCssFixups();
+        this.forceTint = true;
     }
 
     calcCssFixups() {
