@@ -36,7 +36,7 @@ export function _td(s) {
 }
 
 // Wrapper for counterpart's translation function so that it handles nulls and undefineds properly
-//Takes the same arguments as counterpart.translate()
+// Takes the same arguments as counterpart.translate()
 function safe_counterpart_translate(...args) {
     // Horrible hack to avoid https://github.com/vector-im/riot-web/issues/4191
     // The interpolation library that counterpart uses does not support undefined/null
@@ -66,14 +66,20 @@ function safe_counterpart_translate(...args) {
  * @param {object} variables Variable substitutions, e.g { foo: 'bar' }
  * @param {object} tags Tag substitutions e.g. { 'a': (sub) => <a>{sub}</a> }
  *
- * The values to substitute with can be either simple strings, or functions that return the value to use in
- * the substitution (e.g. return a React component). In case of a tag replacement, the function receives as
- * the argument the text inside the element corresponding to the tag.
+ * In both variables and tags, the values to substitute with can be either simple strings, React components,
+ * or functions that return the value to use in the substitution (e.g. return a React component). In case of
+ * a tag replacement, the function receives as the argument the text inside the element corresponding to the tag.
+ *
+ * Use tag substitutions if you need to translate text between tags (e.g. "<a>Click here!</a>"), otherwise
+ * you will end up with literal "<a>" in your output, rather than HTML. Note that you can also use variable
+ * substitution to insert React components, but you can't use it to translate text between tags.
  *
  * @return a React <span> component if any non-strings were used in substitutions, otherwise a string
  */
 export function _t(text, variables, tags) {
-    // Don't do subsitutions in counterpart. We hanle it ourselves so we can replace with React components
+    // Don't do subsitutions in counterpart. We handle it ourselves so we can replace with React components
+    // However, still pass the variables to counterpart so that it can choose the correct plural if count is given
+    // It is enough to pass the count variable, but in the future counterpart might make use of other information too
     const args = Object.assign({ interpolate: false }, variables);
 
     // The translation returns text so there's no XSS vector here (no unsafe HTML, no code execution)
@@ -123,15 +129,18 @@ export function substitute(text, variables, tags) {
 export function replaceByRegexes(text, mapping) {
     const output = [text];
 
-    let wrap = false; // Remember if the output needs to be wrapped later
+    // If we insert any components we need to wrap the output in a span. React doesn't like just an array of components.
+    let shouldWrapInSpan = false;
+
     for (const regexpString in mapping) {
+        // TODO: Cache regexps
         const regexp = new RegExp(regexpString);
 
         // convert the last element in 'output' into 3 elements (pre-text, sub function, post-text).
         // Rinse and repeat for other patterns (using post-text).
         const inputText = output.pop();
         const match = inputText.match(regexp);
-        if(!match) {
+        if (!match) {
             output.push(inputText); // Push back input
             continue; // Missing matches is entirely possible, because translation might change things
         }
@@ -160,7 +169,7 @@ export function replaceByRegexes(text, mapping) {
         }
 
         if(typeof replaced === 'object') {
-            wrap = true;
+            shouldWrapInSpan = true;
         }
 
         const tail = inputText.substr(match.index + match[0].length);
@@ -169,10 +178,7 @@ export function replaceByRegexes(text, mapping) {
         }
     }
 
-    if(wrap) {
-        // this is a bit of a fudge to avoid the 'Each child in an array or iterator
-        // should have a unique "key" prop' error: we explicitly pass the generated
-        // nodes into React.createElement as children of a <span>.
+    if(shouldWrapInSpan) {
         return React.createElement('span', null, ...output);
     } else {
         return output.join('');

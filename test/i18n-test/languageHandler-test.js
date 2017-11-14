@@ -54,6 +54,12 @@ describe('languageHandler', function() {
             .toEqual((<span>You are now ignoring <i>foo</i></span>));
     });
 
+    it('variable substitution with plain React component', function() {
+        const text = 'You are now ignoring %(userId)s';
+        expect(languageHandler._t(text, { userId: <i>foo</i> }))
+            .toEqual((<span>You are now ignoring <i>foo</i></span>));
+    });
+
     it('tag substitution with React component', function() {
         const text = 'Press <StartChatButton> to start a chat with someone';
         expect(languageHandler._t(text, {}, { 'StartChatButton': () => <i>foo</i> }))

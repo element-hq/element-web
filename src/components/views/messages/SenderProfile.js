@@ -52,6 +52,10 @@ export default function SenderProfile(props) {
 
     return (
         <div className="mx_SenderProfile" dir="auto" onClick={props.onClick}>
+            // The text surrounding the user name must be wrapped in order for it to have the correct opacity.
+            // It is not possible to wrap the whole thing, because the user name might contain flair which should
+            // be shown at full opacity. Sadly CSS does not make it possible to "reset" opacity so we have to do it
+            // in parts like this. Sometimes CSS makes me a sad panda :-(
             { content.props.children[0] ?
                 <span className='mx_SenderProfile_aux'>{ content.props.children[0] }</span> : ''
             }
