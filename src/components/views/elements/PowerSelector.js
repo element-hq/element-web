@@ -41,27 +41,21 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             levelRoleMap: {},
-            reverseRoles: {},
         };
     },
 
     componentWillMount: function() {
         // This needs to be done now because levelRoleMap has translated strings
         const levelRoleMap = Roles.levelRoleMap();
-        const reverseRoles = {};
-        Object.keys(levelRoleMap).forEach(function(key) {
-            reverseRoles[levelRoleMap[key]] = key;
-        });
         this.setState({
             levelRoleMap,
-            reverseRoles,
             custom: levelRoleMap[this.props.value] === undefined,
         });
     },
 
     onSelectChange: function(event) {
-        this.setState({ custom: event.target.value === "Custom" });
-        if (event.target.value !== "Custom") {
+        this.setState({ custom: event.target.value === "SELECT_VALUE_CUSTOM" });
+        if (event.target.value !== "SELECT_VALUE_CUSTOM") {
             this.props.onChange(this.getValue());
         }
     },
@@ -79,7 +73,7 @@ module.exports = React.createClass({
     getValue: function() {
         let value;
         if (this.refs.select) {
-            value = this.state.reverseRoles[this.refs.select.value];
+            value = this.refs.select.value;
             if (this.refs.custom) {
                 if (value === undefined) value = parseInt( this.refs.custom.value );
             }
@@ -101,25 +95,26 @@ module.exports = React.createClass({
 
         let selectValue;
         if (this.state.custom) {
-            selectValue = "Custom";
+            selectValue = "SELECT_VALUE_CUSTOM";
         } else {
-            selectValue = this.state.levelRoleMap[this.props.value] || "Custom";
+            selectValue = this.state.levelRoleMap[selectValue] ?
+                this.props.value : "SELECT_VALUE_CUSTOM";
         }
         let select;
         if (this.props.disabled) {
-            select = <span>{ selectValue }</span>;
+            select = <span>{ this.state.levelRoleMap[selectValue] }</span>;
         } else {
             // Each level must have a definition in this.state.levelRoleMap
             const levels = [0, 50, 100];
             let options = levels.map((level) => {
                 return {
-                    value: this.state.levelRoleMap[level],
+                    value: level,
                     // Give a userDefault (users_default in the power event) of 0 but
                     // because level !== undefined, this should never be used.
                     text: Roles.textualPowerLevel(level, 0),
                 };
             });
-            options.push({ value: "Custom", text: _t("Custom level") });
+            options.push({ value: "SELECT_VALUE_CUSTOM", text: _t("Custom level") });
             options = options.map((op) => {
                 return <option value={op.value} key={op.value}>{ op.text }</option>;
             });
