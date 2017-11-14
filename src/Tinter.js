@@ -279,7 +279,15 @@ class Tinter {
                                " fixups)");
         for (let i = 0; i < this.cssFixups[this.theme].length; i++) {
             const cssFixup = this.cssFixups[this.theme][i];
-            cssFixup.style[cssFixup.attr] = this.colors[cssFixup.index];
+            try {
+                cssFixup.style[cssFixup.attr] = this.colors[cssFixup.index];
+            }
+            catch (e) {
+                // Firefox Quantum explodes if you manually edit the CSS in the
+                // inspector and then try to do a tint, as apparently all the
+                // fixups are then stale.
+                console.error("Failed to apply cssFixup in Tinter! ", e.name);
+            }
         }
         if (DEBUG) console.log("applyCssFixups end");
     }
