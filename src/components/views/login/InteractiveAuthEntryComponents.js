@@ -374,7 +374,7 @@ export const MsisdnAuthEntry = React.createClass({
             return (
                 <div>
                     <p>{ _t("A text message has been sent to %(msisdn)s",
-                        { msisdn: () => <i>this._msisdn</i> },
+                        { msisdn: <i>this._msisdn</i> },
                     ) }
                     </p>
                     <p>{ _t("Please enter the code it contains:") }</p>

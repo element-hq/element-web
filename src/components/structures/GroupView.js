@@ -936,7 +936,7 @@ export default React.createClass({
                     'Your community hasn\'t got a Long Description, a HTML page to show to community members.<br />' +
                     'Click here to open settings and give it one!',
                     {},
-                    { 'br': () => <br /> },
+                    { 'br': <br /> },
                 ) }
             </div>;
         }

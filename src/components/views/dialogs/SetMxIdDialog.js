@@ -272,7 +272,7 @@ export default React.createClass({
                             'homeserver, or you can pick a <a>different server</a>.',
                             {},
                             {
-                                'span': () => <span>{ this.props.homeserverUrl }</span>,
+                                'span': <span>{ this.props.homeserverUrl }</span>,
                                 'a': (sub) => <a href="#" onClick={this.props.onDifferentServerClicked}>{ sub }</a>,
                             },
                         ) }

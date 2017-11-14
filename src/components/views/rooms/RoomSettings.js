@@ -938,7 +938,7 @@ module.exports = React.createClass({
                     { Object.keys(events_levels).map(function(event_type, i) {
                         let label = plEventsToLabels[event_type];
                         if (label) label = _t(label);
-                        else label = _t("To send events of type <eventType/>, you must be a", {}, { 'eventType': () => <code>{ event_type }</code> });
+                        else label = _t("To send events of type <eventType/>, you must be a", {}, { 'eventType': <code>{ event_type }</code> });
                         return (
                             <div className="mx_RoomSettings_powerLevel" key={event_type}>
                                 <span className="mx_RoomSettings_powerLevelKey">{ label } </span>

@@ -490,7 +490,7 @@ module.exports = React.createClass({
                     { _t(
                         "Press <StartChatButton> to start a chat with someone",
                         {},
-                        { 'StartChatButton': () => <StartChatButton size="16" callout={true} /> },
+                        { 'StartChatButton': <StartChatButton size="16" callout={true} /> },
                     ) }
                 </div>;
             case 'im.vector.fake.recent':
@@ -500,8 +500,8 @@ module.exports = React.createClass({
                         " <RoomDirectoryButton> to browse the directory",
                         {},
                         {
-                            'CreateRoomButton': () => <CreateRoomButton size="16" callout={true} />,
-                            'RoomDirectoryButton': () => <RoomDirectoryButton size="16" callout={true} />,
+                            'CreateRoomButton': <CreateRoomButton size="16" callout={true} />,
+                            'RoomDirectoryButton': <RoomDirectoryButton size="16" callout={true} />,
                         },
                     ) }
                 </div>;
