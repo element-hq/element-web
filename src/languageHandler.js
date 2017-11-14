@@ -139,24 +139,34 @@ export function replaceByRegexes(text, mapping) {
 
         // Return the raw translation before the *match* followed by the return value of sub() followed
         // by the raw translation after the *match* (not captured group).
-        output.push(inputText.substr(0, match.index));
 
-        let toPush;
-        // If substitution is a function, call it
-        if(mapping[regexpString] instanceof Function) {
-            toPush = mapping[regexpString].apply(null, capturedGroups);
-        } else {
-            toPush = mapping[regexpString];
+        const head = inputText.substr(0, match.index);
+        if (head !== '') { // Don't push empty nodes, they are of no use
+            output.push(head);
         }
 
-        output.push(toPush);
+        let replaced;
+        // If substitution is a function, call it
+        if(mapping[regexpString] instanceof Function) {
+            replaced = mapping[regexpString].apply(null, capturedGroups);
+        } else {
+            replaced = mapping[regexpString];
+        }
 
-        // Check if we need to wrap the output into a span at the end
-        if(typeof toPush === 'object') {
+        // Here we also need to check that it actually is a string before comparing against one
+        // The head and tail are always strings
+        if (typeof replaced !== 'string' || replaced !== '') {
+            output.push(replaced);
+        }
+
+        if(typeof replaced === 'object') {
             wrap = true;
         }
 
-        output.push(inputText.substr(match.index + match[0].length));
+        const tail = inputText.substr(match.index + match[0].length);
+        if (tail !== '') {
+            output.push(tail);
+        }
     }
 
     if(wrap) {
