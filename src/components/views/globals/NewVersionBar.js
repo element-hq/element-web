@@ -42,7 +42,7 @@ export default React.createClass({
         const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
         Modal.createTrackedDialog('Display release notes', '', QuestionDialog, {
             title: _t("What's New"),
-            description: <pre className="changelog_text">{releaseNotes}</pre>,
+            description: <div className="mx_MatrixToolbar_changelog">{releaseNotes}</div>,
             button: _t("Update"),
             onFinished: (update) => {
                 if(update && PlatformPeg.get()) {

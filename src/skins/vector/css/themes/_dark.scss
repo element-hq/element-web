@@ -30,6 +30,13 @@ $preview-bar-bg-color: #333;
 // left-panel style muted accent color
 $secondary-accent-color: $primary-bg-color;
 
+// stop the tinter trying to change the secondary accent color
+// by overriding the key to something untintable
+// XXX: this is a bit of a hack.
+#mx_theme_secondaryAccentColor {
+    color: #2d2d2e ! important; // deliberately off by one
+}
+
 // used by RoomDirectory permissions
 $plinth-bg-color: #474747;
 
@@ -60,6 +67,7 @@ $menu-border-color: rgba(187, 187, 187, 0.5);
 $menu-bg-color: #373737;
 
 $avatar-initial-color: #2d2d2d;
+$avatar-bg-color: #ffffff;
 
 $h3-color: $primary-fg-color;
 
@@ -92,6 +100,9 @@ $roomtile-focused-bg-color: rgba(255, 255, 255, 0.2);
 
 $roomsublist-label-fg-color: $h3-color;
 $roomsublist-label-bg-color: #454545;
+$roomsublist-chevron-color: $accent-color;
+
+$panel-divider-color: rgba(118, 207, 166, 0.2);
 
 // ********************
 
@@ -105,7 +116,8 @@ $event-sending-color: #888;
 $event-notsent-color: #f44;
 
 // event redaction
-$event-redacted-img: url('../../img/redacted-dark.jpg');
+$event-redacted-fg-color: #606060;
+$event-redacted-border-color: #000000;
 
 // event timestamp
 $event-timestamp-color: #acacac;
