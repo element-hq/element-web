@@ -287,6 +287,9 @@ module.exports = React.createClass({
         this._windowWidth = 10000;
         this.handleResize();
         window.addEventListener('resize', this.handleResize);
+
+        // check we have the right tint applied for this theme
+        Tinter.tint();
     },
 
     componentDidMount: function() {
@@ -883,7 +886,7 @@ module.exports = React.createClass({
      */
     _onSetTheme: function(theme) {
         if (!theme) {
-            theme = 'light';
+            theme = this.props.config.default_theme || 'light';
         }
 
         // look for the stylesheet elements.
@@ -911,6 +914,10 @@ module.exports = React.createClass({
             a.disabled = true;
         });
         styleElements[theme].disabled = false;
+
+        Tinter.setTheme(theme);
+        const colors = Tinter.getCurrentColors();
+        Tinter.tint(colors[0], colors[1]);
 
         if (theme === 'dark') {
             // abuse the tinter to change all the SVG's #fff to #2d2d2d
