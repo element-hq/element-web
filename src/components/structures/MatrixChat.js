@@ -931,7 +931,17 @@ module.exports = React.createClass({
             Tinter.tint(colors[0], colors[1]);
         };
 
-        if (styleElements[theme].complete) {
+        let cssLoaded = false;
+
+        for (let i = 0; i < document.styleSheets.length; i++) {
+            const ss = document.styleSheets[i];
+            if (ss && ss.href === styleElements[theme].href) {
+                cssLoaded = true;
+                break;
+            }
+        }
+
+        if (cssLoaded) {
             switchTheme();
         } else {
             styleElements[theme].onload = () => {
