@@ -1001,5 +1001,7 @@
     "Sign in to get started": "Connectez-vous pour commencer",
     "Status.im theme": "Thème Status.im",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Veuillez noter que vous vous connecter au serveur %(hs)s, pas à matrix.org.",
-    "Username on %(hs)s": "Nom d'utilisateur sur %(hs)s"
+    "Username on %(hs)s": "Nom d'utilisateur sur %(hs)s",
+    "Restricted": "Restreint",
+    "Custom of %(powerLevel)s": "Personnalisé de %(powerLevel)s"
 }
