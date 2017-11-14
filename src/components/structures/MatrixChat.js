@@ -931,7 +931,14 @@ module.exports = React.createClass({
             Tinter.tint(colors[0], colors[1]);
         };
 
+        // turns out that Firefox preloads the CSS for link elements with
+        // the disabled attribute, but Chrome doesn't.
+
         let cssLoaded = false;
+
+        styleElements[theme].onload = () => {
+            switchTheme();
+        };
 
         for (let i = 0; i < document.styleSheets.length; i++) {
             const ss = document.styleSheets[i];
@@ -942,11 +949,8 @@ module.exports = React.createClass({
         }
 
         if (cssLoaded) {
+            styleElements[theme].onload = undefined;
             switchTheme();
-        } else {
-            styleElements[theme].onload = () => {
-                switchTheme();
-            };
         }
 
         if (theme === 'dark') {
