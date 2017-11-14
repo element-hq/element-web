@@ -59,14 +59,14 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
-        this._initStateFromProps(this.props, true);
+        this._initStateFromProps(this.props);
     },
 
     componentWillReceiveProps: function(newProps) {
         this._initStateFromProps(newProps);
     },
 
-    _initStateFromProps: function(newProps, initial) {
+    _initStateFromProps: function(newProps) {
         // This needs to be done now because levelRoleMap has translated strings
         const levelRoleMap = Roles.levelRoleMap(newProps.usersDefault);
         const options = Object.keys(levelRoleMap).filter((l) => {
@@ -76,69 +76,53 @@ module.exports = React.createClass({
         this.setState({
             levelRoleMap,
             options,
+            custom: levelRoleMap[newProps.value] === undefined,
         });
-
-        if (initial) {
-            this.setState({
-                custom: levelRoleMap[newProps.value] === undefined,
-            });
-        }
     },
 
     onSelectChange: function(event) {
         this.setState({ custom: event.target.value === "SELECT_VALUE_CUSTOM" });
         if (event.target.value !== "SELECT_VALUE_CUSTOM") {
-            this.props.onChange(this.getValue());
+            this.props.onChange(event.target.value);
         }
     },
 
     onCustomBlur: function(event) {
-        this.props.onChange(this.getValue());
+        this.props.onChange(parseInt(this.refs.custom.value));
     },
 
     onCustomKeyDown: function(event) {
         if (event.key == "Enter") {
-            this.props.onChange(this.getValue());
+            this.props.onChange(parseInt(this.refs.custom.value));
         }
-    },
-
-    getValue: function() {
-        if (this.refs.custom) {
-            return parseInt(this.refs.custom.value);
-        }
-        if (this.refs.select) {
-            return this.refs.select.value;
-        }
-        return undefined;
     },
 
     render: function() {
         let customPicker;
         if (this.state.custom) {
-            let input;
             if (this.props.disabled) {
-                input = <span>{ _t(
+                customPicker = <span>{ _t(
                     "Custom of %(powerLevel)s",
                     { powerLevel: this.props.value },
                 ) }</span>;
             } else {
-                input = <input
+                customPicker = <span> = <input
                     ref="custom"
                     type="text"
                     size="3"
                     defaultValue={this.props.value}
                     onBlur={this.onCustomBlur}
                     onKeyDown={this.onCustomKeyDown}
-                />;
+                />
+                </span>;
             }
-            customPicker = <span> of { input }</span>;
         }
 
         let selectValue;
         if (this.state.custom) {
             selectValue = "SELECT_VALUE_CUSTOM";
         } else {
-            selectValue = this.state.levelRoleMap[selectValue] ?
+            selectValue = this.state.levelRoleMap[this.props.value] ?
                 this.props.value : "SELECT_VALUE_CUSTOM";
         }
         let select;
