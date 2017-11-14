@@ -105,7 +105,7 @@
     "The signing key you provided matches the signing key you received from %(userId)s's device %(deviceId)s. Device marked as verified.": "Podpisovací kľúč, ktorý ste poskytli súhlasí s podpisovacím kľúčom, ktorý ste dostali zo zariadenia %(deviceId)s používateľa %(userId)s's. Zariadenie je považované za overené.",
     "Unrecognised command:": "Nerozpoznaný príkaz:",
     "Reason": "Dôvod",
-    "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s prijal pozvanie pre %(displayName)s.",
+    "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s prijal pozvanie do %(displayName)s.",
     "%(targetName)s accepted an invitation.": "%(targetName)s prijal pozvanie.",
     "%(senderName)s requested a VoIP conference.": "%(senderName)s požiadal o VoIP konferenciu.",
     "%(senderName)s invited %(targetName)s.": "%(senderName)s pozval %(targetName)s.",
