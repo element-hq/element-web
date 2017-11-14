@@ -385,8 +385,8 @@ export default React.createClass({
                     <span className="mx_AppTileMenuBarWidgets">
                         { /* Edit widget */ }
                         { showEditButton && <img
-                            src="img/edit.svg"
-                            className="mx_filterFlipColor mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
+                            src="img/edit_green.svg"
+                            className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
                             width="8" height="8"
                             alt={_t('Edit')}
                             title={_t('Edit')}
