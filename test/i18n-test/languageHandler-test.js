@@ -49,15 +49,14 @@ describe('languageHandler', function() {
     });
 
     it('variable substitution with React component', function() {
-        // Need an extra space at the end because the result of _t() has an extra empty node at the end
-        const text = 'You are now ignoring %(userId)s ';
-        expect(JSON.stringify(languageHandler._t(text, { userId: () => <i>foo</i> })))
-            .toBe(JSON.stringify((<span>You are now ignoring <i>foo</i> </span>)));
+        const text = 'You are now ignoring %(userId)s';
+        expect(languageHandler._t(text, { userId: () => <i>foo</i> }))
+            .toEqual((<span>You are now ignoring <i>foo</i></span>));
     });
 
     it('tag substitution with React component', function() {
         const text = 'Press <StartChatButton> to start a chat with someone';
-        expect(JSON.stringify(languageHandler._t(text, {}, { 'StartChatButton': () => <i>foo</i> })))
-            .toBe(JSON.stringify(<span>Press <i>foo</i> to start a chat with someone</span>));
+        expect(languageHandler._t(text, {}, { 'StartChatButton': () => <i>foo</i> }))
+            .toEqual(<span>Press <i>foo</i> to start a chat with someone</span>);
     });
 });
