@@ -759,7 +759,7 @@
     "Create": "Erstelle",
     "Room creation failed": "Raum-Erstellung fehlgeschlagen",
     "Featured Rooms:": "Hervorgehobene Räume:",
-    "Featured Users:": "Hervorgehobene Nutzer:",
+    "Featured Users:": "Hervorgehobene Benutzer:",
     "Automatically replace plain text Emoji": "Klartext-Emoji automatisch ersetzen",
     "Failed to upload image": "Bild-Hochladen fehlgeschlagen",
     "Hide avatars in user and room mentions": "Profilbilder in Benutzer- und Raum-Erwähnungen verbergen",
@@ -880,7 +880,7 @@
     "Filter community members": "Community-Mitglieder filtern",
     "Filter community rooms": "Community-Räume filtern",
     "Failed to remove room from community": "Entfernen des Raumes aus der Community fehlgeschlagen",
-    "Removing a room from the community will also remove it from the community page.": "Ein Entfernen eines Raumes aus der Community wird ihn auch von der Community-Seite entfernen.",
+    "Removing a room from the community will also remove it from the community page.": "Das Entfernen eines Raumes aus der Community wird ihn auch von der Community-Seite entfernen.",
     "Community IDs may only contain alphanumeric characters": "Community-IDs dürfen nur alphanumerische Zeichen enthalten",
     "Create Community": "Community erstellen",
     "Community Name": "Community-Name",
@@ -1001,5 +1001,6 @@
     "These rooms are displayed to community members on the community page. Community members can join the rooms by clicking on them.": "Diese Räume werden Community-Mitgliedern auf der Community-Seite angezeigt. Community-Mitglieder können diesen Räumen beitreten, indem sie auf diese klicken.",
     "Show these rooms to non-members on the community page and room list?": "Sollen diese Räume Nicht-Mitgliedern auf der Community-Seite und der Raum-Liste angezeigt werden?",
     "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even use 'img' tags\n</p>\n": "<h1>HTML für deine Community-Seite</h1>\n<p>\n    Nutze die ausführliche Beschreibung, um neuen Mitgliedern diese Community vorzustellen\n    oder um wichtige <a href=\"foo\">Links</a> bereitzustellen.\n</p>\n<p>\n    Du kannst sogar 'img'-Tags (HTML) verwenden\n</p>\n",
-    "Your community hasn't got a Long Description, a HTML page to show to community members.<br />Click here to open settings and give it one!": "Deine Community hat noch keine ausführliche Beschreibung, d. h. eine HTML-Seite, die Community-Mitgliedern angezeigt wird.<br />Hier klicken, um die Einstellungen zu öffnen und eine Beschreibung zu erstellen!"
+    "Your community hasn't got a Long Description, a HTML page to show to community members.<br />Click here to open settings and give it one!": "Deine Community hat noch keine ausführliche Beschreibung, d. h. eine HTML-Seite, die Community-Mitgliedern angezeigt wird.<br />Hier klicken, um die Einstellungen zu öffnen und eine Beschreibung zu erstellen!",
+    "Custom of %(powerLevel)s": "benutzerdefiniert mit Wert %(powerLevel)s"
 }
