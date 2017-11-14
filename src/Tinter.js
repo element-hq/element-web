@@ -217,7 +217,7 @@ class Tinter {
         // cache our fixups
         if (this.cssFixups[this.theme]) return;
 
-        if (DEBUG) console.trace("calcCssFixups start for " + this.theme + " (checking " +
+        if (DEBUG) console.debug("calcCssFixups start for " + this.theme + " (checking " +
                                  document.styleSheets.length + 
                                  " stylesheets)");
 
