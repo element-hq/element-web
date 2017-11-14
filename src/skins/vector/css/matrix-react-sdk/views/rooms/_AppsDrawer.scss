@@ -193,8 +193,12 @@ form.mx_Custom_Widget_Form div {
 
 .mx_AppPermissionWarning {
     text-align: center;
-    padding: 30px 0;
     background-color: $primary-bg-color;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .mx_AppPermissionWarningImage {
