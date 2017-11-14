@@ -1001,5 +1001,9 @@
     "Your community hasn't got a Long Description, a HTML page to show to community members.<br />Click here to open settings and give it one!": "A közösségednek nincs bő leírása, HTML oldala ami megjelenik a közösség tagjainak.<br />A létrehozáshoz kattints ide!",
     "Notify the whole room": "Az egész szoba értesítése",
     "Room Notification": "Szoba értesítések",
-    "Show these rooms to non-members on the community page and room list?": "Mutassuk meg ezeket a szobákat kívülállóknak a közösségi oldalon és a szobák listájában?"
+    "Show these rooms to non-members on the community page and room list?": "Mutassuk meg ezeket a szobákat kívülállóknak a közösségi oldalon és a szobák listájában?",
+    "Sign in to get started": "Az induláshoz jelentkezz be",
+    "Status.im theme": "Állapot.im téma",
+    "Please note you are logging into the %(hs)s server, not matrix.org.": "Figyelem, a %(hs)s szerverre jelentkezel be és nem a matrix.org szerverre.",
+    "Username on %(hs)s": "Felhasználónév a %(hs)s szerveren"
 }
