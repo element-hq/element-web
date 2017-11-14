@@ -30,6 +30,13 @@ $preview-bar-bg-color: #333;
 // left-panel style muted accent color
 $secondary-accent-color: $primary-bg-color;
 
+// stop the tinter trying to change the secondary accent color
+// by overriding the key to something untintable
+// XXX: this is a bit of a hack.
+#mx_theme_secondaryAccentColor {
+    color: #2d2d2e ! important; // deliberately off by one
+}
+
 // used by RoomDirectory permissions
 $plinth-bg-color: #474747;
 
