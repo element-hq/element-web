@@ -20,7 +20,7 @@ import React from 'react';
 import sdk from 'matrix-react-sdk';
 import Modal from 'matrix-react-sdk/lib/Modal';
 import dis from 'matrix-react-sdk/lib/dispatcher';
-import { _t, _tJsx } from 'matrix-react-sdk/lib/languageHandler';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 export default React.createClass({
     onUpdateClicked: function() {
@@ -49,10 +49,10 @@ export default React.createClass({
                     alt="Warning"
                 />
                 <div className="mx_MatrixToolbar_content">
-                    { _tJsx(
+                    { _t(
                         "To return to your account in future you need to <u>set a password</u>",
-                        /<u>(.*?)<\/u>/,
-                        (sub) => { return <u>{ sub }</u>; },
+                        {},
+                        { 'u': (sub) => <u>{ sub }</u> },
                     ) }
                 </div>
                 <button className="mx_MatrixToolbar_action">
