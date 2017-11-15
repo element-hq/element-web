@@ -16,7 +16,7 @@ limitations under the License.
 
 'use strict';
 
-import UserSettingsStore from '../../../UserSettingsStore';
+import SettingsStore from "../../../settings/SettingsStore";
 
 const React = require('react');
 
@@ -25,7 +25,7 @@ module.exports = React.createClass({
 
     render: function() {
         // FIXME: this should be turned into a proper skin with a StatusLoginPage component
-        if (UserSettingsStore.getTheme() === 'status') {
+        if (SettingsStore.getValue("theme") === 'status') {
             return (
                 <div className="mx_StatusLogin">
                     <div className="mx_StatusLogin_brand">

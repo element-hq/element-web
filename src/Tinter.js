@@ -243,6 +243,7 @@ class Tinter {
 
 
     setTheme(theme) {
+        console.trace("setTheme " + theme);
         this.theme = theme;
 
         // update keyRgb from the current theme CSS itself, if it defines it
@@ -321,6 +322,8 @@ class Tinter {
             if (ss.href && !ss.href.match(new RegExp('/theme-' + this.theme + '.css$'))) continue;
             if (ss.disabled) continue;
             if (!ss.cssRules) continue;
+
+            if (DEBUG) console.debug("calcCssFixups checking " + ss.cssRules.length + " rules for " + ss.href);
 
             for (let j = 0; j < ss.cssRules.length; j++) {
                 const rule = ss.cssRules[j];
