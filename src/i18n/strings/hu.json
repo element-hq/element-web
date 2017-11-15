@@ -1008,5 +1008,10 @@
     "Username on %(hs)s": "Felhasználónév a %(hs)s szerveren",
     "Restricted": "Korlátozott",
     "Custom of %(powerLevel)s": "Egyedi beállítás: %(powerLevel)s",
-    "Presence Management": "Jelenlét menedzsment"
+    "Presence Management": "Jelenlét menedzsment",
+    "Hide avatar changes": "Avatar változások elrejtése",
+    "Hide display name changes": "Név változások elrejtése",
+    "Enable inline URL previews by default": "Beágyazott URL előnézetek alapértelmezett engedélyezése",
+    "Enable URL previews for this room (only affects you)": "URL előnézet engedélyezése ebben a szobában (csak téged érint)",
+    "Enable URL previews by default for participants in this room": "URL előnézet alapértelmezett engedélyezése a szoba tagságának"
 }
