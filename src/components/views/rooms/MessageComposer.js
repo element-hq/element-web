@@ -22,7 +22,7 @@ import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import Autocomplete from './Autocomplete';
-import UserSettingsStore from '../../../UserSettingsStore';
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 
 export default class MessageComposer extends React.Component {
@@ -49,10 +49,10 @@ export default class MessageComposer extends React.Component {
             inputState: {
                 style: [],
                 blockType: null,
-                isRichtextEnabled: UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false),
+                isRichtextEnabled: SettingsStore.getValue('MessageComposerInput.isRichTextEnabled'),
                 wordCount: 0,
             },
-            showFormatting: UserSettingsStore.getSyncedSetting('MessageComposer.showFormatting', false),
+            showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
         };
     }
 
@@ -226,7 +226,7 @@ export default class MessageComposer extends React.Component {
     }
 
     onToggleFormattingClicked() {
-        UserSettingsStore.setSyncedSetting('MessageComposer.showFormatting', !this.state.showFormatting);
+        SettingsStore.setValue("MessageComposer.showFormatting", null, SettingLevel.DEVICE, !this.state.showFormatting);
         this.setState({showFormatting: !this.state.showFormatting});
     }
 
@@ -238,7 +238,7 @@ export default class MessageComposer extends React.Component {
     render() {
         const me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         const uploadInputStyle = {display: 'none'};
-        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        const MemberPresenceAvatar = sdk.getComponent('avatars.MemberPresenceAvatar');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
 
@@ -246,7 +246,7 @@ export default class MessageComposer extends React.Component {
 
         controls.push(
             <div key="controls_avatar" className="mx_MessageComposer_avatar">
-                <MemberAvatar member={me} width={24} height={24} />
+                <MemberPresenceAvatar member={me} width={24} height={24} />
             </div>,
         );
 

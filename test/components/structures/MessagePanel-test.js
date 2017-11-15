@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import SettingsStore from "../../../src/settings/SettingsStore";
+
 const React = require('react');
 const ReactDOM = require("react-dom");
 const TestUtils = require('react-addons-test-utils');
@@ -23,7 +25,6 @@ import sinon from 'sinon';
 const sdk = require('matrix-react-sdk');
 
 const MessagePanel = sdk.getComponent('structures.MessagePanel');
-import UserSettingsStore from '../../../src/UserSettingsStore';
 import MatrixClientPeg from '../../../src/MatrixClientPeg';
 
 const test_utils = require('test-utils');
@@ -59,7 +60,9 @@ describe('MessagePanel', function() {
         sandbox = test_utils.stubClient();
         client = MatrixClientPeg.get();
         client.credentials = {userId: '@me:here'};
-        UserSettingsStore.getSyncedSettings = sinon.stub().returns({});
+
+        // HACK: We assume all settings want to be disabled
+        SettingsStore.getValue = sinon.stub().returns(false);
     });
 
     afterEach(function() {

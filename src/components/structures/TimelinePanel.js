@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import SettingsStore from "../../settings/SettingsStore";
+
 const React = require('react');
 const ReactDOM = require("react-dom");
 import Promise from 'bluebird';
@@ -30,7 +32,6 @@ const ObjectUtils = require('../../ObjectUtils');
 const Modal = require("../../Modal");
 const UserActivity = require("../../UserActivity");
 const KeyCode = require('../../KeyCode');
-import UserSettingsStore from '../../UserSettingsStore';
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -129,8 +130,6 @@ var TimelinePanel = React.createClass({
             }
         }
 
-        const syncedSettings = UserSettingsStore.getSyncedSettings();
-
         return {
             events: [],
             timelineLoading: true, // track whether our room timeline is loading
@@ -175,10 +174,10 @@ var TimelinePanel = React.createClass({
             clientSyncState: MatrixClientPeg.get().getSyncState(),
 
             // should the event tiles have twelve hour times
-            isTwelveHour: syncedSettings.showTwelveHourTimestamps,
+            isTwelveHour: SettingsStore.getValue("showTwelveHourTimestamps"),
 
             // always show timestamps on event tiles?
-            alwaysShowTimestamps: syncedSettings.alwaysShowTimestamps,
+            alwaysShowTimestamps: SettingsStore.getValue("alwaysShowTimestamps"),
         };
     },
 

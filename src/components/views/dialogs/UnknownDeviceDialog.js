@@ -21,6 +21,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import Resend from '../../../Resend';
 import { _t } from '../../../languageHandler';
+import SettingsStore from "../../../settings/SettingsStore";
 
 function DeviceListEntry(props) {
     const {userId, device} = props;
@@ -114,12 +115,13 @@ export default React.createClass({
     },
 
     render: function() {
-        const client = MatrixClientPeg.get();
-        const blacklistUnverified = client.getGlobalBlacklistUnverifiedDevices() ||
-              this.props.room.getBlacklistUnverifiedDevices();
+        if (this.state.devices === null) {
+            const Spinner = sdk.getComponent("elements.Spinner");
+            return <Spinner />;
+        }
 
         let warning;
-        if (blacklistUnverified) {
+        if (SettingsStore.getValue("blacklistUnverifiedDevices", this.props.room.roomId)) {
             warning = (
                 <h4>
                     { _t("You are currently blacklisting unverified devices; to send " +

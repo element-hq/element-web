@@ -436,6 +436,10 @@ function startMatrixClient() {
     DMRoomMap.makeShared().start();
 
     MatrixClientPeg.start();
+
+    // dispatch that we finished starting up to wire up any other bits
+    // of the matrix client that cannot be set prior to starting up.
+    dis.dispatch({action: 'client_started'});
 }
 
 /*
