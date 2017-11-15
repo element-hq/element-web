@@ -14,6 +14,8 @@
  limitations under the License.
  */
 
+import SettingsStore from "./settings/SettingsStore";
+
 function memberEventDiff(ev) {
     const diff = {
         isMemberEvent: ev.getType() === 'm.room.member',
@@ -34,33 +36,19 @@ function memberEventDiff(ev) {
     return diff;
 }
 
-export default function shouldHideEvent(ev, syncedSettings) {
+export default function shouldHideEvent(ev) {
+    // Wrap getValue() for readability
+    const isEnabled = (name) => SettingsStore.getValue(name, ev.getRoomId());
+
     // Hide redacted events
-    if (syncedSettings['hideRedactions'] && ev.isRedacted()) return true;
+    if (isEnabled('hideRedactions') && ev.isRedacted()) return true;
 
     const eventDiff = memberEventDiff(ev);
 
     if (eventDiff.isMemberEvent) {
-        // XXX: horrific hack for Status until granular settings lands, where these
-        // can then be added into room state
-        if (['!YkNaCvrOXIQKPMhUHC:status.im', // #announcements:status.im
-             '!TSECabqXwnmkYVTfdX:status.im', // #general:status.im
-             '!FhCoxZbSjazJYFlCOY:status.im', // #dev-status:status.im
-             '!hHZWxpKcmFSjXcFHZC:status.im', // #news-articles:status.im
-             '!gIfSnanKtRcKDpUcmR:status.im', // #introductions:status.im
-             '!eGsKellGrAmpROBwXT:status.im', // #book-club:status.im
-             '!AqnfKJOcxeeuMOcqRL:status.im', // #music:status.im
-            ].includes(ev.getRoomId())
-            && (/* eventDiff.isJoin ||
-                eventDiff.isPart ||
-                eventDiff.isDisplaynameChange || */
-                eventDiff.isAvatarChange)) {
-            return true;
-        }
-
-        if (syncedSettings['hideJoinLeaves'] && (eventDiff.isJoin || eventDiff.isPart)) return true;
-        const isMemberAvatarDisplaynameChange = eventDiff.isAvatarChange || eventDiff.isDisplaynameChange;
-        if (syncedSettings['hideAvatarDisplaynameChanges'] && isMemberAvatarDisplaynameChange) return true;
+        if (isEnabled('hideJoinLeaves') && (eventDiff.isJoin || eventDiff.isPart)) return true;
+        if (isEnabled('hideAvatarChanges') && eventDiff.isAvatarChange) return true;
+        if (isEnabled('hideDisplaynameChanges') && eventDiff.isDisplaynameChange) return true;
     }
 
     return false;

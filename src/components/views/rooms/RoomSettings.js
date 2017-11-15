@@ -23,8 +23,8 @@ import sdk from '../../../index';
 import Modal from '../../../Modal';
 import ObjectUtils from '../../../ObjectUtils';
 import dis from '../../../dispatcher';
-import UserSettingsStore from '../../../UserSettingsStore';
 import AccessibleButton from '../elements/AccessibleButton';
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
@@ -309,9 +309,9 @@ module.exports = React.createClass({
         }
 
         // url preview settings
-        const ps = this.saveUrlPreviewSettings();
+        let ps = this.saveUrlPreviewSettings();
         if (ps.length > 0) {
-            promises.push(ps);
+            ps.map(p => promises.push(p));
         }
 
         // related groups
@@ -363,26 +363,16 @@ module.exports = React.createClass({
     },
 
     saveBlacklistUnverifiedDevicesPerRoom: function() {
-        if (!this.refs.blacklistUnverified) return;
-        if (this._isRoomBlacklistUnverified() !== this.refs.blacklistUnverified.checked) {
-            this._setRoomBlacklistUnverified(this.refs.blacklistUnverified.checked);
-        }
-    },
-
-    _isRoomBlacklistUnverified: function() {
-        const blacklistUnverifiedDevicesPerRoom = UserSettingsStore.getLocalSettings().blacklistUnverifiedDevicesPerRoom;
-        if (blacklistUnverifiedDevicesPerRoom) {
-            return blacklistUnverifiedDevicesPerRoom[this.props.room.roomId];
-        }
-        return false;
-    },
-
-    _setRoomBlacklistUnverified: function(value) {
-        const blacklistUnverifiedDevicesPerRoom = UserSettingsStore.getLocalSettings().blacklistUnverifiedDevicesPerRoom || {};
-        blacklistUnverifiedDevicesPerRoom[this.props.room.roomId] = value;
-        UserSettingsStore.setLocalSetting('blacklistUnverifiedDevicesPerRoom', blacklistUnverifiedDevicesPerRoom);
-
-        this.props.room.setBlacklistUnverifiedDevices(value);
+        if (!this.refs.blacklistUnverifiedDevices) return;
+        this.refs.blacklistUnverifiedDevices.save().then(() => {
+            const value = SettingsStore.getValueAt(
+                SettingLevel.ROOM_DEVICE,
+                "blacklistUnverifiedDevices",
+                this.props.room.roomId,
+                /*explicit=*/true,
+            );
+            this.props.room.setBlacklistUnverifiedDevices(value);
+        });
     },
 
     _hasDiff: function(strA, strB) {
@@ -588,19 +578,20 @@ module.exports = React.createClass({
     },
 
     _renderEncryptionSection: function() {
+        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
+
         const cli = MatrixClientPeg.get();
         const roomState = this.props.room.currentState;
         const isEncrypted = cli.isRoomEncrypted(this.props.room.roomId);
-        const isGlobalBlacklistUnverified = UserSettingsStore.getLocalSettings().blacklistUnverifiedDevices;
-        const isRoomBlacklistUnverified = this._isRoomBlacklistUnverified();
 
-        const settings =
-            <label>
-                <input type="checkbox" ref="blacklistUnverified"
-                       defaultChecked={isGlobalBlacklistUnverified || isRoomBlacklistUnverified}
-                       disabled={isGlobalBlacklistUnverified || (this.refs.encrypt && !this.refs.encrypt.checked)} />
-                { _t('Never send encrypted messages to unverified devices in this room from this device') }.
-            </label>;
+        let settings = (
+            <SettingsFlag name="blacklistUnverifiedDevices"
+                          level={SettingLevel.ROOM_DEVICE}
+                          roomId={this.props.room.roomId}
+                          manualSave={true}
+                          ref="blacklistUnverifiedDevices"
+            />
+        );
 
         if (!isEncrypted && roomState.mayClientSendStateEvent("m.room.encryption", cli)) {
             return (

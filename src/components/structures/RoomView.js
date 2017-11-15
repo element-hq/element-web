@@ -29,7 +29,6 @@ const classNames = require("classnames");
 const Matrix = require("matrix-js-sdk");
 import { _t } from '../../languageHandler';
 
-const UserSettingsStore = require('../../UserSettingsStore');
 const MatrixClientPeg = require("../../MatrixClientPeg");
 const ContentMessages = require("../../ContentMessages");
 const Modal = require("../../Modal");
@@ -46,6 +45,7 @@ import KeyCode from '../../KeyCode';
 
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
+import SettingsStore from "../../settings/SettingsStore";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -148,8 +148,6 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("RoomMember.membership", this.onRoomMemberMembership);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
-
-        this._syncedSettings = UserSettingsStore.getSyncedSettings();
 
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
@@ -542,7 +540,7 @@ module.exports = React.createClass({
             // update unread count when scrolled up
             if (!this.state.searchResults && this.state.atEndOfLiveTimeline) {
                 // no change
-            } else if (!shouldHideEvent(ev, this._syncedSettings)) {
+            } else if (!shouldHideEvent(ev)) {
                 this.setState((state, props) => {
                     return {numUnreadMessages: state.numUnreadMessages + 1};
                 });
@@ -616,38 +614,8 @@ module.exports = React.createClass({
     },
 
     _updatePreviewUrlVisibility: function(room) {
-        // console.log("_updatePreviewUrlVisibility");
-
-        // check our per-room overrides
-        const roomPreviewUrls = room.getAccountData("org.matrix.room.preview_urls");
-        if (roomPreviewUrls && roomPreviewUrls.getContent().disable !== undefined) {
-            this.setState({
-                showUrlPreview: !roomPreviewUrls.getContent().disable,
-            });
-            return;
-        }
-
-        // check our global disable override
-        const userRoomPreviewUrls = MatrixClientPeg.get().getAccountData("org.matrix.preview_urls");
-        if (userRoomPreviewUrls && userRoomPreviewUrls.getContent().disable) {
-            this.setState({
-                showUrlPreview: false,
-            });
-            return;
-        }
-
-        // check the room state event
-        const roomStatePreviewUrls = room.currentState.getStateEvents('org.matrix.room.preview_urls', '');
-        if (roomStatePreviewUrls && roomStatePreviewUrls.getContent().disable) {
-            this.setState({
-                showUrlPreview: false,
-            });
-            return;
-        }
-
-        // otherwise, we assume they're on.
         this.setState({
-            showUrlPreview: true,
+            showUrlPreview: SettingsStore.getValue("urlPreviewsEnabled", room.roomId),
         });
     },
 
@@ -666,12 +634,7 @@ module.exports = React.createClass({
         const room = this.state.room;
         if (!room) return;
 
-        const color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
-        let color_scheme = {};
-        if (color_scheme_event) {
-            color_scheme = color_scheme_event.getContent();
-            // XXX: we should validate the event
-        }
+        const color_scheme = SettingsStore.getValue("roomColor", room.room_id);
         console.log("Tinter.tint from updateTint");
         Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
     },
@@ -1775,7 +1738,7 @@ module.exports = React.createClass({
         const messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
                 timelineSet={this.state.room.getUnfilteredTimelineSet()}
-                showReadReceipts={!UserSettingsStore.getSyncedSetting('hideReadReceipts', false)}
+                showReadReceipts={!SettingsStore.getValue('hideReadReceipts')}
                 manageReadReceipts={!this.state.isPeeking}
                 manageReadMarkers={!this.state.isPeeking}
                 hidden={hideMessagePanel}
