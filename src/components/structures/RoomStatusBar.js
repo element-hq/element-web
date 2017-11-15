@@ -23,7 +23,7 @@ import WhoIsTyping from '../../WhoIsTyping';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import MemberAvatar from '../views/avatars/MemberAvatar';
 import Resend from '../../Resend';
-import { getUnknownDevicesForRoom, showUnknownDeviceDialogForMessages } from '../../cryptodevices';
+import { showUnknownDeviceDialogForMessages } from '../../cryptodevices';
 
 const HIDE_DEBOUNCE_MS = 10000;
 const STATUS_BAR_HIDDEN = 0;
