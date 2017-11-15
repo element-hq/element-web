@@ -24,7 +24,7 @@ const sdk = require('matrix-react-sdk');
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 const Modal = require('matrix-react-sdk/lib/Modal');
 const Resend = require("matrix-react-sdk/lib/Resend");
-import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
+import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
 
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',
@@ -67,7 +67,7 @@ module.exports = React.createClass({
         let canPin = room.currentState.mayClientSendStateEvent('m.room.pinned_events', cli);
 
         // HACK: Intentionally say we can't pin if the user doesn't want to use the functionality
-        if (!UserSettingsStore.isFeatureEnabled("feature_pinning")) canPin = false;
+        if (!SettingsStore.isFeatureEnabled("feature_pinning")) canPin = false;
 
         this.setState({canRedact, canPin});
     },
