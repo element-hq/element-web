@@ -41,7 +41,7 @@ function getColorName(hex) {
 1. Add the variable inside the string. The syntax for variables is ``%(variable)s``. Please note the _s_ at the end. The name of the variable has to match the previous used name.
 
 - You can use the special ``count`` variable to choose between multiple versions of the same string, in order to get the correct pluralization. E.g. ``_t('You have %(count)s new messages', { count: 2 })`` would show 'You have 2 new messages', while ``_t('You have %(count)s new messages', { count: 1 })`` would show 'You have one new message' (assuming a singular version of the string has been added to the translation file. See above). Passing in ``count`` is much prefered over having and if-statement choose the correct string to use, because some languages have much more complicated plural rules than english (e.g. they might need a completely different form if there are three things rather than two).
-- If you want to translate text that includes e.g. hyperlinks or other HTML you have to also use tag substitution, e.g. `_t('<a>Click here!</a>', {}, { 'a': (sub) => <a>{sub}</a> })``. If you don't do the tag substitution you will end up showing literally '<a>' rather than making a hyperlink.
+- If you want to translate text that includes e.g. hyperlinks or other HTML you have to also use tag substitution, e.g. ``_t('<a>Click here!</a>', {}, { 'a': (sub) => <a>{sub}</a> })``. If you don't do the tag substitution you will end up showing literally '<a>' rather than making a hyperlink.
 - You can also use React components with normal variable substitution if you want to insert HTML markup, e.g. ``_t('Your email address is %(emailAddress)s', { emailAddress: <i>{userEmailAddress}</i> })``.
 
 ## Things to know/Style Guides
