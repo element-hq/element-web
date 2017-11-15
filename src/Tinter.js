@@ -72,6 +72,7 @@ class Tinter {
             "#EAF5F0", // Vector Light Green
             "#D3EFE1", // roomsublist-label-bg-color (20% Green overlaid on Light Green)
             "#FFFFFF", // white highlights of the SVGs (for switching to dark theme)
+            "#000000", // black lowlights of the SVGs (for switching to dark theme)
         ];
 
         // track the replacement colours actually being used
@@ -81,11 +82,13 @@ class Tinter {
             this.keyHex[1],
             this.keyHex[2],
             this.keyHex[3],
+            this.keyHex[4],
         ];
 
         // track the most current tint request inputs (which may differ from the
         // end result stored in this.colors
         this.currentTint = [
+            undefined,
             undefined,
             undefined,
             undefined,
@@ -223,7 +226,23 @@ class Tinter {
         });
     }
 
-    setTheme(theme) { 
+    tintSvgBlack(blackColor) {
+        this.currentTint[4] = blackColor;
+
+        if (!blackColor) {
+            blackColor = this.colors[4];
+        }
+        if (this.colors[4] === blackColor) {
+            return;
+        }
+        this.colors[4] = blackColor;
+        this.tintables.forEach(function(tintable) {
+            tintable();
+        });
+    }
+
+
+    setTheme(theme) {
         this.theme = theme;
 
         // update keyRgb from the current theme CSS itself, if it defines it
@@ -252,8 +271,10 @@ class Tinter {
             // abuse the tinter to change all the SVG's #fff to #2d2d2d
             // XXX: obviously this shouldn't be hardcoded here.
             this.tintSvgWhite('#2d2d2d');
+            this.tintSvgBlack('#dddddd');
         } else {
             this.tintSvgWhite('#ffffff');
+            this.tintSvgBlack('#000000');
         }
     }
 
