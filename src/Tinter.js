@@ -31,16 +31,17 @@ function colorToRgb(color) {
         const g = (val >> 8) & 255;
         const b = val & 255;
         return [r, g, b];
-    }
-    else {
-        let match = color.match(/rgb\((.*?),(.*?),(.*?)\)/);
+    } else {
+        const match = color.match(/rgb\((.*?),(.*?),(.*?)\)/);
         if (match) {
-            return [ parseInt(match[1]),
-                     parseInt(match[2]),
-                     parseInt(match[3]) ];
+            return [
+                parseInt(match[1]),
+                parseInt(match[2]),
+                parseInt(match[3]),
+            ];
         }
     }
-    return [0,0,0];
+    return [0, 0, 0];
 }
 
 // utility to turn [red,green,blue] into #rrggbb
@@ -152,9 +153,11 @@ class Tinter {
 
         this.calcCssFixups();
 
-        if (DEBUG) console.log("Tinter.tint(" + primaryColor + ", " +
-                                                secondaryColor + ", " + 
-                                                tertiaryColor + ")");
+        if (DEBUG) {
+            console.log("Tinter.tint(" + primaryColor + ", " +
+                secondaryColor + ", " +
+                tertiaryColor + ")");
+        }
 
         if (!primaryColor) {
             primaryColor = this.keyRgb[0];
@@ -194,9 +197,11 @@ class Tinter {
         this.colors[1] = secondaryColor;
         this.colors[2] = tertiaryColor;
 
-        if (DEBUG) console.log("Tinter.tint final: (" + primaryColor + ", " +
-                                                secondaryColor + ", " + 
-                                                tertiaryColor + ")");
+        if (DEBUG) {
+            console.log("Tinter.tint final: (" + primaryColor + ", " +
+                secondaryColor + ", " +
+                tertiaryColor + ")");
+        }
 
         // go through manually fixing up the stylesheets.
         this.applyCssFixups();
@@ -229,18 +234,15 @@ class Tinter {
         // update keyRgb from the current theme CSS itself, if it defines it
         if (document.getElementById('mx_theme_accentColor')) {
             this.keyRgb[0] = window.getComputedStyle(
-                document.getElementById('mx_theme_accentColor')
-            ).color;
+                document.getElementById('mx_theme_accentColor')).color;
         }
         if (document.getElementById('mx_theme_secondaryAccentColor')) {
             this.keyRgb[1] = window.getComputedStyle(
-                document.getElementById('mx_theme_secondaryAccentColor')
-            ).color;
+                document.getElementById('mx_theme_secondaryAccentColor')).color;
         }
         if (document.getElementById('mx_theme_tertiaryAccentColor')) {
             this.keyRgb[2] = window.getComputedStyle(
-                document.getElementById('mx_theme_tertiaryAccentColor')
-            ).color;
+                document.getElementById('mx_theme_tertiaryAccentColor')).color;
         }
 
         this.calcCssFixups();
@@ -261,9 +263,11 @@ class Tinter {
         // cache our fixups
         if (this.cssFixups[this.theme]) return;
 
-        if (DEBUG) console.debug("calcCssFixups start for " + this.theme + " (checking " +
-                                 document.styleSheets.length + 
-                                 " stylesheets)");
+        if (DEBUG) {
+            console.debug("calcCssFixups start for " + this.theme + " (checking " +
+                document.styleSheets.length +
+                " stylesheets)");
+        }
 
         this.cssFixups[this.theme] = [];
 
@@ -319,21 +323,24 @@ class Tinter {
                 }
             }
         }
-        if (DEBUG) console.log("calcCssFixups end (" +
-                               this.cssFixups[this.theme].length + 
-                               " fixups)");
+        if (DEBUG) {
+            console.log("calcCssFixups end (" +
+                this.cssFixups[this.theme].length +
+                " fixups)");
+        }
     }
 
     applyCssFixups() {
-        if (DEBUG) console.log("applyCssFixups start (" + 
-                               this.cssFixups[this.theme].length + 
-                               " fixups)");
+        if (DEBUG) {
+            console.log("applyCssFixups start (" +
+                this.cssFixups[this.theme].length +
+                " fixups)");
+        }
         for (let i = 0; i < this.cssFixups[this.theme].length; i++) {
             const cssFixup = this.cssFixups[this.theme][i];
             try {
                 cssFixup.style[cssFixup.attr] = this.colors[cssFixup.index];
-            }
-            catch (e) {
+            } catch (e) {
                 // Firefox Quantum explodes if you manually edit the CSS in the
                 // inspector and then try to do a tint, as apparently all the
                 // fixups are then stale.
@@ -355,7 +362,7 @@ class Tinter {
         if (DEBUG) console.log("calcSvgFixups start for " + svgs);
         const fixups = [];
         for (let i = 0; i < svgs.length; i++) {
-            var svgDoc;
+            let svgDoc;
             try {
                 svgDoc = svgs[i].contentDocument;
             } catch(e) {
@@ -366,7 +373,7 @@ class Tinter {
                 if (e.stack) {
                     msg += ' | stack: ' + e.stack;
                 }
-                console.error(e);
+                console.error(msg);
             }
             if (!svgDoc) continue;
             const tags = svgDoc.getElementsByTagName("*");
@@ -376,8 +383,7 @@ class Tinter {
                     const attr = this.svgAttrs[k];
                     for (let l = 0; l < this.keyHex.length; l++) {
                         if (tag.getAttribute(attr) &&
-                            tag.getAttribute(attr).toUpperCase() === this.keyHex[l]) 
-                        {
+                            tag.getAttribute(attr).toUpperCase() === this.keyHex[l]) {
                             fixups.push({
                                 node: tag,
                                 attr: attr,
