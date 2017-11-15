@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import GeminiScrollbar from 'react-gemini-scrollbar';
@@ -39,10 +40,10 @@ function DeviceListEntry(props) {
 }
 
 DeviceListEntry.propTypes = {
-    userId: React.PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
 
     // deviceinfo
-    device: React.PropTypes.object.isRequired,
+    device: PropTypes.object.isRequired,
 };
 
 
@@ -62,10 +63,10 @@ function UserUnknownDeviceList(props) {
 }
 
 UserUnknownDeviceList.propTypes = {
-    userId: React.PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
 
     // map from deviceid -> deviceinfo
-    userDevices: React.PropTypes.object.isRequired,
+    userDevices: PropTypes.object.isRequired,
 };
 
 
@@ -84,7 +85,7 @@ function UnknownDeviceList(props) {
 
 UnknownDeviceList.propTypes = {
     // map from userid -> deviceid -> deviceinfo
-    devices: React.PropTypes.object.isRequired,
+    devices: PropTypes.object.isRequired,
 };
 
 
@@ -92,22 +93,12 @@ export default React.createClass({
     displayName: 'UnknownDeviceDialog',
 
     propTypes: {
-        room: React.PropTypes.object.isRequired,
+        room: PropTypes.object.isRequired,
 
         // map from userid -> deviceid -> deviceinfo
-        devices: React.PropTypes.object.isRequired,
-        onFinished: React.PropTypes.func.isRequired,
-    },
-
-    _onSendAnywayClicked: function() {
-        // Mark the devices as known so messages get encrypted to them
-        Object.keys(this.props.devices).forEach((userId) => {
-            Object.keys(this.props.devices[userId]).map((deviceId) => {
-                MatrixClientPeg.get().setDeviceKnown(userId, deviceId, true);
-            });
-        });
-        this.props.onFinished();
-        Resend.resendUnsentEvents(this.props.room);
+        devices: PropTypes.object.isRequired,
+        onFinished: PropTypes.func.isRequired,
+        sendAnywayButton: PropTypes.node,
     },
 
     _onDismissClicked: function() {
@@ -115,7 +106,7 @@ export default React.createClass({
     },
 
     render: function() {
-        if (this.state.devices === null) {
+        if (this.props.devices === null) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return <Spinner />;
         }
@@ -156,9 +147,7 @@ export default React.createClass({
                     <UnknownDeviceList devices={this.props.devices} />
                 </GeminiScrollbar>
                 <div className="mx_Dialog_buttons">
-                    <button onClick={this._onSendAnywayClicked}>
-                        { _t("Send anyway") }
-                    </button>
+                    {this.props.sendAnywayButton}
                     <button className="mx_Dialog_primary" autoFocus={true}
                         onClick={this._onDismissClicked}
                     >

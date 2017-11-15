@@ -14,6 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import Resend from './Resend';
+import sdk from './index';
+import Modal from './Modal';
+import { _t } from './languageHandler';
+
 export function getUnknownDevicesForRoom(matrixClient, room) {
     const roomMembers = room.getJoinedMembers().map((m) => {
         return m.userId;
@@ -37,3 +42,30 @@ export function getUnknownDevicesForRoom(matrixClient, room) {
     });
 }
 
+export function showUnknownDeviceDialogForMessages(matrixClient, room) {
+    getUnknownDevicesForRoom(matrixClient, room).then((unknownDevices) => {
+        const onSendAnywayClicked = () => {
+            markAllDevicesKnown(matrixClient, unknownDevices);
+            Resend.resendUnsentEvents(room);
+        };
+
+        const UnknownDeviceDialog = sdk.getComponent('dialogs.UnknownDeviceDialog');
+        Modal.createTrackedDialog('Unknown Device Dialog', '', UnknownDeviceDialog, {
+            room: room,
+            devices: unknownDevices,
+            sendAnywayButton:(
+                <button onClick={onSendAnywayClicked}>
+                    { _t("Send anyway") }
+                </button>
+            ),
+        }, 'mx_Dialog_unknownDevice');
+    });
+}
+
+function markAllDevicesKnown(matrixClient, devices) {
+    Object.keys(devices).forEach((userId) => {
+        Object.keys(devices[userId]).map((deviceId) => {
+            matrixClient.setDeviceKnown(userId, deviceId, true);
+        });
+    });
+}
