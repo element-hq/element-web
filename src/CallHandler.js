@@ -59,6 +59,7 @@ import sdk from './index';
 import { _t } from './languageHandler';
 import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher';
+import { getUnknownDevicesForRoom } from './cryptodevices';
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -104,6 +105,31 @@ function _setCallListeners(call) {
         console.error(err.stack);
         call.hangup();
         _setCallState(undefined, call.roomId, "ended");
+        if (err.code === 'unknown_devices') {
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+
+            Modal.createTrackedDialog('Call Failed', '', QuestionDialog, {
+                title: _t('Call Failed'),
+                description: _t(
+                    "There are unknown devices in this room: "+
+                    "if you proceed without verifying them, it will be "+
+                    "possible for someone to eavesdrop on your call"
+                ),
+                button: _t('Review Devices'),
+                onFinished: function(confirmed) {
+                    if (confirmed) {
+                        const room = MatrixClientPeg.get().getRoom(call.roomId);
+                        getUnknownDevicesForRoom(MatrixClientPeg.get(), room).then((unknownDevices) => {
+                            const UnknownDeviceDialog = sdk.getComponent('dialogs.UnknownDeviceDialog');
+                            Modal.createTrackedDialog('Unknown Device Dialog', '', UnknownDeviceDialog, {
+                                room: room,
+                                devices: unknownDevices,
+                            }, 'mx_Dialog_unknownDevice');
+                        });
+                    }
+                },
+            });
+        }
     });
     call.on("hangup", function() {
         _setCallState(undefined, call.roomId, "ended");
@@ -171,7 +197,6 @@ function _setCallState(call, roomId, status) {
 function _onAction(payload) {
     function placeCall(newCall) {
         _setCallListeners(newCall);
-        _setCallState(newCall, newCall.roomId, "ringback");
         if (payload.type === 'voice') {
             newCall.placeVoiceCall();
         } else if (payload.type === 'video') {

@@ -24,6 +24,7 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import MemberAvatar from '../views/avatars/MemberAvatar';
 import Resend from '../../Resend';
 import Modal from '../../Modal';
+import { getUnknownDevicesForRoom } from '../../cryptodevices';
 
 const HIDE_DEBOUNCE_MS = 10000;
 const STATUS_BAR_HIDDEN = 0;
@@ -157,37 +158,14 @@ module.exports = React.createClass({
     },
 
     _onShowDevicesClick: function() {
-        this._getUnknownDevices().then((unknownDevices) => {
+        getUnknownDevicesForRoom(MatrixClientPeg.get(), this.props.room).then((unknownDevices) => {
+            if (this._unmounted) return;
+
             const UnknownDeviceDialog = sdk.getComponent('dialogs.UnknownDeviceDialog');
             Modal.createTrackedDialog('Unknown Device Dialog', '', UnknownDeviceDialog, {
                 room: this.props.room,
                 devices: unknownDevices,
             }, 'mx_Dialog_unknownDevice');
-        });
-    },
-
-    _getUnknownDevices: function() {
-        const roomMembers = this.props.room.getJoinedMembers().map((m) => {
-            return m.userId;
-        });
-        return MatrixClientPeg.get().downloadKeys(roomMembers, false).then((devices) => {
-            if (this._unmounted) return;
-
-            const unknownDevices = {};
-            // This is all devices in this room, so find the unknown ones.
-            Object.keys(devices).forEach((userId) => {
-                Object.keys(devices[userId]).map((deviceId) => {
-                    const device = devices[userId][deviceId];
-
-                    if (device.isUnverified() && !device.isKnown()) {
-                        if (unknownDevices[userId] === undefined) {
-                            unknownDevices[userId] = {};
-                        }
-                        unknownDevices[userId][deviceId] = device;
-                    }
-                });
-            });
-            return unknownDevices;
         });
     },
 
