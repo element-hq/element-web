@@ -52,7 +52,7 @@ module.exports = React.createClass({
                         'firefoxLink': (sub) => <a href="https://getfirefox.com">{sub}</a>,
                     },
                 )}
-                { _t('< safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.',
+                { _t('<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.',
                     {},
                     {
                         'safariLink': (sub) => <a href="http://apple.com/safari">{sub}</a>,
