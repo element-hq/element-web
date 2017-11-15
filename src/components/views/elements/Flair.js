@@ -21,7 +21,6 @@ import PropTypes from 'prop-types';
 import {MatrixClient} from 'matrix-js-sdk';
 import FlairStore from '../../../stores/FlairStore';
 import dis from '../../../dispatcher';
-import SettingsStore from "../../../settings/SettingsStore";
 
 
 class FlairAvatar extends React.Component {

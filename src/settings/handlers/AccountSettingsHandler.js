@@ -34,7 +34,7 @@ export default class AccountSettingHandler extends SettingsHandler {
         if (preferredValue === null || preferredValue === undefined) {
             // Honour the old setting on read only
             if (settingName === "hideAvatarChanges" || settingName === "hideDisplaynameChanges") {
-                preferredValue = this._getSettings()["hideAvatarDisplaynameChanges"]
+                preferredValue = this._getSettings()["hideAvatarDisplaynameChanges"];
             }
         }
 
