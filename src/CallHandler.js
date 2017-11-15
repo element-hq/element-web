@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -60,6 +61,7 @@ import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher';
 import { getUnknownDevicesForRoom } from './cryptodevices';
 import SettingsStore from "./settings/SettingsStore";
+import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -99,6 +101,18 @@ function pause(audioId) {
     }
 }
 
+function _reAttemptCall(call) {
+    if (call.direction === 'outbound') {
+        dis.dispatch({
+            action: 'place_call',
+            room_id: call.roomId,
+            type: call.type,
+        });
+    } else {
+        call.answer();
+    }
+}
+
 function _setCallListeners(call) {
     call.on("error", function(err) {
         console.error("Call error: %s", err);
@@ -113,21 +127,29 @@ function _setCallListeners(call) {
                 description: _t(
                     "There are unknown devices in this room: "+
                     "if you proceed without verifying them, it will be "+
-                    "possible for someone to eavesdrop on your call"
+                    "possible for someone to eavesdrop on your call."
                 ),
                 button: _t('Review Devices'),
                 onFinished: function(confirmed) {
                     if (confirmed) {
                         const room = MatrixClientPeg.get().getRoom(call.roomId);
-                        getUnknownDevicesForRoom(MatrixClientPeg.get(), room).then((unknownDevices) => {
-                            const UnknownDeviceDialog = sdk.getComponent('dialogs.UnknownDeviceDialog');
-                            Modal.createTrackedDialog('Unknown Device Dialog', '', UnknownDeviceDialog, {
-                                room: room,
-                                devices: unknownDevices,
-                            }, 'mx_Dialog_unknownDevice');
-                        });
+                        showUnknownDeviceDialogForCalls(
+                            MatrixClientPeg.get(),
+                            room,
+                            () => {
+                                _reAttemptCall(call);
+                            },
+                            call.direction === 'outbound' ? _t("Call Anyway") : _t("Answer Anyway"),
+                        );
                     }
                 },
+            });
+        } else {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+            Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
+                title: _t('Call Failed'),
+                description: err.message,
             });
         }
     });

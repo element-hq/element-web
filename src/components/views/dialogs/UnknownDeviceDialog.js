@@ -98,11 +98,17 @@ export default React.createClass({
         // map from userid -> deviceid -> deviceinfo
         devices: PropTypes.object.isRequired,
         onFinished: PropTypes.func.isRequired,
-        sendAnywayButton: PropTypes.node,
+        sendAnywayLabel: PropTypes.string.isRequired,
+        onSendAnyway: PropTypes.func.isRequired,
     },
 
     _onDismissClicked: function() {
         this.props.onFinished();
+    },
+
+    _onSendAnywayClicked: function() {
+        this.props.onFinished();
+        this.props.onSendAnyway();
     },
 
     render: function() {
@@ -148,6 +154,9 @@ export default React.createClass({
                 </GeminiScrollbar>
                 <div className="mx_Dialog_buttons">
                     {this.props.sendAnywayButton}
+                    <button onClick={this._onSendAnywayClicked}>
+                        { this.props.sendAnywayLabel }
+                    </button>
                     <button className="mx_Dialog_primary" autoFocus={true}
                         onClick={this._onDismissClicked}
                     >

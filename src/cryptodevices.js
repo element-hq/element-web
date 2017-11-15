@@ -53,11 +53,25 @@ export function showUnknownDeviceDialogForMessages(matrixClient, room) {
         Modal.createTrackedDialog('Unknown Device Dialog', '', UnknownDeviceDialog, {
             room: room,
             devices: unknownDevices,
-            sendAnywayButton:(
-                <button onClick={onSendAnywayClicked}>
-                    { _t("Send anyway") }
-                </button>
-            ),
+            sendAnywayLabel: _t("Send anyway"),
+            onSendAnyway: onSendAnywayClicked,
+        }, 'mx_Dialog_unknownDevice');
+    });
+}
+
+export function showUnknownDeviceDialogForCalls(matrixClient, room, sendAnyway, sendAnywayLabel) {
+    getUnknownDevicesForRoom(matrixClient, room).then((unknownDevices) => {
+        const onSendAnywayClicked = () => {
+            markAllDevicesKnown(matrixClient, unknownDevices);
+            sendAnyway();
+        };
+
+        const UnknownDeviceDialog = sdk.getComponent('dialogs.UnknownDeviceDialog');
+        Modal.createTrackedDialog('Unknown Device Dialog', '', UnknownDeviceDialog, {
+            room: room,
+            devices: unknownDevices,
+            sendAnywayLabel: sendAnywayLabel,
+            onSendAnyway: onSendAnywayClicked,
         }, 'mx_Dialog_unknownDevice');
     });
 }
