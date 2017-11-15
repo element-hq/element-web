@@ -922,6 +922,11 @@ module.exports = React.createClass({
         styleElements[theme].disabled = false;
 
         const switchTheme = function() {
+            // we re-enable our theme here just in case we raced with another
+            // theme set request as per https://github.com/vector-im/riot-web/issues/5601.
+            // We could alternatively lock or similar to stop the race, but
+            // this is probably good enough for now.
+            styleElements[theme].disabled = false;
             Object.values(styleElements).forEach((a) => {
                 if (a == styleElements[theme]) return;
                 a.disabled = true;
