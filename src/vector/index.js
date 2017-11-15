@@ -317,7 +317,6 @@ async function loadApp() {
                 // flashes of unstyled content.
                 a.onload = () => { 
                     Tinter.setTheme(theme);
-                    Tinter.tint();
                 };
             }
         }
