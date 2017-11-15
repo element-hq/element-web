@@ -22,8 +22,9 @@ import { _t } from '../../../languageHandler';
 import * as languageHandler from '../../../languageHandler';
 import sdk from '../../../index';
 import Login from '../../../Login';
-import UserSettingsStore from '../../../UserSettingsStore';
 import PlatformPeg from '../../../PlatformPeg';
+import SdkConfig from '../../../SdkConfig';
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9\(\)\-\s]*$/;
@@ -105,7 +106,22 @@ module.exports = React.createClass({
             if (error.httpStatus == 400 && usingEmail) {
                 errorText = _t('This Home Server does not support login using email address.');
             } else if (error.httpStatus === 401 || error.httpStatus === 403) {
-                errorText = _t('Incorrect username and/or password.');
+                if (SdkConfig.get().disable_custom_urls) {
+                    errorText = (
+                        <div>
+                            <div>{ _t('Incorrect username and/or password.') }</div>
+                            <div className="mx_Login_smallError">
+                                { _t('Please note you are logging into the %(hs)s server, not matrix.org.',
+                                    {
+                                        hs: this.props.defaultHsUrl.replace(/^https?:\/\//, '')
+                                    })
+                                }
+                            </div>
+                        </div>
+                    );
+                } else {
+                    errorText = _t('Incorrect username and/or password.');   
+                }
             } else {
                 // other errors, not specific to doing a password login
                 errorText = this._errorTextFromError(error);
@@ -317,7 +333,7 @@ module.exports = React.createClass({
 
     _onLanguageChange: function(newLang) {
         if(languageHandler.getCurrentLanguage() !== newLang) {
-            UserSettingsStore.setLocalSetting('language', newLang);
+            SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLang);
             PlatformPeg.get().reload();
         }
     },
@@ -334,6 +350,7 @@ module.exports = React.createClass({
 
     render: function() {
         const Loader = sdk.getComponent("elements.Spinner");
+        const LoginPage = sdk.getComponent("login.LoginPage");
         const LoginHeader = sdk.getComponent("login.LoginHeader");
         const LoginFooter = sdk.getComponent("login.LoginFooter");
         const ServerConfig = sdk.getComponent("login.ServerConfig");
@@ -348,43 +365,69 @@ module.exports = React.createClass({
         }
 
         let returnToAppJsx;
+        /*
+        // with the advent of ILAG I don't think we need this any more
         if (this.props.onCancelClick) {
             returnToAppJsx =
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
                     { _t('Return to app') }
                 </a>;
         }
+        */
+
+        let serverConfig;
+        let header;
+
+        if (!SdkConfig.get().disable_custom_urls) {
+            serverConfig = <ServerConfig ref="serverConfig"
+                withToggleButton={true}
+                customHsUrl={this.props.customHsUrl}
+                customIsUrl={this.props.customIsUrl}
+                defaultHsUrl={this.props.defaultHsUrl}
+                defaultIsUrl={this.props.defaultIsUrl}
+                onServerConfigChange={this.onServerConfigChange}
+                delayTimeMs={1000} />;
+        }
+
+        // FIXME: remove status.im theme tweaks
+        const theme = SettingsStore.getValue("theme");
+        if (theme !== "status") {
+            header = <h2>{ _t('Sign in') }</h2>;
+        }
+        else {
+            if (!this.state.errorText) {
+                header = <h2>{ _t('Sign in to get started') }</h2>;
+            }
+        }
+
+        let errorTextSection;
+        if (this.state.errorText) {
+            errorTextSection = (
+                <div className="mx_Login_error">
+                    { this.state.errorText }
+                </div>
+            );
+        }
 
         return (
-            <div className="mx_Login">
+            <LoginPage>
                 <div className="mx_Login_box">
                     <LoginHeader />
                     <div>
-                        <h2>{ _t('Sign in') }
-                            { loader }
-                        </h2>
+                        { header }
+                        { errorTextSection }
                         { this.componentForStep(this.state.currentFlow) }
-                        <ServerConfig ref="serverConfig"
-                            withToggleButton={true}
-                            customHsUrl={this.props.customHsUrl}
-                            customIsUrl={this.props.customIsUrl}
-                            defaultHsUrl={this.props.defaultHsUrl}
-                            defaultIsUrl={this.props.defaultIsUrl}
-                            onServerConfigChange={this.onServerConfigChange}
-                            delayTimeMs={1000} />
-                        <div className="mx_Login_error">
-                                { this.state.errorText }
-                        </div>
+                        { serverConfig }
                         <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
                             { _t('Create an account') }
                         </a>
                         { loginAsGuestJsx }
                         { returnToAppJsx }
-                        { this._renderLanguageSetting() }
+                        { !SdkConfig.get().disable_login_language_selector ? this._renderLanguageSetting() : '' }
                         <LoginFooter />
                     </div>
                 </div>
-            </div>
+            </LoginPage>
         );
     },
 });

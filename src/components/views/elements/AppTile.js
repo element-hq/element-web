@@ -22,6 +22,7 @@ import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import PlatformPeg from '../../../PlatformPeg';
 import ScalarAuthClient from '../../../ScalarAuthClient';
+import TintableSvgButton from './TintableSvgButton';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t, _td } from '../../../languageHandler';
@@ -371,8 +372,8 @@ export default React.createClass({
         // editing is done in scalar
         const showEditButton = Boolean(this._scalarClient && this._canUserModify());
         const deleteWidgetLabel = this._deleteWidgetLabel();
-        let deleteIcon = 'img/cancel.svg';
-        let deleteClasses = 'mx_filterFlipColor mx_AppTileMenuBarWidget';
+        let deleteIcon = 'img/cancel_green.svg';
+        let deleteClasses = 'mx_AppTileMenuBarWidget';
         if(this._canUserModify()) {
             deleteIcon = 'img/icon-delete-pink.svg';
             deleteClasses += ' mx_AppTileMenuBarWidgetDelete';
@@ -381,25 +382,26 @@ export default React.createClass({
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
-                    { this.formatAppTileName() }
+                    <b>{ this.formatAppTileName() }</b>
                     <span className="mx_AppTileMenuBarWidgets">
                         { /* Edit widget */ }
-                        { showEditButton && <img
-                            src="img/edit.svg"
-                            className="mx_filterFlipColor mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
-                            width="8" height="8"
-                            alt={_t('Edit')}
+                        { showEditButton && <TintableSvgButton
+                            src="img/edit_green.svg"
+                            className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
                             title={_t('Edit')}
                             onClick={this._onEditClick}
+                            width="10"
+                            height="10"
                         /> }
 
                         { /* Delete widget */ }
-                        <img src={deleteIcon}
-                        className={deleteClasses}
-                        width="8" height="8"
-                        alt={_t(deleteWidgetLabel)}
-                        title={_t(deleteWidgetLabel)}
-                        onClick={this._onDeleteClick}
+                        <TintableSvgButton
+                            src={deleteIcon}
+                            className={deleteClasses}
+                            title={_t(deleteWidgetLabel)}
+                            onClick={this._onDeleteClick}
+                            width="10"
+                            height="10"
                         />
                     </span>
                 </div>

@@ -23,6 +23,7 @@ import ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
 import { _t } from '../../../languageHandler';
 
+
 module.exports = React.createClass({
     displayName: 'AuxPanel',
 

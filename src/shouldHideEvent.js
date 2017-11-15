@@ -14,6 +14,8 @@
  limitations under the License.
  */
 
+import SettingsStore from "./settings/SettingsStore";
+
 function memberEventDiff(ev) {
     const diff = {
         isMemberEvent: ev.getType() === 'm.room.member',
@@ -34,16 +36,19 @@ function memberEventDiff(ev) {
     return diff;
 }
 
-export default function shouldHideEvent(ev, syncedSettings) {
+export default function shouldHideEvent(ev) {
+    // Wrap getValue() for readability
+    const isEnabled = (name) => SettingsStore.getValue(name, ev.getRoomId());
+
     // Hide redacted events
-    if (syncedSettings['hideRedactions'] && ev.isRedacted()) return true;
+    if (isEnabled('hideRedactions') && ev.isRedacted()) return true;
 
     const eventDiff = memberEventDiff(ev);
 
     if (eventDiff.isMemberEvent) {
-        if (syncedSettings['hideJoinLeaves'] && (eventDiff.isJoin || eventDiff.isPart)) return true;
-        const isMemberAvatarDisplaynameChange = eventDiff.isAvatarChange || eventDiff.isDisplaynameChange;
-        if (syncedSettings['hideAvatarDisplaynameChanges'] && isMemberAvatarDisplaynameChange) return true;
+        if (isEnabled('hideJoinLeaves') && (eventDiff.isJoin || eventDiff.isPart)) return true;
+        if (isEnabled('hideAvatarChanges') && eventDiff.isAvatarChange) return true;
+        if (isEnabled('hideDisplaynameChanges') && eventDiff.isDisplaynameChange) return true;
     }
 
     return false;

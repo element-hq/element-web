@@ -21,8 +21,8 @@ import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
 import Promise from 'bluebird';
-import UserSettingsStore from '../../../UserSettingsStore';
 import { _t } from '../../../languageHandler';
+import SettingsStore from "../../../settings/SettingsStore";
 
 module.exports = React.createClass({
     displayName: 'MVideoBody',
@@ -151,7 +151,7 @@ module.exports = React.createClass({
 
         const contentUrl = this._getContentUrl();
         const thumbUrl = this._getThumbUrl();
-        const autoplay = UserSettingsStore.getSyncedSetting("autoplayGifsAndVideos", false);
+        const autoplay = SettingsStore.getValue("autoplayGifsAndVideos");
         let height = null;
         let width = null;
         let poster = null;
