@@ -64,7 +64,9 @@ export default class AccountSettingHandler extends SettingsHandler {
     }
 
     _getSettings(eventType = "im.vector.web.settings") {
-        const event = MatrixClientPeg.get().getAccountData(eventType);
+        const cli = MatrixClientPeg.get();
+        if (!cli) return {};
+        const event = cli.getAccountData(eventType);
         if (!event || !event.getContent()) return {};
         return event.getContent();
     }
