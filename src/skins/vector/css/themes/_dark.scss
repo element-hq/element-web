@@ -34,7 +34,11 @@ $secondary-accent-color: $primary-bg-color;
 // by overriding the key to something untintable
 // XXX: this is a bit of a hack.
 #mx_theme_secondaryAccentColor {
-    color: #2d2d2e ! important; // deliberately off by one
+    color: #c0ff33 ! important; // deliberately off by one
+}
+
+#mx_theme_tertiaryAccentColor {
+    color: #c0ffee ! important;
 }
 
 // used by RoomDirectory permissions
