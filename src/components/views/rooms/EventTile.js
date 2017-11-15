@@ -33,21 +33,29 @@ const ObjectUtils = require('../../../ObjectUtils');
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
-    'm.room.member': 'messages.TextualEvent',
     'm.call.invite': 'messages.TextualEvent',
     'm.call.answer': 'messages.TextualEvent',
     'm.call.hangup': 'messages.TextualEvent',
+};
+
+const stateEventTileTypes = {
+    'm.room.member': 'messages.TextualEvent',
     'm.room.name': 'messages.TextualEvent',
     'm.room.avatar': 'messages.RoomAvatarEvent',
-    'm.room.topic': 'messages.TextualEvent',
     'm.room.third_party_invite': 'messages.TextualEvent',
     'm.room.history_visibility': 'messages.TextualEvent',
     'm.room.encryption': 'messages.TextualEvent',
+    'm.room.topic': 'messages.TextualEvent',
     'm.room.power_levels': 'messages.TextualEvent',
-    'm.room.pinned_events' : 'messages.TextualEvent',
+    'm.room.pinned_events': 'messages.TextualEvent',
 
     'im.vector.modular.widgets': 'messages.TextualEvent',
 };
+
+function getHandlerTile(ev) {
+    const type = ev.getType();
+    return ev.isState() ? stateEventTileTypes[type] : eventTileTypes[type];
+}
 
 const MAX_READ_AVATARS = 5;
 
@@ -433,7 +441,7 @@ module.exports = withMatrixClient(React.createClass({
         // Info messages are basically information about commands processed on a room
         const isInfoMessage = (eventType !== 'm.room.message');
 
-        const EventTileType = sdk.getComponent(eventTileTypes[eventType]);
+        const EventTileType = sdk.getComponent(getHandlerTile(this.props.mxEvent));
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!EventTileType) {
@@ -600,8 +608,10 @@ module.exports = withMatrixClient(React.createClass({
 module.exports.haveTileForEvent = function(e) {
     // Only messages have a tile (black-rectangle) if redacted
     if (e.isRedacted() && e.getType() !== 'm.room.message') return false;
-    if (eventTileTypes[e.getType()] == undefined) return false;
-    if (eventTileTypes[e.getType()] == 'messages.TextualEvent') {
+
+    const handler = getHandlerTile(e);
+    if (handler === undefined) return false;
+    if (handler === 'messages.TextualEvent') {
         return TextForEvent.textForEvent(e) !== '';
     } else {
         return true;
