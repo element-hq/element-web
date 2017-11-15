@@ -21,7 +21,7 @@ import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import Velocity from 'velocity-vector';
 import 'velocity-vector/velocity.ui';
-import UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
+import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
 
 const CALLOUT_ANIM_DURATION = 1000;
 

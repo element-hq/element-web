@@ -67,7 +67,6 @@ sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
 import Promise from 'bluebird';
 var request = require('browser-request');
-import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
 // Also import _t directly so we can call it just `_t` as this is what gen-i18n.js expects
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
@@ -78,6 +77,7 @@ import {parseQs, parseQsFromFragment} from './url_utils';
 import Platform from './platform';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
 import Tinter from 'matrix-react-sdk/lib/Tinter';
 
 var lastLocationHashSet = null;
@@ -252,7 +252,7 @@ async function loadApp() {
     if (!preventRedirect) {
         if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
             // FIXME: ugly status hardcoding
-            if (UserSettingsStore.getTheme() === 'status') {
+            if (SettingsStore.getValue("theme") === 'status') {
                 window.location = "https://status.im/join-riot.html";
                 return;
             }
@@ -265,7 +265,7 @@ async function loadApp() {
         }
         else if (/Android/.test(navigator.userAgent)) {
             // FIXME: ugly status hardcoding
-            if (UserSettingsStore.getTheme() === 'status') {
+            if (SettingsStore.getValue("theme") === 'status') {
                 window.location = "https://status.im/join-riot.html";
                 return;
             }
@@ -369,7 +369,7 @@ async function loadApp() {
 }
 
 async function loadLanguage() {
-    const prefLang = UserSettingsStore.getLocalSetting('language');
+    const prefLang = SettingsStore.getValue("language");
     let langs = [];
 
     if (!prefLang) {

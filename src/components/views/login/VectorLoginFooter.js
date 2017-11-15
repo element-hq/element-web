@@ -18,7 +18,7 @@ limitations under the License.
 
 var React = require('react');
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
+import SettingsStore from 'matrix-react-sdk/lib/settings/SettingsStore';
 
 module.exports = React.createClass({
     displayName: 'VectorLoginFooter',
@@ -28,7 +28,7 @@ module.exports = React.createClass({
 
     render: function() {
         // FIXME: replace this with a proper Status skin
-        if (UserSettingsStore.getTheme() === 'status') return <div/>;
+        if (SettingsStore.getValue("theme") === 'status') return <div/>;
         
         return (
             <div className="mx_Login_links">
