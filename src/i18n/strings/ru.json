@@ -990,5 +990,12 @@
     "Sign in to get started": "Войдите, чтобы начать",
     "Visibility in Room List": "Видимость в списке комнат",
     "Visible to everyone": "Видимый для всех",
-    "Only visible to community members": "Только участникам сообщества"
+    "Only visible to community members": "Только участникам сообщества",
+    "Presence Management": "Управление присутствием",
+    "Hide avatar changes": "Скрыть изменения аватара",
+    "Hide display name changes": "Скрыть изменения отображаемого имени",
+    "Enable inline URL previews by default": "Включить просмотр URL-адресов по умолчанию",
+    "Enable URL previews for this room (only affects you)": "Включить просмотр URL-адресов для этой комнаты (влияет только на вас)",
+    "Enable URL previews by default for participants in this room": "Включить просмотр URL-адресов по умолчанию для участников этой комнаты",
+    "Status.im theme": "Тема status.im"
 }
