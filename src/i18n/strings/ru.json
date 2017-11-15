@@ -217,5 +217,7 @@
     "Add rooms to this community": "Добавить комнаты в это сообщество",
     "Toolbox": "Панель инструментов",
     "Send Account Data": "Отправить данные аккаунта",
-    "Explore Account Data": "Просмотр данных аккаунта"
+    "Explore Account Data": "Просмотр данных аккаунта",
+    "Away": "Нет на месте",
+    "Appear Offline": "Отображать как не в сети"
 }
