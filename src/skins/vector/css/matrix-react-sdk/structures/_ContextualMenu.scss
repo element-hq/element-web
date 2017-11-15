@@ -94,6 +94,60 @@ limitations under the License.
     left: 1px;
 }
 
+.mx_ContextualMenu.mx_ContextualMenu_top {
+    top: 8px;
+}
+
+.mx_ContextualMenu_chevron_top {
+    position: absolute;
+    left: 0px;
+    top: -8px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-bottom: 8px solid $menu-border-color;
+    border-right: 8px solid transparent;
+}
+
+.mx_ContextualMenu_chevron_top:after{
+    content:'';
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-bottom: 7px solid $menu-bg-color;
+    border-right: 7px solid transparent;
+    position:absolute;
+    left: -7px;
+    top: 1px;
+}
+
+.mx_ContextualMenu.mx_ContextualMenu_bottom {
+    bottom: 8px;
+}
+
+.mx_ContextualMenu_chevron_bottom {
+    position: absolute;
+    left: 0px;
+    bottom: -8px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-top: 8px solid $menu-border-color;
+    border-right: 8px solid transparent;
+}
+
+.mx_ContextualMenu_chevron_bottom:after{
+    content:'';
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-top: 7px solid $menu-bg-color;
+    border-right: 7px solid transparent;
+    position:absolute;
+    left: -7px;
+    bottom: 1px;
+}
+
 .mx_ContextualMenu_field {
     padding: 3px 6px 3px 6px;
     cursor: pointer;

@@ -90,7 +90,11 @@ $secondary-accent-color: #586C7B;
 // by overriding the key to something untintable
 // XXX: this is a bit of a hack.
 #mx_theme_secondaryAccentColor {
-    color: #586C7C ! important; // deliberately off by one
+    color: #c0ffee ! important;
+}
+
+#mx_theme_tertiaryAccentColor {
+    color: #c0ffee ! important;
 }
 
 // used by RoomDirectory permissions
@@ -160,6 +164,10 @@ $roomsublist-label-bg-color: $secondary-accent-color;
 $roomsublist-chevron-color: #ffffff;
 
 $panel-divider-color: rgba(0, 0, 0, 0.2);
+
+// ********************
+
+$widget-menu-bar-bg-color: #f7f7f7;
 
 // ********************
 

@@ -132,6 +132,10 @@ textarea {
     color: $secondary-accent-color;
 }
 
+#mx_theme_tertiaryAccentColor {
+    color: $roomsublist-label-bg-color;
+}
+
 .mx_Dialog_wrapper {
     position: fixed;
     z-index: 4000;

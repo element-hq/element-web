@@ -310,10 +310,13 @@ async function loadApp() {
                 a.removeAttribute("disabled");
 
                 // in case the Tinter.tint() in MatrixChat fires before the
-                // CSS has actually loaded (which in practice happens)
+                // CSS has actually loaded (which in practice happens)...
+
+                // FIXME: we should probably block loading the app or even
+                // showing a spinner until the theme is loaded, to avoid
+                // flashes of unstyled content.
                 a.onload = () => { 
                     Tinter.setTheme(theme);
-                    Tinter.tint();
                 };
             }
         }
