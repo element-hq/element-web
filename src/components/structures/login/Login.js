@@ -370,6 +370,9 @@ module.exports = React.createClass({
         }
         */
 
+        let serverConfig;
+        let header;
+
         if (!SdkConfig.get().disable_custom_urls) {
             serverConfig = <ServerConfig ref="serverConfig"
                 withToggleButton={true}
@@ -380,9 +383,6 @@ module.exports = React.createClass({
                 onServerConfigChange={this.onServerConfigChange}
                 delayTimeMs={1000} />;
         }
-
-        let serverConfig;
-        let header;
 
         // FIXME: remove status.im theme tweaks
         const theme = SettingsStore.getValue("theme");

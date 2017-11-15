@@ -288,7 +288,9 @@ module.exports = React.createClass({
         this.handleResize();
         window.addEventListener('resize', this.handleResize);
 
-        // check we have the right tint applied for this theme
+        // check we have the right tint applied for this theme.
+        // N.B. we don't call the whole of setTheme() here as we may be
+        // racing with the theme CSS download finishing from index.js
         Tinter.tint();
     },
 
@@ -912,22 +914,44 @@ module.exports = React.createClass({
         // disable all of them first, then enable the one we want. Chrome only
         // bothers to do an update on a true->false transition, so this ensures
         // that we get exactly one update, at the right time.
+        //
+        // ^ This comment was true when we used to use alternative stylesheets
+        // for the CSS.  Nowadays we just set them all as disabled in index.html
+        // and enable them as needed.  It might be cleaner to disable them all
+        // at the same time to prevent loading two themes simultaneously and
+        // having them interact badly... but this causes a flash of unstyled app
+        // which is even uglier.  So we don't.
 
-        Object.values(styleElements).forEach((a) => {
-            a.disabled = true;
-        });
         styleElements[theme].disabled = false;
 
-        Tinter.setTheme(theme);
-        const colors = Tinter.getCurrentColors();
-        Tinter.tint(colors[0], colors[1]);
+        const switchTheme = function() {
+            Object.values(styleElements).forEach((a) => {
+                if (a == styleElements[theme]) return;
+                a.disabled = true;
+            });
+            Tinter.setTheme(theme);
+        };
 
-        if (theme === 'dark') {
-            // abuse the tinter to change all the SVG's #fff to #2d2d2d
-            // XXX: obviously this shouldn't be hardcoded here.
-            Tinter.tintSvgWhite('#2d2d2d');
-        } else {
-            Tinter.tintSvgWhite('#ffffff');
+        // turns out that Firefox preloads the CSS for link elements with
+        // the disabled attribute, but Chrome doesn't.
+
+        let cssLoaded = false;
+
+        styleElements[theme].onload = () => {
+            switchTheme();
+        };
+
+        for (let i = 0; i < document.styleSheets.length; i++) {
+            const ss = document.styleSheets[i];
+            if (ss && ss.href === styleElements[theme].href) {
+                cssLoaded = true;
+                break;
+            }
+        }
+
+        if (cssLoaded) {
+            styleElements[theme].onload = undefined;
+            switchTheme();
         }
     },
 

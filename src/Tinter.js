@@ -17,23 +17,34 @@ limitations under the License.
 
 const DEBUG = 0;
 
-// utility to turn #rrggbb into [red,green,blue]
-function hexToRgb(color) {
-    if (color[0] === '#') color = color.slice(1);
-    if (color.length === 3) {
-        color = color[0] + color[0] +
-                color[1] + color[1] +
-                color[2] + color[2];
+// utility to turn #rrggbb or rgb(r,g,b) into [red,green,blue]
+function colorToRgb(color) {
+    if (color[0] === '#') {
+        color = color.slice(1);
+        if (color.length === 3) {
+            color = color[0] + color[0] +
+                    color[1] + color[1] +
+                    color[2] + color[2];
+        }
+        const val = parseInt(color, 16);
+        const r = (val >> 16) & 255;
+        const g = (val >> 8) & 255;
+        const b = val & 255;
+        return [r, g, b];
     }
-    const val = parseInt(color, 16);
-    const r = (val >> 16) & 255;
-    const g = (val >> 8) & 255;
-    const b = val & 255;
-    return [r, g, b];
+    else {
+        let match = color.match(/rgb\((.*?),(.*?),(.*?)\)/);
+        if (match) {
+            return [ parseInt(match[1]),
+                     parseInt(match[2]),
+                     parseInt(match[3]) ];
+        }
+    }
+    return [0,0,0];
 }
 
 // utility to turn [red,green,blue] into #rrggbb
-function rgbToHex(rgb) {
+function rgbToColor(rgb) {
     const val = (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
     return '#' + (0x1000000 + val).toString(16).slice(1);
 }
@@ -45,7 +56,7 @@ class Tinter {
         this.keyRgb = [
             "rgb(118, 207, 166)", // Vector Green
             "rgb(234, 245, 240)", // Vector Light Green
-            "rgb(211, 239, 225)", // Unused: BottomLeftMenu (20% Green overlaid on Light Green)
+            "rgb(211, 239, 225)", // roomsublist-label-bg-color (20% Green overlaid on Light Green)
         ];
 
         // Some algebra workings for calculating the tint % of Vector Green & Light Green
@@ -59,17 +70,26 @@ class Tinter {
         this.keyHex = [
             "#76CFA6", // Vector Green
             "#EAF5F0", // Vector Light Green
-            "#D3EFE1", // Unused: BottomLeftMenu (20% Green overlaid on Light Green)
+            "#D3EFE1", // roomsublist-label-bg-color (20% Green overlaid on Light Green)
             "#FFFFFF", // white highlights of the SVGs (for switching to dark theme)
         ];
 
-        // cache of our replacement colours
+        // track the replacement colours actually being used
         // defaults to our keys.
         this.colors = [
             this.keyHex[0],
             this.keyHex[1],
             this.keyHex[2],
             this.keyHex[3],
+        ];
+
+        // track the most current tint request inputs (which may differ from the
+        // end result stored in this.colors
+        this.currentTint = [
+            undefined,
+            undefined,
+            undefined,
+            undefined,
         ];
 
         this.cssFixups = [
@@ -101,6 +121,9 @@ class Tinter {
 
         // the currently loaded theme (if any)
         this.theme = undefined;
+
+        // whether to force a tint (e.g. after changing theme)
+        this.forceTint = false;
     }
 
     /**
@@ -122,48 +145,58 @@ class Tinter {
         return this.keyRgb;
     }
 
-    getCurrentColors() {
-        return this.colors;
-    }
-
     tint(primaryColor, secondaryColor, tertiaryColor) {
+        this.currentTint[0] = primaryColor;
+        this.currentTint[1] = secondaryColor;
+        this.currentTint[2] = tertiaryColor;
+
         this.calcCssFixups();
+
+        if (DEBUG) console.log("Tinter.tint(" + primaryColor + ", " +
+                                                secondaryColor + ", " + 
+                                                tertiaryColor + ")");
 
         if (!primaryColor) {
             primaryColor = this.keyRgb[0];
             secondaryColor = this.keyRgb[1];
+            tertiaryColor = this.keyRgb[2];
         }
 
         if (!secondaryColor) {
             const x = 0.16; // average weighting factor calculated from vector green & light green
-            const rgb = hexToRgb(primaryColor);
+            const rgb = colorToRgb(primaryColor);
             rgb[0] = x * rgb[0] + (1 - x) * 255;
             rgb[1] = x * rgb[1] + (1 - x) * 255;
             rgb[2] = x * rgb[2] + (1 - x) * 255;
-            secondaryColor = rgbToHex(rgb);
+            secondaryColor = rgbToColor(rgb);
         }
 
         if (!tertiaryColor) {
             const x = 0.19;
-            const rgb1 = hexToRgb(primaryColor);
-            const rgb2 = hexToRgb(secondaryColor);
+            const rgb1 = colorToRgb(primaryColor);
+            const rgb2 = colorToRgb(secondaryColor);
             rgb1[0] = x * rgb1[0] + (1 - x) * rgb2[0];
             rgb1[1] = x * rgb1[1] + (1 - x) * rgb2[1];
             rgb1[2] = x * rgb1[2] + (1 - x) * rgb2[2];
-            tertiaryColor = rgbToHex(rgb1);
+            tertiaryColor = rgbToColor(rgb1);
         }
 
-        if (this.colors[0] === primaryColor &&
+        if (this.forceTint == false &&
+            this.colors[0] === primaryColor &&
             this.colors[1] === secondaryColor &&
             this.colors[2] === tertiaryColor) {
             return;
         }
 
+        this.forceTint = false;
+
         this.colors[0] = primaryColor;
         this.colors[1] = secondaryColor;
         this.colors[2] = tertiaryColor;
 
-        if (DEBUG) console.log("Tinter.tint");
+        if (DEBUG) console.log("Tinter.tint final: (" + primaryColor + ", " +
+                                                secondaryColor + ", " + 
+                                                tertiaryColor + ")");
 
         // go through manually fixing up the stylesheets.
         this.applyCssFixups();
@@ -176,6 +209,8 @@ class Tinter {
     }
 
     tintSvgWhite(whiteColor) {
+        this.currentTint[3] = whiteColor;
+
         if (!whiteColor) {
             whiteColor = this.colors[3];
         }
@@ -202,15 +237,31 @@ class Tinter {
                 document.getElementById('mx_theme_secondaryAccentColor')
             ).color;
         }
+        if (document.getElementById('mx_theme_tertiaryAccentColor')) {
+            this.keyRgb[2] = window.getComputedStyle(
+                document.getElementById('mx_theme_tertiaryAccentColor')
+            ).color;
+        }
 
         this.calcCssFixups();
+        this.forceTint = true;
+
+        this.tint(this.currentTint[0], this.currentTint[1], this.currentTint[2]);
+
+        if (theme === 'dark') {
+            // abuse the tinter to change all the SVG's #fff to #2d2d2d
+            // XXX: obviously this shouldn't be hardcoded here.
+            this.tintSvgWhite('#2d2d2d');
+        } else {
+            this.tintSvgWhite('#ffffff');
+        }
     }
 
     calcCssFixups() {
         // cache our fixups
         if (this.cssFixups[this.theme]) return;
 
-        if (DEBUG) console.trace("calcCssFixups start for " + this.theme + " (checking " +
+        if (DEBUG) console.debug("calcCssFixups start for " + this.theme + " (checking " +
                                  document.styleSheets.length + 
                                  " stylesheets)");
 
@@ -279,7 +330,15 @@ class Tinter {
                                " fixups)");
         for (let i = 0; i < this.cssFixups[this.theme].length; i++) {
             const cssFixup = this.cssFixups[this.theme][i];
-            cssFixup.style[cssFixup.attr] = this.colors[cssFixup.index];
+            try {
+                cssFixup.style[cssFixup.attr] = this.colors[cssFixup.index];
+            }
+            catch (e) {
+                // Firefox Quantum explodes if you manually edit the CSS in the
+                // inspector and then try to do a tint, as apparently all the
+                // fixups are then stale.
+                console.error("Failed to apply cssFixup in Tinter! ", e.name);
+            }
         }
         if (DEBUG) console.log("applyCssFixups end");
     }
