@@ -1003,5 +1003,11 @@
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Veuillez noter que vous vous connecter au serveur %(hs)s, pas à matrix.org.",
     "Username on %(hs)s": "Nom d'utilisateur sur %(hs)s",
     "Restricted": "Restreint",
-    "Custom of %(powerLevel)s": "Personnalisé de %(powerLevel)s"
+    "Custom of %(powerLevel)s": "Personnalisé de %(powerLevel)s",
+    "Presence Management": "Gestion de présence",
+    "Hide avatar changes": "Masquer les changements d'avatar",
+    "Hide display name changes": "Masquer les changements de nom affiché",
+    "Enable inline URL previews by default": "Activer l'aperçu des URL par défaut",
+    "Enable URL previews for this room (only affects you)": "Activer l'aperçu des URL pour ce salon (n'affecte que vous)",
+    "Enable URL previews by default for participants in this room": "Activer l'aperçu des URL par défaut pour les participants de ce salon"
 }
