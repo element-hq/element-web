@@ -27,7 +27,7 @@
         if (match) {
             var title = match[1].charAt(0).toUpperCase() + match[1].slice(1);
         %>
-           <link rel="stylesheet" disabled title="<%= title %>" href="<%= file %>">
+           <link rel="stylesheet" disabled="disabled" title="<%= title %>" href="<%= file %>">
         <% } else { %>
            <link rel="stylesheet" href="<%= file %>">
         <% }
@@ -73,6 +73,6 @@
     </audio>
     <audio id="remoteAudio"/>
     <!-- let CSS themes pass constants to the app -->
-    <div id="mx_theme_accentColor"></div><div id="mx_theme_secondaryAccentColor"/></div>
+    <div id="mx_theme_accentColor"></div><div id="mx_theme_secondaryAccentColor"/></div><div id="mx_theme_tertiaryAccentColor"/></div>
   </body>
 </html>
