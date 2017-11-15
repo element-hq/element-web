@@ -74,13 +74,22 @@ class Tinter {
             "#FFFFFF", // white highlights of the SVGs (for switching to dark theme)
         ];
 
-        // cache of our replacement colours
+        // track the replacement colours actually being used
         // defaults to our keys.
         this.colors = [
             this.keyHex[0],
             this.keyHex[1],
             this.keyHex[2],
             this.keyHex[3],
+        ];
+
+        // track the most current tint request inputs (which may differ from the
+        // end result stored in this.colors
+        this.currentTint = [
+            undefined,
+            undefined,
+            undefined,
+            undefined,
         ];
 
         this.cssFixups = [
@@ -136,11 +145,11 @@ class Tinter {
         return this.keyRgb;
     }
 
-    getCurrentColors() {
-        return this.colors;
-    }
-
     tint(primaryColor, secondaryColor, tertiaryColor) {
+        this.currentTint[0] = primaryColor;
+        this.currentTint[1] = secondaryColor;
+        this.currentTint[2] = tertiaryColor;
+
         this.calcCssFixups();
 
         if (DEBUG) console.log("Tinter.tint(" + primaryColor + ", " +
@@ -200,6 +209,8 @@ class Tinter {
     }
 
     tintSvgWhite(whiteColor) {
+        this.currentTint[3] = whiteColor;
+
         if (!whiteColor) {
             whiteColor = this.colors[3];
         }
@@ -234,6 +245,16 @@ class Tinter {
 
         this.calcCssFixups();
         this.forceTint = true;
+
+        this.tint(this.currentTint[0], this.currentTint[1], this.currentTint[2]);
+
+        if (theme === 'dark') {
+            // abuse the tinter to change all the SVG's #fff to #2d2d2d
+            // XXX: obviously this shouldn't be hardcoded here.
+            this.tintSvgWhite('#2d2d2d');
+        } else {
+            this.tintSvgWhite('#ffffff');
+        }
     }
 
     calcCssFixups() {

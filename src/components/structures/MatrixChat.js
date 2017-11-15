@@ -922,13 +922,11 @@ module.exports = React.createClass({
         styleElements[theme].disabled = false;
 
         const switchTheme = function() {
-            const colors = Tinter.getCurrentColors();
             Object.values(styleElements).forEach((a) => {
                 if (a == styleElements[theme]) return;
                 a.disabled = true;
             });
             Tinter.setTheme(theme);
-            Tinter.tint(colors[0], colors[1]);
         };
 
         // turns out that Firefox preloads the CSS for link elements with
@@ -951,14 +949,6 @@ module.exports = React.createClass({
         if (cssLoaded) {
             styleElements[theme].onload = undefined;
             switchTheme();
-        }
-
-        if (theme === 'dark') {
-            // abuse the tinter to change all the SVG's #fff to #2d2d2d
-            // XXX: obviously this shouldn't be hardcoded here.
-            Tinter.tintSvgWhite('#2d2d2d');
-        } else {
-            Tinter.tintSvgWhite('#ffffff');
         }
     },
 
