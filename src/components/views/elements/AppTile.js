@@ -390,6 +390,8 @@ export default React.createClass({
                             className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
                             title={_t('Edit')}
                             onClick={this._onEditClick}
+                            width="10"
+                            height="10"
                         /> }
 
                         { /* Delete widget */ }
@@ -398,6 +400,8 @@ export default React.createClass({
                             className={deleteClasses}
                             title={_t(deleteWidgetLabel)}
                             onClick={this._onDeleteClick}
+                            width="10"
+                            height="10"
                         />
                     </span>
                 </div>

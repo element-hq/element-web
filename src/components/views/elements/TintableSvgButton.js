@@ -36,6 +36,8 @@ export default class TintableSvgButton extends React.Component {
                 className={classes}>
                 <TintableSvg
                     src={this.props.src}
+                    width={this.props.width}
+                    height={this.props.height}
                 ></TintableSvg>
                 <span
                     title={this.props.title}
@@ -49,8 +51,8 @@ TintableSvgButton.propTypes = {
     src: PropTypes.string,
     title: PropTypes.string,
     className: PropTypes.string,
-    width: PropTypes.string,
-    height: PropTypes.string,
+    width: PropTypes.string.isRequired,
+    height: PropTypes.string.isRequired,
     onClick: PropTypes.func,
 };
 
