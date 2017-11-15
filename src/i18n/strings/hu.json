@@ -217,5 +217,7 @@
     "Add rooms to this community": "Szobák hozzáadása ehhez a közösséghez",
     "Toolbox": "Szerszámok",
     "Send Account Data": "Fiók adatok küldése",
-    "Explore Account Data": "Fiók adatok böngészése"
+    "Explore Account Data": "Fiók adatok böngészése",
+    "Appear Offline": "Kapcsolat nélkülinek tűnik",
+    "Away": "Távol"
 }
