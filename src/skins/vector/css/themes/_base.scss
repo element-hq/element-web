@@ -165,6 +165,7 @@ $progressbar-color: #000;
     padding-right: 1.5em;
     cursor: pointer;
     display: inline-block;
+    outline: none;
 }
 
 @define-mixin mx_DialogButton_hover {
