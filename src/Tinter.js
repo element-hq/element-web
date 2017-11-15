@@ -19,6 +19,10 @@ const DEBUG = 0;
 
 // utility to turn #rrggbb or rgb(r,g,b) into [red,green,blue]
 function colorToRgb(color) {
+    if (!color) {
+        return [0, 0, 0];
+    }
+
     if (color[0] === '#') {
         color = color.slice(1);
         if (color.length === 3) {
