@@ -29,11 +29,11 @@ import Modal from '../../../Modal';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
-import UserSettingsStore from "../../../UserSettingsStore";
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import ContextualMenu from '../../structures/ContextualMenu';
 import {RoomMember} from 'matrix-js-sdk';
 import classNames from 'classnames';
+import SettingsStore from "../../../settings/SettingsStore";
 import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
 
 linkifyMatrix(linkify);
@@ -104,7 +104,7 @@ module.exports = React.createClass({
                 setTimeout(() => {
                     if (this._unmounted) return;
                     for (let i = 0; i < blocks.length; i++) {
-                        if (UserSettingsStore.getSyncedSetting("enableSyntaxHighlightLanguageDetection", false)) {
+                        if (SettingsStore.getValue("enableSyntaxHighlightLanguageDetection")) {
                             highlight.highlightBlock(blocks[i]);
                         } else {
                             // Only syntax highlight if there's a class starting with language-
@@ -169,7 +169,7 @@ module.exports = React.createClass({
     },
 
     pillifyLinks: function(nodes) {
-        const shouldShowPillAvatar = !UserSettingsStore.getSyncedSetting("Pill.shouldHidePillAvatar", false);
+        const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
         let node = nodes[0];
         while (node) {
             let pillified = false;
@@ -419,7 +419,7 @@ module.exports = React.createClass({
         const content = mxEvent.getContent();
 
         let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
-            disableBigEmoji: UserSettingsStore.getSyncedSetting('TextualBody.disableBigEmoji', false),
+            disableBigEmoji: SettingsStore.getValue('TextualBody.disableBigEmoji'),
         });
 
         if (this.props.highlightLink) {

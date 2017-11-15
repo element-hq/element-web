@@ -22,8 +22,8 @@ import Email from '../../../email';
 import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
-import UserSettingsStore from '../../../UserSettingsStore';
 import SdkConfig from '../../../SdkConfig';
+import SettingsStore from "../../../settings/SettingsStore";
 
 const FIELD_EMAIL = 'field_email';
 const FIELD_PHONE_COUNTRY = 'field_phone_country';
@@ -275,7 +275,7 @@ module.exports = React.createClass({
     render: function() {
         const self = this;
 
-        const theme = UserSettingsStore.getTheme();
+        const theme = SettingsStore.getValue("theme");
         // FIXME: remove hardcoded Status team tweaks at some point
         const emailPlaceholder = theme === 'status' ? _t("Email address") : _t("Email address (optional)");
 

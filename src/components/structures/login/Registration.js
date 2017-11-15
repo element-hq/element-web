@@ -26,8 +26,8 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import RegistrationForm from '../../views/login/RegistrationForm';
 import RtsClient from '../../../RtsClient';
 import { _t } from '../../../languageHandler';
-import UserSettingsStore from '../../../UserSettingsStore';
 import SdkConfig from '../../../SdkConfig';
+import SettingsStore from "../../../settings/SettingsStore";
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -329,7 +329,7 @@ module.exports = React.createClass({
         const Spinner = sdk.getComponent("elements.Spinner");
         const ServerConfig = sdk.getComponent('views.login.ServerConfig');
 
-        const theme = UserSettingsStore.getTheme();
+        const theme = SettingsStore.getValue("theme");
 
         let registerBody;
         if (this.state.doingUIAuth) {

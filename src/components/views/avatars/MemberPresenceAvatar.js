@@ -22,8 +22,8 @@ import MatrixClientPeg from "../../../MatrixClientPeg";
 import AccessibleButton from '../elements/AccessibleButton';
 import Presence from "../../../Presence";
 import dispatcher from "../../../dispatcher";
-import UserSettingsStore from "../../../UserSettingsStore";
 import * as ContextualMenu from "../../structures/ContextualMenu";
+import SettingsStore from "../../../settings/SettingsStore";
 
 module.exports = React.createClass({
     displayName: 'MemberPresenceAvatar',
@@ -133,7 +133,7 @@ module.exports = React.createClass({
         );
 
         // LABS: Disable presence management functions for now
-        if (!UserSettingsStore.isFeatureEnabled("feature_presence_management")) {
+        if (!SettingsStore.isFeatureEnabled("feature_presence_management")) {
             statusNode = null;
             onClickFn = null;
         }

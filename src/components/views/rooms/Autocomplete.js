@@ -24,9 +24,10 @@ import isEqual from 'lodash/isEqual';
 import sdk from '../../../index';
 import type {Completion} from '../../../autocomplete/Autocompleter';
 import Promise from 'bluebird';
-import UserSettingsStore from '../../../UserSettingsStore';
 import { Room } from 'matrix-js-sdk';
 
+import {getCompletions} from '../../../autocomplete/Autocompleter';
+import SettingsStore from "../../../settings/SettingsStore";
 import Autocompleter from '../../../autocomplete/Autocompleter';
 
 const COMPOSER_SELECTED = 0;
@@ -95,7 +96,7 @@ export default class Autocomplete extends React.Component {
             });
             return Promise.resolve(null);
         }
-        let autocompleteDelay = UserSettingsStore.getLocalSetting('autocompleteDelay', 200);
+        let autocompleteDelay = SettingsStore.getValue("autocompleteDelay");
 
         // Don't debounce if we are already showing completions
         if (this.state.completions.length > 0 || this.state.forceComplete) {
