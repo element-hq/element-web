@@ -302,6 +302,7 @@ async function loadApp() {
     const theme = configJson.default_theme || 'light';
     for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
         const href = a.getAttribute("href");
+        if (!href) continue;
         // shouldn't we be using the 'title' tag rather than the href?
         const match = href.match(/^bundles\/.*\/theme-(.*)\.css$/);
         if (match) {
