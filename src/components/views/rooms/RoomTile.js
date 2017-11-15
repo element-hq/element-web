@@ -27,7 +27,6 @@ const ContextualMenu = require('../../structures/ContextualMenu');
 const RoomNotifs = require('../../../RoomNotifs');
 const FormattingUtils = require('../../../utils/FormattingUtils');
 import AccessibleButton from '../elements/AccessibleButton';
-const UserSettingsStore = require('../../../UserSettingsStore');
 import ActiveRoomObserver from '../../../ActiveRoomObserver';
 import RoomViewStore from '../../../stores/RoomViewStore';
 

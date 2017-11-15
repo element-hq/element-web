@@ -17,58 +17,11 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import MatrixClientPeg from './MatrixClientPeg';
-import Notifier from './Notifier';
-import { _t, _td } from './languageHandler';
-import SdkConfig from './SdkConfig';
 
 /*
  * TODO: Make things use this. This is all WIP - see UserSettings.js for usage.
  */
-
-const FEATURES = [
-    {
-        id: 'feature_groups',
-        name: _td("Communities"),
-    },
-    {
-        id: 'feature_pinning',
-        name: _td("Message Pinning"),
-    },
-];
-
 export default {
-    getLabsFeatures() {
-        const featuresConfig = SdkConfig.get()['features'] || {};
-
-        // The old flag: honoured for backwards compatibility
-        const enableLabs = SdkConfig.get()['enableLabs'];
-
-        let labsFeatures;
-        if (enableLabs) {
-            labsFeatures = FEATURES;
-        } else {
-            labsFeatures = FEATURES.filter((f) => {
-                const sdkConfigValue = featuresConfig[f.id];
-                if (sdkConfigValue === 'labs') {
-                    return true;
-                }
-            });
-        }
-        return labsFeatures.map((f) => {
-            return f.id;
-        });
-    },
-
-    translatedNameForFeature(featureId) {
-        const feature = FEATURES.filter((f) => {
-            return f.id === featureId;
-        })[0];
-
-        if (feature === undefined) return null;
-
-        return _t(feature.name);
-    },
-
     loadProfileInfo: function() {
         const cli = MatrixClientPeg.get();
         return cli.getProfileInfo(cli.credentials.userId);
@@ -89,36 +42,6 @@ export default {
 
     saveThreePids: function(threePids) {
         // TODO
-    },
-
-    getEnableNotifications: function() {
-        return Notifier.isEnabled();
-    },
-
-    setEnableNotifications: function(enable) {
-        if (!Notifier.supportsDesktopNotifications()) {
-            return;
-        }
-        Notifier.setEnabled(enable);
-    },
-
-    getEnableNotificationBody: function() {
-        return Notifier.isBodyEnabled();
-    },
-
-    setEnableNotificationBody: function(enable) {
-        if (!Notifier.supportsDesktopNotifications()) {
-            return;
-        }
-        Notifier.setBodyEnabled(enable);
-    },
-
-    getEnableAudioNotifications: function() {
-        return Notifier.isAudioEnabled();
-    },
-
-    setEnableAudioNotifications: function(enable) {
-        Notifier.setAudioEnabled(enable);
     },
 
     changePassword: function(oldPassword, newPassword) {
@@ -166,84 +89,5 @@ export default {
             data: data,
             append: true,  // We always append for email pushers since we don't want to stop other accounts notifying to the same email address
         });
-    },
-
-    getUrlPreviewsDisabled: function() {
-        const event = MatrixClientPeg.get().getAccountData('org.matrix.preview_urls');
-        return (event && event.getContent().disable);
-    },
-
-    setUrlPreviewsDisabled: function(disabled) {
-        // FIXME: handle errors
-        return MatrixClientPeg.get().setAccountData('org.matrix.preview_urls', {
-            disable: disabled,
-        });
-    },
-
-    getSyncedSettings: function() {
-        const event = MatrixClientPeg.get().getAccountData('im.vector.web.settings');
-        return event ? event.getContent() : {};
-    },
-
-    getSyncedSetting: function(type, defaultValue = null) {
-        const settings = this.getSyncedSettings();
-        return settings.hasOwnProperty(type) ? settings[type] : defaultValue;
-    },
-
-    setSyncedSetting: function(type, value) {
-        const settings = this.getSyncedSettings();
-        settings[type] = value;
-        // FIXME: handle errors
-        return MatrixClientPeg.get().setAccountData('im.vector.web.settings', settings);
-    },
-
-    getLocalSettings: function() {
-        const localSettingsString = localStorage.getItem('mx_local_settings') || '{}';
-        return JSON.parse(localSettingsString);
-    },
-
-    getLocalSetting: function(type, defaultValue = null) {
-        const settings = this.getLocalSettings();
-        return settings.hasOwnProperty(type) ? settings[type] : defaultValue;
-    },
-
-    setLocalSetting: function(type, value) {
-        const settings = this.getLocalSettings();
-        settings[type] = value;
-        // FIXME: handle errors
-        localStorage.setItem('mx_local_settings', JSON.stringify(settings));
-    },
-
-    isFeatureEnabled: function(featureId: string): boolean {
-        const featuresConfig = SdkConfig.get()['features'];
-
-        // The old flag: honoured for backwards compatibility
-        const enableLabs = SdkConfig.get()['enableLabs'];
-
-        let sdkConfigValue = enableLabs ? 'labs' : 'disable';
-        if (featuresConfig && featuresConfig[featureId] !== undefined) {
-            sdkConfigValue = featuresConfig[featureId];
-        }
-
-        if (sdkConfigValue === 'enable') {
-            return true;
-        } else if (sdkConfigValue === 'disable') {
-            return false;
-        } else if (sdkConfigValue === 'labs') {
-            if (!MatrixClientPeg.get().isGuest()) {
-                // Make it explicit that guests get the defaults (although they shouldn't
-                // have been able to ever toggle the flags anyway)
-                const userValue = localStorage.getItem(`mx_labs_feature_${featureId}`);
-                return userValue === 'true';
-            }
-            return false;
-        } else {
-            console.warn(`Unknown features config for ${featureId}: ${sdkConfigValue}`);
-            return false;
-        }
-    },
-
-    setFeatureEnabled: function(featureId: string, enabled: boolean) {
-        localStorage.setItem(`mx_labs_feature_${featureId}`, enabled);
     },
 };

@@ -29,7 +29,6 @@ const classNames = require("classnames");
 const Matrix = require("matrix-js-sdk");
 import { _t } from '../../languageHandler';
 
-const UserSettingsStore = require('../../UserSettingsStore');
 const MatrixClientPeg = require("../../MatrixClientPeg");
 const ContentMessages = require("../../ContentMessages");
 const Modal = require("../../Modal");
@@ -44,10 +43,9 @@ const Rooms = require('../../Rooms');
 
 import KeyCode from '../../KeyCode';
 
-import UserProvider from '../../autocomplete/UserProvider';
-
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
+import SettingsStore from "../../settings/SettingsStore";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -150,8 +148,6 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("RoomMember.membership", this.onRoomMemberMembership);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
-
-        this._syncedSettings = UserSettingsStore.getSyncedSettings();
 
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
@@ -304,6 +300,15 @@ module.exports = React.createClass({
 
     _shouldShowApps: function(room) {
         if (!BROWSER_SUPPORTS_SANDBOX) return false;
+
+        // Check if user has previously chosen to hide the app drawer for this
+        // room. If so, do not show apps
+        let hideWidgetDrawer = localStorage.getItem(
+            room.roomId + "_hide_widget_drawer");
+
+        if (hideWidgetDrawer === "true") {
+            return false;
+        }
 
         const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
         // any valid widget = show apps
@@ -535,17 +540,11 @@ module.exports = React.createClass({
             // update unread count when scrolled up
             if (!this.state.searchResults && this.state.atEndOfLiveTimeline) {
                 // no change
-            } else if (!shouldHideEvent(ev, this._syncedSettings)) {
+            } else if (!shouldHideEvent(ev)) {
                 this.setState((state, props) => {
                     return {numUnreadMessages: state.numUnreadMessages + 1};
                 });
             }
-        }
-
-        // update the tab complete list as it depends on who most recently spoke,
-        // and that has probably just changed
-        if (ev.sender) {
-            UserProvider.getInstance().onUserSpoke(ev.sender);
         }
     },
 
@@ -568,7 +567,6 @@ module.exports = React.createClass({
         this._warnAboutEncryption(room);
         this._calculatePeekRules(room);
         this._updatePreviewUrlVisibility(room);
-        UserProvider.getInstance().setUserListFromRoom(room);
     },
 
     _warnAboutEncryption: function(room) {
@@ -616,38 +614,8 @@ module.exports = React.createClass({
     },
 
     _updatePreviewUrlVisibility: function(room) {
-        // console.log("_updatePreviewUrlVisibility");
-
-        // check our per-room overrides
-        const roomPreviewUrls = room.getAccountData("org.matrix.room.preview_urls");
-        if (roomPreviewUrls && roomPreviewUrls.getContent().disable !== undefined) {
-            this.setState({
-                showUrlPreview: !roomPreviewUrls.getContent().disable,
-            });
-            return;
-        }
-
-        // check our global disable override
-        const userRoomPreviewUrls = MatrixClientPeg.get().getAccountData("org.matrix.preview_urls");
-        if (userRoomPreviewUrls && userRoomPreviewUrls.getContent().disable) {
-            this.setState({
-                showUrlPreview: false,
-            });
-            return;
-        }
-
-        // check the room state event
-        const roomStatePreviewUrls = room.currentState.getStateEvents('org.matrix.room.preview_urls', '');
-        if (roomStatePreviewUrls && roomStatePreviewUrls.getContent().disable) {
-            this.setState({
-                showUrlPreview: false,
-            });
-            return;
-        }
-
-        // otherwise, we assume they're on.
         this.setState({
-            showUrlPreview: true,
+            showUrlPreview: SettingsStore.getValue("urlPreviewsEnabled", room.roomId),
         });
     },
 
@@ -666,12 +634,7 @@ module.exports = React.createClass({
         const room = this.state.room;
         if (!room) return;
 
-        const color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
-        let color_scheme = {};
-        if (color_scheme_event) {
-            color_scheme = color_scheme_event.getContent();
-            // XXX: we should validate the event
-        }
+        const color_scheme = SettingsStore.getValue("roomColor", room.room_id);
         console.log("Tinter.tint from updateTint");
         Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
     },
@@ -721,9 +684,6 @@ module.exports = React.createClass({
         // a member state changed in this room
         // refresh the conf call notification state
         this._updateConfCallNotification();
-
-        // refresh the tab complete list
-        UserProvider.getInstance().setUserListFromRoom(this.state.room);
 
         // if we are now a member of the room, where we were not before, that
         // means we have finished joining a room we were previously peeking
@@ -1778,7 +1738,7 @@ module.exports = React.createClass({
         const messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
                 timelineSet={this.state.room.getUnfilteredTimelineSet()}
-                showReadReceipts={!UserSettingsStore.getSyncedSetting('hideReadReceipts', false)}
+                showReadReceipts={!SettingsStore.getValue('hideReadReceipts')}
                 manageReadReceipts={!this.state.isPeeking}
                 manageReadMarkers={!this.state.isPeeking}
                 hidden={hideMessagePanel}

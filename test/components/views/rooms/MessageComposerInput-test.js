@@ -6,7 +6,6 @@ import sinon from 'sinon';
 import Promise from 'bluebird';
 import * as testUtils from '../../../test-utils';
 import sdk from 'matrix-react-sdk';
-import UserSettingsStore from '../../../../src/UserSettingsStore';
 const MessageComposerInput = sdk.getComponent('views.rooms.MessageComposerInput');
 import MatrixClientPeg from '../../../../src/MatrixClientPeg';
 import RoomMember from 'matrix-js-sdk';

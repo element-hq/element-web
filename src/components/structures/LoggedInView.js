@@ -19,7 +19,6 @@ limitations under the License.
 import * as Matrix from 'matrix-js-sdk';
 import React from 'react';
 
-import UserSettingsStore from '../../UserSettingsStore';
 import KeyCode from '../../KeyCode';
 import Notifier from '../../Notifier';
 import PageTypes from '../../PageTypes';
@@ -28,6 +27,7 @@ import sdk from '../../index';
 import dis from '../../dispatcher';
 import sessionStore from '../../stores/SessionStore';
 import MatrixClientPeg from '../../MatrixClientPeg';
+import SettingsStore from "../../settings/SettingsStore";
 
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is
@@ -74,7 +74,7 @@ export default React.createClass({
     getInitialState: function() {
         return {
             // use compact timeline view
-            useCompactLayout: UserSettingsStore.getSyncedSetting('useCompactLayout'),
+            useCompactLayout: SettingsStore.getValue('useCompactLayout'),
         };
     },
 
@@ -301,6 +301,7 @@ export default React.createClass({
             case PageTypes.GroupView:
                 page_element = <GroupView
                     groupId={this.props.currentGroupId}
+                    isNew={this.props.currentGroupIsNew}
                     collapsedRhs={this.props.collapseRhs}
                 />;
                 if (!this.props.collapseRhs) right_panel = <RightPanel groupId={this.props.currentGroupId} disabled={this.props.rightDisabled} />;

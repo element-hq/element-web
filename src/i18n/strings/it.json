@@ -46,5 +46,6 @@
     "Authentication": "Autenticazione",
     "Alias (optional)": "Alias (opzionale)",
     "Add a widget": "Aggiungi un widget",
-    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Un messaggio di testo è stato inviato a +%(msisdn)s. Inserisci il codice di verifica che contiene"
+    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Un messaggio di testo è stato inviato a +%(msisdn)s. Inserisci il codice di verifica che contiene",
+    "Edit": "Modifica"
 }

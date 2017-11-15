@@ -22,7 +22,6 @@ import dis from "../../../dispatcher";
 import ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
 import { _t, _tJsx} from '../../../languageHandler';
-import UserSettingsStore from '../../../UserSettingsStore';
 
 
 module.exports = React.createClass({

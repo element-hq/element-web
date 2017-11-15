@@ -19,7 +19,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClient} from 'matrix-js-sdk';
-import UserSettingsStore from '../../../UserSettingsStore';
 import FlairStore from '../../../stores/FlairStore';
 import dis from '../../../dispatcher';
 
@@ -43,18 +42,22 @@ class FlairAvatar extends React.Component {
     render() {
         const httpUrl = this.context.matrixClient.mxcUrlToHttp(
             this.props.groupProfile.avatarUrl, 16, 16, 'scale', false);
+        const tooltip = this.props.groupProfile.name ?
+            `${this.props.groupProfile.name} (${this.props.groupProfile.groupId})`:
+            this.props.groupProfile.groupId;
         return <img
             src={httpUrl}
             width="16"
             height="16"
             onClick={this.onClick}
-            title={this.props.groupProfile.groupId} />;
+            title={tooltip} />;
     }
 }
 
 FlairAvatar.propTypes = {
     groupProfile: PropTypes.shape({
         groupId: PropTypes.string.isRequired,
+        name: PropTypes.string,
         avatarUrl: PropTypes.string.isRequired,
     }),
 };
@@ -79,9 +82,7 @@ export default class Flair extends React.Component {
 
     componentWillMount() {
         this._unmounted = false;
-        if (UserSettingsStore.isFeatureEnabled('feature_groups') && FlairStore.groupSupport()) {
-            this._generateAvatars();
-        }
+        this._generateAvatars();
         this.context.matrixClient.on('RoomState.events', this.onRoomStateEvents);
     }
 

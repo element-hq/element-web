@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import classnames from 'classnames';
@@ -35,7 +36,10 @@ export default React.createClass({
         member: React.PropTypes.object,
         // group member object. Supply either this or 'member'
         groupMember: GroupMemberType,
+        // needed if a group member is specified
+        matrixClient: React.PropTypes.instanceOf(MatrixClient),
         action: React.PropTypes.string.isRequired, // eg. 'Ban'
+        title: React.PropTypes.string.isRequired, // eg. 'Ban this user?'
 
         // Whether to display a text field for a reason
         // If true, the second argument to onFinished will
@@ -75,7 +79,6 @@ export default React.createClass({
         const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
         const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
 
-        const title = _t("%(actionVerb)s this person?", { actionVerb: this.props.action});
         const confirmButtonClass = classnames({
             'mx_Dialog_primary': true,
             'danger': this.props.danger,
@@ -104,16 +107,17 @@ export default React.createClass({
             name = this.props.member.name;
             userId = this.props.member.userId;
         } else {
-            // we don't get this info from the API yet
-            avatar = <BaseAvatar name={this.props.groupMember.userId} width={48} height={48} />;
-            name = this.props.groupMember.userId;
+            const httpAvatarUrl = this.props.groupMember.avatarUrl ?
+                this.props.matrixClient.mxcUrlToHttp(this.props.groupMember.avatarUrl, 48, 48) : null;
+            name = this.props.groupMember.displayname || this.props.groupMember.userId;
             userId = this.props.groupMember.userId;
+            avatar = <BaseAvatar name={name} url={httpAvatarUrl} width={48} height={48} />;
         }
 
         return (
             <BaseDialog className="mx_ConfirmUserActionDialog" onFinished={this.props.onFinished}
                 onEnterPressed={this.onOk}
-                title={title}
+                title={this.props.title}
             >
                 <div className="mx_Dialog_content">
                     <div className="mx_ConfirmUserActionDialog_avatar">

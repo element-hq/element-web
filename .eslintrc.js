@@ -33,6 +33,8 @@ module.exports = {
         // This just uses the react plugin to help eslint known when
         // variables have been used in JSX
         "react/jsx-uses-vars": "error",
+        // Don't mark React as unused if we're using JSX
+        "react/jsx-uses-react": "error",
 
         // bind or arrow function in props causes performance issues
         "react/jsx-no-bind": ["error", {

@@ -29,11 +29,12 @@ import Modal from '../../../Modal';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
-import UserSettingsStore from "../../../UserSettingsStore";
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import ContextualMenu from '../../structures/ContextualMenu';
 import {RoomMember} from 'matrix-js-sdk';
 import classNames from 'classnames';
+import SettingsStore from "../../../settings/SettingsStore";
+import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
 
 linkifyMatrix(linkify);
 
@@ -103,7 +104,7 @@ module.exports = React.createClass({
                 setTimeout(() => {
                     if (this._unmounted) return;
                     for (let i = 0; i < blocks.length; i++) {
-                        if (UserSettingsStore.getSyncedSetting("enableSyntaxHighlightLanguageDetection", false)) {
+                        if (SettingsStore.getValue("enableSyntaxHighlightLanguageDetection")) {
                             highlight.highlightBlock(blocks[i]);
                         } else {
                             // Only syntax highlight if there's a class starting with language-
@@ -168,9 +169,11 @@ module.exports = React.createClass({
     },
 
     pillifyLinks: function(nodes) {
-        const shouldShowPillAvatar = !UserSettingsStore.getSyncedSetting("Pill.shouldHidePillAvatar", false);
-        for (let i = 0; i < nodes.length; i++) {
-            const node = nodes[i];
+        const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
+        let node = nodes[0];
+        while (node) {
+            let pillified = false;
+
             if (node.tagName === "A" && node.getAttribute("href")) {
                 const href = node.getAttribute("href");
 
@@ -189,10 +192,71 @@ module.exports = React.createClass({
 
                     ReactDOM.render(pill, pillContainer);
                     node.parentNode.replaceChild(pillContainer, node);
+                    // Pills within pills aren't going to go well, so move on
+                    pillified = true;
+
+                    // update the current node with one that's now taken its place
+                    node = pillContainer;
                 }
-            } else if (node.children && node.children.length) {
-                this.pillifyLinks(node.children);
+            } else if (node.nodeType == Node.TEXT_NODE) {
+                const Pill = sdk.getComponent('elements.Pill');
+
+                let currentTextNode = node;
+                const roomNotifTextNodes = [];
+
+                // Take a textNode and break it up to make all the instances of @room their
+                // own textNode, adding those nodes to roomNotifTextNodes
+                while (currentTextNode !== null) {
+                    const roomNotifPos = Pill.roomNotifPos(currentTextNode.textContent);
+                    let nextTextNode = null;
+                    if (roomNotifPos > -1) {
+                        let roomTextNode = currentTextNode;
+
+                        if (roomNotifPos > 0) roomTextNode = roomTextNode.splitText(roomNotifPos);
+                        if (roomTextNode.textContent.length > Pill.roomNotifLen()) {
+                            nextTextNode = roomTextNode.splitText(Pill.roomNotifLen());
+                        }
+                        roomNotifTextNodes.push(roomTextNode);
+                    }
+                    currentTextNode = nextTextNode;
+                }
+
+                if (roomNotifTextNodes.length > 0) {
+                    const pushProcessor = new PushProcessor(MatrixClientPeg.get());
+                    const atRoomRule = pushProcessor.getPushRuleById(".m.rule.roomnotif");
+                    if (atRoomRule && pushProcessor.ruleMatchesEvent(atRoomRule, this.props.mxEvent)) {
+                        // Now replace all those nodes with Pills
+                        for (const roomNotifTextNode of roomNotifTextNodes) {
+                            const pillContainer = document.createElement('span');
+                            const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+                            const pill = <Pill
+                                type={Pill.TYPE_AT_ROOM_MENTION}
+                                inMessage={true}
+                                room={room}
+                                shouldShowPillAvatar={true}
+                            />;
+
+                            ReactDOM.render(pill, pillContainer);
+                            roomNotifTextNode.parentNode.replaceChild(pillContainer, roomNotifTextNode);
+
+                            // Set the next node to be processed to the one after the node
+                            // we're adding now, since we've just inserted nodes into the structure
+                            // we're iterating over.
+                            // Note we've checked roomNotifTextNodes.length > 0 so we'll do this at least once
+                            node = roomNotifTextNode.nextSibling;
+                        }
+                        // Nothing else to do for a text node (and we don't need to advance
+                        // the loop pointer because we did it above)
+                        continue;
+                    }
+                }
             }
+
+            if (node.childNodes && node.childNodes.length && !pillified) {
+                this.pillifyLinks(node.childNodes);
+            }
+
+            node = node.nextSibling;
         }
     },
 
@@ -355,7 +419,7 @@ module.exports = React.createClass({
         const content = mxEvent.getContent();
 
         let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
-            disableBigEmoji: UserSettingsStore.getSyncedSetting('TextualBody.disableBigEmoji', false),
+            disableBigEmoji: SettingsStore.getValue('TextualBody.disableBigEmoji'),
         });
 
         if (this.props.highlightLink) {

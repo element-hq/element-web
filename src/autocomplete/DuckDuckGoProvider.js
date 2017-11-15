@@ -1,6 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,8 +25,6 @@ import {TextualCompletion} from './Components';
 
 const DDG_REGEX = /\/ddg\s+(.+)$/g;
 const REFERRER = 'vector';
-
-let instance = null;
 
 export default class DuckDuckGoProvider extends AutocompleteProvider {
     constructor() {
@@ -94,13 +93,6 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
 
     getName() {
         return '🔍 ' + _t('Results from DuckDuckGo');
-    }
-
-    static getInstance(): DuckDuckGoProvider {
-        if (instance == null) {
-            instance = new DuckDuckGoProvider();
-        }
-        return instance;
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {

@@ -19,7 +19,7 @@ limitations under the License.
 
 const React = require('react');
 const classNames = require("classnames");
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 const Modal = require('../../../Modal');
 
 const sdk = require('../../../index');
@@ -510,12 +510,12 @@ module.exports = withMatrixClient(React.createClass({
         }
 
         if (needsSenderProfile) {
-            let aux = null;
+            let text = null;
             if (!this.props.tileShape) {
-                if (msgtype === 'm.image') aux = _t('sent an image');
-                else if (msgtype === 'm.video') aux = _t('sent a video');
-                else if (msgtype === 'm.file') aux = _t('uploaded a file');
-                sender = <SenderProfile onClick={this.onSenderProfileClick} mxEvent={this.props.mxEvent} enableFlair={!aux} aux={aux} />;
+                if (msgtype === 'm.image') text = _td('%(senderName)s sent an image');
+                else if (msgtype === 'm.video') text = _td('%(senderName)s sent a video');
+                else if (msgtype === 'm.file') text = _td('%(senderName)s uploaded a file');
+                sender = <SenderProfile onClick={this.onSenderProfileClick} mxEvent={this.props.mxEvent} enableFlair={!text} text={text} />;
             } else {
                 sender = <SenderProfile mxEvent={this.props.mxEvent} enableFlair={true} />;
             }

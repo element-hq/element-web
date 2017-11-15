@@ -6,7 +6,7 @@
     "Dismiss": "Відхилити",
     "Drop here %(toAction)s": "Кидайте сюди %(toAction)s",
     "Error": "Помилка",
-    "Failed to forget room %(errCode)s": "Не вдалось забути кімнату %(errCode)s",
+    "Failed to forget room %(errCode)s": "Не вдалось видалити кімнату %(errCode)s",
     "Favourite": "Вибране",
     "Mute": "Стишити",
     "Notifications": "Сповіщення",
@@ -96,5 +96,12 @@
     "Email address": "Адреса е-почти",
     "Email address (optional)": "Адреса е-почти (не обов'язково)",
     "Email, name or matrix ID": "Е-почта, ім'я або matrix ID",
-    "Failed to send email": "Помилка відправки  е-почти"
+    "Failed to send email": "Помилка відправки  е-почти",
+    "Edit": "Редактувати",
+    "Unpin Message": "Відкріпити повідомлення",
+    "Register": "Зарегіструватись",
+    "Rooms": "Кімнати",
+    "Add rooms to this community": "Добавити кімнати в це суспільство",
+    "This email address is already in use": "Ця адреса елект. почти вже використовується",
+    "This phone number is already in use": "Цей телефонний номер вже використовується"
 }

@@ -19,8 +19,7 @@ import request from 'browser-request';
 import counterpart from 'counterpart';
 import Promise from 'bluebird';
 import React from 'react';
-
-import UserSettingsStore from './UserSettingsStore';
+import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
 
 const i18nFolder = 'i18n/';
 
@@ -168,7 +167,7 @@ export function setLanguage(preferredLangs) {
     }).then((langData) => {
         counterpart.registerTranslations(langToUse, langData);
         counterpart.setLocale(langToUse);
-        UserSettingsStore.setLocalSetting('language', langToUse);
+        SettingsStore.setValue("language", null, SettingLevel.DEVICE, langToUse);
         console.log("set language to " + langToUse);
 
         // Set 'en' as fallback language:
@@ -252,6 +251,26 @@ function getLangsJson() {
     });
 }
 
+function weblateToCounterpart(inTrs) {
+    const outTrs = {};
+
+    for (const key of Object.keys(inTrs)) {
+        const keyParts = key.split('|', 2);
+        if (keyParts.length === 2) {
+            let obj = outTrs[keyParts[0]];
+            if (obj === undefined) {
+                obj = {};
+                outTrs[keyParts[0]] = obj;
+            }
+            obj[keyParts[1]] = inTrs[key];
+        } else {
+            outTrs[key] = inTrs[key];
+        }
+    }
+
+    return outTrs;
+}
+
 function getLanguage(langPath) {
     return new Promise((resolve, reject) => {
         request(
@@ -261,7 +280,7 @@ function getLanguage(langPath) {
                     reject({err: err, response: response});
                     return;
                 }
-                resolve(JSON.parse(body));
+                resolve(weblateToCounterpart(JSON.parse(body)));
             },
         );
     });
