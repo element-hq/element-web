@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import {MatrixClient} from 'matrix-js-sdk';
 import sdk from '../../index';
-import { _t, _tJsx } from '../../languageHandler';
+import { _t } from '../../languageHandler';
 import withMatrixClient from '../../wrappers/withMatrixClient';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import dis from '../../dispatcher';
@@ -165,13 +165,13 @@ export default withMatrixClient(React.createClass({
                         <div className="mx_MyGroups_headerCard_header">
                             { _t('Join an existing community') }
                         </div>
-                        { _tJsx(
+                        { _t(
                             'To join an existing community you\'ll have to '+
                             'know its community identifier; this will look '+
                             'something like <i>+example:matrix.org</i>.',
-                            /<i>(.*)<\/i>/,
-                            (sub) => <i>{ sub }</i>,
-                        ) }
+                            {},
+                            { 'i': (sub) => <i>{ sub }</i> })
+                        }
                     </div>
                 </div>
             </div>

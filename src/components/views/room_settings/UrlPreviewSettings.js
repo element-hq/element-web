@@ -17,7 +17,7 @@ limitations under the License.
 
 const React = require('react');
 const sdk = require("../../../index");
-import {_t, _td, _tJsx} from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 
@@ -42,11 +42,11 @@ module.exports = React.createClass({
         let previewsForAccount = null;
         if (SettingsStore.getValueAt(SettingLevel.ACCOUNT, "urlPreviewsEnabled")) {
             previewsForAccount = (
-                _tJsx("You have <a>enabled</a> URL previews by default.", /<a>(.*?)<\/a>/, (sub)=><a href="#/settings">{ sub }</a>)
+                _t("You have <a>enabled</a> URL previews by default.", {}, { 'a': (sub)=><a href="#/settings">{ sub }</a> })
             );
         } else {
             previewsForAccount = (
-                _tJsx("You have <a>disabled</a> URL previews by default.", /<a>(.*?)<\/a>/, (sub)=><a href="#/settings">{ sub }</a>)
+                _t("You have <a>disabled</a> URL previews by default.", {}, { 'a': (sub)=><a href="#/settings">{ sub }</a> })
             );
         }
 
@@ -70,7 +70,7 @@ module.exports = React.createClass({
             previewsForRoom = (<label>{ _t(str) }</label>);
         }
 
-        let previewsForRoomAccount = (
+        const previewsForRoomAccount = (
             <SettingsFlag name="urlPreviewsEnabled"
                           level={SettingLevel.ROOM_ACCOUNT}
                           roomId={this.props.room.roomId}
