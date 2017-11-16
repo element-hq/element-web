@@ -299,7 +299,7 @@
     "Use with caution": "Use com cautela",
     "VoIP is unsupported": "Chamada de voz não permitida",
     "%(senderName)s withdrew %(targetName)s's invitation.": "%(senderName)s desfez o convite a %(targetName)s.",
-    "You are already in a call.": "Você já está em  uma chamada.",
+    "You are already in a call.": "Você já está em uma chamada.",
     "You're not in any rooms yet! Press <CreateRoomButton> to make a room or <RoomDirectoryButton> to browse the directory": "Você ainda não está em nenhuma sala! Clique em <CreateRoomButton> para criar uma sala ou em <RoomDirectoryButton> para navegar pela lista pública de salas",
     "You are trying to access %(roomName)s.": "Você está tentando acessar a sala %(roomName)s.",
     "You cannot place a call with yourself.": "Você não pode iniciar uma chamada.",
@@ -729,5 +729,18 @@
     "Ignore request": "Ignorar o pedido",
     "You added a new device '%(displayName)s', which is requesting encryption keys.": "Você adicionou um novo dispositivo '%(displayName)s', que está solicitando chaves de criptografia.",
     "Your unverified device '%(displayName)s' is requesting encryption keys.": "Seu dispositivo não verificado '%(displayName)s' está solicitando chaves de criptografia.",
-    "Encryption key request": "Solicitação de chave de criptografia"
+    "Encryption key request": "Solicitação de chave de criptografia",
+    "Invite to Community": "Convidar à comunidade",
+    "Restricted": "Restrito",
+    "Name or matrix ID": "Nome ou ID matrix",
+    "Add to community": "Adicionar à comunidade",
+    "Add rooms to the community": "Adicionar salas à comunidade",
+    "Failed to invite users to community": "Falha ao convidar os usuários à comunidade",
+    "Failed to invite users to %(groupId)s": "Falha ao convidar os usuários para %(groupId)s",
+    "Failed to invite the following users to %(groupId)s:": "Falha ao convidar os seguintes usuários para %(groupId)s:",
+    "Failed to add the following rooms to %(groupId)s:": "Falha ao adicionar as seguintes salas para %(groupId)s:",
+    "You are not in this room.": "Você não está nesta sala.",
+    "You do not have permission to do that in this room.": "Você não tem permissão para fazer isto nesta sala.",
+    "Ignored user": "Usuário ignorado",
+    "You are no longer ignoring %(userId)s": "Você parou de ignorar %(userId)s"
 }
