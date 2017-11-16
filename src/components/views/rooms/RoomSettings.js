@@ -17,7 +17,7 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import React from 'react';
-import { _t, _tJsx, _td } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
@@ -309,9 +309,9 @@ module.exports = React.createClass({
         }
 
         // url preview settings
-        let ps = this.saveUrlPreviewSettings();
+        const ps = this.saveUrlPreviewSettings();
         if (ps.length > 0) {
-            ps.map(p => promises.push(p));
+            ps.map((p) => promises.push(p));
         }
 
         // related groups
@@ -584,7 +584,7 @@ module.exports = React.createClass({
         const roomState = this.props.room.currentState;
         const isEncrypted = cli.isRoomEncrypted(this.props.room.roomId);
 
-        let settings = (
+        const settings = (
             <SettingsFlag name="blacklistUnverifiedDevices"
                           level={SettingLevel.ROOM_DEVICE}
                           roomId={this.props.room.roomId}
@@ -628,9 +628,7 @@ module.exports = React.createClass({
         const ColorSettings = sdk.getComponent("room_settings.ColorSettings");
         const UrlPreviewSettings = sdk.getComponent("room_settings.UrlPreviewSettings");
         const RelatedGroupSettings = sdk.getComponent("room_settings.RelatedGroupSettings");
-        const EditableText = sdk.getComponent('elements.EditableText');
         const PowerSelector = sdk.getComponent('elements.PowerSelector');
-        const Loader = sdk.getComponent("elements.Spinner");
 
         const cli = MatrixClientPeg.get();
         const roomState = this.props.room.currentState;
@@ -749,9 +747,9 @@ module.exports = React.createClass({
             }
         });
 
-        var tagsSection = null;
+        let tagsSection = null;
         if (canSetTag || self.state.tags) {
-            var tagsSection =
+            tagsSection =
                 <div className="mx_RoomSettings_tags">
                     { _t("Tagged as: ") }{ canSetTag ?
                         (tags.map(function(tag, i) {
@@ -781,10 +779,10 @@ module.exports = React.createClass({
         if (this.state.join_rule === "public" && aliasCount == 0) {
             addressWarning =
                 <div className="mx_RoomSettings_warning">
-                        { _tJsx(
+                        { _t(
                             'To link to a room it must have <a>an address</a>.',
-                            /<a>(.*?)<\/a>/,
-                            (sub) => <a href="#addresses">{ sub }</a>,
+                            {},
+                            { 'a': (sub) => <a href="#addresses">{ sub }</a> },
                         ) }
                 </div>;
         }
@@ -931,7 +929,7 @@ module.exports = React.createClass({
                     { Object.keys(events_levels).map(function(event_type, i) {
                         let label = plEventsToLabels[event_type];
                         if (label) label = _t(label);
-                        else label = _tJsx("To send events of type <eventType/>, you must be a", /<eventType\/>/, () => <code>{ event_type }</code>);
+                        else label = _t("To send events of type <eventType/>, you must be a", {}, { 'eventType': <code>{ event_type }</code> });
                         return (
                             <div className="mx_RoomSettings_powerLevel" key={event_type}>
                                 <span className="mx_RoomSettings_powerLevelKey">{ label } </span>

@@ -25,6 +25,9 @@ export default class RoomAccountSettingsHandler extends SettingsHandler {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {
             const content = this._getSettings(roomId, "org.matrix.room.preview_urls");
+
+            // Check to make sure that we actually got a boolean
+            if (typeof(content['disable']) !== "boolean") return null;
             return !content['disable'];
         }
 

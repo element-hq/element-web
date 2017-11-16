@@ -84,7 +84,7 @@ class MatrixClientPeg {
             if (this.matrixClient.initCrypto) {
                 await this.matrixClient.initCrypto();
             }
-        } catch(e) {
+        } catch (e) {
             // this can happen for a number of reasons, the most likely being
             // that the olm library was missing. It's not fatal.
             console.warn("Unable to initialise e2e: " + e);
@@ -99,7 +99,7 @@ class MatrixClientPeg {
             const promise = this.matrixClient.store.startup();
             console.log(`MatrixClientPeg: waiting for MatrixClient store to initialise`);
             await promise;
-        } catch(err) {
+        } catch (err) {
             // log any errors when starting up the database (if one exists)
             console.error(`Error starting matrixclient store: ${err}`);
         }

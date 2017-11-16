@@ -133,7 +133,7 @@ module.exports = React.createClass({
             '$matrix_avatar_url': user ? MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl) : '',
         };
 
-        if(app.data) {
+        if (app.data) {
             Object.keys(app.data).forEach((key) => {
                 params['$' + key] = app.data[key];
             });
@@ -177,7 +177,7 @@ module.exports = React.createClass({
     _canUserModify: function() {
         try {
             return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
-        } catch(err) {
+        } catch (err) {
             console.error(err);
             return false;
         }

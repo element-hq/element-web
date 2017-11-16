@@ -399,8 +399,7 @@ module.exports = React.createClass({
         // FIXME: remove hardcoded Status team tweaks at some point
         if (theme === 'status' && this.state.errorText) {
             header = <div className="mx_Login_error">{ this.state.errorText }</div>;
-        }
-        else {
+        } else {
             header = <h2>{ _t('Create an account') }</h2>;
             if (this.state.errorText) {
                 errorText = <div className="mx_Login_error">{ this.state.errorText }</div>;

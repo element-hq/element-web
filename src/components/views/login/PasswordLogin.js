@@ -122,7 +122,7 @@ class PasswordLogin extends React.Component {
             mx_Login_field_disabled: disabled,
         };
 
-        switch(loginType) {
+        switch (loginType) {
             case PasswordLogin.LOGIN_FIELD_EMAIL:
                 classes.mx_Login_email = true;
                 return <input
@@ -144,9 +144,9 @@ class PasswordLogin extends React.Component {
                     type="text"
                     name="username" // make it a little easier for browser's remember-password
                     onChange={this.onUsernameChanged}
-                    placeholder={ SdkConfig.get().disable_custom_urls ? 
+                    placeholder={SdkConfig.get().disable_custom_urls ?
                                       _t("Username on %(hs)s", {
-                                        hs: this.props.hsUrl.replace(/^https?:\/\//, '')
+                                        hs: this.props.hsUrl.replace(/^https?:\/\//, ''),
                                       }) : _t("User name")}
                     value={this.state.username}
                     autoFocus

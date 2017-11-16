@@ -16,8 +16,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import { _t, _tJsx } from '../../languageHandler';
 import Matrix from 'matrix-js-sdk';
+import { _t } from '../../languageHandler';
 import sdk from '../../index';
 import WhoIsTyping from '../../WhoIsTyping';
 import MatrixClientPeg from '../../MatrixClientPeg';
@@ -25,7 +25,6 @@ import MemberAvatar from '../views/avatars/MemberAvatar';
 import Resend from '../../Resend';
 import { showUnknownDeviceDialogForMessages } from '../../cryptodevices';
 
-const HIDE_DEBOUNCE_MS = 10000;
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
 const STATUS_BAR_EXPANDED_LARGE = 2;
@@ -286,13 +285,13 @@ module.exports = React.createClass({
 
         if (hasUDE) {
             title = _t("Message not sent due to unknown devices being present");
-            content = _tJsx(
-                "<a>Show devices</a> or <a>cancel all</a>.",
-                [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
-                [
-                    (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this._onShowDevicesClick}>{ sub }</a>,
-                    (sub) => <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={this._onCancelAllClick}>{ sub }</a>,
-                ],
+            content = _t(
+                "<showDevicesText>Show devices</showDevicesText> or <cancelText>cancel all</cancelText>.",
+                {},
+                {
+                    'showDevicesText': (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this._onShowDevicesClick}>{ sub }</a>,
+                    'cancelText': (sub) => <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={this._onCancelAllClick}>{ sub }</a>,
+                },
             );
         } else {
             if (
@@ -305,14 +304,15 @@ module.exports = React.createClass({
             } else {
                 title = _t("Some of your messages have not been sent.");
             }
-            content = _tJsx(
-                "<a>Resend all</a> or <a>cancel all</a> now. "+
-                "You can also select individual messages to resend or cancel.",
-                [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
-                [
-                    (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this._onResendAllClick}>{ sub }</a>,
-                    (sub) => <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={this._onCancelAllClick}>{ sub }</a>,
-                ],
+            content = _t("<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. " +
+               "You can also select individual messages to resend or cancel.",
+                {},
+                {
+                    'resendText': (sub) =>
+                        <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this._onResendAllClick}>{ sub }</a>,
+                    'cancelText': (sub) =>
+                        <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={this._onCancelAllClick}>{ sub }</a>,
+                },
             );
         }
 
@@ -391,12 +391,15 @@ module.exports = React.createClass({
         if (this.props.sentMessageAndIsAlone) {
             return (
                 <div className="mx_RoomStatusBar_isAlone">
-                    { _tJsx("There's no one else here! Would you like to <a>invite others</a> or <a>stop warning about the empty room</a>?",
-                        [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
-                        [
-                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="invite" onClick={this.props.onInviteClick}>{ sub }</a>,
-                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="nowarn" onClick={this.props.onStopWarningClick}>{ sub }</a>,
-                        ],
+                    { _t("There's no one else here! Would you like to <inviteText>invite others</inviteText> " +
+                            "or <nowarnText>stop warning about the empty room</nowarnText>?",
+                        {},
+                        {
+                            'inviteText': (sub) =>
+                                <a className="mx_RoomStatusBar_resend_link" key="invite" onClick={this.props.onInviteClick}>{ sub }</a>,
+                            'nowarnText': (sub) =>
+                                <a className="mx_RoomStatusBar_resend_link" key="nowarn" onClick={this.props.onStopWarningClick}>{ sub }</a>,
+                        },
                     ) }
                 </div>
             );

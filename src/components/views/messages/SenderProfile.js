@@ -19,7 +19,7 @@
 import React from 'react';
 import sdk from '../../../index';
 import Flair from '../elements/Flair.js';
-import { _tJsx } from '../../../languageHandler';
+import { _t, substitute } from '../../../languageHandler';
 
 export default function SenderProfile(props) {
     const EmojiText = sdk.getComponent('elements.EmojiText');
@@ -42,22 +42,28 @@ export default function SenderProfile(props) {
             : null,
     ];
 
-    let content = '';
-
-    if(props.text) {
-        // Replace senderName, and wrap surrounding text in spans with the right class
-        content = _tJsx(props.text, /^(.*)\%\(senderName\)s(.*)$/m, (p1, p2) => [
-            p1 ? <span className='mx_SenderProfile_aux'>{ p1 }</span> : null,
-            nameElem,
-            p2 ? <span className='mx_SenderProfile_aux'>{ p2 }</span> : null,
-        ]);
+    let content;
+    if (props.text) {
+        content = _t(props.text, { senderName: () => nameElem });
     } else {
-        content = nameElem;
+        // There is nothing to translate here, so call substitute() instead
+        content = substitute('%(senderName)s', { senderName: () => nameElem });
     }
 
+    // The text surrounding the user name must be wrapped in order for it to have the correct opacity.
+    // It is not possible to wrap the whole thing, because the user name might contain flair which should
+    // be shown at full opacity. Sadly CSS does not make it possible to "reset" opacity so we have to do it
+    // in parts like this. Sometimes CSS makes me a sad panda :-(
+    // XXX: This could be avoided if the actual colour is set, rather than faking it with opacity
     return (
         <div className="mx_SenderProfile" dir="auto" onClick={props.onClick}>
-            { content }
+            { content.props.children[0] ?
+                <span className='mx_SenderProfile_aux'>{ content.props.children[0] }</span> : ''
+            }
+            { content.props.children[1] }
+            { content.props.children[2] ?
+                <span className='mx_SenderProfile_aux'>{ content.props.children[2] }</span> : ''
+            }
         </div>
     );
 }

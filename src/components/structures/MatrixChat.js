@@ -315,7 +315,7 @@ module.exports = React.createClass({
 
         // the first thing to do is to try the token params in the query-string
         Lifecycle.attemptTokenLogin(this.props.realQueryParams).then((loggedIn) => {
-            if(loggedIn) {
+            if (loggedIn) {
                 this.props.onTokenLoginCompleted();
 
                 // don't do anything else until the page reloads - just stay in
@@ -888,7 +888,7 @@ module.exports = React.createClass({
      */
     _onSetTheme: function(theme) {
         if (!theme) {
-            theme = this.props.config.default_theme || 'light';
+            theme = SettingsStore.getValueAt(SettingLevel.DEFAULT, "theme");
         }
 
         // look for the stylesheet elements.

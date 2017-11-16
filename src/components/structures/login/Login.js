@@ -18,7 +18,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import { _t, _tJsx } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import * as languageHandler from '../../../languageHandler';
 import sdk from '../../../index';
 import Login from '../../../Login';
@@ -96,7 +96,7 @@ module.exports = React.createClass({
         ).then((data) => {
             this.props.onLoggedIn(data);
         }, (error) => {
-            if(this._unmounted) {
+            if (this._unmounted) {
                 return;
             }
             let errorText;
@@ -113,14 +113,14 @@ module.exports = React.createClass({
                             <div className="mx_Login_smallError">
                                 { _t('Please note you are logging into the %(hs)s server, not matrix.org.',
                                     {
-                                        hs: this.props.defaultHsUrl.replace(/^https?:\/\//, '')
+                                        hs: this.props.defaultHsUrl.replace(/^https?:\/\//, ''),
                                     })
                                 }
                             </div>
                         </div>
                     );
                 } else {
-                    errorText = _t('Incorrect username and/or password.');   
+                    errorText = _t('Incorrect username and/or password.');
                 }
             } else {
                 // other errors, not specific to doing a password login
@@ -136,7 +136,7 @@ module.exports = React.createClass({
                 loginIncorrect: error.httpStatus === 401 || error.httpStatus == 403,
             });
         }).finally(() => {
-            if(this._unmounted) {
+            if (this._unmounted) {
                 return;
             }
             this.setState({
@@ -272,17 +272,19 @@ module.exports = React.createClass({
                  !this.state.enteredHomeserverUrl.startsWith("http"))
             ) {
                 errorText = <span>
-                    { _tJsx("Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. " +
+                    {
+                        _t("Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. " +
                             "Either use HTTPS or <a>enable unsafe scripts</a>.",
-                      /<a>(.*?)<\/a>/,
-                      (sub) => { return <a href="https://www.google.com/search?&q=enable%20unsafe%20scripts">{ sub }</a>; },
+                            {},
+                            { 'a': (sub) => { return <a href="https://www.google.com/search?&q=enable%20unsafe%20scripts">{ sub }</a>; } },
                     ) }
                 </span>;
             } else {
                 errorText = <span>
-                    { _tJsx("Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
-                      /<a>(.*?)<\/a>/,
-                      (sub) => { return <a href={this.state.enteredHomeserverUrl}>{ sub }</a>; },
+                    {
+                        _t("Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
+                            {},
+                            { 'a': (sub) => { return <a href={this.state.enteredHomeserverUrl}>{ sub }</a>; } },
                     ) }
                 </span>;
             }
@@ -293,7 +295,7 @@ module.exports = React.createClass({
 
     componentForStep: function(step) {
         switch (step) {
-            case 'm.login.password':
+            case 'm.login.password': {
                 const PasswordLogin = sdk.getComponent('login.PasswordLogin');
                 return (
                     <PasswordLogin
@@ -309,12 +311,14 @@ module.exports = React.createClass({
                         hsUrl={this.state.enteredHomeserverUrl}
                     />
                 );
-            case 'm.login.cas':
+            }
+            case 'm.login.cas': {
                 const CasLogin = sdk.getComponent('login.CasLogin');
                 return (
                     <CasLogin onSubmit={this.onCasLogin} />
                 );
-            default:
+            }
+            default: {
                 if (!step) {
                     return;
                 }
@@ -323,11 +327,12 @@ module.exports = React.createClass({
                     { _t('Sorry, this homeserver is using a login which is not recognised ') }({ step })
                     </div>
                 );
+            }
         }
     },
 
     _onLanguageChange: function(newLang) {
-        if(languageHandler.getCurrentLanguage() !== newLang) {
+        if (languageHandler.getCurrentLanguage() !== newLang) {
             SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLang);
             PlatformPeg.get().reload();
         }
@@ -388,8 +393,7 @@ module.exports = React.createClass({
         const theme = SettingsStore.getValue("theme");
         if (theme !== "status") {
             header = <h2>{ _t('Sign in') }</h2>;
-        }
-        else {
+        } else {
             if (!this.state.errorText) {
                 header = <h2>{ _t('Sign in to get started') }</h2>;
             }
