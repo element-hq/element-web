@@ -40,7 +40,6 @@ export class NotificationsEnabledController extends SettingController {
         if (!Notifier.isPossible()) return false;
 
         if (calculatedValue === null) {
-            console.log(isMasterRuleEnabled());
             return isMasterRuleEnabled();
         }
 
