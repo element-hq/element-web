@@ -29,6 +29,10 @@ module.exports = {
         // so we replace it with a version that is class property aware
         "babel/no-invalid-this": "error",
 
+        // We appear to follow this most of the time, so let's enforce it instead
+        // of occasionally following it (or catching it in review)
+        "keyword-spacing": "error",
+
         /** react **/
         // This just uses the react plugin to help eslint known when
         // variables have been used in JSX
