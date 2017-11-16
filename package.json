@@ -46,7 +46,7 @@
     "start:js:prod": "cross-env NODE_ENV=production webpack-dev-server -w --progress",
     "start": "parallelshell \"npm run reskindex:watch\" \"npm run start:res\" \"npm run start:js\"",
     "start:prod": "parallelshell \"npm run reskindex:watch\" \"npm run start:res\" \"npm run start:js:prod\"",
-    "dashboard": "webpack-dashboard -- npm run start",
+    "dashboard": "NODE_ENV=dashboard webpack-dashboard -- npm run start",
     "lint": "eslint src/",
     "lintall": "eslint src/ test/",
     "clean": "rimraf lib webapp electron_app/dist",

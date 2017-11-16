@@ -8,7 +8,7 @@ const dashboard = new Dashboard();
 const devServerHost = "127.0.0.1";
 const devServerPort = 8080;
 
-module.exports = {
+const config = {
     entry: {
         "bundle": "./src/vector/index.js",
         "indexeddb-worker": "./src/vector/indexedbd-worker.js",
@@ -142,10 +142,10 @@ module.exports = {
     devServer: {
         host: devServerHost,
         port: devServerPort,
-        compress: true,
+        compress: false,
         historyApiFallback: true,
         inline: true,
-        quiet: true,   // important
+        quiet: false,   // important
         hot: true,
         open: false,
         // serve unwebpacked assets from webapp.
@@ -156,6 +156,12 @@ module.exports = {
         },
     },
 };
+
+if (process.env.NODE_ENV === "dashboard") {
+    config.devServer.quiet = true;
+}
+
+module.exports = config;
 
 // olm is an optional dependency. Ignore it if it's not installed, to avoid a
 // scary-looking error.
