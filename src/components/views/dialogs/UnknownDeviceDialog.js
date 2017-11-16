@@ -113,11 +113,6 @@ export default React.createClass({
     },
 
     render: function() {
-        if (this.state.devices === null) {
-            const Spinner = sdk.getComponent("elements.Spinner");
-            return <Spinner />;
-        }
-
         let warning;
         if (SettingsStore.getValue("blacklistUnverifiedDevices", this.props.room.roomId)) {
             warning = (
