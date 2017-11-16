@@ -137,6 +137,7 @@ function _setCallListeners(call) {
                                 _reAttemptCall(call);
                             },
                             call.direction === 'outbound' ? _t("Call Anyway") : _t("Answer Anyway"),
+                            call.direction === 'outbound' ? _t("Call") : _t("Answer"),
                         );
                     }
                 },

@@ -24,6 +24,14 @@ import Resend from '../../../Resend';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 
+function markAllDevicesKnown(devices) {
+    Object.keys(devices).forEach((userId) => {
+        Object.keys(devices[userId]).map((deviceId) => {
+            MatrixClientPeg.get().setDeviceKnown(userId, deviceId, true);
+        });
+    });
+}
+
 function DeviceListEntry(props) {
     const {userId, device} = props;
 
@@ -97,9 +105,33 @@ export default React.createClass({
 
         // map from userid -> deviceid -> deviceinfo
         devices: PropTypes.object.isRequired,
+
         onFinished: PropTypes.func.isRequired,
+
+        // Label for the button that marks all devices known and tries the send again
         sendAnywayLabel: PropTypes.string.isRequired,
-        onSendAnyway: PropTypes.func.isRequired,
+
+        // Label for the button that to send the event if you've verified all devices
+        sendLabel: PropTypes.string.isRequired,
+
+        // function to retry the request once all devices are verified / known
+        onSend: PropTypes.func.isRequired,
+    },
+
+    componentWillMount: function() {
+        MatrixClientPeg.get().on("deviceVerificationChanged", this._onDeviceVerificationChanged);
+    },
+
+    componentWillUnmount: function() {
+        MatrixClientPeg.get().removeListener("deviceVerificationChanged", this._onDeviceVerificationChanged);
+    },
+
+    _onDeviceVerificationChanged: function(userId, deviceId, deviceInfo) {
+        if (this.props.devices[userId] && this.props.devices[userId][deviceId]) {
+            // XXX: Mutating props :/
+            this.props.devices[userId][deviceId] = deviceInfo;
+            this.forceUpdate();
+        }
     },
 
     _onDismissClicked: function() {
@@ -107,8 +139,15 @@ export default React.createClass({
     },
 
     _onSendAnywayClicked: function() {
+        markAllDevicesKnown(this.props.devices);
+
         this.props.onFinished();
-        this.props.onSendAnyway();
+        this.props.onSend();
+    },
+
+    _onSendClicked: function() {
+        this.props.onFinished();
+        this.props.onSend();
     },
 
     render: function() {
@@ -137,6 +176,26 @@ export default React.createClass({
             );
         }
 
+        let haveUnknownDevices = false;
+        Object.keys(this.props.devices).forEach((userId) => {
+            Object.keys(this.props.devices[userId]).map((deviceId) => {
+                const device = this.props.devices[userId][deviceId];
+                if (device.isUnverified() && !device.isKnown()) {
+                    haveUnknownDevices = true;
+                }
+            });
+        });
+        let sendButton;
+        if (haveUnknownDevices) {
+            sendButton = <button onClick={this._onSendAnywayClicked}>
+                { this.props.sendAnywayLabel }
+            </button>;
+        } else {
+            sendButton = <button onClick={this._onSendClicked}>
+                { this.props.sendLabel }
+            </button>;
+        }
+
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog className='mx_UnknownDeviceDialog'
@@ -153,10 +212,7 @@ export default React.createClass({
                     <UnknownDeviceList devices={this.props.devices} />
                 </GeminiScrollbar>
                 <div className="mx_Dialog_buttons">
-                    {this.props.sendAnywayButton}
-                    <button onClick={this._onSendAnywayClicked}>
-                        { this.props.sendAnywayLabel }
-                    </button>
+                    {sendButton}
                     <button className="mx_Dialog_primary" autoFocus={true}
                         onClick={this._onDismissClicked}
                     >

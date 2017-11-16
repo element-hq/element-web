@@ -44,8 +44,7 @@ export function getUnknownDevicesForRoom(matrixClient, room) {
 
 export function showUnknownDeviceDialogForMessages(matrixClient, room) {
     getUnknownDevicesForRoom(matrixClient, room).then((unknownDevices) => {
-        const onSendAnywayClicked = () => {
-            markAllDevicesKnown(matrixClient, unknownDevices);
+        const onSendClicked = () => {
             Resend.resendUnsentEvents(room);
         };
 
@@ -54,32 +53,21 @@ export function showUnknownDeviceDialogForMessages(matrixClient, room) {
             room: room,
             devices: unknownDevices,
             sendAnywayLabel: _t("Send anyway"),
-            onSendAnyway: onSendAnywayClicked,
+            sendLabel: _t("Send"),
+            onSend: onSendClicked,
         }, 'mx_Dialog_unknownDevice');
     });
 }
 
-export function showUnknownDeviceDialogForCalls(matrixClient, room, sendAnyway, sendAnywayLabel) {
+export function showUnknownDeviceDialogForCalls(matrixClient, room, sendAnyway, sendAnywayLabel, sendLabel) {
     getUnknownDevicesForRoom(matrixClient, room).then((unknownDevices) => {
-        const onSendAnywayClicked = () => {
-            markAllDevicesKnown(matrixClient, unknownDevices);
-            sendAnyway();
-        };
-
         const UnknownDeviceDialog = sdk.getComponent('dialogs.UnknownDeviceDialog');
         Modal.createTrackedDialog('Unknown Device Dialog', '', UnknownDeviceDialog, {
             room: room,
             devices: unknownDevices,
             sendAnywayLabel: sendAnywayLabel,
-            onSendAnyway: onSendAnywayClicked,
+            sendLabel: sendLabel,
+            onSend: sendAnyway,
         }, 'mx_Dialog_unknownDevice');
-    });
-}
-
-function markAllDevicesKnown(matrixClient, devices) {
-    Object.keys(devices).forEach((userId) => {
-        Object.keys(devices[userId]).map((deviceId) => {
-            matrixClient.setDeviceKnown(userId, deviceId, true);
-        });
     });
 }
