@@ -22,7 +22,7 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
-import { _t, _td, _tJsx } from '../../languageHandler';
+import { _t, _td } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import Modal from '../../Modal';
 import classnames from 'classnames';
@@ -932,12 +932,12 @@ export default React.createClass({
                 className="mx_GroupView_groupDesc_placeholder"
                 onClick={this._onEditClick}
             >
-                { _tJsx(
+                { _t(
                     'Your community hasn\'t got a Long Description, a HTML page to show to community members.<br />' +
                     'Click here to open settings and give it one!',
-                    [/<br \/>/],
-                    [(sub) => <br />])
-                }
+                    {},
+                    { 'br': <br /> },
+                ) }
             </div>;
         }
         const groupDescEditingClasses = classnames({
