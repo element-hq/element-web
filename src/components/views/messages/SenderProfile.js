@@ -19,7 +19,7 @@
 import React from 'react';
 import sdk from '../../../index';
 import Flair from '../elements/Flair.js';
-import { _t, substitute } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 
 export default function SenderProfile(props) {
     const EmojiText = sdk.getComponent('elements.EmojiText');
@@ -31,39 +31,30 @@ export default function SenderProfile(props) {
         return <span />; // emote message must include the name so don't duplicate it
     }
 
+    const nameElem = <EmojiText key='name'>{ name || '' }</EmojiText>;
+
     // Name + flair
-    const nameElem = [
-        <EmojiText key='name' className="mx_SenderProfile_name">{ name || '' }</EmojiText>,
-        props.enableFlair ?
+    const nameFlair = <span>
+        <span className="mx_SenderProfile_name">
+            { nameElem }
+        </span>
+        { props.enableFlair ?
             <Flair key='flair'
                 userId={mxEvent.getSender()}
                 roomId={mxEvent.getRoomId()}
                 showRelated={true} />
-            : null,
-    ];
+            : null
+        }
+    </span>;
 
-    let content;
-    if (props.text) {
-        content = _t(props.text, { senderName: () => nameElem });
-    } else {
-        // There is nothing to translate here, so call substitute() instead
-        content = substitute('%(senderName)s', { senderName: () => nameElem });
-    }
+    const content = props.text ?
+        <span className="mx_SenderProfile_aux">
+            { _t(props.text, { senderName: () => nameElem }) }
+        </span> : nameFlair;
 
-    // The text surrounding the user name must be wrapped in order for it to have the correct opacity.
-    // It is not possible to wrap the whole thing, because the user name might contain flair which should
-    // be shown at full opacity. Sadly CSS does not make it possible to "reset" opacity so we have to do it
-    // in parts like this. Sometimes CSS makes me a sad panda :-(
-    // XXX: This could be avoided if the actual colour is set, rather than faking it with opacity
     return (
         <div className="mx_SenderProfile" dir="auto" onClick={props.onClick}>
-            { content.props.children[0] ?
-                <span className='mx_SenderProfile_aux'>{ content.props.children[0] }</span> : ''
-            }
-            { content.props.children[1] }
-            { content.props.children[2] ?
-                <span className='mx_SenderProfile_aux'>{ content.props.children[2] }</span> : ''
-            }
+            { content }
         </div>
     );
 }
