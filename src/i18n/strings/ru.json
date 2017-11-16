@@ -219,5 +219,7 @@
     "Send Account Data": "Отправить данные аккаунта",
     "Explore Account Data": "Просмотр данных аккаунта",
     "Away": "Нет на месте",
-    "Appear Offline": "Отображать как не в сети"
+    "Appear Offline": "Отображать как не в сети",
+    "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Лучший опыт вы получите, установив <chromeLink>Chrome</chromeLink> или <firefoxLink>Firefox</firefoxLink>.",
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> и <operaLink>Opera</operaLink> работают тоже."
 }
