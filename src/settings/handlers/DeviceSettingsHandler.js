@@ -40,11 +40,17 @@ export default class DeviceSettingsHandler extends SettingsHandler {
 
         // Special case notifications
         if (settingName === "notificationsEnabled") {
-            return localStorage.getItem("notifications_enabled") === "true";
+            const value = localStorage.getItem("notifications_enabled");
+            if (typeof(value) === "string") return value === "true";
+            return null; // wrong type or otherwise not set
         } else if (settingName === "notificationBodyEnabled") {
-            return localStorage.getItem("notifications_body_enabled") === "true";
+            const value = localStorage.getItem("notifications_body_enabled");
+            if (typeof(value) === "string") return value === "true";
+            return null; // wrong type or otherwise not set
         } else if (settingName === "audioNotificationsEnabled") {
-            return localStorage.getItem("audio_notifications_enabled") === "true";
+            const value = localStorage.getItem("audio_notifications_enabled");
+            if (typeof(value) === "string") return value === "true";
+            return null; // wrong type or otherwise not set
         }
 
         return this._getSettings()[settingName];

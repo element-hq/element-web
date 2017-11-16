@@ -15,12 +15,35 @@ limitations under the License.
 */
 
 import SettingController from "./SettingController";
+import MatrixClientPeg from '../../MatrixClientPeg';
+
+// XXX: This feels wrong.
+import PushProcessor from "matrix-js-sdk/lib/pushprocessor";
+
+function isMasterRuleEnabled() {
+    // Return the value of the master push rule as a default
+    const processor = new PushProcessor(MatrixClientPeg.get());
+    const masterRule = processor.getPushRuleById(".m.rule.master");
+
+    if (!masterRule) {
+        console.warn("No master push rule! Notifications are disabled for this user.");
+        return false;
+    }
+
+    // Why enabled == false means "enabled" is beyond me.
+    return !masterRule.enabled;
+}
 
 export class NotificationsEnabledController extends SettingController {
     getValueOverride(level, roomId, calculatedValue) {
         const Notifier = require('../../Notifier'); // avoids cyclical references
+        if (!Notifier.isPossible()) return false;
 
-        return calculatedValue && Notifier.isPossible();
+        if (calculatedValue === null) {
+            return isMasterRuleEnabled();
+        }
+
+        return calculatedValue;
     }
 
     onChange(level, roomId, newValue) {
@@ -35,15 +58,22 @@ export class NotificationsEnabledController extends SettingController {
 export class NotificationBodyEnabledController extends SettingController {
     getValueOverride(level, roomId, calculatedValue) {
         const Notifier = require('../../Notifier'); // avoids cyclical references
+        if (!Notifier.isPossible()) return false;
 
-        return calculatedValue && Notifier.isEnabled();
+        if (calculatedValue === null) {
+            return isMasterRuleEnabled();
+        }
+
+        return calculatedValue;
     }
 }
 
 export class AudioNotificationsEnabledController extends SettingController {
     getValueOverride(level, roomId, calculatedValue) {
         const Notifier = require('../../Notifier'); // avoids cyclical references
+        if (!Notifier.isPossible()) return false;
 
-        return calculatedValue && Notifier.isEnabled();
+        // Note: Audio notifications are *not* enabled by default.
+        return calculatedValue;
     }
 }

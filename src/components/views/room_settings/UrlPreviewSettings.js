@@ -17,7 +17,7 @@ limitations under the License.
 
 const React = require('react');
 const sdk = require("../../../index");
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 
@@ -63,9 +63,9 @@ module.exports = React.createClass({
                 </label>
             );
         } else {
-            let str = "URL previews are enabled by default for participants in this room.";
+            let str = _td("URL previews are enabled by default for participants in this room.");
             if (!SettingsStore.getValueAt(SettingLevel.ROOM, "urlPreviewsEnabled")) {
-                str = "URL previews are disabled by default for participants in this room.";
+                str = _td("URL previews are disabled by default for participants in this room.");
             }
             previewsForRoom = (<label>{ _t(str) }</label>);
         }

@@ -227,6 +227,8 @@
     "Delete": "Delete",
     "Disable Notifications": "Disable Notifications",
     "Enable Notifications": "Enable Notifications",
+    "URL previews are enabled by default for participants in this room.": "URL previews are enabled by default for participants in this room.",
+    "URL previews are disabled by default for participants in this room.": "URL previews are disabled by default for participants in this room.",
     "Cannot add any more widgets": "Cannot add any more widgets",
     "The maximum permitted number of widgets have already been added to this room.": "The maximum permitted number of widgets have already been added to this room.",
     "Add a widget": "Add a widget",
