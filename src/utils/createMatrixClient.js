@@ -23,7 +23,7 @@ const localStorage = window.localStorage;
 let indexedDB;
 try {
     indexedDB = window.indexedDB;
-} catch(e) {}
+} catch (e) {}
 
 /**
  * Create a new matrix client, with the persistent stores set up appropriately

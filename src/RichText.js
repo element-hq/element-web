@@ -68,7 +68,7 @@ function unicodeToEmojiUri(str) {
             return unicodeChar;
         } else {
             // Remove variant selector VS16 (explicitly emoji) as it is unnecessary and leads to an incorrect URL below
-            if(unicodeChar.length == 2 && unicodeChar[1] == '\ufe0f') {
+            if (unicodeChar.length == 2 && unicodeChar[1] == '\ufe0f') {
                 unicodeChar = unicodeChar[0];
             }
 

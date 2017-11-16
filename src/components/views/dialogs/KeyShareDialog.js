@@ -54,7 +54,7 @@ export default React.createClass({
 
             const deviceInfo = r[userId][deviceId];
 
-            if(!deviceInfo) {
+            if (!deviceInfo) {
                 console.warn(`No details found for device ${userId}:${deviceId}`);
 
                 this.props.onFinished(false);

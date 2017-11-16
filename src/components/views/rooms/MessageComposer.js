@@ -111,10 +111,10 @@ export default class MessageComposer extends React.Component {
                 </div>
             ),
             onFinished: (shouldUpload) => {
-                if(shouldUpload) {
+                if (shouldUpload) {
                     // MessageComposer shouldn't have to rely on its parent passing in a callback to upload a file
                     if (files) {
-                        for(let i=0; i<files.length; i++) {
+                        for (let i=0; i<files.length; i++) {
                             this.props.uploadFile(files[i]);
                         }
                     }

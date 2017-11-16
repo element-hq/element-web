@@ -309,9 +309,9 @@ module.exports = React.createClass({
         }
 
         // url preview settings
-        let ps = this.saveUrlPreviewSettings();
+        const ps = this.saveUrlPreviewSettings();
         if (ps.length > 0) {
-            ps.map(p => promises.push(p));
+            ps.map((p) => promises.push(p));
         }
 
         // related groups
@@ -584,7 +584,7 @@ module.exports = React.createClass({
         const roomState = this.props.room.currentState;
         const isEncrypted = cli.isRoomEncrypted(this.props.room.roomId);
 
-        let settings = (
+        const settings = (
             <SettingsFlag name="blacklistUnverifiedDevices"
                           level={SettingLevel.ROOM_DEVICE}
                           roomId={this.props.room.roomId}
@@ -747,7 +747,7 @@ module.exports = React.createClass({
             }
         });
 
-        var tagsSection = null;
+        let tagsSection = null;
         if (canSetTag || self.state.tags) {
             tagsSection =
                 <div className="mx_RoomSettings_tags">

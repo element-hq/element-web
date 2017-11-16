@@ -434,7 +434,7 @@ export default class MessageComposerInput extends React.Component {
         if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
             // The first matched group includes just the matched plaintext emoji
             const emojiMatch = REGEX_EMOJI_WHITESPACE.exec(text.slice(0, currentStartOffset));
-            if(emojiMatch) {
+            if (emojiMatch) {
                 // plaintext -> hex unicode
                 const emojiUc = asciiList[emojiMatch[1]];
                 // hex unicode -> shortname -> actual unicode
@@ -696,7 +696,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
         const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
-        if(
+        if (
             ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item']
             .includes(currentBlockType)
         ) {
