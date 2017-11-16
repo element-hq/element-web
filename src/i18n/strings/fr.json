@@ -1009,5 +1009,9 @@
     "Hide display name changes": "Masquer les changements de nom affiché",
     "Enable inline URL previews by default": "Activer l'aperçu des URL par défaut",
     "Enable URL previews for this room (only affects you)": "Activer l'aperçu des URL pour ce salon (n'affecte que vous)",
-    "Enable URL previews by default for participants in this room": "Activer l'aperçu des URL par défaut pour les participants de ce salon"
+    "Enable URL previews by default for participants in this room": "Activer l'aperçu des URL par défaut pour les participants de ce salon",
+    "URL previews are enabled by default for participants in this room.": "Les aperçus d'URL sont activés par défaut pour les participants de ce salon.",
+    "URL previews are disabled by default for participants in this room.": "Les aperçus d'URL sont désactivés par défaut pour les participants de ce salon.",
+    "<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.": "<resendText>Tout renvoyer</resendText> ou <cancelText>tout annuler</cancelText> maintenant. Vous pouvez également sélectionner des messages individuels à renvoyer ou annuler.",
+    "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Il n'y a personne d'autre ici ! Souhaitez-vous <inviteText>inviter d'autres personnes</inviteText> ou <nowarnText>ne plus être notifié à propos du salon vide</nowarnText> ?"
 }
