@@ -59,7 +59,6 @@ import sdk from './index';
 import { _t } from './languageHandler';
 import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher';
-import { getUnknownDevicesForRoom } from './cryptodevices';
 import SettingsStore from "./settings/SettingsStore";
 import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 
