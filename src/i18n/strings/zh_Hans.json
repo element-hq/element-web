@@ -217,5 +217,7 @@
     "Register": "注册",
     "Rooms": "聊天室",
     "Invite to this community": "邀请加入此社区",
-    "Add rooms to this community": "添加聊天室到此社区"
+    "Add rooms to this community": "添加聊天室到此社区",
+    "Appear Offline": "似乎离线了",
+    "Away": "离开状态"
 }
