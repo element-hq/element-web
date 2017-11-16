@@ -210,6 +210,8 @@
     "Enable Notifications": "Enable Notifications",
     "You have <a>enabled</a> URL previews by default.": "You have <a>enabled</a> URL previews by default.",
     "You have <a>disabled</a> URL previews by default.": "You have <a>disabled</a> URL previews by default.",
+    "URL previews are enabled by default for participants in this room.": "URL previews are enabled by default for participants in this room.",
+    "URL previews are disabled by default for participants in this room.": "URL previews are disabled by default for participants in this room.",
     "URL Previews": "URL Previews",
     "Cannot add any more widgets": "Cannot add any more widgets",
     "The maximum permitted number of widgets have already been added to this room.": "The maximum permitted number of widgets have already been added to this room.",
