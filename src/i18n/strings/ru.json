@@ -998,9 +998,11 @@
     "Enable URL previews for this room (only affects you)": "Включить просмотр URL-адресов для этой комнаты (влияет только на вас)",
     "Enable URL previews by default for participants in this room": "Включить просмотр URL-адресов по умолчанию для участников этой комнаты",
     "Status.im theme": "Тема status.im",
-    "Restricted": "Ограниченный",
+    "Restricted": "Ограничен",
     "Username on %(hs)s": "Имя пользователя на %(hs)s",
-    "The visibility of '%(roomName)s' in %(groupId)s could not be updated.": "Видимость '%(roomName)s' в %(groupId)s не может быть актуализирована.",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s ваше приглашение было отклонено %(count)s раз",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s ваше приглашение отклонил"
+    "The visibility of '%(roomName)s' in %(groupId)s could not be updated.": "Видимость '%(roomName)s' в %(groupId)s не удалось обновить.",
+    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s отклонили приглашения %(count)s раз",
+    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s отклонили приглашения",
+    "URL previews are enabled by default for participants in this room.": "Предварительный просмотр URL-адресов для участников этой комнаты по умолчанию.",
+    "URL previews are disabled by default for participants in this room.": "Предварительный просмотр URL-адресов для участников этой комнаты по умолчанию."
 }
