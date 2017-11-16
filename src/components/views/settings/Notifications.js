@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import Promise from 'bluebird';
 import sdk from 'matrix-react-sdk';
-import { _t, _tJsx } from 'matrix-react-sdk/lib/languageHandler';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 import SettingsStore, {SettingLevel} from "matrix-react-sdk/lib/settings/SettingsStore";
@@ -564,10 +564,11 @@ module.exports = React.createClass({
                         "vectorRuleId": "_keywords",
                         "description" : (
                             <span>
-                            { _tJsx('Messages containing <span>keywords</span>',
-                                /<span>(.*?)<\/span>/,
-                                (sub) =>
+                            { _t('Messages containing <span>keywords</span>',
+                                {},
+                                { 'span': (sub) =>
                                     <span className="mx_UserNotifSettings_keywords" onClick={ self.onKeywordsClicked }>{sub}</span>
+                                },
                             )}
                             </span>
                         ),
