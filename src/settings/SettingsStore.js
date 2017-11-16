@@ -176,7 +176,15 @@ export default class SettingsStore {
      * @return {*} The value, or null if not found
      */
     static getValue(settingName, roomId = null, excludeDefault = false) {
-        return SettingsStore.getValueAt(LEVEL_ORDER[0], settingName, roomId, false, excludeDefault);
+        // Verify that the setting is actually a setting
+        if (!SETTINGS[settingName]) {
+            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
+        }
+
+        const setting = SETTINGS[settingName];
+        const levelOrder = (setting.supportedLevelsAreOrdered ? setting.supportedLevels : LEVEL_ORDER);
+
+        return SettingsStore.getValueAt(levelOrder[0], settingName, roomId, false, excludeDefault);
     }
 
     /**
