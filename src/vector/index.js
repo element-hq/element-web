@@ -77,7 +77,7 @@ import {parseQs, parseQsFromFragment} from './url_utils';
 import Platform from './platform';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
-import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
+import SettingsStore, {SettingLevel} from "matrix-react-sdk/lib/settings/SettingsStore";
 import Tinter from 'matrix-react-sdk/lib/Tinter';
 
 var lastLocationHashSet = null;
@@ -299,7 +299,7 @@ async function loadApp() {
     // as quickly as we possibly can, set a default theme...
     const styleElements = Object.create(null);
     let a;
-    const theme = configJson.default_theme || 'light';
+    const theme = SettingsStore.getValueAt(SettingLevel.DEFAULT, "theme");
     for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
         const href = a.getAttribute("href");
         if (!href) continue;
