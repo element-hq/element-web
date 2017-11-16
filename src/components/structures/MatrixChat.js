@@ -891,7 +891,7 @@ module.exports = React.createClass({
      */
     _onSetTheme: function(theme) {
         if (!theme) {
-            theme = this.props.config.default_theme || 'light';
+            theme = SettingsStore.getValueAt(SettingLevel.DEFAULT, "theme");
         }
 
         // look for the stylesheet elements.
