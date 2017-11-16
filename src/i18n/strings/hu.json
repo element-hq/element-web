@@ -219,5 +219,7 @@
     "Send Account Data": "Fiók adatok küldése",
     "Explore Account Data": "Fiók adatok böngészése",
     "Appear Offline": "Kapcsolat nélkülinek tűnik",
-    "Away": "Távol"
+    "Away": "Távol",
+    "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "A legjobb élmény érdekében telepíts <chromeLink>Chrome</chromeLink>ot vagy <firefoxLink>Firefox</firefoxLink>ot.",
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "Működik <safariLink>Safari</safariLink> és <operaLink>Opera</operaLink> böngészővel is."
 }
