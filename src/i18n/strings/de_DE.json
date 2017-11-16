@@ -219,5 +219,7 @@
     "Explore Account Data": "Benutzerkonto-Daten analysieren",
     "Send Account Data": "Benutzerkonto-Daten senden",
     "Away": "Abwesend",
-    "Appear Offline": "Als offline anzeigen"
+    "Appear Offline": "Als offline anzeigen",
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> und <operaLink>Opera</operaLink> sind weitere Alternativen.",
+    "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Bitte installiere <chromeLink>Chrome</chromeLink> oder <firefoxLink>Firefox</firefoxLink> für ein optimales Anwendungsergebnis."
 }
