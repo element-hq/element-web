@@ -102,13 +102,13 @@ export function _t(text, variables, tags) {
 export function substitute(text, variables, tags) {
     const regexpMapping = {};
 
-    if(variables !== undefined) {
+    if (variables !== undefined) {
         for (const variable in variables) {
             regexpMapping[`%\\(${variable}\\)s`] = variables[variable];
         }
     }
 
-    if(tags !== undefined) {
+    if (tags !== undefined) {
         for (const tag in tags) {
             regexpMapping[`(<${tag}>(.*?)<\\/${tag}>|<${tag}>|<${tag}\\s*\\/>)`] = tags[tag];
         }
@@ -163,7 +163,7 @@ export function replaceByRegexes(text, mapping) {
 
         let replaced;
         // If substitution is a function, call it
-        if(mapping[regexpString] instanceof Function) {
+        if (mapping[regexpString] instanceof Function) {
             replaced = mapping[regexpString].apply(null, capturedGroups);
         } else {
             replaced = mapping[regexpString];
@@ -175,7 +175,7 @@ export function replaceByRegexes(text, mapping) {
             output.push(replaced);
         }
 
-        if(typeof replaced === 'object') {
+        if (typeof replaced === 'object') {
             shouldWrapInSpan = true;
         }
 
@@ -185,7 +185,7 @@ export function replaceByRegexes(text, mapping) {
         }
     }
 
-    if(shouldWrapInSpan) {
+    if (shouldWrapInSpan) {
         return React.createElement('span', null, ...output);
     } else {
         return output.join('');
