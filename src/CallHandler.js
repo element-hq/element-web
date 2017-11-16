@@ -117,7 +117,6 @@ function _setCallListeners(call) {
     call.on("error", function(err) {
         console.error("Call error: %s", err);
         console.error(err.stack);
-        call.hangup();
         _setCallState(undefined, call.roomId, "ended");
         if (err.code === 'unknown_devices') {
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
