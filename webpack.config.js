@@ -2,6 +2,11 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dashboard = require('webpack-dashboard/plugin');
+
+const dashboard = new Dashboard();
+const devServerHost = "127.0.0.1";
+const devServerPort = 8080;
 
 module.exports = {
     entry: {
@@ -23,12 +28,14 @@ module.exports = {
         "theme-status": "./src/skins/vector/themes/status/css/status.scss",
     },
     module: {
-        preLoaders: [
-            { test: /\.js$/, loader: "source-map-loader" },
-        ],
-        loaders: [
-            { test: /\.json$/, loader: "json" },
-            { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
+        rules: [
+            {
+                test: /\.js$/,
+                loader: "source-map-loader",
+                enforce: "pre",
+            },
+            { test: /\.json$/, loader: "json-loader" },
+            { test: /\.js$/, loader: "babel-loader", include: path.resolve('./src') },
             {
                 test: /\.scss$/,
 
@@ -97,6 +104,7 @@ module.exports = {
 
             // same goes for js-sdk
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
+            "matrix-react-sdk": path.resolve('./node_modules/matrix-react-sdk'),
         },
     },
     externals: {
@@ -124,14 +132,24 @@ module.exports = {
             // about moving them.
             inject: false,
         }),
+        new Dashboard({
+            handler: dashboard.setData,
+        }),
     ],
     devtool: 'source-map',
 
     // configuration for the webpack-dev-server
     devServer: {
+        host: devServerHost,
+        port: devServerPort,
+        compress: true,
+        historyApiFallback: true,
+        inline: true,
+        quiet: true,   // important
+        hot: true,
+        open: false,
         // serve unwebpacked assets from webapp.
         contentBase: './webapp',
-
         stats: {
             // don't fill the console up with a mahoosive list of modules
             chunks: false,
