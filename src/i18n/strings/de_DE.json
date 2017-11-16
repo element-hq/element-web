@@ -266,7 +266,7 @@
     "%(names)s and one other are typing": "%(names)s und ein weiteres Raum-Mitglied schreiben",
     "%(senderName)s answered the call.": "%(senderName)s hat den Anruf angenommen.",
     "%(senderName)s banned %(targetName)s.": "%(senderName)s hat %(targetName)s dauerhaft aus dem Raum verbannt.",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s hat den Anzeigenamen von \"%(oldDisplayName)s\" auf \"%(displayName)s\" geändert.",
+    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s hat den Anzeigenamen von %(oldDisplayName)s auf %(displayName)s geändert.",
     "%(senderName)s changed their profile picture.": "%(senderName)s hat das Profilbild geändert.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s hat das Berechtigungslevel von %(powerLevelDiffText)s geändert.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s hat den Raumnamen geändert zu %(roomName)s.",
@@ -1009,5 +1009,8 @@
     "Enable inline URL previews by default": "URL-Vorschau standardmäßig aktivieren",
     "Enable URL previews for this room (only affects you)": "URL-Vorschau für diesen Raum aktivieren (betrifft nur dich)",
     "Enable URL previews by default for participants in this room": "URL-Vorschau standardmäßig für Mitglieder dieses Raumes aktivieren",
-    "Please note you are logging into the %(hs)s server, not matrix.org.": "Hinweis: Du meldest dich auf dem %(hs)s-Server an, nicht auf matrix.org."
+    "Please note you are logging into the %(hs)s server, not matrix.org.": "Hinweis: Du meldest dich auf dem %(hs)s-Server an, nicht auf matrix.org.",
+    "<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.": "<resendText>Alle erneut senden</resendText> oder <cancelText>alle verwerfen</cancelText>. Du kannst auch einzelne Nachrichten erneut senden oder verwerfen.",
+    "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Sonst ist hier aktuell niemand. Möchtest du <inviteText>Benutzer einladen</inviteText> oder die <nowarnText>Warnmeldung bezüglich des leeren Raums deaktivieren</nowarnText>?",
+    "Sign in to get started": "Melde dich an, um loszulegen"
 }
