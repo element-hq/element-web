@@ -1013,5 +1013,9 @@
     "Hide display name changes": "Név változások elrejtése",
     "Enable inline URL previews by default": "Beágyazott URL előnézetek alapértelmezett engedélyezése",
     "Enable URL previews for this room (only affects you)": "URL előnézet engedélyezése ebben a szobában (csak téged érint)",
-    "Enable URL previews by default for participants in this room": "URL előnézet alapértelmezett engedélyezése a szoba tagságának"
+    "Enable URL previews by default for participants in this room": "URL előnézet alapértelmezett engedélyezése a szoba tagságának",
+    "URL previews are enabled by default for participants in this room.": "Az URL előnézetek alapértelmezetten engedélyezve vannak a szobában jelenlévőknek.",
+    "URL previews are disabled by default for participants in this room.": "Az URL előnézet alapértelmezetten tiltva van a szobában jelenlévőknek.",
+    "<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.": "<resendText>Mindet újraküldöd</resendText> vagy <cancelText>mindet megszakítod</cancelText>. De egyenként is kijelölheted az üzenetet elküldésre vagy megszakításra.",
+    "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Senki más nincs itt! Szeretnél <inviteText>meghívni másokat</inviteText> vagy <nowarnText>leállítod a figyelmeztetést az üres szobára</nowarnText>?"
 }
