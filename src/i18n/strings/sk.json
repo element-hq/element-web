@@ -215,5 +215,9 @@
     "Contributing code to Matrix and Riot": "Prispievanie kódu projektom Matrix a Riot",
     "Dev chat for the Riot/Web dev team": "Diskusia pre tím vývojárov Riot/Web",
     "Dev chat for the Dendrite dev team": "Diskusia pre tím vývojárov Dendrite",
-    "Co-ordination for Riot/Web translators": "Koordinácia prekladov Riot/Web"
+    "Co-ordination for Riot/Web translators": "Koordinácia prekladov Riot/Web",
+    "Appear Offline": "Zdá sa byť nedostupný",
+    "Away": "Preč",
+    "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Aby ste s používania mali čo možno najlepší dojem, nainštalujte si <chromeLink>Chrome</chromeLink> alebo <firefoxLink>Firefox</firefoxLink>.",
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "Správne fungujú aj <safariLink>Safari</safariLink> a <operaLink>Opera</operaLink>."
 }
