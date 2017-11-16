@@ -151,9 +151,9 @@ function textForCallHangupEvent(event) {
     const senderName = event.sender ? event.sender.name : _t('Someone');
     const eventContent = event.getContent();
     let reason = "";
-    if(!MatrixClientPeg.get().supportsVoip()) {
+    if (!MatrixClientPeg.get().supportsVoip()) {
         reason = _t('(not supported by this browser)');
-    } else if(eventContent.reason) {
+    } else if (eventContent.reason) {
         if (eventContent.reason === "ice_failed") {
             reason = _t('(could not connect media)');
         } else if (eventContent.reason === "invite_timeout") {

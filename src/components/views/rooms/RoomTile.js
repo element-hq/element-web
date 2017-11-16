@@ -54,7 +54,7 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        return({
+        return ({
             hover: false,
             badgeHover: false,
             menuDisplayed: false,

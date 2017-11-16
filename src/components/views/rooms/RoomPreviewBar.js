@@ -165,13 +165,13 @@ module.exports = React.createClass({
 
             let actionText;
             if (kicked) {
-                if(roomName) {
+                if (roomName) {
                     actionText = _t("You have been kicked from %(roomName)s by %(userName)s.", {roomName: roomName, userName: kickerName});
                 } else {
                     actionText = _t("You have been kicked from this room by %(userName)s.", {userName: kickerName});
                 }
             } else if (banned) {
-                if(roomName) {
+                if (roomName) {
                     actionText = _t("You have been banned from %(roomName)s by %(userName)s.", {roomName: roomName, userName: kickerName});
                 } else {
                     actionText = _t("You have been banned from this room by %(userName)s.", {userName: kickerName});

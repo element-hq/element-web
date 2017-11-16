@@ -393,7 +393,7 @@ class Tinter {
             let svgDoc;
             try {
                 svgDoc = svgs[i].contentDocument;
-            } catch(e) {
+            } catch (e) {
                 let msg = 'Failed to get svg.contentDocument of ' + svgs[i].toString();
                 if (e.message) {
                     msg += e.message;

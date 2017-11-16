@@ -126,7 +126,7 @@ export default class UserProvider extends AutocompleteProvider {
         const events = this.room.getLiveTimeline().getEvents();
         const lastSpoken = {};
 
-        for(const event of events) {
+        for (const event of events) {
             lastSpoken[event.getSender()] = event.getTs();
         }
 

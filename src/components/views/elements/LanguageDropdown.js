@@ -41,8 +41,8 @@ export default class LanguageDropdown extends React.Component {
     componentWillMount() {
         languageHandler.getAllLanguagesFromJson().then((langs) => {
             langs.sort(function(a, b) {
-                if(a.label < b.label) return -1;
-                if(a.label > b.label) return 1;
+                if (a.label < b.label) return -1;
+                if (a.label > b.label) return 1;
                 return 0;
             });
             this.setState({langs});
@@ -57,7 +57,7 @@ export default class LanguageDropdown extends React.Component {
             const language = SettingsStore.getValue("language", null, /*excludeDefault:*/true);
             if (language) {
               this.props.onOptionChange(language);
-            }else {
+            } else {
               const language = languageHandler.normalizeLanguageKey(languageHandler.getLanguageFromBrowser());
               this.props.onOptionChange(language);
             }

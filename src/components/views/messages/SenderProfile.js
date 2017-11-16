@@ -43,7 +43,7 @@ export default function SenderProfile(props) {
     ];
 
     let content;
-    if(props.text) {
+    if (props.text) {
         content = _t(props.text, { senderName: () => nameElem });
     } else {
         // There is nothing to translate here, so call substitute() instead
