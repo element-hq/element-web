@@ -176,13 +176,21 @@ export default class SettingsStore {
      * @return {*} The value, or null if not found
      */
     static getValue(settingName, roomId = null, excludeDefault = false) {
-        return SettingsStore.getValueAt(LEVEL_ORDER[0], settingName, roomId, false, excludeDefault);
+        // Verify that the setting is actually a setting
+        if (!SETTINGS[settingName]) {
+            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
+        }
+
+        const setting = SETTINGS[settingName];
+        const levelOrder = (setting.supportedLevelsAreOrdered ? setting.supportedLevels : LEVEL_ORDER);
+
+        return SettingsStore.getValueAt(levelOrder[0], settingName, roomId, false, excludeDefault);
     }
 
     /**
      * Gets a setting's value at a particular level, ignoring all levels that are more specific.
-     * @param {"device"|"room-device"|"room-account"|"account"|"room"} level The level to
-     * look at.
+     * @param {"device"|"room-device"|"room-account"|"account"|"room"|"config"|"default"} level The
+     * level to look at.
      * @param {string} settingName The name of the setting to read.
      * @param {String} roomId The room ID to read the setting value in, may be null.
      * @param {boolean} explicit If true, this method will not consider other levels, just the one

@@ -613,8 +613,7 @@ module.exports = React.createClass({
 
     onLanguageChange: function(newLang) {
         if (this.state.language !== newLang) {
-            // We intentionally promote this to the account level at this point
-            SettingsStore.setValue("language", null, SettingLevel.ACCOUNT, newLang);
+            SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLang);
             this.setState({
                 language: newLang,
             });
