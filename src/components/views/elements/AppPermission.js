@@ -19,9 +19,9 @@ export default class AppPermission extends React.Component {
 
         const searchParams = new URLSearchParams(wurl.search);
 
-        if(this.isScalarWurl(wurl) && searchParams && searchParams.get('url')) {
+        if (this.isScalarWurl(wurl) && searchParams && searchParams.get('url')) {
             curl = url.parse(searchParams.get('url'));
-            if(curl) {
+            if (curl) {
                 curl.search = curl.query = "";
                 curlString = curl.format();
             }
@@ -34,7 +34,7 @@ export default class AppPermission extends React.Component {
     }
 
     isScalarWurl(wurl) {
-        if(wurl && wurl.hostname && (
+        if (wurl && wurl.hostname && (
             wurl.hostname === 'scalar.vector.im' ||
             wurl.hostname === 'scalar-staging.riot.im' ||
             wurl.hostname === 'scalar-develop.riot.im' ||

@@ -310,7 +310,7 @@ var TimelinePanel = React.createClass({
             return Promise.resolve(false);
         }
 
-        if(!this._timelineWindow.canPaginate(dir)) {
+        if (!this._timelineWindow.canPaginate(dir)) {
             debuglog("TimelinePanel: can't", dir, "paginate any further");
             this.setState({[canPaginateKey]: false});
             return Promise.resolve(false);
@@ -440,7 +440,7 @@ var TimelinePanel = React.createClass({
                 var callback = null;
                 if (sender != myUserId && !UserActivity.userCurrentlyActive()) {
                     updatedState.readMarkerVisible = true;
-                } else if(lastEv && this.getReadMarkerPosition() === 0) {
+                } else if (lastEv && this.getReadMarkerPosition() === 0) {
                     // we know we're stuckAtBottom, so we can advance the RM
                     // immediately, to save a later render cycle
 
@@ -657,7 +657,7 @@ var TimelinePanel = React.createClass({
 
         // the read-marker should become invisible, so that if the user scrolls
         // down, they don't see it.
-        if(this.state.readMarkerVisible) {
+        if (this.state.readMarkerVisible) {
             this.setState({
                 readMarkerVisible: false,
             });

@@ -573,7 +573,7 @@ module.exports = React.createClass({
         debuglog("ScrollPanel: scrolling to token '" + scrollToken + "'+" +
                  pixelOffset + " (delta: "+scrollDelta+")");
 
-        if(scrollDelta != 0) {
+        if (scrollDelta != 0) {
             this._setScrollTop(scrollNode.scrollTop + scrollDelta);
         }
     },

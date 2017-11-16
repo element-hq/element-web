@@ -612,7 +612,7 @@ module.exports = React.createClass({
     },
 
     onLanguageChange: function(newLang) {
-        if(this.state.language !== newLang) {
+        if (this.state.language !== newLang) {
             SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLang);
             this.setState({
                 language: newLang,

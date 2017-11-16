@@ -96,7 +96,7 @@ module.exports = React.createClass({
         ).then((data) => {
             this.props.onLoggedIn(data);
         }, (error) => {
-            if(this._unmounted) {
+            if (this._unmounted) {
                 return;
             }
             let errorText;
@@ -113,14 +113,14 @@ module.exports = React.createClass({
                             <div className="mx_Login_smallError">
                                 { _t('Please note you are logging into the %(hs)s server, not matrix.org.',
                                     {
-                                        hs: this.props.defaultHsUrl.replace(/^https?:\/\//, '')
+                                        hs: this.props.defaultHsUrl.replace(/^https?:\/\//, ''),
                                     })
                                 }
                             </div>
                         </div>
                     );
                 } else {
-                    errorText = _t('Incorrect username and/or password.');   
+                    errorText = _t('Incorrect username and/or password.');
                 }
             } else {
                 // other errors, not specific to doing a password login
@@ -136,7 +136,7 @@ module.exports = React.createClass({
                 loginIncorrect: error.httpStatus === 401 || error.httpStatus == 403,
             });
         }).finally(() => {
-            if(this._unmounted) {
+            if (this._unmounted) {
                 return;
             }
             this.setState({
@@ -332,7 +332,7 @@ module.exports = React.createClass({
     },
 
     _onLanguageChange: function(newLang) {
-        if(languageHandler.getCurrentLanguage() !== newLang) {
+        if (languageHandler.getCurrentLanguage() !== newLang) {
             SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLang);
             PlatformPeg.get().reload();
         }
@@ -393,8 +393,7 @@ module.exports = React.createClass({
         const theme = SettingsStore.getValue("theme");
         if (theme !== "status") {
             header = <h2>{ _t('Sign in') }</h2>;
-        }
-        else {
+        } else {
             if (!this.state.errorText) {
                 header = <h2>{ _t('Sign in to get started') }</h2>;
             }

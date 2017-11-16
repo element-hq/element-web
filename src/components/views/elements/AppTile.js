@@ -284,7 +284,7 @@ export default React.createClass({
 
     formatAppTileName() {
         let appTileName = "No name";
-        if(this.props.name && this.props.name.trim()) {
+        if (this.props.name && this.props.name.trim()) {
             appTileName = this.props.name.trim();
         }
         return appTileName;
@@ -374,7 +374,7 @@ export default React.createClass({
         const deleteWidgetLabel = this._deleteWidgetLabel();
         let deleteIcon = 'img/cancel_green.svg';
         let deleteClasses = 'mx_AppTileMenuBarWidget';
-        if(this._canUserModify()) {
+        if (this._canUserModify()) {
             deleteIcon = 'img/icon-delete-pink.svg';
             deleteClasses += ' mx_AppTileMenuBarWidgetDelete';
         }

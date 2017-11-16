@@ -303,7 +303,7 @@ module.exports = React.createClass({
 
         // Check if user has previously chosen to hide the app drawer for this
         // room. If so, do not show apps
-        let hideWidgetDrawer = localStorage.getItem(
+        const hideWidgetDrawer = localStorage.getItem(
             room.roomId + "_hide_widget_drawer");
 
         if (hideWidgetDrawer === "true") {
@@ -713,7 +713,7 @@ module.exports = React.createClass({
             return;
         }
 
-        const joinedMembers = room.currentState.getMembers().filter(m => m.membership === "join" || m.membership === "invite");
+        const joinedMembers = room.currentState.getMembers().filter((m) => m.membership === "join" || m.membership === "invite");
         this.setState({isAlone: joinedMembers.length === 1});
     },
 
@@ -1110,7 +1110,7 @@ module.exports = React.createClass({
             }
 
             if (this.state.searchScope === 'All') {
-                if(roomId != lastRoomId) {
+                if (roomId != lastRoomId) {
                     const room = cli.getRoom(roomId);
 
                     // XXX: if we've left the room, we might not know about
@@ -1421,13 +1421,13 @@ module.exports = React.createClass({
      */
     handleScrollKey: function(ev) {
         let panel;
-        if(this.refs.searchResultsPanel) {
+        if (this.refs.searchResultsPanel) {
             panel = this.refs.searchResultsPanel;
-        } else if(this.refs.messagePanel) {
+        } else if (this.refs.messagePanel) {
             panel = this.refs.messagePanel;
         }
 
-        if(panel) {
+        if (panel) {
             panel.handleScrollKey(ev);
         }
     },
@@ -1446,7 +1446,7 @@ module.exports = React.createClass({
     // otherwise react calls it with null on each update.
     _gatherTimelinePanelRef: function(r) {
         this.refs.messagePanel = r;
-        if(r) {
+        if (r) {
             console.log("updateTint from RoomView._gatherTimelinePanelRef");
             this.updateTint();
         }

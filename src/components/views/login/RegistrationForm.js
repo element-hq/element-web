@@ -282,7 +282,7 @@ module.exports = React.createClass({
         const emailSection = (
             <div>
                 <input type="text" ref="email"
-                    autoFocus={true} placeholder={ emailPlaceholder }
+                    autoFocus={true} placeholder={emailPlaceholder}
                     defaultValue={this.props.defaultEmail}
                     className={this._classForField(FIELD_EMAIL, 'mx_Login_field')}
                     onBlur={function() {self.validateField(FIELD_EMAIL);}}
