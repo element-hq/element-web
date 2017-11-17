@@ -44,8 +44,15 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        const presenceState = this.props.member.user.presence;
-        const presenceMessage = this.props.member.user.presenceStatusMsg;
+        let presenceState = null;
+        let presenceMessage = null;
+
+        // RoomMembers do not necessarily have a user.
+        if (this.props.member.user) {
+            presenceState = this.props.member.user.presence;
+            presenceMessage = this.props.member.user.presenceStatusMsg;
+        }
+
         return {
             status: presenceState,
             message: presenceMessage,
@@ -109,6 +116,8 @@ module.exports = React.createClass({
         });
 
         e.stopPropagation();
+
+        // XXX NB the following assumes that user is non-null, which is not valid
         // const presenceState = this.props.member.user.presence;
         // const presenceLastActiveAgo = this.props.member.user.lastActiveAgo;
         // const presenceLastTs = this.props.member.user.lastPresenceTs;
