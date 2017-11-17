@@ -136,6 +136,9 @@ class MatrixClientPeg {
     }
 
     _createClient(creds: MatrixClientCreds) {
+        // XXX: This is here and as a require because apparently circular dependencies
+        // are just broken in webpack (https://github.com/webpack/webpack/issues/1788)
+        const UserSettingsStore = require('./UserSettingsStore');
         const opts = {
             baseUrl: creds.homeserverUrl,
             idBaseUrl: creds.identityServerUrl,
@@ -143,6 +146,7 @@ class MatrixClientPeg {
             userId: creds.userId,
             deviceId: creds.deviceId,
             timelineSupport: true,
+            forceTURN: UserSettingsStore.getLocalSetting('webRtcForceTURN', false),
         };
 
         this.matrixClient = createMatrixClient(opts, this.indexedDbWorkerScript);
