@@ -246,8 +246,27 @@ async function loadApp() {
     // set the platform for react sdk (our Platform object automatically picks the right one)
     PlatformPeg.set(new Platform());
 
+    // Load the config file. First try to load up a domain-specific config of the
+    // form "config.$domain.json" and if that fails, fall back to config.json.
+    let configJson;
+    let configError;
+    try {
+        try {
+            configJson = await getConfig(`config.${document.domain}.json`);
+            // 404s succeed with an empty json config, so check that there are keys
+            if (Object.keys(configJson).length === 0) {
+                throw new Error(); // throw to enter the catch
+            }
+        } catch (e) {
+            configJson = await getConfig("config.json");
+        }
+    } catch (e) {
+        configError = e;
+    }
+    SdkConfig.put(configJson);
+
     // don't try to redirect to the native apps if we're
-    // verifying a 3pid
+    // verifying a 3pid (but after we've loaded the config)
     const preventRedirect = Boolean(fragparts.params.client_secret);
 
     if (!preventRedirect) {
@@ -278,25 +297,6 @@ async function loadApp() {
             }
         }
     }
-
-    // Load the config file. First try to load up a domain-specific config of the
-    // form "config.$domain.json" and if that fails, fall back to config.json.
-    let configJson;
-    let configError;
-    try {
-        try {
-            configJson = await getConfig(`config.${document.domain}.json`);
-            // 404s succeed with an empty json config, so check that there are keys
-            if (Object.keys(configJson).length === 0) {
-                throw new Error(); // throw to enter the catch
-            }
-        } catch (e) {
-            configJson = await getConfig("config.json");
-        }
-    } catch (e) {
-        configError = e;
-    }
-    SdkConfig.put(configJson);
 
     // as quickly as we possibly can, set a default theme...
     const styleElements = Object.create(null);
