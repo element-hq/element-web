@@ -79,6 +79,7 @@ import Platform from './platform';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import SettingsStore, {SettingLevel} from "matrix-react-sdk/lib/settings/SettingsStore";
 import Tinter from 'matrix-react-sdk/lib/Tinter';
+import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
 
 var lastLocationHashSet = null;
 
@@ -295,6 +296,7 @@ async function loadApp() {
     } catch (e) {
         configError = e;
     }
+    SdkConfig.put(configJson);
 
     // as quickly as we possibly can, set a default theme...
     const styleElements = Object.create(null);
