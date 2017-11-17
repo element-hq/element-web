@@ -1,3 +1,13 @@
+Changes in [0.13.1](https://github.com/vector-im/riot-web/releases/tag/v0.13.1) (2017-11-17)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.0...v0.13.1)
+
+ * SECURITY UPDATE: Fix the force TURN option for inbound calls. This option forced the use
+   of TURN but only worked for outbound calls and not inbound calls. This means that if you
+   enabled this option expecting it to mask your IP address in calls, your IP would still
+   have been revealed to the room if you accepted an incoming call.
+ * Also adds the Slovak translation.
+
 Changes in [0.13.0](https://github.com/vector-im/riot-web/releases/tag/v0.13.0) (2017-11-15)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.0-rc.3...v0.13.0)
