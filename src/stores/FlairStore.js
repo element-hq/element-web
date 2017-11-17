@@ -95,7 +95,7 @@ class FlairStore extends EventEmitter {
                 // Return silently to avoid spamming for non-supporting servers
                 return;
             }
-            console.error('Could not get groups for user', this.props.userId, err);
+            console.error('Could not get groups for user', userId, err);
             throw err;
         }).finally(() => {
             delete this._usersInFlight[userId];
