@@ -877,6 +877,11 @@ module.exports = React.createClass({
         // TODO: this ought to be a separate component so that we don't need
         // to rebind the onChange each time we render
         const onChange = (e) => {
+            // XXX: awful, but at time of writing, granular settings has landed on
+            // develop which will almost certainly mean we'll handle this differently.
+            if (setting.id === 'webRtcForceTURN') {
+                MatrixClientPeg.get().setForceTURN(e.target.checked);
+            }
             UserSettingsStore.setLocalSetting(setting.id, e.target.checked);
             if (setting.fn) setting.fn(e.target.checked);
         };
