@@ -1005,5 +1005,11 @@
     "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s отклонили приглашения",
     "URL previews are enabled by default for participants in this room.": "Предварительный просмотр URL-адресов для участников этой комнаты по умолчанию.",
     "URL previews are disabled by default for participants in this room.": "Предварительный просмотр URL-адресов для участников этой комнаты по умолчанию.",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)sотклонил приглашения %(count)s раз"
+    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)sотклонил их приглашение %(count)s раз",
+    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)s отклонил приглашение",
+    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)s снова отозвали приглашение %(count)s раз",
+    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)s снова отозвали приглашение",
+    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)s снова отозвал приглашение %(count)s раз",
+    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)s снова отозвал приглашение",
+    "Please note you are logging into the %(hs)s server, not matrix.org.": "Пожалуйста обратите внимание, что вы регистрируете на %(hs)s-сервере а не на matrix.org."
 }
