@@ -221,5 +221,6 @@
     "Appear Offline": "Відображати як не в мережі",
     "Away": "Нема на місці",
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Краще встановіть <chromeLink>Chrome</chromeLink> або <firefoxLink>Firefox</firefoxLink>.",
-    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> та <operaLink>Opera</operaLink> працюють теж."
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> та <operaLink>Opera</operaLink> працюють теж.",
+    "Reply": "Відповісти"
 }
