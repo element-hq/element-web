@@ -938,5 +938,9 @@
     "Enable inline URL previews by default": "Predvolene povoliť náhľady URL adries",
     "Enable URL previews for this room (only affects you)": "Povoliť náhľady URL adries pre túto miestnosť (ovplyvňuje len vás)",
     "Enable URL previews by default for participants in this room": "Predvolene povoliť náhľady URL adries pre členov tejto miestnosti",
-    "Custom of %(powerLevel)s": "Vlastná úroveň %(powerLevel)s"
+    "Custom of %(powerLevel)s": "Vlastná úroveň %(powerLevel)s",
+    "URL previews are enabled by default for participants in this room.": "Náhľady URL adries sú predvolene povolené pre členov tejto miestnosti.",
+    "URL previews are disabled by default for participants in this room.": "Náhľady URL adries sú predvolene zakázané pre členov tejto miestnosti.",
+    "<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.": "<resendText>Znovu odoslať všetky</resendText> alebo <cancelText>Zrušiť všetky</cancelText> teraz. Môžete tiež znovu poslať alebo zrušiť odosielanie jednotlivých správ zvlášť.",
+    "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Okrem vás v tejto miestnosti nie je nik iný! Želáte si <inviteText>Pozvať ďalších</inviteText> alebo <nowarnText>Prestať upozorňovať na prázdnu miestnosť</nowarnText>?"
 }
