@@ -64,7 +64,7 @@ module.exports = React.createClass({
             );
         } else {
             let str = _td("URL previews are enabled by default for participants in this room.");
-            if (!SettingsStore.getValueAt(SettingLevel.ROOM, "urlPreviewsEnabled")) {
+            if (!SettingsStore.getValueAt(SettingLevel.ROOM, "urlPreviewsEnabled", roomId, /*explicit=*/true)) {
                 str = _td("URL previews are disabled by default for participants in this room.");
             }
             previewsForRoom = (<label>{ _t(str) }</label>);
