@@ -581,7 +581,6 @@
     "%(items)s and %(count)s others|other": "%(items)s and %(count)s others",
     "%(items)s and %(count)s others|one": "%(items)s and one other",
     "%(items)s and %(lastItem)s": "%(items)s and %(lastItem)s",
-    "Custom of <span/>": "Custom of <span/>",
     "Custom level": "Custom level",
     "Room directory": "Room directory",
     "Start chat": "Start chat",
