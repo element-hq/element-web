@@ -478,7 +478,7 @@ module.exports = React.createClass({
         }
         const toggleButton = (
             <div className={"mx_MemberEventListSummary_toggle"} onClick={this._toggleSummary}>
-                { expanded ? 'collapse' : 'expand' }
+                { expanded ? _t('collapse') : _t('expand') }
             </div>
         );
 
