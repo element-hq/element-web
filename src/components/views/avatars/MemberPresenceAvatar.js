@@ -25,6 +25,7 @@ import dispatcher from "../../../dispatcher";
 import * as ContextualMenu from "../../structures/ContextualMenu";
 import SettingsStore from "../../../settings/SettingsStore";
 
+// This is just an avatar with a presence indicator for the user on it.
 module.exports = React.createClass({
     displayName: 'MemberPresenceAvatar',
 
@@ -142,7 +143,8 @@ module.exports = React.createClass({
         );
 
         // LABS: Disable presence management functions for now
-        if (!SettingsStore.isFeatureEnabled("feature_presence_management")) {
+        // Also disable the presence information if there's no status information
+        if (!SettingsStore.isFeatureEnabled("feature_presence_management") || !this.state.status) {
             statusNode = null;
             onClickFn = null;
         }
