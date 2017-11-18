@@ -31,7 +31,7 @@ module.exports = React.createClass({
     saveSettings: function() {
         const promises = [];
         if (this.refs.urlPreviewsRoom) promises.push(this.refs.urlPreviewsRoom.save());
-        if (this.refs.urlPrviewsSelf) promises.push(this.refs.urlPreviewsSelf.save());
+        if (this.refs.urlPreviewsSelf) promises.push(this.refs.urlPreviewsSelf.save());
         return promises;
     },
 
