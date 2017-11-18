@@ -370,7 +370,7 @@ async function loadApp() {
 }
 
 async function loadLanguage() {
-    const prefLang = SettingsStore.getValue("language");
+    const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/true);
     let langs = [];
 
     if (!prefLang) {
