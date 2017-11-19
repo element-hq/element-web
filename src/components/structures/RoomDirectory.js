@@ -19,15 +19,12 @@ limitations under the License.
 var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
-var ContentRepo = require("matrix-js-sdk").ContentRepo;
 var Modal = require('matrix-react-sdk/lib/Modal');
 var sdk = require('matrix-react-sdk');
 var dis = require('matrix-react-sdk/lib/dispatcher');
 
 var linkify = require('linkifyjs');
-var linkifyString = require('linkifyjs/string');
 var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
-var sanitizeHtml = require('sanitize-html');
 import Promise from 'bluebird';
 
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
@@ -193,7 +190,7 @@ module.exports = React.createClass({
      * this needs SPEC-417.
      */
     removeFromDirectory: function(room) {
-        var alias = get_display_alias_for_room(room);
+        var alias = room.canonicalAlias || (room.aliases ? room.aliases[0] : '');
         var name = room.name || alias || _t('Unnamed room');
 
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
@@ -216,7 +213,7 @@ module.exports = React.createClass({
                 var modal = Modal.createDialog(Loader);
                 var step = _t('remove %(name)s from the directory.', {name: name});
 
-                MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
+                MatrixClientPeg.get().setRoomDirectoryVisibility(room.roomId, 'private').then(() => {
                     if (!alias) return;
                     step = _t('delete the alias.');
                     return MatrixClientPeg.get().deleteAlias(alias);
@@ -232,11 +229,11 @@ module.exports = React.createClass({
                         description: ((err && err.message) ? err.message : _t('The server may be unavailable or overloaded'))
                     });
                 });
-            }
+            },
         });
     },
 
-    onRoomClicked: function(room, ev) {
+    onRoomClicked: function(ev, room) {
         if (ev.shiftKey) {
             ev.preventDefault();
             this.removeFromDirectory(room);
@@ -353,18 +350,18 @@ module.exports = React.createClass({
             // peek or join: fail earlier so they don't have to click back
             // to the directory.
             if (MatrixClientPeg.get().isGuest()) {
-                if (!room.world_readable && !room.guest_can_join) {
+                if (!room.worldReadable && !room.guestCanJoin) {
                     dis.dispatch({action: 'view_set_mxid'});
                     return;
                 }
             }
 
             if (!room_alias) {
-                room_alias = get_display_alias_for_room(room);
+                room_alias = room.canonicalAlias || (room.aliases ? room.aliases[0] : "");
             }
 
             payload.oob_data = {
-                avatarUrl: room.avatar_url,
+                avatarUrl: room.avatarUrl,
                 // XXX: This logic is duplicated from the JS SDK which
                 // would normally decide what the name is.
                 name: room.name || room_alias || _t('Unnamed room'),
@@ -377,72 +374,27 @@ module.exports = React.createClass({
         if (room_alias) {
             payload.room_alias = room_alias;
         } else {
-            payload.room_id = room.room_id;
+            payload.room_id = room.roomId;
         }
         dis.dispatch(payload);
     },
 
+    onRoomMouseDown: function(ev) {
+        ev.preventDefault();
+    },
+
     getRows: function() {
-        var BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+        const rooms = this.state.publicRooms;
+        if (!rooms) return [];
 
-        if (!this.state.publicRooms) return [];
-
-        var rooms = this.state.publicRooms;
-        var rows = [];
-        var self = this;
-        var guestRead, guestJoin, perms;
-        for (var i = 0; i < rooms.length; i++) {
-            var name = rooms[i].name || get_display_alias_for_room(rooms[i]) || _t('Unnamed room');
-            guestRead = null;
-            guestJoin = null;
-
-            if (rooms[i].world_readable) {
-                guestRead = (
-                    <div className="mx_RoomDirectory_perm">{ _t('World readable') }</div>
-                );
-            }
-            if (rooms[i].guest_can_join) {
-                guestJoin = (
-                    <div className="mx_RoomDirectory_perm">{ _t('Guests can join') }</div>
-                );
-            }
-
-            perms = null;
-            if (guestRead || guestJoin) {
-                perms = <div className="mx_RoomDirectory_perms">{guestRead}{guestJoin}</div>;
-            }
-
-            var topic = rooms[i].topic || '';
-            topic = linkifyString(sanitizeHtml(topic));
-
-            rows.push(
-                <tr key={ rooms[i].room_id }
-                    onClick={self.onRoomClicked.bind(self, rooms[i])}
-                    // cancel onMouseDown otherwise shift-clicking highlights text
-                    onMouseDown={(ev) => {ev.preventDefault();}}
-                >
-                    <td className="mx_RoomDirectory_roomAvatar">
-                        <BaseAvatar width={24} height={24} resizeMethod='crop'
-                            name={ name } idName={ name }
-                            url={ ContentRepo.getHttpUriForMxc(
-                                    MatrixClientPeg.get().getHomeserverUrl(),
-                                    rooms[i].avatar_url, 24, 24, "crop") } />
-                    </td>
-                    <td className="mx_RoomDirectory_roomDescription">
-                        <div className="mx_RoomDirectory_name">{ name }</div>&nbsp;
-                        { perms }
-                        <div className="mx_RoomDirectory_topic"
-                             onClick={ function(e) { e.stopPropagation() } }
-                             dangerouslySetInnerHTML={{ __html: topic }}/>
-                        <div className="mx_RoomDirectory_alias">{ get_display_alias_for_room(rooms[i]) }</div>
-                    </td>
-                    <td className="mx_RoomDirectory_roomMemberCount">
-                        { rooms[i].num_joined_members }
-                    </td>
-                </tr>
-            );
-        }
-        return rows;
+        const RoomDetailRow = sdk.getComponent('rooms.RoomDetailRow');
+        return rooms.map((roomDictRoom) => {
+            const room = mapRoomDirectoryRoomObject(roomDictRoom);
+            return <RoomDetailRow key={room.roomId}
+                                  room={room}
+                                  onClick={this.onRoomClicked}
+                                  onMouseDown={this.onRoomMouseDown} />;
+        });
     },
 
     collectScrollPanel: function(element) {
@@ -514,7 +466,7 @@ module.exports = React.createClass({
             } else {
                 scrollpanel_content = <table ref="directory_table" className="mx_RoomDirectory_table">
                     <tbody>
-                        { this.getRows() }
+                        { rows }
                     </tbody>
                 </table>;
             }
@@ -583,5 +535,20 @@ module.exports = React.createClass({
 // Similar to matrix-react-sdk's MatrixTools.getDisplayAliasForRoom
 // but works with the objects we get from the public room list
 function get_display_alias_for_room(room) {
-    return  room.canonical_alias || (room.aliases ? room.aliases[0] : "");
+    return room.canonical_alias || (room.aliases ? room.aliases[0] : "");
+}
+
+function mapRoomDirectoryRoomObject(room) {
+    return {
+        name: room.name,
+        topic: room.topic,
+        roomId: room.room_id,
+        avatarUrl: room.avatar_url,
+        numJoinedMembers: room.num_joined_members,
+        canonicalAlias: room.canonical_alias,
+        aliases: room.aliases,
+
+        worldReadable: room.world_readable,
+        guestCanJoin: room.guest_can_join,
+    }
 }
