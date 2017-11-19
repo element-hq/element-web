@@ -672,5 +672,14 @@
     "Add an Integration": "Přidat začlenění",
     "Message removed": "Zpráva odstraněna",
     "Robot check is currently unavailable on desktop - please use a <a>web browser</a>": "Ochrana před roboty není aktuálně na desktopu dostupná. Použijte prosím <a>webový prohlížeč</a>",
-    "An email has been sent to %(emailAddress)s": "Na adresu %(emailAddress)s jsme poslali e-mail"
+    "An email has been sent to %(emailAddress)s": "Na adresu %(emailAddress)s jsme poslali e-mail",
+    "File to import": "Soubor k importu",
+    "none": "žádný",
+    "Passphrases must match": "Hesla se musí shodovat",
+    "Passphrase must not be empty": "Heslo nesmí být prázdné",
+    "Export room keys": "Exportovat klíče místnosti",
+    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Tento proces vám umožňuje exportovat do souboru klíče ke zprávám, které jste dostali v šifrovaných místnostech. Když pak tento soubor importujete do jiného Matrix klienta, všechny tyto zprávy bude možné opět dešifrovat.",
+    "The exported file will allow anyone who can read it to decrypt any encrypted messages that you can see, so you should be careful to keep it secure. To help with this, you should enter a passphrase below, which will be used to encrypt the exported data. It will only be possible to import the data by using the same passphrase.": "Kdokoliv, kdo získá přístup k exportovanému souboru, bude moci dešifrovat všechny vaše přijaté zprávy, a proto je třeba dbát zvýšenou pozornost jeho zabezpečení. Z toho důvodu byste měl/a do kolonky níže zadat heslo, se kterým exportovaná data zašifrujeme. Import pak bude možný pouze se znalostí zadaného hesla.",
+    "Confirm passphrase": "Potvrďte heslo",
+    "Import room keys": "Importovat klíče místnosti"
 }
