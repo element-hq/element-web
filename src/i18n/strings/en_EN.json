@@ -807,6 +807,8 @@
     "Report it": "Report it",
     "Analytics": "Analytics",
     "Riot collects anonymous analytics to allow us to improve the application.": "Riot collects anonymous analytics to allow us to improve the application.",
+    "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.",
+    "Learn more about how we use analytics.": "Learn more about how we use analytics.",
     "Labs": "Labs",
     "These are experimental features that may break in unexpected ways": "These are experimental features that may break in unexpected ways",
     "Use with caution": "Use with caution",
@@ -930,5 +932,16 @@
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.",
     "File to import": "File to import",
-    "Import": "Import"
+    "Import": "Import",
+    "The following information is sent to us to help make Riot.im better:": "The following information is sent to us to help make Riot.im better:",
+    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).",
+    "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.",
+    "The platform you're on": "The platform you're on",
+    "The version of Riot.im": "The version of Riot.im",
+    "Whether or not you're logged in (we don't record your user name)": "Whether or not you're logged in (we don't record your user name)",
+    "Your language of choice": "Your language of choice",
+    "Which officially provided instance you are using, if any": "Which officially provided instance you are using, if any",
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": "Whether or not you're using the Richtext mode of the Rich Text Editor",
+    "Your homeserver's URL": "Your homeserver's URL",
+    "Your identity server's URL": "Your identity server's URL"
 }
