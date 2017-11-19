@@ -217,5 +217,9 @@
     "Unpin Message": "Odepnout zprávu",
     "Toolbox": "Sada nástrojů",
     "Send Account Data": "Poslat data o účtu",
-    "Explore Account Data": "Prozkoumat data o účtu"
+    "Explore Account Data": "Prozkoumat data o účtu",
+    "Appear Offline": "Jevit se offline",
+    "Away": "Pryč",
+    "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Pro nejlepší zážitek si prosím nainstalujte <chromeLink>Chrome</chromeLink> nebo <firefoxLink>Firefox</firefoxLink>.",
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> a <operaLink>Opera</operaLink> fungují taky."
 }
