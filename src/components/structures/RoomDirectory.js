@@ -23,8 +23,6 @@ import Modal from 'matrix-react-sdk/lib/Modal';
 import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 
-import linkify from 'linkifyjs';
-import linkifyMatrix from 'matrix-react-sdk/lib/linkify-matrix';
 import Promise from 'bluebird';
 
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
@@ -32,8 +30,6 @@ import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import {instanceForInstanceId, protocolNameForInstanceId} from '../../utils/DirectoryUtils';
 
 import {getDisplayAliasForRoom} from 'matrix-react-sdk/lib/components/views/rooms/RoomDetailRow';
-
-linkifyMatrix(linkify);
 
 module.exports = React.createClass({
     displayName: 'RoomDirectory',
