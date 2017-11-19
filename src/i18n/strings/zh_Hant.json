@@ -217,5 +217,9 @@
     "Add rooms to this community": "新增聊天室到此社群",
     "Toolbox": "工具箱",
     "Send Account Data": "傳送帳號資料",
-    "Explore Account Data": "探索帳號資料"
+    "Explore Account Data": "探索帳號資料",
+    "Appear Offline": "顯示為離線",
+    "Away": "離開",
+    "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "請安裝 <chromeLink>Chrome</chromeLink> 或 <firefoxLink>Firefox</firefoxLink> 以取得最佳體驗。",
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> 與 <operaLink>Opera</operaLink> 也可以運作。"
 }
