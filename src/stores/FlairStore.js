@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import EventEmitter from 'events';
 import Promise from 'bluebird';
 
 const BULK_REQUEST_DEBOUNCE_MS = 200;
@@ -29,9 +28,8 @@ const GROUP_PROFILES_CACHE_BUST_MS = 1800000; // 30 mins
 /**
  * Stores data used by <Flair/>
  */
-class FlairStore extends EventEmitter {
+class FlairStore {
     constructor(matrixClient) {
-        super();
         this._matrixClient = matrixClient;
         this._userGroups = {
             // $userId: ['+group1:domain', '+group2:domain', ...]
