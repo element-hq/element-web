@@ -59,7 +59,6 @@ import sdk from './index';
 import { _t } from './languageHandler';
 import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher';
-import SettingsStore from "./settings/SettingsStore";
 import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 
 global.mxCalls = {
@@ -281,9 +280,7 @@ function _onAction(payload) {
                 return;
             } else if (members.length === 2) {
                 console.log("Place %s call in %s", payload.type, payload.room_id);
-                const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), payload.room_id, {
-                    forceTURN: SettingsStore.getValue('webRtcForceTURN'),
-                });
+                const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), payload.room_id);
                 placeCall(call);
             } else { // > 2
                 dis.dispatch({

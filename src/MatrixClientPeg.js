@@ -21,6 +21,7 @@ import utils from 'matrix-js-sdk/lib/utils';
 import EventTimeline from 'matrix-js-sdk/lib/models/event-timeline';
 import EventTimelineSet from 'matrix-js-sdk/lib/models/event-timeline-set';
 import createMatrixClient from './utils/createMatrixClient';
+import SettingsStore from './settings/SettingsStore';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -144,6 +145,7 @@ class MatrixClientPeg {
             userId: creds.userId,
             deviceId: creds.deviceId,
             timelineSupport: true,
+            forceTURN: SettingsStore.getValue('webRtcForceTURN', false),
         };
 
         this.matrixClient = createMatrixClient(opts, this.indexedDbWorkerScript);

@@ -92,7 +92,12 @@ const ANALYTICS_SETTINGS = [
 
 // These settings must be defined in SettingsStore
 const WEBRTC_SETTINGS = [
-    { id: 'webRtcForceTURN' },
+    {
+        id: 'webRtcForceTURN',
+        fn: (val) => {
+            MatrixClientPeg.get().setForceTURN(val);
+        },
+    },
 ];
 
 // These settings must be defined in SettingsStore
