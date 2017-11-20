@@ -34,7 +34,7 @@ delete webpack_config['entry'];
 
 // add ./test as a search path for js
 webpack_config.module.rules.unshift({
-    test: /\.js$/, loader: "babel-loader",
+    test: /\.js$/, use: "babel-loader",
     include: [path.resolve('./src'), path.resolve('./test')],
 });
 

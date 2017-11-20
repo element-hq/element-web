@@ -148,7 +148,7 @@
     "react-addons-perf": "^15.4.0",
     "react-addons-test-utils": "^15.6.0",
     "rimraf": "^2.4.3",
-    "source-map-loader": "^0.1.5"
+    "source-map-loader": "^0.2.1"
   },
   "optionalDependencies": {
     "olm": "https://matrix.org/packages/npm/olm/olm-2.2.1.tgz"
