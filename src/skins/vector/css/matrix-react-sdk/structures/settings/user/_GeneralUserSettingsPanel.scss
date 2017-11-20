@@ -85,7 +85,7 @@ limitations under the License.
 }
 
 // TODO: {Travis} This should probably be more generic
-.mx_GeneralSettingsPanel_displayName input {
+.mx_GeneralUserSettingsPanel_displayName input {
     border-radius: 3px;
     border: 1px solid $input-border-dark-color;
     padding: 6px;
@@ -96,13 +96,13 @@ limitations under the License.
     margin-top: 3px;
 }
 
-.mx_GeneralSettingsPanel_displayName {
+.mx_GeneralUserSettingsPanel_displayName {
     display: inline-block;
     margin-left: 15px;
     vertical-align: top;
 }
 
-.mx_GeneralSettingsPanel_displayName label {
+.mx_GeneralUserSettingsPanel_displayName label {
     font-weight: 700;
     font-size: 16px;
 }
