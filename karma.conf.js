@@ -149,9 +149,9 @@ module.exports = function (config) {
 
         // Hopefully avoid disconnect timeouts with node 6
         captureTimeout: 1200000,
-        browserDisconnectTimeout: 40000,
+        browserDisconnectTimeout: 1200000,
         browserDisconnectTolerance: 3,
-        browserNoActivityTimeout: 40000,
+        browserNoActivityTimeout: 1200000,
 
         // Concurrency level
         // how many browser should be started simultaneous
