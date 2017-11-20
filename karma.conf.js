@@ -55,6 +55,8 @@ webpack_config.devtool = 'inline-source-map';
 
 module.exports = function (config) {
     const myconfig = {
+        transports: ['polling'],
+
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['mocha'],
@@ -146,7 +148,7 @@ module.exports = function (config) {
         singleRun: true,
 
         // Hopefully avoid disconnect timeouts with node 6
-        captureTimeout: 2000,
+        captureTimeout: 20000,
         browserDisconnectTimeout: 2000,
         browserDisconnectTolerance: 3,
         browserNoActivityTimeout: 10000,
