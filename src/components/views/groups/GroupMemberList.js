@@ -92,7 +92,7 @@ export default withMatrixClient(React.createClass({
         query = (query || "").toLowerCase();
         if (query) {
             memberList = memberList.filter((m) => {
-                const matchesName = m.displayname.toLowerCase().indexOf(query) !== -1;
+                const matchesName = (m.displayname || "").toLowerCase().includes(query);
                 const matchesId = m.userId.toLowerCase().includes(query);
 
                 if (!matchesName && !matchesId) {
