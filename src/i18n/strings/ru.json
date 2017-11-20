@@ -1012,6 +1012,6 @@
     "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)sотклонил приглашение %(count)s раз",
     "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)sотозвал приглашение",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Обратите внимание, что вы заходите на сервер %(hs)s, а не на matrix.org.",
-    "Custom of %(powerLevel)s": "Пользовательский %(powerLevel)s",
-    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even use 'img' tags\n</p>\n": "<h1>HTML страницы вашего сообщества</h1>\n<p>\n    Используйте описание для предстваления вашего сообщества новым пользователям, или поделитесь чем-нибудь важным, например<a href=\"foo\">ссылками</a>\n</p>\n<p>\n    Вы можете также вставлять изображения с помощью тэгов 'img'\n</p>\n"
+    "Custom of %(powerLevel)s": "Пользовательский уровень %(powerLevel)s",
+    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even use 'img' tags\n</p>\n": "<h1>HTML для страницы вашего сообщества</h1>\n<p>\n    Используйте подробное описание для представления вашего сообщества новым участникам, или\n    поделитесь чем-нибудь важным, например <a href=\"foo\">ссылками</a>\n</p>\n<p>\n    Также вы можете использовать теги 'img'\n</p>\n"
 }
