@@ -24,6 +24,7 @@ node_js:
     - 6.3
     - 6
     - 7
+    - 8
 addons:
     chrome: stable
 install:
