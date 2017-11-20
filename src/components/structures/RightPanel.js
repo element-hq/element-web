@@ -29,6 +29,8 @@ import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/Acc
 import { showGroupInviteDialog, showGroupAddRoomDialog } from 'matrix-react-sdk/lib/GroupAddressPicker';
 import GroupStoreCache from 'matrix-react-sdk/lib/stores/GroupStoreCache';
 
+import { formatCount } from 'matrix-react-sdk/lib/utils/FormattingUtils';
+
 class HeaderButton extends React.Component {
     constructor() {
         super();
@@ -264,7 +266,7 @@ module.exports = React.createClass({
             const room = cli.getRoom(this.props.roomId);
             let userIsInRoom;
             if (room) {
-                membersBadge = room.getJoinedMembers().length;
+                membersBadge = formatCount(room.getJoinedMembers().length);
                 userIsInRoom = room.hasMembershipState(
                     this.context.matrixClient.credentials.userId, 'join',
                 );
