@@ -148,10 +148,10 @@ module.exports = function (config) {
         singleRun: true,
 
         // Hopefully avoid disconnect timeouts with node 6
-        captureTimeout: 20000,
-        browserDisconnectTimeout: 2000,
+        captureTimeout: 40000,
+        browserDisconnectTimeout: 40000,
         browserDisconnectTolerance: 3,
-        browserNoActivityTimeout: 10000,
+        browserNoActivityTimeout: 40000,
 
         // Concurrency level
         // how many browser should be started simultaneous
