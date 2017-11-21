@@ -25,7 +25,7 @@ import dispatcher from "../../../dispatcher";
 import * as ContextualMenu from "../../structures/ContextualMenu";
 import SettingsStore from "../../../settings/SettingsStore";
 
-// This is just an avatar with a presence indicator for the user on it.
+// This is an avatar with presence information and controls on it.
 module.exports = React.createClass({
     displayName: 'MemberPresenceAvatar',
 
