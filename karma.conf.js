@@ -53,10 +53,8 @@ webpack_config.resolve.modules = [
 
 webpack_config.devtool = 'inline-source-map';
 
-module.exports = function (config) {
+module.exports = function(config) {
     const myconfig = {
-        transports: ['polling'],
-
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['mocha'],
@@ -140,18 +138,8 @@ module.exports = function (config) {
                     // Without a remote debugging port, Google Chrome exits immediately.
                     '--remote-debugging-port=9222',
                 ],
-            }
+            },
         },
-
-        // Continuous Integration mode
-        // if true, Karma captures browsers, runs the tests and exits
-        singleRun: true,
-
-        // Hopefully avoid disconnect timeouts with node 6
-        captureTimeout: 1200000,
-        browserDisconnectTimeout: 1200000,
-        browserDisconnectTolerance: 3,
-        browserNoActivityTimeout: 1200000,
 
         // Concurrency level
         // how many browser should be started simultaneous
