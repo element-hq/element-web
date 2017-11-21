@@ -30,14 +30,16 @@ const config = {
     module: {
         rules: [
             {
-                test: /\.js$/,
-                loader: "source-map-loader",
                 enforce: "pre",
+                test: /\.js$/,
+                use: "source-map-loader",
+                exclude: /node_modules/,
             },
-            { test: /\.json$/, loader: "json-loader" },
-            { test: /\.js$/, loader: "babel-loader", include: path.resolve('./src') },
+            { test: /\.json$/, use: "json-loader" },
+            { test: /\.js$/, use: "babel-loader", include: path.resolve('./src') },
             {
                 test: /\.scss$/,
+                exclude: /node_modules/,
 
                 // 1. postcss-loader turns the SCSS into normal CSS.
                 // 2. css-raw-loader turns the CSS into a javascript module
@@ -46,12 +48,18 @@ const config = {
                 //    would also drag in the imgs and fonts that our CSS refers to
                 //    as webpack inputs.)
                 // 3. ExtractTextPlugin turns that string into a separate asset.
-                loader: ExtractTextPlugin.extract("css-raw-loader!postcss-loader?config=postcss.config.js"),
+                use: ExtractTextPlugin.extract({
+                    use: [
+                        "css-raw-loader",
+                        "postcss-loader"],
+                    }),
             },
             {
                 // this works similarly to the scss case, without postcss.
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract("css-raw-loader"),
+                loader: ExtractTextPlugin.extract({
+                    use: "css-raw-loader",
+                }),
             },
         ],
         noParse: [
