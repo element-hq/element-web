@@ -1016,5 +1016,6 @@
     "URL previews are disabled by default for participants in this room.": "URL-Vorschau ist für Mitglieder dieses Raumes standardmäßig deaktiviert.",
     "URL previews are enabled by default for participants in this room.": "URL-Vorschau ist für Mitglieder dieses Raumes standardmäßig aktiviert.",
     "Restricted": "Eingeschränkt",
-    "Presence Management": "Anwesenheitsmanagement"
+    "Presence Management": "Anwesenheitsmanagement",
+    "Status.im theme": "Status.im-Thema"
 }
