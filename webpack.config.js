@@ -2,8 +2,13 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dashboard = require('webpack-dashboard/plugin');
 
-module.exports = {
+const dashboard = new Dashboard();
+const devServerHost = "127.0.0.1";
+const devServerPort = 8080;
+
+const config = {
     entry: {
         "bundle": "./src/vector/index.js",
         "indexeddb-worker": "./src/vector/indexedbd-worker.js",
@@ -23,14 +28,18 @@ module.exports = {
         "theme-status": "./src/skins/vector/themes/status/css/status.scss",
     },
     module: {
-        preLoaders: [
-            { test: /\.js$/, loader: "source-map-loader" },
-        ],
-        loaders: [
-            { test: /\.json$/, loader: "json" },
-            { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
+        rules: [
+            {
+                enforce: "pre",
+                test: /\.js$/,
+                use: "source-map-loader",
+                exclude: /node_modules/,
+            },
+            { test: /\.json$/, use: "json-loader" },
+            { test: /\.js$/, use: "babel-loader", include: path.resolve('./src') },
             {
                 test: /\.scss$/,
+                exclude: /node_modules/,
 
                 // 1. postcss-loader turns the SCSS into normal CSS.
                 // 2. css-raw-loader turns the CSS into a javascript module
@@ -39,12 +48,18 @@ module.exports = {
                 //    would also drag in the imgs and fonts that our CSS refers to
                 //    as webpack inputs.)
                 // 3. ExtractTextPlugin turns that string into a separate asset.
-                loader: ExtractTextPlugin.extract("css-raw-loader!postcss-loader?config=postcss.config.js"),
+                use: ExtractTextPlugin.extract({
+                    use: [
+                        "css-raw-loader",
+                        "postcss-loader"],
+                    }),
             },
             {
                 // this works similarly to the scss case, without postcss.
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract("css-raw-loader"),
+                loader: ExtractTextPlugin.extract({
+                    use: "css-raw-loader",
+                }),
             },
         ],
         noParse: [
@@ -97,6 +112,7 @@ module.exports = {
 
             // same goes for js-sdk
             "matrix-js-sdk": path.resolve('./node_modules/matrix-js-sdk'),
+            "matrix-react-sdk": path.resolve('./node_modules/matrix-react-sdk'),
         },
     },
     externals: {
@@ -124,20 +140,36 @@ module.exports = {
             // about moving them.
             inject: false,
         }),
+        new Dashboard({
+            handler: dashboard.setData,
+        }),
     ],
     devtool: 'source-map',
 
     // configuration for the webpack-dev-server
     devServer: {
+        host: devServerHost,
+        port: devServerPort,
+        compress: false,
+        historyApiFallback: true,
+        inline: true,
+        quiet: false,   // important
+        hot: true,
+        open: false,
         // serve unwebpacked assets from webapp.
         contentBase: './webapp',
-
         stats: {
             // don't fill the console up with a mahoosive list of modules
             chunks: false,
         },
     },
 };
+
+if (process.env.NODE_ENV === "dashboard") {
+    config.devServer.quiet = true;
+}
+
+module.exports = config;
 
 // olm is an optional dependency. Ignore it if it's not installed, to avoid a
 // scary-looking error.

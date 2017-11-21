@@ -33,8 +33,8 @@ const olm_entry = webpack_config.entry['olm'];
 delete webpack_config['entry'];
 
 // add ./test as a search path for js
-webpack_config.module.loaders.unshift({
-    test: /\.js$/, loader: "babel",
+webpack_config.module.rules.unshift({
+    test: /\.js$/, use: "babel-loader",
     include: [path.resolve('./src'), path.resolve('./test')],
 });
 
@@ -46,13 +46,14 @@ webpack_config.module.noParse.push(/sinon\/pkg\/sinon\.js$/);
 // ?
 webpack_config.resolve.alias['sinon'] = 'sinon/pkg/sinon.js';
 
-webpack_config.resolve.root = [
+webpack_config.resolve.modules = [
     path.resolve('./test'),
+    'node_modules',
 ];
 
 webpack_config.devtool = 'inline-source-map';
 
-module.exports = function (config) {
+module.exports = function(config) {
     const myconfig = {
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
@@ -137,12 +138,8 @@ module.exports = function (config) {
                     // Without a remote debugging port, Google Chrome exits immediately.
                     '--remote-debugging-port=9222',
                 ],
-            }
+            },
         },
-
-        // Continuous Integration mode
-        // if true, Karma captures browsers, runs the tests and exits
-        // singleRun: false,
 
         // Concurrency level
         // how many browser should be started simultaneous
