@@ -672,18 +672,6 @@ export default React.createClass({
         showGroupAddRoomDialog(this.props.groupId);
     },
 
-    _onPublicityToggle: function() {
-        this.setState({
-            publicityBusy: true,
-        });
-        const publicity = !this.state.isGroupPublicised;
-        this._groupStore.setGroupPublicity(publicity).then(() => {
-            this.setState({
-                publicityBusy: false,
-            });
-        });
-    },
-
     _getGroupSection: function() {
         const groupSettingsSectionClasses = classnames({
             "mx_GroupView_group": this.state.editing,
@@ -903,25 +891,6 @@ export default React.createClass({
         return null;
     },
 
-    _getMemberSettingsSection: function() {
-        return <div className="mx_GroupView_memberSettings">
-            <h2> { _t("Community Member Settings") } </h2>
-            <div className="mx_GroupView_memberSettings_toggle">
-                <input type="checkbox"
-                    onClick={this._onPublicityToggle}
-                    checked={this.state.isGroupPublicised}
-                    tabIndex="3"
-                    id="isGroupPublicised"
-                />
-                <label htmlFor="isGroupPublicised"
-                    onClick={this._onPublicityToggle}
-                >
-                    { _t("Publish this community on your profile") }
-                </label>
-            </div>
-        </div>;
-    },
-
     _getLongDescriptionNode: function() {
         const summary = this.state.summary;
         let description = null;
@@ -976,7 +945,6 @@ export default React.createClass({
             let shortDescNode;
             const bodyNodes = [
                 this._getMembershipSection(),
-                this.state.editing ? this._getMemberSettingsSection() : null,
                 this._getGroupSection(),
             ];
             const rightButtons = [];

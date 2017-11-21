@@ -15,69 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import GeminiScrollbar from 'react-gemini-scrollbar';
-import {MatrixClient} from 'matrix-js-sdk';
 import sdk from '../../index';
 import { _t } from '../../languageHandler';
 import withMatrixClient from '../../wrappers/withMatrixClient';
 import AccessibleButton from '../views/elements/AccessibleButton';
-import dis from '../../dispatcher';
 import Modal from '../../Modal';
-
-import FlairStore from '../../stores/FlairStore';
-
-const GroupTile = React.createClass({
-    displayName: 'GroupTile',
-
-    propTypes: {
-        groupId: PropTypes.string.isRequired,
-    },
-
-    contextTypes: {
-        matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
-    },
-
-    getInitialState() {
-        return {
-            profile: null,
-        };
-    },
-
-    componentWillMount: function() {
-        FlairStore.getGroupProfileCached(this.context.matrixClient, this.props.groupId).then((profile) => {
-            this.setState({profile});
-        });
-    },
-
-    onClick: function(e) {
-        e.preventDefault();
-        dis.dispatch({
-            action: 'view_group',
-            group_id: this.props.groupId,
-        });
-    },
-
-    render: function() {
-        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const profile = this.state.profile || {};
-        const name = profile.name || this.props.groupId;
-        const desc = profile.shortDescription;
-        const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(
-            profile.avatarUrl, 50, 50, "crop",
-        ) : null;
-        return <AccessibleButton className="mx_GroupTile" onClick={this.onClick}>
-            <div className="mx_GroupTile_avatar">
-                <BaseAvatar name={name} url={httpUrl} width={50} height={50} />
-            </div>
-            <div className="mx_GroupTile_profile">
-                <h3 className="mx_GroupTile_name">{ name }</h3>
-                <div className="mx_GroupTile_desc">{ desc }</div>
-                <div className="mx_GroupTile_groupId">{ this.props.groupId }</div>
-            </div>
-        </AccessibleButton>;
-    },
-});
 
 export default withMatrixClient(React.createClass({
     displayName: 'MyGroups',
@@ -114,6 +57,7 @@ export default withMatrixClient(React.createClass({
         const Loader = sdk.getComponent("elements.Spinner");
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const GroupTile = sdk.getComponent("groups.GroupTile");
 
         let content;
         let contentHeader;

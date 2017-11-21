@@ -595,6 +595,11 @@ module.exports = React.createClass({
         });
     },
 
+    _renderGroupSettings: function() {
+        const GroupUserSettings = sdk.getComponent('groups.GroupUserSettings');
+        return <GroupUserSettings />;
+    },
+
     _renderReferral: function() {
         const teamToken = this.props.teamToken;
         if (!teamToken) {
@@ -1248,6 +1253,8 @@ module.exports = React.createClass({
 
                     { accountJsx }
                 </div>
+
+                { this._renderGroupSettings() }
 
                 { this._renderReferral() }
 
