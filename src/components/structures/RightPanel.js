@@ -49,13 +49,19 @@ class HeaderButton extends React.Component {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
-        return <AccessibleButton className="mx_RightPanel_headerButton" onClick={this.onClick} >
-            <div className="mx_RightPanel_headerButton_badge">
-                { this.props.badge ? this.props.badge : <span>&nbsp;</span> }
-            </div>
-            <TintableSvg src={this.props.iconSrc} width="25" height="25"/>
-            { this.props.isHighlighted ? <div className="mx_RightPanel_headerButton_highlight"></div> : <div/> }
-        </AccessibleButton>;
+        return <AccessibleButton
+            aria-label={this.props.title}
+            title={this.props.title}
+            className="mx_RightPanel_headerButton"
+            onClick={this.onClick} >
+
+                <div className="mx_RightPanel_headerButton_badge">
+                    { this.props.badge ? this.props.badge : <span>&nbsp;</span> }
+                </div>
+                <TintableSvg src={this.props.iconSrc} width="25" height="25"/>
+                { this.props.isHighlighted ? <div className="mx_RightPanel_headerButton_highlight"></div> : <div/> }
+
+            </AccessibleButton>;
     }
 }
 
@@ -71,6 +77,9 @@ HeaderButton.propTypes = {
     badge: PropTypes.node,
     // The parameters to track the click event
     analytics: PropTypes.arrayOf(PropTypes.string).isRequired,
+
+    // Button title
+    title: PropTypes.string.isRequired,
 };
 
 module.exports = React.createClass({
@@ -329,7 +338,7 @@ module.exports = React.createClass({
             // button on these 2 screens or you won't be able to re-expand the panel.
             headerButtons.push(
                 <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" key="_minimizeButton"
-                    title={ _t("Hide panel") } onClick={ this.onCollapseClick }
+                    title={ _t("Hide panel") } aria-label={ _t("Hide panel") } onClick={ this.onCollapseClick }
                 >
                     <TintableSvg src="img/minimise.svg" width="10" height="16"/>
                 </div>,
