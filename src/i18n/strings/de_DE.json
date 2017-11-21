@@ -1014,5 +1014,7 @@
     "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Sonst ist hier aktuell niemand. Möchtest du <inviteText>Benutzer einladen</inviteText> oder die <nowarnText>Warnmeldung bezüglich des leeren Raums deaktivieren</nowarnText>?",
     "Sign in to get started": "Melde dich an, um loszulegen",
     "URL previews are disabled by default for participants in this room.": "URL-Vorschau ist für Mitglieder dieses Raumes standardmäßig deaktiviert.",
-    "URL previews are enabled by default for participants in this room.": "URL-Vorschau ist für Mitglieder dieses Raumes standardmäßig aktiviert."
+    "URL previews are enabled by default for participants in this room.": "URL-Vorschau ist für Mitglieder dieses Raumes standardmäßig aktiviert.",
+    "Restricted": "Eingeschränkt",
+    "Presence Management": "Präsenz-Verwaltung"
 }
