@@ -1013,5 +1013,13 @@
     "URL previews are enabled by default for participants in this room.": "Les aperçus d'URL sont activés par défaut pour les participants de ce salon.",
     "URL previews are disabled by default for participants in this room.": "Les aperçus d'URL sont désactivés par défaut pour les participants de ce salon.",
     "<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.": "<resendText>Tout renvoyer</resendText> ou <cancelText>tout annuler</cancelText> maintenant. Vous pouvez également sélectionner des messages individuels à renvoyer ou annuler.",
-    "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Il n'y a personne d'autre ici ! Souhaitez-vous <inviteText>inviter d'autres personnes</inviteText> ou <nowarnText>ne plus être notifié à propos du salon vide</nowarnText> ?"
+    "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Il n'y a personne d'autre ici ! Souhaitez-vous <inviteText>inviter d'autres personnes</inviteText> ou <nowarnText>ne plus être notifié à propos du salon vide</nowarnText> ?",
+    "%(duration)ss": "%(duration)ss",
+    "%(duration)sm": "%(duration)sm",
+    "%(duration)sh": "%(duration)sh",
+    "%(duration)sd": "%(duration)sj",
+    "Online for %(duration)s": "En ligne depuis %(duration)s",
+    "Idle for %(duration)s": "Inactif depuis %(duration)s",
+    "Offline for %(duration)s": "Hors ligne depuis %(duration)s",
+    "Unknown for %(duration)s": "Inconnu depuis %(duration)s"
 }
