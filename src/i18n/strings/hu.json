@@ -1017,5 +1017,13 @@
     "URL previews are enabled by default for participants in this room.": "Az URL előnézetek alapértelmezetten engedélyezve vannak a szobában jelenlévőknek.",
     "URL previews are disabled by default for participants in this room.": "Az URL előnézet alapértelmezetten tiltva van a szobában jelenlévőknek.",
     "<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.": "<resendText>Mindet újraküldöd</resendText> vagy <cancelText>mindet megszakítod</cancelText>. De egyenként is kijelölheted az üzenetet elküldésre vagy megszakításra.",
-    "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Senki más nincs itt! Szeretnél <inviteText>meghívni másokat</inviteText> vagy <nowarnText>leállítod a figyelmeztetést az üres szobára</nowarnText>?"
+    "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Senki más nincs itt! Szeretnél <inviteText>meghívni másokat</inviteText> vagy <nowarnText>leállítod a figyelmeztetést az üres szobára</nowarnText>?",
+    "%(duration)ss": "%(duration)s mp.",
+    "%(duration)sm": "%(duration)s p.",
+    "%(duration)sh": "%(duration)s ó.",
+    "%(duration)sd": "%(duration)s nap",
+    "Online for %(duration)s": "%(duration)s óta elérhető",
+    "Idle for %(duration)s": "%(duration)s óta tétlen",
+    "Offline for %(duration)s": "%(duration)s óta elérhetetlen",
+    "Unknown for %(duration)s": "%(duration)s óta az állapota ismeretlen"
 }
