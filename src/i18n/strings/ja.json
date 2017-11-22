@@ -57,5 +57,7 @@
     "No Webcams detected": "カメラが見つかりません",
     "Microphone": "マイク",
     "Camera": "カメラ",
-    "Are you sure?": "本当によろしいですか？"
+    "Are you sure?": "本当によろしいですか？",
+    "OK": "OK",
+    "Operation failed": "操作に失敗しました"
 }
