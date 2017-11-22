@@ -44,7 +44,7 @@ module.exports = React.createClass({
         };
     },
 
-    // Return duration as a sting using appropriate time units
+    // Return duration as a string using appropriate time units
     // XXX: This would be better handled using a culture-aware library, but we don't use one yet.
     getDuration: function(time) {
         if (!time) return;
