@@ -39,7 +39,9 @@ try {
  * @returns {MatrixClient} the newly-created MatrixClient
  */
 export default function createMatrixClient(opts) {
-    const storeOpts = {};
+    const storeOpts = {
+        useAuthorizationHeader: true,
+    };
 
     if (localStorage) {
         storeOpts.sessionStore = new Matrix.WebStorageSessionStore(localStorage);
