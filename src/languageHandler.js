@@ -126,6 +126,8 @@ export function substitute(text, variables, tags) {
  * @return a React <span> component if any non-strings were used in substitutions, otherwise a string
  */
 export function replaceByRegexes(text, mapping) {
+    // We initially store our output as an array of strings and objects (e.g. React components).
+    // This will then be converted to a string or a <span> at the end
     const output = [text];
 
     // If we insert any components we need to wrap the output in a span. React doesn't like just an array of components.
@@ -135,53 +137,64 @@ export function replaceByRegexes(text, mapping) {
         // TODO: Cache regexps
         const regexp = new RegExp(regexpString);
 
-        // convert the last element in 'output' into 3 elements (pre-text, sub function, post-text).
-        // Rinse and repeat for other patterns (using post-text).
-        const inputText = output.pop();
-        const match = inputText.match(regexp);
-        if (!match) {
-            output.push(inputText); // Push back input
-
-            // Missing matches is entirely possible because you might choose to show some variables only in the case
-            // of e.g. plurals. It's still a bit suspicious, and could be due to an error, so log it.
-            // However, not showing count is so common that it's not worth logging. And other commonly unused variables
-            // here, if there are any.
-            if (regexpString !== '%\\(count\\)s') {
-                console.log(`Could not find ${regexp} in ${inputText}`);
+        // Loop over what output we have so far and perform replacements
+        // We look for matches: if we find one, we get three parts: everything before the match, the replaced part,
+        // and everything after the match. Insert all three into the output. We need to do this because we can insert objects.
+        // Otherwise there would be no need for the splitting and we could do simple replcement.
+        for (const outputIndex in output) {
+            const inputText = output[outputIndex];
+            if (typeof inputText !== 'string') { // We might have inserted objects earlier, don't try to replace them
+                continue;
             }
-            continue;
-        }
-        const capturedGroups = match.slice(2);
 
-        // Return the raw translation before the *match* followed by the return value of sub() followed
-        // by the raw translation after the *match* (not captured group).
+            const match = inputText.match(regexp);
+            if (!match) {
+                // Missing matches is entirely possible because you might choose to show some variables only in the case
+                // of e.g. plurals. It's still a bit suspicious, and could be due to an error, so log it.
+                // However, not showing count is so common that it's not worth logging. And other commonly unused variables
+                // here, if there are any.
+                if (regexpString !== '%\\(count\\)s') {
+                    console.log(`Could not find ${regexp} in ${inputText}`);
+                }
+                continue;
+            }
 
-        const head = inputText.substr(0, match.index);
-        if (head !== '') { // Don't push empty nodes, they are of no use
-            output.push(head);
-        }
+            const capturedGroups = match.slice(2);
 
-        let replaced;
-        // If substitution is a function, call it
-        if (mapping[regexpString] instanceof Function) {
-            replaced = mapping[regexpString].apply(null, capturedGroups);
-        } else {
-            replaced = mapping[regexpString];
-        }
+            // The textual part before the match
+            const head = inputText.substr(0, match.index);
 
-        // Here we also need to check that it actually is a string before comparing against one
-        // The head and tail are always strings
-        if (typeof replaced !== 'string' || replaced !== '') {
-            output.push(replaced);
-        }
+            // The textual part after the match
+            const tail = inputText.substr(match.index + match[0].length);
 
-        if (typeof replaced === 'object') {
-            shouldWrapInSpan = true;
-        }
+            let replaced;
+            // If substitution is a function, call it
+            if (mapping[regexpString] instanceof Function) {
+                replaced = mapping[regexpString].apply(null, capturedGroups);
+            } else {
+                replaced = mapping[regexpString];
+            }
 
-        const tail = inputText.substr(match.index + match[0].length);
-        if (tail !== '') {
-            output.push(tail);
+            if (typeof replaced === 'object') {
+                shouldWrapInSpan = true;
+            }
+
+            output.splice(outputIndex, 1); // Remove old element
+
+            // Insert in reverse order as splice does insert-before and this way we get the final order correct
+            if (tail !== '') {
+                output.splice(outputIndex, 0, tail);
+            }
+
+            // Here we also need to check that it actually is a string before comparing against one
+            // The head and tail are always strings
+            if (typeof replaced !== 'string' || replaced !== '') {
+                output.splice(outputIndex, 0, replaced);
+            }
+
+            if (head !== '') { // Don't push empty nodes, they are of no use
+                output.splice(outputIndex, 0, head);
+            }
         }
     }
 

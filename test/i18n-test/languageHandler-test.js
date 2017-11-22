@@ -65,4 +65,9 @@ describe('languageHandler', function() {
         expect(languageHandler._t(text, {}, { 'StartChatButton': () => <i>foo</i> }))
             .toEqual(<span>Press <i>foo</i> to start a chat with someone</span>);
     });
+
+    it('replacements in the wrong order', function() {
+        const text = '%(var1)s %(var2)s';
+        expect(languageHandler._t(text, { var2: 'val2', var1: 'val1' })).toBe('val1 val2');
+    });
 });
