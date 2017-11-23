@@ -141,6 +141,7 @@ export function replaceByRegexes(text, mapping) {
         // We look for matches: if we find one, we get three parts: everything before the match, the replaced part,
         // and everything after the match. Insert all three into the output. We need to do this because we can insert objects.
         // Otherwise there would be no need for the splitting and we could do simple replcement.
+        let matchFoundSomewhere = false; // If we don't find a match anywhere we want to log it
         for (const outputIndex in output) {
             const inputText = output[outputIndex];
             if (typeof inputText !== 'string') { // We might have inserted objects earlier, don't try to replace them
@@ -149,15 +150,9 @@ export function replaceByRegexes(text, mapping) {
 
             const match = inputText.match(regexp);
             if (!match) {
-                // Missing matches is entirely possible because you might choose to show some variables only in the case
-                // of e.g. plurals. It's still a bit suspicious, and could be due to an error, so log it.
-                // However, not showing count is so common that it's not worth logging. And other commonly unused variables
-                // here, if there are any.
-                if (regexpString !== '%\\(count\\)s') {
-                    console.log(`Could not find ${regexp} in ${inputText}`);
-                }
                 continue;
             }
+            matchFoundSomewhere = true;
 
             const capturedGroups = match.slice(2);
 
@@ -194,6 +189,15 @@ export function replaceByRegexes(text, mapping) {
 
             if (head !== '') { // Don't push empty nodes, they are of no use
                 output.splice(outputIndex, 0, head);
+            }
+        }
+        if (!matchFoundSomewhere) { // The current regexp did not match anything in the input
+            // Missing matches is entirely possible because you might choose to show some variables only in the case
+            // of e.g. plurals. It's still a bit suspicious, and could be due to an error, so log it.
+            // However, not showing count is so common that it's not worth logging. And other commonly unused variables
+            // here, if there are any.
+            if (regexpString !== '%\\(count\\)s') {
+                console.log(`Could not find ${regexp} in ${text}`);
             }
         }
     }
