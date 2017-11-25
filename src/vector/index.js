@@ -382,7 +382,7 @@ async function loadLanguage() {
     }
     try {
         await languageHandler.setLanguage(langs);
-        document.getElementById("root").setAttribute("lang", languageHandler.getCurrentLanguage());
+        document.getElementById("mx_PageRoot").setAttribute("lang", languageHandler.getCurrentLanguage());
     } catch (e) {
         console.error("Unable to set language", e);
     }
