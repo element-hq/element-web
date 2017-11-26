@@ -1019,5 +1019,10 @@
     "%(duration)sh": "%(duration)sчас",
     "%(duration)sd": "%(duration)sдн",
     "Your community hasn't got a Long Description, a HTML page to show to community members.<br />Click here to open settings and give it one!": "У вашего сообщества нет подробного описания HTML-страницы для показа участникам.<br />Щелкните здесь, чтобы открыть параметры и добавить его!",
-    "<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.": "<resendText>Переотправить все</resendText> или <cancelText>отменить все</cancelText> сейчас. Можно также выбрать отдельные сообщения для повторной отправки или отмены."
+    "<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.": "<resendText>Переотправить все</resendText> или <cancelText>отменить все</cancelText> сейчас. Можно также выбрать отдельные сообщения для повторной отправки или отмены.",
+    "Online for %(duration)s": "В сети %(duration)s",
+    "Offline for %(duration)s": "Не в сети %(duration)s",
+    "Idle for %(duration)s": "Неактивен %(duration)s",
+    "Unknown for %(duration)s": "Неизвестно %(duration)s",
+    "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Здесь никого нет! Хотите <inviteText>пригласить кого-нибудь</inviteText> или <nowarnText>выключить уведомления о пустой комнате</nowarnText>?"
 }
