@@ -109,11 +109,17 @@
     margin: 20px;
 }
 
-.mx_HomePage_container h1, 
-.mx_HomePage_container h2, 
-.mx_HomePage_container h3, 
+.mx_HomePage_container h1,
+.mx_HomePage_container h2,
+.mx_HomePage_container h3,
 .mx_HomePage_container h4 {
     font-weight: 600;
+}
+
+.mx_HomePage_apps img {
+    width: 90px;
+    height: 26px;
+    vertical-align: middle;
 }
 </style>
 
@@ -123,6 +129,15 @@
         <div>
             <h1>_t("Welcome to Riot.im")</h1>
             <h2>_t("Decentralised, encrypted chat &amp; collaboration powered by [matrix]")</h2>
+            <p class="mx_HomePage_apps">_t("Riot.im available on all platforms"):
+              <a target="_blank" href="https://itunes.apple.com/us/app/vector.im/id1083446067"><img src="home/images/download_appstore.png" alt="Riot.im in AppStore"></a>
+              <a target="_blank" href="https://play.google.com/store/apps/details?id=im.vector.alpha"><img src="home/images/download_googleplay.png" alt="Riot.im in Google Play"></a>
+              <a target="_blank" href="https://f-droid.org/repository/browse/?fdid=im.vector.alpha"><img src="home/images/download_fdroid.png" alt="Riot.im in F-Droid"></a>
+              <a target="_blank" href="https://riot.im/download/desktop"><img src="home/images/download_windows.png" alt="Riot.im for Windows "></a>
+              <a target="_blank" href="https://riot.im/download/desktop"><img src="home/images/download_mac.png" alt="Riot.im for Mac"></a>
+              <a target="_blank" href="https://riot.im/download/desktop"><img src="home/images/download_linux.png" alt="Riot.im for Linux"></a>
+              <a target="_blank" href="https://riot.im/app/"><img src="home/images/download_browser.png" alt="Riot.im in any browser"></a>
+            </p>
         </div>
     </div>
     <div class="mx_HomePage_col mx_HomePage_toprow">
