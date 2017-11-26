@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import sdk from '../../../index';
-import classnames from 'classnames';
 import { _t } from '../../../languageHandler';
 
 /*
@@ -32,7 +31,7 @@ export default React.createClass({
                 title={_t("Confirm Removal")}
                 description={
                     _t("Are you sure you wish to remove (delete) this event? " +
-                       "Note that if you delete a room name or topic change, it could undo the change.") }
+                       "Note that if you delete a room name or topic change, it could undo the change.")}
                 button={_t("Remove")}>
             </QuestionDialog>
         );
