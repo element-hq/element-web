@@ -122,13 +122,13 @@ limitations under the License.
     justify-content: center;
 }
 
-.mx_GroupTile_profile h3.mx_GroupTile_name,
+.mx_GroupTile_profile .mx_GroupTile_name,
 .mx_GroupTile_profile .mx_GroupTile_groupId,
 .mx_GroupTile_profile .mx_GroupTile_desc {
     padding-right: 10px;
 }
 
-.mx_GroupTile_profile h3.mx_GroupTile_name {
+.mx_GroupTile_profile .mx_GroupTile_name {
     margin: 0px;
     font-size: 15px;
 }
