@@ -1017,5 +1017,16 @@
     "URL previews are enabled by default for participants in this room.": "URL-Vorschau ist für Mitglieder dieses Raumes standardmäßig aktiviert.",
     "Restricted": "Eingeschränkt",
     "Presence Management": "Anwesenheitsmanagement",
-    "Status.im theme": "Status.im-Thema"
+    "Status.im theme": "Status.im-Thema",
+    "%(duration)ss": "%(duration)ss",
+    "%(duration)sm": "%(duration)sm",
+    "%(duration)sh": "%(duration)sh",
+    "%(duration)sd": "%(duration)sd",
+    "Online for %(duration)s": "Online seit %(duration)s",
+    "Idle for %(duration)s": "Untätig seit %(duration)s",
+    "Offline for %(duration)s": "Offline seit %(duration)s",
+    "Unknown for %(duration)s": "Unbekannt seit %(duration)s",
+    "Flair": "Flair",
+    "Showing flair for these communities:": "Flair für diese Communities zeigen:",
+    "This room is not showing flair for any communities": "Dieser Raum zeigt für keine Communities den Flair an"
 }
