@@ -76,6 +76,14 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         this._unmounted = false;
+
+        // map from login step type to a function which will render a control
+        // letting you do that login type
+        this._stepRendererMap = {
+            'm.login.password': this._renderPasswordStep,
+            'm.login.cas': this._renderCasStep,
+        };
+
         this._initLoginLogic();
     },
 
@@ -217,13 +225,29 @@ module.exports = React.createClass({
             loginIncorrect: false,
         });
 
-        loginLogic.getFlows().then(function(flows) {
-            // old behaviour was to always use the first flow without presenting
-            // options. This works in most cases (we don't have a UI for multiple
-            // logins so let's skip that for now).
-            loginLogic.chooseFlow(0);
-            self.setState({
-                currentFlow: self._getCurrentFlowStep(),
+        loginLogic.getFlows().then((flows) => {
+            // look for a flow where we understand all of the steps.
+            for (let i = 0; i < flows.length; i++ ) {
+                if (!this._isSupportedFlow(flows[i])) {
+                    continue;
+                }
+
+                // we just pick the first flow where we support all the
+                // steps. (we don't have a UI for multiple logins so let's skip
+                // that for now).
+                loginLogic.chooseFlow(i);
+                this.setState({
+                    currentFlow: this._getCurrentFlowStep(),
+                });
+                return;
+            }
+            // we got to the end of the list without finding a suitable
+            // flow.
+            this.setState({
+                errorText: _t(
+                    "This homeserver doesn't offer any login flows which are " +
+                        "supported by this client.",
+                ),
             });
         }, function(err) {
             self.setState({
@@ -235,6 +259,16 @@ module.exports = React.createClass({
                 busy: false,
             });
         }).done();
+    },
+
+    _isSupportedFlow: function(flow) {
+        // technically the flow can have multiple steps, but no one does this
+        // for login and loginLogic doesn't support it so we can ignore it.
+        if (!this._stepRendererMap[flow.type]) {
+            console.log("Skipping flow", flow, "due to unsupported login type", flow.type);
+            return false;
+        }
+        return true;
     },
 
     _getCurrentFlowStep: function() {
@@ -276,38 +310,42 @@ module.exports = React.createClass({
     },
 
     componentForStep: function(step) {
-        switch (step) {
-            case 'm.login.password':
-                const PasswordLogin = sdk.getComponent('login.PasswordLogin');
-                return (
-                    <PasswordLogin
-                        onSubmit={this.onPasswordLogin}
-                        initialUsername={this.state.username}
-                        initialPhoneCountry={this.state.phoneCountry}
-                        initialPhoneNumber={this.state.phoneNumber}
-                        onUsernameChanged={this.onUsernameChanged}
-                        onPhoneCountryChanged={this.onPhoneCountryChanged}
-                        onPhoneNumberChanged={this.onPhoneNumberChanged}
-                        onForgotPasswordClick={this.props.onForgotPasswordClick}
-                        loginIncorrect={this.state.loginIncorrect}
-                        hsUrl={this.state.enteredHomeserverUrl}
-                    />
-                );
-            case 'm.login.cas':
-                const CasLogin = sdk.getComponent('login.CasLogin');
-                return (
-                    <CasLogin onSubmit={this.onCasLogin} />
-                );
-            default:
-                if (!step) {
-                    return;
-                }
-                return (
-                    <div>
-                    { _t('Sorry, this homeserver is using a login which is not recognised ') }({ step })
-                    </div>
-                );
+        if (!step) {
+            return null;
         }
+
+        const stepRenderer = this._stepRendererMap[step];
+
+        if (stepRenderer) {
+            return stepRenderer();
+        }
+
+        return null;
+    },
+
+    _renderPasswordStep: function() {
+        const PasswordLogin = sdk.getComponent('login.PasswordLogin');
+        return (
+            <PasswordLogin
+               onSubmit={this.onPasswordLogin}
+               initialUsername={this.state.username}
+               initialPhoneCountry={this.state.phoneCountry}
+               initialPhoneNumber={this.state.phoneNumber}
+               onUsernameChanged={this.onUsernameChanged}
+               onPhoneCountryChanged={this.onPhoneCountryChanged}
+               onPhoneNumberChanged={this.onPhoneNumberChanged}
+               onForgotPasswordClick={this.props.onForgotPasswordClick}
+               loginIncorrect={this.state.loginIncorrect}
+               hsUrl={this.state.enteredHomeserverUrl}
+               />
+        );
+    },
+
+    _renderCasStep: function() {
+        const CasLogin = sdk.getComponent('login.CasLogin');
+        return (
+            <CasLogin onSubmit={this.onCasLogin} />
+        );
     },
 
     _onLanguageChange: function(newLang) {
