@@ -263,6 +263,9 @@ async function loadApp() {
     } catch (e) {
         configError = e;
     }
+    
+    // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
+    // granular settings are loaded correctly and to avoid duplicating the override logic for the theme. 
     SdkConfig.put(configJson);
 
     // don't try to redirect to the native apps if we're
