@@ -1026,7 +1026,7 @@
     "Idle for %(duration)s": "Untätig seit %(duration)s",
     "Offline for %(duration)s": "Offline seit %(duration)s",
     "Unknown for %(duration)s": "Unbekannt seit %(duration)s",
-    "Flair": "Flair",
-    "Showing flair for these communities:": "Flair für diese Communities zeigen:",
-    "This room is not showing flair for any communities": "Dieser Raum zeigt für keine Communities den Flair an"
+    "Flair": "Abzeichen",
+    "Showing flair for these communities:": "Abzeichen für diese Communities zeigen:",
+    "This room is not showing flair for any communities": "Dieser Raum zeigt für keine Communities die Abzeichen an"
 }
