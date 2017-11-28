@@ -1021,5 +1021,16 @@
     "Online for %(duration)s": "En ligne depuis %(duration)s",
     "Idle for %(duration)s": "Inactif depuis %(duration)s",
     "Offline for %(duration)s": "Hors ligne depuis %(duration)s",
-    "Unknown for %(duration)s": "Inconnu depuis %(duration)s"
+    "Unknown for %(duration)s": "Inconnu depuis %(duration)s",
+    "Delete %(count)s devices|one": "Supprimer l'appareil",
+    "Delete %(count)s devices|other": "Supprimer %(count)s appareils",
+    "Select devices": "Sélectionner les appareils",
+    "Something went wrong when trying to get your communities.": "Une erreur est survenue lors de l'obtention de vos communautés.",
+    "This homeserver doesn't offer any login flows which are supported by this client.": "Ce serveur d'accueil n'offre aucun flux compatible avec ce client.",
+    "Flair": "Talent",
+    "Showing flair for these communities:": "Montre les talents pour ces communautés :",
+    "This room is not showing flair for any communities": "Ce salon n'affiche de talent pour aucune communauté",
+    "Flair will appear if enabled in room settings": "Les talents apparaîtront s'ils sont activés dans les paramètres du salon",
+    "Flair will not appear": "Les talents n'apparaîtront pas",
+    "Display your community flair in rooms configured to show it.": "Afficher vos talents de communauté dans les salons configurés pour les afficher."
 }
