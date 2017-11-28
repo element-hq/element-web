@@ -17,6 +17,7 @@ limitations under the License.
 import EventEmitter from 'events';
 import { groupMemberFromApiObject, groupRoomFromApiObject } from '../groups';
 import FlairStore from './FlairStore';
+import MatrixClientPeg from '../MatrixClientPeg';
 
 /**
  * Stores the group summary for a room and provides an API to change it and
@@ -31,13 +32,12 @@ export default class GroupStore extends EventEmitter {
         GroupRooms: 'GroupRooms',
     };
 
-    constructor(matrixClient, groupId) {
+    constructor(groupId) {
         super();
         if (!groupId) {
             throw new Error('GroupStore needs a valid groupId to be created');
         }
         this.groupId = groupId;
-        this._matrixClient = matrixClient;
         this._summary = {};
         this._rooms = [];
         this._members = [];
@@ -50,7 +50,7 @@ export default class GroupStore extends EventEmitter {
     }
 
     _fetchMembers() {
-        this._matrixClient.getGroupUsers(this.groupId).then((result) => {
+        MatrixClientPeg.get().getGroupUsers(this.groupId).then((result) => {
             this._members = result.chunk.map((apiMember) => {
                 return groupMemberFromApiObject(apiMember);
             });
@@ -61,7 +61,7 @@ export default class GroupStore extends EventEmitter {
             this.emit('error', err);
         });
 
-        this._matrixClient.getGroupInvitedUsers(this.groupId).then((result) => {
+        MatrixClientPeg.get().getGroupInvitedUsers(this.groupId).then((result) => {
             this._invitedMembers = result.chunk.map((apiMember) => {
                 return groupMemberFromApiObject(apiMember);
             });
@@ -78,7 +78,7 @@ export default class GroupStore extends EventEmitter {
     }
 
     _fetchSummary() {
-        this._matrixClient.getGroupSummary(this.groupId).then((resp) => {
+        MatrixClientPeg.get().getGroupSummary(this.groupId).then((resp) => {
             this._summary = resp;
             this._ready[GroupStore.STATE_KEY.Summary] = true;
             this._notifyListeners();
@@ -88,7 +88,7 @@ export default class GroupStore extends EventEmitter {
     }
 
     _fetchRooms() {
-        this._matrixClient.getGroupRooms(this.groupId).then((resp) => {
+        MatrixClientPeg.get().getGroupRooms(this.groupId).then((resp) => {
             this._rooms = resp.chunk.map((apiRoom) => {
                 return groupRoomFromApiObject(apiRoom);
             });
@@ -145,19 +145,19 @@ export default class GroupStore extends EventEmitter {
     }
 
     addRoomToGroup(roomId, isPublic) {
-        return this._matrixClient
+        return MatrixClientPeg.get()
             .addRoomToGroup(this.groupId, roomId, isPublic)
             .then(this._fetchRooms.bind(this));
     }
 
     updateGroupRoomVisibility(roomId, isPublic) {
-        return this._matrixClient
+        return MatrixClientPeg.get()
             .updateGroupRoomVisibility(this.groupId, roomId, isPublic)
             .then(this._fetchRooms.bind(this));
     }
 
     removeRoomFromGroup(roomId) {
-        return this._matrixClient
+        return MatrixClientPeg.get()
             .removeRoomFromGroup(this.groupId, roomId)
             // Room might be in the summary, refresh just in case
             .then(this._fetchSummary.bind(this))
@@ -165,12 +165,12 @@ export default class GroupStore extends EventEmitter {
     }
 
     inviteUserToGroup(userId) {
-        return this._matrixClient.inviteUserToGroup(this.groupId, userId)
+        return MatrixClientPeg.get().inviteUserToGroup(this.groupId, userId)
             .then(this._fetchMembers.bind(this));
     }
 
     acceptGroupInvite() {
-        return this._matrixClient.acceptGroupInvite(this.groupId)
+        return MatrixClientPeg.get().acceptGroupInvite(this.groupId)
             // The user might be able to see more rooms now
             .then(this._fetchRooms.bind(this))
             // The user should now appear as a member
@@ -178,33 +178,33 @@ export default class GroupStore extends EventEmitter {
     }
 
     addRoomToGroupSummary(roomId, categoryId) {
-        return this._matrixClient
+        return MatrixClientPeg.get()
             .addRoomToGroupSummary(this.groupId, roomId, categoryId)
             .then(this._fetchSummary.bind(this));
     }
 
     addUserToGroupSummary(userId, roleId) {
-        return this._matrixClient
+        return MatrixClientPeg.get()
             .addUserToGroupSummary(this.groupId, userId, roleId)
             .then(this._fetchSummary.bind(this));
     }
 
     removeRoomFromGroupSummary(roomId) {
-        return this._matrixClient
+        return MatrixClientPeg.get()
             .removeRoomFromGroupSummary(this.groupId, roomId)
             .then(this._fetchSummary.bind(this));
     }
 
     removeUserFromGroupSummary(userId) {
-        return this._matrixClient
+        return MatrixClientPeg.get()
             .removeUserFromGroupSummary(this.groupId, userId)
             .then(this._fetchSummary.bind(this));
     }
 
     setGroupPublicity(isPublished) {
-        return this._matrixClient
+        return MatrixClientPeg.get()
             .setGroupPublicity(this.groupId, isPublished)
-            .then(() => { FlairStore.invalidatePublicisedGroups(this._matrixClient.credentials.userId); })
+            .then(() => { FlairStore.invalidatePublicisedGroups(MatrixClientPeg.get().credentials.userId); })
             .then(this._fetchSummary.bind(this));
     }
 }

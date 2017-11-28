@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
 import GroupStore from '../../../stores/GroupStore';
@@ -27,10 +26,6 @@ export default React.createClass({
 
     propTypes: {
         groupId: PropTypes.string.isRequired,
-    },
-
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
     },
 
     getInitialState() {
@@ -46,7 +41,7 @@ export default React.createClass({
     },
 
     _initGroupStore: function(groupId) {
-        this._groupStore = GroupStoreCache.getGroupStore(this.context.matrixClient, groupId);
+        this._groupStore = GroupStoreCache.getGroupStore(groupId);
         this._groupStore.registerListener(() => {
             this.setState({
                 isGroupPublicised: this._groupStore.getGroupPublicity(),
