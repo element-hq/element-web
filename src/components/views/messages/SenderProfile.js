@@ -83,6 +83,18 @@ export default React.createClass({
         });
     },
 
+    _getDisplayedGroups(userGroups, relatedGroups) {
+        let displayedGroups = userGroups || [];
+        if (relatedGroups && relatedGroups.length > 0) {
+            displayedGroups = displayedGroups.filter((groupId) => {
+                return relatedGroups.includes(groupId);
+            });
+        } else {
+            displayedGroups = [];
+        }
+        return displayedGroups;
+    },
+
     render() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
         const {mxEvent} = this.props;
@@ -93,14 +105,9 @@ export default React.createClass({
             return <span />; // emote message must include the name so don't duplicate it
         }
 
-        let displayedGroups = this.state.userGroups || [];
-        if (this.state.relatedGroups && this.state.relatedGroups.length > 0) {
-            displayedGroups = displayedGroups.filter((groupId) => {
-                return this.state.relatedGroups.includes(groupId);
-            });
-        } else {
-            displayedGroups = [];
-        }
+        const displayedGroups = this._getDisplayedGroups(
+            this.state.userGroups, this.state.relatedGroups,
+        );
 
         name = displayedGroups.length > 0 ? name.replace(' (IRC)', '') : name;
 
