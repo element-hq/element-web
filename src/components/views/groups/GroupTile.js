@@ -52,6 +52,8 @@ const GroupTile = React.createClass({
     componentWillMount: function() {
         FlairStore.getGroupProfileCached(this.context.matrixClient, this.props.groupId).then((profile) => {
             this.setState({profile});
+        }).catch((err) => {
+            console.error('Error whilst getting cached profile for GroupTile', err);
         });
     },
 
