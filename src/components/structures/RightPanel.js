@@ -127,7 +127,7 @@ module.exports = React.createClass({
         return {
             phase: this.props.groupId ? this.Phase.GroupMemberList : this.Phase.RoomMemberList,
             isUserPrivilegedInGroup: null,
-        }
+        };
     },
 
     componentWillReceiveProps(newProps) {
@@ -139,9 +139,7 @@ module.exports = React.createClass({
 
     _initGroupStore(groupId) {
         if (!groupId) return;
-        this._groupStore = GroupStoreCache.getGroupStore(
-            this.context.matrixClient, groupId,
-        );
+        this._groupStore = GroupStoreCache.getGroupStore(groupId);
         this._groupStore.registerListener(this.onGroupStoreUpdated);
     },
 
@@ -151,7 +149,7 @@ module.exports = React.createClass({
         }
     },
 
-    onGroupStoreUpdated: function(){
+    onGroupStoreUpdated: function() {
         this.setState({
             isUserPrivilegedInGroup: this._groupStore.isUserPrivileged(),
         });
