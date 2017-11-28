@@ -105,11 +105,20 @@ export default React.createClass({
             return <span />; // emote message must include the name so don't duplicate it
         }
 
-        const displayedGroups = this._getDisplayedGroups(
-            this.state.userGroups, this.state.relatedGroups,
-        );
+        let flair = <div />;
+        if (this.props.enableFlair) {
+            const displayedGroups = this._getDisplayedGroups(
+                this.state.userGroups, this.state.relatedGroups,
+            );
 
-        name = displayedGroups.length > 0 ? name.replace(' (IRC)', '') : name;
+            // Backwards-compatible replacing of "(IRC)" with AS user flair
+            name = displayedGroups.length > 0 ? name.replace(' (IRC)', '') : name;
+
+            flair = <Flair key='flair'
+                userId={mxEvent.getSender()}
+                groups={displayedGroups}
+            />;
+        }
 
         const nameElem = <EmojiText key='name'>{ name || '' }</EmojiText>;
 
@@ -118,13 +127,7 @@ export default React.createClass({
             <span className="mx_SenderProfile_name">
                 { nameElem }
             </span>
-            { this.props.enableFlair ?
-                <Flair key='flair'
-                    userId={mxEvent.getSender()}
-                    groups={displayedGroups}
-                />
-                : null
-            }
+            { flair }
         </span>;
 
         const content = this.props.text ?
