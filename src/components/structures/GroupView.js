@@ -495,7 +495,19 @@ export default React.createClass({
                 this._onEditClick();
             }
         });
+        let willDoOnboarding = false;
         this._groupStore.on('error', (err) => {
+            if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN' && !willDoOnboarding) {
+                dis.dispatch({
+                    action: 'do_after_sync_prepared',
+                    deferred_action: {
+                        action: 'view_group',
+                        group_id: groupId,
+                    },
+                });
+                dis.dispatch({action: 'view_set_mxid'});
+                willDoOnboarding = true;
+            }
             this.setState({
                 summary: null,
                 error: err,

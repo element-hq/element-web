@@ -82,7 +82,6 @@ const ONBOARDING_FLOW_STARTERS = [
     'view_create_chat',
     'view_create_room',
     'view_my_groups',
-    'view_group',
 ];
 
 module.exports = React.createClass({
