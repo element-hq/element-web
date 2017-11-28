@@ -30,37 +30,60 @@ export default React.createClass({
 
     getInitialState() {
         return {
-            err: null,
+            error: null,
             groups: null,
         };
     },
 
     componentWillMount: function() {
         this.context.matrixClient.getJoinedGroups().done((result) => {
-            this.setState({groups: result.groups, error: null});
+            this.setState({groups: result.groups || [], error: null});
         }, (err) => {
             console.error(err);
             this.setState({groups: null, error: err});
         });
     },
 
-    render() {
-        const GroupPublicityToggle = sdk.getComponent('groups.GroupPublicityToggle');
-        const groupPublicityToggles = (this.state.groups || []).map((groupId, index) => {
-            return <GroupPublicityToggle key={index} groupId={groupId} />;
-        });
+    _renderGroupPublicity() {
+        let text = "";
+        let scrollbox = <div />;
+        const groups = this.state.groups;
+
+        if (this.state.error) {
+            text = _t('Something went wrong when trying to get your communities.');
+        } else if (groups === null) {
+            text = _t('Loading...');
+        } else if (groups.length > 0) {
+            const GroupPublicityToggle = sdk.getComponent('groups.GroupPublicityToggle');
+            const groupPublicityToggles = groups.map((groupId, index) => {
+                return <GroupPublicityToggle key={index} groupId={groupId} />;
+            });
+            text = _t('Display your community flair in rooms configured to show it.');
+            scrollbox = <div className="mx_GroupUserSettings_groupPublicity_scrollbox">
+                <GeminiScrollbar>
+                    { groupPublicityToggles }
+                </GeminiScrollbar>
+            </div>;
+        } else {
+            text = _t("You're not currently a member of any communities.");
+        }
+
         return <div>
             <h3>{ _t('Flair') }</h3>
             <div className="mx_UserSettings_section">
                 <p>
-                    { _t('Display your community flair in rooms configured to show it.') }
+                    { text }
                 </p>
-                <div className="mx_GroupUserSettings_groupPublicity_scrollbox">
-                    <GeminiScrollbar>
-                        { groupPublicityToggles }
-                    </GeminiScrollbar>
-                </div>
+                { scrollbox }
             </div>
+        </div>;
+    },
+
+    render() {
+        const groupPublicity = this._renderGroupPublicity();
+
+        return <div>
+            { groupPublicity }
         </div>;
     },
 });
