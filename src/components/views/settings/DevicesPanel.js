@@ -20,7 +20,9 @@ import classNames from 'classnames';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
+import Modal from '../../../Modal';
 
+const AUTH_CACHE_AGE = 5 * 60 * 1000; // 5 minutes
 
 export default class DevicesPanel extends React.Component {
     constructor(props, context) {
@@ -29,11 +31,16 @@ export default class DevicesPanel extends React.Component {
         this.state = {
             devices: undefined,
             deviceLoadError: undefined,
+
+            selectedDevices: [],
+            deleting: false,
         };
 
         this._unmounted = false;
 
         this._renderDevice = this._renderDevice.bind(this);
+        this._onDeviceSelectionToggled = this._onDeviceSelectionToggled.bind(this);
+        this._onDeleteClick = this._onDeleteClick.bind(this);
     }
 
     componentDidMount() {
@@ -82,25 +89,85 @@ export default class DevicesPanel extends React.Component {
         return (idA < idB) ? -1 : (idA > idB) ? 1 : 0;
     }
 
-    _onDeviceDeleted(device) {
+    _onDeviceSelectionToggled(device) {
         if (this._unmounted) { return; }
 
-        // delete the removed device from our list.
-        const removed_id = device.device_id;
+        const deviceId = device.device_id;
         this.setState((state, props) => {
-            const newDevices = state.devices.filter(
-                (d) => { return d.device_id != removed_id; },
-            );
-            return { devices: newDevices };
+            // Make a copy of the selected devices, then add or remove the device
+            const selectedDevices = state.selectedDevices.slice();
+
+            const i = selectedDevices.indexOf(deviceId);
+            if (i === -1) {
+                selectedDevices.push(deviceId);
+            } else {
+                selectedDevices.splice(i, 1);
+            }
+
+            return {selectedDevices};
         });
+    }
+
+    _onDeleteClick() {
+        if (this.context.authCache.lastUpdate < Date.now() - AUTH_CACHE_AGE) {
+            this.context.authCache.auth = null;
+        }
+
+        this.setState({
+            deleting: true,
+        });
+
+        // try with auth cache (which is null, so no interactive auth, to start off)
+        this._makeDeleteRequest(this.context.authCache.auth).catch((error) => {
+            if (this._unmounted) { return; }
+            if (error.httpStatus !== 401 || !error.data || !error.data.flows) {
+                // doesn't look like an interactive-auth failure
+                throw error;
+            }
+
+            // pop up an interactive auth dialog
+            const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
+
+            Modal.createTrackedDialog('Delete Device Dialog', '', InteractiveAuthDialog, {
+                title: _t("Authentication"),
+                matrixClient: MatrixClientPeg.get(),
+                authData: error.data,
+                makeRequest: this._makeDeleteRequest.bind(this),
+            });
+        }).catch((e) => {
+            console.error("Error deleting devices", e);
+            if (this._unmounted) { return; }
+        }).finally(() => {
+            this.setState({
+                deleting: false,
+            });
+        });
+    }
+
+    _makeDeleteRequest(auth) {
+        this.context.authCache.auth = auth;
+        this.context.authCache.lastUpdate = Date.now();
+        return MatrixClientPeg.get().deleteMultipleDevices(this.state.selectedDevices, auth).then(
+            () => {
+                // Remove the deleted devices from `devices`, reset selection to []
+                this.setState({
+                    devices: this.state.devices.filter(
+                        (d) => !this.state.selectedDevices.includes(d.device_id)
+                    ),
+                    selectedDevices: [],
+                });
+            },
+        );
     }
 
     _renderDevice(device) {
         const DevicesPanelEntry = sdk.getComponent('settings.DevicesPanelEntry');
-        return (
-            <DevicesPanelEntry key={device.device_id} device={device}
-               onDeleted={()=>{this._onDeviceDeleted(device);}} />
-        );
+        return <DevicesPanelEntry
+            key={device.device_id}
+            device={device}
+            selected={this.state.selectedDevices.includes(device.device_id)}
+            onDeviceToggled={this._onDeviceSelectionToggled}
+        />;
     }
 
     render() {
@@ -124,6 +191,12 @@ export default class DevicesPanel extends React.Component {
 
         devices.sort(this._deviceCompare);
 
+        const deleteButton = this.state.deleting ?
+            <Spinner w={22} h={22} /> :
+            <div className="mx_textButton" onClick={this._onDeleteClick}>
+               { _t("Delete %(count)s devices", {count: this.state.selectedDevices.length}) }
+            </div>;
+
         const classes = classNames(this.props.className, "mx_DevicesPanel");
         return (
             <div className={classes}>
@@ -131,7 +204,9 @@ export default class DevicesPanel extends React.Component {
                     <div className="mx_DevicesPanel_deviceId">{ _t("Device ID") }</div>
                     <div className="mx_DevicesPanel_deviceName">{ _t("Device Name") }</div>
                     <div className="mx_DevicesPanel_deviceLastSeen">{ _t("Last seen") }</div>
-                    <div className="mx_DevicesPanel_deviceButtons"></div>
+                    <div className="mx_DevicesPanel_deviceButtons">
+                        { this.state.selectedDevices.length > 0 ? deleteButton : _t('Select devices') }
+                    </div>
                 </div>
                 { devices.map(this._renderDevice) }
             </div>
@@ -142,4 +217,7 @@ export default class DevicesPanel extends React.Component {
 DevicesPanel.displayName = 'MemberDeviceInfo';
 DevicesPanel.propTypes = {
     className: React.PropTypes.string,
+};
+DevicesPanel.contextTypes = {
+    authCache: React.PropTypes.object,
 };
