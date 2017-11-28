@@ -1027,7 +1027,7 @@
     "Select devices": "Sélectionner les appareils",
     "Something went wrong when trying to get your communities.": "Une erreur est survenue lors de l'obtention de vos communautés.",
     "This homeserver doesn't offer any login flows which are supported by this client.": "Ce serveur d'accueil n'offre aucun flux compatible avec ce client.",
-    "Flair": "Talent",
+    "Flair": "Talents",
     "Showing flair for these communities:": "Montre les talents pour ces communautés :",
     "This room is not showing flair for any communities": "Ce salon n'affiche de talent pour aucune communauté",
     "Flair will appear if enabled in room settings": "Les talents apparaîtront s'ils sont activés dans les paramètres du salon",
