@@ -38,7 +38,9 @@
 @import "./matrix-react-sdk/views/elements/_RichText.scss";
 @import "./matrix-react-sdk/views/elements/_RoleButton.scss";
 @import "./matrix-react-sdk/views/elements/_ToolTipButton.scss";
+@import "./matrix-react-sdk/views/groups/_GroupPublicityToggle.scss";
 @import "./matrix-react-sdk/views/groups/_GroupRoomList.scss";
+@import "./matrix-react-sdk/views/groups/_GroupUserSettings.scss";
 @import "./matrix-react-sdk/views/login/_InteractiveAuthEntryComponents.scss";
 @import "./matrix-react-sdk/views/login/_ServerConfig.scss";
 @import "./matrix-react-sdk/views/messages/_MEmoteBody.scss";
@@ -81,7 +83,7 @@
 @import "./vector-web/structures/_RoomSubList.scss";
 @import "./vector-web/structures/_ViewSource.scss";
 @import "./vector-web/views/context_menus/_MessageContextMenu.scss";
-@import "vector-web/views/context_menus/_PresenceContextMenuOption.scss";
+@import "./vector-web/views/context_menus/_PresenceContextMenuOption.scss";
 @import "./vector-web/views/context_menus/_RoomTileContextMenu.scss";
 @import "./vector-web/views/dialogs/_ChangelogDialog.scss";
 @import "./vector-web/views/dialogs/_DevtoolsDialog.scss";
