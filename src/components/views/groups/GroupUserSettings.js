@@ -31,7 +31,7 @@ export default React.createClass({
     getInitialState() {
         return {
             err: null,
-            groups: [],
+            groups: null,
         };
     },
 
@@ -46,7 +46,7 @@ export default React.createClass({
 
     render() {
         const GroupPublicityToggle = sdk.getComponent('groups.GroupPublicityToggle');
-        const groupPublicityToggles = this.state.groups.map((groupId, index) => {
+        const groupPublicityToggles = (this.state.groups || []).map((groupId, index) => {
             return <GroupPublicityToggle key={index} groupId={groupId} />;
         });
         return <div>
