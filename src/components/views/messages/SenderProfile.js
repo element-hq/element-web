@@ -38,7 +38,7 @@ export default React.createClass({
 
     getInitialState() {
         return {
-            groups: null,
+            userGroups: null,
             relatedGroups: [],
         };
     },
@@ -49,9 +49,9 @@ export default React.createClass({
 
         FlairStore.getPublicisedGroupsCached(
             this.context.matrixClient, this.props.mxEvent.getSender(),
-        ).then((groups) => {
+        ).then((userGroups) => {
             if (this.unmounted) return;
-            this.setState({groups});
+            this.setState({userGroups});
         });
 
         this.context.matrixClient.on('RoomState.events', this.onRoomStateEvents);
@@ -93,16 +93,16 @@ export default React.createClass({
             return <span />; // emote message must include the name so don't duplicate it
         }
 
-        let groups = this.state.groups || [];
+        let displayedGroups = this.state.userGroups || [];
         if (this.state.relatedGroups && this.state.relatedGroups.length > 0) {
-            groups = groups.filter((groupId) => {
+            displayedGroups = displayedGroups.filter((groupId) => {
                 return this.state.relatedGroups.includes(groupId);
             });
         } else {
-            groups = [];
+            displayedGroups = [];
         }
 
-        name = groups.length > 0 ? name.replace(' (IRC)', '') : name;
+        name = displayedGroups.length > 0 ? name.replace(' (IRC)', '') : name;
 
         const nameElem = <EmojiText key='name'>{ name || '' }</EmojiText>;
 
@@ -114,7 +114,7 @@ export default React.createClass({
             { this.props.enableFlair ?
                 <Flair key='flair'
                     userId={mxEvent.getSender()}
-                    groups={groups}
+                    groups={displayedGroups}
                 />
                 : null
             }
