@@ -22,8 +22,6 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 
-const AUTH_CACHE_AGE = 5 * 60 * 1000; // 5 minutes
-
 export default class DevicesPanel extends React.Component {
     constructor(props, context) {
         super(props, context);
@@ -109,16 +107,11 @@ export default class DevicesPanel extends React.Component {
     }
 
     _onDeleteClick() {
-        if (this.context.authCache.lastUpdate < Date.now() - AUTH_CACHE_AGE) {
-            this.context.authCache.auth = null;
-        }
-
         this.setState({
             deleting: true,
         });
 
-        // try with auth cache (which is null, so no interactive auth, to start off)
-        this._makeDeleteRequest(this.context.authCache.auth).catch((error) => {
+        this._makeDeleteRequest(null).catch((error) => {
             if (this._unmounted) { return; }
             if (error.httpStatus !== 401 || !error.data || !error.data.flows) {
                 // doesn't look like an interactive-auth failure
@@ -145,14 +138,12 @@ export default class DevicesPanel extends React.Component {
     }
 
     _makeDeleteRequest(auth) {
-        this.context.authCache.auth = auth;
-        this.context.authCache.lastUpdate = Date.now();
         return MatrixClientPeg.get().deleteMultipleDevices(this.state.selectedDevices, auth).then(
             () => {
                 // Remove the deleted devices from `devices`, reset selection to []
                 this.setState({
                     devices: this.state.devices.filter(
-                        (d) => !this.state.selectedDevices.includes(d.device_id)
+                        (d) => !this.state.selectedDevices.includes(d.device_id),
                     ),
                     selectedDevices: [],
                 });
@@ -217,7 +208,4 @@ export default class DevicesPanel extends React.Component {
 DevicesPanel.displayName = 'MemberDeviceInfo';
 DevicesPanel.propTypes = {
     className: React.PropTypes.string,
-};
-DevicesPanel.contextTypes = {
-    authCache: React.PropTypes.object,
 };
