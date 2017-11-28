@@ -81,8 +81,7 @@ const ONBOARDING_FLOW_STARTERS = [
     'view_user_settings',
     'view_create_chat',
     'view_create_room',
-    'view_my_groups',
-    'view_group',
+    'view_create_group',
 ];
 
 module.exports = React.createClass({
@@ -501,6 +500,11 @@ module.exports = React.createClass({
             case 'view_create_room':
                 this._createRoom();
                 break;
+            case 'view_create_group': {
+                const CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog");
+                Modal.createTrackedDialog('Create Community', '', CreateGroupDialog);
+            }
+            break;
             case 'view_room_directory':
                 this._setPage(PageTypes.RoomDirectory);
                 this.notifyNewScreen('directory');

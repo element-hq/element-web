@@ -18,9 +18,9 @@ import React from 'react';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import sdk from '../../index';
 import { _t } from '../../languageHandler';
+import dis from '../../dispatcher';
 import withMatrixClient from '../../wrappers/withMatrixClient';
 import AccessibleButton from '../views/elements/AccessibleButton';
-import Modal from '../../Modal';
 
 export default withMatrixClient(React.createClass({
     displayName: 'MyGroups',
@@ -41,14 +41,18 @@ export default withMatrixClient(React.createClass({
     },
 
     _onCreateGroupClick: function() {
-        const CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog");
-        Modal.createTrackedDialog('Create Community', '', CreateGroupDialog);
+        dis.dispatch({action: 'view_create_group'});
     },
 
     _fetch: function() {
         this.props.matrixClient.getJoinedGroups().done((result) => {
             this.setState({groups: result.groups, error: null});
         }, (err) => {
+            if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN') {
+                // Indicate that the guest isn't in any groups (which should be true)
+                this.setState({groups: [], error: null});
+                return;
+            }
             this.setState({groups: null, error: err});
         });
     },
