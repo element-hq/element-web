@@ -978,5 +978,6 @@
     "Curve25519 identity key": "Klíč totožnosti Curve25519",
     "Claimed Ed25519 fingerprint key": "Údajný klíč s otiskem prstu Ed25519",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Tento proces vás provede importem šifrovacích klíčů, které jste si stáhli z jiného Matrix klienta. Po úspěšném naimportování budete v tomto klientovi moci dešifrovat všechny zprávy, které jste mohli dešifrovat v původním klientovi.",
-    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Stažený soubor je chráněn heslem. Soubor můžete naimportovat pouze pokud zadáte odpovídající heslo."
+    "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Stažený soubor je chráněn heslem. Soubor můžete naimportovat pouze pokud zadáte odpovídající heslo.",
+    "Tag Panel": "Připnout panel"
 }
