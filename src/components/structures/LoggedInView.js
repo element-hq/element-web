@@ -213,6 +213,7 @@ export default React.createClass({
     },
 
     render: function() {
+        const TagPanel = sdk.getComponent('structures.TagPanel');
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RightPanel = sdk.getComponent('structures.RightPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
@@ -334,6 +335,7 @@ export default React.createClass({
             <div className='mx_MatrixChat_wrapper'>
                 { topBar }
                 <div className={bodyClasses}>
+                    <TagPanel />
                     <LeftPanel
                         selectedRoom={this.props.currentRoomId}
                         collapsed={this.props.collapseLhs || false}

@@ -28,6 +28,8 @@ const rate_limited_func = require('../../../ratelimitedfunc');
 const Rooms = require('../../../Rooms');
 import DMRoomMap from '../../../utils/DMRoomMap';
 const Receipt = require('../../../utils/Receipt');
+import FilterStore from '../../../stores/FilterStore';
+import GroupStoreCache from '../../../stores/GroupStoreCache';
 
 const HIDE_CONFERENCE_CHANS = true;
 
@@ -61,6 +63,7 @@ module.exports = React.createClass({
             totalRoomCount: null,
             lists: {},
             incomingCall: null,
+            selectedTags: [],
         };
     },
 
@@ -79,6 +82,23 @@ module.exports = React.createClass({
         cli.on("Event.decrypted", this.onEventDecrypted);
         cli.on("accountData", this.onAccountData);
         cli.on("Group.myMembership", this._onGroupMyMembership);
+
+        this._groupStores = {};
+        this._selectedTagsRoomIds = [];
+        this._selectedTagsUserIds = [];
+        // When the selected tags are changed, initialise a group store if necessary
+        this._filterStoreToken = FilterStore.addListener(() => {
+            FilterStore.getSelectedTags().forEach((tag) => {
+                if (tag[0] !== '+' || this._groupStores[tag]) {
+                    return;
+                }
+                this._groupStores[tag] = GroupStoreCache.getGroupStore(tag);
+                this._groupStores[tag].registerListener(() => {
+                    this.updateSelectedTagsEntities();
+                });
+            });
+            this.updateSelectedTagsEntities();
+        });
 
         this.refreshRoomList();
 
@@ -148,6 +168,11 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
             MatrixClientPeg.get().removeListener("Group.myMembership", this._onGroupMyMembership);
         }
+
+        if (this._filterStoreToken) {
+            this._filterStoreToken.remove();
+        }
+
         // cancel any pending calls to the rate_limited_funcs
         this._delayedRefreshRoomList.cancelPendingCall();
     },
@@ -234,6 +259,41 @@ module.exports = React.createClass({
         this.refreshRoomList();
     }, 500),
 
+    // Update which rooms and users should appear in RoomList as dictated by selected tags
+    updateSelectedTagsEntities: function() {
+        if (!this.mounted) return;
+        this._selectedTagsRoomIds = [];
+        this._selectedTagsUserIds = [];
+        FilterStore.getSelectedTags().forEach((tag) => {
+            this._selectedTagsRoomIds = this._selectedTagsRoomIds.concat(
+               this._groupStores[tag].getGroupRooms().map((room) => room.roomId),
+            );
+            // TODO: Check if room has been tagged to the group by the user
+
+            this._selectedTagsUserIds = this._selectedTagsUserIds.concat(
+               this._groupStores[tag].getGroupMembers().map((member) => member.userId),
+            );
+        });
+        this.setState({
+            selectedTags: FilterStore.getSelectedTags(),
+        }, () => {
+            this.refreshRoomList();
+        });
+    },
+
+    isRoomInSelectedTags: function(room, me, dmRoomMap) {
+        // No selected tags = every room is visible in the list
+        if (this.state.selectedTags.length === 0) {
+            return true;
+        }
+        if (this._selectedTagsRoomIds.includes(room.roomId)) {
+            return true;
+        }
+        const dmUserId = dmRoomMap.getUserIdForRoomId(room.roomId);
+        return dmUserId && dmUserId !== me.userId &&
+            this._selectedTagsUserIds.includes(dmUserId);
+    },
+
     refreshRoomList: function() {
         // TODO: ideally we'd calculate this once at start, and then maintain
         // any changes to it incrementally, updating the appropriate sublists
@@ -253,9 +313,7 @@ module.exports = React.createClass({
     },
 
     getRoomLists: function() {
-        const self = this;
         const lists = {};
-
         lists["im.vector.fake.invite"] = [];
         lists["m.favourite"] = [];
         lists["im.vector.fake.recent"] = [];
@@ -264,8 +322,7 @@ module.exports = React.createClass({
         lists["im.vector.fake.archived"] = [];
 
         const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
-
-        MatrixClientPeg.get().getRooms().forEach(function(room) {
+        MatrixClientPeg.get().getRooms().forEach((room) => {
             const me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (!me) return;
 
@@ -276,12 +333,17 @@ module.exports = React.createClass({
 
             if (me.membership == "invite") {
                 lists["im.vector.fake.invite"].push(room);
-            } else if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(room, me, self.props.ConferenceHandler)) {
+            } else if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(room, me, this.props.ConferenceHandler)) {
                 // skip past this room & don't put it in any lists
             } else if (me.membership == "join" || me.membership === "ban" ||
                      (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey())) {
                 // Used to split rooms via tags
                 const tagNames = Object.keys(room.tags);
+
+                // Apply TagPanel filtering, derived from FilterStore
+                if (!this.isRoomInSelectedTags(room, me, dmRoomMap)) {
+                    return;
+                }
 
                 if (tagNames.length) {
                     for (let i = 0; i < tagNames.length; i++) {
@@ -474,6 +536,10 @@ module.exports = React.createClass({
     },
 
     _getEmptyContent: function(section) {
+        if (this.state.selectedTags.length > 0) {
+            return null;
+        }
+
         const RoomDropTarget = sdk.getComponent('rooms.RoomDropTarget');
 
         if (this.props.collapsed) {
