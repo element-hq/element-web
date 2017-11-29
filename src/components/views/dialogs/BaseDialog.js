@@ -45,6 +45,10 @@ export default React.createClass({
 
         // children should be the content of the dialog
         children: React.PropTypes.node,
+
+        // Id of content element
+        // If provided, this is used to add a aria-describedby attribute
+        contentId: React.PropTypes.string
     },
 
     _onKeyDown: function(e) {
@@ -69,13 +73,13 @@ export default React.createClass({
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         return (
-            <div onKeyDown={this._onKeyDown} className={this.props.className}>
+            <div onKeyDown={this._onKeyDown} className={this.props.className} role="dialog" aria-labelledby='mx_BaseDialog_title' aria-describedby={this.props.contentId}>
                 <AccessibleButton onClick={this._onCancelClick}
                     className="mx_Dialog_cancelButton"
                 >
                     <TintableSvg src="img/icons-close-button.svg" width="35" height="35" />
                 </AccessibleButton>
-                <div className='mx_Dialog_title'>
+                <div className='mx_Dialog_title' id='mx_BaseDialog_title'>
                     { this.props.title }
                 </div>
                 { this.props.children }
