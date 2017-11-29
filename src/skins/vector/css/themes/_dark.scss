@@ -29,12 +29,13 @@ $preview-bar-bg-color: #333;
 
 // left-panel style muted accent color
 $secondary-accent-color: $primary-bg-color;
+$tertiary-accent-color: #454545;
 
 // stop the tinter trying to change the secondary accent color
 // by overriding the key to something untintable
 // XXX: this is a bit of a hack.
 #mx_theme_secondaryAccentColor {
-    color: #c0ff33 ! important; // deliberately off by one
+    color: #c0ffee ! important;
 }
 
 #mx_theme_tertiaryAccentColor {
@@ -103,14 +104,14 @@ $roomtile-selected-bg-color: rgba(255, 255, 255, 0.05);
 $roomtile-focused-bg-color: rgba(255, 255, 255, 0.2);
 
 $roomsublist-label-fg-color: $h3-color;
-$roomsublist-label-bg-color: #454545;
+$roomsublist-label-bg-color: $tertiary-accent-color;
 $roomsublist-chevron-color: $accent-color;
 
 $panel-divider-color: rgba(118, 207, 166, 0.2);
 
 // ********************
 
-$widget-menu-bar-bg-color: #454545;
+$widget-menu-bar-bg-color: $tertiary-accent-color;
 
 // ********************
 
