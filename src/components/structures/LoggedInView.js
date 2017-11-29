@@ -335,7 +335,7 @@ export default React.createClass({
             <div className='mx_MatrixChat_wrapper'>
                 { topBar }
                 <div className={bodyClasses}>
-                    <TagPanel />
+                    { SettingsStore.isFeatureEnabled("feature_tag_panel") ? <TagPanel /> : <div /> }
                     <LeftPanel
                         selectedRoom={this.props.currentRoomId}
                         collapsed={this.props.collapseLhs || false}
