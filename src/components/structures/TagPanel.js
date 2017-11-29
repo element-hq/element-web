@@ -105,11 +105,11 @@ export default React.createClass({
     },
 
     componentWillMount: function() {
-        this.mounted = true;
+        this.unmounted = false;
         this.context.matrixClient.on("Group.myMembership", this._onGroupMyMembership);
 
         this._filterStoreToken = FilterStore.addListener(() => {
-            if (!this.mounted) {
+            if (this.unmounted) {
                 return;
             }
             this.setState({
@@ -121,7 +121,7 @@ export default React.createClass({
     },
 
     componentWillUnmount() {
-        this.mounted = false;
+        this.unmounted = true;
         this.context.matrixClient.removeListener("Group.myMembership", this._onGroupMyMembership);
         if (this._filterStoreToken) {
             this._filterStoreToken.remove();
@@ -129,7 +129,7 @@ export default React.createClass({
     },
 
     _onGroupMyMembership() {
-        if (!this.mounted) return;
+        if (this.unmounted) return;
         this._fetchJoinedRooms();
     },
 
