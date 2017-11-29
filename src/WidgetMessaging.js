@@ -16,26 +16,48 @@ limitations under the License.
 
 export default class WidgetMessaging {
     constructor() {
+        this.listenerCount = 0;
     }
 
     /**
-     * Register event listeners for the widget instance
-     * @param  {string} widgetId Unique widget identifier
+     * Register widget message event listeners
      * @return {undefined}
      */
-    registerListeners(widgetId) {
-        if (widgetId) {
-            console.log("Register widget instance postmessage listeners");
-        } else {
-            console.error("Register widget event listeners - No widget ID specified!");
+    registerListeners() {
+        if (this.listenerCount === 0) {
+            window.addEventListener("message", this.onMessage, false);
+        }
+        this.listenerCount += 1;
+    }
+
+    derigisterListeners() {
+        this.listenerCount -= 1;
+        if (this.listenerCount === 0) {
+            window.removeEventListener("message", this.onMessage);
+        }
+        if (this.listenerCount < 0) {
+            // Make an error so we get a stack trace
+            const e = new Error(
+                "WidgetMessaging: mismatched startListening / stopListening detected." +
+                " Negative count",
+            );
+            console.error(e);
         }
     }
 
-    derigisterListeners(widgetId) {
-        if (widgetId) {
-            console.log("Register widget instance postmessage listeners");
-        } else {
-            console.error("Deregister widget event listerns - No widget ID specified!");
+    onMessage(event) {
+        console.warn("Checking for widget event", event);
+        if (!event.origin) { // Handle chrome
+            event.origin = event.originalEvent.origin;
         }
+
+        // Event origin is empty string if undefined
+        if (event.origin.length === 0 || !event.data.widgetData) {
+            // TODO / FIXME -- check for valid origin URLs!!
+            return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
+        }
+
+        // TODO -- handle widget actions
+        alert(event.data.widgetData);
     }
 }
