@@ -50,6 +50,8 @@ const TagTile = React.createClass({
         dis.dispatch({
             action: 'select_tag',
             tag: this.props.groupProfile.groupId,
+            ctrlOrCmdKey: e.metaKey || e.ctrlKey,
+            shiftKey: e.shiftKey,
         });
     },
 
@@ -148,6 +150,10 @@ export default React.createClass({
         const joinedGroupProfiles = await Promise.all(joinedGroupIds.map(
             (groupId) => FlairStore.getGroupProfileCached(this.context.matrixClient, groupId),
         ));
+        dis.dispatch({
+            action: 'all_tags',
+            tags: joinedGroupIds,
+        });
         this.setState({joinedGroupProfiles});
     },
 
