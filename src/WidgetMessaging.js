@@ -14,20 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+let listenerCount = 0;
+let messageEndpoints = [];
+
 /**
  * Handle widget postMessage events
  * @param  {Event} event Event to handle
  * @return {undefined}
  */
 function onMessage(event) {
-    console.warn("Checking for widget event", event);
     if (!event.origin) { // Handle chrome
         event.origin = event.originalEvent.origin;
     }
 
     // Event origin is empty string if undefined
-    if (event.origin.length === 0 || !event.data.widgetData) {
-        // TODO / FIXME -- check for valid origin URLs!!
+    if (event.origin.length === 0 || trustedEndpoint(event.origin) || !event.data.widgetData) {
+        console.warn("Ignoring postMessage", event);
         return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
     }
 
@@ -35,11 +37,49 @@ function onMessage(event) {
     alert(event.data.widgetData);
 }
 
-let listenerCount = 0;
+/**
+ * Check if message origin is registered as trusted
+ * @param  {string} origin PostMessage origin to check
+ * @return {boolean}       True if trusted
+ */
+function trustedEndpoint(origin) {
+    if (origin) {
+        if (messageEndpoints.filter(function(endpoint) {
+            if (endpoint.endpointUrl == origin) {
+                return true;
+            }
+        }).length > 0) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Represents mapping of widget instance to URLs for trusted postMessage communication.
+ */
+class WidgetMessageEndpoint {
+    /**
+     * Mapping of widget instance to URL for trusted postMessage communication.
+     * @param  {string} widgetId    Unique widget identifier
+     * @param  {string} endpointUrl Widget wurl origin.
+     */
+    constructor(widgetId, endpointUrl) {
+        if (!widgetId) {
+            throw new Error("No widgetId specified in widgetMessageEndpoint constructor");
+        }
+        if (!endpointUrl) {
+            throw new Error("No endpoint specified in widgetMessageEndpoint constructor");
+        }
+        this.widgetId = widgetId;
+        this.endpointUrl = endpointUrl;
+    }
+}
+
 module.exports = {
     /**
      * Register widget message event listeners
-     * @return {undefined}
      */
     startListening() {
         if (listenerCount === 0) {
@@ -48,6 +88,9 @@ module.exports = {
         listenerCount += 1;
     },
 
+    /**
+     * De-register widget message event listeners
+     */
     stopListening() {
         listenerCount -= 1;
         if (listenerCount === 0) {
@@ -61,5 +104,40 @@ module.exports = {
             );
             console.error(e);
         }
+    },
+
+    /**
+     * Register a widget endpoint for trusted postMessage communication
+     * @param {string} widgetId    Unique widget identifier
+     * @param {string} endpointUrl Widget wurl origin (protocol + (optional port) + host)
+     */
+    addEndpoint(widgetId, endpointUrl) {
+        const endpoint = new WidgetMessageEndpoint(widgetId, endpointUrl);
+        if (messageEndpoints && messageEndpoints.length > 0) {
+            if (messageEndpoints.filter(function(ep) {
+                return (ep.widgetId == widgetId && ep.endpointUrl == endpointUrl);
+            }).length > 0) {
+                // Message endpoint already registered
+                return;
+            }
+            messageEndpoints.push(endpoint);
+        }
+    },
+
+    /**
+     * De-register a widget endpoint from trusted communication sources
+     * @param  {string} widgetId Unique widget identifier
+     * @param  {string} endpointUrl Widget wurl origin (protocol + (optional port) + host)
+     * @return {boolean} True if endpoint was successfully removed
+     */
+    removeOrigin(widgetId, endpointUrl) {
+        if (messageEndpoints && messageEndpoints.length > 0) {
+            const length = messageEndpoints.length;
+            messageEndpoints = messageEndpoints.filter(function(endpoint) {
+                return (endpoint.widgetId != widgetId || endpoint.endpointUrl != endpointUrl);
+            });
+            return (length > messageEndpoints.length);
+        }
+        return false;
     },
 };
