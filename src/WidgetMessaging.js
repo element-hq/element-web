@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import dis from './dispatcher';
+
 let listenerCount = 0;
 let messageEndpoints = [];
 
@@ -28,13 +30,25 @@ function onMessage(event) {
     }
 
     // Event origin is empty string if undefined
-    if (event.origin.length === 0 || trustedEndpoint(event.origin) || !event.data.widgetData) {
-        console.warn("Ignoring postMessage", event);
+    if (
+        event.origin.length === 0 ||
+        trustedEndpoint(event.origin) ||
+        !event.data.widgetData ||
+        !event.data.widgetId
+    ) {
         return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
     }
 
-    // TODO -- handle widget actions
-    alert(event.data.widgetData);
+    const widgetData = event.data.widgetData;
+    const widgetId = event.data.widgetId;
+    if (widgetData.action == 'content_loaded') {
+        dis.dispatch({
+            action: 'widget_content_loaded',
+            widgetId: widgetId,
+        });
+    } else {
+        console.warn("Widget postMessage event unhandled");
+    }
 }
 
 /**
