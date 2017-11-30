@@ -387,6 +387,7 @@ async function loadLanguage() {
     }
     try {
         await languageHandler.setLanguage(langs);
+        document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
     } catch (e) {
         console.error("Unable to set language", e);
     }
