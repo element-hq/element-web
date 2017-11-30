@@ -153,8 +153,7 @@ export default React.createClass({
     },
 
     componentWillMount() {
-        this.widgetMessagingClient = new WidgetMessaging();
-        this.widgetMessagingClient.registerListeners();
+        WidgetMessaging.startListening();
         window.addEventListener('message', this._onMessage, false);
         this.setScalarToken();
     },
@@ -207,6 +206,7 @@ export default React.createClass({
     },
 
     componentWillUnmount() {
+        WidgetMessaging.stopListening();
         window.removeEventListener('message', this._onMessage);
     },
 

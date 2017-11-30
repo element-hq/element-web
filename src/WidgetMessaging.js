@@ -1,5 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,28 +14,46 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export default class WidgetMessaging {
-    constructor() {
-        this.listenerCount = 0;
+/**
+ * Handle widget postMessage events
+ * @param  {Event} event Event to handle
+ * @return {undefined}
+ */
+function onMessage(event) {
+    console.warn("Checking for widget event", event);
+    if (!event.origin) { // Handle chrome
+        event.origin = event.originalEvent.origin;
     }
 
+    // Event origin is empty string if undefined
+    if (event.origin.length === 0 || !event.data.widgetData) {
+        // TODO / FIXME -- check for valid origin URLs!!
+        return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
+    }
+
+    // TODO -- handle widget actions
+    alert(event.data.widgetData);
+}
+
+let listenerCount = 0;
+module.exports = {
     /**
      * Register widget message event listeners
      * @return {undefined}
      */
-    registerListeners() {
-        if (this.listenerCount === 0) {
-            window.addEventListener("message", this.onMessage, false);
+    startListening() {
+        if (listenerCount === 0) {
+            window.addEventListener("message", onMessage, false);
         }
-        this.listenerCount += 1;
-    }
+        listenerCount += 1;
+    },
 
-    derigisterListeners() {
-        this.listenerCount -= 1;
-        if (this.listenerCount === 0) {
-            window.removeEventListener("message", this.onMessage);
+    stopListening() {
+        listenerCount -= 1;
+        if (listenerCount === 0) {
+            window.removeEventListener("message", onMessage);
         }
-        if (this.listenerCount < 0) {
+        if (listenerCount < 0) {
             // Make an error so we get a stack trace
             const e = new Error(
                 "WidgetMessaging: mismatched startListening / stopListening detected." +
@@ -43,21 +61,5 @@ export default class WidgetMessaging {
             );
             console.error(e);
         }
-    }
-
-    onMessage(event) {
-        console.warn("Checking for widget event", event);
-        if (!event.origin) { // Handle chrome
-            event.origin = event.originalEvent.origin;
-        }
-
-        // Event origin is empty string if undefined
-        if (event.origin.length === 0 || !event.data.widgetData) {
-            // TODO / FIXME -- check for valid origin URLs!!
-            return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
-        }
-
-        // TODO -- handle widget actions
-        alert(event.data.widgetData);
-    }
-}
+    },
+};
