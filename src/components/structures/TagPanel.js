@@ -44,10 +44,6 @@ const TagTile = React.createClass({
         e.preventDefault();
         e.stopPropagation();
         dis.dispatch({
-            action: 'view_group',
-            group_id: this.props.groupProfile.groupId,
-        });
-        dis.dispatch({
             action: 'select_tag',
             tag: this.props.groupProfile.groupId,
         });
