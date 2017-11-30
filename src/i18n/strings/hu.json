@@ -1025,5 +1025,17 @@
     "Online for %(duration)s": "%(duration)s óta elérhető",
     "Idle for %(duration)s": "%(duration)s óta tétlen",
     "Offline for %(duration)s": "%(duration)s óta elérhetetlen",
-    "Unknown for %(duration)s": "%(duration)s óta az állapota ismeretlen"
+    "Unknown for %(duration)s": "%(duration)s óta az állapota ismeretlen",
+    "Delete %(count)s devices|other": "%(count)s darab eszköz törlése",
+    "Delete %(count)s devices|one": "Eszköz törlése",
+    "Select devices": "Eszköz kiválasztása",
+    "Flair": "Jelvény",
+    "Showing flair for these communities:": "Ezekben a közösségekben mutassa a jelvényt:",
+    "This room is not showing flair for any communities": "Ez a szoba nem mutat jelvényt egyetlen közösséghez sem",
+    "Flair will appear if enabled in room settings": "Ha a szoba beállításai megengedik akkor jelennek meg a jelvények",
+    "Flair will not appear": "Jelvények nem jelennek meg",
+    "Something went wrong when trying to get your communities.": "Valami nem sikerült a közösségeid elérésénél.",
+    "Display your community flair in rooms configured to show it.": "Közösségi jelvényeid megjelenítése azokban a szobákban ahol ez engedélyezett.",
+    "This homeserver doesn't offer any login flows which are supported by this client.": "Ez a saját szerver egyetlen bejelentkezési metódust sem támogat amit ez a kliens ismer.",
+    "Tag Panel": "Címke panel"
 }
