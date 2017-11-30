@@ -108,7 +108,6 @@ export default React.createClass({
         u.search = undefined;
         u.query = params;
 
-        console.log("_addWurlParams", "Modified URL", u.format(), params);
         return u.format();
     },
 
@@ -294,31 +293,16 @@ export default React.createClass({
      */
     _onLoaded() {
         this.setState({loading: false});
-        // Get page title and update widget panel
-        // this._updateWidgetTitle();
     },
 
     /**
-     * Fetch remote content title and update app tile
+     * Set remote content title on AppTile
+     * @param {string} title Title string to set on the AppTile
      */
-    _updateWidgetTitle() {
-        const safeUrl = this._getSafeUrl();
-        console.warn("widget title safeurl:", safeUrl);
-        if (safeUrl) {
-            let title = null;
-            try {
-                // title = yield this.getUrlTitle(safeUrl);
-                // console.log("Foo");
-            } catch (e) {
-                console.error("Failed to get title for:", safeUrl);
-            }
-
-            console.warn("widget title:", title);
-            this.setState({widgetPageTitle: title});
-            return;
+    _updateWidgetTitle(title) {
+        if (title) {
+            this.setState({widgetPageTitle: null});
         }
-        console.warn("widget title: no url");
-        this.setState({widgetPageTitle: null});
     },
 
     // Widget labels to render, depending upon user permissions
@@ -349,21 +333,6 @@ export default React.createClass({
             appTileName = this.props.name.trim();
         }
         return appTileName;
-    },
-
-    /**
-     * Get the HTML title for a given URL
-     * @param {string} url URL to process
-     * @return {string} Title of the HTML page, or null
-     */
-    getUrlTitle(url) {
-        return fetch(url)
-            .then((response) => response.text())
-            .then((html) => {
-                const doc = new DOMParser().parseFromString(html, "text/html");
-                const title = doc.querySelectorAll('title')[0];
-                return title.innerText;
-            });
     },
 
     onClickMenuBar(ev) {
