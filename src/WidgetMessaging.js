@@ -117,6 +117,71 @@ import dis from './dispatcher';
 let listenerCount = 0;
 let messageEndpoints = [];
 
+
+/**
+ * Register widget message event listeners
+ */
+function startListening() {
+    if (listenerCount === 0) {
+        window.addEventListener("message", onMessage, false);
+    }
+    listenerCount += 1;
+}
+
+/**
+ * De-register widget message event listeners
+ */
+function stopListening() {
+    listenerCount -= 1;
+    if (listenerCount === 0) {
+        window.removeEventListener("message", onMessage);
+    }
+    if (listenerCount < 0) {
+        // Make an error so we get a stack trace
+        const e = new Error(
+            "WidgetMessaging: mismatched startListening / stopListening detected." +
+            " Negative count",
+        );
+        console.error(e);
+    }
+}
+
+/**
+ * Register a widget endpoint for trusted postMessage communication
+ * @param {string} widgetId    Unique widget identifier
+ * @param {string} endpointUrl Widget wurl origin (protocol + (optional port) + host)
+ */
+function addEndpoint(widgetId, endpointUrl) {
+    const endpoint = new WidgetMessageEndpoint(widgetId, endpointUrl);
+    if (messageEndpoints && messageEndpoints.length > 0) {
+        if (messageEndpoints.filter(function(ep) {
+            return (ep.widgetId == widgetId && ep.endpointUrl == endpointUrl);
+        }).length > 0) {
+            // Message endpoint already registered
+            return;
+        }
+        messageEndpoints.push(endpoint);
+    }
+}
+
+/**
+ * De-register a widget endpoint from trusted communication sources
+ * @param  {string} widgetId Unique widget identifier
+ * @param  {string} endpointUrl Widget wurl origin (protocol + (optional port) + host)
+ * @return {boolean} True if endpoint was successfully removed
+ */
+function removeEndpoint(widgetId, endpointUrl) {
+    if (messageEndpoints && messageEndpoints.length > 0) {
+        const length = messageEndpoints.length;
+        messageEndpoints = messageEndpoints.filter(function(endpoint) {
+            return (endpoint.widgetId != widgetId || endpoint.endpointUrl != endpointUrl);
+        });
+        return (length > messageEndpoints.length);
+    }
+    return false;
+}
+
+
 /**
  * Handle widget postMessage events
  * @param  {Event} event Event to handle
@@ -232,67 +297,9 @@ class WidgetMessageEndpoint {
     }
 }
 
-module.exports = {
-    /**
-     * Register widget message event listeners
-     */
-    startListening() {
-        if (listenerCount === 0) {
-            window.addEventListener("message", onMessage, false);
-        }
-        listenerCount += 1;
-    },
-
-    /**
-     * De-register widget message event listeners
-     */
-    stopListening() {
-        listenerCount -= 1;
-        if (listenerCount === 0) {
-            window.removeEventListener("message", onMessage);
-        }
-        if (listenerCount < 0) {
-            // Make an error so we get a stack trace
-            const e = new Error(
-                "WidgetMessaging: mismatched startListening / stopListening detected." +
-                " Negative count",
-            );
-            console.error(e);
-        }
-    },
-
-    /**
-     * Register a widget endpoint for trusted postMessage communication
-     * @param {string} widgetId    Unique widget identifier
-     * @param {string} endpointUrl Widget wurl origin (protocol + (optional port) + host)
-     */
-    addEndpoint(widgetId, endpointUrl) {
-        const endpoint = new WidgetMessageEndpoint(widgetId, endpointUrl);
-        if (messageEndpoints && messageEndpoints.length > 0) {
-            if (messageEndpoints.filter(function(ep) {
-                return (ep.widgetId == widgetId && ep.endpointUrl == endpointUrl);
-            }).length > 0) {
-                // Message endpoint already registered
-                return;
-            }
-            messageEndpoints.push(endpoint);
-        }
-    },
-
-    /**
-     * De-register a widget endpoint from trusted communication sources
-     * @param  {string} widgetId Unique widget identifier
-     * @param  {string} endpointUrl Widget wurl origin (protocol + (optional port) + host)
-     * @return {boolean} True if endpoint was successfully removed
-     */
-    removeOrigin(widgetId, endpointUrl) {
-        if (messageEndpoints && messageEndpoints.length > 0) {
-            const length = messageEndpoints.length;
-            messageEndpoints = messageEndpoints.filter(function(endpoint) {
-                return (endpoint.widgetId != widgetId || endpoint.endpointUrl != endpointUrl);
-            });
-            return (length > messageEndpoints.length);
-        }
-        return false;
-    },
+export default {
+    startListening: startListening,
+    stopListening: stopListening,
+    addEndpoint: addEndpoint,
+    removeEndpoint: removeEndpoint,
 };
