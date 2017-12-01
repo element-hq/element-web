@@ -232,17 +232,13 @@ function onMessage(event) {
  * @return {boolean}       True if trusted
  */
 function trustedEndpoint(origin) {
-    if (origin) {
-        if (messageEndpoints.filter(function(endpoint) {
-            if (endpoint.endpointUrl == origin) {
-                return true;
-            }
-        }).length > 0) {
-            return true;
-        }
+    if (!origin) {
+        return false;
     }
 
-    return false;
+    return messageEndpoints.some((endpoint) => {
+        return endpoint.endpointUrl === origin;
+    });
 }
 
 /**
