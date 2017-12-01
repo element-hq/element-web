@@ -35,6 +35,9 @@ The complete request object is returned to the caller with an additional "respon
 }
 
 The "action" determines the format of the request and response. All actions can return an error response.
+
+A success response is an object with zero or more keys.
+
 An error response is a "response" object which consists of a sole "error" key to indicate an error.
 They look like:
 {
@@ -101,8 +104,10 @@ function onMessage(event) {
             action: 'widget_content_loaded',
             widgetId: widgetId,
         });
+        sendResponse(event, {success: true});
     } else {
         console.warn("Widget postMessage event unhandled");
+        sendError(event, {message: "The postMessage was unhandled"});
     }
 }
 
@@ -123,6 +128,37 @@ function trustedEndpoint(origin) {
     }
 
     return false;
+}
+
+/**
+ * Send a postmessage response to a postMessage request
+ * @param  {Event} event  The original postMessage request event
+ * @param  {Object} res   Response data
+ */
+function sendResponse(event, res) {
+    const data = JSON.parse(JSON.stringify(event.data));
+    data.response = res;
+    event.source.postMessage(data, event.origin);
+}
+
+/**
+ * Send an error response to a postMessage request
+ * @param  {Event} event        The original postMessage request event
+ * @param  {string} msg         Error message
+ * @param  {Error} nestedError  Nested error event (optional)
+ */
+function sendError(event, msg, nestedError) {
+    console.error("Action:" + event.data.action + " failed with message: " + msg);
+    const data = JSON.parse(JSON.stringify(event.data));
+    data.response = {
+        error: {
+            message: msg,
+        },
+    };
+    if (nestedError) {
+        data.response.error._error = nestedError;
+    }
+    event.source.postMessage(data, event.origin);
 }
 
 /**
