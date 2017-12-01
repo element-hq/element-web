@@ -195,7 +195,7 @@ function onMessage(event) {
     // Event origin is empty string if undefined
     if (
         event.origin.length === 0 ||
-        trustedEndpoint(event.origin) ||
+        !trustedEndpoint(event.origin) ||
         event.data.api !== "widget" ||
         !event.data.widgetId
     ) {
