@@ -30,7 +30,7 @@ var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
 var FormattingUtils = require('matrix-react-sdk/lib/utils/FormattingUtils');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 import Modal from 'matrix-react-sdk/lib/Modal';
-import KeyCode from 'matrix-react-sdk/lib/KeyCode';
+import { KeyCode } from 'matrix-react-sdk/lib/Keyboard';
 
 // turn this on for drop & drag console debugging galore
 var debug = false;
