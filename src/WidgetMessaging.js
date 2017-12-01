@@ -17,22 +17,22 @@ limitations under the License.
 /*
 Listens for incoming postMessage requests from embedded widgets. The following API is exposed:
 {
-    widgetData: {
-        action: "content_loaded"
-        // additional request fields
-    },
+    api: "widget",
+    action: "content_loaded",
+    // additional request fields
     widgetId: $WIDGET_ID
 }
 
 The complete request object is returned to the caller with an additional "response" key like so:
 {
-    widgetData: {
-        action: "content_loaded"
-        // additional request fields
-    },
+    api: "widget",
+    action: "content_loaded",
+    // additional request fields
     widgetId: $WIDGET_ID
     response: { ... }
 }
+
+The "api" field is required to use this API, and must be set to "widget" in all requests.
 
 The "action" determines the format of the request and response. All actions can return an error response.
 
@@ -50,6 +50,7 @@ The "message" key should be a human-friendly string.
 
 ACTIONS
 =======
+** All actions must include an "api" field with valie "widget".**
 All actions can return an error response instead of the response outlined below.
 
 content_loaded
@@ -65,12 +66,51 @@ Response:
 }
 Example:
 {
-    widgetData: {
-        action: "content_loaded"
-    },
+    api: "widget",
+    action: "content_loaded",
     widgetId: $WIDGET_ID
 }
+
+
+api_version
+-----------
+Get the current version of the widget postMessage API
+
+Request:
+ - No additional fields.
+Response:
+{
+    api_version: "0.0.1"
+}
+Example:
+{
+    api: "widget",
+    action: "api_version",
+}
+
+supported_api_versions
+----------------------
+Get versions of the widget postMessage API that are currently supported
+
+Request:
+ - No additional fields.
+Response:
+{
+    api: "widget"
+    supported_versions: ["0.0.1"]
+}
+Example:
+{
+    api: "widget",
+    action: "supported_api_versions",
+}
+
 */
+
+const WIDGET_API_VERSION = '0.0.1'; // Current API version
+const SUPPORTED_WIDGET_API_VERSIONS = [
+    '0.0.1',
+];
 
 import dis from './dispatcher';
 
@@ -91,20 +131,30 @@ function onMessage(event) {
     if (
         event.origin.length === 0 ||
         trustedEndpoint(event.origin) ||
-        !event.data.widgetData ||
+        event.data.api !== "widget" ||
         !event.data.widgetId
     ) {
         return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
     }
 
-    const widgetData = event.data.widgetData;
+    const action = event.data.action;
     const widgetId = event.data.widgetId;
-    if (widgetData.action == 'content_loaded') {
+    if (action == 'content_loaded') {
         dis.dispatch({
             action: 'widget_content_loaded',
             widgetId: widgetId,
         });
         sendResponse(event, {success: true});
+    } else if (action == 'supported_api_versions') {
+        sendResponse(event, {
+            api: "widget",
+            supported_versions: SUPPORTED_WIDGET_API_VERSIONS,
+        });
+    } else if (action == 'api_version') {
+        sendResponse(event, {
+            api: "widget",
+            version: WIDGET_API_VERSION,
+        });
     } else {
         console.warn("Widget postMessage event unhandled");
         sendError(event, {message: "The postMessage was unhandled"});
