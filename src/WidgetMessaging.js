@@ -155,7 +155,7 @@ function addEndpoint(widgetId, endpointUrl) {
     const endpoint = new WidgetMessageEndpoint(widgetId, endpointUrl);
     if (messageEndpoints && messageEndpoints.length > 0) {
         if (messageEndpoints.filter(function(ep) {
-            return (ep.widgetId == widgetId && ep.endpointUrl == endpointUrl);
+            return (ep.widgetId === widgetId && ep.endpointUrl === endpointUrl);
         }).length > 0) {
             // Message endpoint already registered
             return;
@@ -204,18 +204,18 @@ function onMessage(event) {
 
     const action = event.data.action;
     const widgetId = event.data.widgetId;
-    if (action == 'content_loaded') {
+    if (action === 'content_loaded') {
         dis.dispatch({
             action: 'widget_content_loaded',
             widgetId: widgetId,
         });
         sendResponse(event, {success: true});
-    } else if (action == 'supported_api_versions') {
+    } else if (action === 'supported_api_versions') {
         sendResponse(event, {
             api: "widget",
             supported_versions: SUPPORTED_WIDGET_API_VERSIONS,
         });
-    } else if (action == 'api_version') {
+    } else if (action === 'api_version') {
         sendResponse(event, {
             api: "widget",
             version: WIDGET_API_VERSION,
