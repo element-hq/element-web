@@ -31,7 +31,7 @@ const dis = require("../../dispatcher");
 const ObjectUtils = require('../../ObjectUtils');
 const Modal = require("../../Modal");
 const UserActivity = require("../../UserActivity");
-const KeyCode = require('../../KeyCode');
+import { KeyCode } from '../../Keyboard';
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
