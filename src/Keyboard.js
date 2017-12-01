@@ -60,7 +60,7 @@ export const KeyCode = {
     KEY_Z: 90,
 };
 
-export function isCtrlOrCmdKeyEvent(ev) {
+export function isOnlyCtrlOrCmdKeyEvent(ev) {
     const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
     if (isMac) {
         return ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;

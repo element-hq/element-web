@@ -19,7 +19,7 @@ limitations under the License.
 import * as Matrix from 'matrix-js-sdk';
 import React from 'react';
 
-import { KeyCode, isCtrlOrCmdKeyEvent } from '../../Keyboard';
+import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 import Notifier from '../../Notifier';
 import PageTypes from '../../PageTypes';
 import CallMediaHandler from '../../CallMediaHandler';
@@ -153,7 +153,7 @@ export default React.createClass({
             */
 
         let handled = false;
-        const ctrlCmdOnly = isCtrlOrCmdKeyEvent(ev);
+        const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
         switch (ev.keyCode) {
             case KeyCode.UP:

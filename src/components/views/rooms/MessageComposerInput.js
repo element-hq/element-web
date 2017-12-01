@@ -28,7 +28,7 @@ import Promise from 'bluebird';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
 import SlashCommands from '../../../SlashCommands';
-import { KeyCode, isCtrlOrCmdKeyEvent } from '../../../Keyboard';
+import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../../Keyboard';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
@@ -105,7 +105,7 @@ export default class MessageComposerInput extends React.Component {
     };
 
     static getKeyBinding(ev: SyntheticKeyboardEvent): string {
-        const ctrlCmdOnly = isCtrlOrCmdKeyEvent(ev);
+        const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
         // Restrict a subset of key bindings to ONLY having ctrl/meta* pressed and
         // importantly NOT having alt, shift, meta/ctrl* pressed. draft-js does not
