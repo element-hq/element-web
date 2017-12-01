@@ -22,6 +22,7 @@ import FilterStore from '../../stores/FilterStore';
 import FlairStore from '../../stores/FlairStore';
 import sdk from '../../index';
 import dis from '../../dispatcher';
+import { isCtrlOrCmdKeyEvent } from '../../Keyboard';
 
 const TagTile = React.createClass({
     displayName: 'TagTile',
@@ -50,7 +51,7 @@ const TagTile = React.createClass({
         dis.dispatch({
             action: 'select_tag',
             tag: this.props.groupProfile.groupId,
-            ctrlOrCmdKey: e.metaKey || e.ctrlKey,
+            ctrlOrCmdKey: isCtrlOrCmdKeyEvent(e),
             shiftKey: e.shiftKey,
         });
     },

@@ -41,7 +41,7 @@ const rate_limited_func = require('../../ratelimitedfunc');
 const ObjectUtils = require('../../ObjectUtils');
 const Rooms = require('../../Rooms');
 
-import KeyCode from '../../KeyCode';
+import { KeyCode, isCtrlOrCmdKeyEvent } from '../../Keyboard';
 
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
@@ -433,13 +433,7 @@ module.exports = React.createClass({
 
     onKeyDown: function(ev) {
         let handled = false;
-        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-        let ctrlCmdOnly;
-        if (isMac) {
-            ctrlCmdOnly = ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
-        } else {
-            ctrlCmdOnly = ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
-        }
+        const ctrlCmdOnly = isCtrlOrCmdKeyEvent(ev);
 
         switch (ev.keyCode) {
             case KeyCode.KEY_D:
