@@ -360,7 +360,13 @@ var RoomSubList = React.createClass({
 
         if (order === orderA || order === orderB) {
             console.error("Cannot describe new list position.  This should be incredibly unlikely.");
-            // TODO: renumber the list
+            this.state.sortedList.forEach((room, index) => {
+                MatrixClientPeg.get().setRoomTag(
+                    room.roomId, this.props.tagName,
+                    {order: index / this.state.sortedList.length},
+                );
+            });
+            return index / this.state.sortedList.length;
         }
 
         return order;
