@@ -14,6 +14,61 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/*
+Listens for incoming postMessage requests from embedded widgets. The following API is exposed:
+{
+    widgetData: {
+        action: "content_loaded"
+        // additional request fields
+    },
+    widgetId: $WIDGET_ID
+}
+
+The complete request object is returned to the caller with an additional "response" key like so:
+{
+    widgetData: {
+        action: "content_loaded"
+        // additional request fields
+    },
+    widgetId: $WIDGET_ID
+    response: { ... }
+}
+
+The "action" determines the format of the request and response. All actions can return an error response.
+An error response is a "response" object which consists of a sole "error" key to indicate an error.
+They look like:
+{
+    error: {
+        message: "Unable to invite user into room.",
+        _error: <Original Error Object>
+    }
+}
+The "message" key should be a human-friendly string.
+
+ACTIONS
+=======
+All actions can return an error response instead of the response outlined below.
+
+content_loaded
+--------------
+Indicates that widget contet has fully loaded
+
+Request:
+ - widgetId is the unique ID of the widget instance in riot / matrix state.
+ - No additional fields.
+Response:
+{
+    success: true
+}
+Example:
+{
+    widgetData: {
+        action: "content_loaded"
+    },
+    widgetId: $WIDGET_ID
+}
+*/
+
 import dis from './dispatcher';
 
 let listenerCount = 0;
