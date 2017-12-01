@@ -230,6 +230,7 @@ module.exports = React.createClass({
                     <a href={contentUrl} onClick={this.onClick}>
                         <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
                             alt={content.body}
+                            onLoad={this.props.onWidgetLoad}
                             onMouseEnter={this.onImageEnter}
                             onMouseLeave={this.onImageLeave} />
                     </a>
