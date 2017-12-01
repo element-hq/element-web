@@ -18,7 +18,10 @@ import dis from '../dispatcher';
 import Analytics from '../Analytics';
 
 const INITIAL_STATE = {
-    tags: [],
+    allTags: [],
+    selectedTags: [],
+    // Last selected tag when shift was not being pressed
+    anchorTag: null,
 };
 
 /**
@@ -39,15 +42,62 @@ class FilterStore extends Store {
 
     __onDispatch(payload) {
         switch (payload.action) {
-            case 'select_tag':
+            case 'all_tags' :
                 this._setState({
-                    tags: [payload.tag],
+                    allTags: payload.tags,
                 });
+            break;
+            case 'select_tag': {
+                let newTags = [];
+                // Shift-click semantics
+                if (payload.shiftKey) {
+                    // Select range of tags
+                    let start = this._state.allTags.indexOf(this._state.anchorTag);
+                    let end = this._state.allTags.indexOf(payload.tag);
+
+                    if (start === -1) {
+                        start = end;
+                    }
+                    if (start > end) {
+                        const temp = start;
+                        start = end;
+                        end = temp;
+                    }
+                    newTags = payload.ctrlOrCmdKey ? this._state.selectedTags : [];
+                    newTags = [...new Set(
+                        this._state.allTags.slice(start, end + 1).concat(newTags),
+                    )];
+                } else {
+                    if (payload.ctrlOrCmdKey) {
+                        // Toggle individual tag
+                        if (this._state.selectedTags.includes(payload.tag)) {
+                            newTags = this._state.selectedTags.filter((t) => t !== payload.tag);
+                        } else {
+                            newTags = [...this._state.selectedTags, payload.tag];
+                        }
+                    } else {
+                        // Select individual tag
+                        newTags = [payload.tag];
+                    }
+                    // Only set the anchor tag if the tag was previously unselected, otherwise
+                    // the next range starts with an unselected tag.
+                    if (!this._state.selectedTags.includes(payload.tag)) {
+                        this._setState({
+                            anchorTag: payload.tag,
+                        });
+                    }
+                }
+
+                this._setState({
+                    selectedTags: newTags,
+                });
+
                 Analytics.trackEvent('FilterStore', 'select_tag');
+            }
             break;
             case 'deselect_tags':
                 this._setState({
-                    tags: [],
+                    selectedTags: [],
                 });
                 Analytics.trackEvent('FilterStore', 'deselect_tags');
             break;
@@ -55,7 +105,7 @@ class FilterStore extends Store {
     }
 
     getSelectedTags() {
-        return this._state.tags;
+        return this._state.selectedTags;
     }
 }
 
