@@ -18,7 +18,7 @@ const React = require("react");
 const ReactDOM = require("react-dom");
 const GeminiScrollbar = require('react-gemini-scrollbar');
 import Promise from 'bluebird';
-const KeyCode = require('../../KeyCode');
+import { KeyCode } from '../../Keyboard';
 
 const DEBUG_SCROLL = false;
 // var DEBUG_SCROLL = true;

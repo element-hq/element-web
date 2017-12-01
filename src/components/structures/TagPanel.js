@@ -22,6 +22,7 @@ import FilterStore from '../../stores/FilterStore';
 import FlairStore from '../../stores/FlairStore';
 import sdk from '../../index';
 import dis from '../../dispatcher';
+import { isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 
 const TagTile = React.createClass({
     displayName: 'TagTile',
@@ -46,6 +47,8 @@ const TagTile = React.createClass({
         dis.dispatch({
             action: 'select_tag',
             tag: this.props.groupProfile.groupId,
+            ctrlOrCmdKey: isOnlyCtrlOrCmdKeyEvent(e),
+            shiftKey: e.shiftKey,
         });
     },
 
@@ -144,6 +147,10 @@ export default React.createClass({
         const joinedGroupProfiles = await Promise.all(joinedGroupIds.map(
             (groupId) => FlairStore.getGroupProfileCached(this.context.matrixClient, groupId),
         ));
+        dis.dispatch({
+            action: 'all_tags',
+            tags: joinedGroupIds,
+        });
         this.setState({joinedGroupProfiles});
     },
 
