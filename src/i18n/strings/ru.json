@@ -1025,5 +1025,10 @@
     "Idle for %(duration)s": "Неактивен %(duration)s",
     "Unknown for %(duration)s": "Неизвестно %(duration)s",
     "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "Здесь никого нет! Хотите <inviteText>пригласить кого-нибудь</inviteText> или <nowarnText>выключить предупреждение о пустой комнате</nowarnText>?",
-    "Something went wrong when trying to get your communities.": "Что-то пошло не так, во время отображения ваших сообществ."
+    "Something went wrong when trying to get your communities.": "Что-то пошло не так, во время отображения ваших сообществ.",
+    "Tag Panel": "Панель тегов",
+    "Delete %(count)s devices|other": "Удалить %(count)s устройств",
+    "Delete %(count)s devices|one": "Удалить устройство",
+    "Select devices": "Выбрать устройства",
+    "This homeserver doesn't offer any login flows which are supported by this client.": "Этот домашний сервер не поддерживает метод входа, поддерживаемый клиентом."
 }
