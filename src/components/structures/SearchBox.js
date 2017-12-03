@@ -18,7 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import KeyCode from 'matrix-react-sdk/lib/KeyCode';
+import { KeyCode } from 'matrix-react-sdk/lib/Keyboard';
 import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';

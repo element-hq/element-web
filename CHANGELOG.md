@@ -1,3 +1,8 @@
+Changes in [0.13.2](https://github.com/vector-im/riot-web/releases/tag/v0.13.2) (2017-11-28)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.1...v0.13.2)
+
+
 Changes in [0.13.1](https://github.com/vector-im/riot-web/releases/tag/v0.13.1) (2017-11-17)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.0...v0.13.1)

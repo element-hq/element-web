@@ -12,6 +12,7 @@
 @import "./matrix-react-sdk/structures/_RoomView.scss";
 @import "./matrix-react-sdk/structures/_SearchBox.scss";
 @import "./matrix-react-sdk/structures/_TabbedView.scss";
+@import "./matrix-react-sdk/structures/_TagPanel.scss";
 @import "./matrix-react-sdk/structures/_UploadBar.scss";
 @import "./matrix-react-sdk/structures/_UserSettings.scss";
 @import "./matrix-react-sdk/structures/login/_Login.scss";
@@ -40,7 +41,9 @@
 @import "./matrix-react-sdk/views/elements/_RichText.scss";
 @import "./matrix-react-sdk/views/elements/_RoleButton.scss";
 @import "./matrix-react-sdk/views/elements/_ToolTipButton.scss";
+@import "./matrix-react-sdk/views/groups/_GroupPublicityToggle.scss";
 @import "./matrix-react-sdk/views/groups/_GroupRoomList.scss";
+@import "./matrix-react-sdk/views/groups/_GroupUserSettings.scss";
 @import "./matrix-react-sdk/views/login/_InteractiveAuthEntryComponents.scss";
 @import "./matrix-react-sdk/views/login/_ServerConfig.scss";
 @import "./matrix-react-sdk/views/messages/_MEmoteBody.scss";

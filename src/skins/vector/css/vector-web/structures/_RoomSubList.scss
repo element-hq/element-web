@@ -33,14 +33,13 @@ limitations under the License.
     font-weight: 600;
     font-size: 12px;
     width: 203px; /* padding + width = LHS Panel width */
-    height: 17px; /* padding + height = 29px, same as mx_RoomSubList_stickyContainer */
+    height: 19px; /* height + padding = 31px = mx_RoomSubList_label height */
     padding-left: 16px; /* gutter */
     padding-right: 16px; /* gutter */
     padding-top: 6px;
     padding-bottom: 6px;
     cursor: pointer;
-    background-color: $roomsublist-label-bg-color;
-    border-top: solid 2px $secondary-accent-color;
+    background-color: $secondary-accent-color;
 }
 
 .mx_RoomSubList_label.mx_RoomSubList_fixed {

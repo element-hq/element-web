@@ -29,6 +29,8 @@ import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/Acc
 import { showGroupInviteDialog, showGroupAddRoomDialog } from 'matrix-react-sdk/lib/GroupAddressPicker';
 import GroupStoreCache from 'matrix-react-sdk/lib/stores/GroupStoreCache';
 
+import { formatCount } from 'matrix-react-sdk/lib/utils/FormattingUtils';
+
 class HeaderButton extends React.Component {
     constructor() {
         super();
@@ -47,13 +49,19 @@ class HeaderButton extends React.Component {
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
-        return <AccessibleButton className="mx_RightPanel_headerButton" onClick={this.onClick} >
-            <div className="mx_RightPanel_headerButton_badge">
-                { this.props.badge ? this.props.badge : <span>&nbsp;</span> }
-            </div>
-            <TintableSvg src={this.props.iconSrc} width="25" height="25"/>
-            { this.props.isHighlighted ? <div className="mx_RightPanel_headerButton_highlight"></div> : <div/> }
-        </AccessibleButton>;
+        return <AccessibleButton
+            aria-label={this.props.title}
+            title={this.props.title}
+            className="mx_RightPanel_headerButton"
+            onClick={this.onClick} >
+
+                <div className="mx_RightPanel_headerButton_badge">
+                    { this.props.badge ? this.props.badge : <span>&nbsp;</span> }
+                </div>
+                <TintableSvg src={this.props.iconSrc} width="25" height="25"/>
+                { this.props.isHighlighted ? <div className="mx_RightPanel_headerButton_highlight"></div> : <div/> }
+
+            </AccessibleButton>;
     }
 }
 
@@ -69,6 +77,9 @@ HeaderButton.propTypes = {
     badge: PropTypes.node,
     // The parameters to track the click event
     analytics: PropTypes.arrayOf(PropTypes.string).isRequired,
+
+    // Button title
+    title: PropTypes.string.isRequired,
 };
 
 module.exports = React.createClass({
@@ -116,7 +127,7 @@ module.exports = React.createClass({
         return {
             phase: this.props.groupId ? this.Phase.GroupMemberList : this.Phase.RoomMemberList,
             isUserPrivilegedInGroup: null,
-        }
+        };
     },
 
     componentWillReceiveProps(newProps) {
@@ -128,9 +139,7 @@ module.exports = React.createClass({
 
     _initGroupStore(groupId) {
         if (!groupId) return;
-        this._groupStore = GroupStoreCache.getGroupStore(
-            this.context.matrixClient, groupId,
-        );
+        this._groupStore = GroupStoreCache.getGroupStore(groupId);
         this._groupStore.registerListener(this.onGroupStoreUpdated);
     },
 
@@ -140,7 +149,7 @@ module.exports = React.createClass({
         }
     },
 
-    onGroupStoreUpdated: function(){
+    onGroupStoreUpdated: function() {
         this.setState({
             isUserPrivilegedInGroup: this._groupStore.isUserPrivileged(),
         });
@@ -264,7 +273,7 @@ module.exports = React.createClass({
             const room = cli.getRoom(this.props.roomId);
             let userIsInRoom;
             if (room) {
-                membersBadge = room.getJoinedMembers().length;
+                membersBadge = formatCount(room.getJoinedMembers().length);
                 userIsInRoom = room.hasMembershipState(
                     this.context.matrixClient.credentials.userId, 'join',
                 );
@@ -327,7 +336,7 @@ module.exports = React.createClass({
             // button on these 2 screens or you won't be able to re-expand the panel.
             headerButtons.push(
                 <div className="mx_RightPanel_headerButton mx_RightPanel_collapsebutton" key="_minimizeButton"
-                    title={ _t("Hide panel") } onClick={ this.onCollapseClick }
+                    title={ _t("Hide panel") } aria-label={ _t("Hide panel") } onClick={ this.onCollapseClick }
                 >
                     <TintableSvg src="img/minimise.svg" width="10" height="16"/>
                 </div>,
