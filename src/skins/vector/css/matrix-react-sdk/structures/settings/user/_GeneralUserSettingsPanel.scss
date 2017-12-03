@@ -75,15 +75,6 @@ limitations under the License.
     object-fit: cover;
 }
 
-// TODO: {Travis} These should probably be more generic
-.mx_GeneralUserSettingsPanel_button {
-    @mixin mx_DialogButton;
-    display: inline;
-}
-.mx_GeneralUserSettingsPanel_button:hover {
-    @mixin mx_DialogButton_hover;
-}
-
 // TODO: {Travis} This should probably be more generic
 .mx_GeneralUserSettingsPanel_displayName input {
     border-radius: 3px;
