@@ -468,6 +468,9 @@ module.exports = React.createClass({
                     unsentMessageError: this._getUnsentMessageError(this.state.room),
                 });
                 break;
+            case 'picture_snapshot':
+                this.uploadFile(payload.file);
+                break;
             case 'notifier_enabled':
             case 'upload_failed':
             case 'upload_started':

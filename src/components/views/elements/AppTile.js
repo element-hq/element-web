@@ -32,6 +32,7 @@ import AppWarning from './AppWarning';
 import MessageSpinner from './MessageSpinner';
 import WidgetUtils from '../../../WidgetUtils';
 import dis from '../../../dispatcher';
+import domtoimage from 'dom-to-image';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 
@@ -222,7 +223,14 @@ export default React.createClass({
     },
 
     _onSnapshotClick(e) {
-        console.log("Snapshot widget ID ", this.props.id);
+        const iframe = this.refs.appFrame;
+        domtoimage.toPng(iframe).then(function(dataUrl) {
+            console.log("Image data URL:", dataUrl);
+            dis.dispatch({
+                action: 'picture_snapshot',
+                file: dataURLtoBlob(dataUrl),
+            }, true);
+        });
     },
 
     /* If user has permission to modify widgets, delete the widget,
@@ -428,3 +436,15 @@ export default React.createClass({
         );
     },
 });
+
+function dataURLtoBlob(dataurl) {
+    const arr = dataurl.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type: mime});
+}
