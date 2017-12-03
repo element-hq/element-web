@@ -37,7 +37,7 @@ limitations under the License.
 }
 
 .mx_TabbedView_tabPanels {
-    width: 700px;
+    width: calc(100% - 320px);
     display: inline-block;
     height: 100%;
     margin-left: 300px;
@@ -55,15 +55,25 @@ limitations under the License.
     border-bottom: 1px solid $tab-border-color;
 }
 
+.mx_TabbedView_exit {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
 .mx_TabbedView_tabLabel:hover {
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .mx_TabbedView_tabLabel_active {
     font-weight: 700;
+    background-color: $tab-list-active-bg-color;
+    color: $tab-list-active-fg-color;
 }
 
-//.mx_TabbedView_tabPanel {
-//    width: 100%;
-//    height: 100%;
-//}
+.mx_TabbedView_tabPanel {
+    height: 100%;
+}
+
+.mx_TabbedView_tabPanelContent {
+    width: 700px;
+}

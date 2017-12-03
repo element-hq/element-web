@@ -97,6 +97,14 @@ $voip-accept-color: #80f480;
 $rte-bg-color: #353535;
 $rte-code-bg-color: #000;
 
+// Tabbed views
+$tab-list-bg-color: $secondary-accent-color;
+$tab-list-fg-color: $accent-color;
+$tab-list-active-bg-color: $tertiary-accent-color;
+$tab-list-active-fg-color: $accent-color;
+$tab-border-color: $tertiary-accent-color;
+$tab-panel-bg-color: #333;
+
 // ********************
 
 $roomtile-name-color: rgba(186, 186, 186, 0.8);
