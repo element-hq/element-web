@@ -19,6 +19,7 @@ limitations under the License.
 
 const React = require('react');
 const ReactDOM = require('react-dom');
+import FocusTrap from 'react-focus-trap';
 import Analytics from './Analytics';
 import sdk from './index';
 
@@ -164,6 +165,7 @@ class ModalManager {
         );
         modal.onFinished = props ? props.onFinished : null;
         modal.className = className;
+        modal.closeDialog = closeDialog;
 
         this._modals.unshift(modal);
 
@@ -194,9 +196,9 @@ class ModalManager {
         const modal = this._modals[0];
         const dialog = (
             <div className={"mx_Dialog_wrapper " + (modal.className ? modal.className : '')}>
-                <div className="mx_Dialog">
+                <FocusTrap className="mx_Dialog" onExit={modal.closeDialog}>
                     { modal.elem }
-                </div>
+                </FocusTrap>
                 <div className="mx_Dialog_background" onClick={this.closeAll}></div>
             </div>
         );

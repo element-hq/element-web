@@ -78,6 +78,7 @@
     "react": "^15.4.0",
     "react-addons-css-transition-group": "15.3.2",
     "react-dom": "^15.4.0",
+    "react-focus-trap": "^2.5.0",
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
     "sanitize-html": "^1.14.1",
     "text-encoding-utf-8": "^1.0.1",

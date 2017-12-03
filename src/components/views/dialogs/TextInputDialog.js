@@ -60,25 +60,24 @@ export default React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog className="mx_TextInputDialog" onFinished={this.props.onFinished}
-                onEnterPressed={this.onOk}
                 title={this.props.title}
             >
-                <div className="mx_Dialog_content">
-                    <div className="mx_TextInputDialog_label">
-                        <label htmlFor="textinput"> { this.props.description } </label>
+                <form onSubmit={this.onOk}>
+                    <div className="mx_Dialog_content">
+                        <div className="mx_TextInputDialog_label">
+                            <label htmlFor="textinput"> { this.props.description } </label>
+                        </div>
+                        <div>
+                            <input id="textinput" ref="textinput" className="mx_TextInputDialog_input" defaultValue={this.props.value} autoFocus={this.props.focus} size="64" />
+                        </div>
                     </div>
-                    <div>
-                        <input id="textinput" ref="textinput" className="mx_TextInputDialog_input" defaultValue={this.props.value} autoFocus={this.props.focus} size="64" />
+                    <div className="mx_Dialog_buttons">
+                        <button onClick={this.onCancel}>
+                            { _t("Cancel") }
+                        </button>
+                        <input type="submit" className="mx_Dialog_primary" value={ this.props.button }/>
                     </div>
-                </div>
-                <div className="mx_Dialog_buttons">
-                    <button onClick={this.onCancel}>
-                        { _t("Cancel") }
-                    </button>
-                    <button className="mx_Dialog_primary" onClick={this.onOk}>
-                        { this.props.button }
-                    </button>
-                </div>
+                </form>
             </BaseDialog>
         );
     },

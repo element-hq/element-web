@@ -116,7 +116,6 @@ export default React.createClass({
 
         return (
             <BaseDialog className="mx_CreateGroupDialog" onFinished={this.props.onFinished}
-                onEnterPressed={this._onFormSubmit}
                 title={_t('Create Community')}
             >
                 <form onSubmit={this._onFormSubmit}>

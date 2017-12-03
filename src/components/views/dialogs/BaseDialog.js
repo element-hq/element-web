@@ -33,9 +33,6 @@ export default React.createClass({
         // onFinished callback to call when Escape is pressed
         onFinished: React.PropTypes.func.isRequired,
 
-        // callback to call when Enter is pressed
-        onEnterPressed: React.PropTypes.func,
-
         // CSS class to apply to dialog div
         className: React.PropTypes.string,
 
@@ -51,17 +48,16 @@ export default React.createClass({
         contentId: React.PropTypes.string
     },
 
-    _onKeyDown: function(e) {
-        if (e.keyCode === KeyCode.ESCAPE) {
-            e.stopPropagation();
-            e.preventDefault();
-            this.props.onFinished();
-        } else if (e.keyCode === KeyCode.ENTER) {
-            if (this.props.onEnterPressed) {
-                e.stopPropagation();
-                e.preventDefault();
-                this.props.onEnterPressed(e);
-            }
+    componentDidMount: function() {
+        this.applicationNode = document.getElementById('matrixchat');
+        if (this.applicationNode) {
+            this.applicationNode.setAttribute('aria-hidden', 'true');
+        }
+    },
+
+    componentWillUnmount: function() {
+        if (this.applicationNode) {
+            this.applicationNode.setAttribute('aria-hidden', 'false');
         }
     },
 
@@ -73,7 +69,7 @@ export default React.createClass({
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         return (
-            <div onKeyDown={this._onKeyDown} className={this.props.className} role="dialog" aria-labelledby='mx_BaseDialog_title' aria-describedby={this.props.contentId}>
+            <div className={this.props.className} role="dialog" aria-labelledby='mx_BaseDialog_title' aria-describedby={this.props.contentId}>
                 <AccessibleButton onClick={this._onCancelClick}
                     className="mx_Dialog_cancelButton"
                 >
