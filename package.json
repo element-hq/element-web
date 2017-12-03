@@ -58,6 +58,7 @@
     "classnames": "^2.1.2",
     "commonmark": "^0.27.0",
     "counterpart": "^0.18.0",
+    "dom-to-image": "^2.6.0",
     "draft-js": "^0.11.0-alpha",
     "draft-js-export-html": "^0.6.0",
     "draft-js-export-markdown": "^0.3.0",
