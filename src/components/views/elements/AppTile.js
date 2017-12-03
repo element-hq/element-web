@@ -221,6 +221,10 @@ export default React.createClass({
         }, "mx_IntegrationsManager");
     },
 
+    _onSnapshotClick(e) {
+        console.log("Snapshot widget ID ", this.props.id);
+    },
+
     /* If user has permission to modify widgets, delete the widget,
      * otherwise revoke access for the widget to load in the user's browser
     */
@@ -379,11 +383,25 @@ export default React.createClass({
             deleteClasses += ' mx_AppTileMenuBarWidgetDelete';
         }
 
+        // Picture snapshot
+        const showPictureSnapshotButton = true; // FIXME - Make this dynamic
+        const showPictureSnapshotIcon = 'img/camera_green.svg';
+
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
                     <b>{ this.formatAppTileName() }</b>
                     <span className="mx_AppTileMenuBarWidgets">
+                      { /* Snapshot widget */ }
+                      { showPictureSnapshotButton && <TintableSvgButton
+                          src={showPictureSnapshotIcon}
+                          className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
+                          title={_t('Picture')}
+                          onClick={this._onSnapshotClick}
+                          width="10"
+                          height="10"
+                      /> }
+
                         { /* Edit widget */ }
                         { showEditButton && <TintableSvgButton
                             src="img/edit_green.svg"
