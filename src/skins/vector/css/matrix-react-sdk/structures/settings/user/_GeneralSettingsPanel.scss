@@ -14,34 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_GeneralUserSettingsPanel {
+.mx_GeneralSettingsPanel {
     position: relative;
 }
 
-.mx_GeneralUserSettingsPanel_logout {
+.mx_GeneralSettingsPanel_logout {
     position: absolute;
     top: 0;
     right: 0;
 }
 
-// TODO: {Travis} This should probably be more generic
-.mx_GeneralUserSettingsPanel_personalization {
-    padding: 10px;
-    border: 1px solid $tab-border-color;
-    background: $tab-list-bg-color;
-    border-radius: 4px;
-}
-
-.mx_GeneralUserSettingsPanel_avatarOptions {
+.mx_GeneralSettingsPanel_avatarOptions {
     position: relative;
     display: inline-block;
 }
 
-.mx_GeneralUserSettingsPanel_avatarOptions input[type="file"] {
+.mx_GeneralSettingsPanel_avatarOptions input[type="file"] {
     display: none;
 }
 
-.mx_GeneralUserSettingsPanel_avatarCamera {
+.mx_GeneralSettingsPanel_avatarCamera {
     width: 19px;
     height: 19px;
     padding: 3px 3px;
@@ -55,15 +47,15 @@ limitations under the License.
     right: 0;
 }
 
-.mx_GeneralUserSettingsPanel_avatarImg {
+.mx_GeneralSettingsPanel_avatarImg {
     cursor: pointer;
 }
 
-.mx_GeneralUserSettingsPanel_avatarCamera > img {
+.mx_GeneralSettingsPanel_avatarCamera > img {
     margin: auto;
 }
 
-.mx_GeneralUserSettingsPanel_avatarRemove {
+.mx_GeneralSettingsPanel_avatarRemove {
     font-size: 11px;
     color: $warning-color;
     text-align: center;
@@ -71,29 +63,17 @@ limitations under the License.
     cursor: pointer;
 }
 
-.mx_GeneralUserSettingsPanel_avatarImg .mx_BaseAvatar_image {
+.mx_GeneralSettingsPanel_avatarImg .mx_BaseAvatar_image {
     object-fit: cover;
 }
 
-// TODO: {Travis} This should probably be more generic
-.mx_GeneralUserSettingsPanel_displayName input {
-    border-radius: 3px;
-    border: 1px solid $input-border-dark-color;
-    padding: 6px;
-    color: $primary-fg-color;
-    background-color: $primary-bg-color;
-    font-size: 14px;
-    display: block;
-    margin-top: 3px;
-}
-
-.mx_GeneralUserSettingsPanel_displayName {
+.mx_GeneralSettingsPanel_displayName {
     display: inline-block;
     margin-left: 15px;
     vertical-align: top;
 }
 
-.mx_GeneralUserSettingsPanel_displayName label {
+.mx_GeneralSettingsPanel_displayName label {
     font-weight: 700;
     font-size: 16px;
 }

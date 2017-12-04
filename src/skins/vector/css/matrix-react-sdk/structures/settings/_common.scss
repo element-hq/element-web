@@ -21,3 +21,24 @@ limitations under the License.
 .mx_TabbedSettings_button:hover {
     @mixin mx_DialogButton_hover;
 }
+
+.mx_TabbedSettings_well {
+    padding: 10px;
+    border: 1px solid $tab-border-color;
+    background: $tab-list-bg-color;
+    border-radius: 4px;
+}
+
+.mx_TabbedSettings_input {
+    border-radius: 3px;
+    border: 1px solid $input-border-dark-color;
+    padding: 6px;
+    color: $primary-fg-color;
+
+    // TODO: {Travis} This probably needs to be changed
+    background-color: $primary-bg-color;
+
+    font-size: 14px;
+    display: block;
+    margin-top: 3px;
+}
