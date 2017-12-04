@@ -1,3 +1,9 @@
+Changes in [0.13.3](https://github.com/vector-im/riot-web/releases/tag/v0.13.3) (2017-12-04)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.2...v0.13.3)
+
+ * Bump js-sdk, react-sdk version to pull in fix for [setting room publicity in a group](https://github.com/matrix-org/matrix-js-sdk/commit/aa3201ebb0fff5af2fb733080aa65ed1f7213de6).
+
 Changes in [0.13.2](https://github.com/vector-im/riot-web/releases/tag/v0.13.2) (2017-11-28)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.1...v0.13.2)
