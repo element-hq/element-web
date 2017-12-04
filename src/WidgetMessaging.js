@@ -114,29 +114,33 @@ const SUPPORTED_WIDGET_API_VERSIONS = [
 
 import dis from './dispatcher';
 
-let listenerCount = 0;
-let messageEndpoints = [];
+if (!global.mxWidgetMessagingListenerCount) {
+    global.mxWidgetMessagingListenerCount = 0;
+}
+if (!global.mxWidgetMessagingMessageEndpoints) {
+    global.mxWidgetMessagingMessageEndpoints = [];
+}
 
 
 /**
  * Register widget message event listeners
  */
 function startListening() {
-    if (listenerCount === 0) {
+    if (global.mxWidgetMessagingListenerCount === 0) {
         window.addEventListener("message", onMessage, false);
     }
-    listenerCount += 1;
+    global.mxWidgetMessagingListenerCount += 1;
 }
 
 /**
  * De-register widget message event listeners
  */
 function stopListening() {
-    listenerCount -= 1;
-    if (listenerCount === 0) {
+    global.mxWidgetMessagingListenerCount -= 1;
+    if (global.mxWidgetMessagingListenerCount === 0) {
         window.removeEventListener("message", onMessage);
     }
-    if (listenerCount < 0) {
+    if (global.mxWidgetMessagingListenerCount < 0) {
         // Make an error so we get a stack trace
         const e = new Error(
             "WidgetMessaging: mismatched startListening / stopListening detected." +
@@ -153,14 +157,14 @@ function stopListening() {
  */
 function addEndpoint(widgetId, endpointUrl) {
     const endpoint = new WidgetMessageEndpoint(widgetId, endpointUrl);
-    if (messageEndpoints && messageEndpoints.length > 0) {
-        if (messageEndpoints.filter(function(ep) {
+    if (global.mxWidgetMessagingMessageEndpoints && global.mxWidgetMessagingMessageEndpoints.length > 0) {
+        if (global.mxWidgetMessagingMessageEndpoints.filter(function(ep) {
             return (ep.widgetId === widgetId && ep.endpointUrl === endpointUrl);
         }).length > 0) {
             // Message endpoint already registered
             return;
         }
-        messageEndpoints.push(endpoint);
+        global.mxWidgetMessagingMessageEndpoints.push(endpoint);
     }
 }
 
@@ -171,12 +175,12 @@ function addEndpoint(widgetId, endpointUrl) {
  * @return {boolean} True if endpoint was successfully removed
  */
 function removeEndpoint(widgetId, endpointUrl) {
-    if (messageEndpoints && messageEndpoints.length > 0) {
-        const length = messageEndpoints.length;
-        messageEndpoints = messageEndpoints.filter(function(endpoint) {
+    if (global.mxWidgetMessagingMessageEndpoints && global.mxWidgetMessagingMessageEndpoints.length > 0) {
+        const length = global.mxWidgetMessagingMessageEndpoints.length;
+        global.mxWidgetMessagingMessageEndpoints = global.mxWidgetMessagingMessageEndpoints.filter(function(endpoint) {
             return (endpoint.widgetId != widgetId || endpoint.endpointUrl != endpointUrl);
         });
-        return (length > messageEndpoints.length);
+        return (length > global.mxWidgetMessagingMessageEndpoints.length);
     }
     return false;
 }
@@ -236,7 +240,7 @@ function trustedEndpoint(origin) {
         return false;
     }
 
-    return messageEndpoints.some((endpoint) => {
+    return global.mxWidgetMessagingMessageEndpoints.some((endpoint) => {
         return endpoint.endpointUrl === origin;
     });
 }
