@@ -19,22 +19,26 @@ Listens for incoming postMessage requests from embedded widgets. The following A
 {
     api: "widget",
     action: "content_loaded",
+    widgetId: $WIDGET_ID,
+    data: {}
     // additional request fields
-    widgetId: $WIDGET_ID
 }
 
 The complete request object is returned to the caller with an additional "response" key like so:
 {
     api: "widget",
     action: "content_loaded",
+    widgetId: $WIDGET_ID,
+    data: {},
     // additional request fields
-    widgetId: $WIDGET_ID
     response: { ... }
 }
 
 The "api" field is required to use this API, and must be set to "widget" in all requests.
 
 The "action" determines the format of the request and response. All actions can return an error response.
+
+Additional data can be sent as additional, abritrary fields. However, typically the data object should be used.
 
 A success response is an object with zero or more keys.
 
@@ -209,6 +213,7 @@ function onMessage(event) {
     const action = event.data.action;
     const widgetId = event.data.widgetId;
     if (action === 'content_loaded') {
+        console.warn("Widget content loaded", widgetId);
         dis.dispatch({
             action: 'widget_content_loaded',
             widgetId: widgetId,
