@@ -1028,5 +1028,6 @@
     "Unknown for %(duration)s": "Unbekannt seit %(duration)s",
     "Flair": "Abzeichen",
     "Showing flair for these communities:": "Abzeichen für diese Communities zeigen:",
-    "This room is not showing flair for any communities": "Dieser Raum zeigt für keine Communities die Abzeichen an"
+    "This room is not showing flair for any communities": "Dieser Raum zeigt für keine Communities die Abzeichen an",
+    "Delete %(count)s devices|other": "Lösche %(count)s Geräte"
 }
