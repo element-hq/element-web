@@ -430,13 +430,24 @@ export default React.createClass({
             deleteClasses += ' mx_AppTileMenuBarWidgetDelete';
         }
 
+        const windowStateIcon = (this.props.show ? 'img/minimize.svg' : 'img/maximize.svg');
+
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
-                    <b>{ this.formatAppTileName() }</b>
-                    { this.state.widgetPageTitle && (
-                        <span>&nbsp;-&nbsp;{ this.state.widgetPageTitle }</span>
-                    ) }
+                    <span className="mx_AppTileMenuBarTitle">
+                        <TintableSvgButton
+                            src={windowStateIcon}
+                            className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
+                            title={_t('Minimize apps')}
+                            width="10"
+                            height="10"
+                        />
+                        <b>{ this.formatAppTileName() }</b>
+                        { this.state.widgetPageTitle && (
+                            <span>&nbsp;-&nbsp;{ this.state.widgetPageTitle }</span>
+                        ) }
+                    </span>
                     <span className="mx_AppTileMenuBarWidgets">
                         { /* Edit widget */ }
                         { showEditButton && <TintableSvgButton
