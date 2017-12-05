@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import FocusTrap from 'focus-trap-react';
 
 import * as KeyCode from '../../../KeyCode';
 import AccessibleButton from '../elements/AccessibleButton';
@@ -61,6 +62,14 @@ export default React.createClass({
         }
     },
 
+    _onKeyDown: function(e) {
+        if (e.keyCode === KeyCode.ESCAPE) {
+            e.stopPropagation();
+            e.preventDefault();
+            this.props.onFinished();
+        }
+    },
+
     _onCancelClick: function(e) {
         this.props.onFinished();
     },
@@ -69,7 +78,7 @@ export default React.createClass({
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         return (
-            <div className={this.props.className} role="dialog" aria-labelledby='mx_BaseDialog_title' aria-describedby={this.props.contentId}>
+            <FocusTrap onKeyDown={this._onKeyDown} className={this.props.className} role="dialog" aria-labelledby='mx_BaseDialog_title' aria-describedby={this.props.contentId}>
                 <AccessibleButton onClick={this._onCancelClick}
                     className="mx_Dialog_cancelButton"
                 >
@@ -79,7 +88,7 @@ export default React.createClass({
                     { this.props.title }
                 </div>
                 { this.props.children }
-            </div>
+            </FocusTrap>
         );
     },
 });
