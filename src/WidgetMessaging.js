@@ -232,7 +232,6 @@ function onMessage(event) {
     const action = event.data.action;
     const widgetId = event.data.widgetId;
     if (action === 'content_loaded') {
-        console.warn("Widget content loaded", widgetId);
         dis.dispatch({
             action: 'widget_content_loaded',
             widgetId: widgetId,
