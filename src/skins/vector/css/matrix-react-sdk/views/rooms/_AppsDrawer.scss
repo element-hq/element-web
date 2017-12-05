@@ -88,12 +88,20 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_AppTileMenuBarTitle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    pointer-events: none;
+}
+
 .mx_AppTileMenuBarWidgets {
     float: right;
     display: flex;
     flex-direction: row;
     align-items: center;
 }
+
 .mx_AppTileMenuBarWidget {
     // pointer-events: none;
     cursor: pointer;
