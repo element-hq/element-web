@@ -195,9 +195,7 @@ function removeEndpoint(widgetId, endpointUrl) {
         return;
     }
 
-    console.warn("Origin url:", u);
     const origin = u.protocol + '//' + u.host;
-
     if (global.mxWidgetMessagingMessageEndpoints && global.mxWidgetMessagingMessageEndpoints.length > 0) {
         const length = global.mxWidgetMessagingMessageEndpoints.length;
         global.mxWidgetMessagingMessageEndpoints = global.mxWidgetMessagingMessageEndpoints.filter(function(endpoint) {
