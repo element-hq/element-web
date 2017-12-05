@@ -22,6 +22,7 @@ import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import PlatformPeg from '../../../PlatformPeg';
 import ScalarAuthClient from '../../../ScalarAuthClient';
+import WidgetMessaging from '../../../WidgetMessaging';
 import TintableSvgButton from './TintableSvgButton';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
@@ -71,14 +72,43 @@ export default React.createClass({
         return {
             initialising: true,   // True while we are mangling the widget URL
             loading: true,        // True while the iframe content is loading
-            widgetUrl: newProps.url,
+            widgetUrl: this._addWurlParams(newProps.url),
             widgetPermissionId: widgetPermissionId,
             // Assume that widget has permission to load if we are the user who
             // added it to the room, or if explicitly granted by the user
             hasPermissionToLoad: hasPermissionToLoad === 'true' || newProps.userId === newProps.creatorUserId,
             error: null,
             deleting: false,
+            widgetPageTitle: null,
         };
+    },
+
+    /**
+     * Add widget instance specific parameters to pass in wUrl
+     * Properties passed to widget instance:
+     *  - widgetId
+     *  - origin / parent URL
+     * @param {string} urlString Url string to modify
+     * @return {string}
+     * Url string with parameters appended.
+     * If url can not be parsed, it is returned unmodified.
+     */
+    _addWurlParams(urlString) {
+        const u = url.parse(urlString);
+        if (!u) {
+            console.error("_addWurlParams", "Invalid URL", urlString);
+            return url;
+        }
+
+        const params = qs.parse(u.query);
+        // Append widget ID to query parameters
+        params.widgetId = this.props.id;
+        // Append current / parent URL
+        params.parentUrl = window.location.href;
+        u.search = undefined;
+        u.query = params;
+
+        return u.format();
     },
 
     getInitialState() {
@@ -122,6 +152,8 @@ export default React.createClass({
     },
 
     componentWillMount() {
+        WidgetMessaging.startListening();
+        WidgetMessaging.addEndpoint(this.props.id, this.props.url);
         window.addEventListener('message', this._onMessage, false);
         this.setScalarToken();
     },
@@ -137,7 +169,7 @@ export default React.createClass({
             console.warn('Non-scalar widget, not setting scalar token!', url);
             this.setState({
                 error: null,
-                widgetUrl: this.props.url,
+                widgetUrl: this._addWurlParams(this.props.url),
                 initialising: false,
             });
             return;
@@ -150,7 +182,7 @@ export default React.createClass({
         this._scalarClient.getScalarToken().done((token) => {
             // Append scalar_token as a query param if not already present
             this._scalarClient.scalarToken = token;
-            const u = url.parse(this.props.url);
+            const u = url.parse(this._addWurlParams(this.props.url));
             const params = qs.parse(u.query);
             if (!params.scalar_token) {
                 params.scalar_token = encodeURIComponent(token);
@@ -174,6 +206,8 @@ export default React.createClass({
     },
 
     componentWillUnmount() {
+        WidgetMessaging.stopListening();
+        WidgetMessaging.removeEndpoint(this.props.id, this.props.url);
         window.removeEventListener('message', this._onMessage);
     },
 
@@ -256,8 +290,21 @@ export default React.createClass({
         }
     },
 
+    /**
+     * Called when widget iframe has finished loading
+     */
     _onLoaded() {
         this.setState({loading: false});
+    },
+
+    /**
+     * Set remote content title on AppTile
+     * @param {string} title Title string to set on the AppTile
+     */
+    _updateWidgetTitle(title) {
+        if (title) {
+            this.setState({widgetPageTitle: null});
+        }
     },
 
     // Widget labels to render, depending upon user permissions
@@ -305,6 +352,15 @@ export default React.createClass({
         });
     },
 
+    _getSafeUrl() {
+        const parsedWidgetUrl = url.parse(this.state.widgetUrl);
+        let safeWidgetUrl = '';
+        if (ALLOWED_APP_URL_SCHEMES.indexOf(parsedWidgetUrl.protocol) !== -1) {
+            safeWidgetUrl = url.format(parsedWidgetUrl);
+        }
+        return safeWidgetUrl;
+    },
+
     render() {
         let appTileBody;
 
@@ -320,11 +376,6 @@ export default React.createClass({
         // a link to it.
         const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox "+
             "allow-same-origin allow-scripts allow-presentation";
-        const parsedWidgetUrl = url.parse(this.state.widgetUrl);
-        let safeWidgetUrl = '';
-        if (ALLOWED_APP_URL_SCHEMES.indexOf(parsedWidgetUrl.protocol) !== -1) {
-            safeWidgetUrl = url.format(parsedWidgetUrl);
-        }
 
         if (this.props.show) {
             const loadingElement = (
@@ -347,7 +398,7 @@ export default React.createClass({
                             { this.state.loading && loadingElement }
                             <iframe
                                 ref="appFrame"
-                                src={safeWidgetUrl}
+                                src={this._getSafeUrl()}
                                 allowFullScreen="true"
                                 sandbox={sandboxFlags}
                                 onLoad={this._onLoaded}
@@ -383,6 +434,9 @@ export default React.createClass({
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
                     <b>{ this.formatAppTileName() }</b>
+                    { this.state.widgetPageTitle && (
+                        <span>&nbsp;-&nbsp;{ this.state.widgetPageTitle }</span>
+                    ) }
                     <span className="mx_AppTileMenuBarWidgets">
                         { /* Edit widget */ }
                         { showEditButton && <TintableSvgButton
