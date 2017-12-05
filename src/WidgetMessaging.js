@@ -111,6 +111,8 @@ Example:
 
 */
 
+import URL from 'url';
+
 const WIDGET_API_VERSION = '0.0.1'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [
     '0.0.1',
@@ -160,12 +162,20 @@ function stopListening() {
  * @param {string} endpointUrl Widget wurl origin (protocol + (optional port) + host)
  */
 function addEndpoint(widgetId, endpointUrl) {
-    const endpoint = new WidgetMessageEndpoint(widgetId, endpointUrl);
-    if (global.mxWidgetMessagingMessageEndpoints && global.mxWidgetMessagingMessageEndpoints.length > 0) {
-        if (global.mxWidgetMessagingMessageEndpoints.filter(function(ep) {
+    const u = URL.parse(endpointUrl);
+    if (!u || !u.protocol || !u.host) {
+        console.warn("Invalid origin");
+        return;
+    }
+
+    const origin = u.protocol + '//' + u.host;
+    const endpoint = new WidgetMessageEndpoint(widgetId, origin);
+    if (global.mxWidgetMessagingMessageEndpoints) {
+        if (global.mxWidgetMessagingMessageEndpoints.some(function(ep) {
             return (ep.widgetId === widgetId && ep.endpointUrl === endpointUrl);
-        }).length > 0) {
+        })) {
             // Message endpoint already registered
+            console.warn("Endpoint already registered");
             return;
         }
         global.mxWidgetMessagingMessageEndpoints.push(endpoint);
@@ -179,10 +189,19 @@ function addEndpoint(widgetId, endpointUrl) {
  * @return {boolean} True if endpoint was successfully removed
  */
 function removeEndpoint(widgetId, endpointUrl) {
+    const u = URL.parse(endpointUrl);
+    if (!u || !u.protocol || !u.host) {
+        console.warn("Invalid origin");
+        return;
+    }
+
+    console.warn("Origin url:", u);
+    const origin = u.protocol + '//' + u.host;
+
     if (global.mxWidgetMessagingMessageEndpoints && global.mxWidgetMessagingMessageEndpoints.length > 0) {
         const length = global.mxWidgetMessagingMessageEndpoints.length;
         global.mxWidgetMessagingMessageEndpoints = global.mxWidgetMessagingMessageEndpoints.filter(function(endpoint) {
-            return (endpoint.widgetId != widgetId || endpoint.endpointUrl != endpointUrl);
+            return (endpoint.widgetId != widgetId || endpoint.endpointUrl != origin);
         });
         return (length > global.mxWidgetMessagingMessageEndpoints.length);
     }
