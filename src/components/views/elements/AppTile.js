@@ -306,10 +306,7 @@ export default React.createClass({
     _updateWidgetTitle(url) {
         this._scalarClient.getScalarPageTitle(url).then((widgetPageTitle) => {
             if (widgetPageTitle) {
-                console.log("Got page title", widgetPageTitle);
                 this.setState({widgetPageTitle: widgetPageTitle});
-            } else {
-                console.error("No page title");
             }
         }, (err) =>{
             console.error("Failed to get page title", err);
