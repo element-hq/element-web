@@ -108,7 +108,7 @@ export default React.createClass({
             // XXX: We should catch errcodes and give sensible i18ned messages for them,
             // rather than displaying what the server gives us, but synapse doesn't give
             // any yet.
-            createErrorNode = <div className="error">
+            createErrorNode = <div className="error" role="alert">
                 <div>{ _t('Something went wrong whilst creating your community') }</div>
                 <div>{ this.state.createError.message }</div>
             </div>;
