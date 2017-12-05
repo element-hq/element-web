@@ -255,4 +255,8 @@ export const SETTINGS = {
         default: true,
         controller: new AudioNotificationsEnabledController(),
     },
+    "TagOrderStore.orderedTags": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: null,
+    },
 };

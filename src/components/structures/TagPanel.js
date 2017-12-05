@@ -20,6 +20,7 @@ import { MatrixClient } from 'matrix-js-sdk';
 import classNames from 'classnames';
 import FilterStore from '../../stores/FilterStore';
 import FlairStore from '../../stores/FlairStore';
+import TagOrderStore from '../../stores/TagOrderStore';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import { isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
@@ -115,6 +116,14 @@ export default React.createClass({
                 selectedTags: FilterStore.getSelectedTags(),
             });
         });
+        this._tagOrderStoreToken = TagOrderStore.addListener(() => {
+            if (this.unmounted) {
+                return;
+            }
+            this.setState({
+                orderedTags: TagOrderStore.getOrderedTags(),
+            });
+        });
 
         this._fetchJoinedRooms();
     },
@@ -157,7 +166,13 @@ export default React.createClass({
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
-        const tags = this.state.joinedGroupProfiles.map((groupProfile, index) => {
+
+        const orderedGroupProfiles = this.state.orderedTags ?
+            this.state.joinedGroupProfiles.sort((a, b) =>
+                this.state.orderedTags.indexOf(a.groupId) -
+                this.state.orderedTags.indexOf(b.groupId),
+            ) : this.state.joinedGroupProfiles;
+        const tags = orderedGroupProfiles.map((groupProfile, index) => {
             return <TagTile
                 key={groupProfile.groupId + '_' + index}
                 groupProfile={groupProfile}
