@@ -29,6 +29,12 @@ export default React.createClass({
         onFinished: React.PropTypes.func.isRequired,
     },
 
+    componentDidMount: function() {
+        if (this.refs.bugreportLink) {
+            this.refs.bugreportLink.focus();
+        }
+    },
+
     _sendBugReport: function() {
         const BugReportDialog = sdk.getComponent("dialogs.BugReportDialog");
         Modal.createTrackedDialog('Session Restore Error', 'Send Bug Report Dialog', BugReportDialog, {});
@@ -48,7 +54,7 @@ export default React.createClass({
                 { _t(
                     "Otherwise, <a>click here</a> to send a bug report.",
                     {},
-                    { 'a': (sub) => <a onClick={this._sendBugReport} key="bugreport" href='#'>{ sub }</a> },
+                    { 'a': (sub) => <a ref="bugreportLink" onClick={this._sendBugReport} key="bugreport" href='#'>{ sub }</a> },
                 ) }
                 </p>
             );
@@ -56,8 +62,10 @@ export default React.createClass({
 
         return (
             <BaseDialog className="mx_ErrorDialog" onFinished={this.props.onFinished}
-                    title={_t('Unable to restore session')}>
-                <div className="mx_Dialog_content">
+                    title={_t('Unable to restore session')}
+                contentId='mx_Dialog_content'
+            >
+                <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     <p>{ _t("We encountered an error trying to restore your previous session. If " +
                     "you continue, you will need to log in again, and encrypted chat " +
                     "history will be unreadable.") }</p>
@@ -68,7 +76,7 @@ export default React.createClass({
 
                     { bugreport }
                 </div>
-                <div className="mx_Dialog_buttons">
+                <div className="mx_Dialog_buttons" autoFocus={SdkConfig.get().bug_report_endpoint_url ? false : true}>
                     <button className="mx_Dialog_primary" onClick={this._continueClicked}>
                         { _t("Continue anyway") }
                     </button>

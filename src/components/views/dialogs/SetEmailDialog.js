@@ -41,6 +41,7 @@ export default React.createClass({
     },
 
     componentDidMount: function() {
+        this.refs.emailInputField.focus();
     },
 
     onEmailAddressChanged: function(value) {
@@ -130,6 +131,7 @@ export default React.createClass({
 
         const emailInput = this.state.emailBusy ? <Spinner /> : <EditableText
             className="mx_SetEmailDialog_email_input"
+            ref="emailInputField"
             placeholder={_t("Email address")}
             placeholderClassName="mx_SetEmailDialog_email_input_placeholder"
             blurToCancel={false}
@@ -139,9 +141,10 @@ export default React.createClass({
             <BaseDialog className="mx_SetEmailDialog"
                 onFinished={this.onCancelled}
                 title={this.props.title}
+                contentId='mx_Dialog_content'
             >
                 <div className="mx_Dialog_content">
-                    <p>
+                    <p id='mx_Dialog_content'>
                         { _t('This will allow you to reset your password and receive notifications.') }
                     </p>
                     { emailInput }

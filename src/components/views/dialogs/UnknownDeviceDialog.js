@@ -143,8 +143,9 @@ export default React.createClass({
                             this.props.onFinished();
                 }}
                 title={_t('Room contains unknown devices')}
+                contentId='mx_Dialog_content'
             >
-                <GeminiScrollbar autoshow={false} className="mx_Dialog_content">
+                <GeminiScrollbar autoshow={false} className="mx_Dialog_content" id='mx_Dialog_content'>
                     <h4>
                         { _t('"%(RoomName)s" contains devices that you haven\'t seen before.', {RoomName: this.props.room.name}) }
                     </h4>
@@ -161,7 +162,7 @@ export default React.createClass({
                             }}>
                         { _t("Send anyway") }
                     </button>
-                    <button className="mx_Dialog_primary" autoFocus={true}
+                    <button className="mx_Dialog_primary"
                             onClick={() => {
                                 // XXX: temporary logging to try to diagnose
                                 // https://github.com/vector-im/riot-web/issues/3148

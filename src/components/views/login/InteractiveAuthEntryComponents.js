@@ -130,9 +130,10 @@ export const PasswordAuthEntry = React.createClass({
         return (
             <div>
                 <p>{ _t("To continue, please enter your password.") }</p>
-                <p>{ _t("Password:") }</p>
                 <form onSubmit={this._onSubmit}>
+                    <label htmlFor="passwordField">{ _t("Password:") }</label>
                     <input
+                        name="passwordField"
                         ref="passwordField"
                         className={passwordBoxClass}
                         onChange={this._onPasswordFieldChange}
@@ -142,7 +143,7 @@ export const PasswordAuthEntry = React.createClass({
                         { submitButtonOrSpinner }
                     </div>
                 </form>
-                <div className="error">
+                <div className="error" role={ this.props.errorText ? "alert" : ""}>
                     { this.props.errorText }
                 </div>
             </div>
@@ -184,7 +185,7 @@ export const RecaptchaAuthEntry = React.createClass({
                 <CaptchaForm sitePublicKey={sitePublicKey}
                     onCaptchaResponse={this._onCaptchaResponse}
                 />
-                <div className="error">
+                <div className="error" role={ this.props.errorText ? "alert" : ""}>
                     { this.props.errorText }
                 </div>
             </div>
@@ -384,6 +385,7 @@ export const MsisdnAuthEntry = React.createClass({
                                 className="mx_InteractiveAuthEntryComponents_msisdnEntry"
                                 value={this.state.token}
                                 onChange={this._onTokenChange}
+                                aria-label={ _t("Code")}
                             />
                             <br />
                             <input type="submit" value={_t("Submit")}
@@ -391,7 +393,7 @@ export const MsisdnAuthEntry = React.createClass({
                                 disabled={!enableSubmit}
                             />
                         </form>
-                        <div className="error">
+                        <div className="error" role={this.state.errorText ? "alert" : ""}>
                             { this.state.errorText }
                         </div>
                     </div>
@@ -426,6 +428,12 @@ export const FallbackAuthEntry = React.createClass({
         }
     },
 
+    focus: function() {
+        if (this.refs.fallbackButton) {
+            this.refs.fallbackButton.focus();
+        }
+    },
+
     _onShowFallbackClick: function() {
         const url = this.props.matrixClient.getFallbackAuthUrl(
             this.props.loginType,
@@ -446,8 +454,8 @@ export const FallbackAuthEntry = React.createClass({
     render: function() {
         return (
             <div>
-                <a onClick={this._onShowFallbackClick}>{ _t("Start authentication") }</a>
-                <div className="error">
+                <a ref="fallbackButton" onClick={this._onShowFallbackClick}>{ _t("Start authentication") }</a>
+                <div className="error" role={ this.props.errorText ? "alert" : ""}>
                     { this.props.errorText }
                 </div>
             </div>

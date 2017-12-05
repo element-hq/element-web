@@ -125,11 +125,11 @@ export default React.createClass({
         text = _t(text, {displayName: displayName});
 
         return (
-            <div>
+            <div id='mx_Dialog_content'>
                 <p>{ text }</p>
 
                 <div className="mx_Dialog_buttons">
-                    <button onClick={this._onVerifyClicked}>
+                    <button onClick={this._onVerifyClicked} autoFocus="true">
                         { _t('Start verification') }
                     </button>
                     <button onClick={this._onShareClicked}>
@@ -153,7 +153,7 @@ export default React.createClass({
             content = this._renderContent();
         } else {
             content = (
-                <div>
+                <div id='mx_Dialog_content'>
                     <p>{ _t('Loading device info...') }</p>
                     <Spinner />
                 </div>
@@ -164,6 +164,7 @@ export default React.createClass({
             <BaseDialog className='mx_KeyShareRequestDialog'
                 onFinished={this.props.onFinished}
                 title={_t('Encryption key request')}
+                contentId='mx_Dialog_content'
             >
                 { content }
             </BaseDialog>

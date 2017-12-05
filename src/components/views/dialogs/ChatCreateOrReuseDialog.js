@@ -127,7 +127,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
                 </div>
                 <div className={labelClasses}><i>{ _t("Start new chat") }</i></div>
             </AccessibleButton>;
-            content = <div className="mx_Dialog_content">
+            content = <div className="mx_Dialog_content" id='mx_Dialog_content'>
                 { _t('You already have existing direct chats with this user:') }
                 <div className="mx_ChatCreateOrReuseDialog_tiles">
                     { this.state.tiles }
@@ -144,7 +144,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
             if (this.state.busyProfile) {
                 profile = <Spinner />;
             } else if (this.state.profileError) {
-                profile = <div className="error">
+                profile = <div className="error" role="alert">
                     Unable to load profile information for { this.props.userId }
                 </div>;
             } else {
@@ -160,14 +160,14 @@ export default class ChatCreateOrReuseDialog extends React.Component {
                 </div>;
             }
             content = <div>
-                <div className="mx_Dialog_content">
+                <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     <p>
                         { _t('Click on the button below to start chatting!') }
                     </p>
                     { profile }
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.props.onNewDMClick}>
+                    <button className="mx_Dialog_primary" onClick={this.props.onNewDMClick} autoFocus="true">
                         { _t('Start Chatting') }
                     </button>
                 </div>
@@ -179,6 +179,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
             <BaseDialog className='mx_ChatCreateOrReuseDialog'
                 onFinished={this.props.onFinished.bind(false)}
                 title={title}
+                contentId='mx_Dialog_content'
             >
                 { content }
             </BaseDialog>
@@ -186,7 +187,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
     }
 }
 
-ChatCreateOrReuseDialog.propTyps = {
+ChatCreateOrReuseDialog.propTypes = {
     userId: React.PropTypes.string.isRequired,
     // Called when clicking outside of the dialog
     onFinished: React.PropTypes.func.isRequired,
