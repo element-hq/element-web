@@ -92,9 +92,8 @@ class ScalarAuthClient {
             } else if (response.statusCode / 100 !== 2) {
                 defer.reject({statusCode: response.statusCode});
             } else if (!body) {
-                defer.reject(new Error("Missing scalar_token in response"));
+                defer.reject(new Error("Missing page_title in response"));
             } else {
-                console.warn("page title body", body);
                 let title = "";
                 if (body.page_title_cache_item && body.page_title_cache_item.cached_title) {
                     title = body.page_title_cache_item.cached_title;
