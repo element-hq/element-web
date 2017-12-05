@@ -453,7 +453,7 @@ export default React.createClass({
                             height="10"
                         />
                         <b>{ this.formatAppTileName() }</b>
-                        { this.state.widgetPageTitle && (
+                        { this.state.widgetPageTitle && this.state.widgetPageTitle != this.formatAppTileName() && (
                             <span>&nbsp;-&nbsp;{ this.state.widgetPageTitle }</span>
                         ) }
                     </span>
