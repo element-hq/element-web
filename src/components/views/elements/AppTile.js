@@ -196,6 +196,8 @@ export default React.createClass({
                 widgetUrl: u.format(),
                 initialising: false,
             });
+
+            this._updateWidgetTitle(params.url);
         }, (err) => {
             console.error("Failed to get scalar_token", err);
             this.setState({
@@ -299,12 +301,19 @@ export default React.createClass({
 
     /**
      * Set remote content title on AppTile
-     * @param {string} title Title string to set on the AppTile
+     * @param {string} url Url to check for title
      */
-    _updateWidgetTitle(title) {
-        if (title) {
-            this.setState({widgetPageTitle: null});
-        }
+    _updateWidgetTitle(url) {
+        this._scalarClient.getScalarPageTitle(url).then((widgetPageTitle) => {
+            if (widgetPageTitle) {
+                console.log("Got page title", widgetPageTitle);
+                this.setState({widgetPageTitle: widgetPageTitle});
+            } else {
+                console.error("No page title");
+            }
+        }, (err) =>{
+            console.error("Failed to get page title", err);
+        });
     },
 
     // Widget labels to render, depending upon user permissions
