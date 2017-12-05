@@ -389,7 +389,9 @@ function _persistCredentialsToLocalStorage(credentials) {
  * Logs the current session out and transitions to the logged-out state
  */
 export function logout() {
-    if (MatrixClientPeg.get() && MatrixClientPeg.get().isGuest()) {
+    if (!MatrixClientPeg.get()) return
+
+    if (MatrixClientPeg.get().isGuest()) {
         // logout doesn't work for guest sessions
         // Also we sometimes want to re-log in a guest session
         // if we abort the login
