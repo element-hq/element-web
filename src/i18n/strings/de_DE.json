@@ -1034,5 +1034,7 @@
     "Select devices": "Wähle Geräte",
     "Flair will appear if enabled in room settings": "Abzeichen wird angezeigt, falls es in den Raumeinstellungen aktiviert wurde",
     "Flair will not appear": "Abzeichen wird nicht angezeigt",
-    "Something went wrong when trying to get your communities.": "Beim Laden deiner Communites ist etwas schief gelaufen."
+    "Something went wrong when trying to get your communities.": "Beim Laden deiner Communites ist etwas schief gelaufen.",
+    "Display your community flair in rooms configured to show it.": "Zeige deinen Community-Flair in den Räumen, die es erlauben.",
+    "This homeserver doesn't offer any login flows which are supported by this client.": "Dieser Heimserver verfügt über keinen, von diesem Client unterstützten Anmeldeverlauf."
 }
