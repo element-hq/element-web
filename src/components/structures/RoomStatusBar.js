@@ -272,7 +272,7 @@ module.exports = React.createClass({
         return avatars;
     },
 
-    _getUnsentMessageContent: function(room) {
+    _getUnsentMessageContent: function() {
         const unsentMessages = this.state.unsentMessages;
         if (!unsentMessages.length) return null;
 
