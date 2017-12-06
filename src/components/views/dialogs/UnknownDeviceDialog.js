@@ -103,8 +103,8 @@ export default React.createClass({
     propTypes: {
         room: PropTypes.object.isRequired,
 
-        // map from userid -> deviceid -> deviceinfo
-        devices: PropTypes.object.isRequired,
+        // map from userid -> deviceid -> deviceinfo or null if devices are not yet loaded
+        devices: PropTypes.object,
 
         onFinished: PropTypes.func.isRequired,
 
