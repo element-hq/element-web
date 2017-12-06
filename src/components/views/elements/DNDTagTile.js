@@ -1,3 +1,4 @@
+/* eslint new-cap: "off" */
 /*
 Copyright 2017 New Vector Ltd.
 
