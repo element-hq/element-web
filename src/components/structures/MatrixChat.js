@@ -19,8 +19,6 @@ limitations under the License.
 import Promise from 'bluebird';
 
 import React from 'react';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import Matrix from "matrix-js-sdk";
 
 import Analytics from "../../Analytics";
@@ -1587,4 +1585,4 @@ const MatrixChat = React.createClass({
     },
 });
 
-export default DragDropContext(HTML5Backend)(MatrixChat);
+export default MatrixChat;
