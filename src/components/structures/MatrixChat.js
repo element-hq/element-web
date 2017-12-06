@@ -1152,7 +1152,7 @@ module.exports = React.createClass({
                             "A one-off migration of cryptography data has been performed. "+
                             "End-to-end encryption will not work if you go back to an older "+
                             "version of Riot. If you need to use end-to-end cryptography on "+
-                            "an older version, log out of Riot first. To retain message history "+
+                            "an older version, log out of Riot first. To retain message history, "+
                             "export and re-import your keys.",
                         ),
                     });
@@ -1165,7 +1165,9 @@ module.exports = React.createClass({
                             "This will have caused end-to-end cryptography to malfunction "+
                             "in the older version. End-to-end encrypted messages exchanged "+
                             "recently whilst using the older version may not be decryptable "+
-                            "in this version.",
+                            "in this version. This may also cause messages exchanged with this "+
+                            "version to fail. If you experience problems, log out and back in "+
+                            "again. To retain message history, export and re-import your keys.",
                         ),
                     });
                     break;
