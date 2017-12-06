@@ -15,82 +15,17 @@ limitations under the License.
 */
 
 import React from 'react';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
-import classNames from 'classnames';
 import FilterStore from '../../stores/FilterStore';
 import FlairStore from '../../stores/FlairStore';
 import TagOrderStore from '../../stores/TagOrderStore';
 import sdk from '../../index';
 import dis from '../../dispatcher';
-import { isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 
-const TagTile = React.createClass({
-    displayName: 'TagTile',
-
-    propTypes: {
-        groupProfile: PropTypes.object,
-    },
-
-    contextTypes: {
-        matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
-    },
-
-    getInitialState() {
-        return {
-            hover: false,
-        };
-    },
-
-    onClick: function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        dis.dispatch({
-            action: 'select_tag',
-            tag: this.props.groupProfile.groupId,
-            ctrlOrCmdKey: isOnlyCtrlOrCmdKeyEvent(e),
-            shiftKey: e.shiftKey,
-        });
-    },
-
-    onMouseOver: function() {
-        this.setState({hover: true});
-    },
-
-    onMouseOut: function() {
-        this.setState({hover: false});
-    },
-
-    render: function() {
-        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const RoomTooltip = sdk.getComponent('rooms.RoomTooltip');
-        const profile = this.props.groupProfile || {};
-        const name = profile.name || profile.groupId;
-        const avatarHeight = 35;
-
-        const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(
-            profile.avatarUrl, avatarHeight, avatarHeight, "crop",
-        ) : null;
-
-        const className = classNames({
-            mx_TagTile: true,
-            mx_TagTile_selected: this.props.selected,
-        });
-
-        const tip = this.state.hover ?
-            <RoomTooltip className="mx_TagTile_tooltip" label={name} /> :
-            <div />;
-        return <AccessibleButton className={className} onClick={this.onClick}>
-            <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
-                <BaseAvatar name={name} url={httpUrl} width={avatarHeight} height={avatarHeight} />
-                { tip }
-            </div>
-        </AccessibleButton>;
-    },
-});
-
-export default React.createClass({
+const TagPanel = React.createClass({
     displayName: 'TagPanel',
 
     contextTypes: {
@@ -166,14 +101,16 @@ export default React.createClass({
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
+        const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
 
         const orderedGroupProfiles = this.state.orderedTags ?
             this.state.joinedGroupProfiles.sort((a, b) =>
                 this.state.orderedTags.indexOf(a.groupId) -
                 this.state.orderedTags.indexOf(b.groupId),
             ) : this.state.joinedGroupProfiles;
+
         const tags = orderedGroupProfiles.map((groupProfile, index) => {
-            return <TagTile
+            return <DNDTagTile
                 key={groupProfile.groupId + '_' + index}
                 groupProfile={groupProfile}
                 selected={this.state.selectedTags.includes(groupProfile.groupId)}
@@ -189,3 +126,4 @@ export default React.createClass({
         </div>;
     },
 });
+export default DragDropContext(HTML5Backend)(TagPanel);
