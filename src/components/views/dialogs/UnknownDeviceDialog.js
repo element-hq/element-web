@@ -123,7 +123,9 @@ export default React.createClass({
     },
 
     componentWillUnmount: function() {
-        MatrixClientPeg.get().removeListener("deviceVerificationChanged", this._onDeviceVerificationChanged);
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("deviceVerificationChanged", this._onDeviceVerificationChanged);
+        }
     },
 
     _onDeviceVerificationChanged: function(userId, deviceId, deviceInfo) {
