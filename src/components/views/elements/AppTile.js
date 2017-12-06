@@ -217,7 +217,7 @@ export default React.createClass({
         if (nextProps.url !== this.props.url) {
             this._getNewState(nextProps);
             this.setScalarToken();
-        } else if (nextProps.show && !this.props.show) {
+        } else if (nextProps.show && !this.props.show && this.props.waitForIframeLoad) {
             this.setState({
                 loading: true,
             });
