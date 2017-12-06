@@ -164,7 +164,7 @@ function stopListening() {
 function addEndpoint(widgetId, endpointUrl) {
     const u = URL.parse(endpointUrl);
     if (!u || !u.protocol || !u.host) {
-        console.warn("Invalid origin");
+        console.warn("Invalid origin:", endpointUrl);
         return;
     }
 
