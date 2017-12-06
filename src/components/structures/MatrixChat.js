@@ -1142,6 +1142,35 @@ module.exports = React.createClass({
                 room.setBlacklistUnverifiedDevices(blacklistEnabled);
             }
         });
+        cli.on("crypto.warning", (type) => {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            switch (type) {
+                case 'CRYPTO_WARNING_ACCOUNT_MIGRATED':
+                    Modal.createTrackedDialog('Crypto migrated', '', ErrorDialog, {
+                        title: _t('Cryptography data migrated'),
+                        description: _t(
+                            "A one-off migration of cryptography data has been performed. "+
+                            "End-to-end encryption will not work if you go back to an older "+
+                            "version of Riot. If you need to use end-to-end cryptography on "+
+                            "an older version, log out of Riot first. To retain message history "+
+                            "export and re-import your keys."
+                        ),
+                    });
+                    break;
+                case 'CRYPTO_WARNING_OLD_VERSION_DETECTED':
+                    Modal.createTrackedDialog('Crypto migrated', '', ErrorDialog, {
+                        title: _t('Old cryptography data detected'),
+                        description: _t(
+                            "Data from an older version of Riot has been detected. "+
+                            "This will have caused end-to-end cryptography to malfunction "+
+                            "in the older version. End-to-end encrypted messages exchanged "+
+                            "recently whilst using the older version may not be decryptable "+
+                            "in this version."
+                        ),
+                    });
+                    break;
+            }
+        });
     },
 
     /**
