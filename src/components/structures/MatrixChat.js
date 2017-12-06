@@ -19,6 +19,8 @@ limitations under the License.
 import Promise from 'bluebird';
 
 import React from 'react';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import Matrix from "matrix-js-sdk";
 
 import Analytics from "../../Analytics";
@@ -84,7 +86,7 @@ const ONBOARDING_FLOW_STARTERS = [
     'view_create_group',
 ];
 
-module.exports = React.createClass({
+const MatrixChat = React.createClass({
     // we export this so that the integration tests can use it :-S
     statics: {
         VIEWS: VIEWS,
@@ -1584,3 +1586,5 @@ module.exports = React.createClass({
         console.error(`Unknown view ${this.state.view}`);
     },
 });
+
+export default DragDropContext(HTML5Backend)(MatrixChat);

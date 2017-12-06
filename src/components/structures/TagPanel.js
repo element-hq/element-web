@@ -15,8 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
 import FilterStore from '../../stores/FilterStore';
@@ -126,4 +124,4 @@ const TagPanel = React.createClass({
         </div>;
     },
 });
-export default DragDropContext(HTML5Backend)(TagPanel);
+export default TagPanel;
