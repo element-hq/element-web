@@ -1029,5 +1029,8 @@
     "Flair": "Abzeichen",
     "Showing flair for these communities:": "Abzeichen für diese Communities zeigen:",
     "This room is not showing flair for any communities": "Dieser Raum zeigt für keine Communities die Abzeichen an",
-    "Delete %(count)s devices|other": "Lösche %(count)s Geräte"
+    "Delete %(count)s devices|other": "Lösche %(count)s Geräte",
+    "Delete %(count)s devices|one": "Lösche Gerät",
+    "Select devices": "Wähle Geräte",
+    "Flair will appear if enabled in room settings": "Abzeichen wird angezeigt, falls es die Raumeinstellungen zulassen"
 }
