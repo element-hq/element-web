@@ -32,7 +32,7 @@ const TagPanel = React.createClass({
 
     getInitialState() {
         return {
-            joinedGroupProfiles: [],
+            orderedGroupTagProfiles: [],
             selectedTags: [],
         };
     },
@@ -53,8 +53,13 @@ const TagPanel = React.createClass({
             if (this.unmounted) {
                 return;
             }
-            this.setState({
-                orderedTags: TagOrderStore.getOrderedTags(),
+
+            const orderedTags = TagOrderStore.getOrderedTags() || TagOrderStore.getAllTags();
+            const orderedGroupTags = orderedTags.filter((t) => t[0] === '+');
+            Promise.all(orderedGroupTags.map(
+                (groupId) => FlairStore.getGroupProfileCached(this.context.matrixClient, groupId),
+            )).then((orderedGroupTagProfiles) => {
+                this.setState({orderedGroupTagProfiles});
             });
         });
 
@@ -84,16 +89,13 @@ const TagPanel = React.createClass({
     },
 
     async _fetchJoinedRooms() {
+        // This could be done by anything with a matrix client (, see TagOrderStore).
         const joinedGroupResponse = await this.context.matrixClient.getJoinedGroups();
         const joinedGroupIds = joinedGroupResponse.groups;
-        const joinedGroupProfiles = await Promise.all(joinedGroupIds.map(
-            (groupId) => FlairStore.getGroupProfileCached(this.context.matrixClient, groupId),
-        ));
         dis.dispatch({
             action: 'all_tags',
             tags: joinedGroupIds,
         });
-        this.setState({joinedGroupProfiles});
     },
 
     render() {
@@ -101,13 +103,7 @@ const TagPanel = React.createClass({
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
 
-        const orderedGroupProfiles = this.state.orderedTags ?
-            this.state.joinedGroupProfiles.sort((a, b) =>
-                this.state.orderedTags.indexOf(a.groupId) -
-                this.state.orderedTags.indexOf(b.groupId),
-            ) : this.state.joinedGroupProfiles;
-
-        const tags = orderedGroupProfiles.map((groupProfile, index) => {
+        const tags = this.state.orderedGroupTagProfiles.map((groupProfile, index) => {
             return <DNDTagTile
                 key={groupProfile.groupId + '_' + index}
                 groupProfile={groupProfile}
