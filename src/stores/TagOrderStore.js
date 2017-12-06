@@ -16,10 +16,11 @@ limitations under the License.
 import {Store} from 'flux/utils';
 import dis from '../dispatcher';
 // import Analytics from '../Analytics';
-import SettingsStore from "../settings/SettingsStore";
+import MatrixClientPeg from "../MatrixClientPeg";
 
 const INITIAL_STATE = {
     orderedTags: null,
+    allTags: null,
 };
 
 /**
@@ -40,23 +41,28 @@ class TagOrderStore extends Store {
 
     __onDispatch(payload) {
         switch (payload.action) {
+            // Get ordering from account data, once the client has synced
             case 'sync_state':
-                // Get ordering from account data, once the client has synced
                 if (payload.prevState === "PREPARED" && payload.state === "SYNCING") {
-                    this._setState({
-                        orderedTags: SettingsStore.getValue("TagOrderStore.orderedTags"),
-                    });
+                    const accountDataEvent = MatrixClientPeg.get().getAccountData('im.vector.web.tag_ordering');
+
+                    const orderedTags = accountDataEvent && accountDataEvent.getContent() ?
+                        accountDataEvent.getContent().tags : null;
+
+                    this._setState({orderedTags});
                 }
             break;
+            // Initialise the state such that if account data is unset, default to the existing ordering
             case 'all_tags':
-                // Initialise the state with all known tags displayed in the TagPanel
-                this._setState({allTags: payload.tags});
+                this._setState({
+                    allTags: payload.tags.sort(), // Sort lexically
+                });
             break;
+            // Puts payload.tag at payload.targetTag, placing the targetTag before or after the tag
             case 'order_tag': {
-                if (!payload.tag || !payload.targetTag || payload.tag === payload.targetTag) break;
+                if (!payload.tag || !payload.targetTag || payload.tag === payload.targetTag) return;
 
-                // Puts payload.tag at payload.targetTag, placing the targetTag before or after the tag
-                const tags = SettingsStore.getValue("TagOrderStore.orderedTags") || this._state.allTags;
+                const tags = this._state.orderedTags || this._state.allTags;
 
                 let orderedTags = tags.filter((t) => t !== payload.tag);
                 const newIndex = orderedTags.indexOf(payload.targetTag) + (payload.after ? 1 : 0);
@@ -69,13 +75,17 @@ class TagOrderStore extends Store {
             }
             break;
             case 'commit_tags':
-                SettingsStore.setValue("TagOrderStore.orderedTags", null, "account", this._state.orderedTags);
+                MatrixClientPeg.get().setAccountData('im.vector.web.tag_ordering', {tags: this._state.orderedTags});
             break;
         }
     }
 
     getOrderedTags() {
-        return this._state.orderedTags || SettingsStore.getValue("TagOrderStore.orderedTags");
+        return this._state.orderedTags;
+    }
+
+    getAllTags() {
+        return this._state.allTags;
     }
 }
 
