@@ -1032,5 +1032,7 @@
     "Delete %(count)s devices|other": "Lösche %(count)s Geräte",
     "Delete %(count)s devices|one": "Lösche Gerät",
     "Select devices": "Wähle Geräte",
-    "Flair will appear if enabled in room settings": "Abzeichen wird angezeigt, falls es in den Raumeinstellungen aktiviert wurde"
+    "Flair will appear if enabled in room settings": "Abzeichen wird angezeigt, falls es in den Raumeinstellungen aktiviert wurde",
+    "Flair will not appear": "Abzeichen wird nicht angezeigt",
+    "Something went wrong when trying to get your communities.": "Beim laden deiner Communites ist etwas schief gelaufen."
 }
