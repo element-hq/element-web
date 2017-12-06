@@ -15,7 +15,7 @@ limitations under the License.
 */
 import {Store} from 'flux/utils';
 import dis from '../dispatcher';
-// import Analytics from '../Analytics';
+import Analytics from '../Analytics';
 import MatrixClientPeg from "../MatrixClientPeg";
 
 const INITIAL_STATE = {
@@ -76,6 +76,7 @@ class TagOrderStore extends Store {
             break;
             case 'commit_tags':
                 MatrixClientPeg.get().setAccountData('im.vector.web.tag_ordering', {tags: this._state.orderedTags});
+                Analytics.trackEvent('TagOrderStore', 'commit_tags');
             break;
         }
     }
