@@ -53,18 +53,23 @@ class TagOrderStore extends Store {
                 this._setState({allTags: payload.tags});
             break;
             case 'order_tag': {
-                // Puts payload.tag below payload.prevTag in the orderedTags state
+                if (!payload.tag || !payload.targetTag || payload.tag === payload.targetTag) break;
+
+                // Puts payload.tag at payload.targetTag, placing the targetTag before or after the tag
                 const tags = SettingsStore.getValue("TagOrderStore.orderedTags") || this._state.allTags;
+
                 let orderedTags = tags.filter((t) => t !== payload.tag);
-                const tagPrevIx = orderedTags.indexOf(payload.prevTag);
+                const newIndex = orderedTags.indexOf(payload.targetTag) + (payload.after ? 1 : 0);
                 orderedTags = [
-                    ...orderedTags.slice(0, tagPrevIx + 1),
+                    ...orderedTags.slice(0, newIndex),
                     payload.tag,
-                    ...orderedTags.slice(tagPrevIx + 1),
+                    ...orderedTags.slice(newIndex),
                 ];
                 this._setState({orderedTags});
-                SettingsStore.setValue("TagOrderStore.orderedTags", null, "account", orderedTags);
             }
+            break;
+            case 'commit_tags':
+                SettingsStore.setValue("TagOrderStore.orderedTags", null, "account", this._state.orderedTags);
             break;
         }
     }
