@@ -52,11 +52,13 @@ export default React.createClass({
         userId: React.PropTypes.string.isRequired,
         // UserId of the entity that added / modified the widget
         creatorUserId: React.PropTypes.string,
+        waitForIframeLoad: React.PropTypes.bool,
     },
 
     getDefaultProps() {
         return {
             url: "",
+            waitForIframeLoad: true,
         };
     },
 
@@ -71,7 +73,7 @@ export default React.createClass({
         const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
         return {
             initialising: true,   // True while we are mangling the widget URL
-            loading: true,        // True while the iframe content is loading
+            loading: this.props.waitForIframeLoad,        // True while the iframe content is loading
             widgetUrl: this._addWurlParams(newProps.url),
             widgetPermissionId: widgetPermissionId,
             // Assume that widget has permission to load if we are the user who
