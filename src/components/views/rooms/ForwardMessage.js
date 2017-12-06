@@ -18,7 +18,7 @@
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher';
-import KeyCode from '../../../KeyCode';
+import { KeyCode } from '../../../Keyboard';
 
 
 module.exports = React.createClass({

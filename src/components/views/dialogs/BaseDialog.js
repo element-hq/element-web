@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 
-import * as KeyCode from '../../../KeyCode';
+import { KeyCode } from '../../../Keyboard';
 import AccessibleButton from '../elements/AccessibleButton';
 import sdk from '../../../index';
 

@@ -20,7 +20,7 @@ import React from 'react';
 import sdk from '../../../index';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import classnames from 'classnames';
-import KeyCode from '../../../KeyCode';
+import { KeyCode } from '../../../Keyboard';
 import { _t } from '../../../languageHandler';
 
 // The amount of time to wait for further changes to the input username before
