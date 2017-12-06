@@ -19,6 +19,15 @@ import sdk from './index';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 
+/**
+ * Gets all crypto devices in a room that are marked neither known
+ * nor verified.
+ *
+ * @param {MatrixClient} matrixClient A MatrixClient
+ * @param {Room} room js-sdk room object representing the room
+ * @return {Promise} A promise which resolves to a map userId->deviceId->{@link
+ * module:crypto~DeviceInfo|DeviceInfo}.
+ */
 export function getUnknownDevicesForRoom(matrixClient, room) {
     const roomMembers = room.getJoinedMembers().map((m) => {
         return m.userId;
