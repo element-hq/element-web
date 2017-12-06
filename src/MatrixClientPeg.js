@@ -21,6 +21,7 @@ import utils from 'matrix-js-sdk/lib/utils';
 import EventTimeline from 'matrix-js-sdk/lib/models/event-timeline';
 import EventTimelineSet from 'matrix-js-sdk/lib/models/event-timeline-set';
 import createMatrixClient from './utils/createMatrixClient';
+import SettingsStore from './settings/SettingsStore';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -84,7 +85,7 @@ class MatrixClientPeg {
             if (this.matrixClient.initCrypto) {
                 await this.matrixClient.initCrypto();
             }
-        } catch(e) {
+        } catch (e) {
             // this can happen for a number of reasons, the most likely being
             // that the olm library was missing. It's not fatal.
             console.warn("Unable to initialise e2e: " + e);
@@ -93,12 +94,13 @@ class MatrixClientPeg {
         const opts = utils.deepCopy(this.opts);
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
+        opts.disablePresence = true; // we do this manually
 
         try {
             const promise = this.matrixClient.store.startup();
             console.log(`MatrixClientPeg: waiting for MatrixClient store to initialise`);
             await promise;
-        } catch(err) {
+        } catch (err) {
             // log any errors when starting up the database (if one exists)
             console.error(`Error starting matrixclient store: ${err}`);
         }
@@ -143,6 +145,7 @@ class MatrixClientPeg {
             userId: creds.userId,
             deviceId: creds.deviceId,
             timelineSupport: true,
+            forceTURN: SettingsStore.getValue('webRtcForceTURN', false),
         };
 
         this.matrixClient = createMatrixClient(opts, this.indexedDbWorkerScript);

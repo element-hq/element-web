@@ -204,6 +204,12 @@ export default class Login {
             }
             throw originalLoginError;
         }).catch((error) => {
+            // We apparently squash case at login serverside these days:
+            // https://github.com/matrix-org/synapse/blob/1189be43a2479f5adf034613e8d10e3f4f452eb9/synapse/handlers/auth.py#L475
+            // so this wasn't needed after all. Keeping the code around in case the
+            // the situation changes...
+
+            /*
             if (
                 error.httpStatus === 403 &&
                 loginParams.identifier.type === 'm.id.user' &&
@@ -211,6 +217,7 @@ export default class Login {
             ) {
                 return tryLowercaseUsername(originalLoginError);
             }
+            */
             throw originalLoginError;
         }).catch((error) => {
             console.log("Login failed", error);

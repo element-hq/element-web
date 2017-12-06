@@ -21,7 +21,7 @@ const React = require('react');
 const sdk = require('../../../index');
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 
-import { _t, _tJsx } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'RoomPreviewBar',
@@ -135,13 +135,13 @@ module.exports = React.createClass({
                         { _t('You have been invited to join this room by %(inviterName)s', {inviterName: this.props.inviterName}) }
                     </div>
                     <div className="mx_RoomPreviewBar_join_text">
-                        { _tJsx(
+                        { _t(
                             'Would you like to <acceptText>accept</acceptText> or <declineText>decline</declineText> this invitation?',
-                            [/<acceptText>(.*?)<\/acceptText>/, /<declineText>(.*?)<\/declineText>/],
-                            [
-                                (sub) => <a onClick={this.props.onJoinClick}>{ sub }</a>,
-                                (sub) => <a onClick={this.props.onRejectClick}>{ sub }</a>,
-                            ],
+                            {},
+                            {
+                                'acceptText': (sub) => <a onClick={this.props.onJoinClick}>{ sub }</a>,
+                                'declineText': (sub) => <a onClick={this.props.onRejectClick}>{ sub }</a>,
+                            },
                         ) }
                     </div>
                     { emailMatchBlock }
@@ -165,13 +165,13 @@ module.exports = React.createClass({
 
             let actionText;
             if (kicked) {
-                if(roomName) {
+                if (roomName) {
                     actionText = _t("You have been kicked from %(roomName)s by %(userName)s.", {roomName: roomName, userName: kickerName});
                 } else {
                     actionText = _t("You have been kicked from this room by %(userName)s.", {userName: kickerName});
                 }
             } else if (banned) {
-                if(roomName) {
+                if (roomName) {
                     actionText = _t("You have been banned from %(roomName)s by %(userName)s.", {roomName: roomName, userName: kickerName});
                 } else {
                     actionText = _t("You have been banned from this room by %(userName)s.", {userName: kickerName});
@@ -211,9 +211,9 @@ module.exports = React.createClass({
                     <div className="mx_RoomPreviewBar_join_text">
                         { name ? _t('You are trying to access %(roomName)s.', {roomName: name}) : _t('You are trying to access a room.') }
                         <br />
-                        { _tJsx("<a>Click here</a> to join the discussion!",
-                            /<a>(.*?)<\/a>/,
-                            (sub) => <a onClick={this.props.onJoinClick}><b>{ sub }</b></a>,
+                        { _t("<a>Click here</a> to join the discussion!",
+                            {},
+                            { 'a': (sub) => <a onClick={this.props.onJoinClick}><b>{ sub }</b></a> },
                         ) }
                     </div>
                 </div>

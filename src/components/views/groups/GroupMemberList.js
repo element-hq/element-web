@@ -20,16 +20,11 @@ import sdk from '../../../index';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import PropTypes from 'prop-types';
-import withMatrixClient from '../../../wrappers/withMatrixClient';
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
-export default withMatrixClient(React.createClass({
+export default React.createClass({
     displayName: 'GroupMemberList',
-
-    contextTypes: {
-        matrixClient: PropTypes.object.isRequired,
-    },
 
     propTypes: {
         groupId: PropTypes.string.isRequired,
@@ -49,7 +44,7 @@ export default withMatrixClient(React.createClass({
     },
 
     _initGroupStore: function(groupId) {
-        this._groupStore = GroupStoreCache.getGroupStore(this.context.matrixClient, groupId);
+        this._groupStore = GroupStoreCache.getGroupStore(groupId);
         this._groupStore.registerListener(() => {
             this._fetchMembers();
         });
@@ -92,7 +87,7 @@ export default withMatrixClient(React.createClass({
         query = (query || "").toLowerCase();
         if (query) {
             memberList = memberList.filter((m) => {
-                const matchesName = m.displayname.toLowerCase().indexOf(query) !== -1;
+                const matchesName = (m.displayname || "").toLowerCase().includes(query);
                 const matchesId = m.userId.toLowerCase().includes(query);
 
                 if (!matchesName && !matchesId) {
@@ -108,14 +103,20 @@ export default withMatrixClient(React.createClass({
             if (!uniqueMembers[m.userId]) uniqueMembers[m.userId] = m;
         });
         memberList = Object.keys(uniqueMembers).map((userId) => uniqueMembers[userId]);
+        // Descending sort on isPrivileged = true = 1 to isPrivileged = false = 0
         memberList.sort((a, b) => {
-            // TODO: should put admins at the top: we don't yet have that info
-            if (a < b) {
-                return -1;
-            } else if (a > b) {
-                return 1;
+            if (a.isPrivileged === b.isPrivileged) {
+                const aName = a.displayname || a.userId;
+                const bName = b.displayname || b.userId;
+                if (aName < bName) {
+                    return -1;
+                } else if (aName > bName) {
+                    return 1;
+                } else {
+                    return 0;
+                }
             } else {
-                return 0;
+                return a.isPrivileged ? -1 : 1;
             }
         });
 
@@ -168,4 +169,4 @@ export default withMatrixClient(React.createClass({
             </div>
         );
     },
-}));
+});

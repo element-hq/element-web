@@ -61,9 +61,7 @@ module.exports = React.createClass({
     },
 
     _initGroupStore(groupId) {
-        this._groupStore = GroupStoreCache.getGroupStore(
-            this.context.matrixClient, this.props.groupId,
-        );
+        this._groupStore = GroupStoreCache.getGroupStore(this.props.groupId);
         this._groupStore.registerListener(this.onGroupStoreUpdated);
     },
 
@@ -137,7 +135,7 @@ module.exports = React.createClass({
         const groupId = this.props.groupId;
         const roomId = this.props.groupRoomId;
         const roomName = this.state.groupRoom.displayname;
-        this._groupStore.updateGroupRoomAssociation(roomId, isPublic).catch((err) => {
+        this._groupStore.updateGroupRoomVisibility(roomId, isPublic).catch((err) => {
             console.error(`Error whilst changing visibility of ${roomId} in ${groupId} to ${isPublic}`, err);
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to remove room from group', '', ErrorDialog, {

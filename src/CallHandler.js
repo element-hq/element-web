@@ -52,7 +52,6 @@ limitations under the License.
  */
 
 import MatrixClientPeg from './MatrixClientPeg';
-import UserSettingsStore from './UserSettingsStore';
 import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
 import sdk from './index';
@@ -245,9 +244,7 @@ function _onAction(payload) {
                 return;
             } else if (members.length === 2) {
                 console.log("Place %s call in %s", payload.type, payload.room_id);
-                const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), payload.room_id, {
-                    forceTURN: UserSettingsStore.getLocalSetting('webRtcForceTURN', false),
-                });
+                const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), payload.room_id);
                 placeCall(call);
             } else { // > 2
                 dis.dispatch({

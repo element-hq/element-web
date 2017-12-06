@@ -28,14 +28,13 @@ import Promise from 'bluebird';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
 import SlashCommands from '../../../SlashCommands';
-import KeyCode from '../../../KeyCode';
+import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../../Keyboard';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
 import Analytics from '../../../Analytics';
 
 import dis from '../../../dispatcher';
-import UserSettingsStore from '../../../UserSettingsStore';
 
 import * as RichText from '../../../RichText';
 import * as HtmlUtils from '../../../HtmlUtils';
@@ -50,6 +49,7 @@ const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
 const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g');
 
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
 const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
@@ -105,13 +105,7 @@ export default class MessageComposerInput extends React.Component {
     };
 
     static getKeyBinding(ev: SyntheticKeyboardEvent): string {
-        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-        let ctrlCmdOnly;
-        if (isMac) {
-            ctrlCmdOnly = ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
-        } else {
-            ctrlCmdOnly = ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
-        }
+        const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
         // Restrict a subset of key bindings to ONLY having ctrl/meta* pressed and
         // importantly NOT having alt, shift, meta/ctrl* pressed. draft-js does not
@@ -165,7 +159,7 @@ export default class MessageComposerInput extends React.Component {
         this.onMarkdownToggleClicked = this.onMarkdownToggleClicked.bind(this);
         this.onTextPasted = this.onTextPasted.bind(this);
 
-        const isRichtextEnabled = UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false);
+        const isRichtextEnabled = SettingsStore.getValue('MessageComposerInput.isRichTextEnabled');
 
         Analytics.setRichtextMode(isRichtextEnabled);
 
@@ -216,7 +210,7 @@ export default class MessageComposerInput extends React.Component {
     createEditorState(richText: boolean, contentState: ?ContentState): EditorState {
         const decorators = richText ? RichText.getScopedRTDecorators(this.props) :
                 RichText.getScopedMDDecorators(this.props);
-        const shouldShowPillAvatar = !UserSettingsStore.getSyncedSetting("Pill.shouldHidePillAvatar", false);
+        const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
         decorators.push({
             strategy: this.findPillEntities.bind(this),
             component: (entityProps) => {
@@ -384,7 +378,7 @@ export default class MessageComposerInput extends React.Component {
     }
 
     sendTyping(isTyping) {
-        if (UserSettingsStore.getSyncedSetting('dontSendTypingNotifications', false)) return;
+        if (SettingsStore.getValue('dontSendTypingNotifications')) return;
         MatrixClientPeg.get().sendTyping(
             this.props.room.roomId,
             this.isTyping, TYPING_SERVER_TIMEOUT,
@@ -431,10 +425,10 @@ export default class MessageComposerInput extends React.Component {
         }
 
         // Automatic replacement of plaintext emoji to Unicode emoji
-        if (UserSettingsStore.getSyncedSetting('MessageComposerInput.autoReplaceEmoji', false)) {
+        if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
             // The first matched group includes just the matched plaintext emoji
             const emojiMatch = REGEX_EMOJI_WHITESPACE.exec(text.slice(0, currentStartOffset));
-            if(emojiMatch) {
+            if (emojiMatch) {
                 // plaintext -> hex unicode
                 const emojiUc = asciiList[emojiMatch[1]];
                 // hex unicode -> shortname -> actual unicode
@@ -551,7 +545,7 @@ export default class MessageComposerInput extends React.Component {
             editorState: this.createEditorState(enabled, contentState),
             isRichtextEnabled: enabled,
         });
-        UserSettingsStore.setSyncedSetting('MessageComposerInput.isRichTextEnabled', enabled);
+        SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
     }
 
     handleKeyCommand = (command: string): boolean => {
@@ -696,7 +690,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
         const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
-        if(
+        if (
             ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item']
             .includes(currentBlockType)
         ) {

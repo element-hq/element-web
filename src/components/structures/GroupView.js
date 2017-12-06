@@ -22,7 +22,7 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
-import { _t, _td, _tJsx } from '../../languageHandler';
+import { _t, _td } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import Modal from '../../Modal';
 import classnames from 'classnames';
@@ -430,18 +430,20 @@ export default React.createClass({
             uploadingAvatar: false,
             membershipBusy: false,
             publicityBusy: false,
+            inviterProfile: null,
         };
     },
 
     componentWillMount: function() {
+        this._matrixClient = MatrixClientPeg.get();
+        this._matrixClient.on("Group.myMembership", this._onGroupMyMembership);
+
         this._changeAvatarComponent = null;
         this._initGroupStore(this.props.groupId, true);
-
-        MatrixClientPeg.get().on("Group.myMembership", this._onGroupMyMembership);
     },
 
     componentWillUnmount: function() {
-        MatrixClientPeg.get().removeListener("Group.myMembership", this._onGroupMyMembership);
+        this._matrixClient.removeListener("Group.myMembership", this._onGroupMyMembership);
         this._groupStore.removeAllListeners();
     },
 
@@ -463,7 +465,11 @@ export default React.createClass({
     },
 
     _initGroupStore: function(groupId, firstInit) {
-        this._groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), groupId);
+        const group = this._matrixClient.getGroup(groupId);
+        if (group && group.inviter && group.inviter.userId) {
+            this._fetchInviterProfile(group.inviter.userId);
+        }
+        this._groupStore = GroupStoreCache.getGroupStore(groupId);
         this._groupStore.registerListener(() => {
             const summary = this._groupStore.getSummary();
             if (summary.profile) {
@@ -481,7 +487,7 @@ export default React.createClass({
                 groupRooms: this._groupStore.getGroupRooms(),
                 groupRoomsLoading: !this._groupStore.isStateReady(GroupStore.STATE_KEY.GroupRooms),
                 isUserMember: this._groupStore.getGroupMembers().some(
-                    (m) => m.userId === MatrixClientPeg.get().credentials.userId,
+                    (m) => m.userId === this._matrixClient.credentials.userId,
                 ),
                 error: null,
             });
@@ -489,10 +495,42 @@ export default React.createClass({
                 this._onEditClick();
             }
         });
+        let willDoOnboarding = false;
         this._groupStore.on('error', (err) => {
+            if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN' && !willDoOnboarding) {
+                dis.dispatch({
+                    action: 'do_after_sync_prepared',
+                    deferred_action: {
+                        action: 'view_group',
+                        group_id: groupId,
+                    },
+                });
+                dis.dispatch({action: 'view_set_mxid'});
+                willDoOnboarding = true;
+            }
             this.setState({
                 summary: null,
                 error: err,
+            });
+        });
+    },
+
+    _fetchInviterProfile(userId) {
+        this.setState({
+            inviterProfileBusy: true,
+        });
+        this._matrixClient.getProfileInfo(userId).then((resp) => {
+            this.setState({
+                inviterProfile: {
+                    avatarUrl: resp.avatar_url,
+                    displayName: resp.displayname,
+                },
+            });
+        }).catch((e) => {
+            console.error('Error getting group inviter profile', e);
+        }).finally(() => {
+            this.setState({
+                inviterProfileBusy: false,
             });
         });
     },
@@ -546,7 +584,7 @@ export default React.createClass({
         if (!file) return;
 
         this.setState({uploadingAvatar: true});
-        MatrixClientPeg.get().uploadContent(file).then((url) => {
+        this._matrixClient.uploadContent(file).then((url) => {
             const newProfileForm = Object.assign(this.state.profileForm, { avatar_url: url });
             this.setState({
                 uploadingAvatar: false,
@@ -566,7 +604,7 @@ export default React.createClass({
     _onSaveClick: function() {
         this.setState({saving: true});
         const savePromise = this.state.isUserPrivileged ?
-            MatrixClientPeg.get().setGroupProfile(this.props.groupId, this.state.profileForm) :
+            this._matrixClient.setGroupProfile(this.props.groupId, this.state.profileForm) :
             Promise.resolve();
         savePromise.then((result) => {
             this.setState({
@@ -591,7 +629,7 @@ export default React.createClass({
 
     _onAcceptInviteClick: function() {
         this.setState({membershipBusy: true});
-        MatrixClientPeg.get().acceptGroupInvite(this.props.groupId).then(() => {
+        this._groupStore.acceptGroupInvite().then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
         }).catch((e) => {
             this.setState({membershipBusy: false});
@@ -605,7 +643,7 @@ export default React.createClass({
 
     _onRejectInviteClick: function() {
         this.setState({membershipBusy: true});
-        MatrixClientPeg.get().leaveGroup(this.props.groupId).then(() => {
+        this._matrixClient.leaveGroup(this.props.groupId).then(() => {
             // don't reset membershipBusy here: wait for the membership change to come down the sync
         }).catch((e) => {
             this.setState({membershipBusy: false});
@@ -628,7 +666,7 @@ export default React.createClass({
                 if (!confirmed) return;
 
                 this.setState({membershipBusy: true});
-                MatrixClientPeg.get().leaveGroup(this.props.groupId).then(() => {
+                this._matrixClient.leaveGroup(this.props.groupId).then(() => {
                     // don't reset membershipBusy here: wait for the membership change to come down the sync
                 }).catch((e) => {
                     this.setState({membershipBusy: false});
@@ -644,18 +682,6 @@ export default React.createClass({
 
     _onAddRoomsClick: function() {
         showGroupAddRoomDialog(this.props.groupId);
-    },
-
-    _onPublicityToggle: function() {
-        this.setState({
-            publicityBusy: true,
-        });
-        const publicity = !this.state.isGroupPublicised;
-        this._groupStore.setGroupPublicity(publicity).then(() => {
-            this.setState({
-                publicityBusy: false,
-            });
-        });
     },
 
     _getGroupSection: function() {
@@ -802,20 +828,37 @@ export default React.createClass({
 
     _getMembershipSection: function() {
         const Spinner = sdk.getComponent("elements.Spinner");
+        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        const group = MatrixClientPeg.get().getGroup(this.props.groupId);
+        const group = this._matrixClient.getGroup(this.props.groupId);
         if (!group) return null;
 
         if (group.myMembership === 'invite') {
-            if (this.state.membershipBusy) {
+            if (this.state.membershipBusy || this.state.inviterProfileBusy) {
                 return <div className="mx_GroupView_membershipSection">
                     <Spinner />
                 </div>;
             }
+            const httpInviterAvatar = this.state.inviterProfile ?
+                this._matrixClient.mxcUrlToHttp(
+                    this.state.inviterProfile.avatarUrl, 36, 36,
+                ) : null;
+
+            let inviterName = group.inviter.userId;
+            if (this.state.inviterProfile) {
+                inviterName = this.state.inviterProfile.displayName || group.inviter.userId;
+            }
             return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_invited">
                 <div className="mx_GroupView_membershipSubSection">
                     <div className="mx_GroupView_membershipSection_description">
-                        { _t("%(inviter)s has invited you to join this community", {inviter: group.inviter.userId}) }
+                        <BaseAvatar url={httpInviterAvatar}
+                            name={inviterName}
+                            width={36}
+                            height={36}
+                        />
+                        { _t("%(inviter)s has invited you to join this community", {
+                            inviter: inviterName,
+                        }) }
                     </div>
                     <div className="mx_GroupView_membership_buttonContainer">
                         <AccessibleButton className="mx_GroupView_textButton mx_RoomHeader_textButton"
@@ -860,25 +903,6 @@ export default React.createClass({
         return null;
     },
 
-    _getMemberSettingsSection: function() {
-        return <div className="mx_GroupView_memberSettings">
-            <h2> { _t("Community Member Settings") } </h2>
-            <div className="mx_GroupView_memberSettings_toggle">
-                <input type="checkbox"
-                    onClick={this._onPublicityToggle}
-                    checked={this.state.isGroupPublicised}
-                    tabIndex="3"
-                    id="isGroupPublicised"
-                />
-                <label htmlFor="isGroupPublicised"
-                    onClick={this._onPublicityToggle}
-                >
-                    { _t("Publish this community on your profile") }
-                </label>
-            </div>
-        </div>;
-    },
-
     _getLongDescriptionNode: function() {
         const summary = this.state.summary;
         let description = null;
@@ -889,12 +913,12 @@ export default React.createClass({
                 className="mx_GroupView_groupDesc_placeholder"
                 onClick={this._onEditClick}
             >
-                { _tJsx(
+                { _t(
                     'Your community hasn\'t got a Long Description, a HTML page to show to community members.<br />' +
                     'Click here to open settings and give it one!',
-                    [/<br \/>/],
-                    [(sub) => <br />])
-                }
+                    {},
+                    { 'br': <br /> },
+                ) }
             </div>;
         }
         const groupDescEditingClasses = classnames({
@@ -933,7 +957,6 @@ export default React.createClass({
             let shortDescNode;
             const bodyNodes = [
                 this._getMembershipSection(),
-                this.state.editing ? this._getMemberSettingsSection() : null,
                 this._getGroupSection(),
             ];
             const rightButtons = [];

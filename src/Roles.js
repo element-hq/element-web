@@ -15,19 +15,20 @@ limitations under the License.
 */
 import { _t } from './languageHandler';
 
-export function levelRoleMap() {
+export function levelRoleMap(usersDefault) {
     return {
         undefined: _t('Default'),
-        0: _t('User'),
+        0: _t('Restricted'),
+        [usersDefault]: _t('Default'),
         50: _t('Moderator'),
         100: _t('Admin'),
     };
 }
 
-export function textualPowerLevel(level, userDefault) {
-    const LEVEL_ROLE_MAP = this.levelRoleMap();
+export function textualPowerLevel(level, usersDefault) {
+    const LEVEL_ROLE_MAP = this.levelRoleMap(usersDefault);
     if (LEVEL_ROLE_MAP[level]) {
-        return LEVEL_ROLE_MAP[level] + (level !== undefined ? ` (${level})` : ` (${userDefault})`);
+        return LEVEL_ROLE_MAP[level] + (level !== undefined ? ` (${level})` : ` (${usersDefault})`);
     } else {
         return level;
     }

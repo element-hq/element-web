@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import SettingsStore from "../../settings/SettingsStore";
+
 const React = require('react');
 const ReactDOM = require("react-dom");
 import Promise from 'bluebird';
@@ -29,8 +31,7 @@ const dis = require("../../dispatcher");
 const ObjectUtils = require('../../ObjectUtils');
 const Modal = require("../../Modal");
 const UserActivity = require("../../UserActivity");
-const KeyCode = require('../../KeyCode');
-import UserSettingsStore from '../../UserSettingsStore';
+import { KeyCode } from '../../Keyboard';
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -129,8 +130,6 @@ var TimelinePanel = React.createClass({
             }
         }
 
-        const syncedSettings = UserSettingsStore.getSyncedSettings();
-
         return {
             events: [],
             timelineLoading: true, // track whether our room timeline is loading
@@ -175,10 +174,10 @@ var TimelinePanel = React.createClass({
             clientSyncState: MatrixClientPeg.get().getSyncState(),
 
             // should the event tiles have twelve hour times
-            isTwelveHour: syncedSettings.showTwelveHourTimestamps,
+            isTwelveHour: SettingsStore.getValue("showTwelveHourTimestamps"),
 
             // always show timestamps on event tiles?
-            alwaysShowTimestamps: syncedSettings.alwaysShowTimestamps,
+            alwaysShowTimestamps: SettingsStore.getValue("alwaysShowTimestamps"),
         };
     },
 
@@ -311,7 +310,7 @@ var TimelinePanel = React.createClass({
             return Promise.resolve(false);
         }
 
-        if(!this._timelineWindow.canPaginate(dir)) {
+        if (!this._timelineWindow.canPaginate(dir)) {
             debuglog("TimelinePanel: can't", dir, "paginate any further");
             this.setState({[canPaginateKey]: false});
             return Promise.resolve(false);
@@ -441,7 +440,7 @@ var TimelinePanel = React.createClass({
                 var callback = null;
                 if (sender != myUserId && !UserActivity.userCurrentlyActive()) {
                     updatedState.readMarkerVisible = true;
-                } else if(lastEv && this.getReadMarkerPosition() === 0) {
+                } else if (lastEv && this.getReadMarkerPosition() === 0) {
                     // we know we're stuckAtBottom, so we can advance the RM
                     // immediately, to save a later render cycle
 
@@ -658,7 +657,7 @@ var TimelinePanel = React.createClass({
 
         // the read-marker should become invisible, so that if the user scrolls
         // down, they don't see it.
-        if(this.state.readMarkerVisible) {
+        if (this.state.readMarkerVisible) {
             this.setState({
                 readMarkerVisible: false,
             });

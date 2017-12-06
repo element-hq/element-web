@@ -20,7 +20,7 @@ import url from 'url';
 import classnames from 'classnames';
 
 import sdk from '../../../index';
-import { _t, _tJsx } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -256,7 +256,10 @@ export const EmailIdentityAuthEntry = React.createClass({
         } else {
             return (
                 <div>
-                    <p>{ _tJsx("An email has been sent to %(emailAddress)s", /%\(emailAddress\)s/, (sub) => <i>{this.props.inputs.emailAddress}</i>) }</p>
+                    <p>{ _t("An email has been sent to %(emailAddress)s",
+                        { emailAddress: (sub) => <i>{ this.props.inputs.emailAddress }</i> },
+                    ) }
+                    </p>
                     <p>{ _t("Please check your email to continue registration.") }</p>
                 </div>
             );
@@ -370,7 +373,10 @@ export const MsisdnAuthEntry = React.createClass({
             });
             return (
                 <div>
-                    <p>{ _tJsx("A text message has been sent to %(msisdn)s", /%\(msisdn\)s/, (sub) => <i>{this._msisdn}</i>) }</p>
+                    <p>{ _t("A text message has been sent to %(msisdn)s",
+                        { msisdn: <i>this._msisdn</i> },
+                    ) }
+                    </p>
                     <p>{ _t("Please enter the code it contains:") }</p>
                     <div className="mx_InteractiveAuthEntryComponents_msisdnWrapper">
                         <form onSubmit={this._onFormSubmit}>

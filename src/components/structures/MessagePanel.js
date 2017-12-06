@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import UserSettingsStore from '../../UserSettingsStore';
 import shouldHideEvent from '../../shouldHideEvent';
 import dis from "../../dispatcher";
 import sdk from '../../index';
@@ -109,8 +108,6 @@ module.exports = React.createClass({
         // Remember the read marker ghost node so we can do the cleanup that
         // Velocity requires
         this._readMarkerGhostNode = null;
-
-        this._syncedSettings = UserSettingsStore.getSyncedSettings();
 
         this._isMounted = true;
     },
@@ -251,7 +248,7 @@ module.exports = React.createClass({
         // Always show highlighted event
         if (this.props.highlightedEventId === mxEv.getId()) return true;
 
-        return !shouldHideEvent(mxEv, this._syncedSettings);
+        return !shouldHideEvent(mxEv);
     },
 
     _getEventTiles: function() {

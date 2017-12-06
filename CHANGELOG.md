@@ -1,3 +1,287 @@
+Changes in [0.11.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.11.3) (2017-12-04)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.11.2...v0.11.3)
+
+ * Bump js-sdk version to pull in fix for [setting room publicity in a group](https://github.com/matrix-org/matrix-js-sdk/commit/aa3201ebb0fff5af2fb733080aa65ed1f7213de6).
+
+Changes in [0.11.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.11.2) (2017-11-28)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.11.1...v0.11.2)
+
+ * Ignore unrecognised login flows
+   [\#1633](https://github.com/matrix-org/matrix-react-sdk/pull/1633)
+
+Changes in [0.11.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.11.1) (2017-11-17)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.11.0...v0.11.1)
+
+ * Fix the force TURN option
+   [\#1621](https://github.com/matrix-org/matrix-react-sdk/pull/1621)
+
+Changes in [0.11.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.11.0) (2017-11-15)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.11.0-rc.3...v0.11.0)
+
+
+Changes in [0.11.0-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.11.0-rc.3) (2017-11-14)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.11.0-rc.2...v0.11.0-rc.3)
+
+
+Changes in [0.11.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.11.0-rc.2) (2017-11-10)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.11.0-rc.1...v0.11.0-rc.2)
+
+ * Make groups a fully-fleged baked-in feature
+   [\#1603](https://github.com/matrix-org/matrix-react-sdk/pull/1603)
+
+Changes in [0.11.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.11.0-rc.1) (2017-11-10)
+===============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.7...v0.11.0-rc.1)
+
+ * Improve widget rendering on prop updates
+   [\#1548](https://github.com/matrix-org/matrix-react-sdk/pull/1548)
+ * Display group member profile (avatar/displayname) in ConfirmUserActionDialog
+   [\#1595](https://github.com/matrix-org/matrix-react-sdk/pull/1595)
+ * Don't crash if there isn't a room notif rule
+   [\#1602](https://github.com/matrix-org/matrix-react-sdk/pull/1602)
+ * Show group name in flair tooltip if one is set
+   [\#1596](https://github.com/matrix-org/matrix-react-sdk/pull/1596)
+ * Convert group avatar URL to HTTP before handing to BaseAvatar
+   [\#1597](https://github.com/matrix-org/matrix-react-sdk/pull/1597)
+ * Add group features as starting points for ILAG
+   [\#1601](https://github.com/matrix-org/matrix-react-sdk/pull/1601)
+ * Modify the group room visibility API to reflect the js-sdk changes
+   [\#1598](https://github.com/matrix-org/matrix-react-sdk/pull/1598)
+ * Update from Weblate.
+   [\#1599](https://github.com/matrix-org/matrix-react-sdk/pull/1599)
+ * Revert "UnknownDeviceDialog: get devices from SDK"
+   [\#1594](https://github.com/matrix-org/matrix-react-sdk/pull/1594)
+ * Order users in the group member list with admins first
+   [\#1591](https://github.com/matrix-org/matrix-react-sdk/pull/1591)
+ * Fetch group members after accepting an invite
+   [\#1592](https://github.com/matrix-org/matrix-react-sdk/pull/1592)
+ * Improve address picker for rooms
+   [\#1589](https://github.com/matrix-org/matrix-react-sdk/pull/1589)
+ * Fix FlairStore getPublicisedGroupsCached to give the correct, existing
+   promise
+   [\#1590](https://github.com/matrix-org/matrix-react-sdk/pull/1590)
+ * Use the getProfileInfo API for group inviter profile
+   [\#1585](https://github.com/matrix-org/matrix-react-sdk/pull/1585)
+ * Add checkbox to GroupAddressPicker for determining visibility of group rooms
+   [\#1587](https://github.com/matrix-org/matrix-react-sdk/pull/1587)
+ * Alter group member api
+   [\#1581](https://github.com/matrix-org/matrix-react-sdk/pull/1581)
+ * Improve group creation UX
+   [\#1580](https://github.com/matrix-org/matrix-react-sdk/pull/1580)
+ * Disable RoomDetailList in GroupView when editing
+   [\#1583](https://github.com/matrix-org/matrix-react-sdk/pull/1583)
+ * Default to no read pins if there is no applicable account data
+   [\#1586](https://github.com/matrix-org/matrix-react-sdk/pull/1586)
+ * UnknownDeviceDialog: get devices from SDK
+   [\#1584](https://github.com/matrix-org/matrix-react-sdk/pull/1584)
+ * Add a small indicator for when a new event is pinned
+   [\#1486](https://github.com/matrix-org/matrix-react-sdk/pull/1486)
+ * Implement tooltip for group rooms
+   [\#1582](https://github.com/matrix-org/matrix-react-sdk/pull/1582)
+ * Room notifs in autocomplete & composer
+   [\#1577](https://github.com/matrix-org/matrix-react-sdk/pull/1577)
+ * Ignore img tags in HTML if src is not specified
+   [\#1579](https://github.com/matrix-org/matrix-react-sdk/pull/1579)
+ * Indicate admins in the group member list with a sheriff badge
+   [\#1578](https://github.com/matrix-org/matrix-react-sdk/pull/1578)
+ * Remember whether widget drawer was hidden per-room
+   [\#1533](https://github.com/matrix-org/matrix-react-sdk/pull/1533)
+ * Throw an error when trying to create a group store with falsey groupId
+   [\#1576](https://github.com/matrix-org/matrix-react-sdk/pull/1576)
+ * Fixes React warning
+   [\#1571](https://github.com/matrix-org/matrix-react-sdk/pull/1571)
+ * Fix Flair not appearing due to missing this._usersInFlight
+   [\#1575](https://github.com/matrix-org/matrix-react-sdk/pull/1575)
+ * Use, if possible, a room's canonical or first alias when viewing the …
+   [\#1574](https://github.com/matrix-org/matrix-react-sdk/pull/1574)
+ * Add CSS classes to group ID input in CreateGroupDialog
+   [\#1573](https://github.com/matrix-org/matrix-react-sdk/pull/1573)
+ * Give autocomplete providers the room they're in
+   [\#1568](https://github.com/matrix-org/matrix-react-sdk/pull/1568)
+ * Fix multiple pills on one line
+   [\#1572](https://github.com/matrix-org/matrix-react-sdk/pull/1572)
+ * Fix group invites such that they look similar to room invites
+   [\#1570](https://github.com/matrix-org/matrix-react-sdk/pull/1570)
+ * Add a GeminiScrollbar to Your Communities
+   [\#1569](https://github.com/matrix-org/matrix-react-sdk/pull/1569)
+ * Fix multiple requests for publicised groups of given user
+   [\#1567](https://github.com/matrix-org/matrix-react-sdk/pull/1567)
+ * Add toggle to alter visibility of a room-group association
+   [\#1566](https://github.com/matrix-org/matrix-react-sdk/pull/1566)
+ * Pillify room notifs in the timeline
+   [\#1564](https://github.com/matrix-org/matrix-react-sdk/pull/1564)
+ *  Implement simple GroupRoomInfo
+   [\#1563](https://github.com/matrix-org/matrix-react-sdk/pull/1563)
+ * turn NPE on flair resolution errors into a logged error
+   [\#1565](https://github.com/matrix-org/matrix-react-sdk/pull/1565)
+ * Less translation in parts
+   [\#1484](https://github.com/matrix-org/matrix-react-sdk/pull/1484)
+ * Redact group IDs from analytics
+   [\#1562](https://github.com/matrix-org/matrix-react-sdk/pull/1562)
+ * Display whether the group summary/room list is loading
+   [\#1560](https://github.com/matrix-org/matrix-react-sdk/pull/1560)
+ * Change client-side validation of group IDs to match synapse
+   [\#1558](https://github.com/matrix-org/matrix-react-sdk/pull/1558)
+ * Prevent non-members from opening group settings
+   [\#1559](https://github.com/matrix-org/matrix-react-sdk/pull/1559)
+ * Alter UI for disinviting a group member
+   [\#1556](https://github.com/matrix-org/matrix-react-sdk/pull/1556)
+ * Only show admin tools to privileged users
+   [\#1555](https://github.com/matrix-org/matrix-react-sdk/pull/1555)
+ * Try lowercase username on login
+   [\#1550](https://github.com/matrix-org/matrix-react-sdk/pull/1550)
+ * Don't refresh page on password change prompt
+   [\#1554](https://github.com/matrix-org/matrix-react-sdk/pull/1554)
+ * Fix initial in GroupAvatar in GroupView
+   [\#1553](https://github.com/matrix-org/matrix-react-sdk/pull/1553)
+ * Use "crop" method to scale group avatars in MyGroups
+   [\#1549](https://github.com/matrix-org/matrix-react-sdk/pull/1549)
+ * Lowercase all usernames
+   [\#1547](https://github.com/matrix-org/matrix-react-sdk/pull/1547)
+ * Add sensible missing entry generator for MELS tests
+   [\#1546](https://github.com/matrix-org/matrix-react-sdk/pull/1546)
+ * Fix prompt to re-use chat room
+   [\#1545](https://github.com/matrix-org/matrix-react-sdk/pull/1545)
+ * Add unregiseterListener to GroupStore
+   [\#1544](https://github.com/matrix-org/matrix-react-sdk/pull/1544)
+ * Fix groups invited users err for non members
+   [\#1543](https://github.com/matrix-org/matrix-react-sdk/pull/1543)
+ * Add Mention button to MemberInfo
+   [\#1532](https://github.com/matrix-org/matrix-react-sdk/pull/1532)
+ * Only show group settings cog to members
+   [\#1541](https://github.com/matrix-org/matrix-react-sdk/pull/1541)
+ * Use correct icon for group room deletion and make themeable
+   [\#1540](https://github.com/matrix-org/matrix-react-sdk/pull/1540)
+ * Add invite button to MemberInfo if user has left or wasn't in room
+   [\#1534](https://github.com/matrix-org/matrix-react-sdk/pull/1534)
+ * Add option to mirror local video feed
+   [\#1539](https://github.com/matrix-org/matrix-react-sdk/pull/1539)
+ * Use the correct userId when displaying who redacted a message
+   [\#1538](https://github.com/matrix-org/matrix-react-sdk/pull/1538)
+ * Only show editing UI for aliases/related_groups for users /w power
+   [\#1529](https://github.com/matrix-org/matrix-react-sdk/pull/1529)
+ * Swap from `ui_opacity` to `panel_disabled`
+   [\#1535](https://github.com/matrix-org/matrix-react-sdk/pull/1535)
+ * Fix room address picker tiles default name
+   [\#1536](https://github.com/matrix-org/matrix-react-sdk/pull/1536)
+ * T3chguy/hide level change on 50
+   [\#1531](https://github.com/matrix-org/matrix-react-sdk/pull/1531)
+ * fix missing date sep caused by hidden event at start of day
+   [\#1537](https://github.com/matrix-org/matrix-react-sdk/pull/1537)
+ * Add a delete confirmation dialog for widgets
+   [\#1520](https://github.com/matrix-org/matrix-react-sdk/pull/1520)
+ * When dispatching view_[my_]group[s], reset RoomViewStore
+   [\#1530](https://github.com/matrix-org/matrix-react-sdk/pull/1530)
+ * Prevent editing of UI requiring user privilege if user unprivileged
+   [\#1528](https://github.com/matrix-org/matrix-react-sdk/pull/1528)
+ * Use the correct property of the API room objects
+   [\#1526](https://github.com/matrix-org/matrix-react-sdk/pull/1526)
+ * Don't include the |other in the translation value
+   [\#1527](https://github.com/matrix-org/matrix-react-sdk/pull/1527)
+ * Re-run gen-i18n after fixing https://github.com/matrix-org/matrix-react-
+   sdk/pull/1521
+   [\#1525](https://github.com/matrix-org/matrix-react-sdk/pull/1525)
+ * Fix some react warnings in GroupMemberList
+   [\#1522](https://github.com/matrix-org/matrix-react-sdk/pull/1522)
+ * Fix bug with gen-i18n/js when adding new plurals
+   [\#1521](https://github.com/matrix-org/matrix-react-sdk/pull/1521)
+ * Make GroupStoreCache global for cross-package access
+   [\#1524](https://github.com/matrix-org/matrix-react-sdk/pull/1524)
+ * Add fields needed by RoomDetailList to groupRoomFromApiObject
+   [\#1523](https://github.com/matrix-org/matrix-react-sdk/pull/1523)
+ * Only show flair for groups with avatars set
+   [\#1519](https://github.com/matrix-org/matrix-react-sdk/pull/1519)
+ * Refresh group member lists after inviting users
+   [\#1518](https://github.com/matrix-org/matrix-react-sdk/pull/1518)
+ * Invalidate the user's public groups cache when changing group publicity
+   [\#1517](https://github.com/matrix-org/matrix-react-sdk/pull/1517)
+ * Make the gen-i18n script validate _t calls
+   [\#1515](https://github.com/matrix-org/matrix-react-sdk/pull/1515)
+ * Add placeholder to MyGroups page, adjust CSS classes
+   [\#1514](https://github.com/matrix-org/matrix-react-sdk/pull/1514)
+ * Rxl881/parallelshell
+   [\#1338](https://github.com/matrix-org/matrix-react-sdk/pull/1338)
+ * Run prunei18n
+   [\#1513](https://github.com/matrix-org/matrix-react-sdk/pull/1513)
+ * Update from Weblate.
+   [\#1512](https://github.com/matrix-org/matrix-react-sdk/pull/1512)
+ * Add script to prune unused translations
+   [\#1502](https://github.com/matrix-org/matrix-react-sdk/pull/1502)
+ * Fix creation of DM rooms
+   [\#1510](https://github.com/matrix-org/matrix-react-sdk/pull/1510)
+ * Group create dialog: only enter localpart
+   [\#1507](https://github.com/matrix-org/matrix-react-sdk/pull/1507)
+ * Improve MyGroups UI
+   [\#1509](https://github.com/matrix-org/matrix-react-sdk/pull/1509)
+ * Use object URLs to load Files in to images
+   [\#1508](https://github.com/matrix-org/matrix-react-sdk/pull/1508)
+ * Add clientside error for non-alphanumeric group ID
+   [\#1506](https://github.com/matrix-org/matrix-react-sdk/pull/1506)
+ * Fix invites to groups without names
+   [\#1505](https://github.com/matrix-org/matrix-react-sdk/pull/1505)
+ * Add warning when adding group rooms/users
+   [\#1504](https://github.com/matrix-org/matrix-react-sdk/pull/1504)
+ * More Groups->Communities
+   [\#1503](https://github.com/matrix-org/matrix-react-sdk/pull/1503)
+ * Groups -> Communities
+   [\#1501](https://github.com/matrix-org/matrix-react-sdk/pull/1501)
+ * Factor out Flair cache into FlairStore
+   [\#1500](https://github.com/matrix-org/matrix-react-sdk/pull/1500)
+ * Add i18n script to package.json
+   [\#1499](https://github.com/matrix-org/matrix-react-sdk/pull/1499)
+ * Make gen-i18n support 'HTML'
+   [\#1498](https://github.com/matrix-org/matrix-react-sdk/pull/1498)
+ * fix editing visuals on groupview header
+   [\#1497](https://github.com/matrix-org/matrix-react-sdk/pull/1497)
+ * Script to generate the translations base file
+   [\#1493](https://github.com/matrix-org/matrix-react-sdk/pull/1493)
+ * Update from Weblate.
+   [\#1495](https://github.com/matrix-org/matrix-react-sdk/pull/1495)
+ * Attempt to relate a group to a room when adding it
+   [\#1494](https://github.com/matrix-org/matrix-react-sdk/pull/1494)
+ * Shuffle GroupView UI
+   [\#1490](https://github.com/matrix-org/matrix-react-sdk/pull/1490)
+ * Fix bug preventing partial group profile
+   [\#1491](https://github.com/matrix-org/matrix-react-sdk/pull/1491)
+ * Don't show room IDs when picking rooms
+   [\#1492](https://github.com/matrix-org/matrix-react-sdk/pull/1492)
+ * Only show invited section if there are invited group members
+   [\#1489](https://github.com/matrix-org/matrix-react-sdk/pull/1489)
+ * Show "Invited" section in the user list
+   [\#1488](https://github.com/matrix-org/matrix-react-sdk/pull/1488)
+ * Refactor class names for an entity tile being hovered over
+   [\#1487](https://github.com/matrix-org/matrix-react-sdk/pull/1487)
+ * Modify GroupView UI
+   [\#1475](https://github.com/matrix-org/matrix-react-sdk/pull/1475)
+ * Message/event pinning
+   [\#1439](https://github.com/matrix-org/matrix-react-sdk/pull/1439)
+ * Remove duplicate declaration that breaks the build
+   [\#1483](https://github.com/matrix-org/matrix-react-sdk/pull/1483)
+ * Include magnet scheme in sanitize HTML params
+   [\#1301](https://github.com/matrix-org/matrix-react-sdk/pull/1301)
+ * Add a way to jump to a user's Read Receipt from MemberInfo
+   [\#1454](https://github.com/matrix-org/matrix-react-sdk/pull/1454)
+ * Use standard subsitution syntax in _tJsx
+   [\#1462](https://github.com/matrix-org/matrix-react-sdk/pull/1462)
+ * Don't suggest grey as a color scheme for a room
+   [\#1442](https://github.com/matrix-org/matrix-react-sdk/pull/1442)
+ * allow hiding of notification body for privacy reasons
+   [\#1362](https://github.com/matrix-org/matrix-react-sdk/pull/1362)
+ * Suggest to invite people when speaking in an empty room
+   [\#1466](https://github.com/matrix-org/matrix-react-sdk/pull/1466)
+ * Buttons to remove room/self avatar
+   [\#1478](https://github.com/matrix-org/matrix-react-sdk/pull/1478)
+ * T3chguy/fix memberlist
+   [\#1480](https://github.com/matrix-org/matrix-react-sdk/pull/1480)
+ * add option to disable BigEmoji
+   [\#1481](https://github.com/matrix-org/matrix-react-sdk/pull/1481)
+
 Changes in [0.10.7](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.10.7) (2017-10-16)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.10.7-rc.3...v0.10.7)

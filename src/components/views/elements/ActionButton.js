@@ -77,6 +77,7 @@ export default React.createClass({
                 onClick={this._onClick}
                 onMouseEnter={this._onMouseEnter}
                 onMouseLeave={this._onMouseLeave}
+                aria-label={this.props.label}
             >
                 <TintableSvg src={this.props.iconPath} width={this.props.size} height={this.props.size} />
                 { tooltip }
