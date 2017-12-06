@@ -113,7 +113,7 @@ module.exports = React.createClass({
     componentWillMount: function() {
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
-        MatrixClientPeg.get().on("Room.localEchoUpdated", this.onRoomLocalEchoUpdated);
+        MatrixClientPeg.get().on("Room.localEchoUpdated", this._onRoomLocalEchoUpdated);
 
         this._checkSize();
     },
@@ -128,7 +128,7 @@ module.exports = React.createClass({
         if (client) {
             client.removeListener("sync", this.onSyncStateChange);
             client.removeListener("RoomMember.typing", this.onRoomMemberTyping);
-            client.removeListener("Room.localEchoUpdated", this.onRoomLocalEchoUpdated);
+            client.removeListener("Room.localEchoUpdated", this._onRoomLocalEchoUpdated);
         }
     },
 
@@ -159,7 +159,7 @@ module.exports = React.createClass({
         showUnknownDeviceDialogForMessages(MatrixClientPeg.get(), this.props.room);
     },
 
-    onRoomLocalEchoUpdated: function(event, room, oldEventId, oldStatus) {
+    _onRoomLocalEchoUpdated: function(event, room, oldEventId, oldStatus) {
         if (room.roomId !== this.props.room.roomId) return;
 
         this.setState({
