@@ -142,7 +142,6 @@ module.exports = React.createClass({
             });
 
             app.waitForIframeLoad = (app.data.waitForIframeLoad === 'false' ? false : true);
-            console.log("wait for iframe load:", app.waitForIframeLoad, app.id);
         }
 
         app.url = this.encodeUri(app.url, params);
