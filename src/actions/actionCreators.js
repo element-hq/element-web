@@ -16,6 +16,16 @@ limitations under the License.
 
 import dis from '../dispatcher';
 
+/**
+ * Create an action creator that will dispatch actions asynchronously that
+ * indicate the current status of promise returned by the given function, fn.
+ * @param {string} id the id to give the dispatched actions. This is given a
+ *                   suffix determining whether it is pending, successful or
+ *                   a failure.
+ * @param {function} fn the function to call with arguments given to the
+ *                   returned function. This function should return a Promise.
+ * @returns a function that dispatches asynchronous actions when called.
+ */
 export function createPromiseActionCreator(id, fn) {
     return (...args) => {
         dis.dispatch({action: id + '.pending'});
@@ -24,5 +34,39 @@ export function createPromiseActionCreator(id, fn) {
         }).catch((err) => {
             dis.dispatch({action: id + '.failure', err});
         })
+    }
+}
+
+/**
+ * Create an action creator that will listen to events of type eventId emitted
+ * by matrixClient and dispatch a corresponding action of the following shape:
+ *     {
+ *         action: 'MatrixActions.' + eventId,
+ *         event: matrixEvent,
+ *         event_type: matrixEvent.getType(),
+ *         event_content: matrixEvent.getContent(),
+ *     }
+ * @param matrixClient{MatrixClient} the matrix client with which to register
+ *                                   a listener.
+ * @param eventId{string} the ID of the event that hen emitted will cause the
+ *                        an action to be dispatched.
+ * @returns a function that, when called, will begin to listen to dispatches
+ *          from matrixClient. The result from that function can be called to
+ *          stop listening.
+ */
+export function createMatrixActionCreator(matrixClient, eventId) {
+    const listener = (matrixEvent) => {
+        dis.dispatch({
+            action: 'MatrixActions.' + eventId,
+            event: matrixEvent,
+            event_type: matrixEvent.getType(),
+            event_content: matrixEvent.getContent(),
+        });
+    };
+    return () => {
+        matrixClient.on(eventId, listener);
+        return () => {
+            matrixClient.removeListener(listener);
+        }
     }
 }

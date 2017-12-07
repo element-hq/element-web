@@ -41,17 +41,14 @@ class TagOrderStore extends Store {
 
     __onDispatch(payload) {
         switch (payload.action) {
-            // Get ordering from account data, once the client has synced
-            case 'sync_state':
-                if (payload.prevState === "PREPARED" && payload.state === "SYNCING") {
-                    const accountDataEvent = MatrixClientPeg.get().getAccountData('im.vector.web.tag_ordering');
-
-                    const orderedTags = accountDataEvent && accountDataEvent.getContent() ?
-                        accountDataEvent.getContent().tags : null;
-
-                    this._setState({orderedTags});
-                }
-            break;
+            // Get ordering from account data
+            case 'MatrixActions.accountData': {
+                if (payload.event_type !== 'im.vector.web.tag_ordering') break;
+                this._setState({
+                    orderedTags: payload.event_content ? payload.event_content.tags : null,
+                });
+                break;
+            }
             // Initialise the state such that if account data is unset, default to joined groups
             case 'GroupActions.fetchJoinedGroups.success':
                 this._setState({
