@@ -52,10 +52,10 @@ class TagOrderStore extends Store {
                     this._setState({orderedTags});
                 }
             break;
-            // Initialise the state such that if account data is unset, default to the existing ordering
-            case 'all_tags':
+            // Initialise the state such that if account data is unset, default to joined groups
+            case 'GroupActions.fetchJoinedGroups.success':
                 this._setState({
-                    allTags: payload.tags.sort(), // Sort lexically
+                    allTags: payload.result.groups.sort(), // Sort lexically
                 });
             break;
             // Puts payload.tag at payload.targetTag, placing the targetTag before or after the tag

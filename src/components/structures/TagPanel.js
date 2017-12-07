@@ -20,6 +20,9 @@ import { MatrixClient } from 'matrix-js-sdk';
 import FilterStore from '../../stores/FilterStore';
 import FlairStore from '../../stores/FlairStore';
 import TagOrderStore from '../../stores/TagOrderStore';
+
+import GroupActions from '../../actions/GroupActions';
+
 import sdk from '../../index';
 import dis from '../../dispatcher';
 
@@ -62,8 +65,8 @@ const TagPanel = React.createClass({
                 this.setState({orderedGroupTagProfiles});
             });
         });
-
-        this._fetchJoinedRooms();
+        // This could be done by anything with a matrix client
+        GroupActions.fetchJoinedGroups(this.context.matrixClient);
     },
 
     componentWillUnmount() {
@@ -76,7 +79,7 @@ const TagPanel = React.createClass({
 
     _onGroupMyMembership() {
         if (this.unmounted) return;
-        this._fetchJoinedRooms();
+        GroupActions.fetchJoinedGroups(this.context.matrixClient);
     },
 
     onClick() {
@@ -86,16 +89,6 @@ const TagPanel = React.createClass({
     onCreateGroupClick(ev) {
         ev.stopPropagation();
         dis.dispatch({action: 'view_create_group'});
-    },
-
-    async _fetchJoinedRooms() {
-        // This could be done by anything with a matrix client (, see TagOrderStore).
-        const joinedGroupResponse = await this.context.matrixClient.getJoinedGroups();
-        const joinedGroupIds = joinedGroupResponse.groups;
-        dis.dispatch({
-            action: 'all_tags',
-            tags: joinedGroupIds,
-        });
     },
 
     render() {
