@@ -50,14 +50,19 @@ export default React.createClass({
     },
 
     componentDidMount: function() {
+        // Retrieve the root node of the Riot application outside the dialog
         this.applicationNode = document.getElementById('matrixchat');
         if (this.applicationNode) {
+            // Hide the content outside the dialog to screen reader users
+            // so they won't be able to navigate into it and act on it using
+            // screen reader specific features
             this.applicationNode.setAttribute('aria-hidden', 'true');
         }
     },
 
     componentWillUnmount: function() {
         if (this.applicationNode) {
+            // When dismissing the dialog, make all of Riot available to screen reader users again
             this.applicationNode.setAttribute('aria-hidden', 'false');
         }
     },
