@@ -1037,5 +1037,8 @@
     "Something went wrong when trying to get your communities.": "Valami nem sikerült a közösségeid elérésénél.",
     "Display your community flair in rooms configured to show it.": "Közösségi jelvényeid megjelenítése azokban a szobákban ahol ez engedélyezett.",
     "This homeserver doesn't offer any login flows which are supported by this client.": "Ez a saját szerver egyetlen bejelentkezési metódust sem támogat amit ez a kliens ismer.",
-    "Tag Panel": "Címke panel"
+    "Tag Panel": "Címke panel",
+    "Addresses": "Címek",
+    "collapse": "becsuk",
+    "expand": "kinyit"
 }
