@@ -82,5 +82,7 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "Register": "Registrati",
-    "Rooms": "Stanze"
+    "Rooms": "Stanze",
+    "The remote side failed to pick up": "Il destinatario non ha risposto",
+    "Unable to capture screen": "Impossibile acquisire lo schermo"
 }
