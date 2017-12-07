@@ -16,6 +16,8 @@
 
 import React from 'react';
 
+import { KeyCode } from '../../../Keyboard';
+
 /**
  * AccessibleButton is a generic wrapper for any element that should be treated
  * as a button.  Identifies the element as a button, setting proper tab
@@ -27,8 +29,18 @@ import React from 'react';
 export default function AccessibleButton(props) {
     const {element, onClick, children, ...restProps} = props;
     restProps.onClick = onClick;
+    // We need to consume enter onKeyDown and space onKeyUp
+    // otherwise we are risking also activating other keyboard focusable elements
+    // that might receive focus as a result of the AccessibleButtonClick action
     restProps.onKeyDown = function(e) {
-        if (e.keyCode == 13 || e.keyCode == 32) {
+        if (e.keyCode === KeyCode.ENTER) {
+            e.stopPropagation();
+            e.preventDefault();
+            return onClick(e);
+        }
+    };
+    restProps.onKeyUp = function(e) {
+        if (e.keyCode === KeyCode.SPACE) {
             e.stopPropagation();
             e.preventDefault();
             return onClick(e);
