@@ -84,7 +84,7 @@ const ONBOARDING_FLOW_STARTERS = [
     'view_create_group',
 ];
 
-const MatrixChat = React.createClass({
+export default React.createClass({
     // we export this so that the integration tests can use it :-S
     statics: {
         VIEWS: VIEWS,
@@ -1584,5 +1584,3 @@ const MatrixChat = React.createClass({
         console.error(`Unknown view ${this.state.view}`);
     },
 });
-
-export default MatrixChat;
