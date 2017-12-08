@@ -79,7 +79,7 @@ export default React.createClass({
             hasPermissionToLoad: hasPermissionToLoad === 'true' || newProps.userId === newProps.creatorUserId,
             error: null,
             deleting: false,
-            widgetPageTitle: null,
+            widgetPageTitle: newProps.widgetPageTitle,
         };
     },
 
@@ -197,7 +197,10 @@ export default React.createClass({
                 initialising: false,
             });
 
-            this._updateWidgetTitle(params.url);
+            // Fetch page title from remote content if not already set
+            if (!this.state.widgetPageTitle) {
+                this._fetchWidgetTitle(params.url);
+            }
         }, (err) => {
             console.error("Failed to get scalar_token", err);
             this.setState({
@@ -303,7 +306,7 @@ export default React.createClass({
      * Set remote content title on AppTile
      * @param {string} url Url to check for title
      */
-    _updateWidgetTitle(url) {
+    _fetchWidgetTitle(url) {
         this._scalarClient.getScalarPageTitle(url).then((widgetPageTitle) => {
             if (widgetPageTitle) {
                 this.setState({widgetPageTitle: widgetPageTitle});
