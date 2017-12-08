@@ -215,6 +215,7 @@ module.exports = withMatrixClient(React.createClass({
         this.setState({
             verified: verified,
         });
+        this.props.onWidgetLoad();
     },
 
     _propsEqual: function(objA, objB) {
