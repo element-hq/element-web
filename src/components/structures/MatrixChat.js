@@ -40,7 +40,6 @@ require('../../stores/LifecycleStore');
 import PageTypes from '../../PageTypes';
 
 import createRoom from "../../createRoom";
-import * as UDEHandler from '../../UnknownDeviceErrorHandler';
 import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
@@ -295,7 +294,6 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        UDEHandler.startListening();
 
         this.focusComposer = false;
 
@@ -361,7 +359,6 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
-        UDEHandler.stopListening();
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
     },
@@ -1398,13 +1395,6 @@ module.exports = React.createClass({
         cli.sendEvent(roomId, event.getType(), event.getContent()).done(() => {
             dis.dispatch({action: 'message_sent'});
         }, (err) => {
-            if (err.name === 'UnknownDeviceError') {
-                dis.dispatch({
-                    action: 'unknown_device_error',
-                    err: err,
-                    room: cli.getRoom(roomId),
-                });
-            }
             dis.dispatch({action: 'message_send_failed'});
         });
     },
