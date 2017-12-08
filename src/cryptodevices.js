@@ -51,6 +51,14 @@ export function getUnknownDevicesForRoom(matrixClient, room) {
     });
 }
 
+/**
+ * Show the UnknownDeviceDialog for a given room. The dialog will inform the user
+ * that messages they sent to this room have not been sent due to unknown devices
+ * being present.
+ *
+ * @param {MatrixClient} matrixClient A MatrixClient
+ * @param {Room} room js-sdk room object representing the room
+ */
 export function showUnknownDeviceDialogForMessages(matrixClient, room) {
     getUnknownDevicesForRoom(matrixClient, room).then((unknownDevices) => {
         const onSendClicked = () => {
@@ -68,6 +76,14 @@ export function showUnknownDeviceDialogForMessages(matrixClient, room) {
     });
 }
 
+/**
+ * Show the UnknownDeviceDialog for a given room. The dialog will inform the user
+ * that a call they tried to place or answer in the room couldn't be placed or
+ * answered due to unknown devices being present.
+ *
+ * @param {MatrixClient} matrixClient A MatrixClient
+ * @param {Room} room js-sdk room object representing the room
+ */
 export function showUnknownDeviceDialogForCalls(matrixClient, room, sendAnyway, sendAnywayLabel, sendLabel) {
     getUnknownDevicesForRoom(matrixClient, room).then((unknownDevices) => {
         const UnknownDeviceDialog = sdk.getComponent('dialogs.UnknownDeviceDialog');
