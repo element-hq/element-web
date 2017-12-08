@@ -1030,5 +1030,22 @@
     "Delete %(count)s devices|other": "Удалить %(count)s устройств",
     "Delete %(count)s devices|one": "Удалить устройство",
     "Select devices": "Выбрать устройства",
-    "This homeserver doesn't offer any login flows which are supported by this client.": "Этот домашний сервер не поддерживает метод входа, поддерживаемый клиентом."
+    "This homeserver doesn't offer any login flows which are supported by this client.": "Этот домашний сервер не поддерживает метод входа, поддерживаемый клиентом.",
+    "Call Failed": "Звонок не удался",
+    "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "В этой комнате есть неизвестные устройства: если вы продолжите без их проверки, имейте в виду, что кто-то посторонний может вас прослушать.",
+    "Review Devices": "Обзор устройств",
+    "Call Anyway": "Позвонить в любом случае",
+    "Answer Anyway": "Ответить в любом случае",
+    "Call": "Вызов",
+    "Answer": "Ответить",
+    "Send": "Отправить",
+    "Addresses": "Адреса",
+    "collapse": "свернуть",
+    "expand": "развернуть",
+    "Cryptography data migrated": "Миграция данных криптографии",
+    "A one-off migration of cryptography data has been performed. End-to-end encryption will not work if you go back to an older version of Riot. If you need to use end-to-end cryptography on an older version, log out of Riot first. To retain message history, export and re-import your keys.": "Выполнена одноразовая миграция данных криптографии. Сквозное шифрование не будет работать, если вы вернетесь к старой версии Riot. Если требуется использовать сквозную криптографию для более старой версии, сначала выйдите из Riot. Чтобы сохранить журнал сообщений, экспортируйте и повторно импортируйте ключи.",
+    "Old cryptography data detected": "Обнаружены старые криптографические данные",
+    "Data from an older version of Riot has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "Обнаружены данные из более старой версии Riot. Это приведет к сбою криптографии в более ранней версии. В этой версии не могут быть расшифрованы сообщения, которые использовались недавно при использовании старой версии. Это также может привести к сбою обмена сообщениями с этой версией. Если возникают неполадки, выйдите и снова войдите в систему. Чтобы сохранить журнал сообщений, экспортируйте и повторно импортируйте ключи.",
+    "<showDevicesText>Show devices</showDevicesText> or <cancelText>cancel all</cancelText>.": "<showDevicesText>Показать устройства</showDevicesText> или <cancelText>отменить все</cancelText>.",
+    "Warning": "Предупреждение"
 }
