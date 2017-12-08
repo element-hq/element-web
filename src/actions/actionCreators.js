@@ -66,7 +66,7 @@ export function createMatrixActionCreator(matrixClient, eventId) {
     return () => {
         matrixClient.on(eventId, listener);
         return () => {
-            matrixClient.removeListener(listener);
+            matrixClient.removeListener(eventId, listener);
         }
     }
 }
