@@ -75,7 +75,7 @@ export default React.createClass({
                         <button onClick={this.onCancel}>
                             { _t("Cancel") }
                         </button>
-                        <input type="submit" className="mx_Dialog_primary" value={ this.props.button }/>
+                        <input type="submit" className="mx_Dialog_primary" value={this.props.button} />
                     </div>
                 </form>
             </BaseDialog>

@@ -46,7 +46,7 @@ export default React.createClass({
 
         // Id of content element
         // If provided, this is used to add a aria-describedby attribute
-        contentId: React.PropTypes.string
+        contentId: React.PropTypes.string,
     },
 
     componentDidMount: function() {

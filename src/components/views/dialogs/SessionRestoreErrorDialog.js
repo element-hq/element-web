@@ -54,7 +54,8 @@ export default React.createClass({
                 { _t(
                     "Otherwise, <a>click here</a> to send a bug report.",
                     {},
-                    { 'a': (sub) => <a ref="bugreportLink" onClick={this._sendBugReport} key="bugreport" href='#'>{ sub }</a> },
+                    { 'a': (sub) => <a ref="bugreportLink" onClick={this._sendBugReport}
+                    key="bugreport" href='#'>{ sub }</a> },
                 ) }
                 </p>
             );
