@@ -198,7 +198,7 @@ export default React.createClass({
             });
 
             // Fetch page title from remote content if not already set
-            if (!this.state.widgetPageTitle) {
+            if (!this.state.widgetPageTitle && params.url) {
                 this._fetchWidgetTitle(params.url);
             }
         }, (err) => {

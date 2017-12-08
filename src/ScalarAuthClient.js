@@ -79,7 +79,7 @@ class ScalarAuthClient {
     getScalarPageTitle(url) {
         const defer = Promise.defer();
 
-        let scalarPageLookupUrl = SdkConfig.get().integrations_rest_url + '/api/widgets/title_lookup';
+        let scalarPageLookupUrl = SdkConfig.get().integrations_rest_url + '/widgets/title_lookup';
         scalarPageLookupUrl = this.getStarterLink(scalarPageLookupUrl);
         scalarPageLookupUrl += '&curl=' + encodeURIComponent(url);
         request({
