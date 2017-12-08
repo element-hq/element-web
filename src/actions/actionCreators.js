@@ -48,7 +48,7 @@ export function createPromiseActionCreator(id, fn) {
  *     }
  * @param {MatrixClient} matrixClient the matrix client with which to register
  *                                    a listener.
- * @param {string} eventId the ID of the event that hen emitted will cause the
+ * @param {string} eventId the ID of the event that when emitted will cause the
  *                         an action to be dispatched.
  * @returns {function} a function that, when called, will begin to listen to
  *                     dispatches from matrixClient. The result from that
