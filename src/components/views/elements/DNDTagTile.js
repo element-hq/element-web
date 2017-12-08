@@ -38,9 +38,7 @@ const tagTileSource = {
         if (!monitor.didDrop() || !dropResult) {
             return;
         }
-        dis.dispatch({
-            action: 'commit_tags',
-        });
+        props.onEndDrag();
     },
 };
 

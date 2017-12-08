@@ -22,6 +22,7 @@ import FlairStore from '../../stores/FlairStore';
 import TagOrderStore from '../../stores/TagOrderStore';
 
 import GroupActions from '../../actions/GroupActions';
+import TagOrderActions from '../../actions/TagOrderActions';
 
 import sdk from '../../index';
 import dis from '../../dispatcher';
@@ -91,6 +92,10 @@ const TagPanel = React.createClass({
         dis.dispatch({action: 'view_create_group'});
     },
 
+    onTagTileEndDrag() {
+        TagOrderActions.commitTagOrdering(this.context.matrixClient);
+    },
+
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
@@ -101,6 +106,7 @@ const TagPanel = React.createClass({
                 key={groupProfile.groupId + '_' + index}
                 groupProfile={groupProfile}
                 selected={this.state.selectedTags.includes(groupProfile.groupId)}
+                onEndDrag={this.onTagTileEndDrag}
             />;
         });
         return <div className="mx_TagPanel" onClick={this.onClick}>
