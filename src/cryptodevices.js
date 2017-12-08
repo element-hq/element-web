@@ -83,6 +83,12 @@ export function showUnknownDeviceDialogForMessages(matrixClient, room) {
  *
  * @param {MatrixClient} matrixClient A MatrixClient
  * @param {Room} room js-sdk room object representing the room
+ * @param {func} sendAnyway Function called when the 'call anyway' or 'call'
+ *     button is pressed. This should attempt to place or answer the call again.
+ * @param {string} sendAnywayLabel Label for the button displayed to retry the call
+ *     when unknown devices are still present (eg. "Call Anyway")
+ * @param {string} sendLabel Label for the button displayed to retry the call
+ *     after all devices have been verified (eg. "Call")
  */
 export function showUnknownDeviceDialogForCalls(matrixClient, room, sendAnyway, sendAnywayLabel, sendLabel) {
     getUnknownDevicesForRoom(matrixClient, room).then((unknownDevices) => {
