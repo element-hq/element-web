@@ -15,14 +15,8 @@ limitations under the License.
 */
 import React from 'react';
 import sdk from '../../../index';
-import dis from '../../../dispatcher';
-import classNames from 'classnames';
-import { Room, RoomMember } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import { getDisplayAliasForRoom } from '../../../Rooms';
-import {makeUserPermalink} from "../../../matrix-to";
-import DateUtils from "../../../DateUtils";
 
 // For URLs of matrix.to links in the timeline which have been reformatted by
 // HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
@@ -87,12 +81,7 @@ const Quote = React.createClass({
     },
 
     componentWillMount() {
-        this._unmounted = false;
         this.componentWillReceiveProps(this.props);
-    },
-
-    componentWillUnmount() {
-        this._unmounted = true;
     },
 
     async getEvent(room, eventId) {
@@ -111,27 +100,16 @@ const Quote = React.createClass({
         const ev = this.state.event;
         if (ev) {
             const EventTile = sdk.getComponent('views.rooms.EventTile');
-            // const EmojiText = sdk.getComponent('views.elements.EmojiText');
-            // const Pill = sdk.getComponent('views.elements.Pill');
-            // const senderUrl = makeUserPermalink(ev.getSender());
-            // const EventTileType = sdk.getComponent(EventTile.getHandlerTile(ev));
-            /*return <a href={this.props.url} >*/
             return <blockquote>
-                {/*<span style={{borderBottom: '2px red'}}>*/}
-                    {/*<Pill room={this.state.room} url={senderUrl} shouldShowPillAvatar={this.props.shouldShowPillAvatar} />*/}
-                    {/*&nbsp;<a href={this.props.url}><EmojiText>🔗</EmojiText> { DateUtils.formatTime(new Date(ev.getTs())) }</a>*/}
-                {/*</span>*/}
                 <EventTile mxEvent={ev} tileShape="quote" />
-                {/*<EventTileType mxEvent={ev} />*/}
             </blockquote>;
-            /*</a>;*/
-        } else {
-            // Deliberately render nothing if the URL isn't recognised
-            return <div>
-                <a href={this.props.url}>Quote</a>
-                <br />
-            </div>;
         }
+
+        // Deliberately render nothing if the URL isn't recognised
+        return <div>
+            <a href={this.props.url}>Quote</a>
+            <br />
+        </div>;
     },
 });
 
