@@ -50,6 +50,10 @@ const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g')
 
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import {makeEventPermalink} from "../../../matrix-to";
+import QuotePreview from "./QuotePreview";
+import RoomViewStore from '../../../stores/RoomViewStore';
+
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
 const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
@@ -291,35 +295,6 @@ export default class MessageComposerInput extends React.Component {
                     href: `https://matrix.to/#/${payload.user_id}`,
                     suffix: selection.getStartOffset() === 0 ? ': ' : ' ',
                 });
-            }
-                break;
-            case 'quote': {
-                /// XXX: Not doing rich-text quoting from formatted-body because draft-js
-                /// has regressed such that when links are quoted, errors are thrown. See
-                /// https://github.com/vector-im/riot-web/issues/4756.
-                const body = escape(payload.text);
-                if (body) {
-                    let content = RichText.htmlToContentState(`<blockquote>${body}</blockquote>`);
-                    if (!this.state.isRichtextEnabled) {
-                        content = ContentState.createFromText(RichText.stateToMarkdown(content));
-                    }
-
-                    const blockMap = content.getBlockMap();
-                    let startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
-                    contentState = Modifier.splitBlock(contentState, startSelection);
-                    startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
-                    contentState = Modifier.replaceWithFragment(contentState,
-                        startSelection,
-                        blockMap);
-                    startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
-                    if (this.state.isRichtextEnabled) {
-                        contentState = Modifier.setBlockType(contentState, startSelection, 'blockquote');
-                    }
-                    let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
-                    editorState = EditorState.moveSelectionToEnd(editorState);
-                    this.onEditorContentChanged(editorState);
-                    editor.focus();
-                }
             }
                 break;
         }
@@ -659,7 +634,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
         return false;
-    }
+    };
 
     onTextPasted(text: string, html?: string) {
         const currentSelection = this.state.editorState.getSelection();
@@ -749,9 +724,17 @@ export default class MessageComposerInput extends React.Component {
             return true;
         }
 
+        const quotingEv = RoomViewStore.getQuotingEvent();
+
         if (this.state.isRichtextEnabled) {
             // We should only send HTML if any block is styled or contains inline style
             let shouldSendHTML = false;
+
+            // If we are quoting we need HTML Content
+            if (quotingEv) {
+                shouldSendHTML = true;
+            }
+
             const blocks = contentState.getBlocksAsArray();
             if (blocks.some((block) => block.getType() !== 'unstyled')) {
                 shouldSendHTML = true;
@@ -809,7 +792,8 @@ export default class MessageComposerInput extends React.Component {
             }).join('\n');
 
             const md = new Markdown(pt);
-            if (md.isPlainText()) {
+            // if contains no HTML and we're not quoting (needing HTML)
+            if (md.isPlainText() && !quotingEv) {
                 contentText = md.toPlaintext();
             } else {
                 contentHTML = md.toHTML();
@@ -830,6 +814,24 @@ export default class MessageComposerInput extends React.Component {
             if (contentHTML) contentHTML = contentHTML.replace(/\/me ?/, '');
             sendHtmlFn = this.client.sendHtmlEmote;
             sendTextFn = this.client.sendEmoteMessage;
+        }
+
+        if (quotingEv) {
+            const cli = MatrixClientPeg.get();
+            const room = cli.getRoom(quotingEv.getRoomId());
+            const sender = room.currentState.getMember(quotingEv.getSender());
+
+            const {body/*, formatted_body*/} = quotingEv.getContent();
+
+            const perma = makeEventPermalink(quotingEv.getRoomId(), quotingEv.getId());
+            contentText = `${sender.name}:\n> ${body}\n\n${contentText}`;
+            contentHTML = `<a href="${perma}">Quote<br></a>${contentHTML}`;
+
+            // we have finished quoting, clear the quotingEvent
+            dis.dispatch({
+                action: 'quote_event',
+                event: null,
+            });
         }
 
         let sendMessagePromise;
@@ -1144,6 +1146,7 @@ export default class MessageComposerInput extends React.Component {
         return (
             <div className="mx_MessageComposer_input_wrapper">
                 <div className="mx_MessageComposer_autocomplete_wrapper">
+                    <QuotePreview />
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         room={this.props.room}

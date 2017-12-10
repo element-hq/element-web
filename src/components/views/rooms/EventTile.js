@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -528,79 +529,103 @@ module.exports = withMatrixClient(React.createClass({
         const timestamp = this.props.mxEvent.getTs() ?
             <MessageTimestamp showTwelveHour={this.props.isTwelveHour} ts={this.props.mxEvent.getTs()} /> : null;
 
-        if (this.props.tileShape === "notif") {
-            const room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());
-            return (
-                <div className={classes}>
-                    <div className="mx_EventTile_roomName">
-                        <a href={permalink} onClick={this.onPermalinkClicked}>
-                            { room ? room.name : '' }
-                        </a>
-                    </div>
-                    <div className="mx_EventTile_senderDetails">
-                        { avatar }
-                        <a href={permalink} onClick={this.onPermalinkClicked}>
-                            { sender }
-                            { timestamp }
-                        </a>
-                    </div>
-                    <div className="mx_EventTile_line" >
-                        <EventTileType ref="tile"
-                            mxEvent={this.props.mxEvent}
-                            highlights={this.props.highlights}
-                            highlightLink={this.props.highlightLink}
-                            showUrlPreview={this.props.showUrlPreview}
-                            onWidgetLoad={this.props.onWidgetLoad} />
-                    </div>
-                </div>
-            );
-        } else if (this.props.tileShape === "file_grid") {
-            return (
-                <div className={classes}>
-                    <div className="mx_EventTile_line" >
-                        <EventTileType ref="tile"
-                            mxEvent={this.props.mxEvent}
-                            highlights={this.props.highlights}
-                            highlightLink={this.props.highlightLink}
-                            showUrlPreview={this.props.showUrlPreview}
-                            tileShape={this.props.tileShape}
-                            onWidgetLoad={this.props.onWidgetLoad} />
-                    </div>
-                    <a
-                        className="mx_EventTile_senderDetailsLink"
-                        href={permalink}
-                        onClick={this.onPermalinkClicked}
-                    >
+        switch (this.props.tileShape) {
+            case 'notif': {
+                const room = this.props.matrixClient.getRoom(this.props.mxEvent.getRoomId());
+                return (
+                    <div className={classes}>
+                        <div className="mx_EventTile_roomName">
+                            <a href={permalink} onClick={this.onPermalinkClicked}>
+                                { room ? room.name : '' }
+                            </a>
+                        </div>
                         <div className="mx_EventTile_senderDetails">
+                            { avatar }
+                            <a href={permalink} onClick={this.onPermalinkClicked}>
                                 { sender }
                                 { timestamp }
+                            </a>
                         </div>
-                    </a>
-                </div>
-            );
-        } else {
-            return (
-                <div className={classes}>
-                    <div className="mx_EventTile_msgOption">
-                        { readAvatars }
+                        <div className="mx_EventTile_line" >
+                            <EventTileType ref="tile"
+                                           mxEvent={this.props.mxEvent}
+                                           highlights={this.props.highlights}
+                                           highlightLink={this.props.highlightLink}
+                                           showUrlPreview={this.props.showUrlPreview}
+                                           onWidgetLoad={this.props.onWidgetLoad} />
+                        </div>
                     </div>
-                    { avatar }
-                    { sender }
-                    <div className="mx_EventTile_line">
-                        <a href={permalink} onClick={this.onPermalinkClicked}>
-                            { timestamp }
+                );
+            }
+            case 'file_grid': {
+                return (
+                    <div className={classes}>
+                        <div className="mx_EventTile_line" >
+                            <EventTileType ref="tile"
+                                           mxEvent={this.props.mxEvent}
+                                           highlights={this.props.highlights}
+                                           highlightLink={this.props.highlightLink}
+                                           showUrlPreview={this.props.showUrlPreview}
+                                           tileShape={this.props.tileShape}
+                                           onWidgetLoad={this.props.onWidgetLoad} />
+                        </div>
+                        <a
+                            className="mx_EventTile_senderDetailsLink"
+                            href={permalink}
+                            onClick={this.onPermalinkClicked}
+                        >
+                            <div className="mx_EventTile_senderDetails">
+                                { sender }
+                                { timestamp }
+                            </div>
                         </a>
-                        { this._renderE2EPadlock() }
-                        <EventTileType ref="tile"
-                            mxEvent={this.props.mxEvent}
-                            highlights={this.props.highlights}
-                            highlightLink={this.props.highlightLink}
-                            showUrlPreview={this.props.showUrlPreview}
-                            onWidgetLoad={this.props.onWidgetLoad} />
-                        { editButton }
                     </div>
-                </div>
-            );
+                );
+            }
+            case 'quote': {
+                return (
+                    <div className={classes}>
+                        { avatar }
+                        { sender }
+                        <div className="mx_EventTile_line">
+                            <a href={permalink} onClick={this.onPermalinkClicked}>
+                                { timestamp }
+                            </a>
+                            { this._renderE2EPadlock() }
+                            <EventTileType ref="tile"
+                                           tileShape="quote"
+                                           mxEvent={this.props.mxEvent}
+                                           highlights={this.props.highlights}
+                                           highlightLink={this.props.highlightLink}
+                                           showUrlPreview={false} />
+                        </div>
+                    </div>
+                );
+            }
+            default: {
+                return (
+                    <div className={classes}>
+                        <div className="mx_EventTile_msgOption">
+                            { readAvatars }
+                        </div>
+                        { avatar }
+                        { sender }
+                        <div className="mx_EventTile_line">
+                            <a href={permalink} onClick={this.onPermalinkClicked}>
+                                { timestamp }
+                            </a>
+                            { this._renderE2EPadlock() }
+                            <EventTileType ref="tile"
+                                           mxEvent={this.props.mxEvent}
+                                           highlights={this.props.highlights}
+                                           highlightLink={this.props.highlightLink}
+                                           showUrlPreview={this.props.showUrlPreview}
+                                           onWidgetLoad={this.props.onWidgetLoad} />
+                            { editButton }
+                        </div>
+                    </div>
+                );
+            }
         }
     },
 }));
@@ -653,3 +678,5 @@ function E2ePadlockUnencrypted(props) {
 function E2ePadlock(props) {
     return <img className="mx_EventTile_e2eIcon" {...props} />;
 }
+
+module.exports.getHandlerTile = getHandlerTile;
