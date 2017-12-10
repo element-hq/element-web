@@ -1,6 +1,19 @@
 .mx_Autocomplete {
     position: absolute;
     bottom: 0;
+    z-index: 1001;
+    width: 100%;
+    border: 1px solid $primary-hairline-color;
+    background: $primary-bg-color;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    max-height: 50vh;
+    overflow: auto
+}
+
+.mx_Quoting {
+    position: absolute;
+    bottom: 0;
     z-index: 1000;
     width: 100%;
     border: 1px solid $primary-hairline-color;
@@ -11,7 +24,7 @@
     overflow: auto
 }
 
-.mx_Autocomplete_ProviderSection {
+.mx_Autocomplete_ProviderSection, .mx_Quoting_section {
     border-bottom: 1px solid $primary-hairline-color;
 }
 
@@ -74,11 +87,23 @@
     outline: none;
 }
 
-.mx_Autocomplete_provider_name {
+.mx_Autocomplete_provider_name, .mx_Quoting_header {
     margin: 12px;
     color: $primary-fg-color;
     font-weight: 400;
     opacity: 0.4;
+}
+
+.mx_Quoting_title {
+    float: left;
+}
+
+.mx_Quoting_cancel {
+    float: right;
+}
+
+.mx_Quoting_clear {
+    clear: both;
 }
 
 /* styling for common completion elements */
