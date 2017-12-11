@@ -74,7 +74,11 @@ class TagOrderStore extends Store {
             break;
             // Puts payload.tag at payload.targetTag, placing the targetTag before or after the tag
             case 'order_tag': {
-                if (!payload.tag || !payload.targetTag || payload.tag === payload.targetTag) return;
+                if (!this._state.orderedTags ||
+                    !payload.tag ||
+                    !payload.targetTag ||
+                    payload.tag === payload.targetTag
+                ) return;
 
                 const tags = this._state.orderedTags;
 
