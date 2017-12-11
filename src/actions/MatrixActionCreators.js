@@ -14,7 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { createMatrixActionCreator } from './actionCreators';
+import {
+    createMatrixActionCreator,
+    createMatrixSyncActionCreator,
+} from './actionCreators';
 
 // Events emitted from the matrixClient that we want to dispatch as actions
 // via MatrixActionCreators. See createMatrixActionCreator.
@@ -30,6 +33,8 @@ export default {
         this.actionCreators = REGISTERED_EVENTS.map((eventId) =>
             createMatrixActionCreator(matrixClient, eventId),
         );
+        this.actionCreators.push(createMatrixSyncActionCreator(matrixClient));
+
         this.actionCreatorsStop = this.actionCreators.map((ac) => ac());
     },
 

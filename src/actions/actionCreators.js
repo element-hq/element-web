@@ -70,3 +70,36 @@ export function createMatrixActionCreator(matrixClient, eventId) {
         };
     };
 }
+
+// TODO: migrate from sync_state to MatrixSync so that more js-sdk events
+//       become dispatches in the same place.
+/**
+ * Create an action creator that will listen to `sync` events emitted
+ * by matrixClient and dispatch a corresponding MatrixSync action. E.g:
+ *     {
+ *         action: 'MatrixSync',
+ *         state: 'SYNCING',
+ *         prevState: 'PREPARED'
+ *     }
+ * @param {MatrixClient} matrixClient the matrix client with which to register
+ *                                    a listener.
+ * @returns {function} a function that, when called, will begin to listen to
+ *                     dispatches from matrixClient. The result from that
+ *                     function can be called to stop listening.
+ */
+export function createMatrixSyncActionCreator(matrixClient) {
+    const listener = (state, prevState) => {
+        dis.dispatch({
+            action: 'MatrixSync',
+            state,
+            prevState,
+            matrixClient,
+        });
+    };
+    return () => {
+        matrixClient.on('sync', listener);
+        return () => {
+            matrixClient.removeListener('sync', listener);
+        };
+    };
+}

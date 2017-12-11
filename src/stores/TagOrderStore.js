@@ -18,7 +18,9 @@ import dis from '../dispatcher';
 
 const INITIAL_STATE = {
     orderedTags: null,
-    allTags: null,
+    orderedTagsAccountData: null,
+    hasSynced: false,
+    joinedGroupIds: null,
 };
 
 /**
@@ -39,25 +41,42 @@ class TagOrderStore extends Store {
 
     __onDispatch(payload) {
         switch (payload.action) {
+            // Initialise state after initial sync
+            case 'MatrixSync': {
+                if (!(payload.prevState === 'PREPARED' && payload.state === 'SYNCING')) {
+                    break;
+                }
+                const tagOrderingEvent = payload.matrixClient.getAccountData('im.vector.web.tag_ordering');
+                const tagOrderingEventContent = tagOrderingEvent ? tagOrderingEvent.getContent() : {};
+                this._setState({
+                    orderedTagsAccountData: tagOrderingEventContent.tags || null,
+                    hasSynced: true,
+                });
+                this._updateOrderedTags();
+                break;
+            }
             // Get ordering from account data
             case 'MatrixActions.accountData': {
                 if (payload.event_type !== 'im.vector.web.tag_ordering') break;
                 this._setState({
-                    orderedTags: payload.event_content ? payload.event_content.tags : null,
+                    orderedTagsAccountData: payload.event_content ? payload.event_content.tags : null,
                 });
+                this._updateOrderedTags();
                 break;
             }
             // Initialise the state such that if account data is unset, default to joined groups
             case 'GroupActions.fetchJoinedGroups.success':
                 this._setState({
-                    allTags: payload.result.groups.sort(), // Sort lexically
+                    joinedGroupIds: payload.result.groups.sort(), // Sort lexically
+                    hasFetchedJoinedGroups: true,
                 });
+                this._updateOrderedTags();
             break;
             // Puts payload.tag at payload.targetTag, placing the targetTag before or after the tag
             case 'order_tag': {
                 if (!payload.tag || !payload.targetTag || payload.tag === payload.targetTag) return;
 
-                const tags = this._state.orderedTags || this._state.allTags;
+                const tags = this._state.orderedTags;
 
                 let orderedTags = tags.filter((t) => t !== payload.tag);
                 const newIndex = orderedTags.indexOf(payload.targetTag) + (payload.after ? 1 : 0);
@@ -72,12 +91,15 @@ class TagOrderStore extends Store {
         }
     }
 
-    getOrderedTags() {
-        return this._state.orderedTags;
+    _updateOrderedTags() {
+        this._setState({
+            orderedTags: this._state.hasSynced && this._state.hasFetchedJoinedGroups ?
+                this._state.orderedTagsAccountData || this._state.joinedGroupIds : [],
+        });
     }
 
-    getAllTags() {
-        return this._state.allTags;
+    getOrderedTags() {
+        return this._state.orderedTags;
     }
 }
 
