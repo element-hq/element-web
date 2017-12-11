@@ -227,6 +227,7 @@ module.exports = React.createClass({
                     userId={this.props.userId}
                     show={this.props.showApps}
                     creatorUserId={app.creatorUserId}
+                    widgetPageTitle={(app.data && app.data.title) ? app.data.title : ''}
                     waitForIframeLoad={app.waitForIframeLoad}
                 />);
             });
