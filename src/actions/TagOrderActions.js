@@ -23,10 +23,14 @@ const TagOrderActions = {};
 TagOrderActions.commitTagOrdering = createPromiseActionCreator(
     'TagOrderActions.commitTagOrdering',
     (matrixClient) => {
+        // Only commit tags if the state is ready, i.e. not null
+        const tags = TagOrderStore.getOrderedTags();
+        if (!tags) {
+            return;
+        }
+
         Analytics.trackEvent('TagOrderActions', 'commitTagOrdering');
-        return matrixClient.setAccountData('im.vector.web.tag_ordering', {
-            tags: TagOrderStore.getOrderedTags(),
-        });
+        return matrixClient.setAccountData('im.vector.web.tag_ordering', {tags});
     },
 );
 
