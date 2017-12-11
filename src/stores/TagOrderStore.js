@@ -94,7 +94,7 @@ class TagOrderStore extends Store {
     _updateOrderedTags() {
         this._setState({
             orderedTags: this._state.hasSynced && this._state.hasFetchedJoinedGroups ?
-                this._state.orderedTagsAccountData || this._state.joinedGroupIds : [],
+                this._state.orderedTagsAccountData || this._state.joinedGroupIds : null,
         });
     }
 

@@ -58,7 +58,7 @@ const TagPanel = React.createClass({
                 return;
             }
 
-            const orderedTags = TagOrderStore.getOrderedTags();
+            const orderedTags = TagOrderStore.getOrderedTags() || [];
             const orderedGroupTags = orderedTags.filter((t) => t[0] === '+');
             Promise.all(orderedGroupTags.map(
                 (groupId) => FlairStore.getGroupProfileCached(this.context.matrixClient, groupId),
