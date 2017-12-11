@@ -79,7 +79,7 @@ export default React.createClass({
             hasPermissionToLoad: hasPermissionToLoad === 'true' || newProps.userId === newProps.creatorUserId,
             error: null,
             deleting: false,
-            widgetPageTitle: null,
+            widgetPageTitle: newProps.widgetPageTitle,
         };
     },
 
@@ -196,6 +196,11 @@ export default React.createClass({
                 widgetUrl: u.format(),
                 initialising: false,
             });
+
+            // Fetch page title from remote content if not already set
+            if (!this.state.widgetPageTitle && params.url) {
+                this._fetchWidgetTitle(params.url);
+            }
         }, (err) => {
             console.error("Failed to get scalar_token", err);
             this.setState({
@@ -299,12 +304,16 @@ export default React.createClass({
 
     /**
      * Set remote content title on AppTile
-     * @param {string} title Title string to set on the AppTile
+     * @param {string} url Url to check for title
      */
-    _updateWidgetTitle(title) {
-        if (title) {
-            this.setState({widgetPageTitle: null});
-        }
+    _fetchWidgetTitle(url) {
+        this._scalarClient.getScalarPageTitle(url).then((widgetPageTitle) => {
+            if (widgetPageTitle) {
+                this.setState({widgetPageTitle: widgetPageTitle});
+            }
+        }, (err) =>{
+            console.error("Failed to get page title", err);
+        });
     },
 
     // Widget labels to render, depending upon user permissions
@@ -444,7 +453,7 @@ export default React.createClass({
                             height="10"
                         />
                         <b>{ this.formatAppTileName() }</b>
-                        { this.state.widgetPageTitle && (
+                        { this.state.widgetPageTitle && this.state.widgetPageTitle != this.formatAppTileName() && (
                             <span>&nbsp;-&nbsp;{ this.state.widgetPageTitle }</span>
                         ) }
                     </span>
