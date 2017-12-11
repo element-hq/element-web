@@ -60,6 +60,7 @@ const TagPanel = React.createClass({
 
             const orderedTags = TagOrderStore.getOrderedTags() || [];
             const orderedGroupTags = orderedTags.filter((t) => t[0] === '+');
+            // XXX: One profile lookup failing will bring the whole lot down
             Promise.all(orderedGroupTags.map(
                 (groupId) => FlairStore.getGroupProfileCached(this.context.matrixClient, groupId),
             )).then((orderedGroupTagProfiles) => {

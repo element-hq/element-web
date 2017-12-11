@@ -97,9 +97,26 @@ class TagOrderStore extends Store {
 
     _updateOrderedTags() {
         this._setState({
-            orderedTags: this._state.hasSynced && this._state.hasFetchedJoinedGroups ?
-                this._state.orderedTagsAccountData || this._state.joinedGroupIds : null,
+            orderedTags:
+                this._state.hasSynced &&
+                this._state.hasFetchedJoinedGroups ?
+                    this._mergeGroupsAndTags() : null,
         });
+    }
+
+    _mergeGroupsAndTags() {
+        const groupIds = this._state.joinedGroupIds || [];
+        const tags = this._state.orderedTagsAccountData || [];
+
+        const tagsToKeep = tags.filter(
+            (t) => t[0] !== '+' || groupIds.includes(t),
+        );
+
+        const groupIdsToAdd = groupIds.filter(
+            (groupId) => !tags.includes(groupId),
+        );
+
+        return tagsToKeep.concat(groupIdsToAdd);
     }
 
     getOrderedTags() {
