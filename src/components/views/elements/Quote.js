@@ -48,8 +48,6 @@ const Quote = React.createClass({
 
     getInitialState() {
         return {
-            // The room related to this quote
-            room: null,
             // The event related to this quote
             event: null,
         };
