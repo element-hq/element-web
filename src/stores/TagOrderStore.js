@@ -42,7 +42,7 @@ class TagOrderStore extends Store {
     __onDispatch(payload) {
         switch (payload.action) {
             // Initialise state after initial sync
-            case 'MatrixSync': {
+            case 'MatrixActions.sync': {
                 if (!(payload.prevState === 'PREPARED' && payload.state === 'SYNCING')) {
                     break;
                 }

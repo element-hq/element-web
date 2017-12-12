@@ -14,31 +14,65 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {
-    createMatrixActionCreator,
-    createMatrixSyncActionCreator,
-} from './actionCreators';
+import dis from '../dispatcher';
 
-// Events emitted from the matrixClient that we want to dispatch as actions
-// via MatrixActionCreators. See createMatrixActionCreator.
-const REGISTERED_EVENTS = [
-    "accountData",
-];
+// TODO: migrate from sync_state to MatrixActions.sync so that more js-sdk events
+//       become dispatches in the same place.
+/**
+ * An action creator that will map a `sync` event to a MatrixActions.sync action,
+ * each parameter mapping to a key-value in the action.
+ *
+ * @param {MatrixClient} matrixClient the matrix client
+ * @param {string} state the current sync state.
+ * @param {string} prevState the previous sync state.
+ * @returns {Object} an action of type MatrixActions.sync.
+ */
+function createSyncAction(matrixClient, state, prevState) {
+    return {
+        action: 'MatrixActions.sync',
+        state,
+        prevState,
+        matrixClient,
+    };
+}
+
+/**
+ * An action creator that will map an account data matrix event to a
+ * MatrixActions.accountData action.
+ *
+ * @param {MatrixClient} matrixClient the matrix client with which to
+ *                                    register a listener.
+ * @param {MatrixEvent} accountDataEvent the account data event.
+ * @returns {Object} an action of type MatrixActions.accountData.
+ */
+function createAccountDataAction(matrixClient, accountDataEvent) {
+    return {
+        action: 'MatrixActions.accountData',
+        event: accountDataEvent,
+        event_type: accountDataEvent.getType(),
+        event_content: accountDataEvent.getContent(),
+    };
+}
 
 export default {
-    actionCreators: [],
-    actionCreatorsStop: [],
+    _matrixClientListenersStop: [],
 
     start(matrixClient) {
-        this.actionCreators = REGISTERED_EVENTS.map((eventId) =>
-            createMatrixActionCreator(matrixClient, eventId),
-        );
-        this.actionCreators.push(createMatrixSyncActionCreator(matrixClient));
+        this._addMatrixClientListener(matrixClient, 'sync', createSyncAction);
+        this._addMatrixClientListener(matrixClient, 'accountData', createAccountDataAction);
+    },
 
-        this.actionCreatorsStop = this.actionCreators.map((ac) => ac());
+    _addMatrixClientListener(matrixClient, eventName, actionCreator) {
+        const listener = (...args) => {
+            dis.dispatch(actionCreator(matrixClient, ...args));
+        };
+        matrixClient.on(eventName, listener);
+        this._matrixClientListenersStop.push(() => {
+            matrixClient.removeListener(eventName, listener);
+        });
     },
 
     stop() {
-        this.actionCreatorsStop.map((stop) => stop());
+        this._matrixClientListenersStop.forEach((stopListener) => stopListener());
     },
 };
