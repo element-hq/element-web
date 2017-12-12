@@ -83,7 +83,12 @@ export default React.createClass({
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         return (
-            <FocusTrap onKeyDown={this._onKeyDown} className={this.props.className} role="dialog" aria-labelledby='mx_BaseDialog_title' aria-describedby={this.props.contentId}>
+            <FocusTrap onKeyDown={this._onKeyDown}
+                className={this.props.className}
+                role="dialog"
+                aria-labelledby='mx_BaseDialog_title'
+                aria-describedby={this.props.contentId}
+            >
                 <AccessibleButton onClick={this._onCancelClick}
                     className="mx_Dialog_cancelButton"
                 >
