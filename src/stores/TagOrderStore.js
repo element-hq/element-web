@@ -65,13 +65,14 @@ class TagOrderStore extends Store {
                 break;
             }
             // Initialise the state such that if account data is unset, default to joined groups
-            case 'GroupActions.fetchJoinedGroups.success':
+            case 'GroupActions.fetchJoinedGroups.success': {
                 this._setState({
                     joinedGroupIds: payload.result.groups.sort(), // Sort lexically
                     hasFetchedJoinedGroups: true,
                 });
                 this._updateOrderedTags();
-            break;
+                break;
+            }
             // Puts payload.tag at payload.targetTag, placing the targetTag before or after the tag
             case 'order_tag': {
                 if (!this._state.orderedTags ||
@@ -90,8 +91,8 @@ class TagOrderStore extends Store {
                     ...orderedTags.slice(newIndex),
                 ];
                 this._setState({orderedTags});
+                break;
             }
-            break;
         }
     }
 
