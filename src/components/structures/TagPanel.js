@@ -68,7 +68,7 @@ const TagPanel = React.createClass({
             });
         });
         // This could be done by anything with a matrix client
-        GroupActions.fetchJoinedGroups(this.context.matrixClient);
+        dis.dispatch(GroupActions.fetchJoinedGroups(this.context.matrixClient));
     },
 
     componentWillUnmount() {
@@ -81,7 +81,7 @@ const TagPanel = React.createClass({
 
     _onGroupMyMembership() {
         if (this.unmounted) return;
-        GroupActions.fetchJoinedGroups(this.context.matrixClient);
+        dis.dispatch(GroupActions.fetchJoinedGroups.bind(this.context.matrixClient));
     },
 
     onClick() {
@@ -94,7 +94,7 @@ const TagPanel = React.createClass({
     },
 
     onTagTileEndDrag() {
-        TagOrderActions.commitTagOrdering(this.context.matrixClient);
+        dis.dispatch(TagOrderActions.commitTagOrdering(this.context.matrixClient));
     },
 
     render() {

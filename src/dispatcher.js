@@ -20,14 +20,24 @@ const flux = require("flux");
 
 class MatrixDispatcher extends flux.Dispatcher {
     /**
-     * @param {Object} payload Required. The payload to dispatch.
-     *        Must contain at least an 'action' key.
+     * @param {Object|function} payload Required. The payload to dispatch.
+     *        If an Object, must contain at least an 'action' key.
+     *        If a function, must have the signature (dispatch) => {...}.
      * @param {boolean=} sync Optional. Pass true to dispatch
      *        synchronously. This is useful for anything triggering
      *        an operation that the browser requires user interaction
      *        for.
      */
     dispatch(payload, sync) {
+        // Allow for asynchronous dispatching by accepting payloads that have the
+        // type `function (dispatch) {...}`
+        if (typeof payload === 'function') {
+            payload((action) => {
+                this.dispatch(action, sync);
+            });
+            return;
+        }
+
         if (sync) {
             super.dispatch(payload);
         } else {

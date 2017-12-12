@@ -14,25 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import dis from '../dispatcher';
-
 /**
- * Create an action creator that will dispatch actions asynchronously that
- * indicate the current status of promise returned by the given function, fn.
+ * Create an asynchronous action creator that will dispatch actions indicating
+ * the current status of the promise returned by fn.
  * @param {string} id the id to give the dispatched actions. This is given a
- *                   suffix determining whether it is pending, successful or
- *                   a failure.
- * @param {function} fn the function to call with arguments given to the
- *                   returned function. This function should return a Promise.
- * @returns {function} a function that dispatches asynchronous actions when called.
+ *                    suffix determining whether it is pending, successful or
+ *                    a failure.
+ * @param {function} fn a function that returns a Promise.
+ * @returns {function} a function that uses its single argument as a dispatch
+ *                     function.
  */
-export function createPromiseActionCreator(id, fn) {
-    return (...args) => {
-        dis.dispatch({action: id + '.pending'});
-        fn(...args).then((result) => {
-            dis.dispatch({action: id + '.success', result});
+export function asyncAction(id, fn) {
+    return (dispatch) => {
+        dispatch({action: id + '.pending'});
+        fn().then((result) => {
+            dispatch({action: id + '.success', result});
         }).catch((err) => {
-            dis.dispatch({action: id + '.failure', err});
+            dispatch({action: id + '.failure', err});
         });
     };
 }

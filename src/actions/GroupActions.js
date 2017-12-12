@@ -14,13 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { createPromiseActionCreator } from './actionCreators';
+import { asyncAction } from './actionCreators';
 
 const GroupActions = {};
 
-GroupActions.fetchJoinedGroups = createPromiseActionCreator(
-    'GroupActions.fetchJoinedGroups',
-    (matrixClient) => matrixClient.getJoinedGroups(),
-);
+GroupActions.fetchJoinedGroups = function(matrixClient) {
+    return asyncAction('GroupActions.fetchJoinedGroups', () => matrixClient.getJoinedGroups());
+};
 
 export default GroupActions;

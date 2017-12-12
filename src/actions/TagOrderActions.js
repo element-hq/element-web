@@ -15,14 +15,13 @@ limitations under the License.
 */
 
 import Analytics from '../Analytics';
-import { createPromiseActionCreator } from './actionCreators';
+import { asyncAction } from './actionCreators';
 import TagOrderStore from '../stores/TagOrderStore';
 
 const TagOrderActions = {};
 
-TagOrderActions.commitTagOrdering = createPromiseActionCreator(
-    'TagOrderActions.commitTagOrdering',
-    (matrixClient) => {
+TagOrderActions.commitTagOrdering = function(matrixClient) {
+    return asyncAction('TagOrderActions.commitTagOrdering', () => {
         // Only commit tags if the state is ready, i.e. not null
         const tags = TagOrderStore.getOrderedTags();
         if (!tags) {
@@ -31,7 +30,7 @@ TagOrderActions.commitTagOrdering = createPromiseActionCreator(
 
         Analytics.trackEvent('TagOrderActions', 'commitTagOrdering');
         return matrixClient.setAccountData('im.vector.web.tag_ordering', {tags});
-    },
-);
+    });
+};
 
 export default TagOrderActions;
