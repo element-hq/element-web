@@ -297,6 +297,36 @@ export default class MessageComposerInput extends React.Component {
                 });
             }
                 break;
+
+            case 'quote': { // old quoting, whilst rich quoting is in labs
+                /// XXX: Not doing rich-text quoting from formatted-body because draft-js
+                /// has regressed such that when links are quoted, errors are thrown. See
+                /// https://github.com/vector-im/riot-web/issues/4756.
+                const body = escape(payload.text);
+                if (body) {
+                    let content = RichText.htmlToContentState(`<blockquote>${body}</blockquote>`);
+                    if (!this.state.isRichtextEnabled) {
+                        content = ContentState.createFromText(RichText.stateToMarkdown(content));
+                    }
+
+                    const blockMap = content.getBlockMap();
+                    let startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
+                    contentState = Modifier.splitBlock(contentState, startSelection);
+                    startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
+                    contentState = Modifier.replaceWithFragment(contentState,
+                        startSelection,
+                        blockMap);
+                    startSelection = SelectionState.createEmpty(contentState.getFirstBlock().getKey());
+                    if (this.state.isRichtextEnabled) {
+                        contentState = Modifier.setBlockType(contentState, startSelection, 'blockquote');
+                    }
+                    let editorState = EditorState.push(this.state.editorState, contentState, 'insert-characters');
+                    editorState = EditorState.moveSelectionToEnd(editorState);
+                    this.onEditorContentChanged(editorState);
+                    editor.focus();
+                }
+            }
+                break;
         }
     };
 
@@ -1146,7 +1176,7 @@ export default class MessageComposerInput extends React.Component {
         return (
             <div className="mx_MessageComposer_input_wrapper">
                 <div className="mx_MessageComposer_autocomplete_wrapper">
-                    <QuotePreview />
+                    { SettingsStore.isFeatureEnabled("feature_rich_quoting") && <QuotePreview /> }
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         room={this.props.room}

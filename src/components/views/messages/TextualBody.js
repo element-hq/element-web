@@ -202,7 +202,9 @@ module.exports = React.createClass({
 
                     // update the current node with one that's now taken its place
                     node = pillContainer;
-                } else if (this.props.tileShape !== 'quote' && Quote.isMessageUrl(href)) {
+                } else if (SettingsStore.isFeatureEnabled("feature_rich_quoting") && this.props.tileShape !== 'quote' &&
+                    Quote.isMessageUrl(href)
+                ) {
                     // only allow this branch if we're not already in a quote, as fun as infinite nesting is.
                     const quoteContainer = document.createElement('span');
 
