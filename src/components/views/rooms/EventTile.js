@@ -29,6 +29,7 @@ import withMatrixClient from '../../../wrappers/withMatrixClient';
 
 const ContextualMenu = require('../../structures/ContextualMenu');
 import dis from '../../../dispatcher';
+import {makeEventPermalink} from "../../../matrix-to";
 
 const ObjectUtils = require('../../../ObjectUtils');
 
@@ -472,9 +473,7 @@ module.exports = withMatrixClient(React.createClass({
             mx_EventTile_redacted: isRedacted,
         });
 
-        const permalink = "https://matrix.to/#/" +
-            this.props.mxEvent.getRoomId() + "/" +
-            this.props.mxEvent.getId();
+        const permalink = makeEventPermalink(this.props.mxEvent.getRoomId(), this.props.mxEvent.getId());
 
         const readAvatars = this.getReadAvatars();
 

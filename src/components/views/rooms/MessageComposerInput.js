@@ -50,7 +50,7 @@ const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g')
 
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import {makeEventPermalink} from "../../../matrix-to";
+import {makeEventPermalink, makeUserPermalink} from "../../../matrix-to";
 import QuotePreview from "./QuotePreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
 
@@ -292,7 +292,7 @@ export default class MessageComposerInput extends React.Component {
                 this.setDisplayedCompletion({
                     completion,
                     selection,
-                    href: `https://matrix.to/#/${payload.user_id}`,
+                    href: makeUserPermalink(payload.user_id),
                     suffix: selection.getStartOffset() === 0 ? ': ' : ' ',
                 });
             }
