@@ -19,7 +19,8 @@ import dis from '../dispatcher';
 // TODO: migrate from sync_state to MatrixActions.sync so that more js-sdk events
 //       become dispatches in the same place.
 /**
- * Create a MatrixActions.sync action that represents a MatrixClient `sync` event.
+ * Create a MatrixActions.sync action that represents a MatrixClient `sync` event,
+ * each parameter mapping to a key-value in the action.
  *
  * @param {MatrixClient} matrixClient the matrix client
  * @param {string} state the current sync state.
@@ -36,12 +37,21 @@ function createSyncAction(matrixClient, state, prevState) {
 }
 
 /**
+ * @typedef AccountDataAction
+ * @type {Object}
+ * @property {string} action 'MatrixActions.accountData'.
+ * @property {MatrixEvent} event the MatrixEvent that triggered the dispatch.
+ * @property {string} event_type the type of the MatrixEvent, e.g. "m.direct".
+ * @property {Object} event_content the content of the MatrixEvent.
+ */
+
+/**
  * Create a MatrixActions.accountData action that represents a MatrixClient `accountData`
  * matrix event.
  *
  * @param {MatrixClient} matrixClient the matrix client.
  * @param {MatrixEvent} accountDataEvent the account data event.
- * @returns {Object} an action of type MatrixActions.accountData.
+ * @returns {AccountDataAction} an action of type MatrixActions.accountData.
  */
 function createAccountDataAction(matrixClient, accountDataEvent) {
     return {
