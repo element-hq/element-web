@@ -31,7 +31,7 @@ class TagOrderStore extends Store {
         super(dis);
 
         // Initialise state
-        this._state = INITIAL_STATE;
+        this._state = Object.assign({}, INITIAL_STATE);
     }
 
     _setState(newState) {
@@ -91,6 +91,12 @@ class TagOrderStore extends Store {
                     ...orderedTags.slice(newIndex),
                 ];
                 this._setState({orderedTags});
+                break;
+            }
+            case 'on_logged_out': {
+                // Reset state without pushing an update to the view, which generally assumes that
+                // the matrix client isn't `null` and so causing a re-render will cause NPEs.
+                this._state = Object.assign({}, INITIAL_STATE);
                 break;
             }
         }
