@@ -81,8 +81,8 @@ export default {
     },
 
     /**
-     * Start listening to events emitted by matrixClient, dispatch an action created by the
-     * actionCreator function.
+     * Start listening to events of type eventName on matrixClient and when they are emitted,
+     * dispatch an action created by the actionCreator function.
      * @param {MatrixClient} matrixClient a MatrixClient to register a listener with.
      * @param {string} eventName the event to listen to on MatrixClient.
      * @param {function} actionCreator a function that should return an action to dispatch
