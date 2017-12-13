@@ -21,8 +21,8 @@ limitations under the License.
  *                    suffix determining whether it is pending, successful or
  *                    a failure.
  * @param {function} fn a function that returns a Promise.
- * @returns {function} an asyncronous action creator - a function that uses its
- *                     single argument as a dispatch function.
+ * @returns {function} an asynchronous action creator - a function that uses
+ *                     its single argument as a dispatch function.
  */
 export function asyncAction(id, fn) {
     return (dispatch) => {

@@ -19,11 +19,11 @@ import { asyncAction } from './actionCreators';
 const GroupActions = {};
 
 /**
- * Create a GroupActions.fetchJoinedGroups action that represents an
- * asyncronous request to fetch the groups to which a user is joined.
+ * Create a  GroupActions.fetchJoinedGroups action that represents an
+ * asynchronous request to fetch the groups to which a user is joined.
  *
  * @param {MatrixClient} matrixClient the matrix client to query.
- * @returns {function} an asyncronous action of type
+ * @returns {function} an asynchronous action of type
  *                   GroupActions.fetchJoinedGroups.
  */
 GroupActions.fetchJoinedGroups = function(matrixClient) {

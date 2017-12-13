@@ -27,7 +27,7 @@ const TagOrderActions = {};
  *
  * @param {MatrixClient} matrixClient the matrix client to set the account
  *                                    data on.
- * @returns {function} an asyncronous action of type
+ * @returns {function} an asynchronous action of type
  *                   TagOrderActions.commitTagOrdering.
  */
 TagOrderActions.commitTagOrdering = function(matrixClient) {
