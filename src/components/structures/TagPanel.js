@@ -81,7 +81,7 @@ const TagPanel = React.createClass({
 
     _onGroupMyMembership() {
         if (this.unmounted) return;
-        dis.dispatch(GroupActions.fetchJoinedGroups.bind(this.context.matrixClient));
+        dis.dispatch(GroupActions.fetchJoinedGroups(this.context.matrixClient));
     },
 
     onClick() {
