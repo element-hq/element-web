@@ -36,7 +36,15 @@ const TagPanel = React.createClass({
 
     getInitialState() {
         return {
-            orderedGroupTagProfiles: [],
+            // A list of group profiles for group tags
+            orderedGroupTagProfiles: [
+            // {
+            //     groupId: '+awesome:foo.bar',{
+            //     name: 'My Awesome Community',
+            //     avatarUrl: 'mxc://...',
+            //     shortDescription: 'Some description...',
+            // },
+            ],
             selectedTags: [],
         };
     },
