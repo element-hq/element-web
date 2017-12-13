@@ -20,6 +20,16 @@ import TagOrderStore from '../stores/TagOrderStore';
 
 const TagOrderActions = {};
 
+/**
+ * Create a TagOrderActions.commitTagOrdering action that represents an
+ * asyncronous request to commit TagOrderStore.getOrderedTags() to account
+ * data.
+ *
+ * @param {MatrixClient} matrixClient the matrix client to set the account
+ *                                    data on.
+ * @returns {function} an asyncronous action of type
+ *                   TagOrderActions.commitTagOrdering.
+ */
 TagOrderActions.commitTagOrdering = function(matrixClient) {
     return asyncAction('TagOrderActions.commitTagOrdering', () => {
         // Only commit tags if the state is ready, i.e. not null
