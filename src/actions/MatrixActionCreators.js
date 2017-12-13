@@ -19,8 +19,7 @@ import dis from '../dispatcher';
 // TODO: migrate from sync_state to MatrixActions.sync so that more js-sdk events
 //       become dispatches in the same place.
 /**
- * An action creator that will map a `sync` event to a MatrixActions.sync action,
- * each parameter mapping to a key-value in the action.
+ * Create a MatrixActions.sync action that represents a MatrixClient `sync` event.
  *
  * @param {MatrixClient} matrixClient the matrix client
  * @param {string} state the current sync state.
@@ -37,11 +36,10 @@ function createSyncAction(matrixClient, state, prevState) {
 }
 
 /**
- * An action creator that will map an account data matrix event to a
- * MatrixActions.accountData action.
+ * Create a MatrixActions.accountData action that represents a MatrixClient `accountData`
+ * matrix event.
  *
- * @param {MatrixClient} matrixClient the matrix client with which to
- *                                    register a listener.
+ * @param {MatrixClient} matrixClient the matrix client.
  * @param {MatrixEvent} accountDataEvent the account data event.
  * @returns {Object} an action of type MatrixActions.accountData.
  */
@@ -54,14 +52,33 @@ function createAccountDataAction(matrixClient, accountDataEvent) {
     };
 }
 
+/**
+ * This object is responsible for dispatching actions when certain events are emitted by
+ * the given MatrixClient.
+ */
 export default {
+    // A list of callbacks to call to unregister all listeners added
     _matrixClientListenersStop: [],
 
+    /**
+     * Start listening to certain events from the MatrixClient and dispatch actions when
+     * they are emitted.
+     * @param {MatrixClient} matrixClient the MatrixClient to listen to events from
+     */
     start(matrixClient) {
         this._addMatrixClientListener(matrixClient, 'sync', createSyncAction);
         this._addMatrixClientListener(matrixClient, 'accountData', createAccountDataAction);
     },
 
+    /**
+     * Start listening to events emitted by matrixClient, dispatch an action created by the
+     * actionCreator function.
+     * @param {MatrixClient} matrixClient a MatrixClient to register a listener with.
+     * @param {string} eventName the event to listen to on MatrixClient.
+     * @param {function} actionCreator a function that should return an action to dispatch
+     *                                 when given the arguments emitted in the MatrixClient
+     *                                 event.
+     */
     _addMatrixClientListener(matrixClient, eventName, actionCreator) {
         const listener = (...args) => {
             dis.dispatch(actionCreator(matrixClient, ...args));
@@ -72,6 +89,9 @@ export default {
         });
     },
 
+    /**
+     * Stop listening to events.
+     */
     stop() {
         this._matrixClientListenersStop.forEach((stopListener) => stopListener());
     },
