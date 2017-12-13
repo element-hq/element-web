@@ -275,7 +275,7 @@ module.exports = React.createClass({
                 <div className={ alertMeClasses } onClick={this._onClickAlertMe} >
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute-off-copy.svg" width="16" height="12" />
-                    { _t('All messages (loud)') }
+                    { _t('All messages (noisy)') }
                 </div>
                 <div className={ allNotifsClasses } onClick={this._onClickAllNotifs} >
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />

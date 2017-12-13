@@ -1,7 +1,7 @@
 {
     "Add an email address above to configure email notifications": "ഇ മെയില്‍ അറിയിപ്പുകൾ ലഭിക്കാന്‍ മുകളില്‍ ഇ-മെയില്‍ വിലാസം നല്‍കൂ",
     "All messages": "എല്ലാ സന്ദേശങ്ങളും",
-    "All messages (loud)": "എല്ലാ സന്ദേശങ്ങളും (ഉച്ചത്തിൽ)",
+    "All messages (noisy)": "എല്ലാ സന്ദേശങ്ങളും (ഉച്ചത്തിൽ)",
     "%(appName)s via %(browserName)s on %(osName)s": "%(osName)sല്‍  %(browserName)s വഴി %(appName)s",
     "<a href=\"http://apple.com/safari\">Safari</a> and <a href=\"http://opera.com\">Opera</a> work too.": "<a href=\"http://apple.com/safari\">സഫാരിയിലും</a>പിന്നെ <a href=\"http://opera.com\">ഓപ്പേറയിലും</a>പ്രവര്‍ത്തിക്കുന്നു.",
     "A new version of Riot is available.": "റയട്ടിന്റെ ഒരു പുതിയ പതിപ്പ് ലഭ്യമാണ്.",
