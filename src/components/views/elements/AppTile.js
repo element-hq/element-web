@@ -226,6 +226,10 @@ export default React.createClass({
             this.setState({
                 loading: true,
             });
+        } else if (nextProps.widgetPageTitle !== this.props.widgetPageTitle) {
+            this.setState({
+                widgetPageTitle: nextProps.widgetPageTitle,
+            });
         }
     },
 
