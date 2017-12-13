@@ -15,14 +15,19 @@ limitations under the License.
 */
 
 /**
- * Create an asynchronous action creator that will dispatch actions indicating
- * the current status of the promise returned by fn.
+ * Create an action thunk that will dispatch actions indicating the current
+ * status of the Promise returned by fn.
+ *
  * @param {string} id the id to give the dispatched actions. This is given a
  *                    suffix determining whether it is pending, successful or
  *                    a failure.
  * @param {function} fn a function that returns a Promise.
- * @returns {function} an asynchronous action creator - a function that uses
- *                     its single argument as a dispatch function.
+ * @returns {function} an action thunk - a function that uses its single
+ *                     argument as a dispatch function to dispatch the
+ *                     following actions:
+ *                         `${id}.pending` and either
+ *                         `${id}.success` or
+ *                         `${id}.failure`.
  */
 export function asyncAction(id, fn) {
     return (dispatch) => {
