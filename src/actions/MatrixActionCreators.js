@@ -86,8 +86,8 @@ export default {
      * @param {MatrixClient} matrixClient a MatrixClient to register a listener with.
      * @param {string} eventName the event to listen to on MatrixClient.
      * @param {function} actionCreator a function that should return an action to dispatch
-     *                                 when given the arguments emitted in the MatrixClient
-     *                                 event.
+     *                                 when given the MatrixClient as an argument as well as
+     *                                 arguments emitted in the MatrixClient event.
      */
     _addMatrixClientListener(matrixClient, eventName, actionCreator) {
         const listener = (...args) => {

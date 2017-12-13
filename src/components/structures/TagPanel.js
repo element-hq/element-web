@@ -36,7 +36,9 @@ const TagPanel = React.createClass({
 
     getInitialState() {
         return {
-            // A list of group profiles for group tags
+            // A list of group profiles for tags that are group IDs. The intention in future
+            // is to allow arbitrary tags to be selected in the TagPanel, not just groups.
+            // For now, it suffices to maintain a list of ordered group profiles.
             orderedGroupTagProfiles: [
             // {
             //     groupId: '+awesome:foo.bar',{
