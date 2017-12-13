@@ -64,6 +64,7 @@ const TagPanel = React.createClass({
             Promise.all(orderedGroupTags.map(
                 (groupId) => FlairStore.getGroupProfileCached(this.context.matrixClient, groupId),
             )).then((orderedGroupTagProfiles) => {
+                if (this.unmounted) return;
                 this.setState({orderedGroupTagProfiles});
             });
         });
