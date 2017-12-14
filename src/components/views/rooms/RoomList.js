@@ -71,7 +71,6 @@ module.exports = React.createClass({
         this.mounted = false;
 
         const cli = MatrixClientPeg.get();
-        const dmRoomMap = new DMRoomMap(cli);
 
         cli.on("Room", this.onRoom);
         cli.on("deleteRoom", this.onDeleteRoom);
@@ -85,6 +84,7 @@ module.exports = React.createClass({
         cli.on("accountData", this.onAccountData);
         cli.on("Group.myMembership", this._onGroupMyMembership);
 
+        const dmRoomMap = DMRoomMap.shared();
         this._groupStores = {};
         // A map between tags which are group IDs and the room IDs of rooms that should be kept
         // in the room list when filtering by that tag.
@@ -333,7 +333,7 @@ module.exports = React.createClass({
         lists["m.lowpriority"] = [];
         lists["im.vector.fake.archived"] = [];
 
-        const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
+        const dmRoomMap = DMRoomMap.shared();
         MatrixClientPeg.get().getRooms().forEach((room) => {
             const me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (!me) return;
