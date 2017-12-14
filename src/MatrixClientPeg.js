@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd.
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@ import EventTimeline from 'matrix-js-sdk/lib/models/event-timeline';
 import EventTimelineSet from 'matrix-js-sdk/lib/models/event-timeline-set';
 import createMatrixClient from './utils/createMatrixClient';
 import SettingsStore from './settings/SettingsStore';
+import MatrixActionCreators from './actions/MatrixActionCreators';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -68,6 +70,8 @@ class MatrixClientPeg {
 
     unset() {
         this.matrixClient = null;
+
+        MatrixActionCreators.stop();
     }
 
     /**
@@ -107,6 +111,9 @@ class MatrixClientPeg {
 
         // regardless of errors, start the client. If we did error out, we'll
         // just end up doing a full initial /sync.
+
+        // Connect the matrix client to the dispatcher
+        MatrixActionCreators.start(this.matrixClient);
 
         console.log(`MatrixClientPeg: really starting MatrixClient`);
         this.get().startClient(opts);

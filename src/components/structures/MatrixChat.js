@@ -83,7 +83,7 @@ const ONBOARDING_FLOW_STARTERS = [
     'view_create_group',
 ];
 
-module.exports = React.createClass({
+export default React.createClass({
     // we export this so that the integration tests can use it :-S
     statics: {
         VIEWS: VIEWS,
