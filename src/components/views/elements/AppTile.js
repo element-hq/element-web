@@ -52,11 +52,13 @@ export default React.createClass({
         userId: React.PropTypes.string.isRequired,
         // UserId of the entity that added / modified the widget
         creatorUserId: React.PropTypes.string,
+        waitForIframeLoad: React.PropTypes.bool,
     },
 
     getDefaultProps() {
         return {
             url: "",
+            waitForIframeLoad: true,
         };
     },
 
@@ -71,7 +73,7 @@ export default React.createClass({
         const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
         return {
             initialising: true,   // True while we are mangling the widget URL
-            loading: true,        // True while the iframe content is loading
+            loading: this.props.waitForIframeLoad,        // True while the iframe content is loading
             widgetUrl: this._addWurlParams(newProps.url),
             widgetPermissionId: widgetPermissionId,
             // Assume that widget has permission to load if we are the user who
@@ -79,7 +81,7 @@ export default React.createClass({
             hasPermissionToLoad: hasPermissionToLoad === 'true' || newProps.userId === newProps.creatorUserId,
             error: null,
             deleting: false,
-            widgetPageTitle: null,
+            widgetPageTitle: newProps.widgetPageTitle,
         };
     },
 
@@ -196,6 +198,11 @@ export default React.createClass({
                 widgetUrl: u.format(),
                 initialising: false,
             });
+
+            // Fetch page title from remote content if not already set
+            if (!this.state.widgetPageTitle && params.url) {
+                this._fetchWidgetTitle(params.url);
+            }
         }, (err) => {
             console.error("Failed to get scalar_token", err);
             this.setState({
@@ -215,9 +222,13 @@ export default React.createClass({
         if (nextProps.url !== this.props.url) {
             this._getNewState(nextProps);
             this.setScalarToken();
-        } else if (nextProps.show && !this.props.show) {
+        } else if (nextProps.show && !this.props.show && this.props.waitForIframeLoad) {
             this.setState({
                 loading: true,
+            });
+        } else if (nextProps.widgetPageTitle !== this.props.widgetPageTitle) {
+            this.setState({
+                widgetPageTitle: nextProps.widgetPageTitle,
             });
         }
     },
@@ -299,12 +310,16 @@ export default React.createClass({
 
     /**
      * Set remote content title on AppTile
-     * @param {string} title Title string to set on the AppTile
+     * @param {string} url Url to check for title
      */
-    _updateWidgetTitle(title) {
-        if (title) {
-            this.setState({widgetPageTitle: null});
-        }
+    _fetchWidgetTitle(url) {
+        this._scalarClient.getScalarPageTitle(url).then((widgetPageTitle) => {
+            if (widgetPageTitle) {
+                this.setState({widgetPageTitle: widgetPageTitle});
+            }
+        }, (err) =>{
+            console.error("Failed to get page title", err);
+        });
     },
 
     // Widget labels to render, depending upon user permissions
@@ -430,13 +445,24 @@ export default React.createClass({
             deleteClasses += ' mx_AppTileMenuBarWidgetDelete';
         }
 
+        const windowStateIcon = (this.props.show ? 'img/minimize.svg' : 'img/maximize.svg');
+
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
-                    <b>{ this.formatAppTileName() }</b>
-                    { this.state.widgetPageTitle && (
-                        <span>&nbsp;-&nbsp;{ this.state.widgetPageTitle }</span>
-                    ) }
+                    <span className="mx_AppTileMenuBarTitle">
+                        <TintableSvgButton
+                            src={windowStateIcon}
+                            className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
+                            title={_t('Minimize apps')}
+                            width="10"
+                            height="10"
+                        />
+                        <b>{ this.formatAppTileName() }</b>
+                        { this.state.widgetPageTitle && this.state.widgetPageTitle != this.formatAppTileName() && (
+                            <span>&nbsp;-&nbsp;{ this.state.widgetPageTitle }</span>
+                        ) }
+                    </span>
                     <span className="mx_AppTileMenuBarWidgets">
                         { /* Edit widget */ }
                         { showEditButton && <TintableSvgButton

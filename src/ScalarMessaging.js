@@ -366,6 +366,22 @@ function getWidgets(event, roomId) {
     sendResponse(event, widgetStateEvents);
 }
 
+function getRoomEncState(event, roomId) {
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, _t('You need to be logged in.'));
+        return;
+    }
+    const room = client.getRoom(roomId);
+    if (!room) {
+        sendError(event, _t('This room is not recognised.'));
+        return;
+    }
+    const roomIsEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
+
+    sendResponse(event, roomIsEncrypted);
+}
+
 function setPlumbingState(event, roomId, status) {
     if (typeof status !== 'string') {
         throw new Error('Plumbing state status should be a string');
@@ -592,6 +608,9 @@ const onMessage = function(event) {
             return;
         } else if (event.data.action === "get_widgets") {
             getWidgets(event, roomId);
+            return;
+        } else if (event.data.action === "get_room_enc_state") {
+            getRoomEncState(event, roomId);
             return;
         } else if (event.data.action === "can_send_event") {
             canSendEvent(event, roomId);
