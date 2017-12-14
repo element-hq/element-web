@@ -86,7 +86,12 @@ module.exports = React.createClass({
         cli.on("Group.myMembership", this._onGroupMyMembership);
 
         this._groupStores = {};
-        this._selectedTagsRoomIdsForGroup = {};
+        // A map between tags which are group IDs and the room IDs of rooms that should be kept
+        // in the room list when filtering by that tag.
+        this._selectedTagsRoomIdsForGroup = {
+            // $groupId: [$roomId1, $roomId2, ...],
+        };
+        // All rooms that should be kept in the room list when filtering
         this._selectedTagsRoomIds = [];
         // When the selected tags are changed, initialise a group store if necessary
         this._filterStoreToken = FilterStore.addListener(() => {
