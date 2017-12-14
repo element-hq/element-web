@@ -127,6 +127,15 @@ export const PasswordAuthEntry = React.createClass({
             );
         }
 
+        let errorSection;
+        if (this.props.errorText) {
+            errorSection = (
+                <div className="error" role="alert">
+                    { this.props.errorText }
+                </div>
+            );
+        }
+
         return (
             <div>
                 <p>{ _t("To continue, please enter your password.") }</p>
@@ -143,9 +152,7 @@ export const PasswordAuthEntry = React.createClass({
                         { submitButtonOrSpinner }
                     </div>
                 </form>
-                <div className="error" role={ this.props.errorText ? "alert" : ""}>
-                    { this.props.errorText }
-                </div>
+            { errorSection }
             </div>
         );
     },
@@ -180,14 +187,22 @@ export const RecaptchaAuthEntry = React.createClass({
 
         const CaptchaForm = sdk.getComponent("views.login.CaptchaForm");
         const sitePublicKey = this.props.stageParams.public_key;
+
+        let errorSection;
+        if (this.props.errorText) {
+            errorSection = (
+                <div className="error" role="alert">
+                    { this.props.errorText }
+                </div>
+            );
+        }
+
         return (
             <div>
                 <CaptchaForm sitePublicKey={sitePublicKey}
                     onCaptchaResponse={this._onCaptchaResponse}
                 />
-                <div className="error" role={ this.props.errorText ? "alert" : ""}>
-                    { this.props.errorText }
-                </div>
+                { errorSection }
             </div>
         );
     },
@@ -372,6 +387,14 @@ export const MsisdnAuthEntry = React.createClass({
                 mx_InteractiveAuthEntryComponents_msisdnSubmit: true,
                 mx_UserSettings_button: true, // XXX button classes
             });
+            let errorSection;
+            if (this.state.errorText) {
+                errorSection = (
+                    <div className="error" role="alert">
+                        { this.state.errorText }
+                    </div>
+                );
+            }
             return (
                 <div>
                     <p>{ _t("A text message has been sent to %(msisdn)s",
@@ -393,9 +416,7 @@ export const MsisdnAuthEntry = React.createClass({
                                 disabled={!enableSubmit}
                             />
                         </form>
-                        <div className="error" role={this.state.errorText ? "alert" : ""}>
-                            { this.state.errorText }
-                        </div>
+                        {errorSection}
                     </div>
                 </div>
             );
@@ -452,12 +473,18 @@ export const FallbackAuthEntry = React.createClass({
     },
 
     render: function() {
+        let errorSection;
+        if (this.props.errorText) {
+            errorSection = (
+                <div className="error" role="alert">
+                    { this.props.errorText }
+                </div>
+            );
+        }
         return (
             <div>
                 <a ref="fallbackButton" onClick={this._onShowFallbackClick}>{ _t("Start authentication") }</a>
-                <div className="error" role={ this.props.errorText ? "alert" : ""}>
-                    { this.props.errorText }
-                </div>
+                {errorSection}
             </div>
         );
     },

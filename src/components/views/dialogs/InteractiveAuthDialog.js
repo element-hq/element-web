@@ -73,7 +73,7 @@ export default React.createClass({
         if (this.state.authError) {
             content = (
                 <div id='mx_Dialog_content'>
-                    <div role={(this.state.authError.message || this.state.authError.toString()) ? "alert" : ""}>{ this.state.authError.message || this.state.authError.toString() }</div>
+                    <div role="alert">{ this.state.authError.message || this.state.authError.toString() }</div>
                     <br />
                     <AccessibleButton onClick={this._onDismissClick}
                         className="mx_UserSettings_button"

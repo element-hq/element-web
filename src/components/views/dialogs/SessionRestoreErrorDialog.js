@@ -60,6 +60,7 @@ export default React.createClass({
                 </p>
             );
         }
+        const shouldFocusContinueButton =!(bugreport==true);
 
         return (
             <BaseDialog className="mx_ErrorDialog" onFinished={this.props.onFinished}
@@ -77,8 +78,8 @@ export default React.createClass({
 
                     { bugreport }
                 </div>
-                <div className="mx_Dialog_buttons" autoFocus={SdkConfig.get().bug_report_endpoint_url ? false : true}>
-                    <button className="mx_Dialog_primary" onClick={this._continueClicked}>
+                <div className="mx_Dialog_buttons">
+                    <button className="mx_Dialog_primary" onClick={this._continueClicked} autoFocus={shouldFocusContinueButton}>
                         { _t("Continue anyway") }
                     </button>
                 </div>
