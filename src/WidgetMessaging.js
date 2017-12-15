@@ -153,6 +153,7 @@ Example:
 import URL from 'url';
 import dis from './dispatcher';
 import MatrixPostMessageApi from './MatrixPostMessageApi';
+import Promise from 'bluebird';
 
 const WIDGET_API_VERSION = '0.0.1'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [
@@ -197,6 +198,7 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
      * Register widget message event listeners
      */
     startListening() {
+        this.start();
         if (global.mxWidgetMessagingListenerCount === 0) {
             window.addEventListener("message", () => this.onMessage, false);
         }
@@ -207,6 +209,7 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
      * De-register widget message event listeners
      */
     stopListening() {
+        this.stop();
         global.mxWidgetMessagingListenerCount -= 1;
         if (global.mxWidgetMessagingListenerCount === 0) {
             window.removeEventListener("message", () => this.onMessage);
@@ -365,13 +368,19 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
 
     /**
      * Request a screenshot from a widget
+     * @return {Promise} To be resolved when screenshot has been generated
      */
     getScreenshot() {
-        this.exec({
-            api: "widget_client",
-            action: "screenshot",
-        }).then(function(screenshot) {
-            console.warn("got screenshot", screenshot);
+        return new Promise((resolve, reject) => {
+            this.exec({
+                api: "widget_client",
+                action: "screenshot",
+            }).then(function(response) {
+                // console.warn("got screenshot", response.screenshot);
+                resolve(response.screenshot);
+            }).catch((error) => {
+                reject(Error("Failed to get screenshot: " + error.message));
+            });
         });
     }
 }

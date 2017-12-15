@@ -274,15 +274,14 @@ export default React.createClass({
 
     _onSnapshotClick(e) {
         console.warn("Requesting widget snapshot");
-        this.widgetMessaging.getScreenshot();
-        // const iframe = this.refs.appFrame;
-        // domtoimage.toPng(iframe).then(function(dataUrl) {
-        //     console.log("Image data URL:", dataUrl);
-        //     dis.dispatch({
-        //         action: 'picture_snapshot',
-        //         file: dataURLtoBlob(dataUrl),
-        //     }, true);
-        // });
+        this.widgetMessaging.getScreenshot().then((screenshot) => {
+            dis.dispatch({
+                action: 'picture_snapshot',
+                file: screenshot,
+            }, true);
+        }).catch((err) => {
+            console.error("Failed to get screenshot", err);
+        });
     },
 
     /* If user has permission to modify widgets, delete the widget,
