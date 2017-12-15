@@ -196,6 +196,8 @@ module.exports = withMatrixClient(React.createClass({
      */
     _onDecrypted: function() {
         // we need to re-verify the sending device.
+        // (we call onWidgetLoad in _verifyEvent to handle the case where decryption
+        // has caused a change in size of the event tile)
         this._verifyEvent(this.props.mxEvent);
         this.forceUpdate();
     },
@@ -214,6 +216,9 @@ module.exports = withMatrixClient(React.createClass({
         const verified = await this.props.matrixClient.isEventSenderVerified(mxEvent);
         this.setState({
             verified: verified,
+        }, () => {
+            // Decryption may have caused a change in size
+            this.props.onWidgetLoad();
         });
     },
 
