@@ -102,11 +102,12 @@ module.exports = React.createClass({
                 this._groupStores[tag] = GroupStoreCache.getGroupStore(tag);
                 this._groupStores[tag].registerListener(() => {
                     // This group's rooms or members may have updated, update rooms for its tag
-                    this.updateSelectedTagsRooms(dmRoomMap, [tag]);
+                    this.updateSelectedTagsRoomsForGroups(dmRoomMap, tag);
+                    this.updateSelectedTagsRooms();
                 });
             });
             // Filters themselves have changed, refresh the selected tags
-            this.updateSelectedTagsRooms(dmRoomMap, FilterStore.getSelectedTags());
+            this.updateSelectedTagsRooms();
         });
 
         this.refreshRoomList();
@@ -269,24 +270,24 @@ module.exports = React.createClass({
     }, 500),
 
     // Update which rooms and users should appear in RoomList as dictated by selected tags
-    updateSelectedTagsRooms: function(dmRoomMap, updatedTags) {
+    updateSelectedTagsRoomsForGroups: function(dmRoomMap, tag) {
         if (!this.mounted) return;
-        updatedTags.forEach((tag) => {
-            // For now, only handle group tags
-            const store = this._groupStores[tag];
-            if (!store) return;
+        // For now, only handle group tags
+        const store = this._groupStores[tag];
+        if (!store) return;
 
-            this._selectedTagsRoomIdsForGroup[tag] = [];
-            store.getGroupRooms().forEach((room) => this._selectedTagsRoomIdsForGroup[tag].push(room.roomId));
-            store.getGroupMembers().forEach((member) => {
-                if (member.userId === MatrixClientPeg.get().credentials.userId) return;
-                dmRoomMap.getDMRoomsForUserId(member.userId).forEach(
-                    (roomId) => this._selectedTagsRoomIdsForGroup[tag].push(roomId),
-                );
-            });
-            // TODO: Check if room has been tagged to the group by the user
+        this._selectedTagsRoomIdsForGroup[tag] = [];
+        store.getGroupRooms().forEach((room) => this._selectedTagsRoomIdsForGroup[tag].push(room.roomId));
+        store.getGroupMembers().forEach((member) => {
+            if (member.userId === MatrixClientPeg.get().credentials.userId) return;
+            dmRoomMap.getDMRoomsForUserId(member.userId).forEach(
+                (roomId) => this._selectedTagsRoomIdsForGroup[tag].push(roomId),
+            );
         });
+        // TODO: Check if room has been tagged to the group by the user
+    },
 
+    updateSelectedTagsRooms: function() {
         this._selectedTagsRoomIds = [];
         FilterStore.getSelectedTags().forEach((tag) => {
             (this._selectedTagsRoomIdsForGroup[tag] || []).forEach(
