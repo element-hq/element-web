@@ -287,6 +287,7 @@ module.exports = React.createClass({
         // TODO: Check if room has been tagged to the group by the user
     },
 
+    // Update which rooms and users should appear according to which tags are selected
     updateVisibleRooms: function() {
         this._visibleRooms = [];
         FilterStore.getSelectedTags().forEach((tag) => {
