@@ -198,7 +198,7 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
      */
     startListening() {
         if (global.mxWidgetMessagingListenerCount === 0) {
-            window.addEventListener("message", this.onMessage, false);
+            window.addEventListener("message", () => this.onMessage, false);
         }
         global.mxWidgetMessagingListenerCount += 1;
     }
@@ -209,7 +209,7 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
     stopListening() {
         global.mxWidgetMessagingListenerCount -= 1;
         if (global.mxWidgetMessagingListenerCount === 0) {
-            window.removeEventListener("message", this.onMessage);
+            window.removeEventListener("message", () => this.onMessage);
         }
         if (global.mxWidgetMessagingListenerCount < 0) {
             // Make an error so we get a stack trace
@@ -367,10 +367,11 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
      * Request a screenshot from a widget
      */
     getScreenshot() {
-        const screenshot = this.exec({
+        this.exec({
             action: "screenshot",
+        }).then(function(screenshot) {
+            console.warn("got screenshot", screenshot);
         });
-        console.warn("got screenshot", screenshot);
     }
 }
 
