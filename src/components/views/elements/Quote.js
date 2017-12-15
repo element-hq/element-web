@@ -15,12 +15,30 @@ limitations under the License.
 */
 import React from 'react';
 import sdk from '../../../index';
+import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixEvent} from 'matrix-js-sdk';
 
 // For URLs of matrix.to links in the timeline which have been reformatted by
 // HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
 const REGEX_LOCAL_MATRIXTO = /^#\/room\/(([\#\!])[^\/]*)\/(\$[^\/]*)$/;
+
+const MILLIS_IN_DAY = 86400000;
+function wantsDateSeparator(parentEvent, event) {
+    const parentEventDate = parentEvent.getDate();
+    const eventDate = event.getDate();
+    if (!eventDate || !parentEventDate) {
+        return false;
+    }
+    // Return early for events that are > 24h apart
+    if (Math.abs(parentEvent.getTs() - eventDate.getTime()) > MILLIS_IN_DAY) {
+        return true;
+    }
+
+    // Compare weekdays
+    return parentEventDate.getDay() !== eventDate.getDay();
+}
 
 const Quote = React.createClass({
     statics: {
@@ -36,6 +54,8 @@ const Quote = React.createClass({
     props: {
         // The matrix.to url of the event
         url: PropTypes.string,
+        // The parent event
+        parentEv: PropTypes.instanceOf(MatrixEvent),
         // Whether to include an avatar in the pill
         shouldShowPillAvatar: PropTypes.bool,
     },
@@ -98,14 +118,21 @@ const Quote = React.createClass({
         const ev = this.state.event;
         if (ev) {
             const EventTile = sdk.getComponent('views.rooms.EventTile');
-            return <blockquote>
+            let dateSep = null;
+            if (wantsDateSeparator(this.props.parentEv, this.state.event)) {
+                const DateSeparator = sdk.getComponent('messages.DateSeparator');
+                dateSep = <a href={this.props.url}><DateSeparator ts={this.state.event.getDate()} /></a>;
+            }
+
+            return <blockquote className="mx_Quote">
+                { dateSep }
                 <EventTile mxEvent={ev} tileShape="quote" />
             </blockquote>;
         }
 
         // Deliberately render nothing if the URL isn't recognised
         return <div>
-            <a href={this.props.url}>Quote</a>
+            <a href={this.props.url}>{ _t('Quote') }</a>
             <br />
         </div>;
     },

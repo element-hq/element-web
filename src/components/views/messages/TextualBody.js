@@ -208,7 +208,8 @@ module.exports = React.createClass({
                     // only allow this branch if we're not already in a quote, as fun as infinite nesting is.
                     const quoteContainer = document.createElement('span');
 
-                    const quote = <Quote url={href} shouldShowPillAvatar={shouldShowPillAvatar} />;
+                    const quote =
+                        <Quote url={href} parentEv={this.props.mxEvent} shouldShowPillAvatar={shouldShowPillAvatar} />;
 
                     ReactDOM.render(quote, quoteContainer);
                     node.parentNode.replaceChild(quoteContainer, node);
