@@ -39,6 +39,9 @@ class FlairStore {
             //      avatar_url: 'mxc://...'
             //  }
         };
+        this._groupProfilesPromise = {
+            //  $groupId: Promise
+        };
         this._usersPending = {
             //  $userId: {
             //      prom: Promise
@@ -149,15 +152,22 @@ class FlairStore {
             return this._groupProfiles[groupId];
         }
 
-        const profile = await matrixClient.getGroupProfile(groupId);
+        // No request yet, start one
+        if (!this._groupProfilesPromise[groupId]) {
+            this._groupProfilesPromise[groupId] = matrixClient.getGroupProfile(groupId);
+        }
+
+        const profile = await this._groupProfilesPromise[groupId];
         this._groupProfiles[groupId] = {
             groupId,
             avatarUrl: profile.avatar_url,
             name: profile.name,
             shortDescription: profile.short_description,
         };
+
         setTimeout(() => {
             delete this._groupProfiles[groupId];
+            delete this._groupProfilesPromise[groupId];
         }, GROUP_PROFILES_CACHE_BUST_MS);
 
         return this._groupProfiles[groupId];
