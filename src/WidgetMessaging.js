@@ -52,8 +52,8 @@ They look like:
 }
 The "message" key should be a human-friendly string.
 
-ACTIONS
-=======
+INBOUND ACTIONS
+===============
 ** All actions must include an "api" field with valie "widget".**
 All actions can return an error response instead of the response outlined below.
 
@@ -107,6 +107,45 @@ Example:
 {
     api: "widget",
     action: "supported_api_versions",
+}
+
+
+OUTBOUND ACTIONS
+================
+
+In addition to listening for inbound requests, the API can be used to initiate
+actionss in the widget iframe, and request data from the widget instance.
+
+Outbound actions use the "widget_client" API key / name, which must be included
+on all requests.
+
+{
+    api: "widget_client",
+    action: "screenshot",
+    widgetId: $WIDGET_ID,
+    data: {}
+    // additional request fields
+}
+
+
+screenshot
+----------
+
+Request a screenshot from the widget (if supported).
+This can only be supported by widgets that have access to all of their DOM tree.
+For example, widgets that nest further levels of iframes can not support this.
+
+Request:
+ - No additional fields.
+Response:
+{
+    screenshot: {data...}
+}
+Example:
+{
+    api: "widget_client",
+    action: "screenshot",
+    widgetId: $WIDGET_ID
 }
 
 */
@@ -322,6 +361,16 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
             data.response.error._error = nestedError;
         }
         event.source.postMessage(data, event.origin);
+    }
+
+    /**
+     * Request a screenshot from a widget
+     */
+    getScreenshot() {
+        const screenshot = this.exec({
+            action: "screenshot",
+        });
+        console.warn("got screenshot", screenshot);
     }
 }
 
