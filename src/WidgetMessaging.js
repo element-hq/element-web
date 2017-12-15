@@ -368,6 +368,7 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
      */
     getScreenshot() {
         this.exec({
+            api: "widget_client",
             action: "screenshot",
         }).then(function(screenshot) {
             console.warn("got screenshot", screenshot);
