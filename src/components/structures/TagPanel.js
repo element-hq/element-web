@@ -18,7 +18,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
 import FilterStore from '../../stores/FilterStore';
-import FlairStore from '../../stores/FlairStore';
 import TagOrderStore from '../../stores/TagOrderStore';
 
 import GroupActions from '../../actions/GroupActions';
@@ -36,17 +35,7 @@ const TagPanel = React.createClass({
 
     getInitialState() {
         return {
-            // A list of group profiles for tags that are group IDs. The intention in future
-            // is to allow arbitrary tags to be selected in the TagPanel, not just groups.
-            // For now, it suffices to maintain a list of ordered group profiles.
-            orderedGroupTagProfiles: [
-            // {
-            //     groupId: '+awesome:foo.bar',{
-            //     name: 'My Awesome Community',
-            //     avatarUrl: 'mxc://...',
-            //     shortDescription: 'Some description...',
-            // },
-            ],
+            orderedTags: [],
             selectedTags: [],
         };
     },
@@ -67,15 +56,8 @@ const TagPanel = React.createClass({
             if (this.unmounted) {
                 return;
             }
-
-            const orderedTags = TagOrderStore.getOrderedTags() || [];
-            const orderedGroupTags = orderedTags.filter((t) => t[0] === '+');
-            // XXX: One profile lookup failing will bring the whole lot down
-            Promise.all(orderedGroupTags.map(
-                (groupId) => FlairStore.getGroupProfileCached(this.context.matrixClient, groupId),
-            )).then((orderedGroupTagProfiles) => {
-                if (this.unmounted) return;
-                this.setState({orderedGroupTagProfiles});
+            this.setState({
+                orderedTags: TagOrderStore.getOrderedTags() || [],
             });
         });
         // This could be done by anything with a matrix client
@@ -113,11 +95,11 @@ const TagPanel = React.createClass({
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
 
-        const tags = this.state.orderedGroupTagProfiles.map((groupProfile, index) => {
+        const tags = this.state.orderedTags.map((tag, index) => {
             return <DNDTagTile
-                key={groupProfile.groupId + '_' + index}
-                groupProfile={groupProfile}
-                selected={this.state.selectedTags.includes(groupProfile.groupId)}
+                key={tag + '_' + index}
+                tag={tag}
+                selected={this.state.selectedTags.includes(tag)}
                 onEndDrag={this.onTagTileEndDrag}
             />;
         });

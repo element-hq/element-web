@@ -22,15 +22,34 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { isOnlyCtrlOrCmdKeyEvent } from '../../../Keyboard';
 
+import FlairStore from '../../../stores/FlairStore';
+
 export default React.createClass({
     displayName: 'TagTile',
 
     propTypes: {
-        groupProfile: PropTypes.object,
+        tag: PropTypes.string,
     },
 
     contextTypes: {
         matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
+    },
+
+    componentWillMount() {
+        this.unmounted = false;
+        if (this.props.tag[0] === '+') {
+            FlairStore.getGroupProfileCached(
+                this.context.matrixClient,
+                this.props.tag,
+            ).then((profile) => {
+                if (this.unmounted) return;
+                this.setState({profile});
+            });
+        }
+    },
+
+    componentWillUnmount() {
+        this.unmounted = true;
     },
 
     getInitialState() {
@@ -44,7 +63,7 @@ export default React.createClass({
         e.stopPropagation();
         dis.dispatch({
             action: 'select_tag',
-            tag: this.props.groupProfile.groupId,
+            tag: this.props.tag,
             ctrlOrCmdKey: isOnlyCtrlOrCmdKeyEvent(e),
             shiftKey: e.shiftKey,
         });
@@ -62,8 +81,8 @@ export default React.createClass({
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const RoomTooltip = sdk.getComponent('rooms.RoomTooltip');
-        const profile = this.props.groupProfile || {};
-        const name = profile.name || profile.groupId;
+        const profile = this.state.profile || {};
+        const name = profile.name || this.props.tag;
         const avatarHeight = 35;
 
         const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(

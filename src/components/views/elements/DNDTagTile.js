@@ -29,7 +29,7 @@ const tagTileSource = {
     beginDrag: function(props) {
         // Return the data describing the dragged item
         return {
-            tag: props.groupProfile.groupId,
+            tag: props.tag,
         };
     },
 
@@ -55,7 +55,7 @@ const tagTileTarget = {
         dis.dispatch({
             action: 'order_tag',
             tag: monitor.getItem().tag,
-            targetTag: props.groupProfile.groupId,
+            targetTag: props.tag,
             // Note: we indicate that the tag should be after the target when
             // it's being dragged over the top half of the target.
             after: draggedY < targetY,
@@ -65,7 +65,7 @@ const tagTileTarget = {
     drop(props) {
         // Return the data to be returned by getDropResult
         return {
-            tag: props.groupProfile.groupId,
+            tag: props.tag,
         };
     },
 };
