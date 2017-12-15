@@ -214,8 +214,10 @@ module.exports = withMatrixClient(React.createClass({
         const verified = await this.props.matrixClient.isEventSenderVerified(mxEvent);
         this.setState({
             verified: verified,
+        }, () => {
+            // Decryption may have caused a change in size
+            this.props.onWidgetLoad();
         });
-        this.props.onWidgetLoad();
     },
 
     _propsEqual: function(objA, objB) {
