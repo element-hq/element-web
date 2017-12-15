@@ -88,11 +88,11 @@ module.exports = React.createClass({
         this._groupStores = {};
         // A map between tags which are group IDs and the room IDs of rooms that should be kept
         // in the room list when filtering by that tag.
-        this._selectedTagsRoomIdsForGroup = {
+        this._visibleRoomsForGroup = {
             // $groupId: [$roomId1, $roomId2, ...],
         };
         // All rooms that should be kept in the room list when filtering
-        this._selectedTagsRoomIds = [];
+        this._visibleRooms = [];
         // When the selected tags are changed, initialise a group store if necessary
         this._filterStoreToken = FilterStore.addListener(() => {
             FilterStore.getSelectedTags().forEach((tag) => {
@@ -102,12 +102,12 @@ module.exports = React.createClass({
                 this._groupStores[tag] = GroupStoreCache.getGroupStore(tag);
                 this._groupStores[tag].registerListener(() => {
                     // This group's rooms or members may have updated, update rooms for its tag
-                    this.updateSelectedTagsRoomsForGroups(dmRoomMap, tag);
-                    this.updateSelectedTagsRooms();
+                    this.updateVisibleRoomsForTag(dmRoomMap, tag);
+                    this.updateVisibleRooms();
                 });
             });
             // Filters themselves have changed, refresh the selected tags
-            this.updateSelectedTagsRooms();
+            this.updateVisibleRooms();
         });
 
         this.refreshRoomList();
@@ -270,28 +270,28 @@ module.exports = React.createClass({
     }, 500),
 
     // Update which rooms and users should appear in RoomList for a given group tag
-    updateSelectedTagsRoomsForGroups: function(dmRoomMap, tag) {
+    updateVisibleRoomsForTag: function(dmRoomMap, tag) {
         if (!this.mounted) return;
         // For now, only handle group tags
         const store = this._groupStores[tag];
         if (!store) return;
 
-        this._selectedTagsRoomIdsForGroup[tag] = [];
-        store.getGroupRooms().forEach((room) => this._selectedTagsRoomIdsForGroup[tag].push(room.roomId));
+        this._visibleRoomsForGroup[tag] = [];
+        store.getGroupRooms().forEach((room) => this._visibleRoomsForGroup[tag].push(room.roomId));
         store.getGroupMembers().forEach((member) => {
             if (member.userId === MatrixClientPeg.get().credentials.userId) return;
             dmRoomMap.getDMRoomsForUserId(member.userId).forEach(
-                (roomId) => this._selectedTagsRoomIdsForGroup[tag].push(roomId),
+                (roomId) => this._visibleRoomsForGroup[tag].push(roomId),
             );
         });
         // TODO: Check if room has been tagged to the group by the user
     },
 
-    updateSelectedTagsRooms: function() {
-        this._selectedTagsRoomIds = [];
+    updateVisibleRooms: function() {
+        this._visibleRooms = [];
         FilterStore.getSelectedTags().forEach((tag) => {
-            (this._selectedTagsRoomIdsForGroup[tag] || []).forEach(
-                (roomId) => this._selectedTagsRoomIds.push(roomId),
+            (this._visibleRoomsForGroup[tag] || []).forEach(
+                (roomId) => this._visibleRooms.push(roomId),
             );
         });
 
@@ -304,7 +304,7 @@ module.exports = React.createClass({
 
     isRoomInSelectedTags: function(room) {
         // No selected tags = every room is visible in the list
-        return this.state.selectedTags.length === 0 || this._selectedTagsRoomIds.includes(room.roomId);
+        return this.state.selectedTags.length === 0 || this._visibleRooms.includes(room.roomId);
     },
 
     refreshRoomList: function() {
