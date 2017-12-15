@@ -86,6 +86,7 @@ module.exports = React.createClass({
 
         const dmRoomMap = DMRoomMap.shared();
         this._groupStores = {};
+        this._groupStoreTokens = [];
         // A map between tags which are group IDs and the room IDs of rooms that should be kept
         // in the room list when filtering by that tag.
         this._selectedTagsRoomIdsForGroup = {
@@ -100,10 +101,12 @@ module.exports = React.createClass({
                     return;
                 }
                 this._groupStores[tag] = GroupStoreCache.getGroupStore(tag);
-                this._groupStores[tag].registerListener(() => {
-                    // This group's rooms or members may have updated, update rooms for its tag
-                    this.updateSelectedTagsRooms(dmRoomMap, [tag]);
-                });
+                this._groupStoreTokens.push(
+                    this._groupStores[tag].registerListener(() => {
+                        // This group's rooms or members may have updated, update rooms for its tag
+                        this.updateSelectedTagsRooms(dmRoomMap, [tag]);
+                    }),
+                );
             });
             // Filters themselves have changed, refresh the selected tags
             this.updateSelectedTagsRooms(dmRoomMap, FilterStore.getSelectedTags());
@@ -180,6 +183,11 @@ module.exports = React.createClass({
 
         if (this._filterStoreToken) {
             this._filterStoreToken.remove();
+        }
+
+        if (this._groupStoreTokens.length > 0) {
+            // NB: GroupStore is not a Flux.Store
+            this._groupStoreTokens.forEach((token) => token.unregister());
         }
 
         // cancel any pending calls to the rate_limited_funcs

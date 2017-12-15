@@ -110,6 +110,12 @@ export default class GroupStore extends EventEmitter {
         this._fetchSummary();
         this._fetchRooms();
         this._fetchMembers();
+
+        return {
+            unregister: () => {
+                this.unregisterListener(fn);
+            },
+        };
     }
 
     unregisterListener(fn) {
