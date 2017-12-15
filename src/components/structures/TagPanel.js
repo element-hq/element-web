@@ -17,79 +17,17 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
-import classNames from 'classnames';
 import FilterStore from '../../stores/FilterStore';
 import FlairStore from '../../stores/FlairStore';
+import TagOrderStore from '../../stores/TagOrderStore';
+
+import GroupActions from '../../actions/GroupActions';
+import TagOrderActions from '../../actions/TagOrderActions';
+
 import sdk from '../../index';
 import dis from '../../dispatcher';
-import { isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 
-const TagTile = React.createClass({
-    displayName: 'TagTile',
-
-    propTypes: {
-        groupProfile: PropTypes.object,
-    },
-
-    contextTypes: {
-        matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
-    },
-
-    getInitialState() {
-        return {
-            hover: false,
-        };
-    },
-
-    onClick: function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        dis.dispatch({
-            action: 'select_tag',
-            tag: this.props.groupProfile.groupId,
-            ctrlOrCmdKey: isOnlyCtrlOrCmdKeyEvent(e),
-            shiftKey: e.shiftKey,
-        });
-    },
-
-    onMouseOver: function() {
-        this.setState({hover: true});
-    },
-
-    onMouseOut: function() {
-        this.setState({hover: false});
-    },
-
-    render: function() {
-        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const RoomTooltip = sdk.getComponent('rooms.RoomTooltip');
-        const profile = this.props.groupProfile || {};
-        const name = profile.name || profile.groupId;
-        const avatarHeight = 35;
-
-        const httpUrl = profile.avatarUrl ? this.context.matrixClient.mxcUrlToHttp(
-            profile.avatarUrl, avatarHeight, avatarHeight, "crop",
-        ) : null;
-
-        const className = classNames({
-            mx_TagTile: true,
-            mx_TagTile_selected: this.props.selected,
-        });
-
-        const tip = this.state.hover ?
-            <RoomTooltip className="mx_TagTile_tooltip" label={name} /> :
-            <div />;
-        return <AccessibleButton className={className} onClick={this.onClick}>
-            <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
-                <BaseAvatar name={name} url={httpUrl} width={avatarHeight} height={avatarHeight} />
-                { tip }
-            </div>
-        </AccessibleButton>;
-    },
-});
-
-export default React.createClass({
+const TagPanel = React.createClass({
     displayName: 'TagPanel',
 
     contextTypes: {
@@ -98,7 +36,17 @@ export default React.createClass({
 
     getInitialState() {
         return {
-            joinedGroupProfiles: [],
+            // A list of group profiles for tags that are group IDs. The intention in future
+            // is to allow arbitrary tags to be selected in the TagPanel, not just groups.
+            // For now, it suffices to maintain a list of ordered group profiles.
+            orderedGroupTagProfiles: [
+            // {
+            //     groupId: '+awesome:foo.bar',{
+            //     name: 'My Awesome Community',
+            //     avatarUrl: 'mxc://...',
+            //     shortDescription: 'Some description...',
+            // },
+            ],
             selectedTags: [],
         };
     },
@@ -115,8 +63,23 @@ export default React.createClass({
                 selectedTags: FilterStore.getSelectedTags(),
             });
         });
+        this._tagOrderStoreToken = TagOrderStore.addListener(() => {
+            if (this.unmounted) {
+                return;
+            }
 
-        this._fetchJoinedRooms();
+            const orderedTags = TagOrderStore.getOrderedTags() || [];
+            const orderedGroupTags = orderedTags.filter((t) => t[0] === '+');
+            // XXX: One profile lookup failing will bring the whole lot down
+            Promise.all(orderedGroupTags.map(
+                (groupId) => FlairStore.getGroupProfileCached(this.context.matrixClient, groupId),
+            )).then((orderedGroupTagProfiles) => {
+                if (this.unmounted) return;
+                this.setState({orderedGroupTagProfiles});
+            });
+        });
+        // This could be done by anything with a matrix client
+        dis.dispatch(GroupActions.fetchJoinedGroups(this.context.matrixClient));
     },
 
     componentWillUnmount() {
@@ -129,7 +92,7 @@ export default React.createClass({
 
     _onGroupMyMembership() {
         if (this.unmounted) return;
-        this._fetchJoinedRooms();
+        dis.dispatch(GroupActions.fetchJoinedGroups(this.context.matrixClient));
     },
 
     onClick() {
@@ -141,27 +104,21 @@ export default React.createClass({
         dis.dispatch({action: 'view_create_group'});
     },
 
-    async _fetchJoinedRooms() {
-        const joinedGroupResponse = await this.context.matrixClient.getJoinedGroups();
-        const joinedGroupIds = joinedGroupResponse.groups;
-        const joinedGroupProfiles = await Promise.all(joinedGroupIds.map(
-            (groupId) => FlairStore.getGroupProfileCached(this.context.matrixClient, groupId),
-        ));
-        dis.dispatch({
-            action: 'all_tags',
-            tags: joinedGroupIds,
-        });
-        this.setState({joinedGroupProfiles});
+    onTagTileEndDrag() {
+        dis.dispatch(TagOrderActions.commitTagOrdering(this.context.matrixClient));
     },
 
     render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
-        const tags = this.state.joinedGroupProfiles.map((groupProfile, index) => {
-            return <TagTile
+        const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
+
+        const tags = this.state.orderedGroupTagProfiles.map((groupProfile, index) => {
+            return <DNDTagTile
                 key={groupProfile.groupId + '_' + index}
                 groupProfile={groupProfile}
                 selected={this.state.selectedTags.includes(groupProfile.groupId)}
+                onEndDrag={this.onTagTileEndDrag}
             />;
         });
         return <div className="mx_TagPanel" onClick={this.onClick}>
@@ -174,3 +131,4 @@ export default React.createClass({
         </div>;
     },
 });
+export default TagPanel;
