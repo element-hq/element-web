@@ -155,10 +155,13 @@ export default React.createClass({
     },
 
     componentWillMount() {
-        WidgetMessaging.startListening();
-        WidgetMessaging.addEndpoint(this.props.id, this.props.url);
-        window.addEventListener('message', this._onMessage, false);
         this.setScalarToken();
+    },
+
+    componentDidMount() {
+        // Legacy Jitsi widget messaging -- TODO replace this with standard widget
+        // postMessaging API
+        window.addEventListener('message', this._onMessage, false);
     },
 
     /**
@@ -234,6 +237,8 @@ export default React.createClass({
         }
     },
 
+    // Legacy Jitsi widget messaging
+    // TODO -- This should be replaced with the new widget postMessaging API
     _onMessage(event) {
         if (this.props.type !== 'jitsi') {
             return;
@@ -268,14 +273,16 @@ export default React.createClass({
     },
 
     _onSnapshotClick(e) {
-        const iframe = this.refs.appFrame;
-        domtoimage.toPng(iframe).then(function(dataUrl) {
-            console.log("Image data URL:", dataUrl);
-            dis.dispatch({
-                action: 'picture_snapshot',
-                file: dataURLtoBlob(dataUrl),
-            }, true);
-        });
+        console.warn("Requesting widget snapshot");
+        this.widgetMessaging.getScreenshot();
+        // const iframe = this.refs.appFrame;
+        // domtoimage.toPng(iframe).then(function(dataUrl) {
+        //     console.log("Image data URL:", dataUrl);
+        //     dis.dispatch({
+        //         action: 'picture_snapshot',
+        //         file: dataURLtoBlob(dataUrl),
+        //     }, true);
+        // });
     },
 
     /* If user has permission to modify widgets, delete the widget,
@@ -317,6 +324,10 @@ export default React.createClass({
      * Called when widget iframe has finished loading
      */
     _onLoaded() {
+        // console.warn("App frame", this.refs.appFrame.contentWindow);
+        this.widgetMessaging = new WidgetMessaging(this.refs.appFrame.contentWindow);
+        this.widgetMessaging.startListening();
+        this.widgetMessaging.addEndpoint(this.props.id, this.props.url);
         this.setState({loading: false});
     },
 
