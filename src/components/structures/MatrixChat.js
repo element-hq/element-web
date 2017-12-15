@@ -40,7 +40,6 @@ require('../../stores/LifecycleStore');
 import PageTypes from '../../PageTypes';
 
 import createRoom from "../../createRoom";
-import * as UDEHandler from '../../UnknownDeviceErrorHandler';
 import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
@@ -84,7 +83,7 @@ const ONBOARDING_FLOW_STARTERS = [
     'view_create_group',
 ];
 
-module.exports = React.createClass({
+export default React.createClass({
     // we export this so that the integration tests can use it :-S
     statics: {
         VIEWS: VIEWS,
@@ -295,7 +294,6 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        UDEHandler.startListening();
 
         this.focusComposer = false;
 
@@ -361,7 +359,6 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
-        UDEHandler.stopListening();
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
     },
@@ -1068,10 +1065,10 @@ module.exports = React.createClass({
             // this if we are not scrolled up in the view. To find out, delegate to
             // the timeline panel. If the timeline panel doesn't exist, then we assume
             // it is safe to reset the timeline.
-            if (!self.refs.loggedInView) {
+            if (!self._loggedInView) {
                 return true;
             }
-            return self.refs.loggedInView.canResetTimelineInRoom(roomId);
+            return self._loggedInView.canResetTimelineInRoom(roomId);
         });
 
         cli.on('sync', function(state, prevState) {
@@ -1140,6 +1137,37 @@ module.exports = React.createClass({
                     /*explicit=*/true,
                 );
                 room.setBlacklistUnverifiedDevices(blacklistEnabled);
+            }
+        });
+        cli.on("crypto.warning", (type) => {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            switch (type) {
+                case 'CRYPTO_WARNING_ACCOUNT_MIGRATED':
+                    Modal.createTrackedDialog('Crypto migrated', '', ErrorDialog, {
+                        title: _t('Cryptography data migrated'),
+                        description: _t(
+                            "A one-off migration of cryptography data has been performed. "+
+                            "End-to-end encryption will not work if you go back to an older "+
+                            "version of Riot. If you need to use end-to-end cryptography on "+
+                            "an older version, log out of Riot first. To retain message history, "+
+                            "export and re-import your keys.",
+                        ),
+                    });
+                    break;
+                case 'CRYPTO_WARNING_OLD_VERSION_DETECTED':
+                    Modal.createTrackedDialog('Crypto migrated', '', ErrorDialog, {
+                        title: _t('Old cryptography data detected'),
+                        description: _t(
+                            "Data from an older version of Riot has been detected. "+
+                            "This will have caused end-to-end cryptography to malfunction "+
+                            "in the older version. End-to-end encrypted messages exchanged "+
+                            "recently whilst using the older version may not be decryptable "+
+                            "in this version. This may also cause messages exchanged with this "+
+                            "version to fail. If you experience problems, log out and back in "+
+                            "again. To retain message history, export and re-import your keys.",
+                        ),
+                    });
+                    break;
             }
         });
     },
@@ -1398,13 +1426,6 @@ module.exports = React.createClass({
         cli.sendEvent(roomId, event.getType(), event.getContent()).done(() => {
             dis.dispatch({action: 'message_sent'});
         }, (err) => {
-            if (err.name === 'UnknownDeviceError') {
-                dis.dispatch({
-                    action: 'unknown_device_error',
-                    err: err,
-                    room: cli.getRoom(roomId),
-                });
-            }
             dis.dispatch({action: 'message_send_failed'});
         });
     },
@@ -1466,6 +1487,10 @@ module.exports = React.createClass({
         return this.props.makeRegistrationUrl(params);
     },
 
+    _collectLoggedInView: function(ref) {
+        this._loggedInView = ref;
+    },
+
     render: function() {
         // console.log(`Rendering MatrixChat with view ${this.state.view}`);
 
@@ -1498,7 +1523,7 @@ module.exports = React.createClass({
                  */
                 const LoggedInView = sdk.getComponent('structures.LoggedInView');
                 return (
-                   <LoggedInView ref="loggedInView" matrixClient={MatrixClientPeg.get()}
+                   <LoggedInView ref={this._collectLoggedInView} matrixClient={MatrixClientPeg.get()}
                         onRoomCreated={this.onRoomCreated}
                         onUserSettingsClose={this.onUserSettingsClose}
                         onRegistered={this.onRegistered}

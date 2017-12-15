@@ -253,7 +253,7 @@ module.exports = React.createClass({
 
         return (
             <div>
-                <h3>Addresses</h3>
+                <h3>{ _t('Addresses') }</h3>
                 <div className="mx_RoomSettings_aliasLabel">
                     { _t('The main address for this room is') }: { canonical_alias_section }
                 </div>
