@@ -269,7 +269,7 @@ module.exports = React.createClass({
         this.refreshRoomList();
     }, 500),
 
-    // Update which rooms and users should appear in RoomList as dictated by selected tags
+    // Update which rooms and users should appear in RoomList for a given group tag
     updateSelectedTagsRoomsForGroups: function(dmRoomMap, tag) {
         if (!this.mounted) return;
         // For now, only handle group tags
