@@ -71,6 +71,7 @@ module.exports = React.createClass({
         this.mounted = false;
 
         const cli = MatrixClientPeg.get();
+
         cli.on("Room", this.onRoom);
         cli.on("deleteRoom", this.onDeleteRoom);
         cli.on("Room.timeline", this.onRoomTimeline);
@@ -83,9 +84,15 @@ module.exports = React.createClass({
         cli.on("accountData", this.onAccountData);
         cli.on("Group.myMembership", this._onGroupMyMembership);
 
+        const dmRoomMap = DMRoomMap.shared();
         this._groupStores = {};
-        this._selectedTagsRoomIds = [];
-        this._selectedTagsUserIds = [];
+        // A map between tags which are group IDs and the room IDs of rooms that should be kept
+        // in the room list when filtering by that tag.
+        this._visibleRoomsForGroup = {
+            // $groupId: [$roomId1, $roomId2, ...],
+        };
+        // All rooms that should be kept in the room list when filtering
+        this._visibleRooms = [];
         // When the selected tags are changed, initialise a group store if necessary
         this._filterStoreToken = FilterStore.addListener(() => {
             FilterStore.getSelectedTags().forEach((tag) => {
@@ -94,10 +101,13 @@ module.exports = React.createClass({
                 }
                 this._groupStores[tag] = GroupStoreCache.getGroupStore(tag);
                 this._groupStores[tag].registerListener(() => {
-                    this.updateSelectedTagsEntities();
+                    // This group's rooms or members may have updated, update rooms for its tag
+                    this.updateVisibleRoomsForTag(dmRoomMap, tag);
+                    this.updateVisibleRooms();
                 });
             });
-            this.updateSelectedTagsEntities();
+            // Filters themselves have changed, refresh the selected tags
+            this.updateVisibleRooms();
         });
 
         this.refreshRoomList();
@@ -259,21 +269,33 @@ module.exports = React.createClass({
         this.refreshRoomList();
     }, 500),
 
-    // Update which rooms and users should appear in RoomList as dictated by selected tags
-    updateSelectedTagsEntities: function() {
+    // Update which rooms and users should appear in RoomList for a given group tag
+    updateVisibleRoomsForTag: function(dmRoomMap, tag) {
         if (!this.mounted) return;
-        this._selectedTagsRoomIds = [];
-        this._selectedTagsUserIds = [];
-        FilterStore.getSelectedTags().forEach((tag) => {
-            this._selectedTagsRoomIds = this._selectedTagsRoomIds.concat(
-               this._groupStores[tag].getGroupRooms().map((room) => room.roomId),
-            );
-            // TODO: Check if room has been tagged to the group by the user
+        // For now, only handle group tags
+        const store = this._groupStores[tag];
+        if (!store) return;
 
-            this._selectedTagsUserIds = this._selectedTagsUserIds.concat(
-               this._groupStores[tag].getGroupMembers().map((member) => member.userId),
+        this._visibleRoomsForGroup[tag] = [];
+        store.getGroupRooms().forEach((room) => this._visibleRoomsForGroup[tag].push(room.roomId));
+        store.getGroupMembers().forEach((member) => {
+            if (member.userId === MatrixClientPeg.get().credentials.userId) return;
+            dmRoomMap.getDMRoomsForUserId(member.userId).forEach(
+                (roomId) => this._visibleRoomsForGroup[tag].push(roomId),
             );
         });
+        // TODO: Check if room has been tagged to the group by the user
+    },
+
+    // Update which rooms and users should appear according to which tags are selected
+    updateVisibleRooms: function() {
+        this._visibleRooms = [];
+        FilterStore.getSelectedTags().forEach((tag) => {
+            (this._visibleRoomsForGroup[tag] || []).forEach(
+                (roomId) => this._visibleRooms.push(roomId),
+            );
+        });
+
         this.setState({
             selectedTags: FilterStore.getSelectedTags(),
         }, () => {
@@ -281,17 +303,9 @@ module.exports = React.createClass({
         });
     },
 
-    isRoomInSelectedTags: function(room, me, dmRoomMap) {
+    isRoomInSelectedTags: function(room) {
         // No selected tags = every room is visible in the list
-        if (this.state.selectedTags.length === 0) {
-            return true;
-        }
-        if (this._selectedTagsRoomIds.includes(room.roomId)) {
-            return true;
-        }
-        const dmUserId = dmRoomMap.getUserIdForRoomId(room.roomId);
-        return dmUserId && dmUserId !== me.userId &&
-            this._selectedTagsUserIds.includes(dmUserId);
+        return this.state.selectedTags.length === 0 || this._visibleRooms.includes(room.roomId);
     },
 
     refreshRoomList: function() {
@@ -321,7 +335,7 @@ module.exports = React.createClass({
         lists["m.lowpriority"] = [];
         lists["im.vector.fake.archived"] = [];
 
-        const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
+        const dmRoomMap = DMRoomMap.shared();
         MatrixClientPeg.get().getRooms().forEach((room) => {
             const me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (!me) return;
@@ -341,7 +355,7 @@ module.exports = React.createClass({
                 const tagNames = Object.keys(room.tags);
 
                 // Apply TagPanel filtering, derived from FilterStore
-                if (!this.isRoomInSelectedTags(room, me, dmRoomMap)) {
+                if (!this.isRoomInSelectedTags(room)) {
                     return;
                 }
 
