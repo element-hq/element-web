@@ -63,7 +63,11 @@ export default class QuotePreview extends React.Component {
 
         return <div className="mx_QuotePreview">
             <div className="mx_QuotePreview_section">
-                <EmojiText element="div" className="mx_QuotePreview_header mx_QuotePreview_title">💬 { _t('Quoting') }</EmojiText>
+                <EmojiText element="div" className="mx_QuotePreview_header mx_QuotePreview_title">
+                    <span>
+                        💬 { _t('Quoting') }
+                    </span>
+                </EmojiText>
                 <div className="mx_QuotePreview_header mx_QuotePreview_cancel">
                     <img className="mx_filterFlipColor" src="img/cancel.svg" width="18" height="18"
                          onClick={cancelQuoting} />
