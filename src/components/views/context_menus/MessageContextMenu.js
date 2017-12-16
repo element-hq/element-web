@@ -25,6 +25,7 @@ import { _t } from 'matrix-react-sdk/lib/languageHandler';
 const Modal = require('matrix-react-sdk/lib/Modal');
 const Resend = require("matrix-react-sdk/lib/Resend");
 import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
+import {makeEventPermalink} from 'matrix-react-sdk/lib/matrix-to';
 
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',
@@ -170,17 +171,18 @@ module.exports = React.createClass({
     },
 
     onQuoteClick: function() {
-        if (SettingsStore.isFeatureEnabled("feature_rich_quoting")) {
-            dis.dispatch({
-                action: 'quote_event',
-                event: this.props.mxEvent,
-            });
-        } else {
-            dis.dispatch({
-                action: 'quote',
-                text: this.props.eventTileOps.getInnerText(),
-            });
-        }
+        dis.dispatch({
+            action: 'quote',
+            text: this.props.eventTileOps.getInnerText(),
+        });
+        this.closeMenu();
+    },
+
+    onReplyClick: function() {
+        dis.dispatch({
+            action: 'quote_event',
+            event: this.props.mxEvent,
+        });
         this.closeMenu();
     },
 
@@ -197,6 +199,7 @@ module.exports = React.createClass({
         let permalinkButton;
         let externalURLButton;
         let quoteButton;
+        let replyButton;
 
         if (eventStatus === 'not_sent') {
             resendButton = (
@@ -268,8 +271,8 @@ module.exports = React.createClass({
         // XXX: if we use room ID, we should also include a server where the event can be found (other than in the domain of the event ID)
         permalinkButton = (
             <div className="mx_MessageContextMenu_field">
-                <a href={ "https://matrix.to/#/" + this.props.mxEvent.getRoomId() +"/"+ this.props.mxEvent.getId() }
-                  target="_blank" rel="noopener" onClick={ this.closeMenu }>{ _t('Permalink') }</a>
+                <a href={makeEventPermalink(this.props.mxEvent.getRoomId(), this.props.mxEvent.getId())}
+                  target="_blank" rel="noopener" onClick={this.closeMenu}>{ _t('Permalink') }</a>
             </div>
         );
 
@@ -279,6 +282,14 @@ module.exports = React.createClass({
                     { _t('Quote') }
                 </div>
             );
+
+            if (SettingsStore.isFeatureEnabled("feature_rich_quoting")) {
+                replyButton = (
+                    <div className="mx_MessageContextMenu_field" onClick={this.onReplyClick}>
+                        { _t('Reply') }
+                    </div>
+                );
+            }
         }
 
         // Bridges can provide a 'external_url' to link back to the source.
@@ -304,6 +315,7 @@ module.exports = React.createClass({
                 {unhidePreviewButton}
                 {permalinkButton}
                 {quoteButton}
+                {replyButton}
                 {externalURLButton}
             </div>
         );
