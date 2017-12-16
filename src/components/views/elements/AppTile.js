@@ -33,7 +33,6 @@ import AppWarning from './AppWarning';
 import MessageSpinner from './MessageSpinner';
 import WidgetUtils from '../../../WidgetUtils';
 import dis from '../../../dispatcher';
-import domtoimage from 'dom-to-image';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 
@@ -83,7 +82,18 @@ export default React.createClass({
             error: null,
             deleting: false,
             widgetPageTitle: newProps.widgetPageTitle,
+            capabilities: [],
         };
+    },
+
+
+    /**
+     * Does the widget support a given capability
+     * @param  {[type]}  capability Capability to check for
+     * @return {Boolean}            True if capability supported
+     */
+    _hasCapability(capability) {
+        return this.state.capabilities.some((c) => {return c === capability;});
     },
 
     /**
@@ -327,6 +337,12 @@ export default React.createClass({
         this.widgetMessaging = new WidgetMessaging(this.refs.appFrame.contentWindow);
         this.widgetMessaging.startListening();
         this.widgetMessaging.addEndpoint(this.props.id, this.props.url);
+        this.widgetMessaging.getCapabilities().then((capabilities) => {
+            console.log("Got widget capabilities", this.widgetId, capabilities);
+            this.setState({capabilities});
+        }).catch((err) => {
+            console.log("Failed to get widget capabilities", this.widgetId, err);
+        });
         this.setState({loading: false});
     },
 
@@ -468,7 +484,7 @@ export default React.createClass({
         }
 
         // Picture snapshot
-        const showPictureSnapshotButton = true; // FIXME - Make this dynamic
+        const showPictureSnapshotButton = this._hasCapability('screenshot');
         const showPictureSnapshotIcon = 'img/camera_green.svg';
         const windowStateIcon = (this.props.show ? 'img/minimize.svg' : 'img/maximize.svg');
 
@@ -525,15 +541,3 @@ export default React.createClass({
         );
     },
 });
-
-function dataURLtoBlob(dataurl) {
-    const arr = dataurl.split(',');
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new Blob([u8arr], {type: mime});
-}

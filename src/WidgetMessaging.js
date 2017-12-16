@@ -383,6 +383,20 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
             });
         });
     }
+
+    getCapabilities() {
+        return new Promise((resolve, reject) => {
+            this.exec({
+                api: "widget_client",
+                action: "capabilities",
+            }).then(function(response) {
+                // console.warn("got capabilities", response.capabilities);
+                resolve(response.capabilities);
+            }).catch((error) => {
+                reject(Error("Failed to get capabilities: " + error.message));
+            });
+        });
+    }
 }
 
 
