@@ -40,7 +40,7 @@
     "No results": "Emaitzarik ez",
     "Bug Report": "Arazte-txostena",
     "Join Room": "Elkartu gelara",
-    "Register": "Erregistratu",
+    "Register": "Eman izena",
     "Submit": "Bidali",
     "Skip": "Saltatu",
     "Send Reset Email": "Bidali berrezartzeko e-maila",
@@ -796,5 +796,15 @@
     "To configure the room, you must be a": "Gela konfiguratzeko hau izan behar zara:",
     "To kick users, you must be a": "Erabiltzaileak kanporatzeko hau izan behar zara:",
     "To ban users, you must be a": "Erabiltzaileak debekatzeko hau izan behar zara:",
-    "To remove other users' messages, you must be a": "Beste erabiltzaileen mezuak kentzeko hau izan behar zara:"
+    "To remove other users' messages, you must be a": "Beste erabiltzaileen mezuak kentzeko hau izan behar zara:",
+    "Unpin Message": "Desfinkatu mezua",
+    "Add rooms to this community": "Gehitu gelak komunitate honetara",
+    "Call Failed": "Deiak huts egin du",
+    "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "Gailu ezezagunak daude gela honetan: hauek egiaztatu gabe aurrera jarraituz gero, posiblea litzateke inork zure deia entzutea.",
+    "Review Devices": "Aztertu gailuak",
+    "Call Anyway": "Deitu hala ere",
+    "Answer Anyway": "Erantzun hala ere",
+    "Call": "Deitu",
+    "Answer": "Erantzun",
+    "Who would you like to add to this community?": "Nor gehitu nahi duzu komunitate honetara?"
 }
