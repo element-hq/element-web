@@ -27,6 +27,7 @@ import ScalarAuthClient from '../../../ScalarAuthClient';
 import ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
 import WidgetUtils from '../../../WidgetUtils';
+import SettingsStore from "../../../settings/SettingsStore";
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
@@ -131,6 +132,9 @@ module.exports = React.createClass({
             '$matrix_room_id': this.props.room.roomId,
             '$matrix_display_name': user ? user.displayName : this.props.userId,
             '$matrix_avatar_url': user ? MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl) : '',
+
+            // Namespaced for Riot
+            '$riot_theme': SettingsStore.getValue("theme"),
         };
 
         app.id = appId;
