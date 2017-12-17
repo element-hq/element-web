@@ -209,7 +209,7 @@ module.exports = React.createClass({
                     const quoteContainer = document.createElement('span');
 
                     const quote =
-                        <Quote url={href} parentEv={this.props.mxEvent} shouldShowPillAvatar={shouldShowPillAvatar} />;
+                        <Quote url={href} parentEv={this.props.mxEvent} />;
 
                     ReactDOM.render(quote, quoteContainer);
                     node.parentNode.replaceChild(quoteContainer, node);

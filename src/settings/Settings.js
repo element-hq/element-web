@@ -78,7 +78,7 @@ export const SETTINGS = {
     // },
     "feature_rich_quoting": {
         isFeature: true,
-        displayName: _td("Rich Quoting"),
+        displayName: _td("Message Replies"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },

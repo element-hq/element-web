@@ -40,38 +40,36 @@ function wantsDateSeparator(parentEvent, event) {
     return parentEventDate.getDay() !== eventDate.getDay();
 }
 
-const Quote = React.createClass({
-    statics: {
-        isMessageUrl: (url) => {
-            return !!REGEX_LOCAL_MATRIXTO.exec(url);
-        },
-    },
+export default class Quote extends React.Component {
+    static isMessageUrl(url) {
+        return !!REGEX_LOCAL_MATRIXTO.exec(url);
+    }
 
-    childContextTypes: {
-        matrixClient: React.PropTypes.object,
-    },
+    static childContextTypes = {
+        matrixClient: PropTypes.object,
+    };
 
-    props: {
+    static propTypes = {
         // The matrix.to url of the event
         url: PropTypes.string,
         // The parent event
         parentEv: PropTypes.instanceOf(MatrixEvent),
-        // Whether to include an avatar in the pill
-        shouldShowPillAvatar: PropTypes.bool,
-    },
+    };
 
-    getChildContext: function() {
-        return {
-            matrixClient: MatrixClientPeg.get(),
-        };
-    },
+    constructor(props, context) {
+        super(props, context);
 
-    getInitialState() {
-        return {
+        this.state = {
             // The event related to this quote
             event: null,
         };
-    },
+    }
+
+    getChildContext() {
+        return {
+            matrixClient: MatrixClientPeg.get(),
+        };
+    }
 
     componentWillReceiveProps(nextProps) {
         let roomId;
@@ -96,11 +94,11 @@ const Quote = React.createClass({
         // Only try and load the event if we know about the room
         // otherwise we just leave a `Quote` anchor which can be used to navigate/join the room manually.
         if (room) this.getEvent(room, eventId);
-    },
+    }
 
     componentWillMount() {
         this.componentWillReceiveProps(this.props);
-    },
+    }
 
     async getEvent(room, eventId) {
         let event = room.findEventById(eventId);
@@ -112,9 +110,9 @@ const Quote = React.createClass({
         await MatrixClientPeg.get().getEventTimeline(room.getUnfilteredTimelineSet(), eventId);
         event = room.findEventById(eventId);
         this.setState({room, event});
-    },
+    }
 
-    render: function() {
+    render() {
         const ev = this.state.event;
         if (ev) {
             const EventTile = sdk.getComponent('views.rooms.EventTile');
@@ -135,7 +133,5 @@ const Quote = React.createClass({
             <a href={this.props.url}>{ _t('Quote') }</a>
             <br />
         </div>;
-    },
-});
-
-export default Quote;
+    }
+}
