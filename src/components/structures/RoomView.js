@@ -854,9 +854,13 @@ module.exports = React.createClass({
 
         ev.dataTransfer.dropEffect = 'none';
 
-        const items = ev.dataTransfer.items;
-        if (items.length == 1) {
-            if (items[0].kind == 'file') {
+        const items = [...ev.dataTransfer.items];
+        if (items.length >= 1) {
+            const isDraggingFiles = items.every(function(item) {
+                return item.kind == 'file';
+            });
+
+            if (isDraggingFiles) {
                 this.setState({ draggingFile: true });
                 ev.dataTransfer.dropEffect = 'copy';
             }
@@ -867,10 +871,8 @@ module.exports = React.createClass({
         ev.stopPropagation();
         ev.preventDefault();
         this.setState({ draggingFile: false });
-        const files = ev.dataTransfer.files;
-        if (files.length == 1) {
-            this.uploadFile(files[0]);
-        }
+        const files = [...ev.dataTransfer.files];
+        files.forEach(this.uploadFile);
     },
 
     onDragLeaveOrEnd: function(ev) {
