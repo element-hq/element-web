@@ -60,7 +60,7 @@ class GenericEditor extends DevtoolsComponent {
                 <label htmlFor={id}>{ label }</label>
             </div>
             <div className="mx_DevTools_inputCell">
-                <input id={id} onChange={this._onChange} value={this.state[id]} size="32" />
+                <input id={id} className="mx_TextInputDialog_input" onChange={this._onChange} value={this.state[id]} size="32" />
             </div>
         </div>;
     }
