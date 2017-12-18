@@ -45,6 +45,8 @@ import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import SettingsStore from "../../settings/SettingsStore";
 
+import _every from "lodash/every";
+
 const DEBUG = false;
 let debuglog = function() {};
 
@@ -855,8 +857,12 @@ module.exports = React.createClass({
         ev.dataTransfer.dropEffect = 'none';
 
         const items = ev.dataTransfer.items;
-        if (items.length == 1) {
-            if (items[0].kind == 'file') {
+        if (items.length >= 1) {
+            const isDraggingFiles = _every(items, function(item) {
+                return item.kind == 'file';
+            });
+
+            if (isDraggingFiles) {
                 this.setState({ draggingFile: true });
                 ev.dataTransfer.dropEffect = 'copy';
             }
@@ -867,10 +873,8 @@ module.exports = React.createClass({
         ev.stopPropagation();
         ev.preventDefault();
         this.setState({ draggingFile: false });
-        const files = ev.dataTransfer.files;
-        if (files.length == 1) {
-            this.uploadFile(files[0]);
-        }
+        const files = [...ev.dataTransfer.files];
+        files.forEach(this.uploadFile);
     },
 
     onDragLeaveOrEnd: function(ev) {
