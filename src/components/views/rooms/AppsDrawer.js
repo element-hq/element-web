@@ -133,8 +133,8 @@ module.exports = React.createClass({
             '$matrix_display_name': user ? user.displayName : this.props.userId,
             '$matrix_avatar_url': user ? MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl) : '',
 
-            // Namespaced for Riot
-            '$riot_theme': SettingsStore.getValue("theme"),
+            // TODO: Namespace themes through some standard
+            '$theme': SettingsStore.getValue("theme"),
         };
 
         app.id = appId;
