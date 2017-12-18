@@ -54,6 +54,8 @@ export default class Quote extends React.Component {
         url: PropTypes.string,
         // The parent event
         parentEv: PropTypes.instanceOf(MatrixEvent),
+        // Whether this isn't the first Quote, and we're being nested
+        isNested: PropTypes.bool,
     };
 
     constructor(props, context) {
@@ -62,7 +64,10 @@ export default class Quote extends React.Component {
         this.state = {
             // The event related to this quote
             event: null,
+            show: !this.props.isNested,
         };
+
+        this.onShowNested = this.onShowNested.bind(this);
     }
 
     getChildContext() {
@@ -112,20 +117,33 @@ export default class Quote extends React.Component {
         this.setState({room, event});
     }
 
+    onShowNested() {
+        this.setState({
+            show: true,
+        });
+    }
+
     render() {
         const ev = this.state.event;
         if (ev) {
-            const EventTile = sdk.getComponent('views.rooms.EventTile');
-            let dateSep = null;
-            if (wantsDateSeparator(this.props.parentEv, this.state.event)) {
-                const DateSeparator = sdk.getComponent('messages.DateSeparator');
-                dateSep = <a href={this.props.url}><DateSeparator ts={this.state.event.getDate()} /></a>;
+            if (this.state.show) {
+                const EventTile = sdk.getComponent('views.rooms.EventTile');
+                let dateSep = null;
+                if (wantsDateSeparator(this.props.parentEv, this.state.event)) {
+                    const DateSeparator = sdk.getComponent('messages.DateSeparator');
+                    dateSep = <a href={this.props.url}><DateSeparator ts={this.state.event.getDate()} /></a>;
+                }
+
+                return <blockquote className="mx_Quote">
+                    { dateSep }
+                    <EventTile mxEvent={ev} tileShape="quote" />
+                </blockquote>;
             }
 
-            return <blockquote className="mx_Quote">
-                { dateSep }
-                <EventTile mxEvent={ev} tileShape="quote" />
-            </blockquote>;
+            return <div>
+                <a onClick={this.onShowNested} className="mx_Quote_show">{ _t('Quote') }</a>
+                <br />
+            </div>;
         }
 
         // Deliberately render nothing if the URL isn't recognised
