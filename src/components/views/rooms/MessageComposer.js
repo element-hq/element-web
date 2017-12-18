@@ -21,7 +21,7 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
-import Autocomplete from './Autocomplete';
+import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 
@@ -42,6 +42,7 @@ export default class MessageComposer extends React.Component {
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
         this.onInputStateChanged = this.onInputStateChanged.bind(this);
         this.onEvent = this.onEvent.bind(this);
+        this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
 
         this.state = {
             autocompleteQuery: '',
@@ -53,6 +54,7 @@ export default class MessageComposer extends React.Component {
                 wordCount: 0,
             },
             showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
+            isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
         };
     }
 
@@ -62,11 +64,15 @@ export default class MessageComposer extends React.Component {
         // marked as encrypted.
         // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
         MatrixClientPeg.get().on("event", this.onEvent);
+        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
     }
 
     componentWillUnmount() {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("event", this.onEvent);
+        }
+        if (this._roomStoreToken) {
+            this._roomStoreToken.remove();
         }
     }
 
@@ -74,6 +80,12 @@ export default class MessageComposer extends React.Component {
         if (event.getType() !== 'm.room.encryption') return;
         if (event.getRoomId() !== this.props.room.roomId) return;
         this.forceUpdate();
+    }
+
+    _onRoomViewStoreUpdate() {
+        const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
+        if (this.state.isQuoting === isQuoting) return;
+        this.setState({ isQuoting });
     }
 
     onUploadClick(ev) {
@@ -325,8 +337,20 @@ export default class MessageComposer extends React.Component {
                      key="controls_formatting" />
             );
 
-            const placeholderText = roomIsEncrypted ?
-                _t('Send an encrypted message') + '…' : _t('Send a message (unencrypted)') + '…';
+            let placeholderText;
+            if (this.state.isQuoting) {
+                if (roomIsEncrypted) {
+                    placeholderText = _t('Send an encrypted reply');
+                } else {
+                    placeholderText = _t('Send a reply (unencrypted)');
+                }
+            } else {
+                if (roomIsEncrypted) {
+                    placeholderText = _t('Send an encrypted message');
+                } else {
+                    placeholderText = _t('Send a message (unencrypted)');
+                }
+            }
 
             controls.push(
                 <MessageComposerInput
@@ -334,7 +358,7 @@ export default class MessageComposer extends React.Component {
                     key="controls_input"
                     onResize={this.props.onResize}
                     room={this.props.room}
-                    placeholder={placeholderText}
+                    placeholder={placeholderText + '…'}
                     onFilesPasted={this.uploadFiles}
                     onContentChanged={this.onInputContentChanged}
                     onInputStateChanged={this.onInputStateChanged} />,
