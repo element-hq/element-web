@@ -23,6 +23,10 @@ import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
 
 const i18nFolder = 'i18n/';
 
+// Control whether to also return original, untranslated strings
+// Useful for debugging and testing
+const ANNOTATE_STRINGS = false;
+
 // We use english strings as keys, some of which contain full stops
 counterpart.setSeparator('|');
 // Fall back to English
@@ -84,7 +88,21 @@ export function _t(text, variables, tags) {
     // The translation returns text so there's no XSS vector here (no unsafe HTML, no code execution)
     const translated = safeCounterpartTranslate(text, args);
 
-    return substitute(translated, variables, tags);
+    let substituted = substitute(translated, variables, tags);
+
+    // For development/testing purposes it is useful to also output the original string
+    // Don't do that for release versions
+    if (ANNOTATE_STRINGS) {
+        if (typeof substituted === 'string') {
+            return `@@${text}##${substituted}@@`
+        }
+        else {
+            return <span className='translated-string' data-orig-string={text}>{substituted}</span>;
+        }
+    }
+    else {
+        return substituted;
+    }
 }
 
 /*
