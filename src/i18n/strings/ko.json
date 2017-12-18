@@ -318,7 +318,7 @@
     "Reason: %(reasonText)s": "이유: %(reasonText)s",
     "Revoke Moderator": "조정자 철회",
     "Refer a friend to Riot:": "라이엇을 친구에게 추천해주세요:",
-    "Register": "등록하기",
+    "Register": "등록",
     "%(targetName)s rejected the invitation.": "%(targetName)s님이 초대를 거절하셨어요.",
     "Reject invitation": "초대 거절",
     "Rejoin": "다시 들어가기",
@@ -731,5 +731,6 @@
     "Ignore request": "요청 무시하기",
     "You added a new device '%(displayName)s', which is requesting encryption keys.": "새 장치 '%(displayName)s'를 추가했고 암호화 키를 요청하고 있어요.",
     "Your unverified device '%(displayName)s' is requesting encryption keys.": "인증하지 않은 장치 '%(displayName)s'가 암호화 키를 요청하고 있어요.",
-    "Encryption key request": "암호화 키 요청"
+    "Encryption key request": "암호화 키 요청",
+    "Edit": "수정하기"
 }
