@@ -1065,10 +1065,10 @@ export default React.createClass({
             // this if we are not scrolled up in the view. To find out, delegate to
             // the timeline panel. If the timeline panel doesn't exist, then we assume
             // it is safe to reset the timeline.
-            if (!self._loggedInView || !self._loggedInView.child) {
+            if (!self._loggedInView) {
                 return true;
             }
-            return self._loggedInView.child.canResetTimelineInRoom(roomId);
+            return self._loggedInView.getDecoratedComponentInstance().canResetTimelineInRoom(roomId);
         });
 
         cli.on('sync', function(state, prevState) {
