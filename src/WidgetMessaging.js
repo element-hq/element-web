@@ -54,7 +54,7 @@ The "message" key should be a human-friendly string.
 
 INBOUND ACTIONS
 ===============
-** All actions must include an "api" field with valie "widget".**
+** All actions must include an "api" field with value of "widget".**
 All actions can return an error response instead of the response outlined below.
 
 content_loaded
@@ -66,7 +66,7 @@ Request:
  - No additional fields.
 Response:
 {
-    success: true
+    success: "true"
 }
 Example:
 {
@@ -114,7 +114,7 @@ OUTBOUND ACTIONS
 ================
 
 In addition to listening for inbound requests, the API can be used to initiate
-actionss in the widget iframe, and request data from the widget instance.
+actions in the widget iframe, and request data from the widget instance.
 
 Outbound actions use the "widget_client" API key / name, which must be included
 on all requests.
@@ -135,11 +135,13 @@ Request a screenshot from the widget (if supported).
 This can only be supported by widgets that have access to all of their DOM tree.
 For example, widgets that nest further levels of iframes can not support this.
 
+The screenshot is returned as a Blob object.
+
 Request:
  - No additional fields.
 Response:
 {
-    screenshot: {data...}
+    screenshot: {<Blob>data...}
 }
 Example:
 {
