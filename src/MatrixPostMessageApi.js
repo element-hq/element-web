@@ -1,10 +1,26 @@
+/*
+Copyright 2017 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 import Promise from "bluebird";
 
-
 function defer() {
-    let resolve, reject;
+    let resolve;
+    let reject;
     let isPending = true;
-    let promise = new Promise(function(...args) {
+    const promise = new Promise(function(...args) {
         resolve = args[0];
         reject = args[1];
     });
@@ -55,18 +71,18 @@ export default class PostMessageApi {
         if (this._onMsgCallback) {
             return this._onMsgCallback;
         }
-        let self = this;
+        const self = this;
         this._onMsgCallback = function(ev) {
             // THIS IS ALL UNSAFE EXECUTION.
             // We do not verify who the sender of `ev` is!
-            let payload = ev.data;
+            const payload = ev.data;
             // NOTE: Workaround for running in a mobile WebView where a
             // postMessage immediately triggers this callback even though it is
             // not the response.
             if (payload.response === undefined) {
                 return;
             }
-            let deferred = self._pending[payload._id];
+            const deferred = self._pending[payload._id];
             if (!deferred) {
                 return;
             }
@@ -83,7 +99,7 @@ export default class PostMessageApi {
         this._counter += 1;
         target = target || "*";
         action._id = Date.now() + "-" + Math.random().toString(36) + "-" + this._counter;
-        let d = defer();
+        const d = defer();
         this._pending[action._id] = d;
         this._window.postMessage(action, target);
 
