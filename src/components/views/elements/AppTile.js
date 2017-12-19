@@ -339,6 +339,7 @@ export default React.createClass({
         this.widgetMessaging.addEndpoint(this.props.id, this.props.url);
         this.widgetMessaging.getCapabilities().then((capabilities) => {
             console.log("Got widget capabilities", this.widgetId, capabilities);
+            capabilities = capabilities || [];
             this.setState({capabilities});
         }).catch((err) => {
             console.log("Failed to get widget capabilities", this.widgetId, err);
