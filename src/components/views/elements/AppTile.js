@@ -484,8 +484,8 @@ export default React.createClass({
             deleteClasses += ' mx_AppTileMenuBarWidgetDelete';
         }
 
-        // Picture snapshot
-        const showPictureSnapshotButton = this._hasCapability('screenshot');
+        // Picture snapshot - only show button when apps are maximised.
+        const showPictureSnapshotButton = this._hasCapability('screenshot') && this.props.show;
         const showPictureSnapshotIcon = 'img/camera_green.svg';
         const windowStateIcon = (this.props.show ? 'img/minimize.svg' : 'img/maximize.svg');
 
