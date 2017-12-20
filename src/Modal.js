@@ -186,9 +186,23 @@ class ModalManager {
     }
 
     _reRender() {
+        // Retrieve the root node of the Riot application outside the modal
+        let applicationNode = document.getElementById('matrixchat');
         if (this._modals.length == 0) {
+            if (applicationNode) {
+                // If there is no modal to render, make all of Riot available
+                // to screen reader users again
+                applicationNode.setAttribute('aria-hidden', 'false');
+            }
             ReactDOM.unmountComponentAtNode(this.getOrCreateContainer());
             return;
+        }
+
+        if (applicationNode) {
+            // Hide the content outside the modal to screen reader users
+            // so they won't be able to navigate into it and act on it using
+            // screen reader specific features
+            applicationNode.setAttribute('aria-hidden', 'true');
         }
 
         const modal = this._modals[0];
