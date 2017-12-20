@@ -40,10 +40,6 @@ export default React.createClass({
         };
     },
 
-    componentDidMount: function() {
-        this.refs.emailInputField.focus();
-    },
-
     onEmailAddressChanged: function(value) {
         this.setState({
             emailAddress: value,
@@ -131,7 +127,7 @@ export default React.createClass({
 
         const emailInput = this.state.emailBusy ? <Spinner /> : <EditableText
             className="mx_SetEmailDialog_email_input"
-            ref="emailInputField"
+            autoFocus="true"
             placeholder={_t("Email address")}
             placeholderClassName="mx_SetEmailDialog_email_input_placeholder"
             blurToCancel={false}
