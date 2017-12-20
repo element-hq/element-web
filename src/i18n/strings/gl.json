@@ -217,5 +217,9 @@
     "Register": "Rexistrar",
     "Rooms": "Salas",
     "Invite to this community": "Convidar a esta comunidade",
-    "Add rooms to this community": "Engadir salas a esta comunidade"
+    "Add rooms to this community": "Engadir salas a esta comunidade",
+    "Appear Offline": "Aparecer fora de liña",
+    "Away": "Fóra",
+    "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Por favor instale <chromeLink>Chrome</chromeLink> ou <firefoxLink>Firefox</firefoxLink> para a mellor experiencia de usuaria.",
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> e <operaLink>Opera</operaLink> tamén funcionan."
 }
