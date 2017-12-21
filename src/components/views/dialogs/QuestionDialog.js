@@ -18,7 +18,6 @@ limitations under the License.
 import React from 'react';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import classnames from 'classnames';
 
 export default React.createClass({
     displayName: 'QuestionDialog',
@@ -53,30 +52,27 @@ export default React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const cancelButton = this.props.hasCancelButton ? (
-            <button onClick={this.onCancel}>
-                { _t("Cancel") }
-            </button>
-        ) : null;
-        const buttonClasses = classnames({
-            mx_Dialog_primary: true,
-            danger: this.props.danger,
-        });
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+        let primaryButtonClass = "";
+        if (this.props.danger) {
+            primaryButtonClass = "danger";
+        }
         return (
             <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished}
                 onEnterPressed={this.onOk}
                 title={this.props.title}
+                focus={this.props.focus}
             >
                 <div className="mx_Dialog_content">
                     { this.props.description }
-                </div>
-                <div className="mx_Dialog_buttons">
-                    <button className={buttonClasses} onClick={this.onOk} autoFocus={this.props.focus}>
-                        { this.props.button || _t('OK') }
-                    </button>
+                </div>.
+                <DialogButtons primaryButton={this.props.button || _t('OK')}
+                    onPrimaryButtonClick={this.onOk}
+                    primaryButtonClass={primaryButtonClass}
+                    onCancel={this.onCancel}
+                >
                     { this.props.extraButtons }
-                    { cancelButton }
-                </div>
+                </DialogButtons>
             </BaseDialog>
         );
     },
