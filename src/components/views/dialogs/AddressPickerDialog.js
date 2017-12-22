@@ -507,6 +507,7 @@ module.exports = React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const AddressSelector = sdk.getComponent("elements.AddressSelector");
         this.scrollElement = null;
 
@@ -590,11 +591,9 @@ module.exports = React.createClass({
                     { addressSelector }
                     { this.props.extraNode }
                 </div>
-                <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.onButtonClick}>
-                        { this.props.button }
-                    </button>
-                </div>
+                <DialogButtons primaryButton={this.props.button}
+                    onPrimaryButtonClick={this.onButtonClick}
+                    onCancel={this.onCancel} />
             </BaseDialog>
         );
     },
