@@ -168,12 +168,18 @@
       "webapp/**/*"
     ],
     "linux": {
-      "target": "deb",
+      "target": [
+        "deb",
+        "snap"
+      ],
       "category": "Network;InstantMessaging;Chat",
       "maintainer": "support@riot.im",
       "desktop": {
         "StartupWMClass": "riot"
       }
+    },
+    "snap": {
+      "plugs": ["default", "desktop"]
     },
     "win": {
       "target": "squirrel"
