@@ -76,13 +76,11 @@ export default React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
         const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
 
-        const confirmButtonClass = classnames({
-            'mx_Dialog_primary': true,
-            'danger': this.props.danger,
-        });
+        const confirmButtonClass = this.props.danger ? 'danger' : '';
 
         let reasonBox;
         if (this.props.askReason) {
@@ -127,17 +125,11 @@ export default React.createClass({
                     <div className="mx_ConfirmUserActionDialog_userId">{ userId }</div>
                 </div>
                 { reasonBox }
-                <div className="mx_Dialog_buttons">
-                    <button className={confirmButtonClass}
-                        onClick={this.onOk} autoFocus={!this.props.askReason}
-                    >
-                        { this.props.action }
-                    </button>
-
-                    <button onClick={this.onCancel}>
-                        { _t("Cancel") }
-                    </button>
-                </div>
+                <DialogButtons primaryButton={this.props.action}
+                    onPrimaryButtonClick={this.onOk}
+                    primaryButtonClass={confirmButtonClass}
+                    focus={!this.props.askReason}
+                    onCancel={this.onCancel} />
             </BaseDialog>
         );
     },
