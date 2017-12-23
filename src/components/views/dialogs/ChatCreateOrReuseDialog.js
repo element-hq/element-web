@@ -137,6 +137,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
         } else {
             // Show the avatar, name and a button to confirm that a new chat is requested
             const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
+            const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             const Spinner = sdk.getComponent('elements.Spinner');
             title = _t('Start chatting');
 
@@ -166,11 +167,8 @@ export default class ChatCreateOrReuseDialog extends React.Component {
                     </p>
                     { profile }
                 </div>
-                <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.props.onNewDMClick}>
-                        { _t('Start Chatting') }
-                    </button>
-                </div>
+                <DialogButtons primaryButton={_t('Start Chatting')}
+                    onPrimaryButtonClick={this.props.onNewDMClick} />
             </div>;
         }
 
