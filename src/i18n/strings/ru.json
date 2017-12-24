@@ -252,7 +252,7 @@
     "VoIP is unsupported": "VoIP не поддерживается",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Текстовое сообщение было отправлено на +%(msisdn)s. Введите проверочный код, который оно содержит",
     "and %(count)s others...|other": "и %(count)s других...",
-    "and %(count)s others...|one": "и ещё один...",
+    "and %(count)s others...|one": "и еще один...",
     "Are you sure?": "Вы уверены?",
     "Autoplay GIFs and videos": "Автовоспроизведение GIF и видео",
     "Click to mute audio": "Щелкните, чтобы выключить звук",
