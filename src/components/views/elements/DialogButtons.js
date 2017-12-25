@@ -17,6 +17,7 @@ limitations under the License.
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 import { _t } from '../../../languageHandler';
 
 /**
@@ -27,15 +28,15 @@ module.exports = React.createClass({
 
     propTypes: {
         // The primary button which is styled differently and has default focus.
-        primaryButton: React.PropTypes.node.isRequired,
+        primaryButton: PropTypes.node.isRequired,
 
         // onClick handler for the primary button.
-        onPrimaryButtonClick: React.PropTypes.func.isRequired,
+        onPrimaryButtonClick: PropTypes.func.isRequired,
 
         // onClick handler for the cancel button.
-        onCancel: React.PropTypes.func.isRequired,
+        onCancel: PropTypes.func.isRequired,
 
-        focus: React.PropTypes.bool,
+        focus: PropTypes.bool,
     },
 
     render: function() {
