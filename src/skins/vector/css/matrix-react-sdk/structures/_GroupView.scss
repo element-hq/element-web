@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Vector Creations Ltd.
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,10 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MEmoteBody {
-    white-space: pre-wrap;
+.mx_GroupView {
+    max-width: 960px;
+    width: 100%;
+    margin: 20px auto;
 }
 
-.mx_MEmoteBody_sender {
-    cursor: pointer;
+.mx_GroupView_error {
+    margin: auto;
+}
+
+.mx_GroupView_header_groupid {
+    font-weight: normal;
+    font-size: initial;
+    padding-left: 10px;
 }

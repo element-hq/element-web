@@ -36,7 +36,7 @@ var expect = require('expect');
 var q = require('q');
 
 var test_utils = require('../test-utils');
-var MockHttpBackend = require('../mock-request');
+var MockHttpBackend = require('matrix-mock-request');
 
 var HS_URL='http://localhost';
 var IS_URL='http://localhost';
