@@ -251,7 +251,7 @@ export default class MessageComposer extends React.Component {
     render() {
         const me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         const uploadInputStyle = {display: 'none'};
-        const MemberPresenceAvatar = sdk.getComponent('avatars.MemberPresenceAvatar');
+        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
 
@@ -259,7 +259,7 @@ export default class MessageComposer extends React.Component {
 
         controls.push(
             <div key="controls_avatar" className="mx_MessageComposer_avatar">
-                <MemberPresenceAvatar member={me} width={24} height={24} />
+                <MemberAvatar member={me} width={24} height={24} />
             </div>,
         );
 
