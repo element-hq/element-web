@@ -50,10 +50,11 @@ limitations under the License.
     color: $primary-fg-color;
     background-color: $droptarget-bg-color;
     border-radius: 4px;
+    line-height: 16px;
 }
 
 .mx_RoomList_emptySubListTip .mx_RoleButton {
-    vertical-align: -3px;
+    vertical-align: -2px;
 }
 
 .mx_RoomList_headerButtons {

@@ -1,6 +1,6 @@
 "use strict";
 
-var q = require('q');
+import Promise from 'bluebird';
 
 /**
  * Perform common actions before each test case, e.g. printing the test case
@@ -28,13 +28,14 @@ export function browserSupportsWebRTC() {
 }
 
 export function deleteIndexedDB(dbName) {
-    return new q.Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         if (!window.indexedDB) {
             resolve();
             return;
         }
 
-        console.log(`${Date.now()}: Removing indexeddb instance: ${dbName}`);
+        const startTime = Date.now();
+        console.log(`${startTime}: Removing indexeddb instance: ${dbName}`);
         const req = window.indexedDB.deleteDatabase(dbName);
 
         req.onblocked = () => {
@@ -48,7 +49,8 @@ export function deleteIndexedDB(dbName) {
         };
 
         req.onsuccess = () => {
-            console.log(`${Date.now()}: Removed indexeddb instance: ${dbName}`);
+            const now = Date.now();
+            console.log(`${now}: Removed indexeddb instance: ${dbName} in ${now-startTime} ms`);
             resolve();
         };
     }).catch((e) => {

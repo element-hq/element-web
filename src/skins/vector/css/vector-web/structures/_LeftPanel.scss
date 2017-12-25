@@ -44,12 +44,13 @@ limitations under the License.
 
 .mx_LeftPanel.collapsed .mx_BottomLeftMenu {
    flex: 0 0 160px;
+   margin-bottom: 9px;
 }
 
 .mx_LeftPanel .mx_BottomLeftMenu {
     order: 3;
 
-    border-top: 1px solid rgba(118, 207, 166, 0.2);
+    border-top: 1px solid $panel-divider-color;
     margin-left: 16px; /* gutter */
     margin-right: 16px; /* gutter */
     flex: 0 0 60px;
@@ -77,6 +78,7 @@ limitations under the License.
 .mx_BottomLeftMenu_options .mx_RoleButton {
     margin-left: 0px;
     margin-right: 10px;
+    height: 30px;
 }
 
 .mx_BottomLeftMenu_options .mx_BottomLeftMenu_settings {

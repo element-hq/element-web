@@ -14,13 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_ChatInviteDialog {
+    /* XXX: padding-left is on mx_Dialog but padding-right has subsequently
+     * been added on other dialogs. Surely all our dialogs should have consistent
+     * right hand padding?
+     */
+    padding-right: 58px;
+}
+
 /* Using a textarea for this element, to circumvent autofill */
 .mx_ChatInviteDialog_input,
 .mx_ChatInviteDialog_input:focus
 {
     height: 26px;
     font-size: 14px;
-    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    font-family: $font-family;
     padding-left: 12px;
     padding-right: 12px;
     margin: 0 !important;
@@ -52,9 +60,8 @@ limitations under the License.
 }
 
 .mx_ChatInviteDialog_error {
-    position: absolute;
+    margin-top: 10px;
     color: $warning-color;
-    line-height: 36px;
 }
 
 .mx_ChatInviteDialog_cancel {

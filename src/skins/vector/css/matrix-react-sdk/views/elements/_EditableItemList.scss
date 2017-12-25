@@ -1,0 +1,62 @@
+/*
+Copyright 2017 New Vector Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_EditableItemList {
+    margin-top: 12px;
+    margin-bottom: 0px;
+}
+
+.mx_EditableItem {
+    display: flex;
+    margin-left: 56px;
+}
+
+.mx_EditableItem .mx_EditableItem_editable {
+    border: 0px;
+    border-bottom: 1px solid $strong-input-border-color;
+    padding: 0px;
+    min-width: 240px;
+    max-width: 400px;
+    margin-bottom: 16px;
+}
+
+.mx_EditableItem .mx_EditableItem_editable:focus {
+    border-bottom: 1px solid $accent-color;
+    outline: none;
+    box-shadow: none;
+}
+
+.mx_EditableItem .mx_EditableItem_editablePlaceholder {
+    color: $settings-grey-fg-color;
+}
+
+.mx_EditableItem .mx_EditableItem_addButton,
+.mx_EditableItem .mx_EditableItem_removeButton {
+    padding-left: 0.5em;
+    position: relative;
+    cursor: pointer;
+
+    visibility: hidden;
+}
+
+.mx_EditableItem:hover .mx_EditableItem_addButton,
+.mx_EditableItem:hover .mx_EditableItem_removeButton {
+    visibility: visible;
+}
+
+.mx_EditableItemList_label {
+    margin-bottom: 8px;
+}

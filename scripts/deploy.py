@@ -13,6 +13,8 @@ import os.path
 import subprocess
 import sys
 import tarfile
+import shutil
+import glob
 
 try:
     # python3
@@ -48,11 +50,12 @@ def move_bundles(source, dest):
     for f in os.listdir(source):
         dst = os.path.join(dest, f)
         if os.path.exists(dst):
-            raise DeployException(
-                "Not deploying. The bundle includes '%s' which we have previously deployed."
+            print (
+                "Skipping bundle. The bundle includes '%s' which we have previously deployed."
                 % f
             )
-        renames[os.path.join(source, f)] = dst
+        else:
+            renames[os.path.join(source, f)] = dst
 
     for (src, dst) in renames.iteritems():
         print ("Move %s -> %s" % (src, dst))
@@ -63,7 +66,8 @@ class Deployer:
         self.packages_path = "."
         self.bundles_path = None
         self.should_clean = False
-        self.config_location = None
+        # filename -> symlink path e.g 'config.localhost.json' => '../localhost/config.json'
+        self.symlink_paths = {}
         self.verify_signature = True
 
     def deploy(self, tarball, extract_path):
@@ -95,19 +99,20 @@ class Deployer:
 
         print ("Extracted into: %s" % extracted_dir)
 
-        if self.config_location:
-            create_relative_symlink(
-                target=self.config_location,
-                linkname=os.path.join(extracted_dir, 'config.json')
-            )
+        if self.symlink_paths:
+            for link_path, file_path in self.symlink_paths.iteritems():
+                create_relative_symlink(
+                    target=file_path,
+                    linkname=os.path.join(extracted_dir, link_path)
+                )
 
         if self.bundles_path:
             extracted_bundles = os.path.join(extracted_dir, 'bundles')
             move_bundles(source=extracted_bundles, dest=self.bundles_path)
 
-            # replace the (hopefully now empty) extracted_bundles dir with a
-            # symlink to the common dir.
-            os.rmdir(extracted_bundles)
+            # replace the extracted_bundles dir (which may not be empty if some
+            # bundles were skipped) with a symlink to the common dir.
+            shutil.rmtree(extracted_bundles)
             create_relative_symlink(
                 target=self.bundles_path,
                 linkname=extracted_bundles,
@@ -161,9 +166,10 @@ if __name__ == "__main__":
         )
     )
     parser.add_argument(
-        "--config", nargs='?', default='./config.json', help=(
-            "Write a symlink at config.json in the extracted tarball to this \
-            location. (Default: '%(default)s')"
+        "--include", nargs='*', default='./config*.json', help=(
+            "Symlink these files into the root of the deployed tarball. \
+             Useful for config files and home pages. Supports glob syntax. \
+             (Default: '%(default)s')"
         )
     )
     parser.add_argument(
@@ -178,6 +184,8 @@ if __name__ == "__main__":
     deployer.packages_path = args.packages_dir
     deployer.bundles_path = args.bundles_dir
     deployer.should_clean = args.clean
-    deployer.config_location = args.config
+
+    for include in args.include:
+        deployer.symlink_paths.update({ os.path.basename(pth): pth for pth in glob.iglob(include) })
 
     deployer.deploy(args.tarball, args.extract_path)

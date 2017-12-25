@@ -20,6 +20,7 @@ limitations under the License.
 
 .mx_BaseAvatar_initial {
     position: absolute;
+    left: 0px;
     color: $avatar-initial-color;
     text-align: center;
     speak: none;
@@ -30,5 +31,5 @@ limitations under the License.
 .mx_BaseAvatar_image {
     border-radius: 40px;
     vertical-align: top;
-    background-color: #fff;
+    background-color: $avatar-bg-color;
 }

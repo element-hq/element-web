@@ -65,10 +65,11 @@ var sdk = require("matrix-react-sdk");
 const PlatformPeg = require("matrix-react-sdk/lib/PlatformPeg");
 sdk.loadSkin(require('../component-index'));
 var VectorConferenceHandler = require('../VectorConferenceHandler');
-var q = require('q');
+import Promise from 'bluebird';
 var request = require('browser-request');
-import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
 import * as languageHandler from 'matrix-react-sdk/lib/languageHandler';
+// Also import _t directly so we can call it just `_t` as this is what gen-i18n.js expects
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 import url from 'url';
 
@@ -76,6 +77,9 @@ import {parseQs, parseQsFromFragment} from './url_utils';
 import Platform from './platform';
 
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
+import SettingsStore, {SettingLevel} from "matrix-react-sdk/lib/settings/SettingsStore";
+import Tinter from 'matrix-react-sdk/lib/Tinter';
+import SdkConfig from "matrix-react-sdk/lib/SdkConfig";
 
 var lastLocationHashSet = null;
 
@@ -187,11 +191,11 @@ var makeRegistrationUrl = function(params) {
 
 window.addEventListener('hashchange', onHashChange);
 
-function getConfig() {
-    let deferred = q.defer();
+function getConfig(configJsonFilename) {
+    let deferred = Promise.defer();
 
     request(
-        { method: "GET", url: "config.json" },
+        { method: "GET", url: configJsonFilename },
         (err, response, body) => {
             if (err || response.status < 200 || response.status >= 300) {
                 // Lack of a config isn't an error, we should
@@ -242,6 +246,7 @@ async function loadApp() {
     // set the platform for react sdk (our Platform object automatically picks the right one)
     PlatformPeg.set(new Platform());
 
+    //Init Spellchecker
     if (PlatformPeg.get().isElectron()) {
         try {
             const lang = languageHandler.getCurrentLanguage();
@@ -251,32 +256,87 @@ async function loadApp() {
             console.error("Unable to init SpellChecker" + e);
         }
     }
+  
+    // Load the config file. First try to load up a domain-specific config of the
+    // form "config.$domain.json" and if that fails, fall back to config.json.
+    let configJson;
+    let configError;
+    try {
+        try {
+            configJson = await getConfig(`config.${document.domain}.json`);
+            // 404s succeed with an empty json config, so check that there are keys
+            if (Object.keys(configJson).length === 0) {
+                throw new Error(); // throw to enter the catch
+            }
+        } catch (e) {
+            configJson = await getConfig("config.json");
+        }
+    } catch (e) {
+        configError = e;
+    }
+    
+    // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
+    // granular settings are loaded correctly and to avoid duplicating the override logic for the theme. 
+    SdkConfig.put(configJson);
 
     // don't try to redirect to the native apps if we're
-    // verifying a 3pid
+    // verifying a 3pid (but after we've loaded the config)
     const preventRedirect = Boolean(fragparts.params.client_secret);
 
     if (!preventRedirect) {
         if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-            if (confirm(languageHandler._t("Riot is not supported on mobile web. Install the app?"))) {
-                window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
+            // FIXME: ugly status hardcoding
+            if (SettingsStore.getValue("theme") === 'status') {
+                window.location = "https://status.im/join-riot.html";
                 return;
+            }
+            else {
+                if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
+                    window.location = "https://itunes.apple.com/us/app/vector.im/id1083446067";
+                    return;
+                }
             }
         }
         else if (/Android/.test(navigator.userAgent)) {
-            if (confirm(languageHandler._t("Riot is not supported on mobile web. Install the app?"))) {
-                window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
+            // FIXME: ugly status hardcoding
+            if (SettingsStore.getValue("theme") === 'status') {
+                window.location = "https://status.im/join-riot.html";
                 return;
+            }
+            else {
+                if (confirm(_t("Riot is not supported on mobile web. Install the app?"))) {
+                    window.location = "https://play.google.com/store/apps/details?id=im.vector.alpha";
+                    return;
+                }
             }
         }
     }
 
-    let configJson;
-    let configError;
-    try {
-        configJson = await getConfig();
-    } catch (e) {
-        configError = e;
+    // as quickly as we possibly can, set a default theme...
+    const styleElements = Object.create(null);
+    let a;
+    const theme = SettingsStore.getValue("theme");
+    for (let i = 0; (a = document.getElementsByTagName("link")[i]); i++) {
+        const href = a.getAttribute("href");
+        if (!href) continue;
+        // shouldn't we be using the 'title' tag rather than the href?
+        const match = href.match(/^bundles\/.*\/theme-(.*)\.css$/);
+        if (match) {
+            if (match[1] === theme) {
+                // remove the disabled flag off the stylesheet
+                a.removeAttribute("disabled");
+
+                // in case the Tinter.tint() in MatrixChat fires before the
+                // CSS has actually loaded (which in practice happens)...
+
+                // FIXME: we should probably block loading the app or even
+                // showing a spinner until the theme is loaded, to avoid
+                // flashes of unstyled content.
+                a.onload = () => { 
+                    Tinter.setTheme(theme);
+                };
+            }
+        }
     }
 
     if (window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser')) {
@@ -302,7 +362,7 @@ async function loadApp() {
                 config={configJson}
                 realQueryParams={params}
                 startingFragmentQueryParams={fragparts.params}
-                enableGuest={true}
+                enableGuest={!configJson.disable_guests}
                 onTokenLoginCompleted={onTokenLoginCompleted}
                 initialScreenAfterLogin={getScreenFromLocation(window.location)}
                 defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
@@ -326,7 +386,7 @@ async function loadApp() {
 }
 
 async function loadLanguage() {
-    const prefLang = UserSettingsStore.getLocalSetting('language');
+    const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/true);
     let langs = [];
 
     if (!prefLang) {
@@ -338,6 +398,7 @@ async function loadLanguage() {
     }
     try {
         await languageHandler.setLanguage(langs);
+        document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
     } catch (e) {
         console.error("Unable to set language", e);
     }
