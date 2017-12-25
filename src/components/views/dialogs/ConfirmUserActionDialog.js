@@ -18,7 +18,6 @@ import React from 'react';
 import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import classnames from 'classnames';
 import { GroupMemberType } from '../../../groups';
 
 /*
