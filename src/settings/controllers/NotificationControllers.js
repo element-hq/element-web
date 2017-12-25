@@ -35,11 +35,11 @@ function isMasterRuleEnabled() {
 }
 
 export class NotificationsEnabledController extends SettingController {
-    getValueOverride(level, roomId, calculatedValue) {
+    getValueOverride(level, roomId, calculatedValue, calculatedAtLevel) {
         const Notifier = require('../../Notifier'); // avoids cyclical references
         if (!Notifier.isPossible()) return false;
 
-        if (calculatedValue === null) {
+        if (calculatedValue === null || calculatedAtLevel === "default") {
             return isMasterRuleEnabled();
         }
 
