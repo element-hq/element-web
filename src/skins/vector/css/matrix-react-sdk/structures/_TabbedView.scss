@@ -66,7 +66,7 @@ limitations under the License.
 }
 
 .mx_TabbedView_tabPanel {
-    height: 100%;
+    height: 100vh; // 100% of viewport height
 }
 
 .mx_TabbedView_tabPanelContent {
