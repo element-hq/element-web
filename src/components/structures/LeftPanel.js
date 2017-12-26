@@ -17,8 +17,6 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import classNames from 'classnames';
 import { KeyCode } from 'matrix-react-sdk/lib/Keyboard';
 import sdk from 'matrix-react-sdk';
@@ -199,4 +197,4 @@ var LeftPanel = React.createClass({
     }
 });
 
-module.exports = DragDropContext(HTML5Backend)(LeftPanel);
+module.exports = LeftPanel;

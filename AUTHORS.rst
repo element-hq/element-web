@@ -13,3 +13,6 @@ include:
 
 * Michael Telatynski (https://github.com/t3chguy)
   Improved consistency of inverted elements in dark theme across browsers
+
+* Alexandr Korsak (https://github.com/oivoodoo)
+  Improved multiple file uploading
