@@ -22,7 +22,7 @@ import dis from 'matrix-react-sdk/lib/dispatcher';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import spellchecker from 'spellchecker';
 import Promise from 'bluebird';
-import {remote, ipcRenderer, desktopCapturer} from 'electron';
+import {remote, ipcRenderer, desktopCapturer, webFrame} from 'electron';
 import rageshake from '../rageshake';
 
 remote.autoUpdater.on('update-downloaded', onUpdateDownloaded);

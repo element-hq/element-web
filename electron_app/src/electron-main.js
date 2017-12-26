@@ -258,7 +258,6 @@ electron.app.on('before-quit', () => {
     }
 });
 
-
 // Set the App User Model ID to match what the squirrel
 // installer uses for the shortcut icon.
 // This makes notifications work on windows 8.1 (and is
