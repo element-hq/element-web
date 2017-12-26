@@ -15,60 +15,60 @@ limitations under the License.
 */
 
 .mx_TabbedView {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    background-color: $tab-panel-bg-color;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: $tab-panel-bg-color;
 }
 
 .mx_TabbedView_tabLabels {
-    width: 300px;
-    height: 100%;
-    background-color: $tab-list-bg-color;
-    color: $tab-list-fg-color;
-    border-right: 1px solid $tab-border-color;
-    border-left: 1px solid $tab-border-color;
+  width: 300px;
+  height: 100%;
+  background-color: $tab-list-bg-color;
+  color: $tab-list-fg-color;
+  border-right: 1px solid $tab-border-color;
+  border-left: 1px solid $tab-border-color;
 }
 
 .mx_TabbedView_tabPanels {
-    width: calc(100% - 320px);
-    display: inline-block;
-    height: 100%;
-    padding-left: 20px;
+  width: calc(100% - 320px);
+  display: inline-block;
+  height: 100%;
+  padding-left: 20px;
 }
 
 .mx_TabbedView_tabLabel {
-    text-align: center;
-    vertical-align: middle;
-    text-transform: uppercase;
-    cursor: pointer;
-    display: block;
-    padding: 20px;
-    width: calc(100% - 40px);
-    border-bottom: 1px solid $tab-border-color;
+  text-align: center;
+  vertical-align: middle;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: block;
+  padding: 20px;
+  width: calc(100% - 40px);
+  border-bottom: 1px solid $tab-border-color;
 }
 
 .mx_TabbedView_exit {
-    padding-top: 10px;
-    padding-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .mx_TabbedView_tabLabel:hover {
-    font-weight: 700;
+  font-weight: 700;
 }
 
 .mx_TabbedView_tabLabel_active {
-    font-weight: 700;
-    background-color: $tab-list-active-bg-color;
-    color: $tab-list-active-fg-color;
+  font-weight: 700;
+  background-color: $tab-list-active-bg-color;
+  color: $tab-list-active-fg-color;
 }
 
 .mx_TabbedView_tabPanel {
-    height: 100vh; // 100% of viewport height
+  height: 100vh; // 100% of viewport height
 }
 
 .mx_TabbedView_tabPanelContent {
-    width: 600px;
+  width: 600px;
 }
