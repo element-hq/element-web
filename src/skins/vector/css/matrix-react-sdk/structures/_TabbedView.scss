@@ -37,6 +37,7 @@ limitations under the License.
   display: inline-block;
   height: 100%;
   padding-left: 20px;
+  scroll-snap-type: block;
 }
 
 .mx_TabbedView_tabLabel {
@@ -67,6 +68,7 @@ limitations under the License.
 
 .mx_TabbedView_tabPanel {
   height: 100vh; // 100% of viewport height
+  scroll-snap-align: start;
 }
 
 .mx_TabbedView_tabPanelContent {
