@@ -94,7 +94,7 @@
     "Describe your problem here.": "Tu popíšte váš problém.",
     "In order to diagnose problems, logs from this client will be sent with this bug report. If you would prefer to only send the text above, please untick:": "S cieľom lepšej diagnostiky problému sa spolu s vašim hlásením odošlú záznami o činnosti programu Riot. Ak si želáte odoslať len text hlásenia, odškrtnite nasledujúce pole:",
     "Send logs": "Zahrnúť záznamy",
-    "Send": "Poslať",
+    "Send": "Odoslať",
     "Unavailable": "Nedostupné",
     "Changelog": "Zoznam zmien",
     "Back": "Naspäť",
