@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../languageHandler';
 import sdk from '../../index';
 import MatrixClientPeg from '../../MatrixClientPeg';
@@ -30,8 +31,8 @@ module.exports = React.createClass({
     displayName: 'CreateRoom',
 
     propTypes: {
-        onRoomCreated: React.PropTypes.func,
-        collapsedRhs: React.PropTypes.bool,
+        onRoomCreated: PropTypes.func,
+        collapsedRhs: PropTypes.bool,
     },
 
     phases: {

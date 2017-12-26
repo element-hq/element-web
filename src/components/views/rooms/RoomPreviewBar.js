@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 const sdk = require('../../../index');
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 
@@ -27,29 +28,29 @@ module.exports = React.createClass({
     displayName: 'RoomPreviewBar',
 
     propTypes: {
-        onJoinClick: React.PropTypes.func,
-        onRejectClick: React.PropTypes.func,
-        onForgetClick: React.PropTypes.func,
+        onJoinClick: PropTypes.func,
+        onRejectClick: PropTypes.func,
+        onForgetClick: PropTypes.func,
 
         // if inviterName is specified, the preview bar will shown an invite to the room.
         // You should also specify onRejectClick if specifiying inviterName
-        inviterName: React.PropTypes.string,
+        inviterName: PropTypes.string,
 
         // If invited by 3rd party invite, the email address the invite was sent to
-        invitedEmail: React.PropTypes.string,
+        invitedEmail: PropTypes.string,
 
         // A standard client/server API error object. If supplied, indicates that the
         // caller was unable to fetch details about the room for the given reason.
-        error: React.PropTypes.object,
+        error: PropTypes.object,
 
-        canPreview: React.PropTypes.bool,
-        spinner: React.PropTypes.bool,
-        room: React.PropTypes.object,
+        canPreview: PropTypes.bool,
+        spinner: PropTypes.bool,
+        room: PropTypes.object,
 
         // The alias that was used to access this room, if appropriate
         // If given, this will be how the room is referred to (eg.
         // in error messages).
-        roomAlias: React.PropTypes.string,
+        roomAlias: PropTypes.string,
     },
 
     getDefaultProps: function() {

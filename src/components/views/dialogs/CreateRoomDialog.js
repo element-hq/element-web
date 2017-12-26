@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import { _t } from '../../../languageHandler';
@@ -22,7 +23,7 @@ import { _t } from '../../../languageHandler';
 export default React.createClass({
     displayName: 'CreateRoomDialog',
     propTypes: {
-        onFinished: React.PropTypes.func.isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     componentDidMount: function() {

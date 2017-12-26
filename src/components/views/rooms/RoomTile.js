@@ -19,6 +19,7 @@ limitations under the License.
 
 const React = require('react');
 const ReactDOM = require("react-dom");
+import PropTypes from 'prop-types';
 const classNames = require('classnames');
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 import DMRoomMap from '../../../utils/DMRoomMap';
@@ -34,17 +35,17 @@ module.exports = React.createClass({
     displayName: 'RoomTile',
 
     propTypes: {
-        connectDragSource: React.PropTypes.func,
-        connectDropTarget: React.PropTypes.func,
-        onClick: React.PropTypes.func,
-        isDragging: React.PropTypes.bool,
+        connectDragSource: PropTypes.func,
+        connectDropTarget: PropTypes.func,
+        onClick: PropTypes.func,
+        isDragging: PropTypes.bool,
 
-        room: React.PropTypes.object.isRequired,
-        collapsed: React.PropTypes.bool.isRequired,
-        unread: React.PropTypes.bool.isRequired,
-        highlight: React.PropTypes.bool.isRequired,
-        isInvite: React.PropTypes.bool.isRequired,
-        incomingCall: React.PropTypes.object,
+        room: PropTypes.object.isRequired,
+        collapsed: PropTypes.bool.isRequired,
+        unread: PropTypes.bool.isRequired,
+        highlight: PropTypes.bool.isRequired,
+        isInvite: PropTypes.bool.isRequired,
+        incomingCall: PropTypes.object,
     },
 
     getDefaultProps: function() {

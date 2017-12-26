@@ -390,7 +390,7 @@ const FeaturedUser = React.createClass({
 });
 
 const GroupContext = {
-    groupStore: React.PropTypes.instanceOf(GroupStore).isRequired,
+    groupStore: PropTypes.instanceOf(GroupStore).isRequired,
 };
 
 CategoryRoomList.contextTypes = GroupContext;
@@ -408,7 +408,7 @@ export default React.createClass({
     },
 
     childContextTypes: {
-        groupStore: React.PropTypes.instanceOf(GroupStore),
+        groupStore: PropTypes.instanceOf(GroupStore),
     },
 
     getChildContext: function() {

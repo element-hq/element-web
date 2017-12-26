@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -399,17 +400,17 @@ export default class MessageComposer extends React.Component {
 MessageComposer.propTypes = {
     // a callback which is called when the height of the composer is
     // changed due to a change in content.
-    onResize: React.PropTypes.func,
+    onResize: PropTypes.func,
 
     // js-sdk Room object
-    room: React.PropTypes.object.isRequired,
+    room: PropTypes.object.isRequired,
 
     // string representing the current voip call state
-    callState: React.PropTypes.string,
+    callState: PropTypes.string,
 
     // callback when a file to upload is chosen
-    uploadFile: React.PropTypes.func.isRequired,
+    uploadFile: PropTypes.func.isRequired,
 
     // string representing the current room app drawer state
-    showApps: React.PropTypes.bool,
+    showApps: PropTypes.bool,
 };

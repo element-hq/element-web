@@ -27,6 +27,7 @@ limitations under the License.
  * 'isTargetMod': boolean
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
@@ -46,8 +47,8 @@ module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
 
     propTypes: {
-        matrixClient: React.PropTypes.object.isRequired,
-        member: React.PropTypes.object.isRequired,
+        matrixClient: PropTypes.object.isRequired,
+        member: PropTypes.object.isRequired,
     },
 
     getInitialState: function() {
