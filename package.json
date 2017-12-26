@@ -41,7 +41,7 @@
     "dist": "scripts/package.sh",
     "install:electron": "install-app-deps && npm run electron:rebuild",
     "electron": "npm run install:electron && electron .",
-    "electron:rebuild": "cd electron_app && electron-rebuild -v 1.6.8 -w spellchecker && cd ..",
+    "electron:rebuild": "cd electron_app && electron-rebuild -v 1.7.9 -w spellchecker && cd ..",
     "start:res": "node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --output-filename=bundles/_dev_/[name].js --output-chunk-file=bundles/_dev_/[name].js -w --progress",
     "start:js:prod": "cross-env NODE_ENV=production webpack-dev-server -w --progress",

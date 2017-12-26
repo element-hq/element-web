@@ -10,6 +10,6 @@
     "electron-window-state": "^4.1.0",
     "minimist": "^1.2.0",
     "png-to-ico": "^1.0.2",
-    "spellchecker": "^3.3.1"
+    "spellchecker": "^3.4.4"
   }
 }
