@@ -132,7 +132,7 @@ screenshot
 ----------
 
 Request a screenshot from the widget (if supported).
-This can only be supported by widgets that have access to all of their DOM tree.
+This can currently only be supported by widgets that have access to all of their DOM tree.
 For example, widgets that nest further levels of iframes can not support this.
 
 The screenshot is returned as a Blob object.
