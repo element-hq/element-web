@@ -72,8 +72,8 @@ export default React.createClass({
         const widgetPermissionId = [newProps.room.roomId, encodeURIComponent(newProps.url)].join('_');
         const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
         return {
-            initialising: true,   // True while we are mangling the widget URL
-            loading: this.props.waitForIframeLoad,        // True while the iframe content is loading
+            initialising: true, // True while we are mangling the widget URL
+            loading: this.props.waitForIframeLoad, // True while the iframe content is loading
             widgetUrl: this._addWurlParams(newProps.url),
             widgetPermissionId: widgetPermissionId,
             // Assume that widget has permission to load if we are the user who
@@ -227,8 +227,8 @@ export default React.createClass({
     },
 
     componentWillUnmount() {
-        WidgetMessaging.stopListening();
-        WidgetMessaging.removeEndpoint(this.props.id, this.props.url);
+        this.widgetMessaging.stopListening();
+        this.widgetMessaging.removeEndpoint(this.props.id, this.props.url);
         window.removeEventListener('message', this._onMessage);
     },
 
