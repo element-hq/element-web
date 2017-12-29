@@ -403,7 +403,7 @@
     "Reason: %(reasonText)s": "Razón: %(reasonText)s",
     "Revoke Moderator": "Eliminar Moderador",
     "Refer a friend to Riot:": "Informar a un amigo sobre Riot:",
-    "Register": "Registrarse",
+    "Register": "Registro",
     "%(targetName)s rejected the invitation.": "%(targetName)s ha rechazado la invitación.",
     "Reject invitation": "Rechazar invitación",
     "Rejoin": "Volver a unirse",
@@ -606,5 +606,16 @@
     "May": "May",
     "Jun": "Jun",
     "Jul": "Jul",
-    "Aug": "August"
+    "Aug": "August",
+    "Add rooms to this community": "Agrega salas a esta comunidad",
+    "Call Failed": "La llamada falló",
+    "Review Devices": "Revisar Dispositivos",
+    "Call Anyway": "Llamar de todas formas",
+    "Answer Anyway": "Contestar de todas formas",
+    "Call": "Llamar",
+    "Answer": "Contestar",
+    "Sep": "Sep",
+    "Oct": "Oct",
+    "Nov": "Nov",
+    "Dec": "Dic"
 }
