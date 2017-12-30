@@ -979,5 +979,22 @@
     "Claimed Ed25519 fingerprint key": "Údajný klíč s otiskem prstu Ed25519",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Tento proces vás provede importem šifrovacích klíčů, které jste si stáhli z jiného Matrix klienta. Po úspěšném naimportování budete v tomto klientovi moci dešifrovat všechny zprávy, které jste mohli dešifrovat v původním klientovi.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Stažený soubor je chráněn heslem. Soubor můžete naimportovat pouze pokud zadáte odpovídající heslo.",
-    "Tag Panel": "Připnout panel"
+    "Tag Panel": "Připnout panel",
+    "Call Failed": "Hovor selhal",
+    "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "V této místnosti jsou neznámá zařízení: Pokud budete pokračovat bez jejich ověření, někdo může Váš hovor odposlouchávat.",
+    "Review Devices": "Ověřit zařízení",
+    "Call Anyway": "Přesto zavolat",
+    "Answer Anyway": "Přesto přijmout",
+    "Call": "Hovor",
+    "Answer": "Přijmout",
+    "Send": "Odeslat",
+    "Addresses": "Adresy",
+    "collapse": "sbalit",
+    "expand": "rozbalit",
+    "Cryptography data migrated": "Šifrovaná data byla převedena",
+    "A one-off migration of cryptography data has been performed. End-to-end encryption will not work if you go back to an older version of Riot. If you need to use end-to-end cryptography on an older version, log out of Riot first. To retain message history, export and re-import your keys.": "Jednorázová migrace šifrovaných údajů dokončena. E2E šifrovaní vám nebude fungovat jakmile se vrátíte ke starší verzi programu Riot. Pokud plánujete používat šifrovaní ve starší verzi Riot, doporučujeme vám se nejdříve odhlásit. Aby jste si zachovali historii šifrovaných konverzací, exportujte a znovu importujte klíče místností.",
+    "Old cryptography data detected": "Nalezeny starší šifrované datové zprávy",
+    "Data from an older version of Riot has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "Nalezeny datové zprávy ze starší verze Riot. Důsledkem bude, že E2E šifrování nebude ve starší verzi Riot správně fungovat. Šifrované zprávy ze starší verze nemusí být čitelné v nové verzi. Může dojít i k selhání zasílaní zpráv s touto verzí Riot. Pokud zaznamenáte některý z uvedených problému, odhlaste se a přihlaste znovu. Pro zachování historie zpráv exportujte a znovu importujte vaše klíče.",
+    "<showDevicesText>Show devices</showDevicesText> or <cancelText>cancel all</cancelText>.": "<showDevicesText>Zobrazit zařízení</showDevicesText> anebo <cancelText>Zrušit vše</cancelText>.",
+    "Warning": "Upozornění"
 }
