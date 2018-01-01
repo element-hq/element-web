@@ -169,8 +169,10 @@ module.exports = React.createClass({
 
     // Check whether current size is greater than 0, if yes call props.onVisible
     _checkSize: function() {
-        if (this.props.onVisible && this._getSize()) {
-            this.props.onVisible();
+        if (this._getSize()) {
+            if (this.props.onVisible) this.props.onVisible();
+        } else {
+            if (this.props.onHidden) this.props.onHidden();
         }
     },
 
