@@ -39,7 +39,7 @@ module.exports = React.createClass({
     },
 
     onResize: function(e) {
-        if(this.props.onResize) {
+        if (this.props.onResize) {
             this.props.onResize(e);
         }
     },

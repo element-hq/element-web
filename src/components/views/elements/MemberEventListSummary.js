@@ -216,7 +216,7 @@ module.exports = React.createClass({
         // are there only to show translators to non-English languages
         // that the verb is conjugated to plural or singular Subject.
         let res = null;
-        switch(t) {
+        switch (t) {
             case "joined":
                 res = (userCount > 1)
                     ? _t("%(severalUsers)sjoined %(count)s times", { severalUsers: "", count: repeats })
@@ -304,7 +304,7 @@ module.exports = React.createClass({
             return items[0];
         } else if (remaining > 0) {
             items = items.slice(0, itemLimit);
-            return _t("%(items)s and %(count)s others", { items: items.join(', '), count: remaining } )
+            return _t("%(items)s and %(count)s others", { items: items.join(', '), count: remaining } );
         } else {
             const lastItem = items.pop();
             return _t("%(items)s and %(lastItem)s", { items: items.join(', '), lastItem: lastItem });
@@ -478,7 +478,7 @@ module.exports = React.createClass({
         }
         const toggleButton = (
             <div className={"mx_MemberEventListSummary_toggle"} onClick={this._toggleSummary}>
-                { expanded ? 'collapse' : 'expand' }
+                { expanded ? _t('collapse') : _t('expand') }
             </div>
         );
 

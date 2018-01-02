@@ -104,8 +104,8 @@ module.exports = React.createClass({
     render: function() {
         const localDomain = this.context.matrixClient.getDomain();
         const EditableItemList = sdk.getComponent('elements.EditableItemList');
-        return (<div>
-            <h3>{ _t('Related Communities') }</h3>
+        return <div>
+            <h3>{ _t('Flair') }</h3>
             <EditableItemList
                 items={this.state.newGroupsList}
                 className={"mx_RelatedGroupSettings"}
@@ -115,12 +115,12 @@ module.exports = React.createClass({
                 onItemAdded={this.onGroupAdded}
                 onItemEdited={this.onGroupEdited}
                 onItemRemoved={this.onGroupDeleted}
-                itemsLabel={_t('Related communities for this room:')}
-                noItemsLabel={_t('This room has no related communities')}
+                itemsLabel={_t('Showing flair for these communities:')}
+                noItemsLabel={_t('This room is not showing flair for any communities')}
                 placeholder={_t(
                     'New community ID (e.g. +foo:%(localDomain)s)', {localDomain},
                 )}
             />
-        </div>);
+        </div>;
     },
 });

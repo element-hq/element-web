@@ -494,7 +494,6 @@ module.exports = withMatrixClient(React.createClass({
         const defaultPerms = {
             can: {},
             muted: false,
-            modifyLevel: false,
         };
         const room = this.props.matrixClient.getRoom(member.roomId);
         if (!room) return defaultPerms;
@@ -516,13 +515,15 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     _calculateCanPermissions: function(me, them, powerLevels) {
+        const isMe = me.userId === them.userId;
         const can = {
             kick: false,
             ban: false,
             mute: false,
             modifyLevel: false,
+            modifyLevelMax: 0,
         };
-        const canAffectUser = them.powerLevel < me.powerLevel;
+        const canAffectUser = them.powerLevel < me.powerLevel || isMe;
         if (!canAffectUser) {
             //console.log("Cannot affect user: %s >= %s", them.powerLevel, me.powerLevel);
             return can;
@@ -531,16 +532,13 @@ module.exports = withMatrixClient(React.createClass({
             (powerLevels.events ? powerLevels.events["m.room.power_levels"] : null) ||
             powerLevels.state_default
         );
-        const levelToSend = (
-            (powerLevels.events ? powerLevels.events["m.room.message"] : null) ||
-            powerLevels.events_default
-        );
 
         can.kick = me.powerLevel >= powerLevels.kick;
         can.ban = me.powerLevel >= powerLevels.ban;
         can.mute = me.powerLevel >= editPowerLevel;
-        can.toggleMod = me.powerLevel > them.powerLevel && them.powerLevel >= levelToSend;
-        can.modifyLevel = me.powerLevel > them.powerLevel && me.powerLevel >= editPowerLevel;
+        can.modifyLevel = me.powerLevel >= editPowerLevel && (isMe || me.powerLevel > them.powerLevel);
+        can.modifyLevelMax = me.powerLevel;
+
         return can;
     },
 
@@ -564,7 +562,7 @@ module.exports = withMatrixClient(React.createClass({
     onMemberAvatarClick: function() {
         const member = this.props.member;
         const avatarUrl = member.user ? member.user.avatarUrl : member.events.member.getContent().avatar_url;
-        if(!avatarUrl) return;
+        if (!avatarUrl) return;
 
         const httpUrl = this.props.matrixClient.mxcUrlToHttp(avatarUrl);
         const ImageView = sdk.getComponent("elements.ImageView");
@@ -832,8 +830,11 @@ module.exports = withMatrixClient(React.createClass({
             presenceCurrentlyActive = this.props.member.user.currentlyActive;
         }
 
-        let roomMemberDetails = null;
+        const room = this.props.matrixClient.getRoom(this.props.member.roomId);
+        const poweLevelEvent = room ? room.currentState.getStateEvents("m.room.power_levels", "") : null;
+        const powerLevelUsersDefault = poweLevelEvent.getContent().users_default;
 
+        let roomMemberDetails = null;
         if (this.props.member.roomId) { // is in room
             const PowerSelector = sdk.getComponent('elements.PowerSelector');
             const PresenceLabel = sdk.getComponent('rooms.PresenceLabel');
@@ -842,7 +843,9 @@ module.exports = withMatrixClient(React.createClass({
                     { _t("Level:") } <b>
                         <PowerSelector controlled={true}
                             value={parseInt(this.props.member.powerLevel)}
+                            maxValue={this.state.can.modifyLevelMax}
                             disabled={!this.state.can.modifyLevel}
+                            usersDefault={powerLevelUsersDefault}
                             onChange={this.onPowerChange} />
                     </b>
                 </div>

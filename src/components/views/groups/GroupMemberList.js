@@ -20,16 +20,11 @@ import sdk from '../../../index';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import PropTypes from 'prop-types';
-import withMatrixClient from '../../../wrappers/withMatrixClient';
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
-export default withMatrixClient(React.createClass({
+export default React.createClass({
     displayName: 'GroupMemberList',
-
-    contextTypes: {
-        matrixClient: PropTypes.object.isRequired,
-    },
 
     propTypes: {
         groupId: PropTypes.string.isRequired,
@@ -49,7 +44,7 @@ export default withMatrixClient(React.createClass({
     },
 
     _initGroupStore: function(groupId) {
-        this._groupStore = GroupStoreCache.getGroupStore(this.context.matrixClient, groupId);
+        this._groupStore = GroupStoreCache.getGroupStore(groupId);
         this._groupStore.registerListener(() => {
             this._fetchMembers();
         });
@@ -92,7 +87,7 @@ export default withMatrixClient(React.createClass({
         query = (query || "").toLowerCase();
         if (query) {
             memberList = memberList.filter((m) => {
-                const matchesName = m.displayname.toLowerCase().indexOf(query) !== -1;
+                const matchesName = (m.displayname || "").toLowerCase().includes(query);
                 const matchesId = m.userId.toLowerCase().includes(query);
 
                 if (!matchesName && !matchesId) {
@@ -174,4 +169,4 @@ export default withMatrixClient(React.createClass({
             </div>
         );
     },
-}));
+});

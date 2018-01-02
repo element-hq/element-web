@@ -53,8 +53,10 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     destroy() {
-        MatrixClientPeg.get().removeListener("Room.timeline", this._onRoomTimelineBound);
-        MatrixClientPeg.get().removeListener("RoomState.members", this._onRoomStateMemberBound);
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("Room.timeline", this._onRoomTimelineBound);
+            MatrixClientPeg.get().removeListener("RoomState.members", this._onRoomStateMemberBound);
+        }
     }
 
     _onRoomTimeline(ev, room, toStartOfTimeline, removed, data) {
@@ -126,7 +128,7 @@ export default class UserProvider extends AutocompleteProvider {
         const events = this.room.getLiveTimeline().getEvents();
         const lastSpoken = {};
 
-        for(const event of events) {
+        for (const event of events) {
             lastSpoken[event.getSender()] = event.getTs();
         }
 

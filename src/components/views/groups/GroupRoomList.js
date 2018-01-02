@@ -19,15 +19,10 @@ import sdk from '../../../index';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import PropTypes from 'prop-types';
-import {MatrixClient} from 'matrix-js-sdk';
 
 const INITIAL_LOAD_NUM_ROOMS = 30;
 
 export default React.createClass({
-    contextTypes: {
-        matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
-    },
-
     propTypes: {
         groupId: PropTypes.string.isRequired,
     },
@@ -46,7 +41,7 @@ export default React.createClass({
     },
 
     _initGroupStore: function(groupId) {
-        this._groupStore = GroupStoreCache.getGroupStore(this.context.matrixClient, groupId);
+        this._groupStore = GroupStoreCache.getGroupStore(groupId);
         this._groupStore.registerListener(() => {
             this._fetchRooms();
         });

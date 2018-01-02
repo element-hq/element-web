@@ -72,24 +72,19 @@ export default class Flair extends React.Component {
         this.state = {
             profiles: [],
         };
-        this.onRoomStateEvents = this.onRoomStateEvents.bind(this);
     }
 
     componentWillUnmount() {
         this._unmounted = true;
-        this.context.matrixClient.removeListener('RoomState.events', this.onRoomStateEvents);
     }
 
     componentWillMount() {
         this._unmounted = false;
-        this._generateAvatars();
-        this.context.matrixClient.on('RoomState.events', this.onRoomStateEvents);
+        this._generateAvatars(this.props.groups);
     }
 
-    onRoomStateEvents(event) {
-        if (event.getType() === 'm.room.related_groups' && FlairStore.groupSupport()) {
-            this._generateAvatars();
-        }
+    componentWillReceiveProps(newProps) {
+        this._generateAvatars(newProps.groups);
     }
 
     async _getGroupProfiles(groups) {
@@ -106,23 +101,7 @@ export default class Flair extends React.Component {
         return profiles.filter((p) => p !== null);
     }
 
-    async _generateAvatars() {
-        let groups = await FlairStore.getPublicisedGroupsCached(this.context.matrixClient, this.props.userId);
-        if (this.props.roomId && this.props.showRelated) {
-            const relatedGroupsEvent = this.context.matrixClient
-                .getRoom(this.props.roomId)
-                .currentState
-                .getStateEvents('m.room.related_groups', '');
-            const relatedGroups = relatedGroupsEvent ?
-                relatedGroupsEvent.getContent().groups || [] : [];
-            if (relatedGroups && relatedGroups.length > 0) {
-                groups = groups.filter((groupId) => {
-                    return relatedGroups.includes(groupId);
-                });
-            } else {
-                groups = [];
-            }
-        }
+    async _generateAvatars(groups) {
         if (!groups || groups.length === 0) {
             return;
         }
@@ -148,13 +127,7 @@ export default class Flair extends React.Component {
 }
 
 Flair.propTypes = {
-    userId: PropTypes.string,
-
-    // Whether to show only the flair associated with related groups of the given room,
-    // or all flair associated with a user.
-    showRelated: PropTypes.bool,
-    // The room that this flair will be displayed in. Optional. Only applies when showRelated = true.
-    roomId: PropTypes.string,
+    groups: PropTypes.arrayOf(PropTypes.string),
 };
 
 // TODO: We've decided that all components should follow this pattern, which means removing withMatrixClient and using

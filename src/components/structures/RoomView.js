@@ -26,26 +26,24 @@ const React = require("react");
 const ReactDOM = require("react-dom");
 import Promise from 'bluebird';
 const classNames = require("classnames");
-const Matrix = require("matrix-js-sdk");
 import { _t } from '../../languageHandler';
 
-const UserSettingsStore = require('../../UserSettingsStore');
 const MatrixClientPeg = require("../../MatrixClientPeg");
 const ContentMessages = require("../../ContentMessages");
 const Modal = require("../../Modal");
 const sdk = require('../../index');
 const CallHandler = require('../../CallHandler');
-const Resend = require("../../Resend");
 const dis = require("../../dispatcher");
 const Tinter = require("../../Tinter");
 const rate_limited_func = require('../../ratelimitedfunc');
 const ObjectUtils = require('../../ObjectUtils');
 const Rooms = require('../../Rooms');
 
-import KeyCode from '../../KeyCode';
+import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
+import SettingsStore from "../../settings/SettingsStore";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -110,7 +108,6 @@ module.exports = React.createClass({
             draggingFile: false,
             searching: false,
             searchResults: null,
-            unsentMessageError: '',
             callState: null,
             guestsCanJoin: false,
             canPeek: false,
@@ -148,8 +145,6 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
         MatrixClientPeg.get().on("RoomMember.membership", this.onRoomMemberMembership);
         MatrixClientPeg.get().on("accountData", this.onAccountData);
-
-        this._syncedSettings = UserSettingsStore.getSyncedSettings();
 
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
@@ -204,7 +199,6 @@ module.exports = React.createClass({
         if (initial) {
             newState.room = MatrixClientPeg.get().getRoom(newState.roomId);
             if (newState.room) {
-                newState.unsentMessageError = this._getUnsentMessageError(newState.room);
                 newState.showApps = this._shouldShowApps(newState.room);
                 this._onRoomLoaded(newState.room);
             }
@@ -305,7 +299,7 @@ module.exports = React.createClass({
 
         // Check if user has previously chosen to hide the app drawer for this
         // room. If so, do not show apps
-        let hideWidgetDrawer = localStorage.getItem(
+        const hideWidgetDrawer = localStorage.getItem(
             room.roomId + "_hide_widget_drawer");
 
         if (hideWidgetDrawer === "true") {
@@ -435,13 +429,7 @@ module.exports = React.createClass({
 
     onKeyDown: function(ev) {
         let handled = false;
-        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-        let ctrlCmdOnly;
-        if (isMac) {
-            ctrlCmdOnly = ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
-        } else {
-            ctrlCmdOnly = ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
-        }
+        const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
         switch (ev.keyCode) {
             case KeyCode.KEY_D:
@@ -470,11 +458,6 @@ module.exports = React.createClass({
             case 'message_send_failed':
             case 'message_sent':
                 this._checkIfAlone(this.state.room);
-                // no break; to intentionally fall through
-            case 'message_send_cancelled':
-                this.setState({
-                    unsentMessageError: this._getUnsentMessageError(this.state.room),
-                });
                 break;
             case 'notifier_enabled':
             case 'upload_failed':
@@ -542,7 +525,7 @@ module.exports = React.createClass({
             // update unread count when scrolled up
             if (!this.state.searchResults && this.state.atEndOfLiveTimeline) {
                 // no change
-            } else if (!shouldHideEvent(ev, this._syncedSettings)) {
+            } else if (!shouldHideEvent(ev)) {
                 this.setState((state, props) => {
                     return {numUnreadMessages: state.numUnreadMessages + 1};
                 });
@@ -616,38 +599,8 @@ module.exports = React.createClass({
     },
 
     _updatePreviewUrlVisibility: function(room) {
-        // console.log("_updatePreviewUrlVisibility");
-
-        // check our per-room overrides
-        const roomPreviewUrls = room.getAccountData("org.matrix.room.preview_urls");
-        if (roomPreviewUrls && roomPreviewUrls.getContent().disable !== undefined) {
-            this.setState({
-                showUrlPreview: !roomPreviewUrls.getContent().disable,
-            });
-            return;
-        }
-
-        // check our global disable override
-        const userRoomPreviewUrls = MatrixClientPeg.get().getAccountData("org.matrix.preview_urls");
-        if (userRoomPreviewUrls && userRoomPreviewUrls.getContent().disable) {
-            this.setState({
-                showUrlPreview: false,
-            });
-            return;
-        }
-
-        // check the room state event
-        const roomStatePreviewUrls = room.currentState.getStateEvents('org.matrix.room.preview_urls', '');
-        if (roomStatePreviewUrls && roomStatePreviewUrls.getContent().disable) {
-            this.setState({
-                showUrlPreview: false,
-            });
-            return;
-        }
-
-        // otherwise, we assume they're on.
         this.setState({
-            showUrlPreview: true,
+            showUrlPreview: SettingsStore.getValue("urlPreviewsEnabled", room.roomId),
         });
     },
 
@@ -666,12 +619,7 @@ module.exports = React.createClass({
         const room = this.state.room;
         if (!room) return;
 
-        const color_scheme_event = room.getAccountData("org.matrix.room.color_scheme");
-        let color_scheme = {};
-        if (color_scheme_event) {
-            color_scheme = color_scheme_event.getContent();
-            // XXX: we should validate the event
-        }
+        const color_scheme = SettingsStore.getValue("roomColor", room.room_id);
         console.log("Tinter.tint from updateTint");
         Tinter.tint(color_scheme.primary_color, color_scheme.secondary_color);
     },
@@ -750,37 +698,8 @@ module.exports = React.createClass({
             return;
         }
 
-        const joinedMembers = room.currentState.getMembers().filter(m => m.membership === "join" || m.membership === "invite");
+        const joinedMembers = room.currentState.getMembers().filter((m) => m.membership === "join" || m.membership === "invite");
         this.setState({isAlone: joinedMembers.length === 1});
-    },
-
-    _getUnsentMessageError: function(room) {
-        const unsentMessages = this._getUnsentMessages(room);
-        if (!unsentMessages.length) return "";
-
-        if (
-            unsentMessages.length === 1 &&
-            unsentMessages[0].error &&
-            unsentMessages[0].error.data &&
-            unsentMessages[0].error.data.error &&
-            unsentMessages[0].error.name !== "UnknownDeviceError"
-        ) {
-            return unsentMessages[0].error.data.error;
-        }
-
-        for (const event of unsentMessages) {
-            if (!event.error || event.error.name !== "UnknownDeviceError") {
-                return _t("Some of your messages have not been sent.");
-            }
-        }
-        return _t("Message not sent due to unknown devices being present");
-    },
-
-    _getUnsentMessages: function(room) {
-        if (!room) { return []; }
-        return room.getPendingEvents().filter(function(ev) {
-            return ev.status === Matrix.EventStatus.NOT_SENT;
-        });
     },
 
     _updateConfCallNotification: function() {
@@ -825,14 +744,6 @@ module.exports = React.createClass({
             debuglog("no more search results");
             return Promise.resolve(false);
         }
-    },
-
-    onResendAllClick: function() {
-        Resend.resendUnsentEvents(this.state.room);
-    },
-
-    onCancelAllClick: function() {
-        Resend.cancelUnsentEvents(this.state.room);
     },
 
     onInviteButtonClick: function() {
@@ -943,9 +854,13 @@ module.exports = React.createClass({
 
         ev.dataTransfer.dropEffect = 'none';
 
-        const items = ev.dataTransfer.items;
-        if (items.length == 1) {
-            if (items[0].kind == 'file') {
+        const items = [...ev.dataTransfer.items];
+        if (items.length >= 1) {
+            const isDraggingFiles = items.every(function(item) {
+                return item.kind == 'file';
+            });
+
+            if (isDraggingFiles) {
                 this.setState({ draggingFile: true });
                 ev.dataTransfer.dropEffect = 'copy';
             }
@@ -956,10 +871,8 @@ module.exports = React.createClass({
         ev.stopPropagation();
         ev.preventDefault();
         this.setState({ draggingFile: false });
-        const files = ev.dataTransfer.files;
-        if (files.length == 1) {
-            this.uploadFile(files[0]);
-        }
+        const files = [...ev.dataTransfer.files];
+        files.forEach(this.uploadFile);
     },
 
     onDragLeaveOrEnd: function(ev) {
@@ -978,11 +891,7 @@ module.exports = React.createClass({
             file, this.state.room.roomId, MatrixClientPeg.get(),
         ).done(undefined, (error) => {
             if (error.name === "UnknownDeviceError") {
-                dis.dispatch({
-                    action: 'unknown_device_error',
-                    err: error,
-                    room: this.state.room,
-                });
+                // Let the staus bar handle this
                 return;
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -1147,7 +1056,7 @@ module.exports = React.createClass({
             }
 
             if (this.state.searchScope === 'All') {
-                if(roomId != lastRoomId) {
+                if (roomId != lastRoomId) {
                     const room = cli.getRoom(roomId);
 
                     // XXX: if we've left the room, we might not know about
@@ -1458,13 +1367,13 @@ module.exports = React.createClass({
      */
     handleScrollKey: function(ev) {
         let panel;
-        if(this.refs.searchResultsPanel) {
+        if (this.refs.searchResultsPanel) {
             panel = this.refs.searchResultsPanel;
-        } else if(this.refs.messagePanel) {
+        } else if (this.refs.messagePanel) {
             panel = this.refs.messagePanel;
         }
 
-        if(panel) {
+        if (panel) {
             panel.handleScrollKey(ev);
         }
     },
@@ -1483,7 +1392,7 @@ module.exports = React.createClass({
     // otherwise react calls it with null on each update.
     _gatherTimelinePanelRef: function(r) {
         this.refs.messagePanel = r;
-        if(r) {
+        if (r) {
             console.log("updateTint from RoomView._gatherTimelinePanelRef");
             this.updateTint();
         }
@@ -1614,12 +1523,9 @@ module.exports = React.createClass({
             statusBar = <RoomStatusBar
                 room={this.state.room}
                 numUnreadMessages={this.state.numUnreadMessages}
-                unsentMessageError={this.state.unsentMessageError}
                 atEndOfLiveTimeline={this.state.atEndOfLiveTimeline}
                 sentMessageAndIsAlone={this.state.isAlone}
                 hasActiveCall={inCall}
-                onResendAllClick={this.onResendAllClick}
-                onCancelAllClick={this.onCancelAllClick}
                 onInviteClick={this.onInviteButtonClick}
                 onStopWarningClick={this.onStopAloneWarningClick}
                 onScrollToBottomClick={this.jumpToLiveTimeline}
@@ -1775,7 +1681,7 @@ module.exports = React.createClass({
         const messagePanel = (
             <TimelinePanel ref={this._gatherTimelinePanelRef}
                 timelineSet={this.state.room.getUnfilteredTimelineSet()}
-                showReadReceipts={!UserSettingsStore.getSyncedSetting('hideReadReceipts', false)}
+                showReadReceipts={!SettingsStore.getValue('hideReadReceipts')}
                 manageReadReceipts={!this.state.isPeeking}
                 manageReadMarkers={!this.state.isPeeking}
                 hidden={hideMessagePanel}

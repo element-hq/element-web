@@ -22,7 +22,7 @@ import MatrixClientPeg from '../../MatrixClientPeg';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
-import { _t, _td, _tJsx } from '../../languageHandler';
+import { _t, _td } from '../../languageHandler';
 import AccessibleButton from '../views/elements/AccessibleButton';
 import Modal from '../../Modal';
 import classnames from 'classnames';
@@ -469,7 +469,7 @@ export default React.createClass({
         if (group && group.inviter && group.inviter.userId) {
             this._fetchInviterProfile(group.inviter.userId);
         }
-        this._groupStore = GroupStoreCache.getGroupStore(this._matrixClient, groupId);
+        this._groupStore = GroupStoreCache.getGroupStore(groupId);
         this._groupStore.registerListener(() => {
             const summary = this._groupStore.getSummary();
             if (summary.profile) {
@@ -495,7 +495,19 @@ export default React.createClass({
                 this._onEditClick();
             }
         });
+        let willDoOnboarding = false;
         this._groupStore.on('error', (err) => {
+            if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN' && !willDoOnboarding) {
+                dis.dispatch({
+                    action: 'do_after_sync_prepared',
+                    deferred_action: {
+                        action: 'view_group',
+                        group_id: groupId,
+                    },
+                });
+                dis.dispatch({action: 'view_set_mxid'});
+                willDoOnboarding = true;
+            }
             this.setState({
                 summary: null,
                 error: err,
@@ -670,18 +682,6 @@ export default React.createClass({
 
     _onAddRoomsClick: function() {
         showGroupAddRoomDialog(this.props.groupId);
-    },
-
-    _onPublicityToggle: function() {
-        this.setState({
-            publicityBusy: true,
-        });
-        const publicity = !this.state.isGroupPublicised;
-        this._groupStore.setGroupPublicity(publicity).then(() => {
-            this.setState({
-                publicityBusy: false,
-            });
-        });
     },
 
     _getGroupSection: function() {
@@ -903,25 +903,6 @@ export default React.createClass({
         return null;
     },
 
-    _getMemberSettingsSection: function() {
-        return <div className="mx_GroupView_memberSettings">
-            <h2> { _t("Community Member Settings") } </h2>
-            <div className="mx_GroupView_memberSettings_toggle">
-                <input type="checkbox"
-                    onClick={this._onPublicityToggle}
-                    checked={this.state.isGroupPublicised}
-                    tabIndex="3"
-                    id="isGroupPublicised"
-                />
-                <label htmlFor="isGroupPublicised"
-                    onClick={this._onPublicityToggle}
-                >
-                    { _t("Publish this community on your profile") }
-                </label>
-            </div>
-        </div>;
-    },
-
     _getLongDescriptionNode: function() {
         const summary = this.state.summary;
         let description = null;
@@ -932,12 +913,12 @@ export default React.createClass({
                 className="mx_GroupView_groupDesc_placeholder"
                 onClick={this._onEditClick}
             >
-                { _tJsx(
+                { _t(
                     'Your community hasn\'t got a Long Description, a HTML page to show to community members.<br />' +
                     'Click here to open settings and give it one!',
-                    [/<br \/>/],
-                    [(sub) => <br />])
-                }
+                    {},
+                    { 'br': <br /> },
+                ) }
             </div>;
         }
         const groupDescEditingClasses = classnames({
@@ -976,7 +957,6 @@ export default React.createClass({
             let shortDescNode;
             const bodyNodes = [
                 this._getMembershipSection(),
-                this.state.editing ? this._getMemberSettingsSection() : null,
                 this._getGroupSection(),
             ];
             const rightButtons = [];

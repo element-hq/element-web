@@ -114,7 +114,7 @@ function _onGroupInviteFinished(groupId, addrs) {
 
 function _onGroupAddRoomFinished(groupId, addrs, addRoomsPublicly) {
     const matrixClient = MatrixClientPeg.get();
-    const groupStore = GroupStoreCache.getGroupStore(matrixClient, groupId);
+    const groupStore = GroupStoreCache.getGroupStore(groupId);
     const errorList = [];
     return Promise.all(addrs.map((addr) => {
         return groupStore

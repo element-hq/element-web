@@ -61,7 +61,7 @@ export default class ComposerHistoryManager {
 
         // TODO: Performance issues?
         let item;
-        for(; item = sessionStorage.getItem(`${this.prefix}[${this.currentIndex}]`); this.currentIndex++) {
+        for (; item = sessionStorage.getItem(`${this.prefix}[${this.currentIndex}]`); this.currentIndex++) {
             this.history.push(
                 Object.assign(new HistoryItem(), JSON.parse(item)),
             );

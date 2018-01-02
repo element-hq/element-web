@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import EventEmitter from 'events';
 import Promise from 'bluebird';
 
 const BULK_REQUEST_DEBOUNCE_MS = 200;
@@ -29,9 +28,8 @@ const GROUP_PROFILES_CACHE_BUST_MS = 1800000; // 30 mins
 /**
  * Stores data used by <Flair/>
  */
-class FlairStore extends EventEmitter {
+class FlairStore {
     constructor(matrixClient) {
-        super();
         this._matrixClient = matrixClient;
         this._userGroups = {
             // $userId: ['+group1:domain', '+group2:domain', ...]
@@ -40,6 +38,9 @@ class FlairStore extends EventEmitter {
             //  $groupId: {
             //      avatar_url: 'mxc://...'
             //  }
+        };
+        this._groupProfilesPromise = {
+            //  $groupId: Promise
         };
         this._usersPending = {
             //  $userId: {
@@ -95,7 +96,7 @@ class FlairStore extends EventEmitter {
                 // Return silently to avoid spamming for non-supporting servers
                 return;
             }
-            console.error('Could not get groups for user', this.props.userId, err);
+            console.error('Could not get groups for user', userId, err);
             throw err;
         }).finally(() => {
             delete this._usersInFlight[userId];
@@ -151,13 +152,29 @@ class FlairStore extends EventEmitter {
             return this._groupProfiles[groupId];
         }
 
-        const profile = await matrixClient.getGroupProfile(groupId);
+        // No request yet, start one
+        if (!this._groupProfilesPromise[groupId]) {
+            this._groupProfilesPromise[groupId] = matrixClient.getGroupProfile(groupId);
+        }
+
+        let profile;
+        try {
+            profile = await this._groupProfilesPromise[groupId];
+        } catch (e) {
+            console.log('Failed to get group profile for ' + groupId, e);
+            // Don't retry, but allow a retry when the profile is next requested
+            delete this._groupProfilesPromise[groupId];
+            return;
+        }
+
         this._groupProfiles[groupId] = {
             groupId,
             avatarUrl: profile.avatar_url,
             name: profile.name,
             shortDescription: profile.short_description,
         };
+        delete this._groupProfilesPromise[groupId];
+
         setTimeout(() => {
             delete this._groupProfiles[groupId];
         }, GROUP_PROFILES_CACHE_BUST_MS);

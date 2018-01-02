@@ -119,7 +119,7 @@ export default class MultiInviter {
         let doInvite;
         if (this.groupId !== null) {
             doInvite = GroupStoreCache
-                .getGroupStore(MatrixClientPeg.get(), this.groupId)
+                .getGroupStore(this.groupId)
                 .inviteUserToGroup(addr);
         } else {
             doInvite = inviteToRoom(this.roomId, addr);

@@ -21,8 +21,7 @@ import sdk from '../../../index';
 import dis from "../../../dispatcher";
 import ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
-import { _t, _tJsx} from '../../../languageHandler';
-import UserSettingsStore from '../../../UserSettingsStore';
+import { _t } from '../../../languageHandler';
 
 
 module.exports = React.createClass({
@@ -100,13 +99,13 @@ module.exports = React.createClass({
                 supportedText = _t(" (unsupported)");
             } else {
                 joinNode = (<span>
-                    { _tJsx(
+                    { _t(
                         "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.",
-                        [/<voiceText>(.*?)<\/voiceText>/, /<videoText>(.*?)<\/videoText>/],
-                        [
-                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}} href="#">{ sub }</a>,
-                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video');}} href="#">{ sub }</a>,
-                        ],
+                        {},
+                        {
+                            'voiceText': (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}} href="#">{ sub }</a>,
+                            'videoText': (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video');}} href="#">{ sub }</a>,
+                        },
                     ) }
                 </span>);
             }

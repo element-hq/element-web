@@ -244,7 +244,7 @@ module.exports = React.createClass({
 
     _doNaiveGroupRoomSearch: function(query) {
         const lowerCaseQuery = query.toLowerCase();
-        const groupStore = GroupStoreCache.getGroupStore(MatrixClientPeg.get(), this.props.groupId);
+        const groupStore = GroupStoreCache.getGroupStore(this.props.groupId);
         const results = [];
         groupStore.getGroupRooms().forEach((r) => {
             const nameMatch = (r.name || '').toLowerCase().includes(lowerCaseQuery);

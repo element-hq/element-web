@@ -31,7 +31,7 @@ import linkifyMatrix from '../../../linkify-matrix';
 import AccessibleButton from '../elements/AccessibleButton';
 import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
-import UserSettingsStore from "../../../UserSettingsStore";
+import SettingsStore from "../../../settings/SettingsStore";
 
 linkifyMatrix(linkify);
 
@@ -339,7 +339,7 @@ module.exports = React.createClass({
                 </AccessibleButton>;
         }
 
-        if (this.props.onPinnedClick && UserSettingsStore.isFeatureEnabled('feature_pinning')) {
+        if (this.props.onPinnedClick && SettingsStore.isFeatureEnabled('feature_pinning')) {
             let pinsIndicator = null;
             if (this._hasUnreadPins()) {
                 pinsIndicator = (<div className="mx_RoomHeader_pinsIndicator mx_RoomHeader_pinsIndicatorUnread" />);
@@ -389,7 +389,7 @@ module.exports = React.createClass({
 
         let rightRow;
         let manageIntegsButton;
-        if(this.props.room && this.props.room.roomId && this.props.inRoom) {
+        if (this.props.room && this.props.room.roomId && this.props.inRoom) {
             manageIntegsButton = <ManageIntegsButton
                 roomId={this.props.room.roomId}
             />;

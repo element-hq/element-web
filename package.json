@@ -77,6 +77,8 @@
     "querystring": "^0.2.0",
     "react": "^15.4.0",
     "react-addons-css-transition-group": "15.3.2",
+    "react-dnd": "^2.1.4",
+    "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.4.0",
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
     "sanitize-html": "^1.14.1",

@@ -18,7 +18,7 @@ const React = require("react");
 const ReactDOM = require("react-dom");
 const GeminiScrollbar = require('react-gemini-scrollbar');
 import Promise from 'bluebird';
-const KeyCode = require('../../KeyCode');
+import { KeyCode } from '../../Keyboard';
 
 const DEBUG_SCROLL = false;
 // var DEBUG_SCROLL = true;
@@ -573,7 +573,7 @@ module.exports = React.createClass({
         debuglog("ScrollPanel: scrolling to token '" + scrollToken + "'+" +
                  pixelOffset + " (delta: "+scrollDelta+")");
 
-        if(scrollDelta != 0) {
+        if (scrollDelta != 0) {
             this._setScrollTop(scrollNode.scrollTop + scrollDelta);
         }
     },

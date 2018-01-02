@@ -25,6 +25,7 @@ import dis from './dispatcher';
 import sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
+import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
 
 /*
  * Dispatches:
@@ -138,10 +139,8 @@ const Notifier = {
 
         // make sure that we persist the current setting audio_enabled setting
         // before changing anything
-        if (global.localStorage) {
-            if (global.localStorage.getItem('audio_notifications_enabled') === null) {
-                this.setAudioEnabled(this.isEnabled());
-            }
+        if (SettingsStore.isLevelSupported(SettingLevel.DEVICE)) {
+            SettingsStore.setValue("audioNotificationsEnabled", null, SettingLevel.DEVICE, this.isEnabled());
         }
 
         if (enable) {
@@ -149,6 +148,7 @@ const Notifier = {
             plaf.requestNotificationPermission().done((result) => {
                 if (result !== 'granted') {
                     // The permission request was dismissed or denied
+                    // TODO: Support alternative branding in messaging
                     const description = result === 'denied'
                         ? _t('Riot does not have permission to send you notifications - please check your browser settings')
                         : _t('Riot was not given permission to send notifications - please try again');
@@ -158,10 +158,6 @@ const Notifier = {
                         description,
                     });
                     return;
-                }
-
-                if (global.localStorage) {
-                    global.localStorage.setItem('notifications_enabled', 'true');
                 }
 
                 if (callback) callback();
@@ -174,8 +170,6 @@ const Notifier = {
             // disabled again in the future, we will show the banner again.
             this.setToolbarHidden(false);
         } else {
-            if (!global.localStorage) return;
-            global.localStorage.setItem('notifications_enabled', 'false');
             dis.dispatch({
                 action: "notifier_enabled",
                 value: false,
@@ -184,44 +178,24 @@ const Notifier = {
     },
 
     isEnabled: function() {
+        return this.isPossible() && SettingsStore.getValue("notificationsEnabled");
+    },
+
+    isPossible: function() {
         const plaf = PlatformPeg.get();
         if (!plaf) return false;
         if (!plaf.supportsNotifications()) return false;
         if (!plaf.maySendNotifications()) return false;
 
-        if (!global.localStorage) return true;
-
-        const enabled = global.localStorage.getItem('notifications_enabled');
-        if (enabled === null) return true;
-        return enabled === 'true';
-    },
-
-    setBodyEnabled: function(enable) {
-        if (!global.localStorage) return;
-        global.localStorage.setItem('notifications_body_enabled', enable ? 'true' : 'false');
+        return true; // possible, but not necessarily enabled
     },
 
     isBodyEnabled: function() {
-        if (!global.localStorage) return true;
-        const enabled = global.localStorage.getItem('notifications_body_enabled');
-        // default to true if the popups are enabled
-        if (enabled === null) return this.isEnabled();
-        return enabled === 'true';
+        return this.isEnabled() && SettingsStore.getValue("notificationBodyEnabled");
     },
 
-    setAudioEnabled: function(enable) {
-        if (!global.localStorage) return;
-        global.localStorage.setItem('audio_notifications_enabled',
-            enable ? 'true' : 'false');
-    },
-
-    isAudioEnabled: function(enable) {
-        if (!global.localStorage) return true;
-        const enabled = global.localStorage.getItem(
-            'audio_notifications_enabled');
-        // default to true if the popups are enabled
-        if (enabled === null) return this.isEnabled();
-        return enabled === 'true';
+    isAudioEnabled: function() {
+        return this.isEnabled() && SettingsStore.getValue("audioNotificationsEnabled");
     },
 
     setToolbarHidden: function(hidden, persistent = true) {
@@ -238,16 +212,14 @@ const Notifier = {
 
         // update the info to localStorage for persistent settings
         if (persistent && global.localStorage) {
-            global.localStorage.setItem('notifications_hidden', hidden);
+            global.localStorage.setItem("notifications_hidden", hidden);
         }
     },
 
     isToolbarHidden: function() {
         // Check localStorage for any such meta data
         if (global.localStorage) {
-            if (global.localStorage.getItem('notifications_hidden') === 'true') {
-                return true;
-            }
+            return global.localStorage.getItem("notifications_hidden") === "true";
         }
 
         return this.toolbarHidden;
