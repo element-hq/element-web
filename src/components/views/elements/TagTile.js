@@ -45,6 +45,7 @@ export default React.createClass({
     getInitialState() {
         return {
             hover: false,
+            profile: null,
         };
     },
 
