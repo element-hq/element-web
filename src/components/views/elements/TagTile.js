@@ -24,11 +24,17 @@ import { isOnlyCtrlOrCmdKeyEvent } from '../../../Keyboard';
 
 import FlairStore from '../../../stores/FlairStore';
 
+// A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
+// a thing to click on for the user to filter the visible rooms in the RoomList to:
+//  - Rooms that are part of the group
+//  - Direct messages with members of the group
+// with the intention that this could be expanded to arbitrary tags in future.
 export default React.createClass({
     displayName: 'TagTile',
 
     propTypes: {
         // A string tag such as "m.favourite" or a group ID such as "+groupid:domain.bla"
+        // For now, only group IDs are handled.
         tag: PropTypes.string,
     },
 
