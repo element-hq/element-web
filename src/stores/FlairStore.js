@@ -157,17 +157,25 @@ class FlairStore {
             this._groupProfilesPromise[groupId] = matrixClient.getGroupProfile(groupId);
         }
 
-        const profile = await this._groupProfilesPromise[groupId];
+        let profile;
+        try {
+            profile = await this._groupProfilesPromise[groupId];
+        } catch (e) {
+            // Don't retry, but allow a retry when the profile is next requested
+            delete this._groupProfilesPromise[groupId];
+            return;
+        }
+
         this._groupProfiles[groupId] = {
             groupId,
             avatarUrl: profile.avatar_url,
             name: profile.name,
             shortDescription: profile.short_description,
         };
+        delete this._groupProfilesPromise[groupId];
 
         setTimeout(() => {
             delete this._groupProfiles[groupId];
-            delete this._groupProfilesPromise[groupId];
         }, GROUP_PROFILES_CACHE_BUST_MS);
 
         return this._groupProfiles[groupId];
