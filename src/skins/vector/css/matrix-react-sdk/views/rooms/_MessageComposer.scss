@@ -96,17 +96,14 @@ limitations under the License.
     width: 100%;
     flex: 1;
     word-break: break-word;
+    max-height: 120px;
+    min-height: 21px;
+    overflow: auto;
 }
 
 .mx_MessageComposer_input .DraftEditor-root .DraftEditor-editorContainer {
     /* Ensure mx_UserPill and mx_RoomPill (see _RichText) are not obscured from the top */
     padding-top: 2px;
-}
-
-.mx_MessageComposer_input .public-DraftEditor-content {
-    max-height: 120px;
-    min-height: 21px;
-    overflow: auto;
 }
 
 .mx_MessageComposer_input blockquote {
