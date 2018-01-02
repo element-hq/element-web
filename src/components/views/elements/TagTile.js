@@ -28,6 +28,7 @@ export default React.createClass({
     displayName: 'TagTile',
 
     propTypes: {
+        // A string tag such as "m.favourite" or a group ID such as "+groupid:domain.bla"
         tag: PropTypes.string,
     },
 
