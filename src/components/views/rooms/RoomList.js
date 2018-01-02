@@ -104,7 +104,8 @@ module.exports = React.createClass({
                 this._groupStoreTokens.push(
                     this._groupStores[tag].registerListener(() => {
                         // This group's rooms or members may have updated, update rooms for its tag
-                        this.updateSelectedTagsRooms(dmRoomMap, [tag]);
+                        this.updateVisibleRoomsForTag(dmRoomMap, tag);
+                        this.updateVisibleRooms();
                     }),
                 );
             });
