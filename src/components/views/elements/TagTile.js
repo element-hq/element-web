@@ -44,7 +44,9 @@ export default React.createClass({
 
     getInitialState() {
         return {
+            // Whether the mouse is over the tile
             hover: false,
+            // The profile data of the group if this.props.tag is a group ID
             profile: null,
         };
     },
