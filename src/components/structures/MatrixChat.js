@@ -1068,7 +1068,7 @@ export default React.createClass({
             if (!self._loggedInView) {
                 return true;
             }
-            return self._loggedInView.canResetTimelineInRoom(roomId);
+            return self._loggedInView.getDecoratedComponentInstance().canResetTimelineInRoom(roomId);
         });
 
         cli.on('sync', function(state, prevState) {

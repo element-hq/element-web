@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import Promise from 'bluebird';
+import SettingsStore from "./settings/SettingsStore";
 const request = require('browser-request');
 
 const SdkConfig = require('./SdkConfig');
@@ -109,6 +110,7 @@ class ScalarAuthClient {
         let url = SdkConfig.get().integrations_ui_url;
         url += "?scalar_token=" + encodeURIComponent(this.scalarToken);
         url += "&room_id=" + encodeURIComponent(roomId);
+        url += "&theme=" + encodeURIComponent(SettingsStore.getValue("theme"));
         if (id) {
             url += '&integ_id=' + encodeURIComponent(id);
         }
