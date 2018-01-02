@@ -103,6 +103,22 @@ export default class GroupStore extends EventEmitter {
         this.emit('update');
     }
 
+    /**
+     * Register a listener to recieve updates from the store. This also
+     * immediately triggers an update to send the current state of the
+     * store (which could be the initial state).
+     *
+     * XXX: This also causes a fetch of all group data, which effectively
+     * causes 4 separate HTTP requests. This is bad, we should at least
+     * deduplicate these in order to fix:
+     *  https://github.com/vector-im/riot-web/issues/5901
+     *
+     * @param {function} fn the function to call when the store updates.
+     * @return {Object} tok a registration "token" with a single
+     *                      property `unregister`, a function that can
+     *                      be called to unregister the listener such
+     *                      that it won't be called any more.
+     */
     registerListener(fn) {
         this.on('update', fn);
         // Call to set initial state (before fetching starts)
@@ -111,6 +127,8 @@ export default class GroupStore extends EventEmitter {
         this._fetchRooms();
         this._fetchMembers();
 
+        // Similar to the Store of flux/utils, we return a "token" that
+        // can be used to unregister the listener.
         return {
             unregister: () => {
                 this.unregisterListener(fn);
