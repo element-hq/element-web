@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,12 +24,7 @@ html {
 }
 
 body {
-    /* Open Sans lacks combining diacritics, so these will fall through
-       to the next font.  Helevetica's diacritics however do not combine
-       nicely with Open Sans (on OSX, at least) and result in a huge
-       horizontal mess.  Arial empirically gets it right, hence prioritising
-       Arial here. */
-    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    font-family: $font-family;
     font-size: 15px;
     background-color: $primary-bg-color;
     color: $primary-fg-color;
@@ -73,7 +69,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 /* Required by Firefox */
 textarea {
-    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    font-family: $font-family;
 }
 
 /* Prevent ugly dotted highlight around selected elements in Firefox */
@@ -121,6 +117,23 @@ textarea {
 .gm-scrollbar.-horizontal:active {
     height: 8px;
     transition: height 120ms ease-out ! important;
+}
+
+// These are magic constants which are excluded from tinting, to let themes
+// (which only have CSS, unlike skins) tell the app what their non-tinted
+// colourscheme is by inspecting the stylesheet DOM.
+//
+// They are not used for layout!!
+#mx_theme_accentColor {
+    color: $accent-color;
+}
+
+#mx_theme_secondaryAccentColor {
+    color: $secondary-accent-color;
+}
+
+#mx_theme_tertiaryAccentColor {
+    color: $roomsublist-label-bg-color;
 }
 
 .mx_Dialog_wrapper {
@@ -210,24 +223,19 @@ textarea {
 }
 
 .mx_Dialog button, .mx_Dialog input[type="submit"] {
-    border: 0px;
-    height: 36px;
-    border-radius: 40px;
-    border: solid 1px $accent-color;
-    font-weight: 600;
-    font-size: 14px;
-    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    @mixin mx_DialogButton;
     margin-left: 0px;
     margin-right: 8px;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
-    outline: none;
-    cursor: pointer;
-    color: $accent-color;
-    background-color: $primary-bg-color;
 
-    /* align images in buttons (eg spinners) */
-    vertical-align: middle;
+    // flip colours for the secondary ones
+    font-weight: 600;
+    border: 1px solid $accent-color ! important;
+    color: $accent-color;
+    background-color: $accent-fg-color;
+}
+
+.mx_Dialog button:hover, .mx_Dialog input[type="submit"]:hover {
+    @mixin mx_DialogButton_hover;
 }
 
 .mx_Dialog button:focus, .mx_Dialog input[type="submit"]:focus {
@@ -292,24 +300,16 @@ textarea {
     color: $selection-fg-color;
 }
 
-/** green button with rounded corners */
 .mx_textButton {
-    color: $accent-fg-color;
-    background-color: $accent-color;
-    border-radius: 17px;
-    text-align: center;
-    padding-left: 1em;
-    padding-right: 1em;
-    cursor: pointer;
-    display: inline;
+    @mixin mx_DialogButton_small;    
+}
+
+.mx_textButton:hover {
+    @mixin mx_DialogButton_hover;
 }
 
 .mx_button_row {
     margin-top: 69px;
-}
-
-.changelog_text {
-    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
 }
 
 .mx_Beta {
@@ -331,4 +331,31 @@ textarea {
     color: white;
     border: 1px solid gray;
     background-color: darkred;
+}
+
+.mx_TintableSvgButton {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+}
+
+.mx_TintableSvgButton object {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.mx_TintableSvgButton span {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
 }
