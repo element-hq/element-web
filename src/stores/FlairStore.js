@@ -161,6 +161,7 @@ class FlairStore {
         try {
             profile = await this._groupProfilesPromise[groupId];
         } catch (e) {
+            console.log('Failed to get group profile for ' + groupId, e);
             // Don't retry, but allow a retry when the profile is next requested
             delete this._groupProfilesPromise[groupId];
             return;
