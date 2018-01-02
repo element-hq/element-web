@@ -58,6 +58,8 @@ export default React.createClass({
             ).then((profile) => {
                 if (this.unmounted) return;
                 this.setState({profile});
+            }).catch((err) => {
+                console.warn('Could not fetch group profile for ' + this.props.tag, err);
             });
         }
     },
