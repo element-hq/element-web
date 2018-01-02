@@ -440,20 +440,35 @@ module.exports = withMatrixClient(React.createClass({
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
         const room = this.props.matrixClient.getRoom(roomId);
-        const self = this;
-        if (!room) {
-            return;
-        }
-        const powerLevelEvent = room.currentState.getStateEvents(
-            "m.room.power_levels", "",
-        );
-        if (!powerLevelEvent) {
-            return;
-        }
+        if (!room) return;
+
+        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
+        if (!powerLevelEvent) return;
+
         if (powerLevelEvent.getContent().users) {
-            const myPower = powerLevelEvent.getContent().users[this.props.matrixClient.credentials.userId];
+            const myUserId = this.props.matrixClient.getUserId();
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+
+            if (myUserId === target) {
+                Modal.createTrackedDialog('Demoting Self', '', QuestionDialog, {
+                    title: _t("Warning!"),
+                    description:
+                        <div>
+                            { _t("You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.") }<br />
+                            { _t("Are you sure?") }
+                        </div>,
+                    button: _t("Continue"),
+                    onFinished: (confirmed) => {
+                        if (confirmed) {
+                            this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+                        }
+                    },
+                });
+                return;
+            }
+
+            const myPower = powerLevelEvent.getContent().users[myUserId];
             if (parseInt(myPower) === parseInt(powerLevel)) {
-                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
                 Modal.createTrackedDialog('Promote to PL100 Warning', '', QuestionDialog, {
                     title: _t("Warning!"),
                     description:
@@ -462,18 +477,17 @@ module.exports = withMatrixClient(React.createClass({
                             { _t("Are you sure?") }
                         </div>,
                     button: _t("Continue"),
-                    onFinished: function(confirmed) {
+                    onFinished: (confirmed) => {
                         if (confirmed) {
-                            self._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+                            this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
                         }
                     },
                 });
-            } else {
-                this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+                return;
             }
-        } else {
-            this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+
         }
+        this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
     },
 
     onNewDMClick: function() {

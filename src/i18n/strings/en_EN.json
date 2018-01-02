@@ -273,6 +273,7 @@
     "Failed to toggle moderator status": "Failed to toggle moderator status",
     "Failed to change power level": "Failed to change power level",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.",
+    "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.",
     "Are you sure?": "Are you sure?",
     "No devices with registered encryption keys": "No devices with registered encryption keys",
     "Devices": "Devices",
