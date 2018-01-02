@@ -42,6 +42,12 @@ export default React.createClass({
         matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
     },
 
+    getInitialState() {
+        return {
+            hover: false,
+        };
+    },
+
     componentWillMount() {
         this.unmounted = false;
         if (this.props.tag[0] === '+') {
@@ -57,12 +63,6 @@ export default React.createClass({
 
     componentWillUnmount() {
         this.unmounted = true;
-    },
-
-    getInitialState() {
-        return {
-            hover: false,
-        };
     },
 
     onClick: function(e) {
