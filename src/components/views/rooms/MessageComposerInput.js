@@ -525,7 +525,8 @@ export default class MessageComposerInput extends React.Component {
             // composer. For some reason the editor won't scroll automatically if we paste
             // blocks of text in or insert newlines.
             if (textContent.slice(selection.start).indexOf("\n") === -1) {
-                this.refs.editor.refs.editor.scrollTop = this.refs.editor.refs.editor.scrollHeight;
+                this.refs.editor.refs.editor.parentNode.parentNode.scrollTop = this.
+                    refs.editor.refs.editor.parentNode.parentNode.scrollHeight;
             }
         });
     }
