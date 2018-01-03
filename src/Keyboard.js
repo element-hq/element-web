@@ -68,3 +68,12 @@ export function isOnlyCtrlOrCmdKeyEvent(ev) {
         return ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
     }
 }
+
+export function isCtrlOrCmdKeyEvent(ev) {
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    if (isMac) {
+        return ev.metaKey && !ev.ctrlKey;
+    } else {
+        return ev.ctrlKey && !ev.metaKey;
+    }
+}
