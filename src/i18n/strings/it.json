@@ -84,5 +84,8 @@
     "Register": "Registrati",
     "Rooms": "Stanze",
     "The remote side failed to pick up": "Il destinatario non ha risposto",
-    "Unable to capture screen": "Impossibile acquisire lo schermo"
+    "Unable to capture screen": "Impossibile acquisire lo schermo",
+    "Call": "Chiama",
+    "Answer": "Rispondi",
+    "Invite to Community": "Invita alla community"
 }
