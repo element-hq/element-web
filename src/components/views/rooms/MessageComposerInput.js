@@ -513,7 +513,6 @@ export default class MessageComposerInput extends React.Component {
             // blocks of text in or insert newlines.
             if (textContent.slice(selection.start).indexOf("\n") === -1) {
                 let editorRoot = this.refs.editor.refs.editor.parentNode.parentNode;
-                console.log(editorRoot, editorRoot.scrollHeight);
                 editorRoot.scrollTop = editorRoot.scrollHeight;
             }
         });
