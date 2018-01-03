@@ -311,11 +311,6 @@ module.exports = React.createClass({
         });
     },
 
-    isRoomInSelectedTags: function(room) {
-        // No selected tags = every room is visible in the list
-        return this.state.selectedTags.length === 0 || this._visibleRooms.includes(room.roomId);
-    },
-
     refreshRoomList: function() {
         // TODO: ideally we'd calculate this once at start, and then maintain
         // any changes to it incrementally, updating the appropriate sublists
@@ -344,7 +339,26 @@ module.exports = React.createClass({
         lists["im.vector.fake.archived"] = [];
 
         const dmRoomMap = DMRoomMap.shared();
-        MatrixClientPeg.get().getRooms().forEach((room) => {
+
+        // If there are any tags selected, constrain the rooms listed to the
+        // visible rooms as determined by this._visibleRooms. Here, we
+        // de-duplicate and filter out rooms that the client doesn't know
+        // about (hence the Set and the null-guard on `room`).
+        let rooms = [];
+        if (this.state.selectedTags.length > 0) {
+            const roomSet = new Set();
+            this._visibleRooms.forEach((roomId) => {
+                const room = MatrixClientPeg.get().getRoom(roomId);
+                if (room) {
+                    roomSet.add(room);
+                }
+            });
+            rooms = Array.from(roomSet);
+        } else {
+            rooms = MatrixClientPeg.get().getRooms();
+        }
+
+        rooms.forEach((room, index) => {
             const me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (!me) return;
 
@@ -361,11 +375,6 @@ module.exports = React.createClass({
                      (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey())) {
                 // Used to split rooms via tags
                 const tagNames = Object.keys(room.tags);
-
-                // Apply TagPanel filtering, derived from FilterStore
-                if (!this.isRoomInSelectedTags(room)) {
-                    return;
-                }
 
                 if (tagNames.length) {
                     for (let i = 0; i < tagNames.length; i++) {
