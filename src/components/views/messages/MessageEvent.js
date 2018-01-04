@@ -54,6 +54,7 @@ module.exports = React.createClass({
             'm.notice': sdk.getComponent('messages.TextualBody'),
             'm.emote': sdk.getComponent('messages.TextualBody'),
             'm.image': sdk.getComponent('messages.MImageBody'),
+            'm.sticker': sdk.getComponent('messages.MStickerBody'),
             'm.file': sdk.getComponent('messages.MFileBody'),
             'm.audio': sdk.getComponent('messages.MAudioBody'),
             'm.video': sdk.getComponent('messages.MVideoBody'),
@@ -69,10 +70,12 @@ module.exports = React.createClass({
             BodyType = bodyTypes['m.file'];
         }
 
-        return <BodyType ref="body" mxEvent={this.props.mxEvent} highlights={this.props.highlights}
-                    highlightLink={this.props.highlightLink}
-                    showUrlPreview={this.props.showUrlPreview}
-                    tileShape={this.props.tileShape}
-                    onWidgetLoad={this.props.onWidgetLoad} />;
+        return <BodyType
+            ref="body" mxEvent={this.props.mxEvent}
+            highlights={this.props.highlights}
+            highlightLink={this.props.highlightLink}
+            showUrlPreview={this.props.showUrlPreview}
+            tileShape={this.props.tileShape}
+            onWidgetLoad={this.props.onWidgetLoad} />;
     },
 });
