@@ -459,6 +459,9 @@ module.exports = React.createClass({
             case 'message_sent':
                 this._checkIfAlone(this.state.room);
                 break;
+            case 'inject_sticker':
+              this.injectSticker(payload.url, payload.info, payload.text);
+              break;
             case 'picture_snapshot':
                 this.uploadFile(payload.file);
                 break;
@@ -902,6 +905,21 @@ module.exports = React.createClass({
                 description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or the file too big")),
             });
         });
+    },
+
+    injectSticker: function(url, info, text) {
+        if (MatrixClientPeg.get().isGuest()) {
+            dis.dispatch({action: 'view_set_mxid'});
+            return;
+        }
+
+        ContentMessages.sendURLContentToRoom(url, this.state.room.roomId, info, text, MatrixClientPeg.get())
+          .done(undefined, (error) => {
+              if (error.name === "UnknownDeviceError") {
+                  // Let the staus bar handle this
+                  return;
+              }
+          });
     },
 
     onSearch: function(term, scope) {

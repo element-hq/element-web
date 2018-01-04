@@ -275,6 +275,12 @@ class ContentMessages {
         this.nextId = 0;
     }
 
+    sendURLContentToRoom(url, roomId, info, text, matrixClient) {
+      return MatrixClientPeg.get().sendImageMessage(roomId, url, info, text).catch((e) => {
+        console.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
+      });
+    }
+
     sendContentToRoom(file, roomId, matrixClient) {
         const content = {
             body: file.name || 'Attachment',

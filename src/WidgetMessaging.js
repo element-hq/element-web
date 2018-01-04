@@ -15,6 +15,9 @@ limitations under the License.
 */
 
 /*
+POSTMESSAGE API
+===============
+
 Listens for incoming postMessage requests from embedded widgets. The following API is exposed:
 {
     api: "widget",
@@ -38,7 +41,7 @@ The "api" field is required to use this API, and must be set to "widget" in all 
 
 The "action" determines the format of the request and response. All actions can return an error response.
 
-Additional data can be sent as additional, abritrary fields. However, typically the data object should be used.
+Additional data can be sent as abritrary fields. However, typically the data object should be used.
 
 A success response is an object with zero or more keys.
 
@@ -52,8 +55,8 @@ They look like:
 }
 The "message" key should be a human-friendly string.
 
-INBOUND ACTIONS
-===============
+ACTIONS
+=======
 ** All actions must include an "api" field with value of "widget".**
 All actions can return an error response instead of the response outlined below.
 
@@ -110,11 +113,13 @@ Example:
 }
 
 
-OUTBOUND ACTIONS
-================
+OUTBOUND POSTMESSAGE API
+========================
 
-In addition to listening for inbound requests, the API can be used to initiate
-actions in the widget iframe, and request data from the widget instance.
+This API can be used to initiate actions in remote widget instances.
+
+ACTIONS
+=======
 
 Outbound actions use the "widget_client" API key / name, which must be included
 on all requests.
@@ -133,7 +138,7 @@ screenshot
 
 Request a screenshot from the widget (if supported).
 This can currently only be supported by widgets that have access to all of their DOM tree.
-For example, widgets that nest further levels of iframes can not support this.
+For example, widgets that nest further levels of iframes can not support this capability.
 
 The screenshot is returned as a Blob object.
 
