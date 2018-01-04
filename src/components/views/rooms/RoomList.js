@@ -93,7 +93,8 @@ module.exports = React.createClass({
             // $groupId: [$roomId1, $roomId2, ...],
         };
         // All rooms that should be kept in the room list when filtering
-        this._visibleRooms = [];
+        // By default, set to `null` meaning "all rooms visible"
+        this._visibleRooms = null;
         // When the selected tags are changed, initialise a group store if necessary
         this._filterStoreToken = FilterStore.addListener(() => {
             FilterStore.getSelectedTags().forEach((tag) => {
@@ -297,15 +298,35 @@ module.exports = React.createClass({
 
     // Update which rooms and users should appear according to which tags are selected
     updateVisibleRooms: function() {
-        this._visibleRooms = [];
-        FilterStore.getSelectedTags().forEach((tag) => {
-            (this._visibleRoomsForGroup[tag] || []).forEach(
-                (roomId) => this._visibleRooms.push(roomId),
+        const selectedTags = FilterStore.getSelectedTags();
+
+        let visibleGroupRooms = [];
+        selectedTags.forEach((tag) => {
+            visibleGroupRooms = visibleGroupRooms.concat(
+                this._visibleRoomsForGroup[tag] || [],
             );
         });
 
+        // If there are any tags selected, constrain the rooms listed to the
+        // visible rooms as determined by visibleGroupRooms. Here, we
+        // de-duplicate and filter out rooms that the client doesn't know
+        // about (hence the Set and the null-guard on `room`).
+        if (selectedTags.length > 0) {
+            const roomSet = new Set();
+            visibleGroupRooms.forEach((roomId) => {
+                const room = MatrixClientPeg.get().getRoom(roomId);
+                if (room) {
+                    roomSet.add(room);
+                }
+            });
+            this._visibleRooms = Array.from(roomSet);
+        } else {
+            // Show all rooms
+            this._visibleRooms = null;
+        }
+
         this.setState({
-            selectedTags: FilterStore.getSelectedTags(),
+            selectedTags,
         }, () => {
             this.refreshRoomList();
         });
@@ -340,25 +361,7 @@ module.exports = React.createClass({
 
         const dmRoomMap = DMRoomMap.shared();
 
-        // If there are any tags selected, constrain the rooms listed to the
-        // visible rooms as determined by this._visibleRooms. Here, we
-        // de-duplicate and filter out rooms that the client doesn't know
-        // about (hence the Set and the null-guard on `room`).
-        let rooms = [];
-        if (this.state.selectedTags.length > 0) {
-            const roomSet = new Set();
-            this._visibleRooms.forEach((roomId) => {
-                const room = MatrixClientPeg.get().getRoom(roomId);
-                if (room) {
-                    roomSet.add(room);
-                }
-            });
-            rooms = Array.from(roomSet);
-        } else {
-            rooms = MatrixClientPeg.get().getRooms();
-        }
-
-        rooms.forEach((room, index) => {
+        (this._visibleRooms || MatrixClientPeg.get().getRooms()).forEach((room, index) => {
             const me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (!me) return;
 
