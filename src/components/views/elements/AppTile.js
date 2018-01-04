@@ -334,11 +334,11 @@ export default React.createClass({
      */
     _onLoaded() {
         // console.warn("App frame", this.refs.appFrame.contentWindow);
-        this.widgetMessaging = new WidgetMessaging(this.refs.appFrame.contentWindow);
+        this.widgetMessaging = new WidgetMessaging(this.props.id, this.refs.appFrame.contentWindow);
         this.widgetMessaging.startListening();
         this.widgetMessaging.addEndpoint(this.props.id, this.props.url);
         this.widgetMessaging.getCapabilities().then((capabilities) => {
-            console.log("Got widget capabilities", this.widgetId, capabilities);
+            console.log("Got widget capabilities", this.props.id, capabilities);
             capabilities = capabilities || [];
             this.setState({capabilities});
         }).catch((err) => {

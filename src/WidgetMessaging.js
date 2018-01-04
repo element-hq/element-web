@@ -175,8 +175,9 @@ if (!global.mxWidgetMessagingMessageEndpoints) {
 }
 
 export default class WidgetMessaging extends MatrixPostMessageApi {
-    constructor(targetWindow) {
+    constructor(widgetId, targetWindow) {
         super(targetWindow);
+        this.widgetId = widgetId;
     }
 
     exec(action) {
