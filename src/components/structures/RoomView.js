@@ -916,7 +916,7 @@ module.exports = React.createClass({
             return;
         }
 
-        ContentMessages.sendURLContentToRoom(url, this.state.room.roomId, info, text, MatrixClientPeg.get())
+        ContentMessages.sendStickerContentToRoom(url, this.state.room.roomId, info, text, MatrixClientPeg.get())
           .done(undefined, (error) => {
               if (error.name === "UnknownDeviceError") {
                   // Let the staus bar handle this
