@@ -254,7 +254,7 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
                 console.warn("Endpoint already registered");
                 return;
             } else {
-                console.warn(`Adding widget messaging endpoint for ${widgetId}`);
+                // console.warn(`Adding widget messaging endpoint for ${widgetId}`);
                 global.mxWidgetMessagingMessageEndpoints.push(endpoint);
             }
         }
