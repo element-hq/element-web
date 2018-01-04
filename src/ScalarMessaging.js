@@ -356,14 +356,30 @@ function getWidgets(event, roomId) {
     }
     const stateEvents = room.currentState.getStateEvents("im.vector.modular.widgets");
     // Only return widgets which have required fields
-    let widgetStateEvents = [];
+    const widgetStateEvents = [];
     stateEvents.forEach((ev) => {
         if (ev.getContent().type && ev.getContent().url) {
             widgetStateEvents.push(ev.event); // return the raw event
         }
-    })
+    });
 
     sendResponse(event, widgetStateEvents);
+}
+
+function getRoomEncState(event, roomId) {
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, _t('You need to be logged in.'));
+        return;
+    }
+    const room = client.getRoom(roomId);
+    if (!room) {
+        sendError(event, _t('This room is not recognised.'));
+        return;
+    }
+    const roomIsEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
+
+    sendResponse(event, roomIsEncrypted);
 }
 
 function setPlumbingState(event, roomId, status) {
@@ -376,7 +392,7 @@ function setPlumbingState(event, roomId, status) {
         sendError(event, _t('You need to be logged in.'));
         return;
     }
-    client.sendStateEvent(roomId, "m.room.plumbing", { status : status }).done(() => {
+    client.sendStateEvent(roomId, "m.room.plumbing", { status: status }).done(() => {
         sendResponse(event, {
             success: true,
         });
@@ -415,11 +431,11 @@ function setBotPower(event, roomId, userId, level) {
     }
 
     client.getStateEvent(roomId, "m.room.power_levels", "").then((powerLevels) => {
-        let powerEvent = new MatrixEvent(
+        const powerEvent = new MatrixEvent(
             {
                 type: "m.room.power_levels",
                 content: powerLevels,
-            }
+            },
         );
 
         client.setPowerLevel(roomId, userId, level, powerEvent).done(() => {
@@ -485,8 +501,7 @@ function canSendEvent(event, roomId) {
     let canSend = false;
     if (isState) {
         canSend = room.currentState.maySendStateEvent(evType, me);
-    }
-    else {
+    } else {
         canSend = room.currentState.maySendEvent(evType, me);
     }
 
@@ -517,8 +532,8 @@ function returnStateEvent(event, roomId, eventType, stateKey) {
     sendResponse(event, stateEvent.getContent());
 }
 
-var currentRoomId = null;
-var currentRoomAlias = null;
+let currentRoomId = null;
+let currentRoomAlias = null;
 
 // Listen for when a room is viewed
 dis.register(onAction);
@@ -542,8 +557,16 @@ const onMessage = function(event) {
     //
     // All strings start with the empty string, so for sanity return if the length
     // of the event origin is 0.
-    let url = SdkConfig.get().integrations_ui_url;
-    if (event.origin.length === 0 || !url.startsWith(event.origin) || !event.data.action) {
+    //
+    // TODO -- Scalar postMessage API should be namespaced with event.data.api field
+    // Fix following "if" statement to respond only to specific API messages.
+    const url = SdkConfig.get().integrations_ui_url;
+    if (
+        event.origin.length === 0 ||
+        !url.startsWith(event.origin) ||
+        !event.data.action ||
+        event.data.api // Ignore messages with specific API set
+    ) {
         return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
     }
 
@@ -593,6 +616,9 @@ const onMessage = function(event) {
             return;
         } else if (event.data.action === "get_widgets") {
             getWidgets(event, roomId);
+            return;
+        } else if (event.data.action === "get_room_enc_state") {
+            getRoomEncState(event, roomId);
             return;
         } else if (event.data.action === "can_send_event") {
             canSendEvent(event, roomId);
@@ -647,7 +673,7 @@ module.exports = {
             // Make an error so we get a stack trace
             const e = new Error(
                 "ScalarMessaging: mismatched startListening / stopListening detected." +
-                " Negative count"
+                " Negative count",
             );
             console.error(e);
         }

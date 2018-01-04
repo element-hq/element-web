@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +16,7 @@ limitations under the License.
 */
 
 /* a selection of key codes, as used in KeyboardEvent.keyCode */
-module.exports = {
+export const KeyCode = {
     BACKSPACE: 8,
     TAB: 9,
     ENTER: 13,
@@ -58,3 +59,12 @@ module.exports = {
     KEY_Y: 89,
     KEY_Z: 90,
 };
+
+export function isOnlyCtrlOrCmdKeyEvent(ev) {
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    if (isMac) {
+        return ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
+    } else {
+        return ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
+    }
+}

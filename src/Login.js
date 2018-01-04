@@ -59,8 +59,8 @@ export default class Login {
     }
 
     getFlows() {
-        var self = this;
-        var client = this._createTemporaryClient();
+        const self = this;
+        const client = this._createTemporaryClient();
         return client.loginFlows().then(function(result) {
             self._flows = result.flows;
             self._currentFlowIndex = 0;
@@ -77,12 +77,12 @@ export default class Login {
     getCurrentFlowStep() {
         // technically the flow can have multiple steps, but no one does this
         // for login so we can ignore it.
-        var flowStep = this._flows[this._currentFlowIndex];
+        const flowStep = this._flows[this._currentFlowIndex];
         return flowStep ? flowStep.type : null;
     }
 
     loginAsGuest() {
-        var client = this._createTemporaryClient();
+        const client = this._createTemporaryClient();
         return client.registerGuest({
             body: {
                 initial_device_display_name: this._defaultDeviceDisplayName,
@@ -94,7 +94,7 @@ export default class Login {
                 accessToken: creds.access_token,
                 homeserverUrl: this._hsUrl,
                 identityServerUrl: this._isUrl,
-                guest: true
+                guest: true,
             };
         }, (error) => {
             throw error;
@@ -143,36 +143,84 @@ export default class Login {
         Object.assign(loginParams, legacyParams);
 
         const client = this._createTemporaryClient();
+
+        const tryFallbackHs = (originalError) => {
+            const fbClient = Matrix.createClient({
+                baseUrl: self._fallbackHsUrl,
+                idBaseUrl: this._isUrl,
+            });
+
+            return fbClient.login('m.login.password', loginParams).then(function(data) {
+                return Promise.resolve({
+                    homeserverUrl: self._fallbackHsUrl,
+                    identityServerUrl: self._isUrl,
+                    userId: data.user_id,
+                    deviceId: data.device_id,
+                    accessToken: data.access_token,
+                });
+            }).catch((fallback_error) => {
+                console.log("fallback HS login failed", fallback_error);
+                // throw the original error
+                throw originalError;
+            });
+        };
+        const tryLowercaseUsername = (originalError) => {
+            const loginParamsLowercase = Object.assign({}, loginParams, {
+                user: username.toLowerCase(),
+                identifier: {
+                    user: username.toLowerCase(),
+                },
+            });
+            return client.login('m.login.password', loginParamsLowercase).then(function(data) {
+                return Promise.resolve({
+                    homeserverUrl: self._hsUrl,
+                    identityServerUrl: self._isUrl,
+                    userId: data.user_id,
+                    deviceId: data.device_id,
+                    accessToken: data.access_token,
+                });
+            }).catch((fallback_error) => {
+                console.log("Lowercase username login failed", fallback_error);
+                // throw the original error
+                throw originalError;
+            });
+        };
+
+        let originalLoginError = null;
         return client.login('m.login.password', loginParams).then(function(data) {
             return Promise.resolve({
                 homeserverUrl: self._hsUrl,
                 identityServerUrl: self._isUrl,
                 userId: data.user_id,
                 deviceId: data.device_id,
-                accessToken: data.access_token
+                accessToken: data.access_token,
             });
-        }, function(error) {
+        }).catch((error) => {
+            originalLoginError = error;
             if (error.httpStatus === 403) {
                 if (self._fallbackHsUrl) {
-                    var fbClient = Matrix.createClient({
-                        baseUrl: self._fallbackHsUrl,
-                        idBaseUrl: this._isUrl,
-                    });
-
-                    return fbClient.login('m.login.password', loginParams).then(function(data) {
-                        return Promise.resolve({
-                            homeserverUrl: self._fallbackHsUrl,
-                            identityServerUrl: self._isUrl,
-                            userId: data.user_id,
-                            deviceId: data.device_id,
-                            accessToken: data.access_token
-                        });
-                    }, function(fallback_error) {
-                        // throw the original error
-                        throw error;
-                    });
+                    return tryFallbackHs(originalLoginError);
                 }
             }
+            throw originalLoginError;
+        }).catch((error) => {
+            // We apparently squash case at login serverside these days:
+            // https://github.com/matrix-org/synapse/blob/1189be43a2479f5adf034613e8d10e3f4f452eb9/synapse/handlers/auth.py#L475
+            // so this wasn't needed after all. Keeping the code around in case the
+            // the situation changes...
+
+            /*
+            if (
+                error.httpStatus === 403 &&
+                loginParams.identifier.type === 'm.id.user' &&
+                username.search(/[A-Z]/) > -1
+            ) {
+                return tryLowercaseUsername(originalLoginError);
+            }
+            */
+            throw originalLoginError;
+        }).catch((error) => {
+            console.log("Login failed", error);
             throw error;
         });
     }

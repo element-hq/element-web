@@ -14,21 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var ReactDOM = require("react-dom");
-var TestUtils = require('react-addons-test-utils');
-var expect = require('expect');
+import SettingsStore from "../../../src/settings/SettingsStore";
+
+const React = require('react');
+const ReactDOM = require("react-dom");
+const TestUtils = require('react-addons-test-utils');
+const expect = require('expect');
 import sinon from 'sinon';
 
-var sdk = require('matrix-react-sdk');
+const sdk = require('matrix-react-sdk');
 
-var MessagePanel = sdk.getComponent('structures.MessagePanel');
-import UserSettingsStore from '../../../src/UserSettingsStore';
+const MessagePanel = sdk.getComponent('structures.MessagePanel');
+import MatrixClientPeg from '../../../src/MatrixClientPeg';
 
-var test_utils = require('test-utils');
-var mockclock = require('mock-clock');
+const test_utils = require('test-utils');
+const mockclock = require('mock-clock');
 
-var client;
+let client;
 
 // wrap MessagePanel with a component which provides the MatrixClient in the context.
 const WrappedMessagePanel = React.createClass({
@@ -47,26 +49,31 @@ const WrappedMessagePanel = React.createClass({
     },
 });
 
-describe('MessagePanel', function () {
-    var clock = mockclock.clock();
-    var realSetTimeout = window.setTimeout;
-    var events = mkEvents();
+describe('MessagePanel', function() {
+    const clock = mockclock.clock();
+    const realSetTimeout = window.setTimeout;
+    const events = mkEvents();
+    let sandbox = null;
 
     beforeEach(function() {
         test_utils.beforeEach(this);
-        client = test_utils.createTestClient();
+        sandbox = test_utils.stubClient();
+        client = MatrixClientPeg.get();
         client.credentials = {userId: '@me:here'};
-        UserSettingsStore.getSyncedSettings = sinon.stub().returns({});
+
+        // HACK: We assume all settings want to be disabled
+        SettingsStore.getValue = sinon.stub().returns(false);
     });
 
     afterEach(function() {
         clock.uninstall();
+        sandbox.restore();
     });
 
     function mkEvents() {
-        var events = [];
-        var ts0 = Date.now();
-        for (var i = 0; i < 10; i++) {
+        const events = [];
+        const ts0 = Date.now();
+        for (let i = 0; i < 10; i++) {
             events.push(test_utils.mkMessage(
                 {
                     event: true, room: "!room:id", user: "@user:id",
@@ -77,30 +84,30 @@ describe('MessagePanel', function () {
     }
 
     it('should show the events', function() {
-        var res = TestUtils.renderIntoDocument(
-                <WrappedMessagePanel className="cls" events={events} />
+        const res = TestUtils.renderIntoDocument(
+                <WrappedMessagePanel className="cls" events={events} />,
         );
 
         // just check we have the right number of tiles for now
-        var tiles = TestUtils.scryRenderedComponentsWithType(
+        const tiles = TestUtils.scryRenderedComponentsWithType(
             res, sdk.getComponent('rooms.EventTile'));
         expect(tiles.length).toEqual(10);
     });
 
     it('should show the read-marker in the right place', function() {
-        var res = TestUtils.renderIntoDocument(
+        const res = TestUtils.renderIntoDocument(
                 <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
-                    readMarkerVisible={true} />
+                    readMarkerVisible={true} />,
         );
 
-        var tiles = TestUtils.scryRenderedComponentsWithType(
+        const tiles = TestUtils.scryRenderedComponentsWithType(
             res, sdk.getComponent('rooms.EventTile'));
 
         // find the <li> which wraps the read marker
-        var rm = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_RoomView_myReadMarker_container');
+        const rm = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_RoomView_myReadMarker_container');
 
         // it should follow the <li> which wraps the event tile for event 4
-        var eventContainer = ReactDOM.findDOMNode(tiles[4]).parentNode;
+        const eventContainer = ReactDOM.findDOMNode(tiles[4]).parentNode;
         expect(rm.previousSibling).toEqual(eventContainer);
     });
 
@@ -109,22 +116,22 @@ describe('MessagePanel', function () {
         clock.install();
         clock.mockDate();
 
-        var parentDiv = document.createElement('div');
+        const parentDiv = document.createElement('div');
 
         // first render with the RM in one place
-        var mp = ReactDOM.render(
+        let mp = ReactDOM.render(
                 <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
                     readMarkerVisible={true}
                 />, parentDiv);
 
-        var tiles = TestUtils.scryRenderedComponentsWithType(
+        const tiles = TestUtils.scryRenderedComponentsWithType(
             mp, sdk.getComponent('rooms.EventTile'));
-        var tileContainers = tiles.map(function (t) {
+        const tileContainers = tiles.map(function(t) {
             return ReactDOM.findDOMNode(t).parentNode;
         });
 
         // find the <li> which wraps the read marker
-        var rm = TestUtils.findRenderedDOMComponentWithClass(mp, 'mx_RoomView_myReadMarker_container');
+        const rm = TestUtils.findRenderedDOMComponentWithClass(mp, 'mx_RoomView_myReadMarker_container');
         expect(rm.previousSibling).toEqual(tileContainers[4]);
 
         // now move the RM
@@ -134,12 +141,12 @@ describe('MessagePanel', function () {
                 />, parentDiv);
 
         // now there should be two RM containers
-        var found = TestUtils.scryRenderedDOMComponentsWithClass(mp, 'mx_RoomView_myReadMarker_container');
+        const found = TestUtils.scryRenderedDOMComponentsWithClass(mp, 'mx_RoomView_myReadMarker_container');
         expect(found.length).toEqual(2);
 
         // the first should be the ghost
         expect(found[0].previousSibling).toEqual(tileContainers[4]);
-        var hr = found[0].children[0];
+        const hr = found[0].children[0];
 
         // the second should be the real thing
         expect(found[1].previousSibling).toEqual(tileContainers[6]);
@@ -160,17 +167,17 @@ describe('MessagePanel', function () {
     });
 
     it('shows only one ghost when the RM moves twice', function() {
-        var parentDiv = document.createElement('div');
+        const parentDiv = document.createElement('div');
 
         // first render with the RM in one place
-        var mp = ReactDOM.render(
+        let mp = ReactDOM.render(
                 <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
                     readMarkerVisible={true}
                 />, parentDiv);
 
-        var tiles = TestUtils.scryRenderedComponentsWithType(
+        const tiles = TestUtils.scryRenderedComponentsWithType(
             mp, sdk.getComponent('rooms.EventTile'));
-        var tileContainers = tiles.map(function (t) {
+        const tileContainers = tiles.map(function(t) {
             return ReactDOM.findDOMNode(t).parentNode;
         });
 
@@ -181,7 +188,7 @@ describe('MessagePanel', function () {
                 />, parentDiv);
 
         // now there should be two RM containers
-        var found = TestUtils.scryRenderedDOMComponentsWithClass(mp, 'mx_RoomView_myReadMarker_container');
+        let found = TestUtils.scryRenderedDOMComponentsWithClass(mp, 'mx_RoomView_myReadMarker_container');
         expect(found.length).toEqual(2);
 
         // the first should be the ghost

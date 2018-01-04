@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,13 +17,13 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 import { _t } from '../../../languageHandler';
-var sdk = require('../../../index');
-var Modal = require("../../../Modal");
-var MatrixClientPeg = require('../../../MatrixClientPeg');
+import sdk from '../../../index';
+import Modal from "../../../Modal";
+import MatrixClientPeg from "../../../MatrixClientPeg";
 
-var PasswordReset = require("../../../PasswordReset");
+import PasswordReset from "../../../PasswordReset";
 
 module.exports = React.createClass({
     displayName: 'ForgotPassword',
@@ -34,30 +35,30 @@ module.exports = React.createClass({
         customIsUrl: React.PropTypes.string,
         onLoginClick: React.PropTypes.func,
         onRegisterClick: React.PropTypes.func,
-        onComplete: React.PropTypes.func.isRequired
+        onComplete: React.PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
         return {
             enteredHomeserverUrl: this.props.customHsUrl || this.props.defaultHsUrl,
             enteredIdentityServerUrl: this.props.customIsUrl || this.props.defaultIsUrl,
-            progress: null
+            progress: null,
         };
     },
 
     submitPasswordReset: function(hsUrl, identityUrl, email, password) {
         this.setState({
-            progress: "sending_email"
+            progress: "sending_email",
         });
         this.reset = new PasswordReset(hsUrl, identityUrl);
         this.reset.resetPassword(email, password).done(() => {
             this.setState({
-                progress: "sent_email"
+                progress: "sent_email",
             });
         }, (err) => {
             this.showErrorDialog(_t('Failed to send email') + ": " + err.message);
             this.setState({
-                progress: null
+                progress: null,
             });
         });
     },
@@ -80,15 +81,12 @@ module.exports = React.createClass({
 
         if (!this.state.email) {
             this.showErrorDialog(_t('The email address linked to your account must be entered.'));
-        }
-        else if (!this.state.password || !this.state.password2) {
+        } else if (!this.state.password || !this.state.password2) {
             this.showErrorDialog(_t('A new password must be entered.'));
-        }
-        else if (this.state.password !== this.state.password2) {
+        } else if (this.state.password !== this.state.password2) {
             this.showErrorDialog(_t('New passwords must match each other.'));
-        }
-        else {
-            var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        } else {
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             Modal.createTrackedDialog('Forgot Password Warning', '', QuestionDialog, {
                 title: _t('Warning!'),
                 description:
@@ -98,7 +96,7 @@ module.exports = React.createClass({
                             'end-to-end encryption keys on all devices, ' +
                             'making encrypted chat history unreadable, ' +
                             'unless you first export your room keys and re-import ' +
-                            'them afterwards. In future this will be improved.'
+                            'them afterwards. In future this will be improved.',
                         ) }
                     </div>,
                 button: _t('Continue'),
@@ -106,13 +104,13 @@ module.exports = React.createClass({
                     <button className="mx_Dialog_primary"
                             onClick={this._onExportE2eKeysClicked}>
                         { _t('Export E2E room keys') }
-                    </button>
+                    </button>,
                 ],
                 onFinished: (confirmed) => {
                     if (confirmed) {
                         this.submitPasswordReset(
                             this.state.enteredHomeserverUrl, this.state.enteredIdentityServerUrl,
-                            this.state.email, this.state.password
+                            this.state.email, this.state.password,
                         );
                     }
                 },
@@ -132,24 +130,23 @@ module.exports = React.createClass({
 
     onInputChanged: function(stateKey, ev) {
         this.setState({
-            [stateKey]: ev.target.value
+            [stateKey]: ev.target.value,
         });
     },
 
-    onHsUrlChanged: function(newHsUrl) {
-        this.setState({
-            enteredHomeserverUrl: newHsUrl
-        });
-    },
-
-    onIsUrlChanged: function(newIsUrl) {
-        this.setState({
-            enteredIdentityServerUrl: newIsUrl
-        });
+    onServerConfigChange: function(config) {
+        const newState = {};
+        if (config.hsUrl !== undefined) {
+            newState.enteredHomeserverUrl = config.hsUrl;
+        }
+        if (config.isUrl !== undefined) {
+            newState.enteredIdentityServerUrl = config.isUrl;
+        }
+        this.setState(newState);
     },
 
     showErrorDialog: function(body, title) {
-        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Forgot Password Error', '', ErrorDialog, {
             title: title,
             description: body,
@@ -157,37 +154,49 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var LoginHeader = sdk.getComponent("login.LoginHeader");
-        var LoginFooter = sdk.getComponent("login.LoginFooter");
-        var ServerConfig = sdk.getComponent("login.ServerConfig");
-        var Spinner = sdk.getComponent("elements.Spinner");
+        const LoginPage = sdk.getComponent("login.LoginPage");
+        const LoginHeader = sdk.getComponent("login.LoginHeader");
+        const LoginFooter = sdk.getComponent("login.LoginFooter");
+        const ServerConfig = sdk.getComponent("login.ServerConfig");
+        const Spinner = sdk.getComponent("elements.Spinner");
 
-        var resetPasswordJsx;
+        let resetPasswordJsx;
 
         if (this.state.progress === "sending_email") {
             resetPasswordJsx = <Spinner />;
-        }
-        else if (this.state.progress === "sent_email") {
+        } else if (this.state.progress === "sent_email") {
             resetPasswordJsx = (
-                <div>
-                    { _t('An email has been sent to') } {this.state.email}. { _t('Once you&#39;ve followed the link it contains, click below') }.
+                <div className="mx_Login_prompt">
+                    { _t("An email has been sent to %(emailAddress)s. Once you've followed the link it contains, click below.", { emailAddress: this.state.email }) }
                     <br />
                     <input className="mx_Login_submit" type="button" onClick={this.onVerify}
-                        value={ _t('I have verified my email address') } />
+                        value={_t('I have verified my email address')} />
                 </div>
             );
-        }
-        else if (this.state.progress === "complete") {
+        } else if (this.state.progress === "complete") {
             resetPasswordJsx = (
-                <div>
+                <div className="mx_Login_prompt">
                     <p>{ _t('Your password has been reset') }.</p>
                     <p>{ _t('You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device') }.</p>
                     <input className="mx_Login_submit" type="button" onClick={this.props.onComplete}
-                        value={ _t('Return to login screen') } />
+                        value={_t('Return to login screen')} />
                 </div>
             );
-        }
-        else {
+        } else {
+            let serverConfigSection;
+            if (!config.disable_custom_urls) {
+                serverConfigSection = (
+                    <ServerConfig ref="serverConfig"
+                        withToggleButton={true}
+                        defaultHsUrl={this.props.defaultHsUrl}
+                        defaultIsUrl={this.props.defaultIsUrl}
+                        customHsUrl={this.props.customHsUrl}
+                        customIsUrl={this.props.customIsUrl}
+                        onServerConfigChange={this.onServerConfigChange}
+                        delayTimeMs={0} />
+                );
+            }
+
             resetPasswordJsx = (
             <div>
                 <div className="mx_Login_prompt">
@@ -199,35 +208,25 @@ module.exports = React.createClass({
                             name="reset_email" // define a name so browser's password autofill gets less confused
                             value={this.state.email}
                             onChange={this.onInputChanged.bind(this, "email")}
-                            placeholder={ _t('Email address') } autoFocus />
+                            placeholder={_t('Email address')} autoFocus />
                         <br />
                         <input className="mx_Login_field" ref="pass" type="password"
                             name="reset_password"
                             value={this.state.password}
                             onChange={this.onInputChanged.bind(this, "password")}
-                            placeholder={ _t('New password') } />
+                            placeholder={_t('New password')} />
                         <br />
                         <input className="mx_Login_field" ref="pass" type="password"
                             name="reset_password_confirm"
                             value={this.state.password2}
                             onChange={this.onInputChanged.bind(this, "password2")}
-                            placeholder={ _t('Confirm your new password') } />
+                            placeholder={_t('Confirm your new password')} />
                         <br />
-                        <input className="mx_Login_submit" type="submit" value={ _t('Send Reset Email') } />
+                        <input className="mx_Login_submit" type="submit" value={_t('Send Reset Email')} />
                     </form>
-                    <ServerConfig ref="serverConfig"
-                        withToggleButton={true}
-                        defaultHsUrl={this.props.defaultHsUrl}
-                        defaultIsUrl={this.props.defaultIsUrl}
-                        customHsUrl={this.props.customHsUrl}
-                        customIsUrl={this.props.customIsUrl}
-                        onHsUrlChanged={this.onHsUrlChanged}
-                        onIsUrlChanged={this.onIsUrlChanged}
-                        delayTimeMs={0}/>
-                    <div className="mx_Login_error">
-                    </div>
+                    { serverConfigSection }
                     <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
-                        {_t('Return to login screen')}
+                        { _t('Return to login screen') }
                     </a>
                     <a className="mx_Login_create" onClick={this.props.onRegisterClick} href="#">
                         { _t('Create an account') }
@@ -240,12 +239,12 @@ module.exports = React.createClass({
 
 
         return (
-            <div className="mx_Login">
+            <LoginPage>
                 <div className="mx_Login_box">
                     <LoginHeader />
-                    {resetPasswordJsx}
+                    { resetPasswordJsx }
                 </div>
-            </div>
+            </LoginPage>
         );
-    }
+    },
 });

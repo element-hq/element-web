@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,14 +28,13 @@ import Promise from 'bluebird';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import type {MatrixClient} from 'matrix-js-sdk/lib/matrix';
 import SlashCommands from '../../../SlashCommands';
-import KeyCode from '../../../KeyCode';
+import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../../Keyboard';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import Analytics from '../../../Analytics';
 
 import dis from '../../../dispatcher';
-import UserSettingsStore from '../../../UserSettingsStore';
 
 import * as RichText from '../../../RichText';
 import * as HtmlUtils from '../../../HtmlUtils';
@@ -49,6 +49,7 @@ const REGEX_MATRIXTO = new RegExp(MATRIXTO_URL_PATTERN);
 const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g');
 
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
 const REGEX_EMOJI_WHITESPACE = new RegExp('(?:^|\\s)(' + asciiRegexp + ')\\s$');
@@ -57,6 +58,11 @@ const TYPING_USER_TIMEOUT = 10000, TYPING_SERVER_TIMEOUT = 30000;
 
 const ZWS_CODE = 8203;
 const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
+
+const ENTITY_TYPES = {
+    AT_ROOM_PILL: 'ATROOMPILL',
+};
+
 function stateToMarkdown(state) {
     return __stateToMarkdown(state)
         .replace(
@@ -68,13 +74,6 @@ function onSendMessageFailed(err, room) {
     // XXX: temporary logging to try to diagnose
     // https://github.com/vector-im/riot-web/issues/3148
     console.log('MessageComposer got send failure: ' + err.name + '('+err+')');
-    if (err.name === "UnknownDeviceError") {
-        dis.dispatch({
-            action: 'unknown_device_error',
-            err: err,
-            room: room,
-        });
-    }
     dis.dispatch({
         action: 'message_send_failed',
     });
@@ -99,13 +98,7 @@ export default class MessageComposerInput extends React.Component {
     };
 
     static getKeyBinding(ev: SyntheticKeyboardEvent): string {
-        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-        let ctrlCmdOnly;
-        if (isMac) {
-            ctrlCmdOnly = ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
-        } else {
-            ctrlCmdOnly = ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
-        }
+        const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
         // Restrict a subset of key bindings to ONLY having ctrl/meta* pressed and
         // importantly NOT having alt, shift, meta/ctrl* pressed. draft-js does not
@@ -159,7 +152,7 @@ export default class MessageComposerInput extends React.Component {
         this.onMarkdownToggleClicked = this.onMarkdownToggleClicked.bind(this);
         this.onTextPasted = this.onTextPasted.bind(this);
 
-        const isRichtextEnabled = UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false);
+        const isRichtextEnabled = SettingsStore.getValue('MessageComposerInput.isRichTextEnabled');
 
         Analytics.setRichtextMode(isRichtextEnabled);
 
@@ -187,13 +180,16 @@ export default class MessageComposerInput extends React.Component {
         this.client = MatrixClientPeg.get();
     }
 
-    findLinkEntities(contentState: ContentState, contentBlock: ContentBlock, callback) {
+    findPillEntities(contentState: ContentState, contentBlock: ContentBlock, callback) {
         contentBlock.findEntityRanges(
             (character) => {
                 const entityKey = character.getEntity();
                 return (
                     entityKey !== null &&
-                    contentState.getEntity(entityKey).getType() === 'LINK'
+                    (
+                        contentState.getEntity(entityKey).getType() === 'LINK' ||
+                        contentState.getEntity(entityKey).getType() === ENTITY_TYPES.AT_ROOM_PILL
+                    )
                 );
             }, callback,
         );
@@ -207,13 +203,21 @@ export default class MessageComposerInput extends React.Component {
     createEditorState(richText: boolean, contentState: ?ContentState): EditorState {
         const decorators = richText ? RichText.getScopedRTDecorators(this.props) :
                 RichText.getScopedMDDecorators(this.props);
-        const shouldShowPillAvatar = !UserSettingsStore.getSyncedSetting("Pill.shouldHidePillAvatar", false);
+        const shouldShowPillAvatar = !SettingsStore.getValue("Pill.shouldHidePillAvatar");
         decorators.push({
-            strategy: this.findLinkEntities.bind(this),
+            strategy: this.findPillEntities.bind(this),
             component: (entityProps) => {
                 const Pill = sdk.getComponent('elements.Pill');
+                const type = entityProps.contentState.getEntity(entityProps.entityKey).getType();
                 const {url} = entityProps.contentState.getEntity(entityProps.entityKey).getData();
-                if (Pill.isPillUrl(url)) {
+                if (type === ENTITY_TYPES.AT_ROOM_PILL) {
+                    return <Pill
+                        type={Pill.TYPE_AT_ROOM_MENTION}
+                        room={this.props.room}
+                        offsetKey={entityProps.offsetKey}
+                        shouldShowPillAvatar={shouldShowPillAvatar}
+                    />;
+                } else if (Pill.isPillUrl(url)) {
                     return <Pill
                         url={url}
                         room={this.props.room}
@@ -224,7 +228,7 @@ export default class MessageComposerInput extends React.Component {
 
                 return (
                     <a href={url} data-offset-key={entityProps.offsetKey}>
-                        {entityProps.children}
+                        { entityProps.children }
                     </a>
                 );
             },
@@ -286,7 +290,7 @@ export default class MessageComposerInput extends React.Component {
                 /// XXX: Not doing rich-text quoting from formatted-body because draft-js
                 /// has regressed such that when links are quoted, errors are thrown. See
                 /// https://github.com/vector-im/riot-web/issues/4756.
-                let body = escape(payload.text);
+                const body = escape(payload.text);
                 if (body) {
                     let content = RichText.htmlToContentState(`<blockquote>${body}</blockquote>`);
                     if (!this.state.isRichtextEnabled) {
@@ -367,7 +371,7 @@ export default class MessageComposerInput extends React.Component {
     }
 
     sendTyping(isTyping) {
-        if (UserSettingsStore.getSyncedSetting('dontSendTypingNotifications', false)) return;
+        if (SettingsStore.getValue('dontSendTypingNotifications')) return;
         MatrixClientPeg.get().sendTyping(
             this.props.room.roomId,
             this.isTyping, TYPING_SERVER_TIMEOUT,
@@ -414,10 +418,10 @@ export default class MessageComposerInput extends React.Component {
         }
 
         // Automatic replacement of plaintext emoji to Unicode emoji
-        if (UserSettingsStore.getSyncedSetting('MessageComposerInput.autoReplaceEmoji', false)) {
+        if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
             // The first matched group includes just the matched plaintext emoji
             const emojiMatch = REGEX_EMOJI_WHITESPACE.exec(text.slice(0, currentStartOffset));
-            if(emojiMatch) {
+            if (emojiMatch) {
                 // plaintext -> hex unicode
                 const emojiUc = asciiList[emojiMatch[1]];
                 // hex unicode -> shortname -> actual unicode
@@ -464,7 +468,7 @@ export default class MessageComposerInput extends React.Component {
             // autocomplete will probably have different completions to show.
             if (
                 !state.editorState.getSelection().equals(
-                    this.state.editorState.getSelection()
+                    this.state.editorState.getSelection(),
                 )
                 && state.editorState.getCurrentContent().getPlainText() ===
                 this.state.editorState.getCurrentContent().getPlainText()
@@ -508,7 +512,8 @@ export default class MessageComposerInput extends React.Component {
             // composer. For some reason the editor won't scroll automatically if we paste
             // blocks of text in or insert newlines.
             if (textContent.slice(selection.start).indexOf("\n") === -1) {
-                this.refs.editor.refs.editor.scrollTop = this.refs.editor.refs.editor.scrollHeight;
+                let editorRoot = this.refs.editor.refs.editor.parentNode.parentNode;
+                editorRoot.scrollTop = editorRoot.scrollHeight;
             }
         });
     }
@@ -534,7 +539,7 @@ export default class MessageComposerInput extends React.Component {
             editorState: this.createEditorState(enabled, contentState),
             isRichtextEnabled: enabled,
         });
-        UserSettingsStore.setSyncedSetting('MessageComposerInput.isRichTextEnabled', enabled);
+        SettingsStore.setValue("MessageComposerInput.isRichTextEnabled", null, SettingLevel.ACCOUNT, enabled);
     }
 
     handleKeyCommand = (command: string): boolean => {
@@ -679,7 +684,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
         const currentBlockType = RichUtils.getCurrentBlockType(this.state.editorState);
-        if(
+        if (
             ['code-block', 'blockquote', 'unordered-list-item', 'ordered-list-item']
             .includes(currentBlockType)
         ) {
@@ -783,7 +788,7 @@ export default class MessageComposerInput extends React.Component {
             const pt = contentState.getBlocksAsArray().map((block) => {
                 let blockText = block.getText();
                 let offset = 0;
-                this.findLinkEntities(contentState, block, (start, end) => {
+                this.findPillEntities(contentState, block, (start, end) => {
                     const entity = contentState.getEntity(block.getEntityAt(start));
                     if (entity.getType() !== 'LINK') {
                         return;
@@ -974,7 +979,6 @@ export default class MessageComposerInput extends React.Component {
                 editorState = EditorState.forceSelection(editorState,
                     editorState.getSelection());
                 this.setState({editorState});
-
             }
             return false;
         }
@@ -986,6 +990,11 @@ export default class MessageComposerInput extends React.Component {
         if (href) {
             contentState = contentState.createEntity('LINK', 'IMMUTABLE', {
                 url: href,
+                isCompletion: true,
+            });
+            entityKey = contentState.getLastCreatedEntityKey();
+        } else if (completion === '@room') {
+            contentState = contentState.createEntity(ENTITY_TYPES.AT_ROOM_PILL, 'IMMUTABLE', {
                 isCompletion: true,
             });
             entityKey = contentState.getLastCreatedEntityKey();
@@ -1032,10 +1041,10 @@ export default class MessageComposerInput extends React.Component {
      buttons. */
     getSelectionInfo(editorState: EditorState) {
         const styleName = {
-            BOLD: 'bold',
-            ITALIC: 'italic',
-            STRIKETHROUGH: 'strike',
-            UNDERLINE: 'underline',
+            BOLD: _td('bold'),
+            ITALIC: _td('italic'),
+            STRIKETHROUGH: _td('strike'),
+            UNDERLINE: _td('underline'),
         };
 
         const originalStyle = editorState.getCurrentInlineStyle().toArray();
@@ -1044,10 +1053,10 @@ export default class MessageComposerInput extends React.Component {
             .filter((styleName) => !!styleName);
 
         const blockName = {
-            'code-block': 'code',
-            'blockquote': 'quote',
-            'unordered-list-item': 'bullet',
-            'ordered-list-item': 'numbullet',
+            'code-block': _td('code'),
+            'blockquote': _td('quote'),
+            'unordered-list-item': _td('bullet'),
+            'ordered-list-item': _td('numbullet'),
         };
         const originalBlockType = editorState.getCurrentContent()
             .getBlockForKey(editorState.getSelection().getStartKey())
@@ -1131,15 +1140,17 @@ export default class MessageComposerInput extends React.Component {
                 <div className="mx_MessageComposer_autocomplete_wrapper">
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
+                        room={this.props.room}
                         onConfirm={this.setDisplayedCompletion}
                         onSelectionChange={this.setDisplayedCompletion}
                         query={this.getAutocompleteQuery(content)}
-                        selection={selection}/>
+                        selection={selection}
+                    />
                 </div>
                 <div className={className}>
                     <img className="mx_MessageComposer_input_markdownIndicator mx_filterFlipColor"
                          onMouseDown={this.onMarkdownToggleClicked}
-                         title={ this.state.isRichtextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
+                         title={this.state.isRichtextEnabled ? _t("Markdown is disabled") : _t("Markdown is enabled")}
                          src={`img/button-md-${!this.state.isRichtextEnabled}.png`} />
                     <Editor ref="editor"
                             dir="auto"
@@ -1157,7 +1168,7 @@ export default class MessageComposerInput extends React.Component {
                             onUpArrow={this.onUpArrow}
                             onDownArrow={this.onDownArrow}
                             onEscape={this.onEscape}
-                            spellCheck={true}/>
+                            spellCheck={true} />
                 </div>
             </div>
         );

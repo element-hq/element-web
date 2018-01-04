@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require('react');
-var ReactDOM = require("react-dom");
+const React = require('react');
+const ReactDOM = require("react-dom");
 import { _t } from '../../languageHandler';
-var Matrix = require("matrix-js-sdk");
-var sdk = require('../../index');
-var MatrixClientPeg = require("../../MatrixClientPeg");
-var dis = require("../../dispatcher");
+const Matrix = require("matrix-js-sdk");
+const sdk = require('../../index');
+const MatrixClientPeg = require("../../MatrixClientPeg");
+const dis = require("../../dispatcher");
 
 /*
  * Component which shows the global notification list using a TimelinePanel
  */
-var NotificationPanel = React.createClass({
+const NotificationPanel = React.createClass({
     displayName: 'NotificationPanel',
 
     propTypes: {
@@ -33,10 +33,10 @@ var NotificationPanel = React.createClass({
 
     render: function() {
         // wrap a TimelinePanel with the jump-to-event bits turned off.
-        var TimelinePanel = sdk.getComponent("structures.TimelinePanel");
-        var Loader = sdk.getComponent("elements.Spinner");
+        const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
+        const Loader = sdk.getComponent("elements.Spinner");
 
-        var timelineSet = MatrixClientPeg.get().getNotifTimelineSet();
+        const timelineSet = MatrixClientPeg.get().getNotifTimelineSet();
         if (timelineSet) {
             return (
                 <TimelinePanel key={"NotificationPanel_" + this.props.roomId}
@@ -44,18 +44,16 @@ var NotificationPanel = React.createClass({
                     manageReadReceipts={false}
                     manageReadMarkers={false}
                     timelineSet={timelineSet}
-                    showUrlPreview = { false }
-                    opacity={ this.props.opacity }
+                    showUrlPreview = {false}
                     tileShape="notif"
-                    empty={ _t('You have no visible notifications') }
+                    empty={_t('You have no visible notifications')}
                 />
             );
-        }
-        else {
+        } else {
             console.error("No notifTimelineSet available!");
             return (
                 <div className="mx_NotificationPanel">
-                    <Loader/>
+                    <Loader />
                 </div>
             );
         }

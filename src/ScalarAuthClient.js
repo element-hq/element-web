@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 import Promise from 'bluebird';
-var request = require('browser-request');
+import SettingsStore from "./settings/SettingsStore";
+const request = require('browser-request');
 
-var SdkConfig = require('./SdkConfig');
-var MatrixClientPeg = require('./MatrixClientPeg');
+const SdkConfig = require('./SdkConfig');
+const MatrixClientPeg = require('./MatrixClientPeg');
 
 class ScalarAuthClient {
 
@@ -38,7 +39,7 @@ class ScalarAuthClient {
 
     // Returns a scalar_token string
     getScalarToken() {
-        var tok = window.localStorage.getItem("mx_scalar_token");
+        const tok = window.localStorage.getItem("mx_scalar_token");
         if (tok) return Promise.resolve(tok);
 
         // No saved token, so do the dance to get one. First, we
@@ -53,9 +54,9 @@ class ScalarAuthClient {
     }
 
     exchangeForScalarToken(openid_token_object) {
-        var defer = Promise.defer();
+        const defer = Promise.defer();
 
-        var scalar_rest_url = SdkConfig.get().integrations_rest_url;
+        const scalar_rest_url = SdkConfig.get().integrations_rest_url;
         request({
             method: 'POST',
             uri: scalar_rest_url+'/register',
@@ -76,10 +77,40 @@ class ScalarAuthClient {
         return defer.promise;
     }
 
+    getScalarPageTitle(url) {
+        const defer = Promise.defer();
+
+        let scalarPageLookupUrl = SdkConfig.get().integrations_rest_url + '/widgets/title_lookup';
+        scalarPageLookupUrl = this.getStarterLink(scalarPageLookupUrl);
+        scalarPageLookupUrl += '&curl=' + encodeURIComponent(url);
+        request({
+            method: 'GET',
+            uri: scalarPageLookupUrl,
+            json: true,
+        }, (err, response, body) => {
+            if (err) {
+                defer.reject(err);
+            } else if (response.statusCode / 100 !== 2) {
+                defer.reject({statusCode: response.statusCode});
+            } else if (!body) {
+                defer.reject(new Error("Missing page title in response"));
+            } else {
+                let title = "";
+                if (body.page_title_cache_item && body.page_title_cache_item.cached_title) {
+                    title = body.page_title_cache_item.cached_title;
+                }
+                defer.resolve(title);
+            }
+        });
+
+        return defer.promise;
+    }
+
     getScalarInterfaceUrlForRoom(roomId, screen, id) {
-        var url = SdkConfig.get().integrations_ui_url;
+        let url = SdkConfig.get().integrations_ui_url;
         url += "?scalar_token=" + encodeURIComponent(this.scalarToken);
         url += "&room_id=" + encodeURIComponent(roomId);
+        url += "&theme=" + encodeURIComponent(SettingsStore.getValue("theme"));
         if (id) {
             url += '&integ_id=' + encodeURIComponent(id);
         }

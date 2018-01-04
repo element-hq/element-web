@@ -1,6 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,8 +26,6 @@ import {TextualCompletion} from './Components';
 const DDG_REGEX = /\/ddg\s+(.+)$/g;
 const REFERRER = 'vector';
 
-let instance = null;
-
 export default class DuckDuckGoProvider extends AutocompleteProvider {
     constructor() {
         super(DDG_REGEX);
@@ -38,7 +37,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
     }
 
     async getCompletions(query: string, selection: {start: number, end: number}) {
-        let {command, range} = this.getCurrentCommand(query, selection);
+        const {command, range} = this.getCurrentCommand(query, selection);
         if (!query || !command) {
             return [];
         }
@@ -47,7 +46,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
             method: 'GET',
         });
         const json = await response.json();
-        let results = json.Results.map(result => {
+        const results = json.Results.map((result) => {
             return {
                 completion: result.Text,
                 component: (
@@ -96,16 +95,9 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
         return '🔍 ' + _t('Results from DuckDuckGo');
     }
 
-    static getInstance(): DuckDuckGoProvider {
-        if (instance == null) {
-            instance = new DuckDuckGoProvider();
-        }
-        return instance;
-    }
-
     renderCompletions(completions: [React.Component]): ?React.Component {
         return <div className="mx_Autocomplete_Completion_container_block">
-            {completions}
+            { completions }
         </div>;
     }
 }

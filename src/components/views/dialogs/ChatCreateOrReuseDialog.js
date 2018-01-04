@@ -155,7 +155,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
                         width={48} height={48}
                     />
                     <div className="mx_ChatCreateOrReuseDialog_profile_name">
-                        {this.state.profile.displayName || this.props.userId}
+                        { this.state.profile.displayName || this.props.userId }
                     </div>
                 </div>;
             }
@@ -177,7 +177,7 @@ export default class ChatCreateOrReuseDialog extends React.Component {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog className='mx_ChatCreateOrReuseDialog'
-                onFinished={ this.props.onFinished.bind(false) }
+                onFinished={this.props.onFinished.bind(false)}
                 title={title}
             >
                 { content }

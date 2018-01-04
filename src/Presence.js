@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var MatrixClientPeg = require("./MatrixClientPeg");
-var dis = require("./dispatcher");
+const MatrixClientPeg = require("./MatrixClientPeg");
+const dis = require("./dispatcher");
 
  // Time in ms after that a user is considered as unavailable/away
-var UNAVAILABLE_TIME_MS = 3 * 60 * 1000; // 3 mins
-var PRESENCE_STATES = ["online", "offline", "unavailable"];
+const UNAVAILABLE_TIME_MS = 3 * 60 * 1000; // 3 mins
+const PRESENCE_STATES = ["online", "offline", "unavailable"];
 
 class Presence {
 
@@ -57,12 +57,26 @@ class Presence {
     }
 
     /**
+     * Get the current status message.
+     * @returns {String} the status message, may be null
+     */
+    getStatusMessage() {
+        return this.statusMessage;
+    }
+
+    /**
      * Set the presence state.
      * If the state has changed, the Home Server will be notified.
      * @param {string} newState the new presence state (see PRESENCE enum)
+     * @param {String} statusMessage an optional status message for the presence
+     * @param {boolean} maintain true to have this status maintained by this tracker
      */
-    setState(newState) {
-        if (newState === this.state) {
+    setState(newState, statusMessage=null, maintain=false) {
+        if (this.maintain) {
+            // Don't update presence if we're maintaining a particular status
+            return;
+        }
+        if (newState === this.state && statusMessage === this.statusMessage) {
             return;
         }
         if (PRESENCE_STATES.indexOf(newState) === -1) {
@@ -71,20 +85,36 @@ class Presence {
         if (!this.running) {
             return;
         }
-        var old_state = this.state;
+        const old_state = this.state;
+        const old_message = this.statusMessage;
         this.state = newState;
+        this.statusMessage = statusMessage;
+        this.maintain = maintain;
 
         if (MatrixClientPeg.get().isGuest()) {
             return; // don't try to set presence when a guest; it won't work.
         }
 
-        var self = this;
-        MatrixClientPeg.get().setPresence(this.state).done(function() {
+        const updateContent = {
+            presence: this.state,
+            status_msg: this.statusMessage ? this.statusMessage : '',
+        };
+
+        const self = this;
+        MatrixClientPeg.get().setPresence(updateContent).done(function() {
             console.log("Presence: %s", newState);
+
+            // We have to dispatch because the js-sdk is unreliable at telling us about our own presence
+            dis.dispatch({action: "self_presence_updated", statusInfo: updateContent});
         }, function(err) {
             console.error("Failed to set presence: %s", err);
             self.state = old_state;
+            self.statusMessage = old_message;
         });
+    }
+
+    stopMaintainingStatus() {
+        this.maintain = false;
     }
 
     /**
@@ -95,7 +125,8 @@ class Presence {
         this.setState("unavailable");
     }
 
-    _onUserActivity() {
+    _onUserActivity(payload) {
+        if (payload.action === "sync_state" || payload.action === "self_presence_updated") return;
         this._resetTimer();
     }
 
@@ -104,7 +135,7 @@ class Presence {
      * @private
      */
     _resetTimer() {
-        var self = this;
+        const self = this;
         this.setState("online");
         // Re-arm the timer
         clearTimeout(this.timer);

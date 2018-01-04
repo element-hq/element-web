@@ -23,10 +23,18 @@ module.exports = React.createClass({
     displayName: 'UnknownBody',
 
     render: function() {
+        let tooltip = _t("Removed or unknown message type");
+        if (this.props.mxEvent.isRedacted()) {
+            const redactedBecauseUserId = this.props.mxEvent.getUnsigned().redacted_because.sender;
+            tooltip = redactedBecauseUserId ?
+                _t("Message removed by %(userId)s", { userId: redactedBecauseUserId }) :
+                _t("Message removed");
+        }
+
         const text = this.props.mxEvent.getContent().body;
         return (
-            <span className="mx_UnknownBody" title={_t("Removed or unknown message type")}>
-                {text}
+            <span className="mx_UnknownBody" title={tooltip}>
+                { text }
             </span>
         );
     },

@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,16 +16,25 @@ limitations under the License.
 */
 
 import React from 'react';
-import { _t, _tJsx } from '../../languageHandler';
+import Matrix from 'matrix-js-sdk';
+import { _t } from '../../languageHandler';
 import sdk from '../../index';
 import WhoIsTyping from '../../WhoIsTyping';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import MemberAvatar from '../views/avatars/MemberAvatar';
+import Resend from '../../Resend';
+import { showUnknownDeviceDialogForMessages } from '../../cryptodevices';
 
-const HIDE_DEBOUNCE_MS = 10000;
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
 const STATUS_BAR_EXPANDED_LARGE = 2;
+
+function getUnsentMessages(room) {
+    if (!room) { return []; }
+    return room.getPendingEvents().filter(function(ev) {
+        return ev.status === Matrix.EventStatus.NOT_SENT;
+    });
+};
 
 module.exports = React.createClass({
     displayName: 'RoomStatusBar',
@@ -36,12 +46,13 @@ module.exports = React.createClass({
         // the number of messages which have arrived since we've been scrolled up
         numUnreadMessages: React.PropTypes.number,
 
-        // string to display when there are messages in the room which had errors on send
-        unsentMessageError: React.PropTypes.string,
-
         // this is true if we are fully scrolled-down, and are looking at
         // the end of the live timeline.
         atEndOfLiveTimeline: React.PropTypes.bool,
+
+        // This is true when the user is alone in the room, but has also sent a message.
+        // Used to suggest to the user to invite someone
+        sentMessageAndIsAlone: React.PropTypes.bool,
 
         // true if there is an active call in this room (means we show
         // the 'Active Call' text in the status bar if there is nothing
@@ -59,6 +70,14 @@ module.exports = React.createClass({
         // callback for when the user clicks on the 'cancel all' button in the
         // 'unsent messages' bar
         onCancelAllClick: React.PropTypes.func,
+
+        // callback for when the user clicks on the 'invite others' button in the
+        // 'you are alone' bar
+        onInviteClick: React.PropTypes.func,
+
+        // callback for when the user clicks on the 'stop warning me' button in the
+        // 'you are alone' bar
+        onStopWarningClick: React.PropTypes.func,
 
         // callback for when the user clicks on the 'scroll to bottom' button
         onScrollToBottomClick: React.PropTypes.func,
@@ -87,12 +106,14 @@ module.exports = React.createClass({
         return {
             syncState: MatrixClientPeg.get().getSyncState(),
             usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
+            unsentMessages: getUnsentMessages(this.props.room),
         };
     },
 
     componentWillMount: function() {
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
+        MatrixClientPeg.get().on("Room.localEchoUpdated", this._onRoomLocalEchoUpdated);
 
         this._checkSize();
     },
@@ -103,10 +124,11 @@ module.exports = React.createClass({
 
     componentWillUnmount: function() {
         // we may have entirely lost our client as we're logging out before clicking login on the guest bar...
-        var client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener("sync", this.onSyncStateChange);
             client.removeListener("RoomMember.typing", this.onRoomMemberTyping);
+            client.removeListener("Room.localEchoUpdated", this._onRoomLocalEchoUpdated);
         }
     },
 
@@ -115,18 +137,38 @@ module.exports = React.createClass({
             return;
         }
         this.setState({
-            syncState: state
+            syncState: state,
         });
     },
 
     onRoomMemberTyping: function(ev, member) {
         this.setState({
-            usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
+            usersTyping: WhoIsTyping.usersTypingApartFromMeAndIgnored(this.props.room),
+        });
+    },
+
+    _onResendAllClick: function() {
+        Resend.resendUnsentEvents(this.props.room);
+    },
+
+    _onCancelAllClick: function() {
+        Resend.cancelUnsentEvents(this.props.room);
+    },
+
+    _onShowDevicesClick: function() {
+        showUnknownDeviceDialogForMessages(MatrixClientPeg.get(), this.props.room);
+    },
+
+    _onRoomLocalEchoUpdated: function(event, room, oldEventId, oldStatus) {
+        if (room.roomId !== this.props.room.roomId) return;
+
+        this.setState({
+            unsentMessages: getUnsentMessages(this.props.room),
         });
     },
 
     // Check whether current size is greater than 0, if yes call props.onVisible
-    _checkSize: function () {
+    _checkSize: function() {
         if (this.props.onVisible && this._getSize()) {
             this.props.onVisible();
         }
@@ -140,10 +182,11 @@ module.exports = React.createClass({
             (this.state.usersTyping.length > 0) ||
             this.props.numUnreadMessages ||
             !this.props.atEndOfLiveTimeline ||
-            this.props.hasActiveCall
+            this.props.hasActiveCall ||
+            this.props.sentMessageAndIsAlone
         ) {
             return STATUS_BAR_EXPANDED;
-        } else if (this.props.unsentMessageError) {
+        } else if (this.state.unsentMessages.length > 0) {
             return STATUS_BAR_EXPANDED_LARGE;
         }
         return STATUS_BAR_HIDDEN;
@@ -157,9 +200,9 @@ module.exports = React.createClass({
         if (this.props.numUnreadMessages) {
             return (
                 <div className="mx_RoomStatusBar_scrollDownIndicator"
-                        onClick={ this.props.onScrollToBottomClick }>
+                        onClick={this.props.onScrollToBottomClick}>
                     <img src="img/newmessages.svg" width="24" height="24"
-                        alt=""/>
+                        alt="" />
                 </div>
             );
         }
@@ -167,18 +210,18 @@ module.exports = React.createClass({
         if (!this.props.atEndOfLiveTimeline) {
             return (
                 <div className="mx_RoomStatusBar_scrollDownIndicator"
-                        onClick={ this.props.onScrollToBottomClick }>
+                        onClick={this.props.onScrollToBottomClick}>
                     <img src="img/scrolldown.svg" width="24" height="24"
-                        alt={ _t("Scroll to bottom of page") }
-                        title={ _t("Scroll to bottom of page") }/>
+                        alt={_t("Scroll to bottom of page")}
+                        title={_t("Scroll to bottom of page")} />
                 </div>
             );
         }
 
         if (this.props.hasActiveCall) {
-            var TintableSvg = sdk.getComponent("elements.TintableSvg");
+            const TintableSvg = sdk.getComponent("elements.TintableSvg");
             return (
-                <TintableSvg src="img/sound-indicator.svg" width="23" height="20"/>
+                <TintableSvg src="img/sound-indicator.svg" width="23" height="20" />
             );
         }
 
@@ -189,7 +232,7 @@ module.exports = React.createClass({
         if (wantPlaceholder) {
             return (
                 <div className="mx_RoomStatusBar_typingIndicatorAvatars">
-                    {this._renderTypingIndicatorAvatars(this.props.whoIsTypingLimit)}
+                    { this._renderTypingIndicatorAvatars(this.props.whoIsTypingLimit) }
                 </div>
             );
         }
@@ -221,12 +264,67 @@ module.exports = React.createClass({
         if (othersCount > 0) {
             avatars.push(
                 <span className="mx_RoomStatusBar_typingIndicatorRemaining" key="others">
-                    +{othersCount}
-                </span>
+                    +{ othersCount }
+                </span>,
             );
         }
 
         return avatars;
+    },
+
+    _getUnsentMessageContent: function() {
+        const unsentMessages = this.state.unsentMessages;
+        if (!unsentMessages.length) return null;
+
+        let title;
+        let content;
+
+        const hasUDE = unsentMessages.some((m) => {
+            return m.error && m.error.name === "UnknownDeviceError";
+        });
+
+        if (hasUDE) {
+            title = _t("Message not sent due to unknown devices being present");
+            content = _t(
+                "<showDevicesText>Show devices</showDevicesText> or <cancelText>cancel all</cancelText>.",
+                {},
+                {
+                    'showDevicesText': (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this._onShowDevicesClick}>{ sub }</a>,
+                    'cancelText': (sub) => <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={this._onCancelAllClick}>{ sub }</a>,
+                },
+            );
+        } else {
+            if (
+                unsentMessages.length === 1 &&
+                unsentMessages[0].error &&
+                unsentMessages[0].error.data &&
+                unsentMessages[0].error.data.error
+            ) {
+                title = unsentMessages[0].error.data.error;
+            } else {
+                title = _t("Some of your messages have not been sent.");
+            }
+            content = _t("<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. " +
+               "You can also select individual messages to resend or cancel.",
+                {},
+                {
+                    'resendText': (sub) =>
+                        <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this._onResendAllClick}>{ sub }</a>,
+                    'cancelText': (sub) =>
+                        <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={this._onCancelAllClick}>{ sub }</a>,
+                },
+            );
+        }
+
+        return <div className="mx_RoomStatusBar_connectionLostBar">
+            <img src="img/warning.svg" width="24" height="23" title={_t("Warning")} alt={_t("Warning")} />
+            <div className="mx_RoomStatusBar_connectionLostBar_title">
+                { title }
+            </div>
+            <div className="mx_RoomStatusBar_connectionLostBar_desc">
+                { content }
+            </div>
+        </div>;
     },
 
     // return suitable content for the main (text) part of the status bar.
@@ -240,59 +338,43 @@ module.exports = React.createClass({
         if (this.state.syncState === "ERROR") {
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
-                    <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
+                    <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ " />
                     <div className="mx_RoomStatusBar_connectionLostBar_title">
-                        {_t('Connectivity to the server has been lost.')}
+                        { _t('Connectivity to the server has been lost.') }
                     </div>
                     <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                        {_t('Sent messages will be stored until your connection has returned.')}
+                        { _t('Sent messages will be stored until your connection has returned.') }
                     </div>
                 </div>
             );
         }
 
-        if (this.props.unsentMessageError) {
-            return (
-                <div className="mx_RoomStatusBar_connectionLostBar">
-                    <img src="img/warning.svg" width="24" height="23" title="/!\ " alt="/!\ "/>
-                    <div className="mx_RoomStatusBar_connectionLostBar_title">
-                        { this.props.unsentMessageError }
-                    </div>
-                    <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                    {_tJsx("<a>Resend all</a> or <a>cancel all</a> now. You can also select individual messages to resend or cancel.",
-                        [/<a>(.*?)<\/a>/, /<a>(.*?)<\/a>/],
-                        [
-                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={ this.props.onResendAllClick }>{sub}</a>,
-                            (sub) => <a className="mx_RoomStatusBar_resend_link" key="cancel" onClick={ this.props.onCancelAllClick }>{sub}</a>,
-                        ]
-                    )}
-                    </div>
-                </div>
-            );
+        if (this.state.unsentMessages.length > 0) {
+            return this._getUnsentMessageContent();
         }
 
         // unread count trumps who is typing since the unread count is only
         // set when you've scrolled up
         if (this.props.numUnreadMessages) {
             // MUST use var name "count" for pluralization to kick in
-            var unreadMsgs = _t("%(count)s new messages", {count: this.props.numUnreadMessages});
+            const unreadMsgs = _t("%(count)s new messages", {count: this.props.numUnreadMessages});
 
             return (
                 <div className="mx_RoomStatusBar_unreadMessagesBar"
-                        onClick={ this.props.onScrollToBottomClick }>
-                    {unreadMsgs}
+                        onClick={this.props.onScrollToBottomClick}>
+                    { unreadMsgs }
                 </div>
             );
         }
 
         const typingString = WhoIsTyping.whoIsTypingString(
             this.state.usersTyping,
-            this.props.whoIsTypingLimit
+            this.props.whoIsTypingLimit,
         );
         if (typingString) {
             return (
                 <div className="mx_RoomStatusBar_typingBar">
-                    <EmojiText>{typingString}</EmojiText>
+                    <EmojiText>{ typingString }</EmojiText>
                 </div>
             );
         }
@@ -300,7 +382,25 @@ module.exports = React.createClass({
         if (this.props.hasActiveCall) {
             return (
                 <div className="mx_RoomStatusBar_callBar">
-                    <b>{_t('Active call')}</b>
+                    <b>{ _t('Active call') }</b>
+                </div>
+            );
+        }
+
+        // If you're alone in the room, and have sent a message, suggest to invite someone
+        if (this.props.sentMessageAndIsAlone) {
+            return (
+                <div className="mx_RoomStatusBar_isAlone">
+                    { _t("There's no one else here! Would you like to <inviteText>invite others</inviteText> " +
+                            "or <nowarnText>stop warning about the empty room</nowarnText>?",
+                        {},
+                        {
+                            'inviteText': (sub) =>
+                                <a className="mx_RoomStatusBar_resend_link" key="invite" onClick={this.props.onInviteClick}>{ sub }</a>,
+                            'nowarnText': (sub) =>
+                                <a className="mx_RoomStatusBar_resend_link" key="nowarn" onClick={this.props.onStopWarningClick}>{ sub }</a>,
+                        },
+                    ) }
                 </div>
             );
         }
@@ -308,17 +408,16 @@ module.exports = React.createClass({
         return null;
     },
 
-
     render: function() {
-        var content = this._getContent();
-        var indicator = this._getIndicator(this.state.usersTyping.length > 0);
+        const content = this._getContent();
+        const indicator = this._getIndicator(this.state.usersTyping.length > 0);
 
         return (
             <div className="mx_RoomStatusBar">
                 <div className="mx_RoomStatusBar_indicator">
-                    {indicator}
+                    { indicator }
                 </div>
-                {content}
+                { content }
             </div>
         );
     },

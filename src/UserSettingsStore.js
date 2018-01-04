@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,30 +17,11 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import MatrixClientPeg from './MatrixClientPeg';
-import Notifier from './Notifier';
-import { _t } from './languageHandler';
 
 /*
  * TODO: Make things use this. This is all WIP - see UserSettings.js for usage.
  */
-
 export default {
-    LABS_FEATURES: [
-        {
-            name: "-",
-            id: 'matrix_apps',
-            default: true,
-
-            // XXX: Always use default, ignore localStorage and remove from labs
-            override: true,
-        },
-    ],
-
-    // horrible but it works. The locality makes this somewhat more palatable.
-    doTranslations: function() {
-        this.LABS_FEATURES[0].name = _t("Matrix Apps");
-    },
-
     loadProfileInfo: function() {
         const cli = MatrixClientPeg.get();
         return cli.getProfileInfo(cli.credentials.userId);
@@ -60,25 +42,6 @@ export default {
 
     saveThreePids: function(threePids) {
         // TODO
-    },
-
-    getEnableNotifications: function() {
-        return Notifier.isEnabled();
-    },
-
-    setEnableNotifications: function(enable) {
-        if (!Notifier.supportsDesktopNotifications()) {
-            return;
-        }
-        Notifier.setEnabled(enable);
-    },
-
-    getEnableAudioNotifications: function() {
-        return Notifier.isAudioEnabled();
-    },
-
-    setEnableAudioNotifications: function(enable) {
-        Notifier.setAudioEnabled(enable);
     },
 
     changePassword: function(oldPassword, newPassword) {
@@ -126,84 +89,5 @@ export default {
             data: data,
             append: true,  // We always append for email pushers since we don't want to stop other accounts notifying to the same email address
         });
-    },
-
-    getUrlPreviewsDisabled: function() {
-        const event = MatrixClientPeg.get().getAccountData('org.matrix.preview_urls');
-        return (event && event.getContent().disable);
-    },
-
-    setUrlPreviewsDisabled: function(disabled) {
-        // FIXME: handle errors
-        return MatrixClientPeg.get().setAccountData('org.matrix.preview_urls', {
-            disable: disabled,
-        });
-    },
-
-    getSyncedSettings: function() {
-        const event = MatrixClientPeg.get().getAccountData('im.vector.web.settings');
-        return event ? event.getContent() : {};
-    },
-
-    getSyncedSetting: function(type, defaultValue = null) {
-        const settings = this.getSyncedSettings();
-        return settings.hasOwnProperty(type) ? settings[type] : defaultValue;
-    },
-
-    setSyncedSetting: function(type, value) {
-        const settings = this.getSyncedSettings();
-        settings[type] = value;
-        // FIXME: handle errors
-        return MatrixClientPeg.get().setAccountData('im.vector.web.settings', settings);
-    },
-
-    getLocalSettings: function() {
-        const localSettingsString = localStorage.getItem('mx_local_settings') || '{}';
-        return JSON.parse(localSettingsString);
-    },
-
-    getLocalSetting: function(type, defaultValue = null) {
-        const settings = this.getLocalSettings();
-        return settings.hasOwnProperty(type) ? settings[type] : defaultValue;
-    },
-
-    setLocalSetting: function(type, value) {
-        const settings = this.getLocalSettings();
-        settings[type] = value;
-        // FIXME: handle errors
-        localStorage.setItem('mx_local_settings', JSON.stringify(settings));
-    },
-
-    getFeatureById(feature: string) {
-        for (let i = 0; i < this.LABS_FEATURES.length; i++) {
-            const f = this.LABS_FEATURES[i];
-            if (f.id === feature) {
-                return f;
-            }
-        }
-        return null;
-    },
-
-    isFeatureEnabled: function(featureId: string): boolean {
-        // Disable labs for guests.
-        if (MatrixClientPeg.get().isGuest()) return false;
-
-        const feature = this.getFeatureById(featureId);
-        if (!feature) {
-            console.warn(`Unknown feature "${featureId}"`);
-            return false;
-        }
-        // Return the default if this feature has an override to be the default value or
-        // if the feature has never been toggled and is therefore not in localStorage
-        if (Object.keys(feature).includes('override') ||
-            localStorage.getItem(`mx_labs_feature_${featureId}`) === null
-        ) {
-            return feature.default;
-        }
-        return localStorage.getItem(`mx_labs_feature_${featureId}`) === 'true';
-    },
-
-    setFeatureEnabled: function(featureId: string, enabled: boolean) {
-        localStorage.setItem(`mx_labs_feature_${featureId}`, enabled);
     },
 };

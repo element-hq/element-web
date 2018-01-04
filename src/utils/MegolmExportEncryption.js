@@ -116,7 +116,7 @@ export async function decryptMegolmKeyFile(data, password) {
             aesKey,
             ciphertext,
         );
-    } catch(e) {
+    } catch (e) {
         throw friendlyError('subtleCrypto.decrypt failed: ' + e, cryptoFailMsg());
     }
 

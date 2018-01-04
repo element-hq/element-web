@@ -16,18 +16,18 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
+const React = require('react');
+const ReactDOM = require('react-dom');
 
-var sdk = require('../../../index');
+const sdk = require('../../../index');
 
-var Velociraptor = require('../../../Velociraptor');
+const Velociraptor = require('../../../Velociraptor');
 require('../../../VelocityBounce');
 import { _t } from '../../../languageHandler';
 
 import DateUtils from '../../../DateUtils';
 
-var bounce = false;
+let bounce = false;
 try {
     if (global.localStorage) {
         bounce = global.localStorage.getItem('avatar_bounce') == 'true';
@@ -90,7 +90,7 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         // before we remove the rr, store its location in the map, so that if
         // it reappears, it can be animated from the right place.
-        var rrInfo = this.props.readReceiptInfo;
+        const rrInfo = this.props.readReceiptInfo;
         if (!rrInfo) {
             return;
         }
@@ -102,7 +102,7 @@ module.exports = React.createClass({
             return;
         }
 
-        var avatarNode = ReactDOM.findDOMNode(this);
+        const avatarNode = ReactDOM.findDOMNode(this);
         rrInfo.top = avatarNode.offsetTop;
         rrInfo.left = avatarNode.offsetLeft;
         rrInfo.parent = avatarNode.offsetParent;
@@ -115,29 +115,40 @@ module.exports = React.createClass({
         }
 
         // treat new RRs as though they were off the top of the screen
-        var oldTop = -15;
+        let oldTop = -15;
 
-        var oldInfo = this.props.readReceiptInfo;
+        const oldInfo = this.props.readReceiptInfo;
         if (oldInfo && oldInfo.parent) {
             oldTop = oldInfo.top + oldInfo.parent.getBoundingClientRect().top;
         }
 
-        var newElement = ReactDOM.findDOMNode(this);
-        var startTopOffset = oldTop - newElement.offsetParent.getBoundingClientRect().top;
+        const newElement = ReactDOM.findDOMNode(this);
+        let startTopOffset;
+        if (!newElement.offsetParent) {
+            // this seems to happen sometimes for reasons I don't understand
+            // the docs for `offsetParent` say it may be null if `display` is
+            // `none`, but I can't see why that would happen.
+            console.warn(
+                `ReadReceiptMarker for ${this.props.member.userId} in ` +
+                `${this.props.member.roomId} has no offsetParent`,
+            );
+            startTopOffset = 0;
+        } else {
+            startTopOffset = oldTop - newElement.offsetParent.getBoundingClientRect().top;
+        }
 
-        var startStyles = [];
-        var enterTransitionOpts = [];
+        const startStyles = [];
+        const enterTransitionOpts = [];
 
         if (oldInfo && oldInfo.left) {
             // start at the old height and in the old h pos
 
-            var leftOffset = oldInfo.left;
             startStyles.push({ top: startTopOffset+"px",
                                left: oldInfo.left+"px" });
 
-            var reorderTransitionOpts = {
+            const reorderTransitionOpts = {
                 duration: 100,
-                easing: 'easeOut'
+                easing: 'easeOut',
             };
 
             enterTransitionOpts.push(reorderTransitionOpts);
@@ -160,12 +171,12 @@ module.exports = React.createClass({
 
 
     render: function() {
-        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         if (this.state.suppressDisplay) {
-            return <div/>;
+            return <div />;
         }
 
-        var style = {
+        const style = {
             left: this.props.leftOffset+'px',
             top: '0px',
             visibility: this.props.hidden ? 'hidden' : 'visible',
@@ -175,7 +186,7 @@ module.exports = React.createClass({
         if (this.props.timestamp) {
             title = _t(
                 "Seen by %(userName)s at %(dateTime)s",
-                {userName: this.props.member.userId, dateTime: DateUtils.formatDate(new Date(this.props.timestamp), this.props.showTwelveHour)}
+                {userName: this.props.member.userId, dateTime: DateUtils.formatDate(new Date(this.props.timestamp), this.props.showTwelveHour)},
             );
         }
 

@@ -1,6 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ import {PillCompletion} from './Components';
 import type {SelectionRange, Completion} from './Autocompleter';
 import _uniq from 'lodash/uniq';
 import _sortBy from 'lodash/sortBy';
+import SettingsStore from "../settings/SettingsStore";
 
 import EmojiData from '../stripped-emoji.json';
 
@@ -69,8 +71,6 @@ const EMOJI_SHORTNAMES = Object.keys(EmojiData).map((key) => EmojiData[key]).sor
     };
 });
 
-let instance = null;
-
 function score(query, space) {
     const index = space.indexOf(query);
     if (index === -1) {
@@ -96,6 +96,10 @@ export default class EmojiProvider extends AutocompleteProvider {
     }
 
     async getCompletions(query: string, selection: SelectionRange) {
+        if (SettingsStore.getValue("MessageComposerInput.dontSuggestEmoji")) {
+            return []; // don't give any suggestions if the user doesn't want them
+        }
+
         const EmojiText = sdk.getComponent('views.elements.EmojiText');
 
         let completions = [];
@@ -133,7 +137,7 @@ export default class EmojiProvider extends AutocompleteProvider {
                 return {
                     completion: unicode,
                     component: (
-                        <PillCompletion title={shortname} initialComponent={<EmojiText style={{maxWidth: '1em'}}>{unicode}</EmojiText>} />
+                        <PillCompletion title={shortname} initialComponent={<EmojiText style={{maxWidth: '1em'}}>{ unicode }</EmojiText>} />
                     ),
                     range,
                 };
@@ -146,15 +150,9 @@ export default class EmojiProvider extends AutocompleteProvider {
         return '😃 ' + _t('Emoji');
     }
 
-    static getInstance() {
-        if (instance == null)
-            {instance = new EmojiProvider();}
-        return instance;
-    }
-
     renderCompletions(completions: [React.Component]): ?React.Component {
         return <div className="mx_Autocomplete_Completion_container_pill">
-            {completions}
+            { completions }
         </div>;
     }
 }

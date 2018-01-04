@@ -1,5 +1,6 @@
 /*
  Copyright 2016 Aviral Dasgupta
+ Copyright 2017 New Vector Ltd
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,12 +16,19 @@
  */
 
 import React from 'react';
-import {emojifyText} from '../../../HtmlUtils';
+import {emojifyText, containsEmoji} from '../../../HtmlUtils';
 
 export default function EmojiText(props) {
     const {element, children, ...restProps} = props;
-    restProps.dangerouslySetInnerHTML = emojifyText(children);
-    return React.createElement(element, restProps);
+
+    // fast path: simple regex to detect strings that don't contain
+    // emoji and just return them
+    if (containsEmoji(children)) {
+        restProps.dangerouslySetInnerHTML = emojifyText(children);
+        return React.createElement(element, restProps);
+    } else {
+        return React.createElement(element, restProps, children);
+    }
 }
 
 EmojiText.propTypes = {

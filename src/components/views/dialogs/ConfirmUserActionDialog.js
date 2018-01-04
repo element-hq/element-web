@@ -15,9 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
+import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import classnames from 'classnames';
+import { GroupMemberType } from '../../../groups';
 
 /*
  * A dialog for confirming an operation on another user.
@@ -30,8 +32,14 @@ import classnames from 'classnames';
 export default React.createClass({
     displayName: 'ConfirmUserActionDialog',
     propTypes: {
-        member: React.PropTypes.object.isRequired, // matrix-js-sdk member object
+        // matrix-js-sdk (room) member object. Supply either this or 'groupMember'
+        member: React.PropTypes.object,
+        // group member object. Supply either this or 'member'
+        groupMember: GroupMemberType,
+        // needed if a group member is specified
+        matrixClient: React.PropTypes.instanceOf(MatrixClient),
         action: React.PropTypes.string.isRequired, // eg. 'Ban'
+        title: React.PropTypes.string.isRequired, // eg. 'Ban this user?'
 
         // Whether to display a text field for a reason
         // If true, the second argument to onFinished will
@@ -69,8 +77,8 @@ export default React.createClass({
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const MemberAvatar = sdk.getComponent("views.avatars.MemberAvatar");
+        const BaseAvatar = sdk.getComponent("views.avatars.BaseAvatar");
 
-        const title = _t("%(actionVerb)s this person?", { actionVerb: this.props.action});
         const confirmButtonClass = classnames({
             'mx_Dialog_primary': true,
             'danger': this.props.danger,
@@ -83,7 +91,7 @@ export default React.createClass({
                     <form onSubmit={this.onOk}>
                         <input className="mx_ConfirmUserActionDialog_reasonField"
                             ref={this._collectReasonField}
-                            placeholder={ _t("Reason") }
+                            placeholder={_t("Reason")}
                             autoFocus={true}
                         />
                     </form>
@@ -91,24 +99,39 @@ export default React.createClass({
             );
         }
 
+        let avatar;
+        let name;
+        let userId;
+        if (this.props.member) {
+            avatar = <MemberAvatar member={this.props.member} width={48} height={48} />;
+            name = this.props.member.name;
+            userId = this.props.member.userId;
+        } else {
+            const httpAvatarUrl = this.props.groupMember.avatarUrl ?
+                this.props.matrixClient.mxcUrlToHttp(this.props.groupMember.avatarUrl, 48, 48) : null;
+            name = this.props.groupMember.displayname || this.props.groupMember.userId;
+            userId = this.props.groupMember.userId;
+            avatar = <BaseAvatar name={name} url={httpAvatarUrl} width={48} height={48} />;
+        }
+
         return (
             <BaseDialog className="mx_ConfirmUserActionDialog" onFinished={this.props.onFinished}
-                onEnterPressed={ this.onOk }
-                title={title}
+                onEnterPressed={this.onOk}
+                title={this.props.title}
             >
                 <div className="mx_Dialog_content">
                     <div className="mx_ConfirmUserActionDialog_avatar">
-                        <MemberAvatar member={this.props.member} width={48} height={48} />
+                        { avatar }
                     </div>
-                    <div className="mx_ConfirmUserActionDialog_name">{this.props.member.name}</div>
-                    <div className="mx_ConfirmUserActionDialog_userId">{this.props.member.userId}</div>
+                    <div className="mx_ConfirmUserActionDialog_name">{ name }</div>
+                    <div className="mx_ConfirmUserActionDialog_userId">{ userId }</div>
                 </div>
-                {reasonBox}
+                { reasonBox }
                 <div className="mx_Dialog_buttons">
                     <button className={confirmButtonClass}
                         onClick={this.onOk} autoFocus={!this.props.askReason}
                     >
-                        {this.props.action}
+                        { this.props.action }
                     </button>
 
                     <button onClick={this.onCancel}>

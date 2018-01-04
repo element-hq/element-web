@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ import dis from './dispatcher';
 import sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
+import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
 
 /*
  * Dispatches:
@@ -79,10 +81,11 @@ const Notifier = {
             if (ev.getContent().body) msg = ev.getContent().body;
         }
 
-        const avatarUrl = ev.sender ? Avatar.avatarUrlForMember(
-            ev.sender, 40, 40, 'crop'
-        ) : null;
+        if (!this.isBodyEnabled()) {
+            msg = '';
+        }
 
+        const avatarUrl = ev.sender ? Avatar.avatarUrlForMember(ev.sender, 40, 40, 'crop') : null;
         const notif = plaf.displayNotification(title, msg, avatarUrl, room);
 
         // if displayNotification returns non-null,  the platform supports
@@ -96,17 +99,16 @@ const Notifier = {
     _playAudioNotification: function(ev, room) {
         const e = document.getElementById("messageAudio");
         if (e) {
-            e.load();
             e.play();
         }
     },
 
     start: function() {
-        this.boundOnRoomTimeline = this.onRoomTimeline.bind(this);
+        this.boundOnEvent = this.onEvent.bind(this);
         this.boundOnSyncStateChange = this.onSyncStateChange.bind(this);
         this.boundOnRoomReceipt = this.onRoomReceipt.bind(this);
         this.boundOnEventDecrypted = this.onEventDecrypted.bind(this);
-        MatrixClientPeg.get().on('Room.timeline', this.boundOnRoomTimeline);
+        MatrixClientPeg.get().on('event', this.boundOnEvent);
         MatrixClientPeg.get().on('Room.receipt', this.boundOnRoomReceipt);
         MatrixClientPeg.get().on('Event.decrypted', this.boundOnEventDecrypted);
         MatrixClientPeg.get().on("sync", this.boundOnSyncStateChange);
@@ -116,7 +118,7 @@ const Notifier = {
 
     stop: function() {
         if (MatrixClientPeg.get() && this.boundOnRoomTimeline) {
-            MatrixClientPeg.get().removeListener('Room.timeline', this.boundOnRoomTimeline);
+            MatrixClientPeg.get().removeListener('Event', this.boundOnEvent);
             MatrixClientPeg.get().removeListener('Room.receipt', this.boundOnRoomReceipt);
             MatrixClientPeg.get().removeListener('Event.decrypted', this.boundOnEventDecrypted);
             MatrixClientPeg.get().removeListener('sync', this.boundOnSyncStateChange);
@@ -137,10 +139,8 @@ const Notifier = {
 
         // make sure that we persist the current setting audio_enabled setting
         // before changing anything
-        if (global.localStorage) {
-            if (global.localStorage.getItem('audio_notifications_enabled') === null) {
-                this.setAudioEnabled(this.isEnabled());
-            }
+        if (SettingsStore.isLevelSupported(SettingLevel.DEVICE)) {
+            SettingsStore.setValue("audioNotificationsEnabled", null, SettingLevel.DEVICE, this.isEnabled());
         }
 
         if (enable) {
@@ -148,6 +148,7 @@ const Notifier = {
             plaf.requestNotificationPermission().done((result) => {
                 if (result !== 'granted') {
                     // The permission request was dismissed or denied
+                    // TODO: Support alternative branding in messaging
                     const description = result === 'denied'
                         ? _t('Riot does not have permission to send you notifications - please check your browser settings')
                         : _t('Riot was not given permission to send notifications - please try again');
@@ -157,10 +158,6 @@ const Notifier = {
                         description,
                     });
                     return;
-                }
-
-                if (global.localStorage) {
-                    global.localStorage.setItem('notifications_enabled', 'true');
                 }
 
                 if (callback) callback();
@@ -173,8 +170,6 @@ const Notifier = {
             // disabled again in the future, we will show the banner again.
             this.setToolbarHidden(false);
         } else {
-            if (!global.localStorage) return;
-            global.localStorage.setItem('notifications_enabled', 'false');
             dis.dispatch({
                 action: "notifier_enabled",
                 value: false,
@@ -183,31 +178,24 @@ const Notifier = {
     },
 
     isEnabled: function() {
+        return this.isPossible() && SettingsStore.getValue("notificationsEnabled");
+    },
+
+    isPossible: function() {
         const plaf = PlatformPeg.get();
         if (!plaf) return false;
         if (!plaf.supportsNotifications()) return false;
         if (!plaf.maySendNotifications()) return false;
 
-        if (!global.localStorage) return true;
-
-        const enabled = global.localStorage.getItem('notifications_enabled');
-        if (enabled === null) return true;
-        return enabled === 'true';
+        return true; // possible, but not necessarily enabled
     },
 
-    setAudioEnabled: function(enable) {
-        if (!global.localStorage) return;
-        global.localStorage.setItem('audio_notifications_enabled',
-            enable ? 'true' : 'false');
+    isBodyEnabled: function() {
+        return this.isEnabled() && SettingsStore.getValue("notificationBodyEnabled");
     },
 
-    isAudioEnabled: function(enable) {
-        if (!global.localStorage) return true;
-        const enabled = global.localStorage.getItem(
-            'audio_notifications_enabled');
-        // default to true if the popups are enabled
-        if (enabled === null) return this.isEnabled();
-        return enabled === 'true';
+    isAudioEnabled: function() {
+        return this.isEnabled() && SettingsStore.getValue("audioNotificationsEnabled");
     },
 
     setToolbarHidden: function(hidden, persistent = true) {
@@ -224,16 +212,14 @@ const Notifier = {
 
         // update the info to localStorage for persistent settings
         if (persistent && global.localStorage) {
-            global.localStorage.setItem('notifications_hidden', hidden);
+            global.localStorage.setItem("notifications_hidden", hidden);
         }
     },
 
     isToolbarHidden: function() {
         // Check localStorage for any such meta data
         if (global.localStorage) {
-            if (global.localStorage.getItem('notifications_hidden') === 'true') {
-                return true;
-            }
+            return global.localStorage.getItem("notifications_hidden") === "true";
         }
 
         return this.toolbarHidden;
@@ -247,12 +233,9 @@ const Notifier = {
         }
     },
 
-    onRoomTimeline: function(ev, room, toStartOfTimeline, removed, data) {
-        if (toStartOfTimeline) return;
-        if (!room) return;
+    onEvent: function(ev) {
         if (!this.isSyncing) return; // don't alert for any messages initially
         if (ev.sender && ev.sender.userId === MatrixClientPeg.get().credentials.userId) return;
-        if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
 
         // If it's an encrypted event and the type is still 'm.room.encrypted',
         // it hasn't yet been decrypted, so wait until it is.
@@ -306,7 +289,7 @@ const Notifier = {
                 this._playAudioNotification(ev, room);
             }
         }
-    }
+    },
 };
 
 if (!global.mxNotifier) {

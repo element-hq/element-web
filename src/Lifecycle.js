@@ -389,6 +389,8 @@ function _persistCredentialsToLocalStorage(credentials) {
  * Logs the current session out and transitions to the logged-out state
  */
 export function logout() {
+    if (!MatrixClientPeg.get()) return;
+
     if (MatrixClientPeg.get().isGuest()) {
         // logout doesn't work for guest sessions
         // Also we sometimes want to re-log in a guest session
@@ -436,6 +438,10 @@ function startMatrixClient() {
     DMRoomMap.makeShared().start();
 
     MatrixClientPeg.start();
+
+    // dispatch that we finished starting up to wire up any other bits
+    // of the matrix client that cannot be set prior to starting up.
+    dis.dispatch({action: 'client_started'});
 }
 
 /*

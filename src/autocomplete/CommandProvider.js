@@ -1,6 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { _t } from '../languageHandler';
+import { _t, _td } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import FuzzyMatcher from './FuzzyMatcher';
 import {TextualCompletion} from './Components';
@@ -27,79 +28,87 @@ const COMMANDS = [
     {
         command: '/me',
         args: '<message>',
-        description: 'Displays action',
+        description: _td('Displays action'),
     },
     {
         command: '/ban',
         args: '<user-id> [reason]',
-        description: 'Bans user with given id',
+        description: _td('Bans user with given id'),
     },
     {
         command: '/unban',
         args: '<user-id>',
-        description: 'Unbans user with given id',
+        description: _td('Unbans user with given id'),
     },
     {
         command: '/op',
         args: '<user-id> [<power-level>]',
-        description: 'Define the power level of a user',
+        description: _td('Define the power level of a user'),
     },
     {
         command: '/deop',
         args: '<user-id>',
-        description: 'Deops user with given id',
+        description: _td('Deops user with given id'),
     },
     {
         command: '/invite',
         args: '<user-id>',
-        description: 'Invites user with given id to current room',
+        description: _td('Invites user with given id to current room'),
     },
     {
         command: '/join',
         args: '<room-alias>',
-        description: 'Joins room with given alias',
+        description: _td('Joins room with given alias'),
     },
     {
         command: '/part',
         args: '[<room-alias>]',
-        description: 'Leave room',
+        description: _td('Leave room'),
     },
     {
         command: '/topic',
         args: '<topic>',
-        description: 'Sets the room topic',
+        description: _td('Sets the room topic'),
     },
     {
         command: '/kick',
         args: '<user-id> [reason]',
-        description: 'Kicks user with given id',
+        description: _td('Kicks user with given id'),
     },
     {
         command: '/nick',
         args: '<display-name>',
-        description: 'Changes your display nickname',
+        description: _td('Changes your display nickname'),
     },
     {
         command: '/ddg',
         args: '<query>',
-        description: 'Searches DuckDuckGo for results',
+        description: _td('Searches DuckDuckGo for results'),
     },
     {
         command: '/tint',
         args: '<color1> [<color2>]',
-        description: 'Changes colour scheme of current room',
+        description: _td('Changes colour scheme of current room'),
     },
     {
         command: '/verify',
         args: '<user-id> <device-id> <device-signing-key>',
-        description: 'Verifies a user, device, and pubkey tuple',
+        description: _td('Verifies a user, device, and pubkey tuple'),
+    },
+    {
+        command: '/ignore',
+        args: '<user-id>',
+        description: _td('Ignores a user, hiding their messages from you'),
+    },
+    {
+        command: '/unignore',
+        args: '<user-id>',
+        description: _td('Stops ignoring a user, showing their messages going forward'),
     },
     // Omitting `/markdown` as it only seems to apply to OldComposer
 ];
 
 const COMMAND_RE = /(^\/\w*)/g;
-
-let instance = null;
 
 export default class CommandProvider extends AutocompleteProvider {
     constructor() {
@@ -119,7 +128,7 @@ export default class CommandProvider extends AutocompleteProvider {
                     component: (<TextualCompletion
                         title={result.command}
                         subtitle={result.args}
-                        description={ _t(result.description) }
+                        description={_t(result.description)}
                         />),
                     range,
                 };
@@ -132,15 +141,9 @@ export default class CommandProvider extends AutocompleteProvider {
         return '*️⃣ ' + _t('Commands');
     }
 
-    static getInstance(): CommandProvider {
-        if (instance === null) instance = new CommandProvider();
-
-        return instance;
-    }
-
     renderCompletions(completions: [React.Component]): ?React.Component {
         return <div className="mx_Autocomplete_Completion_container_block">
-            {completions}
+            { completions }
         </div>;
     }
 }

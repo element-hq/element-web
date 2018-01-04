@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "0.10.2",
+  "version": "0.11.3",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -28,19 +28,24 @@
     "test"
   ],
   "bin": {
-    "reskindex": "scripts/reskindex.js"
+    "reskindex": "scripts/reskindex.js",
+    "matrix-gen-i18n": "scripts/gen-i18n.js",
+    "matrix-prune-i18n": "scripts/prune-i18n.js"
   },
   "scripts": {
     "reskindex": "node scripts/reskindex.js -h header",
     "reskindex:watch": "node scripts/reskindex.js -h header -w",
+    "i18n": "matrix-gen-i18n",
+    "prunei18n": "matrix-prune-i18n",
     "build": "npm run reskindex && babel src -d lib --source-maps --copy-files",
     "build:watch": "babel src -w -d lib --source-maps --copy-files",
     "emoji-data-strip": "node scripts/emoji-data-strip.js",
     "start": "parallelshell \"npm run build:watch\" \"npm run reskindex:watch\"",
     "lint": "eslint src/",
     "lintall": "eslint src/ test/",
+    "lintwithexclusions": "eslint --max-warnings 0 --ignore-path .eslintignore.errorfiles src test",
     "clean": "rimraf lib",
-    "prepublish": "npm run build && git rev-parse HEAD > git-revision.txt",
+    "prepublish": "npm run clean && npm run build && git rev-parse HEAD > git-revision.txt",
     "test": "karma start --single-run=true --browsers ChromeHeadless",
     "test-multi": "karma start"
   },
@@ -66,11 +71,14 @@
     "isomorphic-fetch": "^2.2.1",
     "linkifyjs": "^2.1.3",
     "lodash": "^4.13.1",
-    "matrix-js-sdk": "0.8.2",
+    "matrix-js-sdk": "0.9.2",
     "optimist": "^0.6.1",
     "prop-types": "^15.5.8",
+    "querystring": "^0.2.0",
     "react": "^15.4.0",
     "react-addons-css-transition-group": "15.3.2",
+    "react-dnd": "^2.1.4",
+    "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.4.0",
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
     "sanitize-html": "^1.14.1",
@@ -99,8 +107,10 @@
     "eslint-config-google": "^0.7.1",
     "eslint-plugin-babel": "^4.0.1",
     "eslint-plugin-flowtype": "^2.30.0",
-    "eslint-plugin-react": "^6.9.0",
+    "eslint-plugin-react": "^7.4.0",
+    "estree-walker": "^0.5.0",
     "expect": "^1.16.0",
+    "flow-parser": "^0.57.3",
     "json-loader": "^0.5.3",
     "karma": "^1.7.0",
     "karma-chrome-launcher": "^0.2.3",
@@ -114,12 +124,13 @@
     "karma-webpack": "^1.7.0",
     "matrix-react-test-utils": "^0.1.1",
     "mocha": "^2.4.5",
-    "parallelshell": "^1.2.0",
+    "parallelshell": "^3.0.2",
     "react-addons-test-utils": "^15.4.0",
     "require-json": "0.0.1",
     "rimraf": "^2.4.3",
     "sinon": "^1.17.3",
     "source-map-loader": "^0.1.5",
+    "walk": "^2.3.9",
     "webpack": "^1.12.14"
   }
 }

@@ -21,8 +21,8 @@ import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
 import Promise from 'bluebird';
-import UserSettingsStore from '../../../UserSettingsStore';
 import { _t } from '../../../languageHandler';
+import SettingsStore from "../../../settings/SettingsStore";
 
 module.exports = React.createClass({
     displayName: 'MVideoBody',
@@ -54,13 +54,12 @@ module.exports = React.createClass({
             // no scaling needs to be applied
             return 1;
         }
-        var widthMulti = thumbWidth / fullWidth;
-        var heightMulti = thumbHeight / fullHeight;
+        const widthMulti = thumbWidth / fullWidth;
+        const heightMulti = thumbHeight / fullHeight;
         if (widthMulti < heightMulti) {
             // width is the dominant dimension so scaling will be fixed on that
             return widthMulti;
-        }
-        else {
+        } else {
             // height is the dominant dimension so scaling will be fixed on that
             return heightMulti;
         }
@@ -89,15 +88,15 @@ module.exports = React.createClass({
     componentDidMount: function() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            var thumbnailPromise = Promise.resolve(null);
+            let thumbnailPromise = Promise.resolve(null);
             if (content.info.thumbnail_file) {
                 thumbnailPromise = decryptFile(
-                    content.info.thumbnail_file
+                    content.info.thumbnail_file,
                 ).then(function(blob) {
                     return readBlobAsDataUri(blob);
                 });
             }
-            var decryptedBlob;
+            let decryptedBlob;
             thumbnailPromise.then((thumbnailUrl) => {
                 return decryptFile(content.file).then(function(blob) {
                     decryptedBlob = blob;
@@ -126,8 +125,8 @@ module.exports = React.createClass({
         if (this.state.error !== null) {
             return (
                 <span className="mx_MVideoBody" ref="body">
-                    <img src="img/warning.svg" width="16" height="16"/>
-                    {_t("Error decrypting video")}
+                    <img src="img/warning.svg" width="16" height="16" />
+                    { _t("Error decrypting video") }
                 </span>
             );
         }
@@ -144,7 +143,7 @@ module.exports = React.createClass({
                         "justify-items": "center",
                         "width": "100%",
                     }}>
-                        <img src="img/spinner.gif" alt={content.body} width="16" height="16"/>
+                        <img src="img/spinner.gif" alt={content.body} width="16" height="16" />
                     </div>
                 </span>
             );
@@ -152,7 +151,7 @@ module.exports = React.createClass({
 
         const contentUrl = this._getContentUrl();
         const thumbUrl = this._getThumbUrl();
-        const autoplay = UserSettingsStore.getSyncedSetting("autoplayGifsAndVideos", false);
+        const autoplay = SettingsStore.getValue("autoplayGifsAndVideos");
         let height = null;
         let width = null;
         let poster = null;

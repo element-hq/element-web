@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@ import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import Autocomplete from './Autocomplete';
-import UserSettingsStore from '../../../UserSettingsStore';
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 
 export default class MessageComposer extends React.Component {
@@ -48,10 +49,10 @@ export default class MessageComposer extends React.Component {
             inputState: {
                 style: [],
                 blockType: null,
-                isRichtextEnabled: UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', false),
+                isRichtextEnabled: SettingsStore.getValue('MessageComposerInput.isRichTextEnabled'),
                 wordCount: 0,
             },
-            showFormatting: UserSettingsStore.getSyncedSetting('MessageComposer.showFormatting', false),
+            showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
         };
     }
 
@@ -89,13 +90,13 @@ export default class MessageComposer extends React.Component {
     }
 
     uploadFiles(files) {
-        let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        let TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        let fileList = [];
+        const fileList = [];
         for (let i=0; i<files.length; i++) {
             fileList.push(<li key={i}>
-                <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> {files[i].name || _t('Attachment')}
+                <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') }
             </li>);
         }
 
@@ -105,15 +106,15 @@ export default class MessageComposer extends React.Component {
                 <div>
                     <p>{ _t('Are you sure you want to upload the following files?') }</p>
                     <ul style={{listStyle: 'none', textAlign: 'left'}}>
-                        {fileList}
+                        { fileList }
                     </ul>
                 </div>
             ),
             onFinished: (shouldUpload) => {
-                if(shouldUpload) {
+                if (shouldUpload) {
                     // MessageComposer shouldn't have to rely on its parent passing in a callback to upload a file
                     if (files) {
-                        for(let i=0; i<files.length; i++) {
+                        for (let i=0; i<files.length; i++) {
                             this.props.uploadFile(files[i]);
                         }
                     }
@@ -225,7 +226,7 @@ export default class MessageComposer extends React.Component {
     }
 
     onToggleFormattingClicked() {
-        UserSettingsStore.setSyncedSetting('MessageComposer.showFormatting', !this.state.showFormatting);
+        SettingsStore.setValue("MessageComposer.showFormatting", null, SettingLevel.DEVICE, !this.state.showFormatting);
         this.setState({showFormatting: !this.state.showFormatting});
     }
 
@@ -237,7 +238,7 @@ export default class MessageComposer extends React.Component {
     render() {
         const me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
         const uploadInputStyle = {display: 'none'};
-        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
+        const MemberPresenceAvatar = sdk.getComponent('avatars.MemberPresenceAvatar');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
 
@@ -245,7 +246,7 @@ export default class MessageComposer extends React.Component {
 
         controls.push(
             <div key="controls_avatar" className="mx_MessageComposer_avatar">
-                <MemberAvatar member={me} width={24} height={24} />
+                <MemberPresenceAvatar member={me} width={24} height={24} />
             </div>,
         );
 
@@ -271,32 +272,30 @@ export default class MessageComposer extends React.Component {
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
                 <div key="controls_hangup" className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
-                    <img src="img/hangup.svg" alt={ _t('Hangup') } title={ _t('Hangup') } width="25" height="26"/>
+                    <img src="img/hangup.svg" alt={_t('Hangup')} title={_t('Hangup')} width="25" height="26" />
                 </div>;
         } else {
             callButton =
-                <div key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title={ _t('Voice call') }>
-                    <TintableSvg src="img/icon-call.svg" width="35" height="35"/>
+                <div key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title={_t('Voice call')}>
+                    <TintableSvg src="img/icon-call.svg" width="35" height="35" />
                 </div>;
             videoCallButton =
-                <div key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title={ _t('Video call') }>
-                    <TintableSvg src="img/icons-video.svg" width="35" height="35"/>
+                <div key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title={_t('Video call')}>
+                    <TintableSvg src="img/icons-video.svg" width="35" height="35" />
                 </div>;
         }
 
         // Apps
-        if (UserSettingsStore.isFeatureEnabled('matrix_apps')) {
-            if (this.props.showApps) {
-                hideAppsButton =
-                    <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title={_t("Hide Apps")}>
-                        <TintableSvg src="img/icons-hide-apps.svg" width="35" height="35"/>
-                    </div>;
-            } else {
-                showAppsButton =
-                    <div key="show_apps" className="mx_MessageComposer_apps" onClick={this.onShowAppsClick} title={_t("Show Apps")}>
-                        <TintableSvg src="img/icons-show-apps.svg" width="35" height="35"/>
-                    </div>;
-            }
+        if (this.props.showApps) {
+            hideAppsButton =
+                <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title={_t("Hide Apps")}>
+                    <TintableSvg src="img/icons-hide-apps.svg" width="35" height="35" />
+                </div>;
+        } else {
+            showAppsButton =
+                <div key="show_apps" className="mx_MessageComposer_apps" onClick={this.onShowAppsClick} title={_t("Show Apps")}>
+                    <TintableSvg src="img/icons-show-apps.svg" width="35" height="35" />
+                </div>;
         }
 
         const canSendMessages = this.props.room.currentState.maySendMessage(
@@ -308,8 +307,8 @@ export default class MessageComposer extends React.Component {
             // complex because of conference calls.
             const uploadButton = (
                 <div key="controls_upload" className="mx_MessageComposer_upload"
-                        onClick={this.onUploadClick} title={ _t('Upload file') }>
-                    <TintableSvg src="img/icons-upload.svg" width="35" height="35"/>
+                        onClick={this.onUploadClick} title={_t('Upload file')}>
+                    <TintableSvg src="img/icons-upload.svg" width="35" height="35" />
                     <input ref="uploadInput" type="file"
                         style={uploadInputStyle}
                         multiple
@@ -363,7 +362,7 @@ export default class MessageComposer extends React.Component {
                 const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
                 const className = 'mx_MessageComposer_format_button mx_filterFlipColor';
                 return <img className={className}
-                            title={ _t(name) }
+                            title={_t(name)}
                             onMouseDown={onFormatButtonClicked}
                             key={name}
                             src={`img/button-text-${name}${suffix}.svg`}
@@ -372,21 +371,21 @@ export default class MessageComposer extends React.Component {
         );
 
         return (
-            <div className="mx_MessageComposer mx_fadable" style={{ opacity: this.props.opacity }}>
+            <div className="mx_MessageComposer">
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
-                        {controls}
+                        { controls }
                     </div>
                 </div>
                 <div className="mx_MessageComposer_formatbar_wrapper">
                     <div className="mx_MessageComposer_formatbar" style={this.state.showFormatting ? {} : {display: 'none'}}>
-                        {formatButtons}
+                        { formatButtons }
                         <div style={{flex: 1}}></div>
-                        <img title={ this.state.inputState.isRichtextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off") }
+                        <img title={this.state.inputState.isRichtextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off")}
                              onMouseDown={this.onToggleMarkdownClicked}
                             className="mx_MessageComposer_formatbar_markdown mx_filterFlipColor"
                             src={`img/button-md-${!this.state.inputState.isRichtextEnabled}.png`} />
-                        <img title={ _t("Hide Text Formatting Toolbar") }
+                        <img title={_t("Hide Text Formatting Toolbar")}
                              onClick={this.onToggleFormattingClicked}
                              className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
                              src="img/icon-text-cancel.svg" />
@@ -410,9 +409,6 @@ MessageComposer.propTypes = {
 
     // callback when a file to upload is chosen
     uploadFile: React.PropTypes.func.isRequired,
-
-    // opacity for dynamic UI fading effects
-    opacity: React.PropTypes.number,
 
     // string representing the current room app drawer state
     showApps: React.PropTypes.bool,

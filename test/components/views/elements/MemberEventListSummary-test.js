@@ -88,6 +88,9 @@ describe('MemberEventListSummary', function() {
         sandbox = testUtils.stubClient();
 
         languageHandler.setLanguage('en').done(done);
+        languageHandler.setMissingEntryGenerator(function(key) {
+            return key.split('|', 2)[1];
+        });
     });
 
     afterEach(function() {
@@ -155,10 +158,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />
+            <MemberEventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_MemberEventListSummary_summary"
+            instance, "mx_MemberEventListSummary_summary",
         );
         const summaryText = summary.innerText;
 
@@ -191,10 +194,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />
+            <MemberEventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_MemberEventListSummary_summary"
+            instance, "mx_MemberEventListSummary_summary",
         );
         const summaryText = summary.innerText;
 
@@ -239,15 +242,15 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />
+            <MemberEventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_MemberEventListSummary_summary"
+            instance, "mx_MemberEventListSummary_summary",
         );
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
-            "user_1 was unbanned, joined and left 7 times and was invited"
+            "user_1 was unbanned, joined and left 7 times and was invited",
         );
     });
 
@@ -292,16 +295,16 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />
+            <MemberEventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_MemberEventListSummary_summary"
+            instance, "mx_MemberEventListSummary_summary",
         );
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
             "user_1 was unbanned, joined and left 2 times, was banned, " +
-            "joined and left 3 times and was invited"
+            "joined and left 3 times and was invited",
         );
     });
 
@@ -351,15 +354,15 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />
+            <MemberEventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_MemberEventListSummary_summary"
+            instance, "mx_MemberEventListSummary_summary",
         );
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
-            "user_1 and one other were unbanned, joined and left 2 times and were banned"
+            "user_1 and one other were unbanned, joined and left 2 times and were banned",
         );
     });
 
@@ -389,15 +392,15 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />
+            <MemberEventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_MemberEventListSummary_summary"
+            instance, "mx_MemberEventListSummary_summary",
         );
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
-            "user_0 and 19 others were unbanned, joined and left 2 times and were banned"
+            "user_0 and 19 others were unbanned, joined and left 2 times and were banned",
         );
     });
 
@@ -440,16 +443,16 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />
+            <MemberEventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_MemberEventListSummary_summary"
+            instance, "mx_MemberEventListSummary_summary",
         );
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
             "user_2 was unbanned and joined and left 2 times, user_1 was unbanned, " +
-            "joined and left 2 times and was banned"
+            "joined and left 2 times and was banned",
         );
     });
 
@@ -507,16 +510,16 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />
+            <MemberEventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_MemberEventListSummary_summary"
+            instance, "mx_MemberEventListSummary_summary",
         );
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
             "user_1 was invited, was banned, joined, rejected their invitation, left, " +
-            "had their invitation withdrawn, was unbanned, was kicked and left"
+            "had their invitation withdrawn, was unbanned, was kicked and left",
         );
     });
 
@@ -554,16 +557,16 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />
+            <MemberEventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_MemberEventListSummary_summary"
+            instance, "mx_MemberEventListSummary_summary",
         );
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
             "user_1 and one other rejected their invitations and " +
-            "had their invitations withdrawn"
+            "had their invitations withdrawn",
         );
     });
 
@@ -590,15 +593,15 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />
+            <MemberEventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_MemberEventListSummary_summary"
+            instance, "mx_MemberEventListSummary_summary",
         );
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
-            "user_1 rejected their invitation 2 times"
+            "user_1 rejected their invitation 2 times",
         );
     });
 
@@ -618,15 +621,15 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />
+            <MemberEventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_MemberEventListSummary_summary"
+            instance, "mx_MemberEventListSummary_summary",
         );
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
-            "user_1 and user_2 joined 2 times"
+            "user_1 and user_2 joined 2 times",
         );
     });
 
@@ -645,15 +648,15 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />
+            <MemberEventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_MemberEventListSummary_summary"
+            instance, "mx_MemberEventListSummary_summary",
         );
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
-            "user_1, user_2 and one other joined"
+            "user_1, user_2 and one other joined",
         );
     });
 
@@ -670,15 +673,15 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />
+            <MemberEventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_MemberEventListSummary_summary"
+            instance, "mx_MemberEventListSummary_summary",
         );
         const summaryText = summary.innerText;
 
         expect(summaryText).toBe(
-            "user_0, user_1 and 18 others joined"
+            "user_0, user_1 and 18 others joined",
         );
     });
 });

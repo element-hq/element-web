@@ -26,6 +26,8 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import RegistrationForm from '../../views/login/RegistrationForm';
 import RtsClient from '../../../RtsClient';
 import { _t } from '../../../languageHandler';
+import SdkConfig from '../../../SdkConfig';
+import SettingsStore from "../../../settings/SettingsStore";
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -57,7 +59,7 @@ module.exports = React.createClass({
 
         // registration shouldn't know or care how login is done.
         onLoginClick: React.PropTypes.func.isRequired,
-        onCancelClick: React.PropTypes.func
+        onCancelClick: React.PropTypes.func,
     },
 
     getInitialState: function() {
@@ -121,7 +123,7 @@ module.exports = React.createClass({
     },
 
     onServerConfigChange: function(config) {
-        let newState = {};
+        const newState = {};
         if (config.hsUrl !== undefined) {
             newState.hsUrl = config.hsUrl;
         }
@@ -195,7 +197,7 @@ module.exports = React.createClass({
 
                 this._rtsClient.getTeam(teamToken).then((team) => {
                     console.log(
-                        `User successfully registered with team ${team.name}`
+                        `User successfully registered with team ${team.name}`,
                     );
                     if (!team.rooms) {
                         return;
@@ -223,7 +225,7 @@ module.exports = React.createClass({
                 deviceId: response.device_id,
                 homeserverUrl: this._matrixClient.getHomeserverUrl(),
                 identityServerUrl: this._matrixClient.getIdentityServerUrl(),
-                accessToken: response.access_token
+                accessToken: response.access_token,
             }, teamToken);
         }).then((cli) => {
             return this._setupPushers(cli);
@@ -253,7 +255,7 @@ module.exports = React.createClass({
     },
 
     onFormValidationFailed: function(errCode) {
-        var errMsg;
+        let errMsg;
         switch (errCode) {
             case "RegistrationForm.ERR_PASSWORD_MISSING":
                 errMsg = _t('Missing password.');
@@ -282,7 +284,7 @@ module.exports = React.createClass({
                 break;
         }
         this.setState({
-            errorText: errMsg
+            errorText: errMsg,
         });
     },
 
@@ -316,15 +318,18 @@ module.exports = React.createClass({
             emailAddress: this.state.formVals.email,
             phoneCountry: this.state.formVals.phoneCountry,
             phoneNumber: this.state.formVals.phoneNumber,
-        }
+        };
     },
 
     render: function() {
         const LoginHeader = sdk.getComponent('login.LoginHeader');
         const LoginFooter = sdk.getComponent('login.LoginFooter');
+        const LoginPage = sdk.getComponent('login.LoginPage');
         const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
         const Spinner = sdk.getComponent("elements.Spinner");
         const ServerConfig = sdk.getComponent('views.login.ServerConfig');
+
+        const theme = SettingsStore.getValue("theme");
 
         let registerBody;
         if (this.state.doingUIAuth) {
@@ -344,9 +349,19 @@ module.exports = React.createClass({
         } else if (this.state.busy || this.state.teamServerBusy) {
             registerBody = <Spinner />;
         } else {
-            let errorSection;
-            if (this.state.errorText) {
-                errorSection = <div className="mx_Login_error">{this.state.errorText}</div>;
+            let serverConfigSection;
+            if (!SdkConfig.get().disable_custom_urls) {
+                serverConfigSection = (
+                    <ServerConfig ref="serverConfig"
+                        withToggleButton={true}
+                        customHsUrl={this.props.customHsUrl}
+                        customIsUrl={this.props.customIsUrl}
+                        defaultHsUrl={this.props.defaultHsUrl}
+                        defaultIsUrl={this.props.defaultIsUrl}
+                        onServerConfigChange={this.onServerConfigChange}
+                        delayTimeMs={1000}
+                    />
+                );
             }
             registerBody = (
                 <div>
@@ -362,30 +377,46 @@ module.exports = React.createClass({
                         onRegisterClick={this.onFormSubmit}
                         onTeamSelected={this.onTeamSelected}
                     />
-                    {errorSection}
-                    <ServerConfig ref="serverConfig"
-                        withToggleButton={true}
-                        customHsUrl={this.props.customHsUrl}
-                        customIsUrl={this.props.customIsUrl}
-                        defaultHsUrl={this.props.defaultHsUrl}
-                        defaultIsUrl={this.props.defaultIsUrl}
-                        onServerConfigChange={this.onServerConfigChange}
-                        delayTimeMs={1000}
-                    />
+                    { serverConfigSection }
                 </div>
             );
         }
 
         let returnToAppJsx;
+        /*
+        // with the advent of ILAG I don't think we need this any more
         if (this.props.onCancelClick) {
             returnToAppJsx = (
                 <a className="mx_Login_create" onClick={this.props.onCancelClick} href="#">
-                    {_t('Return to app')}
+                    { _t('Return to app') }
                 </a>
             );
         }
+        */
+
+        let header;
+        let errorText;
+        // FIXME: remove hardcoded Status team tweaks at some point
+        if (theme === 'status' && this.state.errorText) {
+            header = <div className="mx_Login_error">{ this.state.errorText }</div>;
+        } else {
+            header = <h2>{ _t('Create an account') }</h2>;
+            if (this.state.errorText) {
+                errorText = <div className="mx_Login_error">{ this.state.errorText }</div>;
+            }
+        }
+
+        let signIn;
+        if (!this.state.doingUIAuth) {
+            signIn = (
+                <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
+                    { theme === 'status' ? _t('Sign in') : _t('I already have an account') }
+                </a>
+            );
+        }
+
         return (
-            <div className="mx_Login">
+            <LoginPage>
                 <div className="mx_Login_box">
                     <LoginHeader
                         icon={this.state.teamSelected ?
@@ -393,15 +424,14 @@ module.exports = React.createClass({
                             this.state.teamSelected.domain + "/icon.png" :
                             null}
                     />
-                    <h2>{_t('Create an account')}</h2>
-                    {registerBody}
-                    <a className="mx_Login_create" onClick={this.props.onLoginClick} href="#">
-                        {_t('I already have an account')}
-                    </a>
-                    {returnToAppJsx}
+                    { header }
+                    { registerBody }
+                    { signIn }
+                    { errorText }
+                    { returnToAppJsx }
                     <LoginFooter />
                 </div>
-            </div>
+            </LoginPage>
         );
-    }
+    },
 });
