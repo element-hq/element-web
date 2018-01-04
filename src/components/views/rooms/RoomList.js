@@ -96,7 +96,7 @@ module.exports = React.createClass({
         this._visibleRooms = [];
         // When the selected tags are changed, initialise a group store if necessary
         this._tagStoreToken = TagOrderStore.addListener(() => {
-            TagOrderStore.getSelectedTags().forEach((tag) => {
+            (TagOrderStore.getOrderedTags() || []).forEach((tag) => {
                 if (tag[0] !== '+' || this._groupStores[tag]) {
                     return;
                 }
