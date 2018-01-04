@@ -45,11 +45,14 @@ module.exports = React.createClass({
         return {
             newGroupsList: this.props.relatedGroupsEvent ?
                 (this.props.relatedGroupsEvent.getContent().groups || []) : [],
+            hasChanged: false,
             newGroupId: null,
         };
     },
 
     saveSettings: function() {
+        if (!this.state.hasChanged) return Promise.resolve();
+
         return this.context.matrixClient.sendStateEvent(
             this.props.roomId,
             'm.room.related_groups',
@@ -82,6 +85,7 @@ module.exports = React.createClass({
         }
         this.setState({
             newGroupsList: this.state.newGroupsList.concat([groupId]),
+            hasChanged: true,
             newGroupId: '',
         });
     },
@@ -92,13 +96,14 @@ module.exports = React.createClass({
         }
         this.setState({
             newGroupsList: Object.assign(this.state.newGroupsList, {[index]: groupId}),
+            hasChanged: true,
         });
     },
 
     onGroupDeleted: function(index) {
         const newGroupsList = this.state.newGroupsList.slice();
-        newGroupsList.splice(index, 1),
-        this.setState({ newGroupsList });
+        newGroupsList.splice(index, 1);
+        this.setState({ newGroupsList, hasChanged: true });
     },
 
     render: function() {
