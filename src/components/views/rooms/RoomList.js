@@ -28,7 +28,7 @@ const rate_limited_func = require('../../../ratelimitedfunc');
 const Rooms = require('../../../Rooms');
 import DMRoomMap from '../../../utils/DMRoomMap';
 const Receipt = require('../../../utils/Receipt');
-import FilterStore from '../../../stores/FilterStore';
+import TagOrderStore from '../../../stores/TagOrderStore';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
 
 const HIDE_CONFERENCE_CHANS = true;
@@ -95,8 +95,8 @@ module.exports = React.createClass({
         // All rooms that should be kept in the room list when filtering
         this._visibleRooms = [];
         // When the selected tags are changed, initialise a group store if necessary
-        this._filterStoreToken = FilterStore.addListener(() => {
-            FilterStore.getSelectedTags().forEach((tag) => {
+        this._tagStoreToken = TagOrderStore.addListener(() => {
+            TagOrderStore.getSelectedTags().forEach((tag) => {
                 if (tag[0] !== '+' || this._groupStores[tag]) {
                     return;
                 }
@@ -182,8 +182,8 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Group.myMembership", this._onGroupMyMembership);
         }
 
-        if (this._filterStoreToken) {
-            this._filterStoreToken.remove();
+        if (this._tagStoreToken) {
+            this._tagStoreToken.remove();
         }
 
         if (this._groupStoreTokens.length > 0) {
@@ -298,14 +298,14 @@ module.exports = React.createClass({
     // Update which rooms and users should appear according to which tags are selected
     updateVisibleRooms: function() {
         this._visibleRooms = [];
-        FilterStore.getSelectedTags().forEach((tag) => {
+        TagOrderStore.getSelectedTags().forEach((tag) => {
             (this._visibleRoomsForGroup[tag] || []).forEach(
                 (roomId) => this._visibleRooms.push(roomId),
             );
         });
 
         this.setState({
-            selectedTags: FilterStore.getSelectedTags(),
+            selectedTags: TagOrderStore.getSelectedTags(),
         }, () => {
             this.refreshRoomList();
         });
@@ -362,7 +362,7 @@ module.exports = React.createClass({
                 // Used to split rooms via tags
                 const tagNames = Object.keys(room.tags);
 
-                // Apply TagPanel filtering, derived from FilterStore
+                // Apply TagPanel filtering, derived from TagOrderStore
                 if (!this.isRoomInSelectedTags(room)) {
                     return;
                 }
