@@ -15,25 +15,72 @@ limitations under the License.
 */
 
 import EventEmitter from 'events';
+import { groupMemberFromApiObject, groupRoomFromApiObject } from '../groups';
+import FlairStore from './FlairStore';
+import MatrixClientPeg from '../MatrixClientPeg';
 
 /**
  * Stores the group summary for a room and provides an API to change it and
  * other useful group APIs that may have an effect on the group summary.
  */
 export default class GroupStore extends EventEmitter {
-    constructor(matrixClient, groupId) {
+
+    static STATE_KEY = {
+        GroupMembers: 'GroupMembers',
+        GroupInvitedMembers: 'GroupInvitedMembers',
+        Summary: 'Summary',
+        GroupRooms: 'GroupRooms',
+    };
+
+    constructor(groupId) {
         super();
+        if (!groupId) {
+            throw new Error('GroupStore needs a valid groupId to be created');
+        }
         this.groupId = groupId;
-        this._matrixClient = matrixClient;
         this._summary = {};
         this._rooms = [];
-        this._fetchSummary();
-        this._fetchRooms();
+        this._members = [];
+        this._invitedMembers = [];
+        this._ready = {};
+
+        this.on('error', (err) => {
+            console.error(`GroupStore for ${this.groupId} encountered error`, err);
+        });
+    }
+
+    _fetchMembers() {
+        MatrixClientPeg.get().getGroupUsers(this.groupId).then((result) => {
+            this._members = result.chunk.map((apiMember) => {
+                return groupMemberFromApiObject(apiMember);
+            });
+            this._ready[GroupStore.STATE_KEY.GroupMembers] = true;
+            this._notifyListeners();
+        }).catch((err) => {
+            console.error("Failed to get group member list: " + err);
+            this.emit('error', err);
+        });
+
+        MatrixClientPeg.get().getGroupInvitedUsers(this.groupId).then((result) => {
+            this._invitedMembers = result.chunk.map((apiMember) => {
+                return groupMemberFromApiObject(apiMember);
+            });
+            this._ready[GroupStore.STATE_KEY.GroupInvitedMembers] = true;
+            this._notifyListeners();
+        }).catch((err) => {
+            // Invited users not visible to non-members
+            if (err.httpStatus === 403) {
+                return;
+            }
+            console.error("Failed to get group invited member list: " + err);
+            this.emit('error', err);
+        });
     }
 
     _fetchSummary() {
-        this._matrixClient.getGroupSummary(this.groupId).then((resp) => {
+        MatrixClientPeg.get().getGroupSummary(this.groupId).then((resp) => {
             this._summary = resp;
+            this._ready[GroupStore.STATE_KEY.Summary] = true;
             this._notifyListeners();
         }).catch((err) => {
             this.emit('error', err);
@@ -41,8 +88,11 @@ export default class GroupStore extends EventEmitter {
     }
 
     _fetchRooms() {
-        this._matrixClient.getGroupRooms(this.groupId).then((resp) => {
-            this._rooms = resp.chunk;
+        MatrixClientPeg.get().getGroupRooms(this.groupId).then((resp) => {
+            this._rooms = resp.chunk.map((apiRoom) => {
+                return groupRoomFromApiObject(apiRoom);
+            });
+            this._ready[GroupStore.STATE_KEY.GroupRooms] = true;
             this._notifyListeners();
         }).catch((err) => {
             this.emit('error', err);
@@ -53,6 +103,47 @@ export default class GroupStore extends EventEmitter {
         this.emit('update');
     }
 
+    /**
+     * Register a listener to recieve updates from the store. This also
+     * immediately triggers an update to send the current state of the
+     * store (which could be the initial state).
+     *
+     * XXX: This also causes a fetch of all group data, which effectively
+     * causes 4 separate HTTP requests. This is bad, we should at least
+     * deduplicate these in order to fix:
+     *  https://github.com/vector-im/riot-web/issues/5901
+     *
+     * @param {function} fn the function to call when the store updates.
+     * @return {Object} tok a registration "token" with a single
+     *                      property `unregister`, a function that can
+     *                      be called to unregister the listener such
+     *                      that it won't be called any more.
+     */
+    registerListener(fn) {
+        this.on('update', fn);
+        // Call to set initial state (before fetching starts)
+        this.emit('update');
+        this._fetchSummary();
+        this._fetchRooms();
+        this._fetchMembers();
+
+        // Similar to the Store of flux/utils, we return a "token" that
+        // can be used to unregister the listener.
+        return {
+            unregister: () => {
+                this.unregisterListener(fn);
+            },
+        };
+    }
+
+    unregisterListener(fn) {
+        this.removeListener('update', fn);
+    }
+
+    isStateReady(id) {
+        return this._ready[id];
+    }
+
     getSummary() {
         return this._summary;
     }
@@ -61,47 +152,83 @@ export default class GroupStore extends EventEmitter {
         return this._rooms;
     }
 
-    addRoomToGroup(roomId) {
-        return this._matrixClient
-            .addRoomToGroup(this.groupId, roomId)
+    getGroupMembers( ) {
+        return this._members;
+    }
+
+    getGroupInvitedMembers( ) {
+        return this._invitedMembers;
+    }
+
+    getGroupPublicity() {
+        return this._summary.user ? this._summary.user.is_publicised : null;
+    }
+
+    isUserPrivileged() {
+        return this._summary.user ? this._summary.user.is_privileged : null;
+    }
+
+    addRoomToGroup(roomId, isPublic) {
+        return MatrixClientPeg.get()
+            .addRoomToGroup(this.groupId, roomId, isPublic)
+            .then(this._fetchRooms.bind(this));
+    }
+
+    updateGroupRoomVisibility(roomId, isPublic) {
+        return MatrixClientPeg.get()
+            .updateGroupRoomVisibility(this.groupId, roomId, isPublic)
             .then(this._fetchRooms.bind(this));
     }
 
     removeRoomFromGroup(roomId) {
-        return this._matrixClient
+        return MatrixClientPeg.get()
             .removeRoomFromGroup(this.groupId, roomId)
             // Room might be in the summary, refresh just in case
             .then(this._fetchSummary.bind(this))
             .then(this._fetchRooms.bind(this));
     }
 
+    inviteUserToGroup(userId) {
+        return MatrixClientPeg.get().inviteUserToGroup(this.groupId, userId)
+            .then(this._fetchMembers.bind(this));
+    }
+
+    acceptGroupInvite() {
+        return MatrixClientPeg.get().acceptGroupInvite(this.groupId)
+            // The user might be able to see more rooms now
+            .then(this._fetchRooms.bind(this))
+            // The user should now appear as a member
+            .then(this._fetchMembers.bind(this));
+    }
+
     addRoomToGroupSummary(roomId, categoryId) {
-        return this._matrixClient
+        return MatrixClientPeg.get()
             .addRoomToGroupSummary(this.groupId, roomId, categoryId)
             .then(this._fetchSummary.bind(this));
     }
 
     addUserToGroupSummary(userId, roleId) {
-        return this._matrixClient
+        return MatrixClientPeg.get()
             .addUserToGroupSummary(this.groupId, userId, roleId)
             .then(this._fetchSummary.bind(this));
     }
 
     removeRoomFromGroupSummary(roomId) {
-        return this._matrixClient
+        return MatrixClientPeg.get()
             .removeRoomFromGroupSummary(this.groupId, roomId)
             .then(this._fetchSummary.bind(this));
     }
 
     removeUserFromGroupSummary(userId) {
-        return this._matrixClient
+        return MatrixClientPeg.get()
             .removeUserFromGroupSummary(this.groupId, userId)
             .then(this._fetchSummary.bind(this));
     }
 
     setGroupPublicity(isPublished) {
-        return this._matrixClient
+        return MatrixClientPeg.get()
             .setGroupPublicity(this.groupId, isPublished)
+            .then(() => { FlairStore.invalidatePublicisedGroups(MatrixClientPeg.get().credentials.userId); })
             .then(this._fetchSummary.bind(this));
     }
 }

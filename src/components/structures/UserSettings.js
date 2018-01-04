@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,6 +15,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+
 const React = require('react');
 const ReactDOM = require('react-dom');
 const sdk = require('../../index');
@@ -55,125 +58,69 @@ const gHVersionLabel = function(repo, token='') {
     return <a target="_blank" rel="noopener" href={url}>{ token }</a>;
 };
 
-// Enumerate some simple 'flip a bit' UI settings (if any).
-// 'id' gives the key name in the im.vector.web.settings account data event
-// 'label' is how we describe it in the UI.
-// Warning: Each "label" string below must be added to i18n/strings/en_EN.json,
-// since they will be translated when rendered.
-const SETTINGS_LABELS = [
-    {
-        id: 'autoplayGifsAndVideos',
-        label: _td('Autoplay GIFs and videos'),
-    },
-    {
-        id: 'hideReadReceipts',
-        label: _td('Hide read receipts'),
-    },
-    {
-        id: 'dontSendTypingNotifications',
-        label: _td("Don't send typing notifications"),
-    },
-    {
-        id: 'alwaysShowTimestamps',
-        label: _td('Always show message timestamps'),
-    },
-    {
-        id: 'showTwelveHourTimestamps',
-        label: _td('Show timestamps in 12 hour format (e.g. 2:30pm)'),
-    },
-    {
-        id: 'hideJoinLeaves',
-        label: _td('Hide join/leave messages (invites/kicks/bans unaffected)'),
-    },
-    {
-        id: 'hideAvatarDisplaynameChanges',
-        label: _td('Hide avatar and display name changes'),
-    },
-    {
-        id: 'useCompactLayout',
-        label: _td('Use compact timeline layout'),
-    },
-    {
-        id: 'hideRedactions',
-        label: _td('Hide removed messages'),
-    },
-    {
-        id: 'enableSyntaxHighlightLanguageDetection',
-        label: _td('Enable automatic language detection for syntax highlighting'),
-    },
-    {
-        id: 'MessageComposerInput.autoReplaceEmoji',
-        label: _td('Automatically replace plain text Emoji'),
-    },
-    {
-        id: 'MessageComposerInput.dontSuggestEmoji',
-        label: _td('Disable Emoji suggestions while typing'),
-    },
-    {
-        id: 'Pill.shouldHidePillAvatar',
-        label: _td('Hide avatars in user and room mentions'),
-    },
-/*
-    {
-        id: 'useFixedWidthFont',
-        label: 'Use fixed width font',
-    },
-*/
+// Enumerate some simple 'flip a bit' UI settings (if any). The strings provided here
+// must be settings defined in SettingsStore.
+const SIMPLE_SETTINGS = [
+    { id: "urlPreviewsEnabled" },
+    { id: "autoplayGifsAndVideos" },
+    { id: "hideReadReceipts" },
+    { id: "dontSendTypingNotifications" },
+    { id: "alwaysShowTimestamps" },
+    { id: "showTwelveHourTimestamps" },
+    { id: "hideJoinLeaves" },
+    { id: "hideAvatarChanges" },
+    { id: "hideDisplaynameChanges" },
+    { id: "useCompactLayout" },
+    { id: "hideRedactions" },
+    { id: "enableSyntaxHighlightLanguageDetection" },
+    { id: "MessageComposerInput.autoReplaceEmoji" },
+    { id: "MessageComposerInput.dontSuggestEmoji" },
+    { id: "Pill.shouldHidePillAvatar" },
+    { id: "TextualBody.disableBigEmoji" },
+    { id: "VideoView.flipVideoHorizontally" },
 ];
 
-const ANALYTICS_SETTINGS_LABELS = [
+// These settings must be defined in SettingsStore
+const ANALYTICS_SETTINGS = [
     {
         id: 'analyticsOptOut',
-        label: _td('Opt out of analytics'),
         fn: function(checked) {
             Analytics[checked ? 'disable' : 'enable']();
         },
     },
 ];
 
-const WEBRTC_SETTINGS_LABELS = [
+// These settings must be defined in SettingsStore
+const WEBRTC_SETTINGS = [
     {
         id: 'webRtcForceTURN',
-        label: _td('Disable Peer-to-Peer for 1:1 calls'),
+        fn: (val) => {
+            MatrixClientPeg.get().setForceTURN(val);
+        },
     },
 ];
 
-// Warning: Each "label" string below must be added to i18n/strings/en_EN.json,
-// since they will be translated when rendered.
-const CRYPTO_SETTINGS_LABELS = [
+// These settings must be defined in SettingsStore
+const CRYPTO_SETTINGS = [
     {
         id: 'blacklistUnverifiedDevices',
-        label: _td('Never send encrypted messages to unverified devices from this device'),
         fn: function(checked) {
             MatrixClientPeg.get().setGlobalBlacklistUnverifiedDevices(checked);
         },
     },
-    // XXX: this is here for documentation; the actual setting is managed via RoomSettings
-    // {
-    //     id: 'blacklistUnverifiedDevicesPerRoom'
-    //     label: 'Never send encrypted messages to unverified devices in this room',
-    // }
 ];
 
 // Enumerate the available themes, with a nice human text label.
-// 'id' gives the key name in the im.vector.web.settings account data event
-// 'value' is the value for that key in the event
 // 'label' is how we describe it in the UI.
+// 'value' is the value for the theme setting
 //
 // XXX: Ideally we would have a theme manifest or something and they'd be nicely
 // packaged up in a single directory, and/or located at the application layer.
 // But for now for expedience we just hardcode them here.
 const THEMES = [
-    {
-        id: 'theme',
-        label: _td('Light theme'),
-        value: 'light',
-    },
-    {
-        id: 'theme',
-        label: _td('Dark theme'),
-        value: 'dark',
-    },
+    { label: _td('Light theme'), value: 'light' },
+    { label: _td('Dark theme'), value: 'dark' },
+    { label: _td('Status.im theme'), value: 'status' },
 ];
 
 const IgnoredUser = React.createClass({
@@ -195,7 +142,7 @@ const IgnoredUser = React.createClass({
     render: function() {
         return (
             <li>
-                <AccessibleButton onClick={this._onUnignoreClick} className="mx_UserSettings_button mx_UserSettings_buttonSmall">
+                <AccessibleButton onClick={this._onUnignoreClick} className="mx_textButton">
                     { _t("Unignore") }
                 </AccessibleButton>
                 { this.props.userId }
@@ -212,9 +159,6 @@ module.exports = React.createClass({
         // The brand string given when creating email pushers
         brand: React.PropTypes.string,
 
-        // True to show the 'labs' section of experimental features
-        enableLabs: React.PropTypes.bool,
-
         // The base URL to use in the referral link. Defaults to window.location.origin.
         referralBaseUrl: React.PropTypes.string,
 
@@ -226,7 +170,6 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             onClose: function() {},
-            enableLabs: true,
         };
     },
 
@@ -270,19 +213,11 @@ module.exports = React.createClass({
         MatrixClientPeg.get().on("RoomMember.membership", this._onInviteStateChange);
 
         dis.dispatch({
-            action: 'ui_opacity',
-            sideOpacity: 0.3,
-            middleOpacity: 0.3,
+            action: 'panel_disable',
+            sideDisabled: true,
+            middleDisabled: true,
         });
         this._refreshFromServer();
-
-        const syncedSettings = UserSettingsStore.getSyncedSettings();
-        if (!syncedSettings.theme) {
-            syncedSettings.theme = 'light';
-        }
-        this._syncedSettings = syncedSettings;
-
-        this._localSettings = UserSettingsStore.getLocalSettings();
 
         if (PlatformPeg.get().isElectron()) {
             const {ipcRenderer} = require('electron');
@@ -310,9 +245,9 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         this._unmounted = true;
         dis.dispatch({
-            action: 'ui_opacity',
-            sideOpacity: 1.0,
-            middleOpacity: 1.0,
+            action: 'panel_disable',
+            sideDisabled: false,
+            middleDisabled: false,
         });
         dis.unregister(this.dispatcherRef);
         const cli = MatrixClientPeg.get();
@@ -354,8 +289,8 @@ module.exports = React.createClass({
             if (this._unmounted) return;
             this.setState({
                 mediaDevices,
-                activeAudioInput: this._localSettings['webrtc_audioinput'],
-                activeVideoInput: this._localSettings['webrtc_videoinput'],
+                activeAudioInput: SettingsStore.getValueAt(SettingLevel.DEVICE, 'webrtc_audioinput'),
+                activeVideoInput: SettingsStore.getValueAt(SettingLevel.DEVICE, 'webrtc_videoinput'),
             });
         });
     },
@@ -426,6 +361,11 @@ module.exports = React.createClass({
         });
     },
 
+    onAvatarRemoveClick: function() {
+        MatrixClientPeg.get().setAvatarUrl(null);
+        this.setState({avatarUrl: null}); // the avatar update will complete async for us
+    },
+
     onLogoutClicked: function(ev) {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createTrackedDialog('Logout E2E Export', '', QuestionDialog, {
@@ -435,7 +375,7 @@ module.exports = React.createClass({
              { _t("For security, logging out will delete any end-to-end " +
                   "encryption keys from this browser. If you want to be able " +
                   "to decrypt your conversation history from future Riot sessions, " +
-                  "please export your room keys for safe-keeping.") }.
+                  "please export your room keys for safe-keeping.") }
                 </div>,
             button: _t("Sign out"),
             extraButtons: [
@@ -480,10 +420,6 @@ module.exports = React.createClass({
             ) + ".",
         });
         dis.dispatch({action: 'password_changed'});
-    },
-
-    onEnableNotificationsChange: function(event) {
-        UserSettingsStore.setEnableNotifications(event.target.checked);
     },
 
     _onAddEmailEditFinished: function(value, shouldSubmit) {
@@ -659,6 +595,11 @@ module.exports = React.createClass({
         });
     },
 
+    _renderGroupSettings: function() {
+        const GroupUserSettings = sdk.getComponent('groups.GroupUserSettings');
+        return <GroupUserSettings />;
+    },
+
     _renderReferral: function() {
         const teamToken = this.props.teamToken;
         if (!teamToken) {
@@ -681,8 +622,8 @@ module.exports = React.createClass({
     },
 
     onLanguageChange: function(newLang) {
-        if(this.state.language !== newLang) {
-            UserSettingsStore.setLocalSetting('language', newLang);
+        if (this.state.language !== newLang) {
+            SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLang);
             this.setState({
                 language: newLang,
             });
@@ -705,14 +646,13 @@ module.exports = React.createClass({
         // TODO: this ought to be a separate component so that we don't need
         // to rebind the onChange each time we render
         const onChange = (e) =>
-            UserSettingsStore.setLocalSetting('autocompleteDelay', + e.target.value);
+            SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.value);
         return (
             <div>
                 <h3>{ _t("User Interface") }</h3>
                 <div className="mx_UserSettings_section">
-                    { this._renderUrlPreviewSelector() }
-                    { SETTINGS_LABELS.map( this._renderSyncedSetting ) }
-                    { THEMES.map( this._renderThemeSelector ) }
+                    { SIMPLE_SETTINGS.map( this._renderAccountSetting ) }
+                    { THEMES.map( this._renderThemeOption ) }
                     <table>
                         <tbody>
                         <tr>
@@ -720,7 +660,7 @@ module.exports = React.createClass({
                             <td>
                                 <input
                                     type="number"
-                                    defaultValue={UserSettingsStore.getLocalSetting('autocompleteDelay', 200)}
+                                    defaultValue={SettingsStore.getValueAt(SettingLevel.DEVICE, "autocompleteDelay")}
                                     onChange={onChange}
                                 />
                             </td>
@@ -733,69 +673,31 @@ module.exports = React.createClass({
         );
     },
 
-    _renderUrlPreviewSelector: function() {
-        return <div className="mx_UserSettings_toggle">
-            <input id="urlPreviewsDisabled"
-                   type="checkbox"
-                   defaultChecked={UserSettingsStore.getUrlPreviewsDisabled()}
-                   onChange={this._onPreviewsDisabledChanged}
-            />
-            <label htmlFor="urlPreviewsDisabled">
-                { _t("Disable inline URL previews by default") }
-            </label>
-        </div>;
+    _renderAccountSetting: function(setting) {
+        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
+        return (
+            <div className="mx_UserSettings_toggle" key={setting.id}>
+                <SettingsFlag name={setting.id}
+                                  label={setting.label}
+                                  level={SettingLevel.ACCOUNT}
+                                  onChange={setting.fn} />
+            </div>
+        );
     },
 
-    _onPreviewsDisabledChanged: function(e) {
-         UserSettingsStore.setUrlPreviewsDisabled(e.target.checked);
-    },
-
-    _renderSyncedSetting: function(setting) {
-        // TODO: this ought to be a separate component so that we don't need
-        // to rebind the onChange each time we render
-
-        const onChange = (e) => {
-            UserSettingsStore.setSyncedSetting(setting.id, e.target.checked);
-            if (setting.fn) setting.fn(e.target.checked);
-        };
-
-        return <div className="mx_UserSettings_toggle" key={setting.id}>
-            <input id={setting.id}
-                   type="checkbox"
-                   defaultChecked={this._syncedSettings[setting.id]}
-                   onChange={onChange}
-            />
-            <label htmlFor={setting.id}>
-                { _t(setting.label) }
-            </label>
-        </div>;
-    },
-
-    _renderThemeSelector: function(setting) {
-        // TODO: this ought to be a separate component so that we don't need
-        // to rebind the onChange each time we render
-        const onChange = (e) => {
-            if (e.target.checked) {
-                this._syncedSettings[setting.id] = setting.value;
-                UserSettingsStore.setSyncedSetting(setting.id, setting.value);
-            }
-            dis.dispatch({
-                action: 'set_theme',
-                value: setting.value,
-            });
-        };
-        return <div className="mx_UserSettings_toggle" key={setting.id + "_" + setting.value}>
-            <input id={setting.id + "_" + setting.value}
-                   type="radio"
-                   name={setting.id}
-                   value={setting.value}
-                   checked={this._syncedSettings[setting.id] === setting.value}
-                   onChange={onChange}
-            />
-            <label htmlFor={setting.id + "_" + setting.value}>
-                { _t(setting.label) }
-            </label>
-        </div>;
+    _renderThemeOption: function(setting) {
+        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
+        const onChange = (v) => dis.dispatch({action: 'set_theme', value: setting.value});
+        return (
+            <div className="mx_UserSettings_toggle" key={setting.id + '_' + setting.value}>
+                <SettingsFlag name="theme"
+                                  label={setting.label}
+                                  level={SettingLevel.ACCOUNT}
+                                  onChange={onChange}
+                                  group="theme"
+                                  value={setting.value} />
+            </div>
+        );
     },
 
     _renderCryptoInfo: function() {
@@ -837,7 +739,7 @@ module.exports = React.createClass({
                     { importExportButtons }
                 </div>
                 <div className="mx_UserSettings_section">
-                    { CRYPTO_SETTINGS_LABELS.map( this._renderLocalSetting ) }
+                    { CRYPTO_SETTINGS.map( this._renderDeviceSetting ) }
                 </div>
             </div>
         );
@@ -863,24 +765,16 @@ module.exports = React.createClass({
         } else return (<div />);
     },
 
-    _renderLocalSetting: function(setting) {
-        // TODO: this ought to be a separate component so that we don't need
-        // to rebind the onChange each time we render
-        const onChange = (e) => {
-            UserSettingsStore.setLocalSetting(setting.id, e.target.checked);
-            if (setting.fn) setting.fn(e.target.checked);
-        };
-
-        return <div className="mx_UserSettings_toggle" key={setting.id}>
-            <input id={setting.id}
-                   type="checkbox"
-                   defaultChecked={this._localSettings[setting.id]}
-                   onChange={onChange}
-            />
-            <label htmlFor={setting.id}>
-                { _t(setting.label) }
-            </label>
-        </div>;
+    _renderDeviceSetting: function(setting) {
+        const SettingsFlag = sdk.getComponent("elements.SettingsFlag");
+        return (
+            <div className="mx_UserSettings_toggle" key={setting.id}>
+                <SettingsFlag name={setting.id}
+                              label={setting.label}
+                              level={SettingLevel.DEVICE}
+                              onChange={setting.fn} />
+            </div>
+        );
     },
 
     _renderDevicesPanel: function() {
@@ -917,40 +811,31 @@ module.exports = React.createClass({
             <h3>{ _t('Analytics') }</h3>
             <div className="mx_UserSettings_section">
                 { _t('Riot collects anonymous analytics to allow us to improve the application.') }
-                { ANALYTICS_SETTINGS_LABELS.map( this._renderLocalSetting ) }
+                { ANALYTICS_SETTINGS.map( this._renderDeviceSetting ) }
             </div>
         </div>;
     },
 
     _renderLabs: function() {
-        // default to enabled if undefined
-        if (this.props.enableLabs === false) return null;
-        UserSettingsStore.doTranslations();
-
         const features = [];
-        UserSettingsStore.LABS_FEATURES.forEach((feature) => {
-            // This feature has an override and will be set to the default, so do not
-            // show it here.
-            if (feature.override) {
-                return;
-            }
+        SettingsStore.getLabsFeatures().forEach((featureId) => {
             // TODO: this ought to be a separate component so that we don't need
             // to rebind the onChange each time we render
             const onChange = (e) => {
-                UserSettingsStore.setFeatureEnabled(feature.id, e.target.checked);
+                SettingsStore.setFeatureEnabled(featureId, e.target.checked);
                 this.forceUpdate();
             };
 
             features.push(
-                <div key={feature.id} className="mx_UserSettings_toggle">
+                <div key={featureId} className="mx_UserSettings_toggle">
                     <input
                         type="checkbox"
-                        id={feature.id}
-                        name={feature.id}
-                        defaultChecked={UserSettingsStore.isFeatureEnabled(feature.id)}
+                        id={featureId}
+                        name={featureId}
+                        defaultChecked={SettingsStore.isFeatureEnabled(featureId)}
                         onChange={onChange}
                     />
-                    <label htmlFor={feature.id}>{ feature.name }</label>
+                    <label htmlFor={featureId}>{ SettingsStore.getDisplayName(featureId) }</label>
                 </div>);
         });
 
@@ -1043,6 +928,8 @@ module.exports = React.createClass({
         const settings = this.state.electron_settings;
         if (!settings) return;
 
+        // TODO: This should probably be a granular setting, but it only applies to electron
+        // and ends up being get/set outside of matrix anyways (local system setting).
         return <div>
             <h3>{ _t('Desktop specific') }</h3>
             <div className="mx_UserSettings_section">
@@ -1165,7 +1052,7 @@ module.exports = React.createClass({
         return <div>
             <h3>{ _t('VoIP') }</h3>
             <div className="mx_UserSettings_section">
-                { WEBRTC_SETTINGS_LABELS.map(this._renderLocalSetting) }
+                { WEBRTC_SETTINGS.map(this._renderDeviceSetting) }
                 { this._renderWebRtcDeviceSettings() }
             </div>
         </div>;
@@ -1330,7 +1217,14 @@ module.exports = React.createClass({
                     </div>
 
                     <div className="mx_UserSettings_avatarPicker">
-                        <div onClick={this.onAvatarPickerClick}>
+                        <div className="mx_UserSettings_avatarPicker_remove" onClick={this.onAvatarRemoveClick}>
+                            <img src="img/cancel.svg"
+                                width="15" height="15"
+                                className="mx_filterFlipColor"
+                                alt={_t("Remove avatar")}
+                                title={_t("Remove avatar")} />
+                        </div>
+                        <div onClick={this.onAvatarPickerClick} className="mx_UserSettings_avatarPicker_imgContainer">
                             <ChangeAvatar ref="changeAvatar" initialAvatarUrl={avatarUrl}
                                 showUploadSection={false} className="mx_UserSettings_avatarPicker_img" />
                         </div>
@@ -1359,6 +1253,8 @@ module.exports = React.createClass({
 
                     { accountJsx }
                 </div>
+
+                { this._renderGroupSettings() }
 
                 { this._renderReferral() }
 

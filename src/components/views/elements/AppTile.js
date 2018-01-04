@@ -17,10 +17,13 @@ limitations under the License.
 'use strict';
 
 import url from 'url';
+import qs from 'querystring';
 import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import PlatformPeg from '../../../PlatformPeg';
 import ScalarAuthClient from '../../../ScalarAuthClient';
+import WidgetMessaging from '../../../WidgetMessaging';
+import TintableSvgButton from './TintableSvgButton';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t, _td } from '../../../languageHandler';
@@ -49,44 +52,96 @@ export default React.createClass({
         userId: React.PropTypes.string.isRequired,
         // UserId of the entity that added / modified the widget
         creatorUserId: React.PropTypes.string,
+        waitForIframeLoad: React.PropTypes.bool,
     },
 
-    getDefaultProps: function() {
+    getDefaultProps() {
         return {
             url: "",
+            waitForIframeLoad: true,
         };
     },
 
-    getInitialState: function() {
-        const widgetPermissionId = [this.props.room.roomId, encodeURIComponent(this.props.url)].join('_');
+    /**
+     * Set initial component state when the App wUrl (widget URL) is being updated.
+     * Component props *must* be passed (rather than relying on this.props).
+     * @param  {Object} newProps The new properties of the component
+     * @return {Object} Updated component state to be set with setState
+     */
+    _getNewState(newProps) {
+        const widgetPermissionId = [newProps.room.roomId, encodeURIComponent(newProps.url)].join('_');
         const hasPermissionToLoad = localStorage.getItem(widgetPermissionId);
         return {
-            loading: false,
-            widgetUrl: this.props.url,
+            initialising: true,   // True while we are mangling the widget URL
+            loading: this.props.waitForIframeLoad,        // True while the iframe content is loading
+            widgetUrl: this._addWurlParams(newProps.url),
             widgetPermissionId: widgetPermissionId,
-            // Assume that widget has permission to load if we are the user who added it to the room, or if explicitly granted by the user
-            hasPermissionToLoad: hasPermissionToLoad === 'true' || this.props.userId === this.props.creatorUserId,
+            // Assume that widget has permission to load if we are the user who
+            // added it to the room, or if explicitly granted by the user
+            hasPermissionToLoad: hasPermissionToLoad === 'true' || newProps.userId === newProps.creatorUserId,
             error: null,
             deleting: false,
+            widgetPageTitle: newProps.widgetPageTitle,
         };
     },
 
-    // Returns true if props.url is a scalar URL, typically https://scalar.vector.im/api
-    isScalarUrl: function() {
+    /**
+     * Add widget instance specific parameters to pass in wUrl
+     * Properties passed to widget instance:
+     *  - widgetId
+     *  - origin / parent URL
+     * @param {string} urlString Url string to modify
+     * @return {string}
+     * Url string with parameters appended.
+     * If url can not be parsed, it is returned unmodified.
+     */
+    _addWurlParams(urlString) {
+        const u = url.parse(urlString);
+        if (!u) {
+            console.error("_addWurlParams", "Invalid URL", urlString);
+            return url;
+        }
+
+        const params = qs.parse(u.query);
+        // Append widget ID to query parameters
+        params.widgetId = this.props.id;
+        // Append current / parent URL
+        params.parentUrl = window.location.href;
+        u.search = undefined;
+        u.query = params;
+
+        return u.format();
+    },
+
+    getInitialState() {
+        return this._getNewState(this.props);
+    },
+
+    /**
+     * Returns true if specified url is a scalar URL, typically https://scalar.vector.im/api
+     * @param  {[type]}  url URL to check
+     * @return {Boolean} True if specified URL is a scalar URL
+     */
+    isScalarUrl(url) {
+        if (!url) {
+            console.error('Scalar URL check failed. No URL specified');
+            return false;
+        }
+
         let scalarUrls = SdkConfig.get().integrations_widgets_urls;
         if (!scalarUrls || scalarUrls.length == 0) {
             scalarUrls = [SdkConfig.get().integrations_rest_url];
         }
 
         for (let i = 0; i < scalarUrls.length; i++) {
-            if (this.props.url.startsWith(scalarUrls[i])) {
+            if (url.startsWith(scalarUrls[i])) {
                 return true;
             }
         }
         return false;
     },
 
-    isMixedContent: function() {
+    isMixedContent() {
         const parentContentProtocol = window.location.protocol;
         const u = url.parse(this.props.url);
         const childContentProtocol = u.protocol;
@@ -98,41 +153,84 @@ export default React.createClass({
         return false;
     },
 
-    componentWillMount: function() {
-        if (!this.isScalarUrl()) {
+    componentWillMount() {
+        WidgetMessaging.startListening();
+        WidgetMessaging.addEndpoint(this.props.id, this.props.url);
+        window.addEventListener('message', this._onMessage, false);
+        this.setScalarToken();
+    },
+
+    /**
+     * Adds a scalar token to the widget URL, if required
+     * Component initialisation is only complete when this function has resolved
+     */
+    setScalarToken() {
+        this.setState({initialising: true});
+
+        if (!this.isScalarUrl(this.props.url)) {
+            console.warn('Non-scalar widget, not setting scalar token!', url);
+            this.setState({
+                error: null,
+                widgetUrl: this._addWurlParams(this.props.url),
+                initialising: false,
+            });
             return;
         }
-        // Fetch the token before loading the iframe as we need to mangle the URL
-        this.setState({
-            loading: true,
-        });
-        this._scalarClient = new ScalarAuthClient();
+
+        // Fetch the token before loading the iframe as we need it to mangle the URL
+        if (!this._scalarClient) {
+            this._scalarClient = new ScalarAuthClient();
+        }
         this._scalarClient.getScalarToken().done((token) => {
-            // Append scalar_token as a query param
+            // Append scalar_token as a query param if not already present
             this._scalarClient.scalarToken = token;
-            const u = url.parse(this.props.url);
-            if (!u.search) {
-                u.search = "?scalar_token=" + encodeURIComponent(token);
-            } else {
-                u.search += "&scalar_token=" + encodeURIComponent(token);
+            const u = url.parse(this._addWurlParams(this.props.url));
+            const params = qs.parse(u.query);
+            if (!params.scalar_token) {
+                params.scalar_token = encodeURIComponent(token);
+                // u.search must be set to undefined, so that u.format() uses query paramerters - https://nodejs.org/docs/latest/api/url.html#url_url_format_url_options
+                u.search = undefined;
+                u.query = params;
             }
 
             this.setState({
                 error: null,
                 widgetUrl: u.format(),
-                loading: false,
+                initialising: false,
             });
+
+            // Fetch page title from remote content if not already set
+            if (!this.state.widgetPageTitle && params.url) {
+                this._fetchWidgetTitle(params.url);
+            }
         }, (err) => {
+            console.error("Failed to get scalar_token", err);
             this.setState({
                 error: err.message,
-                loading: false,
+                initialising: false,
             });
         });
-        window.addEventListener('message', this._onMessage, false);
     },
 
     componentWillUnmount() {
+        WidgetMessaging.stopListening();
+        WidgetMessaging.removeEndpoint(this.props.id, this.props.url);
         window.removeEventListener('message', this._onMessage);
+    },
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.url !== this.props.url) {
+            this._getNewState(nextProps);
+            this.setScalarToken();
+        } else if (nextProps.show && !this.props.show && this.props.waitForIframeLoad) {
+            this.setState({
+                loading: true,
+            });
+        } else if (nextProps.widgetPageTitle !== this.props.widgetPageTitle) {
+            this.setState({
+                widgetPageTitle: nextProps.widgetPageTitle,
+            });
+        }
     },
 
     _onMessage(event) {
@@ -154,11 +252,11 @@ export default React.createClass({
         }
     },
 
-    _canUserModify: function() {
+    _canUserModify() {
         return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
     },
 
-    _onEditClick: function(e) {
+    _onEditClick(e) {
         console.log("Edit widget ID ", this.props.id);
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         const src = this._scalarClient.getScalarInterfaceUrlForRoom(
@@ -168,27 +266,60 @@ export default React.createClass({
         }, "mx_IntegrationsManager");
     },
 
-    /* If user has permission to modify widgets, delete the widget, otherwise revoke access for the widget to load in the user's browser
+    /* If user has permission to modify widgets, delete the widget,
+     * otherwise revoke access for the widget to load in the user's browser
     */
-    _onDeleteClick: function() {
+    _onDeleteClick() {
         if (this._canUserModify()) {
-            console.log("Delete widget %s", this.props.id);
-            this.setState({deleting: true});
-            MatrixClientPeg.get().sendStateEvent(
-                this.props.room.roomId,
-                'im.vector.modular.widgets',
-                {}, // empty content
-                this.props.id,
-            ).then(() => {
-                console.log('Deleted widget');
-            }, (e) => {
-                console.error('Failed to delete widget', e);
-                this.setState({deleting: false});
+            // Show delete confirmation dialog
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+            Modal.createTrackedDialog('Delete Widget', '', QuestionDialog, {
+                title: _t("Delete Widget"),
+                description: _t(
+                    "Deleting a widget removes it for all users in this room." +
+                    " Are you sure you want to delete this widget?"),
+                button: _t("Delete widget"),
+                onFinished: (confirmed) => {
+                    if (!confirmed) {
+                        return;
+                    }
+                    this.setState({deleting: true});
+                    MatrixClientPeg.get().sendStateEvent(
+                        this.props.room.roomId,
+                        'im.vector.modular.widgets',
+                        {}, // empty content
+                        this.props.id,
+                    ).catch((e) => {
+                        console.error('Failed to delete widget', e);
+                        this.setState({deleting: false});
+                    });
+                },
             });
         } else {
             console.log("Revoke widget permissions - %s", this.props.id);
             this._revokeWidgetPermission();
         }
+    },
+
+    /**
+     * Called when widget iframe has finished loading
+     */
+    _onLoaded() {
+        this.setState({loading: false});
+    },
+
+    /**
+     * Set remote content title on AppTile
+     * @param {string} url Url to check for title
+     */
+    _fetchWidgetTitle(url) {
+        this._scalarClient.getScalarPageTitle(url).then((widgetPageTitle) => {
+            if (widgetPageTitle) {
+                this.setState({widgetPageTitle: widgetPageTitle});
+            }
+        }, (err) =>{
+            console.error("Failed to get page title", err);
+        });
     },
 
     // Widget labels to render, depending upon user permissions
@@ -213,15 +344,15 @@ export default React.createClass({
         this.setState({hasPermissionToLoad: false});
     },
 
-    formatAppTileName: function() {
+    formatAppTileName() {
         let appTileName = "No name";
-        if(this.props.name && this.props.name.trim()) {
+        if (this.props.name && this.props.name.trim()) {
             appTileName = this.props.name.trim();
         }
         return appTileName;
     },
 
-    onClickMenuBar: function(ev) {
+    onClickMenuBar(ev) {
         ev.preventDefault();
 
         // Ignore clicks on menu bar children
@@ -236,7 +367,16 @@ export default React.createClass({
         });
     },
 
-    render: function() {
+    _getSafeUrl() {
+        const parsedWidgetUrl = url.parse(this.state.widgetUrl);
+        let safeWidgetUrl = '';
+        if (ALLOWED_APP_URL_SCHEMES.indexOf(parsedWidgetUrl.protocol) !== -1) {
+            safeWidgetUrl = url.format(parsedWidgetUrl);
+        }
+        return safeWidgetUrl;
+    },
+
+    render() {
         let appTileBody;
 
         // Don't render widget if it is in the process of being deleted
@@ -251,36 +391,32 @@ export default React.createClass({
         // a link to it.
         const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox "+
             "allow-same-origin allow-scripts allow-presentation";
-        const parsedWidgetUrl = url.parse(this.state.widgetUrl);
-        let safeWidgetUrl = '';
-        if (ALLOWED_APP_URL_SCHEMES.indexOf(parsedWidgetUrl.protocol) !== -1) {
-            safeWidgetUrl = url.format(parsedWidgetUrl);
-        }
 
         if (this.props.show) {
-            if (this.state.loading) {
-                appTileBody = (
-                    <div className='mx_AppTileBody mx_AppLoading'>
-                        <MessageSpinner msg='Loading...' />
-                    </div>
-                );
+            const loadingElement = (
+                <div className='mx_AppTileBody mx_AppLoading'>
+                    <MessageSpinner msg='Loading...' />
+                </div>
+            );
+            if (this.state.initialising) {
+                appTileBody = loadingElement;
             } else if (this.state.hasPermissionToLoad == true) {
                 if (this.isMixedContent()) {
                     appTileBody = (
                         <div className="mx_AppTileBody">
-                            <AppWarning
-                                errorMsg="Error - Mixed content"
-                            />
+                            <AppWarning errorMsg="Error - Mixed content" />
                         </div>
                     );
                 } else {
                     appTileBody = (
-                        <div className="mx_AppTileBody">
+                        <div className={this.state.loading ? 'mx_AppTileBody mx_AppLoading' : 'mx_AppTileBody'}>
+                            { this.state.loading && loadingElement }
                             <iframe
                                 ref="appFrame"
-                                src={safeWidgetUrl}
+                                src={this._getSafeUrl()}
                                 allowFullScreen="true"
                                 sandbox={sandboxFlags}
+                                onLoad={this._onLoaded}
                             ></iframe>
                         </div>
                     );
@@ -302,35 +438,50 @@ export default React.createClass({
         // editing is done in scalar
         const showEditButton = Boolean(this._scalarClient && this._canUserModify());
         const deleteWidgetLabel = this._deleteWidgetLabel();
-        let deleteIcon = 'img/cancel.svg';
-        let deleteClasses = 'mx_filterFlipColor mx_AppTileMenuBarWidget';
-        if(this._canUserModify()) {
-            deleteIcon = 'img/cancel-red.svg';
+        let deleteIcon = 'img/cancel_green.svg';
+        let deleteClasses = 'mx_AppTileMenuBarWidget';
+        if (this._canUserModify()) {
+            deleteIcon = 'img/icon-delete-pink.svg';
             deleteClasses += ' mx_AppTileMenuBarWidgetDelete';
         }
+
+        const windowStateIcon = (this.props.show ? 'img/minimize.svg' : 'img/maximize.svg');
 
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
-                    { this.formatAppTileName() }
+                    <span className="mx_AppTileMenuBarTitle">
+                        <TintableSvgButton
+                            src={windowStateIcon}
+                            className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
+                            title={_t('Minimize apps')}
+                            width="10"
+                            height="10"
+                        />
+                        <b>{ this.formatAppTileName() }</b>
+                        { this.state.widgetPageTitle && this.state.widgetPageTitle != this.formatAppTileName() && (
+                            <span>&nbsp;-&nbsp;{ this.state.widgetPageTitle }</span>
+                        ) }
+                    </span>
                     <span className="mx_AppTileMenuBarWidgets">
                         { /* Edit widget */ }
-                        { showEditButton && <img
-                            src="img/edit.svg"
-                            className="mx_filterFlipColor mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
-                            width="8" height="8"
-                            alt={_t('Edit')}
+                        { showEditButton && <TintableSvgButton
+                            src="img/edit_green.svg"
+                            className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
                             title={_t('Edit')}
                             onClick={this._onEditClick}
+                            width="10"
+                            height="10"
                         /> }
 
                         { /* Delete widget */ }
-                        <img src={deleteIcon}
-                        className={deleteClasses}
-                        width="8" height="8"
-                        alt={_t(deleteWidgetLabel)}
-                        title={_t(deleteWidgetLabel)}
-                        onClick={this._onDeleteClick}
+                        <TintableSvgButton
+                            src={deleteIcon}
+                            className={deleteClasses}
+                            title={_t(deleteWidgetLabel)}
+                            onClick={this._onDeleteClick}
+                            width="10"
+                            height="10"
                         />
                     </span>
                 </div>

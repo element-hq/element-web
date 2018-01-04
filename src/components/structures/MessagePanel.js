@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import UserSettingsStore from '../../UserSettingsStore';
+import classNames from 'classnames';
 import shouldHideEvent from '../../shouldHideEvent';
 import dis from "../../dispatcher";
 import sdk from '../../index';
@@ -78,9 +78,6 @@ module.exports = React.createClass({
         // callback which is called when more content is needed.
         onFillRequest: React.PropTypes.func,
 
-        // opacity for dynamic UI fading effects
-        opacity: React.PropTypes.number,
-
         // className for the panel
         className: React.PropTypes.string.isRequired,
 
@@ -111,8 +108,6 @@ module.exports = React.createClass({
         // Remember the read marker ghost node so we can do the cleanup that
         // Velocity requires
         this._readMarkerGhostNode = null;
-
-        this._syncedSettings = UserSettingsStore.getSyncedSettings();
 
         this._isMounted = true;
     },
@@ -253,7 +248,7 @@ module.exports = React.createClass({
         // Always show highlighted event
         if (this.props.highlightedEventId === mxEv.getId()) return true;
 
-        return !shouldHideEvent(mxEv, this._syncedSettings);
+        return !shouldHideEvent(mxEv);
     },
 
     _getEventTiles: function() {
@@ -353,7 +348,7 @@ module.exports = React.createClass({
                     }
 
                     if (!isMembershipChange(collapsedMxEv) ||
-                        this._wantsDateSeparator(this.props.events[i], collapsedMxEv.getDate())) {
+                        this._wantsDateSeparator(mxEv, collapsedMxEv.getDate())) {
                         break;
                     }
 
@@ -376,9 +371,7 @@ module.exports = React.createClass({
                     // of MemberEventListSummary, render each member event as if the previous
                     // one was itself. This way, the timestamp of the previous event === the
                     // timestamp of the current event, and no DateSeperator is inserted.
-                    const ret = this._getTilesForEvent(e, e, e === lastShownEvent);
-                    prevEvent = e;
-                    return ret;
+                    return this._getTilesForEvent(e, e, e === lastShownEvent);
                 }).reduce((a, b) => a.concat(b));
 
                 if (eventTiles.length === 0) {
@@ -397,6 +390,7 @@ module.exports = React.createClass({
                     ret.push(this._getReadMarkerTile(visible));
                 }
 
+                prevEvent = mxEv;
                 continue;
             }
 
@@ -649,12 +643,13 @@ module.exports = React.createClass({
         }
 
         const style = this.props.hidden ? { display: 'none' } : {};
-        style.opacity = this.props.opacity;
 
-        let className = this.props.className + " mx_fadable";
-        if (this.props.alwaysShowTimestamps) {
-            className += " mx_MessagePanel_alwaysShowTimestamps";
-        }
+        const className = classNames(
+            this.props.className,
+            {
+                "mx_MessagePanel_alwaysShowTimestamps": this.props.alwaysShowTimestamps,
+            },
+        );
 
         return (
             <ScrollPanel ref="scrollPanel" className={className}

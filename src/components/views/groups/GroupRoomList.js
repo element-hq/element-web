@@ -16,19 +16,13 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
-import { groupRoomFromApiObject } from '../../../groups';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import PropTypes from 'prop-types';
-import {MatrixClient} from 'matrix-js-sdk';
 
 const INITIAL_LOAD_NUM_ROOMS = 30;
 
 export default React.createClass({
-    contextTypes: {
-        matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
-    },
-
     propTypes: {
         groupId: PropTypes.string.isRequired,
     },
@@ -47,25 +41,21 @@ export default React.createClass({
     },
 
     _initGroupStore: function(groupId) {
-        this._groupStore = GroupStoreCache.getGroupStore(this.context.matrixClient, groupId);
-        this._groupStore.on('update', () => {
+        this._groupStore = GroupStoreCache.getGroupStore(groupId);
+        this._groupStore.registerListener(() => {
             this._fetchRooms();
         });
         this._groupStore.on('error', (err) => {
-            console.error('Error in group store (listened to by GroupRoomList)', err);
             this.setState({
                 rooms: null,
             });
         });
-        this._fetchRooms();
     },
 
     _fetchRooms: function() {
         if (this._unmounted) return;
         this.setState({
-            rooms: this._groupStore.getGroupRooms().map((apiRoom) => {
-                return groupRoomFromApiObject(apiRoom);
-            }),
+            rooms: this._groupStore.getGroupRooms(),
         });
     },
 
@@ -99,7 +89,7 @@ export default React.createClass({
         let roomList = this.state.rooms;
         if (query) {
             roomList = roomList.filter((room) => {
-                const matchesName = (room.name || "").toLowerCase().include(query);
+                const matchesName = (room.name || "").toLowerCase().includes(query);
                 const matchesAlias = (room.canonicalAlias || "").toLowerCase().includes(query);
                 return matchesName || matchesAlias;
             });
@@ -126,7 +116,7 @@ export default React.createClass({
             <form autoComplete="off">
                 <input className="mx_GroupRoomList_query" id="mx_GroupRoomList_query" type="text"
                         onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={_t('Filter group rooms')} />
+                        placeholder={_t('Filter community rooms')} />
             </form>
         );
 

@@ -17,13 +17,6 @@
     "Dismiss": "Scarta",
     "Error": "Errore",
     "Favourite": "Preferito",
-    "Sunday": "Domenica",
-    "Monday": "Lunedì",
-    "Tuesday": "Martedì",
-    "Wednesday": "Mercoledì",
-    "Thursday": "Giovedì",
-    "Friday": "Venerdì",
-    "Saturday": "Sabato",
     "OK": "OK",
     "Drop here %(toAction)s": "Rilascia qui %(toAction)s",
     "Failed to change password. Is your password correct?": "Modifica password fallita. La tua password è corretta?",
@@ -52,5 +45,7 @@
     "Always show message timestamps": "Mostra sempre il timestamps dei messaggi",
     "Authentication": "Autenticazione",
     "Alias (optional)": "Alias (opzionale)",
-    "and": "e"
+    "Add a widget": "Aggiungi un widget",
+    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "Un messaggio di testo è stato inviato a +%(msisdn)s. Inserisci il codice di verifica che contiene",
+    "Edit": "Modifica"
 }

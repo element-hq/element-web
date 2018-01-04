@@ -21,20 +21,18 @@ class GroupStoreCache {
         this.groupStore = null;
     }
 
-    getGroupStore(matrixClient, groupId) {
+    getGroupStore(groupId) {
         if (!this.groupStore || this.groupStore.groupId !== groupId) {
             // This effectively throws away the reference to any previous GroupStore,
             // allowing it to be GCd once the components referencing it have stopped
             // referencing it.
-            this.groupStore = new GroupStore(matrixClient, groupId);
+            this.groupStore = new GroupStore(groupId);
         }
-        this.groupStore._fetchSummary();
         return this.groupStore;
     }
 }
 
-let singletonGroupStoreCache = null;
-if (!singletonGroupStoreCache) {
-    singletonGroupStoreCache = new GroupStoreCache();
+if (global.singletonGroupStoreCache === undefined) {
+    global.singletonGroupStoreCache = new GroupStoreCache();
 }
-module.exports = singletonGroupStoreCache;
+export default global.singletonGroupStoreCache;

@@ -20,7 +20,7 @@ import classNames from 'classnames';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {field_input_incorrect} from '../../../UiEffects';
-
+import SdkConfig from '../../../SdkConfig';
 
 /**
  * A pure UI component which displays a username/password form.
@@ -122,7 +122,7 @@ class PasswordLogin extends React.Component {
             mx_Login_field_disabled: disabled,
         };
 
-        switch(loginType) {
+        switch (loginType) {
             case PasswordLogin.LOGIN_FIELD_EMAIL:
                 classes.mx_Login_email = true;
                 return <input
@@ -144,7 +144,10 @@ class PasswordLogin extends React.Component {
                     type="text"
                     name="username" // make it a little easier for browser's remember-password
                     onChange={this.onUsernameChanged}
-                    placeholder={_t('User name')}
+                    placeholder={SdkConfig.get().disable_custom_urls ?
+                                      _t("Username on %(hs)s", {
+                                        hs: this.props.hsUrl.replace(/^https?:\/\//, ''),
+                                      }) : _t("User name")}
                     value={this.state.username}
                     autoFocus
                     disabled={disabled}
@@ -210,9 +213,9 @@ class PasswordLogin extends React.Component {
 
         const loginField = this.renderLoginField(this.state.loginType, matrixIdText === '');
 
-        return (
-            <div>
-                <form onSubmit={this.onSubmitForm}>
+        let loginType;
+        if (!SdkConfig.get().disable_3pid_login) {
+            loginType = (
                 <div className="mx_Login_type_container">
                     <label className="mx_Login_type_label">{ _t('Sign in with') }</label>
                     <Dropdown
@@ -225,6 +228,13 @@ class PasswordLogin extends React.Component {
                             <span key={PasswordLogin.LOGIN_FIELD_PHONE}>{ _t('Phone') }</span>
                     </Dropdown>
                 </div>
+            );
+        }
+
+        return (
+            <div>
+                <form onSubmit={this.onSubmitForm}>
+                { loginType }
                 { loginField }
                 <input className={pwFieldClass} ref={(e) => {this._passwordField = e;}} type="password"
                     name="password"

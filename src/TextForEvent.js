@@ -151,9 +151,9 @@ function textForCallHangupEvent(event) {
     const senderName = event.sender ? event.sender.name : _t('Someone');
     const eventContent = event.getContent();
     let reason = "";
-    if(!MatrixClientPeg.get().supportsVoip()) {
+    if (!MatrixClientPeg.get().supportsVoip()) {
         reason = _t('(not supported by this browser)');
-    } else if(eventContent.reason) {
+    } else if (eventContent.reason) {
         if (eventContent.reason === "ice_failed") {
             reason = _t('(could not connect media)');
         } else if (eventContent.reason === "invite_timeout") {
@@ -259,6 +259,11 @@ function textForPowerEvent(event) {
     });
 }
 
+function textForPinnedEvent(event) {
+    const senderName = event.getSender();
+    return _t("%(senderName)s changed the pinned messages for the room.", {senderName});
+}
+
 function textForWidgetEvent(event) {
     const senderName = event.getSender();
     const {name: prevName, type: prevType, url: prevUrl} = event.getPrevContent();
@@ -304,6 +309,7 @@ const stateHandlers = {
     'm.room.history_visibility': textForHistoryVisibilityEvent,
     'm.room.encryption': textForEncryptionEvent,
     'm.room.power_levels': textForPowerEvent,
+    'm.room.pinned_events': textForPinnedEvent,
 
     'im.vector.modular.widgets': textForWidgetEvent,
 };

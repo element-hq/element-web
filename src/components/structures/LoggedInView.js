@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,9 +18,10 @@ limitations under the License.
 
 import * as Matrix from 'matrix-js-sdk';
 import React from 'react';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
-import UserSettingsStore from '../../UserSettingsStore';
-import KeyCode from '../../KeyCode';
+import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 import Notifier from '../../Notifier';
 import PageTypes from '../../PageTypes';
 import CallMediaHandler from '../../CallMediaHandler';
@@ -27,6 +29,7 @@ import sdk from '../../index';
 import dis from '../../dispatcher';
 import sessionStore from '../../stores/SessionStore';
 import MatrixClientPeg from '../../MatrixClientPeg';
+import SettingsStore from "../../settings/SettingsStore";
 
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is
@@ -37,7 +40,7 @@ import MatrixClientPeg from '../../MatrixClientPeg';
  *
  * Components mounted below us can access the matrix client via the react context.
  */
-export default React.createClass({
+const LoggedInView = React.createClass({
     displayName: 'LoggedInView',
 
     propTypes: {
@@ -73,7 +76,7 @@ export default React.createClass({
     getInitialState: function() {
         return {
             // use compact timeline view
-            useCompactLayout: UserSettingsStore.getSyncedSetting('useCompactLayout'),
+            useCompactLayout: SettingsStore.getValue('useCompactLayout'),
         };
     },
 
@@ -152,13 +155,7 @@ export default React.createClass({
             */
 
         let handled = false;
-        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-        let ctrlCmdOnly;
-        if (isMac) {
-            ctrlCmdOnly = ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
-        } else {
-            ctrlCmdOnly = ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
-        }
+        const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
         switch (ev.keyCode) {
             case KeyCode.UP:
@@ -212,6 +209,7 @@ export default React.createClass({
     },
 
     render: function() {
+        const TagPanel = sdk.getComponent('structures.TagPanel');
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RightPanel = sdk.getComponent('structures.RightPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
@@ -239,22 +237,23 @@ export default React.createClass({
                         oobData={this.props.roomOobData}
                         eventPixelOffset={this.props.initialEventPixelOffset}
                         key={this.props.currentRoomId || 'roomview'}
-                        opacity={this.props.middleOpacity}
+                        disabled={this.props.middleDisabled}
                         collapsedRhs={this.props.collapseRhs}
                         ConferenceHandler={this.props.ConferenceHandler}
                     />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel roomId={this.props.currentRoomId} opacity={this.props.rightOpacity} />;
+                if (!this.props.collapseRhs) {
+                    right_panel = <RightPanel roomId={this.props.currentRoomId} disabled={this.props.rightDisabled} />;
+                }
                 break;
 
             case PageTypes.UserSettings:
                 page_element = <UserSettings
                     onClose={this.props.onUserSettingsClose}
                     brand={this.props.config.brand}
-                    enableLabs={this.props.config.enableLabs}
                     referralBaseUrl={this.props.config.referralBaseUrl}
                     teamToken={this.props.teamToken}
                 />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel opacity={this.props.rightOpacity} />;
+                if (!this.props.collapseRhs) right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
 
             case PageTypes.MyGroups:
@@ -266,7 +265,7 @@ export default React.createClass({
                     onRoomCreated={this.props.onRoomCreated}
                     collapsedRhs={this.props.collapseRhs}
                 />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel opacity={this.props.rightOpacity} />;
+                if (!this.props.collapseRhs) right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
 
             case PageTypes.RoomDirectory:
@@ -294,14 +293,15 @@ export default React.createClass({
 
             case PageTypes.UserView:
                 page_element = null; // deliberately null for now
-                right_panel = <RightPanel opacity={this.props.rightOpacity} />;
+                right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
             case PageTypes.GroupView:
                 page_element = <GroupView
                     groupId={this.props.currentGroupId}
+                    isNew={this.props.currentGroupIsNew}
                     collapsedRhs={this.props.collapseRhs}
                 />;
-                if (!this.props.collapseRhs) right_panel = <RightPanel groupId={this.props.currentGroupId} opacity={this.props.rightOpacity} />;
+                if (!this.props.collapseRhs) right_panel = <RightPanel groupId={this.props.currentGroupId} disabled={this.props.rightDisabled} />;
                 break;
         }
 
@@ -331,10 +331,11 @@ export default React.createClass({
             <div className='mx_MatrixChat_wrapper'>
                 { topBar }
                 <div className={bodyClasses}>
+                    { SettingsStore.isFeatureEnabled("feature_tag_panel") ? <TagPanel /> : <div /> }
                     <LeftPanel
                         selectedRoom={this.props.currentRoomId}
                         collapsed={this.props.collapseLhs || false}
-                        opacity={this.props.leftOpacity}
+                        disabled={this.props.leftDisabled}
                     />
                     <main className='mx_MatrixChat_middlePanel'>
                         { page_element }
@@ -345,3 +346,5 @@ export default React.createClass({
         );
     },
 });
+
+export default DragDropContext(HTML5Backend)(LoggedInView);

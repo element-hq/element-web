@@ -45,7 +45,6 @@ const NotificationPanel = React.createClass({
                     manageReadMarkers={false}
                     timelineSet={timelineSet}
                     showUrlPreview = {false}
-                    opacity={this.props.opacity}
                     tileShape="notif"
                     empty={_t('You have no visible notifications')}
                 />

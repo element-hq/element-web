@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,8 +21,7 @@ import sdk from '../../../index';
 import dis from "../../../dispatcher";
 import ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
-import { _t, _tJsx} from '../../../languageHandler';
-import UserSettingsStore from '../../../UserSettingsStore';
+import { _t } from '../../../languageHandler';
 
 
 module.exports = React.createClass({
@@ -99,13 +99,13 @@ module.exports = React.createClass({
                 supportedText = _t(" (unsupported)");
             } else {
                 joinNode = (<span>
-                    { _tJsx(
+                    { _t(
                         "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.",
-                        [/<voiceText>(.*?)<\/voiceText>/, /<videoText>(.*?)<\/videoText>/],
-                        [
-                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}} href="#">{ sub }</a>,
-                            (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video');}} href="#">{ sub }</a>,
-                        ],
+                        {},
+                        {
+                            'voiceText': (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'voice');}} href="#">{ sub }</a>,
+                            'videoText': (sub) => <a onClick={(event)=>{ this.onConferenceNotificationClick(event, 'video');}} href="#">{ sub }</a>,
+                        },
                     ) }
                 </span>);
             }
@@ -128,15 +128,12 @@ module.exports = React.createClass({
             />
         );
 
-        let appsDrawer = null;
-        if(UserSettingsStore.isFeatureEnabled('matrix_apps')) {
-            appsDrawer = <AppsDrawer ref="appsDrawer"
-                room={this.props.room}
-                userId={this.props.userId}
-                maxHeight={this.props.maxHeight}
-                showApps={this.props.showApps}
-            />;
-        }
+        const appsDrawer = <AppsDrawer ref="appsDrawer"
+            room={this.props.room}
+            userId={this.props.userId}
+            maxHeight={this.props.maxHeight}
+            showApps={this.props.showApps}
+        />;
 
         return (
             <div className="mx_RoomView_auxPanel" style={{maxHeight: this.props.maxHeight}} >

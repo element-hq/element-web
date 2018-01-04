@@ -30,6 +30,8 @@ export default React.createClass({
 
         // List of the addresses to display
         addressList: React.PropTypes.arrayOf(UserAddressType).isRequired,
+        // Whether to show the address on the address tiles
+        showAddress: React.PropTypes.bool,
         truncateAt: React.PropTypes.number.isRequired,
         selected: React.PropTypes.number,
 
@@ -142,7 +144,13 @@ export default React.createClass({
                         key={this.props.addressList[i].addressType + "/" + this.props.addressList[i].address}
                         ref={(ref) => { this.addressListElement = ref; }}
                     >
-                        <AddressTile address={this.props.addressList[i]} justified={true} networkName="vector" networkUrl="img/search-icon-vector.svg" />
+                        <AddressTile
+                            address={this.props.addressList[i]}
+                            showAddress={this.props.showAddress}
+                            justified={true}
+                            networkName="vector"
+                            networkUrl="img/search-icon-vector.svg"
+                        />
                     </div>,
                 );
             }

@@ -2,6 +2,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,20 +31,57 @@ import type {Room, RoomMember} from 'matrix-js-sdk';
 
 const USER_REGEX = /@\S*/g;
 
-let instance = null;
-
 export default class UserProvider extends AutocompleteProvider {
     users: Array<RoomMember> = null;
     room: Room = null;
 
-    constructor() {
+    constructor(room) {
         super(USER_REGEX, {
             keys: ['name'],
         });
+        this.room = room;
         this.matcher = new FuzzyMatcher([], {
             keys: ['name', 'userId'],
             shouldMatchPrefix: true,
         });
+
+        this._onRoomTimelineBound = this._onRoomTimeline.bind(this);
+        this._onRoomStateMemberBound = this._onRoomStateMember.bind(this);
+
+        MatrixClientPeg.get().on("Room.timeline", this._onRoomTimelineBound);
+        MatrixClientPeg.get().on("RoomState.members", this._onRoomStateMemberBound);
+    }
+
+    destroy() {
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("Room.timeline", this._onRoomTimelineBound);
+            MatrixClientPeg.get().removeListener("RoomState.members", this._onRoomStateMemberBound);
+        }
+    }
+
+    _onRoomTimeline(ev, room, toStartOfTimeline, removed, data) {
+        if (!room) return;
+        if (removed) return;
+        if (room.roomId !== this.room.roomId) return;
+
+        // ignore events from filtered timelines
+        if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
+
+        // ignore anything but real-time updates at the end of the room:
+        // updates from pagination will happen when the paginate completes.
+        if (toStartOfTimeline || !data || !data.liveEvent) return;
+
+        this.onUserSpoke(ev.sender);
+    }
+
+    _onRoomStateMember(ev, state, member) {
+        // ignore members in other rooms
+        if (member.roomId !== this.room.roomId) {
+            return;
+        }
+
+        // blow away the users cache
+        this.users = null;
     }
 
     async getCompletions(query: string, selection: {start: number, end: number}, force = false) {
@@ -86,16 +124,11 @@ export default class UserProvider extends AutocompleteProvider {
         return '👥 ' + _t('Users');
     }
 
-    setUserListFromRoom(room: Room) {
-        this.room = room;
-        this.users = null;
-    }
-
     _makeUsers() {
         const events = this.room.getLiveTimeline().getEvents();
         const lastSpoken = {};
 
-        for(const event of events) {
+        for (const event of events) {
             lastSpoken[event.getSender()] = event.getTs();
         }
 
@@ -121,13 +154,6 @@ export default class UserProvider extends AutocompleteProvider {
         this.users = [user, ...this.users];
 
         this.matcher.setObjects(this.users);
-    }
-
-    static getInstance(): UserProvider {
-        if (instance == null) {
-            instance = new UserProvider();
-        }
-        return instance;
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {

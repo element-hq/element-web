@@ -17,64 +17,81 @@ limitations under the License.
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { MatrixClient } from 'matrix-js-sdk';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
-import { groupMemberFromApiObject } from '../../../groups';
-import withMatrixClient from '../../../wrappers/withMatrixClient';
+import GroupStoreCache from '../../../stores/GroupStoreCache';
 import AccessibleButton from '../elements/AccessibleButton';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 
-
-module.exports = withMatrixClient(React.createClass({
+module.exports = React.createClass({
     displayName: 'GroupMemberInfo',
 
+    contextTypes: {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
+    },
+
     propTypes: {
-        matrixClient: PropTypes.object.isRequired,
         groupId: PropTypes.string,
         groupMember: GroupMemberType,
+        isInvited: PropTypes.bool,
     },
 
     getInitialState: function() {
         return {
-            fetching: false,
             removingUser: false,
-            groupMembers: null,
+            isUserPrivilegedInGroup: null,
         };
     },
 
     componentWillMount: function() {
-        this._fetchMembers();
+        this._initGroupStore(this.props.groupId);
     },
 
-    _fetchMembers: function() {
-        this.setState({fetching: true});
-        this.props.matrixClient.getGroupUsers(this.props.groupId).then((result) => {
-            this.setState({
-                groupMembers: result.chunk.map((apiMember) => {
-                    return groupMemberFromApiObject(apiMember);
-                }),
-                fetching: false,
-            });
-        }).catch((e) => {
-            this.setState({fetching: false});
-            console.error("Failed to get group groupMember list: ", e);
+    componentWillReceiveProps(newProps) {
+        if (newProps.groupId !== this.props.groupId) {
+            this._unregisterGroupStore();
+            this._initGroupStore(newProps.groupId);
+        }
+    },
+
+    _initGroupStore(groupId) {
+        this._groupStore = GroupStoreCache.getGroupStore(this.props.groupId);
+        this._groupStore.registerListener(this.onGroupStoreUpdated);
+    },
+
+    _unregisterGroupStore() {
+        if (this._groupStore) {
+            this._groupStore.unregisterListener(this.onGroupStoreUpdated);
+        }
+    },
+
+    onGroupStoreUpdated: function() {
+        this.setState({
+            isUserInvited: this._groupStore.getGroupInvitedMembers().some(
+                (m) => m.userId === this.props.groupMember.userId,
+            ),
+            isUserPrivilegedInGroup: this._groupStore.isUserPrivileged(),
         });
     },
 
     _onKick: function() {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
+            matrixClient: this.context.matrixClient,
             groupMember: this.props.groupMember,
-            action: _t('Remove from group'),
+            action: this.state.isUserInvited ? _t('Disinvite') : _t('Remove from community'),
+            title: this.state.isUserInvited ? _t('Disinvite this user from community?')
+                                            : _t('Remove this user from community?'),
             danger: true,
             onFinished: (proceed) => {
                 if (!proceed) return;
 
                 this.setState({removingUser: true});
-                this.props.matrixClient.removeUserFromGroup(
+                this.context.matrixClient.removeUserFromGroup(
                     this.props.groupId, this.props.groupMember.userId,
                 ).then(() => {
                     // return to the user list
@@ -86,7 +103,9 @@ module.exports = withMatrixClient(React.createClass({
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Failed to remove user from group', '', ErrorDialog, {
                         title: _t('Error'),
-                        description: _t('Failed to remove user from group'),
+                        description: this.state.isUserInvited ?
+                            _t('Failed to withdraw invitation') :
+                            _t('Failed to remove user from community'),
                     });
                 }).finally(() => {
                     this.setState({removingUser: false});
@@ -111,24 +130,17 @@ module.exports = withMatrixClient(React.createClass({
     },
 
     render: function() {
-        if (this.state.fetching || this.state.removingUser) {
+        if (this.state.removingUser) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return <Spinner />;
         }
-        if (!this.state.groupMembers) return null;
 
-        const targetIsInGroup = this.state.groupMembers.some((m) => {
-            return m.userId === this.props.groupMember.userId;
-        });
-
-        let kickButton;
-        let adminButton;
-
-        if (targetIsInGroup) {
-            kickButton = (
+        let adminTools;
+        if (this.state.isUserPrivilegedInGroup) {
+            const kickButton = (
                 <AccessibleButton className="mx_MemberInfo_field"
                         onClick={this._onKick}>
-                    { _t('Remove from group') }
+                    { this.state.isUserInvited ? _t('Disinvite') : _t('Remove from community') }
                 </AccessibleButton>
             );
 
@@ -137,22 +149,19 @@ module.exports = withMatrixClient(React.createClass({
             giveModButton = <AccessibleButton className="mx_MemberInfo_field" onClick={this.onModToggle}>
                 {giveOpLabel}
             </AccessibleButton>;*/
+
+            if (kickButton) {
+                adminTools =
+                    <div className="mx_MemberInfo_adminTools">
+                        <h3>{ _t("Admin Tools") }</h3>
+                        <div className="mx_MemberInfo_buttons">
+                            { kickButton }
+                        </div>
+                    </div>;
+            }
         }
 
-        let adminTools;
-        if (kickButton || adminButton) {
-            adminTools =
-                <div className="mx_MemberInfo_adminTools">
-                    <h3>{ _t("Admin Tools") }</h3>
-
-                    <div className="mx_MemberInfo_buttons">
-                        { kickButton }
-                        { adminButton }
-                    </div>
-                </div>;
-        }
-
-        const avatarUrl = this.props.matrixClient.mxcUrlToHttp(
+        const avatarUrl = this.context.matrixClient.mxcUrlToHttp(
             this.props.groupMember.avatarUrl,
             36, 36, 'crop',
         );
@@ -173,7 +182,7 @@ module.exports = withMatrixClient(React.createClass({
             <div className="mx_MemberInfo">
                 <GeminiScrollbar autoshow={true}>
                     <AccessibleButton className="mx_MemberInfo_cancel"onClick={this._onCancel}>
-                        <img src="img/cancel.svg" width="18" height="18" />
+                        <img src="img/cancel.svg" width="18" height="18" className="mx_filterFlipColor" />
                     </AccessibleButton>
                     <div className="mx_MemberInfo_avatar">
                         { avatar }
@@ -192,4 +201,4 @@ module.exports = withMatrixClient(React.createClass({
             </div>
         );
     },
-}));
+});

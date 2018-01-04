@@ -61,9 +61,9 @@ export default withMatrixClient(React.createClass({
         );
 
         return (
-            <EntityTile presenceState="online"
-                avatarJsx={av} onClick={this.onClick}
-                name={name} powerLevel={0} suppressOnHover={true}
+            <EntityTile name={name} avatarJsx={av} onClick={this.onClick}
+                suppressOnHover={true} presenceState="online"
+                powerStatus={this.props.member.isPrivileged ? EntityTile.POWER_STATUS_ADMIN : null}
             />
         );
     },

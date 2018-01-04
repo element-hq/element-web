@@ -17,46 +17,44 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import sdk from '../../../index';
-import { groupMemberFromApiObject } from '../../../groups';
+import GroupStoreCache from '../../../stores/GroupStoreCache';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import PropTypes from 'prop-types';
-import withMatrixClient from '../../../wrappers/withMatrixClient';
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
-export default withMatrixClient(React.createClass({
+export default React.createClass({
     displayName: 'GroupMemberList',
 
     propTypes: {
-        matrixClient: PropTypes.object.isRequired,
         groupId: PropTypes.string.isRequired,
     },
 
     getInitialState: function() {
         return {
-            fetching: false,
             members: null,
+            invitedMembers: null,
             truncateAt: INITIAL_LOAD_NUM_MEMBERS,
         };
     },
 
     componentWillMount: function() {
         this._unmounted = false;
-        this._fetchMembers();
+        this._initGroupStore(this.props.groupId);
+    },
+
+    _initGroupStore: function(groupId) {
+        this._groupStore = GroupStoreCache.getGroupStore(groupId);
+        this._groupStore.registerListener(() => {
+            this._fetchMembers();
+        });
     },
 
     _fetchMembers: function() {
-        this.setState({fetching: true});
-        this.props.matrixClient.getGroupUsers(this.props.groupId).then((result) => {
-            this.setState({
-                members: result.chunk.map((apiMember) => {
-                    return groupMemberFromApiObject(apiMember);
-                }),
-                fetching: false,
-            });
-        }).catch((e) => {
-            this.setState({fetching: false});
-            console.error("Failed to get group member list: " + e);
+        if (this._unmounted) return;
+        this.setState({
+            members: this._groupStore.getGroupMembers(),
+            invitedMembers: this._groupStore.getGroupInvitedMembers(),
         });
     },
 
@@ -83,14 +81,13 @@ export default withMatrixClient(React.createClass({
         this.setState({ searchQuery: ev.target.value });
     },
 
-    makeGroupMemberTiles: function(query) {
+    makeGroupMemberTiles: function(query, memberList) {
         const GroupMemberTile = sdk.getComponent("groups.GroupMemberTile");
+        const TruncatedList = sdk.getComponent("elements.TruncatedList");
         query = (query || "").toLowerCase();
-
-        let memberList = this.state.members;
         if (query) {
             memberList = memberList.filter((m) => {
-                const matchesName = m.displayname.toLowerCase().indexOf(query) !== -1;
+                const matchesName = (m.displayname || "").toLowerCase().includes(query);
                 const matchesId = m.userId.toLowerCase().includes(query);
 
                 if (!matchesName && !matchesId) {
@@ -101,55 +98,75 @@ export default withMatrixClient(React.createClass({
             });
         }
 
-        memberList = memberList.map((m) => {
+        const uniqueMembers = {};
+        memberList.forEach((m) => {
+            if (!uniqueMembers[m.userId]) uniqueMembers[m.userId] = m;
+        });
+        memberList = Object.keys(uniqueMembers).map((userId) => uniqueMembers[userId]);
+        // Descending sort on isPrivileged = true = 1 to isPrivileged = false = 0
+        memberList.sort((a, b) => {
+            if (a.isPrivileged === b.isPrivileged) {
+                const aName = a.displayname || a.userId;
+                const bName = b.displayname || b.userId;
+                if (aName < bName) {
+                    return -1;
+                } else if (aName > bName) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } else {
+                return a.isPrivileged ? -1 : 1;
+            }
+        });
+
+        const memberTiles = memberList.map((m) => {
             return (
                 <GroupMemberTile key={m.userId} groupId={this.props.groupId} member={m} />
             );
         });
 
-        memberList.sort((a, b) => {
-            // TODO: should put admins at the top: we don't yet have that info
-            if (a < b) {
-                return -1;
-            } else if (a > b) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
-
-        return memberList;
+        return <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
+            createOverflowElement={this._createOverflowTile}
+        >
+            { memberTiles }
+        </TruncatedList>;
     },
 
     render: function() {
-        if (this.state.fetching) {
+        if (this.state.fetching || this.state.fetchingInvitedMembers) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return (<div className="mx_MemberList">
                 <Spinner />
             </div>);
-        } else if (this.state.members === null) {
-            return null;
         }
 
         const inputBox = (
             <form autoComplete="off">
                 <input className="mx_GroupMemberList_query" id="mx_GroupMemberList_query" type="text"
                         onChange={this.onSearchQueryChanged} value={this.state.searchQuery}
-                        placeholder={_t('Filter group members')} />
+                        placeholder={_t('Filter community members')} />
             </form>
         );
 
-        const TruncatedList = sdk.getComponent("elements.TruncatedList");
+        const joined = this.state.members ? <div className="mx_MemberList_joined">
+            { this.makeGroupMemberTiles(this.state.searchQuery, this.state.members) }
+        </div> : <div />;
+
+        const invited = (this.state.invitedMembers && this.state.invitedMembers.length > 0) ?
+            <div className="mx_MemberList_invited">
+                <h2>{ _t("Invited") }</h2>
+                { this.makeGroupMemberTiles(this.state.searchQuery, this.state.invitedMembers) }
+            </div> : <div />;
+
         return (
             <div className="mx_MemberList">
                 { inputBox }
-                <GeminiScrollbar autoshow={true} className="mx_MemberList_joined mx_MemberList_outerWrapper">
-                    <TruncatedList className="mx_MemberList_wrapper" truncateAt={this.state.truncateAt}
-                            createOverflowElement={this._createOverflowTile}>
-                        { this.makeGroupMemberTiles(this.state.searchQuery) }
-                    </TruncatedList>
+                <GeminiScrollbar autoshow={true} className="mx_MemberList_outerWrapper">
+                    { joined }
+                    { invited }
                 </GeminiScrollbar>
             </div>
         );
     },
-}));
+});

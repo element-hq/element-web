@@ -47,7 +47,7 @@ function presenceClassForMember(presenceState, lastActiveAgo) {
     }
 }
 
-module.exports = React.createClass({
+const EntityTile = React.createClass({
     displayName: 'EntityTile',
 
     propTypes: {
@@ -116,7 +116,9 @@ module.exports = React.createClass({
             nameEl = (
                 <div className="mx_EntityTile_details">
                     <img className="mx_EntityTile_chevron" src="img/member_chevron.png" width="8" height="12" />
-                    <EmojiText element="div" className="mx_EntityTile_name_hover" dir="auto">{ name }</EmojiText>
+                    <EmojiText element="div" className="mx_EntityTile_name mx_EntityTile_name_hover" dir="auto">
+                        { name }
+                    </EmojiText>
                     <PresenceLabel activeAgo={activeAgo}
                         currentlyActive={this.props.presenceCurrentlyActive}
                         presenceState={this.props.presenceState} />
@@ -138,16 +140,19 @@ module.exports = React.createClass({
         }
 
         let power;
-        const powerLevel = this.props.powerLevel;
-        if (powerLevel >= 50 && powerLevel < 99) {
-            power = <img src="img/mod.svg" className="mx_EntityTile_power" width="16" height="17" alt={_t("Moderator")} />;
-        }
-        if (powerLevel >= 99) {
-            power = <img src="img/admin.svg" className="mx_EntityTile_power" width="16" height="17" alt={_t("Admin")} />;
+        const powerStatus = this.props.powerStatus;
+        if (powerStatus) {
+            const src = {
+                [EntityTile.POWER_STATUS_MODERATOR]: "img/mod.svg",
+                [EntityTile.POWER_STATUS_ADMIN]: "img/admin.svg",
+            }[powerStatus];
+            const alt = {
+                [EntityTile.POWER_STATUS_MODERATOR]: _t("Moderator"),
+                [EntityTile.POWER_STATUS_ADMIN]: _t("Admin"),
+            }[powerStatus];
+            power = <img src={src} className="mx_EntityTile_power" width="16" height="17" alt={alt} />;
         }
 
-
-        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
         const av = this.props.avatarJsx || <BaseAvatar name={this.props.name} width={36} height={36} />;
@@ -166,3 +171,9 @@ module.exports = React.createClass({
         );
     },
 });
+
+EntityTile.POWER_STATUS_MODERATOR = "moderator";
+EntityTile.POWER_STATUS_ADMIN = "admin";
+
+
+export default EntityTile;

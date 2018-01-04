@@ -256,7 +256,10 @@ export const EmailIdentityAuthEntry = React.createClass({
         } else {
             return (
                 <div>
-                    <p>{ _t("An email has been sent to") } <i>{ this.props.inputs.emailAddress }</i></p>
+                    <p>{ _t("An email has been sent to %(emailAddress)s",
+                        { emailAddress: (sub) => <i>{ this.props.inputs.emailAddress }</i> },
+                    ) }
+                    </p>
                     <p>{ _t("Please check your email to continue registration.") }</p>
                 </div>
             );
@@ -370,7 +373,10 @@ export const MsisdnAuthEntry = React.createClass({
             });
             return (
                 <div>
-                    <p>{ _t("A text message has been sent to") } +<i>{ this._msisdn }</i></p>
+                    <p>{ _t("A text message has been sent to %(msisdn)s",
+                        { msisdn: <i>{ this._msisdn }</i> },
+                    ) }
+                    </p>
                     <p>{ _t("Please enter the code it contains:") }</p>
                     <div className="mx_InteractiveAuthEntryComponents_msisdnWrapper">
                         <form onSubmit={this._onFormSubmit}>

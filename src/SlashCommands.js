@@ -20,6 +20,7 @@ import Tinter from "./Tinter";
 import sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
+import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
 
 
 class Command {
@@ -97,9 +98,7 @@ const commands = {
                     colorScheme.secondary_color = matches[4];
                 }
                 return success(
-                    MatrixClientPeg.get().setRoomAccountData(
-                        roomId, "org.matrix.room.color_scheme", colorScheme,
-                    ),
+                    SettingsStore.setValue("roomColor", roomId, SettingLevel.ROOM_ACCOUNT, colorScheme),
                 );
             }
         }

@@ -27,6 +27,7 @@ import ScalarAuthClient from '../../../ScalarAuthClient';
 import ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
 import WidgetUtils from '../../../WidgetUtils';
+import SettingsStore from "../../../settings/SettingsStore";
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
@@ -81,16 +82,25 @@ module.exports = React.createClass({
     },
 
     onAction: function(action) {
+        const hideWidgetKey = this.props.room.roomId + "_hide_widget_drawer";
         switch (action.action) {
             case 'appsDrawer':
-                // When opening the app draw when there aren't any apps, auto-launch the
-                // integrations manager to skip the awkward click on "Add widget"
+                // When opening the app drawer when there aren't any apps,
+                // auto-launch the integrations manager to skip the awkward
+                // click on "Add widget"
                 if (action.show) {
                     const apps = this._getApps();
                     if (apps.length === 0) {
                         this._launchManageIntegrations();
                     }
+
+                    localStorage.removeItem(hideWidgetKey);
+                } else {
+                    // Store hidden state of widget
+                    // Don't show if previously hidden
+                    localStorage.setItem(hideWidgetKey, true);
                 }
+
                 break;
         }
     },
@@ -122,16 +132,22 @@ module.exports = React.createClass({
             '$matrix_room_id': this.props.room.roomId,
             '$matrix_display_name': user ? user.displayName : this.props.userId,
             '$matrix_avatar_url': user ? MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl) : '',
-        };
 
-        if(app.data) {
-            Object.keys(app.data).forEach((key) => {
-                params['$' + key] = app.data[key];
-            });
-        }
+            // TODO: Namespace themes through some standard
+            '$theme': SettingsStore.getValue("theme"),
+        };
 
         app.id = appId;
         app.name = app.name || app.type;
+
+        if (app.data) {
+            Object.keys(app.data).forEach((key) => {
+                params['$' + key] = app.data[key];
+            });
+
+            app.waitForIframeLoad = (app.data.waitForIframeLoad === 'false' ? false : true);
+        }
+
         app.url = this.encodeUri(app.url, params);
         app.creatorUserId = (sender && sender.userId) ? sender.userId : null;
 
@@ -168,7 +184,7 @@ module.exports = React.createClass({
     _canUserModify: function() {
         try {
             return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
-        } catch(err) {
+        } catch (err) {
             console.error(err);
             return false;
         }
@@ -215,6 +231,8 @@ module.exports = React.createClass({
                     userId={this.props.userId}
                     show={this.props.showApps}
                     creatorUserId={app.creatorUserId}
+                    widgetPageTitle={(app.data && app.data.title) ? app.data.title : ''}
+                    waitForIframeLoad={app.waitForIframeLoad}
                 />);
             });
 

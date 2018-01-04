@@ -26,11 +26,9 @@ class MenuOption extends React.Component {
         this._onClick = this._onClick.bind(this);
     }
 
-    getDefaultProps() {
-        return {
-            disabled: false,
-        };
-    }
+    static defaultProps = {
+        disabled: false,
+    };
 
     _onMouseEnter() {
         this.props.onMouseEnter(this.props.dropdownKey);
