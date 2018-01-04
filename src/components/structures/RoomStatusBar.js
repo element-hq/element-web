@@ -302,11 +302,11 @@ module.exports = React.createClass({
             ) {
                 title = unsentMessages[0].error.data.error;
             } else {
-                title = _t("Some of your messages have not been sent.");
+                title = _t('%(count)s of your messages have not been sent.', { count: unsentMessages.length });
             }
-            content = _t("<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. " +
+            content = _t("%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. " +
                "You can also select individual messages to resend or cancel.",
-                {},
+                { count: unsentMessages.length },
                 {
                     'resendText': (sub) =>
                         <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this._onResendAllClick}>{ sub }</a>,
