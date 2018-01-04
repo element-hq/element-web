@@ -41,7 +41,6 @@ import AccessibleButton from '../elements/AccessibleButton';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import RoomViewStore from '../../../stores/RoomViewStore';
 
-
 module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
 
@@ -713,6 +712,10 @@ module.exports = withMatrixClient(React.createClass({
 
         if (this.props.member.userId !== this.props.matrixClient.credentials.userId) {
             const dmRoomMap = new DMRoomMap(this.props.matrixClient);
+            // dmRooms will not include dmRooms that we have been invited into but did not join.
+            // Because DMRoomMap runs off account_data[m.direct] which is only set on join of dm room.
+            // XXX: we potentially want DMs we have been invited to, to also show up here :L
+            // especially as logic below concerns specially if we haven't joined but have been invited
             const dmRooms = dmRoomMap.getDMRoomsForUserId(this.props.member.userId);
 
             const RoomTile = sdk.getComponent("rooms.RoomTile");
@@ -722,10 +725,15 @@ module.exports = withMatrixClient(React.createClass({
                 const room = this.props.matrixClient.getRoom(roomId);
                 if (room) {
                     const me = room.getMember(this.props.matrixClient.credentials.userId);
-                    const highlight = (
-                        room.getUnreadNotificationCount('highlight') > 0 ||
-                        me.membership === "invite"
-                    );
+
+                    // not a DM room if we have are not joined
+                    if (!me.membership || me.membership !== 'join') continue;
+                    // not a DM room if they are not joined
+                    const them = this.props.member;
+                    if (!them.membership || them.membership !== 'join') continue;
+
+                    const highlight = room.getUnreadNotificationCount('highlight') > 0 || me.membership === 'invite';
+
                     tiles.push(
                         <RoomTile key={room.roomId} room={room}
                             collapsed={false}
