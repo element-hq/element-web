@@ -326,7 +326,7 @@
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "Zobrazovat časové značky v 12hodinovém formátu (např. 2:30 odp.)",
     "Sign in": "Přihlásit",
     "Sign out": "Odhlásit",
-    "Some of your messages have not been sent.": "Některé z vašich zpráv nebyly odeslány.",
+    "%(count)s of your messages have not been sent.|other": "Některé z vašich zpráv nebyly odeslány.",
     "Someone": "Někdo",
     "Start a chat": "Začít chat",
     "Start authentication": "Začít ověření",
