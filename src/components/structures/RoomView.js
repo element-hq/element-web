@@ -459,8 +459,11 @@ module.exports = React.createClass({
             case 'message_sent':
                 this._checkIfAlone(this.state.room);
                 break;
-            case 'inject_sticker':
-              this.injectSticker(payload.url, payload.info, payload.text);
+            case 'post_sticker_message':
+              this.injectSticker(
+                  payload.data.content.url,
+                  payload.data.content.info,
+                  payload.data.description || payload.data.name);
               break;
             case 'picture_snapshot':
                 this.uploadFile(payload.file);

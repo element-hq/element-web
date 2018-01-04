@@ -253,8 +253,10 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
                 // Message endpoint already registered
                 console.warn("Endpoint already registered");
                 return;
+            } else {
+                console.warn(`Adding widget messaging endpoint for ${widgetId}`);
+                global.mxWidgetMessagingMessageEndpoints.push(endpoint);
             }
-            global.mxWidgetMessagingMessageEndpoints.push(endpoint);
         }
     }
 
@@ -322,6 +324,9 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
                 api: "widget",
                 version: WIDGET_API_VERSION,
             });
+        } else if (action === 'sticker_message') {
+            console.warn('got widget sticker message', widgetId);
+            dis.dispatch({action: 'sticker_message', data: event.data.data});
         } else {
             console.warn("Widget postMessage event unhandled");
             this.sendError(event, {message: "The postMessage was unhandled"});
