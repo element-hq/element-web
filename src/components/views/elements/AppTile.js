@@ -333,7 +333,7 @@ export default React.createClass({
      * Called when widget iframe has finished loading
      */
     _onLoaded() {
-        // console.warn("App frame", this.refs.appFrame.contentWindow);
+        console.warn("App frame loaded", this.props.id);
         this.widgetMessaging = new WidgetMessaging(this.props.id, this.refs.appFrame.contentWindow);
         this.widgetMessaging.startListening();
         this.widgetMessaging.addEndpoint(this.props.id, this.props.url);
@@ -345,7 +345,21 @@ export default React.createClass({
             console.log("Failed to get widget capabilities", this.widgetId, err);
         });
         this.setState({loading: false});
+
+        dis.register(this._onAction);
     },
+
+    _onAction(payload) {
+      switch (payload) {
+        case payload.action === 'sticker_message':
+          if (this._hasCapability('sticker_message')) {
+            dis.dispatch({action: 'post_sticker_message', data: payload.data});
+          } else {
+            console.warn('Ignoring sticker message. Invalid capability');
+          }
+          break;
+      }
+  },
 
     /**
      * Set remote content title on AppTile
