@@ -208,7 +208,7 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
     startListening() {
         this.start();
         if (global.mxWidgetMessagingListenerCount === 0) {
-            window.addEventListener("message", () => this.onMessage, false);
+            window.addEventListener("message", (evt) => this.onMessage(evt), false);
         }
         global.mxWidgetMessagingListenerCount += 1;
     }
