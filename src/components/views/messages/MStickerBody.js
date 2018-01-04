@@ -17,7 +17,6 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import ImageUtils from '../../../ImageUtils';
 import Modal from '../../../Modal';
@@ -46,29 +45,6 @@ module.exports = React.createClass({
             decryptedBlob: null,
             error: null,
         };
-    },
-
-
-    onClick: function onClick(ev) {
-        if (ev.button == 0 && !ev.metaKey) {
-            ev.preventDefault();
-            const content = this.props.mxEvent.getContent();
-            const httpUrl = this._getContentUrl();
-            const ImageView = sdk.getComponent("elements.ImageView");
-            const params = {
-                src: httpUrl,
-                name: content.body && content.body.length > 0 ? content.body : _t('Attachment'),
-                mxEvent: this.props.mxEvent,
-            };
-
-            if (content.info) {
-                params.width = content.info.w;
-                params.height = content.info.h;
-                params.fileSize = content.info.size;
-            }
-
-            Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
-        }
     },
 
     _isGif: function() {
@@ -185,7 +161,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const TintableSvg = sdk.getComponent("elements.TintableSvg");
         const content = this.props.mxEvent.getContent();
 
         if (this.state.error !== null) {
@@ -227,13 +202,11 @@ module.exports = React.createClass({
         if (thumbUrl) {
             return (
                 <span className="mx_MImageBody" ref="body">
-                    <a href={contentUrl} onClick={this.onClick}>
-                        <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
-                            alt={content.body}
-                            onLoad={this.props.onWidgetLoad}
-                            onMouseEnter={this.onImageEnter}
-                            onMouseLeave={this.onImageLeave} />
-                    </a>
+                    <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
+                        alt={content.body}
+                        onLoad={this.props.onWidgetLoad}
+                        onMouseEnter={this.onImageEnter}
+                        onMouseLeave={this.onImageLeave} />
                 </span>
             );
         } else if (content.body) {
