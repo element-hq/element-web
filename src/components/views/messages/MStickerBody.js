@@ -19,8 +19,6 @@ limitations under the License.
 import React from 'react';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import ImageUtils from '../../../ImageUtils';
-import Modal from '../../../Modal';
-import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
 import Promise from 'bluebird';
