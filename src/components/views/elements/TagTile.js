@@ -20,7 +20,7 @@ import classNames from 'classnames';
 import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
-import { isOnlyCtrlOrCmdKeyEvent } from '../../../Keyboard';
+import { isCtrlOrCmdKeyEvent } from '../../../Keyboard';
 
 import FlairStore from '../../../stores/FlairStore';
 
@@ -76,7 +76,7 @@ export default React.createClass({
         dis.dispatch({
             action: 'select_tag',
             tag: this.props.tag,
-            ctrlOrCmdKey: isOnlyCtrlOrCmdKeyEvent(e),
+            ctrlOrCmdKey: isCtrlOrCmdKeyEvent(e),
             shiftKey: e.shiftKey,
         });
     },

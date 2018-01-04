@@ -15,12 +15,17 @@ limitations under the License.
 */
 import {Store} from 'flux/utils';
 import dis from '../dispatcher';
+import Analytics from '../Analytics';
 
 const INITIAL_STATE = {
     orderedTags: null,
     orderedTagsAccountData: null,
     hasSynced: false,
     joinedGroupIds: null,
+
+    selectedTags: [],
+    // Last selected tag when shift was not being pressed
+    anchorTag: null,
 };
 
 /**
@@ -93,6 +98,60 @@ class TagOrderStore extends Store {
                 this._setState({orderedTags});
                 break;
             }
+            case 'select_tag': {
+                let newTags = [];
+                // Shift-click semantics
+                if (payload.shiftKey) {
+                    // Select range of tags
+                    let start = this._state.orderedTags.indexOf(this._state.anchorTag);
+                    let end = this._state.orderedTags.indexOf(payload.tag);
+
+                    if (start === -1) {
+                        start = end;
+                    }
+                    if (start > end) {
+                        const temp = start;
+                        start = end;
+                        end = temp;
+                    }
+                    newTags = payload.ctrlOrCmdKey ? this._state.selectedTags : [];
+                    newTags = [...new Set(
+                        this._state.orderedTags.slice(start, end + 1).concat(newTags),
+                    )];
+                } else {
+                    if (payload.ctrlOrCmdKey) {
+                        // Toggle individual tag
+                        if (this._state.selectedTags.includes(payload.tag)) {
+                            newTags = this._state.selectedTags.filter((t) => t !== payload.tag);
+                        } else {
+                            newTags = [...this._state.selectedTags, payload.tag];
+                        }
+                    } else {
+                        // Select individual tag
+                        newTags = [payload.tag];
+                    }
+                    // Only set the anchor tag if the tag was previously unselected, otherwise
+                    // the next range starts with an unselected tag.
+                    if (!this._state.selectedTags.includes(payload.tag)) {
+                        this._setState({
+                            anchorTag: payload.tag,
+                        });
+                    }
+                }
+
+                this._setState({
+                    selectedTags: newTags,
+                });
+
+                Analytics.trackEvent('FilterStore', 'select_tag');
+            }
+            break;
+            case 'deselect_tags':
+                this._setState({
+                    selectedTags: [],
+                });
+                Analytics.trackEvent('FilterStore', 'deselect_tags');
+            break;
             case 'on_logged_out': {
                 // Reset state without pushing an update to the view, which generally assumes that
                 // the matrix client isn't `null` and so causing a re-render will cause NPEs.
@@ -128,6 +187,10 @@ class TagOrderStore extends Store {
 
     getOrderedTags() {
         return this._state.orderedTags;
+    }
+
+    getSelectedTags() {
+        return this._state.selectedTags;
     }
 }
 

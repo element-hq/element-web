@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
-import FilterStore from '../../stores/FilterStore';
 import TagOrderStore from '../../stores/TagOrderStore';
 
 import GroupActions from '../../actions/GroupActions';
@@ -44,20 +43,13 @@ const TagPanel = React.createClass({
         this.unmounted = false;
         this.context.matrixClient.on("Group.myMembership", this._onGroupMyMembership);
 
-        this._filterStoreToken = FilterStore.addListener(() => {
-            if (this.unmounted) {
-                return;
-            }
-            this.setState({
-                selectedTags: FilterStore.getSelectedTags(),
-            });
-        });
         this._tagOrderStoreToken = TagOrderStore.addListener(() => {
             if (this.unmounted) {
                 return;
             }
             this.setState({
                 orderedTags: TagOrderStore.getOrderedTags() || [],
+                selectedTags: TagOrderStore.getSelectedTags(),
             });
         });
         // This could be done by anything with a matrix client
