@@ -350,16 +350,18 @@ export default React.createClass({
     },
 
     _onAction(payload) {
-      switch (payload) {
-        case payload.action === 'sticker_message':
-          if (this._hasCapability('sticker_message')) {
-            dis.dispatch({action: 'post_sticker_message', data: payload.data});
-          } else {
-            console.warn('Ignoring sticker message. Invalid capability');
-          }
-          break;
-      }
-  },
+        if (payload.widgetId === this.props.id) {
+            switch (payload.action) {
+                case 'sticker_message':
+                if (this._hasCapability('sticker_message')) {
+                    dis.dispatch({action: 'post_sticker_message', data: payload.data});
+                } else {
+                    console.warn('Ignoring sticker message. Invalid capability');
+                }
+                break;
+            }
+        }
+    },
 
     /**
      * Set remote content title on AppTile

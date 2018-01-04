@@ -325,8 +325,7 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
                 version: WIDGET_API_VERSION,
             });
         } else if (action === 'sticker_message') {
-            console.warn('got widget sticker message', widgetId);
-            dis.dispatch({action: 'sticker_message', data: event.data.data});
+            dis.dispatch({action: 'sticker_message', data: event.data.widgetData, widgetId: event.data.widgetId});
         } else {
             console.warn("Widget postMessage event unhandled");
             this.sendError(event, {message: "The postMessage was unhandled"});
