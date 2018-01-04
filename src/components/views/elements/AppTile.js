@@ -333,7 +333,7 @@ export default React.createClass({
      * Called when widget iframe has finished loading
      */
     _onLoaded() {
-        console.warn("App frame loaded", this.props.id);
+        // console.warn("App frame loaded", this.props.id);
         this.widgetMessaging = new WidgetMessaging(this.props.id, this.refs.appFrame.contentWindow);
         this.widgetMessaging.startListening();
         this.widgetMessaging.addEndpoint(this.props.id, this.props.url);
