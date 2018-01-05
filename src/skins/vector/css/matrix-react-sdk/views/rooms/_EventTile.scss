@@ -224,6 +224,10 @@ limitations under the License.
     width: 19px;
     height: 19px;
     background-image: url($edit-button-url);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .mx_EventTile:hover .mx_EventTile_editButton,
