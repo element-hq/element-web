@@ -1347,10 +1347,12 @@ module.exports = React.createClass({
     },
 
     onStatusBarHidden: function() {
-        if (this.unmounted) return;
+        // This is currently nor desired as it is annoying if it keeps expanding and collapsing
+        // TODO: Find a less annoying way of hiding the status bar
+        /*if (this.unmounted) return;
         this.setState({
             statusBarVisible: false,
-        });
+        });*/
     },
 
     showSettings: function(show) {
