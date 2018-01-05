@@ -93,8 +93,9 @@ module.exports = React.createClass({
         this._visibleRoomsForGroup = {
             // $groupId: [$roomId1, $roomId2, ...],
         };
-        // All rooms that should be kept in the room list when filtering
-        this._visibleRooms = [];
+        // All rooms that should be kept in the room list when filtering.
+        // By default, show all rooms.
+        this._visibleRooms = MatrixClientPeg.get().getRooms();
         // When the selected tags are changed, initialise a group store if necessary
         this._tagStoreToken = TagOrderStore.addListener(() => {
             (TagOrderStore.getOrderedTags() || []).forEach((tag) => {
@@ -197,11 +198,11 @@ module.exports = React.createClass({
     },
 
     onRoom: function(room) {
-        this._delayedRefreshRoomList();
+        this.updateVisibleRooms();
     },
 
     onDeleteRoom: function(roomId) {
-        this._delayedRefreshRoomList();
+        this.updateVisibleRooms();
     },
 
     onArchivedHeaderClick: function(isHidden, scrollToPosition) {
@@ -298,23 +299,37 @@ module.exports = React.createClass({
 
     // Update which rooms and users should appear according to which tags are selected
     updateVisibleRooms: function() {
-        this._visibleRooms = [];
-        TagOrderStore.getSelectedTags().forEach((tag) => {
+        const selectedTags = TagOrderStore.getSelectedTags();
+        const visibleGroupRooms = [];
+        selectedTags.forEach((tag) => {
             (this._visibleRoomsForGroup[tag] || []).forEach(
-                (roomId) => this._visibleRooms.push(roomId),
+                (roomId) => visibleGroupRooms.push(roomId),
             );
         });
 
+        // If there are any tags selected, constrain the rooms listed to the
+        // visible rooms as determined by visibleGroupRooms. Here, we
+        // de-duplicate and filter out rooms that the client doesn't know
+        // about (hence the Set and the null-guard on `room`).
+        if (selectedTags.length > 0) {
+            const roomSet = new Set();
+            visibleGroupRooms.forEach((roomId) => {
+                const room = MatrixClientPeg.get().getRoom(roomId);
+                if (room) {
+                    roomSet.add(room);
+                }
+            });
+            this._visibleRooms = Array.from(roomSet);
+        } else {
+            // Show all rooms
+            this._visibleRooms = MatrixClientPeg.get().getRooms();
+        }
+
         this.setState({
-            selectedTags: TagOrderStore.getSelectedTags(),
+            selectedTags,
         }, () => {
             this.refreshRoomList();
         });
-    },
-
-    isRoomInSelectedTags: function(room) {
-        // No selected tags = every room is visible in the list
-        return this.state.selectedTags.length === 0 || this._visibleRooms.includes(room.roomId);
     },
 
     refreshRoomList: function() {
@@ -345,7 +360,8 @@ module.exports = React.createClass({
         lists["im.vector.fake.archived"] = [];
 
         const dmRoomMap = DMRoomMap.shared();
-        MatrixClientPeg.get().getRooms().forEach((room) => {
+
+        this._visibleRooms.forEach((room, index) => {
             const me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (!me) return;
 
@@ -362,12 +378,6 @@ module.exports = React.createClass({
                      (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey())) {
                 // Used to split rooms via tags
                 const tagNames = Object.keys(room.tags);
-
-                // Apply TagPanel filtering, derived from TagOrderStore
-                if (!this.isRoomInSelectedTags(room)) {
-                    return;
-                }
-
                 if (tagNames.length) {
                     for (let i = 0; i < tagNames.length; i++) {
                         const tagName = tagNames[i];
