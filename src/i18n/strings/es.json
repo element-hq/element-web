@@ -321,7 +321,7 @@
     "since the point in time of selecting this option": "a partir del momento en que seleccione esta opción",
     "since they joined": "desde que se conectaron",
     "since they were invited": "desde que fueron invitados",
-    "Some of your messages have not been sent.": "Algunos de sus mensajes no han sido enviados.",
+    "%(count)s of your messages have not been sent.|other": "Algunos de sus mensajes no han sido enviados.",
     "Someone": "Alguien",
     "Sorry, this homeserver is using a login which is not recognised ": "Lo siento, este servidor está usando un usuario no reconocido. ",
     "Start a chat": "Iniciar una conversación",
