@@ -1042,5 +1042,9 @@
     "Dark theme": "Gai iluna",
     "Status.im theme": "Status.im gaia",
     "An email has been sent to %(emailAddress)s. Once you've followed the link it contains, click below.": "%(emailAddress)s helbidera e-mail bat bidali da. Behin dakarren esteka jarraituta, egin klik behean.",
-    "This homeserver doesn't offer any login flows which are supported by this client.": "Hasiera zerbitzari honek ez du bezero honek onartzen duen fluxurik eskaintzen."
+    "This homeserver doesn't offer any login flows which are supported by this client.": "Hasiera zerbitzari honek ez du bezero honek onartzen duen fluxurik eskaintzen.",
+    "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Ezin izango duzu hau aldatu zure burua mailaz jaisten ari zarelako, zu bazara gelan baimenak dituen azken erabiltzailea ezin izango dira baimenak berreskuratu.",
+    "%(count)s of your messages have not been sent.|one": "Zure mezua ez da bidali.",
+    "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|other": "<resendText>Birbidali guztiak</resendText> edo <cancelText>baztertu guztiak</cancelText> orain. Mezuak banaka birbidali edo baztertu ditzakezu ere.",
+    "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Birbidali mezua</resendText> edo <cancelText>baztertu mezua</cancelText> orain."
 }
