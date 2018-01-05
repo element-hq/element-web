@@ -453,6 +453,7 @@ module.exports = withMatrixClient(React.createClass({
         const myUserId = this.props.matrixClient.getUserId();
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
+        // If we are changing our own PL it can only ever be decreasing, which we cannot reverse.
         if (myUserId === target) {
             Modal.createTrackedDialog('Demoting Self', '', QuestionDialog, {
                 title: _t("Warning!"),
