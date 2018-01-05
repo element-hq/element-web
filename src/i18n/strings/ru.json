@@ -1053,5 +1053,9 @@
     "Flair will appear if enabled in room settings": "Талант появится, если он активирован в настройках комнаты",
     "Flair": "Талант",
     "Flair will not appear": "Талант не отображается",
-    "Display your community flair in rooms configured to show it.": "Покажите свой талант в комнатах, которых это разрешено."
+    "Display your community flair in rooms configured to show it.": "Покажите свой талант в комнатах, которых это разрешено.",
+    "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Вы не сможете отменить это изменение после понижения себя, в случае если вы являетесь последним привилегированным пользователем в этой комнате.",
+    "%(count)s of your messages have not been sent.|one": "Ваше сообщение не было отправлено.",
+    "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|other": "<resendText>Отправить все</resendText> или <cancelText>отменить все</cancelText> сейчас. Можно также выбрать отдельные сообщения для отправки или отмены.",
+    "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Отправить</resendText> или <cancelText>отменить</cancelText> сообщение сейчас."
 }
