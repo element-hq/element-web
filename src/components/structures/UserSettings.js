@@ -19,6 +19,7 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 
 const React = require('react');
 const ReactDOM = require('react-dom');
+import PropTypes from 'prop-types';
 const sdk = require('../../index');
 const MatrixClientPeg = require("../../MatrixClientPeg");
 const PlatformPeg = require("../../PlatformPeg");
@@ -125,8 +126,8 @@ const THEMES = [
 
 const IgnoredUser = React.createClass({
     propTypes: {
-        userId: React.PropTypes.string.isRequired,
-        onUnignored: React.PropTypes.func.isRequired,
+        userId: PropTypes.string.isRequired,
+        onUnignored: PropTypes.func.isRequired,
     },
 
     _onUnignoreClick: function() {
@@ -155,16 +156,16 @@ module.exports = React.createClass({
     displayName: 'UserSettings',
 
     propTypes: {
-        onClose: React.PropTypes.func,
+        onClose: PropTypes.func,
         // The brand string given when creating email pushers
-        brand: React.PropTypes.string,
+        brand: PropTypes.string,
 
         // The base URL to use in the referral link. Defaults to window.location.origin.
-        referralBaseUrl: React.PropTypes.string,
+        referralBaseUrl: PropTypes.string,
 
         // Team token for the referral link. If falsy, the referral section will
         // not appear
-        teamToken: React.PropTypes.string,
+        teamToken: PropTypes.string,
     },
 
     getDefaultProps: function() {

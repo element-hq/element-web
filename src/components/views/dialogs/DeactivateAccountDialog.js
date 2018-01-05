@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
 import Analytics from '../../../Analytics';
@@ -136,5 +137,5 @@ export default class DeactivateAccountDialog extends React.Component {
 }
 
 DeactivateAccountDialog.propTypes = {
-    onFinished: React.PropTypes.func.isRequired,
+    onFinished: PropTypes.func.isRequired,
 };

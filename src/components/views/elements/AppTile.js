@@ -19,6 +19,7 @@ limitations under the License.
 import url from 'url';
 import qs from 'querystring';
 import React from 'react';
+import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import PlatformPeg from '../../../PlatformPeg';
 import ScalarAuthClient from '../../../ScalarAuthClient';
@@ -40,19 +41,19 @@ export default React.createClass({
     displayName: 'AppTile',
 
     propTypes: {
-        id: React.PropTypes.string.isRequired,
-        url: React.PropTypes.string.isRequired,
-        name: React.PropTypes.string.isRequired,
-        room: React.PropTypes.object.isRequired,
-        type: React.PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired,
+        url: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        room: PropTypes.object.isRequired,
+        type: PropTypes.string.isRequired,
         // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
         // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
-        fullWidth: React.PropTypes.bool,
+        fullWidth: PropTypes.bool,
         // UserId of the current user
-        userId: React.PropTypes.string.isRequired,
+        userId: PropTypes.string.isRequired,
         // UserId of the entity that added / modified the widget
-        creatorUserId: React.PropTypes.string,
-        waitForIframeLoad: React.PropTypes.bool,
+        creatorUserId: PropTypes.string,
+        waitForIframeLoad: PropTypes.bool,
     },
 
     getDefaultProps() {

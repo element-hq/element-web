@@ -24,6 +24,7 @@ import shouldHideEvent from "../../shouldHideEvent";
 
 const React = require("react");
 const ReactDOM = require("react-dom");
+import PropTypes from 'prop-types';
 import Promise from 'bluebird';
 const classNames = require("classnames");
 import { _t } from '../../languageHandler';
@@ -58,18 +59,18 @@ if (DEBUG) {
 module.exports = React.createClass({
     displayName: 'RoomView',
     propTypes: {
-        ConferenceHandler: React.PropTypes.any,
+        ConferenceHandler: PropTypes.any,
 
         // Called with the credentials of a registered user (if they were a ROU that
         // transitioned to PWLU)
-        onRegistered: React.PropTypes.func,
+        onRegistered: PropTypes.func,
 
         // An object representing a third party invite to join this room
         // Fields:
         // * inviteSignUrl (string) The URL used to join this room from an email invite
         //                          (given as part of the link in the invite email)
         // * invitedEmail (string) The email address that was invited to this room
-        thirdPartyInvite: React.PropTypes.object,
+        thirdPartyInvite: PropTypes.object,
 
         // Any data about the room that would normally come from the Home Server
         // but has been passed out-of-band, eg. the room name and avatar URL
@@ -80,10 +81,10 @@ module.exports = React.createClass({
         //  * avatarUrl (string) The mxc:// avatar URL for the room
         //  * inviterName (string) The display name of the person who
         //  *                      invited us tovthe room
-        oobData: React.PropTypes.object,
+        oobData: PropTypes.object,
 
         // is the RightPanel collapsed?
-        collapsedRhs: React.PropTypes.bool,
+        collapsedRhs: PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -1347,10 +1348,12 @@ module.exports = React.createClass({
     },
 
     onStatusBarHidden: function() {
-        if (this.unmounted) return;
+        // This is currently not desired as it is annoying if it keeps expanding and collapsing
+        // TODO: Find a less annoying way of hiding the status bar
+        /*if (this.unmounted) return;
         this.setState({
             statusBarVisible: false,
-        });
+        });*/
     },
 
     showSettings: function(show) {

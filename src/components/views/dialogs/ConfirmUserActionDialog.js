@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -33,20 +34,20 @@ export default React.createClass({
     displayName: 'ConfirmUserActionDialog',
     propTypes: {
         // matrix-js-sdk (room) member object. Supply either this or 'groupMember'
-        member: React.PropTypes.object,
+        member: PropTypes.object,
         // group member object. Supply either this or 'member'
         groupMember: GroupMemberType,
         // needed if a group member is specified
-        matrixClient: React.PropTypes.instanceOf(MatrixClient),
-        action: React.PropTypes.string.isRequired, // eg. 'Ban'
-        title: React.PropTypes.string.isRequired, // eg. 'Ban this user?'
+        matrixClient: PropTypes.instanceOf(MatrixClient),
+        action: PropTypes.string.isRequired, // eg. 'Ban'
+        title: PropTypes.string.isRequired, // eg. 'Ban this user?'
 
         // Whether to display a text field for a reason
         // If true, the second argument to onFinished will
         // be the string entered.
-        askReason: React.PropTypes.bool,
-        danger: React.PropTypes.bool,
-        onFinished: React.PropTypes.func.isRequired,
+        askReason: PropTypes.bool,
+        danger: PropTypes.bool,
+        onFinished: PropTypes.func.isRequired,
     },
 
     defaultProps: {

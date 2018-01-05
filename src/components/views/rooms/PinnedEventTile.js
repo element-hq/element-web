@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+import PropTypes from 'prop-types';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -25,9 +26,9 @@ import { _t } from '../../../languageHandler';
 module.exports = React.createClass({
     displayName: 'PinnedEventTile',
     propTypes: {
-        mxRoom: React.PropTypes.object.isRequired,
-        mxEvent: React.PropTypes.object.isRequired,
-        onUnpinned: React.PropTypes.func,
+        mxRoom: PropTypes.object.isRequired,
+        mxEvent: PropTypes.object.isRequired,
+        onUnpinned: PropTypes.func,
     },
     onTileClicked: function() {
         dis.dispatch({

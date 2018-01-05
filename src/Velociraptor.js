@@ -1,5 +1,6 @@
 const React = require('react');
 const ReactDom = require('react-dom');
+import PropTypes from 'prop-types';
 const Velocity = require('velocity-vector');
 
 /**
@@ -14,16 +15,16 @@ module.exports = React.createClass({
 
     propTypes: {
         // either a list of child nodes, or a single child.
-        children: React.PropTypes.any,
+        children: PropTypes.any,
 
         // optional transition information for changing existing children
-        transition: React.PropTypes.object,
+        transition: PropTypes.object,
 
         // a list of state objects to apply to each child node in turn
-        startStyles: React.PropTypes.array,
+        startStyles: PropTypes.array,
 
         // a list of transition options from the corresponding startStyle
-        enterTransitionOpts: React.PropTypes.array,
+        enterTransitionOpts: PropTypes.array,
     },
 
     getDefaultProps: function() {

@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import Matrix from 'matrix-js-sdk';
 import { _t } from '../../languageHandler';
 import sdk from '../../index';
@@ -41,59 +42,59 @@ module.exports = React.createClass({
 
     propTypes: {
         // the room this statusbar is representing.
-        room: React.PropTypes.object.isRequired,
+        room: PropTypes.object.isRequired,
 
         // the number of messages which have arrived since we've been scrolled up
-        numUnreadMessages: React.PropTypes.number,
+        numUnreadMessages: PropTypes.number,
 
         // this is true if we are fully scrolled-down, and are looking at
         // the end of the live timeline.
-        atEndOfLiveTimeline: React.PropTypes.bool,
+        atEndOfLiveTimeline: PropTypes.bool,
 
         // This is true when the user is alone in the room, but has also sent a message.
         // Used to suggest to the user to invite someone
-        sentMessageAndIsAlone: React.PropTypes.bool,
+        sentMessageAndIsAlone: PropTypes.bool,
 
         // true if there is an active call in this room (means we show
         // the 'Active Call' text in the status bar if there is nothing
         // more interesting)
-        hasActiveCall: React.PropTypes.bool,
+        hasActiveCall: PropTypes.bool,
 
         // Number of names to display in typing indication. E.g. set to 3, will
         // result in "X, Y, Z and 100 others are typing."
-        whoIsTypingLimit: React.PropTypes.number,
+        whoIsTypingLimit: PropTypes.number,
 
         // callback for when the user clicks on the 'resend all' button in the
         // 'unsent messages' bar
-        onResendAllClick: React.PropTypes.func,
+        onResendAllClick: PropTypes.func,
 
         // callback for when the user clicks on the 'cancel all' button in the
         // 'unsent messages' bar
-        onCancelAllClick: React.PropTypes.func,
+        onCancelAllClick: PropTypes.func,
 
         // callback for when the user clicks on the 'invite others' button in the
         // 'you are alone' bar
-        onInviteClick: React.PropTypes.func,
+        onInviteClick: PropTypes.func,
 
         // callback for when the user clicks on the 'stop warning me' button in the
         // 'you are alone' bar
-        onStopWarningClick: React.PropTypes.func,
+        onStopWarningClick: PropTypes.func,
 
         // callback for when the user clicks on the 'scroll to bottom' button
-        onScrollToBottomClick: React.PropTypes.func,
+        onScrollToBottomClick: PropTypes.func,
 
         // callback for when we do something that changes the size of the
         // status bar. This is used to trigger a re-layout in the parent
         // component.
-        onResize: React.PropTypes.func,
+        onResize: PropTypes.func,
 
         // callback for when the status bar can be hidden from view, as it is
         // not displaying anything
-        onHidden: React.PropTypes.func,
+        onHidden: PropTypes.func,
 
         // callback for when the status bar is displaying something and should
         // be visible
-        onVisible: React.PropTypes.func,
+        onVisible: PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -169,8 +170,10 @@ module.exports = React.createClass({
 
     // Check whether current size is greater than 0, if yes call props.onVisible
     _checkSize: function() {
-        if (this.props.onVisible && this._getSize()) {
-            this.props.onVisible();
+        if (this._getSize()) {
+            if (this.props.onVisible) this.props.onVisible();
+        } else {
+            if (this.props.onHidden) this.props.onHidden();
         }
     },
 
@@ -302,11 +305,11 @@ module.exports = React.createClass({
             ) {
                 title = unsentMessages[0].error.data.error;
             } else {
-                title = _t("Some of your messages have not been sent.");
+                title = _t('%(count)s of your messages have not been sent.', { count: unsentMessages.length });
             }
-            content = _t("<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. " +
+            content = _t("%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. " +
                "You can also select individual messages to resend or cancel.",
-                {},
+                { count: unsentMessages.length },
                 {
                     'resendText': (sub) =>
                         <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this._onResendAllClick}>{ sub }</a>,

@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 const MatrixClientPeg = require("../../../MatrixClientPeg");
 const Modal = require("../../../Modal");
 const sdk = require("../../../index");
@@ -30,16 +31,16 @@ import sessionStore from '../../../stores/SessionStore';
 module.exports = React.createClass({
     displayName: 'ChangePassword',
     propTypes: {
-        onFinished: React.PropTypes.func,
-        onError: React.PropTypes.func,
-        onCheckPassword: React.PropTypes.func,
-        rowClassName: React.PropTypes.string,
-        rowLabelClassName: React.PropTypes.string,
-        rowInputClassName: React.PropTypes.string,
-        buttonClassName: React.PropTypes.string,
-        confirm: React.PropTypes.bool,
+        onFinished: PropTypes.func,
+        onError: PropTypes.func,
+        onCheckPassword: PropTypes.func,
+        rowClassName: PropTypes.string,
+        rowLabelClassName: PropTypes.string,
+        rowInputClassName: PropTypes.string,
+        buttonClassName: PropTypes.string,
+        confirm: PropTypes.bool,
         // Whether to autoFocus the new password input
-        autoFocusNewPasswordInput: React.PropTypes.bool,
+        autoFocusNewPasswordInput: PropTypes.bool,
     },
 
     Phases: {

@@ -16,6 +16,7 @@ limitations under the License.
 
 import Promise from 'bluebird';
 const React = require('react');
+import PropTypes from 'prop-types';
 const ObjectUtils = require("../../../ObjectUtils");
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 const sdk = require("../../../index");
@@ -26,11 +27,11 @@ module.exports = React.createClass({
     displayName: 'AliasSettings',
 
     propTypes: {
-        roomId: React.PropTypes.string.isRequired,
-        canSetCanonicalAlias: React.PropTypes.bool.isRequired,
-        canSetAliases: React.PropTypes.bool.isRequired,
-        aliasEvents: React.PropTypes.array, // [MatrixEvent]
-        canonicalAliasEvent: React.PropTypes.object, // MatrixEvent
+        roomId: PropTypes.string.isRequired,
+        canSetCanonicalAlias: PropTypes.bool.isRequired,
+        canSetAliases: PropTypes.bool.isRequired,
+        aliasEvents: PropTypes.array, // [MatrixEvent]
+        canonicalAliasEvent: PropTypes.object, // MatrixEvent
     },
 
     getDefaultProps: function() {

@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import classnames from 'classnames';
@@ -23,13 +24,13 @@ import classnames from 'classnames';
 export default React.createClass({
     displayName: 'QuestionDialog',
     propTypes: {
-        title: React.PropTypes.string,
-        description: React.PropTypes.node,
-        extraButtons: React.PropTypes.node,
-        button: React.PropTypes.string,
-        danger: React.PropTypes.bool,
-        focus: React.PropTypes.bool,
-        onFinished: React.PropTypes.func.isRequired,
+        title: PropTypes.string,
+        description: PropTypes.node,
+        extraButtons: PropTypes.node,
+        button: PropTypes.string,
+        danger: PropTypes.bool,
+        focus: PropTypes.bool,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {
