@@ -266,6 +266,7 @@ module.exports = React.createClass({
         let inviteGroup;
 
         let membersBadge;
+        let membersTitle = _t('Members');
         if ((this.state.phase == this.Phase.RoomMemberList || this.state.phase === this.Phase.RoomMemberInfo)
             && this.props.roomId
         ) {
@@ -273,10 +274,10 @@ module.exports = React.createClass({
             const room = cli.getRoom(this.props.roomId);
             let userIsInRoom;
             if (room) {
-                membersBadge = formatCount(room.getJoinedMembers().length);
-                userIsInRoom = room.hasMembershipState(
-                    this.context.matrixClient.credentials.userId, 'join',
-                );
+                const numMembers = room.getJoinedMembers().length;
+                membersTitle = _t('%(numMembers)s Members', { numMembers });
+                membersBadge = <div title={membersTitle}>{ formatCount(numMembers) }</div>;
+                userIsInRoom = room.hasMembershipState(this.context.matrixClient.credentials.userId, 'join');
             }
 
             if (userIsInRoom) {
@@ -298,7 +299,7 @@ module.exports = React.createClass({
         let headerButtons = [];
         if (this.props.roomId) {
             headerButtons = [
-                <HeaderButton key="_membersButton" title={_t('Members')} iconSrc="img/icons-people.svg"
+                <HeaderButton key="_membersButton" title={membersTitle} iconSrc="img/icons-people.svg"
                     isHighlighted={[this.Phase.RoomMemberList, this.Phase.RoomMemberInfo].includes(this.state.phase)}
                     clickPhase={this.Phase.RoomMemberList}
                     badge={membersBadge}
