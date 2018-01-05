@@ -19,6 +19,7 @@ import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
+import isEqual from 'lodash/isEqual';
 
 const GROUP_ID_REGEX = /\+\S+\:\S+/;
 
@@ -43,15 +44,24 @@ module.exports = React.createClass({
 
     getInitialState: function() {
         return {
-            newGroupsList: this.props.relatedGroupsEvent ?
-                (this.props.relatedGroupsEvent.getContent().groups || []) : [],
-            hasChanged: false,
+            newGroupsList: this.getInitialGroupList(),
             newGroupId: null,
         };
     },
 
+    getInitialGroupList: function() {
+        return this.props.relatedGroupsEvent ? (this.props.relatedGroupsEvent.getContent().groups || []) : [];
+    },
+
+    needsSaving: function() {
+        const cli = this.context.matrixClient;
+        const room = cli.getRoom(this.props.roomId);
+        if (!room.currentState.maySendStateEvent('m.room.related_groups', cli.getUserId())) return false;
+        return isEqual(this.getInitialGroupList(), this.state.newGroupsList);
+    },
+
     saveSettings: function() {
-        if (!this.state.hasChanged) return Promise.resolve();
+        if (!this.needsSaving()) return Promise.resolve();
 
         return this.context.matrixClient.sendStateEvent(
             this.props.roomId,
@@ -85,7 +95,6 @@ module.exports = React.createClass({
         }
         this.setState({
             newGroupsList: this.state.newGroupsList.concat([groupId]),
-            hasChanged: true,
             newGroupId: '',
         });
     },
@@ -96,14 +105,13 @@ module.exports = React.createClass({
         }
         this.setState({
             newGroupsList: Object.assign(this.state.newGroupsList, {[index]: groupId}),
-            hasChanged: true,
         });
     },
 
     onGroupDeleted: function(index) {
         const newGroupsList = this.state.newGroupsList.slice();
         newGroupsList.splice(index, 1);
-        this.setState({ newGroupsList, hasChanged: true });
+        this.setState({ newGroupsList });
     },
 
     render: function() {
