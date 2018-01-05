@@ -445,47 +445,49 @@ module.exports = withMatrixClient(React.createClass({
         const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
         if (!powerLevelEvent) return;
 
-        if (powerLevelEvent.getContent().users) {
-            const myUserId = this.props.matrixClient.getUserId();
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        if (!powerLevelEvent.getContent().users) {
+            this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+            return;
+        }
 
-            if (myUserId === target) {
-                Modal.createTrackedDialog('Demoting Self', '', QuestionDialog, {
-                    title: _t("Warning!"),
-                    description:
-                        <div>
-                            { _t("You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.") }<br />
-                            { _t("Are you sure?") }
-                        </div>,
-                    button: _t("Continue"),
-                    onFinished: (confirmed) => {
-                        if (confirmed) {
-                            this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-                        }
-                    },
-                });
-                return;
-            }
+        const myUserId = this.props.matrixClient.getUserId();
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
-            const myPower = powerLevelEvent.getContent().users[myUserId];
-            if (parseInt(myPower) === parseInt(powerLevel)) {
-                Modal.createTrackedDialog('Promote to PL100 Warning', '', QuestionDialog, {
-                    title: _t("Warning!"),
-                    description:
-                        <div>
-                            { _t("You will not be able to undo this change as you are promoting the user to have the same power level as yourself.") }<br />
-                            { _t("Are you sure?") }
-                        </div>,
-                    button: _t("Continue"),
-                    onFinished: (confirmed) => {
-                        if (confirmed) {
-                            this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-                        }
-                    },
-                });
-                return;
-            }
+        if (myUserId === target) {
+            Modal.createTrackedDialog('Demoting Self', '', QuestionDialog, {
+                title: _t("Warning!"),
+                description:
+                    <div>
+                        { _t("You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.") }<br />
+                        { _t("Are you sure?") }
+                    </div>,
+                button: _t("Continue"),
+                onFinished: (confirmed) => {
+                    if (confirmed) {
+                        this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+                    }
+                },
+            });
+            return;
+        }
 
+        const myPower = powerLevelEvent.getContent().users[myUserId];
+        if (parseInt(myPower) === parseInt(powerLevel)) {
+            Modal.createTrackedDialog('Promote to PL100 Warning', '', QuestionDialog, {
+                title: _t("Warning!"),
+                description:
+                    <div>
+                        { _t("You will not be able to undo this change as you are promoting the user to have the same power level as yourself.") }<br />
+                        { _t("Are you sure?") }
+                    </div>,
+                button: _t("Continue"),
+                onFinished: (confirmed) => {
+                    if (confirmed) {
+                        this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+                    }
+                },
+            });
+            return;
         }
         this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
     },
