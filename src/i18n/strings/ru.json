@@ -1048,10 +1048,10 @@
     "Data from an older version of Riot has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "Обнаружены данные из более старой версии Riot. Это приведет к сбою криптографии в более ранней версии. В этой версии не могут быть расшифрованы сообщения, которые использовались недавно при использовании старой версии. Это также может привести к сбою обмена сообщениями с этой версией. Если возникают неполадки, выйдите и снова войдите в систему. Чтобы сохранить журнал сообщений, экспортируйте и повторно импортируйте ключи.",
     "<showDevicesText>Show devices</showDevicesText> or <cancelText>cancel all</cancelText>.": "<showDevicesText>Показать устройства</showDevicesText> или <cancelText>отменить все</cancelText>.",
     "Warning": "Предупреждение",
-    "Showing flair for these communities:": "Показ таланта этим сообществам:",
-    "This room is not showing flair for any communities": "Эта комната не показывает талант любым сообществам",
-    "Flair will appear if enabled in room settings": "Талант появится, если включено в настройках комнаты",
-    "Flair": "Чутье",
-    "Flair will not appear": "Талант не появится",
-    "Display your community flair in rooms configured to show it.": "Покажите свое чутье в комнатах, настроенных для показа."
+    "Showing flair for these communities:": "Показ таланта в следующих сообществах:",
+    "This room is not showing flair for any communities": "В этой комнате не отображается талант для любых сообществ",
+    "Flair will appear if enabled in room settings": "Талант появится, если он активирован в настройках комнаты",
+    "Flair": "Талант",
+    "Flair will not appear": "Талант не отображается",
+    "Display your community flair in rooms configured to show it.": "Покажите свой талант в комнатах, которых это разрешено."
 }
