@@ -39,7 +39,7 @@ export default React.createClass({
     },
 
     contextTypes: {
-        matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
+        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
     },
 
     getInitialState() {

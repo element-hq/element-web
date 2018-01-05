@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import filesize from 'filesize';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
@@ -191,7 +192,7 @@ module.exports = React.createClass({
     },
 
     contextTypes: {
-        appConfig: React.PropTypes.object,
+        appConfig: PropTypes.object,
     },
 
     /**

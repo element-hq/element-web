@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import AccessibleButton from './AccessibleButton';
 import { _t } from '../../../languageHandler';
@@ -56,14 +57,14 @@ class MenuOption extends React.Component {
 }
 
 MenuOption.propTypes = {
-    children: React.PropTypes.oneOfType([
-      React.PropTypes.arrayOf(React.PropTypes.node),
-      React.PropTypes.node,
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(React.PropTypes.node),
+      PropTypes.node,
     ]),
-    highlighted: React.PropTypes.bool,
-    dropdownKey: React.PropTypes.string,
-    onClick: React.PropTypes.func.isRequired,
-    onMouseEnter: React.PropTypes.func.isRequired,
+    highlighted: PropTypes.bool,
+    dropdownKey: PropTypes.string,
+    onClick: PropTypes.func.isRequired,
+    onMouseEnter: PropTypes.func.isRequired,
 };
 
 /*
@@ -322,20 +323,20 @@ Dropdown.propTypes = {
     // The width that the dropdown should be. If specified,
     // the dropped-down part of the menu will be set to this
     // width.
-    menuWidth: React.PropTypes.number,
+    menuWidth: PropTypes.number,
     // Called when the selected option changes
-    onOptionChange: React.PropTypes.func.isRequired,
+    onOptionChange: PropTypes.func.isRequired,
     // Called when the value of the search field changes
-    onSearchChange: React.PropTypes.func,
-    searchEnabled: React.PropTypes.bool,
+    onSearchChange: PropTypes.func,
+    searchEnabled: PropTypes.bool,
     // Function that, given the key of an option, returns
     // a node representing that option to be displayed in the
     // box itself as the currently-selected option (ie. as
     // opposed to in the actual dropped-down part). If
     // unspecified, the appropriate child element is used as
     // in the dropped-down menu.
-    getShortOption: React.PropTypes.func,
-    value: React.PropTypes.string,
+    getShortOption: PropTypes.func,
+    value: PropTypes.string,
     // negative for consistency with HTML
-    disabled: React.PropTypes.bool,
+    disabled: PropTypes.bool,
 };

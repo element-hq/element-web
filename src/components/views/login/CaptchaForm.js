@@ -18,6 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
 const DIV_ID = 'mx_recaptcha';
@@ -29,10 +30,10 @@ module.exports = React.createClass({
     displayName: 'CaptchaForm',
 
     propTypes: {
-        sitePublicKey: React.PropTypes.string,
+        sitePublicKey: PropTypes.string,
 
         // called with the captcha response
-        onCaptchaResponse: React.PropTypes.func,
+        onCaptchaResponse: PropTypes.func,
     },
 
     getDefaultProps: function() {

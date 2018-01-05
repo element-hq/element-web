@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 const React = require('react');
+import PropTypes from 'prop-types';
 const ContentMessages = require('../../ContentMessages');
 const dis = require('../../dispatcher');
 const filesize = require('filesize');
@@ -22,7 +23,7 @@ import { _t } from '../../languageHandler';
 
 module.exports = React.createClass({displayName: 'UploadBar',
     propTypes: {
-        room: React.PropTypes.object,
+        room: PropTypes.object,
     },
 
     componentDidMount: function() {

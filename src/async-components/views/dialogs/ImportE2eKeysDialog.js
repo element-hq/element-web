@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import * as Matrix from 'matrix-js-sdk';
 import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
@@ -40,8 +41,8 @@ export default React.createClass({
     displayName: 'ImportE2eKeysDialog',
 
     propTypes: {
-        matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
-        onFinished: React.PropTypes.func.isRequired,
+        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {

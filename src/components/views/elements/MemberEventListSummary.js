@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 const MemberAvatar = require('../avatars/MemberAvatar.js');
 import { _t } from '../../../languageHandler';
@@ -23,19 +24,19 @@ module.exports = React.createClass({
 
     propTypes: {
         // An array of member events to summarise
-        events: React.PropTypes.array.isRequired,
+        events: PropTypes.array.isRequired,
         // An array of EventTiles to render when expanded
-        children: React.PropTypes.array.isRequired,
+        children: PropTypes.array.isRequired,
         // The maximum number of names to show in either each summary e.g. 2 would result "A, B and 234 others left"
-        summaryLength: React.PropTypes.number,
+        summaryLength: PropTypes.number,
         // The maximum number of avatars to display in the summary
-        avatarsMaxLength: React.PropTypes.number,
+        avatarsMaxLength: PropTypes.number,
         // The minimum number of events needed to trigger summarisation
-        threshold: React.PropTypes.number,
+        threshold: PropTypes.number,
         // Called when the MELS expansion is toggled
-        onToggle: React.PropTypes.func,
+        onToggle: PropTypes.func,
         // Whether or not to begin with state.expanded=true
-        startExpanded: React.PropTypes.bool,
+        startExpanded: PropTypes.bool,
     },
 
     getInitialState: function() {

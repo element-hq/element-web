@@ -17,17 +17,18 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 module.exports = React.createClass({
     displayName: 'VideoFeed',
 
     propTypes: {
         // maxHeight style attribute for the video element
-        maxHeight: React.PropTypes.number,
+        maxHeight: PropTypes.number,
 
         // a callback which is called when the video element is resized
         // due to a change in video metadata
-        onResize: React.PropTypes.func,
+        onResize: PropTypes.func,
     },
 
     componentDidMount() {

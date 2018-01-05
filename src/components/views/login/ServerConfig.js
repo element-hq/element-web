@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 const Modal = require('../../../Modal');
 const sdk = require('../../../index');
 import { _t } from '../../../languageHandler';
@@ -28,24 +29,24 @@ module.exports = React.createClass({
     displayName: 'ServerConfig',
 
     propTypes: {
-        onServerConfigChange: React.PropTypes.func,
+        onServerConfigChange: PropTypes.func,
 
         // default URLs are defined in config.json (or the hardcoded defaults)
         // they are used if the user has not overridden them with a custom URL.
         // In other words, if the custom URL is blank, the default is used.
-        defaultHsUrl: React.PropTypes.string, // e.g. https://matrix.org
-        defaultIsUrl: React.PropTypes.string, // e.g. https://vector.im
+        defaultHsUrl: PropTypes.string, // e.g. https://matrix.org
+        defaultIsUrl: PropTypes.string, // e.g. https://vector.im
 
         // custom URLs are explicitly provided by the user and override the
         // default URLs.  The user enters them via the component's input fields,
         // which is reflected on these properties whenever on..UrlChanged fires.
         // They are persisted in localStorage by MatrixClientPeg, and so can
         // override the default URLs when the component initially loads.
-        customHsUrl: React.PropTypes.string,
-        customIsUrl: React.PropTypes.string,
+        customHsUrl: PropTypes.string,
+        customIsUrl: PropTypes.string,
 
-        withToggleButton: React.PropTypes.bool,
-        delayTimeMs: React.PropTypes.number, // time to wait before invoking onChanged
+        withToggleButton: PropTypes.bool,
+        delayTimeMs: PropTypes.number, // time to wait before invoking onChanged
     },
 
     getDefaultProps: function() {

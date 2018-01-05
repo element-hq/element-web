@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
 
@@ -131,11 +132,11 @@ export default class CountryDropdown extends React.Component {
 }
 
 CountryDropdown.propTypes = {
-    className: React.PropTypes.string,
-    isSmall: React.PropTypes.bool,
+    className: PropTypes.string,
+    isSmall: PropTypes.bool,
     // if isSmall, show +44 in the selected value
-    showPrefix: React.PropTypes.bool,
-    onOptionChange: React.PropTypes.func.isRequired,
-    value: React.PropTypes.string,
-    disabled: React.PropTypes.bool,
+    showPrefix: PropTypes.bool,
+    onOptionChange: PropTypes.func.isRequired,
+    value: PropTypes.string,
+    disabled: PropTypes.bool,
 };

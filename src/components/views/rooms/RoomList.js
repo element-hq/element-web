@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 const React = require("react");
 const ReactDOM = require("react-dom");
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 const GeminiScrollbar = require('react-gemini-scrollbar');
 const MatrixClientPeg = require("../../../MatrixClientPeg");
@@ -52,9 +53,9 @@ module.exports = React.createClass({
     displayName: 'RoomList',
 
     propTypes: {
-        ConferenceHandler: React.PropTypes.any,
-        collapsed: React.PropTypes.bool.isRequired,
-        searchFilter: React.PropTypes.string,
+        ConferenceHandler: PropTypes.any,
+        collapsed: PropTypes.bool.isRequired,
+        searchFilter: PropTypes.string,
     },
 
     getInitialState: function() {

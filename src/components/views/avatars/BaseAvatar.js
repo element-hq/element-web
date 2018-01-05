@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import AvatarLogic from '../../../Avatar';
 import sdk from '../../../index';
 import AccessibleButton from '../elements/AccessibleButton';
@@ -23,16 +24,16 @@ module.exports = React.createClass({
     displayName: 'BaseAvatar',
 
     propTypes: {
-        name: React.PropTypes.string.isRequired, // The name (first initial used as default)
-        idName: React.PropTypes.string, // ID for generating hash colours
-        title: React.PropTypes.string, // onHover title text
-        url: React.PropTypes.string, // highest priority of them all, shortcut to set in urls[0]
-        urls: React.PropTypes.array, // [highest_priority, ... , lowest_priority]
-        width: React.PropTypes.number,
-        height: React.PropTypes.number,
+        name: PropTypes.string.isRequired, // The name (first initial used as default)
+        idName: PropTypes.string, // ID for generating hash colours
+        title: PropTypes.string, // onHover title text
+        url: PropTypes.string, // highest priority of them all, shortcut to set in urls[0]
+        urls: PropTypes.array, // [highest_priority, ... , lowest_priority]
+        width: PropTypes.number,
+        height: PropTypes.number,
         // XXX resizeMethod not actually used.
-        resizeMethod: React.PropTypes.string,
-        defaultToInitialLetter: React.PropTypes.bool, // true to add default url
+        resizeMethod: PropTypes.string,
+        defaultToInitialLetter: PropTypes.bool, // true to add default url
     },
 
     getDefaultProps: function() {

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import {MatrixEvent, MatrixClient} from 'matrix-js-sdk';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -27,13 +28,13 @@ module.exports = React.createClass({
     displayName: 'RelatedGroupSettings',
 
     propTypes: {
-        roomId: React.PropTypes.string.isRequired,
-        canSetRelatedGroups: React.PropTypes.bool.isRequired,
-        relatedGroupsEvent: React.PropTypes.instanceOf(MatrixEvent),
+        roomId: PropTypes.string.isRequired,
+        canSetRelatedGroups: PropTypes.bool.isRequired,
+        relatedGroupsEvent: PropTypes.instanceOf(MatrixEvent),
     },
 
     contextTypes: {
-        matrixClient: React.PropTypes.instanceOf(MatrixClient),
+        matrixClient: PropTypes.instanceOf(MatrixClient),
     },
 
     getDefaultProps: function() {

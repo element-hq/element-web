@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import sdk from '../../../index';
@@ -207,5 +208,5 @@ export default class DevicesPanel extends React.Component {
 
 DevicesPanel.displayName = 'MemberDeviceInfo';
 DevicesPanel.propTypes = {
-    className: React.PropTypes.string,
+    className: PropTypes.string,
 };

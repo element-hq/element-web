@@ -15,23 +15,24 @@ limitations under the License.
 */
 
 import React from "react";
+import PropTypes from 'prop-types';
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'SettingsFlag',
     propTypes: {
-        name: React.PropTypes.string.isRequired,
-        level: React.PropTypes.string.isRequired,
-        roomId: React.PropTypes.string, // for per-room settings
-        label: React.PropTypes.string, // untranslated
-        onChange: React.PropTypes.func,
-        isExplicit: React.PropTypes.bool,
-        manualSave: React.PropTypes.bool,
+        name: PropTypes.string.isRequired,
+        level: PropTypes.string.isRequired,
+        roomId: PropTypes.string, // for per-room settings
+        label: PropTypes.string, // untranslated
+        onChange: PropTypes.func,
+        isExplicit: PropTypes.bool,
+        manualSave: PropTypes.bool,
 
         // If group is supplied, then this will create a radio button instead.
-        group: React.PropTypes.string,
-        value: React.PropTypes.any, // the value for the radio button
+        group: PropTypes.string,
+        value: PropTypes.any, // the value for the radio button
     },
 
     getInitialState: function() {

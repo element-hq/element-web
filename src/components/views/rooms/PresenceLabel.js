@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { _t } from '../../../languageHandler';
 
@@ -27,14 +28,14 @@ module.exports = React.createClass({
     propTypes: {
         // number of milliseconds ago this user was last active.
         // zero = unknown
-        activeAgo: React.PropTypes.number,
+        activeAgo: PropTypes.number,
 
         // if true, activeAgo is an approximation and "Now" should
         // be shown instead
-        currentlyActive: React.PropTypes.bool,
+        currentlyActive: PropTypes.bool,
 
         // offline, online, etc
-        presenceState: React.PropTypes.string,
+        presenceState: PropTypes.string,
     },
 
     getDefaultProps: function() {

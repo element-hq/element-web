@@ -63,7 +63,7 @@ FlairAvatar.propTypes = {
 };
 
 FlairAvatar.contextTypes = {
-    matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
+    matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
 };
 
 export default class Flair extends React.Component {
@@ -134,5 +134,5 @@ Flair.propTypes = {
 // this.context.matrixClient everywhere instead of this.props.matrixClient.
 // See https://github.com/vector-im/riot-web/issues/4951.
 Flair.contextTypes = {
-    matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
+    matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
 };

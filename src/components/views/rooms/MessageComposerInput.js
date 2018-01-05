@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import PropTypes from 'prop-types';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
 import {Editor, EditorState, RichUtils, CompositeDecorator, Modifier,
@@ -86,15 +87,15 @@ export default class MessageComposerInput extends React.Component {
     static propTypes = {
         // a callback which is called when the height of the composer is
         // changed due to a change in content.
-        onResize: React.PropTypes.func,
+        onResize: PropTypes.func,
 
         // js-sdk Room object
-        room: React.PropTypes.object.isRequired,
+        room: PropTypes.object.isRequired,
 
         // called with current plaintext content (as a string) whenever it changes
-        onContentChanged: React.PropTypes.func,
+        onContentChanged: PropTypes.func,
 
-        onInputStateChanged: React.PropTypes.func,
+        onInputStateChanged: PropTypes.func,
     };
 
     static getKeyBinding(ev: SyntheticKeyboardEvent): string {
@@ -1178,15 +1179,15 @@ export default class MessageComposerInput extends React.Component {
 MessageComposerInput.propTypes = {
     // a callback which is called when the height of the composer is
     // changed due to a change in content.
-    onResize: React.PropTypes.func,
+    onResize: PropTypes.func,
 
     // js-sdk Room object
-    room: React.PropTypes.object.isRequired,
+    room: PropTypes.object.isRequired,
 
     // called with current plaintext content (as a string) whenever it changes
-    onContentChanged: React.PropTypes.func,
+    onContentChanged: PropTypes.func,
 
-    onFilesPasted: React.PropTypes.func,
+    onFilesPasted: PropTypes.func,
 
-    onInputStateChanged: React.PropTypes.func,
+    onInputStateChanged: PropTypes.func,
 };

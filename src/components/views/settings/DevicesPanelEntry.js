@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -88,8 +89,8 @@ export default class DevicesPanelEntry extends React.Component {
 }
 
 DevicesPanelEntry.propTypes = {
-    device: React.PropTypes.object.isRequired,
-    onDeviceToggled: React.PropTypes.func,
+    device: PropTypes.object.isRequired,
+    onDeviceToggled: PropTypes.func,
 };
 
 DevicesPanelEntry.defaultProps = {

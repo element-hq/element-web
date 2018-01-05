@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 
 const sdk = require('../../../index');
 const MatrixClientPeg = require('../../../MatrixClientPeg');
@@ -32,10 +33,10 @@ module.exports = React.createClass({
     displayName: 'LinkPreviewWidget',
 
     propTypes: {
-        link: React.PropTypes.string.isRequired, // the URL being previewed
-        mxEvent: React.PropTypes.object.isRequired, // the Event associated with the preview
-        onCancelClick: React.PropTypes.func, // called when the preview's cancel ('hide') button is clicked
-        onWidgetLoad: React.PropTypes.func, // called when the preview's contents has loaded
+        link: PropTypes.string.isRequired, // the URL being previewed
+        mxEvent: PropTypes.object.isRequired, // the Event associated with the preview
+        onCancelClick: PropTypes.func, // called when the preview's cancel ('hide') button is clicked
+        onWidgetLoad: PropTypes.func, // called when the preview's contents has loaded
     },
 
     getInitialState: function() {
