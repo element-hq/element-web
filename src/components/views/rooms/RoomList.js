@@ -28,7 +28,7 @@ const rate_limited_func = require('../../../ratelimitedfunc');
 const Rooms = require('../../../Rooms');
 import DMRoomMap from '../../../utils/DMRoomMap';
 const Receipt = require('../../../utils/Receipt');
-import FilterStore from '../../../stores/FilterStore';
+import TagOrderStore from '../../../stores/TagOrderStore';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
 
 const HIDE_CONFERENCE_CHANS = true;
@@ -96,8 +96,8 @@ module.exports = React.createClass({
         // By default, set to `null` meaning "all rooms visible"
         this._visibleRooms = null;
         // When the selected tags are changed, initialise a group store if necessary
-        this._filterStoreToken = FilterStore.addListener(() => {
-            FilterStore.getSelectedTags().forEach((tag) => {
+        this._tagStoreToken = TagOrderStore.addListener(() => {
+            TagOrderStore.getSelectedTags().forEach((tag) => {
                 if (tag[0] !== '+' || this._groupStores[tag]) {
                     return;
                 }
@@ -183,8 +183,8 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Group.myMembership", this._onGroupMyMembership);
         }
 
-        if (this._filterStoreToken) {
-            this._filterStoreToken.remove();
+        if (this._tagStoreToken) {
+            this._tagStoreToken.remove();
         }
 
         if (this._groupStoreTokens.length > 0) {
@@ -298,12 +298,11 @@ module.exports = React.createClass({
 
     // Update which rooms and users should appear according to which tags are selected
     updateVisibleRooms: function() {
-        const selectedTags = FilterStore.getSelectedTags();
-
-        let visibleGroupRooms = [];
+        const selectedTags = TagOrderStore.getSelectedTags();
+        const visibleGroupRooms = [];
         selectedTags.forEach((tag) => {
-            visibleGroupRooms = visibleGroupRooms.concat(
-                this._visibleRoomsForGroup[tag] || [],
+            (this._visibleRoomsForGroup[tag] || []).forEach(
+                (roomId) => visibleGroupRooms.push(roomId),
             );
         });
 
@@ -378,7 +377,6 @@ module.exports = React.createClass({
                      (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey())) {
                 // Used to split rooms via tags
                 const tagNames = Object.keys(room.tags);
-
                 if (tagNames.length) {
                     for (let i = 0; i < tagNames.length; i++) {
                         const tagName = tagNames[i];
@@ -672,7 +670,6 @@ module.exports = React.createClass({
                              editable={false}
                              order="recent"
                              isInvite={true}
-                             selectedRoom={self.props.selectedRoom}
                              incomingCall={self.state.incomingCall}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
@@ -686,7 +683,6 @@ module.exports = React.createClass({
                              emptyContent={this._getEmptyContent('m.favourite')}
                              editable={true}
                              order="manual"
-                             selectedRoom={self.props.selectedRoom}
                              incomingCall={self.state.incomingCall}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
@@ -700,7 +696,6 @@ module.exports = React.createClass({
                              headerItems={this._getHeaderItems('im.vector.fake.direct')}
                              editable={true}
                              order="recent"
-                             selectedRoom={self.props.selectedRoom}
                              incomingCall={self.state.incomingCall}
                              collapsed={self.props.collapsed}
                              alwaysShowHeader={true}
@@ -714,7 +709,6 @@ module.exports = React.createClass({
                              emptyContent={this._getEmptyContent('im.vector.fake.recent')}
                              headerItems={this._getHeaderItems('im.vector.fake.recent')}
                              order="recent"
-                             selectedRoom={self.props.selectedRoom}
                              incomingCall={self.state.incomingCall}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
@@ -730,7 +724,6 @@ module.exports = React.createClass({
                              emptyContent={this._getEmptyContent(tagName)}
                              editable={true}
                              order="manual"
-                             selectedRoom={self.props.selectedRoom}
                              incomingCall={self.state.incomingCall}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
@@ -745,7 +738,6 @@ module.exports = React.createClass({
                              emptyContent={this._getEmptyContent('m.lowpriority')}
                              editable={true}
                              order="recent"
-                             selectedRoom={self.props.selectedRoom}
                              incomingCall={self.state.incomingCall}
                              collapsed={self.props.collapsed}
                              searchFilter={self.props.searchFilter}
@@ -756,7 +748,6 @@ module.exports = React.createClass({
                              label={_t('Historical')}
                              editable={false}
                              order="recent"
-                             selectedRoom={self.props.selectedRoom}
                              collapsed={self.props.collapsed}
                              alwaysShowHeader={true}
                              startAsHidden={true}
