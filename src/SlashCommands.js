@@ -96,6 +96,8 @@ const commands = {
                 colorScheme.primary_color = matches[1];
                 if (matches[4]) {
                     colorScheme.secondary_color = matches[4];
+                } else {
+                    colorScheme.secondary_color = colorScheme.primary_color;
                 }
                 return success(
                     SettingsStore.setValue("roomColor", roomId, SettingLevel.ROOM_ACCOUNT, colorScheme),
