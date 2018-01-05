@@ -92,9 +92,9 @@ module.exports = React.createClass({
         this._visibleRoomsForGroup = {
             // $groupId: [$roomId1, $roomId2, ...],
         };
-        // All rooms that should be kept in the room list when filtering
-        // By default, set to `null` meaning "all rooms visible"
-        this._visibleRooms = null;
+        // All rooms that should be kept in the room list when filtering.
+        // By default, show all rooms.
+        this._visibleRooms = MatrixClientPeg.get().getRooms();
         // When the selected tags are changed, initialise a group store if necessary
         this._tagStoreToken = TagOrderStore.addListener(() => {
             TagOrderStore.getSelectedTags().forEach((tag) => {
@@ -197,11 +197,11 @@ module.exports = React.createClass({
     },
 
     onRoom: function(room) {
-        this._delayedRefreshRoomList();
+        this.updateVisibleRooms();
     },
 
     onDeleteRoom: function(roomId) {
-        this._delayedRefreshRoomList();
+        this.updateVisibleRooms();
     },
 
     onArchivedHeaderClick: function(isHidden, scrollToPosition) {
@@ -321,7 +321,7 @@ module.exports = React.createClass({
             this._visibleRooms = Array.from(roomSet);
         } else {
             // Show all rooms
-            this._visibleRooms = null;
+            this._visibleRooms = MatrixClientPeg.get().getRooms();
         }
 
         this.setState({
@@ -360,7 +360,7 @@ module.exports = React.createClass({
 
         const dmRoomMap = DMRoomMap.shared();
 
-        (this._visibleRooms || MatrixClientPeg.get().getRooms()).forEach((room, index) => {
+        this._visibleRooms.forEach((room, index) => {
             const me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (!me) return;
 
