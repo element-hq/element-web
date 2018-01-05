@@ -43,7 +43,7 @@ export function getOnlyOtherMember(room, me) {
     return null;
 }
 
-export function isConfCallRoom(room, me, conferenceHandler) {
+function _isConfCallRoom(room, me, conferenceHandler) {
     if (!conferenceHandler) return false;
 
     if (me.membership != "join") {
@@ -58,6 +58,26 @@ export function isConfCallRoom(room, me, conferenceHandler) {
     if (conferenceHandler.isConferenceUser(otherMember.userId)) {
         return true;
     }
+
+    return false;
+}
+
+// Cache whether a room is a conference call. Assumes that rooms will always
+// either will or will not be a conference call room.
+const isConfCallRoomCache = {
+    // $roomId: bool
+};
+
+export function isConfCallRoom(room, me, conferenceHandler) {
+    if (isConfCallRoomCache[room.roomId] !== undefined) {
+        return isConfCallRoomCache[room.roomId];
+    }
+
+    const result = _isConfCallRoom(room, me, conferenceHandler);
+
+    isConfCallRoomCache[room.roomId] = result;
+
+    return result;
 }
 
 export function looksLikeDirectMessageRoom(room, me) {
