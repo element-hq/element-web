@@ -18,7 +18,7 @@ limitations under the License.
     max-width: 100%;
     clear: both;
     padding-top: 18px;
-    font-size: 14px;
+    font-size: 0.875em;
     position: relative;
 }
 
@@ -45,7 +45,7 @@ limitations under the License.
 
 .mx_EventTile .mx_SenderProfile {
     color: $primary-fg-color;
-    font-size: 14px;
+    font-size: 0.875em;
     display: block; /* anti-zalgo, with overflow hidden */
     overflow-y: hidden;
     cursor: pointer;
@@ -77,7 +77,7 @@ limitations under the License.
     visibility: hidden;
     white-space: nowrap;
     color: $event-timestamp-color;
-    font-size: 10px;
+    font-size: 0.625em;
     left: 0px;
     width: 46px; /* 8 + 30 (avatar) + 8 */
     text-align: center;
@@ -102,8 +102,8 @@ limitations under the License.
 
 /* HACK to override line-height which is already marked important elsewhere */
 .mx_EventTile_bigEmoji.mx_EventTile_bigEmoji {
-    font-size: 48px ! important;
-    line-height: 48px ! important;
+    font-size: 3em ! important;
+    line-height: 3em ! important;
 }
 
 /* this is used for the tile for the event which is selected via the URL.
@@ -257,7 +257,7 @@ limitations under the License.
 
 .mx_EventTile_readAvatarRemainder {
     color: $event-timestamp-color;
-    font-size: 11px;
+    font-size: 0.688em;
     position: absolute;
 }
 
@@ -337,7 +337,7 @@ limitations under the License.
     white-space: normal ! important;
     line-height: inherit ! important;
     color: inherit; // inherit the colour from the dark or light theme by default (but not for code blocks)
-    font-size: 14px;
+    font-size: 0.875em;
 }
 
 /* have to use overlay rather than auto otherwise Linux and Windows
@@ -419,7 +419,7 @@ limitations under the License.
     .mx_EventTile.mx_EventTile_info {
         // same as the padding for non-compact .mx_EventTile.mx_EventTile_info
         padding-top: 0px;
-        font-size: 13px;
+        font-size: 0.813em;
         .mx_EventTile_line {
             line-height: 20px;
         }
@@ -429,7 +429,7 @@ limitations under the License.
     }
 
     .mx_EventTile .mx_SenderProfile {
-        font-size: 13px;
+        font-size: 0.813em;
     }
 
     .mx_EventTile.mx_EventTile_emote {
