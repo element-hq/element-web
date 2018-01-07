@@ -1,0 +1,129 @@
+// Styling Cross-Browser Compatible Range Inputs with Sass
+// *Modified to work with postcss*
+// Github: https://github.com/darlanrod/input-range-sass
+// Author: Darlan Rod https://github.com/darlanrod
+// Version 1.4.1
+// MIT License
+
+$track-color: #eceff1;
+$thumb-color: $accent-color;
+
+$thumb-radius: 12px;
+$thumb-height: 24px;
+$thumb-width: 24px;
+$thumb-shadow-size: 4px;
+$thumb-shadow-blur: 4px;
+$thumb-shadow-color: $accent-fg-color;
+$thumb-border-width: 2px;
+$thumb-border-color: $accent-color;
+
+$track-width: 100%;
+$track-height: 8px;
+$track-shadow-size: 1px;
+$track-shadow-blur: 1px;
+$track-shadow-color: rgba(0, 0, 0, .2);
+$track-border-width: 2px;
+$track-border-color: #cfd8dc;
+
+$track-radius: 5px;
+$contrast: 5%;
+
+@define-mixin shadow $shadow-size, $shadow-blur, $shadow-color {
+  box-shadow: $shadow-size $shadow-size $shadow-blur $shadow-color, 0 0 $shadow-size lighten($shadow-color, 5%);
+}
+
+@define-mixin track {
+  cursor: pointer;
+  height: $track-height;
+  transition: all .2s ease;
+  width: $track-width;
+}
+
+@define-mixin thumb {
+  @mixin shadow $thumb-shadow-size, $thumb-shadow-blur, $thumb-shadow-color;
+  background: $thumb-color;
+  border: $thumb-border-width solid $thumb-border-color;
+  border-radius: $thumb-radius;
+  cursor: pointer;
+  height: $thumb-height;
+  width: $thumb-width;
+}
+
+.mx_SettingsSlider_label {
+    text-align: center;
+}
+
+.mx_SettingsSlider input[type='range'] {
+  -webkit-appearance: none;
+  margin: calc($thumb-height / 2) 0;
+  width: $track-width;
+
+  &:focus {
+    outline: 0;
+
+    &::-webkit-slider-runnable-track {
+      background: lighten($track-color, $contrast);
+    }
+
+    &::-ms-fill-lower {
+      background: $track-color;
+    }
+
+    &::-ms-fill-upper {
+      background: lighten($track-color, $contrast);
+    }
+  }
+
+  &::-webkit-slider-runnable-track {
+    @mixin track;
+    @mixin shadow $track-shadow-size, $track-shadow-blur, $track-shadow-color;
+    background: $track-color;
+    border: $track-border-width solid $track-border-color;
+    border-radius: $track-radius;
+  }
+
+  &::-webkit-slider-thumb {
+    @mixin thumb;
+    -webkit-appearance: none;
+    margin-top: calc(((-$track-border-width * 2 + $track-height) / 2) - ($thumb-height / 2));
+  }
+
+  &::-moz-range-track {
+    @mixin track;
+    @mixin shadow $track-shadow-size, $track-shadow-blur, $track-shadow-color;
+    background: $track-color;
+    border: $track-border-width solid $track-border-color;
+    border-radius: $track-radius;
+  }
+
+  &::-moz-range-thumb {
+    @mixin thumb;
+  }
+
+  &::-ms-track {
+    @mixin track;
+    background: transparent;
+    border-color: transparent;
+    border-width: calc($thumb-height / 2) 0;
+    color: transparent;
+  }
+
+  &::-ms-fill-lower {
+    @mixin shadow $track-shadow-size, $track-shadow-blur, $track-shadow-color;
+    background: darken($track-color, $contrast);
+    border: $track-border-width solid $track-border-color;
+    border-radius: calc($track-radius * 2);
+  }
+
+  &::-ms-fill-upper {
+    @mixin shadow $track-shadow-size, $track-shadow-blur, $track-shadow-color;
+    background: $track-color;
+    border: $track-border-width solid $track-border-color;
+    border-radius: calc($track-radius * 2);
+  }
+
+  &::-ms-thumb {
+    @mixin thumb;
+    margin-top: 0;
+  }
+}
