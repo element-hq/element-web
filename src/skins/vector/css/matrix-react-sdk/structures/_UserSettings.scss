@@ -31,6 +31,10 @@ limitations under the License.
     flex: 0 0 70px;
 }
 
+.mx_UserSettings .mx_RoomHeader .mx_RoomHeader_simpleHeader {
+    margin-left: 0;
+}
+
 .mx_UserSettings_body {
     order: 2;
 
@@ -42,7 +46,6 @@ limitations under the License.
 
 .mx_UserSettings h3 {
     clear: both;
-    margin-left: 63px;
     text-transform: uppercase;
     color: $h3-color;
     font-weight: 600;
@@ -78,7 +81,6 @@ limitations under the License.
 }
 
 .mx_UserSettings_section {
-    margin-left: 63px;
     margin-top: 28px;
     margin-bottom: 28px;
 }
