@@ -53,7 +53,7 @@ limitations under the License.
     padding-bottom: 0px;
     padding-top: 0px;
     margin: 0px;
-    line-height: 22px;
+    line-height: 1.375em;
 }
 
 .mx_EventTile .mx_SenderProfile .mx_SenderProfile_name,
@@ -93,7 +93,7 @@ limitations under the License.
     padding-bottom: 2px;
     border-radius: 4px;
     min-height: 24px;
-    line-height: 22px;
+    line-height: 1.375em;
 }
 
 .mx_EventTile_info .mx_EventTile_line {
@@ -421,7 +421,7 @@ limitations under the License.
         padding-top: 0px;
         font-size: 0.813em;
         .mx_EventTile_line {
-            line-height: 20px;
+            line-height: 1.250em;
         }
         .mx_EventTile_avatar {
             top: 4px;
