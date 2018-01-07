@@ -16,7 +16,7 @@ const INCLUDE_LANGS = [
     {'value': 'el', 'label': 'Ελληνικά'},
     {'value': 'eo', 'label': 'Esperanto'},
     {'value': 'es', 'label': 'Español'},
-    {'value': 'eu', 'label': 'Euskal'},
+    {'value': 'eu', 'label': 'Euskara'},
     {'value': 'fi', 'label': 'Suomi'},
     {'value': 'fr', 'label': 'Français'},
     {'value': 'hu', 'label': 'Magyar'},
