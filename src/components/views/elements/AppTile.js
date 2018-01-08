@@ -171,6 +171,7 @@ export default React.createClass({
     componentDidMount() {
         // Legacy Jitsi widget messaging -- TODO replace this with standard widget
         // postMessaging API
+        dis.register(this._onAction);
         window.addEventListener('message', this._onMessage, false);
     },
 
@@ -346,8 +347,6 @@ export default React.createClass({
             console.log("Failed to get widget capabilities", this.widgetId, err);
         });
         this.setState({loading: false});
-
-        dis.register(this._onAction);
     },
 
     _onAction(payload) {
