@@ -333,18 +333,27 @@ function setWidget(event, roomId) {
     };
 
     if (userWidget) {
+        console.warn('Adding user widget');
         const client = MatrixClientPeg.get();
-        let userWidgets = client.getAccountData('m.widgets');
+        let userWidgets = client.getAccountData('m.widgets') || {};
 
         // Delete existing widget with ID
-        userWidgets = userWidgets.filter((widget) => widget.data.id === widgetId ? false : true);
+        delete userWidgets[widgetId];
 
         // Add new widget / update
         if (widgetUrl !== null) {
-            userWidgets.push(content);
+            userWidgets[widgetId] = {
+                content: content,
+                sender: client.getUserId(),
+                stateKey: widgetId,
+                type: 'm.widget',
+            };
         }
 
-        client.setAccountData('m.widgets', userWidgets);
+        client.setAccountData('m.widgets', {widgets: userWidgets});
+        sendResponse(event, {
+            success: true,
+        });
     } else { // Room widget
         if (widgetUrl === null) { // widget is being deleted
             content = {};
