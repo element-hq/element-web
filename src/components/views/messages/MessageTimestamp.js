@@ -30,7 +30,7 @@ module.exports = React.createClass({
         const date = new Date(this.props.ts);
         return (
             <span className="mx_MessageTimestamp" title={ DateUtils.formatFullDate(date, this.props.showTwelveHour) }>
-                { DateUtils.formatTime(date, this.props.showTwelveHour) }
+                { DateUtils.formatTime(date, this.props.showTwelveHour) + '&nbsp;' }
             </span>
         );
     },
