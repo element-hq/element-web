@@ -197,7 +197,7 @@ class Analytics {
             title: _t('Analytics'),
             description: <div>
                 <div>
-                    { _t('The following information is sent to us to help make Riot.im better:') }
+                    { _t('The information being sent to us to help make Riot.im better includes:') }
                 </div>
                 <table>
                     { rows.map((row) => <tr key={row[0]}>

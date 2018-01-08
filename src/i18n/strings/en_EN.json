@@ -933,7 +933,7 @@
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.",
     "File to import": "File to import",
     "Import": "Import",
-    "The following information is sent to us to help make Riot.im better:": "The following information is sent to us to help make Riot.im better:",
+    "The information being sent to us to help make Riot.im better includes:": "The information being sent to us to help make Riot.im better includes:",
     "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.",
     "The platform you're on": "The platform you're on",
