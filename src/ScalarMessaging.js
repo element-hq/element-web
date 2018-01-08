@@ -291,6 +291,7 @@ function setWidget(event, roomId) {
     const widgetUrl = event.data.url;
     const widgetName = event.data.name; // optional
     const widgetData = event.data.data; // optional
+    const userWidget = event.data.userWidget;
 
     const client = MatrixClientPeg.get();
     if (!client) {
@@ -330,17 +331,32 @@ function setWidget(event, roomId) {
         name: widgetName,
         data: widgetData,
     };
-    if (widgetUrl === null) { // widget is being deleted
-        content = {};
-    }
 
-    client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).done(() => {
-        sendResponse(event, {
-            success: true,
+    if (userWidget) {
+        const client = MatrixClientPeg.get();
+        let userWidgets = client.getAccountData('m.widgets');
+
+        // Delete existing widget with ID
+        userWidgets = userWidgets.filter((widget) => widget.data.id === widgetId ? false : true);
+
+        // Add new widget / update
+        if (widgetUrl !== null) {
+            userWidgets.push(content);
+        }
+
+        client.setAccountData('m.widgets', userWidgets);
+    } else { // Room widget
+        if (widgetUrl === null) { // widget is being deleted
+            content = {};
+        }
+        client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).done(() => {
+            sendResponse(event, {
+                success: true,
+            });
+        }, (err) => {
+            sendError(event, _t('Failed to send request.'), err);
         });
-    }, (err) => {
-        sendError(event, _t('Failed to send request.'), err);
-    });
+    }
 }
 
 function getWidgets(event, roomId) {
