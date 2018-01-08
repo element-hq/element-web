@@ -16,10 +16,13 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sdk = require('matrix-react-sdk')
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
+import React from 'react';
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
+import { KeyCode } from 'matrix-react-sdk/lib/Keyboard';
+import sdk from 'matrix-react-sdk';
+import dis from 'matrix-react-sdk/lib/dispatcher';
+import rate_limited_func from 'matrix-react-sdk/lib/ratelimitedfunc';
+import AccessibleButton from 'matrix-react-sdk/lib/components/views/elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'SearchBox',
@@ -33,6 +36,30 @@ module.exports = React.createClass({
         return {
             searchTerm: "",
         };
+    },
+
+    componentDidMount: function() {
+        this.dispatcherRef = dis.register(this.onAction);
+    },
+
+    componentWillUnmount: function() {
+        dis.unregister(this.dispatcherRef);
+    },
+
+    onAction: function(payload) {
+        switch (payload.action) {
+            case 'view_room':
+                if (this.refs.search && payload.clear_search) {
+                    this._clearSearch();
+                }
+                break;
+            case 'focus_room_filter':
+                if (this.refs.search) {
+                    this.refs.search.focus();
+                    this.refs.search.select();
+                }
+                break;
+        }
     },
 
     onChange: function() {
@@ -61,35 +88,51 @@ module.exports = React.createClass({
         }
     },
 
+    _onKeyDown: function(ev) {
+        switch (ev.keyCode) {
+            case KeyCode.ESCAPE:
+                this._clearSearch();
+                dis.dispatch({action: 'focus_composer'});
+                break;
+        }
+    },
+
+    _clearSearch: function() {
+        this.refs.search.value = "";
+        this.onChange();
+    },
+
     render: function() {
         var TintableSvg = sdk.getComponent('elements.TintableSvg');
+
+        var collapseTabIndex = this.refs.search && this.refs.search.value !== "" ? "-1" : "0";
 
         var toggleCollapse;
         if (this.props.collapsed) {
             toggleCollapse =
-                <div className="mx_SearchBox_maximise" onClick={ this.onToggleCollapse.bind(this, true) }>
-                    <TintableSvg src="img/maximise.svg" width="10" height="16" alt="&lt;"/>
-                </div>
+                <AccessibleButton className="mx_SearchBox_maximise" tabIndex={collapseTabIndex} onClick={ this.onToggleCollapse.bind(this, true) }>
+                    <TintableSvg src="img/maximise.svg" width="10" height="16" alt={ _t("Expand panel") }/>
+                </AccessibleButton>
         }
         else {
             toggleCollapse =
-                <div className="mx_SearchBox_minimise" onClick={ this.onToggleCollapse.bind(this, false) }>
-                    <TintableSvg src="img/minimise.svg" width="10" height="16" alt="&lt;"/>
-                </div>
+                <AccessibleButton className="mx_SearchBox_minimise" tabIndex={collapseTabIndex} onClick={ this.onToggleCollapse.bind(this, false) }>
+                    <TintableSvg src="img/minimise.svg" width="10" height="16" alt={ _t("Collapse panel") }/>
+                </AccessibleButton>
         }
 
         var searchControls;
         if (!this.props.collapsed) {
             searchControls = [
                     this.state.searchTerm.length > 0 ?
-                    <div key="button"
-                         className="mx_SearchBox_closeButton"
-                         onClick={ ()=>{ this.refs.search.value = ""; this.onChange(); } }>
+                    <AccessibleButton key="button"
+                            className="mx_SearchBox_closeButton"
+                            onClick={ ()=>{ this._clearSearch(); } }>
                         <TintableSvg
                             className="mx_SearchBox_searchButton"
                             src="img/icons-close.svg" width="24" height="24"
                         />
-                    </div>
+                    </AccessibleButton>
                     :
                     <TintableSvg
                         key="button"
@@ -103,7 +146,8 @@ module.exports = React.createClass({
                         className="mx_SearchBox_search"
                         value={ this.state.searchTerm }
                         onChange={ this.onChange }
-                        placeholder="Filter room names"
+                        onKeyDown={ this._onKeyDown }
+                        placeholder={ _t('Filter room names') }
                     />
                 ];
         }

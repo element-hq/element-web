@@ -16,18 +16,27 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
+
+const i = [1, 2, 3, 4, 5][Math.floor(Math.random() * 5)];
+const DEFAULT_LOGO_URI = "img/logos/riot-im-logo-" + i + ".svg";
 
 module.exports = React.createClass({
     displayName: 'VectorLoginHeader',
     statics: {
         replaces: 'LoginHeader',
     },
+    propTypes: {
+        icon: PropTypes.string,
+    },
 
     render: function() {
         return (
-            <div className="mx_Login_logo">
-                <img src="img/logo.png" width="195" height="195" alt="Riot"/>
+            <div className="mx_Login_header">
+                <div className="mx_Login_logo">
+                    <img src={this.props.icon || DEFAULT_LOGO_URI} alt="Riot"/>
+                </div>
             </div>
         );
     }

@@ -9,6 +9,8 @@
     "test/css/flexbox",
     "test/es5/specification",
     "test/css/objectfit",
-    "test/storage/localstorage"
+    "test/storage/localstorage",
+    "test/workers/webworkers",
+    "test/indexeddb"
   ]
 }

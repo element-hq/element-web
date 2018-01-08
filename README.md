@@ -14,12 +14,15 @@ https://riot.im/develop for those who like living dangerously.
 To host your own copy of Riot, the quickest bet is to use a pre-built
 released version of Riot:
 
-1. Download the latest version from https://github.com/vector-im/vector-web/releases
+1. Download the latest version from https://github.com/vector-im/riot-web/releases
 1. Untar the tarball on your web server
-1. Move (or symlink) the vector-x.x.x directory to an appropriate name
+1. Move (or symlink) the riot-x.x.x directory to an appropriate name
 1. If desired, copy `config.sample.json` to `config.json` and edit it
    as desired. See below for details.
 1. Enter the URL into your browser and log into Riot!
+
+Releases are signed by PGP, and can be checked against the public key
+at https://riot.im/packages/keys/riot.asc
 
 Note that Chrome does not allow microphone or webcam access for sites served
 over http (except localhost), so for working VoIP you will need to serve Riot
@@ -44,7 +47,7 @@ access to Riot (or other apps) due to sharing the same domain.
 
 We have put some coarse mitigations into place to try to protect against this
 situation, but it's still not good practice to do it in the first place.  See
-https://github.com/vector-im/vector-web/issues/1977 for more details.
+https://github.com/vector-im/riot-web/issues/1977 for more details.
 
 Building From Source
 ====================
@@ -52,16 +55,41 @@ Building From Source
 Riot is a modular webapp built with modern ES6 and requires a npm build system
 to build.
 
-1. Install or update `node.js` so that your `npm` is at least at version `2.0.0`
-1. Clone the repo: `git clone https://github.com/vector-im/vector-web.git`
-1. Switch to the vector-web directory: `cd vector-web`
-1. Install the prerequisites: `npm install`
-1. If you are using the `develop` branch of vector-web, you will probably need
-   to rebuild one of the dependencies, due to
-   https://github.com/npm/npm/issues/3055: `(cd node_modules/matrix-react-sdk
-   && npm install)`
+1. Install or update `node.js` so that your `node` is at least v6.3.0 (and `npm`
+   is at least v3.10.x).
+1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`.
+1. Switch to the riot-web directory: `cd riot-web`.
+1. If you're using the `develop` branch, install the develop versions of the
+   dependencies, as the released ones will be too old:
+   ```
+   scripts/fetch-develop.deps.sh
+   ```
+   Whenever you git pull on riot-web you will also probably need to force an update
+   to these dependencies - the simplest way is to re-run the script, but you can also
+   manually update and rebuild them:
+   ```
+   cd matrix-js-sdk
+   git pull
+   npm install # re-run to pull in any new dependencies
+   # Depending on your version of npm, npm run build may happen as part of
+   # the npm install above (https://docs.npmjs.com/misc/scripts#prepublish-and-prepare)
+   # If in doubt, run it anyway:
+   npm run build
+   cd ../matrix-react-sdk
+   git pull
+   npm install
+   npm run build
+   ```
+   However, we recommend setting up a proper development environment (see "Setting
+   up a dev environment" below) if you want to run your own copy of the
+   `develop` branch, as it makes it much easier to keep these dependencies
+   up-to-date.  Or just use https://riot.im/develop - the continuous integration
+   release of the develop branch.
+   (Note that we don't reference the develop versions in git directly due to
+   https://github.com/npm/npm/issues/3055.)
+1. Install the prerequisites: `npm install`.
 1. Configure the app by copying `config.sample.json` to `config.json` and
-   modifying it (see below for details)
+   modifying it (see below for details).
 1. `npm run dist` to build a tarball to deploy. Untaring this file will give
    a version-specific directory containing all the files that need to go on your
    web server.
@@ -87,7 +115,9 @@ You can configure the app by copying `config.sample.json` to
    addresses) to matrix IDs: see http://matrix.org/docs/spec/identity_service/unstable.html
    for more details.  Currently the only public matrix identity servers are https://matrix.org
    and https://vector.im.  In future identity servers will be decentralised.
-1. `integrations_ui_url`: URL to the web interface for the integrations server.
+1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
+   server is not Riot and normally not your Home Server either. The integration server settings
+   may be left blank to disable integrations.
 1. `integrations_rest_url`: URL to the REST interface for the integrations server.
 1. `roomDirectory`: config for the public room directory. This section is optional.
 1. `roomDirectory.servers`: List of other Home Servers' directories to include in the drop
@@ -105,16 +135,19 @@ Running as a Desktop app
 ========================
 
 Riot can also be run as a desktop app, wrapped in electron. You can download a
-pre-built version from https://riot.im/download/desktop/ or, if you prefer,
-built it yourself.
+pre-built version from https://riot.im/desktop.html or, if you prefer,
+build it yourself. Requires Electron >=1.6.0
 
 To run as a desktop app:
-```
-npm install
-npm install electron
-npm run build
-node_modules/.bin/electron .
-```
+
+1. Follow the instructions in 'Building From Source' above, but run
+   `npm run build` instead of `npm run dist` (since we don't need the tarball).
+2. Install electron and run it:
+
+   ```
+   npm install electron
+   npm run electron
+   ```
 
 To build packages, use electron-builder. This is configured to output:
  * dmg + zip for macOS
@@ -137,11 +170,9 @@ npm run build:electron
 
 For other packages, use electron-builder manually. For example, to build a package
 for 64 bit Linux:
-```
-npm install
-npm run build
-node_modules/.bin/build -l --x64
-```
+
+ 1. Follow the instructions in 'Building From Source' above
+ 2. `node_modules/.bin/build -l --x64`
 
 All electron packages go into `electron/dist/`
 
@@ -175,13 +206,13 @@ the `component-index.js` for the app (used in future for skinning)
 development on Riot forcing `matrix-react-sdk` to move fast at the expense of
 maintaining a clear abstraction between the two.**  Hacking on Riot inevitably
 means hacking equally on `matrix-react-sdk`, and there are bits of
-`matrix-react-sdk` behaviour incorrectly residing in the `vector-web` project
+`matrix-react-sdk` behaviour incorrectly residing in the `riot-web` project
 (e.g. matrix-react-sdk specific CSS), and a bunch of Riot specific behaviour
 in the `matrix-react-sdk` (grep for `vector` / `riot`).  This separation problem will be
 solved asap once development on Riot (and thus matrix-react-sdk) has
 stabilised.  Until then, the two projects should basically be considered as a
 single unit.  In particular, `matrix-react-sdk` issues are currently filed
-against `vector-web` in github.
+against `riot-web` in github.
 
 Please note that Riot is intended to run correctly without access to the public
 internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
@@ -216,15 +247,14 @@ Then similarly with `matrix-react-sdk`:
 
 Finally, build and start Riot itself:
 
-1. `git clone git@github.com:vector-im/vector-web.git`
-1. `cd vector-web`
+1. `git clone git@github.com:vector-im/riot-web.git`
+1. `cd riot-web`
 1. `git checkout develop`
 1. `npm install`
 1. `rm -r node_modules/matrix-js-sdk; ln -s ../../matrix-js-sdk node_modules/`
 1. `rm -r node_modules/matrix-react-sdk; ln -s ../../matrix-react-sdk node_modules/`
 1. `npm start`
 1. Wait a few seconds for the initial build to finish; you should see something like:
-
     ```
     Hash: b0af76309dd56d7275c8
     Version: webpack 1.12.14
@@ -241,10 +271,10 @@ Finally, build and start Riot itself:
    disables caching, so do NOT use it in production.
 1. Open http://127.0.0.1:8080/ in your browser to see your newly built Riot.
 
-When you make changes to `matrix-react-sdk`, you will need to run `npm run
-build` in the relevant directory. You can do this automatically by instead
-running `npm start` in the directory, to start a development builder which
-will watch for changes to the files and rebuild automatically.
+When you make changes to `matrix-react-sdk` or `matrix-js-sdk`, you will need
+to run `npm run build` in the relevant directory. You can do this automatically
+by instead running `npm start` in the directory, to start a development builder
+which will watch for changes to the files and rebuild automatically.
 
 If you add or remove any components from the Riot skin, you will need to rebuild
 the skin's index by running, `npm run reskindex`.
@@ -253,27 +283,62 @@ If any of these steps error with, `file table overflow`, you are probably on a m
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
 You'll need to do this in each new terminal you open before building Riot.
 
+Running the tests
+-----------------
+
+There are a number of application-level tests in the `tests` directory; these
+are designed to run in a browser instance under the control of
+[karma](https://karma-runner.github.io). To run them:
+
+* Make sure you have Chrome installed (a recent version, like 59)
+* Make sure you have `matrix-js-sdk` and `matrix-react-sdk` installed and
+  built, as above
+* `npm run test`
+
+The above will run the tests under Chrome in a `headless` mode.
+
+You can also tell karma to run the tests in a loop (every time the source
+changes), in an instance of Chrome on your desktop, with `npm run
+test-multi`. This also gives you the option of running the tests in 'debug'
+mode, which is useful for stepping through the tests in the developer tools.
+
+Translations
+============
+
+To add a new translation, head to the [translating doc](docs/translating.md).
+
+For a developer guide, see the [translating dev doc](docs/translating-dev.md).
+
+[<img src="https://translate.riot.im/widgets/riot-web/-/multi-auto.svg" alt="translationsstatus" width="340">](https://translate.riot.im/engage/riot-web/?utm_source=widget)
+
 Triaging issues
 ===============
 
 Issues will be triaged by the core team using the following primary set of tags:
 
 priority:
-    P1: top priority; typically blocks releases.
-    P2: one below that
-    P3: non-urgent
-    P4/P5: bluesky some day, who knows.
+
+* P1: top priority; typically blocks releases
+* P2: still need to fix, but lower than P1
+* P3: non-urgent
+* P4: intereseting idea - bluesky some day
+* P5: recorded for posterity/to avoid duplicates. No intention to resolves right now.
 
 bug or feature:
-  bug severity:
-     * cosmetic - feature works functionally but UI/UX is broken.
-     * critical - whole app doesn't work
-     * major - entire feature doesn't work
-     * minor - partially broken feature (but still usable)
 
-     * release blocker
+* bug
+* feature
 
-     * ui/ux (think of this as cosmetic)
+bug severity:
 
-     * network (specific to network conditions)
-     * platform (platform specific)
+* cosmetic - feature works functionally but UI/UX is broken
+* critical - whole app doesn't work
+* major - entire feature doesn't work
+* minor - partially broken feature (but still usable)
+
+additional categories:
+
+* release blocker
+* ui/ux (think of this as cosmetic)
+* network (specific to network conditions)
+* platform (platform specific)

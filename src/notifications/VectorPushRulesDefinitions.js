@@ -16,6 +16,8 @@ limitations under the License.
 
 'use strict';
 
+import { _td } from 'matrix-react-sdk/lib/languageHandler';
+
 var StandardActions = require('./StandardActions');
 var PushRuleVectorState = require('./PushRuleVectorState');
 
@@ -63,10 +65,20 @@ class VectorPushRuleDefinition {
  */
 module.exports = {
     // Messages containing user's display name
-    // (skip contains_user_name which is too geeky)
     ".m.rule.contains_display_name": new VectorPushRuleDefinition({
         kind: "override",
-        description: "Messages containing my name",
+        description: _td("Messages containing my display name"), // passed through _t() translation in src/components/views/settings/Notifications.js
+        vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
+            on: StandardActions.ACTION_NOTIFY,
+            loud: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
+            off: StandardActions.ACTION_DISABLED
+        }
+    }),
+
+    // Messages containing user's username (localpart/MXID)
+    ".m.rule.contains_user_name": new VectorPushRuleDefinition({
+        kind: "override",
+        description: _td("Messages containing my user name"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
             on: StandardActions.ACTION_NOTIFY,
             loud: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
@@ -77,7 +89,7 @@ module.exports = {
     // Messages just sent to the user in a 1:1 room
     ".m.rule.room_one_to_one": new VectorPushRuleDefinition({
         kind: "underride",
-        description: "Messages in one-to-one chats",
+        description: _td("Messages in one-to-one chats"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
             on: StandardActions.ACTION_NOTIFY,
             loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
@@ -90,7 +102,7 @@ module.exports = {
     // By opposition, all other room messages are from group chat rooms.
     ".m.rule.message": new VectorPushRuleDefinition({
         kind: "underride",
-        description: "Messages in group chats",
+        description: _td("Messages in group chats"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
             on: StandardActions.ACTION_NOTIFY,
             loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
@@ -101,7 +113,7 @@ module.exports = {
     // Invitation for the user
     ".m.rule.invite_for_me": new VectorPushRuleDefinition({
         kind: "underride",
-        description: "When I'm invited to a room",
+        description: _td("When I'm invited to a room"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
             on: StandardActions.ACTION_NOTIFY,
             loud: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
@@ -112,7 +124,7 @@ module.exports = {
     // Incoming call
     ".m.rule.call": new VectorPushRuleDefinition({
         kind: "underride",
-        description: "Call invitation",
+        description: _td("Call invitation"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
             on: StandardActions.ACTION_NOTIFY,
             loud: StandardActions.ACTION_NOTIFY_RING_SOUND,
@@ -123,7 +135,7 @@ module.exports = {
     // Notifications from bots
     ".m.rule.suppress_notices": new VectorPushRuleDefinition({
         kind: "override",
-        description: "Messages sent by bot",
+        description: _td("Messages sent by bot"), // passed through _t() translation in src/components/views/settings/Notifications.js
         vectorStateToActions: {
             // .m.rule.suppress_notices is a "negative" rule, we have to invert its enabled value for vector UI
             on: StandardActions.ACTION_DISABLED,

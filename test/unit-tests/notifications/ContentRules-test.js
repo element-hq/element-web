@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var notifications = require('notifications');
+var notifications = require('../../../src/notifications');
 
 var ContentRules = notifications.ContentRules;
 var PushRuleVectorState = notifications.PushRuleVectorState;

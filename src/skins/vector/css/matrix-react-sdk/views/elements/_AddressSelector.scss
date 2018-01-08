@@ -1,0 +1,45 @@
+/*
+Copyright 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_AddressSelector {
+    position: absolute;
+    background-color: $primary-bg-color;
+    width: 485px;
+    max-height: 116px;
+    overflow-y: auto;
+	border-radius: 3px;
+	background-color: $primary-bg-color;
+	border: solid 1px $accent-color;
+    cursor: pointer;
+}
+
+.mx_AddressSelector.mx_AddressSelector_empty {
+    display: none;
+}
+
+.mx_AddressSelector_addressListElement .mx_AddressTile {
+    background-color: $primary-bg-color;
+    border: solid 1px $primary-bg-color;
+}
+
+.mx_AddressSelector_addressListElement.mx_AddressSelector_selected {
+    background-color: $selected-color;
+}
+
+.mx_AddressSelector_addressListElement.mx_AddressSelector_selected .mx_AddressTile {
+    background-color: $selected-color;
+    border: solid 1px $selected-color;
+}

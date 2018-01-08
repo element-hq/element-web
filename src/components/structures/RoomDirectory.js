@@ -23,13 +23,14 @@ var ContentRepo = require("matrix-js-sdk").ContentRepo;
 var Modal = require('matrix-react-sdk/lib/Modal');
 var sdk = require('matrix-react-sdk');
 var dis = require('matrix-react-sdk/lib/dispatcher');
-var GeminiScrollbar = require('react-gemini-scrollbar');
 
 var linkify = require('linkifyjs');
 var linkifyString = require('linkifyjs/string');
 var linkifyMatrix = require('matrix-react-sdk/lib/linkify-matrix');
 var sanitizeHtml = require('sanitize-html');
-var q = require('q');
+import Promise from 'bluebird';
+
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 import {instanceForInstanceId, protocolNameForInstanceId} from '../../utils/DirectoryUtils';
 
@@ -61,6 +62,7 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function() {
+        this._unmounted = false;
         this.nextBatch = null;
         this.filterTimeout = null;
         this.scrollPanel = null;
@@ -71,6 +73,7 @@ module.exports = React.createClass({
             this.protocols = response;
             this.setState({protocolsLoading: false});
         }, (err) => {
+            console.warn(`error loading thirdparty protocols: ${err}`);
             this.setState({protocolsLoading: false});
             if (MatrixClientPeg.get().isGuest()) {
                 // Guests currently aren't allowed to use this API, so
@@ -79,25 +82,29 @@ module.exports = React.createClass({
                 return;
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
-                title: "Failed to get protocol list from Home Server",
-                description: "The Home Server may be too old to support third party networks",
+            Modal.createTrackedDialog('Failed to get protocol list from Home Server', '', ErrorDialog, {
+                title: _t('Failed to get protocol list from Home Server'),
+                description: _t('The Home Server may be too old to support third party networks'),
             });
         });
 
         // dis.dispatch({
-        //     action: 'ui_opacity',
-        //     sideOpacity: 0.3,
-        //     middleOpacity: 0.3,
+        //     action: 'panel_disable',
+        //     sideDisabled: true,
+        //     middleDisabled: true,
         // });
     },
 
     componentWillUnmount: function() {
         // dis.dispatch({
-        //     action: 'ui_opacity',
-        //     sideOpacity: 1.0,
-        //     middleOpacity: 1.0,
+        //     action: 'panel_disable',
+        //     sideDisabled: false,
+        //     middleDisabled: false,
         // });
+        if (this.filterTimeout) {
+            clearTimeout(this.filterTimeout);
+        }
+        this._unmounted = true;
     },
 
     refreshRoomList: function() {
@@ -110,7 +117,7 @@ module.exports = React.createClass({
     },
 
     getMoreRooms: function() {
-        if (!MatrixClientPeg.get()) return q();
+        if (!MatrixClientPeg.get()) return Promise.resolve();
 
         const my_filter_string = this.state.filterString;
         const my_server = this.state.roomServer;
@@ -140,6 +147,11 @@ module.exports = React.createClass({
                 return;
             }
 
+            if (this._unmounted) {
+                // if we've been unmounted, we don't care either.
+                return;
+            }
+
             this.nextBatch = data.next_batch;
             this.setState((s) => {
                 s.publicRooms.push(...data.chunk);
@@ -157,12 +169,18 @@ module.exports = React.createClass({
                 // requests either
                 return;
             }
+
+            if (this._unmounted) {
+                // if we've been unmounted, we don't care either.
+                return;
+            }
+
             this.setState({ loading: false });
             console.error("Failed to get publicRooms: %s", JSON.stringify(err));
             var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
-                title: "Failed to get public room list",
-                description: err.message
+            Modal.createTrackedDialog('Failed to get public room list', '', ErrorDialog, {
+                title: _t('Failed to get public room list'),
+                description: ((err && err.message) ? err.message : _t('The server may be unavailable or overloaded'))
             });
         });
     },
@@ -176,41 +194,42 @@ module.exports = React.createClass({
      */
     removeFromDirectory: function(room) {
         var alias = get_display_alias_for_room(room);
-        var name = room.name || alias || "Unnamed room";
+        var name = room.name || alias || _t('Unnamed room');
 
         var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
         var desc;
         if (alias) {
-            desc = `Delete the room alias '${alias}' and remove '${name}' from the directory?`;
+            desc = _t('Delete the room alias %(alias)s and remove %(name)s from the directory?', {alias: alias, name: name});
         } else {
-            desc = `Remove '${name}' from the directory?`;
+            desc = _t('Remove %(name)s from the directory?', {name: name});
         }
 
-        Modal.createDialog(QuestionDialog, {
-            title: "Remove from Directory",
+        Modal.createTrackedDialog('Remove from Directory', '', QuestionDialog, {
+            title: _t('Remove from Directory'),
             description: desc,
             onFinished: (should_delete) => {
                 if (!should_delete) return;
 
                 var Loader = sdk.getComponent("elements.Spinner");
                 var modal = Modal.createDialog(Loader);
-                var step = `remove '${name}' from the directory.`;
+                var step = _t('remove %(name)s from the directory.', {name: name});
 
                 MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
                     if (!alias) return;
-                    step = 'delete the alias.';
+                    step = _t('delete the alias.');
                     return MatrixClientPeg.get().deleteAlias(alias);
                 }).done(() => {
                     modal.close();
                     this.refreshRoomList();
-                }, function(err) {
+                }, (err) => {
                     modal.close();
                     this.refreshRoomList();
-                    Modal.createDialog(ErrorDialog, {
-                        title: "Failed to "+step,
-                        description: err.toString()
+                    console.error("Failed to " + step + ": " + err);
+                    Modal.createTrackedDialog('Remove from Directory Error', '', ErrorDialog, {
+                        title: _t('Error'),
+                        description: ((err && err.message) ? err.message : _t('The server may be unavailable or overloaded'))
                     });
                 });
             }
@@ -247,7 +266,7 @@ module.exports = React.createClass({
     },
 
     onFillRequest: function(backwards) {
-        if (backwards || !this.nextBatch) return q(false);
+        if (backwards || !this.nextBatch) return Promise.resolve(false);
 
         return this.getMoreRooms();
     },
@@ -297,9 +316,9 @@ module.exports = React.createClass({
             const fields = protocolName ? this._getFieldsForThirdPartyLocation(alias, this.protocols[protocolName], instance) : null;
             if (!fields) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: "Unable to join network",
-                    description: "Riot does not know how to join a room on this network",
+                Modal.createTrackedDialog('Unable to join network', '', ErrorDialog, {
+                    title: _t('Unable to join network'),
+                    description: _t('Riot does not know how to join a room on this network'),
                 });
                 return;
             }
@@ -308,16 +327,16 @@ module.exports = React.createClass({
                     this.showRoomAlias(resp[0].alias);
                 } else {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                    Modal.createDialog(ErrorDialog, {
-                        title: "Room not found",
-                        description: "Couldn't find a matching Matrix room",
+                    Modal.createTrackedDialog('Room not found', '', ErrorDialog, {
+                        title: _t('Room not found'),
+                        description: _t('Couldn\'t find a matching Matrix room'),
                     });
                 }
             }, (e) => {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: "Fetching third party location failed",
-                    description: "Unable to look up room ID from server",
+                Modal.createTrackedDialog('Fetching third party location failed', '', ErrorDialog, {
+                    title: _t('Fetching third party location failed'),
+                    description: _t('Unable to look up room ID from server'),
                 });
             });
         }
@@ -335,11 +354,7 @@ module.exports = React.createClass({
             // to the directory.
             if (MatrixClientPeg.get().isGuest()) {
                 if (!room.world_readable && !room.guest_can_join) {
-                    var NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-                    Modal.createDialog(NeedToRegisterDialog, {
-                        title: "Failed to join the room",
-                        description: "This room is inaccessible to guests. You may be able to join if you register."
-                    });
+                    dis.dispatch({action: 'view_set_mxid'});
                     return;
                 }
             }
@@ -352,7 +367,7 @@ module.exports = React.createClass({
                 avatarUrl: room.avatar_url,
                 // XXX: This logic is duplicated from the JS SDK which
                 // would normally decide what the name is.
-                name: room.name || room_alias || "Unnamed room",
+                name: room.name || room_alias || _t('Unnamed room'),
             };
         }
         // It's not really possible to join Matrix rooms by ID because the HS has no way to know
@@ -377,24 +392,24 @@ module.exports = React.createClass({
         var self = this;
         var guestRead, guestJoin, perms;
         for (var i = 0; i < rooms.length; i++) {
-            var name = rooms[i].name || get_display_alias_for_room(rooms[i]) || "Unnamed room";
+            var name = rooms[i].name || get_display_alias_for_room(rooms[i]) || _t('Unnamed room');
             guestRead = null;
             guestJoin = null;
 
             if (rooms[i].world_readable) {
                 guestRead = (
-                    <div className="mx_RoomDirectory_perm">World readable</div>
+                    <div className="mx_RoomDirectory_perm">{ _t('World readable') }</div>
                 );
             }
             if (rooms[i].guest_can_join) {
                 guestJoin = (
-                    <div className="mx_RoomDirectory_perm">Guests can join</div>
+                    <div className="mx_RoomDirectory_perm">{ _t('Guests can join') }</div>
                 );
             }
 
             perms = null;
             if (guestRead || guestJoin) {
-                perms = <div className="mx_RoomDirectory_perms">{guestRead} {guestJoin}</div>;
+                perms = <div className="mx_RoomDirectory_perms">{guestRead}{guestJoin}</div>;
             }
 
             var topic = rooms[i].topic || '';
@@ -459,6 +474,17 @@ module.exports = React.createClass({
         return fields;
     },
 
+    /**
+     * called by the parent component when PageUp/Down/etc is pressed.
+     *
+     * We pass it down to the scroll panel.
+     */
+    handleScrollKey: function(ev) {
+        if (this.scrollPanel) {
+            this.scrollPanel.handleScrollKey(ev);
+        }
+    },
+
     render: function() {
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
         const Loader = sdk.getComponent("elements.Spinner");
@@ -466,7 +492,7 @@ module.exports = React.createClass({
         if (this.state.protocolsLoading) {
             return (
                 <div className="mx_RoomDirectory">
-                    <SimpleRoomHeader title="Directory" />
+                    <SimpleRoomHeader title={ _t('Directory') } />
                     <Loader />
                 </div>
             );
@@ -484,7 +510,7 @@ module.exports = React.createClass({
             // request from the scrollpanel because there isn't one
             let scrollpanel_content;
             if (rows.length == 0) {
-                scrollpanel_content = <i>No rooms to show</i>;
+                scrollpanel_content = <i>{ _t('No rooms to show') }</i>;
             } else {
                 scrollpanel_content = <table ref="directory_table" className="mx_RoomDirectory_table">
                     <tbody>
@@ -518,9 +544,9 @@ module.exports = React.createClass({
         }
 
 
-        let placeholder = 'Search for a room';
+        let placeholder = _t('Search for a room');
         if (!this.state.instanceId) {
-            placeholder = '#example:' + this.state.roomServer;
+            placeholder = _t('#example') + ':' + this.state.roomServer;
         } else if (instance_expected_field_type) {
             placeholder = instance_expected_field_type.placeholder;
         }
@@ -537,7 +563,7 @@ module.exports = React.createClass({
         const DirectorySearchBox = sdk.getComponent('elements.DirectorySearchBox');
         return (
             <div className="mx_RoomDirectory">
-                <SimpleRoomHeader title="Directory" />
+                <SimpleRoomHeader title={ _t('Directory') } icon="img/icons-directory.svg" />
                 <div className="mx_RoomDirectory_list">
                     <div className="mx_RoomDirectory_listheader">
                         <DirectorySearchBox

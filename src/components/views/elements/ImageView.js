@@ -22,6 +22,10 @@ var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
 var DateUtils = require('matrix-react-sdk/lib/DateUtils');
 var filesize = require('filesize');
+var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+const Modal = require('matrix-react-sdk/lib/Modal');
+const sdk = require('matrix-react-sdk');
+import { _t } from 'matrix-react-sdk/lib/languageHandler';
 
 module.exports = React.createClass({
     displayName: 'ImageView',
@@ -61,19 +65,23 @@ module.exports = React.createClass({
     },
 
     onRedactClick: function() {
-        var self = this;
-        MatrixClientPeg.get().redactEvent(
-            this.props.mxEvent.getRoomId(), this.props.mxEvent.getId()
-        ).done(function() {
-            if (self.props.onFinished) self.props.onFinished();
-        }, function(e) {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            // display error message stating you couldn't delete this.
-            var code = e.errcode || e.statusCode;
-            Modal.createDialog(ErrorDialog, {
-                title: "Error",
-                description: "You cannot delete this image. (" + code + ")"
-            });
+        const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
+        Modal.createTrackedDialog('Confirm Redact Dialog', 'Image View', ConfirmRedactDialog, {
+            onFinished: (proceed) => {
+                if (!proceed) return;
+                var self = this;
+                MatrixClientPeg.get().redactEvent(
+                    this.props.mxEvent.getRoomId(), this.props.mxEvent.getId()
+                ).catch(function(e) {
+                    var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                    // display error message stating you couldn't delete this.
+                    var code = e.errcode || e.statusCode;
+                    Modal.createTrackedDialog('You cannot delete this image.', '', ErrorDialog, {
+                        title: _t('Error'),
+                        description: _t('You cannot delete this image. (%(code)s)', {code: code})
+                    });
+                }).done();
+            }
         });
     },
 
@@ -142,15 +150,23 @@ module.exports = React.createClass({
 
         var eventMeta;
         if(showEventMeta) {
+            // Figure out the sender, defaulting to mxid
+            let sender = this.props.mxEvent.getSender();
+            const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+            if (room) {
+                const member = room.getMember(sender);
+                if (member) sender = member.name;
+            }
+
             eventMeta = (<div className="mx_ImageView_metadata">
-                Uploaded on { DateUtils.formatDate(new Date(this.props.mxEvent.getTs())) } by { this.props.mxEvent.getSender() }
+                { _t('Uploaded on %(date)s by %(user)s', {date: DateUtils.formatDate(new Date(this.props.mxEvent.getTs())), user: sender}) }
             </div>);
         }
 
         var eventRedact;
         if(showEventMeta) {
             eventRedact = (<div className="mx_ImageView_button" onClick={this.onRedactClick}>
-                Redact
+                { _t('Remove') }
             </div>);
         }
 
@@ -162,16 +178,16 @@ module.exports = React.createClass({
                     <img src={this.props.src} style={style}/>
                     <div className="mx_ImageView_labelWrapper">
                         <div className="mx_ImageView_label">
-                            <img className="mx_ImageView_cancel" src="img/cancel-white.svg" width="18" height="18" alt="Close" onClick={ this.props.onFinished }/>
+                            <AccessibleButton className="mx_ImageView_cancel" onClick={ this.props.onFinished }><img src="img/cancel-white.svg" width="18" height="18" alt={ _t('Close') }/></AccessibleButton>
                             <div className="mx_ImageView_shim">
                             </div>
                             <div className="mx_ImageView_name">
                                 { this.getName() }
                             </div>
                             { eventMeta }
-                            <a className="mx_ImageView_link" href={ this.props.src } target="_blank" rel="noopener">
+                            <a className="mx_ImageView_link" href={ this.props.src } download={ this.props.name } target="_blank" rel="noopener">
                                 <div className="mx_ImageView_download">
-                                        Download this file<br/>
+                                        { _t('Download this file') }<br/>
                                          <span className="mx_ImageView_size">{ size_res }</span>
                                 </div>
                             </a>

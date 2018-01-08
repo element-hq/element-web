@@ -1,3 +1,1208 @@
+Changes in [0.13.4](https://github.com/vector-im/riot-web/releases/tag/v0.13.4) (2018-01-03)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.3...v0.13.4)
+
+ * Change config of riot.im electron build to fix some widgets not working. This only affects
+   electron builds using the riot.im config - for all other builds, this is identical to
+   v0.13.3.
+
+Changes in [0.13.3](https://github.com/vector-im/riot-web/releases/tag/v0.13.3) (2017-12-04)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.2...v0.13.3)
+
+ * Bump js-sdk, react-sdk version to pull in fix for [setting room publicity in a group](https://github.com/matrix-org/matrix-js-sdk/commit/aa3201ebb0fff5af2fb733080aa65ed1f7213de6).
+
+Changes in [0.13.2](https://github.com/vector-im/riot-web/releases/tag/v0.13.2) (2017-11-28)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.1...v0.13.2)
+
+
+Changes in [0.13.1](https://github.com/vector-im/riot-web/releases/tag/v0.13.1) (2017-11-17)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.0...v0.13.1)
+
+ * SECURITY UPDATE: Fix the force TURN option for inbound calls. This option forced the use
+   of TURN but only worked for outbound calls and not inbound calls. This means that if you
+   enabled this option expecting it to mask your IP address in calls, your IP would still
+   have been revealed to the room if you accepted an incoming call.
+ * Also adds the Slovak translation.
+
+Changes in [0.13.0](https://github.com/vector-im/riot-web/releases/tag/v0.13.0) (2017-11-15)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.0-rc.3...v0.13.0)
+
+
+Changes in [0.13.0-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.13.0-rc.3) (2017-11-14)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.0-rc.2...v0.13.0-rc.3)
+
+
+Changes in [0.13.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.13.0-rc.2) (2017-11-10)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.0-rc.1...v0.13.0-rc.2)
+
+ * Make groups a fully-fleged baked-in feature
+   [\#5566](https://github.com/vector-im/riot-web/pull/5566)
+
+Changes in [0.13.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.13.0-rc.1) (2017-11-10)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7...v0.13.0-rc.1)
+
+ * Fix app tile margins.
+   [\#5561](https://github.com/vector-im/riot-web/pull/5561)
+ * Fix wrapping of long room topics (and overlap with apps)
+   [\#5549](https://github.com/vector-im/riot-web/pull/5549)
+ * Don't display widget iframes whilst loading.
+   [\#5555](https://github.com/vector-im/riot-web/pull/5555)
+ * Update from Weblate.
+   [\#5558](https://github.com/vector-im/riot-web/pull/5558)
+ * Adjust CSS for GroupView
+   [\#5543](https://github.com/vector-im/riot-web/pull/5543)
+ * CSS for adding rooms to a group with visibility
+   [\#5546](https://github.com/vector-im/riot-web/pull/5546)
+ * CSS for pinned indicators
+   [\#5511](https://github.com/vector-im/riot-web/pull/5511)
+ * Implement general-purpose tooltip "(?)"-style
+   [\#5540](https://github.com/vector-im/riot-web/pull/5540)
+ * CSS for improving group creation UX, namely setting long description
+   [\#5535](https://github.com/vector-im/riot-web/pull/5535)
+ * CSS for room notif pills in composer
+   [\#5531](https://github.com/vector-im/riot-web/pull/5531)
+ * Do not init a group store when no groupId specified
+   [\#5520](https://github.com/vector-im/riot-web/pull/5520)
+ * CSS for new pinned events indicator
+   [\#5293](https://github.com/vector-im/riot-web/pull/5293)
+ * T3chguy/devtools 1
+   [\#5471](https://github.com/vector-im/riot-web/pull/5471)
+ * Use margin to separate "perms" in the room directory
+   [\#5498](https://github.com/vector-im/riot-web/pull/5498)
+ * Add CSS for CreateGroupDialog to give group ID input suffix and prefix style
+   [\#5505](https://github.com/vector-im/riot-web/pull/5505)
+ * Fix group invites such that they look similar to room invites
+   [\#5504](https://github.com/vector-im/riot-web/pull/5504)
+ * CSS for Your Communities scrollbar
+   [\#5501](https://github.com/vector-im/riot-web/pull/5501)
+ * Add toggle to alter visibility of room-group association
+   [\#5497](https://github.com/vector-im/riot-web/pull/5497)
+ * CSS for room notification pills
+   [\#5494](https://github.com/vector-im/riot-web/pull/5494)
+ * Implement simple GroupRoomInfo
+   [\#5493](https://github.com/vector-im/riot-web/pull/5493)
+ * Add back bottom border to widget title bar
+   [\#5458](https://github.com/vector-im/riot-web/pull/5458)
+ * Prevent group name looking clickable for non-members
+   [\#5478](https://github.com/vector-im/riot-web/pull/5478)
+ * Fix instanceof check, was checking against the Package rather than class
+   [\#5472](https://github.com/vector-im/riot-web/pull/5472)
+ * Use correct group store state when rendering "Invite to this community"
+   [\#5455](https://github.com/vector-im/riot-web/pull/5455)
+ * Leverages ES6 in Notifications
+   [\#5453](https://github.com/vector-im/riot-web/pull/5453)
+ * Re-PR #4412
+   [\#5437](https://github.com/vector-im/riot-web/pull/5437)
+ * fix comma error of features example
+   [\#5410](https://github.com/vector-im/riot-web/pull/5410)
+ * Devtools: make filtering case-insensitive
+   [\#5387](https://github.com/vector-im/riot-web/pull/5387)
+ * Highlight group members icon in group member info
+   [\#5432](https://github.com/vector-im/riot-web/pull/5432)
+ * Use CSS to stop greyed Right/LeftPanel UI from being interactable
+   [\#5422](https://github.com/vector-im/riot-web/pull/5422)
+ * CSS for preventing editing of UI requiring user privilege if user
+   unprivileged
+   [\#5417](https://github.com/vector-im/riot-web/pull/5417)
+ * Only show UI for adding rooms/users to groups to privileged users
+   [\#5409](https://github.com/vector-im/riot-web/pull/5409)
+ * Only show "Invite to this community" when viewing group members
+   [\#5407](https://github.com/vector-im/riot-web/pull/5407)
+ * Add trash can icon for delete widget
+   [\#5397](https://github.com/vector-im/riot-web/pull/5397)
+ * CSS to improve MyGroups in general, and add placeholder
+   [\#5375](https://github.com/vector-im/riot-web/pull/5375)
+ * Rxl881/parallelshell
+   [\#4881](https://github.com/vector-im/riot-web/pull/4881)
+ * Custom server text was i18ned by key
+   [\#5371](https://github.com/vector-im/riot-web/pull/5371)
+ * Run prunei18n
+   [\#5370](https://github.com/vector-im/riot-web/pull/5370)
+ * Update from Weblate.
+   [\#5369](https://github.com/vector-im/riot-web/pull/5369)
+ * Add script to prune unused translations
+   [\#5339](https://github.com/vector-im/riot-web/pull/5339)
+ * CSS for improved MyGroups page
+   [\#5360](https://github.com/vector-im/riot-web/pull/5360)
+ * Add padding-right to Dialogs
+   [\#5346](https://github.com/vector-im/riot-web/pull/5346)
+ * Add div.warning and use the scss var
+   [\#5344](https://github.com/vector-im/riot-web/pull/5344)
+ * Groups->Communities
+   [\#5343](https://github.com/vector-im/riot-web/pull/5343)
+ * Make the 'add rooms' button clickable
+   [\#5342](https://github.com/vector-im/riot-web/pull/5342)
+ * Switch to gen-i18n script
+   [\#5338](https://github.com/vector-im/riot-web/pull/5338)
+ * Use _t as _t
+   [\#5334](https://github.com/vector-im/riot-web/pull/5334)
+ * fix groupview header editing visuals (pt 1)
+   [\#5330](https://github.com/vector-im/riot-web/pull/5330)
+ * bump version to prevent eslint errors
+   [\#5316](https://github.com/vector-im/riot-web/pull/5316)
+ * CSS for invited group members section
+   [\#5303](https://github.com/vector-im/riot-web/pull/5303)
+ * Handle long names in EntityTiles by overflowing correctly
+   [\#5302](https://github.com/vector-im/riot-web/pull/5302)
+ * Disable labs in electron
+   [\#5296](https://github.com/vector-im/riot-web/pull/5296)
+ * CSS for Modifying GroupView UI matrix-org/matrix-react-sdk#1475
+   [\#5295](https://github.com/vector-im/riot-web/pull/5295)
+ * Message/event pinning
+   [\#5142](https://github.com/vector-im/riot-web/pull/5142)
+ * Sorting of networks within a protocol based on name
+   [\#4054](https://github.com/vector-im/riot-web/pull/4054)
+ * allow hiding of notification body for privacy reasons
+   [\#4988](https://github.com/vector-im/riot-web/pull/4988)
+ * Don't use MXIDs on the lightbox if possible
+   [\#5281](https://github.com/vector-im/riot-web/pull/5281)
+ * CSS for lonely room message
+   [\#5267](https://github.com/vector-im/riot-web/pull/5267)
+ * Bring back dark theme code block border
+   [\#5037](https://github.com/vector-im/riot-web/pull/5037)
+ * CSS for remove avatar buttons
+   [\#5282](https://github.com/vector-im/riot-web/pull/5282)
+
+Changes in [0.12.7](https://github.com/vector-im/riot-web/releases/tag/v0.12.7) (2017-10-16)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7-rc.3...v0.12.7)
+
+ * Released versions of react-sdk & js-sdk
+
+Changes in [0.12.7-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.12.7-rc.3) (2017-10-13)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7-rc.2...v0.12.7-rc.3)
+
+ * Hide the join group button
+   [\#5275](https://github.com/vector-im/riot-web/pull/5275)
+
+Changes in [0.12.7-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.12.7-rc.2) (2017-10-13)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7-rc.1...v0.12.7-rc.2)
+
+
+Changes in [0.12.7-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.7-rc.1) (2017-10-13)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.6...v0.12.7-rc.1)
+
+ * switch to new logos, and use import rather than VAR
+   [\#5203](https://github.com/vector-im/riot-web/pull/5203)
+ * Clarify what an integrations server is
+   [\#5266](https://github.com/vector-im/riot-web/pull/5266)
+ * Update from Weblate.
+   [\#5269](https://github.com/vector-im/riot-web/pull/5269)
+ * Remove trailing comma in JSON
+   [\#5167](https://github.com/vector-im/riot-web/pull/5167)
+ * Added default_federate property
+   [\#3849](https://github.com/vector-im/riot-web/pull/3849)
+ * CSS for greying out login form
+   [\#5197](https://github.com/vector-im/riot-web/pull/5197)
+ * Fix bug that made sub list placeholders not show for ILAG etc.
+   [\#5164](https://github.com/vector-im/riot-web/pull/5164)
+ * Factor out EditableItemList component from AliasSettings
+   [\#5161](https://github.com/vector-im/riot-web/pull/5161)
+ * Mark and remove some translations
+   [\#5110](https://github.com/vector-im/riot-web/pull/5110)
+ * CSS for "remove" button on GroupRoomTile
+   [\#5141](https://github.com/vector-im/riot-web/pull/5141)
+ * Create basic icon for the GroupRoomList tab and adding rooms to groups
+   [\#5140](https://github.com/vector-im/riot-web/pull/5140)
+ * Add button to get to MyGroups
+   [\#5131](https://github.com/vector-im/riot-web/pull/5131)
+ * Remove `key` prop pass-thru on HeaderButton
+   [\#5137](https://github.com/vector-im/riot-web/pull/5137)
+ * Implement "Add room to group" feature
+   [\#5125](https://github.com/vector-im/riot-web/pull/5125)
+ * Add Jitsi screensharing support in electron app
+   [\#4967](https://github.com/vector-im/riot-web/pull/4967)
+ * Refactor right panel header buttons
+   [\#5117](https://github.com/vector-im/riot-web/pull/5117)
+ * CSS for publicity status & toggle button
+   [\#5104](https://github.com/vector-im/riot-web/pull/5104)
+ * CSS for "X" in top right of features users/rooms
+   [\#5103](https://github.com/vector-im/riot-web/pull/5103)
+ * Include Finnish translation
+   [\#5051](https://github.com/vector-im/riot-web/pull/5051)
+ * Redesign membership section of GroupView
+   [\#5096](https://github.com/vector-im/riot-web/pull/5096)
+ * Make --config accept globs
+   [\#5090](https://github.com/vector-im/riot-web/pull/5090)
+ * CSS for GroupView: Add a User
+   [\#5093](https://github.com/vector-im/riot-web/pull/5093)
+ * T3chguy/devtools 1
+   [\#5074](https://github.com/vector-im/riot-web/pull/5074)
+ * Alter opacity for flair
+   [\#5085](https://github.com/vector-im/riot-web/pull/5085)
+ * Fix ugly integ button
+   [\#5082](https://github.com/vector-im/riot-web/pull/5082)
+ * Group Membership UI
+   [\#4830](https://github.com/vector-im/riot-web/pull/4830)
+
+Changes in [0.12.6](https://github.com/vector-im/riot-web/releases/tag/v0.12.6) (2017-09-21)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.5...v0.12.6)
+
+ * Use matrix-js-sdk v0.8.4 to fix build
+
+Changes in [0.12.5](https://github.com/vector-im/riot-web/releases/tag/v0.12.5) (2017-09-21)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.4...v0.12.5)
+
+ * Use react-sdk v0.10.5 to fix build
+
+Changes in [0.12.4](https://github.com/vector-im/riot-web/releases/tag/v0.12.4) (2017-09-20)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.4-rc.1...v0.12.4)
+
+ * No changes
+
+Changes in [0.12.4-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.4-rc.1) (2017-09-19)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3...v0.12.4-rc.1)
+
+ * Fix test for new behaviour of 'joining' flag
+   [\#5053](https://github.com/vector-im/riot-web/pull/5053)
+ * fix really dumb blunder/typo preventing system from going to sleep.
+   [\#5080](https://github.com/vector-im/riot-web/pull/5080)
+ * T3chguy/devtools
+   [\#4735](https://github.com/vector-im/riot-web/pull/4735)
+ * CSS for unignore button in UserSettings
+   [\#5042](https://github.com/vector-im/riot-web/pull/5042)
+ * Fix alias on home page for identity room
+   [\#5044](https://github.com/vector-im/riot-web/pull/5044)
+ * generic contextual menu for tooltip/responses
+   [\#4989](https://github.com/vector-im/riot-web/pull/4989)
+ * Update from Weblate.
+   [\#5018](https://github.com/vector-im/riot-web/pull/5018)
+ * Avoid re-rendering RoomList on room switch
+   [\#5015](https://github.com/vector-im/riot-web/pull/5015)
+ * Fix menu on change keyboard language issue #4345
+   [\#4623](https://github.com/vector-im/riot-web/pull/4623)
+ * Make isInvite default to false
+   [\#4999](https://github.com/vector-im/riot-web/pull/4999)
+ * Revert "Implement sticky date separators"
+   [\#4991](https://github.com/vector-im/riot-web/pull/4991)
+ * Implement sticky date separators
+   [\#4939](https://github.com/vector-im/riot-web/pull/4939)
+
+Changes in [0.12.3](https://github.com/vector-im/riot-web/releases/tag/v0.12.3) (2017-09-06)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3-rc.3...v0.12.3)
+
+ * No changes
+
+Changes in [0.12.3-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.12.3-rc.3) (2017-09-05)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3-rc.2...v0.12.3-rc.3)
+
+ * Fix plurals in translations
+   [\#4971](https://github.com/vector-im/riot-web/pull/4971)
+ * Update from Weblate.
+   [\#4968](https://github.com/vector-im/riot-web/pull/4968)
+
+Changes in [0.12.3-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.12.3-rc.2) (2017-09-05)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.3-rc.1...v0.12.3-rc.2)
+
+ * New react-sdk version to pull in new translations and fix some translation bugs.
+
+
+Changes in [0.12.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.3-rc.1) (2017-09-01)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.2...v0.12.3-rc.1)
+
+ * Fix overflowing login/register buttons on some languages issue #4804
+   [\#4858](https://github.com/vector-im/riot-web/pull/4858)
+ * Update vector-im to riot-im on Login
+   [\#4943](https://github.com/vector-im/riot-web/pull/4943)
+ * lets let people know that the bug report actually sent properly :)
+   [\#4910](https://github.com/vector-im/riot-web/pull/4910)
+ * another s/vector/riot/ in README
+   [\#4934](https://github.com/vector-im/riot-web/pull/4934)
+ * fix two room list regressions
+   [\#4907](https://github.com/vector-im/riot-web/pull/4907)
+
+Changes in [0.12.2](https://github.com/vector-im/riot-web/releases/tag/v0.12.2) (2017-08-24)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.1...v0.12.2)
+
+ * Update react-sdk and js-sdk to fix bugs with incoming calls, messages and notifications
+   in encrypted rooms.
+
+Changes in [0.12.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.1) (2017-08-23)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.1-rc.1...v0.12.1)
+
+ * [No changes]
+
+Changes in [0.12.1-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.1-rc.1) (2017-08-22)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.0-rc.2...v0.12.1-rc.1)
+
+ * Update from Weblate.
+   [\#4832](https://github.com/vector-im/riot-web/pull/4832)
+ * Misc styling fixes.
+   [\#4826](https://github.com/vector-im/riot-web/pull/4826)
+ * Show / Hide apps icons
+   [\#4774](https://github.com/vector-im/riot-web/pull/4774)
+
+Changes in [0.12.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.12.0-rc.1) (2017-08-16)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.4...v0.12.0-rc.1)
+
+ * Update from Weblate.
+   [\#4797](https://github.com/vector-im/riot-web/pull/4797)
+ * move focus-via-up/down cursors to LeftPanel
+   [\#4777](https://github.com/vector-im/riot-web/pull/4777)
+ * Remove userId property on RightPanel
+   [\#4775](https://github.com/vector-im/riot-web/pull/4775)
+ * Make member device info buttons fluid and stackable with flexbox
+   [\#4776](https://github.com/vector-im/riot-web/pull/4776)
+ * un-i18n Modal Analytics
+   [\#4688](https://github.com/vector-im/riot-web/pull/4688)
+ * Quote using innerText
+   [\#4773](https://github.com/vector-im/riot-web/pull/4773)
+ * Karma tweaks for riot-web
+   [\#4765](https://github.com/vector-im/riot-web/pull/4765)
+ * Fix typo with scripts/fetch-develop-deps.sh in Building From Source
+   [\#4764](https://github.com/vector-im/riot-web/pull/4764)
+ * Adjust CSS for optional avatars in pills
+   [\#4757](https://github.com/vector-im/riot-web/pull/4757)
+ * Fix crypto on develop
+   [\#4754](https://github.com/vector-im/riot-web/pull/4754)
+ * Fix signing key url in readme
+   [\#4464](https://github.com/vector-im/riot-web/pull/4464)
+ * update gitignore to allow .idea directory to exist in subdirs
+   [\#4749](https://github.com/vector-im/riot-web/pull/4749)
+ * tweak compact theme
+   [\#4665](https://github.com/vector-im/riot-web/pull/4665)
+ * Update draft-js from 0.10.1 to 0.11.0-alpha
+   [\#4740](https://github.com/vector-im/riot-web/pull/4740)
+ * electron support for mouse forward/back buttons in Windows
+   [\#4739](https://github.com/vector-im/riot-web/pull/4739)
+ * Update draft-js from 0.8.1 to 0.10.1
+   [\#4730](https://github.com/vector-im/riot-web/pull/4730)
+ * Make pills, emoji translucent when sending
+   [\#4693](https://github.com/vector-im/riot-web/pull/4693)
+ * Widget permissions styling and icon
+   [\#4690](https://github.com/vector-im/riot-web/pull/4690)
+ * CSS required for composer autoscroll
+   [\#4682](https://github.com/vector-im/riot-web/pull/4682)
+ * CSS for group edit UI
+   [\#4608](https://github.com/vector-im/riot-web/pull/4608)
+ * Fix a couple of minor errors in the room list
+   [\#4671](https://github.com/vector-im/riot-web/pull/4671)
+ * Styling for beta testing icon.
+   [\#4584](https://github.com/vector-im/riot-web/pull/4584)
+ * Increase the timeout for clearing indexeddbs
+   [\#4650](https://github.com/vector-im/riot-web/pull/4650)
+ * Make some adjustments to mx_UserPill and mx_RoomPill
+   [\#4597](https://github.com/vector-im/riot-web/pull/4597)
+ * Apply CSS to <pre> tags to distinguish them from each other
+   [\#4639](https://github.com/vector-im/riot-web/pull/4639)
+ * Use `catch` instead of `fail` to handle room tag error
+   [\#4643](https://github.com/vector-im/riot-web/pull/4643)
+ * CSS for decorated matrix.to links in the composer
+   [\#4583](https://github.com/vector-im/riot-web/pull/4583)
+ * Deflake the joining test
+   [\#4579](https://github.com/vector-im/riot-web/pull/4579)
+ * Bump react to 15.6 to fix build problems
+   [\#4577](https://github.com/vector-im/riot-web/pull/4577)
+ * Improve AppTile menu bar button styling.
+   [\#4567](https://github.com/vector-im/riot-web/pull/4567)
+ * Transform `async` functions to bluebird promises
+   [\#4572](https://github.com/vector-im/riot-web/pull/4572)
+ * use flushAllExpected in joining test
+   [\#4570](https://github.com/vector-im/riot-web/pull/4570)
+ * Switch riot-web to bluebird
+   [\#4565](https://github.com/vector-im/riot-web/pull/4565)
+ * loading tests: wait for login component
+   [\#4564](https://github.com/vector-im/riot-web/pull/4564)
+ * Remove CSS for the MessageComposerInputOld
+   [\#4568](https://github.com/vector-im/riot-web/pull/4568)
+ * Implement the focus_room_filter action
+   [\#4560](https://github.com/vector-im/riot-web/pull/4560)
+ * CSS for Rooms in Group View
+   [\#4530](https://github.com/vector-im/riot-web/pull/4530)
+ * more HomePage tweaks
+   [\#4557](https://github.com/vector-im/riot-web/pull/4557)
+ * Give HomePage an unmounted guard
+   [\#4556](https://github.com/vector-im/riot-web/pull/4556)
+ * Take RTE out of labs
+   [\#4500](https://github.com/vector-im/riot-web/pull/4500)
+ * CSS for Groups page
+   [\#4468](https://github.com/vector-im/riot-web/pull/4468)
+ * CSS for GroupView
+   [\#4442](https://github.com/vector-im/riot-web/pull/4442)
+ * remove unused class
+   [\#4525](https://github.com/vector-im/riot-web/pull/4525)
+ * Fix long words causing MessageComposer to widen
+   [\#4466](https://github.com/vector-im/riot-web/pull/4466)
+ * Add visual bell animation for RTE
+   [\#4516](https://github.com/vector-im/riot-web/pull/4516)
+ * Truncate auto-complete pills properly
+   [\#4502](https://github.com/vector-im/riot-web/pull/4502)
+ * Use chrome headless instead of phantomjs
+   [\#4512](https://github.com/vector-im/riot-web/pull/4512)
+ * Use external mock-request
+   [\#4489](https://github.com/vector-im/riot-web/pull/4489)
+ * fix Quote not closing contextual menu
+   [\#4443](https://github.com/vector-im/riot-web/pull/4443)
+ * Apply white-space: pre-wrap to mx_MEmoteBody
+   [\#4470](https://github.com/vector-im/riot-web/pull/4470)
+ * Add some style improvements to autocompletions
+   [\#4456](https://github.com/vector-im/riot-web/pull/4456)
+ * Styling for apps / widgets
+   [\#4447](https://github.com/vector-im/riot-web/pull/4447)
+ * Attempt to flush the rageshake logs on close
+   [\#4400](https://github.com/vector-im/riot-web/pull/4400)
+ * Update from Weblate.
+   [\#4401](https://github.com/vector-im/riot-web/pull/4401)
+ * improve update polling electron and provide a manual check for updates
+   button
+   [\#4176](https://github.com/vector-im/riot-web/pull/4176)
+ * Fix load failure in firefox when indexedDB is disabled
+   [\#4395](https://github.com/vector-im/riot-web/pull/4395)
+ * Change missed 'Redact' to 'Remove' in ImageView.
+   [\#4362](https://github.com/vector-im/riot-web/pull/4362)
+ * explicit convert to nativeImage to stabilise trayIcon on Windows [Electron]
+   [\#4355](https://github.com/vector-im/riot-web/pull/4355)
+ * Use _tJsx for PasswordNagBar (because it has <u>)
+   [\#4373](https://github.com/vector-im/riot-web/pull/4373)
+ * Clean up some log outputs from the integ tests
+   [\#4376](https://github.com/vector-im/riot-web/pull/4376)
+ * CSS for redeisng of password warning
+   [\#4367](https://github.com/vector-im/riot-web/pull/4367)
+ * Give _t to PasswordNagBar, add CSS for UserSettings password warning
+   [\#4366](https://github.com/vector-im/riot-web/pull/4366)
+ * Update from Weblate.
+   [\#4361](https://github.com/vector-im/riot-web/pull/4361)
+ * Update from Weblate.
+   [\#4360](https://github.com/vector-im/riot-web/pull/4360)
+ * Test 'return-to-app' functionality
+   [\#4352](https://github.com/vector-im/riot-web/pull/4352)
+ * Update from Weblate.
+   [\#4354](https://github.com/vector-im/riot-web/pull/4354)
+ * onLoadCompleted is now onTokenLoginCompleted
+   [\#4335](https://github.com/vector-im/riot-web/pull/4335)
+ * Tweak tests to match updates to matrixchat
+   [\#4325](https://github.com/vector-im/riot-web/pull/4325)
+ * Update from Weblate.
+   [\#4346](https://github.com/vector-im/riot-web/pull/4346)
+ * change dispatcher forward_event signature
+   [\#4337](https://github.com/vector-im/riot-web/pull/4337)
+ * Add border on hover for code blocks
+   [\#4259](https://github.com/vector-im/riot-web/pull/4259)
+
+Changes in [0.11.4](https://github.com/vector-im/riot-web/releases/tag/v0.11.4) (2017-06-22)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.3...v0.11.4)
+
+ * Update matrix-js-sdk and react-sdk to fix a regression where the
+   background indexedb worker was disabled, failures to open indexeddb
+   causing the app to fail to start, a race when starting that could break
+   switching to rooms, and the inability to invite users with mixed case
+   usernames.
+
+Changes in [0.11.3](https://github.com/vector-im/riot-web/releases/tag/v0.11.3) (2017-06-20)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.2...v0.11.3)
+
+ * Update to matrix-react-sdk 0.9.6 to fix infinite spinner bugs
+   and some parts of the app that had missed translation.
+
+Changes in [0.11.2](https://github.com/vector-im/riot-web/releases/tag/v0.11.2) (2017-06-19)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.2-rc.2...v0.11.2)
+
+ * Add more languages and translations
+ * Add a 'register' button
+
+Changes in [0.11.2-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.11.2-rc.2) (2017-06-16)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.2-rc.1...v0.11.2-rc.2)
+
+ * Update react-sdk to pull in fixes for URL previews, CAS
+   login, h2 in markdown and CAPTCHA forms.
+ * Enable Korean translation
+ * Update from Weblate.
+   [\#4323](https://github.com/vector-im/riot-web/pull/4323)
+ * Fix h2 in markdown being weird
+   [\#4332](https://github.com/vector-im/riot-web/pull/4332)
+
+Changes in [0.11.2-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.11.2-rc.1) (2017-06-15)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.1...v0.11.2-rc.1)
+
+ * Attempts to deflakify the joining test
+   [\#4313](https://github.com/vector-im/riot-web/pull/4313)
+ * Add a test for the login flow when there is a teamserver
+   [\#4315](https://github.com/vector-im/riot-web/pull/4315)
+ * Remove onload simulator from loading test
+   [\#4314](https://github.com/vector-im/riot-web/pull/4314)
+ * Update from Weblate.
+   [\#4305](https://github.com/vector-im/riot-web/pull/4305)
+ * Test that we handle stored mx_last_room_id correctly
+   [\#4292](https://github.com/vector-im/riot-web/pull/4292)
+ * Ask for email address after setting password for the first time
+   [\#4301](https://github.com/vector-im/riot-web/pull/4301)
+ * i18n for setting email after password flow
+   [\#4299](https://github.com/vector-im/riot-web/pull/4299)
+ * Update from Weblate.
+   [\#4290](https://github.com/vector-im/riot-web/pull/4290)
+ * Don't show the tooltips when filtering rooms
+   [\#4282](https://github.com/vector-im/riot-web/pull/4282)
+ * Update from Weblate.
+   [\#4272](https://github.com/vector-im/riot-web/pull/4272)
+ * Add missing VOIP Dropdown width
+   [\#4266](https://github.com/vector-im/riot-web/pull/4266)
+ * Update import and directory path in the Translations dev guide
+   [\#4261](https://github.com/vector-im/riot-web/pull/4261)
+ * Use Thai string for Thai in Language-Chooser
+   [\#4260](https://github.com/vector-im/riot-web/pull/4260)
+
+Changes in [0.11.1](https://github.com/vector-im/riot-web/releases/tag/v0.11.1) (2017-06-14)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.0...v0.11.1)
+
+ * Update to react-sdk 0.9.4 to prompt to set an
+   email address when setting a password and make
+   DM guessing smarter.
+
+Changes in [0.11.0](https://github.com/vector-im/riot-web/releases/tag/v0.11.0) (2017-06-12)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.0-rc.2...v0.11.0)
+
+ * More translations & minor fixes
+
+Changes in [0.11.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.11.0-rc.2) (2017-06-09)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.11.0-rc.1...v0.11.0-rc.2)
+
+ * Update to matrix-react-sdk rc.2 which fixes the flux
+   dependency version and an issue with the conference
+   call bar translation.
+
+
+Changes in [0.11.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.11.0-rc.1) (2017-06-09)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.2...v0.11.0-rc.1)
+
+ * Update from Weblate.
+   [\#4258](https://github.com/vector-im/riot-web/pull/4258)
+ * Update from Weblate.
+   [\#4254](https://github.com/vector-im/riot-web/pull/4254)
+ * Update from Weblate.
+   [\#4253](https://github.com/vector-im/riot-web/pull/4253)
+ * Expect to see HTTP /join/#some:alias when we the view knows it
+   [\#4252](https://github.com/vector-im/riot-web/pull/4252)
+ * Update from Weblate.
+   [\#4250](https://github.com/vector-im/riot-web/pull/4250)
+ * add explicit import to utf8 polyfill and rip out unused imports
+   [\#4169](https://github.com/vector-im/riot-web/pull/4169)
+ * Added styling for copy to clipboard button
+   [\#4204](https://github.com/vector-im/riot-web/pull/4204)
+ * Update from Weblate.
+   [\#4231](https://github.com/vector-im/riot-web/pull/4231)
+ * Update from Weblate.
+   [\#4218](https://github.com/vector-im/riot-web/pull/4218)
+ * Update CSS for ChatInviteDialog
+   [\#4226](https://github.com/vector-im/riot-web/pull/4226)
+ * change electron -> electron_app which was previously missed
+   [\#4212](https://github.com/vector-im/riot-web/pull/4212)
+ * New guest access
+   [\#4039](https://github.com/vector-im/riot-web/pull/4039)
+ * Align message timestamp centrally about the avatar mid-point
+   [\#4219](https://github.com/vector-im/riot-web/pull/4219)
+ * Remove '/' from homepage URL
+   [\#4221](https://github.com/vector-im/riot-web/pull/4221)
+ * Chop off 'origin/'
+   [\#4220](https://github.com/vector-im/riot-web/pull/4220)
+ * Update from Weblate.
+   [\#4214](https://github.com/vector-im/riot-web/pull/4214)
+ * adjust alignment of message menu button in compact layout
+   [\#4211](https://github.com/vector-im/riot-web/pull/4211)
+ * Update from Weblate.
+   [\#4207](https://github.com/vector-im/riot-web/pull/4207)
+ * Fix Tests in ILAG
+   [\#4209](https://github.com/vector-im/riot-web/pull/4209)
+ * Update from Weblate.
+   [\#4197](https://github.com/vector-im/riot-web/pull/4197)
+ * Fix tests for new-guest-access
+   [\#4201](https://github.com/vector-im/riot-web/pull/4201)
+ * i18n for SetPasswordDialog
+   [\#4198](https://github.com/vector-im/riot-web/pull/4198)
+ * Update from Weblate.
+   [\#4193](https://github.com/vector-im/riot-web/pull/4193)
+ * to make the windows volume mixer not explode as it can't resize icons.
+   [\#4183](https://github.com/vector-im/riot-web/pull/4183)
+ * provide react devtools in electron dev runs
+   [\#4186](https://github.com/vector-im/riot-web/pull/4186)
+ * Fix DeprecationWarning
+   [\#4184](https://github.com/vector-im/riot-web/pull/4184)
+ * room link should be a matrix.to one
+   [\#4178](https://github.com/vector-im/riot-web/pull/4178)
+ * Update home.html
+   [\#4163](https://github.com/vector-im/riot-web/pull/4163)
+ * Add missing translation for room directory
+   [\#4160](https://github.com/vector-im/riot-web/pull/4160)
+ * i18n welcome
+   [\#4129](https://github.com/vector-im/riot-web/pull/4129)
+ * Tom welcome page
+   [\#4038](https://github.com/vector-im/riot-web/pull/4038)
+ * Fix some tests that expect Directory (they should expect HomePage)
+   [\#4076](https://github.com/vector-im/riot-web/pull/4076)
+ * Add "Login" button to RHS when user is a guest
+   [\#4037](https://github.com/vector-im/riot-web/pull/4037)
+ * Rejig the PaswordNagBar
+   [\#4026](https://github.com/vector-im/riot-web/pull/4026)
+ * Allow team server config to be missing
+   [\#4024](https://github.com/vector-im/riot-web/pull/4024)
+ * Remove GuestWarningBar
+   [\#4020](https://github.com/vector-im/riot-web/pull/4020)
+ * Make left panel better for new users (mk III)
+   [\#4023](https://github.com/vector-im/riot-web/pull/4023)
+ * Implement default welcome page and allow custom URL /w config
+   [\#4015](https://github.com/vector-im/riot-web/pull/4015)
+ * Add warm-fuzzy for successful password entry
+   [\#3989](https://github.com/vector-im/riot-web/pull/3989)
+ * autoFocus new password input in SetPasswordDialog
+   [\#3982](https://github.com/vector-im/riot-web/pull/3982)
+ * Implement dialog to set password
+   [\#3921](https://github.com/vector-im/riot-web/pull/3921)
+ * Replace NeedToRegister with SetMxId dialog
+   [\#3924](https://github.com/vector-im/riot-web/pull/3924)
+ * Add welcomeUserId to sample config
+   [\#3906](https://github.com/vector-im/riot-web/pull/3906)
+ * CSS for mxIdDialog redesign
+   [\#3885](https://github.com/vector-im/riot-web/pull/3885)
+ * Implement PasswordNagBar
+   [\#3817](https://github.com/vector-im/riot-web/pull/3817)
+ * CSS for new SetMxIdDialog
+   [\#3762](https://github.com/vector-im/riot-web/pull/3762)
+
+Changes in [0.10.2](https://github.com/vector-im/riot-web/releases/tag/v0.10.2) (2017-06-06)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.1...v0.10.2)
+
+ * Hotfix for bugs where navigating straight to a URL like /#/login and
+   and /#/forgot_password
+
+
+Changes in [0.10.1](https://github.com/vector-im/riot-web/releases/tag/v0.10.1) (2017-06-02)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.0...v0.10.1)
+
+ * Update to matrix-react-sdk 0.9.1 to fix i18n error which broke start chat in some circumstances
+
+Changes in [0.10.0](https://github.com/vector-im/riot-web/releases/tag/v0.10.0) (2017-06-02)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.0-rc.2...v0.10.0)
+
+ * Update from Weblate.
+   [\#4152](https://github.com/vector-im/riot-web/pull/4152)
+
+Changes in [0.10.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.10.0-rc.2) (2017-06-02)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.10.0-rc.1...v0.10.0-rc.2)
+
+ * Update from Weblate.
+   [\#4150](https://github.com/vector-im/riot-web/pull/4150)
+ * styling for webrtc settings
+   [\#4019](https://github.com/vector-im/riot-web/pull/4019)
+ * Update from Weblate.
+   [\#4140](https://github.com/vector-im/riot-web/pull/4140)
+ * add styles for compact layout
+   [\#4132](https://github.com/vector-im/riot-web/pull/4132)
+ * Various tweaks to fetch-develop-deps
+   [\#4147](https://github.com/vector-im/riot-web/pull/4147)
+ * Don't try to build with node 6.0
+   [\#4145](https://github.com/vector-im/riot-web/pull/4145)
+ * Support 12hr time on DateSeparator
+   [\#4143](https://github.com/vector-im/riot-web/pull/4143)
+ * Update from Weblate.
+   [\#4137](https://github.com/vector-im/riot-web/pull/4137)
+ * Update from Weblate.
+   [\#4105](https://github.com/vector-im/riot-web/pull/4105)
+ * Update from Weblate.
+   [\#4094](https://github.com/vector-im/riot-web/pull/4094)
+ * Update from Weblate.
+   [\#4091](https://github.com/vector-im/riot-web/pull/4091)
+ * Update from Weblate.
+   [\#4089](https://github.com/vector-im/riot-web/pull/4089)
+ * Update from Weblate.
+   [\#4083](https://github.com/vector-im/riot-web/pull/4083)
+
+Changes in [0.10.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.10.0-rc.1) (2017-06-01)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.10...v0.10.0-rc.1)
+
+ * basic electron profile support
+   [\#4030](https://github.com/vector-im/riot-web/pull/4030)
+ * Finish translations for vector-im/riot-web
+   [\#4122](https://github.com/vector-im/riot-web/pull/4122)
+ * Translate src/vector
+   [\#4119](https://github.com/vector-im/riot-web/pull/4119)
+ * electron flashFrame was way too annoying
+   [\#4128](https://github.com/vector-im/riot-web/pull/4128)
+ * auto-launch support [Electron]
+   [\#4012](https://github.com/vector-im/riot-web/pull/4012)
+ * Show 12hr time on hover too
+   [\#4092](https://github.com/vector-im/riot-web/pull/4092)
+ * Translate src/notifications
+   [\#4087](https://github.com/vector-im/riot-web/pull/4087)
+ * Translate src/components/structures
+   [\#4084](https://github.com/vector-im/riot-web/pull/4084)
+ * Smaller font size on timestamp to better fit in the available space
+   [\#4085](https://github.com/vector-im/riot-web/pull/4085)
+ * Make travis run the build with several versions of node
+   [\#4079](https://github.com/vector-im/riot-web/pull/4079)
+ * Piwik Analytics
+   [\#4056](https://github.com/vector-im/riot-web/pull/4056)
+ * Update from Weblate.
+   [\#4077](https://github.com/vector-im/riot-web/pull/4077)
+ * managed to eat the eventStatus check, can't redact a local-echo etc
+   [\#4078](https://github.com/vector-im/riot-web/pull/4078)
+ * show redact in context menu only if has PL to/sent message
+   [\#3925](https://github.com/vector-im/riot-web/pull/3925)
+ * Update from Weblate.
+   [\#4064](https://github.com/vector-im/riot-web/pull/4064)
+ * Change redact -> remove to improve clarity
+   [\#3722](https://github.com/vector-im/riot-web/pull/3722)
+ * Update from Weblate.
+   [\#4058](https://github.com/vector-im/riot-web/pull/4058)
+ * Message Forwarding
+   [\#3688](https://github.com/vector-im/riot-web/pull/3688)
+ * Update from Weblate.
+   [\#4057](https://github.com/vector-im/riot-web/pull/4057)
+ * Fixed an input field's background color in dark theme
+   [\#4053](https://github.com/vector-im/riot-web/pull/4053)
+ * Update from Weblate.
+   [\#4051](https://github.com/vector-im/riot-web/pull/4051)
+ * Update from Weblate.
+   [\#4049](https://github.com/vector-im/riot-web/pull/4049)
+ * Update from Weblate.
+   [\#4048](https://github.com/vector-im/riot-web/pull/4048)
+ * Update from Weblate.
+   [\#4040](https://github.com/vector-im/riot-web/pull/4040)
+ * Update translating.md: Minor suggestions
+   [\#4041](https://github.com/vector-im/riot-web/pull/4041)
+ * tidy electron files, they weren't pwetty
+   [\#3993](https://github.com/vector-im/riot-web/pull/3993)
+ * Prevent Power Save when in call (Electron)
+   [\#3992](https://github.com/vector-im/riot-web/pull/3992)
+ * Translations!
+   [\#4035](https://github.com/vector-im/riot-web/pull/4035)
+ * Kieran gould/12hourtimestamp
+   [\#3961](https://github.com/vector-im/riot-web/pull/3961)
+ * Don't include src in the test resolve root
+   [\#4033](https://github.com/vector-im/riot-web/pull/4033)
+ * add moar context menus [Electron]
+   [\#4021](https://github.com/vector-im/riot-web/pull/4021)
+ * Add `Chat` to Linux app categories
+   [\#4022](https://github.com/vector-im/riot-web/pull/4022)
+ * add menu category for linux build of app
+   [\#3975](https://github.com/vector-im/riot-web/pull/3975)
+ * Electron Tray Improvements
+   [\#3909](https://github.com/vector-im/riot-web/pull/3909)
+ * More riot-web test deflakification
+   [\#3966](https://github.com/vector-im/riot-web/pull/3966)
+ * Script to fetch corresponding branches of dependent projects
+   [\#3945](https://github.com/vector-im/riot-web/pull/3945)
+ * Add type="text/css" to SVG logos
+   [\#3964](https://github.com/vector-im/riot-web/pull/3964)
+ * Fix some setState-after-unmount in roomdirectory
+   [\#3958](https://github.com/vector-im/riot-web/pull/3958)
+ * Attempt to deflakify joining test
+   [\#3956](https://github.com/vector-im/riot-web/pull/3956)
+
+Changes in [0.9.10](https://github.com/vector-im/riot-web/releases/tag/v0.9.10) (2017-05-22)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.10-rc.1...v0.9.10)
+
+ * No changes
+
+
+Changes in [0.9.10-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.10-rc.1) (2017-05-19)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.9...v0.9.10-rc.1)
+
+ * CSS for left_aligned Dropdowns, and adjustments for Country dd in Login
+   [\#3959](https://github.com/vector-im/riot-web/pull/3959)
+ * Add square flag pngs /w genflags.sh script
+   [\#3953](https://github.com/vector-im/riot-web/pull/3953)
+ * Add config for riot-bot on desktop app build
+   [\#3954](https://github.com/vector-im/riot-web/pull/3954)
+ * Desktop: 'copy link address'
+   [\#3952](https://github.com/vector-im/riot-web/pull/3952)
+ * Reduce rageshake log size to 1MB
+   [\#3943](https://github.com/vector-im/riot-web/pull/3943)
+ * CSS for putting country dd on same line as phone input
+   [\#3942](https://github.com/vector-im/riot-web/pull/3942)
+ * fix #3894
+   [\#3919](https://github.com/vector-im/riot-web/pull/3919)
+ * change vector->riot on the surface
+   [\#3894](https://github.com/vector-im/riot-web/pull/3894)
+ * move manifest.json outward so it is scoped properly
+   [\#3888](https://github.com/vector-im/riot-web/pull/3888)
+ * add to manifest
+   [\#3799](https://github.com/vector-im/riot-web/pull/3799)
+ * Automatically update component-index
+   [\#3886](https://github.com/vector-im/riot-web/pull/3886)
+ * move electron -> electron_app because npm smart
+   [\#3877](https://github.com/vector-im/riot-web/pull/3877)
+ * Fix bug report endpoint in config.sample.json.
+   [\#3863](https://github.com/vector-im/riot-web/pull/3863)
+ * Update 2 missed icons to the new icon
+   [\#3851](https://github.com/vector-im/riot-web/pull/3851)
+ * Make left panel better for new users (mk II)
+   [\#3804](https://github.com/vector-im/riot-web/pull/3804)
+ * match primary package.json
+   [\#3839](https://github.com/vector-im/riot-web/pull/3839)
+ * Re-add productName
+   [\#3829](https://github.com/vector-im/riot-web/pull/3829)
+ * Remove leading v in /version file, for SemVer and to match Electron ver
+   [\#3683](https://github.com/vector-im/riot-web/pull/3683)
+ * Fix scope of callback
+   [\#3790](https://github.com/vector-im/riot-web/pull/3790)
+ * Remember and Recall window layout/position state
+   [\#3622](https://github.com/vector-im/riot-web/pull/3622)
+ * Remove babelcheck
+   [\#3808](https://github.com/vector-im/riot-web/pull/3808)
+ * Include MXID and device id in rageshakes
+   [\#3809](https://github.com/vector-im/riot-web/pull/3809)
+ * import Modal
+   [\#3791](https://github.com/vector-im/riot-web/pull/3791)
+ * Pin filesize ver to fix break upstream
+   [\#3775](https://github.com/vector-im/riot-web/pull/3775)
+ * Improve Room Directory Look & Feel
+   [\#3751](https://github.com/vector-im/riot-web/pull/3751)
+ * Fix emote RRs alignment
+   [\#3742](https://github.com/vector-im/riot-web/pull/3742)
+ * Remove unused `placeholder` prop on RoomDropTarget
+   [\#3741](https://github.com/vector-im/riot-web/pull/3741)
+ * Modify CSS for matrix-org/matrix-react-sdk#833
+   [\#3732](https://github.com/vector-im/riot-web/pull/3732)
+ * Warn when exiting due to single-instance
+   [\#3727](https://github.com/vector-im/riot-web/pull/3727)
+ * Electron forgets it was maximized when you click on a notification
+   [\#3709](https://github.com/vector-im/riot-web/pull/3709)
+ * CSS to make h1 and h2 the same size as h1.
+   [\#3719](https://github.com/vector-im/riot-web/pull/3719)
+ * Prevent long room names/topics from pushing UI of the screen
+   [\#3721](https://github.com/vector-im/riot-web/pull/3721)
+ * Disable dropdown highlight on focus
+   [\#3717](https://github.com/vector-im/riot-web/pull/3717)
+ * Escape HTML Tags from Linux Notifications (electron)
+   [\#3564](https://github.com/vector-im/riot-web/pull/3564)
+ * styling for spoilerized access token view in Settings
+   [\#3651](https://github.com/vector-im/riot-web/pull/3651)
+ * Fix Webpack conf
+   [\#3690](https://github.com/vector-im/riot-web/pull/3690)
+ * Add config.json to .gitignore
+   [\#3599](https://github.com/vector-im/riot-web/pull/3599)
+ * add command line arg (--hidden) for electron app
+   [\#3641](https://github.com/vector-im/riot-web/pull/3641)
+ * fix ImageView Download functionality
+   [\#3640](https://github.com/vector-im/riot-web/pull/3640)
+ * Add cross-env into the mix
+   [\#3693](https://github.com/vector-im/riot-web/pull/3693)
+ * Remember acceptance for unsupported browsers.
+   [\#3694](https://github.com/vector-im/riot-web/pull/3694)
+ * Cosmetics to go with matrix-org/matrix-react-sdk#811
+   [\#3692](https://github.com/vector-im/riot-web/pull/3692)
+ * Cancel quicksearch on ESC
+   [\#3680](https://github.com/vector-im/riot-web/pull/3680)
+ * Optimise RoomList and implement quick-search functionality on it.
+   [\#3654](https://github.com/vector-im/riot-web/pull/3654)
+ * Progress updates for rageshake uploads
+   [\#3648](https://github.com/vector-im/riot-web/pull/3648)
+ * Factor out rageshake upload to a separate file
+   [\#3645](https://github.com/vector-im/riot-web/pull/3645)
+ * rageshake: fix race when collecting logs
+   [\#3644](https://github.com/vector-im/riot-web/pull/3644)
+ * Fix a flaky test
+   [\#3649](https://github.com/vector-im/riot-web/pull/3649)
+
+Changes in [0.9.9](https://github.com/vector-im/riot-web/releases/tag/v0.9.9) (2017-04-25)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.9-rc.2...v0.9.9)
+
+ * No changes
+
+
+Changes in [0.9.9-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.9.9-rc.2) (2017-04-24)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.9-rc.1...v0.9.9-rc.2)
+
+ * Fix bug where links to Riot would fail to open.
+
+
+Changes in [0.9.9-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.9-rc.1) (2017-04-21)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.8...v0.9.9-rc.1)
+
+ * Update js-sdk and matrix-react-sdk to fix registration without a captcha (https://github.com/vector-im/riot-web/issues/3621)
+
+
+Changes in [0.9.8](https://github.com/vector-im/riot-web/releases/tag/v0.9.8) (2017-04-12)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.8-rc.3...v0.9.8)
+
+ * No changes
+
+Changes in [0.9.8-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.9.8-rc.3) (2017-04-11)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.8-rc.2...v0.9.8-rc.3)
+
+ * Make the clear cache button work on desktop
+   [\#3598](https://github.com/vector-im/riot-web/pull/3598)
+
+Changes in [0.9.8-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.9.8-rc.2) (2017-04-10)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.8-rc.1...v0.9.8-rc.2)
+
+ * Redacted events bg: black lozenge -> torn paper
+   [\#3596](https://github.com/vector-im/riot-web/pull/3596)
+ * Add 'app' parameter to rageshake report
+   [\#3594](https://github.com/vector-im/riot-web/pull/3594)
+
+Changes in [0.9.8-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.8-rc.1) (2017-04-07)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.7...v0.9.8-rc.1)
+
+ * Add support for indexeddb sync in webworker
+   [\#3578](https://github.com/vector-im/riot-web/pull/3578)
+ * Add CSS to make Emote sender cursor : pointer
+   [\#3574](https://github.com/vector-im/riot-web/pull/3574)
+ * Remove rageshake server
+   [\#3565](https://github.com/vector-im/riot-web/pull/3565)
+ * Adjust CSS for matrix-org/matrix-react-sdk#789
+   [\#3566](https://github.com/vector-im/riot-web/pull/3566)
+ * Fix tests to reflect recent changes
+   [\#3537](https://github.com/vector-im/riot-web/pull/3537)
+ * Do not assume getTs will return comparable integer
+   [\#3536](https://github.com/vector-im/riot-web/pull/3536)
+ * Rename ReactPerf to Perf
+   [\#3535](https://github.com/vector-im/riot-web/pull/3535)
+ * Don't show phone number as target for email notifs
+   [\#3530](https://github.com/vector-im/riot-web/pull/3530)
+ * Fix people section again
+   [\#3458](https://github.com/vector-im/riot-web/pull/3458)
+ * dark theme invert inconsistent across browsers
+   [\#3479](https://github.com/vector-im/riot-web/pull/3479)
+ * CSS for adding phone number in UserSettings
+   [\#3451](https://github.com/vector-im/riot-web/pull/3451)
+ * Support for phone number registration/signin, mk2
+   [\#3426](https://github.com/vector-im/riot-web/pull/3426)
+ * Confirm redactions with a dialog
+   [\#3470](https://github.com/vector-im/riot-web/pull/3470)
+ * Better CSS for redactions
+   [\#3453](https://github.com/vector-im/riot-web/pull/3453)
+ * Fix the people section
+   [\#3448](https://github.com/vector-im/riot-web/pull/3448)
+ * Merge the two RoomTile context menus into one
+   [\#3395](https://github.com/vector-im/riot-web/pull/3395)
+ * Refactor screen set after login
+   [\#3385](https://github.com/vector-im/riot-web/pull/3385)
+ * CSS for redacted EventTiles
+   [\#3379](https://github.com/vector-im/riot-web/pull/3379)
+ * Height:100% for welcome pages on Safari
+   [\#3340](https://github.com/vector-im/riot-web/pull/3340)
+ * `view_room` dispatch from `onClick` RoomTile
+   [\#3376](https://github.com/vector-im/riot-web/pull/3376)
+ * Hide statusAreaBox_line entirely when inCall
+   [\#3350](https://github.com/vector-im/riot-web/pull/3350)
+ * Set padding-bottom: 0px for .mx_Dialog spinner
+   [\#3351](https://github.com/vector-im/riot-web/pull/3351)
+ * Support InteractiveAuth based registration
+   [\#3333](https://github.com/vector-im/riot-web/pull/3333)
+ * Expose notification option for username/MXID
+   [\#3334](https://github.com/vector-im/riot-web/pull/3334)
+ * Float the toggle in the top right of MELS
+   [\#3190](https://github.com/vector-im/riot-web/pull/3190)
+ * More aggressive rageshake log culling
+   [\#3311](https://github.com/vector-im/riot-web/pull/3311)
+ * Don't overflow directory network options
+   [\#3282](https://github.com/vector-im/riot-web/pull/3282)
+ * CSS for ban / kick reason prompt
+   [\#3250](https://github.com/vector-im/riot-web/pull/3250)
+ * Allow forgetting rooms you're banned from
+   [\#3246](https://github.com/vector-im/riot-web/pull/3246)
+ * Fix icon paths in manifest
+   [\#3245](https://github.com/vector-im/riot-web/pull/3245)
+ * Fix broken tests caused by adding IndexedDB support
+   [\#3242](https://github.com/vector-im/riot-web/pull/3242)
+ * CSS for un-ban button in RoomSettings
+   [\#3227](https://github.com/vector-im/riot-web/pull/3227)
+ * Remove z-index property on avatar initials
+   [\#3239](https://github.com/vector-im/riot-web/pull/3239)
+ * Reposition certain icons in the status bar
+   [\#3233](https://github.com/vector-im/riot-web/pull/3233)
+ * CSS for kick/ban confirmation dialog
+   [\#3224](https://github.com/vector-im/riot-web/pull/3224)
+ * Style for split-out interactive auth
+   [\#3217](https://github.com/vector-im/riot-web/pull/3217)
+ * Use the teamToken threaded through from react sdk
+   [\#3196](https://github.com/vector-im/riot-web/pull/3196)
+ * rageshake: Add file server with basic auth
+   [\#3169](https://github.com/vector-im/riot-web/pull/3169)
+ * Fix bug with home icon not appearing when logged in as team member
+   [\#3162](https://github.com/vector-im/riot-web/pull/3162)
+ * Add ISSUE_TEMPLATE
+   [\#2836](https://github.com/vector-im/riot-web/pull/2836)
+ * Store bug reports in separate directories
+   [\#3150](https://github.com/vector-im/riot-web/pull/3150)
+ * Quick and dirty support for custom welcome pages.
+   [\#2575](https://github.com/vector-im/riot-web/pull/2575)
+ * RTS Welcome Pages
+   [\#3103](https://github.com/vector-im/riot-web/pull/3103)
+ * rageshake: Abide by Go standards
+   [\#3149](https://github.com/vector-im/riot-web/pull/3149)
+ * Bug report server script
+   [\#3072](https://github.com/vector-im/riot-web/pull/3072)
+ * Bump olm version
+   [\#3125](https://github.com/vector-im/riot-web/pull/3125)
+
+Changes in [0.9.7](https://github.com/vector-im/riot-web/releases/tag/v0.9.7) (2017-02-04)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.7-rc.3...v0.9.7)
+
+ * Update to matrix-js-sdk 0.7.5 (no changes from 0.7.5-rc.3)
+ * Update to matrix-react-sdk 0.8.6 (no changes from 0.8.6-rc.3)
+
+Changes in [0.9.7-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.9.7-rc.3) (2017-02-03)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.7-rc.2...v0.9.7-rc.3)
+ * Update to latest Olm to fix key import/export and use of megolm sessions
+   created on more recent versions
+ * Update to latest matrix-react-sdk and matrix-js-sdk to fix e2e device
+   handling
+
+Changes in [0.9.7-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.9.7-rc.2) (2017-02-03)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.7-rc.1...v0.9.7-rc.2)
+
+ * Update matrix-js-sdk to get new device change
+   notifications interface for more reliable e2e crypto
+
+Changes in [0.9.7-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.7-rc.1) (2017-02-03)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.6...v0.9.7-rc.1)
+
+ * Better user interface for screen readers and keyboard navigation
+   [\#2946](https://github.com/vector-im/riot-web/pull/2946)
+ * Allow mxc: URLs for icons in the NetworkDropdown
+   [\#3118](https://github.com/vector-im/riot-web/pull/3118)
+ * make TopRightMenu more intuitive
+   [\#3117](https://github.com/vector-im/riot-web/pull/3117)
+ * Handle icons with width > height
+   [\#3110](https://github.com/vector-im/riot-web/pull/3110)
+ * Fix jenkins build
+   [\#3105](https://github.com/vector-im/riot-web/pull/3105)
+ * Add CSS for a support box in login
+   [\#3081](https://github.com/vector-im/riot-web/pull/3081)
+ * Allow a custom login logo to be displayed on login
+   [\#3082](https://github.com/vector-im/riot-web/pull/3082)
+ * Fix the width of input fields within login/reg box
+   [\#3080](https://github.com/vector-im/riot-web/pull/3080)
+ * Set BaseAvatar_image bg colour = #fff
+   [\#3057](https://github.com/vector-im/riot-web/pull/3057)
+ * only recalculate favicon if it changes
+   [\#3067](https://github.com/vector-im/riot-web/pull/3067)
+ * CSS tweak for email address lookup
+   [\#3064](https://github.com/vector-im/riot-web/pull/3064)
+ * Glue the dialog to rageshake: honour sendLogs flag.
+   [\#3061](https://github.com/vector-im/riot-web/pull/3061)
+ * Don't use hash-named directory for dev server
+   [\#3049](https://github.com/vector-im/riot-web/pull/3049)
+ * Implement bug reporting logic
+   [\#3000](https://github.com/vector-im/riot-web/pull/3000)
+ * Add css for bug report dialog
+   [\#3045](https://github.com/vector-im/riot-web/pull/3045)
+ * Increase the max-height of the expanded status bar
+   [\#3043](https://github.com/vector-im/riot-web/pull/3043)
+ * Hopefully, fix intermittent test failure
+   [\#3040](https://github.com/vector-im/riot-web/pull/3040)
+ * CSS for 'searching known users'
+   [\#2971](https://github.com/vector-im/riot-web/pull/2971)
+ * Animate status bar max-height and margin-top
+   [\#2981](https://github.com/vector-im/riot-web/pull/2981)
+ * Add eslint config
+   [\#3032](https://github.com/vector-im/riot-web/pull/3032)
+ * Re-position typing avatars relative to "is typing"
+   [\#3030](https://github.com/vector-im/riot-web/pull/3030)
+ * CSS for avatars that appear when users are typing
+   [\#2998](https://github.com/vector-im/riot-web/pull/2998)
+ * Add StartupWMClass
+   [\#3001](https://github.com/vector-im/riot-web/pull/3001)
+ * Fix link to image for event options menu
+   [\#3002](https://github.com/vector-im/riot-web/pull/3002)
+ * Make riot desktop single instance
+   [\#2999](https://github.com/vector-im/riot-web/pull/2999)
+ * Add electron tray icon
+   [\#2997](https://github.com/vector-im/riot-web/pull/2997)
+ * Fixes to electron desktop notifs
+   [\#2994](https://github.com/vector-im/riot-web/pull/2994)
+ * Auto-hide the electron menu bar
+   [\#2975](https://github.com/vector-im/riot-web/pull/2975)
+ * A couple of tweaks to the karma config
+   [\#2987](https://github.com/vector-im/riot-web/pull/2987)
+ * Deploy script
+   [\#2974](https://github.com/vector-im/riot-web/pull/2974)
+ * Use the postcss-webpack-loader
+   [\#2990](https://github.com/vector-im/riot-web/pull/2990)
+ * Switch CSS to using postcss, and implement a dark theme.
+   [\#2973](https://github.com/vector-im/riot-web/pull/2973)
+ * Update redeploy script to keep old bundles
+   [\#2969](https://github.com/vector-im/riot-web/pull/2969)
+ * Include current version in update check explicitly
+   [\#2967](https://github.com/vector-im/riot-web/pull/2967)
+ * Add another layer of directory to webpack chunks
+   [\#2966](https://github.com/vector-im/riot-web/pull/2966)
+ * Fix links to fonts and images from CSS
+   [\#2965](https://github.com/vector-im/riot-web/pull/2965)
+ * Put parent build hash in webpack output filenames
+   [\#2961](https://github.com/vector-im/riot-web/pull/2961)
+ * update README to point to new names/locations
+   [\#2846](https://github.com/vector-im/riot-web/pull/2846)
+
+Changes in [0.9.6](https://github.com/vector-im/riot-web/releases/tag/v0.9.6) (2017-01-16)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.6-rc.1...v0.9.6)
+
+ * Update to matrix-js-sdk 0.9.6 for video calling fix
+
+Changes in [0.9.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.9.6-rc.1) (2017-01-13)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.5...v0.9.6-rc.1)
+
+ * Build the js-sdk in the CI script
+   [\#2920](https://github.com/vector-im/riot-web/pull/2920)
+ * Hopefully fix Windows shortcuts
+   [\#2917](https://github.com/vector-im/riot-web/pull/2917)
+ * Update README now the js-sdk has a transpile step
+   [\#2921](https://github.com/vector-im/riot-web/pull/2921)
+ * Use the role for 'toggle dev tools'
+   [\#2915](https://github.com/vector-im/riot-web/pull/2915)
+ * Enable screen sharing easter-egg in desktop app
+   [\#2909](https://github.com/vector-im/riot-web/pull/2909)
+ * make electron send email validation URLs with a nextlink of riot.im
+   [\#2808](https://github.com/vector-im/riot-web/pull/2808)
+ * add Debian Stretch install steps to readme
+   [\#2809](https://github.com/vector-im/riot-web/pull/2809)
+ * Update desktop build instructions fixes #2792
+   [\#2793](https://github.com/vector-im/riot-web/pull/2793)
+ * CSS for the delete threepid button
+   [\#2784](https://github.com/vector-im/riot-web/pull/2784)
+
 Changes in [0.9.5](https://github.com/vector-im/riot-web/releases/tag/v0.9.5) (2016-12-24)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.9.4...v0.9.5)

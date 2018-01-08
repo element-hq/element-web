@@ -2,36 +2,44 @@
 
 set -e
 
-export NVM_DIR="/home/jenkins/.nvm"
+export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 nvm use 6
 
 set -x
 
+# check out corresponding branches of dependencies.
+#
+# clone the deps with depth 1: we know we will only ever need that one
+# commit.
+`dirname $0`/fetch-develop.deps.sh --depth 1
+
 npm install
 
 # apparently npm 3.10.3 on node 6.4.0 doesn't upgrade #develop target with npm install unless explicitly asked.
-npm install matrix-react-sdk matrix-js-sdk
+npm install olm
 
 # install olm. A naive 'npm i ./olm/olm-*.tgz' fails because it uses the url
 # from our package.json (or even matrix-js-sdk's) in preference.
-tar -C olm -xz < olm/olm-*.tgz
-rm -r node_modules/olm
-cp -r olm/package node_modules/olm
-
-# we may be using a dev branch of react-sdk, in which case we need to build it
-(cd node_modules/matrix-react-sdk && npm run build)
+#
+# disabled for now, to avoid the annoying scenario of a release doing something
+# different to /develop. Instead, add it to the 'npm install' list above.
+# -- rav 2016/02/03
+#tar -C olm -xz < olm/olm-*.tgz
+#rm -r node_modules/olm
+#cp -r olm/package node_modules/olm
 
 # run the mocha tests
 npm run test
 
-rm dist/vector-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
+# run eslint
+npm run lintall -- -f checkstyle -o eslint.xml || true
 
- # node_modules deps from 'npm install' don't have a .git dir so can't
- # rev-parse; but they do set the commit in package.json under 'gitHead' which
- # we're grabbing here.
-REACT_SHA=$(grep 'gitHead' node_modules/matrix-react-sdk/package.json | cut -d \" -f 4 | head -c 12)
-JSSDK_SHA=$(grep 'gitHead' node_modules/matrix-js-sdk/package.json | cut -d \" -f 4 | head -c 12)
+rm dist/riot-*.tar.gz || true # rm previous artifacts without failing if it doesn't exist
+
+# Since the deps are fetched from git, we can rev-parse
+REACT_SHA=$(cd node_modules/matrix-react-sdk; git rev-parse --short=12 HEAD)
+JSSDK_SHA=$(cd node_modules/matrix-js-sdk; git rev-parse --short=12 HEAD)
 
 VECTOR_SHA=$(git rev-parse --short=12 HEAD) # use the ACTUAL SHA rather than assume develop
 
