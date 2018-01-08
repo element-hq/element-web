@@ -229,6 +229,7 @@ export default React.createClass({
     componentWillUnmount() {
         this.widgetMessaging.stopListening();
         this.widgetMessaging.removeEndpoint(this.props.id, this.props.url);
+        dis.unregister(this._onAction);
         window.removeEventListener('message', this._onMessage);
     },
 
