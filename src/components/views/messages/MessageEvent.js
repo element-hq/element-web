@@ -54,7 +54,6 @@ module.exports = React.createClass({
             'm.notice': sdk.getComponent('messages.TextualBody'),
             'm.emote': sdk.getComponent('messages.TextualBody'),
             'm.image': sdk.getComponent('messages.MImageBody'),
-            'm.sticker': sdk.getComponent('messages.MStickerBody'),
             'm.file': sdk.getComponent('messages.MFileBody'),
             'm.audio': sdk.getComponent('messages.MAudioBody'),
             'm.video': sdk.getComponent('messages.MVideoBody'),
@@ -65,6 +64,8 @@ module.exports = React.createClass({
         let BodyType = UnknownBody;
         if (msgtype && bodyTypes[msgtype]) {
             BodyType = bodyTypes[msgtype];
+        } else if (this.props.mxEvent.getType() === 'm.room.sticker') {
+            BodyType = sdk.getComponent('messages.MStickerBody');
         } else if (content.url) {
             // Fallback to MFileBody if there's a content URL
             BodyType = bodyTypes['m.file'];
