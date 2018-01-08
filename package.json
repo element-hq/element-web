@@ -4,7 +4,7 @@
   "main": "electron_app/src/electron-main.js",
   "version": "0.13.4",
   "description": "A feature-rich client for Matrix.org",
-  "author": "Vector Creations Ltd.",
+  "author": "New Vector Ltd.",
   "repository": {
     "type": "git",
     "url": "https://github.com/vector-im/riot-web"
