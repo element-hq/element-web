@@ -219,5 +219,7 @@
     "Invite to this community": "邀请加入此社区",
     "Add rooms to this community": "添加聊天室到此社区",
     "Appear Offline": "似乎离线了",
-    "Away": "离开状态"
+    "Away": "离开状态",
+    "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "请安装 <chromeLink>Chrome</chromeLink> 或 <firefoxLink>Firefox</firefoxLink> 以获得最佳体验。",
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> 和 <operaLink>Opera</operaLink> 也能工作。"
 }
