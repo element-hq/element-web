@@ -296,7 +296,7 @@ module.exports = React.createClass({
         if (hasUDE) {
             title = _t("Message not sent due to unknown devices being present");
             content = _t(
-                "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send without verifying</sendAnywayText> or <cancelText>cancel all</cancelText>.",
+                "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>mark devices known and send</sendAnywayText> or <cancelText>cancel all</cancelText>.",
                 {},
                 {
                     'showDevicesText': (sub) => <a className="mx_RoomStatusBar_resend_link" key="resend" onClick={this._onShowDevicesClick}>{ sub }</a>,
