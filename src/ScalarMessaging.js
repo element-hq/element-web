@@ -335,10 +335,15 @@ function setWidget(event, roomId) {
     if (userWidget) {
         console.warn('Adding user widget');
         const client = MatrixClientPeg.get();
-        let userWidgets = client.getAccountData('m.widgets') || {};
+        // client.setAccountData('m.widgets', {});
+        const userWidgets = client.getAccountData('m.widgets').getContent() || {};
 
         // Delete existing widget with ID
-        delete userWidgets[widgetId];
+        try {
+            delete userWidgets[widgetId];
+        } catch (e) {
+            console.error(`$widgetId is non-configurable`);
+        }
 
         // Add new widget / update
         if (widgetUrl !== null) {
@@ -346,15 +351,21 @@ function setWidget(event, roomId) {
                 content: content,
                 sender: client.getUserId(),
                 stateKey: widgetId,
-                type: 'm.widget',
+                type: 'im.vector.modular.widgets',
+                id: widgetId,
             };
         }
 
-        client.setAccountData('m.widgets', {widgets: userWidgets});
+        client.setAccountData('m.widgets', userWidgets);
+        console.warn(`Set user widgets to:`, client.getAccountData('m.widgets'));
         sendResponse(event, {
             success: true,
         });
     } else { // Room widget
+        if (!roomId) {
+            sendError(event, _t('Missing roomId.'), null);
+        }
+
         if (widgetUrl === null) { // widget is being deleted
             content = {};
         }
@@ -374,19 +385,30 @@ function getWidgets(event, roomId) {
         sendError(event, _t('You need to be logged in.'));
         return;
     }
-    const room = client.getRoom(roomId);
-    if (!room) {
-        sendError(event, _t('This room is not recognised.'));
-        return;
-    }
-    const stateEvents = room.currentState.getStateEvents("im.vector.modular.widgets");
-    // Only return widgets which have required fields
-    const widgetStateEvents = [];
-    stateEvents.forEach((ev) => {
-        if (ev.getContent().type && ev.getContent().url) {
-            widgetStateEvents.push(ev.event); // return the raw event
+    let widgetStateEvents = [];
+
+    if (roomId) {
+        const room = client.getRoom(roomId);
+        if (!room) {
+            sendError(event, _t('This room is not recognised.'));
+            return;
         }
-    });
+        const stateEvents = room.currentState.getStateEvents("im.vector.modular.widgets");
+        // Only return widgets which have required fields
+        if (room) {
+            stateEvents.forEach((ev) => {
+                if (ev.getContent().type && ev.getContent().url) {
+                    widgetStateEvents.push(ev.event); // return the raw event
+                }
+            });
+        }
+    }
+
+    // Add user widgets (not linked to a specific room)
+    const userWidgets = client.getAccountData('m.widgets').getContent() || {};
+    const userWidgetArray = Object.keys(userWidgets).map((key) => userWidgets[key]);
+    widgetStateEvents = widgetStateEvents.concat(userWidgetArray);
+    console.warn('Sending user widgets', userWidgetArray);
 
     sendResponse(event, widgetStateEvents);
 }
@@ -595,6 +617,16 @@ const onMessage = function(event) {
 
     const roomId = event.data.room_id;
     const userId = event.data.user_id;
+
+    // These APIs don't require roomId
+    if (event.data.action === "get_widgets") {
+        getWidgets(event, roomId);
+        return;
+    } else if (event.data.action === "set_widget") {
+        setWidget(event, roomId);
+        return;
+    }
+
     if (!roomId) {
         sendError(event, _t('Missing room_id in request'));
         return;
@@ -627,12 +659,6 @@ const onMessage = function(event) {
             return;
         } else if (event.data.action === "get_membership_count") {
             getMembershipCount(event, roomId);
-            return;
-        } else if (event.data.action === "set_widget") {
-            setWidget(event, roomId);
-            return;
-        } else if (event.data.action === "get_widgets") {
-            getWidgets(event, roomId);
             return;
         } else if (event.data.action === "get_room_enc_state") {
             getRoomEncState(event, roomId);
