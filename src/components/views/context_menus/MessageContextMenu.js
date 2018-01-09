@@ -123,6 +123,11 @@ module.exports = React.createClass({
         this.closeMenu();
     },
 
+    onHideUnhideClick: function() {
+        this.props.eventTileOps.toggleBodyHidden();
+        this.closeMenu();
+    },
+
     onCancelSendClick: function() {
         Resend.removeFromQueue(this.props.mxEvent);
         this.closeMenu();
@@ -181,6 +186,7 @@ module.exports = React.createClass({
         const eventStatus = this.props.mxEvent.status;
         let resendButton;
         let redactButton;
+        let hideUnhideButton;
         let cancelButton;
         let forwardButton;
         let pinButton;
@@ -203,6 +209,14 @@ module.exports = React.createClass({
             redactButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onRedactClick}>
                     { _t('Remove') }
+                </div>
+            );
+        }
+
+        if (!eventStatus) {
+            hideUnhideButton = (
+                <div className="mx_MessageContextMenu_field" onClick={this.onHideUnhideClick}>
+                    { this.props.eventTileOps.isBodyHidden() ? _t("Unhide") : _t("Hide") }
                 </div>
             );
         }
@@ -248,7 +262,7 @@ module.exports = React.createClass({
             );
         }
 
-        if (this.props.eventTileOps) {
+        if (this.props.eventTileOps.isWidgetHidden) {
             if (this.props.eventTileOps.isWidgetHidden()) {
                 unhidePreviewButton = (
                     <div className="mx_MessageContextMenu_field" onClick={this.onUnhidePreviewClick}>
@@ -266,7 +280,7 @@ module.exports = React.createClass({
             </div>
         );
 
-        if (this.props.eventTileOps && this.props.eventTileOps.getInnerText) {
+        if (this.props.eventTileOps.getInnerText) {
             quoteButton = (
                 <div className="mx_MessageContextMenu_field" onClick={this.onQuoteClick}>
                     { _t('Quote') }
@@ -289,6 +303,7 @@ module.exports = React.createClass({
             <div>
                 {resendButton}
                 {redactButton}
+                {hideUnhideButton}
                 {cancelButton}
                 {forwardButton}
                 {pinButton}

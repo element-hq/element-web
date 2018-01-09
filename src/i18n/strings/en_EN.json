@@ -124,6 +124,8 @@
     "This will allow you to return to your account after signing out, and sign in on other devices.": "This will allow you to return to your account after signing out, and sign in on other devices.",
     "You cannot delete this message. (%(code)s)": "You cannot delete this message. (%(code)s)",
     "Resend": "Resend",
+    "Unhide": "Unhide",
+    "Hide": "Hide",
     "Cancel Sending": "Cancel Sending",
     "Forward Message": "Forward Message",
     "Unpin Message": "Unpin Message",
