@@ -31,8 +31,8 @@ export default class MessageComposer extends React.Component {
         this.onCallClick = this.onCallClick.bind(this);
         this.onHangupClick = this.onHangupClick.bind(this);
         this.onUploadClick = this.onUploadClick.bind(this);
-        this.onShowAppsClick = this.onShowAppsClick.bind(this);
-        this.onHideAppsClick = this.onHideAppsClick.bind(this);
+        this.onShowStickersClick = this.onShowStickersClick.bind(this);
+        this.onHideStickersClick = this.onHideStickersClick.bind(this);
         this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
         this.uploadFiles = this.uploadFiles.bind(this);
         this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
@@ -53,6 +53,7 @@ export default class MessageComposer extends React.Component {
                 wordCount: 0,
             },
             showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
+            showStickers: false,
         };
     }
 
@@ -189,18 +190,12 @@ export default class MessageComposer extends React.Component {
         // this._startCallApp(true);
     }
 
-    onShowAppsClick(ev) {
-        dis.dispatch({
-            action: 'appsDrawer',
-            show: true,
-        });
+    onShowStickersClick(ev) {
+        this.setState({showStickers: true});
     }
 
-    onHideAppsClick(ev) {
-        dis.dispatch({
-            action: 'appsDrawer',
-            show: false,
-        });
+    onHideStickersClick(ev) {
+        this.setState({showStickers: false});
     }
 
     onInputContentChanged(content: string, selection: {start: number, end: number}) {
@@ -268,7 +263,7 @@ export default class MessageComposer extends React.Component {
                 alt={e2eTitle} title={e2eTitle}
             />,
         );
-        let callButton, videoCallButton, hangupButton, showAppsButton, hideAppsButton;
+        let callButton, videoCallButton, hangupButton, showStickersButton, hideStickersButton;
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
                 <div key="controls_hangup" className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
@@ -286,15 +281,23 @@ export default class MessageComposer extends React.Component {
         }
 
         // Apps
-        if (this.props.showApps) {
-            hideAppsButton =
-                <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title={_t("Hide Apps")}>
-                    <TintableSvg src="img/icons-hide-apps.svg" width="35" height="35" />
+        if (this.state.showStickers) {
+            hideStickersButton =
+                <div
+                    key="controls_hide_stickers"
+                    className="mx_MessageComposer_stickers"
+                    onClick={this.onHideStickersClick}
+                    title={_t("Hide Stickers")}>
+                    <TintableSvg src="img/icons-hide-stickers.svg" width="35" height="35" />
                 </div>;
         } else {
-            showAppsButton =
-                <div key="show_apps" className="mx_MessageComposer_apps" onClick={this.onShowAppsClick} title={_t("Show Apps")}>
-                    <TintableSvg src="img/icons-show-apps.svg" width="35" height="35" />
+            showStickersButton =
+                <div
+                    key="constrols_show_stickers"
+                    className="mx_MessageComposer_stickers"
+                    onClick={this.onShowStickersClick}
+                    title={_t("Show Stickers")}>
+                    <TintableSvg src="img/icons-show-stickers.svg" width="35" height="35" />
                 </div>;
         }
 
@@ -343,8 +346,8 @@ export default class MessageComposer extends React.Component {
                 hangupButton,
                 callButton,
                 videoCallButton,
-                showAppsButton,
-                hideAppsButton,
+                showStickersButton,
+                hideStickersButton,
             );
         } else {
             controls.push(
@@ -409,7 +412,4 @@ MessageComposer.propTypes = {
 
     // callback when a file to upload is chosen
     uploadFile: React.PropTypes.func.isRequired,
-
-    // string representing the current room app drawer state
-    showApps: React.PropTypes.bool,
 };
