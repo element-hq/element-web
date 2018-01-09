@@ -24,11 +24,7 @@ import WhoIsTyping from '../../WhoIsTyping';
 import MatrixClientPeg from '../../MatrixClientPeg';
 import MemberAvatar from '../views/avatars/MemberAvatar';
 import Resend from '../../Resend';
-import {
-    showUnknownDeviceDialogForMessages,
-    markAllDevicesKnown,
-    getUnknownDevicesForRoom,
- } from '../../cryptodevices';
+import * as cryptodevices from '../../cryptodevices';
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -153,8 +149,8 @@ module.exports = React.createClass({
     },
 
     _onSendWithoutVerifyingClick: function() {
-        getUnknownDevicesForRoom(MatrixClientPeg.get(), this.props.room).then((devices) => {
-            markAllDevicesKnown(MatrixClientPeg.get(), devices);
+        cryptodevices.getUnknownDevicesForRoom(MatrixClientPeg.get(), this.props.room).then((devices) => {
+            cryptodevices.markAllDevicesKnown(MatrixClientPeg.get(), devices);
             Resend.resendUnsentEvents(this.props.room);
         });
     },
@@ -168,7 +164,7 @@ module.exports = React.createClass({
     },
 
     _onShowDevicesClick: function() {
-        showUnknownDeviceDialogForMessages(MatrixClientPeg.get(), this.props.room);
+        cryptodevices.showUnknownDeviceDialogForMessages(MatrixClientPeg.get(), this.props.room);
     },
 
     _onRoomLocalEchoUpdated: function(event, room, oldEventId, oldStatus) {
