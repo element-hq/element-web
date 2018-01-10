@@ -58,7 +58,7 @@ module.exports = React.createClass({
         /* callback for when our widget has loaded */
         onWidgetLoad: React.PropTypes.func,
 
-        /* the shsape of the tile, used */
+        /* the shape of the tile, used */
         tileShape: React.PropTypes.string,
     },
 
