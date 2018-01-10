@@ -283,7 +283,15 @@ export default class MessageComposer extends React.Component {
 
         // Stickers
         if (this.state.showStickers) {
-            const stickersContent = <p>Click here to add your first sitckerpack</p>;
+            let stickerpackWidget = '';
+            let stickersContent = <p>Click here to add your first sitckerpack</p>;
+            if (true) {
+                stickersContent = <iframe src={stickerpackWidget} style={{
+                    borderRadius: '5px',
+                    border: 'none',
+                }}></iframe>;
+            }
+
             hideStickersButton =
                 <div
                     key="controls_hide_stickers"
@@ -298,8 +306,14 @@ export default class MessageComposer extends React.Component {
                         target={this.refs.stickersContainer}
                         show={this.state.showStickers}
                         onHide={this.onHideStickersClick}
-                        containerStyle={{}}
-                        style={{borderRadius: '5px'}}
+                        containerStyle={{
+                            zIndex: 100,
+                        }}
+                        style={{
+                            borderRadius: '5px',
+                            width: 'initial',
+                            padding: 0,
+                        }}
                         children={stickersContent}
                     />
                 </div>;
