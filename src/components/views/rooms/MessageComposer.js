@@ -283,7 +283,7 @@ export default class MessageComposer extends React.Component {
 
         // Stickers
         if (this.state.showStickers) {
-            const children = <p>Stickers popover</p>;
+            const stickersContent = <p>Click here to add your first sitckerpack</p>;
             hideStickersButton =
                 <div
                     key="controls_hide_stickers"
@@ -300,7 +300,7 @@ export default class MessageComposer extends React.Component {
                         onHide={this.onHideStickersClick}
                         containerStyle={{}}
                         style={{borderRadius: '5px'}}
-                        children={children}
+                        children={stickersContent}
                     />
                 </div>;
         } else {
