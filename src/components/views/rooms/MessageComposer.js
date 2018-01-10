@@ -23,7 +23,7 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import Autocomplete from './Autocomplete';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-
+import Popover from 'react-simple-popover';
 
 export default class MessageComposer extends React.Component {
     constructor(props, context) {
@@ -42,6 +42,7 @@ export default class MessageComposer extends React.Component {
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
         this.onInputStateChanged = this.onInputStateChanged.bind(this);
         this.onEvent = this.onEvent.bind(this);
+        this.render = this.render.bind(this);
 
         this.state = {
             autocompleteQuery: '',
@@ -280,15 +281,27 @@ export default class MessageComposer extends React.Component {
                 </div>;
         }
 
-        // Apps
+        // Stickers
         if (this.state.showStickers) {
+            const children = <p>Stickers popover</p>;
             hideStickersButton =
                 <div
                     key="controls_hide_stickers"
                     className="mx_MessageComposer_stickers"
                     onClick={this.onHideStickersClick}
+                    ref='target'
                     title={_t("Hide Stickers")}>
                     <TintableSvg src="img/icons-hide-stickers.svg" width="35" height="35" />
+                    <Popover
+                        placement='top'
+                        container={this.refs.messageComposerInput}
+                        target={this.refs.stickersContainer}
+                        show={this.state.showStickers}
+                        onHide={this.onHideStickersClick}
+                        containerStyle={{}}
+                        style={{borderRadius: '5px'}}
+                        children={children}
+                    />
                 </div>;
         } else {
             showStickersButton =
@@ -300,6 +313,10 @@ export default class MessageComposer extends React.Component {
                     <TintableSvg src="img/icons-show-stickers.svg" width="35" height="35" />
                 </div>;
         }
+        const stickersContainer = <div ref='stickersContainer' key='stickers'>
+            { showStickersButton }
+            { hideStickersButton }
+        </div>;
 
         const canSendMessages = this.props.room.currentState.maySendMessage(
             MatrixClientPeg.get().credentials.userId);
@@ -346,8 +363,7 @@ export default class MessageComposer extends React.Component {
                 hangupButton,
                 callButton,
                 videoCallButton,
-                showStickersButton,
-                hideStickersButton,
+                stickersContainer,
             );
         } else {
             controls.push(
