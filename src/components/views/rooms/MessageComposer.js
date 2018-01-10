@@ -341,15 +341,15 @@ export default class MessageComposer extends React.Component {
             let placeholderText;
             if (this.state.isQuoting) {
                 if (roomIsEncrypted) {
-                    placeholderText = _t('Send an encrypted reply');
+                    placeholderText = _t('Send an encrypted reply…');
                 } else {
-                    placeholderText = _t('Send a reply (unencrypted)');
+                    placeholderText = _t('Send a reply (unencrypted)…');
                 }
             } else {
                 if (roomIsEncrypted) {
-                    placeholderText = _t('Send an encrypted message');
+                    placeholderText = _t('Send an encrypted message…');
                 } else {
-                    placeholderText = _t('Send a message (unencrypted)');
+                    placeholderText = _t('Send a message (unencrypted)…');
                 }
             }
 
@@ -359,7 +359,7 @@ export default class MessageComposer extends React.Component {
                     key="controls_input"
                     onResize={this.props.onResize}
                     room={this.props.room}
-                    placeholder={placeholderText + '…'}
+                    placeholder={placeholderText}
                     onFilesPasted={this.uploadFiles}
                     onContentChanged={this.onInputContentChanged}
                     onInputStateChanged={this.onInputStateChanged} />,
