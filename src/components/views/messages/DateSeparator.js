@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import DateUtils from 'matrix-react-sdk/lib/DateUtils';
+import {formatFullDate} from 'matrix-react-sdk/lib/DateUtils';
 
 function getdaysArray() {
 	return [
@@ -49,7 +49,7 @@ module.exports = React.createClass({
             label = days[date.getDay()];
         }
         else {
-            label = DateUtils.formatFullDate(date, this.props.showTwelveHour);
+            label = formatFullDate(date, this.props.showTwelveHour);
         }
 
         return (

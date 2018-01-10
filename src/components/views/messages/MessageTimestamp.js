@@ -17,7 +17,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import DateUtils from 'matrix-react-sdk/lib/DateUtils';
+import {formatFullDate, formatTime} from 'matrix-react-sdk/lib/DateUtils';
 
 module.exports = React.createClass({
     displayName: 'MessageTimestamp',
@@ -29,8 +29,8 @@ module.exports = React.createClass({
     render: function() {
         const date = new Date(this.props.ts);
         return (
-            <span className="mx_MessageTimestamp" title={ DateUtils.formatFullDate(date, this.props.showTwelveHour) }>
-                { DateUtils.formatTime(date, this.props.showTwelveHour) }
+            <span className="mx_MessageTimestamp" title={ formatFullDate(date, this.props.showTwelveHour) }>
+                { formatTime(date, this.props.showTwelveHour) }
             </span>
         );
     },
