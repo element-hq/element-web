@@ -26,7 +26,7 @@ const Velociraptor = require('../../../Velociraptor');
 require('../../../VelocityBounce');
 import { _t } from '../../../languageHandler';
 
-import DateUtils from '../../../DateUtils';
+import {formatDate} from '../../../DateUtils';
 
 let bounce = false;
 try {
@@ -187,7 +187,7 @@ module.exports = React.createClass({
         if (this.props.timestamp) {
             title = _t(
                 "Seen by %(userName)s at %(dateTime)s",
-                {userName: this.props.member.userId, dateTime: DateUtils.formatDate(new Date(this.props.timestamp), this.props.showTwelveHour)},
+                {userName: this.props.member.userId, dateTime: formatDate(new Date(this.props.timestamp), this.props.showTwelveHour)},
             );
         }
 
