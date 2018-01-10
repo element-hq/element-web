@@ -67,7 +67,7 @@ export default class Quote extends React.Component {
             show: !this.props.isNested,
         };
 
-        this.onShowNested = this.onShowNested.bind(this);
+        this.onQuoteClick = this.onQuoteClick.bind(this);
     }
 
     getChildContext() {
@@ -117,7 +117,7 @@ export default class Quote extends React.Component {
         this.setState({room, event});
     }
 
-    onShowNested() {
+    onQuoteClick() {
         this.setState({
             show: true,
         });
@@ -141,7 +141,7 @@ export default class Quote extends React.Component {
             }
 
             return <div>
-                <a onClick={this.onShowNested} className="mx_Quote_show">{ _t('Quote') }</a>
+                <a onClick={this.onQuoteClick} className="mx_Quote_show">{ _t('Quote') }</a>
                 <br />
             </div>;
         }
