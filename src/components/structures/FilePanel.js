@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Matrix from 'matrix-js-sdk';
 import sdk from '../../index';
@@ -28,7 +29,7 @@ const FilePanel = React.createClass({
     displayName: 'FilePanel',
 
     propTypes: {
-        roomId: React.PropTypes.string.isRequired,
+        roomId: PropTypes.string.isRequired,
     },
 
     getInitialState: function() {

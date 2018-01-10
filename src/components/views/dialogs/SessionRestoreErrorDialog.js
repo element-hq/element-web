@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
@@ -25,8 +26,8 @@ export default React.createClass({
     displayName: 'SessionRestoreErrorDialog',
 
     propTypes: {
-        error: React.PropTypes.string.isRequired,
-        onFinished: React.PropTypes.func.isRequired,
+        error: PropTypes.string.isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     _sendBugReport: function() {

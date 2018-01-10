@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -256,17 +257,17 @@ PasswordLogin.LOGIN_FIELD_MXID = "login_field_mxid";
 PasswordLogin.LOGIN_FIELD_PHONE = "login_field_phone";
 
 PasswordLogin.propTypes = {
-    onSubmit: React.PropTypes.func.isRequired, // fn(username, password)
-    onForgotPasswordClick: React.PropTypes.func, // fn()
-    initialUsername: React.PropTypes.string,
-    initialPhoneCountry: React.PropTypes.string,
-    initialPhoneNumber: React.PropTypes.string,
-    initialPassword: React.PropTypes.string,
-    onUsernameChanged: React.PropTypes.func,
-    onPhoneCountryChanged: React.PropTypes.func,
-    onPhoneNumberChanged: React.PropTypes.func,
-    onPasswordChanged: React.PropTypes.func,
-    loginIncorrect: React.PropTypes.bool,
+    onSubmit: PropTypes.func.isRequired, // fn(username, password)
+    onForgotPasswordClick: PropTypes.func, // fn()
+    initialUsername: PropTypes.string,
+    initialPhoneCountry: PropTypes.string,
+    initialPhoneNumber: PropTypes.string,
+    initialPassword: PropTypes.string,
+    onUsernameChanged: PropTypes.func,
+    onPhoneCountryChanged: PropTypes.func,
+    onPhoneNumberChanged: PropTypes.func,
+    onPasswordChanged: PropTypes.func,
+    loginIncorrect: PropTypes.bool,
 };
 
 module.exports = PasswordLogin;

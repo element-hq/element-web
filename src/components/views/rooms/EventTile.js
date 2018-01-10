@@ -19,6 +19,7 @@ limitations under the License.
 
 
 const React = require('react');
+import PropTypes from 'prop-types';
 const classNames = require("classnames");
 import { _t, _td } from '../../../languageHandler';
 const Modal = require('../../../Modal');
@@ -77,65 +78,65 @@ module.exports = withMatrixClient(React.createClass({
 
     propTypes: {
         /* MatrixClient instance for sender verification etc */
-        matrixClient: React.PropTypes.object.isRequired,
+        matrixClient: PropTypes.object.isRequired,
 
         /* the MatrixEvent to show */
-        mxEvent: React.PropTypes.object.isRequired,
+        mxEvent: PropTypes.object.isRequired,
 
         /* true if mxEvent is redacted. This is a prop because using mxEvent.isRedacted()
          * might not be enough when deciding shouldComponentUpdate - prevProps.mxEvent
          * references the same this.props.mxEvent.
          */
-        isRedacted: React.PropTypes.bool,
+        isRedacted: PropTypes.bool,
 
         /* true if this is a continuation of the previous event (which has the
          * effect of not showing another avatar/displayname
          */
-        continuation: React.PropTypes.bool,
+        continuation: PropTypes.bool,
 
         /* true if this is the last event in the timeline (which has the effect
          * of always showing the timestamp)
          */
-        last: React.PropTypes.bool,
+        last: PropTypes.bool,
 
         /* true if this is search context (which has the effect of greying out
          * the text
          */
-        contextual: React.PropTypes.bool,
+        contextual: PropTypes.bool,
 
         /* a list of words to highlight, ordered by longest first */
-        highlights: React.PropTypes.array,
+        highlights: PropTypes.array,
 
         /* link URL for the highlights */
-        highlightLink: React.PropTypes.string,
+        highlightLink: PropTypes.string,
 
         /* should show URL previews for this event */
-        showUrlPreview: React.PropTypes.bool,
+        showUrlPreview: PropTypes.bool,
 
         /* is this the focused event */
-        isSelectedEvent: React.PropTypes.bool,
+        isSelectedEvent: PropTypes.bool,
 
         /* callback called when dynamic content in events are loaded */
-        onWidgetLoad: React.PropTypes.func,
+        onWidgetLoad: PropTypes.func,
 
         /* a list of read-receipts we should show. Each object has a 'roomMember' and 'ts'. */
-        readReceipts: React.PropTypes.arrayOf(React.PropTypes.object),
+        readReceipts: PropTypes.arrayOf(React.PropTypes.object),
 
         /* opaque readreceipt info for each userId; used by ReadReceiptMarker
          * to manage its animations. Should be an empty object when the room
          * first loads
          */
-        readReceiptMap: React.PropTypes.object,
+        readReceiptMap: PropTypes.object,
 
         /* A function which is used to check if the parent panel is being
          * unmounted, to avoid unnecessary work. Should return true if we
          * are being unmounted.
          */
-        checkUnmounting: React.PropTypes.func,
+        checkUnmounting: PropTypes.func,
 
         /* the status of this event - ie, mxEvent.status. Denormalised to here so
          * that we can tell when it changes. */
-        eventSendStatus: React.PropTypes.string,
+        eventSendStatus: PropTypes.string,
 
         /* the shape of the tile. by default, the layout is intended for the
          * normal room timeline.  alternative values are: "file_list", "file_grid"
@@ -144,10 +145,10 @@ module.exports = withMatrixClient(React.createClass({
          * boiilerplatey.  So just make the necessary render decisions conditional
          * for now.
          */
-        tileShape: React.PropTypes.string,
+        tileShape: PropTypes.string,
 
         // show twelve hour timestamps
-        isTwelveHour: React.PropTypes.bool,
+        isTwelveHour: PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -198,6 +199,8 @@ module.exports = withMatrixClient(React.createClass({
      */
     _onDecrypted: function() {
         // we need to re-verify the sending device.
+        // (we call onWidgetLoad in _verifyEvent to handle the case where decryption
+        // has caused a change in size of the event tile)
         this._verifyEvent(this.props.mxEvent);
         this.forceUpdate();
     },
@@ -216,6 +219,9 @@ module.exports = withMatrixClient(React.createClass({
         const verified = await this.props.matrixClient.isEventSenderVerified(mxEvent);
         this.setState({
             verified: verified,
+        }, () => {
+            // Decryption may have caused a change in size
+            this.props.onWidgetLoad();
         });
     },
 

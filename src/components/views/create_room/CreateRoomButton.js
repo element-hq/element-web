@@ -17,11 +17,12 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 module.exports = React.createClass({
     displayName: 'CreateRoomButton',
     propTypes: {
-        onCreateRoom: React.PropTypes.func,
+        onCreateRoom: PropTypes.func,
     },
 
     getDefaultProps: function() {

@@ -24,9 +24,9 @@ import shouldHideEvent from "../../shouldHideEvent";
 
 const React = require("react");
 const ReactDOM = require("react-dom");
+import PropTypes from 'prop-types';
 import Promise from 'bluebird';
 const classNames = require("classnames");
-const Matrix = require("matrix-js-sdk");
 import { _t } from '../../languageHandler';
 
 const MatrixClientPeg = require("../../MatrixClientPeg");
@@ -34,7 +34,6 @@ const ContentMessages = require("../../ContentMessages");
 const Modal = require("../../Modal");
 const sdk = require('../../index');
 const CallHandler = require('../../CallHandler');
-const Resend = require("../../Resend");
 const dis = require("../../dispatcher");
 const Tinter = require("../../Tinter");
 const rate_limited_func = require('../../ratelimitedfunc');
@@ -60,18 +59,18 @@ if (DEBUG) {
 module.exports = React.createClass({
     displayName: 'RoomView',
     propTypes: {
-        ConferenceHandler: React.PropTypes.any,
+        ConferenceHandler: PropTypes.any,
 
         // Called with the credentials of a registered user (if they were a ROU that
         // transitioned to PWLU)
-        onRegistered: React.PropTypes.func,
+        onRegistered: PropTypes.func,
 
         // An object representing a third party invite to join this room
         // Fields:
         // * inviteSignUrl (string) The URL used to join this room from an email invite
         //                          (given as part of the link in the invite email)
         // * invitedEmail (string) The email address that was invited to this room
-        thirdPartyInvite: React.PropTypes.object,
+        thirdPartyInvite: PropTypes.object,
 
         // Any data about the room that would normally come from the Home Server
         // but has been passed out-of-band, eg. the room name and avatar URL
@@ -82,10 +81,10 @@ module.exports = React.createClass({
         //  * avatarUrl (string) The mxc:// avatar URL for the room
         //  * inviterName (string) The display name of the person who
         //  *                      invited us tovthe room
-        oobData: React.PropTypes.object,
+        oobData: PropTypes.object,
 
         // is the RightPanel collapsed?
-        collapsedRhs: React.PropTypes.bool,
+        collapsedRhs: PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -110,7 +109,6 @@ module.exports = React.createClass({
             draggingFile: false,
             searching: false,
             searchResults: null,
-            unsentMessageError: '',
             callState: null,
             guestsCanJoin: false,
             canPeek: false,
@@ -202,7 +200,6 @@ module.exports = React.createClass({
         if (initial) {
             newState.room = MatrixClientPeg.get().getRoom(newState.roomId);
             if (newState.room) {
-                newState.unsentMessageError = this._getUnsentMessageError(newState.room);
                 newState.showApps = this._shouldShowApps(newState.room);
                 this._onRoomLoaded(newState.room);
             }
@@ -462,11 +459,6 @@ module.exports = React.createClass({
             case 'message_send_failed':
             case 'message_sent':
                 this._checkIfAlone(this.state.room);
-                // no break; to intentionally fall through
-            case 'message_send_cancelled':
-                this.setState({
-                    unsentMessageError: this._getUnsentMessageError(this.state.room),
-                });
                 break;
             case 'notifier_enabled':
             case 'upload_failed':
@@ -711,35 +703,6 @@ module.exports = React.createClass({
         this.setState({isAlone: joinedMembers.length === 1});
     },
 
-    _getUnsentMessageError: function(room) {
-        const unsentMessages = this._getUnsentMessages(room);
-        if (!unsentMessages.length) return "";
-
-        if (
-            unsentMessages.length === 1 &&
-            unsentMessages[0].error &&
-            unsentMessages[0].error.data &&
-            unsentMessages[0].error.data.error &&
-            unsentMessages[0].error.name !== "UnknownDeviceError"
-        ) {
-            return unsentMessages[0].error.data.error;
-        }
-
-        for (const event of unsentMessages) {
-            if (!event.error || event.error.name !== "UnknownDeviceError") {
-                return _t("Some of your messages have not been sent.");
-            }
-        }
-        return _t("Message not sent due to unknown devices being present");
-    },
-
-    _getUnsentMessages: function(room) {
-        if (!room) { return []; }
-        return room.getPendingEvents().filter(function(ev) {
-            return ev.status === Matrix.EventStatus.NOT_SENT;
-        });
-    },
-
     _updateConfCallNotification: function() {
         const room = this.state.room;
         if (!room || !this.props.ConferenceHandler) {
@@ -782,14 +745,6 @@ module.exports = React.createClass({
             debuglog("no more search results");
             return Promise.resolve(false);
         }
-    },
-
-    onResendAllClick: function() {
-        Resend.resendUnsentEvents(this.state.room);
-    },
-
-    onCancelAllClick: function() {
-        Resend.cancelUnsentEvents(this.state.room);
     },
 
     onInviteButtonClick: function() {
@@ -900,9 +855,13 @@ module.exports = React.createClass({
 
         ev.dataTransfer.dropEffect = 'none';
 
-        const items = ev.dataTransfer.items;
-        if (items.length == 1) {
-            if (items[0].kind == 'file') {
+        const items = [...ev.dataTransfer.items];
+        if (items.length >= 1) {
+            const isDraggingFiles = items.every(function(item) {
+                return item.kind == 'file';
+            });
+
+            if (isDraggingFiles) {
                 this.setState({ draggingFile: true });
                 ev.dataTransfer.dropEffect = 'copy';
             }
@@ -913,10 +872,8 @@ module.exports = React.createClass({
         ev.stopPropagation();
         ev.preventDefault();
         this.setState({ draggingFile: false });
-        const files = ev.dataTransfer.files;
-        if (files.length == 1) {
-            this.uploadFile(files[0]);
-        }
+        const files = [...ev.dataTransfer.files];
+        files.forEach(this.uploadFile);
     },
 
     onDragLeaveOrEnd: function(ev) {
@@ -935,11 +892,7 @@ module.exports = React.createClass({
             file, this.state.room.roomId, MatrixClientPeg.get(),
         ).done(undefined, (error) => {
             if (error.name === "UnknownDeviceError") {
-                dis.dispatch({
-                    action: 'unknown_device_error',
-                    err: error,
-                    room: this.state.room,
-                });
+                // Let the staus bar handle this
                 return;
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
@@ -1395,10 +1348,12 @@ module.exports = React.createClass({
     },
 
     onStatusBarHidden: function() {
-        if (this.unmounted) return;
+        // This is currently not desired as it is annoying if it keeps expanding and collapsing
+        // TODO: Find a less annoying way of hiding the status bar
+        /*if (this.unmounted) return;
         this.setState({
             statusBarVisible: false,
-        });
+        });*/
     },
 
     showSettings: function(show) {
@@ -1571,12 +1526,9 @@ module.exports = React.createClass({
             statusBar = <RoomStatusBar
                 room={this.state.room}
                 numUnreadMessages={this.state.numUnreadMessages}
-                unsentMessageError={this.state.unsentMessageError}
                 atEndOfLiveTimeline={this.state.atEndOfLiveTimeline}
                 sentMessageAndIsAlone={this.state.isAlone}
                 hasActiveCall={inCall}
-                onResendAllClick={this.onResendAllClick}
-                onCancelAllClick={this.onCancelAllClick}
                 onInviteClick={this.onInviteButtonClick}
                 onStopWarningClick={this.onStopAloneWarningClick}
                 onScrollToBottomClick={this.jumpToLiveTimeline}

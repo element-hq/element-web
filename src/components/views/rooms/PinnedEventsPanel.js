@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+import PropTypes from 'prop-types';
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import AccessibleButton from "../elements/AccessibleButton";
 import PinnedEventTile from "./PinnedEventTile";
@@ -25,9 +26,9 @@ module.exports = React.createClass({
     displayName: 'PinnedEventsPanel',
     propTypes: {
         // The Room from the js-sdk we're going to show pinned events for
-        room: React.PropTypes.object.isRequired,
+        room: PropTypes.object.isRequired,
 
-        onCancelClick: React.PropTypes.func,
+        onCancelClick: PropTypes.func,
     },
 
     getInitialState: function() {

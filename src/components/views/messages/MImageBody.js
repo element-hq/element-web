@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import ImageUtils from '../../../ImageUtils';
@@ -33,10 +34,10 @@ module.exports = React.createClass({
 
     propTypes: {
         /* the MatrixEvent to show */
-        mxEvent: React.PropTypes.object.isRequired,
+        mxEvent: PropTypes.object.isRequired,
 
         /* called when the image has loaded */
-        onWidgetLoad: React.PropTypes.func.isRequired,
+        onWidgetLoad: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {

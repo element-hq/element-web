@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import PropTypes from 'prop-types';
 import type SyntheticKeyboardEvent from 'react/lib/SyntheticKeyboardEvent';
 
 import {Editor, EditorState, RichUtils, CompositeDecorator, Modifier,
@@ -78,13 +79,6 @@ function onSendMessageFailed(err, room) {
     // XXX: temporary logging to try to diagnose
     // https://github.com/vector-im/riot-web/issues/3148
     console.log('MessageComposer got send failure: ' + err.name + '('+err+')');
-    if (err.name === "UnknownDeviceError") {
-        dis.dispatch({
-            action: 'unknown_device_error',
-            err: err,
-            room: room,
-        });
-    }
     dis.dispatch({
         action: 'message_send_failed',
     });
@@ -97,15 +91,15 @@ export default class MessageComposerInput extends React.Component {
     static propTypes = {
         // a callback which is called when the height of the composer is
         // changed due to a change in content.
-        onResize: React.PropTypes.func,
+        onResize: PropTypes.func,
 
         // js-sdk Room object
-        room: React.PropTypes.object.isRequired,
+        room: PropTypes.object.isRequired,
 
         // called with current plaintext content (as a string) whenever it changes
-        onContentChanged: React.PropTypes.func,
+        onContentChanged: PropTypes.func,
 
-        onInputStateChanged: React.PropTypes.func,
+        onInputStateChanged: PropTypes.func,
     };
 
     static getKeyBinding(ev: SyntheticKeyboardEvent): string {
@@ -524,7 +518,8 @@ export default class MessageComposerInput extends React.Component {
             // composer. For some reason the editor won't scroll automatically if we paste
             // blocks of text in or insert newlines.
             if (textContent.slice(selection.start).indexOf("\n") === -1) {
-                this.refs.editor.refs.editor.scrollTop = this.refs.editor.refs.editor.scrollHeight;
+                let editorRoot = this.refs.editor.refs.editor.parentNode.parentNode;
+                editorRoot.scrollTop = editorRoot.scrollHeight;
             }
         });
     }
@@ -1217,15 +1212,15 @@ export default class MessageComposerInput extends React.Component {
 MessageComposerInput.propTypes = {
     // a callback which is called when the height of the composer is
     // changed due to a change in content.
-    onResize: React.PropTypes.func,
+    onResize: PropTypes.func,
 
     // js-sdk Room object
-    room: React.PropTypes.object.isRequired,
+    room: PropTypes.object.isRequired,
 
     // called with current plaintext content (as a string) whenever it changes
-    onContentChanged: React.PropTypes.func,
+    onContentChanged: PropTypes.func,
 
-    onFilesPasted: React.PropTypes.func,
+    onFilesPasted: PropTypes.func,
 
-    onInputStateChanged: React.PropTypes.func,
+    onInputStateChanged: PropTypes.func,
 };

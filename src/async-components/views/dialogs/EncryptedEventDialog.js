@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 const React = require("react");
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 const sdk = require('../../../index');
 const MatrixClientPeg = require("../../../MatrixClientPeg");
@@ -23,8 +24,8 @@ module.exports = React.createClass({
     displayName: 'EncryptedEventDialog',
 
     propTypes: {
-        event: React.PropTypes.object.isRequired,
-        onFinished: React.PropTypes.func.isRequired,
+        event: PropTypes.object.isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {

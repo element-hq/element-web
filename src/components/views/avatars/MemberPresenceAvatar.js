@@ -17,6 +17,7 @@
 'use strict';
 
 import React from "react";
+import PropTypes from 'prop-types';
 import * as sdk from "../../../index";
 import MatrixClientPeg from "../../../MatrixClientPeg";
 import AccessibleButton from '../elements/AccessibleButton';
@@ -30,10 +31,10 @@ module.exports = React.createClass({
     displayName: 'MemberPresenceAvatar',
 
     propTypes: {
-        member: React.PropTypes.object.isRequired,
-        width: React.PropTypes.number,
-        height: React.PropTypes.number,
-        resizeMethod: React.PropTypes.string,
+        member: PropTypes.object.isRequired,
+        width: PropTypes.number,
+        height: PropTypes.number,
+        resizeMethod: PropTypes.string,
     },
 
     getDefaultProps: function() {

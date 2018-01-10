@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
@@ -187,9 +188,9 @@ export default class ChatCreateOrReuseDialog extends React.Component {
 }
 
 ChatCreateOrReuseDialog.propTyps = {
-    userId: React.PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
     // Called when clicking outside of the dialog
-    onFinished: React.PropTypes.func.isRequired,
-    onNewDMClick: React.PropTypes.func.isRequired,
-    onExistingRoomSelected: React.PropTypes.func.isRequired,
+    onFinished: PropTypes.func.isRequired,
+    onNewDMClick: PropTypes.func.isRequired,
+    onExistingRoomSelected: PropTypes.func.isRequired,
 };

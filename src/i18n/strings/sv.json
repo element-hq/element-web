@@ -365,7 +365,7 @@
     "since the point in time of selecting this option": "från och med att det här alternativet valdes",
     "since they joined": "från och med att de gick med",
     "since they were invited": "från och med att de bjöds in",
-    "Some of your messages have not been sent.": "Vissa av dina meddelanden har inte skickats.",
+    "%(count)s of your messages have not been sent.|other": "Vissa av dina meddelanden har inte skickats.",
     "Someone": "Någon",
     "Sorry, this homeserver is using a login which is not recognised ": "Den här hemsevern använder en login-metod som inte stöds ",
     "Start a chat": "Starta en chatt",

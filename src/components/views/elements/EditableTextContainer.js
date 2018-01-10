@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import Promise from 'bluebird';
 
@@ -126,21 +127,21 @@ export default class EditableTextContainer extends React.Component {
 
 EditableTextContainer.propTypes = {
     /* callback to retrieve the initial value. */
-    getInitialValue: React.PropTypes.func,
+    getInitialValue: PropTypes.func,
 
     /* initial value; used if getInitialValue is not given */
-    initialValue: React.PropTypes.string,
+    initialValue: PropTypes.string,
 
     /* placeholder text to use when the value is empty (and not being
      * edited) */
-    placeholder: React.PropTypes.string,
+    placeholder: PropTypes.string,
 
     /* callback to update the value. Called with a single argument: the new
      * value. */
-    onSubmit: React.PropTypes.func,
+    onSubmit: PropTypes.func,
 
     /* should the input submit when focus is lost? */
-    blurToSubmit: React.PropTypes.bool,
+    blurToSubmit: PropTypes.bool,
 };
 
 

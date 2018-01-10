@@ -16,6 +16,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import {emojifyText, containsEmoji} from '../../../HtmlUtils';
 
 export default function EmojiText(props) {
@@ -32,8 +33,8 @@ export default function EmojiText(props) {
 }
 
 EmojiText.propTypes = {
-    element: React.PropTypes.string,
-    children: React.PropTypes.string.isRequired,
+    element: PropTypes.string,
+    children: PropTypes.string.isRequired,
 };
 
 EmojiText.defaultProps = {

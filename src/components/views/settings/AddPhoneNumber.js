@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
 import sdk from '../../../index';
@@ -26,8 +27,8 @@ export default withMatrixClient(React.createClass({
     displayName: 'AddPhoneNumber',
 
     propTypes: {
-        matrixClient: React.PropTypes.object.isRequired,
-        onThreepidAdded: React.PropTypes.func,
+        matrixClient: PropTypes.object.isRequired,
+        onThreepidAdded: PropTypes.func,
     },
 
     getInitialState: function() {
