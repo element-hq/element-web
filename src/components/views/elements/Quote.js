@@ -18,27 +18,12 @@ import sdk from '../../../index';
 import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import {wantsDateSeparator} from '../../../DateUtils';
 import {MatrixEvent} from 'matrix-js-sdk';
 
 // For URLs of matrix.to links in the timeline which have been reformatted by
 // HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
 const REGEX_LOCAL_MATRIXTO = /^#\/room\/(([\#\!])[^\/]*)\/(\$[^\/]*)$/;
-
-const MILLIS_IN_DAY = 86400000;
-function wantsDateSeparator(parentEvent, event) {
-    const parentEventDate = parentEvent.getDate();
-    const eventDate = event.getDate();
-    if (!eventDate || !parentEventDate) {
-        return false;
-    }
-    // Return early for events that are > 24h apart
-    if (Math.abs(parentEvent.getTs() - eventDate.getTime()) > MILLIS_IN_DAY) {
-        return true;
-    }
-
-    // Compare weekdays
-    return parentEventDate.getDay() !== eventDate.getDay();
-}
 
 export default class Quote extends React.Component {
     static isMessageUrl(url) {
@@ -129,9 +114,11 @@ export default class Quote extends React.Component {
             if (this.state.show) {
                 const EventTile = sdk.getComponent('views.rooms.EventTile');
                 let dateSep = null;
-                if (wantsDateSeparator(this.props.parentEv, this.state.event)) {
+
+                const evDate = ev.getDate();
+                if (wantsDateSeparator(this.props.parentEv.getDate(), evDate)) {
                     const DateSeparator = sdk.getComponent('messages.DateSeparator');
-                    dateSep = <a href={this.props.url}><DateSeparator ts={this.state.event.getDate()} /></a>;
+                    dateSep = <a href={this.props.url}><DateSeparator ts={evDate} /></a>;
                 }
 
                 return <blockquote className="mx_Quote">

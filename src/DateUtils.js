@@ -100,3 +100,17 @@ export function formatTime(date, showTwelveHour=false) {
     }
     return pad(date.getHours()) + ':' + pad(date.getMinutes());
 }
+
+const MILLIS_IN_DAY = 86400000;
+export function wantsDateSeparator(prevEventDate, nextEventDate) {
+    if (!nextEventDate || !prevEventDate) {
+        return false;
+    }
+    // Return early for events that are > 24h apart
+    if (Math.abs(prevEventDate.getTime() - nextEventDate.getTime()) > MILLIS_IN_DAY) {
+        return true;
+    }
+
+    // Compare weekdays
+    return prevEventDate.getDay() !== nextEventDate.getDay();
+}
