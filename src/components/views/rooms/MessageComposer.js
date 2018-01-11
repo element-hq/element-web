@@ -289,8 +289,8 @@ export default class MessageComposer extends React.Component {
             let stickersContent = <p>Click here to add your first sitckerpack</p>;
             if (stickerpackWidget && stickerpackWidget.content && stickerpackWidget.content.url) {
                 stickersContent = <iframe src={stickerpackWidget.content.url} style={{
-                    borderRadius: '5px',
                     border: 'none',
+                    height: '160px',
                 }}></iframe>;
             }
 
@@ -309,12 +309,14 @@ export default class MessageComposer extends React.Component {
                         show={this.state.showStickers}
                         onHide={this.onHideStickersClick}
                         containerStyle={{
-                            zIndex: 100,
+                            zIndex: 1000,
                         }}
                         style={{
                             borderRadius: '5px',
                             width: 'initial',
                             padding: 0,
+                            overflow: 'hidden',
+                            height: '160px'
                         }}
                         children={stickersContent}
                     />
