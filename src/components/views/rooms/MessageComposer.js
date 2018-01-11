@@ -285,12 +285,15 @@ export default class MessageComposer extends React.Component {
 
         // Stickers
         if (this.state.showStickers) {
+            const popoverWidth = '300px';
+            const popoverHeight = '300px';
             const stickerpackWidget = Widgets.getStickerpackWidgets()[0];
             let stickersContent = <p>Click here to add your first sitckerpack</p>;
             if (stickerpackWidget && stickerpackWidget.content && stickerpackWidget.content.url) {
                 stickersContent = <div style={{
                     border: 'none',
-                    height: '160px',
+                    height: popoverHeight,
+                    width: popoverWidth,
                 }}>
                     <AppTile
                         id={stickerpackWidget.id}
@@ -327,10 +330,10 @@ export default class MessageComposer extends React.Component {
                         }}
                         style={{
                             borderRadius: '5px',
-                            width: 'initial',
                             padding: 0,
                             overflow: 'hidden',
-                            height: '160px',
+                            height: popoverHeight,
+                            width: popoverWidth,
                         }}
                         children={stickersContent}
                     />
