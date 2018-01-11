@@ -23,7 +23,7 @@ import { _t } from './languageHandler';
  * Mark all given devices as 'known'
  *
  * @param {MatrixClient} matrixClient A MatrixClient
- * @param {Object} map from userid -> deviceid -> deviceinfo
+ * @param {Object} devices Map from userid -> deviceid -> deviceinfo
  */
 export function markAllDevicesKnown(matrixClient, devices) {
     Object.keys(devices).forEach((userId) => {
