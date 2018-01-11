@@ -1,4 +1,4 @@
-/*
+/**
 Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,31 +36,8 @@ import dis from '../../../dispatcher';
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 
-export default React.createClass({
-    displayName: 'AppTile',
-
-    propTypes: {
-        id: React.PropTypes.string.isRequired,
-        url: React.PropTypes.string.isRequired,
-        name: React.PropTypes.string.isRequired,
-        room: React.PropTypes.object.isRequired,
-        type: React.PropTypes.string.isRequired,
-        // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
-        // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
-        fullWidth: React.PropTypes.bool,
-        // UserId of the current user
-        userId: React.PropTypes.string.isRequired,
-        // UserId of the entity that added / modified the widget
-        creatorUserId: React.PropTypes.string,
-        waitForIframeLoad: React.PropTypes.bool,
-    },
-
-    getDefaultProps() {
-        return {
-            url: "",
-            waitForIframeLoad: true,
-        };
-    },
+export default class AppTile extends React.Component {
+    static displayName ='AppTile';
 
     /**
      * Set initial component state when the App wUrl (widget URL) is being updated.
@@ -84,7 +61,7 @@ export default React.createClass({
             widgetPageTitle: newProps.widgetPageTitle,
             capabilities: [],
         };
-    },
+    }
 
 
     /**
@@ -94,7 +71,7 @@ export default React.createClass({
      */
     _hasCapability(capability) {
         return this.state.capabilities.some((c) => {return c === capability;});
-    },
+    }
 
     /**
      * Add widget instance specific parameters to pass in wUrl
@@ -122,11 +99,11 @@ export default React.createClass({
         u.query = params;
 
         return u.format();
-    },
+    }
 
     getInitialState() {
         return this._getNewState(this.props);
-    },
+    }
 
     /**
      * Returns true if specified url is a scalar URL, typically https://scalar.vector.im/api
@@ -150,7 +127,7 @@ export default React.createClass({
             }
         }
         return false;
-    },
+    }
 
     isMixedContent() {
         const parentContentProtocol = window.location.protocol;
@@ -162,18 +139,18 @@ export default React.createClass({
             return true;
         }
         return false;
-    },
+    }
 
     componentWillMount() {
         this.setScalarToken();
-    },
+    }
 
     componentDidMount() {
         // Legacy Jitsi widget messaging -- TODO replace this with standard widget
         // postMessaging API
         dis.register(this._onAction);
         window.addEventListener('message', this._onMessage, false);
-    },
+    }
 
     /**
      * Adds a scalar token to the widget URL, if required
@@ -225,14 +202,14 @@ export default React.createClass({
                 initialising: false,
             });
         });
-    },
+    }
 
     componentWillUnmount() {
         this.widgetMessaging.stopListening();
         this.widgetMessaging.removeEndpoint(this.props.id, this.props.url);
         dis.unregister(this._onAction);
         window.removeEventListener('message', this._onMessage);
-    },
+    }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.url !== this.props.url) {
@@ -247,7 +224,7 @@ export default React.createClass({
                 widgetPageTitle: nextProps.widgetPageTitle,
             });
         }
-    },
+    }
 
     // Legacy Jitsi widget messaging
     // TODO -- This should be replaced with the new widget postMessaging API
@@ -268,11 +245,11 @@ export default React.createClass({
                 .document.querySelector('iframe[id^="jitsiConferenceFrame"]');
             PlatformPeg.get().setupScreenSharingForIframe(iframe);
         }
-    },
+    }
 
     _canUserModify() {
         return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
-    },
+    }
 
     _onEditClick(e) {
         console.log("Edit widget ID ", this.props.id);
@@ -282,7 +259,7 @@ export default React.createClass({
         Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
             src: src,
         }, "mx_IntegrationsManager");
-    },
+    }
 
     _onSnapshotClick(e) {
         console.warn("Requesting widget snapshot");
@@ -294,7 +271,7 @@ export default React.createClass({
         }).catch((err) => {
             console.error("Failed to get screenshot", err);
         });
-    },
+    }
 
     /* If user has permission to modify widgets, delete the widget,
      * otherwise revoke access for the widget to load in the user's browser
@@ -329,7 +306,7 @@ export default React.createClass({
             console.log("Revoke widget permissions - %s", this.props.id);
             this._revokeWidgetPermission();
         }
-    },
+    }
 
     /**
      * Called when widget iframe has finished loading
@@ -347,7 +324,7 @@ export default React.createClass({
             console.log("Failed to get widget capabilities", this.widgetId, err);
         });
         this.setState({loading: false});
-    },
+    }
 
     _onAction(payload) {
         if (payload.widgetId === this.props.id) {
@@ -361,7 +338,7 @@ export default React.createClass({
                 break;
             }
         }
-    },
+    }
 
     /**
      * Set remote content title on AppTile
@@ -375,7 +352,7 @@ export default React.createClass({
         }, (err) =>{
             console.error("Failed to get page title", err);
         });
-    },
+    }
 
     // Widget labels to render, depending upon user permissions
     // These strings are translated at the point that they are inserted in to the DOM, in the render method
@@ -384,20 +361,20 @@ export default React.createClass({
             return _td('Delete widget');
         }
         return _td('Revoke widget access');
-    },
+    }
 
     /* TODO -- Store permission in account data so that it is persisted across multiple devices */
     _grantWidgetPermission() {
         console.warn('Granting permission to load widget - ', this.state.widgetUrl);
         localStorage.setItem(this.state.widgetPermissionId, true);
         this.setState({hasPermissionToLoad: true});
-    },
+    }
 
     _revokeWidgetPermission() {
         console.warn('Revoking permission to load widget - ', this.state.widgetUrl);
         localStorage.removeItem(this.state.widgetPermissionId);
         this.setState({hasPermissionToLoad: false});
-    },
+    }
 
     formatAppTileName() {
         let appTileName = "No name";
@@ -405,7 +382,7 @@ export default React.createClass({
             appTileName = this.props.name.trim();
         }
         return appTileName;
-    },
+    }
 
     onClickMenuBar(ev) {
         ev.preventDefault();
@@ -420,7 +397,7 @@ export default React.createClass({
             action: 'appsDrawer',
             show: !this.props.show,
         });
-    },
+    }
 
     _getSafeUrl() {
         const parsedWidgetUrl = url.parse(this.state.widgetUrl);
@@ -429,7 +406,7 @@ export default React.createClass({
             safeWidgetUrl = url.format(parsedWidgetUrl);
         }
         return safeWidgetUrl;
-    },
+    }
 
     render() {
         let appTileBody;
@@ -556,5 +533,26 @@ export default React.createClass({
                 { appTileBody }
             </div>
         );
-    },
-});
+    }
+}
+
+AppTile.propTypes = {
+    id: React.PropTypes.string.isRequired,
+    url: React.PropTypes.string.isRequired,
+    name: React.PropTypes.string.isRequired,
+    room: React.PropTypes.object.isRequired,
+    type: React.PropTypes.string.isRequired,
+    // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
+    // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
+    fullWidth: React.PropTypes.bool,
+    // UserId of the current user
+    userId: React.PropTypes.string.isRequired,
+    // UserId of the entity that added / modified the widget
+    creatorUserId: React.PropTypes.string,
+    waitForIframeLoad: React.PropTypes.bool,
+};
+
+AppTile.defaultProps = {
+    url: "",
+    waitForIframeLoad: true,
+};
