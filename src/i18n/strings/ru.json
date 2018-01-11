@@ -962,5 +962,9 @@
     "Send an encrypted reply…": "Отправить зашифрованный ответ…",
     "Send a reply (unencrypted)…": "Отправить ответ (незашифрованный)…",
     "Send an encrypted message…": "Отправить зашифрованное сообщение…",
-    "Send a message (unencrypted)…": "Отправить сообщение (незашифрованное)…"
+    "Send a message (unencrypted)…": "Отправить сообщение (незашифрованное)…",
+    "Replying": "Отвечая",
+    "Minimize apps": "Свернуть приложения",
+    "Quote": "Цитата",
+    "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>mark devices known and send</sendAnywayText> or <cancelText>cancel all</cancelText>.": "<showDevicesText>Показать устройства</showDevicesText>, <sendAnywayText>отметить известные устройства и отправить</sendAnywayText> или <cancelText>отменить все</cancelText>."
 }
