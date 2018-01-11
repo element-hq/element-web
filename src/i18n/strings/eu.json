@@ -957,5 +957,16 @@
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Ezin izango duzu hau aldatu zure burua mailaz jaisten ari zarelako, zu bazara gelan baimenak dituen azken erabiltzailea ezin izango dira baimenak berreskuratu.",
     "%(count)s of your messages have not been sent.|one": "Zure mezua ez da bidali.",
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|other": "<resendText>Birbidali guztiak</resendText> edo <cancelText>baztertu guztiak</cancelText> orain. Mezuak banaka birbidali edo baztertu ditzakezu ere.",
-    "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Birbidali mezua</resendText> edo <cancelText>baztertu mezua</cancelText> orain."
+    "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Birbidali mezua</resendText> edo <cancelText>baztertu mezua</cancelText> orain.",
+    "Message Replies": "Mezuei erantzunak",
+    "Send an encrypted reply…": "Bidali zifratutako erantzun bat…",
+    "Send a reply (unencrypted)…": "Bidali erantzun bat (zifratu gabea)…",
+    "Send an encrypted message…": "Bidali zifratutako mezu bat…",
+    "Send a message (unencrypted)…": "Bidali mezu bat (zifratu gabea)…",
+    "Replying": "Erantzuten",
+    "Minimize apps": "Minimizatu aplikazioak",
+    "Quote": "Aipua",
+    "The platform you're on": "Zauden plataforma",
+    "The version of Riot.im": "Riot.im bertsioa",
+    "Your language of choice": "Zure aukerako hizkuntza"
 }
