@@ -780,7 +780,7 @@
     "You have no visible notifications": "You have no visible notifications",
     "Scroll to bottom of page": "Scroll to bottom of page",
     "Message not sent due to unknown devices being present": "Message not sent due to unknown devices being present",
-    "<showDevicesText>Show devices</showDevicesText> or <cancelText>cancel all</cancelText>.": "<showDevicesText>Show devices</showDevicesText> or <cancelText>cancel all</cancelText>.",
+    "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>mark devices known and send</sendAnywayText> or <cancelText>cancel all</cancelText>.": "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>mark devices known and send</sendAnywayText> or <cancelText>cancel all</cancelText>.",
     "%(count)s of your messages have not been sent.|other": "Some of your messages have not been sent.",
     "%(count)s of your messages have not been sent.|one": "Your message was not sent.",
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|other": "<resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.",
