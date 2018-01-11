@@ -979,5 +979,6 @@
     "Which officially provided instance you are using, if any": "Milyen hivatalosan nyújtott verziót használsz",
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Használod-e a Richtext módot a szerkesztőben vagy nem",
     "Your homeserver's URL": "Az egyedi szerver URL-t",
-    "Your identity server's URL": "Az azonosítási szerver URL-t"
+    "Your identity server's URL": "Az azonosítási szerver URL-t",
+    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(fullYear)s. %(monthName)s %(day)s, %(weekDayName)s"
 }
