@@ -979,5 +979,6 @@
     "Which officially provided instance you are using, if any": "Quelle instance officielle vous utilisez, si c'est le cas",
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Si vous utilisez le mode de texte enrichi de l'éditeur de texte enrichi",
     "Your homeserver's URL": "L'URL de votre serveur d'accueil",
-    "Your identity server's URL": "L'URL de votre serveur d'identité"
+    "Your identity server's URL": "L'URL de votre serveur d'identité",
+    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s %(day)s %(monthName)s %(fullYear)s"
 }
