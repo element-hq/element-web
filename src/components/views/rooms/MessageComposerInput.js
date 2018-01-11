@@ -273,6 +273,7 @@ export default class MessageComposerInput extends React.Component {
         let contentState = this.state.editorState.getCurrentContent();
 
         switch (payload.action) {
+            case 'quote_event':
             case 'focus_composer':
                 editor.focus();
                 break;
