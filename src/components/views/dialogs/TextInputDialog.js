@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from '../../../index';
-import { _t } from '../../../languageHandler';
 
 export default React.createClass({
     displayName: 'TextInputDialog',
@@ -59,6 +58,7 @@ export default React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
             <BaseDialog className="mx_TextInputDialog" onFinished={this.props.onFinished}
                 onEnterPressed={this.onOk}
@@ -72,14 +72,9 @@ export default React.createClass({
                         <input id="textinput" ref="textinput" className="mx_TextInputDialog_input" defaultValue={this.props.value} autoFocus={this.props.focus} size="64" />
                     </div>
                 </div>
-                <div className="mx_Dialog_buttons">
-                    <button onClick={this.onCancel}>
-                        { _t("Cancel") }
-                    </button>
-                    <button className="mx_Dialog_primary" onClick={this.onOk}>
-                        { this.props.button }
-                    </button>
-                </div>
+                <DialogButtons primaryButton={this.props.button}
+                    onPrimaryButtonClick={this.onOk}
+                    onCancel={this.onCancel} />
             </BaseDialog>
         );
     },

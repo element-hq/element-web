@@ -42,6 +42,7 @@ export default React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
             <BaseDialog className="mx_CreateRoomDialog" onFinished={this.props.onFinished}
                 onEnterPressed={this.onOk}
@@ -68,14 +69,9 @@ export default React.createClass({
                         </div>
                     </details>
                 </div>
-                <div className="mx_Dialog_buttons">
-                    <button onClick={this.onCancel}>
-                        { _t('Cancel') }
-                    </button>
-                    <button className="mx_Dialog_primary" onClick={this.onOk}>
-                        { _t('Create Room') }
-                    </button>
-                </div>
+                <DialogButtons primaryButton={_t('Create Room')}
+                    onPrimaryButtonClick={this.onOk}
+                    onCancel={this.onCancel} />
             </BaseDialog>
         );
     },
