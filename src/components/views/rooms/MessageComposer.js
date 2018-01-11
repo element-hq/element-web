@@ -24,6 +24,7 @@ import dis from '../../../dispatcher';
 import Autocomplete from './Autocomplete';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import Popover from 'react-simple-popover';
+import Widgets from '../../../utils/widgets';
 
 export default class MessageComposer extends React.Component {
     constructor(props, context) {
@@ -283,10 +284,11 @@ export default class MessageComposer extends React.Component {
 
         // Stickers
         if (this.state.showStickers) {
-            let stickerpackWidget = '';
+            const stickerpackWidget = Widgets.getStickerpackWidgets()[0];
+            console.warn('Stickerpack widgets', stickerpackWidget);
             let stickersContent = <p>Click here to add your first sitckerpack</p>;
-            if (true) {
-                stickersContent = <iframe src={stickerpackWidget} style={{
+            if (stickerpackWidget && stickerpackWidget.content && stickerpackWidget.content.url) {
+                stickersContent = <iframe src={stickerpackWidget.content.url} style={{
                     borderRadius: '5px',
                     border: 'none',
                 }}></iframe>;
