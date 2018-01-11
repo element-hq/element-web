@@ -812,6 +812,12 @@ module.exports = React.createClass({
             <h3>{ _t('Analytics') }</h3>
             <div className="mx_UserSettings_section">
                 { _t('Riot collects anonymous analytics to allow us to improve the application.') }
+                <br />
+                { _t('Privacy is important to us, so we don\'t collect any personal'
+                    + ' or identifiable data for our analytics.') }
+                <div className="mx_UserSettings_advanced_spoiler" onClick={Analytics.showDetailsModal}>
+                    { _t('Learn more about how we use analytics.') }
+                </div>
                 { ANALYTICS_SETTINGS.map( this._renderDeviceSetting ) }
             </div>
         </div>;
