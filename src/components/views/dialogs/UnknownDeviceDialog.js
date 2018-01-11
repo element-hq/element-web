@@ -180,18 +180,11 @@ export default React.createClass({
                 }
             });
         });
-        let sendButton;
-        if (haveUnknownDevices) {
-            sendButton = <button onClick={this._onSendAnywayClicked}>
-                { this.props.sendAnywayLabel }
-            </button>;
-        } else {
-            sendButton = <button onClick={this._onSendClicked}>
-                { this.props.sendLabel }
-            </button>;
-        }
+        const sendButtonOnClick = haveUnknownDevices ? this._onSendAnywayClicked : this._onSendClicked;
+        const sendButtonLabel = haveUnknownDevices ? this.props.sendAnywayLabel : this.props.sendAnywayLabel;
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
             <BaseDialog className='mx_UnknownDeviceDialog'
                 onFinished={this.props.onFinished}
@@ -206,14 +199,9 @@ export default React.createClass({
 
                     <UnknownDeviceList devices={this.props.devices} />
                 </GeminiScrollbar>
-                <div className="mx_Dialog_buttons">
-                    {sendButton}
-                    <button className="mx_Dialog_primary" autoFocus={true}
-                        onClick={this._onDismissClicked}
-                    >
-                        {_t("Dismiss")}
-                    </button>
-                </div>
+                <DialogButtons primaryButton={sendButtonLabel}
+                    onPrimaryButtonClick={sendButtonOnClick}
+                    onCancel={this._onDismissClicked} />
             </BaseDialog>
         );
         // XXX: do we want to give the user the option to enable blacklistUnverifiedDevices for this room (or globally) at this point?

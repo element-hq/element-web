@@ -159,10 +159,10 @@ export default React.createClass({
                         { createErrorNode }
                     </div>
                     <div className="mx_Dialog_buttons">
+                        <input type="submit" value={_t('Create')} className="mx_Dialog_primary" />
                         <button onClick={this._onCancel}>
                             { _t("Cancel") }
                         </button>
-                        <input type="submit" value={_t('Create')} className="mx_Dialog_primary" />
                     </div>
                 </form>
             </BaseDialog>

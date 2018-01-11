@@ -41,6 +41,7 @@ export default React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         let bugreport;
 
         if (SdkConfig.get().bug_report_endpoint_url) {
@@ -69,11 +70,9 @@ export default React.createClass({
 
                     { bugreport }
                 </div>
-                <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this._continueClicked}>
-                        { _t("Continue anyway") }
-                    </button>
-                </div>
+                <DialogButtons primaryButton={_t("Continue anyway")}
+                    onPrimaryButtonClick={this._continueClicked}
+                    onCancel={this.props.onFinished} />
             </BaseDialog>
         );
     },

@@ -76,7 +76,7 @@ export default React.createClass({
                 >
                     <TintableSvg src="img/icons-close-button.svg" width="35" height="35" />
                 </AccessibleButton>
-                <div className='mx_Dialog_title'>
+                <div className={'mx_Dialog_title ' + this.props.titleClass}>
                     { this.props.title }
                 </div>
                 { this.props.children }
