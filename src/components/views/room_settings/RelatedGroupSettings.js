@@ -58,7 +58,7 @@ module.exports = React.createClass({
         const cli = this.context.matrixClient;
         const room = cli.getRoom(this.props.roomId);
         if (!room.currentState.maySendStateEvent('m.room.related_groups', cli.getUserId())) return false;
-        return isEqual(this.getInitialGroupList(), this.state.newGroupsList);
+        return !isEqual(this.getInitialGroupList(), this.state.newGroupsList);
     },
 
     saveSettings: function() {
