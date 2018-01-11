@@ -41,7 +41,8 @@ export default class AppTile extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = this._getNewState(this.props);
+        console.warn('AppTile constructor', props);
+        this.state = this._getNewState(props);
 
         this._onAction = this._onAction.bind(this);
         this._onMessage = this._onMessage.bind(this);
@@ -158,8 +159,10 @@ export default class AppTile extends React.Component {
     componentDidMount() {
         // Legacy Jitsi widget messaging -- TODO replace this with standard widget
         // postMessaging API
-        dis.register(this._onAction);
         window.addEventListener('message', this._onMessage, false);
+
+        // General event handler
+        dis.register(this._onAction);
     }
 
     /**
@@ -322,7 +325,7 @@ export default class AppTile extends React.Component {
      * Called when widget iframe has finished loading
      */
     _onLoaded() {
-        // console.warn("App frame loaded", this.props.id);
+        console.warn("App frame loaded", this.props.id);
         this.widgetMessaging = new WidgetMessaging(this.props.id, this.refs.appFrame.contentWindow);
         this.widgetMessaging.startListening();
         this.widgetMessaging.addEndpoint(this.props.id, this.props.url);
@@ -494,6 +497,7 @@ export default class AppTile extends React.Component {
 
         return (
             <div className={this.props.fullWidth ? "mx_AppTileFullWidth" : "mx_AppTile"} id={this.props.id}>
+                { this.props.showMenubar &&
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
                     <span className="mx_AppTileMenuBarTitle">
                         <TintableSvgButton
@@ -539,7 +543,7 @@ export default class AppTile extends React.Component {
                             height="10"
                         />
                     </span>
-                </div>
+                </div> }
                 { appTileBody }
             </div>
         );
@@ -560,9 +564,13 @@ AppTile.propTypes = {
     // UserId of the entity that added / modified the widget
     creatorUserId: React.PropTypes.string,
     waitForIframeLoad: React.PropTypes.bool,
+    showMenubar: React.PropTypes.bool,
+    // Should the AppTile render itself
+    show: React.PropTypes.bool,
 };
 
 AppTile.defaultProps = {
     url: "",
     waitForIframeLoad: true,
+    showMenubar: true,
 };

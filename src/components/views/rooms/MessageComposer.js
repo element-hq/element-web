@@ -25,6 +25,7 @@ import Autocomplete from './Autocomplete';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import Popover from 'react-simple-popover';
 import Widgets from '../../../utils/widgets';
+import AppTile from '../elements/AppTile';
 
 export default class MessageComposer extends React.Component {
     constructor(props, context) {
@@ -285,13 +286,26 @@ export default class MessageComposer extends React.Component {
         // Stickers
         if (this.state.showStickers) {
             const stickerpackWidget = Widgets.getStickerpackWidgets()[0];
-            console.warn('Stickerpack widgets', stickerpackWidget);
             let stickersContent = <p>Click here to add your first sitckerpack</p>;
             if (stickerpackWidget && stickerpackWidget.content && stickerpackWidget.content.url) {
-                stickersContent = <iframe src={stickerpackWidget.content.url} style={{
+                stickersContent = <div style={{
                     border: 'none',
                     height: '160px',
-                }}></iframe>;
+                }}>
+                    <AppTile
+                        id={stickerpackWidget.id}
+                        url={stickerpackWidget.content.url}
+                        name={stickerpackWidget.content.name}
+                        room={this.props.room}
+                        type={stickerpackWidget.content.type}
+                        fullWidth={true}
+                        userId={stickerpackWidget.sender || MatrixClientPeg.get().credentials.userId}
+                        creatorUserId={MatrixClientPeg.get().credentials.userId}
+                        waitForIframeLoad={true}
+                        show={true}
+                        showMenubar={false}
+                    />
+                </div>;
             }
 
             hideStickersButton =
@@ -316,7 +330,7 @@ export default class MessageComposer extends React.Component {
                             width: 'initial',
                             padding: 0,
                             overflow: 'hidden',
-                            height: '160px'
+                            height: '160px',
                         }}
                         children={stickersContent}
                     />
