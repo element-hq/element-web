@@ -39,6 +39,19 @@ const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 export default class AppTile extends React.Component {
     static displayName ='AppTile';
 
+    constructor(props) {
+        super(props);
+        this.state = this._getNewState(this.props);
+
+        this._onAction = this._onAction.bind(this);
+        this._onMessage = this._onMessage.bind(this);
+        this._onLoaded = this._onLoaded.bind(this);
+        this._onEditClick = this._onEditClick.bind(this);
+        this._onDeleteClick = this._onDeleteClick.bind(this);
+        this._onSnapshotClick = this._onSnapshotClick.bind(this);
+        this.onClickMenuBar = this.onClickMenuBar.bind(this);
+    }
+
     /**
      * Set initial component state when the App wUrl (widget URL) is being updated.
      * Component props *must* be passed (rather than relying on this.props).
@@ -101,9 +114,6 @@ export default class AppTile extends React.Component {
         return u.format();
     }
 
-    getInitialState() {
-        return this._getNewState(this.props);
-    }
 
     /**
      * Returns true if specified url is a scalar URL, typically https://scalar.vector.im/api
