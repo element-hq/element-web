@@ -19,12 +19,11 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import shouldHideEvent from '../../shouldHideEvent';
+import {wantsDateSeparator} from '../../DateUtils';
 import dis from "../../dispatcher";
 import sdk from '../../index';
 
 import MatrixClientPeg from '../../MatrixClientPeg';
-
-const MILLIS_IN_DAY = 86400000;
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
@@ -523,17 +522,7 @@ module.exports = React.createClass({
             // here.
             return !this.props.suppressFirstDateSeparator;
         }
-        const prevEventDate = prevEvent.getDate();
-        if (!nextEventDate || !prevEventDate) {
-            return false;
-        }
-        // Return early for events that are > 24h apart
-        if (Math.abs(prevEvent.getTs() - nextEventDate.getTime()) > MILLIS_IN_DAY) {
-            return true;
-        }
-
-        // Compare weekdays
-        return prevEventDate.getDay() !== nextEventDate.getDay();
+        return wantsDateSeparator(prevEvent.getDate(), nextEventDate);
     },
 
     // get a list of read receipts that should be shown next to this event
