@@ -966,5 +966,18 @@
     "Replying": "Répond",
     "Minimize apps": "Minimiser les applications",
     "Quote": "Citer",
-    "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>mark devices known and send</sendAnywayText> or <cancelText>cancel all</cancelText>.": "<showDevicesText>Afficher les appareils</showDevicesText>, <sendAnywayText>marquer les appareils comme connus et envoyer</sendAnywayText> ou <cancelText>tout annuler</cancelText>."
+    "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>mark devices known and send</sendAnywayText> or <cancelText>cancel all</cancelText>.": "<showDevicesText>Afficher les appareils</showDevicesText>, <sendAnywayText>marquer les appareils comme connus et envoyer</sendAnywayText> ou <cancelText>tout annuler</cancelText>.",
+    "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Le respect de votre vie privée est important pour nous, donc nous ne collectons aucune donnée personnelle ou permettant de vous identifier pour nos statistiques.",
+    "Learn more about how we use analytics.": "En savoir plus sur notre utilisation des statistiques.",
+    "The information being sent to us to help make Riot.im better includes:": "Les informations qui nous sont envoyées pour nous aider à améliorer Riot.im comprennent :",
+    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Nous enregistrons aussi chaque page que vous utilisez dans l'application (en ce moment <CurrentPageHash>), votre User Agent (<CurrentUserAgent>) et la résolution de votre appareil (<CurrentDeviceResolution>).",
+    "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Si la page contient des informations permettant de vous identifier, comme un salon, un identifiant d'utilisateur ou de groupe, ces données sont enlevées avant qu'elle ne soit envoyée au serveur.",
+    "The platform you're on": "La plateforme que vous utilisez",
+    "The version of Riot.im": "La version de Riot.im",
+    "Whether or not you're logged in (we don't record your user name)": "Si vous êtes connecté ou non (nous n'enregistrons pas votre nom d'utilisateur)",
+    "Your language of choice": "La langue que vous avez choisie",
+    "Which officially provided instance you are using, if any": "Quelle instance officielle vous utilisez, si c'est le cas",
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": "Si vous utilisez le mode de texte enrichi de l'éditeur de texte enrichi",
+    "Your homeserver's URL": "L'URL de votre serveur d'accueil",
+    "Your identity server's URL": "L'URL de votre serveur d'identité"
 }
