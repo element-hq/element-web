@@ -235,6 +235,7 @@ const SdkConfig = require('./SdkConfig');
 const MatrixClientPeg = require("./MatrixClientPeg");
 const MatrixEvent = require("matrix-js-sdk").MatrixEvent;
 const dis = require("./dispatcher");
+const Widgets = require('./utils/widgets');
 import { _t } from './languageHandler';
 
 function sendResponse(event, res) {
@@ -405,10 +406,8 @@ function getWidgets(event, roomId) {
     }
 
     // Add user widgets (not linked to a specific room)
-    const userWidgets = client.getAccountData('m.widgets').getContent() || {};
-    const userWidgetArray = Object.keys(userWidgets).map((key) => userWidgets[key]);
-    widgetStateEvents = widgetStateEvents.concat(userWidgetArray);
-    console.warn('Sending user widgets', userWidgetArray);
+    const userWidgets = Widgets.getUserWidgets();
+    widgetStateEvents = widgetStateEvents.concat(userWidgets);
 
     sendResponse(event, widgetStateEvents);
 }
