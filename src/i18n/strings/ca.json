@@ -12,7 +12,6 @@
     "Hide removed messages": "Amaga els missatges esborrats",
     "Always show message timestamps": "Mostra sempre la marca de temps del missatge",
     "Alias (optional)": "Àlies (opcional)",
-    "An email has been sent to": "S'ha enviat un correu electrònic a",
     "Cancel": "Cancel·la",
     "Close": "Tanca",
     "Create new room": "Crea una nova sala",
@@ -31,6 +30,5 @@
     "Remove": "Elimina",
     "unknown error code": "codi d'error desconegut",
     "OK": "D'acord",
-    "a room": "una sala",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains": "S'ha enviat un missatge de text a +%(msisdn)s. Entreu si us plau el codi de verificació que conté"
 }
