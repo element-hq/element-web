@@ -957,5 +957,14 @@
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Vous ne pourrez pas annuler cette modification car vous vous destituez. Si vous êtes le dernier utilisateur privilégié de ce salon, il sera impossible de récupérer les privilèges.",
     "%(count)s of your messages have not been sent.|one": "Votre message n'a pas été envoyé.",
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|other": "<resendText>Tout renvoyer</resendText> ou <cancelText>tout annuler</cancelText> maintenant. Vous pouvez aussi choisir des messages individuels à renvoyer ou annuler.",
-    "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Renvoyer le message</resendText> ou <cancelText>annuler le message</cancelText> maintenant."
+    "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>Renvoyer le message</resendText> ou <cancelText>annuler le message</cancelText> maintenant.",
+    "Message Replies": "Réponses",
+    "Send an encrypted reply…": "Envoyer une réponse chiffrée…",
+    "Send a reply (unencrypted)…": "Envoyer une réponse (non chiffrée)…",
+    "Send an encrypted message…": "Envoyer un message chiffré…",
+    "Send a message (unencrypted)…": "Envoyer un message (non chiffré)…",
+    "Replying": "Répond",
+    "Minimize apps": "Minimiser les applications",
+    "Quote": "Citer",
+    "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>mark devices known and send</sendAnywayText> or <cancelText>cancel all</cancelText>.": "<showDevicesText>Afficher les appareils</showDevicesText>, <sendAnywayText>marquer les appareils comme connus et envoyer</sendAnywayText> ou <cancelText>tout annuler</cancelText>."
 }
