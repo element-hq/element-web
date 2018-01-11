@@ -966,5 +966,16 @@
     "Replying": "Отвечая",
     "Minimize apps": "Свернуть приложения",
     "Quote": "Цитата",
-    "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>mark devices known and send</sendAnywayText> or <cancelText>cancel all</cancelText>.": "<showDevicesText>Показать устройства</showDevicesText>, <sendAnywayText>отметить известные устройства и отправить</sendAnywayText> или <cancelText>отменить все</cancelText>."
+    "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>mark devices known and send</sendAnywayText> or <cancelText>cancel all</cancelText>.": "<showDevicesText>Показать устройства</showDevicesText>, <sendAnywayText>отметить известные устройства и отправить</sendAnywayText> или <cancelText>отменить все</cancelText>.",
+    "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Конфиденциальность важна для нас, поэтому мы не собираем никаких личных или идентифицируемых данных для нашей аналитики.",
+    "Learn more about how we use analytics.": "Подробнее о том, как мы используем аналитику.",
+    "The information being sent to us to help make Riot.im better includes:": "Информация направляемая нам, чтобы помочь сделать Riot.im лучше включает в себя:",
+    "We also record each page you use in the app (currently <CurrentPageHash>), your User Agent (<CurrentUserAgent>) and your device resolution (<CurrentDeviceResolution>).": "Мы также записываем каждую страницу, которую вы используете в приложении (в данный момент <CurrentPageHash>), ваш пользовательский агент (<CurrentUserAgent>) и разрешение экрана вашего устройства (<CurrentDeviceResolution>).",
+    "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Если на этой странице содержатся идентифицируемые сведения, например номер, идентификатор пользователя или группы, эти данные удаляются перед отправкой на сервер.",
+    "The platform you're on": "Используемая платформа",
+    "The version of Riot.im": "Версия Riot.im",
+    "Whether or not you're logged in (we don't record your user name)": "Независимо от того, вошли вы или нет (мы не записываем ваше имя пользователя)",
+    "Your language of choice": "Выбранный вами язык",
+    "Your homeserver's URL": "URL-адрес домашнего сервера",
+    "Your identity server's URL": "URL-адрес вашего идентификационного сервера"
 }
