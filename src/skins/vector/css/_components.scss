@@ -39,6 +39,7 @@
 @import "./matrix-react-sdk/views/elements/_RichText.scss";
 @import "./matrix-react-sdk/views/elements/_RoleButton.scss";
 @import "./matrix-react-sdk/views/elements/_ToolTipButton.scss";
+@import "./matrix-react-sdk/views/elements/_Quote.scss";
 @import "./matrix-react-sdk/views/groups/_GroupPublicityToggle.scss";
 @import "./matrix-react-sdk/views/groups/_GroupRoomList.scss";
 @import "./matrix-react-sdk/views/groups/_GroupUserSettings.scss";
@@ -70,6 +71,7 @@
 @import "./matrix-react-sdk/views/rooms/_RoomTile.scss";
 @import "./matrix-react-sdk/views/rooms/_SearchableEntityList.scss";
 @import "./matrix-react-sdk/views/rooms/_TopUnreadMessagesBar.scss";
+@import "./matrix-react-sdk/views/rooms/_QuotePreview.scss";
 @import "./matrix-react-sdk/views/settings/_DevicesPanel.scss";
 @import "./matrix-react-sdk/views/settings/_IntegrationsManager.scss";
 @import "./matrix-react-sdk/views/voip/_CallView.scss";
