@@ -62,7 +62,6 @@ export default React.createClass({
             <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished}
                 onEnterPressed={this.onOk}
                 title={this.props.title}
-                focus={this.props.focus}
             >
                 <div className="mx_Dialog_content">
                     { this.props.description }
@@ -70,6 +69,7 @@ export default React.createClass({
                 <DialogButtons primaryButton={this.props.button || _t('OK')}
                     onPrimaryButtonClick={this.onOk}
                     primaryButtonClass={primaryButtonClass}
+                    focus={this.props.focus}
                     onCancel={this.onCancel}
                 >
                     { this.props.extraButtons }
