@@ -240,3 +240,18 @@ limitations under the License.
         height: 50px;
     }
 }
+
+.mx_PopoverOuterContainer {
+    border-radius: 5px;
+    padding: 2px;
+}
+
+.mx_PopoverOuterContainer .mx_AppTileFullWidth {
+    margin-top: 0 !important;
+    border: none;
+}
+
+.mx_PopoverOuterContainer .mx_StickersContent {
+    border-radius: 5px;
+    overflow: hidden;
+}
