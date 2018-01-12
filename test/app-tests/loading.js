@@ -16,6 +16,9 @@ limitations under the License.
 
 /* loading.js: test the myriad paths we have for loading the application */
 
+import PlatformPeg from 'matrix-react-sdk/lib/PlatformPeg';
+import Platform from '../../src/vector/platform';
+
 import 'skin-sdk';
 
 import React from 'react';
@@ -136,6 +139,8 @@ describe('loading:', function () {
             default_hs_url: DEFAULT_HS_URL,
             default_is_url: DEFAULT_IS_URL,
         }, opts.config || {});
+
+        PlatformPeg.set(new Platform());
 
         var params = parseQs(windowLocation);
         matrixChat = ReactDOM.render(
