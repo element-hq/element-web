@@ -66,7 +66,7 @@ export default React.createClass({
             >
                 <div className="mx_Dialog_content">
                     { this.props.description }
-                </div>.
+                </div>
                 <DialogButtons primaryButton={this.props.button || _t('OK')}
                     onPrimaryButtonClick={this.onOk}
                     primaryButtonClass={primaryButtonClass}
