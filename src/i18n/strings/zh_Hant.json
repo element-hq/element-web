@@ -801,7 +801,7 @@
     "Invalid community ID": "無效的社群 ID",
     "'%(groupId)s' is not a valid community ID": "「%(groupId)s」不是有效的社群 ID",
     "Flair": "特色",
-    "Showing flair for these communities:": "為這些社群顯示特色",
+    "Showing flair for these communities:": "為這些社群顯示特色：",
     "This room is not showing flair for any communities": "此聊天室並未對任何社群顯示特色",
     "New community ID (e.g. +foo:%(localDomain)s)": "新社群 ID（例子：+foo:%(localDomain)s）",
     "URL previews are enabled by default for participants in this room.": "此聊天室已預設對參與者啟用 URL 預覽。",
