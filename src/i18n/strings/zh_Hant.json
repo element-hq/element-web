@@ -978,5 +978,6 @@
     "Which officially provided instance you are using, if any": "您正在使用的任何官方實體，如果有的話",
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "您是否正在使用豐富文字編輯器的豐富文字模式",
     "Your homeserver's URL": "您的家伺服器 URL",
-    "Your identity server's URL": "您的驗證伺服器 URL"
+    "Your identity server's URL": "您的驗證伺服器 URL",
+    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s"
 }
