@@ -19,7 +19,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {formatFullDate, formatTime} from 'matrix-react-sdk/lib/DateUtils';
 
-export class MessageTimestamp extends React.Component {
+export default class MessageTimestamp extends React.Component {
     static propTypes = {
         ts: PropTypes.number.isRequired,
         showTwelveHour: PropTypes.bool,

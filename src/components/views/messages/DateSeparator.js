@@ -32,7 +32,7 @@ function getdaysArray() {
     ];
 }
 
-export class DateSeparator extends React.Component {
+export default class DateSeparator extends React.Component {
     static propTypes = {
         ts: PropTypes.number.isRequired,
     };
