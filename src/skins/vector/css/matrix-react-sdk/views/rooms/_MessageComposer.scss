@@ -244,6 +244,8 @@ limitations under the License.
 .mx_PopoverOuterContainer {
     border-radius: 5px;
     padding: 2px;
+    background-color: white;
+    overflow: 'hidden';
 }
 
 .mx_PopoverOuterContainer .mx_AppTileFullWidth {
@@ -254,4 +256,9 @@ limitations under the License.
 .mx_PopoverOuterContainer .mx_StickersContent {
     border-radius: 5px;
     overflow: hidden;
+}
+
+// Set z-index for popovers
+.another-react-popover-container {
+    z-index: 1000;
 }
