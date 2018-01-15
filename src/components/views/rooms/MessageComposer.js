@@ -350,6 +350,11 @@ export default class MessageComposer extends React.Component {
                 </div>;
         }
 
+        // Fall back to default highlight color if we can't compute one from the DOM
+        const highlightColor = document.getElementById('mx_theme_accentColor') ?
+          window.getComputedStyle(document.getElementById('mx_theme_accentColor')).color :
+          '#76CFA6';
+
         const stickers = <Popover
             isOpen={this.state.showStickers}
             position={'top'}
@@ -360,13 +365,13 @@ export default class MessageComposer extends React.Component {
                     position={position}
                     targetRect={targetRect}
                     popoverRect={popoverRect}
-                    arrowColor={'#76CFA6'}
+                    arrowColor={highlightColor}
                     arrowSize={20}
                 >
                     <div
                         className='mx_PopoverOuterContainer'
                         style={{
-                            border: '1px solid #76CFA6',
+                            border: `1px solid ${highlightColor}`,
                         }}
                     >
                         { this.state.stickersContent }
