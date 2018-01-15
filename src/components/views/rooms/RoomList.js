@@ -324,12 +324,7 @@ module.exports = React.createClass({
             // Show all rooms
             this._visibleRooms = MatrixClientPeg.get().getRooms();
         }
-
-        this.setState({
-            selectedTags,
-        }, () => {
-            this.refreshRoomList();
-        });
+        this._delayedRefreshRoomList();
     },
 
     refreshRoomList: function() {
@@ -345,6 +340,9 @@ module.exports = React.createClass({
         this.setState({
             lists: this.getRoomLists(),
             totalRoomCount: totalRooms,
+            // Do this here so as to not render every time the selected tags
+            // themselves change.
+            selectedTags: TagOrderStore.getSelectedTags(),
         });
 
         // this._lastRefreshRoomListTs = Date.now();
