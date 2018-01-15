@@ -977,5 +977,8 @@
     "Whether or not you're logged in (we don't record your user name)": "Независимо от того, вошли вы или нет (мы не записываем ваше имя пользователя)",
     "Your language of choice": "Выбранный вами язык",
     "Your homeserver's URL": "URL-адрес домашнего сервера",
-    "Your identity server's URL": "URL-адрес вашего идентификационного сервера"
+    "Your identity server's URL": "URL-адрес вашего идентификационного сервера",
+    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
+    "Which officially provided instance you are using, if any": "Какую официально выпущенную версию вы используете",
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": "Независимо от того, используете ли вы режим Richtext в редакторе Rich Text Editor"
 }
