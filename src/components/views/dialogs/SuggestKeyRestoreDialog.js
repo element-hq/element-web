@@ -44,33 +44,33 @@ export default React.createClass({
                 onFinished={this.props.onFinished}
                 title={_t('Restore encryption keys')}
             >
-            <div>
-                <p>We don't have a way to decrypt older messages on this device.</p>
+                <div>
+                    <p>We don't have a way to decrypt older messages on this device.</p>
 
-                <p>Your options are:</p>
+                    <p>Your options are:</p>
 
-                <li>
-                    { !this.props.isOnlyDevice ? <ul>Verify this device from one or more of your other ones to automatically sync keys</ul>: '' }
-                    { this.props.hasOnlineBackup ? <ul>Enter your recovery key to restore encryption keys from your online backup</ul> : '' }
-                    <ul>Import encryption keys from an offline backup</ul>
-                    <ul>Continue without restoring keys, syncing keys from your other devices on a best effort basis</ul>
-                </li>
+                    <li>
+                        { !this.props.isOnlyDevice ? <ul>Verify this device from one or more of your other ones to automatically sync keys</ul>: '' }
+                        { this.props.hasOnlineBackup ? <ul>Enter your recovery key to restore encryption keys from your online backup</ul> : '' }
+                        <ul>Import encryption keys from an offline backup</ul>
+                        <ul>Continue without restoring keys, syncing keys from your other devices on a best effort basis</ul>
+                    </li>
 
-                <div className="mx_Dialog_buttons">
-                    <button onClick={this.props.onVerifyDevice}>
-                        { _t('Verify this device') }
-                    </button>
-                    <button onClick={this.props.onRecoverFromBackup}>
-                        { _t('Restore from online backup') }
-                    </button>
-                    <button onClick={this.props.onImportBackup}>
-                        { _t('Restore from offline backup') }
-                    </button>
-                    <button onClick={this.props.onIgnoreClicked}>
-                        { _t('Ignore request') }
-                    </button>
+                    <div className="mx_Dialog_buttons">
+                        <button onClick={this.props.onVerifyDevice}>
+                            { _t('Verify this device') }
+                        </button>
+                        <button onClick={this.props.onRecoverFromBackup}>
+                            { _t('Restore from online backup') }
+                        </button>
+                        <button onClick={this.props.onImportBackup}>
+                            { _t('Restore from offline backup') }
+                        </button>
+                        <button onClick={this.props.onIgnoreClicked}>
+                            { _t('Ignore request') }
+                        </button>
+                    </div>
                 </div>
-            </div>
             </BaseDialog>
         );
     },
