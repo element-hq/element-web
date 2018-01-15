@@ -980,5 +980,6 @@
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Használod-e a Richtext módot a szerkesztőben vagy nem",
     "Your homeserver's URL": "Az egyedi szerver URL-t",
     "Your identity server's URL": "Az azonosítási szerver URL-t",
-    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(fullYear)s. %(monthName)s %(day)s, %(weekDayName)s"
+    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(fullYear)s. %(monthName)s %(day)s, %(weekDayName)s",
+    "This room is not public. You will not be able to rejoin without an invite.": "Ez a szoba nem nyilvános. Kilépés után csak újabb meghívóval tudsz újra belépni a szobába."
 }
