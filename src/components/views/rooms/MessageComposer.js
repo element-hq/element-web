@@ -362,7 +362,6 @@ export default class MessageComposer extends React.Component {
                     popoverRect={popoverRect}
                     arrowColor={'#76CFA6'}
                     arrowSize={20}
-                    arrowStyle={{ opacity: 0.7 }}
                 >
                     <div
                         className='mx_PopoverOuterContainer'
