@@ -366,9 +366,6 @@ export default class MessageComposer extends React.Component {
                     <div
                         className='mx_PopoverOuterContainer'
                         style={{
-                            backgroundColor: '#FFF',
-                            opacity: 0.7,
-                            overflow: 'hidden',
                             border: '1px solid #76CFA6',
                         }}
                     >
