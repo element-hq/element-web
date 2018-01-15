@@ -1129,6 +1129,12 @@ export default React.createClass({
         cli.on("crypto.roomKeyRequestCancellation", (req) => {
             krh.handleKeyRequestCancellation(req);
         });
+
+        const skrh = new SuggestKeyRestoreHandler(cli);
+        cli.on("crypto.suggestKeyRestore", () => {
+            skrh.handleSuggestKeyRestore();
+        });
+
         cli.on("Room", (room) => {
             if (MatrixClientPeg.get().isCryptoEnabled()) {
                 const blacklistEnabled = SettingsStore.getValueAt(
