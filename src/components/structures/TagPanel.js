@@ -25,6 +25,8 @@ import TagOrderActions from '../../actions/TagOrderActions';
 import sdk from '../../index';
 import dis from '../../dispatcher';
 
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+
 const TagPanel = React.createClass({
     displayName: 'TagPanel',
 
@@ -69,7 +71,9 @@ const TagPanel = React.createClass({
         dis.dispatch(GroupActions.fetchJoinedGroups(this.context.matrixClient));
     },
 
-    onClick() {
+    onClick(e) {
+        // Ignore clicks on children
+        if (e.target !== e.currentTarget) return;
         dis.dispatch({action: 'deselect_tags'});
     },
 
@@ -78,8 +82,20 @@ const TagPanel = React.createClass({
         dis.dispatch({action: 'view_create_group'});
     },
 
-    onTagTileEndDrag() {
-        dis.dispatch(TagOrderActions.commitTagOrdering(this.context.matrixClient));
+    onTagTileEndDrag(result) {
+        // Dragged to an invalid destination, not onto a droppable
+        if (!result.destination) {
+            return;
+        }
+
+        // Dispatch synchronously so that the TagPanel receives an
+        // optimistic update from TagOrderStore before the previous
+        // state is shown.
+        dis.dispatch(TagOrderActions.moveTag(
+            this.context.matrixClient,
+            result.draggableId,
+            result.destination.index,
+        ), true);
     },
 
     render() {
@@ -89,16 +105,26 @@ const TagPanel = React.createClass({
 
         const tags = this.state.orderedTags.map((tag, index) => {
             return <DNDTagTile
-                key={tag + '_' + index}
+                key={tag}
                 tag={tag}
+                index={index}
                 selected={this.state.selectedTags.includes(tag)}
-                onEndDrag={this.onTagTileEndDrag}
             />;
         });
         return <div className="mx_TagPanel" onClick={this.onClick}>
-            <div className="mx_TagPanel_tagTileContainer">
-                { tags }
-            </div>
+            <DragDropContext onDragEnd={this.onTagTileEndDrag}>
+                <Droppable droppableId="tag-panel-droppable">
+                    { (provided, snapshot) => (
+                        <div
+                            className="mx_TagPanel_tagTileContainer"
+                            ref={provided.innerRef}
+                        >
+                            { tags }
+                            { provided.placeholder }
+                        </div>
+                    ) }
+                </Droppable>
+            </DragDropContext>
             <AccessibleButton className="mx_TagPanel_createGroupButton" onClick={this.onCreateGroupClick}>
                 <TintableSvg src="img/icons-create-room.svg" width="25" height="25" />
             </AccessibleButton>

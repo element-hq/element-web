@@ -31,16 +31,22 @@ const TagOrderActions = {};
  *                     indicating the status of the request.
  * @see asyncAction
  */
-TagOrderActions.commitTagOrdering = function(matrixClient) {
-    return asyncAction('TagOrderActions.commitTagOrdering', () => {
-        // Only commit tags if the state is ready, i.e. not null
-        const tags = TagOrderStore.getOrderedTags();
-        if (!tags) {
-            return;
-        }
+TagOrderActions.moveTag = function(matrixClient, tag, destinationIx) {
+    // Only commit tags if the state is ready, i.e. not null
+    let tags = TagOrderStore.getOrderedTags();
+    if (!tags) {
+        return;
+    }
 
+    tags = tags.filter((t) => t !== tag);
+    tags = [...tags.slice(0, destinationIx), tag, ...tags.slice(destinationIx)];
+
+    return asyncAction('TagOrderActions.moveTag', () => {
         Analytics.trackEvent('TagOrderActions', 'commitTagOrdering');
         return matrixClient.setAccountData('im.vector.web.tag_ordering', {tags});
+    }, () => {
+        // For an optimistic update
+        return {tags};
     });
 };
 
