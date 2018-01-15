@@ -232,6 +232,14 @@ module.exports = React.createClass({
                     </div>
                 );
 
+                if (SettingsStore.isFeatureEnabled("feature_rich_quoting")) {
+                    replyButton = (
+                        <div className="mx_MessageContextMenu_field" onClick={this.onReplyClick}>
+                            { _t('Reply') }
+                        </div>
+                    );
+                }
+
                 if (this.state.canPin) {
                     pinButton = (
                         <div className="mx_MessageContextMenu_field" onClick={this.onPinClick}>
@@ -280,14 +288,6 @@ module.exports = React.createClass({
                     { _t('Quote') }
                 </div>
             );
-
-            if (SettingsStore.isFeatureEnabled("feature_rich_quoting")) {
-                replyButton = (
-                    <div className="mx_MessageContextMenu_field" onClick={this.onReplyClick}>
-                        { _t('Reply') }
-                    </div>
-                );
-            }
         }
 
         // Bridges can provide a 'external_url' to link back to the source.
