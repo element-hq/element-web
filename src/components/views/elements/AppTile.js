@@ -41,7 +41,6 @@ export default class AppTile extends React.Component {
 
     constructor(props) {
         super(props);
-        console.warn('AppTile constructor', props);
         this.state = this._getNewState(props);
 
         this._onAction = this._onAction.bind(this);
@@ -218,8 +217,12 @@ export default class AppTile extends React.Component {
     }
 
     componentWillUnmount() {
-        this.widgetMessaging.stopListening();
-        this.widgetMessaging.removeEndpoint(this.props.id, this.props.url);
+        try {
+            this.widgetMessaging.stopListening();
+            this.widgetMessaging.removeEndpoint(this.props.id, this.props.url);
+        } catch (e) {
+            console.error('Failed to stop listening for widgetMessaging events', e.message);
+        }
         dis.unregister(this._onAction);
         window.removeEventListener('message', this._onMessage);
     }

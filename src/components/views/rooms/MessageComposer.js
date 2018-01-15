@@ -354,6 +354,7 @@ export default class MessageComposer extends React.Component {
             isOpen={this.state.showStickers}
             position={'top'}
             padding={1}
+            key='stickersPopover'
             content={({ position, targetRect, popoverRect }) => (
                 <ArrowContainer
                     position={position}
