@@ -1,5 +1,5 @@
 /*
-Copyright 2017 New Vector Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,10 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_GroupUserSettings_groupPublicity_scrollbox {
-    height: 200px;
-    border: 1px solid $primary-hairline-color;
-    border-radius: 3px;
-    margin-right: 32px;
-    overflow: hidden;
+.mx_Quote .mx_DateSeparator {
+    font-size: 1em !important;
+    margin-bottom: 0;
+    padding-bottom: 1px;
+    bottom: -5px;
+}
+
+.mx_Quote_show {
+    cursor: pointer;
 }

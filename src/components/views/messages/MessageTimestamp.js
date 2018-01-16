@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,24 +15,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
-import DateUtils from 'matrix-react-sdk/lib/DateUtils';
+import PropTypes from 'prop-types';
+import {formatFullDate, formatTime} from 'matrix-react-sdk/lib/DateUtils';
 
-module.exports = React.createClass({
-    displayName: 'MessageTimestamp',
+export default class MessageTimestamp extends React.Component {
+    static propTypes = {
+        ts: PropTypes.number.isRequired,
+        showTwelveHour: PropTypes.bool,
+    };
 
-    propTypes: {
-        showTwelveHour: React.PropTypes.bool,
-    },
-
-    render: function() {
+    render() {
         const date = new Date(this.props.ts);
         return (
-            <span className="mx_MessageTimestamp" title={ DateUtils.formatFullDate(date, this.props.showTwelveHour) }>
-                { DateUtils.formatTime(date, this.props.showTwelveHour) }
+            <span className="mx_MessageTimestamp" title={formatFullDate(date, this.props.showTwelveHour)}>
+                { formatTime(date, this.props.showTwelveHour) }
             </span>
         );
-    },
-});
+    }
+}

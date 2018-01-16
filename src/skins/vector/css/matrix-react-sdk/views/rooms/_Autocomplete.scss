@@ -1,7 +1,7 @@
 .mx_Autocomplete {
     position: absolute;
     bottom: 0;
-    z-index: 1000;
+    z-index: 1001;
     width: 100%;
     border: 1px solid $primary-hairline-color;
     background: $primary-bg-color;
@@ -90,3 +90,4 @@
 .mx_Autocomplete_Completion_description {
     color: gray;
 }
+

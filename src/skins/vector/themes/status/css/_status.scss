@@ -85,6 +85,7 @@ $preview-bar-bg-color: #f7f7f7;
 
 // left-panel style muted accent color
 $secondary-accent-color: #586C7B;
+$tertiary-accent-color: #DBEBF6;
 
 // stop the tinter trying to change the secondary accent color
 // by overriding the key to something untintable
@@ -236,7 +237,7 @@ $progressbar-color: #000;
 .mx_RoomSubList_label {
     font-size: 13px;
     font-family: $header-font-family;
-    letter-spacing: 1px;    
+    letter-spacing: 1px;
 }
 
 // FIXME: all these ! importants are horrid - we should instead go and define

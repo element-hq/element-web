@@ -130,6 +130,11 @@ You can configure the app by copying `config.sample.json` to
    anything else since it is used to isolate the privileges of file attachments to this
    domain. Default: `usercontent.riot.im`. This needs to contain v1.html from
    https://github.com/matrix-org/usercontent/blob/master/v1.html
+1. `piwik`: an object containing the following properties:
+    1. `url`: The URL of the Piwik instance to use for collecting Analytics
+    1. `whitelistedHSUrls`: a list of HS URLs to not redact from the Analytics
+    1. `whitelistedISUrls`: a list of IS URLs to not redact from the Analytics
+    1. `siteId`: The Piwik Site ID to use when sending Analytics to the Piwik server configured above
 
 Running as a Desktop app
 ========================
