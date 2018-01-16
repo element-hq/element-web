@@ -118,6 +118,10 @@ const TagPanel = React.createClass({
                         <div
                             className="mx_TagPanel_tagTileContainer"
                             ref={provided.innerRef}
+                            // react-beautiful-dnd has a bug that emits a click to the parent
+                            // of draggables upon dropping
+                            //   https://github.com/atlassian/react-beautiful-dnd/issues/273
+                            // so we use onMouseDown here as a workaround.
                             onMouseDown={this.onClick}
                         >
                             { tags }
