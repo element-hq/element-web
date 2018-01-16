@@ -29,11 +29,13 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 65px;
+    padding-top: 65px;
+
+    flex-grow: 1;
 }
 
 .mx_TagPanel .mx_TagTile {
-    margin: 6px 0px;
+    padding: 6px 3px;
     opacity: 0.5;
 }
 .mx_TagPanel .mx_TagTile:focus,
@@ -44,7 +46,7 @@ limitations under the License.
 
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected {
     /* To offset border of mx_TagTile_avatar */
-    margin: 3px 0px;
+    padding: 3px 0px;
 }
 
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected .mx_TagTile_avatar {
