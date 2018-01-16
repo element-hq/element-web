@@ -258,7 +258,11 @@ limitations under the License.
     overflow: hidden;
 }
 
-// Set z-index for popovers
-.another-react-popover-container {
-    z-index: 1000;
+.mx_StickersContentPlaceholder {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
