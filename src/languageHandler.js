@@ -67,8 +67,7 @@ function safeCounterpartTranslate(text, options) {
     if (translated === undefined && count !== undefined) {
         // counterpart does not do fallback if no pluralisation exists
         // in the preferred language, so do it here
-        options.locale = 'en';
-        translated = counterpart.translate(text, options);
+        translated = counterpart.translate(text, Object.assign({}, options, {locale: 'en'}));
     }
     return translated;
 }
