@@ -22,11 +22,12 @@ const TagOrderActions = {};
 
 /**
  * Creates an action thunk that will do an asynchronous request to
- * commit TagOrderStore.getOrderedTags() to account data and dispatch
- * actions to indicate the status of the request.
+ * move a tag in TagOrderStore to destinationIx.
  *
  * @param {MatrixClient} matrixClient the matrix client to set the
  *                                    account data on.
+ * @param {string} tag the tag to move.
+ * @param {number} destinationIx the new position of the tag.
  * @returns {function} an action thunk that will dispatch actions
  *                     indicating the status of the request.
  * @see asyncAction
