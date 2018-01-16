@@ -292,6 +292,8 @@ export default class MessageComposer extends React.Component {
         // Stickers
         const popoverWidth = '300px';
         const popoverHeight = '300px';
+        // TODO - Add support for stickerpacks from multiple app stores.
+        // Render content from multiple stickerpack sources, each within their own iframe, within the stickerpack UI element.
         const stickerpackWidget = Widgets.getStickerpackWidgets()[0];
 
         // Load stickerpack content
