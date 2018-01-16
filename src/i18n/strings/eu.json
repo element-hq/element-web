@@ -980,5 +980,6 @@
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Testu editorean testu aberatsa modua erabiltzen duzun",
     "Your homeserver's URL": "Zure hasiera zerbitzariaren URL-a",
     "Your identity server's URL": "Zure identitate zerbitzariaren URL-a",
-    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(fullYear)s(e)ko %(monthName)sk %(day)sa"
+    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(fullYear)s(e)ko %(monthName)sk %(day)sa",
+    "This room is not public. You will not be able to rejoin without an invite.": "Gela hau ez da publikoa. Ezin izango zara berriro elkartu gonbidapenik gabe."
 }
