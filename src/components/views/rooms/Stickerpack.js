@@ -28,6 +28,7 @@ export default class Stickerpack extends React.Component {
         super(props);
         this.onShowStickersClick = this.onShowStickersClick.bind(this);
         this.onHideStickersClick = this.onHideStickersClick.bind(this);
+        this.onFinished = this.onFinished.bind(this);
 
         this.defaultStickersContent = (
             <div className='mx_StickersContentPlaceholder'>
@@ -100,6 +101,7 @@ export default class Stickerpack extends React.Component {
             menuWidth: this.popoverWidth,
             menuHeight: this.popoverHeight,
             element: this.state.stickersContent,
+            onFinished: this.onFinished,
         });
 
 
@@ -107,6 +109,10 @@ export default class Stickerpack extends React.Component {
     }
 
     onHideStickersClick(ev) {
+        this.setState({showStickers: false});
+    }
+
+    onFinished() {
         this.setState({showStickers: false});
     }
 
