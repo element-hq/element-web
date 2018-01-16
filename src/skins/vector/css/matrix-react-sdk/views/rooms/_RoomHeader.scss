@@ -42,22 +42,14 @@ limitations under the License.
 }
 
 .mx_RoomHeader_textButton {
-    height: 36px;
-    background-color: $accent-color;
-    border-radius: 36px;
+    @mixin mx_DialogButton;
     margin-right: 8px;
-    color: $accent-fg-color;
-    line-height: 34px;
-    margin-top: -2px;
-    text-align: center;
+    margin-top: -5px;
     order: 2;
-    cursor: pointer;
+}
 
-/*
-    flex: 0 0 90px;
-*/
-    padding-left: 12px;
-    padding-right: 12px;
+.mx_RoomHeader_textButton:hover {
+    @mixin mx_DialogButton_hover;
 }
 
 .mx_RoomHeader_textButton_danger {

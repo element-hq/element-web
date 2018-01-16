@@ -26,7 +26,6 @@ limitations under the License.
 }
 
 .mx_Login h2 {
-    color: $primary-fg-color;
     font-weight: 300;
     margin-top: 32px;
     margin-bottom: 20px;
@@ -80,15 +79,14 @@ limitations under the License.
 }
 
 .mx_Login_submit {
+    @mixin mx_DialogButton;
+    width: 100%;
     margin-top: 35px;
     margin-bottom: 24px;
-    width: 100%;
-    border-radius: 40px;
-    height: 40px;
-    border: 0px;
-    background-color: $accent-color;
-    font-size: 15px;
-    color: $accent-fg-color;
+}
+
+.mx_Login_submit:hover {
+    @mixin mx_DialogButton_hover;
 }
 
 .mx_Login_submit:disabled {
@@ -137,8 +135,7 @@ limitations under the License.
 }
 
 .mx_Login_forgot {
-    font-size: 13px;
-    opacity: 0.8;
+    font-size: 15px;
 }
 
 .mx_Login_forgot:link {
@@ -224,7 +221,6 @@ limitations under the License.
     height: 16px;
     flex-shrink: 1;
     min-width: 0px;
-    border-radius: 3px;
 }
 
 .mx_Login_phoneNumberField {
