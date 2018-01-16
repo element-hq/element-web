@@ -111,13 +111,14 @@ const TagPanel = React.createClass({
                 selected={this.state.selectedTags.includes(tag)}
             />;
         });
-        return <div className="mx_TagPanel" onClick={this.onClick}>
+        return <div className="mx_TagPanel">
             <DragDropContext onDragEnd={this.onTagTileEndDrag}>
                 <Droppable droppableId="tag-panel-droppable">
                     { (provided, snapshot) => (
                         <div
                             className="mx_TagPanel_tagTileContainer"
                             ref={provided.innerRef}
+                            onMouseDown={this.onClick}
                         >
                             { tags }
                             { provided.placeholder }
