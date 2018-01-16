@@ -294,6 +294,10 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_EventTile_e2eIcon[hidden] {
+    display: none;
+}
+
 .mx_EventTile_12hr .mx_EventTile_e2eIcon {
     padding-left: 5px;
 }
