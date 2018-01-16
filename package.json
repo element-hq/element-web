@@ -82,7 +82,6 @@
     "react-dom": "^15.4.0",
     "react-gemini-scrollbar": "matrix-org/react-gemini-scrollbar#5e97aef",
     "react-simple-popover": "matrix-org/react-popover",
-    "react-tiny-popover": "^3.2.5",
     "sanitize-html": "^1.14.1",
     "text-encoding-utf-8": "^1.0.1",
     "url": "^0.11.0",
