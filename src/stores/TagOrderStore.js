@@ -78,24 +78,11 @@ class TagOrderStore extends Store {
                 this._updateOrderedTags();
                 break;
             }
-            // Puts payload.tag at payload.targetTag, placing the targetTag before or after the tag
-            case 'order_tag': {
-                if (!this._state.orderedTags ||
-                    !payload.tag ||
-                    !payload.targetTag ||
-                    payload.tag === payload.targetTag
-                ) return;
-
-                const tags = this._state.orderedTags;
-
-                let orderedTags = tags.filter((t) => t !== payload.tag);
-                const newIndex = orderedTags.indexOf(payload.targetTag) + (payload.after ? 1 : 0);
-                orderedTags = [
-                    ...orderedTags.slice(0, newIndex),
-                    payload.tag,
-                    ...orderedTags.slice(newIndex),
-                ];
-                this._setState({orderedTags});
+            case 'TagOrderActions.moveTag.pending': {
+                // Optimistic update of a moved tag
+                this._setState({
+                    orderedTags: payload.request.tags,
+                });
                 break;
             }
             case 'select_tag': {

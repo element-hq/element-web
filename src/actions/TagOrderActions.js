@@ -22,25 +22,32 @@ const TagOrderActions = {};
 
 /**
  * Creates an action thunk that will do an asynchronous request to
- * commit TagOrderStore.getOrderedTags() to account data and dispatch
- * actions to indicate the status of the request.
+ * move a tag in TagOrderStore to destinationIx.
  *
  * @param {MatrixClient} matrixClient the matrix client to set the
  *                                    account data on.
+ * @param {string} tag the tag to move.
+ * @param {number} destinationIx the new position of the tag.
  * @returns {function} an action thunk that will dispatch actions
  *                     indicating the status of the request.
  * @see asyncAction
  */
-TagOrderActions.commitTagOrdering = function(matrixClient) {
-    return asyncAction('TagOrderActions.commitTagOrdering', () => {
-        // Only commit tags if the state is ready, i.e. not null
-        const tags = TagOrderStore.getOrderedTags();
-        if (!tags) {
-            return;
-        }
+TagOrderActions.moveTag = function(matrixClient, tag, destinationIx) {
+    // Only commit tags if the state is ready, i.e. not null
+    let tags = TagOrderStore.getOrderedTags();
+    if (!tags) {
+        return;
+    }
 
+    tags = tags.filter((t) => t !== tag);
+    tags = [...tags.slice(0, destinationIx), tag, ...tags.slice(destinationIx)];
+
+    return asyncAction('TagOrderActions.moveTag', () => {
         Analytics.trackEvent('TagOrderActions', 'commitTagOrdering');
         return matrixClient.setAccountData('im.vector.web.tag_ordering', {tags});
+    }, () => {
+        // For an optimistic update
+        return {tags};
     });
 };
 
