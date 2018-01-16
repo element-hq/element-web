@@ -241,21 +241,12 @@ limitations under the License.
     }
 }
 
-.mx_PopoverOuterContainer {
-    border-radius: 5px;
-    padding: 2px;
-    background-color: white;
-    overflow: 'hidden';
-}
-
-.mx_PopoverOuterContainer .mx_AppTileFullWidth {
-    margin-top: 0 !important;
-    border: none;
-}
-
-.mx_PopoverOuterContainer .mx_StickersContent {
-    border-radius: 5px;
+.mx_StickersContent {
     overflow: hidden;
+}
+
+.mx_StickersContent .mx_AppTileFullWidth {
+    border: none;
 }
 
 .mx_StickersContentPlaceholder {
