@@ -29,10 +29,13 @@ export default class Stickerpack extends React.Component {
         this.onShowStickersClick = this.onShowStickersClick.bind(this);
         this.onHideStickersClick = this.onHideStickersClick.bind(this);
 
-        this.defaultStickersContent = (<div className='mx_StickersContentPlaceholder'>
-            <p>You don't currently have any stickerpacks enabled</p>
-            <p>Click <a href=''>here</a> to add some!</p>
-        </div>);
+        this.defaultStickersContent = (
+            <div className='mx_StickersContentPlaceholder'>
+                <p>You don't currently have any stickerpacks enabled</p>
+                <p>Click <a href=''>here</a> to add some!</p>
+                <img src='img/stickerpack-placeholder.png' alt='Add a stickerpack' />
+            </div>
+        );
         this.popoverWidth = 300;
         this.popoverHeight = 300;
 
@@ -86,7 +89,7 @@ export default class Stickerpack extends React.Component {
         const buttonRect = e.target.getBoundingClientRect();
 
         // The window X and Y offsets are to adjust position when zoomed in to page
-        const x = buttonRect.right + window.pageXOffset - 40;
+        const x = buttonRect.right + window.pageXOffset - 37;
         const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
         // const self = this;
         ContextualMenu.createMenu(GenericElementContextMenu, {
