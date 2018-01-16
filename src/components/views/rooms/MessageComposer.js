@@ -23,9 +23,7 @@ import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import Autocomplete from './Autocomplete';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import Popover, {ArrowContainer} from 'react-tiny-popover';
-import Widgets from '../../../utils/widgets';
-import AppTile from '../elements/AppTile';
+import Stickerpack from './Stickerpack';
 
 export default class MessageComposer extends React.Component {
     constructor(props, context) {
@@ -33,8 +31,6 @@ export default class MessageComposer extends React.Component {
         this.onCallClick = this.onCallClick.bind(this);
         this.onHangupClick = this.onHangupClick.bind(this);
         this.onUploadClick = this.onUploadClick.bind(this);
-        this.onShowStickersClick = this.onShowStickersClick.bind(this);
-        this.onHideStickersClick = this.onHideStickersClick.bind(this);
         this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
         this.uploadFiles = this.uploadFiles.bind(this);
         this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
@@ -46,6 +42,8 @@ export default class MessageComposer extends React.Component {
         this.onEvent = this.onEvent.bind(this);
         this.render = this.render.bind(this);
 
+        //
+
         this.state = {
             autocompleteQuery: '',
             selection: null,
@@ -56,7 +54,6 @@ export default class MessageComposer extends React.Component {
                 wordCount: 0,
             },
             showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
-            showStickers: false,
         };
     }
 
@@ -193,14 +190,6 @@ export default class MessageComposer extends React.Component {
         // this._startCallApp(true);
     }
 
-    onShowStickersClick(ev) {
-        this.setState({showStickers: true});
-    }
-
-    onHideStickersClick(ev) {
-        this.setState({showStickers: false});
-    }
-
     onInputContentChanged(content: string, selection: {start: number, end: number}) {
         this.setState({
             autocompleteQuery: content,
@@ -270,7 +259,6 @@ export default class MessageComposer extends React.Component {
         let callButton;
         let videoCallButton;
         let hangupButton;
-        let stickersButton;
 
         // Call buttons
         if (this.props.callState && this.props.callState !== 'ended') {
@@ -288,103 +276,6 @@ export default class MessageComposer extends React.Component {
                     <TintableSvg src="img/icons-video.svg" width="35" height="35" />
                 </div>;
         }
-
-        // Stickers
-        const popoverWidth = '300px';
-        const popoverHeight = '300px';
-        // TODO - Add support for stickerpacks from multiple app stores.
-        // Render content from multiple stickerpack sources, each within their own iframe, within the stickerpack UI element.
-        const stickerpackWidget = Widgets.getStickerpackWidgets()[0];
-
-        // Load stickerpack content
-        if (stickerpackWidget && stickerpackWidget.content && stickerpackWidget.content.url) {
-            this.state.stickersContent = <div
-                id='stickersContent'
-                className='mx_StickersContent'
-                style={{
-                    border: 'none',
-                    height: popoverHeight,
-                    width: popoverWidth,
-                }}
-            >
-                <AppTile
-                    id={stickerpackWidget.id}
-                    url={stickerpackWidget.content.url}
-                    name={stickerpackWidget.content.name}
-                    room={this.props.room}
-                    type={stickerpackWidget.content.type}
-                    fullWidth={true}
-                    userId={stickerpackWidget.sender || MatrixClientPeg.get().credentials.userId}
-                    creatorUserId={MatrixClientPeg.get().credentials.userId}
-                    waitForIframeLoad={true}
-                    show={true}
-                    showMenubar={false}
-                />
-            </div>;
-        } else {
-            // Default content to show if stickerpack widget not added
-            this.state.stickersContent = <p>Click here to add your first sitckerpack</p>;
-        }
-
-
-        if (this.state.showStickers) {
-            // Show hide-stickers button
-            stickersButton =
-                <div
-                    id='stickersButton'
-                    key="controls_hide_stickers"
-                    className="mx_MessageComposer_stickers"
-                    onClick={this.onHideStickersClick}
-                    ref='target'
-                    title={_t("Hide Stickers")}>
-                    <TintableSvg src="img/icons-hide-stickers.svg" width="35" height="35" />
-                </div>;
-        } else {
-            // Show show-stickers button
-            stickersButton =
-                <div
-                    id='stickersButton'
-                    key="constrols_show_stickers"
-                    className="mx_MessageComposer_stickers"
-                    onClick={this.onShowStickersClick}
-                    title={_t("Show Stickers")}>
-                    <TintableSvg src="img/icons-show-stickers.svg" width="35" height="35" />
-                </div>;
-        }
-
-        // Fall back to default highlight color if we can't compute one from the DOM
-        const highlightColor = document.getElementById('mx_theme_accentColor') ?
-          window.getComputedStyle(document.getElementById('mx_theme_accentColor')).color :
-          '#76CFA6';
-
-        const stickers = <Popover
-            isOpen={this.state.showStickers}
-            position={'top'}
-            padding={1}
-            key='stickersPopover'
-            content={({ position, targetRect, popoverRect }) => (
-                <ArrowContainer
-                    position={position}
-                    targetRect={targetRect}
-                    popoverRect={popoverRect}
-                    arrowColor={highlightColor}
-                    arrowSize={20}
-                >
-                    <div
-                        className='mx_PopoverOuterContainer'
-                        style={{
-                            border: `1px solid ${highlightColor}`,
-                        }}
-                    >
-                        { this.state.stickersContent }
-                    </div>
-                </ArrowContainer>
-            )}
-        >
-            <div id='popoverTarget'>
-                { stickersButton }
-            </div>
-        </Popover>;
 
         const canSendMessages = this.props.room.currentState.maySendMessage(
             MatrixClientPeg.get().credentials.userId);
@@ -431,7 +322,7 @@ export default class MessageComposer extends React.Component {
                 hangupButton,
                 callButton,
                 videoCallButton,
-                stickers,
+                <Stickerpack key='stickerpack_controls_button' />,
             );
         } else {
             controls.push(
