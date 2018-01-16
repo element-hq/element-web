@@ -46,11 +46,12 @@ export default class Stickerpack extends React.Component {
         };
     }
 
-    onComponentDidMount() {
+    componentDidMount() {
         // Stickers
         // TODO - Add support for stickerpacks from multiple app stores.
         // Render content from multiple stickerpack sources, each within their own iframe, within the stickerpack UI element.
         const stickerpackWidget = Widgets.getStickerpackWidgets()[0];
+        console.warn('Stickerpack widget', stickerpackWidget);
         let stickersContent;
 
         // Load stickerpack content

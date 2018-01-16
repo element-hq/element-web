@@ -322,7 +322,7 @@ export default class MessageComposer extends React.Component {
                 hangupButton,
                 callButton,
                 videoCallButton,
-                <Stickerpack key='stickerpack_controls_button' />,
+                <Stickerpack key='stickerpack_controls_button' room={this.props.room} />,
             );
         } else {
             controls.push(
