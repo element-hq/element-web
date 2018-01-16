@@ -56,29 +56,50 @@ export default class Stickerpack extends React.Component {
 
         // Load stickerpack content
         if (stickerpackWidget && stickerpackWidget.content && stickerpackWidget.content.url) {
-            stickersContent = <div
-                id='stickersContent'
-                className='mx_StickersContent'
-                style={{
-                    border: 'none',
-                    height: this.popoverHeight,
-                    width: this.popoverWidth,
-                }}
-            >
-                <AppTile
-                    id={stickerpackWidget.id}
-                    url={stickerpackWidget.content.url}
-                    name={stickerpackWidget.content.name}
-                    room={this.props.room}
-                    type={stickerpackWidget.content.type}
-                    fullWidth={true}
-                    userId={stickerpackWidget.sender || MatrixClientPeg.get().credentials.userId}
-                    creatorUserId={MatrixClientPeg.get().credentials.userId}
-                    waitForIframeLoad={true}
-                    show={true}
-                    showMenubar={false}
-                />
-            </div>;
+            stickersContent = (
+                <div
+                    style={{
+                        overflow: 'hidden',
+                        height: '300px',
+                    }}
+                >
+                    <div
+                        id='stickersContent'
+                        className='mx_StickersContent'
+                        style={{
+                            border: 'none',
+                            height: this.popoverHeight - 30,
+                            width: this.popoverWidth,
+                        }}
+                    >
+                        <AppTile
+                            id={stickerpackWidget.id}
+                            url={stickerpackWidget.content.url}
+                            name={stickerpackWidget.content.name}
+                            room={this.props.room}
+                            type={stickerpackWidget.content.type}
+                            fullWidth={true}
+                            userId={stickerpackWidget.sender || MatrixClientPeg.get().credentials.userId}
+                            creatorUserId={MatrixClientPeg.get().credentials.userId}
+                            waitForIframeLoad={true}
+                            show={true}
+                            showMenubar={false}
+                        />
+                    </div>
+                    <div style={{
+                        height: '20px',
+                        position: 'absolute',
+                        bottom: '5px',
+                        right: '19px',
+                        width: '263px',
+                        textAlign: 'right',
+                        padding: '5px',
+                        borderTop: '1px solid #999',
+                    }}>
+                        Add sticker packs
+                    </div>
+                </div>
+            );
         } else {
             // Default content to show if stickerpack widget not added
             stickersContent = <p>Click here to add your first sitckerpack</p>;
