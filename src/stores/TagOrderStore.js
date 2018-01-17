@@ -63,6 +63,11 @@ class TagOrderStore extends Store {
             // Get ordering from account data
             case 'MatrixActions.accountData': {
                 if (payload.event_type !== 'im.vector.web.tag_ordering') break;
+
+                // Ignore remote echos caused by this store so as to avoid setting
+                // state back to old state.
+                if (payload.event_content._storeId === this.getStoreId()) break;
+
                 this._setState({
                     orderedTagsAccountData: payload.event_content ? payload.event_content.tags : null,
                 });
@@ -174,6 +179,13 @@ class TagOrderStore extends Store {
 
     getOrderedTags() {
         return this._state.orderedTags;
+    }
+
+    getStoreId() {
+        // Generate a random ID to prevent this store from clobbering its
+        // state with redundant remote echos.
+        if (!this._id) this._id = Math.random().toString(16).slice(2, 10);
+        return this._id;
     }
 
     getSelectedTags() {
