@@ -20,7 +20,10 @@ import Widgets from '../../../utils/widgets';
 import AppTile from '../elements/AppTile';
 import ContextualMenu from '../../structures/ContextualMenu';
 import MatrixClientPeg from '../../../MatrixClientPeg';
+import Modal from '../../../Modal';
 import sdk from '../../../index';
+import SdkConfig from '../../../SdkConfig';
+import ScalarAuthClient from '../../../ScalarAuthClient';
 
 
 export default class Stickerpack extends React.Component {
@@ -29,6 +32,7 @@ export default class Stickerpack extends React.Component {
         this.onShowStickersClick = this.onShowStickersClick.bind(this);
         this.onHideStickersClick = this.onHideStickersClick.bind(this);
         this.onFinished = this.onFinished.bind(this);
+        this._launchManageIntegrations = this._launchManageIntegrations.bind(this);
 
         this.defaultStickersContent = (
             <div className='mx_StickersContentPlaceholder'>
@@ -47,6 +51,20 @@ export default class Stickerpack extends React.Component {
     }
 
     componentDidMount() {
+        this.scalarClient = null;
+        if (SdkConfig.get().integrations_ui_url && SdkConfig.get().integrations_rest_url) {
+            this.scalarClient = new ScalarAuthClient();
+            this.scalarClient.connect().then(() => {
+                this.forceUpdate();
+            }).catch((e) => {
+                console.log("Failed to connect to integrations server");
+                // TODO -- Handle Scalar errors
+                //     this.setState({
+                //         scalar_error: err,
+                //     });
+            });
+        }
+
         // Stickers
         // TODO - Add support for stickerpacks from multiple app stores.
         // Render content from multiple stickerpack sources, each within their own iframe, within the stickerpack UI element.
@@ -56,6 +74,7 @@ export default class Stickerpack extends React.Component {
 
         // Load stickerpack content
         if (stickerpackWidget && stickerpackWidget.content && stickerpackWidget.content.url) {
+            this.widgetId = stickerpackWidget.id;
             stickersContent = (
                 <div
                     style={{
@@ -96,7 +115,7 @@ export default class Stickerpack extends React.Component {
                         padding: '5px',
                         borderTop: '1px solid #999',
                     }}>
-                        Add sticker packs
+                        <span className='mx_Stickerpack_addLink' onClick={this._launchManageIntegrations} >Add sticker packs</span>
                     </div>
                 </div>
             );
@@ -136,6 +155,21 @@ export default class Stickerpack extends React.Component {
 
     onFinished() {
         this.setState({showStickers: false});
+    }
+
+    _launchManageIntegrations() {
+        this.onFinished();
+        const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+        const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
+                this.scalarClient.getScalarInterfaceUrlForRoom(
+                    this.props.room.roomId,
+                    'add_integ',
+                    // this.widgetId,
+                ) :
+                null;
+        Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
+            src: src,
+        }, "mx_IntegrationsManager");
     }
 
     render() {
