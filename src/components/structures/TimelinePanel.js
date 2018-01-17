@@ -302,6 +302,8 @@ var TimelinePanel = React.createClass({
 
     // set off a pagination request.
     onMessageListFillRequest: function(backwards) {
+        if (!this._shouldPaginate()) return Promise.resolve(false);
+
         const dir = backwards ? EventTimeline.BACKWARDS : EventTimeline.FORWARDS;
         const canPaginateKey = backwards ? 'canBackPaginate' : 'canForwardPaginate';
         const paginatingKey = backwards ? 'backPaginating' : 'forwardPaginating';
@@ -1089,6 +1091,17 @@ var TimelinePanel = React.createClass({
         this.setState({
             readMarkerEventId: eventId,
         }, this.props.onReadMarkerUpdated);
+    },
+
+    _shouldPaginate: function() {
+        // don't try to paginate while events in the timeline are
+        // still being decrypted. We don't render events while they're
+        // being decrypted, so they don't take up space in the timeline.
+        // This means we can pull quite a lot of events into the timeline
+        // and end up trying to render a lot of events.
+        return !this.state.events.some((e) => {
+            return e.isBeingDecrypted();
+        });
     },
 
     render: function() {
