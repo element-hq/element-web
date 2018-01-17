@@ -857,8 +857,8 @@ module.exports = withMatrixClient(React.createClass({
         }
 
         const room = this.props.matrixClient.getRoom(this.props.member.roomId);
-        const poweLevelEvent = room ? room.currentState.getStateEvents("m.room.power_levels", "") : null;
-        const powerLevelUsersDefault = poweLevelEvent.getContent().users_default;
+        const powerLevelEvent = room ? room.currentState.getStateEvents("m.room.power_levels", "") : null;
+        const powerLevelUsersDefault = powerLevelEvent ? powerLevelEvent.getContent().users_default : 0;
 
         let roomMemberDetails = null;
         if (this.props.member.roomId) { // is in room
