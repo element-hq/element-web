@@ -450,7 +450,7 @@ module.exports = React.createClass({
         if (prevEvent !== null
                 && prevEvent.sender && mxEv.sender
                 && mxEv.sender.userId === prevEvent.sender.userId
-                && mxEv.getType() == prevEvent.getType()) {
+                 && Boolean(mxEv.getContent().body) == Boolean(prevEvent.getContent().body)) {
             continuation = true;
         }
 

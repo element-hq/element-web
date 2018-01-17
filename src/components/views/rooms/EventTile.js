@@ -440,7 +440,8 @@ module.exports = withMatrixClient(React.createClass({
         const eventType = this.props.mxEvent.getType();
 
         // Info messages are basically information about commands processed on a room
-        const isInfoMessage = (eventType !== 'm.room.message' && eventType !== 'm.room.sticker');
+        // For now assume that anything that doesn't have a content body is an isInfoMessage
+        const isInfoMessage = !content.body; // Boolean comparison of non-boolean content body
 
         const EventTileType = sdk.getComponent(getHandlerTile(this.props.mxEvent));
         // This shouldn't happen: the caller should check we support this type
