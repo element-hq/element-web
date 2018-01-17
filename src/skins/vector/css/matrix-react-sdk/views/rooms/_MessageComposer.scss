@@ -240,30 +240,3 @@ limitations under the License.
         height: 50px;
     }
 }
-
-.mx_StickersContent {
-    overflow: hidden;
-}
-
-.mx_StickersContent .mx_AppTileFullWidth {
-    border: none;
-}
-
-.mx_StickersContentPlaceholder {
-    display: flex;
-    flex-grow: 1;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-.mx_StickersContentPlaceholder p {
-    max-width: 200px;
-}
-
-.mx_Stickerpack_addLink {
-    display: inline;
-    cursor: pointer;
-    text-decoration: underline;
-}
