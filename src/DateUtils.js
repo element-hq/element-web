@@ -82,6 +82,17 @@ export function formatDate(date, showTwelveHour=false) {
     return formatFullDate(date, showTwelveHour);
 }
 
+export function formatFullDateNoTime(date) {
+    const days = getDaysArray();
+    const months = getMonthsArray();
+    return _t('%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s', {
+        weekDayName: days[date.getDay()],
+        monthName: months[date.getMonth()],
+        day: date.getDate(),
+        fullYear: date.getFullYear(),
+    });
+}
+
 export function formatFullDate(date, showTwelveHour=false) {
     const days = getDaysArray();
     const months = getMonthsArray();
