@@ -182,7 +182,7 @@ export default class Stickerpack extends React.Component {
                 <div
                     id='stickersButton'
                     key="controls_hide_stickers"
-                    className="mx_MessageComposer_stickers"
+                    className="mx_MessageComposer_stickers mx_MessageComposer_hideStickers"
                     onClick={this.onHideStickersClick}
                     ref='target'
                     title={_t("Hide Stickers")}>
