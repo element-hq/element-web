@@ -134,7 +134,7 @@ export default class Stickerpack extends React.Component {
         const x = buttonRect.right + window.pageXOffset - 37;
         const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
         // const self = this;
-        ContextualMenu.createMenu(GenericElementContextMenu, {
+        this.stickersMenu = ContextualMenu.createMenu(GenericElementContextMenu, {
             chevronOffset: 10,
             chevronFace: 'bottom',
             left: x,
@@ -150,11 +150,12 @@ export default class Stickerpack extends React.Component {
     }
 
     onHideStickersClick(ev) {
-        this.setState({showStickers: false});
+        this.stickersMenu.close();
     }
 
     onFinished() {
         this.setState({showStickers: false});
+        this.stickersMenu = null;
     }
 
     _launchManageIntegrations() {
