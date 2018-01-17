@@ -43,7 +43,7 @@ export default class AppTile extends React.Component {
         super(props);
         this.state = this._getNewState(props);
 
-        this._onAction = this._onAction.bind(this);
+        this._onWidgetAction = this._onWidgetAction.bind(this);
         this._onMessage = this._onMessage.bind(this);
         this._onLoaded = this._onLoaded.bind(this);
         this._onEditClick = this._onEditClick.bind(this);
@@ -161,7 +161,7 @@ export default class AppTile extends React.Component {
         window.addEventListener('message', this._onMessage, false);
 
         // General event handler
-        dis.register(this._onAction);
+        this.dispatcherRef = dis.register(this._onWidgetAction);
     }
 
     /**
@@ -217,13 +217,19 @@ export default class AppTile extends React.Component {
     }
 
     componentWillUnmount() {
+        // Widget action listeners
+        dis.unregister(this.dispatcherRef);
+
+        // Widget postMessage listeners
         try {
-            this.widgetMessaging.stopListening();
-            this.widgetMessaging.removeEndpoint(this.props.id, this.props.url);
+            if (this.widgetMessaging) {
+                this.widgetMessaging.stopListening();
+                this.widgetMessaging.removeEndpoint(this.props.id, this.props.url);
+            }
         } catch (e) {
             console.error('Failed to stop listening for widgetMessaging events', e.message);
         }
-        dis.unregister(this._onAction);
+        // Jitsi listener
         window.removeEventListener('message', this._onMessage);
     }
 
@@ -342,7 +348,7 @@ export default class AppTile extends React.Component {
         this.setState({loading: false});
     }
 
-    _onAction(payload) {
+    _onWidgetAction(payload) {
         if (payload.widgetId === this.props.id) {
             switch (payload.action) {
                 case 'sticker_message':
