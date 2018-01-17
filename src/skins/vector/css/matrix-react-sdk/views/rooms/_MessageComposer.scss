@@ -261,3 +261,9 @@ limitations under the License.
 .mx_StickersContentPlaceholder p {
     max-width: 200px;
 }
+
+.mx_Stickerpack_addLink {
+    display: inline;
+    cursor: pointer;
+    text-decoration: underline;
+}
