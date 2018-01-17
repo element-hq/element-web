@@ -35,7 +35,7 @@ export default class Stickerpack extends React.Component {
         this._launchManageIntegrations = this._launchManageIntegrations.bind(this);
 
         this.defaultStickersContent = (
-            <div className='mx_StickersContentPlaceholder'>
+            <div className='mx_Stickers_contentPlaceholder'>
                 <p>You don't currently have any stickerpacks enabled</p>
                 <p>Click <a href=''>here</a> to add some!</p>
                 <img src='img/stickerpack-placeholder.png' alt='Add a stickerpack' />
@@ -84,7 +84,7 @@ export default class Stickerpack extends React.Component {
                 >
                     <div
                         id='stickersContent'
-                        className='mx_StickersContent'
+                        className='mx_Stickers_content'
                         style={{
                             border: 'none',
                             height: this.popoverHeight - 30,
@@ -115,7 +115,7 @@ export default class Stickerpack extends React.Component {
                         padding: '5px',
                         borderTop: '1px solid #999',
                     }}>
-                        <span className='mx_Stickerpack_addLink' onClick={this._launchManageIntegrations} >Add sticker packs</span>
+                        <span className='mx_Stickers_addLink' onClick={this._launchManageIntegrations} >Add sticker packs</span>
                     </div>
                 </div>
             );
@@ -182,7 +182,7 @@ export default class Stickerpack extends React.Component {
                 <div
                     id='stickersButton'
                     key="controls_hide_stickers"
-                    className="mx_MessageComposer_stickers mx_MessageComposer_hideStickers"
+                    className="mx_MessageComposer_stickers mx_Stickers_hideStickers"
                     onClick={this.onHideStickersClick}
                     ref='target'
                     title={_t("Hide Stickers")}>
