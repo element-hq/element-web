@@ -53,6 +53,7 @@ export default class GroupStore extends EventEmitter {
         this._state[GroupStore.STATE_KEY.GroupInvitedMembers] = [];
         this._ready = {};
 
+        this._fetchResourcePromise = {};
         this._resourceFetcher = {
             [GroupStore.STATE_KEY.Summary]: () => {
                 return MatrixClientPeg.get()
@@ -81,7 +82,14 @@ export default class GroupStore extends EventEmitter {
     }
 
     _fetchResource(stateKey) {
+        // Ongoing request, ignore
+        if (this._fetchResourcePromise[stateKey]) return;
+
         const clientPromise = this._resourceFetcher[stateKey]();
+
+        // Indicate ongoing request
+        this._fetchResourcePromise[stateKey] = clientPromise;
+
         clientPromise.then((result) => {
             this._state[stateKey] = result;
             this._ready[stateKey] = true;
@@ -94,6 +102,9 @@ export default class GroupStore extends EventEmitter {
 
             console.error("Failed to get resource " + stateKey + ":" + err);
             this.emit('error', err);
+        }).finally(() => {
+            // Indicate finished request, allow for future fetches
+            delete this._fetchResourcePromise[stateKey];
         });
 
         return clientPromise;
