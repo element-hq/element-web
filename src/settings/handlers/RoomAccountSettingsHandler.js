@@ -35,6 +35,7 @@ export default class RoomAccountSettingsHandler extends SettingsHandler {
         if (settingName === "roomColor") {
             // The event content should already be in an appropriate format, we just need
             // to get the right value.
+            // don't fallback to {} because thats truthy and would imply there is an event specifying tint
             return this._getSettings(roomId, "org.matrix.room.color_scheme");
         }
 
