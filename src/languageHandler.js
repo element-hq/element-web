@@ -40,7 +40,7 @@ export function _td(s) {
 
 // Wrapper for counterpart's translation function so that it handles nulls and undefineds properly
 // Takes the same arguments as counterpart.translate()
-function safeCounterpartTranslate(...args) {
+function safeCounterpartTranslate(text, options) {
     // Horrible hack to avoid https://github.com/vector-im/riot-web/issues/4191
     // The interpolation library that counterpart uses does not support undefined/null
     // values and instead will throw an error. This is a problem since everywhere else
@@ -48,19 +48,28 @@ function safeCounterpartTranslate(...args) {
     // valid ES6 template strings to i18n strings it's extremely easy to pass undefined/null
     // if there are no existing null guards. To avoid this making the app completely inoperable,
     // we'll check all the values for undefined/null and stringify them here.
-    if (args[1] && typeof args[1] === 'object') {
-        Object.keys(args[1]).forEach((k) => {
-            if (args[1][k] === undefined) {
+    let count;
+
+    if (options && typeof options === 'object') {
+        count = options['count'];
+        Object.keys(options).forEach((k) => {
+            if (options[k] === undefined) {
                 console.warn("safeCounterpartTranslate called with undefined interpolation name: " + k);
-                args[1][k] = 'undefined';
+                options[k] = 'undefined';
             }
-            if (args[1][k] === null) {
+            if (options[k] === null) {
                 console.warn("safeCounterpartTranslate called with null interpolation name: " + k);
-                args[1][k] = 'null';
+                options[k] = 'null';
             }
         });
     }
-    return counterpart.translate(...args);
+    let translated = counterpart.translate(text, options);
+    if (translated === undefined && count !== undefined) {
+        // counterpart does not do fallback if no pluralisation exists
+        // in the preferred language, so do it here
+        translated = counterpart.translate(text, Object.assign({}, options, {locale: 'en'}));
+    }
+    return translated;
 }
 
 /*
