@@ -160,8 +160,28 @@ export default class AppTile extends React.Component {
         // postMessaging API
         window.addEventListener('message', this._onMessage, false);
 
-        // General event handler
+        // Widget action listeners
         this.dispatcherRef = dis.register(this._onWidgetAction);
+    }
+
+    componentWillUnmount() {
+        // Widget action listeners
+        console.warn('Removing widget event listener', this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
+
+        // Widget postMessage listeners
+        try {
+            if (this.widgetMessaging) {
+                this.widgetMessaging.stopListening();
+                this.widgetMessaging.removeEndpoint(this.props.id, this.props.url);
+            } else {
+                console.warn('WidgetMessaging not initialised. Not stopping.');
+            }
+        } catch (e) {
+            console.error('Failed to stop listening for widgetMessaging events', e.message);
+        }
+        // Jitsi listener
+        window.removeEventListener('message', this._onMessage);
     }
 
     /**
@@ -214,23 +234,6 @@ export default class AppTile extends React.Component {
                 initialising: false,
             });
         });
-    }
-
-    componentWillUnmount() {
-        // Widget action listeners
-        dis.unregister(this.dispatcherRef);
-
-        // Widget postMessage listeners
-        try {
-            if (this.widgetMessaging) {
-                this.widgetMessaging.stopListening();
-                this.widgetMessaging.removeEndpoint(this.props.id, this.props.url);
-            }
-        } catch (e) {
-            console.error('Failed to stop listening for widgetMessaging events', e.message);
-        }
-        // Jitsi listener
-        window.removeEventListener('message', this._onMessage);
     }
 
     componentWillReceiveProps(nextProps) {
