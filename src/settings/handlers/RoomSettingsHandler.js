@@ -24,25 +24,26 @@ export default class RoomSettingsHandler extends SettingsHandler {
     getValue(settingName, roomId) {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {
-            const content = this._getSettings(roomId, "org.matrix.room.preview_urls");
+            const content = this._getSettings(roomId, "org.matrix.room.preview_urls") || {};
 
             // Check to make sure that we actually got a boolean
             if (typeof(content['disable']) !== "boolean") return null;
             return !content['disable'];
         }
 
-        return this._getSettings(roomId)[settingName];
+        const settings = this._getSettings(roomId) || {};
+        return settings[settingName];
     }
 
     setValue(settingName, roomId, newValue) {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {
-            const content = this._getSettings(roomId, "org.matrix.room.preview_urls");
+            const content = this._getSettings(roomId, "org.matrix.room.preview_urls") || {};
             content['disable'] = !newValue;
             return MatrixClientPeg.get().sendStateEvent(roomId, "org.matrix.room.preview_urls", content);
         }
 
-        const content = this._getSettings(roomId);
+        const content = this._getSettings(roomId) || {};
         content[settingName] = newValue;
         return MatrixClientPeg.get().sendStateEvent(roomId, "im.vector.web.settings", content, "");
     }
@@ -65,9 +66,10 @@ export default class RoomSettingsHandler extends SettingsHandler {
 
     _getSettings(roomId, eventType = "im.vector.web.settings") {
         const room = MatrixClientPeg.get().getRoom(roomId);
-        if (!room) return {};
+        if (!room) return null;
+
         const event = room.currentState.getStateEvents(eventType, "");
-        if (!event || !event.getContent()) return {};
+        if (!event || !event.getContent()) return null;
         return event.getContent();
     }
 }

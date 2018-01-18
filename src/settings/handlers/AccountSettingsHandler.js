@@ -25,19 +25,20 @@ export default class AccountSettingHandler extends SettingsHandler {
     getValue(settingName, roomId) {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {
-            const content = this._getSettings("org.matrix.preview_urls");
+            const content = this._getSettings("org.matrix.preview_urls") || {};
 
             // Check to make sure that we actually got a boolean
             if (typeof(content['disable']) !== "boolean") return null;
             return !content['disable'];
         }
 
-        let preferredValue = this._getSettings()[settingName];
+        const settings = this._getSettings() || {};
+        let preferredValue = settings[settingName];
 
         if (preferredValue === null || preferredValue === undefined) {
             // Honour the old setting on read only
             if (settingName === "hideAvatarChanges" || settingName === "hideDisplaynameChanges") {
-                preferredValue = this._getSettings()["hideAvatarDisplaynameChanges"];
+                preferredValue = settings["hideAvatarDisplaynameChanges"];
             }
         }
 
@@ -47,12 +48,12 @@ export default class AccountSettingHandler extends SettingsHandler {
     setValue(settingName, roomId, newValue) {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {
-            const content = this._getSettings("org.matrix.preview_urls");
+            const content = this._getSettings("org.matrix.preview_urls") || {};
             content['disable'] = !newValue;
             return MatrixClientPeg.get().setAccountData("org.matrix.preview_urls", content);
         }
 
-        const content = this._getSettings();
+        const content = this._getSettings() || {};
         content[settingName] = newValue;
         return MatrixClientPeg.get().setAccountData("im.vector.web.settings", content);
     }
@@ -68,9 +69,10 @@ export default class AccountSettingHandler extends SettingsHandler {
 
     _getSettings(eventType = "im.vector.web.settings") {
         const cli = MatrixClientPeg.get();
-        if (!cli) return {};
+        if (!cli) return null;
+
         const event = cli.getAccountData(eventType);
-        if (!event || !event.getContent()) return {};
+        if (!event || !event.getContent()) return null;
         return event.getContent();
     }
 }
