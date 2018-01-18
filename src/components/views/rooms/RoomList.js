@@ -367,6 +367,9 @@ module.exports = React.createClass({
             });
         }
 
+        // Refresh to display the optimistic updates - this needs to be done in the
+        // same tick as the drag finishing otherwise the room will pop back to its
+        // previous position - hence no delayed refresh
         this.refreshRoomList();
     },
 
