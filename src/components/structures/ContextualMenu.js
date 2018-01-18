@@ -51,11 +51,11 @@ module.exports = {
     createMenu: function(Element, props) {
         const self = this;
 
-        const closeMenu = function() {
+        const closeMenu = function(...args) {
             ReactDOM.unmountComponentAtNode(self.getOrCreateContainer());
 
             if (props && props.onFinished) {
-                props.onFinished.apply(null, arguments);
+                props.onFinished.apply(null, args);
             }
         };
 
