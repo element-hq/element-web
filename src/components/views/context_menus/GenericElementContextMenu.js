@@ -24,6 +24,21 @@ export default class GenericElementContextMenu extends React.Component {
         element: PropTypes.element.isRequired,
     };
 
+    componentDidMount() {
+        this.resize = this.resize.bind(this);
+        window.addEventListener("resize", this.resize.bind(this));
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.resize.bind(this));
+    }
+
+    resize() {
+        if (this.props.onResize) {
+            this.props.onResize();
+        }
+    }
+
     render() {
         return <div>{ this.props.element }</div>;
     }
