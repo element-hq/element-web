@@ -748,114 +748,114 @@ module.exports = React.createClass({
         const self = this;
         return (
             <DragDropContext onDragEnd={this.onRoomTileEndDrag}>
-            <GeminiScrollbar className="mx_RoomList_scrollbar"
-                 autoshow={true} onScroll={self._whenScrolling} ref="gemscroll">
-            <div className="mx_RoomList">
-                <RoomSubList list={[]}
-                             extraTiles={this._makeGroupInviteTiles()}
-                             label={_t('Community Invites')}
-                             editable={false}
-                             order="recent"
-                             isInvite={true}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms}
-                />
+                <GeminiScrollbar className="mx_RoomList_scrollbar"
+                     autoshow={true} onScroll={self._whenScrolling} ref="gemscroll">
+                <div className="mx_RoomList">
+                    <RoomSubList list={[]}
+                                 extraTiles={this._makeGroupInviteTiles()}
+                                 label={_t('Community Invites')}
+                                 editable={false}
+                                 order="recent"
+                                 isInvite={true}
+                                 collapsed={self.props.collapsed}
+                                 searchFilter={self.props.searchFilter}
+                                 onHeaderClick={self.onSubListHeaderClick}
+                                 onShowMoreRooms={self.onShowMoreRooms}
+                    />
 
-                <RoomSubList list={self.state.lists['im.vector.fake.invite']}
-                             label={_t('Invites')}
-                             editable={false}
-                             order="recent"
-                             isInvite={true}
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms}
-                />
+                    <RoomSubList list={self.state.lists['im.vector.fake.invite']}
+                                 label={_t('Invites')}
+                                 editable={false}
+                                 order="recent"
+                                 isInvite={true}
+                                 incomingCall={self.state.incomingCall}
+                                 collapsed={self.props.collapsed}
+                                 searchFilter={self.props.searchFilter}
+                                 onHeaderClick={self.onSubListHeaderClick}
+                                 onShowMoreRooms={self.onShowMoreRooms}
+                    />
 
-                <RoomSubList list={self.state.lists['m.favourite']}
-                             label={_t('Favourites')}
-                             tagName="m.favourite"
-                             emptyContent={this._getEmptyContent('m.favourite')}
-                             editable={true}
-                             order="manual"
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />
+                    <RoomSubList list={self.state.lists['m.favourite']}
+                                 label={_t('Favourites')}
+                                 tagName="m.favourite"
+                                 emptyContent={this._getEmptyContent('m.favourite')}
+                                 editable={true}
+                                 order="manual"
+                                 incomingCall={self.state.incomingCall}
+                                 collapsed={self.props.collapsed}
+                                 searchFilter={self.props.searchFilter}
+                                 onHeaderClick={self.onSubListHeaderClick}
+                                 onShowMoreRooms={self.onShowMoreRooms} />
 
-                <RoomSubList list={self.state.lists['im.vector.fake.direct']}
-                             label={_t('People')}
-                             tagName="im.vector.fake.direct"
-                             emptyContent={this._getEmptyContent('im.vector.fake.direct')}
-                             headerItems={this._getHeaderItems('im.vector.fake.direct')}
-                             editable={true}
-                             order="recent"
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             alwaysShowHeader={true}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />
+                    <RoomSubList list={self.state.lists['im.vector.fake.direct']}
+                                 label={_t('People')}
+                                 tagName="im.vector.fake.direct"
+                                 emptyContent={this._getEmptyContent('im.vector.fake.direct')}
+                                 headerItems={this._getHeaderItems('im.vector.fake.direct')}
+                                 editable={true}
+                                 order="recent"
+                                 incomingCall={self.state.incomingCall}
+                                 collapsed={self.props.collapsed}
+                                 alwaysShowHeader={true}
+                                 searchFilter={self.props.searchFilter}
+                                 onHeaderClick={self.onSubListHeaderClick}
+                                 onShowMoreRooms={self.onShowMoreRooms} />
 
-                <RoomSubList list={self.state.lists['im.vector.fake.recent']}
-                             label={_t('Rooms')}
-                             editable={true}
-                             emptyContent={this._getEmptyContent('im.vector.fake.recent')}
-                             headerItems={this._getHeaderItems('im.vector.fake.recent')}
-                             order="recent"
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />
+                    <RoomSubList list={self.state.lists['im.vector.fake.recent']}
+                                 label={_t('Rooms')}
+                                 editable={true}
+                                 emptyContent={this._getEmptyContent('im.vector.fake.recent')}
+                                 headerItems={this._getHeaderItems('im.vector.fake.recent')}
+                                 order="recent"
+                                 incomingCall={self.state.incomingCall}
+                                 collapsed={self.props.collapsed}
+                                 searchFilter={self.props.searchFilter}
+                                 onHeaderClick={self.onSubListHeaderClick}
+                                 onShowMoreRooms={self.onShowMoreRooms} />
 
-                { Object.keys(self.state.lists).map((tagName) => {
-                    if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
-                        return <RoomSubList list={self.state.lists[tagName]}
-                             key={tagName}
-                             label={tagName}
-                             tagName={tagName}
-                             emptyContent={this._getEmptyContent(tagName)}
-                             editable={true}
-                             order="manual"
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />;
-                    }
-                }) }
+                    { Object.keys(self.state.lists).map((tagName) => {
+                        if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
+                            return <RoomSubList list={self.state.lists[tagName]}
+                                 key={tagName}
+                                 label={tagName}
+                                 tagName={tagName}
+                                 emptyContent={this._getEmptyContent(tagName)}
+                                 editable={true}
+                                 order="manual"
+                                 incomingCall={self.state.incomingCall}
+                                 collapsed={self.props.collapsed}
+                                 searchFilter={self.props.searchFilter}
+                                 onHeaderClick={self.onSubListHeaderClick}
+                                 onShowMoreRooms={self.onShowMoreRooms} />;
+                        }
+                    }) }
 
-                <RoomSubList list={self.state.lists['m.lowpriority']}
-                             label={_t('Low priority')}
-                             tagName="m.lowpriority"
-                             emptyContent={this._getEmptyContent('m.lowpriority')}
-                             editable={true}
-                             order="recent"
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />
+                    <RoomSubList list={self.state.lists['m.lowpriority']}
+                                 label={_t('Low priority')}
+                                 tagName="m.lowpriority"
+                                 emptyContent={this._getEmptyContent('m.lowpriority')}
+                                 editable={true}
+                                 order="recent"
+                                 incomingCall={self.state.incomingCall}
+                                 collapsed={self.props.collapsed}
+                                 searchFilter={self.props.searchFilter}
+                                 onHeaderClick={self.onSubListHeaderClick}
+                                 onShowMoreRooms={self.onShowMoreRooms} />
 
-                <RoomSubList list={self.state.lists['im.vector.fake.archived']}
-                             label={_t('Historical')}
-                             editable={false}
-                             order="recent"
-                             collapsed={self.props.collapsed}
-                             alwaysShowHeader={true}
-                             startAsHidden={true}
-                             showSpinner={self.state.isLoadingLeftRooms}
-                             onHeaderClick= {self.onArchivedHeaderClick}
-                             incomingCall={self.state.incomingCall}
-                             searchFilter={self.props.searchFilter}
-                             onShowMoreRooms={self.onShowMoreRooms} />
-            </div>
-            </GeminiScrollbar>
+                    <RoomSubList list={self.state.lists['im.vector.fake.archived']}
+                                 label={_t('Historical')}
+                                 editable={false}
+                                 order="recent"
+                                 collapsed={self.props.collapsed}
+                                 alwaysShowHeader={true}
+                                 startAsHidden={true}
+                                 showSpinner={self.state.isLoadingLeftRooms}
+                                 onHeaderClick= {self.onArchivedHeaderClick}
+                                 incomingCall={self.state.incomingCall}
+                                 searchFilter={self.props.searchFilter}
+                                 onShowMoreRooms={self.onShowMoreRooms} />
+                </div>
+                </GeminiScrollbar>
             </DragDropContext>
         );
     },
