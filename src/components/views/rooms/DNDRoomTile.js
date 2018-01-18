@@ -18,18 +18,19 @@ import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import RoomTile from 'matrix-react-sdk/lib/components/views/rooms/RoomTile';
 
+import classNames from 'classnames';
+
 export default class DNDRoomTile extends React.Component {
     constructor() {
         super();
-        this.getStyle = this.getStyle.bind(this);
+        this.getClassName = this.getClassName.bind(this);
     }
 
-    getStyle(isDragging) {
-        const result = {
-            transform: isDragging ? "scale(1.05, 1.05)" : "none",
-            transition: "transform 0.2s",
-        };
-        return result;
+    getClassName(isDragging) {
+        return classNames({
+            "mx_DNDRoomTile": true,
+            "mx_DNDRoomTile_dragging": isDragging,
+        });
     }
 
     render() {
@@ -49,7 +50,7 @@ export default class DNDRoomTile extends React.Component {
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                             >
-                                <div style={this.getStyle(snapshot.isDragging)}>
+                                <div className={this.getClassName(snapshot.isDragging)}>
                                     <RoomTile {...props} />
                                 </div>
                             </div>

@@ -157,6 +157,15 @@ limitations under the License.
     background-color: $roomtile-selected-bg-color;
 }
 
+.mx_DNDRoomTile {
+    transform: none;
+    transition: transform 0.2s;
+}
+
+.mx_DNDRoomTile_dragging {
+    transform: scale(1.05, 1.05);
+}
+
 .mx_RoomTile:focus {
     filter: none ! important;
     background-color: $roomtile-focused-bg-color;
