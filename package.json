@@ -74,6 +74,7 @@
     "pako": "^1.0.5",
     "prop-types": "^15.5.10",
     "react": "^15.6.0",
+    "react-beautiful-dnd": "^4.0.1",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.6.0",
