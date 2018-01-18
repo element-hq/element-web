@@ -59,6 +59,11 @@ module.exports = {
             }
         };
 
+        // Close the menu on window resize
+        const windowResize = function() {
+            closeMenu();
+        };
+
         const position = {};
         let chevronFace = null;
 
@@ -135,7 +140,7 @@ module.exports = {
             <div className={className} style={position}>
                 <div className={menuClasses} style={menuStyle}>
                     { chevron }
-                    <Element {...props} onFinished={closeMenu} />
+                    <Element {...props} onFinished={closeMenu} onResize={windowResize} />
                 </div>
                 <div className="mx_ContextualMenu_background" onClick={closeMenu}></div>
                 <style>{ chevronCSS }</style>
