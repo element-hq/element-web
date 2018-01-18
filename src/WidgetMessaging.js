@@ -178,6 +178,10 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
     constructor(widgetId, targetWindow) {
         super(targetWindow);
         this.widgetId = widgetId;
+
+        this.startListening = this.startListening.bind(this);
+        this.stopListening = this.stopListening.bind(this);
+        this.onMessage = this.onMessage.bind(this);
     }
 
     exec(action) {
@@ -206,9 +210,11 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
      * Register widget message event listeners
      */
     startListening() {
-        this.start();
         if (global.mxWidgetMessagingListenerCount === 0) {
-            window.addEventListener("message", (evt) => this.onMessage(evt), false);
+            // Start postMessage API listener
+            this.start();
+            // Start widget specific listener
+            window.addEventListener("message", this.onMessage, false);
         }
         global.mxWidgetMessagingListenerCount += 1;
     }
@@ -217,10 +223,12 @@ export default class WidgetMessaging extends MatrixPostMessageApi {
      * De-register widget message event listeners
      */
     stopListening() {
-        this.stop();
         global.mxWidgetMessagingListenerCount -= 1;
         if (global.mxWidgetMessagingListenerCount === 0) {
-            window.removeEventListener("message", () => this.onMessage);
+            // Stop widget specific listener
+            window.removeEventListener("message", this.onMessage, false);
+            // Stop postMessage API listener
+            this.stop();
         }
         if (global.mxWidgetMessagingListenerCount < 0) {
             // Make an error so we get a stack trace

@@ -171,12 +171,8 @@ export default class AppTile extends React.Component {
 
         // Widget postMessage listeners
         try {
-            if (this.widgetMessaging) {
-                this.widgetMessaging.stopListening();
-                this.widgetMessaging.removeEndpoint(this.props.id, this.props.url);
-            } else {
-                console.warn('WidgetMessaging not initialised. Not stopping.');
-            }
+            this.widgetMessaging.stopListening();
+            this.widgetMessaging.removeEndpoint(this.props.id, this.props.url);
         } catch (e) {
             console.error('Failed to stop listening for widgetMessaging events', e.message);
         }
