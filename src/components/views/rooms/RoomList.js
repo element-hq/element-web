@@ -18,6 +18,7 @@ limitations under the License.
 'use strict';
 const React = require("react");
 const ReactDOM = require("react-dom");
+import { DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 const GeminiScrollbar = require('react-gemini-scrollbar');
@@ -31,6 +32,8 @@ import DMRoomMap from '../../../utils/DMRoomMap';
 const Receipt = require('../../../utils/Receipt');
 import TagOrderStore from '../../../stores/TagOrderStore';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
+
+import Modal from '../../../Modal';
 
 const HIDE_CONFERENCE_CHANS = true;
 
@@ -273,6 +276,98 @@ module.exports = React.createClass({
 
     _onGroupMyMembership: function(group) {
         this.forceUpdate();
+    },
+
+    onRoomTileEndDrag: function(result) {
+        if (!result.destination) return;
+
+        let newTag = result.destination.droppableId.split('_')[1];
+        let prevTag = result.source.droppableId.split('_')[1];
+        if (newTag === 'undefined') newTag = undefined;
+        if (prevTag === 'undefined') prevTag = undefined;
+
+        const roomId = result.draggableId.split('_')[1];
+        const room = MatrixClientPeg.get().getRoom(roomId);
+
+        const newIndex = result.destination.index;
+
+        // Evil hack to get DMs behaving
+        if ((prevTag === undefined && newTag === 'im.vector.fake.direct') ||
+            (prevTag === 'im.vector.fake.direct' && newTag === undefined)
+        ) {
+            Rooms.guessAndSetDMRoom(
+                room, newTag === 'im.vector.fake.direct',
+            ).catch((err) => {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                console.error("Failed to set direct chat tag " + err);
+                Modal.createTrackedDialog('Failed to set direct chat tag', '', ErrorDialog, {
+                    title: _t('Failed to set direct chat tag'),
+                    description: ((err && err.message) ? err.message : _t('Operation failed')),
+                });
+            });
+            return;
+        }
+
+        const hasChangedSubLists = result.source.droppableId !== result.destination.droppableId;
+
+        const newOrder = {};
+
+        // Is the tag ordered manually?
+        if (!newTag.match(/^(m\.lowpriority|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
+            const newList = Object.assign({}, this.state.lists[newTag]);
+
+            // If the room was moved "down" (increasing index) in the same list we
+            // need to use the orders of the tiles with indices shifted by +1
+            const offset = (
+                newTag === prevTag && result.source.index < result.destination.index
+            ) ? 1 : 0;
+
+            const prevOrder = newIndex === 0 ?
+                0 : newList[offset + newIndex - 1].tags[newTag].order;
+            const nextOrder = newIndex === newList.length ?
+                1 : newList[offset + newIndex].tags[newTag].order;
+
+            newOrder['order'] = (prevOrder + nextOrder) / 2.0;
+        }
+
+        // More evilness: We will still be dealing with moving to favourites/low prio,
+        // but we avoid ever doing a request with 'im.vector.fake.direct`.
+        //
+        // if we moved lists, remove the old tag
+        if (prevTag && prevTag !== 'im.vector.fake.direct' &&
+            hasChangedSubLists
+        ) {
+            // Optimistic update of what will happen to the room tags
+            delete room.tags[prevTag];
+
+            MatrixClientPeg.get().deleteRoomTag(roomId, prevTag).catch(function(err) {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                console.error("Failed to remove tag " + prevTag + " from room: " + err);
+                Modal.createTrackedDialog('Failed to remove tag from room', '', ErrorDialog, {
+                    title: _t('Failed to remove tag %(tagName)s from room', {tagName: prevTag}),
+                    description: ((err && err.message) ? err.message : _t('Operation failed')),
+                });
+            });
+        }
+
+        // if we moved lists or the ordering changed, add the new tag
+        if (newTag && newTag !== 'im.vector.fake.direct' &&
+            (hasChangedSubLists || newOrder)
+        ) {
+            // Optimistic update of what will happen to the room tags
+            room.tags[newTag] = newOrder;
+
+            MatrixClientPeg.get().setRoomTag(roomId, newTag, newOrder).catch(function(err) {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                console.error("Failed to add tag " + newTag + " to room: " + err);
+                Modal.createTrackedDialog('Failed to add tag to room', '', ErrorDialog, {
+                    title: _t('Failed to add tag %(tagName)s to room', {tagName: newTag}),
+                    description: ((err && err.message) ? err.message : _t('Operation failed')),
+                });
+            });
+        }
+
+        this.refreshRoomList();
     },
 
     _delayedRefreshRoomList: new rate_limited_func(function() {
@@ -649,6 +744,7 @@ module.exports = React.createClass({
 
         const self = this;
         return (
+            <DragDropContext onDragEnd={this.onRoomTileEndDrag}>
             <GeminiScrollbar className="mx_RoomList_scrollbar"
                  autoshow={true} onScroll={self._whenScrolling} ref="gemscroll">
             <div className="mx_RoomList">
@@ -757,6 +853,7 @@ module.exports = React.createClass({
                              onShowMoreRooms={self.onShowMoreRooms} />
             </div>
             </GeminiScrollbar>
+            </DragDropContext>
         );
     },
 });
