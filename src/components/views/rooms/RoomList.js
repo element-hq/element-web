@@ -313,7 +313,7 @@ module.exports = React.createClass({
         const newOrder = {};
 
         // Is the tag ordered manually?
-        if (!newTag.match(/^(m\.lowpriority|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
+        if (newTag && !newTag.match(/^(m\.lowpriority|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
             const newList = Object.assign({}, this.state.lists[newTag]);
 
             // If the room was moved "down" (increasing index) in the same list we
