@@ -310,7 +310,7 @@ module.exports = React.createClass({
 
         const hasChangedSubLists = result.source.droppableId !== result.destination.droppableId;
 
-        const newOrder = {};
+        let newOrder = null;
 
         // Is the tag ordered manually?
         if (newTag && !newTag.match(/^(m\.lowpriority|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
@@ -327,7 +327,9 @@ module.exports = React.createClass({
             const nextOrder = newIndex === newList.length ?
                 1 : newList[offset + newIndex].tags[newTag].order;
 
-            newOrder['order'] = (prevOrder + nextOrder) / 2.0;
+            newOrder = {
+                order: (prevOrder + nextOrder) / 2.0,
+            };
         }
 
         // More evilness: We will still be dealing with moving to favourites/low prio,
