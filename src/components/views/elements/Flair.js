@@ -110,7 +110,7 @@ export default class Flair extends React.Component {
             this.setState({
                 profiles: profiles.filter((profile) => {
                     return profile ? profile.avatarUrl : false;
-                })
+                }),
             });
         }
     }
