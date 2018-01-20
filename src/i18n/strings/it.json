@@ -211,7 +211,7 @@
     "You can use the custom server options to sign into other Matrix servers by specifying a different Home server URL.<br/>This allows you to use Riot with an existing Matrix account on a different home server.<br/><br/>You can also set a custom identity server but you won't be able to invite users by email address, or be invited by email address yourself.": "Puoi usare le opzioni server personalizzate per accedere ad altri server Matrix specificando l'indirizzo dell'home server.<br/> Questo permette di usare Matrix con un account esistente su un home server diverso.<br/><br/>È anche possibile impostare un diverso identity server, ma in quel caso non sarà possibile invitare utenti attraverso l'indirizzo e-mail o essere invitati attraverso l'indirizzo e-mail.",
     "Appear Offline": "Appari offline",
     "Away": "Assente",
-    "Explore Account Data": "Esplora dati account",
+    "Explore Account Data": "Esplora Dati Account",
     "Toolbox": "Strumenti",
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Installa <chromeLink>Chrome</chromeLink> o <firefoxLink>Firefox</firefoxLink> per la migliore esperienza d'uso.",
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "Anche <safariLink>Safari</safariLink> e <operaLink>Opera</operaLink> vanno bene.",
@@ -220,7 +220,7 @@
     "Send Account Data": "Invia dati account",
     "Unpin Message": "Sblocca messaggio",
     "Pin Message": "Blocca messaggio",
-    "Add rooms to this community": "Aggiungi stanze a questa community",
+    "Add rooms to this community": "Aggiungi stanze a questa comunità",
     "Reply": "Rispondi",
     "Invite to this community": "Invita nella communita'"
 }
