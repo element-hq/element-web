@@ -137,7 +137,7 @@
     "Failed to set Direct Message status of room": "Failed to set Direct Message status of room",
     "unknown error code": "unknown error code",
     "Failed to forget room %(errCode)s": "Failed to forget room %(errCode)s",
-    "All messages (loud)": "All messages (loud)",
+    "All messages (noisy)": "All messages (noisy)",
     "All messages": "All messages",
     "Mentions only": "Mentions only",
     "Mute": "Mute",
