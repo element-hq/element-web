@@ -216,5 +216,11 @@
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Installa <chromeLink>Chrome</chromeLink> o <firefoxLink>Firefox</firefoxLink> per la migliore esperienza d'uso.",
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "Anche <safariLink>Safari</safariLink> e <operaLink>Opera</operaLink> vanno bene.",
     "Register": "Registrati",
-    "Rooms": "Stanze"
+    "Rooms": "Stanze",
+    "Send Account Data": "Invia Dati Account",
+    "Unpin Message": "Sblocca messaggio",
+    "Pin Message": "Blocca messaggio",
+    "Add rooms to this community": "Aggiungi stanze a questa community",
+    "Reply": "Rispondi",
+    "Invite to this community": "Invita nella communita'"
 }
