@@ -85,5 +85,9 @@
     "Unable to capture screen": "Impossibile acquisire lo schermo",
     "Call": "Chiama",
     "Answer": "Rispondi",
-    "Invite to Community": "Invita alla community"
+    "Invite to Community": "Invita alla community",
+    "Unpin Message": "Sblocca messaggio",
+    "Add rooms to this community": "Aggiungi stanze a questa community",
+    "Warning": "Attenzione",
+    "Unnamed room": "Stanza senza nome"
 }
