@@ -5,7 +5,7 @@
     "Add an email address above to configure email notifications": "Pievieno augšā epasta adresi, lai konfigurētu epasta notifikāciju paziņojumus",
     "Advanced notification settings": "Īpašie notifikāciju uzstādījumi",
     "All messages": "Visas ziņas",
-    "All messages (loud)": "Visas ziņas (skaļi)",
+    "All messages (noisy)": "Visas ziņas (skaļi)",
     "All Rooms": "Visas istabas",
     "All notifications are currently disabled for all targets.": "Visi notifikāciju paziņojumi ir atspējoti visiem saņēmējiem.",
     "An error occurred whilst saving your email notification preferences.": "Radās kļūda saglabājot tavus epasta notifikāciju ziņu uzstādījumus.",

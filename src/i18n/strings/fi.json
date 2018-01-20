@@ -4,7 +4,7 @@
     "Add an email address above to configure email notifications": "Lisää sähköpostiosoite yllä saadaksesi ilmoituksia sähköpostiisi",
     "Advanced notification settings": "Lisäasetukset ilmoituksille",
     "All messages": "Kaikki viestit",
-    "All messages (loud)": "Kaikki viestit (äänekkäästi)",
+    "All messages (noisy)": "Kaikki viestit (äänekkäästi)",
     "All Rooms": "Kaikki huoneet",
     "All notifications are currently disabled for all targets.": "Kaikki ilmoitukset on kytketty pois kaikilta kohteilta.",
     "An error occurred whilst saving your email notification preferences.": "Sähköposti-ilmoitusasetuksia tallettaessa tapahtui virhe.",

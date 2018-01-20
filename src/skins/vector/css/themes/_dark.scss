@@ -100,9 +100,10 @@ $rte-code-bg-color: #000;
 // ********************
 
 $roomtile-name-color: rgba(186, 186, 186, 0.8);
-$roomtile-selected-bg-color: rgba(255, 255, 255, 0.05);
+$roomtile-selected-bg-color: #333;
 $roomtile-focused-bg-color: rgba(255, 255, 255, 0.2);
 
+$roomsublist-background: #222;
 $roomsublist-label-fg-color: $h3-color;
 $roomsublist-label-bg-color: $tertiary-accent-color;
 $roomsublist-chevron-color: $accent-color;
