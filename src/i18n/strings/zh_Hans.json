@@ -203,5 +203,7 @@
     "Event sent!": "事件已发出！",
     "Event Type": "事件类型",
     "Event Content": "事件内容",
-    "State Key": "状态密钥"
+    "State Key": "状态密钥",
+    "Unstar Message": "删除书签",
+    "Star Message": "加入书签"
 }

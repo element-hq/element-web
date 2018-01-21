@@ -73,6 +73,13 @@ module.exports = React.createClass({
         this.setState({canRedact, canPin});
     },
 
+    _isStarred: function() {
+        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        const starredEvent = room.getAccountData('m.room.starred_events', '');
+        if (!starredEvent) return false;
+        return starredEvent.getContent().starred.includes(this.props.mxEvent.getId());
+    },
+
     _isPinned: function() {
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
         const pinnedEvent = room.currentState.getStateEvents('m.room.pinned_events', '');
@@ -125,6 +132,22 @@ module.exports = React.createClass({
 
     onCancelSendClick: function() {
         Resend.removeFromQueue(this.props.mxEvent);
+        this.closeMenu();
+    },
+
+    onStarClick: function() {
+        const cli = MatrixClientPeg.get();
+        const room = cli.getRoom(this.props.mxEvent.getRoomId());
+        const starredEvent = room.getAccountData('m.room.starred_events', '');
+        const eventIds = (starredEvent ? starredEvent.getContent().starred : []) || [];
+        if (!eventIds.includes(this.props.mxEvent.getId())) {
+            // Not starred - add
+            eventIds.push(this.props.mxEvent.getId());
+        } else {
+            // Starred - remove
+            eventIds.splice(eventIds.indexOf(this.props.mxEvent.getId()), 1);
+        }
+        cli.setRoomAccountData(this.props.mxEvent.getRoomId(), 'm.room.starred_events', {starred: eventIds});
         this.closeMenu();
     },
 
@@ -191,6 +214,7 @@ module.exports = React.createClass({
         let resendButton;
         let redactButton;
         let cancelButton;
+        let starButton;
         let forwardButton;
         let pinButton;
         let viewClearSourceButton;
@@ -226,6 +250,12 @@ module.exports = React.createClass({
         if (!eventStatus && this.props.mxEvent.getType() === 'm.room.message') {
             const content = this.props.mxEvent.getContent();
             if (content.msgtype && content.msgtype !== 'm.bad.encrypted' && content.hasOwnProperty('body')) {
+                starButton = (
+                    <div className="mx_MessageContextMenu_field" onClick={this.onStarClick}>
+                        { this._isStarred() ? _t('Unstar Message') : _t('Star Message') }
+                    </div>
+                );
+                
                 forwardButton = (
                     <div className="mx_MessageContextMenu_field" onClick={this.onForwardClick}>
                         { _t('Forward Message') }
@@ -306,6 +336,7 @@ module.exports = React.createClass({
                 { resendButton }
                 { redactButton }
                 { cancelButton }
+                { starButton }
                 { forwardButton }
                 { pinButton }
                 { viewSourceButton }
