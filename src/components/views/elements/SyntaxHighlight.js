@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {highlightBlock} from 'highlight.js';
 
-export default class Highlight extends React.Component {
+export default class SyntaxHighlight extends React.Component {
     static propTypes = {
         className: PropTypes.string,
         children: PropTypes.node,
@@ -42,7 +42,7 @@ export default class Highlight extends React.Component {
     render() {
         const { className, children } = this.props;
 
-        return <pre className={`${className} mx_Highlight`} ref={this._ref}>
+        return <pre className={`${className} mx_SyntaxHighlight`} ref={this._ref}>
             <code>{ children }</code>
         </pre>;
     }

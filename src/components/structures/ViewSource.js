@@ -18,7 +18,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Highlight from '../views/elements/Highlight';
+import SyntaxHighlight from '../views/elements/SyntaxHighlight';
 
 
 module.exports = React.createClass({
@@ -48,9 +48,9 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_ViewSource">
-                <Highlight className="json">
+                <SyntaxHighlight className="json">
                     { JSON.stringify(this.props.content, null, 2) }
-                </Highlight>
+                </SyntaxHighlight>
             </div>
         );
     }
