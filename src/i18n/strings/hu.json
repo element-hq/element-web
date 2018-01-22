@@ -2,7 +2,7 @@
     "Add an email address above to configure email notifications": "E-mail értesítés beállításához írd be az e-mail címed",
     "Advanced notification settings": "Haladó értesítési beállítások",
     "All messages": "Minden üzenet",
-    "All messages (loud)": "Minden üzenet (hangos)",
+    "All messages (noisy)": "Minden üzenet (hangos)",
     "All notifications are currently disabled for all targets.": "Minden céleszközön minden értesítés tiltva van.",
     "An error occurred whilst saving your email notification preferences.": "Hiba történt az e-mail értesítés beállításánál.",
     "Call invitation": "Hívás meghívó",

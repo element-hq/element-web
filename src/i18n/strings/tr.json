@@ -5,7 +5,7 @@
     "Add an email address above to configure email notifications": "E-posta bildirimlerini yapılandırmak için yukarıya bir e-posta adresi ekleyin",
     "Advanced notification settings": "Gelişmiş bildirim ayarları",
     "All messages": "Tüm mesajlar",
-    "All messages (loud)": "Tüm mesajlar (uzun)",
+    "All messages (noisy)": "Tüm mesajlar (uzun)",
     "All Rooms": "Tüm Odalar",
     "All notifications are currently disabled for all targets.": "Tüm bildirimler şu anda tüm hedefler için devre dışı bırakılmıştır.",
     "An error occurred whilst saving your email notification preferences.": "E-posta bildirim tercihlerinizi kaydetme işlemi sırasında bir hata oluştu.",

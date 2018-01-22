@@ -135,7 +135,7 @@
     "You have successfully set a password and an email address!": "¡Ha establecido exitosamente la contraseña y la dirección de email!",
     "You have successfully set a password!": "¡Ha establecido exitosamente una contraseña!",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s en %(osName)s",
-    "All messages (loud)": "Todos los mensajes (ruidoso)",
+    "All messages (noisy)": "Todos los mensajes (ruidoso)",
     "All notifications are currently disabled for all targets.": "Las notificaciones estan desactivadas para todos los objetivos.",
     "Collecting app version information": "Recolectando información de la versión de la aplicación",
     "Collecting logs": "Recolectando registros",

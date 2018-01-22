@@ -62,7 +62,7 @@
     "On": "An",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Du hast sie eventuell auf einem anderen Matrix-Client und nicht in Riot konfiguriert. Sie können in Riot nicht verändert werden, gelten aber trotzdem",
     "All messages": "Alle Nachrichten",
-    "All messages (loud)": "Alle Nachrichten (laut)",
+    "All messages (noisy)": "Alle Nachrichten (laut)",
     "Cancel Sending": "Senden abbrechen",
     "Close": "Schließen",
     "Delete the room alias %(alias)s and remove %(name)s from the directory?": "Soll der Raum-Alias %(alias)s gelöscht und der %(name)s aus dem Verzeichnis entfernt werden?",
