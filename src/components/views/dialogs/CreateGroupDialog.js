@@ -55,11 +55,15 @@ export default React.createClass({
 
     _checkGroupId: function(e) {
         let error = null;
-        if (!/^[a-z0-9=_\-\.\/]*$/.test(this.state.groupId)) {
+        if (!this.state.groupId) {
+            error = _t("Community IDs cannot not be empty.");
+        } else if (!/^[a-z0-9=_\-\.\/]*$/.test(this.state.groupId)) {
             error = _t("Community IDs may only contain characters a-z, 0-9, or '=_-./'");
         }
         this.setState({
             groupIdError: error,
+            // Reset createError to get rid of now stale error message
+            createError: null,
         });
         return error;
     },
