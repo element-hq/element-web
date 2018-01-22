@@ -156,7 +156,8 @@ export default class Quote extends React.Component {
                     {
                         _t('<a>In reply to</a> <pill>', {}, {
                             'a': (sub) => <a onClick={this.onQuoteClick} className="mx_Quote_show">{ sub }</a>,
-                            'pill': <Pill type={Pill.TYPE_USER_MENTION} url={makeUserPermalink(oldestEv.getSender())} room={room} shouldShowPillAvatar={true} />,
+                            'pill': <Pill type={Pill.TYPE_USER_MENTION} room={room}
+                                          url={makeUserPermalink(oldestEv.getSender())} shouldShowPillAvatar={true} />,
                         })
                     }
                 </blockquote>);
