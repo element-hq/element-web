@@ -158,6 +158,8 @@
     "Register": "Register",
     "Invite to this room": "Invite to this room",
     "Members": "Members",
+    "%(count)s Members|other": "%(count)s Members",
+    "%(count)s Members|one": "%(count)s Member",
     "Files": "Files",
     "Notifications": "Notifications",
     "Rooms": "Rooms",
