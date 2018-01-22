@@ -271,15 +271,15 @@ module.exports = React.createClass({
         ) {
             const cli = this.context.matrixClient;
             const room = cli.getRoom(this.props.roomId);
-            let userIsInRoom;
+            let isUserInRoom;
             if (room) {
                 const numMembers = room.getJoinedMembers().length;
                 membersTitle = _t('%(count)s Members', { count: numMembers });
                 membersBadge = <div title={membersTitle}>{ formatCount(numMembers) }</div>;
-                userIsInRoom = room.hasMembershipState(this.context.matrixClient.credentials.userId, 'join');
+                isUserInRoom = room.hasMembershipState(this.context.matrixClient.credentials.userId, 'join');
             }
 
-            if (userIsInRoom) {
+            if (isUserInRoom) {
                 inviteGroup =
                     <AccessibleButton className="mx_RightPanel_invite" onClick={this.onInviteButtonClick}>
                         <div className="mx_RightPanel_icon" >
