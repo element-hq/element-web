@@ -115,7 +115,7 @@ export default class Stickerpack extends React.Component {
                         padding: '5px',
                         borderTop: '1px solid #999',
                     }}>
-                        <span className='mx_Stickers_addLink' onClick={this._launchManageIntegrations} >Add sticker packs</span>
+                        <span className='mx_Stickers_addLink' onClick={this._launchManageIntegrations} > { _t("Manage sticker packs") } </span>
                     </div>
                 </div>
             );
@@ -126,6 +126,11 @@ export default class Stickerpack extends React.Component {
         this.setState({stickersContent});
     }
 
+    /**
+     * Show the sticker picker overlay
+     * If no stickerpacks have been added, show a link to the integration manager add sticker packs page.
+     * @param  {Event} e Event that triggered the function
+     */
     onShowStickersClick(e) {
         const GenericElementContextMenu = sdk.getComponent('context_menus.GenericElementContextMenu');
         const buttonRect = e.target.getBoundingClientRect();
@@ -149,23 +154,33 @@ export default class Stickerpack extends React.Component {
         this.setState({showStickers: true});
     }
 
+    /**
+     * Trigger hiding of the sticker picker overlay
+     * @param  {Event} ev Event that triggered the function call
+     */
     onHideStickersClick(ev) {
         this.stickersMenu.close();
     }
 
+    /**
+     * The stickers picker was hidden
+     */
     onFinished() {
         this.setState({showStickers: false});
         this.stickersMenu = null;
     }
 
+    /**
+     * Launch the integrations manager on the stickers integration page
+     */
     _launchManageIntegrations() {
         this.onFinished();
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                 this.scalarClient.getScalarInterfaceUrlForRoom(
                     this.props.room.roomId,
-                    'add_integ',
-                    // this.widgetId,
+                    'type_stickerpack',
+                    this.widgetId,
                 ) :
                 null;
         Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
