@@ -982,5 +982,6 @@
     "Your identity server's URL": "Az azonosítási szerver URL-t",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(fullYear)s. %(monthName)s %(day)s, %(weekDayName)s",
     "This room is not public. You will not be able to rejoin without an invite.": "Ez a szoba nem nyilvános. Kilépés után csak újabb meghívóval tudsz újra belépni a szobába.",
-    "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>Eszközök listája</showDevicesText>, <sendAnywayText>mindenképpen küld</sendAnywayText> vagy <cancelText>szakítsd meg</cancelText>."
+    "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>Eszközök listája</showDevicesText>, <sendAnywayText>mindenképpen küld</sendAnywayText> vagy <cancelText>szakítsd meg</cancelText>.",
+    "Community IDs cannot not be empty.": "A közösségi azonosító nem lehet üres."
 }
