@@ -53,8 +53,8 @@ export default class Quote extends React.Component {
             events: [],
             // Whether the top (oldest) event should be shown or spoilered
             show: true,
-            // Whether an error was encountered fetching another older event, show if it does
-            err: null,
+            // Whether an error was encountered fetching nested older event, show node if it does
+            err: false,
         };
 
         this.onQuoteClick = this.onQuoteClick.bind(this);
@@ -124,10 +124,16 @@ export default class Quote extends React.Component {
     // addRichQuote(roomId, eventId) {
     addRichQuote(href) {
         const {roomIdentifier, eventId} = this.parseUrl(href);
-        if (!roomIdentifier || !eventId) return;
+        if (!roomIdentifier || !eventId) {
+            this.setState({ err: true });
+            return;
+        }
 
         const room = this.getRoom(roomIdentifier);
-        if (!room) return;
+        if (!room) {
+            this.setState({ err: true });
+            return;
+        }
 
         this.getEvent(room, eventId, false);
     }
