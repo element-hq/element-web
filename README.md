@@ -128,7 +128,7 @@ You can configure the app by copying `config.sample.json` to
 1. `cross_origin_renderer_url`: URL to a static HTML page hosting code to help display
    encrypted file attachments. This MUST be hosted on a completely separate domain to
    anything else since it is used to isolate the privileges of file attachments to this
-   domain. Default: `usercontent.riot.im`. This needs to contain v1.html from
+   domain. Default: `https://usercontent.riot.im/v1.html`. This needs to contain v1.html from
    https://github.com/matrix-org/usercontent/blob/master/v1.html
 1. `piwik`: an object containing the following properties:
     1. `url`: The URL of the Piwik instance to use for collecting Analytics
