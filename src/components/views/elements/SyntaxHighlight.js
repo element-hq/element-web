@@ -30,10 +30,14 @@ export default class SyntaxHighlight extends React.Component {
         this._ref = this._ref.bind(this);
     }
 
+    // componentDidUpdate used here for reusability
+    // componentWillReceiveProps fires too early to call highlightBlock on.
     componentDidUpdate() {
         if (this._el) highlightBlock(this._el);
     }
 
+    // call componentDidUpdate because _ref is fired on initial render
+    // which does not fire componentDidUpdate
     _ref(el) {
         this._el = el;
         this.componentDidUpdate();
