@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   x="0"
+   y="0"
+   width="35"
+   height="35"
+   viewBox="0, 0, 35, 35"
+   id="svg3715"
+   sodipodi:docname="icons-starred.svg"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)">
+  <metadata
+     id="metadata3721">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3719" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     id="namedview3717"
+     showgrid="false"
+     inkscape:zoom="22.8"
+     inkscape:cx="17.5"
+     inkscape:cy="17.5"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3715" />
+  <g
+     id="Symbols">
+    <path
+       d="M17.5,35 C27.165,35 35,27.165 35,17.5 C35,7.835 27.165,0 17.5,0 C7.835,0 0,7.835 0,17.5 C0,27.165 7.835,35 17.5,35 z"
+       fill="#76CFA6"
+       opacity="0.15"
+       id="Oval-1-Copy-7" />
+    <path
+       d="M22.4,15.4 C22.4,19.266 19.266,22.4 15.4,22.4 C11.534,22.4 8.4,19.266 8.4,15.4 C8.4,11.534 11.534,8.4 15.4,8.4 C19.266,8.4 22.4,11.534 22.4,15.4 z"
+       fill-opacity="0"
+       stroke="#76CFA6"
+       stroke-width="1"
+       stroke-linecap="round"
+       id="path-1"
+       opacity="0.7" />
+    <path
+       d="M20.3,20.3 L25.25,25.25"
+       fill-opacity="0"
+       stroke="#76CFA6"
+       stroke-width="1"
+       stroke-linecap="round"
+       id="Line"
+       opacity="0.7" />
+  </g>
+  <path
+     sodipodi:type="star"
+     id="path3723"
+     sodipodi:sides="5"
+     sodipodi:cx="15.394737"
+     sodipodi:cy="15.833334"
+     sodipodi:r1="4.9662218"
+     sodipodi:r2="2.4831109"
+     sodipodi:arg1="0.90433106"
+     sodipodi:arg2="1.5326496"
+     inkscape:flatsided="false"
+     inkscape:rounded="0"
+     inkscape:randomized="0"
+     d="m 18.464913,19.736843 -2.975476,-1.422205 -2.858421,1.644857 0.433124,-3.269331 -2.447652,-2.210231 3.243162,-0.598353 1.345688,-3.010855 1.57126,2.899528 3.279333,0.349421 -2.272069,2.390361 z"
+     inkscape:transform-center-x="0.058527577"
+     inkscape:transform-center-y="-0.41822394"
+     style="fill:#76cfa6;fill-opacity:0.74509804" />
+</svg>

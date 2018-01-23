@@ -70,7 +70,8 @@ limitations under the License.
     width: 100%;
     margin: 0px auto;
 
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
     border-bottom: 1px solid $primary-hairline-color;
 
     flex: 0 0 auto;
