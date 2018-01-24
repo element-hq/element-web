@@ -132,6 +132,8 @@ class RoomViewStore extends Store {
                 shouldPeek: payload.should_peek === undefined ? true : payload.should_peek,
                 // have we sent a join request for this room and are waiting for a response?
                 joining: payload.joining || false,
+                // Reset quotingEvent because we don't want cross-room because bad UX
+                quotingEvent: null,
             };
 
             if (this._state.forwardingEvent) {
