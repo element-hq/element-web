@@ -96,6 +96,10 @@ limitations under the License.
     line-height: 22px;
 }
 
+.mx_EventTile_quote {
+    margin-right: 10px;
+}
+
 .mx_EventTile_info .mx_EventTile_line {
     padding-left: 83px;
 }
@@ -115,7 +119,7 @@ limitations under the License.
     background-color: $event-selected-color;
 }
 
-.mx_EventTile:hover .mx_EventTile_line,
+.mx_EventTile:hover .mx_EventTile_line:not(.mx_EventTile_quote),
 .mx_EventTile.menu .mx_EventTile_line
 {
     background-color: $event-selected-color;
