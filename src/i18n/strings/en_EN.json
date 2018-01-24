@@ -981,5 +981,6 @@
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Whether or not you're using the Richtext mode of the Rich Text Editor",
     "Your homeserver's URL": "Your homeserver's URL",
     "Your identity server's URL": "Your identity server's URL",
+    "<a>In reply to</a> <pill>": "<a>In reply to</a> <pill>",
     "This room is not public. You will not be able to rejoin without an invite.": "This room is not public. You will not be able to rejoin without an invite."
 }
