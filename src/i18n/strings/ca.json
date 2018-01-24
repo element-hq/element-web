@@ -230,12 +230,12 @@
     "Don't send typing notifications": "No enviïs notificacions d'escriptura",
     "Automatically replace plain text Emoji": "Substitueix automàticament Emoji de text pla",
     "Disable Peer-to-Peer for 1:1 calls": "Desactiva el Peer-to-Peer per a trucades entre dos",
-    "Never send encrypted messages to unverified devices in this room from this device": "Des d´aquest dispositiu no enviïs mai a aquesta sala missatges encriptats a dispositius sense verificar",
-    "Enable inline URL previews by default": "Activa per defecte les visualitzacions prèvies d'URL en línia",
-    "Enable URL previews for this room (only affects you)": "Activa les visualitzacions prèvies d'URL d'aquesta sala (no afecta a altres usuaris)",
-    "Enable URL previews by default for participants in this room": "Activa per defecte les visualitzacions prèvies d'URL per als participants d'aquesta sala",
+    "Never send encrypted messages to unverified devices in this room from this device": "Des d'aquest dispositiu no enviïs mai a aquesta sala missatges encriptats a dispositius sense verificar",
+    "Enable inline URL previews by default": "Activa per defecte la vista prèvia d'URLs en línia",
+    "Enable URL previews for this room (only affects you)": "Activa la vista prèvia d'URLs d'aquesta sala (no afecta a altres usuaris)",
+    "Enable URL previews by default for participants in this room": "Activa per defecte la vista prèvia d'URLs per als participants d'aquesta sala",
     "Room Colour": "Color de la sala",
     "Active call (%(roomName)s)": "Trucada activa (%(roomName)s)",
-    "unknown caller": "trucada desconeguda",
+    "unknown caller": "trucada d'un desconegut",
     "Incoming voice call from %(name)s": "Trucada de veu entrant de %(name)s"
 }
