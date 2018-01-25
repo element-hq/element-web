@@ -62,6 +62,10 @@ function createAccountDataAction(matrixClient, accountDataEvent) {
     };
 }
 
+function createRoomTagsAction(matrixClient, roomTagsEvent, room) {
+    return { action: 'MatrixActions.Room.tags', room };
+}
+
 /**
  * This object is responsible for dispatching actions when certain events are emitted by
  * the given MatrixClient.
@@ -78,6 +82,7 @@ export default {
     start(matrixClient) {
         this._addMatrixClientListener(matrixClient, 'sync', createSyncAction);
         this._addMatrixClientListener(matrixClient, 'accountData', createAccountDataAction);
+        this._addMatrixClientListener(matrixClient, 'Room.tags', createRoomTagsAction);
     },
 
     /**

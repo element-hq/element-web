@@ -26,10 +26,11 @@ const CallHandler = require('../../../CallHandler');
 const dis = require("../../../dispatcher");
 const sdk = require('../../../index');
 const rate_limited_func = require('../../../ratelimitedfunc');
-const Rooms = require('../../../Rooms');
+import * as Rooms from '../../../Rooms';
 import DMRoomMap from '../../../utils/DMRoomMap';
 const Receipt = require('../../../utils/Receipt');
 import TagOrderStore from '../../../stores/TagOrderStore';
+import RoomListStore from '../../../stores/RoomListStore';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
 
 const HIDE_CONFERENCE_CHANS = true;
@@ -77,7 +78,6 @@ module.exports = React.createClass({
         cli.on("deleteRoom", this.onDeleteRoom);
         cli.on("Room.timeline", this.onRoomTimeline);
         cli.on("Room.name", this.onRoomName);
-        cli.on("Room.tags", this.onRoomTags);
         cli.on("Room.receipt", this.onRoomReceipt);
         cli.on("RoomState.events", this.onRoomStateEvents);
         cli.on("RoomMember.name", this.onRoomMemberName);
@@ -113,6 +113,10 @@ module.exports = React.createClass({
             });
             // Filters themselves have changed, refresh the selected tags
             this.updateVisibleRooms();
+        });
+
+        this._roomListStoreToken = RoomListStore.addListener(() => {
+            this._delayedRefreshRoomList();
         });
 
         this.refreshRoomList();
@@ -175,7 +179,6 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("deleteRoom", this.onDeleteRoom);
             MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
             MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
-            MatrixClientPeg.get().removeListener("Room.tags", this.onRoomTags);
             MatrixClientPeg.get().removeListener("Room.receipt", this.onRoomReceipt);
             MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
             MatrixClientPeg.get().removeListener("RoomMember.name", this.onRoomMemberName);
@@ -245,10 +248,6 @@ module.exports = React.createClass({
     },
 
     onRoomName: function(room) {
-        this._delayedRefreshRoomList();
-    },
-
-    onRoomTags: function(event, room) {
         this._delayedRefreshRoomList();
     },
 
@@ -338,7 +337,7 @@ module.exports = React.createClass({
             totalRooms += l.length;
         }
         this.setState({
-            lists: this.getRoomLists(),
+            lists,
             totalRoomCount: totalRooms,
             // Do this here so as to not render every time the selected tags
             // themselves change.
@@ -349,70 +348,28 @@ module.exports = React.createClass({
     },
 
     getRoomLists: function() {
-        const lists = {};
-        lists["im.vector.fake.invite"] = [];
-        lists["m.favourite"] = [];
-        lists["im.vector.fake.recent"] = [];
-        lists["im.vector.fake.direct"] = [];
-        lists["m.lowpriority"] = [];
-        lists["im.vector.fake.archived"] = [];
+        const lists = RoomListStore.getRoomLists();
 
-        const dmRoomMap = DMRoomMap.shared();
+        const filteredLists = {};
 
-        this._visibleRooms.forEach((room, index) => {
-            const me = room.getMember(MatrixClientPeg.get().credentials.userId);
-            if (!me) return;
-
-            // console.log("room = " + room.name + ", me.membership = " + me.membership +
-            //             ", sender = " + me.events.member.getSender() +
-            //             ", target = " + me.events.member.getStateKey() +
-            //             ", prevMembership = " + me.events.member.getPrevContent().membership);
-
-            if (me.membership == "invite") {
-                lists["im.vector.fake.invite"].push(room);
-            } else if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(room, me, this.props.ConferenceHandler)) {
-                // skip past this room & don't put it in any lists
-            } else if (me.membership == "join" || me.membership === "ban" ||
-                     (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey())) {
-                // Used to split rooms via tags
-                const tagNames = Object.keys(room.tags);
-                if (tagNames.length) {
-                    for (let i = 0; i < tagNames.length; i++) {
-                        const tagName = tagNames[i];
-                        lists[tagName] = lists[tagName] || [];
-                        lists[tagName].push(room);
-                    }
-                } else if (dmRoomMap.getUserIdForRoomId(room.roomId)) {
-                    // "Direct Message" rooms (that we're still in and that aren't otherwise tagged)
-                    lists["im.vector.fake.direct"].push(room);
-                } else {
-                    lists["im.vector.fake.recent"].push(room);
+        Object.keys(lists).forEach((tagName) => {
+            filteredLists[tagName] = lists[tagName].filter((taggedRoom) => {
+                // Somewhat impossible, but guard against it anyway
+                if (!taggedRoom) {
+                    return;
                 }
-            } else if (me.membership === "leave") {
-                lists["im.vector.fake.archived"].push(room);
-            } else {
-                console.error("unrecognised membership: " + me.membership + " - this should never happen");
-            }
+                const me = taggedRoom.getMember(MatrixClientPeg.get().credentials.userId);
+                if (HIDE_CONFERENCE_CHANS && Rooms.isConfCallRoom(taggedRoom, me, this.props.ConferenceHandler)) {
+                    return;
+                }
+
+                return this._visibleRooms.some((visibleRoom) => {
+                    return visibleRoom.roomId === taggedRoom.roomId;
+                });
+            });
         });
 
-        // we actually apply the sorting to this when receiving the prop in RoomSubLists.
-
-        // we'll need this when we get to iterating through lists programatically - e.g. ctrl-shift-up/down
-/*
-        this.listOrder = [
-            "im.vector.fake.invite",
-            "m.favourite",
-            "im.vector.fake.recent",
-            "im.vector.fake.direct",
-            Object.keys(otherTagNames).filter(tagName=>{
-                return (!tagName.match(/^m\.(favourite|lowpriority)$/));
-            }).sort(),
-            "m.lowpriority",
-            "im.vector.fake.archived"
-        ];
-*/
-
-        return lists;
+        return filteredLists;
     },
 
     _getScrollNode: function() {
