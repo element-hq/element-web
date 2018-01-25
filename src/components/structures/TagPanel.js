@@ -95,7 +95,10 @@ const TagPanel = React.createClass({
             />;
         });
         return <div className="mx_TagPanel">
-            <Droppable droppableId="tag-panel-droppable">
+            <Droppable
+                droppableId="tag-panel-droppable"
+                type="draggable-TagTile"
+            >
                 { (provided, snapshot) => (
                     <div
                         className="mx_TagPanel_tagTileContainer"
