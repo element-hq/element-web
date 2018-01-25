@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import sdk from 'matrix-react-sdk';
+import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 
@@ -60,7 +61,7 @@ class GenericEditor extends DevtoolsComponent {
                 <label htmlFor={id}>{ label }</label>
             </div>
             <div className="mx_DevTools_inputCell">
-                <input id={id} onChange={this._onChange} value={this.state[id]} size="32" />
+                <input id={id} className="mx_TextInputDialog_input" onChange={this._onChange} value={this.state[id]} size="32" />
             </div>
         </div>;
     }
@@ -363,7 +364,9 @@ class RoomStateExplorer extends DevtoolsComponent {
 
             return <div className="mx_ViewSource">
                 <div className="mx_Dialog_content">
-                    <pre>{ JSON.stringify(this.state.event.event, null, 2) }</pre>
+                    <SyntaxHighlight className="json">
+                        { JSON.stringify(this.state.event.event, null, 2) }
+                    </SyntaxHighlight>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.onBack}>{ _t('Back') }</button>
@@ -492,7 +495,9 @@ class AccountDataExplorer extends DevtoolsComponent {
 
             return <div className="mx_ViewSource">
                 <div className="mx_Dialog_content">
-                    <pre>{ JSON.stringify(this.state.event.event, null, 2) }</pre>
+                    <SyntaxHighlight className="json">
+                        { JSON.stringify(this.state.event.event, null, 2) }
+                    </SyntaxHighlight>
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.onBack}>{ _t('Back') }</button>

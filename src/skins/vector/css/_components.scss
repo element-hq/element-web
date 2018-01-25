@@ -11,6 +11,7 @@
 @import "./matrix-react-sdk/structures/_RoomStatusBar.scss";
 @import "./matrix-react-sdk/structures/_RoomView.scss";
 @import "./matrix-react-sdk/structures/_SearchBox.scss";
+@import "./matrix-react-sdk/structures/_TagPanel.scss";
 @import "./matrix-react-sdk/structures/_UploadBar.scss";
 @import "./matrix-react-sdk/structures/_UserSettings.scss";
 @import "./matrix-react-sdk/structures/login/_Login.scss";
@@ -38,6 +39,7 @@
 @import "./matrix-react-sdk/views/elements/_RichText.scss";
 @import "./matrix-react-sdk/views/elements/_RoleButton.scss";
 @import "./matrix-react-sdk/views/elements/_ToolTipButton.scss";
+@import "./matrix-react-sdk/views/elements/_Quote.scss";
 @import "./matrix-react-sdk/views/groups/_GroupPublicityToggle.scss";
 @import "./matrix-react-sdk/views/groups/_GroupRoomList.scss";
 @import "./matrix-react-sdk/views/groups/_GroupUserSettings.scss";
@@ -69,6 +71,7 @@
 @import "./matrix-react-sdk/views/rooms/_RoomTile.scss";
 @import "./matrix-react-sdk/views/rooms/_SearchableEntityList.scss";
 @import "./matrix-react-sdk/views/rooms/_TopUnreadMessagesBar.scss";
+@import "./matrix-react-sdk/views/rooms/_QuotePreview.scss";
 @import "./matrix-react-sdk/views/settings/_DevicesPanel.scss";
 @import "./matrix-react-sdk/views/settings/_IntegrationsManager.scss";
 @import "./matrix-react-sdk/views/voip/_CallView.scss";
@@ -93,6 +96,7 @@
 @import "./vector-web/views/elements/_ImageView.scss";
 @import "./vector-web/views/elements/_InlineSpinner.scss";
 @import "./vector-web/views/elements/_Spinner.scss";
+@import "./vector-web/views/elements/_SyntaxHighlight.scss";
 @import "./vector-web/views/globals/_MatrixToolbar.scss";
 @import "./vector-web/views/messages/_DateSeparator.scss";
 @import "./vector-web/views/messages/_MessageTimestamp.scss";

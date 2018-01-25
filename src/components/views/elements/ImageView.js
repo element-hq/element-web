@@ -20,7 +20,7 @@ var React = require('react');
 
 var MatrixClientPeg = require('matrix-react-sdk/lib/MatrixClientPeg');
 
-var DateUtils = require('matrix-react-sdk/lib/DateUtils');
+import {formatDate} from 'matrix-react-sdk/lib/DateUtils';
 var filesize = require('filesize');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 const Modal = require('matrix-react-sdk/lib/Modal');
@@ -159,7 +159,7 @@ module.exports = React.createClass({
             }
 
             eventMeta = (<div className="mx_ImageView_metadata">
-                { _t('Uploaded on %(date)s by %(user)s', {date: DateUtils.formatDate(new Date(this.props.mxEvent.getTs())), user: sender}) }
+                { _t('Uploaded on %(date)s by %(user)s', {date: formatDate(new Date(this.props.mxEvent.getTs())), user: sender}) }
             </div>);
         }
 

@@ -40,6 +40,7 @@ $preview-bar-bg-color: #f7f7f7;
 
 // left-panel style muted accent color
 $secondary-accent-color: #eaf5f0;
+$tertiary-accent-color: #d3efe1;
 
 // used by RoomDirectory permissions
 $plinth-bg-color: $secondary-accent-color;
@@ -48,7 +49,7 @@ $plinth-bg-color: $secondary-accent-color;
 $droptarget-bg-color: rgba(255,255,255,0.5);
 
 // used by AddressSelector
-$selected-color: #eaf5f0;
+$selected-color: $secondary-accent-color;
 
 // selected for hoverover & selected event tiles
 $event-selected-color: #f7f7f7;
@@ -103,15 +104,16 @@ $roomtile-name-color: rgba(69, 69, 69, 0.8);
 $roomtile-selected-bg-color: rgba(255, 255, 255, 0.8);
 $roomtile-focused-bg-color: rgba(255, 255, 255, 0.9);
 
+$roomsublist-background: #badece;
 $roomsublist-label-fg-color: $h3-color;
-$roomsublist-label-bg-color: #d3efe1;
+$roomsublist-label-bg-color: $tertiary-accent-color;
 $roomsublist-chevron-color: $accent-color;
 
 $panel-divider-color: rgba(118, 207, 166, 0.2);
 
 // ********************
 
-$widget-menu-bar-bg-color: #d3efe1;
+$widget-menu-bar-bg-color: $tertiary-accent-color;
 
 // ********************
 

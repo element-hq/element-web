@@ -14,7 +14,7 @@
     "Failed to remove tag %(tagName)s from room": "No s'ha pogut esborrar l'etiqueta %(tagName)s de la sala",
     "Filter room names": "Filtra els noms de les sales",
     "Couldn't load home page": "No s'ha pogut carregar la pàgina d'inici",
-    "All messages (loud)": "Tots els missatges (sorollós)",
+    "All messages (noisy)": "Tots els missatges (sorollós)",
     "Mentions only": "Només mencions",
     "Mute": "Silenciat",
     "Direct Chat": "Xat directe",

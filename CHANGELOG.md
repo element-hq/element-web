@@ -1,3 +1,17 @@
+Changes in [0.13.4](https://github.com/vector-im/riot-web/releases/tag/v0.13.4) (2018-01-03)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.3...v0.13.4)
+
+ * Change config of riot.im electron build to fix some widgets not working. This only affects
+   electron builds using the riot.im config - for all other builds, this is identical to
+   v0.13.3.
+
+Changes in [0.13.3](https://github.com/vector-im/riot-web/releases/tag/v0.13.3) (2017-12-04)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.2...v0.13.3)
+
+ * Bump js-sdk, react-sdk version to pull in fix for [setting room publicity in a group](https://github.com/matrix-org/matrix-js-sdk/commit/aa3201ebb0fff5af2fb733080aa65ed1f7213de6).
+
 Changes in [0.13.2](https://github.com/vector-im/riot-web/releases/tag/v0.13.2) (2017-11-28)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.1...v0.13.2)

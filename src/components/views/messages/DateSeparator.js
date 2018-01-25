@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,8 +16,9 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-import DateUtils from 'matrix-react-sdk/lib/DateUtils';
+import {formatFullDateNoTime} from 'matrix-react-sdk/lib/DateUtils';
 
 function getdaysArray() {
 	return [
@@ -30,30 +32,30 @@ function getdaysArray() {
     ];
 }
 
-module.exports = React.createClass({
-    displayName: 'DateSeparator',
-    render: function() {
-        var date = new Date(this.props.ts);
-        var today = new Date();
-        var yesterday = new Date();
-        var days = getdaysArray();
-        yesterday.setDate(today.getDate() - 1);
-        var label;
-        if (date.toDateString() === today.toDateString()) {
-            label = _t('Today');
-        }
-        else if (date.toDateString() === yesterday.toDateString()) {
-            label = _t('Yesterday');
-        }
-        else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
-            label = days[date.getDay()];
-        }
-        else {
-            label = DateUtils.formatFullDate(date, this.props.showTwelveHour);
-        }
+export default class DateSeparator extends React.Component {
+    static propTypes = {
+        ts: PropTypes.number.isRequired,
+    };
 
-        return (
-            <h2 className="mx_DateSeparator">{ label }</h2>
-        );
+    getLabel() {
+        const date = new Date(this.props.ts);
+        const today = new Date();
+        const yesterday = new Date();
+        const days = getdaysArray();
+        yesterday.setDate(today.getDate() - 1);
+
+        if (date.toDateString() === today.toDateString()) {
+            return _t('Today');
+        } else if (date.toDateString() === yesterday.toDateString()) {
+            return _t('Yesterday');
+        } else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
+            return days[date.getDay()];
+        } else {
+            return formatFullDateNoTime(date);
+        }
     }
-});
+
+    render() {
+        return <h2 className="mx_DateSeparator">{ this.getLabel() }</h2>;
+    }
+}
