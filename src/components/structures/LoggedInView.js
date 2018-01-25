@@ -208,7 +208,6 @@ const LoggedInView = React.createClass({
     },
 
     render: function() {
-        const TagPanel = sdk.getComponent('structures.TagPanel');
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RightPanel = sdk.getComponent('structures.RightPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
@@ -330,7 +329,6 @@ const LoggedInView = React.createClass({
             <div className='mx_MatrixChat_wrapper'>
                 { topBar }
                 <div className={bodyClasses}>
-                    { SettingsStore.isFeatureEnabled("feature_tag_panel") ? <TagPanel /> : <div /> }
                     <LeftPanel
                         collapsed={this.props.collapseLhs || false}
                         disabled={this.props.leftDisabled}
