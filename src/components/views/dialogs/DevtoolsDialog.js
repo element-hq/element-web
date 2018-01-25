@@ -252,24 +252,15 @@ class FilteredList extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.onQuery = this.onQuery.bind(this);
-
-        this.state = {
-            query: this.props.query,
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.state.query !== nextProps.query) this.setState({ query: nextProps.query });
     }
 
     onQuery(ev) {
-        this.setState({ query: ev.target.value });
         if (this.props.onChange) this.props.onChange(ev.target.value);
     }
 
     filterChildren() {
-        if (this.state.query) {
-            const lowerQuery = this.state.query.toLowerCase();
+        if (this.props.query) {
+            const lowerQuery = this.props.query.toLowerCase();
             return this.props.children.filter((child) => child.key.toLowerCase().includes(lowerQuery));
         }
         return this.props.children;
@@ -279,7 +270,7 @@ class FilteredList extends React.Component {
         return <div>
             <input size="64"
                    onChange={this.onQuery}
-                   value={this.state.query}
+                   value={this.props.query}
                    placeholder={_t('Filter results')}
                    className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query" />
             { this.filterChildren() }
