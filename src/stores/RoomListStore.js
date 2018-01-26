@@ -46,7 +46,6 @@ class RoomListStore extends Store {
 
     _setState(newState) {
         this._state = Object.assign(this._state, newState);
-        console.info(this._state);
         this.__emitChange();
     }
 
