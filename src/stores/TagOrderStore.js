@@ -48,7 +48,7 @@ class TagOrderStore extends Store {
         switch (payload.action) {
             // Initialise state after initial sync
             case 'MatrixActions.sync': {
-                if (!(payload.prevState === 'PREPARED' && payload.state === 'SYNCING')) {
+                if (!(payload.prevState !== 'PREPARED' && payload.state === 'PREPARED')) {
                     break;
                 }
                 const tagOrderingEvent = payload.matrixClient.getAccountData('im.vector.web.tag_ordering');
