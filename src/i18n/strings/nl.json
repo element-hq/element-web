@@ -722,5 +722,10 @@
     "%(names)s and %(count)s others are typing|other": "%(names)s en %(count)s andere gebruikers zijn aan het typen",
     "%(names)s and %(count)s others are typing|one": "%(names)s en iemand anders is aan het typen",
     "Send": "Verstuur",
-    "Message Pinning": "Boodschap vastpinnen"
+    "Message Pinning": "Boodschap vastpinnen",
+    "Message Replies": "Antwoorden op bericht",
+    "Presence Management": "Presentie Beheer",
+    "Tag Panel": "Label Paneel",
+    "Disable Emoji suggestions while typing": "Emoji suggesties tijdens het typen uitzetten",
+    "Hide avatar changes": "Avatar veranderingen verbergen"
 }
