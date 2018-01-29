@@ -972,5 +972,7 @@
     "Your language of choice": "Deine ausgewählte Sprache",
     "Whether or not you're using the Richtext mode of the Rich Text Editor": "Ob du den Richtext-Modus des Editors benutzt oder nicht",
     "Your homeserver's URL": "Die URL deines Homeservers",
-    "Your identity server's URL": "Die URL deines Identitätsservers"
+    "Your identity server's URL": "Die URL deines Identitätsservers",
+    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
+    "Tag Panel": "Beschriftungsfeld"
 }
