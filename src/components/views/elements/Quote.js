@@ -182,6 +182,7 @@ export default class Quote extends React.Component {
         }
 
         // Deliberately render nothing if the URL isn't recognised
-        return this.props.node;
+        // in case we get an undefined/falsey node, replace it with null to make React happy
+        return this.props.node || null;
     }
 }
