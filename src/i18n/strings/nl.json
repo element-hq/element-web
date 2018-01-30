@@ -727,5 +727,20 @@
     "Presence Management": "Presentie Beheer",
     "Tag Panel": "Label Paneel",
     "Disable Emoji suggestions while typing": "Emoji suggesties tijdens het typen uitzetten",
-    "Hide avatar changes": "Avatar veranderingen verbergen"
+    "Hide avatar changes": "Avatar veranderingen verbergen",
+    "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
+    "Hide display name changes": "Weergavenaam wijzigingen verbergen",
+    "Enable inline URL previews by default": "Inline URL voorvertoning standaard aanzetten",
+    "Enable URL previews for this room (only affects you)": "URL voorvertoning in deze ruimte aanzetten (geldt alleen voor jou)",
+    "Enable URL previews by default for participants in this room": "URL voorvertoning standaard voor de gebruikers in deze ruimte aanzetten",
+    "Delete %(count)s devices|other": "Verwijder %(count)s apparaten",
+    "Delete %(count)s devices|one": "Verwijder apparaat",
+    "Select devices": "Apparaten selecteren",
+    "%(senderName)s sent an image": "%(senderName)s heeft een afbeelding gestuurd",
+    "%(senderName)s sent a video": "%(senderName)s heeft een video gestuurd",
+    "%(senderName)s uploaded a file": "%(senderName)s heeft een bestand geüpload",
+    "Disinvite this user?": "Uitnodiging van deze gebruiker intrekken?",
+    "Kick this user?": "Deze gebruiker er uit zetten?",
+    "Unban this user?": "Deze gebruiker ontbannen?",
+    "Ban this user?": "Deze gebruiker bannen?"
 }
