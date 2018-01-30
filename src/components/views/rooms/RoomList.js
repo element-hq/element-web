@@ -314,7 +314,7 @@ module.exports = React.createClass({
 
         // Is the tag ordered manually?
         if (newTag && !newTag.match(/^(m\.lowpriority|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
-            const newList = Object.assign({}, this.state.lists[newTag]);
+            const newList = this.state.lists[newTag];
 
             // If the room was moved "down" (increasing index) in the same list we
             // need to use the orders of the tiles with indices shifted by +1
@@ -322,10 +322,13 @@ module.exports = React.createClass({
                 newTag === prevTag && result.source.index < result.destination.index
             ) ? 1 : 0;
 
-            const prevOrder = newIndex === 0 ?
-                0 : newList[offset + newIndex - 1].tags[newTag].order;
-            const nextOrder = newIndex === newList.length ?
-                1 : newList[offset + newIndex].tags[newTag].order;
+            const indexBefore = offset + newIndex - 1;
+            const indexAfter = offset + newIndex;
+
+            const prevOrder = indexBefore < 0 ?
+                0 : newList[indexBefore].tags[newTag].order;
+            const nextOrder = indexAfter >= newList.length ?
+                1 : newList[indexAfter].tags[newTag].order;
 
             newOrder = {
                 order: (prevOrder + nextOrder) / 2.0,
