@@ -63,7 +63,7 @@
     "You are not receiving desktop notifications": "Вы не получаете уведомления на рабочем столе",
     "You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply": "Возможно вы настроили их не в Riot, а в другом Matrix-клиенте. Настроить их в Riot не удастся, но они будут в нем применяться",
     "All messages": "Все сообщения",
-    "All messages (loud)": "Все сообщения (со звуком)",
+    "All messages (noisy)": "Все сообщения (со звуком)",
     "Cancel Sending": "Отменить отправку",
     "Close": "Закрыть",
     "Download this file": "Скачать этот файл",

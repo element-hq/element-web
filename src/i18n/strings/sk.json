@@ -135,7 +135,7 @@
     "Failed to set Direct Message status of room": "Nepodarilo sa nastaviť stav miestnosti priama konverzácia",
     "unknown error code": "neznámy kód chyby",
     "Failed to forget room %(errCode)s": "Nepodarilo sa zabudnuť miestnosť %(errCode)s",
-    "All messages (loud)": "Všetky správy (hlučné)",
+    "All messages (noisy)": "Všetky správy (hlučné)",
     "All messages": "Všetky správy",
     "Mentions only": "Len zmienky",
     "Mute": "Umlčať",

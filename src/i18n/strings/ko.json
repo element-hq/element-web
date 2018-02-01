@@ -3,7 +3,7 @@
     "Add an email address above to configure email notifications": "이메일 알림을 설정하기 위해 이메일 주소를 추가해주세요",
     "Advanced notification settings": "고급 알림 설정",
     "All messages": "모든 메시지",
-    "All messages (loud)": "모든 메시지 (크게)",
+    "All messages (noisy)": "모든 메시지 (크게)",
     "All Rooms": "모든 방",
     "All notifications are currently disabled for all targets.": "현재 모든 알림이 모든 상대에게서 꺼졌어요.",
     "An error occurred whilst saving your email notification preferences.": "이메일 알림을 설정하다가 오류가 일어났어요.",
