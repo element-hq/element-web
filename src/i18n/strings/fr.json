@@ -217,5 +217,10 @@
     "Invite to this community": "Inviter à cette communauté",
     "Toolbox": "Boîte à outils",
     "Send Account Data": "Envoyer les données du compte",
-    "Explore Account Data": "Explorer les données du compte"
+    "Explore Account Data": "Explorer les données du compte",
+    "Appear Offline": "Apparaître Hors ligne",
+    "Away": "Absent",
+    "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Veuillez installer <chromeLink>Chrome</chromeLink> ou <firefoxLink>Firefox</firefoxLink> pour une expérience optimale.",
+    "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> et <operaLink>Opera</operaLink> fonctionnent également.",
+    "Reply": "Répondre"
 }
