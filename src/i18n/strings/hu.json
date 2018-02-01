@@ -222,5 +222,7 @@
     "Away": "Távol",
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "A legjobb élmény érdekében telepíts <chromeLink>Chrome</chromeLink>ot vagy <firefoxLink>Firefox</firefoxLink>ot.",
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "Működik <safariLink>Safari</safariLink> és <operaLink>Opera</operaLink> böngészővel is.",
-    "Reply": "Válasz"
+    "Reply": "Válasz",
+    "%(count)s Members|other": "%(count)s tag",
+    "%(count)s Members|one": "%(count)s tag"
 }
