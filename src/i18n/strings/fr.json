@@ -222,5 +222,7 @@
     "Away": "Absent",
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Veuillez installer <chromeLink>Chrome</chromeLink> ou <firefoxLink>Firefox</firefoxLink> pour une expérience optimale.",
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "<safariLink>Safari</safariLink> et <operaLink>Opera</operaLink> fonctionnent également.",
-    "Reply": "Répondre"
+    "Reply": "Répondre",
+    "%(count)s Members|other": "%(count)s membres",
+    "%(count)s Members|one": "%(count)s membre"
 }
