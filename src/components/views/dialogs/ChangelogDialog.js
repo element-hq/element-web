@@ -31,13 +31,13 @@ export default class ChangelogDialog extends React.Component {
     componentDidMount() {
         const version = this.props.newVersion.split('-');
         const version2 = this.props.version.split('-');
-        if(version == null || version2 == null) return;
+        if (version == null || version2 == null) return;
         // parse versions of form: [vectorversion]-react-[react-sdk-version]-js-[js-sdk-version]
-        for(let i=0; i<REPOS.length; i++) {
+        for (let i=0; i<REPOS.length; i++) {
             const oldVersion = version2[2*i];
             const newVersion = version[2*i];
             request(`https://api.github.com/repos/${REPOS[i]}/compare/${oldVersion}...${newVersion}`, (a, b, body) => {
-                if(body == null) return;
+                if (body == null) return;
                 this.setState({[REPOS[i]]: JSON.parse(body).commits});
             });
         }
@@ -47,7 +47,7 @@ export default class ChangelogDialog extends React.Component {
         return (
             <li key={commit.sha} className="mx_ChangelogDialog_li">
                 <a href={commit.html_url} target="_blank" rel="noopener">
-                    {commit.commit.message}
+                    { commit.commit.message }
                 </a>
             </li>
         );
@@ -57,21 +57,21 @@ export default class ChangelogDialog extends React.Component {
         const Spinner = sdk.getComponent('views.elements.Spinner');
         const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
 
-        const logs = REPOS.map(repo => {
+        const logs = REPOS.map((repo) => {
             if (this.state[repo] == null) return <Spinner key={repo} />;
             return (
                 <div key={repo}>
-                    <h2>{repo}</h2>
+                    <h2>{ repo }</h2>
                     <ul>
-                    {this.state[repo].map(this._elementsForCommit)}
+                    { this.state[repo].map(this._elementsForCommit) }
                     </ul>
                 </div>
-            )
+            );
         });
 
         const content = (
             <div className="mx_ChangelogDialog_content">
-                {this.props.version == null || this.props.newVersion == null ? <h2>{_t("Unavailable")}</h2> : logs}
+                { this.props.version == null || this.props.newVersion == null ? <h2>{ _t("Unavailable") }</h2> : logs }
             </div>
         );
 
@@ -83,7 +83,7 @@ export default class ChangelogDialog extends React.Component {
                 button={_t("Update")}
                 onFinished={this.props.onFinished}
                 />
-        )
+        );
     }
 }
 

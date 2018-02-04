@@ -16,12 +16,12 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
-var sdk = require('matrix-react-sdk')
-var dis = require('matrix-react-sdk/lib/dispatcher');
-var rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
-var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
+const sdk = require('matrix-react-sdk');
+const dis = require('matrix-react-sdk/lib/dispatcher');
+const rate_limited_func = require('matrix-react-sdk/lib/ratelimitedfunc');
+const AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 
 module.exports = React.createClass({
     displayName: 'LoginBox',
@@ -35,8 +35,7 @@ module.exports = React.createClass({
             dis.dispatch({
                 action: 'show_left_panel',
             });
-        }
-        else {
+        } else {
             dis.dispatch({
                 action: 'hide_left_panel',
             });
@@ -52,23 +51,22 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var TintableSvg = sdk.getComponent('elements.TintableSvg');
+        const TintableSvg = sdk.getComponent('elements.TintableSvg');
 
-        var toggleCollapse;
+        let toggleCollapse;
         if (this.props.collapsed) {
             toggleCollapse =
-                <AccessibleButton className="mx_SearchBox_maximise" onClick={ this.onToggleCollapse.bind(this, true) }>
-                    <TintableSvg src="img/maximise.svg" width="10" height="16" alt="Expand panel"/>
-                </AccessibleButton>
-        }
-        else {
+                <AccessibleButton className="mx_SearchBox_maximise" onClick={this.onToggleCollapse.bind(this, true)}>
+                    <TintableSvg src="img/maximise.svg" width="10" height="16" alt="Expand panel" />
+                </AccessibleButton>;
+        } else {
             toggleCollapse =
-                <AccessibleButton className="mx_SearchBox_minimise" onClick={ this.onToggleCollapse.bind(this, false) }>
-                    <TintableSvg src="img/minimise.svg" width="10" height="16" alt="Collapse panel"/>
-                </AccessibleButton>
+                <AccessibleButton className="mx_SearchBox_minimise" onClick={this.onToggleCollapse.bind(this, false)}>
+                    <TintableSvg src="img/minimise.svg" width="10" height="16" alt="Collapse panel" />
+                </AccessibleButton>;
         }
 
-        var loginButton;
+        let loginButton;
         if (!this.props.collapsed) {
             loginButton = (
                 <div className="mx_LoginBox_loginButton_wrapper">
@@ -82,12 +80,12 @@ module.exports = React.createClass({
             );
         }
 
-        var self = this;
+        const self = this;
         return (
             <div className="mx_SearchBox mx_LoginBox">
                 { loginButton }
                 { toggleCollapse }
             </div>
         );
-    }
+    },
 });

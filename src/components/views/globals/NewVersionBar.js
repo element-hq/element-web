@@ -42,13 +42,13 @@ export default React.createClass({
         const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
         Modal.createTrackedDialog('Display release notes', '', QuestionDialog, {
             title: _t("What's New"),
-            description: <div className="mx_MatrixToolbar_changelog">{releaseNotes}</div>,
+            description: <div className="mx_MatrixToolbar_changelog">{ releaseNotes }</div>,
             button: _t("Update"),
             onFinished: (update) => {
-                if(update && PlatformPeg.get()) {
+                if (update && PlatformPeg.get()) {
                     PlatformPeg.get().installUpdate();
                 }
-            }
+            },
         });
     },
 
@@ -58,10 +58,10 @@ export default React.createClass({
             version: this.props.version,
             newVersion: this.props.newVersion,
             onFinished: (update) => {
-                if(update && PlatformPeg.get()) {
+                if (update && PlatformPeg.get()) {
                     PlatformPeg.get().installUpdate();
                 }
-            }
+            },
         });
     },
 
@@ -96,12 +96,12 @@ export default React.createClass({
         }
         return (
             <div className="mx_MatrixToolbar">
-                <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="Warning"/>
+                <img className="mx_MatrixToolbar_warning" src="img/warning.svg" width="24" height="23" alt="Warning" />
                 <div className="mx_MatrixToolbar_content">
-                    {_t("A new version of Riot is available.")}
+                    { _t("A new version of Riot is available.") }
                 </div>
-                {action_button}
+                { action_button }
             </div>
         );
-    }
+    },
 });

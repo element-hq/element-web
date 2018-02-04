@@ -16,7 +16,7 @@ limitations under the License.
 
 'use strict';
 
-var PushRuleVectorState = require('./PushRuleVectorState');
+const PushRuleVectorState = require('./PushRuleVectorState');
 
 module.exports = {
     /**
@@ -32,7 +32,7 @@ module.exports = {
      */
     parseContentRules: function(rulesets) {
         // first categorise the keyword rules in terms of their actions
-        var contentRules = this._categoriseContentRules(rulesets);
+        const contentRules = this._categoriseContentRules(rulesets);
 
         // Decide which content rules to display in Vector UI.
         // Vector displays a single global rule for a list of keywords
@@ -54,41 +54,38 @@ module.exports = {
                 rules: contentRules.loud,
                 externalRules: [].concat(contentRules.loud_but_disabled, contentRules.on, contentRules.on_but_disabled, contentRules.other),
             };
-        }
-        else if (contentRules.loud_but_disabled.length) {
+        } else if (contentRules.loud_but_disabled.length) {
             return {
                 vectorState: PushRuleVectorState.OFF,
                 rules: contentRules.loud_but_disabled,
                 externalRules: [].concat(contentRules.on, contentRules.on_but_disabled, contentRules.other),
             };
-        }
-        else if (contentRules.on.length) {
+        } else if (contentRules.on.length) {
             return {
                 vectorState: PushRuleVectorState.ON,
                 rules: contentRules.on,
                 externalRules: [].concat(contentRules.on_but_disabled, contentRules.other),
             };
-        }
-        else if (contentRules.on_but_disabled.length) {
+        } else if (contentRules.on_but_disabled.length) {
             return {
                 vectorState: PushRuleVectorState.OFF,
                 rules: contentRules.on_but_disabled,
                 externalRules: contentRules.other,
-            }
-        } else  {
+            };
+        } else {
             return {
                 vectorState: PushRuleVectorState.ON,
                 rules: [],
                 externalRules: contentRules.other,
-            }
+            };
         }
     },
 
     _categoriseContentRules: function(rulesets) {
-        var contentRules = {on: [], on_but_disabled:[], loud: [], loud_but_disabled: [], other: []};
-        for (var kind in rulesets.global) {
-            for (var i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
-                var r = rulesets.global[kind][i];
+        const contentRules = {on: [], on_but_disabled: [], loud: [], loud_but_disabled: [], other: []};
+        for (const kind in rulesets.global) {
+            for (let i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
+                const r = rulesets.global[kind][i];
 
                 // check it's not a default rule
                 if (r.rule_id[0] === '.' || kind !== 'content') {
@@ -101,16 +98,14 @@ module.exports = {
                     case PushRuleVectorState.ON:
                         if (r.enabled) {
                             contentRules.on.push(r);
-                        }
-                        else {
+                        } else {
                             contentRules.on_but_disabled.push(r);
                         }
                         break;
                     case PushRuleVectorState.LOUD:
                         if (r.enabled) {
                             contentRules.loud.push(r);
-                        }
-                        else {
+                        } else {
                             contentRules.loud_but_disabled.push(r);
                         }
                         break;

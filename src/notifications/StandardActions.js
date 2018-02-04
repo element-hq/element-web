@@ -16,9 +16,9 @@ limitations under the License.
 
 'use strict';
 
-var NotificationUtils = require('./NotificationUtils');
+const NotificationUtils = require('./NotificationUtils');
 
-var encodeActions = NotificationUtils.encodeActions;
+const encodeActions = NotificationUtils.encodeActions;
 
 module.exports = {
     ACTION_NOTIFY: encodeActions({notify: true}),

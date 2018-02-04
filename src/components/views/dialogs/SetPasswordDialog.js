@@ -33,7 +33,7 @@ const WarmFuzzy = function(props) {
 
     return <BaseDialog className="mx_SetPasswordDialog"
         onFinished={props.onFinished}
-        title={ title }
+        title={title}
     >
         <div className="mx_Dialog_content">
             <p>
@@ -110,7 +110,7 @@ export default React.createClass({
         return (
             <BaseDialog className="mx_SetPasswordDialog"
                 onFinished={this.props.onFinished}
-                title={ _t('Please set a password!') }
+                title={_t('Please set a password!')}
             >
                 <div className="mx_Dialog_content">
                     <p>

@@ -24,11 +24,11 @@ module.exports = {
     // }
     // to a list of push actions.
     encodeActions: function(action) {
-        var notify = action.notify;
-        var sound = action.sound;
-        var highlight = action.highlight;
+        const notify = action.notify;
+        const sound = action.sound;
+        const highlight = action.highlight;
         if (notify) {
-            var actions = ["notify"];
+            const actions = ["notify"];
             if (sound) {
                 actions.push({"set_tweak": "sound", "value": sound});
             }
@@ -50,19 +50,19 @@ module.exports = {
     // }
     // If the actions couldn't be decoded then returns null.
     decodeActions: function(actions) {
-        var notify = false;
-        var sound = null;
-        var highlight = false;
+        let notify = false;
+        let sound = null;
+        let highlight = false;
 
-        for (var i = 0; i < actions.length; ++i) {
-            var action = actions[i];
+        for (let i = 0; i < actions.length; ++i) {
+            const action = actions[i];
             if (action === "notify") {
                 notify = true;
             } else if (action === "dont_notify") {
                 notify = false;
             } else if (typeof action === 'object') {
                 if (action.set_tweak === "sound") {
-                    sound = action.value
+                    sound = action.value;
                 } else if (action.set_tweak === "highlight") {
                     highlight = action.value;
                 } else {
@@ -80,7 +80,7 @@ module.exports = {
             highlight = true;
         }
 
-        var result = {notify: notify, highlight: highlight};
+        const result = {notify: notify, highlight: highlight};
         if (sound !== null) {
             result.sound = sound;
         }
