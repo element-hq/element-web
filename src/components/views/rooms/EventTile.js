@@ -602,6 +602,7 @@ module.exports = withMatrixClient(React.createClass({
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
+                                           onWidgetLoad={this.props.onWidgetLoad}
                                            showUrlPreview={false} />
                         </div>
                     </div>
