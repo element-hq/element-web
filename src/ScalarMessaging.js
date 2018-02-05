@@ -624,6 +624,12 @@ const onMessage = function(event) {
     } else if (event.data.action === "set_widget") {
         setWidget(event, roomId);
         return;
+    } else if (event.data.action === "add_widget_asset") {
+        addWidgetAsset(event, roomId);
+        return;
+    } else if (event.data.action === "remove_widget_asset") {
+        removeWidgetAsset(event, roomId);
+        return;
     }
 
     if (!roomId) {
