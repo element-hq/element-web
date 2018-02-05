@@ -70,6 +70,11 @@ class RoomListStore extends Store {
                 this._generateRoomLists();
             }
             break;
+            case 'MatrixActions.RoomMember.membership': {
+                if (!this._matrixClient || payload.member.userId !== this._matrixClient.credentials.userId) break;
+                this._generateRoomLists();
+            }
+            break;
             case 'RoomListActions.tagRoom.pending': {
                 this._updateRoomListsOptimistic(
                     payload.request.room,
