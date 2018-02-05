@@ -20,10 +20,11 @@ import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import {wantsDateSeparator} from '../../../DateUtils';
 import {MatrixEvent} from 'matrix-js-sdk';
+import {makeUserPermalink} from "../../../matrix-to";
 
 // For URLs of matrix.to links in the timeline which have been reformatted by
 // HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
-const REGEX_LOCAL_MATRIXTO = /^#\/room\/(([\#\!])[^\/]*)\/(\$[^\/]*)$/;
+const REGEX_LOCAL_MATRIXTO = /^#\/room\/([\#\!][^\/]*)\/(\$[^\/]*)$/;
 
 export default class Quote extends React.Component {
     static isMessageUrl(url) {
@@ -32,111 +33,156 @@ export default class Quote extends React.Component {
 
     static childContextTypes = {
         matrixClient: PropTypes.object,
+        addRichQuote: PropTypes.func,
     };
 
     static propTypes = {
         // The matrix.to url of the event
         url: PropTypes.string,
+        // The original node that was rendered
+        node: PropTypes.instanceOf(Element),
         // The parent event
         parentEv: PropTypes.instanceOf(MatrixEvent),
-        // Whether this isn't the first Quote, and we're being nested
-        isNested: PropTypes.bool,
     };
 
     constructor(props, context) {
         super(props, context);
 
         this.state = {
-            // The event related to this quote
-            event: null,
-            show: !this.props.isNested,
+            // The event related to this quote and their nested rich quotes
+            events: [],
+            // Whether the top (oldest) event should be shown or spoilered
+            show: true,
+            // Whether an error was encountered fetching nested older event, show node if it does
+            err: false,
         };
 
         this.onQuoteClick = this.onQuoteClick.bind(this);
+        this.addRichQuote = this.addRichQuote.bind(this);
     }
 
     getChildContext() {
         return {
             matrixClient: MatrixClientPeg.get(),
+            addRichQuote: this.addRichQuote,
         };
     }
 
+    parseUrl(url) {
+        if (!url) return;
+
+        // Default to the empty array if no match for simplicity
+        // resource and prefix will be undefined instead of throwing
+        const matrixToMatch = REGEX_LOCAL_MATRIXTO.exec(url) || [];
+
+        const [, roomIdentifier, eventId] = matrixToMatch;
+        return {roomIdentifier, eventId};
+    }
+
     componentWillReceiveProps(nextProps) {
-        let roomId;
-        let prefix;
-        let eventId;
+        const {roomIdentifier, eventId} = this.parseUrl(nextProps.url);
+        if (!roomIdentifier || !eventId) return;
 
-        if (nextProps.url) {
-            // Default to the empty array if no match for simplicity
-            // resource and prefix will be undefined instead of throwing
-            const matrixToMatch = REGEX_LOCAL_MATRIXTO.exec(nextProps.url) || [];
-
-            roomId = matrixToMatch[1]; // The room ID
-            prefix = matrixToMatch[2]; // The first character of prefix
-            eventId = matrixToMatch[3]; // The event ID
-        }
-
-        const room = prefix === '#' ?
-            MatrixClientPeg.get().getRooms().find((r) => {
-                return r.getAliases().includes(roomId);
-            }) : MatrixClientPeg.get().getRoom(roomId);
+        const room = this.getRoom(roomIdentifier);
+        if (!room) return;
 
         // Only try and load the event if we know about the room
         // otherwise we just leave a `Quote` anchor which can be used to navigate/join the room manually.
-        if (room) this.getEvent(room, eventId);
+        this.setState({ events: [] });
+        if (room) this.getEvent(room, eventId, true);
     }
 
     componentWillMount() {
         this.componentWillReceiveProps(this.props);
     }
 
-    async getEvent(room, eventId) {
-        let event = room.findEventById(eventId);
+    getRoom(id) {
+        const cli = MatrixClientPeg.get();
+        if (id[0] === '!') return cli.getRoom(id);
+
+        return cli.getRooms().find((r) => {
+            return r.getAliases().includes(id);
+        });
+    }
+
+    async getEvent(room, eventId, show) {
+        const event = room.findEventById(eventId);
         if (event) {
-            this.setState({room, event});
+            this.addEvent(event, show);
             return;
         }
 
         await MatrixClientPeg.get().getEventTimeline(room.getUnfilteredTimelineSet(), eventId);
-        event = room.findEventById(eventId);
-        this.setState({room, event});
+        this.addEvent(room.findEventById(eventId), show);
+    }
+
+    addEvent(event, show) {
+        const events = [event].concat(this.state.events);
+        this.setState({events, show});
+    }
+
+    // addRichQuote(roomId, eventId) {
+    addRichQuote(href) {
+        const {roomIdentifier, eventId} = this.parseUrl(href);
+        if (!roomIdentifier || !eventId) {
+            this.setState({ err: true });
+            return;
+        }
+
+        const room = this.getRoom(roomIdentifier);
+        if (!room) {
+            this.setState({ err: true });
+            return;
+        }
+
+        this.getEvent(room, eventId, false);
     }
 
     onQuoteClick() {
-        this.setState({
-            show: true,
-        });
+        this.setState({ show: true });
     }
 
     render() {
-        const ev = this.state.event;
-        if (ev) {
-            if (this.state.show) {
-                const EventTile = sdk.getComponent('views.rooms.EventTile');
-                let dateSep = null;
+        const events = this.state.events.slice();
+        if (events.length) {
+            const evTiles = [];
 
-                const evDate = ev.getDate();
-                if (wantsDateSeparator(this.props.parentEv.getDate(), evDate)) {
-                    const DateSeparator = sdk.getComponent('messages.DateSeparator');
-                    dateSep = <a href={this.props.url}><DateSeparator ts={evDate} /></a>;
-                }
+            if (!this.state.show) {
+                const oldestEv = events.shift();
+                const Pill = sdk.getComponent('elements.Pill');
+                const room = MatrixClientPeg.get().getRoom(oldestEv.getRoomId());
 
-                return <blockquote className="mx_Quote">
-                    { dateSep }
-                    <EventTile mxEvent={ev} tileShape="quote" />
-                </blockquote>;
+                evTiles.push(<blockquote className="mx_Quote" key="load">
+                    {
+                        _t('<a>In reply to</a> <pill>', {}, {
+                            'a': (sub) => <a onClick={this.onQuoteClick} className="mx_Quote_show">{ sub }</a>,
+                            'pill': <Pill type={Pill.TYPE_USER_MENTION} room={room}
+                                          url={makeUserPermalink(oldestEv.getSender())} shouldShowPillAvatar={true} />,
+                        })
+                    }
+                </blockquote>);
             }
 
-            return <div>
-                <a onClick={this.onQuoteClick} className="mx_Quote_show">{ _t('Quote') }</a>
-                <br />
-            </div>;
+            const EventTile = sdk.getComponent('views.rooms.EventTile');
+            const DateSeparator = sdk.getComponent('messages.DateSeparator');
+            events.forEach((ev) => {
+                let dateSep = null;
+
+                if (wantsDateSeparator(this.props.parentEv.getDate(), ev.getDate())) {
+                    dateSep = <a href={this.props.url}><DateSeparator ts={ev.getTs()} /></a>;
+                }
+
+                evTiles.push(<blockquote className="mx_Quote" key={ev.getId()}>
+                    { dateSep }
+                    <EventTile mxEvent={ev} tileShape="quote" />
+                </blockquote>);
+            });
+
+            return <div>{ evTiles }</div>;
         }
 
         // Deliberately render nothing if the URL isn't recognised
-        return <div>
-            <a href={this.props.url}>{ _t('Quote') }</a>
-            <br />
-        </div>;
+        // in case we get an undefined/falsey node, replace it with null to make React happy
+        return this.props.node || null;
     }
 }

@@ -58,8 +58,8 @@ module.exports = React.createClass({
 
         state.domainToAliases = this.aliasEventsToDictionary(aliasEvents);
 
-        state.remoteDomains = Object.keys(state.domainToAliases).filter((alias) => {
-            return alias !== localDomain;
+        state.remoteDomains = Object.keys(state.domainToAliases).filter((domain) => {
+            return domain !== localDomain && state.domainToAliases[domain].length > 0;
         });
 
         if (canonicalAliasEvent) {
