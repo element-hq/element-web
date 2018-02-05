@@ -33,12 +33,13 @@ export default class Stickerpack extends React.Component {
         this.onHideStickersClick = this.onHideStickersClick.bind(this);
         this.onFinished = this.onFinished.bind(this);
         this._launchManageIntegrations = this._launchManageIntegrations.bind(this);
+        this._removeStickerpackWidgets = this._removeStickerpackWidgets.bind(this);
 
         this.defaultStickersContent = (
             <div className='mx_Stickers_contentPlaceholder'>
-                <p>You don't currently have any stickerpacks enabled</p>
-                <p>Click <a href=''>here</a> to add some!</p>
-                <img src='img/stickerpack-placeholder.png' alt='Add a stickerpack' />
+                <p>{_t("You don't currently have any stickerpacks enabled")}</p>
+                <p>{_t("Click")} <span className='mx_Stickers_addLink' onClick={this._launchManageIntegrations} > { _t("here") } </span>{_t("to add some!")}</p>
+                <img src='img/stickerpack-placeholder.png' alt={_t('Add a stickerpack')} />
             </div>
         );
         this.popoverWidth = 300;
@@ -48,6 +49,11 @@ export default class Stickerpack extends React.Component {
             stickersContent: this.defaultStickersContent,
             showStickers: false,
         };
+    }
+
+    _removeStickerpackWidgets() {
+        console.warn('Removing stickerpack widgets');
+        Widgets.removeStickerpackWidgets()
     }
 
     componentDidMount() {
@@ -91,6 +97,14 @@ export default class Stickerpack extends React.Component {
                             width: this.popoverWidth,
                         }}
                     >
+                        <div
+                            style={{
+                                'float': 'right',
+                                'fontSize': 'smaller',
+                                'cursor': 'pointer',
+                            }}
+                            onClick={this._removeStickerpackWidgets()}
+                        >X</div>
                         <AppTile
                             id={stickerpackWidget.id}
                             url={stickerpackWidget.content.url}
@@ -121,7 +135,7 @@ export default class Stickerpack extends React.Component {
             );
         } else {
             // Default content to show if stickerpack widget not added
-            stickersContent = <p>Click here to add your first sitckerpack</p>;
+            stickersContent = this.defaultStickersContent;
         }
         this.setState({stickersContent});
     }
