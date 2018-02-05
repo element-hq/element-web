@@ -45,12 +45,33 @@ function getUserWidgets() {
  * @return {[object]} Array containing current / active stickerpack widgets
  */
 function getStickerpackWidgets() {
-    return getUserWidgets().filter((widget) => widget.type='stickerpack');
+    const stickerpackWidgets = getUserWidgets().filter((widget) => widget.type='stickerpack');
+    console.warn('Stickerpack widgets', stickerpackWidgets);
+    return stickerpackWidgets;
 }
+
+/**
+ * Remove all stickerpack widgets (stickerpacks are user widgets by nature)
+ */
+function removeStickerpackWidgets() {
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        throw new Error('User not logged in');
+    }
+    const userWidgets = client.getAccountData('m.widgets').getContent() || {};
+    Object.entries(userWidgets).forEach(([key, widget]) => {
+        if (widget.type === 'stickerpack') {
+            delete userWidgets[key];
+        }
+    });
+    client.setAccountData('m.widgets', userWidgets);
+}
+
 
 export default {
     getWidgets,
     getRoomWidgets,
     getUserWidgets,
     getStickerpackWidgets,
+    removeStickerpackWidgets,
 };
