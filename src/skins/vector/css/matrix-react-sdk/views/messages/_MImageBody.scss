@@ -27,34 +27,3 @@ limitations under the License.
     border-radius: 1px;
 */
 }
-
-.mx_MImageBody_download {
-    color: $accent-color;
-}
-
-.mx_MImageBody_download a {
-    color: $accent-color;
-    text-decoration: none;
-}
-
-.mx_MImageBody_download object {
-    margin-left: -16px;
-    padding-right: 4px;
-    margin-top: -4px;
-    vertical-align: middle;
-    pointer-events: none;
-}
-
-/* Remove the border and padding for iframes for download links. */
-.mx_MImageBody_download iframe {
-    margin: 0px;
-    padding: 0px;
-    border: none;
-    width: 100%;
-    /* Set the height of the iframe to be 1 line of text.
-     * Iframes don't automatically size themselves to fit their content.
-     * So either we have to fix the height of the iframe using CSS or
-     * use javascript's cross-origin postMessage API to communicate how
-     * big the content of the iframe is. */
-    height: 1.5em;
-}
