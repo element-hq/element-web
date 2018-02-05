@@ -847,16 +847,36 @@ export default React.createClass({
         }).close;
     },
 
+    _leaveRoomWarnings: function(roomId) {
+        const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
+        // Show a warning if there are additional complications.
+        const joinRules = roomToLeave.currentState.getStateEvents('m.room.join_rules', '');
+        const warnings = [];
+        if (joinRules) {
+            const rule = joinRules.getContent().join_rule;
+            if (rule !== "public") {
+                warnings.push((
+                    <span className="warning" key="non_public_warning">
+                        { _t("This room is not public. You will not be able to rejoin without an invite.") }
+                    </span>
+                ));
+            }
+        }
+        return warnings;
+    },
+
     _leaveRoom: function(roomId) {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
+        const warnings = this._leaveRoomWarnings(roomId);
+
         Modal.createTrackedDialog('Leave room', '', QuestionDialog, {
             title: _t("Leave room"),
             description: (
                 <span>
                 { _t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name}) }
+                { warnings }
                 </span>
             ),
             onFinished: (shouldLeave) => {

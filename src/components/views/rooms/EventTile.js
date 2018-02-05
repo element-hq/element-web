@@ -592,7 +592,7 @@ module.exports = withMatrixClient(React.createClass({
                     <div className={classes}>
                         { avatar }
                         { sender }
-                        <div className="mx_EventTile_line">
+                        <div className="mx_EventTile_line mx_EventTile_quote">
                             <a href={permalink} onClick={this.onPermalinkClicked}>
                                 { timestamp }
                             </a>
@@ -602,6 +602,7 @@ module.exports = withMatrixClient(React.createClass({
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
+                                           onWidgetLoad={this.props.onWidgetLoad}
                                            showUrlPreview={false} />
                         </div>
                     </div>

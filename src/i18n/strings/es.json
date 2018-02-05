@@ -429,7 +429,7 @@
     "Changes colour scheme of current room": "Cambia el esquema de colores de esta sala",
     "Delete widget": "Eliminar widget",
     "Define the power level of a user": "Definir el nivel de poder de los usuarios",
-    "Edit": "Edita",
+    "Edit": "Editar",
     "Enable automatic language detection for syntax highlighting": "Activar la detección automática del lenguaje para resaltar la sintaxis",
     "Hide Apps": "Ocultar aplicaciones",
     "Hide join/leave messages (invites/kicks/bans unaffected)": "Ocultar mensajes de entrada/salida (no afecta invitaciones/kicks/bans)",
@@ -560,7 +560,7 @@
     "Jun": "Jun",
     "Jul": "Jul",
     "Aug": "August",
-    "Add rooms to this community": "Agrega salas a esta comunidad",
+    "Add rooms to this community": "Agregar salas a esta comunidad",
     "Call Failed": "La llamada falló",
     "Review Devices": "Revisar Dispositivos",
     "Call Anyway": "Llamar de todas formas",
@@ -570,5 +570,7 @@
     "Sep": "Sep",
     "Oct": "Oct",
     "Nov": "Nov",
-    "Dec": "Dic"
+    "Dec": "Dic",
+    "Warning": "Advertencia",
+    "Unpin Message": "Desmarcar Mensaje"
 }
