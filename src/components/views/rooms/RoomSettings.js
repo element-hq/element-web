@@ -774,7 +774,8 @@ module.exports = React.createClass({
         const aliasEvents = this.props.room.currentState.getStateEvents('m.room.aliases') || [];
         let aliasCount = 0;
         aliasEvents.forEach((event) => {
-            aliasCount += event.getContent().aliases.length;
+            const aliases = event.getContent().aliases || [];
+            aliasCount += aliases.length;
         });
 
         if (this.state.join_rule === "public" && aliasCount == 0) {
