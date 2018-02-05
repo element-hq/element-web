@@ -26,7 +26,6 @@ class RoomListStore extends Store {
         super(dis);
 
         this._init();
-        this._actionHistory = [];
     }
 
     _init() {
@@ -57,14 +56,13 @@ class RoomListStore extends Store {
                     break;
                 }
 
-                this._generateRoomLists(payload.matrixClient);
-                this._actionHistory.unshift(payload);
+                this._matrixClient = payload.matrixClient;
+                this._generateRoomLists();
             }
             break;
             case 'MatrixActions.Room.tags': {
                 if (!this._state.ready) break;
                 this._updateRoomLists(payload.room);
-                this._actionHistory.unshift(payload);
             }
             break;
             case 'RoomListActions.tagRoom.pending': {
@@ -74,33 +72,20 @@ class RoomListStore extends Store {
                     payload.request.newTag,
                     payload.request.metaData,
                 );
-                this._actionHistory.unshift(payload);
             }
             break;
             case 'RoomListActions.tagRoom.failure': {
-                this._actionHistory = this._actionHistory.filter((action) => {
-                    return action.asyncId !== payload.asyncId;
-                });
-
-                // don't duplicate history
-                const history = this._actionHistory.slice(0);
-                this._actionHistory = [];
-                this._reloadFromHistory(history);
+                // Reset state according to js-sdk
+                this._generateRoomLists();
             }
             break;
             case 'on_logged_out': {
                 // Reset state without pushing an update to the view, which generally assumes that
                 // the matrix client isn't `null` and so causing a re-render will cause NPEs.
                 this._init();
-                this._actionHistory.unshift(payload);
             }
             break;
         }
-    }
-
-    _reloadFromHistory(history) {
-        this._init();
-        history.forEach((action) => this.__onDispatch(action));
     }
 
     _updateRoomListsOptimistic(updatedRoom, oldTag, newTag, metaData) {
@@ -153,7 +138,7 @@ class RoomListStore extends Store {
         });
     }
 
-    _generateRoomLists(matrixClient) {
+    _generateRoomLists() {
         const lists = {
             "im.vector.fake.invite": [],
             "m.favourite": [],
@@ -163,10 +148,14 @@ class RoomListStore extends Store {
             "im.vector.fake.archived": [],
         };
 
+
         const dmRoomMap = DMRoomMap.shared();
 
-        matrixClient.getRooms().forEach((room, index) => {
-            const me = room.getMember(matrixClient.credentials.userId);
+        // If somehow we dispatched a RoomListActions.tagRoom.failure before a MatrixActions.sync
+        if (!this._matrixClient) return;
+
+        this._matrixClient.getRooms().forEach((room, index) => {
+            const me = room.getMember(this._matrixClient.credentials.userId);
             if (!me) return;
 
             if (me.membership == "invite") {
