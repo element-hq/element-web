@@ -65,6 +65,11 @@ class RoomListStore extends Store {
                 this._updateRoomLists(payload.room);
             }
             break;
+            case 'MatrixActions.accountData': {
+                if (payload.event_type !== 'm.direct') break;
+                this._generateRoomLists();
+            }
+            break;
             case 'RoomListActions.tagRoom.pending': {
                 this._updateRoomListsOptimistic(
                     payload.request.room,
