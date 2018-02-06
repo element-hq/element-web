@@ -101,6 +101,16 @@ class RoomListStore extends Store {
     _updateRoomListsOptimistic(updatedRoom, oldTag, newTag, metaData) {
         const newLists = {};
 
+        // Adding a tag to an untagged room - need to remove it from recents
+        if (newTag && Object.keys(updatedRoom.tags).length === 0) {
+            oldTag = 'im.vector.fake.recent';
+        }
+
+        // Removing a tag from a room with one tag left - need to add it to recents
+        if (oldTag && Object.keys(updatedRoom.tags).length === 1) {
+            newTag = 'im.vector.fake.recent';
+        }
+
         // Remove room from oldTag
         Object.keys(this._state.lists).forEach((tagName) => {
             if (tagName === oldTag) {
