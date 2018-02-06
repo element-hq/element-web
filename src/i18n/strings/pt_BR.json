@@ -658,5 +658,6 @@
     "Ignored user": "Usuário ignorado",
     "You are no longer ignoring %(userId)s": "Você parou de ignorar %(userId)s",
     "Edit": "Editar",
-    "Unpin Message": "Desafixar Mensagem"
+    "Unpin Message": "Desafixar Mensagem",
+    "Add rooms to this community": "Adicionar salas na comunidade"
 }
