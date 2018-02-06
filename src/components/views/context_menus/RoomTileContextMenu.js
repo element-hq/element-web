@@ -59,42 +59,16 @@ module.exports = React.createClass({
     },
 
     _toggleTag: function(tagNameOn, tagNameOff) {
-        var self = this;
-        const roomId = this.props.room.roomId;
-        var cli = MatrixClientPeg.get();
-        if (!cli.isGuest()) {
-            Promise.delay(500).then(function() {
-                if (tagNameOff !== null && tagNameOff !== undefined) {
-                    cli.deleteRoomTag(roomId, tagNameOff).finally(function() {
-                        // Close the context menu
-                        if (self.props.onFinished) {
-                            self.props.onFinished();
-                        };
-                    }).catch(function(err) {
-                        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                        Modal.createTrackedDialog('Failed to remove tag from room 1', '', ErrorDialog, {
-                            title: _t('Failed to remove tag %(tagName)s from room', {tagName: tagNameOff}),
-                            description: ((err && err.message) ? err.message : _t('Operation failed')),
-                        });
-                    });
-                }
+        if (!MatrixClientPeg.get().isGuest()) {
+            Promise.delay(500).then(() => {
+                dis.dispatch(RoomListActions.tagRoom(
+                    MatrixClientPeg.get(),
+                    this.props.room,
+                    tagNameOff, tagNameOn,
+                    undefined, 0,
+                ), true);
 
-                if (tagNameOn !== null && tagNameOn !== undefined) {
-                    // If the tag ordering meta data is required, it is added by
-                    // the RoomSubList when it sorts its rooms
-                    cli.setRoomTag(roomId, tagNameOn, {}).finally(function() {
-                        // Close the context menu
-                        if (self.props.onFinished) {
-                            self.props.onFinished();
-                        };
-                    }).catch(function(err) {
-                        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                        Modal.createTrackedDialog('Failed to remove tag from room 2', '', ErrorDialog, {
-                            title: _t('Failed to remove tag %(tagName)s from room', {tagName: tagNameOn}),
-                            description: ((err && err.message) ? err.message : _t('Operation failed')),
-                        });
-                    });
-                }
+                this.props.onFinished();
             });
         }
     },
