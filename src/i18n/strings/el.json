@@ -49,7 +49,6 @@
     "Blacklisted": "Στη μαύρη λίστα",
     "Can't load user settings": "Δεν είναι δυνατή η φόρτωση των ρυθμίσεων χρήστη",
     "Change Password": "Αλλαγή κωδικού πρόσβασης",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "Ο %(senderName)s άλλαξε το όνομά του από %(oldDisplayName)s σε %(displayName)s.",
     "%(senderName)s changed their profile picture.": "Ο %(senderName)s άλλαξε τη φωτογραφία του προφίλ του.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "Ο %(senderDisplayName)s άλλαξε το όνομα του δωματίου σε %(roomName)s.",
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "Ο %(senderDisplayName)s άλλαξε το θέμα σε \"%(topic)s\".",

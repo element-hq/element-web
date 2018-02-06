@@ -62,7 +62,6 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Yhdistäminen kotipalveluun HTTP:n avulla ei ole mahdollista kun selaimen osoitepalkissa on HTTPS URL. Käytä joko HTTPS tai <a>salli turvattomat skriptit</a>.",
     "Can't load user settings": "Käyttäjäasetusten lataaminen epäonnistui",
     "Change Password": "Muuta salasana",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s muutti näyttönimensä %(oldDisplayName)s -> %(displayName)s.",
     "%(senderName)s changed their profile picture.": "%(senderName)s muutti profiilikuvansa.",
     "%(targetName)s accepted an invitation.": "%(targetName)s hyväksyi kutsun.",
     "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s hyväksyi kutsun käyttäjän %(displayName)s puolesta.",

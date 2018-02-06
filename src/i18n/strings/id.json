@@ -178,7 +178,6 @@
     "Banned users": "Pengguna yang diblokir",
     "Bulk Options": "Opsi Massal",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Tidak dapat terhubung ke server Home - harap cek koneksi anda, pastikan <a>sertifikat SSL server Home</a> Anda terpercaya, dan ekstensi dari browser tidak memblokir permintaan.",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s mengubah tampilan namanya dari %(oldDisplayName)s menjadi %(displayName)s.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Tidak dapat terhubung ke server Home melalui HTTP ketika URL di browser berupa HTTPS. Pilih gunakan HTTPS atau <a>aktifkan skrip yang tidak aman</a>.",
     "%(senderName)s changed their profile picture.": "%(senderName)s telah mengubah foto profilnya.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s telah mengubah tingkat kekuatan dari %(powerLevelDiffText)s.",
