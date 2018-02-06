@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
 const Presets = {
@@ -28,8 +29,8 @@ const Presets = {
 module.exports = React.createClass({
     displayName: 'CreateRoomPresets',
     propTypes: {
-        onChange: React.PropTypes.func,
-        preset: React.PropTypes.string,
+        onChange: PropTypes.func,
+        preset: PropTypes.string,
     },
 
     Presets: Presets,

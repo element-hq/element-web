@@ -18,6 +18,8 @@ limitations under the License.
 'use strict';
 const React = require("react");
 const ReactDOM = require("react-dom");
+import { DragDropContext } from 'react-beautiful-dnd';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 const GeminiScrollbar = require('react-gemini-scrollbar');
 const MatrixClientPeg = require("../../../MatrixClientPeg");
@@ -28,8 +30,10 @@ const rate_limited_func = require('../../../ratelimitedfunc');
 const Rooms = require('../../../Rooms');
 import DMRoomMap from '../../../utils/DMRoomMap';
 const Receipt = require('../../../utils/Receipt');
-import FilterStore from '../../../stores/FilterStore';
+import TagOrderStore from '../../../stores/TagOrderStore';
 import GroupStoreCache from '../../../stores/GroupStoreCache';
+
+import Modal from '../../../Modal';
 
 const HIDE_CONFERENCE_CHANS = true;
 
@@ -52,9 +56,9 @@ module.exports = React.createClass({
     displayName: 'RoomList',
 
     propTypes: {
-        ConferenceHandler: React.PropTypes.any,
-        collapsed: React.PropTypes.bool.isRequired,
-        searchFilter: React.PropTypes.string,
+        ConferenceHandler: PropTypes.any,
+        collapsed: PropTypes.bool.isRequired,
+        searchFilter: PropTypes.string,
     },
 
     getInitialState: function() {
@@ -71,6 +75,7 @@ module.exports = React.createClass({
         this.mounted = false;
 
         const cli = MatrixClientPeg.get();
+
         cli.on("Room", this.onRoom);
         cli.on("deleteRoom", this.onDeleteRoom);
         cli.on("Room.timeline", this.onRoomTimeline);
@@ -83,21 +88,34 @@ module.exports = React.createClass({
         cli.on("accountData", this.onAccountData);
         cli.on("Group.myMembership", this._onGroupMyMembership);
 
+        const dmRoomMap = DMRoomMap.shared();
         this._groupStores = {};
-        this._selectedTagsRoomIds = [];
-        this._selectedTagsUserIds = [];
+        this._groupStoreTokens = [];
+        // A map between tags which are group IDs and the room IDs of rooms that should be kept
+        // in the room list when filtering by that tag.
+        this._visibleRoomsForGroup = {
+            // $groupId: [$roomId1, $roomId2, ...],
+        };
+        // All rooms that should be kept in the room list when filtering.
+        // By default, show all rooms.
+        this._visibleRooms = MatrixClientPeg.get().getRooms();
         // When the selected tags are changed, initialise a group store if necessary
-        this._filterStoreToken = FilterStore.addListener(() => {
-            FilterStore.getSelectedTags().forEach((tag) => {
+        this._tagStoreToken = TagOrderStore.addListener(() => {
+            (TagOrderStore.getOrderedTags() || []).forEach((tag) => {
                 if (tag[0] !== '+' || this._groupStores[tag]) {
                     return;
                 }
                 this._groupStores[tag] = GroupStoreCache.getGroupStore(tag);
-                this._groupStores[tag].registerListener(() => {
-                    this.updateSelectedTagsEntities();
-                });
+                this._groupStoreTokens.push(
+                    this._groupStores[tag].registerListener(() => {
+                        // This group's rooms or members may have updated, update rooms for its tag
+                        this.updateVisibleRoomsForTag(dmRoomMap, tag);
+                        this.updateVisibleRooms();
+                    }),
+                );
             });
-            this.updateSelectedTagsEntities();
+            // Filters themselves have changed, refresh the selected tags
+            this.updateVisibleRooms();
         });
 
         this.refreshRoomList();
@@ -169,8 +187,13 @@ module.exports = React.createClass({
             MatrixClientPeg.get().removeListener("Group.myMembership", this._onGroupMyMembership);
         }
 
-        if (this._filterStoreToken) {
-            this._filterStoreToken.remove();
+        if (this._tagStoreToken) {
+            this._tagStoreToken.remove();
+        }
+
+        if (this._groupStoreTokens.length > 0) {
+            // NB: GroupStore is not a Flux.Store
+            this._groupStoreTokens.forEach((token) => token.unregister());
         }
 
         // cancel any pending calls to the rate_limited_funcs
@@ -178,11 +201,11 @@ module.exports = React.createClass({
     },
 
     onRoom: function(room) {
-        this._delayedRefreshRoomList();
+        this.updateVisibleRooms();
     },
 
     onDeleteRoom: function(roomId) {
-        this._delayedRefreshRoomList();
+        this.updateVisibleRooms();
     },
 
     onArchivedHeaderClick: function(isHidden, scrollToPosition) {
@@ -255,43 +278,156 @@ module.exports = React.createClass({
         this.forceUpdate();
     },
 
+    onRoomTileEndDrag: function(result) {
+        if (!result.destination) return;
+
+        let newTag = result.destination.droppableId.split('_')[1];
+        let prevTag = result.source.droppableId.split('_')[1];
+        if (newTag === 'undefined') newTag = undefined;
+        if (prevTag === 'undefined') prevTag = undefined;
+
+        const roomId = result.draggableId.split('_')[1];
+        const room = MatrixClientPeg.get().getRoom(roomId);
+
+        const newIndex = result.destination.index;
+
+        // Evil hack to get DMs behaving
+        if ((prevTag === undefined && newTag === 'im.vector.fake.direct') ||
+            (prevTag === 'im.vector.fake.direct' && newTag === undefined)
+        ) {
+            Rooms.guessAndSetDMRoom(
+                room, newTag === 'im.vector.fake.direct',
+            ).catch((err) => {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                console.error("Failed to set direct chat tag " + err);
+                Modal.createTrackedDialog('Failed to set direct chat tag', '', ErrorDialog, {
+                    title: _t('Failed to set direct chat tag'),
+                    description: ((err && err.message) ? err.message : _t('Operation failed')),
+                });
+            });
+            return;
+        }
+
+        const hasChangedSubLists = result.source.droppableId !== result.destination.droppableId;
+
+        let newOrder = null;
+
+        // Is the tag ordered manually?
+        if (newTag && !newTag.match(/^(m\.lowpriority|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
+            const newList = this.state.lists[newTag];
+
+            // If the room was moved "down" (increasing index) in the same list we
+            // need to use the orders of the tiles with indices shifted by +1
+            const offset = (
+                newTag === prevTag && result.source.index < result.destination.index
+            ) ? 1 : 0;
+
+            const indexBefore = offset + newIndex - 1;
+            const indexAfter = offset + newIndex;
+
+            const prevOrder = indexBefore < 0 ?
+                0 : newList[indexBefore].tags[newTag].order;
+            const nextOrder = indexAfter >= newList.length ?
+                1 : newList[indexAfter].tags[newTag].order;
+
+            newOrder = {
+                order: (prevOrder + nextOrder) / 2.0,
+            };
+        }
+
+        // More evilness: We will still be dealing with moving to favourites/low prio,
+        // but we avoid ever doing a request with 'im.vector.fake.direct`.
+        //
+        // if we moved lists, remove the old tag
+        if (prevTag && prevTag !== 'im.vector.fake.direct' &&
+            hasChangedSubLists
+        ) {
+            // Optimistic update of what will happen to the room tags
+            delete room.tags[prevTag];
+
+            MatrixClientPeg.get().deleteRoomTag(roomId, prevTag).catch(function(err) {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                console.error("Failed to remove tag " + prevTag + " from room: " + err);
+                Modal.createTrackedDialog('Failed to remove tag from room', '', ErrorDialog, {
+                    title: _t('Failed to remove tag %(tagName)s from room', {tagName: prevTag}),
+                    description: ((err && err.message) ? err.message : _t('Operation failed')),
+                });
+            });
+        }
+
+        // if we moved lists or the ordering changed, add the new tag
+        if (newTag && newTag !== 'im.vector.fake.direct' &&
+            (hasChangedSubLists || newOrder)
+        ) {
+            // Optimistic update of what will happen to the room tags
+            room.tags[newTag] = newOrder;
+
+            MatrixClientPeg.get().setRoomTag(roomId, newTag, newOrder).catch(function(err) {
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                console.error("Failed to add tag " + newTag + " to room: " + err);
+                Modal.createTrackedDialog('Failed to add tag to room', '', ErrorDialog, {
+                    title: _t('Failed to add tag %(tagName)s to room', {tagName: newTag}),
+                    description: ((err && err.message) ? err.message : _t('Operation failed')),
+                });
+            });
+        }
+
+        // Refresh to display the optimistic updates - this needs to be done in the
+        // same tick as the drag finishing otherwise the room will pop back to its
+        // previous position - hence no delayed refresh
+        this.refreshRoomList();
+    },
+
     _delayedRefreshRoomList: new rate_limited_func(function() {
         this.refreshRoomList();
     }, 500),
 
-    // Update which rooms and users should appear in RoomList as dictated by selected tags
-    updateSelectedTagsEntities: function() {
+    // Update which rooms and users should appear in RoomList for a given group tag
+    updateVisibleRoomsForTag: function(dmRoomMap, tag) {
         if (!this.mounted) return;
-        this._selectedTagsRoomIds = [];
-        this._selectedTagsUserIds = [];
-        FilterStore.getSelectedTags().forEach((tag) => {
-            this._selectedTagsRoomIds = this._selectedTagsRoomIds.concat(
-               this._groupStores[tag].getGroupRooms().map((room) => room.roomId),
-            );
-            // TODO: Check if room has been tagged to the group by the user
+        // For now, only handle group tags
+        const store = this._groupStores[tag];
+        if (!store) return;
 
-            this._selectedTagsUserIds = this._selectedTagsUserIds.concat(
-               this._groupStores[tag].getGroupMembers().map((member) => member.userId),
+        this._visibleRoomsForGroup[tag] = [];
+        store.getGroupRooms().forEach((room) => this._visibleRoomsForGroup[tag].push(room.roomId));
+        store.getGroupMembers().forEach((member) => {
+            if (member.userId === MatrixClientPeg.get().credentials.userId) return;
+            dmRoomMap.getDMRoomsForUserId(member.userId).forEach(
+                (roomId) => this._visibleRoomsForGroup[tag].push(roomId),
             );
         });
-        this.setState({
-            selectedTags: FilterStore.getSelectedTags(),
-        }, () => {
-            this.refreshRoomList();
-        });
+        // TODO: Check if room has been tagged to the group by the user
     },
 
-    isRoomInSelectedTags: function(room, me, dmRoomMap) {
-        // No selected tags = every room is visible in the list
-        if (this.state.selectedTags.length === 0) {
-            return true;
+    // Update which rooms and users should appear according to which tags are selected
+    updateVisibleRooms: function() {
+        const selectedTags = TagOrderStore.getSelectedTags();
+        const visibleGroupRooms = [];
+        selectedTags.forEach((tag) => {
+            (this._visibleRoomsForGroup[tag] || []).forEach(
+                (roomId) => visibleGroupRooms.push(roomId),
+            );
+        });
+
+        // If there are any tags selected, constrain the rooms listed to the
+        // visible rooms as determined by visibleGroupRooms. Here, we
+        // de-duplicate and filter out rooms that the client doesn't know
+        // about (hence the Set and the null-guard on `room`).
+        if (selectedTags.length > 0) {
+            const roomSet = new Set();
+            visibleGroupRooms.forEach((roomId) => {
+                const room = MatrixClientPeg.get().getRoom(roomId);
+                if (room) {
+                    roomSet.add(room);
+                }
+            });
+            this._visibleRooms = Array.from(roomSet);
+        } else {
+            // Show all rooms
+            this._visibleRooms = MatrixClientPeg.get().getRooms();
         }
-        if (this._selectedTagsRoomIds.includes(room.roomId)) {
-            return true;
-        }
-        const dmUserId = dmRoomMap.getUserIdForRoomId(room.roomId);
-        return dmUserId && dmUserId !== me.userId &&
-            this._selectedTagsUserIds.includes(dmUserId);
+        this._delayedRefreshRoomList();
     },
 
     refreshRoomList: function() {
@@ -307,6 +443,9 @@ module.exports = React.createClass({
         this.setState({
             lists: this.getRoomLists(),
             totalRoomCount: totalRooms,
+            // Do this here so as to not render every time the selected tags
+            // themselves change.
+            selectedTags: TagOrderStore.getSelectedTags(),
         });
 
         // this._lastRefreshRoomListTs = Date.now();
@@ -321,8 +460,9 @@ module.exports = React.createClass({
         lists["m.lowpriority"] = [];
         lists["im.vector.fake.archived"] = [];
 
-        const dmRoomMap = new DMRoomMap(MatrixClientPeg.get());
-        MatrixClientPeg.get().getRooms().forEach((room) => {
+        const dmRoomMap = DMRoomMap.shared();
+
+        this._visibleRooms.forEach((room, index) => {
             const me = room.getMember(MatrixClientPeg.get().credentials.userId);
             if (!me) return;
 
@@ -339,12 +479,6 @@ module.exports = React.createClass({
                      (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey())) {
                 // Used to split rooms via tags
                 const tagNames = Object.keys(room.tags);
-
-                // Apply TagPanel filtering, derived from FilterStore
-                if (!this.isRoomInSelectedTags(room, me, dmRoomMap)) {
-                    return;
-                }
-
                 if (tagNames.length) {
                     for (let i = 0; i < tagNames.length; i++) {
                         const tagName = tagNames[i];
@@ -618,121 +752,116 @@ module.exports = React.createClass({
 
         const self = this;
         return (
-            <GeminiScrollbar className="mx_RoomList_scrollbar"
-                 autoshow={true} onScroll={self._whenScrolling} ref="gemscroll">
-            <div className="mx_RoomList">
-                <RoomSubList list={[]}
-                             extraTiles={this._makeGroupInviteTiles()}
-                             label={_t('Community Invites')}
-                             editable={false}
-                             order="recent"
-                             isInvite={true}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms}
-                />
+            <DragDropContext onDragEnd={this.onRoomTileEndDrag}>
+                <GeminiScrollbar className="mx_RoomList_scrollbar"
+                     autoshow={true} onScroll={self._whenScrolling} ref="gemscroll">
+                <div className="mx_RoomList">
+                    <RoomSubList list={[]}
+                                 extraTiles={this._makeGroupInviteTiles()}
+                                 label={_t('Community Invites')}
+                                 editable={false}
+                                 order="recent"
+                                 isInvite={true}
+                                 collapsed={self.props.collapsed}
+                                 searchFilter={self.props.searchFilter}
+                                 onHeaderClick={self.onSubListHeaderClick}
+                                 onShowMoreRooms={self.onShowMoreRooms}
+                    />
 
-                <RoomSubList list={self.state.lists['im.vector.fake.invite']}
-                             label={_t('Invites')}
-                             editable={false}
-                             order="recent"
-                             isInvite={true}
-                             selectedRoom={self.props.selectedRoom}
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms}
-                />
+                    <RoomSubList list={self.state.lists['im.vector.fake.invite']}
+                                 label={_t('Invites')}
+                                 editable={false}
+                                 order="recent"
+                                 isInvite={true}
+                                 incomingCall={self.state.incomingCall}
+                                 collapsed={self.props.collapsed}
+                                 searchFilter={self.props.searchFilter}
+                                 onHeaderClick={self.onSubListHeaderClick}
+                                 onShowMoreRooms={self.onShowMoreRooms}
+                    />
 
-                <RoomSubList list={self.state.lists['m.favourite']}
-                             label={_t('Favourites')}
-                             tagName="m.favourite"
-                             emptyContent={this._getEmptyContent('m.favourite')}
-                             editable={true}
-                             order="manual"
-                             selectedRoom={self.props.selectedRoom}
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />
+                    <RoomSubList list={self.state.lists['m.favourite']}
+                                 label={_t('Favourites')}
+                                 tagName="m.favourite"
+                                 emptyContent={this._getEmptyContent('m.favourite')}
+                                 editable={true}
+                                 order="manual"
+                                 incomingCall={self.state.incomingCall}
+                                 collapsed={self.props.collapsed}
+                                 searchFilter={self.props.searchFilter}
+                                 onHeaderClick={self.onSubListHeaderClick}
+                                 onShowMoreRooms={self.onShowMoreRooms} />
 
-                <RoomSubList list={self.state.lists['im.vector.fake.direct']}
-                             label={_t('People')}
-                             tagName="im.vector.fake.direct"
-                             emptyContent={this._getEmptyContent('im.vector.fake.direct')}
-                             headerItems={this._getHeaderItems('im.vector.fake.direct')}
-                             editable={true}
-                             order="recent"
-                             selectedRoom={self.props.selectedRoom}
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             alwaysShowHeader={true}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />
+                    <RoomSubList list={self.state.lists['im.vector.fake.direct']}
+                                 label={_t('People')}
+                                 tagName="im.vector.fake.direct"
+                                 emptyContent={this._getEmptyContent('im.vector.fake.direct')}
+                                 headerItems={this._getHeaderItems('im.vector.fake.direct')}
+                                 editable={true}
+                                 order="recent"
+                                 incomingCall={self.state.incomingCall}
+                                 collapsed={self.props.collapsed}
+                                 alwaysShowHeader={true}
+                                 searchFilter={self.props.searchFilter}
+                                 onHeaderClick={self.onSubListHeaderClick}
+                                 onShowMoreRooms={self.onShowMoreRooms} />
 
-                <RoomSubList list={self.state.lists['im.vector.fake.recent']}
-                             label={_t('Rooms')}
-                             editable={true}
-                             emptyContent={this._getEmptyContent('im.vector.fake.recent')}
-                             headerItems={this._getHeaderItems('im.vector.fake.recent')}
-                             order="recent"
-                             selectedRoom={self.props.selectedRoom}
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />
+                    <RoomSubList list={self.state.lists['im.vector.fake.recent']}
+                                 label={_t('Rooms')}
+                                 editable={true}
+                                 emptyContent={this._getEmptyContent('im.vector.fake.recent')}
+                                 headerItems={this._getHeaderItems('im.vector.fake.recent')}
+                                 order="recent"
+                                 incomingCall={self.state.incomingCall}
+                                 collapsed={self.props.collapsed}
+                                 searchFilter={self.props.searchFilter}
+                                 onHeaderClick={self.onSubListHeaderClick}
+                                 onShowMoreRooms={self.onShowMoreRooms} />
 
-                { Object.keys(self.state.lists).map((tagName) => {
-                    if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
-                        return <RoomSubList list={self.state.lists[tagName]}
-                             key={tagName}
-                             label={tagName}
-                             tagName={tagName}
-                             emptyContent={this._getEmptyContent(tagName)}
-                             editable={true}
-                             order="manual"
-                             selectedRoom={self.props.selectedRoom}
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />;
-                    }
-                }) }
+                    { Object.keys(self.state.lists).map((tagName) => {
+                        if (!tagName.match(/^(m\.(favourite|lowpriority)|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
+                            return <RoomSubList list={self.state.lists[tagName]}
+                                 key={tagName}
+                                 label={tagName}
+                                 tagName={tagName}
+                                 emptyContent={this._getEmptyContent(tagName)}
+                                 editable={true}
+                                 order="manual"
+                                 incomingCall={self.state.incomingCall}
+                                 collapsed={self.props.collapsed}
+                                 searchFilter={self.props.searchFilter}
+                                 onHeaderClick={self.onSubListHeaderClick}
+                                 onShowMoreRooms={self.onShowMoreRooms} />;
+                        }
+                    }) }
 
-                <RoomSubList list={self.state.lists['m.lowpriority']}
-                             label={_t('Low priority')}
-                             tagName="m.lowpriority"
-                             emptyContent={this._getEmptyContent('m.lowpriority')}
-                             editable={true}
-                             order="recent"
-                             selectedRoom={self.props.selectedRoom}
-                             incomingCall={self.state.incomingCall}
-                             collapsed={self.props.collapsed}
-                             searchFilter={self.props.searchFilter}
-                             onHeaderClick={self.onSubListHeaderClick}
-                             onShowMoreRooms={self.onShowMoreRooms} />
+                    <RoomSubList list={self.state.lists['m.lowpriority']}
+                                 label={_t('Low priority')}
+                                 tagName="m.lowpriority"
+                                 emptyContent={this._getEmptyContent('m.lowpriority')}
+                                 editable={true}
+                                 order="recent"
+                                 incomingCall={self.state.incomingCall}
+                                 collapsed={self.props.collapsed}
+                                 searchFilter={self.props.searchFilter}
+                                 onHeaderClick={self.onSubListHeaderClick}
+                                 onShowMoreRooms={self.onShowMoreRooms} />
 
-                <RoomSubList list={self.state.lists['im.vector.fake.archived']}
-                             label={_t('Historical')}
-                             editable={false}
-                             order="recent"
-                             selectedRoom={self.props.selectedRoom}
-                             collapsed={self.props.collapsed}
-                             alwaysShowHeader={true}
-                             startAsHidden={true}
-                             showSpinner={self.state.isLoadingLeftRooms}
-                             onHeaderClick= {self.onArchivedHeaderClick}
-                             incomingCall={self.state.incomingCall}
-                             searchFilter={self.props.searchFilter}
-                             onShowMoreRooms={self.onShowMoreRooms} />
-            </div>
-            </GeminiScrollbar>
+                    <RoomSubList list={self.state.lists['im.vector.fake.archived']}
+                                 label={_t('Historical')}
+                                 editable={false}
+                                 order="recent"
+                                 collapsed={self.props.collapsed}
+                                 alwaysShowHeader={true}
+                                 startAsHidden={true}
+                                 showSpinner={self.state.isLoadingLeftRooms}
+                                 onHeaderClick= {self.onArchivedHeaderClick}
+                                 incomingCall={self.state.incomingCall}
+                                 searchFilter={self.props.searchFilter}
+                                 onShowMoreRooms={self.onShowMoreRooms} />
+                </div>
+                </GeminiScrollbar>
+            </DragDropContext>
         );
     },
 });

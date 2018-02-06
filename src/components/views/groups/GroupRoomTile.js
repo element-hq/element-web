@@ -66,7 +66,7 @@ const GroupRoomTile = React.createClass({
 });
 
 GroupRoomTile.contextTypes = {
-    matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
+    matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
 };
 
 

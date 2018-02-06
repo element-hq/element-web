@@ -27,6 +27,7 @@ limitations under the License.
  * 'isTargetMod': boolean
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
@@ -41,13 +42,12 @@ import AccessibleButton from '../elements/AccessibleButton';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import RoomViewStore from '../../../stores/RoomViewStore';
 
-
 module.exports = withMatrixClient(React.createClass({
     displayName: 'MemberInfo',
 
     propTypes: {
-        matrixClient: React.PropTypes.object.isRequired,
-        member: React.PropTypes.object.isRequired,
+        matrixClient: PropTypes.object.isRequired,
+        member: PropTypes.object.isRequired,
     },
 
     getInitialState: function() {
@@ -440,40 +440,57 @@ module.exports = withMatrixClient(React.createClass({
         const roomId = this.props.member.roomId;
         const target = this.props.member.userId;
         const room = this.props.matrixClient.getRoom(roomId);
-        const self = this;
-        if (!room) {
-            return;
-        }
-        const powerLevelEvent = room.currentState.getStateEvents(
-            "m.room.power_levels", "",
-        );
-        if (!powerLevelEvent) {
-            return;
-        }
-        if (powerLevelEvent.getContent().users) {
-            const myPower = powerLevelEvent.getContent().users[this.props.matrixClient.credentials.userId];
-            if (parseInt(myPower) === parseInt(powerLevel)) {
-                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                Modal.createTrackedDialog('Promote to PL100 Warning', '', QuestionDialog, {
-                    title: _t("Warning!"),
-                    description:
-                        <div>
-                            { _t("You will not be able to undo this change as you are promoting the user to have the same power level as yourself.") }<br />
-                            { _t("Are you sure?") }
-                        </div>,
-                    button: _t("Continue"),
-                    onFinished: function(confirmed) {
-                        if (confirmed) {
-                            self._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-                        }
-                    },
-                });
-            } else {
-                this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
-            }
-        } else {
+        if (!room) return;
+
+        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
+        if (!powerLevelEvent) return;
+
+        if (!powerLevelEvent.getContent().users) {
             this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+            return;
         }
+
+        const myUserId = this.props.matrixClient.getUserId();
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+
+        // If we are changing our own PL it can only ever be decreasing, which we cannot reverse.
+        if (myUserId === target) {
+            Modal.createTrackedDialog('Demoting Self', '', QuestionDialog, {
+                title: _t("Warning!"),
+                description:
+                    <div>
+                        { _t("You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.") }<br />
+                        { _t("Are you sure?") }
+                    </div>,
+                button: _t("Continue"),
+                onFinished: (confirmed) => {
+                    if (confirmed) {
+                        this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+                    }
+                },
+            });
+            return;
+        }
+
+        const myPower = powerLevelEvent.getContent().users[myUserId];
+        if (parseInt(myPower) === parseInt(powerLevel)) {
+            Modal.createTrackedDialog('Promote to PL100 Warning', '', QuestionDialog, {
+                title: _t("Warning!"),
+                description:
+                    <div>
+                        { _t("You will not be able to undo this change as you are promoting the user to have the same power level as yourself.") }<br />
+                        { _t("Are you sure?") }
+                    </div>,
+                button: _t("Continue"),
+                onFinished: (confirmed) => {
+                    if (confirmed) {
+                        this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
+                    }
+                },
+            });
+            return;
+        }
+        this._applyPowerChange(roomId, target, powerLevel, powerLevelEvent);
     },
 
     onNewDMClick: function() {
@@ -713,6 +730,10 @@ module.exports = withMatrixClient(React.createClass({
 
         if (this.props.member.userId !== this.props.matrixClient.credentials.userId) {
             const dmRoomMap = new DMRoomMap(this.props.matrixClient);
+            // dmRooms will not include dmRooms that we have been invited into but did not join.
+            // Because DMRoomMap runs off account_data[m.direct] which is only set on join of dm room.
+            // XXX: we potentially want DMs we have been invited to, to also show up here :L
+            // especially as logic below concerns specially if we haven't joined but have been invited
             const dmRooms = dmRoomMap.getDMRoomsForUserId(this.props.member.userId);
 
             const RoomTile = sdk.getComponent("rooms.RoomTile");
@@ -722,10 +743,15 @@ module.exports = withMatrixClient(React.createClass({
                 const room = this.props.matrixClient.getRoom(roomId);
                 if (room) {
                     const me = room.getMember(this.props.matrixClient.credentials.userId);
-                    const highlight = (
-                        room.getUnreadNotificationCount('highlight') > 0 ||
-                        me.membership === "invite"
-                    );
+
+                    // not a DM room if we have are not joined
+                    if (!me.membership || me.membership !== 'join') continue;
+                    // not a DM room if they are not joined
+                    const them = this.props.member;
+                    if (!them.membership || them.membership !== 'join') continue;
+
+                    const highlight = room.getUnreadNotificationCount('highlight') > 0 || me.membership === 'invite';
+
                     tiles.push(
                         <RoomTile key={room.roomId} room={room}
                             collapsed={false}
@@ -831,8 +857,8 @@ module.exports = withMatrixClient(React.createClass({
         }
 
         const room = this.props.matrixClient.getRoom(this.props.member.roomId);
-        const poweLevelEvent = room ? room.currentState.getStateEvents("m.room.power_levels", "") : null;
-        const powerLevelUsersDefault = poweLevelEvent.getContent().users_default;
+        const powerLevelEvent = room ? room.currentState.getStateEvents("m.room.power_levels", "") : null;
+        const powerLevelUsersDefault = powerLevelEvent ? powerLevelEvent.getContent().users_default : 0;
 
         let roomMemberDetails = null;
         if (this.props.member.roomId) { // is in room

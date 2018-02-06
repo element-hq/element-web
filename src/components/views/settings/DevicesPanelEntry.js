@@ -15,11 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import DateUtils from '../../../DateUtils';
+import {formatDate} from '../../../DateUtils';
 
 export default class DevicesPanelEntry extends React.Component {
     constructor(props, context) {
@@ -55,7 +56,7 @@ export default class DevicesPanelEntry extends React.Component {
 
         let lastSeen = "";
         if (device.last_seen_ts) {
-            const lastSeenDate = DateUtils.formatDate(new Date(device.last_seen_ts));
+            const lastSeenDate = formatDate(new Date(device.last_seen_ts));
             lastSeen = device.last_seen_ip + " @ " +
                 lastSeenDate.toLocaleString();
         }
@@ -88,8 +89,8 @@ export default class DevicesPanelEntry extends React.Component {
 }
 
 DevicesPanelEntry.propTypes = {
-    device: React.PropTypes.object.isRequired,
-    onDeviceToggled: React.PropTypes.func,
+    device: PropTypes.object.isRequired,
+    onDeviceToggled: PropTypes.func,
 };
 
 DevicesPanelEntry.defaultProps = {

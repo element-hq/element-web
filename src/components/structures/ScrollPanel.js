@@ -16,6 +16,7 @@ limitations under the License.
 
 const React = require("react");
 const ReactDOM = require("react-dom");
+import PropTypes from 'prop-types';
 const GeminiScrollbar = require('react-gemini-scrollbar');
 import Promise from 'bluebird';
 import { KeyCode } from '../../Keyboard';
@@ -86,7 +87,7 @@ module.exports = React.createClass({
          * scroll down to show the new element, rather than preserving the
          * existing view.
          */
-        stickyBottom: React.PropTypes.bool,
+        stickyBottom: PropTypes.bool,
 
         /* startAtBottom: if set to true, the view is assumed to start
          * scrolled to the bottom.
@@ -95,7 +96,7 @@ module.exports = React.createClass({
          * behaviour stays the same for other uses of ScrollPanel.
          * If so, let's remove this parameter down the line.
          */
-        startAtBottom: React.PropTypes.bool,
+        startAtBottom: PropTypes.bool,
 
         /* onFillRequest(backwards): a callback which is called on scroll when
          * the user nears the start (backwards = true) or end (backwards =
@@ -110,7 +111,7 @@ module.exports = React.createClass({
          * directon (at this time) - which will stop the pagination cycle until
          * the user scrolls again.
          */
-        onFillRequest: React.PropTypes.func,
+        onFillRequest: PropTypes.func,
 
         /* onUnfillRequest(backwards): a callback which is called on scroll when
          * there are children elements that are far out of view and could be removed
@@ -121,24 +122,24 @@ module.exports = React.createClass({
          * first element to remove if removing from the front/bottom, and last element
          * to remove if removing from the back/top.
          */
-        onUnfillRequest: React.PropTypes.func,
+        onUnfillRequest: PropTypes.func,
 
         /* onScroll: a callback which is called whenever any scroll happens.
          */
-        onScroll: React.PropTypes.func,
+        onScroll: PropTypes.func,
 
         /* onResize: a callback which is called whenever the Gemini scroll
          * panel is resized
          */
-        onResize: React.PropTypes.func,
+        onResize: PropTypes.func,
 
         /* className: classnames to add to the top-level div
          */
-        className: React.PropTypes.string,
+        className: PropTypes.string,
 
         /* style: styles to add to the top-level div
          */
-        style: React.PropTypes.object,
+        style: PropTypes.object,
     },
 
     getDefaultProps: function() {

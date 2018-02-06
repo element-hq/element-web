@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import * as Roles from '../../../Roles';
 import { _t } from '../../../languageHandler';
 
@@ -24,23 +25,23 @@ module.exports = React.createClass({
     displayName: 'PowerSelector',
 
     propTypes: {
-        value: React.PropTypes.number.isRequired,
+        value: PropTypes.number.isRequired,
         // The maximum value that can be set with the power selector
-        maxValue: React.PropTypes.number.isRequired,
+        maxValue: PropTypes.number.isRequired,
 
         // Default user power level for the room
-        usersDefault: React.PropTypes.number.isRequired,
+        usersDefault: PropTypes.number.isRequired,
 
         // if true, the <select/> should be a 'controlled' form element and updated by React
         // to reflect the current value, rather than left freeform.
         // MemberInfo uses controlled; RoomSettings uses non-controlled.
         //
         // ignored if disabled is truthy. false by default.
-        controlled: React.PropTypes.bool,
+        controlled: PropTypes.bool,
 
         // should the user be able to change the value? false by default.
-        disabled: React.PropTypes.bool,
-        onChange: React.PropTypes.func,
+        disabled: PropTypes.bool,
+        onChange: PropTypes.func,
     },
 
     getInitialState: function() {

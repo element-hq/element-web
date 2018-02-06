@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
@@ -22,7 +23,7 @@ module.exports = React.createClass({
     displayName: 'IncomingCallBox',
 
     propTypes: {
-        incomingCall: React.PropTypes.object,
+        incomingCall: PropTypes.object,
     },
 
     onAnswerClick: function() {

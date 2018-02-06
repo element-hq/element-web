@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import filesize from 'filesize';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
@@ -191,7 +192,7 @@ module.exports = React.createClass({
     },
 
     contextTypes: {
-        appConfig: React.PropTypes.object,
+        appConfig: PropTypes.object,
     },
 
     /**
@@ -294,7 +295,7 @@ module.exports = React.createClass({
 
                 return (
                     <span className="mx_MFileBody" ref="body">
-                        <div className="mx_MImageBody_download">
+                        <div className="mx_MFileBody_download">
                             <a href="javascript:void(0)" onClick={decrypt}>
                                 { _t("Decrypt %(text)s", { text: text }) }
                             </a>
@@ -326,7 +327,7 @@ module.exports = React.createClass({
             }
             return (
                 <span className="mx_MFileBody">
-                    <div className="mx_MImageBody_download">
+                    <div className="mx_MFileBody_download">
                         <div style={{display: "none"}}>
                             { /*
                               * Add dummy copy of the "a" tag
@@ -346,7 +347,7 @@ module.exports = React.createClass({
             if (this.props.tileShape === "file_grid") {
                 return (
                     <span className="mx_MFileBody">
-                        <div className="mx_MImageBody_download">
+                        <div className="mx_MFileBody_download">
                             <a className="mx_ImageBody_downloadLink" href={contentUrl} download={fileName} target="_blank">
                                 { fileName }
                             </a>
@@ -359,7 +360,7 @@ module.exports = React.createClass({
             } else {
                 return (
                     <span className="mx_MFileBody">
-                        <div className="mx_MImageBody_download">
+                        <div className="mx_MFileBody_download">
                             <a href={contentUrl} download={fileName} target="_blank" rel="noopener">
                                 <img src={tintedDownloadImageURL} width="12" height="14" ref="downloadImage" />
                                 { _t("Download %(text)s", { text: text }) }

@@ -17,13 +17,14 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'CasLogin',
 
     propTypes: {
-      onSubmit: React.PropTypes.func, // fn()
+      onSubmit: PropTypes.func, // fn()
     },
 
     render: function() {

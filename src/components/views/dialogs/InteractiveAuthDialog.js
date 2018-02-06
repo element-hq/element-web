@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -27,22 +28,22 @@ export default React.createClass({
 
     propTypes: {
         // matrix client to use for UI auth requests
-        matrixClient: React.PropTypes.object.isRequired,
+        matrixClient: PropTypes.object.isRequired,
 
         // response from initial request. If not supplied, will do a request on
         // mount.
-        authData: React.PropTypes.shape({
-            flows: React.PropTypes.array,
-            params: React.PropTypes.object,
-            session: React.PropTypes.string,
+        authData: PropTypes.shape({
+            flows: PropTypes.array,
+            params: PropTypes.object,
+            session: PropTypes.string,
         }),
 
         // callback
-        makeRequest: React.PropTypes.func.isRequired,
+        makeRequest: PropTypes.func.isRequired,
 
-        onFinished: React.PropTypes.func.isRequired,
+        onFinished: PropTypes.func.isRequired,
 
-        title: React.PropTypes.string,
+        title: PropTypes.string,
     },
 
     getInitialState: function() {

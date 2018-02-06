@@ -17,6 +17,7 @@ limitations under the License.
 
 import Promise from 'bluebird';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t, _td } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
@@ -60,10 +61,10 @@ const plEventsToShow = {
 
 const BannedUser = React.createClass({
     propTypes: {
-        canUnban: React.PropTypes.bool,
-        member: React.PropTypes.object.isRequired, // js-sdk RoomMember
-        by: React.PropTypes.string.isRequired,
-        reason: React.PropTypes.string,
+        canUnban: PropTypes.bool,
+        member: PropTypes.object.isRequired, // js-sdk RoomMember
+        by: PropTypes.string.isRequired,
+        reason: PropTypes.string,
     },
 
     _onUnbanClick: function() {
@@ -115,8 +116,8 @@ module.exports = React.createClass({
     displayName: 'RoomSettings',
 
     propTypes: {
-        room: React.PropTypes.object.isRequired,
-        onSaveClick: React.PropTypes.func,
+        room: PropTypes.object.isRequired,
+        onSaveClick: PropTypes.func,
     },
 
     getInitialState: function() {
@@ -773,7 +774,8 @@ module.exports = React.createClass({
         const aliasEvents = this.props.room.currentState.getStateEvents('m.room.aliases') || [];
         let aliasCount = 0;
         aliasEvents.forEach((event) => {
-            aliasCount += event.getContent().aliases.length;
+            const aliases = event.getContent().aliases || [];
+            aliasCount += aliases.length;
         });
 
         if (this.state.join_rule === "public" && aliasCount == 0) {

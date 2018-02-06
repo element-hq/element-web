@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
@@ -65,6 +66,6 @@ export default class MemberDeviceInfo extends React.Component {
 
 MemberDeviceInfo.displayName = 'MemberDeviceInfo';
 MemberDeviceInfo.propTypes = {
-    userId: React.PropTypes.string.isRequired,
-    device: React.PropTypes.object.isRequired,
+    userId: PropTypes.string.isRequired,
+    device: PropTypes.object.isRequired,
 };

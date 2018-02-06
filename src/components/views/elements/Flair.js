@@ -63,7 +63,7 @@ FlairAvatar.propTypes = {
 };
 
 FlairAvatar.contextTypes = {
-    matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
+    matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
 };
 
 export default class Flair extends React.Component {
@@ -107,7 +107,11 @@ export default class Flair extends React.Component {
         }
         const profiles = await this._getGroupProfiles(groups);
         if (!this.unmounted) {
-            this.setState({profiles: profiles.filter((profile) => {return profile.avatarUrl;})});
+            this.setState({
+                profiles: profiles.filter((profile) => {
+                    return profile ? profile.avatarUrl : false;
+                }),
+            });
         }
     }
 
@@ -134,5 +138,5 @@ Flair.propTypes = {
 // this.context.matrixClient everywhere instead of this.props.matrixClient.
 // See https://github.com/vector-im/riot-web/issues/4951.
 Flair.contextTypes = {
-    matrixClient: React.PropTypes.instanceOf(MatrixClient).isRequired,
+    matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
 };

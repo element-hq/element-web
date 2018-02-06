@@ -19,6 +19,7 @@ limitations under the License.
 
 const React = require('react');
 const ReactDOM = require("react-dom");
+import PropTypes from 'prop-types';
 const classNames = require('classnames');
 const MatrixClientPeg = require('../../../MatrixClientPeg');
 import DMRoomMap from '../../../utils/DMRoomMap';
@@ -34,17 +35,14 @@ module.exports = React.createClass({
     displayName: 'RoomTile',
 
     propTypes: {
-        connectDragSource: React.PropTypes.func,
-        connectDropTarget: React.PropTypes.func,
-        onClick: React.PropTypes.func,
-        isDragging: React.PropTypes.bool,
+        onClick: PropTypes.func,
 
-        room: React.PropTypes.object.isRequired,
-        collapsed: React.PropTypes.bool.isRequired,
-        unread: React.PropTypes.bool.isRequired,
-        highlight: React.PropTypes.bool.isRequired,
-        isInvite: React.PropTypes.bool.isRequired,
-        incomingCall: React.PropTypes.object,
+        room: PropTypes.object.isRequired,
+        collapsed: PropTypes.bool.isRequired,
+        unread: PropTypes.bool.isRequired,
+        highlight: PropTypes.bool.isRequired,
+        isInvite: PropTypes.bool.isRequired,
+        incomingCall: PropTypes.object,
     },
 
     getDefaultProps: function() {
@@ -255,35 +253,19 @@ module.exports = React.createClass({
          directMessageIndicator = <img src="img/icon_person.svg" className="mx_RoomTile_dm" width="11" height="13" alt="dm" />;
         }
 
-        // These props are injected by React DnD,
-        // as defined by your `collect` function above:
-        const isDragging = this.props.isDragging;
-        const connectDragSource = this.props.connectDragSource;
-        const connectDropTarget = this.props.connectDropTarget;
-
-
-        let ret = (
-            <div> { /* Only native elements can be wrapped in a DnD object. */ }
-            <AccessibleButton className={classes} tabIndex="0" onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-                <div className={avatarClasses}>
-                    <div className="mx_RoomTile_avatar_container">
-                        <RoomAvatar room={this.props.room} width={24} height={24} />
-                        { directMessageIndicator }
-                    </div>
+        return <AccessibleButton className={classes} tabIndex="0" onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <div className={avatarClasses}>
+                <div className="mx_RoomTile_avatar_container">
+                    <RoomAvatar room={this.props.room} width={24} height={24} />
+                    { directMessageIndicator }
                 </div>
-                <div className="mx_RoomTile_nameContainer">
-                    { label }
-                    { badge }
-                </div>
-                { /* { incomingCallBox } */ }
-                { tooltip }
-            </AccessibleButton>
             </div>
-        );
-
-        if (connectDropTarget) ret = connectDropTarget(ret);
-        if (connectDragSource) ret = connectDragSource(ret);
-
-        return ret;
+            <div className="mx_RoomTile_nameContainer">
+                { label }
+                { badge }
+            </div>
+            { /* { incomingCallBox } */ }
+            { tooltip }
+        </AccessibleButton>;
     },
 });

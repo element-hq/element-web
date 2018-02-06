@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import sdk from '../../index';
 import { _t } from '../../languageHandler';
@@ -26,7 +27,7 @@ export default withMatrixClient(React.createClass({
     displayName: 'MyGroups',
 
     propTypes: {
-        matrixClient: React.PropTypes.object.isRequired,
+        matrixClient: PropTypes.object.isRequired,
     },
 
     getInitialState: function() {

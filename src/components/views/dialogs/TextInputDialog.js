@@ -15,21 +15,21 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
-import { _t } from '../../../languageHandler';
 
 export default React.createClass({
     displayName: 'TextInputDialog',
     propTypes: {
-        title: React.PropTypes.string,
-        description: React.PropTypes.oneOfType([
-            React.PropTypes.element,
-            React.PropTypes.string,
+        title: PropTypes.string,
+        description: PropTypes.oneOfType([
+            PropTypes.element,
+            PropTypes.string,
         ]),
-        value: React.PropTypes.string,
-        button: React.PropTypes.string,
-        focus: React.PropTypes.bool,
-        onFinished: React.PropTypes.func.isRequired,
+        value: PropTypes.string,
+        button: PropTypes.string,
+        focus: PropTypes.bool,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {
@@ -58,6 +58,7 @@ export default React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
             <BaseDialog className="mx_TextInputDialog" onFinished={this.props.onFinished}
                 title={this.props.title}
@@ -71,13 +72,10 @@ export default React.createClass({
                             <input id="textinput" ref="textinput" className="mx_TextInputDialog_input" defaultValue={this.props.value} autoFocus={this.props.focus} size="64" />
                         </div>
                     </div>
-                    <div className="mx_Dialog_buttons">
-                        <button onClick={this.onCancel}>
-                            { _t("Cancel") }
-                        </button>
-                        <input type="submit" className="mx_Dialog_primary" value={this.props.button} />
-                    </div>
                 </form>
+                <DialogButtons primaryButton={this.props.button}
+                    onPrimaryButtonClick={this.onOk}
+                    onCancel={this.onCancel} />
             </BaseDialog>
         );
     },

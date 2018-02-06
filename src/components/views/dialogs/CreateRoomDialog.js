@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import { _t } from '../../../languageHandler';
@@ -22,7 +23,7 @@ import { _t } from '../../../languageHandler';
 export default React.createClass({
     displayName: 'CreateRoomDialog',
     propTypes: {
-        onFinished: React.PropTypes.func.isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     componentDidMount: function() {
@@ -41,6 +42,7 @@ export default React.createClass({
 
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
             <BaseDialog className="mx_CreateRoomDialog" onFinished={this.props.onFinished}
                 title={_t('Create Room')}
@@ -53,27 +55,11 @@ export default React.createClass({
                         <div>
                             <input id="textinput" ref="textinput" className="mx_CreateRoomDialog_input" autoFocus={true} size="64" />
                         </div>
-                        <br />
-
-                        <details className="mx_CreateRoomDialog_details">
-                            <summary className="mx_CreateRoomDialog_details_summary">{ _t('Advanced options') }</summary>
-                            <div>
-                                <input type="checkbox" id="checkbox" ref="checkbox" defaultChecked={this.defaultNoFederate} />
-                                <label htmlFor="checkbox">
-                                    { _t('Block users on other matrix homeservers from joining this room') }
-                                    <br />
-                                    ({ _t('This setting cannot be changed later!') })
-                                </label>
-                            </div>
-                        </details>
-                    </div>
-                    <div className="mx_Dialog_buttons">
-                        <button onClick={this.onCancel}>
-                            { _t('Cancel') }
-                        </button>
-                        <input type="submit" className="mx_Dialog_primary" value={_t('Create Room')} />
                     </div>
                 </form>
+                <DialogButtons primaryButton={_t('Create Room')}
+                    onPrimaryButtonClick={this.onOk}
+                    onCancel={this.onCancel} />
             </BaseDialog>
         );
     },

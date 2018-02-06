@@ -17,6 +17,7 @@ limitations under the License.
 
 import * as Matrix from 'matrix-js-sdk';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * Wraps a react class, pulling the MatrixClient from the context and adding it
@@ -30,7 +31,7 @@ export default function(WrappedComponent) {
         displayName: "withMatrixClient<" + WrappedComponent.displayName + ">",
 
         contextTypes: {
-            matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+            matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
         },
 
         render: function() {

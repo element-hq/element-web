@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
 import Analytics from '../../../Analytics';
@@ -77,6 +78,7 @@ export default class DeactivateAccountDialog extends React.Component {
     }
 
     render() {
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const Loader = sdk.getComponent("elements.Spinner");
         let passwordBoxClass = '';
 
@@ -99,10 +101,11 @@ export default class DeactivateAccountDialog extends React.Component {
         }
 
         return (
-            <div className="mx_DeactivateAccountDialog">
-                <div className="mx_Dialog_title danger">
-                    { _t("Deactivate Account") }
-                </div>
+            <BaseDialog className="mx_DeactivateAccountDialog"
+                onFinished={this.props.onFinished}
+                onEnterPressed={this.onOk}
+                titleClass="danger"
+                title={_t("Deactivate Account")}>
                 <div className="mx_Dialog_content">
                     <p>{ _t("This will make your account permanently unusable. You will not be able to re-register the same user ID.") }</p>
 
@@ -130,11 +133,11 @@ export default class DeactivateAccountDialog extends React.Component {
 
                     { cancelButton }
                 </div>
-            </div>
+            </BaseDialog>
         );
     }
 }
 
 DeactivateAccountDialog.propTypes = {
-    onFinished: React.PropTypes.func.isRequired,
+    onFinished: PropTypes.func.isRequired,
 };

@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 const React = require('react');
+import PropTypes from 'prop-types';
 const sdk = require('../../../index');
 import { _t } from "../../../languageHandler";
 
@@ -24,7 +25,7 @@ module.exports = React.createClass({
     displayName: 'RoomTopicEditor',
 
     propTypes: {
-        room: React.PropTypes.object.isRequired,
+        room: PropTypes.object.isRequired,
     },
 
     componentWillMount: function() {

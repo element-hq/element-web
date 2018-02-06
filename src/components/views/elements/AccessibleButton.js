@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { KeyCode } from '../../../Keyboard';
 
@@ -72,9 +73,9 @@ export default function AccessibleButton(props) {
  *           implemented exactly like a normal onClick handler.
  */
 AccessibleButton.propTypes = {
-    children: React.PropTypes.node,
-    element: React.PropTypes.string,
-    onClick: React.PropTypes.func.isRequired,
+    children: PropTypes.node,
+    element: PropTypes.string,
+    onClick: PropTypes.func.isRequired,
 };
 
 AccessibleButton.defaultProps = {

@@ -16,6 +16,7 @@ limitations under the License.
 
 import FileSaver from 'file-saver';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 
 import * as Matrix from 'matrix-js-sdk';
@@ -29,8 +30,8 @@ export default React.createClass({
     displayName: 'ExportE2eKeysDialog',
 
     propTypes: {
-        matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
-        onFinished: React.PropTypes.func.isRequired,
+        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
