@@ -55,7 +55,6 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Tarayıcı çubuğunuzda bir HTTPS URL'si olduğunda Ana Sunusuna HTTP üzerinden bağlanılamıyor . Ya HTTPS kullanın veya  <a> güvensiz komut dosyalarını</a> etkinleştirin.",
     "Can't load user settings": "Kullanıcı ayarları yüklenemiyor",
     "Change Password": "Şifre Değiştir",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s görüntülenen ismini %(oldDisplayName)s dan %(displayName)s 'a değiştirdi.",
     "%(senderName)s changed their profile picture.": "%(senderName)s profil resmini değiştirdi.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s %(powerLevelDiffText)s'nin güç düzeyini değiştirdi.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s odanın ismini  %(roomName)s olarak değiştirdi.",

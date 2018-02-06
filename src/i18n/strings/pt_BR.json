@@ -207,7 +207,6 @@
     "%(senderName)s answered the call.": "%(senderName)s atendeu à chamada.",
     "%(senderName)s banned %(targetName)s.": "%(senderName)s removeu %(targetName)s da sala.",
     "Call Timeout": "Tempo esgotado. Chamada encerrada",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s mudou seu nome público de %(oldDisplayName)s para %(displayName)s.",
     "%(senderName)s changed their profile picture.": "%(senderName)s alterou sua imagem de perfil.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s alterou o nível de permissões de %(powerLevelDiffText)s.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s alterou o nome da sala para %(roomName)s.",

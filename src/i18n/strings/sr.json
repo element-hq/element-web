@@ -119,7 +119,6 @@
     "%(senderName)s banned %(targetName)s.": "%(senderName)s је бановао %(targetName)s.",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and device %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "УПОЗОРЕЊЕ: ПОТВРДА КЉУЧА НИЈЕ УСПЕЛА! Кључ потписивања за корисника %(userId)s и уређај %(deviceId)s је „%(fprint)s“ а то се не подудара са достављеним кључем „%(fingerprint)s“. Ово можда значи да се ваши разговори прате!",
     "The signing key you provided matches the signing key you received from %(userId)s's device %(deviceId)s. Device marked as verified.": "Кључ за потписивање који сте доставили се подудара са кључем за потписивање од корисника %(userId)s и уређаја %(deviceId)s. Уређај је означен као проверен.",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "Корисник %(senderName)s је променио приказно име из %(oldDisplayName)s у %(displayName)s.",
     "%(senderName)s set their display name to %(displayName)s.": "Корисник %(senderName)s је себи поставио приказно име %(displayName)s.",
     "%(senderName)s removed their display name (%(oldDisplayName)s).": "Корисник %(senderName)s је себи уклонио приказно име %(oldDisplayName)s.",
     "%(senderName)s removed their profile picture.": "Корисник %(senderName)s је себи уклонио профилну слику.",
