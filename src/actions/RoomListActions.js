@@ -116,8 +116,9 @@ RoomListActions.tagRoom = function(matrixClient, room, oldTag, newTag, oldIndex,
         if (newTag && newTag !== 'im.vector.fake.direct' &&
             (hasChangedSubLists || metaData)
         ) {
-            // Optimistic update of what will happen to the room tags
-            room.tags[newTag] = metaData || {};
+            // metaData is the body of the PUT to set the tag, so it must
+            // at least be an empty object.
+            metaData = metaData || {};
 
             const promiseToAdd = matrixClient.setRoomTag(roomId, newTag, metaData).catch(function(err) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");

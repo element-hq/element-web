@@ -16,6 +16,7 @@ limitations under the License.
 import {Store} from 'flux/utils';
 import dis from '../dispatcher';
 import DMRoomMap from '../utils/DMRoomMap';
+import Unread from '../Unread';
 
 /**
  * A class for storing application state for categorising rooms in
@@ -26,6 +27,8 @@ class RoomListStore extends Store {
         super(dis);
 
         this._init();
+        this._getManualComparator = this._getManualComparator.bind(this);
+        this._recentsComparator = this._recentsComparator.bind(this);
     }
 
     _init() {
@@ -62,7 +65,7 @@ class RoomListStore extends Store {
             break;
             case 'MatrixActions.Room.tags': {
                 if (!this._state.ready) break;
-                this._updateRoomLists(payload.room);
+                this._generateRoomLists();
             }
             break;
             case 'MatrixActions.accountData': {
@@ -76,12 +79,7 @@ class RoomListStore extends Store {
             }
             break;
             case 'RoomListActions.tagRoom.pending': {
-                this._updateRoomListsOptimistic(
-                    payload.request.room,
-                    payload.request.oldTag,
-                    payload.request.newTag,
-                    payload.request.metaData,
-                );
+                this._generateRoomLists(payload.request);
             }
             break;
             case 'RoomListActions.tagRoom.failure': {
@@ -93,76 +91,13 @@ class RoomListStore extends Store {
                 // Reset state without pushing an update to the view, which generally assumes that
                 // the matrix client isn't `null` and so causing a re-render will cause NPEs.
                 this._init();
+                this._matrixClient = null;
             }
             break;
         }
     }
 
-    _updateRoomListsOptimistic(updatedRoom, oldTag, newTag, metaData) {
-        const newLists = {};
-
-        // Adding a tag to an untagged room - need to remove it from recents
-        if (newTag && Object.keys(updatedRoom.tags).length === 0) {
-            oldTag = 'im.vector.fake.recent';
-        }
-
-        // Removing a tag from a room with one tag left - need to add it to recents
-        if (oldTag && Object.keys(updatedRoom.tags).length === 1) {
-            newTag = 'im.vector.fake.recent';
-        }
-
-        // Remove room from oldTag
-        Object.keys(this._state.lists).forEach((tagName) => {
-            if (tagName === oldTag) {
-                newLists[tagName] = this._state.lists[tagName].filter((room) => {
-                    return room.roomId !== updatedRoom.roomId;
-                });
-            } else {
-                newLists[tagName] = this._state.lists[tagName];
-            }
-        });
-
-        /// XXX: RoomSubList sorts by data on the room object. We
-        /// should sort in advance and incrementally insert new rooms
-        /// instead of resorting every time.
-        if (metaData) {
-            updatedRoom.tags[newTag] = metaData;
-        }
-
-        newLists[newTag].push(updatedRoom);
-
-        this._setState({
-            lists: newLists,
-        });
-    }
-
-    _updateRoomLists(updatedRoom) {
-        const roomTags = Object.keys(updatedRoom.tags);
-
-        const newLists = {};
-
-        // Removal of the updatedRoom from tags it no longer has
-        Object.keys(this._state.lists).forEach((tagName) => {
-            newLists[tagName] = this._state.lists[tagName].filter((room) => {
-                return room.roomId !== updatedRoom.roomId || roomTags.includes(tagName);
-            });
-        });
-
-        roomTags.forEach((tagName) => {
-            if (newLists[tagName].includes(updatedRoom)) return;
-            newLists[tagName].push(updatedRoom);
-        });
-
-        if (roomTags.length === 0) {
-            newLists['im.vector.fake.recent'].unshift(updatedRoom);
-        }
-
-        this._setState({
-            lists: newLists,
-        });
-    }
-
-    _generateRoomLists() {
+    _generateRoomLists(optimisticRequest) {
         const lists = {
             "im.vector.fake.invite": [],
             "m.favourite": [],
@@ -187,7 +122,19 @@ class RoomListStore extends Store {
             } else if (me.membership == "join" || me.membership === "ban" ||
                      (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey())) {
                 // Used to split rooms via tags
-                const tagNames = Object.keys(room.tags);
+                let tagNames = Object.keys(room.tags);
+
+                if (optimisticRequest && optimisticRequest.room === room) {
+                    // Remove old tag
+                    tagNames = tagNames.filter((tagName) => tagName !== optimisticRequest.oldTag);
+                    // Add new tag
+                    if (optimisticRequest.newTag &&
+                        !tagNames.includes(optimisticRequest.newTag)
+                    ) {
+                        tagNames.push(optimisticRequest.newTag);
+                    }
+                }
+
                 if (tagNames.length) {
                     for (let i = 0; i < tagNames.length; i++) {
                         const tagName = tagNames[i];
@@ -207,10 +154,90 @@ class RoomListStore extends Store {
             }
         });
 
+        const listOrders = {
+            "manual": [
+                "m.favourite",
+            ],
+            "recent": [
+                "im.vector.fake.invite",
+                "im.vector.fake.recent",
+                "im.vector.fake.direct",
+                "m.lowpriority",
+                "im.vector.fake.archived",
+            ],
+        };
+
+        Object.keys(listOrders).forEach((order) => {
+            listOrders[order].forEach((listKey) => {
+                let comparator;
+                switch (order) {
+                    case "manual":
+                        comparator = this._getManualComparator(listKey, optimisticRequest);
+                        break;
+                    case "recent":
+                        comparator = this._recentsComparator;
+                        break;
+                }
+                lists[listKey].sort(comparator);
+            });
+        });
+
         this._setState({
             lists,
             ready: true, // Ready to receive updates via Room.tags events
         });
+    }
+
+    _tsOfNewestEvent(room) {
+        for (let i = room.timeline.length - 1; i >= 0; --i) {
+            const ev = room.timeline[i];
+            if (ev.getTs() &&
+                (Unread.eventTriggersUnreadCount(ev) ||
+                (ev.getSender() === this._matrixClient.credentials.userId))
+            ) {
+                return ev.getTs();
+            }
+        }
+
+        // we might only have events that don't trigger the unread indicator,
+        // in which case use the oldest event even if normally it wouldn't count.
+        // This is better than just assuming the last event was forever ago.
+        if (room.timeline.length && room.timeline[0].getTs()) {
+            return room.timeline[0].getTs();
+        } else {
+            return Number.MAX_SAFE_INTEGER;
+        }
+    }
+
+    _recentsComparator(roomA, roomB) {
+        return this._tsOfNewestEvent(roomB) - this._tsOfNewestEvent(roomA);
+    }
+
+    _lexicographicalComparator(roomA, roomB) {
+        return roomA.name > roomB.name ? 1 : -1;
+    }
+
+    _getManualComparator(tagName, optimisticRequest) {
+        return (roomA, roomB) => {
+            let metaA = roomA.tags[tagName];
+            let metaB = roomB.tags[tagName];
+
+            if (optimisticRequest && roomA === optimisticRequest.room) metaA = optimisticRequest.metaData;
+            if (optimisticRequest && roomB === optimisticRequest.room) metaB = optimisticRequest.metaData;
+
+            // Make sure the room tag has an order element, if not set it to be the bottom
+            const a = metaA.order;
+            const b = metaB.order;
+
+            // Order undefined room tag orders to the bottom
+            if (a === undefined && b !== undefined) {
+                return 1;
+            } else if (a !== undefined && b === undefined) {
+                return -1;
+            }
+
+            return a == b ? this._lexicographicalComparator(roomA, roomB) : ( a > b ? 1 : -1);
+        };
     }
 
     getRoomLists() {
