@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@ import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
+import AccessibleButton from '../elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'IncomingCallBox',
@@ -26,14 +28,16 @@ module.exports = React.createClass({
         incomingCall: PropTypes.object,
     },
 
-    onAnswerClick: function() {
+    onAnswerClick: function(e) {
+        e.stopPropagation();
         dis.dispatch({
             action: 'answer',
             room_id: this.props.incomingCall.roomId,
         });
     },
 
-    onRejectClick: function() {
+    onRejectClick: function(e) {
+        e.stopPropagation();
         dis.dispatch({
             action: 'hangup',
             room_id: this.props.incomingCall.roomId,
@@ -67,14 +71,14 @@ module.exports = React.createClass({
                 </div>
                 <div className="mx_IncomingCallBox_buttons">
                     <div className="mx_IncomingCallBox_buttons_cell">
-                        <div className="mx_IncomingCallBox_buttons_decline" onClick={this.onRejectClick}>
+                        <AccessibleButton className="mx_IncomingCallBox_buttons_decline" onClick={this.onRejectClick}>
                             { _t("Decline") }
-                        </div>
+                        </AccessibleButton>
                     </div>
                     <div className="mx_IncomingCallBox_buttons_cell">
-                        <div className="mx_IncomingCallBox_buttons_accept" onClick={this.onAnswerClick}>
+                        <AccessibleButton className="mx_IncomingCallBox_buttons_accept" onClick={this.onAnswerClick}>
                             { _t("Accept") }
-                        </div>
+                        </AccessibleButton>
                     </div>
                 </div>
             </div>
