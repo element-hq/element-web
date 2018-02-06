@@ -44,7 +44,7 @@
     "On": "Укључено",
     "Noisy": "Бучно",
     "Failed to set direct chat tag": "Нисам успео да поставим ознаку директног ћаскања",
-    "Failed to remove tag %(tagName)s from room": "Нисам успео да уклоним ознаку %(tagName)s са собе",
+    "Failed to remove tag %(tagName)s from room": "Нисам успео да скинем ознаку %(tagName)s са собе",
     "Failed to add tag %(tagName)s to room": "Нисам успео да додам ознаку %(tagName)s на собу",
     "Search…": "Претрага…",
     "Search": "Претрага",
