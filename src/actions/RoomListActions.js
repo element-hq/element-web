@@ -56,10 +56,13 @@ RoomListActions.tagRoom = function(matrixClient, room, oldTag, newTag, oldIndex,
             newTag === oldTag && oldIndex < newIndex
         ) ? 1 : 0;
 
-        const prevOrder = newIndex === 0 ?
-            0 : newList[offset + newIndex - 1].tags[newTag].order;
-        const nextOrder = newIndex === newList.length ?
-            1 : newList[offset + newIndex].tags[newTag].order;
+        const indexBefore = offset + newIndex - 1;
+        const indexAfter = offset + newIndex;
+
+        const prevOrder = indexBefore <= 0 ?
+            0 : newList[indexBefore].tags[newTag].order;
+        const nextOrder = indexAfter >= newList.length ?
+            1 : newList[indexAfter].tags[newTag].order;
 
         metaData = {
             order: (prevOrder + nextOrder) / 2.0,
