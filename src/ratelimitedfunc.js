@@ -35,13 +35,17 @@ module.exports = function(f, minIntervalMs) {
 
         if (self.lastCall < now - minIntervalMs) {
             f.apply(this);
-            self.lastCall = now;
+            // get the time again now the function has finished, so if it
+            // took longer than the delay time to execute, it doesn't
+            // immediately become eligible to run again.
+            self.lastCall = Date.now();
         } else if (self.scheduledCall === undefined) {
             self.scheduledCall = setTimeout(
                 () => {
                     self.scheduledCall = undefined;
                     f.apply(this);
-                    self.lastCall = now;
+                    // get time again as per above
+                    self.lastCall = Date.now();
                 },
                 (self.lastCall + minIntervalMs) - now,
             );
