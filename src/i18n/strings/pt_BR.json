@@ -656,5 +656,7 @@
     "You are not in this room.": "Você não está nesta sala.",
     "You do not have permission to do that in this room.": "Você não tem permissão para fazer isto nesta sala.",
     "Ignored user": "Usuário ignorado",
-    "You are no longer ignoring %(userId)s": "Você parou de ignorar %(userId)s"
+    "You are no longer ignoring %(userId)s": "Você parou de ignorar %(userId)s",
+    "Edit": "Editar",
+    "Unpin Message": "Desafixar Mensagem"
 }
