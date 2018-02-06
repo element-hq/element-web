@@ -153,6 +153,10 @@ class RoomListStore extends Store {
             newLists[tagName].push(updatedRoom);
         });
 
+        if (roomTags.length === 0) {
+            newLists['im.vector.fake.recent'].unshift(updatedRoom);
+        }
+
         this._setState({
             lists: newLists,
         });
