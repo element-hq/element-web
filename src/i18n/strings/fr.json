@@ -984,5 +984,6 @@
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s a changé son nom affiché en %(displayName)s.",
     "Failed to set direct chat tag": "Échec de l'ajout de l'étiquette discussion directe",
     "Failed to remove tag %(tagName)s from room": "Échec de la suppression de l'étiquette %(tagName)s du salon",
-    "Failed to add tag %(tagName)s to room": "Échec de l'ajout de l'étiquette %(tagName)s au salon"
+    "Failed to add tag %(tagName)s to room": "Échec de l'ajout de l'étiquette %(tagName)s au salon",
+    "Clear filter": "Supprimer les filtres"
 }
