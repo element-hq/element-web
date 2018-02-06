@@ -114,7 +114,7 @@ RoomListActions.tagRoom = function(matrixClient, room, oldTag, newTag, oldIndex,
             (hasChangedSubLists || metaData)
         ) {
             // Optimistic update of what will happen to the room tags
-            room.tags[newTag] = metaData;
+            room.tags[newTag] = metaData || {};
 
             const promiseToAdd = matrixClient.setRoomTag(roomId, newTag, metaData).catch(function(err) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
