@@ -191,7 +191,6 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "当浏览器地址栏里有 HTTPS 的 URL 时，不能使用 HTTP 连接主服务器。请使用 HTTPS 或者<a>允许不安全的脚本</a>。",
     "Can't load user settings": "无法加载用户设置",
     "Change Password": "修改密码",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s 将昵称从 %(oldDisplayName)s 改为了 %(displayName)s。",
     "%(senderName)s changed their profile picture.": "%(senderName)s 修改了头像。",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s 将聊天室名称改为 %(roomName)s。",
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s 移除了聊天室名称。",

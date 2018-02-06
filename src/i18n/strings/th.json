@@ -84,7 +84,6 @@
     "Bans user with given id": "ผู้ใช้และ id ที่ถูกแบน",
     "Blacklisted": "ขึ้นบัญชีดำ",
     "Can't load user settings": "ไม่สามารถโหลดการตั้งค่าผู้ใช้ได้",
-    "%(senderName)s changed their display name from %(oldDisplayName)s to %(displayName)s.": "%(senderName)s เปลี่ยนชื่อที่แสดงของเขาจาก %(oldDisplayName)s ไปเป็น %(displayName)s",
     "%(senderName)s changed their profile picture.": "%(senderName)s เปลี่ยนรูปโปรไฟล์ของเขา",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s เปลี่ยนชื่อห้องไปเป็น %(roomName)s",
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s ลบชื่อห้อง",
