@@ -572,13 +572,17 @@ var RoomSubList = React.createClass({
                 { subList }
             </div>;
 
-            return this.props.editable ? <Droppable droppableId={"room-sub-list-droppable_" + this.props.tagName}>
-                { (provided, snapshot) => (
-                    <div ref={provided.innerRef}>
-                        { subListContent }
-                    </div>
-                ) }
-            </Droppable> : subListContent;
+            return this.props.editable ?
+                <Droppable
+                    droppableId={"room-sub-list-droppable_" + this.props.tagName}
+                    type="draggable-RoomTile"
+                >
+                    { (provided, snapshot) => (
+                        <div ref={provided.innerRef}>
+                            { subListContent }
+                        </div>
+                    ) }
+                </Droppable> : subListContent;
         }
         else {
             var Loader = sdk.getComponent("elements.Spinner");

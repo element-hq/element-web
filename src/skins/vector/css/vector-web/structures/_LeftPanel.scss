@@ -21,6 +21,10 @@ limitations under the License.
     flex-direction: column;
 }
 
+.mx_LeftPanel_container {
+    display: flex;
+}
+
 .mx_LeftPanel_hideButton {
     position: absolute;
     top: 10px;
