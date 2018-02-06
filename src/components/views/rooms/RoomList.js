@@ -352,6 +352,14 @@ module.exports = React.createClass({
 
         const filteredLists = {};
 
+        const isRoomVisible = {
+            // $roomId: true,
+        };
+
+        this._visibleRooms.forEach((r) => {
+            isRoomVisible[r.roomId] = true;
+        });
+
         Object.keys(lists).forEach((tagName) => {
             filteredLists[tagName] = lists[tagName].filter((taggedRoom) => {
                 // Somewhat impossible, but guard against it anyway
@@ -363,9 +371,7 @@ module.exports = React.createClass({
                     return;
                 }
 
-                return this._visibleRooms.some((visibleRoom) => {
-                    return visibleRoom.roomId === taggedRoom.roomId;
-                });
+                return isRoomVisible[taggedRoom.roomId];
             });
         });
 
