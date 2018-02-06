@@ -984,5 +984,6 @@
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s megváltoztatta a nevét erre: %(displayName)s.",
     "Failed to set direct chat tag": "Nem sikerült a közvetlen beszélgetés jelzést beállítani",
     "Failed to remove tag %(tagName)s from room": "Nem sikerült a szobáról eltávolítani ezt: %(tagName)s",
-    "Failed to add tag %(tagName)s to room": "Nem sikerült hozzáadni a szobához ezt: %(tagName)s"
+    "Failed to add tag %(tagName)s to room": "Nem sikerült hozzáadni a szobához ezt: %(tagName)s",
+    "Clear filter": "Szűrő törlése"
 }
