@@ -37,6 +37,9 @@ export default React.createClass({
         // callback to call when Enter is pressed
         onEnterPressed: PropTypes.func,
 
+        // called when a key is pressed
+        onKeyDown: PropTypes.func,
+
         // CSS class to apply to dialog div
         className: PropTypes.string,
 
@@ -49,6 +52,9 @@ export default React.createClass({
     },
 
     _onKeyDown: function(e) {
+        if (this.props.onKeyDown) {
+            this.props.onKeyDown(e);
+        }
         if (e.keyCode === KeyCode.ESCAPE) {
             e.stopPropagation();
             e.preventDefault();
