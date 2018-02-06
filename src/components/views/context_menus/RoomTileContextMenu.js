@@ -20,6 +20,7 @@ limitations under the License.
 import Promise from 'bluebird';
 import React from 'react';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import sdk from 'matrix-react-sdk';
 import { _t, _td } from 'matrix-react-sdk/lib/languageHandler';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
@@ -28,14 +29,15 @@ import DMRoomMap from 'matrix-react-sdk/lib/utils/DMRoomMap';
 import * as Rooms from 'matrix-react-sdk/lib/Rooms';
 import * as RoomNotifs from 'matrix-react-sdk/lib/RoomNotifs';
 import Modal from 'matrix-react-sdk/lib/Modal';
+import RoomListActions from 'matrix-react-sdk/lib/actions/RoomListActions';
 
 module.exports = React.createClass({
     displayName: 'RoomTileContextMenu',
 
     propTypes: {
-        room: React.PropTypes.object.isRequired,
+        room: PropTypes.object.isRequired,
         /* callback called when the menu is dismissed */
-        onFinished: React.PropTypes.func,
+        onFinished: PropTypes.func,
     },
 
     getInitialState() {
@@ -45,7 +47,7 @@ module.exports = React.createClass({
             isFavourite: this.props.room.tags.hasOwnProperty("m.favourite"),
             isLowPriority: this.props.room.tags.hasOwnProperty("m.lowpriority"),
             isDirectMessage: Boolean(dmRoomMap.getUserIdForRoomId(this.props.room.roomId)),
-        }
+        };
     },
 
     componentWillMount: function() {
@@ -132,22 +134,22 @@ module.exports = React.createClass({
     },
 
     _onClickDM: function() {
+        if (MatrixClientPeg.get().isGuest()) return;
+
         const newIsDirectMessage = !this.state.isDirectMessage;
         this.setState({
             isDirectMessage: newIsDirectMessage,
         });
 
-        if (MatrixClientPeg.get().isGuest()) return;
-
         Rooms.guessAndSetDMRoom(
-            this.props.room, newIsDirectMessage
+            this.props.room, newIsDirectMessage,
         ).delay(500).finally(() => {
             // Close the context menu
             if (this.props.onFinished) {
                 this.props.onFinished();
-            };
+            }
         }, (err) => {
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to set Direct Message status of room', '', ErrorDialog, {
                 title: _t('Failed to set Direct Message status of room'),
                 description: ((err && err.message) ? err.message : _t('Operation failed')),
@@ -165,7 +167,7 @@ module.exports = React.createClass({
         // Close the context menu
         if (this.props.onFinished) {
             this.props.onFinished();
-        };
+        }
     },
 
     _onClickReject: function() {
@@ -177,7 +179,7 @@ module.exports = React.createClass({
         // Close the context menu
         if (this.props.onFinished) {
             this.props.onFinished();
-        };
+        }
     },
 
     _onClickForget: function() {
@@ -185,8 +187,8 @@ module.exports = React.createClass({
         MatrixClientPeg.get().forget(this.props.room.roomId).done(function() {
             dis.dispatch({ action: 'view_next_room' });
         }, function(err) {
-            var errCode = err.errcode || _td("unknown error code");
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            const errCode = err.errcode || _td("unknown error code");
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to forget room', '', ErrorDialog, {
                 title: _t('Failed to forget room %(errCode)s', {errCode: errCode}),
                 description: ((err && err.message) ? err.message : _t('Operation failed')),
@@ -196,20 +198,19 @@ module.exports = React.createClass({
         // Close the context menu
         if (this.props.onFinished) {
             this.props.onFinished();
-        };
+        }
     },
 
     _saveNotifState: function(newState) {
+        if (MatrixClientPeg.get().isGuest()) return;
+
         const oldState = this.state.roomNotifState;
         const roomId = this.props.room.roomId;
-        var cli = MatrixClientPeg.get();
-
-        if (cli.isGuest()) return;
 
         this.setState({
             roomNotifState: newState,
         });
-        RoomNotifs.setRoomNotifsState(this.props.room.roomId, newState).done(() => {
+        RoomNotifs.setRoomNotifsState(roomId, newState).done(() => {
             // delay slightly so that the user can see their state change
             // before closing the menu
             return Promise.delay(500).then(() => {
@@ -217,7 +218,7 @@ module.exports = React.createClass({
                 // Close the context menu
                 if (this.props.onFinished) {
                     this.props.onFinished();
-                };
+                }
             });
         }, (error) => {
             // TODO: some form of error notification to the user
@@ -247,22 +248,22 @@ module.exports = React.createClass({
     },
 
     _renderNotifMenu: function() {
-        var alertMeClasses = classNames({
+        const alertMeClasses = classNames({
             'mx_RoomTileContextMenu_notif_field': true,
             'mx_RoomTileContextMenu_notif_fieldSet': this.state.roomNotifState == RoomNotifs.ALL_MESSAGES_LOUD,
         });
 
-        var allNotifsClasses = classNames({
+        const allNotifsClasses = classNames({
             'mx_RoomTileContextMenu_notif_field': true,
             'mx_RoomTileContextMenu_notif_fieldSet': this.state.roomNotifState == RoomNotifs.ALL_MESSAGES,
         });
 
-        var mentionsClasses = classNames({
+        const mentionsClasses = classNames({
             'mx_RoomTileContextMenu_notif_field': true,
             'mx_RoomTileContextMenu_notif_fieldSet': this.state.roomNotifState == RoomNotifs.MENTIONS_ONLY,
         });
 
-        var muteNotifsClasses = classNames({
+        const muteNotifsClasses = classNames({
             'mx_RoomTileContextMenu_notif_field': true,
             'mx_RoomTileContextMenu_notif_fieldSet': this.state.roomNotifState == RoomNotifs.MUTE,
         });
@@ -272,22 +273,22 @@ module.exports = React.createClass({
                 <div className="mx_RoomTileContextMenu_notif_picker" >
                     <img src="img/notif-slider.svg" width="20" height="107" />
                 </div>
-                <div className={ alertMeClasses } onClick={this._onClickAlertMe} >
+                <div className={alertMeClasses} onClick={this._onClickAlertMe} >
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute-off-copy.svg" width="16" height="12" />
                     { _t('All messages (noisy)') }
                 </div>
-                <div className={ allNotifsClasses } onClick={this._onClickAllNotifs} >
+                <div className={allNotifsClasses} onClick={this._onClickAllNotifs} >
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute-off.svg" width="16" height="12" />
                     { _t('All messages') }
                 </div>
-                <div className={ mentionsClasses } onClick={this._onClickMentions} >
+                <div className={mentionsClasses} onClick={this._onClickMentions} >
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute-mentions.svg" width="16" height="12" />
                     { _t('Mentions only') }
                 </div>
-                <div className={ muteNotifsClasses } onClick={this._onClickMute} >
+                <div className={muteNotifsClasses} onClick={this._onClickMute} >
                     <img className="mx_RoomTileContextMenu_notif_activeIcon" src="img/notif-active.svg" width="12" height="12" />
                     <img className="mx_RoomTileContextMenu_notif_icon mx_filterFlipColor" src="img/icon-context-mute.svg" width="16" height="12" />
                     { _t('Mute') }
@@ -322,7 +323,7 @@ module.exports = React.createClass({
 
         return (
             <div>
-                <div className="mx_RoomTileContextMenu_leave" onClick={ leaveClickHandler } >
+                <div className="mx_RoomTileContextMenu_leave" onClick={leaveClickHandler} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src="img/icon_context_delete.svg" width="15" height="15" />
                     { leaveText }
                 </div>
@@ -351,17 +352,17 @@ module.exports = React.createClass({
 
         return (
             <div>
-                <div className={ favouriteClasses } onClick={this._onClickFavourite} >
+                <div className={favouriteClasses} onClick={this._onClickFavourite} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src="img/icon_context_fave.svg" width="15" height="15" />
                     <img className="mx_RoomTileContextMenu_tag_icon_set" src="img/icon_context_fave_on.svg" width="15" height="15" />
                     { _t('Favourite') }
                 </div>
-                <div className={ lowPriorityClasses } onClick={this._onClickLowPriority} >
+                <div className={lowPriorityClasses} onClick={this._onClickLowPriority} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src="img/icon_context_low.svg" width="15" height="15" />
                     <img className="mx_RoomTileContextMenu_tag_icon_set" src="img/icon_context_low_on.svg" width="15" height="15" />
                     { _t('Low Priority') }
                 </div>
-                <div className={ dmClasses } onClick={this._onClickDM} >
+                <div className={dmClasses} onClick={this._onClickDM} >
                     <img className="mx_RoomTileContextMenu_tag_icon" src="img/icon_context_person.svg" width="15" height="15" />
                     <img className="mx_RoomTileContextMenu_tag_icon_set" src="img/icon_context_person_on.svg" width="15" height="15" />
                     { _t('Direct Chat') }
@@ -372,7 +373,7 @@ module.exports = React.createClass({
 
     render: function() {
         const myMember = this.props.room.getMember(
-            MatrixClientPeg.get().credentials.userId
+            MatrixClientPeg.get().credentials.userId,
         );
 
         // Can't set notif level or tags on non-join rooms
@@ -389,5 +390,5 @@ module.exports = React.createClass({
                 { this._renderRoomTagMenu() }
             </div>
         );
-    }
+    },
 });
