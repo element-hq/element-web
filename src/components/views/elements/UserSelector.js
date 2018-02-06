@@ -16,14 +16,16 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'UserSelector',
 
     propTypes: {
-        onChange: React.PropTypes.func,
-        selected_users: React.PropTypes.arrayOf(React.PropTypes.string),
+        onChange: PropTypes.func,
+        selected_users: PropTypes.arrayOf(React.PropTypes.string),
     },
 
     getDefaultProps: function() {
@@ -51,19 +53,19 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var self = this;
+        const self = this;
         return (
             <div>
                 <ul className="mx_UserSelector_UserIdList" ref="list">
-                    {this.props.selected_users.map(function(user_id, i) {
-                        return <li key={user_id}>{user_id} - <span onClick={function() {self.removeUser(user_id);}}>X</span></li>
-                    })}
+                    { this.props.selected_users.map(function(user_id, i) {
+                        return <li key={user_id}>{ user_id } - <span onClick={function() {self.removeUser(user_id);}}>X</span></li>;
+                    }) }
                 </ul>
-                <input type="text" ref="user_id_input" defaultValue="" className="mx_UserSelector_userIdInput" placeholder="ex. @bob:example.com"/>
+                <input type="text" ref="user_id_input" defaultValue="" className="mx_UserSelector_userIdInput" placeholder={_t("ex. @bob:example.com")} />
                 <button onClick={this.onAddUserId} className="mx_UserSelector_AddUserId">
-                    Add User
+                    { _t("Add User") }
                 </button>
             </div>
         );
-    }
+    },
 });

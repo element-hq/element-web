@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -51,32 +52,34 @@ limitations under the License.
  * }
  */
 
-var MatrixClientPeg = require('./MatrixClientPeg');
-var Modal = require('./Modal');
-var sdk = require('./index');
-var Matrix = require("matrix-js-sdk");
-var dis = require("./dispatcher");
+import MatrixClientPeg from './MatrixClientPeg';
+import PlatformPeg from './PlatformPeg';
+import Modal from './Modal';
+import sdk from './index';
+import { _t } from './languageHandler';
+import Matrix from 'matrix-js-sdk';
+import dis from './dispatcher';
+import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 
 global.mxCalls = {
     //room_id: MatrixCall
 };
-var calls = global.mxCalls;
-var ConferenceHandler = null;
+const calls = global.mxCalls;
+let ConferenceHandler = null;
 
-var audioPromises = {};
+const audioPromises = {};
 
 function play(audioId) {
     // TODO: Attach an invisible element for this instead
     // which listens?
-    var audio = document.getElementById(audioId);
+    const audio = document.getElementById(audioId);
     if (audio) {
         if (audioPromises[audioId]) {
             audioPromises[audioId] = audioPromises[audioId].then(()=>{
                 audio.load();
                 return audio.play();
             });
-        }
-        else {
+        } else {
             audioPromises[audioId] = audio.play();
         }
     }
@@ -85,15 +88,26 @@ function play(audioId) {
 function pause(audioId) {
     // TODO: Attach an invisible element for this instead
     // which listens?
-    var audio = document.getElementById(audioId);
+    const audio = document.getElementById(audioId);
     if (audio) {
         if (audioPromises[audioId]) {
             audioPromises[audioId] = audioPromises[audioId].then(()=>audio.pause());
-        }
-        else {
+        } else {
             // pause doesn't actually return a promise, but might as well do this for symmetry with play();
             audioPromises[audioId] = audio.pause();
         }
+    }
+}
+
+function _reAttemptCall(call) {
+    if (call.direction === 'outbound') {
+        dis.dispatch({
+            action: 'place_call',
+            room_id: call.roomId,
+            type: call.type,
+        });
+    } else {
+        call.answer();
     }
 }
 
@@ -101,8 +115,40 @@ function _setCallListeners(call) {
     call.on("error", function(err) {
         console.error("Call error: %s", err);
         console.error(err.stack);
-        call.hangup();
-        _setCallState(undefined, call.roomId, "ended");
+        if (err.code === 'unknown_devices') {
+            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+
+            Modal.createTrackedDialog('Call Failed', '', QuestionDialog, {
+                title: _t('Call Failed'),
+                description: _t(
+                    "There are unknown devices in this room: "+
+                    "if you proceed without verifying them, it will be "+
+                    "possible for someone to eavesdrop on your call."
+                ),
+                button: _t('Review Devices'),
+                onFinished: function(confirmed) {
+                    if (confirmed) {
+                        const room = MatrixClientPeg.get().getRoom(call.roomId);
+                        showUnknownDeviceDialogForCalls(
+                            MatrixClientPeg.get(),
+                            room,
+                            () => {
+                                _reAttemptCall(call);
+                            },
+                            call.direction === 'outbound' ? _t("Call Anyway") : _t("Answer Anyway"),
+                            call.direction === 'outbound' ? _t("Call") : _t("Answer"),
+                        );
+                    }
+                },
+            });
+        } else {
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+
+            Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
+                title: _t('Call Failed'),
+                description: err.message,
+            });
+        }
     });
     call.on("hangup", function() {
         _setCallState(undefined, call.roomId, "ended");
@@ -113,38 +159,32 @@ function _setCallListeners(call) {
         if (newState === "ringing") {
             _setCallState(call, call.roomId, "ringing");
             pause("ringbackAudio");
-        }
-        else if (newState === "invite_sent") {
+        } else if (newState === "invite_sent") {
             _setCallState(call, call.roomId, "ringback");
             play("ringbackAudio");
-        }
-        else if (newState === "ended" && oldState === "connected") {
+        } else if (newState === "ended" && oldState === "connected") {
             _setCallState(undefined, call.roomId, "ended");
             pause("ringbackAudio");
             play("callendAudio");
-        }
-        else if (newState === "ended" && oldState === "invite_sent" &&
+        } else if (newState === "ended" && oldState === "invite_sent" &&
                 (call.hangupParty === "remote" ||
                 (call.hangupParty === "local" && call.hangupReason === "invite_timeout")
                 )) {
             _setCallState(call, call.roomId, "busy");
             pause("ringbackAudio");
             play("busyAudio");
-            var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createDialog(ErrorDialog, {
-                title: "Call Timeout",
-                description: "The remote side failed to pick up."
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            Modal.createTrackedDialog('Call Handler', 'Call Timeout', ErrorDialog, {
+                title: _t('Call Timeout'),
+                description: _t('The remote side failed to pick up') + '.',
             });
-        }
-        else if (oldState === "invite_sent") {
+        } else if (oldState === "invite_sent") {
             _setCallState(call, call.roomId, "stop_ringback");
             pause("ringbackAudio");
-        }
-        else if (oldState === "ringing") {
+        } else if (oldState === "ringing") {
             _setCallState(call, call.roomId, "stop_ringing");
             pause("ringbackAudio");
-        }
-        else if (newState === "connected") {
+        } else if (newState === "connected") {
             _setCallState(call, call.roomId, "connected");
             pause("ringbackAudio");
         }
@@ -153,15 +193,14 @@ function _setCallListeners(call) {
 
 function _setCallState(call, roomId, status) {
     console.log(
-        "Call state in %s changed to %s (%s)", roomId, status, (call ? call.call_state : "-")
+        "Call state in %s changed to %s (%s)", roomId, status, (call ? call.call_state : "-"),
     );
     calls[roomId] = call;
 
     if (status === "ringing") {
-        play("ringAudio")
-    }
-    else if (call && call.call_state === "ringing") {
-        pause("ringAudio")
+        play("ringAudio");
+    } else if (call && call.call_state === "ringing") {
+        pause("ringAudio");
     }
 
     if (call) {
@@ -169,30 +208,38 @@ function _setCallState(call, roomId, status) {
     }
     dis.dispatch({
         action: 'call_state',
-        room_id: roomId
+        room_id: roomId,
+        state: status,
     });
 }
 
 function _onAction(payload) {
     function placeCall(newCall) {
         _setCallListeners(newCall);
-        _setCallState(newCall, newCall.roomId, "ringback");
         if (payload.type === 'voice') {
             newCall.placeVoiceCall();
-        }
-        else if (payload.type === 'video') {
+        } else if (payload.type === 'video') {
             newCall.placeVideoCall(
                 payload.remote_element,
-                payload.local_element
+                payload.local_element,
             );
-        }
-        else if (payload.type === 'screensharing') {
+        } else if (payload.type === 'screensharing') {
+            const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
+            if (screenCapErrorString) {
+                _setCallState(undefined, newCall.roomId, "ended");
+                console.log("Can't capture screen: " + screenCapErrorString);
+                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                Modal.createTrackedDialog('Call Handler', 'Unable to capture screen', ErrorDialog, {
+                    title: _t('Unable to capture screen'),
+                    description: screenCapErrorString,
+                });
+                return;
+            }
             newCall.placeScreenSharingCall(
                 payload.remote_element,
-                payload.local_element
+                payload.local_element,
             );
-        }
-        else {
+        } else {
             console.error("Unknown conf call type: %s", payload.type);
         }
     }
@@ -201,9 +248,9 @@ function _onAction(payload) {
         case 'place_call':
             if (module.exports.getAnyActiveCall()) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: "Existing Call",
-                    description: "You are already in a call."
+                Modal.createTrackedDialog('Call Handler', 'Existing Call', ErrorDialog, {
+                    title: _t('Existing Call'),
+                    description: _t('You are already in a call.'),
                 });
                 return; // don't allow >1 call to be placed.
             }
@@ -211,9 +258,9 @@ function _onAction(payload) {
             // if the runtime env doesn't do VoIP, whine.
             if (!MatrixClientPeg.get().supportsVoip()) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: "VoIP is unsupported",
-                    description: "You cannot place VoIP calls in this browser."
+                Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {
+                    title: _t('VoIP is unsupported'),
+                    description: _t('You cannot place VoIP calls in this browser.'),
                 });
                 return;
             }
@@ -227,25 +274,21 @@ function _onAction(payload) {
             var members = room.getJoinedMembers();
             if (members.length <= 1) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    description: "You cannot place a call with yourself."
+                Modal.createTrackedDialog('Call Handler', 'Cannot place call with self', ErrorDialog, {
+                    description: _t('You cannot place a call with yourself.'),
                 });
                 return;
-            }
-            else if (members.length === 2) {
+            } else if (members.length === 2) {
                 console.log("Place %s call in %s", payload.type, payload.room_id);
-                var call = Matrix.createNewMatrixCall(
-                    MatrixClientPeg.get(), payload.room_id
-                );
+                const call = Matrix.createNewMatrixCall(MatrixClientPeg.get(), payload.room_id);
                 placeCall(call);
-            }
-            else { // > 2
+            } else { // > 2
                 dis.dispatch({
                     action: "place_conference_call",
                     room_id: payload.room_id,
                     type: payload.type,
                     remote_element: payload.remote_element,
-                    local_element: payload.local_element
+                    local_element: payload.local_element,
                 });
             }
             break;
@@ -253,18 +296,16 @@ function _onAction(payload) {
             console.log("Place conference call in %s", payload.room_id);
             if (!ConferenceHandler) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    description: "Conference calls are not supported in this client"
+                Modal.createTrackedDialog('Call Handler', 'Conference call unsupported client', ErrorDialog, {
+                    description: _t('Conference calls are not supported in this client'),
                 });
-            }
-            else if (!MatrixClientPeg.get().supportsVoip()) {
+            } else if (!MatrixClientPeg.get().supportsVoip()) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    title: "VoIP is unsupported",
-                    description: "You cannot place VoIP calls in this browser."
+                Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {
+                    title: _t('VoIP is unsupported'),
+                    description: _t('You cannot place VoIP calls in this browser.'),
                 });
-            }
-            else if (MatrixClientPeg.get().isRoomEncrypted(payload.room_id)) {
+            } else if (MatrixClientPeg.get().isRoomEncrypted(payload.room_id)) {
                 // Conference calls are implemented by sending the media to central
                 // server which combines the audio from all the participants together
                 // into a single stream. This is incompatible with end-to-end encryption
@@ -272,26 +313,26 @@ function _onAction(payload) {
                 // participant.
                 // Therefore we disable conference calling in E2E rooms.
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                Modal.createDialog(ErrorDialog, {
-                    description: "Conference calls are not supported in encrypted rooms",
+                Modal.createTrackedDialog('Call Handler', 'Conference calls unsupported e2e', ErrorDialog, {
+                    description: _t('Conference calls are not supported in encrypted rooms'),
                 });
-            }
-            else {
-                var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                Modal.createDialog(QuestionDialog, {
-                    title: "Warning!",
-                    description: "Conference calling in Riot is in development and may not be reliable.",
-                    onFinished: confirm=>{
+            } else {
+                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                Modal.createTrackedDialog('Call Handler', 'Conference calling in development', QuestionDialog, {
+                    title: _t('Warning!'),
+                    description: _t('Conference calling is in development and may not be reliable.'),
+                    onFinished: (confirm)=>{
                         if (confirm) {
                             ConferenceHandler.createNewMatrixCall(
-                                MatrixClientPeg.get(), payload.room_id
+                                MatrixClientPeg.get(), payload.room_id,
                             ).done(function(call) {
                                 placeCall(call);
                             }, function(err) {
                                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                                Modal.createDialog(ErrorDialog, {
-                                    title: "Failed to set up conference call",
-                                    description: "Conference call failed: " + err,
+                                console.error("Conference call failed: " + err);
+                                Modal.createTrackedDialog('Call Handler', 'Failed to set up conference call', ErrorDialog, {
+                                    title: _t('Failed to set up conference call'),
+                                    description: _t('Conference call failed.') + ' ' + ((err && err.message) ? err.message : ''),
                                 });
                             });
                         }
@@ -332,7 +373,7 @@ function _onAction(payload) {
             _setCallState(calls[payload.room_id], payload.room_id, "connected");
             dis.dispatch({
                 action: "view_room",
-                room_id: payload.room_id
+                room_id: payload.room_id,
             });
             break;
     }
@@ -343,9 +384,9 @@ if (!global.mxCallHandler) {
     dis.register(_onAction);
 }
 
-var callHandler = {
+const callHandler = {
     getCallForRoom: function(roomId) {
-        var call = module.exports.getCall(roomId);
+        let call = module.exports.getCall(roomId);
         if (call) return call;
 
         if (ConferenceHandler) {
@@ -361,8 +402,8 @@ var callHandler = {
     },
 
     getAnyActiveCall: function() {
-        var roomsWithCalls = Object.keys(calls);
-        for (var i = 0; i < roomsWithCalls.length; i++) {
+        const roomsWithCalls = Object.keys(calls);
+        for (let i = 0; i < roomsWithCalls.length; i++) {
             if (calls[roomsWithCalls[i]] &&
                     calls[roomsWithCalls[i]].call_state !== "ended") {
                 return calls[roomsWithCalls[i]];
@@ -377,7 +418,7 @@ var callHandler = {
 
     getConferenceHandler: function() {
         return ConferenceHandler;
-    }
+    },
 };
 // Only things in here which actually need to be global are the
 // calls list (done separately) and making sure we only register

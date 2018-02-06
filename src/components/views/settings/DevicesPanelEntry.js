@@ -15,28 +15,20 @@ limitations under the License.
 */
 
 import React from 'react';
-import classNames from 'classnames';
-import q from 'q';
+import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import DateUtils from '../../../DateUtils';
-import Modal from '../../../Modal';
+import {formatDate} from '../../../DateUtils';
 
 export default class DevicesPanelEntry extends React.Component {
     constructor(props, context) {
         super(props, context);
 
-        this.state = {
-            deleting: false,
-            deleteError: undefined,
-        };
-
         this._unmounted = false;
-
-        this._onDeleteClick = this._onDeleteClick.bind(this);
+        this.onDeviceToggled = this.onDeviceToggled.bind(this);
         this._onDisplayNameChanged = this._onDisplayNameChanged.bind(this);
-        this._makeDeleteRequest = this._makeDeleteRequest.bind(this);
     }
 
     componentWillUnmount() {
@@ -49,51 +41,12 @@ export default class DevicesPanelEntry extends React.Component {
             display_name: value,
         }).catch((e) => {
             console.error("Error setting device display name", e);
-            throw new Error("Failed to set display name");
+            throw new Error(_t("Failed to set display name"));
         });
     }
 
-    _onDeleteClick() {
-        this.setState({deleting: true});
-
-        // try without interactive auth to start off
-        this._makeDeleteRequest(null).catch((error) => {
-            if (this._unmounted) { return; }
-            if (error.httpStatus !== 401 || !error.data || !error.data.flows) {
-                // doesn't look like an interactive-auth failure
-                throw e;
-            }
-
-            // pop up an interactive auth dialog
-            var InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
-
-            Modal.createDialog(InteractiveAuthDialog, {
-                authData: error.data,
-                makeRequest: this._makeDeleteRequest,
-            });
-
-            this.setState({
-                deleting: false,
-            });
-        }).catch((e) => {
-            console.error("Error deleting device", e);
-            if (this._unmounted) { return; }
-            this.setState({
-                deleting: false,
-                deleteError: "Failed to delete device",
-            });
-        }).done();
-    }
-
-    _makeDeleteRequest(auth) {
-        const device = this.props.device;
-        return MatrixClientPeg.get().deleteDevice(device.device_id, auth).then(
-            () => {
-                this.props.onDeleted();
-                if (this._unmounted) { return; }
-                this.setState({ deleting: false });
-            }
-        );
+    onDeviceToggled() {
+        this.props.onDeviceToggled(this.props.device);
     }
 
     render() {
@@ -101,45 +54,22 @@ export default class DevicesPanelEntry extends React.Component {
 
         const device = this.props.device;
 
-        if (this.state.deleting) {
-            const Spinner = sdk.getComponent("elements.Spinner");
-
-            return (
-                <div className="mx_DevicesPanel_device">
-                    <Spinner />
-                </div>
-            );
-        }
-
         let lastSeen = "";
         if (device.last_seen_ts) {
-            // todo: format the timestamp as "5 minutes ago" or whatever.
-            const lastSeenDate = new Date(device.last_seen_ts);
+            const lastSeenDate = formatDate(new Date(device.last_seen_ts));
             lastSeen = device.last_seen_ip + " @ " +
                 lastSeenDate.toLocaleString();
         }
 
-        let deleteButton;
-        if (this.state.deleteError) {
-            deleteButton = <div className="error">{this.state.deleteError}</div>
-        } else {
-            deleteButton = (
-                <div className="mx_textButton"
-                  onClick={this._onDeleteClick}>
-                    Delete
-                </div>
-            );
-        }
-
-        var myDeviceClass = '';
+        let myDeviceClass = '';
         if (device.device_id === MatrixClientPeg.get().getDeviceId()) {
             myDeviceClass = " mx_DevicesPanel_myDevice";
         }
 
         return (
-            <div className={ "mx_DevicesPanel_device" + myDeviceClass }>
+            <div className={"mx_DevicesPanel_device" + myDeviceClass}>
                 <div className="mx_DevicesPanel_deviceId">
-                    {device.device_id}
+                    { device.device_id }
                 </div>
                 <div className="mx_DevicesPanel_deviceName">
                     <EditableTextContainer initialValue={device.display_name}
@@ -148,10 +78,10 @@ export default class DevicesPanelEntry extends React.Component {
                     />
                 </div>
                 <div className="mx_DevicesPanel_lastSeen">
-                    {lastSeen}
+                    { lastSeen }
                 </div>
                 <div className="mx_DevicesPanel_deviceButtons">
-                    {deleteButton}
+                    <input type="checkbox" onClick={this.onDeviceToggled} checked={this.props.selected} />
                 </div>
             </div>
         );
@@ -159,10 +89,10 @@ export default class DevicesPanelEntry extends React.Component {
 }
 
 DevicesPanelEntry.propTypes = {
-    device: React.PropTypes.object.isRequired,
-    onDeleted: React.PropTypes.func,
+    device: PropTypes.object.isRequired,
+    onDeviceToggled: PropTypes.func,
 };
 
 DevicesPanelEntry.defaultProps = {
-    onDeleted: function() {},
+    onDeviceToggled: function() {},
 };

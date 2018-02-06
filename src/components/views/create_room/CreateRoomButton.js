@@ -16,12 +16,13 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-
+import React from 'react';
+import PropTypes from 'prop-types';
+import { _t } from '../../../languageHandler';
 module.exports = React.createClass({
     displayName: 'CreateRoomButton',
     propTypes: {
-        onCreateRoom: React.PropTypes.func,
+        onCreateRoom: PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -36,7 +37,7 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <button className="mx_CreateRoomButton" onClick={this.onClick}>Create Room</button>
+            <button className="mx_CreateRoomButton" onClick={this.onClick}>{ _t("Create Room") }</button>
         );
-    }
+    },
 });

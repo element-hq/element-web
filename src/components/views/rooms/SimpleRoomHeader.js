@@ -14,55 +14,59 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
+import AccessibleButton from '../elements/AccessibleButton';
+import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
-var React = require('react');
-var sdk = require('../../../index');
-var dis = require("../../../dispatcher");
+// cancel button which is shared between room header and simple room header
+export function CancelButton(props) {
+    const {onClick} = props;
+
+    return (
+        <AccessibleButton className='mx_RoomHeader_cancelButton' onClick={onClick}>
+            <img src="img/cancel.svg" className='mx_filterFlipColor'
+                width="18" height="18" alt={_t("Cancel")} />
+        </AccessibleButton>
+    );
+}
 
 /*
  * A stripped-down room header used for things like the user settings
  * and room directory.
  */
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'SimpleRoomHeader',
 
     propTypes: {
-        title: React.PropTypes.string,
-        onCancelClick: React.PropTypes.func,
+        title: PropTypes.string,
+        onCancelClick: PropTypes.func,
 
-        // is the RightPanel collapsed?
-        collapsedRhs: React.PropTypes.bool,
-    },
-
-    onShowRhsClick: function(ev) {
-        dis.dispatch({ action: 'show_right_panel' });
+        // `src` to a TintableSvg. Optional.
+        icon: PropTypes.string,
     },
 
     render: function() {
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
-
-        var cancelButton;
+        let cancelButton;
+        let icon;
         if (this.props.onCancelClick) {
-            cancelButton = <div className="mx_RoomHeader_cancelButton" onClick={this.props.onCancelClick}><img src="img/cancel.svg" width="18" height="18" alt="Cancel"/> </div>
+            cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
         }
-
-        var showRhsButton;
-        /* // don't bother cluttering things up with this for now.
-        if (this.props.collapsedRhs) {
-            showRhsButton =
-                <div className="mx_RoomHeader_button" style={{ float: 'right' }} onClick={this.onShowRhsClick} title=">">
-                    <TintableSvg src="img/minimise.svg" width="10" height="16"/>
-                </div>
+        if (this.props.icon) {
+            const TintableSvg = sdk.getComponent('elements.TintableSvg');
+            icon = <TintableSvg
+                className="mx_RoomHeader_icon" src={this.props.icon}
+                width="25" height="25"
+            />;
         }
-        */
 
         return (
             <div className="mx_RoomHeader" >
                 <div className="mx_RoomHeader_wrapper">
                     <div className="mx_RoomHeader_simpleHeader">
+                        { icon }
                         { this.props.title }
-                        { showRhsButton }
                         { cancelButton }
                     </div>
                 </div>
@@ -70,4 +74,3 @@ module.exports = React.createClass({
         );
     },
 });
-

@@ -20,7 +20,7 @@ import encrypt from 'browser-encrypt-attachment';
 import 'isomorphic-fetch';
 // Grab the client so that we can turn mxc:// URLs into https:// URLS.
 import MatrixClientPeg from '../MatrixClientPeg';
-import q from 'q';
+import Promise from 'bluebird';
 
 
 /**
@@ -28,8 +28,8 @@ import q from 'q';
  * @return {Promise} A promise that resolves with the data:// URI.
  */
 export function readBlobAsDataUri(file) {
-    var deferred = q.defer();
-    var reader = new FileReader();
+    const deferred = Promise.defer();
+    const reader = new FileReader();
     reader.onload = function(e) {
         deferred.resolve(e.target.result);
     };
@@ -53,7 +53,7 @@ export function readBlobAsDataUri(file) {
 export function decryptFile(file) {
     const url = MatrixClientPeg.get().mxcUrlToHttp(file.url);
     // Download the encrypted file as an array buffer.
-    return q(fetch(url)).then(function(response) {
+    return Promise.resolve(fetch(url)).then(function(response) {
         return response.arrayBuffer();
     }).then(function(responseData) {
         // Decrypt the array buffer using the information taken from
@@ -61,7 +61,7 @@ export function decryptFile(file) {
         return encrypt.decryptAttachment(responseData, file);
     }).then(function(dataArray) {
         // Turn the array into a Blob and give it the correct MIME-type.
-        var blob = new Blob([dataArray], {type: file.mimetype});
+        const blob = new Blob([dataArray], {type: file.mimetype});
         return blob;
     });
 }

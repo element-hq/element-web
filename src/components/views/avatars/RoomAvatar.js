@@ -13,11 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react');
-var ContentRepo = require("matrix-js-sdk").ContentRepo;
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var Avatar = require('../../../Avatar');
-var sdk = require("../../../index");
+import React from "react";
+import PropTypes from 'prop-types';
+import {ContentRepo} from "matrix-js-sdk";
+import MatrixClientPeg from "../../../MatrixClientPeg";
+import sdk from "../../../index";
 
 module.exports = React.createClass({
     displayName: 'RoomAvatar',
@@ -26,11 +26,11 @@ module.exports = React.createClass({
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)
     propTypes: {
-        room: React.PropTypes.object,
-        oobData: React.PropTypes.object,
-        width: React.PropTypes.number,
-        height: React.PropTypes.number,
-        resizeMethod: React.PropTypes.string
+        room: PropTypes.object,
+        oobData: PropTypes.object,
+        width: PropTypes.number,
+        height: PropTypes.number,
+        resizeMethod: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -39,19 +39,19 @@ module.exports = React.createClass({
             height: 36,
             resizeMethod: 'crop',
             oobData: {},
-        }
+        };
     },
 
     getInitialState: function() {
         return {
-            urls: this.getImageUrls(this.props)
+            urls: this.getImageUrls(this.props),
         };
     },
 
     componentWillReceiveProps: function(newProps) {
         this.setState({
-            urls: this.getImageUrls(newProps)
-        })
+            urls: this.getImageUrls(newProps),
+        });
     },
 
     getImageUrls: function(props) {
@@ -59,34 +59,37 @@ module.exports = React.createClass({
             ContentRepo.getHttpUriForMxc(
                 MatrixClientPeg.get().getHomeserverUrl(),
                 props.oobData.avatarUrl,
-                props.width, props.height, props.resizeMethod
+                Math.floor(props.width * window.devicePixelRatio),
+                Math.floor(props.height * window.devicePixelRatio),
+                props.resizeMethod,
             ), // highest priority
             this.getRoomAvatarUrl(props),
-            this.getOneToOneAvatar(props),
-            this.getFallbackAvatar(props) // lowest priority
+            this.getOneToOneAvatar(props), // lowest priority
         ].filter(function(url) {
             return (url != null && url != "");
         });
     },
 
     getRoomAvatarUrl: function(props) {
-        if (!this.props.room) return null;
+        if (!props.room) return null;
 
         return props.room.getAvatarUrl(
             MatrixClientPeg.get().getHomeserverUrl(),
-            props.width, props.height, props.resizeMethod,
-            false
+            Math.floor(props.width * window.devicePixelRatio),
+            Math.floor(props.height * window.devicePixelRatio),
+            props.resizeMethod,
+            false,
         );
     },
 
     getOneToOneAvatar: function(props) {
-        if (!this.props.room) return null;
+        if (!props.room) return null;
 
-        var mlist = props.room.currentState.members;
-        var userIds = [];
-        var leftUserIds = [];
+        const mlist = props.room.currentState.members;
+        const userIds = [];
+        const leftUserIds = [];
         // for .. in optimisation to return early if there are >2 keys
-        for (var uid in mlist) {
+        for (const uid in mlist) {
             if (mlist.hasOwnProperty(uid)) {
                 if (["join", "invite"].includes(mlist[uid].membership)) {
                     userIds.push(uid);
@@ -100,7 +103,7 @@ module.exports = React.createClass({
         }
 
         if (userIds.length == 2) {
-            var theOtherGuy = null;
+            let theOtherGuy = null;
             if (mlist[userIds[0]].userId == MatrixClientPeg.get().credentials.userId) {
                 theOtherGuy = mlist[userIds[1]];
             } else {
@@ -108,8 +111,10 @@ module.exports = React.createClass({
             }
             return theOtherGuy.getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
-                props.width, props.height, props.resizeMethod,
-                false
+                Math.floor(props.width * window.devicePixelRatio),
+                Math.floor(props.height * window.devicePixelRatio),
+                props.resizeMethod,
+                false,
             );
         } else if (userIds.length == 1) {
             // The other 1-1 user left, leaving just the current user, so show the left user's avatar
@@ -122,31 +127,27 @@ module.exports = React.createClass({
             }
             return mlist[userIds[0]].getAvatarUrl(
                 MatrixClientPeg.get().getHomeserverUrl(),
-                props.width, props.height, props.resizeMethod,
-                    false
+                Math.floor(props.width * window.devicePixelRatio),
+                Math.floor(props.height * window.devicePixelRatio),
+                props.resizeMethod,
+                false,
             );
         } else {
            return null;
         }
     },
 
-    getFallbackAvatar: function(props) {
-        if (!this.props.room) return null;
-
-        return Avatar.defaultAvatarUrlForString(props.room.roomId);
-    },
-
     render: function() {
-        var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
 
-        var {room, oobData, ...otherProps} = this.props;
+        const {room, oobData, ...otherProps} = this.props;
 
-        var roomName = room ? room.name : oobData.name;
+        const roomName = room ? room.name : oobData.name;
 
         return (
             <BaseAvatar {...otherProps} name={roomName}
                 idName={room ? room.roomId : null}
                 urls={this.state.urls} />
         );
-    }
+    },
 });

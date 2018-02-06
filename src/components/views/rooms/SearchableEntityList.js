@@ -13,35 +13,35 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react');
-var MatrixClientPeg = require("../../../MatrixClientPeg");
-var Modal = require("../../../Modal");
-var sdk = require("../../../index");
-var GeminiScrollbar = require('react-gemini-scrollbar');
+const React = require('react');
+import PropTypes from 'prop-types';
+const MatrixClientPeg = require("../../../MatrixClientPeg");
+const Modal = require("../../../Modal");
+const sdk = require("../../../index");
+import { _t } from '../../../languageHandler';
+const GeminiScrollbar = require('react-gemini-scrollbar');
 
 // A list capable of displaying entities which conform to the SearchableEntity
 // interface which is an object containing getJsx(): Jsx and matches(query: string): boolean
-var SearchableEntityList = React.createClass({
+const SearchableEntityList = React.createClass({
     displayName: 'SearchableEntityList',
 
     propTypes: {
-        searchPlaceholderText: React.PropTypes.string,
-        emptyQueryShowsAll: React.PropTypes.bool,
-        showInputBox: React.PropTypes.bool,
-        onQueryChanged: React.PropTypes.func, // fn(inputText)
-        onSubmit: React.PropTypes.func, // fn(inputText)
-        entities: React.PropTypes.array,
-        truncateAt: React.PropTypes.number
+        emptyQueryShowsAll: PropTypes.bool,
+        showInputBox: PropTypes.bool,
+        onQueryChanged: PropTypes.func, // fn(inputText)
+        onSubmit: PropTypes.func, // fn(inputText)
+        entities: PropTypes.array,
+        truncateAt: PropTypes.number,
     },
 
     getDefaultProps: function() {
         return {
             showInputBox: true,
-            searchPlaceholderText: "Search",
             entities: [],
             emptyQueryShowsAll: false,
             onSubmit: function() {},
-            onQueryChanged: function(input) {}
+            onQueryChanged: function(input) {},
         };
     },
 
@@ -50,14 +50,14 @@ var SearchableEntityList = React.createClass({
             query: "",
             focused: false,
             truncateAt: this.props.truncateAt,
-            results: this.getSearchResults("", this.props.entities)
+            results: this.getSearchResults("", this.props.entities),
         };
     },
 
     componentWillReceiveProps: function(newProps) {
         // recalculate the search results in case we got new entities
         this.setState({
-            results: this.getSearchResults(this.state.query, newProps.entities)
+            results: this.getSearchResults(this.state.query, newProps.entities),
         });
     },
 
@@ -74,17 +74,17 @@ var SearchableEntityList = React.createClass({
     setQuery: function(input) {
         this.setState({
             query: input,
-            results: this.getSearchResults(input, this.props.entities)
+            results: this.getSearchResults(input, this.props.entities),
         });
     },
 
     onQueryChanged: function(ev) {
-        var q = ev.target.value;
+        const q = ev.target.value;
         this.setState({
             query: q,
             // reset truncation if they back out the entire text
             truncateAt: (q.length === 0 ? this.props.truncateAt : this.state.truncateAt),
-            results: this.getSearchResults(q, this.props.entities)
+            results: this.getSearchResults(q, this.props.entities),
         }, () => {
             // invoke the callback AFTER we've flushed the new state. We need to
             // do this because onQueryChanged can result in new props being passed
@@ -111,14 +111,14 @@ var SearchableEntityList = React.createClass({
 
     _showAll: function() {
         this.setState({
-            truncateAt: -1
+            truncateAt: -1,
         });
     },
 
     _createOverflowEntity: function(overflowCount, totalCount) {
-        var EntityTile = sdk.getComponent("rooms.EntityTile");
-        var BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
-        var text = "and " + overflowCount + " other" + (overflowCount > 1 ? "s" : "") +  "...";
+        const EntityTile = sdk.getComponent("rooms.EntityTile");
+        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+        const text = _t("and %(count)s others...", { count: overflowCount });
         return (
             <EntityTile className="mx_EntityTile_ellipsis" avatarJsx={
                 <BaseAvatar url="img/ellipsis.svg" name="..." width={36} height={36} />
@@ -128,40 +128,39 @@ var SearchableEntityList = React.createClass({
     },
 
     render: function() {
-        var inputBox;
+        let inputBox;
 
         if (this.props.showInputBox) {
             inputBox = (
                 <form onSubmit={this.onQuerySubmit} autoComplete="off">
                     <input className="mx_SearchableEntityList_query" id="mx_SearchableEntityList_query" type="text"
                         onChange={this.onQueryChanged} value={this.state.query}
-                        onFocus= {() => { this.setState({ focused: true }) }}
-                        onBlur= {() => { this.setState({ focused: false }) }}
-                        placeholder={this.props.searchPlaceholderText} />
+                        onFocus= {() => { this.setState({ focused: true }); }}
+                        onBlur= {() => { this.setState({ focused: false }); }}
+                        placeholder={_t("Search")} />
                 </form>
             );
         }
 
-        var list;
+        let list;
         if (this.state.results.length > 1 || this.state.focused) {
             if (this.props.truncateAt) { // caller wants list truncated
-                var TruncatedList = sdk.getComponent("elements.TruncatedList");
+                const TruncatedList = sdk.getComponent("elements.TruncatedList");
                 list = (
                     <TruncatedList className="mx_SearchableEntityList_list"
                             truncateAt={this.state.truncateAt} // use state truncation as it may be expanded
                             createOverflowElement={this._createOverflowEntity}>
-                        {this.state.results.map((entity) => {
+                        { this.state.results.map((entity) => {
                             return entity.getJsx();
-                        })}
+                        }) }
                     </TruncatedList>
                 );
-            }
-            else {
+            } else {
                 list = (
                     <div className="mx_SearchableEntityList_list">
-                        {this.state.results.map((entity) => {
+                        { this.state.results.map((entity) => {
                             return entity.getJsx();
-                        })}
+                        }) }
                     </div>
                 );
             }
@@ -174,13 +173,13 @@ var SearchableEntityList = React.createClass({
         }
 
         return (
-            <div className={ "mx_SearchableEntityList " + (list ? "mx_SearchableEntityList_expanded" : "") }>
+            <div className={"mx_SearchableEntityList " + (list ? "mx_SearchableEntityList_expanded" : "")}>
                 { inputBox }
                 { list }
-                { list ? <div className="mx_SearchableEntityList_hrWrapper"><hr/></div> : '' }
+                { list ? <div className="mx_SearchableEntityList_hrWrapper"><hr /></div> : '' }
             </div>
         );
-    }
+    },
 });
 
  module.exports = SearchableEntityList;

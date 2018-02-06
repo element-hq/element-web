@@ -16,27 +16,29 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sdk = require('../../../index');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
+const React = require('react');
+import PropTypes from 'prop-types';
+const sdk = require('../../../index');
+const MatrixClientPeg = require('../../../MatrixClientPeg');
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'RoomNameEditor',
 
     propTypes: {
-        room: React.PropTypes.object.isRequired,
+        room: PropTypes.object.isRequired,
     },
 
     componentWillMount: function() {
-        var room = this.props.room;
-        var name = room.currentState.getStateEvents('m.room.name', '');
-        var myId = MatrixClientPeg.get().credentials.userId;
-        var defaultName = room.getDefaultRoomName(myId);
+        const room = this.props.room;
+        const name = room.currentState.getStateEvents('m.room.name', '');
+        const myId = MatrixClientPeg.get().credentials.userId;
+        const defaultName = room.getDefaultRoomName(myId);
 
         this._initialName = name ? name.getContent().name : '';
 
-        this._placeholderName = "Unnamed Room";
-        if (defaultName && defaultName !== 'Empty room') {
+        this._placeholderName = _t("Unnamed Room");
+        if (defaultName && defaultName !== 'Empty room') { // default name from JS SDK, needs no translation as we don't ever show it.
             this._placeholderName += " (" + defaultName + ")";
         }
     },
@@ -46,18 +48,18 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var EditableText = sdk.getComponent("elements.EditableText");
+        const EditableText = sdk.getComponent("elements.EditableText");
 
         return (
                 <div className="mx_RoomHeader_name">
                     <EditableText ref="editor"
                          className="mx_RoomHeader_nametext mx_RoomHeader_editable"
                          placeholderClassName="mx_RoomHeader_placeholder"
-                         placeholder={ this._placeholderName }
-                         blurToCancel={ false }
-                         initialValue={ this._initialName }/>
+                         placeholder={this._placeholderName}
+                         blurToCancel={false}
+                         initialValue={this._initialName}
+                         dir="auto" />
                 </div>
         );
     },
 });
-

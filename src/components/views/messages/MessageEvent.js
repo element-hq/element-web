@@ -16,30 +16,31 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sdk = require('../../../index');
+const React = require('react');
+import PropTypes from 'prop-types';
+const sdk = require('../../../index');
 
 module.exports = React.createClass({
     displayName: 'MessageEvent',
 
     propTypes: {
         /* the MatrixEvent to show */
-        mxEvent: React.PropTypes.object.isRequired,
+        mxEvent: PropTypes.object.isRequired,
 
         /* a list of words to highlight */
-        highlights: React.PropTypes.array,
+        highlights: PropTypes.array,
 
         /* link URL for the highlights */
-        highlightLink: React.PropTypes.string,
+        highlightLink: PropTypes.string,
 
         /* should show URL previews for this event */
-        showUrlPreview: React.PropTypes.bool,
+        showUrlPreview: PropTypes.bool,
 
         /* callback called when dynamic content in events are loaded */
-        onWidgetLoad: React.PropTypes.func,
+        onWidgetLoad: PropTypes.func,
 
         /* the shsape of the tile, used */
-        tileShape: React.PropTypes.string,
+        tileShape: PropTypes.string,
     },
 
     getEventTileOps: function() {
@@ -47,21 +48,21 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var UnknownBody = sdk.getComponent('messages.UnknownBody');
+        const UnknownBody = sdk.getComponent('messages.UnknownBody');
 
-        var bodyTypes = {
+        const bodyTypes = {
             'm.text': sdk.getComponent('messages.TextualBody'),
             'm.notice': sdk.getComponent('messages.TextualBody'),
             'm.emote': sdk.getComponent('messages.TextualBody'),
             'm.image': sdk.getComponent('messages.MImageBody'),
             'm.file': sdk.getComponent('messages.MFileBody'),
             'm.audio': sdk.getComponent('messages.MAudioBody'),
-            'm.video': sdk.getComponent('messages.MVideoBody')
+            'm.video': sdk.getComponent('messages.MVideoBody'),
         };
 
-        var content = this.props.mxEvent.getContent();
-        var msgtype = content.msgtype;
-        var BodyType = UnknownBody;
+        const content = this.props.mxEvent.getContent();
+        const msgtype = content.msgtype;
+        let BodyType = UnknownBody;
         if (msgtype && bodyTypes[msgtype]) {
             BodyType = bodyTypes[msgtype];
         } else if (content.url) {

@@ -1,0 +1,133 @@
+/*
+Copyright 2017 Vector Creations Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+import React from 'react';
+import PropTypes from 'prop-types';
+import GeminiScrollbar from 'react-gemini-scrollbar';
+import sdk from '../../index';
+import { _t } from '../../languageHandler';
+import dis from '../../dispatcher';
+import withMatrixClient from '../../wrappers/withMatrixClient';
+import AccessibleButton from '../views/elements/AccessibleButton';
+
+export default withMatrixClient(React.createClass({
+    displayName: 'MyGroups',
+
+    propTypes: {
+        matrixClient: PropTypes.object.isRequired,
+    },
+
+    getInitialState: function() {
+        return {
+            groups: null,
+            error: null,
+        };
+    },
+
+    componentWillMount: function() {
+        this._fetch();
+    },
+
+    _onCreateGroupClick: function() {
+        dis.dispatch({action: 'view_create_group'});
+    },
+
+    _fetch: function() {
+        this.props.matrixClient.getJoinedGroups().done((result) => {
+            this.setState({groups: result.groups, error: null});
+        }, (err) => {
+            if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN') {
+                // Indicate that the guest isn't in any groups (which should be true)
+                this.setState({groups: [], error: null});
+                return;
+            }
+            this.setState({groups: null, error: err});
+        });
+    },
+
+    render: function() {
+        const Loader = sdk.getComponent("elements.Spinner");
+        const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const GroupTile = sdk.getComponent("groups.GroupTile");
+
+        let content;
+        let contentHeader;
+        if (this.state.groups) {
+            const groupNodes = [];
+            this.state.groups.forEach((g) => {
+                groupNodes.push(<GroupTile groupId={g} />);
+            });
+            contentHeader = groupNodes.length > 0 ? <h3>{ _t('Your Communities') }</h3> : <div />;
+            content = groupNodes.length > 0 ?
+                <GeminiScrollbar className="mx_MyGroups_joinedGroups">
+                    { groupNodes }
+                </GeminiScrollbar> :
+                <div className="mx_MyGroups_placeholder">
+                    { _t(
+                        "You're not currently a member of any communities.",
+                    ) }
+                </div>;
+        } else if (this.state.error) {
+            content = <div className="mx_MyGroups_error">
+                { _t('Error whilst fetching joined communities') }
+            </div>;
+        } else {
+            content = <Loader />;
+        }
+
+        return <div className="mx_MyGroups">
+            <SimpleRoomHeader title={_t("Communities")} icon="img/icons-groups.svg" />
+            <div className='mx_MyGroups_header'>
+                <div className="mx_MyGroups_headerCard">
+                    <AccessibleButton className='mx_MyGroups_headerCard_button' onClick={this._onCreateGroupClick}>
+                        <TintableSvg src="img/icons-create-room.svg" width="50" height="50" />
+                    </AccessibleButton>
+                    <div className="mx_MyGroups_headerCard_content">
+                        <div className="mx_MyGroups_headerCard_header">
+                            { _t('Create a new community') }
+                        </div>
+                        { _t(
+                            'Create a community to group together users and rooms! ' +
+                            'Build a custom homepage to mark out your space in the Matrix universe.',
+                        ) }
+                    </div>
+                </div>
+                <div className="mx_MyGroups_joinBox mx_MyGroups_headerCard">
+                    <AccessibleButton className='mx_MyGroups_headerCard_button' onClick={this._onJoinGroupClick}>
+                        <TintableSvg src="img/icons-create-room.svg" width="50" height="50" />
+                    </AccessibleButton>
+                    <div className="mx_MyGroups_headerCard_content">
+                        <div className="mx_MyGroups_headerCard_header">
+                            { _t('Join an existing community') }
+                        </div>
+                        { _t(
+                            'To join an existing community you\'ll have to '+
+                            'know its community identifier; this will look '+
+                            'something like <i>+example:matrix.org</i>.',
+                            {},
+                            { 'i': (sub) => <i>{ sub }</i> })
+                        }
+                    </div>
+                </div>
+            </div>
+            <div className="mx_MyGroups_content">
+                { contentHeader }
+                { content }
+            </div>
+        </div>;
+    },
+}));

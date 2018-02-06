@@ -17,6 +17,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import dis from './dispatcher';
+
 /**
  * Base class for classes that provide platform-specific functionality
  * eg. Setting an application badge or displaying notifications
@@ -27,6 +29,21 @@ export default class BasePlatform {
     constructor() {
         this.notificationCount = 0;
         this.errorDidOccur = false;
+
+        dis.register(this._onAction.bind(this));
+    }
+
+    _onAction(payload: Object) {
+        switch (payload.action) {
+            case 'on_logged_out':
+                this.setNotificationCount(0);
+                break;
+        }
+    }
+
+    // Used primarily for Analytics
+    getHumanReadableName(): string {
+        return 'Base Platform';
     }
 
     setNotificationCount(count: number) {
@@ -40,16 +57,18 @@ export default class BasePlatform {
     /**
      * Returns true if the platform supports displaying
      * notifications, otherwise false.
+     * @returns {boolean} whether the platform supports displaying notifications
      */
-    supportsNotifications() : boolean {
+    supportsNotifications(): boolean {
         return false;
     }
 
     /**
      * Returns true if the application currently has permission
      * to display notifications. Otherwise false.
+     * @returns {boolean} whether the application has permission to display notifications
      */
-    maySendNotifications() : boolean {
+    maySendNotifications(): boolean {
         return false;
     }
 
@@ -60,17 +79,42 @@ export default class BasePlatform {
      * that is 'granted' if the user allowed the request or
      * 'denied' otherwise.
      */
-    requestNotificationPermission() : Promise<string> {
+    requestNotificationPermission(): Promise<string> {
     }
 
     displayNotification(title: string, msg: string, avatarUrl: string, room: Object) {
+    }
+
+    loudNotification(ev: Event, room: Object) {
     }
 
     /**
      * Returns a promise that resolves to a string representing
      * the current version of the application.
      */
-    getAppVersion() {
+    getAppVersion(): Promise<string> {
         throw new Error("getAppVersion not implemented!");
+    }
+
+    /*
+     * If it's not expected that capturing the screen will work
+     * with getUserMedia, return a string explaining why not.
+     * Otherwise, return null.
+     */
+    screenCaptureErrorString(): string {
+        return "Not implemented";
+    }
+
+    isElectron(): boolean { return false; }
+
+    setupScreenSharingForIframe() {
+    }
+
+    /**
+     * Restarts the application, without neccessarily reloading
+     * any application code
+     */
+    reload() {
+        throw new Error("reload not implemented!");
     }
 }

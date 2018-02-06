@@ -1,5 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,11 +18,17 @@ limitations under the License.
 
 import * as Matrix from 'matrix-js-sdk';
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import KeyCode from '../../KeyCode';
+import { KeyCode, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
 import Notifier from '../../Notifier';
 import PageTypes from '../../PageTypes';
+import CallMediaHandler from '../../CallMediaHandler';
 import sdk from '../../index';
+import dis from '../../dispatcher';
+import sessionStore from '../../stores/SessionStore';
+import MatrixClientPeg from '../../MatrixClientPeg';
+import SettingsStore from "../../settings/SettingsStore";
 
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is
@@ -31,26 +39,43 @@ import sdk from '../../index';
  *
  * Components mounted below us can access the matrix client via the react context.
  */
-export default React.createClass({
+const LoggedInView = React.createClass({
     displayName: 'LoggedInView',
 
     propTypes: {
-        matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
-        page_type: React.PropTypes.string.isRequired,
-        onRoomIdResolved: React.PropTypes.func,
-        onRoomCreated: React.PropTypes.func,
-        onUserSettingsClose: React.PropTypes.func,
+        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient).isRequired,
+        page_type: PropTypes.string.isRequired,
+        onRoomCreated: PropTypes.func,
+        onUserSettingsClose: PropTypes.func,
+
+        // Called with the credentials of a registered user (if they were a ROU that
+        // transitioned to PWLU)
+        onRegistered: PropTypes.func,
+
+        teamToken: PropTypes.string,
 
         // and lots and lots of other stuff.
     },
 
     childContextTypes: {
-        matrixClient: React.PropTypes.instanceOf(Matrix.MatrixClient),
+        matrixClient: PropTypes.instanceOf(Matrix.MatrixClient),
+        authCache: PropTypes.object,
     },
 
     getChildContext: function() {
         return {
             matrixClient: this._matrixClient,
+            authCache: {
+                auth: {},
+                lastUpdate: 0,
+            },
+        };
+    },
+
+    getInitialState: function() {
+        return {
+            // use compact timeline view
+            useCompactLayout: SettingsStore.getValue('useCompactLayout'),
         };
     },
 
@@ -58,19 +83,59 @@ export default React.createClass({
         // stash the MatrixClient in case we log out before we are unmounted
         this._matrixClient = this.props.matrixClient;
 
-        // _scrollStateMap is a map from room id to the scroll state returned by
-        // RoomView.getScrollState()
-        this._scrollStateMap = {};
+        CallMediaHandler.loadDevices();
 
         document.addEventListener('keydown', this._onKeyDown);
+
+        this._sessionStore = sessionStore;
+        this._sessionStoreToken = this._sessionStore.addListener(
+            this._setStateFromSessionStore,
+        );
+        this._setStateFromSessionStore();
+
+        this._matrixClient.on("accountData", this.onAccountData);
     },
 
     componentWillUnmount: function() {
         document.removeEventListener('keydown', this._onKeyDown);
+        this._matrixClient.removeListener("accountData", this.onAccountData);
+        if (this._sessionStoreToken) {
+            this._sessionStoreToken.remove();
+        }
     },
 
-    getScrollStateForRoom: function(roomId) {
-        return this._scrollStateMap[roomId];
+    // Child components assume that the client peg will not be null, so give them some
+    // sort of assurance here by only allowing a re-render if the client is truthy.
+    //
+    // This is required because `LoggedInView` maintains its own state and if this state
+    // updates after the client peg has been made null (during logout), then it will
+    // attempt to re-render and the children will throw errors.
+    shouldComponentUpdate: function() {
+        return Boolean(MatrixClientPeg.get());
+    },
+
+    canResetTimelineInRoom: function(roomId) {
+        if (!this.refs.roomView) {
+            return true;
+        }
+        return this.refs.roomView.canResetTimeline();
+    },
+
+    _setStateFromSessionStore() {
+        this.setState({
+            userHasGeneratedPassword: Boolean(this._sessionStore.getCachedPassword()),
+        });
+    },
+
+    onAccountData: function(event) {
+        if (event.getType() === "im.vector.web.settings") {
+            this.setState({
+                useCompactLayout: event.getContent().useCompactLayout,
+            });
+        }
+        if (event.getType() === "m.ignored_user_list") {
+            dis.dispatch({action: "ignore_state_changed"});
+        }
     },
 
     _onKeyDown: function(ev) {
@@ -88,13 +153,14 @@ export default React.createClass({
             }
             */
 
-        var handled = false;
+        let handled = false;
+        const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
         switch (ev.keyCode) {
             case KeyCode.UP:
             case KeyCode.DOWN:
-                if (ev.altKey) {
-                    var action = ev.keyCode == KeyCode.UP ?
+                if (ev.altKey && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey) {
+                    const action = ev.keyCode == KeyCode.UP ?
                         'view_prev_room' : 'view_next_room';
                     dis.dispatch({action: action});
                     handled = true;
@@ -103,14 +169,24 @@ export default React.createClass({
 
             case KeyCode.PAGE_UP:
             case KeyCode.PAGE_DOWN:
-                this._onScrollKeyPressed(ev);
-                handled = true;
+                if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+                    this._onScrollKeyPressed(ev);
+                    handled = true;
+                }
                 break;
 
             case KeyCode.HOME:
             case KeyCode.END:
-                if (ev.ctrlKey) {
+                if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
                     this._onScrollKeyPressed(ev);
+                    handled = true;
+                }
+                break;
+            case KeyCode.KEY_K:
+                if (ctrlCmdOnly) {
+                    dis.dispatch({
+                        action: 'focus_room_filter',
+                    });
                     handled = true;
                 }
                 break;
@@ -126,104 +202,147 @@ export default React.createClass({
     _onScrollKeyPressed: function(ev) {
         if (this.refs.roomView) {
             this.refs.roomView.handleScrollKey(ev);
+        } else if (this.refs.roomDirectory) {
+            this.refs.roomDirectory.handleScrollKey(ev);
         }
     },
 
     render: function() {
-        var LeftPanel = sdk.getComponent('structures.LeftPanel');
-        var RightPanel = sdk.getComponent('structures.RightPanel');
-        var RoomView = sdk.getComponent('structures.RoomView');
-        var UserSettings = sdk.getComponent('structures.UserSettings');
-        var CreateRoom = sdk.getComponent('structures.CreateRoom');
-        var RoomDirectory = sdk.getComponent('structures.RoomDirectory');
-        var MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
-        var GuestWarningBar = sdk.getComponent('globals.GuestWarningBar');
-        var NewVersionBar = sdk.getComponent('globals.NewVersionBar');
+        const TagPanel = sdk.getComponent('structures.TagPanel');
+        const LeftPanel = sdk.getComponent('structures.LeftPanel');
+        const RightPanel = sdk.getComponent('structures.RightPanel');
+        const RoomView = sdk.getComponent('structures.RoomView');
+        const UserSettings = sdk.getComponent('structures.UserSettings');
+        const CreateRoom = sdk.getComponent('structures.CreateRoom');
+        const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
+        const HomePage = sdk.getComponent('structures.HomePage');
+        const GroupView = sdk.getComponent('structures.GroupView');
+        const MyGroups = sdk.getComponent('structures.MyGroups');
+        const MatrixToolbar = sdk.getComponent('globals.MatrixToolbar');
+        const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
+        const UpdateCheckBar = sdk.getComponent('globals.UpdateCheckBar');
+        const PasswordNagBar = sdk.getComponent('globals.PasswordNagBar');
 
-        var page_element;
-        var right_panel = '';
+        let page_element;
+        let right_panel = '';
 
         switch (this.props.page_type) {
             case PageTypes.RoomView:
                 page_element = <RoomView
                         ref='roomView'
-                        roomAddress={this.props.currentRoomAlias || this.props.currentRoomId}
                         autoJoin={this.props.autoJoin}
-                        onRoomIdResolved={this.props.onRoomIdResolved}
-                        eventId={this.props.initialEventId}
+                        onRegistered={this.props.onRegistered}
                         thirdPartyInvite={this.props.thirdPartyInvite}
                         oobData={this.props.roomOobData}
-                        highlightedEventId={this.props.highlightedEventId}
                         eventPixelOffset={this.props.initialEventPixelOffset}
-                        key={this.props.currentRoomAlias || this.props.currentRoomId}
-                        opacity={this.props.middleOpacity}
-                        collapsedRhs={this.props.collapse_rhs}
+                        key={this.props.currentRoomId || 'roomview'}
+                        disabled={this.props.middleDisabled}
+                        collapsedRhs={this.props.collapseRhs}
                         ConferenceHandler={this.props.ConferenceHandler}
-                        scrollStateMap={this._scrollStateMap}
-                    />
-                if (!this.props.collapse_rhs) right_panel = <RightPanel roomId={this.props.currentRoomId} opacity={this.props.sideOpacity} />
+                    />;
+                if (!this.props.collapseRhs) {
+                    right_panel = <RightPanel roomId={this.props.currentRoomId} disabled={this.props.rightDisabled} />;
+                }
                 break;
 
             case PageTypes.UserSettings:
                 page_element = <UserSettings
                     onClose={this.props.onUserSettingsClose}
                     brand={this.props.config.brand}
-                    collapsedRhs={this.props.collapse_rhs}
-                    enableLabs={this.props.config.enableLabs}
-                />
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>
+                    referralBaseUrl={this.props.config.referralBaseUrl}
+                    teamToken={this.props.teamToken}
+                />;
+                if (!this.props.collapseRhs) right_panel = <RightPanel disabled={this.props.rightDisabled} />;
+                break;
+
+            case PageTypes.MyGroups:
+                page_element = <MyGroups />;
                 break;
 
             case PageTypes.CreateRoom:
                 page_element = <CreateRoom
                     onRoomCreated={this.props.onRoomCreated}
-                    collapsedRhs={this.props.collapse_rhs}
-                />
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>
+                    collapsedRhs={this.props.collapseRhs}
+                />;
+                if (!this.props.collapseRhs) right_panel = <RightPanel disabled={this.props.rightDisabled} />;
                 break;
 
             case PageTypes.RoomDirectory:
                 page_element = <RoomDirectory
-                    collapsedRhs={this.props.collapse_rhs}
+                    ref="roomDirectory"
                     config={this.props.config.roomDirectory}
-                />
-                if (!this.props.collapse_rhs) right_panel = <RightPanel opacity={this.props.sideOpacity}/>
+                />;
                 break;
+
+            case PageTypes.HomePage:
+                {
+                    // If team server config is present, pass the teamServerURL. props.teamToken
+                    // must also be set for the team page to be displayed, otherwise the
+                    // welcomePageUrl is used (which might be undefined).
+                    const teamServerUrl = this.props.config.teamServerConfig ?
+                        this.props.config.teamServerConfig.teamServerURL : null;
+
+                    page_element = <HomePage
+                        teamServerUrl={teamServerUrl}
+                        teamToken={this.props.teamToken}
+                        homePageUrl={this.props.config.welcomePageUrl}
+                    />;
+                }
+                break;
+
             case PageTypes.UserView:
                 page_element = null; // deliberately null for now
-                right_panel = <RightPanel userId={this.props.viewUserId} opacity={this.props.sideOpacity} />
+                right_panel = <RightPanel disabled={this.props.rightDisabled} />;
+                break;
+            case PageTypes.GroupView:
+                page_element = <GroupView
+                    groupId={this.props.currentGroupId}
+                    isNew={this.props.currentGroupIsNew}
+                    collapsedRhs={this.props.collapseRhs}
+                />;
+                if (!this.props.collapseRhs) right_panel = <RightPanel groupId={this.props.currentGroupId} disabled={this.props.rightDisabled} />;
                 break;
         }
 
-        var topBar;
+        let topBar;
+        const isGuest = this.props.matrixClient.isGuest();
         if (this.props.hasNewVersion) {
             topBar = <NewVersionBar version={this.props.version} newVersion={this.props.newVersion}
-                releaseNotes={this.props.newVersionReleaseNotes}
+                                    releaseNotes={this.props.newVersionReleaseNotes}
             />;
-        }
-        else if (this.props.matrixClient.isGuest()) {
-            topBar = <GuestWarningBar />;
-        }
-        else if (Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
+        } else if (this.props.checkingForUpdate) {
+            topBar = <UpdateCheckBar {...this.props.checkingForUpdate} />;
+        } else if (this.state.userHasGeneratedPassword) {
+            topBar = <PasswordNagBar />;
+        } else if (!isGuest && Notifier.supportsDesktopNotifications() && !Notifier.isEnabled() && !Notifier.isToolbarHidden()) {
             topBar = <MatrixToolbar />;
         }
 
-        var bodyClasses = 'mx_MatrixChat';
+        let bodyClasses = 'mx_MatrixChat';
         if (topBar) {
             bodyClasses += ' mx_MatrixChat_toolbarShowing';
+        }
+        if (this.state.useCompactLayout) {
+            bodyClasses += ' mx_MatrixChat_useCompactLayout';
         }
 
         return (
             <div className='mx_MatrixChat_wrapper'>
-                {topBar}
+                { topBar }
                 <div className={bodyClasses}>
-                    <LeftPanel selectedRoom={this.props.currentRoomId} collapsed={this.props.collapse_lhs || false} opacity={this.props.sideOpacity}/>
+                    { SettingsStore.isFeatureEnabled("feature_tag_panel") ? <TagPanel /> : <div /> }
+                    <LeftPanel
+                        collapsed={this.props.collapseLhs || false}
+                        disabled={this.props.leftDisabled}
+                    />
                     <main className='mx_MatrixChat_middlePanel'>
-                        {page_element}
+                        { page_element }
                     </main>
-                    {right_panel}
+                    { right_panel }
                 </div>
             </div>
         );
     },
 });
+
+export default LoggedInView;

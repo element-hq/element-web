@@ -15,11 +15,14 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
+import Analytics from '../../../Analytics';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import Lifecycle from '../../../Lifecycle';
+import * as Lifecycle from '../../../Lifecycle';
 import Velocity from 'velocity-vector';
+import { _t } from '../../../languageHandler';
 
 export default class DeactivateAccountDialog extends React.Component {
     constructor(props, context) {
@@ -53,13 +56,14 @@ export default class DeactivateAccountDialog extends React.Component {
             user: MatrixClientPeg.get().credentials.userId,
             password: this._passwordField.value,
         }).done(() => {
+            Analytics.trackEvent('Account', 'Deactivate Account');
             Lifecycle.onLoggedOut();
             this.props.onFinished(false);
         }, (err) => {
-            let errStr = 'Unknown error';
+            let errStr = _t('Unknown error');
             // https://matrix.org/jira/browse/SYN-744
             if (err.httpStatus == 401 || err.httpStatus == 403) {
-                errStr = 'Incorrect password';
+                errStr = _t('Incorrect password');
                 Velocity(this._passwordField, "callout.shake", 300);
             }
             this.setState({
@@ -74,47 +78,49 @@ export default class DeactivateAccountDialog extends React.Component {
     }
 
     render() {
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const Loader = sdk.getComponent("elements.Spinner");
         let passwordBoxClass = '';
 
         let error = null;
         if (this.state.errStr) {
             error = <div className="error">
-                {this.state.err_str}
-            </div>
+                { this.state.errStr }
+            </div>;
             passwordBoxClass = 'error';
         }
 
-        const okLabel = this.state.busy ? <Loader /> : 'Deactivate Account';
+        const okLabel = this.state.busy ? <Loader /> : _t('Deactivate Account');
         const okEnabled = this.state.confirmButtonEnabled && !this.state.busy;
 
         let cancelButton = null;
         if (!this.state.busy) {
             cancelButton = <button onClick={this._onCancel} autoFocus={true}>
-                Cancel
-            </button>
+                { _t("Cancel") }
+            </button>;
         }
 
         return (
-            <div className="mx_DeactivateAccountDialog">
-                <div className="mx_Dialog_title danger">
-                    Deactivate Account
-                </div>
+            <BaseDialog className="mx_DeactivateAccountDialog"
+                onFinished={this.props.onFinished}
+                onEnterPressed={this.onOk}
+                titleClass="danger"
+                title={_t("Deactivate Account")}>
                 <div className="mx_Dialog_content">
-                    <p>This will make your account permanently unusable. You will not be able to re-register the same user ID.</p>
+                    <p>{ _t("This will make your account permanently unusable. You will not be able to re-register the same user ID.") }</p>
 
-                    <p>This action is irreversible.</p>
+                    <p>{ _t("This action is irreversible.") }</p>
 
-                    <p>To continue, please enter your password.</p>
+                    <p>{ _t("To continue, please enter your password.") }</p>
 
-                    <p>Password:</p>
+                    <p>{ _t("Password") }:</p>
                     <input
                         type="password"
                         onChange={this._onPasswordFieldChange}
                         ref={(e) => {this._passwordField = e;}}
                         className={passwordBoxClass}
                     />
-                    {error}
+                    { error }
                 </div>
                 <div className="mx_Dialog_buttons">
                     <button
@@ -122,16 +128,16 @@ export default class DeactivateAccountDialog extends React.Component {
                         onClick={this._onOk}
                         disabled={!okEnabled}
                     >
-                        {okLabel}
+                        { okLabel }
                     </button>
 
-                    {cancelButton}
+                    { cancelButton }
                 </div>
-            </div>
+            </BaseDialog>
         );
     }
 }
 
 DeactivateAccountDialog.propTypes = {
-    onFinished: React.PropTypes.func.isRequired,
+    onFinished: PropTypes.func.isRequired,
 };

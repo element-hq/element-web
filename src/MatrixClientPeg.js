@@ -1,5 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd.
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,12 +18,12 @@ limitations under the License.
 
 'use strict';
 
-import Matrix from 'matrix-js-sdk';
 import utils from 'matrix-js-sdk/lib/utils';
 import EventTimeline from 'matrix-js-sdk/lib/models/event-timeline';
 import EventTimelineSet from 'matrix-js-sdk/lib/models/event-timeline-set';
-
-const localStorage = window.localStorage;
+import createMatrixClient from './utils/createMatrixClient';
+import SettingsStore from './settings/SettingsStore';
+import MatrixActionCreators from './actions/MatrixActionCreators';
 
 interface MatrixClientCreds {
     homeserverUrl: string,
@@ -51,12 +53,25 @@ class MatrixClientPeg {
         };
     }
 
+    /**
+     * Sets the script href passed to the IndexedDB web worker
+     * If set, a separate web worker will be started to run the IndexedDB
+     * queries on.
+     *
+     * @param {string} script href to the script to be passed to the web worker
+     */
+    setIndexedDbWorkerScript(script) {
+        createMatrixClient.indexedDbWorkerScript = script;
+    }
+
     get(): MatrixClient {
         return this.matrixClient;
     }
 
     unset() {
         this.matrixClient = null;
+
+        MatrixActionCreators.stop();
     }
 
     /**
@@ -67,11 +82,42 @@ class MatrixClientPeg {
         this._createClient(creds);
     }
 
-    start() {
+    async start() {
+        // try to initialise e2e on the new client
+        try {
+            // check that we have a version of the js-sdk which includes initCrypto
+            if (this.matrixClient.initCrypto) {
+                await this.matrixClient.initCrypto();
+            }
+        } catch (e) {
+            // this can happen for a number of reasons, the most likely being
+            // that the olm library was missing. It's not fatal.
+            console.warn("Unable to initialise e2e: " + e);
+        }
+
         const opts = utils.deepCopy(this.opts);
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
+        opts.disablePresence = true; // we do this manually
+
+        try {
+            const promise = this.matrixClient.store.startup();
+            console.log(`MatrixClientPeg: waiting for MatrixClient store to initialise`);
+            await promise;
+        } catch (err) {
+            // log any errors when starting up the database (if one exists)
+            console.error(`Error starting matrixclient store: ${err}`);
+        }
+
+        // regardless of errors, start the client. If we did error out, we'll
+        // just end up doing a full initial /sync.
+
+        // Connect the matrix client to the dispatcher
+        MatrixActionCreators.start(this.matrixClient);
+
+        console.log(`MatrixClientPeg: really starting MatrixClient`);
         this.get().startClient(opts);
+        console.log(`MatrixClientPeg: MatrixClient started`);
     }
 
     getCredentials(): MatrixClientCreds {
@@ -99,20 +145,17 @@ class MatrixClientPeg {
     }
 
     _createClient(creds: MatrixClientCreds) {
-        var opts = {
+        const opts = {
             baseUrl: creds.homeserverUrl,
             idBaseUrl: creds.identityServerUrl,
             accessToken: creds.accessToken,
             userId: creds.userId,
             deviceId: creds.deviceId,
             timelineSupport: true,
+            forceTURN: SettingsStore.getValue('webRtcForceTURN', false),
         };
 
-        if (localStorage) {
-            opts.sessionStore = new Matrix.WebStorageSessionStore(localStorage);
-        }
-
-        this.matrixClient = Matrix.createClient(opts);
+        this.matrixClient = createMatrixClient(opts, this.indexedDbWorkerScript);
 
         // we're going to add eventlisteners for each matrix event tile, so the
         // potential number of event listeners is quite high.
@@ -120,8 +163,8 @@ class MatrixClientPeg {
 
         this.matrixClient.setGuest(Boolean(creds.guest));
 
-        var notifTimelineSet = new EventTimelineSet(null, {
-            timelineSupport: true
+        const notifTimelineSet = new EventTimelineSet(null, {
+            timelineSupport: true,
         });
         // XXX: what is our initial pagination token?! it somehow needs to be synchronised with /sync.
         notifTimelineSet.getLiveTimeline().setPaginationToken("", EventTimeline.BACKWARDS);

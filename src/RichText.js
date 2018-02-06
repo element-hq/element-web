@@ -12,10 +12,11 @@ import {
     SelectionState,
     Entity,
 } from 'draft-js';
-import * as sdk from  './index';
+import * as sdk from './index';
 import * as emojione from 'emojione';
 import {stateToHTML} from 'draft-js-export-html';
 import {SelectionRange} from "./autocomplete/Autocompleter";
+import {stateToMarkdown as __stateToMarkdown} from 'draft-js-export-markdown';
 
 const MARKDOWN_REGEX = {
     LINK: /(?:\[([^\]]+)\]\(([^\)]+)\))|\<(\w+:\/\/[^\>]+)\>/g,
@@ -30,17 +31,35 @@ const USERNAME_REGEX = /@\S+:\S+/g;
 const ROOM_REGEX = /#\S+:\S+/g;
 const EMOJI_REGEX = new RegExp(emojione.unicodeRegexp, 'g');
 
-export const contentStateToHTML = stateToHTML;
+const ZWS_CODE = 8203;
+const ZWS = String.fromCharCode(ZWS_CODE); // zero width space
+export function stateToMarkdown(state) {
+    return __stateToMarkdown(state)
+        .replace(
+            ZWS, // draft-js-export-markdown adds these
+            ''); // this is *not* a zero width space, trust me :)
+}
 
-export function HTMLtoContentState(html: string): ContentState {
-    return ContentState.createFromBlockArray(convertFromHTML(html));
+export const contentStateToHTML = (contentState: ContentState) => {
+    return stateToHTML(contentState, {
+        inlineStyles: {
+            UNDERLINE: {
+                element: 'u',
+            },
+        },
+    });
+};
+
+export function htmlToContentState(html: string): ContentState {
+    const blockArray = convertFromHTML(html).contentBlocks;
+    return ContentState.createFromBlockArray(blockArray);
 }
 
 function unicodeToEmojiUri(str) {
     let replaceWith, unicode, alt;
     if ((!emojione.unicodeAlt) || (emojione.sprites)) {
         // if we are using the shortname as the alt tag then we need a reversed array to map unicode code point to shortnames
-        let mappedUnicode = emojione.mapUnicodeToShort();
+        const mappedUnicode = emojione.mapUnicodeToShort();
     }
 
     str = str.replace(emojione.regUnicode, function(unicodeChar) {
@@ -48,8 +67,14 @@ function unicodeToEmojiUri(str) {
             // if the unicodeChar doesnt exist just return the entire match
             return unicodeChar;
         } else {
+            // Remove variant selector VS16 (explicitly emoji) as it is unnecessary and leads to an incorrect URL below
+            if (unicodeChar.length == 2 && unicodeChar[1] == '\ufe0f') {
+                unicodeChar = unicodeChar[0];
+            }
+
             // get the unicode codepoint from the actual char
             unicode = emojione.jsEscapeMap[unicodeChar];
+
             return emojione.imagePathSVG+unicode+'.svg'+emojione.cacheBustParam;
         }
     });
@@ -71,14 +96,14 @@ function findWithRegex(regex, contentBlock: ContentBlock, callback: (start: numb
 }
 
 // Workaround for https://github.com/facebook/draft-js/issues/414
-let emojiDecorator = {
-    strategy: (contentBlock, callback) => {
+const emojiDecorator = {
+    strategy: (contentState, contentBlock, callback) => {
         findWithRegex(EMOJI_REGEX, contentBlock, callback);
     },
     component: (props) => {
-        let uri = unicodeToEmojiUri(props.children[0].props.text);
-        let shortname = emojione.toShort(props.children[0].props.text);
-        let style = {
+        const uri = unicodeToEmojiUri(props.children[0].props.text);
+        const shortname = emojione.toShort(props.children[0].props.text);
+        const style = {
             display: 'inline-block',
             width: '1em',
             maxHeight: '1em',
@@ -87,7 +112,7 @@ let emojiDecorator = {
             backgroundPosition: 'center center',
             overflow: 'hidden',
         };
-        return (<span title={shortname} style={style}><span style={{opacity: 0}}>{props.children}</span></span>);
+        return (<span title={shortname} style={style}><span style={{opacity: 0}}>{ props.children }</span></span>);
     },
 };
 
@@ -95,60 +120,35 @@ let emojiDecorator = {
  * Returns a composite decorator which has access to provided scope.
  */
 export function getScopedRTDecorators(scope: any): CompositeDecorator {
-    let MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-
-    let usernameDecorator = {
-        strategy: (contentBlock, callback) => {
-            findWithRegex(USERNAME_REGEX, contentBlock, callback);
-        },
-        component: (props) => {
-            let member = scope.room.getMember(props.children[0].props.text);
-            // unused until we make these decorators immutable (autocomplete needed)
-            let name = member ? member.name : null;
-            let avatar = member ? <MemberAvatar member={member} width={16} height={16}/> : null;
-            return <span className="mx_UserPill">{avatar}{props.children}</span>;
-        }
-    };
-    
-    let roomDecorator = {
-        strategy: (contentBlock, callback) => {
-            findWithRegex(ROOM_REGEX, contentBlock, callback);
-        },
-        component: (props) => {
-            return <span className="mx_RoomPill">{props.children}</span>;
-        }
-    };
-
-    // TODO Re-enable usernameDecorator and roomDecorator
     return [emojiDecorator];
 }
 
 export function getScopedMDDecorators(scope: any): CompositeDecorator {
-    let markdownDecorators = ['HR', 'BOLD', 'ITALIC', 'CODE', 'STRIKETHROUGH'].map(
+    const markdownDecorators = ['HR', 'BOLD', 'ITALIC', 'CODE', 'STRIKETHROUGH'].map(
         (style) => ({
-            strategy: (contentBlock, callback) => {
+            strategy: (contentState, contentBlock, callback) => {
                 return findWithRegex(MARKDOWN_REGEX[style], contentBlock, callback);
             },
             component: (props) => (
                 <span className={"mx_MarkdownElement mx_Markdown_" + style}>
-                    {props.children}
+                    { props.children }
                 </span>
-            )
+            ),
         }));
 
     markdownDecorators.push({
-        strategy: (contentBlock, callback) => {
+        strategy: (contentState, contentBlock, callback) => {
             return findWithRegex(MARKDOWN_REGEX.LINK, contentBlock, callback);
         },
         component: (props) => (
             <a href="#" className="mx_MarkdownElement mx_Markdown_LINK">
-                {props.children}
+                { props.children }
             </a>
-        )
+        ),
     });
-    markdownDecorators.push(emojiDecorator);
-
-    return markdownDecorators;
+    // markdownDecorators.push(emojiDecorator);
+    // TODO Consider renabling "syntax highlighting" when we can do it properly
+    return [emojiDecorator];
 }
 
 /**
@@ -167,7 +167,7 @@ export function modifyText(contentState: ContentState, rangeToReplace: Selection
     for (let currentKey = startKey;
             currentKey && currentKey !== endKey;
             currentKey = contentState.getKeyAfter(currentKey)) {
-        let blockText = getText(currentKey);
+        const blockText = getText(currentKey);
         text += blockText.substring(startOffset, blockText.length);
 
         // from now on, we'll take whole blocks
@@ -188,7 +188,7 @@ export function modifyText(contentState: ContentState, rangeToReplace: Selection
 export function selectionStateToTextOffsets(selectionState: SelectionState,
                                             contentBlocks: Array<ContentBlock>): {start: number, end: number} {
     let offset = 0, start = 0, end = 0;
-    for (let block of contentBlocks) {
+    for (const block of contentBlocks) {
         if (selectionState.getStartKey() === block.getKey()) {
             start = offset + selectionState.getStartOffset();
         }
@@ -208,31 +208,36 @@ export function selectionStateToTextOffsets(selectionState: SelectionState,
 export function textOffsetsToSelectionState({start, end}: SelectionRange,
                                             contentBlocks: Array<ContentBlock>): SelectionState {
     let selectionState = SelectionState.createEmpty();
-
-    for (let block of contentBlocks) {
-        let blockLength = block.getLength();
-
-        if (start !== -1 && start < blockLength) {
-            selectionState = selectionState.merge({
-                anchorKey: block.getKey(),
-                anchorOffset: start,
-            });
-            start = -1;
-        } else {
-            start -= blockLength;
+    // Subtract block lengths from `start` and `end` until they are less than the current
+    // block length (accounting for the NL at the end of each block). Set them to -1 to
+    // indicate that the corresponding selection state has been determined.
+    for (const block of contentBlocks) {
+        const blockLength = block.getLength();
+        // -1 indicating that the position start position has been found
+        if (start !== -1) {
+            if (start < blockLength + 1) {
+                selectionState = selectionState.merge({
+                    anchorKey: block.getKey(),
+                    anchorOffset: start,
+                });
+                start = -1; // selection state for the start calculated
+            } else {
+                start -= blockLength + 1; // +1 to account for newline between blocks
+            }
         }
-
-        if (end !== -1 && end <= blockLength) {
-            selectionState = selectionState.merge({
-                focusKey: block.getKey(),
-                focusOffset: end,
-            });
-            end = -1;
-        } else {
-            end -= blockLength;
+        // -1 indicating that the position end position has been found
+        if (end !== -1) {
+            if (end < blockLength + 1) {
+                selectionState = selectionState.merge({
+                    focusKey: block.getKey(),
+                    focusOffset: end,
+                });
+                end = -1; // selection state for the end calculated
+            } else {
+                end -= blockLength + 1; // +1 to account for newline between blocks
+            }
         }
     }
-
     return selectionState;
 }
 
@@ -249,7 +254,7 @@ export function attachImmutableEntitiesToEmoji(editorState: EditorState): Editor
             const existingEntityKey = block.getEntityAt(start);
             if (existingEntityKey) {
                 // avoid manipulation in case the emoji already has an entity
-                const entity = Entity.get(existingEntityKey);
+                const entity = newContentState.getEntity(existingEntityKey);
                 if (entity && entity.get('type') === 'emoji') {
                     return;
                 }
@@ -259,7 +264,10 @@ export function attachImmutableEntitiesToEmoji(editorState: EditorState): Editor
                 .set('anchorOffset', start)
                 .set('focusOffset', end);
             const emojiText = plainText.substring(start, end);
-            const entityKey = Entity.create('emoji', 'IMMUTABLE', { emojiUnicode: emojiText });
+            newContentState = newContentState.createEntity(
+                'emoji', 'IMMUTABLE', { emojiUnicode: emojiText },
+            );
+            const entityKey = newContentState.getLastCreatedEntityKey();
             newContentState = Modifier.replaceText(
                 newContentState,
                 selection,
@@ -285,4 +293,15 @@ export function attachImmutableEntitiesToEmoji(editorState: EditorState): Editor
     }
 
     return editorState;
+}
+
+export function hasMultiLineSelection(editorState: EditorState): boolean {
+    const selectionState = editorState.getSelection();
+    const anchorKey = selectionState.getAnchorKey();
+    const currentContent = editorState.getCurrentContent();
+    const currentContentBlock = currentContent.getBlockForKey(anchorKey);
+    const start = selectionState.getStartOffset();
+    const end = selectionState.getEndOffset();
+    const selectedText = currentContentBlock.getText().slice(start, end);
+    return selectedText.includes('\n');
 }

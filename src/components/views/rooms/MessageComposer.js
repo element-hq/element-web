@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,17 +14,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require('react');
-
-var CallHandler = require('../../../CallHandler');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
-var Modal = require('../../../Modal');
-var sdk = require('../../../index');
-var dis = require('../../../dispatcher');
-import Autocomplete from './Autocomplete';
-import classNames from 'classnames';
-
-import UserSettingsStore from '../../../UserSettingsStore';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { _t } from '../../../languageHandler';
+import CallHandler from '../../../CallHandler';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import Modal from '../../../Modal';
+import sdk from '../../../index';
+import dis from '../../../dispatcher';
+import RoomViewStore from '../../../stores/RoomViewStore';
+import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 
 export default class MessageComposer extends React.Component {
@@ -32,17 +32,18 @@ export default class MessageComposer extends React.Component {
         this.onCallClick = this.onCallClick.bind(this);
         this.onHangupClick = this.onHangupClick.bind(this);
         this.onUploadClick = this.onUploadClick.bind(this);
+        this.onShowAppsClick = this.onShowAppsClick.bind(this);
+        this.onHideAppsClick = this.onHideAppsClick.bind(this);
         this.onUploadFileSelected = this.onUploadFileSelected.bind(this);
+        this.uploadFiles = this.uploadFiles.bind(this);
         this.onVoiceCallClick = this.onVoiceCallClick.bind(this);
         this.onInputContentChanged = this.onInputContentChanged.bind(this);
-        this.onUpArrow = this.onUpArrow.bind(this);
-        this.onDownArrow = this.onDownArrow.bind(this);
-        this._tryComplete = this._tryComplete.bind(this);
         this._onAutocompleteConfirm = this._onAutocompleteConfirm.bind(this);
         this.onToggleFormattingClicked = this.onToggleFormattingClicked.bind(this);
         this.onToggleMarkdownClicked = this.onToggleMarkdownClicked.bind(this);
         this.onInputStateChanged = this.onInputStateChanged.bind(this);
         this.onEvent = this.onEvent.bind(this);
+        this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
 
         this.state = {
             autocompleteQuery: '',
@@ -50,12 +51,12 @@ export default class MessageComposer extends React.Component {
             inputState: {
                 style: [],
                 blockType: null,
-                isRichtextEnabled: UserSettingsStore.getSyncedSetting('MessageComposerInput.isRichTextEnabled', true),
+                isRichtextEnabled: SettingsStore.getValue('MessageComposerInput.isRichTextEnabled'),
                 wordCount: 0,
             },
-            showFormatting: UserSettingsStore.getSyncedSetting('MessageComposer.showFormatting', false),
+            showFormatting: SettingsStore.getValue('MessageComposer.showFormatting'),
+            isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
         };
-
     }
 
     componentDidMount() {
@@ -64,11 +65,15 @@ export default class MessageComposer extends React.Component {
         // marked as encrypted.
         // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
         MatrixClientPeg.get().on("event", this.onEvent);
+        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
     }
 
     componentWillUnmount() {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("event", this.onEvent);
+        }
+        if (this._roomStoreToken) {
+            this._roomStoreToken.remove();
         }
     }
 
@@ -78,47 +83,51 @@ export default class MessageComposer extends React.Component {
         this.forceUpdate();
     }
 
+    _onRoomViewStoreUpdate() {
+        const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
+        if (this.state.isQuoting === isQuoting) return;
+        this.setState({ isQuoting });
+    }
+
     onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
-            let NeedToRegisterDialog = sdk.getComponent("dialogs.NeedToRegisterDialog");
-            Modal.createDialog(NeedToRegisterDialog, {
-                title: "Please Register",
-                description: "Guest users can't upload files. Please register to upload.",
-            });
+            dis.dispatch({action: 'view_set_mxid'});
             return;
         }
 
         this.refs.uploadInput.click();
     }
 
-    onUploadFileSelected(ev) {
-        let files = ev.target.files;
+    onUploadFileSelected(files) {
+        this.uploadFiles(files.target.files);
+    }
 
-        let QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        let TintableSvg = sdk.getComponent("elements.TintableSvg");
+    uploadFiles(files) {
+        const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
-        let fileList = [];
+        const fileList = [];
         for (let i=0; i<files.length; i++) {
             fileList.push(<li key={i}>
-                <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> {files[i].name}
+                <TintableSvg key={i} src="img/files.svg" width="16" height="16" /> { files[i].name || _t('Attachment') }
             </li>);
         }
 
-        Modal.createDialog(QuestionDialog, {
-            title: "Upload Files",
+        Modal.createTrackedDialog('Upload Files confirmation', '', QuestionDialog, {
+            title: _t('Upload Files'),
             description: (
                 <div>
-                    <p>Are you sure you want upload the following files?</p>
+                    <p>{ _t('Are you sure you want to upload the following files?') }</p>
                     <ul style={{listStyle: 'none', textAlign: 'left'}}>
-                        {fileList}
+                        { fileList }
                     </ul>
                 </div>
             ),
             onFinished: (shouldUpload) => {
-                if(shouldUpload) {
+                if (shouldUpload) {
                     // MessageComposer shouldn't have to rely on its parent passing in a callback to upload a file
                     if (files) {
-                        for(var i=0; i<files.length; i++) {
+                        for (let i=0; i<files.length; i++) {
                             this.props.uploadFile(files[i]);
                         }
                     }
@@ -130,7 +139,7 @@ export default class MessageComposer extends React.Component {
     }
 
     onHangupClick() {
-        var call = CallHandler.getCallForRoom(this.props.room.roomId);
+        const call = CallHandler.getCallForRoom(this.props.room.roomId);
         //var call = CallHandler.getAnyActiveCall();
         if (!call) {
             return;
@@ -143,19 +152,67 @@ export default class MessageComposer extends React.Component {
         });
     }
 
+    // _startCallApp(isAudioConf) {
+        // dis.dispatch({
+        //     action: 'appsDrawer',
+        //     show: true,
+        // });
+
+        // const appsStateEvents = this.props.room.currentState.getStateEvents('im.vector.modular.widgets', '');
+        // let appsStateEvent = {};
+        // if (appsStateEvents) {
+        //     appsStateEvent = appsStateEvents.getContent();
+        // }
+        // if (!appsStateEvent.videoConf) {
+        //     appsStateEvent.videoConf = {
+        //         type: 'jitsi',
+        //         // FIXME -- This should not be localhost
+        //         url: 'http://localhost:8000/jitsi.html',
+        //         data: {
+        //             confId: this.props.room.roomId.replace(/[^A-Za-z0-9]/g, '_') + Date.now(),
+        //             isAudioConf: isAudioConf,
+        //         },
+        //     };
+        //     MatrixClientPeg.get().sendStateEvent(
+        //         this.props.room.roomId,
+        //         'im.vector.modular.widgets',
+        //         appsStateEvent,
+        //         '',
+        //     ).then(() => console.log('Sent state'), (e) => console.error(e));
+        // }
+    // }
+
     onCallClick(ev) {
+        // NOTE -- Will be replaced by Jitsi code (currently commented)
         dis.dispatch({
             action: 'place_call',
             type: ev.shiftKey ? "screensharing" : "video",
             room_id: this.props.room.roomId,
         });
+        // this._startCallApp(false);
     }
 
     onVoiceCallClick(ev) {
+        // NOTE -- Will be replaced by Jitsi code (currently commented)
         dis.dispatch({
             action: 'place_call',
-            type: 'voice',
+            type: "voice",
             room_id: this.props.room.roomId,
+        });
+        // this._startCallApp(true);
+    }
+
+    onShowAppsClick(ev) {
+        dis.dispatch({
+            action: 'appsDrawer',
+            show: true,
+        });
+    }
+
+    onHideAppsClick(ev) {
+        dis.dispatch({
+            action: 'appsDrawer',
+            show: false,
         });
     }
 
@@ -170,21 +227,6 @@ export default class MessageComposer extends React.Component {
         this.setState({inputState});
     }
 
-    onUpArrow() {
-       return this.refs.autocomplete.onUpArrow();
-    }
-
-    onDownArrow() {
-        return this.refs.autocomplete.onDownArrow();
-    }
-
-    _tryComplete(): boolean {
-        if (this.refs.autocomplete) {
-            return this.refs.autocomplete.onCompletionClicked();
-        }
-        return false;
-    }
-
     _onAutocompleteConfirm(range, completion) {
         if (this.messageComposerInput) {
             this.messageComposerInput.setDisplayedCompletion(range, completion);
@@ -197,7 +239,7 @@ export default class MessageComposer extends React.Component {
     }
 
     onToggleFormattingClicked() {
-        UserSettingsStore.setSyncedSetting('MessageComposer.showFormatting', !this.state.showFormatting);
+        SettingsStore.setValue("MessageComposer.showFormatting", null, SettingLevel.DEVICE, !this.state.showFormatting);
         this.setState({showFormatting: !this.state.showFormatting});
     }
 
@@ -207,66 +249,79 @@ export default class MessageComposer extends React.Component {
     }
 
     render() {
-        var me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
-        var uploadInputStyle = {display: 'none'};
-        var MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-        var TintableSvg = sdk.getComponent("elements.TintableSvg");
-        var MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput" +
-            (UserSettingsStore.isFeatureEnabled('rich_text_editor') ? "" : "Old"));
+        const me = this.props.room.getMember(MatrixClientPeg.get().credentials.userId);
+        const uploadInputStyle = {display: 'none'};
+        const MemberPresenceAvatar = sdk.getComponent('avatars.MemberPresenceAvatar');
+        const TintableSvg = sdk.getComponent("elements.TintableSvg");
+        const MessageComposerInput = sdk.getComponent("rooms.MessageComposerInput");
 
-        var controls = [];
+        const controls = [];
 
         controls.push(
             <div key="controls_avatar" className="mx_MessageComposer_avatar">
-                <MemberAvatar member={me} width={24} height={24} />
-            </div>
+                <MemberPresenceAvatar member={me} width={24} height={24} />
+            </div>,
         );
 
-        let e2eimg, e2etitle;
-
-        if (MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId)) {
+        let e2eImg, e2eTitle, e2eClass;
+        const roomIsEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
+        if (roomIsEncrypted) {
             // FIXME: show a /!\ if there are untrusted devices in the room...
-            e2eimg = 'img/e2e-verified.svg';
-            e2etitle = 'Encrypted room';
+            e2eImg = 'img/e2e-verified.svg';
+            e2eTitle = _t('Encrypted room');
+            e2eClass = 'mx_MessageComposer_e2eIcon';
         } else {
-            e2eimg = 'img/e2e-unencrypted.svg';
-            e2etitle = 'Unencrypted room';
+            e2eImg = 'img/e2e-unencrypted.svg';
+            e2eTitle = _t('Unencrypted room');
+            e2eClass = 'mx_MessageComposer_e2eIcon mx_filterFlipColor';
         }
 
         controls.push(
-            <img key="e2eIcon" className="mx_MessageComposer_e2eIcon" src={e2eimg} width="12" height="12"
-                alt={e2etitle} title={e2etitle}
-            />
+            <img key="e2eIcon" className={e2eClass} src={e2eImg} width="12" height="12"
+                alt={e2eTitle} title={e2eTitle}
+            />,
         );
-        var callButton, videoCallButton, hangupButton;
+        let callButton, videoCallButton, hangupButton, showAppsButton, hideAppsButton;
         if (this.props.callState && this.props.callState !== 'ended') {
             hangupButton =
                 <div key="controls_hangup" className="mx_MessageComposer_hangup" onClick={this.onHangupClick}>
-                    <img src="img/hangup.svg" alt="Hangup" title="Hangup" width="25" height="26"/>
+                    <img src="img/hangup.svg" alt={_t('Hangup')} title={_t('Hangup')} width="25" height="26" />
                 </div>;
-        }
-        else {
+        } else {
             callButton =
-                <div key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title="Voice call">
-                    <TintableSvg src="img/icon-call.svg" width="35" height="35"/>
+                <div key="controls_call" className="mx_MessageComposer_voicecall" onClick={this.onVoiceCallClick} title={_t('Voice call')}>
+                    <TintableSvg src="img/icon-call.svg" width="35" height="35" />
                 </div>;
             videoCallButton =
-                <div key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title="Video call">
-                    <TintableSvg src="img/icons-video.svg" width="35" height="35"/>
+                <div key="controls_videocall" className="mx_MessageComposer_videocall" onClick={this.onCallClick} title={_t('Video call')}>
+                    <TintableSvg src="img/icons-video.svg" width="35" height="35" />
                 </div>;
         }
 
-        var canSendMessages = this.props.room.currentState.maySendMessage(
+        // Apps
+        if (this.props.showApps) {
+            hideAppsButton =
+                <div key="controls_hide_apps" className="mx_MessageComposer_apps" onClick={this.onHideAppsClick} title={_t("Hide Apps")}>
+                    <TintableSvg src="img/icons-hide-apps.svg" width="35" height="35" />
+                </div>;
+        } else {
+            showAppsButton =
+                <div key="show_apps" className="mx_MessageComposer_apps" onClick={this.onShowAppsClick} title={_t("Show Apps")}>
+                    <TintableSvg src="img/icons-show-apps.svg" width="35" height="35" />
+                </div>;
+        }
+
+        const canSendMessages = this.props.room.currentState.maySendMessage(
             MatrixClientPeg.get().credentials.userId);
 
         if (canSendMessages) {
             // This also currently includes the call buttons. Really we should
             // check separately for whether we can call, but this is slightly
             // complex because of conference calls.
-            var uploadButton = (
+            const uploadButton = (
                 <div key="controls_upload" className="mx_MessageComposer_upload"
-                        onClick={this.onUploadClick} title="Upload file">
-                    <TintableSvg src="img/icons-upload.svg" width="35" height="35"/>
+                        onClick={this.onUploadClick} title={_t('Upload file')}>
+                    <TintableSvg src="img/icons-upload.svg" width="35" height="35" />
                     <input ref="uploadInput" type="file"
                         style={uploadInputStyle}
                         multiple
@@ -276,65 +331,64 @@ export default class MessageComposer extends React.Component {
 
             const formattingButton = (
                 <img className="mx_MessageComposer_formatting"
-                     title="Show Text Formatting Toolbar"
+                     title={_t("Show Text Formatting Toolbar")}
                      src="img/button-text-formatting.svg"
                      onClick={this.onToggleFormattingClicked}
-                     style={{visibility: this.state.showFormatting ||
-                       !UserSettingsStore.isFeatureEnabled('rich_text_editor') ? 'hidden' : 'visible'}}
+                     style={{visibility: this.state.showFormatting ? 'hidden' : 'visible'}}
                      key="controls_formatting" />
             );
 
+            let placeholderText;
+            if (this.state.isQuoting) {
+                if (roomIsEncrypted) {
+                    placeholderText = _t('Send an encrypted reply…');
+                } else {
+                    placeholderText = _t('Send a reply (unencrypted)…');
+                }
+            } else {
+                if (roomIsEncrypted) {
+                    placeholderText = _t('Send an encrypted message…');
+                } else {
+                    placeholderText = _t('Send a message (unencrypted)…');
+                }
+            }
+
             controls.push(
                 <MessageComposerInput
-                    ref={c => this.messageComposerInput = c}
+                    ref={(c) => this.messageComposerInput = c}
                     key="controls_input"
                     onResize={this.props.onResize}
                     room={this.props.room}
-                    tryComplete={this._tryComplete}
-                    onUpArrow={this.onUpArrow}
-                    onDownArrow={this.onDownArrow}
-                    tabComplete={this.props.tabComplete} // used for old messagecomposerinput/tabcomplete
+                    placeholder={placeholderText}
+                    onFilesPasted={this.uploadFiles}
                     onContentChanged={this.onInputContentChanged}
                     onInputStateChanged={this.onInputStateChanged} />,
                 formattingButton,
                 uploadButton,
                 hangupButton,
                 callButton,
-                videoCallButton
+                videoCallButton,
+                showAppsButton,
+                hideAppsButton,
             );
         } else {
             controls.push(
                 <div key="controls_error" className="mx_MessageComposer_noperm_error">
-                    You do not have permission to post to this room
-                </div>
+                    { _t('You do not have permission to post to this room') }
+                </div>,
             );
         }
 
-        let autoComplete;
-        if (UserSettingsStore.isFeatureEnabled('rich_text_editor')) {
-            autoComplete = <div className="mx_MessageComposer_autocomplete_wrapper">
-                <Autocomplete
-                    ref="autocomplete"
-                    onConfirm={this._onAutocompleteConfirm}
-                    query={this.state.autocompleteQuery}
-                    selection={this.state.selection} />
-            </div>;
-        }
-
-
         const {style, blockType} = this.state.inputState;
         const formatButtons = ["bold", "italic", "strike", "underline", "code", "quote", "bullet", "numbullet"].map(
-            name => {
+            (name) => {
                 const active = style.includes(name) || blockType === name;
                 const suffix = active ? '-o-n' : '';
                 const onFormatButtonClicked = this.onFormatButtonClicked.bind(this, name);
-                const disabled = !this.state.inputState.isRichtextEnabled && 'underline' === name;
-                const className = classNames("mx_MessageComposer_format_button", {
-                    mx_MessageComposer_format_button_disabled: disabled,
-                });
+                const className = 'mx_MessageComposer_format_button mx_filterFlipColor';
                 return <img className={className}
-                            title={name}
-                            onMouseDown={disabled ? null : onFormatButtonClicked}
+                            title={_t(name)}
+                            onMouseDown={onFormatButtonClicked}
                             key={name}
                             src={`img/button-text-${name}${suffix}.svg`}
                             height="17" />;
@@ -342,49 +396,45 @@ export default class MessageComposer extends React.Component {
         );
 
         return (
-            <div className="mx_MessageComposer mx_fadable" style={{ opacity: this.props.opacity }}>
+            <div className="mx_MessageComposer">
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
-                        {controls}
+                        { controls }
                     </div>
                 </div>
-                {UserSettingsStore.isFeatureEnabled('rich_text_editor') ?
-                    <div className="mx_MessageComposer_formatbar_wrapper">
-                        <div className="mx_MessageComposer_formatbar" style={this.state.showFormatting ? {} : {display: 'none'}}>
-                            {formatButtons}
-                            <div style={{flex: 1}}></div>
-                            <img title={`Turn Markdown ${this.state.inputState.isRichtextEnabled ? 'on' : 'off'}`}
-                                 onMouseDown={this.onToggleMarkdownClicked}
-                                className="mx_MessageComposer_formatbar_markdown"
-                                src={`img/button-md-${!this.state.inputState.isRichtextEnabled}.png`} />
-                            <img title="Hide Text Formatting Toolbar"
-                                 onClick={this.onToggleFormattingClicked}
-                                 className="mx_MessageComposer_formatbar_cancel"
-                                 src="img/icon-text-cancel.svg" />
-                        </div>
-                    </div>: null
-                }
+                <div className="mx_MessageComposer_formatbar_wrapper">
+                    <div className="mx_MessageComposer_formatbar" style={this.state.showFormatting ? {} : {display: 'none'}}>
+                        { formatButtons }
+                        <div style={{flex: 1}}></div>
+                        <img title={this.state.inputState.isRichtextEnabled ? _t("Turn Markdown on") : _t("Turn Markdown off")}
+                             onMouseDown={this.onToggleMarkdownClicked}
+                            className="mx_MessageComposer_formatbar_markdown mx_filterFlipColor"
+                            src={`img/button-md-${!this.state.inputState.isRichtextEnabled}.png`} />
+                        <img title={_t("Hide Text Formatting Toolbar")}
+                             onClick={this.onToggleFormattingClicked}
+                             className="mx_MessageComposer_formatbar_cancel mx_filterFlipColor"
+                             src="img/icon-text-cancel.svg" />
+                    </div>
+                </div>
             </div>
         );
     }
-};
+}
 
 MessageComposer.propTypes = {
-    tabComplete: React.PropTypes.any,
-
     // a callback which is called when the height of the composer is
     // changed due to a change in content.
-    onResize: React.PropTypes.func,
+    onResize: PropTypes.func,
 
     // js-sdk Room object
-    room: React.PropTypes.object.isRequired,
+    room: PropTypes.object.isRequired,
 
     // string representing the current voip call state
-    callState: React.PropTypes.string,
+    callState: PropTypes.string,
 
     // callback when a file to upload is chosen
-    uploadFile: React.PropTypes.func.isRequired,
+    uploadFile: PropTypes.func.isRequired,
 
-    // opacity for dynamic UI fading effects
-    opacity: React.PropTypes.number
+    // string representing the current room app drawer state
+    showApps: PropTypes.bool,
 };

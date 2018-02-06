@@ -16,16 +16,25 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'UnknownBody',
 
     render: function() {
-        var content = this.props.mxEvent.getContent();
+        let tooltip = _t("Removed or unknown message type");
+        if (this.props.mxEvent.isRedacted()) {
+            const redactedBecauseUserId = this.props.mxEvent.getUnsigned().redacted_because.sender;
+            tooltip = redactedBecauseUserId ?
+                _t("Message removed by %(userId)s", { userId: redactedBecauseUserId }) :
+                _t("Message removed");
+        }
+
+        const text = this.props.mxEvent.getContent().body;
         return (
-            <span className="mx_UnknownBody">
-                {content.body}
+            <span className="mx_UnknownBody" title={tooltip}>
+                { text }
             </span>
         );
     },

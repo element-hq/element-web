@@ -16,7 +16,7 @@ limitations under the License.
 
 /*
  * Usage:
- * Modal.createDialog(ErrorDialog, {
+ * Modal.createTrackedDialog('An Identifier', 'some detail', ErrorDialog, {
  *   title: "some text", (default: "Error")
  *   description: "some more text",
  *   button: "Button Text",
@@ -25,53 +25,53 @@ limitations under the License.
  * });
  */
 
-var React = require("react");
+import React from 'react';
+import PropTypes from 'prop-types';
+import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'ErrorDialog',
     propTypes: {
-        title: React.PropTypes.string,
-        description: React.PropTypes.oneOfType([
-            React.PropTypes.element,
-            React.PropTypes.string,
+        title: PropTypes.string,
+        description: PropTypes.oneOfType([
+            PropTypes.element,
+            PropTypes.string,
         ]),
-        button: React.PropTypes.string,
-        focus: React.PropTypes.bool,
-        onFinished: React.PropTypes.func.isRequired,
+        button: PropTypes.string,
+        focus: PropTypes.bool,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {
         return {
-            title: "Error",
-            description: "An error has occurred.",
-            button: "OK",
             focus: true,
+            title: null,
+            description: null,
+            button: null,
         };
     },
 
-    onKeyDown: function(e) {
-        if (e.keyCode === 27) { // escape
-            e.stopPropagation();
-            e.preventDefault();
-            this.props.onFinished(false);
+    componentDidMount: function() {
+        if (this.props.focus) {
+            this.refs.button.focus();
         }
     },
 
     render: function() {
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
-            <div className="mx_ErrorDialog" onKeyDown={ this.onKeyDown }>
-                <div className="mx_Dialog_title">
-                    {this.props.title}
-                </div>
+            <BaseDialog className="mx_ErrorDialog" onFinished={this.props.onFinished}
+                    title={this.props.title || _t('Error')}>
                 <div className="mx_Dialog_content">
-                    {this.props.description}
+                    { this.props.description || _t('An error has occurred.') }
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.props.onFinished} autoFocus={this.props.focus}>
-                        {this.props.button}
+                    <button ref="button" className="mx_Dialog_primary" onClick={this.props.onFinished}>
+                        { this.props.button || _t('OK') }
                     </button>
                 </div>
-            </div>
+            </BaseDialog>
         );
-    }
+    },
 });

@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var Skinner = require('./Skinner');
+import Skinner from './Skinner';
+import RtsClient from './RtsClient';
 
 module.exports.loadSkin = function(skinObject) {
     Skinner.load(skinObject);
@@ -28,3 +29,6 @@ module.exports.getComponent = function(componentName) {
     return Skinner.getComponent(componentName);
 };
 
+module.exports.setFetch = function(fetchFunction) {
+    RtsClient.setFetch(fetchFunction);
+};

@@ -17,15 +17,24 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
-import Model from '../../../Modal';
-import sdk from '../../../index';
 import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
-import q from 'q';
+import Promise from 'bluebird';
+import { _t } from '../../../languageHandler';
+import SettingsStore from "../../../settings/SettingsStore";
 
 module.exports = React.createClass({
     displayName: 'MVideoBody',
+
+    propTypes: {
+        /* the MatrixEvent to show */
+        mxEvent: PropTypes.object.isRequired,
+
+        /* called when the video has loaded */
+        onWidgetLoad: PropTypes.func.isRequired,
+    },
 
     getInitialState: function() {
         return {
@@ -46,13 +55,12 @@ module.exports = React.createClass({
             // no scaling needs to be applied
             return 1;
         }
-        var widthMulti = thumbWidth / fullWidth;
-        var heightMulti = thumbHeight / fullHeight;
+        const widthMulti = thumbWidth / fullWidth;
+        const heightMulti = thumbHeight / fullHeight;
         if (widthMulti < heightMulti) {
             // width is the dominant dimension so scaling will be fixed on that
             return widthMulti;
-        }
-        else {
+        } else {
             // height is the dominant dimension so scaling will be fixed on that
             return heightMulti;
         }
@@ -71,7 +79,7 @@ module.exports = React.createClass({
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
             return this.state.decryptedThumbnailUrl;
-        } else if (content.info.thumbnail_url) {
+        } else if (content.info && content.info.thumbnail_url) {
             return MatrixClientPeg.get().mxcUrlToHttp(content.info.thumbnail_url);
         } else {
             return null;
@@ -81,15 +89,15 @@ module.exports = React.createClass({
     componentDidMount: function() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            var thumbnailPromise = q(null);
+            let thumbnailPromise = Promise.resolve(null);
             if (content.info.thumbnail_file) {
                 thumbnailPromise = decryptFile(
-                    content.info.thumbnail_file
+                    content.info.thumbnail_file,
                 ).then(function(blob) {
                     return readBlobAsDataUri(blob);
                 });
             }
-            var decryptedBlob;
+            let decryptedBlob;
             thumbnailPromise.then((thumbnailUrl) => {
                 return decryptFile(content.file).then(function(blob) {
                     decryptedBlob = blob;
@@ -100,9 +108,10 @@ module.exports = React.createClass({
                         decryptedThumbnailUrl: thumbnailUrl,
                         decryptedBlob: decryptedBlob,
                     });
+                    this.props.onWidgetLoad();
                 });
             }).catch((err) => {
-                console.warn("Unable to decrypt attachment: ", err)
+                console.warn("Unable to decrypt attachment: ", err);
                 // Set a placeholder image when we can't decrypt the image.
                 this.setState({
                     error: err,
@@ -117,8 +126,8 @@ module.exports = React.createClass({
         if (this.state.error !== null) {
             return (
                 <span className="mx_MVideoBody" ref="body">
-                    <img src="img/warning.svg" width="16" height="16"/>
-                    Error decrypting video
+                    <img src="img/warning.svg" width="16" height="16" />
+                    { _t("Error decrypting video") }
                 </span>
             );
         }
@@ -135,7 +144,7 @@ module.exports = React.createClass({
                         "justify-items": "center",
                         "width": "100%",
                     }}>
-                        <img src="img/spinner.gif" alt={content.body} width="16" height="16"/>
+                        <img src="img/spinner.gif" alt={content.body} width="16" height="16" />
                     </div>
                 </span>
             );
@@ -143,11 +152,11 @@ module.exports = React.createClass({
 
         const contentUrl = this._getContentUrl();
         const thumbUrl = this._getThumbUrl();
-
-        var height = null;
-        var width = null;
-        var poster = null;
-        var preload = "metadata";
+        const autoplay = SettingsStore.getValue("autoplayGifsAndVideos");
+        let height = null;
+        let width = null;
+        let poster = null;
+        let preload = "metadata";
         if (content.info) {
             const scale = this.thumbScale(content.info.w, content.info.h, 480, 360);
             if (scale) {
@@ -160,11 +169,10 @@ module.exports = React.createClass({
                 preload = "none";
             }
         }
-
         return (
             <span className="mx_MVideoBody">
                 <video className="mx_MVideoBody" src={contentUrl} alt={content.body}
-                    controls preload={preload} autoPlay={false}
+                    controls preload={preload} muted={autoplay} autoPlay={autoplay}
                     height={height} width={width} poster={poster}>
                 </video>
                 <MFileBody {...this.props} decryptedBlob={this.state.decryptedBlob} />

@@ -17,10 +17,10 @@ limitations under the License.
 'use strict';
 
 module.exports = function(dest, src) {
-    for (var i in src) {
+    for (const i in src) {
         if (src.hasOwnProperty(i)) {
             dest[i] = src[i];
         }
     }
     return dest;
-}
+};

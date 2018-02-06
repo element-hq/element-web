@@ -16,20 +16,26 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
+import PropTypes from 'prop-types';
 
-var TextForEvent = require('../../../TextForEvent');
+const TextForEvent = require('../../../TextForEvent');
 import sdk from '../../../index';
 
 module.exports = React.createClass({
     displayName: 'TextualEvent',
 
+    propTypes: {
+        /* the MatrixEvent to show */
+        mxEvent: PropTypes.object.isRequired,
+    },
+
     render: function() {
         const EmojiText = sdk.getComponent('elements.EmojiText');
-        var text = TextForEvent.textForEvent(this.props.mxEvent);
+        const text = TextForEvent.textForEvent(this.props.mxEvent);
         if (text == null || text.length === 0) return null;
         return (
-            <EmojiText element="div" className="mx_TextualEvent">{text}</EmojiText>
+            <EmojiText element="div" className="mx_TextualEvent">{ text }</EmojiText>
         );
     },
 });

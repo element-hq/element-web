@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,18 +17,28 @@ limitations under the License.
 
 'use strict';
 
-var flux = require("flux");
+const flux = require("flux");
 
 class MatrixDispatcher extends flux.Dispatcher {
     /**
-     * @param {Object} payload Required. The payload to dispatch.
-     *        Must contain at least an 'action' key.
-     * @param {boolean} sync Optional. Pass true to dispatch
+     * @param {Object|function} payload Required. The payload to dispatch.
+     *        If an Object, must contain at least an 'action' key.
+     *        If a function, must have the signature (dispatch) => {...}.
+     * @param {boolean=} sync Optional. Pass true to dispatch
      *        synchronously. This is useful for anything triggering
      *        an operation that the browser requires user interaction
      *        for.
      */
     dispatch(payload, sync) {
+        // Allow for asynchronous dispatching by accepting payloads that have the
+        // type `function (dispatch) {...}`
+        if (typeof payload === 'function') {
+            payload((action) => {
+                this.dispatch(action, sync);
+            });
+            return;
+        }
+
         if (sync) {
             super.dispatch(payload);
         } else {
@@ -39,7 +50,7 @@ class MatrixDispatcher extends flux.Dispatcher {
             setTimeout(super.dispatch.bind(this, payload), 0);
         }
     }
-};
+}
 
 if (global.mxDispatcher === undefined) {
     global.mxDispatcher = new MatrixDispatcher();

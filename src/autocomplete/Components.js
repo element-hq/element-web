@@ -1,5 +1,21 @@
+/*
+Copyright 2016 Aviral Dasgupta
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 import React from 'react';
-import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 /* These were earlier stateless functional components but had to be converted
@@ -15,22 +31,22 @@ export class TextualCompletion extends React.Component {
             subtitle,
             description,
             className,
-            ...restProps,
+            ...restProps
         } = this.props;
         return (
             <div className={classNames('mx_Autocomplete_Completion_block', className)} {...restProps}>
-                <span className="mx_Autocomplete_Completion_title">{title}</span>
-                <span className="mx_Autocomplete_Completion_subtitle">{subtitle}</span>
-                <span className="mx_Autocomplete_Completion_description">{description}</span>
+                <span className="mx_Autocomplete_Completion_title">{ title }</span>
+                <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
+                <span className="mx_Autocomplete_Completion_description">{ description }</span>
             </div>
         );
     }
 }
 TextualCompletion.propTypes = {
-    title: React.PropTypes.string,
-    subtitle: React.PropTypes.string,
-    description: React.PropTypes.string,
-    className: React.PropTypes.string,
+    title: PropTypes.string,
+    subtitle: PropTypes.string,
+    description: PropTypes.string,
+    className: PropTypes.string,
 };
 
 export class PillCompletion extends React.Component {
@@ -41,22 +57,22 @@ export class PillCompletion extends React.Component {
             description,
             initialComponent,
             className,
-            ...restProps,
+            ...restProps
         } = this.props;
         return (
             <div className={classNames('mx_Autocomplete_Completion_pill', className)} {...restProps}>
-                {initialComponent}
-                <span className="mx_Autocomplete_Completion_title">{title}</span>
-                <span className="mx_Autocomplete_Completion_subtitle">{subtitle}</span>
-                <span className="mx_Autocomplete_Completion_description">{description}</span>
+                { initialComponent }
+                <span className="mx_Autocomplete_Completion_title">{ title }</span>
+                <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
+                <span className="mx_Autocomplete_Completion_description">{ description }</span>
             </div>
         );
     }
 }
 PillCompletion.propTypes = {
-    title: React.PropTypes.string,
-    subtitle: React.PropTypes.string,
-    description: React.PropTypes.string,
-    initialComponent: React.PropTypes.element,
-    className: React.PropTypes.string,
+    title: PropTypes.string,
+    subtitle: PropTypes.string,
+    description: PropTypes.string,
+    initialComponent: PropTypes.element,
+    className: PropTypes.string,
 };

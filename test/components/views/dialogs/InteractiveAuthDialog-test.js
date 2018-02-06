@@ -15,24 +15,25 @@ limitations under the License.
 */
 
 import expect from 'expect';
-import q from 'q';
+import Promise from 'bluebird';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-addons-test-utils';
 import sinon from 'sinon';
+import MatrixReactTestUtils from 'matrix-react-test-utils';
 
 import sdk from 'matrix-react-sdk';
-import MatrixClientPeg from 'MatrixClientPeg';
+import MatrixClientPeg from '../../../../src/MatrixClientPeg';
 
 import * as test_utils from '../../../test-utils';
 
 const InteractiveAuthDialog = sdk.getComponent(
-    'views.dialogs.InteractiveAuthDialog'
+    'views.dialogs.InteractiveAuthDialog',
 );
 
-describe('InteractiveAuthDialog', function () {
-    var parentDiv;
-    var sandbox;
+describe('InteractiveAuthDialog', function() {
+    let parentDiv;
+    let sandbox;
 
     beforeEach(function() {
         test_utils.beforeEach(this);
@@ -47,62 +48,72 @@ describe('InteractiveAuthDialog', function () {
         sandbox.restore();
     });
 
-    it('Should successfully complete a password flow', function(done) {
+    it('Should successfully complete a password flow', function() {
         const onFinished = sinon.spy();
-        const doRequest = sinon.stub().returns(q({a:1}));
+        const doRequest = sinon.stub().returns(Promise.resolve({a: 1}));
 
         // tell the stub matrixclient to return a real userid
-        var client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.get();
         client.credentials = {userId: "@user:id"};
 
         const dlg = ReactDOM.render(
             <InteractiveAuthDialog
+                matrixClient={client}
                 authData={{
                     session: "sess",
                     flows: [
-                        {"stages":["m.login.password"]}
-                    ]
+                        {"stages": ["m.login.password"]},
+                    ],
                 }}
                 makeRequest={doRequest}
                 onFinished={onFinished}
             />, parentDiv);
 
-        // at this point there should be a password box
-        const passwordNode = ReactTestUtils.findRenderedDOMComponentWithTag(
-            dlg, "input"
-        );
-        expect(passwordNode.type).toEqual("password");
+        // wait for a password box and a submit button
+        return MatrixReactTestUtils.waitForRenderedDOMComponentWithTag(dlg, "form", 2).then((formNode) => {
+            const inputNodes = ReactTestUtils.scryRenderedDOMComponentsWithTag(
+                dlg, "input",
+            );
+            let passwordNode;
+            let submitNode;
+            for (const node of inputNodes) {
+                if (node.type == 'password') {
+                    passwordNode = node;
+                } else if (node.type == 'submit') {
+                    submitNode = node;
+                }
+            }
+            expect(passwordNode).toExist();
+            expect(submitNode).toExist();
 
-        // submit should be disabled
-        const submitNode = ReactTestUtils.findRenderedDOMComponentWithClass(
-            dlg, "mx_Dialog_primary"
-        );
-        expect(submitNode.disabled).toBe(true);
+            // submit should be disabled
+            expect(submitNode.disabled).toBe(true);
 
-        // put something in the password box, and hit enter; that should
-        // trigger a request
-        passwordNode.value = "s3kr3t";
-        ReactTestUtils.Simulate.change(passwordNode);
-        expect(submitNode.disabled).toBe(false);
-        ReactTestUtils.Simulate.keyDown(passwordNode, {
-            key: "Enter", keyCode: 13, which: 13,
-        });
+            // put something in the password box, and hit enter; that should
+            // trigger a request
+            passwordNode.value = "s3kr3t";
+            ReactTestUtils.Simulate.change(passwordNode);
+            expect(submitNode.disabled).toBe(false);
+            ReactTestUtils.Simulate.submit(formNode, {});
 
-        expect(doRequest.callCount).toEqual(1);
-        expect(doRequest.calledWithExactly({
-            session: "sess",
-            type: "m.login.password",
-            password: "s3kr3t",
-            user: "@user:id",
-        })).toBe(true);
+            expect(doRequest.callCount).toEqual(1);
+            expect(doRequest.calledWithExactly({
+                session: "sess",
+                type: "m.login.password",
+                password: "s3kr3t",
+                user: "@user:id",
+            })).toBe(true);
 
-        // the submit button should now be disabled (and be a spinner)
-        expect(submitNode.disabled).toBe(true);
+            // there should now be a spinner
+            ReactTestUtils.findRenderedComponentWithType(
+                dlg, sdk.getComponent('elements.Spinner'),
+            );
 
-        // let the request complete
-        q.delay(1).then(() => {
+            // let the request complete
+            return Promise.delay(1);
+        }).then(() => {
             expect(onFinished.callCount).toEqual(1);
-            expect(onFinished.calledWithExactly(true, {a:1})).toBe(true);
-        }).done(done, done);
+            expect(onFinished.calledWithExactly(true, {a: 1})).toBe(true);
+        });
     });
 });

@@ -16,7 +16,8 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
+import PropTypes from 'prop-types';
 
 const KEY_TAB = 9;
 const KEY_SHIFT = 16;
@@ -26,15 +27,18 @@ module.exports = React.createClass({
     displayName: 'EditableText',
 
     propTypes: {
-        onValueChanged: React.PropTypes.func,
-        initialValue: React.PropTypes.string,
-        label: React.PropTypes.string,
-        placeholder: React.PropTypes.string,
-        className: React.PropTypes.string,
-        labelClassName: React.PropTypes.string,
-        placeholderClassName: React.PropTypes.string,
-        blurToCancel: React.PropTypes.bool,
-        editable: React.PropTypes.bool,
+        onValueChanged: PropTypes.func,
+        initialValue: PropTypes.string,
+        label: PropTypes.string,
+        placeholder: PropTypes.string,
+        className: PropTypes.string,
+        labelClassName: PropTypes.string,
+        placeholderClassName: PropTypes.string,
+        // Overrides blurToSubmit if true
+        blurToCancel: PropTypes.bool,
+        // Will cause onValueChanged(value, true) to fire on blur
+        blurToSubmit: PropTypes.bool,
+        editable: PropTypes.bool,
     },
 
     Phases: {
@@ -51,17 +55,20 @@ module.exports = React.createClass({
             editable: true,
             className: "mx_EditableText",
             placeholderClassName: "mx_EditableText_placeholder",
+            blurToSubmit: false,
         };
     },
 
     getInitialState: function() {
         return {
             phase: this.Phases.Display,
-        }
+        };
     },
 
     componentWillReceiveProps: function(nextProps) {
-        if (nextProps.initialValue !== this.props.initialValue) {
+        if (nextProps.initialValue !== this.props.initialValue ||
+            nextProps.initialValue !== this.value
+        ) {
             this.value = nextProps.initialValue;
             if (this.refs.editable_div) {
                 this.showPlaceholder(!this.value);
@@ -89,8 +96,7 @@ module.exports = React.createClass({
             this.refs.editable_div.setAttribute("class", this.props.className + " " + this.props.placeholderClassName);
             this.placeholder = true;
             this.value = '';
-        }
-        else {
+        } else {
             this.refs.editable_div.textContent = this.value;
             this.refs.editable_div.setAttribute("class", this.props.className);
             this.placeholder = false;
@@ -119,6 +125,7 @@ module.exports = React.createClass({
         this.value = this.props.initialValue;
         this.showPlaceholder(!this.value);
         this.onValueChanged(false);
+        this.refs.editable_div.blur();
     },
 
     onValueChanged: function(shouldSubmit) {
@@ -145,8 +152,7 @@ module.exports = React.createClass({
 
         if (!ev.target.textContent) {
             this.showPlaceholder(true);
-        }
-        else if (!this.placeholder) {
+        } else if (!this.placeholder) {
             this.value = ev.target.textContent;
         }
 
@@ -164,48 +170,47 @@ module.exports = React.createClass({
 
         this.setState({
             phase: this.Phases.Edit,
-        })
+        });
     },
 
     onFocus: function(ev) {
         //ev.target.setSelectionRange(0, ev.target.textContent.length);
 
-        var node = ev.target.childNodes[0];
+        const node = ev.target.childNodes[0];
         if (node) {
-            var range = document.createRange();
+            const range = document.createRange();
             range.setStart(node, 0);
             range.setEnd(node, node.length);
 
-            var sel = window.getSelection();
+            const sel = window.getSelection();
             sel.removeAllRanges();
             sel.addRange(range);
         }
     },
 
-    onFinish: function(ev) {
-        var self = this;
-        var submit = (ev.key === "Enter");
+    onFinish: function(ev, shouldSubmit) {
+        const self = this;
+        const submit = (ev.key === "Enter") || shouldSubmit;
         this.setState({
             phase: this.Phases.Display,
         }, function() {
-            self.onValueChanged(submit);
+            if (this.value !== this.props.initialValue) {
+                self.onValueChanged(submit);
+            }
         });
     },
 
     onBlur: function(ev) {
-        var sel = window.getSelection();
+        const sel = window.getSelection();
         sel.removeAllRanges();
 
-        if (this.props.blurToCancel)
-            this.cancelEdit();
-        else
-            this.onFinish(ev);
+        if (this.props.blurToCancel) {this.cancelEdit();} else {this.onFinish(ev, this.props.blurToSubmit);}
 
         this.showPlaceholder(!this.value);
     },
 
     render: function() {
-        var editable_el;
+        let editable_el;
 
         if (!this.props.editable || (this.state.phase == this.Phases.Display && (this.props.label || this.props.labelClassName) && !this.value)) {
             // show the label
@@ -217,5 +222,5 @@ module.exports = React.createClass({
         }
 
         return editable_el;
-    }
+    },
 });

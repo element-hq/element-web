@@ -1,11 +1,12 @@
 "use strict";
 
-var sinon = require('sinon');
-var q = require('q');
+import sinon from 'sinon';
+import Promise from 'bluebird';
 
-var peg = require('../src/MatrixClientPeg.js');
-var jssdk = require('matrix-js-sdk');
-var MatrixEvent = jssdk.MatrixEvent;
+import peg from '../src/MatrixClientPeg';
+import dis from '../src/dispatcher';
+import jssdk from 'matrix-js-sdk';
+const MatrixEvent = jssdk.MatrixEvent;
 
 /**
  * Perform common actions before each test case, e.g. printing the test case
@@ -13,11 +14,19 @@ var MatrixEvent = jssdk.MatrixEvent;
  * @param {Mocha.Context} context  The test context
  */
 export function beforeEach(context) {
-    var desc = context.currentTest.fullTitle();
+    const desc = context.currentTest.fullTitle();
+
     console.log();
+
+    // this puts a mark in the chrome devtools timeline, which can help
+    // figure out what's been going on.
+    if (console.timeStamp) {
+        console.timeStamp(desc);
+    }
+
     console.log(desc);
     console.log(new Array(1 + desc.length).join("="));
-};
+}
 
 
 /**
@@ -31,16 +40,16 @@ export function beforeEach(context) {
  * @returns {sinon.Sandbox}; remember to call sandbox.restore afterwards.
  */
 export function stubClient() {
-    var sandbox = sinon.sandbox.create();
+    const sandbox = sinon.sandbox.create();
 
-    var client = createTestClient();
+    const client = createTestClient();
 
     // stub out the methods in MatrixClientPeg
     //
     // 'sandbox.restore()' doesn't work correctly on inherited methods,
     // so we do this for each method
-    var methods = ['get', 'unset', 'replaceUsingCreds'];
-    for (var i = 0; i < methods.length; i++) {
+    const methods = ['get', 'unset', 'replaceUsingCreds'];
+    for (let i = 0; i < methods.length; i++) {
         sandbox.stub(peg, methods[i]);
     }
     // MatrixClientPeg.get() is called a /lot/, so implement it with our own
@@ -66,12 +75,12 @@ export function createTestClient() {
         on: sinon.stub(),
         removeListener: sinon.stub(),
         isRoomEncrypted: sinon.stub().returns(false),
-        peekInRoom: sinon.stub().returns(q(mkStubRoom())),
+        peekInRoom: sinon.stub().returns(Promise.resolve(mkStubRoom())),
 
-        paginateEventTimeline: sinon.stub().returns(q()),
-        sendReadReceipt: sinon.stub().returns(q()),
-        getRoomIdForAlias: sinon.stub().returns(q()),
-        getProfileInfo: sinon.stub().returns(q({})),
+        paginateEventTimeline: sinon.stub().returns(Promise.resolve()),
+        sendReadReceipt: sinon.stub().returns(Promise.resolve()),
+        getRoomIdForAlias: sinon.stub().returns(Promise.resolve()),
+        getProfileInfo: sinon.stub().returns(Promise.resolve({})),
         getAccountData: (type) => {
             return mkEvent({
                 type,
@@ -80,10 +89,26 @@ export function createTestClient() {
             });
         },
         setAccountData: sinon.stub(),
-        sendTyping: sinon.stub().returns(q({})),
-        sendTextMessage: () => q({}),
-        sendHtmlMessage: () => q({}),
+        sendTyping: sinon.stub().returns(Promise.resolve({})),
+        sendTextMessage: () => Promise.resolve({}),
+        sendHtmlMessage: () => Promise.resolve({}),
         getSyncState: () => "SYNCING",
+        generateClientSecret: () => "t35tcl1Ent5ECr3T",
+        isGuest: () => false,
+    };
+}
+
+export function createTestRtsClient(teamMap, sidMap) {
+    return {
+        getTeamsConfig() {
+            return Promise.resolve(Object.keys(teamMap).map((token) => teamMap[token]));
+        },
+        trackReferral(referrer, emailSid, clientSecret) {
+            return Promise.resolve({team_token: sidMap[emailSid]});
+        },
+        getTeam(teamToken) {
+            return Promise.resolve(teamMap[teamToken]);
+        },
     };
 }
 
@@ -103,24 +128,24 @@ export function mkEvent(opts) {
     if (!opts.type || !opts.content) {
         throw new Error("Missing .type or .content =>" + JSON.stringify(opts));
     }
-    var event = {
+    const event = {
         type: opts.type,
         room_id: opts.room,
         sender: opts.user,
         content: opts.content,
+        prev_content: opts.prev_content,
         event_id: "$" + Math.random() + "-" + Math.random(),
         origin_server_ts: opts.ts,
     };
     if (opts.skey) {
         event.state_key = opts.skey;
-    }
-    else if (["m.room.name", "m.room.topic", "m.room.create", "m.room.join_rules",
+    } else if (["m.room.name", "m.room.topic", "m.room.create", "m.room.join_rules",
          "m.room.power_levels", "m.room.topic",
          "com.example.state"].indexOf(opts.type) !== -1) {
         event.state_key = "";
     }
     return opts.event ? new MatrixEvent(event) : event;
-};
+}
 
 /**
  * Create an m.presence event.
@@ -131,7 +156,7 @@ export function mkPresence(opts) {
     if (!opts.user) {
         throw new Error("Missing user");
     }
-    var event = {
+    const event = {
         event_id: "$" + Math.random() + "-" + Math.random(),
         type: "m.presence",
         sender: opts.user,
@@ -139,18 +164,20 @@ export function mkPresence(opts) {
             avatar_url: opts.url,
             displayname: opts.name,
             last_active_ago: opts.ago,
-            presence: opts.presence || "offline"
-        }
+            presence: opts.presence || "offline",
+        },
     };
     return opts.event ? new MatrixEvent(event) : event;
-};
+}
 
 /**
  * Create an m.room.member event.
  * @param {Object} opts Values for the membership.
  * @param {string} opts.room The room ID for the event.
  * @param {string} opts.mship The content.membership for the event.
+ * @param {string} opts.prevMship The prev_content.membership for the event.
  * @param {string} opts.user The user ID for the event.
+ * @param {RoomMember} opts.target The target of the event.
  * @param {string} opts.skey The other user ID for the event if applicable
  * e.g. for invites/bans.
  * @param {string} opts.name The content.displayname for the event.
@@ -167,12 +194,19 @@ export function mkMembership(opts) {
         throw new Error("Missing .mship => " + JSON.stringify(opts));
     }
     opts.content = {
-        membership: opts.mship
+        membership: opts.mship,
     };
+    if (opts.prevMship) {
+        opts.prev_content = { membership: opts.prevMship };
+    }
     if (opts.name) { opts.content.displayname = opts.name; }
     if (opts.url) { opts.content.avatar_url = opts.url; }
-    return mkEvent(opts);
-};
+    const e = mkEvent(opts);
+    if (opts.target) {
+        e.target = opts.target;
+    }
+    return e;
+}
 
 /**
  * Create an m.room.message event.
@@ -193,17 +227,22 @@ export function mkMessage(opts) {
     }
     opts.content = {
         msgtype: "m.text",
-        body: opts.msg
+        body: opts.msg,
     };
     return mkEvent(opts);
 }
 
 export function mkStubRoom(roomId = null) {
-    var stubTimeline = { getEvents: () => [] };
+    const stubTimeline = { getEvents: () => [] };
     return {
         roomId,
         getReceiptsForEvent: sinon.stub().returns([]),
-        getMember: sinon.stub().returns({}),
+        getMember: sinon.stub().returns({
+            userId: '@member:domain.bla',
+            name: 'Member',
+            roomId: roomId,
+            getAvatarUrl: () => 'mxc://avatar.url/image.png',
+        }),
         getJoinedMembers: sinon.stub().returns([]),
         getPendingEvents: () => [],
         getLiveTimeline: () => stubTimeline,
@@ -214,5 +253,15 @@ export function mkStubRoom(roomId = null) {
             getStateEvents: sinon.stub(),
             members: [],
         },
+    };
+}
+
+export function getDispatchForStore(store) {
+    // Mock the dispatcher by gut-wrenching. Stores can only __emitChange whilst a
+    // dispatcher `_isDispatching` is true.
+    return (payload) => {
+        dis._isDispatching = true;
+        dis._callbacks[store._dispatchToken](payload);
+        dis._isDispatching = false;
     };
 }

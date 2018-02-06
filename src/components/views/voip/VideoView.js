@@ -16,25 +16,29 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
-var sdk = require('../../../index');
-var dis = require('../../../dispatcher');
+import sdk from '../../../index';
+import dis from '../../../dispatcher';
+
+import SettingsStore from "../../../settings/SettingsStore";
 
 module.exports = React.createClass({
     displayName: 'VideoView',
 
     propTypes: {
         // maxHeight style attribute for the video element
-        maxHeight: React.PropTypes.number,
+        maxHeight: PropTypes.number,
 
         // a callback which is called when the user clicks on the video div
-        onClick: React.PropTypes.func,
+        onClick: PropTypes.func,
 
         // a callback which is called when the video element is resized due to
         // a change in video metadata
-        onResize: React.PropTypes.func,
+        onResize: PropTypes.func,
     },
 
     componentDidMount: function() {
@@ -53,9 +57,10 @@ module.exports = React.createClass({
         // this needs to be somewhere at the top of the DOM which
         // always exists to avoid audio interruptions.
         // Might as well just use DOM.
-        var remoteAudioElement = document.getElementById("remoteAudio");
+        const remoteAudioElement = document.getElementById("remoteAudio");
         if (!remoteAudioElement) {
-            console.error("Failed to find remoteAudio element - cannot play audio!  You need to add an <audio/> to the DOM.");
+            console.error("Failed to find remoteAudio element - cannot play audio!"
+                + "You need to add an <audio/> to the DOM.");
         }
         return remoteAudioElement;
     },
@@ -70,22 +75,21 @@ module.exports = React.createClass({
 
     onAction: function(payload) {
         switch (payload.action) {
-            case 'video_fullscreen':
+            case 'video_fullscreen': {
                 if (!this.container) {
                     return;
                 }
-                var element = this.container;
+                const element = this.container;
                 if (payload.fullscreen) {
-                    var requestMethod = (
+                    const requestMethod = (
                         element.requestFullScreen ||
                         element.webkitRequestFullScreen ||
                         element.mozRequestFullScreen ||
                         element.msRequestFullscreen
                     );
                     requestMethod.call(element);
-                }
-                else {
-                    var exitMethod = (
+                } else {
+                    const exitMethod = (
                         document.exitFullscreen ||
                         document.mozCancelFullScreen ||
                         document.webkitExitFullscreen ||
@@ -96,28 +100,33 @@ module.exports = React.createClass({
                     }
                 }
                 break;
+            }
         }
     },
 
     render: function() {
-        var VideoFeed = sdk.getComponent('voip.VideoFeed');
+        const VideoFeed = sdk.getComponent('voip.VideoFeed');
 
         // if we're fullscreen, we don't want to set a maxHeight on the video element.
-        var fullscreenElement = (document.fullscreenElement ||
+        const fullscreenElement = (document.fullscreenElement ||
                  document.mozFullScreenElement ||
                  document.webkitFullscreenElement);
-        var maxVideoHeight = fullscreenElement ? null : this.props.maxHeight;
-
+        const maxVideoHeight = fullscreenElement ? null : this.props.maxHeight;
+        const localVideoFeedClasses = classNames("mx_VideoView_localVideoFeed",
+            { "mx_VideoView_localVideoFeed_flipped":
+                SettingsStore.getValue('VideoView.flipVideoHorizontally'),
+            },
+        );
         return (
-            <div className="mx_VideoView" ref={this.setContainer} onClick={ this.props.onClick }>
+            <div className="mx_VideoView" ref={this.setContainer} onClick={this.props.onClick}>
                 <div className="mx_VideoView_remoteVideoFeed">
                     <VideoFeed ref="remote" onResize={this.props.onResize}
                         maxHeight={maxVideoHeight} />
                 </div>
-                <div className="mx_VideoView_localVideoFeed">                
-                    <VideoFeed ref="local"/>
+                <div className={localVideoFeedClasses}>
+                    <VideoFeed ref="local" />
                 </div>
             </div>
         );
-    }
+    },
 });

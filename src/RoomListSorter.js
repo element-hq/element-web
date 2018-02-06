@@ -19,18 +19,17 @@ limitations under the License.
 function tsOfNewestEvent(room) {
     if (room.timeline.length) {
         return room.timeline[room.timeline.length - 1].getTs();
-    }
-    else {
+    } else {
         return Number.MAX_SAFE_INTEGER;
     }
 }
 
 function mostRecentActivityFirst(roomList) {
-    return roomList.sort(function(a,b) {
+    return roomList.sort(function(a, b) {
         return tsOfNewestEvent(b) - tsOfNewestEvent(a);
     });
 }
 
 module.exports = {
-    mostRecentActivityFirst: mostRecentActivityFirst
+    mostRecentActivityFirst,
 };

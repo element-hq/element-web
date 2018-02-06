@@ -13,11 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-var React = require("react");
-var dis = require("../../../dispatcher");
-var CallHandler = require("../../../CallHandler");
-var sdk = require('../../../index');
-var MatrixClientPeg = require("../../../MatrixClientPeg");
+import React from 'react';
+import PropTypes from 'prop-types';
+import dis from '../../../dispatcher';
+import CallHandler from '../../../CallHandler';
+import sdk from '../../../index';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'CallView',
@@ -25,25 +27,25 @@ module.exports = React.createClass({
     propTypes: {
         // js-sdk room object. If set, we will only show calls for the given
         // room; if not, we will show any active call.
-        room: React.PropTypes.object,
+        room: PropTypes.object,
 
         // A Conference Handler implementation
         // Must have a function signature:
         //  getConferenceCallForRoom(roomId: string): MatrixCall
-        ConferenceHandler: React.PropTypes.object,
+        ConferenceHandler: PropTypes.object,
 
         // maxHeight style attribute for the video panel
-        maxVideoHeight: React.PropTypes.number,
+        maxVideoHeight: PropTypes.number,
 
         // a callback which is called when the user clicks on the video div
-        onClick: React.PropTypes.func,
+        onClick: PropTypes.func,
 
         // a callback which is called when the content in the callview changes
         // in a way that is likely to cause a resize.
-        onResize: React.PropTypes.func,
+        onResize: PropTypes.func,
 
         // render ongoing audio call details - useful when in LeftPanel
-        showVoice: React.PropTypes.bool,
+        showVoice: PropTypes.bool,
     },
 
     getInitialState: function() {
@@ -72,10 +74,10 @@ module.exports = React.createClass({
     },
 
     showCall: function() {
-        var call;
+        let call;
 
         if (this.props.room) {
-            var roomId = this.props.room.roomId;
+            const roomId = this.props.room.roomId;
             call = CallHandler.getCallForRoom(roomId) ||
                 (this.props.ConferenceHandler ?
                  this.props.ConferenceHandler.getConferenceCallForRoom(roomId) :
@@ -85,9 +87,7 @@ module.exports = React.createClass({
             if (this.call) {
                 this.setState({ call: call });
             }
-
-        }
-        else {
+        } else {
             call = CallHandler.getAnyActiveCall();
             this.setState({ call: call });
         }
@@ -108,8 +108,7 @@ module.exports = React.createClass({
                 call.confUserId ? "none" : "block"
             );
             this.getVideoView().getRemoteVideoElement().style.display = "block";
-        }
-        else {
+        } else {
             this.getVideoView().getLocalVideoElement().style.display = "none";
             this.getVideoView().getRemoteVideoElement().style.display = "none";
             dis.dispatch({action: 'video_fullscreen', fullscreen: false});
@@ -124,24 +123,28 @@ module.exports = React.createClass({
         return this.refs.video;
     },
 
-    render: function(){
-        var VideoView = sdk.getComponent('voip.VideoView');
+    render: function() {
+        const VideoView = sdk.getComponent('voip.VideoView');
 
-        var voice;
+        let voice;
         if (this.state.call && this.state.call.type === "voice" && this.props.showVoice) {
-            var callRoom = MatrixClientPeg.get().getRoom(this.state.call.roomId);
-            voice = <div className="mx_CallView_voice" onClick={ this.props.onClick }>Active call ({ callRoom.name })</div>;
+            const callRoom = MatrixClientPeg.get().getRoom(this.state.call.roomId);
+            voice = (
+                <div className="mx_CallView_voice" onClick={this.props.onClick}>
+                { _t("Active call (%(roomName)s)", {roomName: callRoom.name}) }
+                </div>
+            );
         }
 
         return (
             <div>
-                <VideoView ref="video" onClick={ this.props.onClick }
-                    onResize={ this.props.onResize }
-                    maxHeight={ this.props.maxVideoHeight }
+                <VideoView ref="video" onClick={this.props.onClick}
+                    onResize={this.props.onResize}
+                    maxHeight={this.props.maxVideoHeight}
                 />
                 { voice }
             </div>
         );
-    }
+    },
 });
 

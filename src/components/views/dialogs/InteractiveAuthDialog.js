@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,206 +15,94 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Matrix from 'matrix-js-sdk';
-const InteractiveAuth = Matrix.InteractiveAuth;
-
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
-import {getEntryComponentForLoginType} from '../login/InteractiveAuthEntryComponents';
+import AccessibleButton from '../elements/AccessibleButton';
 
 export default React.createClass({
     displayName: 'InteractiveAuthDialog',
 
     propTypes: {
+        // matrix client to use for UI auth requests
+        matrixClient: PropTypes.object.isRequired,
+
         // response from initial request. If not supplied, will do a request on
         // mount.
-        authData: React.PropTypes.shape({
-            flows: React.PropTypes.array,
-            params: React.PropTypes.object,
-            session: React.PropTypes.string,
+        authData: PropTypes.shape({
+            flows: PropTypes.array,
+            params: PropTypes.object,
+            session: PropTypes.string,
         }),
 
         // callback
-        makeRequest: React.PropTypes.func.isRequired,
+        makeRequest: PropTypes.func.isRequired,
 
-        onFinished: React.PropTypes.func.isRequired,
+        onFinished: PropTypes.func.isRequired,
 
-        title: React.PropTypes.string,
-        submitButtonLabel: React.PropTypes.string,
-    },
-
-    getDefaultProps: function() {
-        return {
-            title: "Authentication",
-            submitButtonLabel: "Submit",
-        };
+        title: PropTypes.string,
     },
 
     getInitialState: function() {
         return {
-            authStage: null,
-            busy: false,
-            errorText: null,
-            stageErrorText: null,
-            submitButtonEnabled: false,
+            authError: null,
         };
     },
 
-    componentWillMount: function() {
-        this._unmounted = false;
-        this._authLogic = new InteractiveAuth({
-            authData: this.props.authData,
-            doRequest: this._requestCallback,
-            startAuthStage: this._startAuthStage,
-        });
-
-        this._authLogic.attemptAuth().then((result) => {
+    _onAuthFinished: function(success, result) {
+        if (success) {
             this.props.onFinished(true, result);
-        }).catch((error) => {
-            console.error("Error during user-interactive auth:", error);
-            if (this._unmounted) {
-                return;
-            }
-
-            const msg = error.message || error.toString();
+        } else {
             this.setState({
-                errorText: msg
+                authError: result,
             });
-        }).done();
-    },
-
-    componentWillUnmount: function() {
-        this._unmounted = true;
-    },
-
-    _startAuthStage: function(stageType, error) {
-        this.setState({
-            authStage: stageType,
-            errorText: error ? error.error : null,
-        }, this._setFocus);
-    },
-
-    _requestCallback: function(auth) {
-        this.setState({
-            busy: true,
-            errorText: null,
-            stageErrorText: null,
-        });
-        return this.props.makeRequest(auth).finally(() => {
-            if (this._unmounted) {
-                return;
-            }
-            this.setState({
-                busy: false,
-            });
-        });
-    },
-
-    _onKeyDown: function(e) {
-        if (e.keyCode === 27) { // escape
-            e.stopPropagation();
-            e.preventDefault();
-            if (!this.state.busy) {
-                this._onCancel();
-            }
-        }
-        else if (e.keyCode === 13) { // enter
-            e.stopPropagation();
-            e.preventDefault();
-            if (this.state.submitButtonEnabled && !this.state.busy) {
-                this._onSubmit();
-            }
         }
     },
 
-    _onSubmit: function() {
-        if (this.refs.stageComponent && this.refs.stageComponent.onSubmitClick) {
-            this.refs.stageComponent.onSubmitClick();
-        }
-    },
-
-    _setFocus: function() {
-        if (this.refs.stageComponent && this.refs.stageComponent.focus) {
-            this.refs.stageComponent.focus();
-        }
-    },
-
-    _onCancel: function() {
+    _onDismissClick: function() {
         this.props.onFinished(false);
     },
 
-    _setSubmitButtonEnabled: function(enabled) {
-        this.setState({
-            submitButtonEnabled: enabled,
-        });
-    },
-
-    _submitAuthDict: function(authData) {
-        this._authLogic.submitAuthDict(authData);
-    },
-
-    _renderCurrentStage: function() {
-        const stage = this.state.authStage;
-        var StageComponent = getEntryComponentForLoginType(stage);
-        return (
-            <StageComponent ref="stageComponent"
-                loginType={stage}
-                authSessionId={this._authLogic.getSessionId()}
-                stageParams={this._authLogic.getStageParams(stage)}
-                submitAuthDict={this._submitAuthDict}
-                setSubmitButtonEnabled={this._setSubmitButtonEnabled}
-                errorText={this.state.stageErrorText}
-            />
-        );
-    },
-
     render: function() {
-        const Loader = sdk.getComponent("elements.Spinner");
+        const InteractiveAuth = sdk.getComponent("structures.InteractiveAuth");
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
-        let error = null;
-        if (this.state.errorText) {
-            error = (
-                <div className="error">
-                    {this.state.errorText}
+        let content;
+        if (this.state.authError) {
+            content = (
+                <div>
+                    <div>{ this.state.authError.message || this.state.authError.toString() }</div>
+                    <br />
+                    <AccessibleButton onClick={this._onDismissClick}
+                        className="mx_UserSettings_button"
+                    >
+                        { _t("Dismiss") }
+                    </AccessibleButton>
+                </div>
+            );
+        } else {
+            content = (
+                <div>
+                    <InteractiveAuth ref={this._collectInteractiveAuth}
+                        matrixClient={this.props.matrixClient}
+                        authData={this.props.authData}
+                        makeRequest={this.props.makeRequest}
+                        onAuthFinished={this._onAuthFinished}
+                    />
                 </div>
             );
         }
 
-        const submitLabel = this.state.busy ? <Loader /> : this.props.submitButtonLabel;
-        const submitEnabled = this.state.submitButtonEnabled && !this.state.busy;
-
-        const submitButton = (
-            <button className="mx_Dialog_primary"
-                onClick={this._onSubmit}
-                disabled={!submitEnabled}
-            >
-                {submitLabel}
-            </button>
-        );
-
-        const cancelButton = (
-            <button onClick={this._onCancel}>
-                Cancel
-            </button>
-        );
-
         return (
-            <div className="mx_InteractiveAuthDialog" onKeyDown={this._onKeyDown}>
-                <div className="mx_Dialog_title">
-                    {this.props.title}
-                </div>
-                <div className="mx_Dialog_content">
-                    <p>This operation requires additional authentication.</p>
-                    {this._renderCurrentStage()}
-                    {error}
-                </div>
-                <div className="mx_Dialog_buttons">
-                    {submitButton}
-                    {cancelButton}
-                </div>
-            </div>
+            <BaseDialog className="mx_InteractiveAuthDialog"
+                onFinished={this.props.onFinished}
+                title={this.state.authError ? 'Error' : (this.props.title || _t('Authentication'))}
+            >
+                { content }
+            </BaseDialog>
         );
     },
 });

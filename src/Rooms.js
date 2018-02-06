@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import MatrixClientPeg from './MatrixClientPeg';
-import DMRoomMap from './utils/DMRoomMap';
-import q from 'q';
+import Promise from 'bluebird';
 
 /**
  * Given a room object, return the alias we should use for it,
@@ -37,14 +36,14 @@ export function getOnlyOtherMember(room, me) {
 
     if (joinedMembers.length === 2) {
         return joinedMembers.filter(function(m) {
-            return m.userId !== me.userId
+            return m.userId !== me.userId;
         })[0];
     }
 
     return null;
 }
 
-export function isConfCallRoom(room, me, conferenceHandler) {
+function _isConfCallRoom(room, me, conferenceHandler) {
     if (!conferenceHandler) return false;
 
     if (me.membership != "join") {
@@ -59,12 +58,31 @@ export function isConfCallRoom(room, me, conferenceHandler) {
     if (conferenceHandler.isConferenceUser(otherMember.userId)) {
         return true;
     }
+
+    return false;
+}
+
+// Cache whether a room is a conference call. Assumes that rooms will always
+// either will or will not be a conference call room.
+const isConfCallRoomCache = {
+    // $roomId: bool
+};
+
+export function isConfCallRoom(room, me, conferenceHandler) {
+    if (isConfCallRoomCache[room.roomId] !== undefined) {
+        return isConfCallRoomCache[room.roomId];
+    }
+
+    const result = _isConfCallRoom(room, me, conferenceHandler);
+
+    isConfCallRoomCache[room.roomId] = result;
+
+    return result;
 }
 
 export function looksLikeDirectMessageRoom(room, me) {
     if (me.membership == "join" || me.membership === "ban" ||
-        (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey()))
-    {
+        (me.membership === "leave" && me.events.member.getSender() !== me.events.member.getStateKey())) {
         // Used to split rooms via tags
         const tagNames = Object.keys(room.tags);
         // Used for 1:1 direct chats
@@ -79,6 +97,20 @@ export function looksLikeDirectMessageRoom(room, me) {
     return false;
 }
 
+export function guessAndSetDMRoom(room, isDirect) {
+    let newTarget;
+    if (isDirect) {
+        const guessedTarget = guessDMRoomTarget(
+            room, room.getMember(MatrixClientPeg.get().credentials.userId),
+        );
+        newTarget = guessedTarget.userId;
+    } else {
+        newTarget = null;
+    }
+
+    return setDMRoom(room.roomId, newTarget);
+}
+
 /**
  * Marks or unmarks the given room as being as a DM room.
  * @param {string} roomId The ID of the room to modify
@@ -89,7 +121,7 @@ export function looksLikeDirectMessageRoom(room, me) {
  */
 export function setDMRoom(roomId, userId) {
     if (MatrixClientPeg.get().isGuest()) {
-        return q();
+        return Promise.resolve();
     }
 
     const mDirectEvent = MatrixClientPeg.get().getAccountData('m.direct');
@@ -131,7 +163,18 @@ export function guessDMRoomTarget(room, me) {
     let oldestTs;
     let oldestUser;
 
-    // Pick the user who's been here longest (and isn't us)
+    // Pick the joined user who's been here longest (and isn't us),
+    for (const user of room.getJoinedMembers()) {
+        if (user.userId == me.userId) continue;
+
+        if (oldestTs === undefined || user.events.member.getTs() < oldestTs) {
+            oldestUser = user;
+            oldestTs = user.events.member.getTs();
+        }
+    }
+    if (oldestUser) return oldestUser;
+
+    // if there are no joined members other than us, use the oldest member
     for (const user of room.currentState.getMembers()) {
         if (user.userId == me.userId) continue;
 

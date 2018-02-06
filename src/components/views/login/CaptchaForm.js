@@ -16,8 +16,12 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var DIV_ID = 'mx_recaptcha';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+import { _t } from '../../../languageHandler';
+
+const DIV_ID = 'mx_recaptcha';
 
 /**
  * A pure UI component which displays a captcha form.
@@ -26,10 +30,10 @@ module.exports = React.createClass({
     displayName: 'CaptchaForm',
 
     propTypes: {
-        sitePublicKey: React.PropTypes.string,
+        sitePublicKey: PropTypes.string,
 
         // called with the captcha response
-        onCaptchaResponse: React.PropTypes.func,
+        onCaptchaResponse: PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -44,6 +48,10 @@ module.exports = React.createClass({
         };
     },
 
+    componentWillMount: function() {
+        this._captchaWidgetId = null;
+    },
+
     componentDidMount: function() {
         // Just putting a script tag into the returned jsx doesn't work, annoyingly,
         // so we do this instead.
@@ -52,13 +60,31 @@ module.exports = React.createClass({
             this._onCaptchaLoaded();
         } else {
             console.log("Loading recaptcha script...");
-            var scriptTag = document.createElement('script');
-            window.mx_on_recaptcha_loaded = () => {this._onCaptchaLoaded()};
-            scriptTag.setAttribute(
-                'src', global.location.protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit"
-            );
-            this.refs.recaptchaContainer.appendChild(scriptTag);
+            window.mx_on_recaptcha_loaded = () => {this._onCaptchaLoaded();};
+            const protocol = global.location.protocol;
+            if (protocol === "file:") {
+                const warning = document.createElement('div');
+                // XXX: fix hardcoded app URL.  Better solutions include:
+                // * jumping straight to a hosted captcha page (but we don't support that yet)
+                // * embedding the captcha in an iframe (if that works)
+                // * using a better captcha lib
+                ReactDOM.render(_t(
+                    "Robot check is currently unavailable on desktop - please use a <a>web browser</a>",
+                    {},
+                    { 'a': (sub) => { return <a href='https://riot.im/app'>{ sub }</a>; }}), warning);
+                this.refs.recaptchaContainer.appendChild(warning);
+            } else {
+                const scriptTag = document.createElement('script');
+                scriptTag.setAttribute(
+                    'src', protocol+"//www.google.com/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit",
+                );
+                this.refs.recaptchaContainer.appendChild(scriptTag);
+            }
         }
+    },
+
+    componentWillUnmount: function() {
+        this._resetRecaptcha();
     },
 
     _renderRecaptcha: function(divId) {
@@ -67,7 +93,7 @@ module.exports = React.createClass({
             throw new Error("Recaptcha did not load successfully");
         }
 
-        var publicKey = this.props.sitePublicKey;
+        const publicKey = this.props.sitePublicKey;
         if (!publicKey) {
             console.error("No public key for recaptcha!");
             throw new Error(
@@ -76,10 +102,16 @@ module.exports = React.createClass({
         }
 
         console.log("Rendering to %s", divId);
-        global.grecaptcha.render(divId, {
+        this._captchaWidgetId = global.grecaptcha.render(divId, {
             sitekey: publicKey,
             callback: this.props.onCaptchaResponse,
         });
+    },
+
+    _resetRecaptcha: function() {
+        if (this._captchaWidgetId !== null) {
+            global.grecaptcha.reset(this._captchaWidgetId);
+        }
     },
 
     _onCaptchaLoaded: function() {
@@ -89,7 +121,7 @@ module.exports = React.createClass({
         } catch (e) {
             this.setState({
                 errorText: e.toString(),
-            })
+            });
         }
     },
 
@@ -98,17 +130,18 @@ module.exports = React.createClass({
         if (this.state.errorText) {
             error = (
                 <div className="error">
-                    {this.state.errorText}
+                    { this.state.errorText }
                 </div>
             );
         }
 
         return (
             <div ref="recaptchaContainer">
-                This Home Server would like to make sure you are not a robot
+                { _t("This Home Server would like to make sure you are not a robot") }
+                <br />
                 <div id={DIV_ID}></div>
-                {error}
+                { error }
             </div>
         );
-    }
+    },
 });

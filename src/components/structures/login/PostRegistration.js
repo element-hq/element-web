@@ -16,22 +16,24 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sdk = require('../../../index');
-var MatrixClientPeg = require('../../../MatrixClientPeg');
+import React from 'react';
+import PropTypes from 'prop-types';
+import sdk from '../../../index';
+import MatrixClientPeg from '../../../MatrixClientPeg';
+import { _t } from '../../../languageHandler';
 
 module.exports = React.createClass({
     displayName: 'PostRegistration',
 
     propTypes: {
-        onComplete: React.PropTypes.func.isRequired
+        onComplete: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
         return {
             avatarUrl: null,
             errorString: null,
-            busy: false
+            busy: false,
         };
     },
 
@@ -39,41 +41,42 @@ module.exports = React.createClass({
         // There is some assymetry between ChangeDisplayName and ChangeAvatar,
         // as ChangeDisplayName will auto-get the name but ChangeAvatar expects
         // the URL to be passed to you (because it's also used for room avatars).
-        var cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.get();
         this.setState({busy: true});
-        var self = this;
+        const self = this;
         cli.getProfileInfo(cli.credentials.userId).done(function(result) {
             self.setState({
                 avatarUrl: MatrixClientPeg.get().mxcUrlToHttp(result.avatar_url),
-                busy: false
+                busy: false,
             });
         }, function(error) {
             self.setState({
-                errorString: "Failed to fetch avatar URL",
-                busy: false
+                errorString: _t("Failed to fetch avatar URL"),
+                busy: false,
             });
         });
     },
 
     render: function() {
-        var ChangeDisplayName = sdk.getComponent('settings.ChangeDisplayName');
-        var ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
-        var LoginHeader = sdk.getComponent('login.LoginHeader');
+        const ChangeDisplayName = sdk.getComponent('settings.ChangeDisplayName');
+        const ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
+        const LoginPage = sdk.getComponent('login.LoginPage');
+        const LoginHeader = sdk.getComponent('login.LoginHeader');
         return (
-            <div className="mx_Login">
+            <LoginPage>
                 <div className="mx_Login_box">
                     <LoginHeader />
                     <div className="mx_Login_profile">
-                        Set a display name:
+                        { _t('Set a display name:') }
                         <ChangeDisplayName />
-                        Upload an avatar:
+                        { _t('Upload an avatar:') }
                         <ChangeAvatar
                             initialAvatarUrl={this.state.avatarUrl} />
-                        <button onClick={this.props.onComplete}>Continue</button>
-                        {this.state.errorString}
+                        <button onClick={this.props.onComplete}>{ _t('Continue') }</button>
+                        { this.state.errorString }
                     </div>
                 </div>
-            </div>
+            </LoginPage>
         );
-    }
+    },
 });

@@ -15,107 +15,99 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
 import Modal from '../../../Modal';
+import { _t } from '../../../languageHandler';
 
 export default React.createClass({
     displayName: 'DeviceVerifyButtons',
 
     propTypes: {
-        userId: React.PropTypes.string.isRequired,
-        device: React.PropTypes.object.isRequired,
+        userId: PropTypes.string.isRequired,
+        device: PropTypes.object.isRequired,
+    },
+
+    getInitialState: function() {
+        return {
+            device: this.props.device,
+        };
+    },
+
+    componentWillMount: function() {
+        const cli = MatrixClientPeg.get();
+        cli.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
+    },
+
+    componentWillUnmount: function() {
+        const cli = MatrixClientPeg.get();
+        cli.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
+    },
+
+    onDeviceVerificationChanged: function(userId, deviceId, deviceInfo) {
+        if (userId === this.props.userId && deviceId === this.props.device.deviceId) {
+            this.setState({ device: deviceInfo });
+        }
     },
 
     onVerifyClick: function() {
-        var QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        Modal.createDialog(QuestionDialog, {
-            title: "Verify device",
-            description: (
-                <div>
-                    <p>
-                        To verify that this device can be trusted, please contact its
-                        owner using some other means (e.g. in person or a phone call)
-                        and ask them whether the key they see in their User Settings
-                        for this device matches the key below:
-                    </p>
-                    <div className="mx_UserSettings_cryptoSection">
-                        <ul>
-                            <li><label>Device name:</label> <span>{ this.props.device.getDisplayName() }</span></li>
-                            <li><label>Device ID:</label>   <span><code>{ this.props.device.deviceId}</code></span></li>
-                            <li><label>Device key:</label>  <span><code><b>{ this.props.device.getFingerprint() }</b></code></span></li>
-                        </ul>
-                    </div>
-                    <p>
-                        If it matches, press the verify button below.
-                        If it doesnt, then someone else is intercepting this device
-                        and you probably want to press the blacklist button instead.
-                    </p>
-                    <p>
-                        In future this verification process will be more sophisticated.
-                    </p>
-                </div>
-            ),
-            button: "I verify that the keys match",
-            onFinished: confirm=>{
-                if (confirm) {
-                    MatrixClientPeg.get().setDeviceVerified(
-                        this.props.userId, this.props.device.deviceId, true
-                    );
-                }
-            },
+        const DeviceVerifyDialog = sdk.getComponent('views.dialogs.DeviceVerifyDialog');
+        Modal.createTrackedDialog('Device Verify Dialog', '', DeviceVerifyDialog, {
+            userId: this.props.userId,
+            device: this.state.device,
         });
     },
 
     onUnverifyClick: function() {
         MatrixClientPeg.get().setDeviceVerified(
-            this.props.userId, this.props.device.deviceId, false
+            this.props.userId, this.state.device.deviceId, false,
         );
     },
 
     onBlacklistClick: function() {
         MatrixClientPeg.get().setDeviceBlocked(
-            this.props.userId, this.props.device.deviceId, true
+            this.props.userId, this.state.device.deviceId, true,
         );
     },
 
     onUnblacklistClick: function() {
         MatrixClientPeg.get().setDeviceBlocked(
-            this.props.userId, this.props.device.deviceId, false
+            this.props.userId, this.state.device.deviceId, false,
         );
     },
 
     render: function() {
-        var blacklistButton = null, verifyButton = null;
+        let blacklistButton = null, verifyButton = null;
 
-        if (this.props.device.isBlocked()) {
+        if (this.state.device.isBlocked()) {
             blacklistButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unblacklist"
                   onClick={this.onUnblacklistClick}>
-                    Unblacklist
+                    { _t("Unblacklist") }
                 </button>
             );
         } else {
             blacklistButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_blacklist"
                   onClick={this.onBlacklistClick}>
-                    Blacklist
+                    { _t("Blacklist") }
                 </button>
             );
         }
 
-        if (this.props.device.isVerified()) {
+        if (this.state.device.isVerified()) {
             verifyButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_unverify"
                   onClick={this.onUnverifyClick}>
-                    Unverify
+                    { _t("Unverify") }
                 </button>
             );
         } else {
             verifyButton = (
                 <button className="mx_MemberDeviceInfo_textButton mx_MemberDeviceInfo_verify"
                   onClick={this.onVerifyClick}>
-                    Verify...
+                    { _t("Verify...") }
                 </button>
             );
         }

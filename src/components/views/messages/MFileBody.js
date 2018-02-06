@@ -17,21 +17,22 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import filesize from 'filesize';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 import {decryptFile} from '../../../utils/DecryptFile';
 import Tinter from '../../../Tinter';
 import request from 'browser-request';
-import q from 'q';
 import Modal from '../../../Modal';
 
 
 // A cached tinted copy of "img/download.svg"
-var tintedDownloadImageURL;
+let tintedDownloadImageURL;
 // Track a list of mounted MFileBody instances so that we can update
 // the "img/download.svg" when the tint changes.
-var nextMountId = 0;
+let nextMountId = 0;
 const mounts = {};
 
 /**
@@ -169,11 +170,11 @@ function computedStyle(element) {
         return "";
     }
     const style = window.getComputedStyle(element, null);
-    var cssText = style.cssText;
+    let cssText = style.cssText;
     if (cssText == "") {
         // Firefox doesn't implement ".cssText" for computed styles.
         // https://bugzilla.mozilla.org/show_bug.cgi?id=137687
-        for (var i = 0; i < style.length; i++) {
+        for (let i = 0; i < style.length; i++) {
             cssText += style[i] + ":";
             cssText += style.getPropertyValue(style[i]) + ";";
         }
@@ -191,7 +192,7 @@ module.exports = React.createClass({
     },
 
     contextTypes: {
-        appConfig: React.PropTypes.object,
+        appConfig: PropTypes.object,
     },
 
     /**
@@ -202,7 +203,7 @@ module.exports = React.createClass({
      * @return {string} the human readable link text for the attachment.
      */
     presentableTextForFile: function(content) {
-        var linkText = 'Attachment';
+        let linkText = _t("Attachment");
         if (content.body && content.body.length > 0) {
             // The content body should be the name of the file including a
             // file extension.
@@ -261,7 +262,7 @@ module.exports = React.createClass({
         const content = this.props.mxEvent.getContent();
         const text = this.presentableTextForFile(content);
         const isEncrypted = content.file !== undefined;
-        const fileName = content.body && content.body.length > 0 ? content.body : "Attachment";
+        const fileName = content.body && content.body.length > 0 ? content.body : _t("Attachment");
         const contentUrl = this._getContentUrl();
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
@@ -270,7 +271,7 @@ module.exports = React.createClass({
                 // Need to decrypt the attachment
                 // Wait for the user to click on the link before downloading
                 // and decrypting the attachment.
-                var decrypting = false;
+                let decrypting = false;
                 const decrypt = () => {
                     if (decrypting) {
                         return false;
@@ -281,9 +282,10 @@ module.exports = React.createClass({
                             decryptedBlob: blob,
                         });
                     }).catch((err) => {
-                        console.warn("Unable to decrypt attachment: ", err)
-                        Modal.createDialog(ErrorDialog, {
-                            description: "Error decrypting attachment"
+                        console.warn("Unable to decrypt attachment: ", err);
+                        Modal.createTrackedDialog('Error decrypting attachment', '', ErrorDialog, {
+                            title: _t("Error"),
+                            description: _t("Error decrypting attachment"),
                         });
                     }).finally(() => {
                         decrypting = false;
@@ -293,9 +295,9 @@ module.exports = React.createClass({
 
                 return (
                     <span className="mx_MFileBody" ref="body">
-                        <div className="mx_MImageBody_download">
+                        <div className="mx_MFileBody_download">
                             <a href="javascript:void(0)" onClick={decrypt}>
-                                Decrypt {text}
+                                { _t("Decrypt %(text)s", { text: text }) }
                             </a>
                         </div>
                     </span>
@@ -314,7 +316,7 @@ module.exports = React.createClass({
                     // We can't provide a Content-Disposition header like we would for HTTP.
                     download: fileName,
                     target: "_blank",
-                    textContent: "Download " + text,
+                    textContent: _t("Download %(text)s", { text: text }),
                 }, "*");
             };
 
@@ -325,16 +327,16 @@ module.exports = React.createClass({
             }
             return (
                 <span className="mx_MFileBody">
-                    <div className="mx_MImageBody_download">
+                    <div className="mx_MFileBody_download">
                         <div style={{display: "none"}}>
-                            {/*
+                            { /*
                               * Add dummy copy of the "a" tag
                               * We'll use it to learn how the download link
                               * would have been styled if it was rendered inline.
-                              */}
-                            <a ref="dummyLink"/>
+                              */ }
+                            <a ref="dummyLink" />
                         </div>
-                        <iframe src={renderer_url} onLoad={onIframeLoad} ref="iframe"/>
+                        <iframe src={renderer_url} onLoad={onIframeLoad} ref="iframe" />
                     </div>
                 </span>
             );
@@ -345,8 +347,8 @@ module.exports = React.createClass({
             if (this.props.tileShape === "file_grid") {
                 return (
                     <span className="mx_MFileBody">
-                        <div className="mx_MImageBody_download">
-                            <a className="mx_ImageBody_downloadLink" href={contentUrl} target="_blank">
+                        <div className="mx_MFileBody_download">
+                            <a className="mx_ImageBody_downloadLink" href={contentUrl} download={fileName} target="_blank">
                                 { fileName }
                             </a>
                             <div className="mx_MImageBody_size">
@@ -355,24 +357,23 @@ module.exports = React.createClass({
                         </div>
                     </span>
                 );
-            }
-            else {
+            } else {
                 return (
                     <span className="mx_MFileBody">
-                        <div className="mx_MImageBody_download">
-                            <a href={contentUrl} target="_blank" rel="noopener">
-                                <img src={tintedDownloadImageURL} width="12" height="14" ref="downloadImage"/>
-                                Download {text}
+                        <div className="mx_MFileBody_download">
+                            <a href={contentUrl} download={fileName} target="_blank" rel="noopener">
+                                <img src={tintedDownloadImageURL} width="12" height="14" ref="downloadImage" />
+                                { _t("Download %(text)s", { text: text }) }
                             </a>
                         </div>
                     </span>
                 );
             }
         } else {
-            var extra = text ? (': ' + text) : '';
+            const extra = text ? (': ' + text) : '';
             return <span className="mx_MFileBody">
-                Invalid file{extra}
-            </span>
+                { _t("Invalid file%(extra)s", { extra: extra }) }
+            </span>;
         }
     },
 });

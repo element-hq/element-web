@@ -16,19 +16,21 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sdk = require('../../../index');
+const React = require('react');
+import PropTypes from 'prop-types';
+const sdk = require('../../../index');
+import { _t } from "../../../languageHandler";
 
 module.exports = React.createClass({
     displayName: 'RoomTopicEditor',
 
     propTypes: {
-        room: React.PropTypes.object.isRequired,
+        room: PropTypes.object.isRequired,
     },
 
     componentWillMount: function() {
-        var room = this.props.room;
-        var topic = room.currentState.getStateEvents('m.room.topic', '');
+        const room = this.props.room;
+        const topic = room.currentState.getStateEvents('m.room.topic', '');
         this._initialTopic = topic ? topic.getContent().topic : '';
     },
 
@@ -37,15 +39,16 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var EditableText = sdk.getComponent("elements.EditableText");
+        const EditableText = sdk.getComponent("elements.EditableText");
 
         return (
                 <EditableText ref="editor"
                      className="mx_RoomHeader_topic mx_RoomHeader_editable"
                      placeholderClassName="mx_RoomHeader_placeholder"
-                     placeholder="Add a topic"
-                     blurToCancel={ false }
-                     initialValue={ this._initialTopic }/>
+                     placeholder={_t("Add a topic")}
+                     blurToCancel={false}
+                     initialValue={this._initialTopic}
+                     dir="auto" />
         );
     },
 });

@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,27 +15,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var React = require("react");
+import React from 'react';
+import PropTypes from 'prop-types';
+import sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 
-module.exports = React.createClass({
+export default React.createClass({
     displayName: 'QuestionDialog',
     propTypes: {
-        title: React.PropTypes.string,
-        description: React.PropTypes.oneOfType([
-            React.PropTypes.element,
-            React.PropTypes.string,
-        ]),
-        button: React.PropTypes.string,
-        focus: React.PropTypes.bool,
-        onFinished: React.PropTypes.func.isRequired,
+        title: PropTypes.string,
+        description: PropTypes.node,
+        extraButtons: PropTypes.node,
+        button: PropTypes.string,
+        danger: PropTypes.bool,
+        focus: PropTypes.bool,
+        onFinished: PropTypes.func.isRequired,
     },
 
     getDefaultProps: function() {
         return {
             title: "",
             description: "",
-            button: "OK",
+            extraButtons: null,
             focus: true,
+            hasCancelButton: true,
+            danger: false,
         };
     },
 
@@ -46,38 +51,30 @@ module.exports = React.createClass({
         this.props.onFinished(false);
     },
 
-    onKeyDown: function(e) {
-        if (e.keyCode === 27) { // escape
-            e.stopPropagation();
-            e.preventDefault();
-            this.props.onFinished(false);
-        }
-        else if (e.keyCode === 13) { // enter
-            e.stopPropagation();
-            e.preventDefault();
-            this.props.onFinished(true);
-        }
-    },
-
     render: function() {
+        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+        let primaryButtonClass = "";
+        if (this.props.danger) {
+            primaryButtonClass = "danger";
+        }
         return (
-            <div className="mx_QuestionDialog" onKeyDown={ this.onKeyDown }>
-                <div className="mx_Dialog_title">
-                    {this.props.title}
-                </div>
+            <BaseDialog className="mx_QuestionDialog" onFinished={this.props.onFinished}
+                onEnterPressed={this.onOk}
+                title={this.props.title}
+            >
                 <div className="mx_Dialog_content">
-                    {this.props.description}
+                    { this.props.description }
                 </div>
-                <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.onOk} autoFocus={this.props.focus}>
-                        {this.props.button}
-                    </button>
-
-                    <button onClick={this.onCancel}>
-                        Cancel
-                    </button>
-                </div>
-            </div>
+                <DialogButtons primaryButton={this.props.button || _t('OK')}
+                    onPrimaryButtonClick={this.onOk}
+                    primaryButtonClass={primaryButtonClass}
+                    focus={this.props.focus}
+                    onCancel={this.onCancel}
+                >
+                    { this.props.extraButtons }
+                </DialogButtons>
+            </BaseDialog>
         );
-    }
+    },
 });

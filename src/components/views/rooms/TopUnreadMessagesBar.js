@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 Vector Creations Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,15 +17,17 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
-var sdk = require('../../../index');
+const React = require('react');
+import PropTypes from 'prop-types';
+import { _t } from '../../../languageHandler';
+const sdk = require('../../../index');
 
 module.exports = React.createClass({
     displayName: 'TopUnreadMessagesBar',
 
     propTypes: {
-        onScrollUpClick: React.PropTypes.func,
-        onCloseClick: React.PropTypes.func,
+        onScrollUpClick: PropTypes.func,
+        onCloseClick: PropTypes.func,
     },
 
     render: function() {
@@ -32,17 +35,16 @@ module.exports = React.createClass({
             <div className="mx_TopUnreadMessagesBar">
                 <div className="mx_TopUnreadMessagesBar_scrollUp"
                         onClick={this.props.onScrollUpClick}>
-                    <img src="img/scrollup.svg" width="24" height="24"
-                        alt="Scroll to unread messages"
-                        title="Scroll to unread messages"/>
-                    Unread messages. <span style={{ textDecoration: 'underline' }} onClick={this.props.onCloseClick}>Mark all read</span>
+                    <img src="img/scrollto.svg" width="24" height="24"
+                        alt={_t('Scroll to unread messages')}
+                        title={_t('Scroll to unread messages')} />
+                    { _t("Jump to first unread message.") }
                 </div>
-                <img className="mx_TopUnreadMessagesBar_close"
+                <img className="mx_TopUnreadMessagesBar_close mx_filterFlipColor"
                     src="img/cancel.svg" width="18" height="18"
-                    alt="Close" title="Close"
+                    alt={_t("Close")} title={_t("Close")}
                     onClick={this.props.onCloseClick} />
             </div>
         );
     },
 });
-

@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2017 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,15 +15,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {getAddressType, inviteToRoom} from '../Invite';
-import q from 'q';
+import MatrixClientPeg from '../MatrixClientPeg';
+import {getAddressType} from '../UserAddress';
+import {inviteToRoom} from '../RoomInvite';
+import GroupStoreCache from '../stores/GroupStoreCache';
+import Promise from 'bluebird';
 
 /**
- * Invites multiple addresses to a room, handling rate limiting from the server
+ * Invites multiple addresses to a room or group, handling rate limiting from the server
  */
 export default class MultiInviter {
-    constructor(roomId) {
-        this.roomId = roomId;
+    /**
+     * @param {string} targetId The ID of the room or group to invite to
+     */
+    constructor(targetId) {
+        if (targetId[0] === '+') {
+            this.roomId = null;
+            this.groupId = targetId;
+        } else {
+            this.roomId = targetId;
+            this.groupId = null;
+        }
 
         this.canceled = false;
         this.addrs = [];
@@ -35,10 +48,6 @@ export default class MultiInviter {
     /**
      * Invite users to this room. This may only be called once per
      * instance of the class.
-     *
-     * The promise is given progress when each address completes, with an
-     * object argument with each completed address with value either
-     * 'invited' or 'error'.
      *
      * @param {array} addresses Array of addresses to invite
      * @returns {Promise} Resolved when all invitations in the queue are complete
@@ -55,7 +64,7 @@ export default class MultiInviter {
                 this.errorTexts[addr] = 'Unrecognised address';
             }
         }
-        this.deferred = q.defer();
+        this.deferred = Promise.defer();
         this._inviteMore(0);
 
         return this.deferred.promise;
@@ -107,11 +116,19 @@ export default class MultiInviter {
             return;
         }
 
-        inviteToRoom(this.roomId, addr).then(() => {
+        let doInvite;
+        if (this.groupId !== null) {
+            doInvite = GroupStoreCache
+                .getGroupStore(this.groupId)
+                .inviteUserToGroup(addr);
+        } else {
+            doInvite = inviteToRoom(this.roomId, addr);
+        }
+
+        doInvite.then(() => {
             if (this._canceled) { return; }
 
             this.completionStates[addr] = 'invited';
-            this.deferred.notify(this.completionStates);
 
             this._inviteMore(nextIndex + 1);
         }, (err) => {
@@ -136,7 +153,6 @@ export default class MultiInviter {
             this.busy = !fatal;
 
             if (!fatal) {
-                this.deferred.notify(this.completionStates);
                 this._inviteMore(nextIndex + 1);
             }
         });

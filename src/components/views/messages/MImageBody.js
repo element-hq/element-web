@@ -17,6 +17,7 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import MFileBody from './MFileBody';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import ImageUtils from '../../../ImageUtils';
@@ -24,17 +25,19 @@ import Modal from '../../../Modal';
 import sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { decryptFile, readBlobAsDataUri } from '../../../utils/DecryptFile';
-import q from 'q';
+import Promise from 'bluebird';
+import { _t } from '../../../languageHandler';
+import SettingsStore from "../../../settings/SettingsStore";
 
 module.exports = React.createClass({
     displayName: 'MImageBody',
 
     propTypes: {
         /* the MatrixEvent to show */
-        mxEvent: React.PropTypes.object.isRequired,
+        mxEvent: PropTypes.object.isRequired,
 
         /* called when the image has loaded */
-        onWidgetLoad: React.PropTypes.func.isRequired,
+        onWidgetLoad: PropTypes.func.isRequired,
     },
 
     getInitialState: function() {
@@ -42,7 +45,7 @@ module.exports = React.createClass({
             decryptedUrl: null,
             decryptedThumbnailUrl: null,
             decryptedBlob: null,
-            error: null
+            error: null,
         };
     },
 
@@ -55,7 +58,8 @@ module.exports = React.createClass({
             const ImageView = sdk.getComponent("elements.ImageView");
             const params = {
                 src: httpUrl,
-                mxEvent: this.props.mxEvent
+                name: content.body && content.body.length > 0 ? content.body : _t('Attachment'),
+                mxEvent: this.props.mxEvent,
             };
 
             if (content.info) {
@@ -70,22 +74,26 @@ module.exports = React.createClass({
 
     _isGif: function() {
         const content = this.props.mxEvent.getContent();
-        return (content && content.info && content.info.mimetype === "image/gif");
+        return (
+          content &&
+          content.info &&
+          content.info.mimetype === "image/gif"
+        );
     },
 
     onImageEnter: function(e) {
-        if (!this._isGif()) {
+        if (!this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
-        var imgElement = e.target;
+        const imgElement = e.target;
         imgElement.src = this._getContentUrl();
     },
 
     onImageLeave: function(e) {
-        if (!this._isGif()) {
+        if (!this._isGif() || SettingsStore.getValue("autoplayGifsAndVideos")) {
             return;
         }
-        var imgElement = e.target;
+        const imgElement = e.target;
         imgElement.src = this._getThumbUrl();
     },
 
@@ -101,6 +109,7 @@ module.exports = React.createClass({
     _getThumbUrl: function() {
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined) {
+            // Don't use the thumbnail for clients wishing to autoplay gifs.
             if (this.state.decryptedThumbnailUrl) {
                 return this.state.decryptedThumbnailUrl;
             }
@@ -115,15 +124,15 @@ module.exports = React.createClass({
         this.fixupHeight();
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            var thumbnailPromise = q(null);
+            let thumbnailPromise = Promise.resolve(null);
             if (content.info.thumbnail_file) {
                 thumbnailPromise = decryptFile(
-                    content.info.thumbnail_file
-                ).then(function (blob) {
+                    content.info.thumbnail_file,
+                ).then(function(blob) {
                     return readBlobAsDataUri(blob);
                 });
             }
-            var decryptedBlob;
+            let decryptedBlob;
             thumbnailPromise.then((thumbnailUrl) => {
                 return decryptFile(content.file).then(function(blob) {
                     decryptedBlob = blob;
@@ -168,7 +177,7 @@ module.exports = React.createClass({
         // the alternative here would be 600*timelineWidth/800; to scale them down to fit inside a 4:3 bounding box
 
         //console.log("trying to fit image into timelineWidth of " + this.refs.body.offsetWidth + " or " + this.refs.body.clientWidth);
-        var thumbHeight = null;
+        let thumbHeight = null;
         if (content.info) {
             thumbHeight = ImageUtils.thumbHeight(content.info.w, content.info.h, timelineWidth, maxHeight);
         }
@@ -183,14 +192,13 @@ module.exports = React.createClass({
         if (this.state.error !== null) {
             return (
                 <span className="mx_MImageBody" ref="body">
-                    <img src="img/warning.svg" width="16" height="16"/>
-                    Error decrypting image
+                    <img src="img/warning.svg" width="16" height="16" />
+                    { _t("Error decrypting image") }
                 </span>
             );
         }
 
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-
             // Need to decrypt the attachment
             // The attachment is decrypted in componentDidMount.
             // For now add an img tag with a spinner.
@@ -203,21 +211,27 @@ module.exports = React.createClass({
                     }}>
                         <img src="img/spinner.gif" alt={content.body} width="32" height="32" style={{
                             "margin": "auto",
-                        }}/>
+                        }} />
                     </div>
                 </span>
             );
         }
 
         const contentUrl = this._getContentUrl();
-        const thumbUrl = this._getThumbUrl();
+        let thumbUrl;
+        if (this._isGif() && SettingsStore.getValue("autoplayGifsAndVideos")) {
+          thumbUrl = contentUrl;
+        } else {
+          thumbUrl = this._getThumbUrl();
+        }
 
         if (thumbUrl) {
             return (
                 <span className="mx_MImageBody" ref="body">
-                    <a href={contentUrl} onClick={ this.onClick }>
+                    <a href={contentUrl} onClick={this.onClick}>
                         <img className="mx_MImageBody_thumbnail" src={thumbUrl} ref="image"
                             alt={content.body}
+                            onLoad={this.props.onWidgetLoad}
                             onMouseEnter={this.onImageEnter}
                             onMouseLeave={this.onImageLeave} />
                     </a>
@@ -227,13 +241,13 @@ module.exports = React.createClass({
         } else if (content.body) {
             return (
                 <span className="mx_MImageBody">
-                    Image '{content.body}' cannot be displayed.
+                    { _t("Image '%(Body)s' cannot be displayed.", {Body: content.body}) }
                 </span>
             );
         } else {
             return (
                 <span className="mx_MImageBody">
-                    This image cannot be displayed.
+                    { _t("This image cannot be displayed.") }
                 </span>
             );
         }
