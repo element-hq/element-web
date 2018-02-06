@@ -24,7 +24,6 @@ import { MatrixClient } from 'matrix-js-sdk';
 import { KeyCode } from 'matrix-react-sdk/lib/Keyboard';
 import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
-import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
 import VectorConferenceHandler from '../../VectorConferenceHandler';
 
 import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
@@ -206,7 +205,7 @@ var LeftPanel = React.createClass({
 
         dis.dispatch(RoomListActions.tagRoom(
             this.context.matrixClient,
-            MatrixClientPeg.get().getRoom(roomId),
+            this.context.matrixClient.getRoom(roomId),
             prevTag, newTag,
             oldIndex, newIndex,
         ), true);
@@ -223,7 +222,7 @@ var LeftPanel = React.createClass({
         const CallPreview = sdk.getComponent('voip.CallPreview');
 
         let topBox;
-        if (MatrixClientPeg.get().isGuest()) {
+        if (this.context.matrixClient.isGuest()) {
             const LoginBox = sdk.getComponent('structures.LoginBox');
             topBox = <LoginBox collapsed={ this.props.collapsed }/>;
         } else {
