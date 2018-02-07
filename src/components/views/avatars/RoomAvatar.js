@@ -122,7 +122,7 @@ module.exports = React.createClass({
                 return mlist[leftUserIds[0]].getAvatarUrl(
                     MatrixClientPeg.get().getHomeserverUrl(),
                     props.width, props.height, props.resizeMethod,
-                        false
+                    false,
                 );
             }
             return mlist[userIds[0]].getAvatarUrl(
