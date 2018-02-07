@@ -658,5 +658,7 @@
     "You are no longer ignoring %(userId)s": "Você parou de ignorar %(userId)s",
     "Edit": "Editar",
     "Unpin Message": "Desafixar Mensagem",
-    "Add rooms to this community": "Adicionar salas na comunidade"
+    "Add rooms to this community": "Adicionar salas na comunidade",
+    "The version of Riot.im": "A Versão do Riot.im",
+    "Whether or not you're logged in (we don't record your user name)": "Se você está ou não conectado (Nos não Gravaremos seu nome de usuário)"
 }
