@@ -25,8 +25,6 @@ import sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import dis from '../../../dispatcher';
-import TintableSvgButton from '../elements/TintableSvgButton';
-
 
 export default class Stickerpack extends React.Component {
     constructor(props) {

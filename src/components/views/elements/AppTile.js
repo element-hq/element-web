@@ -37,8 +37,6 @@ import dis from '../../../dispatcher';
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 
 export default class AppTile extends React.Component {
-    static displayName ='AppTile';
-
     constructor(props) {
         super(props);
         this.state = this._getNewState(props);
@@ -578,6 +576,8 @@ export default class AppTile extends React.Component {
         );
     }
 }
+
+AppTile.displayName ='AppTile';
 
 AppTile.propTypes = {
     id: React.PropTypes.string.isRequired,
