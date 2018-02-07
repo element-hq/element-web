@@ -108,6 +108,10 @@ limitations under the License.
     padding-top: 2px;
 }
 
+.mx_MessageComposer .public-DraftStyleDefault-block {
+    overflow-x: hidden;
+}
+
 .mx_MessageComposer_input blockquote {
     color: $blockquote-fg-color;
     margin: 0 0 16px;
