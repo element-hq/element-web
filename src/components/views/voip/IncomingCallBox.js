@@ -19,7 +19,6 @@ import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
-import AccessibleButton from '../elements/AccessibleButton';
 
 module.exports = React.createClass({
     displayName: 'IncomingCallBox',
@@ -63,6 +62,7 @@ module.exports = React.createClass({
             }
         }
 
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <div className="mx_IncomingCallBox" id="incomingCallBox">
                 <img className="mx_IncomingCallBox_chevron" src="img/chevron-left.png" width="9" height="16" />
