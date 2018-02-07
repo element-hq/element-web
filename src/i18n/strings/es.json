@@ -221,5 +221,7 @@
     "Add rooms to this community": "Agregar salas a esta comunidad",
     "Unpin Message": "Desmarcar Mensaje",
     "Pin Message": "Marcar Mensaje",
-    "Reply": "Responder"
+    "Reply": "Responder",
+    "%(count)s Members|other": "%(count)s miembros",
+    "%(count)s Members|one": "%(count)s miembro"
 }
