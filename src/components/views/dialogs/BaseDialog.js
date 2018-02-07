@@ -17,9 +17,12 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { MatrixClient } from 'matrix-js-sdk';
+
 import { KeyCode } from '../../../Keyboard';
 import AccessibleButton from '../elements/AccessibleButton';
 import sdk from '../../../index';
+import MatrixClientPeg from '../../../MatrixClientPeg';
 
 /**
  * Basic container for modal dialogs.
@@ -49,6 +52,20 @@ export default React.createClass({
 
         // children should be the content of the dialog
         children: PropTypes.node,
+    },
+
+    childContextTypes: {
+        matrixClient: PropTypes.instanceOf(MatrixClient),
+    },
+
+    getChildContext: function() {
+        return {
+            matrixClient: this._matrixClient,
+        };
+    },
+
+    componentWillMount() {
+        this._matrixClient = MatrixClientPeg.get();
     },
 
     _onKeyDown: function(e) {
