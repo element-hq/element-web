@@ -44,8 +44,8 @@
     "On": "Povolené",
     "Noisy": "Hlučné",
     "Failed to set direct chat tag": "Nepodarilo sa nastaviť značku priama konverzácia",
-    "Failed to remove tag %(tagName)s from room": "Nepodarilo sa odstrániť značku %(tagName)s pre túto miestnosť",
-    "Failed to add tag %(tagName)s to room": "Nepodarilo sa pridať značku %(tagName)s pre túto miestnosť",
+    "Failed to remove tag %(tagName)s from room": "Z miestnosti sa nepodarilo odstrániť značku %(tagName)s",
+    "Failed to add tag %(tagName)s to room": "Miestnosti sa nepodarilo pridať značku %(tagName)s",
     "Search…": "Hľadať…",
     "Search": "Vyhľadávanie",
     "This Room": "V tejto miestnosti",
@@ -220,5 +220,7 @@
     "Away": "Preč",
     "Please install <chromeLink>Chrome</chromeLink> or <firefoxLink>Firefox</firefoxLink> for the best experience.": "Aby ste s používania mali čo možno najlepší dojem, nainštalujte si <chromeLink>Chrome</chromeLink> alebo <firefoxLink>Firefox</firefoxLink>.",
     "<safariLink>Safari</safariLink> and <operaLink>Opera</operaLink> work too.": "Správne fungujú aj <safariLink>Safari</safariLink> a <operaLink>Opera</operaLink>.",
-    "Reply": "Odpovedať"
+    "Reply": "Odpovedať",
+    "%(count)s Members|other": "%(count)s Členov",
+    "%(count)s Members|one": "%(count)s Člen"
 }
