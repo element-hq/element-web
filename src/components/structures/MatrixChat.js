@@ -618,18 +618,26 @@ export default React.createClass({
     },
 
     _startRegistration: function(params) {
-        this.setStateForNewView({
+        const newState = {
             view: VIEWS.REGISTER,
-            // these params may be undefined, but if they are,
-            // unset them from our state: we don't want to
-            // resume a previous registration session if the
-            // user just clicked 'register'
-            register_client_secret: params.client_secret,
-            register_session_id: params.session_id,
-            register_hs_url: params.hs_url,
-            register_is_url: params.is_url,
-            register_id_sid: params.sid,
-        });
+        };
+
+        // Only honour params if they are all present, otherwise we reset
+        // HS and IS URLs when switching to registration.
+        if (params.client_secret &&
+            params.session_id &&
+            params.hs_url &&
+            params.is_url &&
+            params.sid
+        ) {
+            newState.register_client_secret = params.client_secret;
+            newState.register_session_id = params.session_id;
+            newState.register_hs_url = params.hs_url;
+            newState.register_is_url = params.is_url;
+            newState.register_id_sid = params.sid;
+        }
+
+        this.setStateForNewView(newState);
         this.notifyNewScreen('register');
     },
 
@@ -1501,6 +1509,17 @@ export default React.createClass({
         }
     },
 
+    onServerConfigChange(config) {
+        const newState = {};
+        if (config.hsUrl) {
+            newState.register_hs_url = config.hsUrl;
+        }
+        if (config.isUrl) {
+            newState.register_is_url = config.isUrl;
+        }
+        this.setState(newState);
+    },
+
     _makeRegistrationUrl: function(params) {
         if (this.props.startingFragmentQueryParams.referrer) {
             params.referrer = this.props.startingFragmentQueryParams.referrer;
@@ -1589,6 +1608,7 @@ export default React.createClass({
                     onLoginClick={this.onLoginClick}
                     onRegisterClick={this.onRegisterClick}
                     onCancelClick={MatrixClientPeg.get() ? this.onReturnToAppClick : null}
+                    onServerConfigChange={this.onServerConfigChange}
                     />
             );
         }
@@ -1623,6 +1643,7 @@ export default React.createClass({
                     onForgotPasswordClick={this.onForgotPasswordClick}
                     enableGuest={this.props.enableGuest}
                     onCancelClick={MatrixClientPeg.get() ? this.onReturnToAppClick : null}
+                    onServerConfigChange={this.onServerConfigChange}
                 />
             );
         }
