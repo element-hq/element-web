@@ -984,5 +984,5 @@
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s änderte den Anzeigenamen auf %(displayName)s.",
     "Failed to set direct chat tag": "Fehler beim Setzen der Direkt-Chat-Markierung",
     "Failed to remove tag %(tagName)s from room": "Fehler beim Entfernen des \"%(tagName)s\"-Tags von dem Raum",
-    "Failed to add tag %(tagName)s to room": "Fehler beim Hinzufügen des \"%(tagName)s\"-Tags von dem Raum"
+    "Failed to add tag %(tagName)s to room": "Fehler beim Hinzufügen des \"%(tagName)s\"-Tags an dem Raum"
 }
