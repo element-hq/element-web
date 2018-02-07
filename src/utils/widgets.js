@@ -36,8 +36,12 @@ function getUserWidgets() {
     if (!client) {
         throw new Error('User not logged in');
     }
-    const userWidgets = client.getAccountData('m.widgets').getContent() || {};
-    return Object.keys(userWidgets).map((key) => userWidgets[key]);
+    const userWidgets = client.getAccountData('m.widgets');
+    let userWidgetContent = {};
+    if (userWidgets && userWidgets.getContent()) {
+      userWidgetContent = userWidgets.getContent();
+    }
+    return Object.keys(userWidgetContent).map((key) => userWidgetContent[key]);
 }
 
 /**

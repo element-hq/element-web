@@ -87,7 +87,6 @@ export default class Stickerpack extends React.Component {
             this._getStickerPickerWidget();
             return;
         }
-        console.error("Unhandled widget action");
     }
 
     _getStickerPickerWidget() {
