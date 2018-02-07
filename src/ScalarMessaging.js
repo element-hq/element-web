@@ -362,6 +362,8 @@ function setWidget(event, roomId) {
         sendResponse(event, {
             success: true,
         });
+
+        dis.dispatch({ action: "user_widget_updated" });
     } else { // Room widget
         if (!roomId) {
             sendError(event, _t('Missing roomId.'), null);

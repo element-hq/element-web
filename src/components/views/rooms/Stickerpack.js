@@ -24,7 +24,7 @@ import Modal from '../../../Modal';
 import sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
-
+import dis from '../../../dispatcher';
 
 export default class Stickerpack extends React.Component {
     constructor(props) {
@@ -34,11 +34,12 @@ export default class Stickerpack extends React.Component {
         this.onFinished = this.onFinished.bind(this);
         this._launchManageIntegrations = this._launchManageIntegrations.bind(this);
         this._removeStickerpackWidgets = this._removeStickerpackWidgets.bind(this);
+        this._onWidgetAction = this._onWidgetAction.bind(this);
 
         this.defaultStickersContent = (
             <div className='mx_Stickers_contentPlaceholder'>
-                <p>{_t("You don't currently have any stickerpacks enabled")}</p>
-                <p>{_t("Click")} <span className='mx_Stickers_addLink' onClick={this._launchManageIntegrations} > { _t("here") } </span>{_t("to add some!")}</p>
+                <p>{ _t("You don't currently have any stickerpacks enabled") }</p>
+                <p>{ _t("Click") } <span className='mx_Stickers_addLink' onClick={this._launchManageIntegrations} > { _t("here") } </span>{ _t("to add some!") }</p>
                 <img src='img/stickerpack-placeholder.png' alt={_t('Add a stickerpack')} />
             </div>
         );
@@ -53,7 +54,9 @@ export default class Stickerpack extends React.Component {
 
     _removeStickerpackWidgets() {
         console.warn('Removing stickerpack widgets');
-        Widgets.removeStickerpackWidgets()
+        Widgets.removeStickerpackWidgets();
+        this._getStickerPickerWidget();
+        this.onFinished();
     }
 
     componentDidMount() {
@@ -70,16 +73,36 @@ export default class Stickerpack extends React.Component {
                 //     });
             });
         }
+        this._getStickerPickerWidget();
+        this.dispatcherRef = dis.register(this._onWidgetAction);
+    }
 
+    componentWillUnmount() {
+        dis.unregister(this.dispatcherRef);
+    }
+
+    _onWidgetAction(payload) {
+        if (payload.action === "user_widget_updated") {
+            console.warn("user widget updated");
+            this._getStickerPickerWidget();
+            return;
+        }
+        console.error("Unhandled widget action");
+    }
+
+    _getStickerPickerWidget() {
         // Stickers
         // TODO - Add support for stickerpacks from multiple app stores.
         // Render content from multiple stickerpack sources, each within their own iframe, within the stickerpack UI element.
+        console.warn("Checking for sticker picker widgets");
         const stickerpackWidget = Widgets.getStickerpackWidgets()[0];
-        console.warn('Stickerpack widget', stickerpackWidget);
         let stickersContent;
 
         // Load stickerpack content
         if (stickerpackWidget && stickerpackWidget.content && stickerpackWidget.content.url) {
+            // Set default name
+            stickerpackWidget.content.name = stickerpackWidget.name || "Stickerpack";
+            console.warn('Stickerpack widget', stickerpackWidget);
             this.widgetId = stickerpackWidget.id;
             stickersContent = (
                 <div
@@ -103,7 +126,7 @@ export default class Stickerpack extends React.Component {
                                 'fontSize': 'smaller',
                                 'cursor': 'pointer',
                             }}
-                            onClick={this._removeStickerpackWidgets()}
+                            onClick={this._removeStickerpackWidgets}
                         >X</div>
                         <AppTile
                             id={stickerpackWidget.id}
@@ -135,9 +158,14 @@ export default class Stickerpack extends React.Component {
             );
         } else {
             // Default content to show if stickerpack widget not added
+            console.warn("No available sticker picker widgets");
             stickersContent = this.defaultStickersContent;
+            this.forceUpdate();
         }
-        this.setState({stickersContent});
+        this.setState({
+            showStickers: false,
+            stickersContent: stickersContent,
+        });
     }
 
     /**
@@ -146,6 +174,7 @@ export default class Stickerpack extends React.Component {
      * @param  {Event} e Event that triggered the function
      */
     onShowStickersClick(e) {
+        this._getStickerPickerWidget();
         const GenericElementContextMenu = sdk.getComponent('context_menus.GenericElementContextMenu');
         const buttonRect = e.target.getBoundingClientRect();
 
@@ -182,6 +211,8 @@ export default class Stickerpack extends React.Component {
     onFinished() {
         this.setState({showStickers: false});
         this.stickersMenu = null;
+        this.forceUpdate();
+        console.warn("finshed");
     }
 
     /**

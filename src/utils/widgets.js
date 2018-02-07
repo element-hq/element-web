@@ -45,7 +45,9 @@ function getUserWidgets() {
  * @return {[object]} Array containing current / active stickerpack widgets
  */
 function getStickerpackWidgets() {
-    const stickerpackWidgets = getUserWidgets().filter((widget) => widget.type='stickerpack');
+    const widgets = getUserWidgets();
+    console.warn("widgets", widgets);
+    const stickerpackWidgets = widgets.filter((widget) => widget.type='stickerpack');
     console.warn('Stickerpack widgets', stickerpackWidgets);
     return stickerpackWidgets;
 }
