@@ -274,12 +274,16 @@ export default class AppTile extends React.Component {
 
     _onEditClick(e) {
         console.log("Edit widget ID ", this.props.id);
-        const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
-        const src = this._scalarClient.getScalarInterfaceUrlForRoom(
-            this.props.room.roomId, 'type_' + this.props.type, this.props.id);
-        Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
-            src: src,
-        }, "mx_IntegrationsManager");
+        if (this.props.onEditClick) {
+            this.props.onEditClick();
+        } else {
+            const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+            const src = this._scalarClient.getScalarInterfaceUrlForRoom(
+                this.props.room.roomId, 'type_' + this.props.type, this.props.id);
+            Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
+                src: src,
+            }, "mx_IntegrationsManager");
+        }
     }
 
     _onSnapshotClick(e) {
@@ -298,34 +302,38 @@ export default class AppTile extends React.Component {
      * otherwise revoke access for the widget to load in the user's browser
     */
     _onDeleteClick() {
-        if (this._canUserModify()) {
-            // Show delete confirmation dialog
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            Modal.createTrackedDialog('Delete Widget', '', QuestionDialog, {
-                title: _t("Delete Widget"),
-                description: _t(
-                    "Deleting a widget removes it for all users in this room." +
-                    " Are you sure you want to delete this widget?"),
-                button: _t("Delete widget"),
-                onFinished: (confirmed) => {
-                    if (!confirmed) {
-                        return;
-                    }
-                    this.setState({deleting: true});
-                    MatrixClientPeg.get().sendStateEvent(
-                        this.props.room.roomId,
-                        'im.vector.modular.widgets',
-                        {}, // empty content
-                        this.props.id,
-                    ).catch((e) => {
-                        console.error('Failed to delete widget', e);
-                        this.setState({deleting: false});
-                    });
-                },
-            });
+        if (this.props.onDeleteClick) {
+            this.props.onDeleteClick();
         } else {
-            console.log("Revoke widget permissions - %s", this.props.id);
-            this._revokeWidgetPermission();
+            if (this._canUserModify()) {
+                // Show delete confirmation dialog
+                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                Modal.createTrackedDialog('Delete Widget', '', QuestionDialog, {
+                    title: _t("Delete Widget"),
+                    description: _t(
+                        "Deleting a widget removes it for all users in this room." +
+                        " Are you sure you want to delete this widget?"),
+                    button: _t("Delete widget"),
+                    onFinished: (confirmed) => {
+                        if (!confirmed) {
+                            return;
+                        }
+                        this.setState({deleting: true});
+                        MatrixClientPeg.get().sendStateEvent(
+                            this.props.room.roomId,
+                            'im.vector.modular.widgets',
+                            {}, // empty content
+                            this.props.id,
+                        ).catch((e) => {
+                            console.error('Failed to delete widget', e);
+                            this.setState({deleting: false});
+                        });
+                    },
+                });
+            } else {
+                console.log("Revoke widget permissions - %s", this.props.id);
+                this._revokeWidgetPermission();
+            }
         }
     }
 
@@ -429,6 +437,22 @@ export default class AppTile extends React.Component {
         return safeWidgetUrl;
     }
 
+    _getTileTitle() {
+        const name = this.formatAppTileName();
+        const titleSpacer = <span>&nbsp;-&nbsp;</span>;
+        let title = '';
+        if (this.state.widgetPageTitle && this.state.widgetPageTitle != this.formatAppTileName()) {
+            title = this.state.widgetPageTitle;
+        }
+
+        return (
+            <span>
+                <b>{ name }</b>
+                <span>{ title ? titleSpacer : '' }{ title }</span>
+            </span>
+        );
+    }
+
     render() {
         let appTileBody;
 
@@ -508,17 +532,14 @@ export default class AppTile extends React.Component {
                 { this.props.showMenubar &&
                 <div ref="menu_bar" className="mx_AppTileMenuBar" onClick={this.onClickMenuBar}>
                     <span className="mx_AppTileMenuBarTitle">
-                        <TintableSvgButton
+                        { this.props.showMinimise && <TintableSvgButton
                             src={windowStateIcon}
                             className="mx_AppTileMenuBarWidget mx_AppTileMenuBarWidgetPadding"
                             title={_t('Minimize apps')}
                             width="10"
                             height="10"
-                        />
-                        <b>{ this.formatAppTileName() }</b>
-                        { this.state.widgetPageTitle && this.state.widgetPageTitle != this.formatAppTileName() && (
-                            <span>&nbsp;-&nbsp;{ this.state.widgetPageTitle }</span>
-                        ) }
+                        /> }
+                        { this.props.showTitle && this._getTileTitle() }
                     </span>
                     <span className="mx_AppTileMenuBarWidgets">
                       { /* Snapshot widget */ }
@@ -575,10 +596,20 @@ AppTile.propTypes = {
     showMenubar: React.PropTypes.bool,
     // Should the AppTile render itself
     show: React.PropTypes.bool,
+    // Optional onEditClickHandler (overrides default behaviour)
+    onEditClick: React.PropTypes.func,
+    // Optional onDeleteClickHandler (overrides default behaviour)
+    onDeleteClick: React.PropTypes.func,
+    // Optionally hide the tile title
+    showTitle: React.PropTypes.bool,
+    // Optionally hide the tile minimise icon
+    showMinimise: React.PropTypes.bool,
 };
 
 AppTile.defaultProps = {
     url: "",
     waitForIframeLoad: true,
     showMenubar: true,
+    showTitle: true,
+    showMinimise: true,
 };

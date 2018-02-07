@@ -25,6 +25,8 @@ import sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import dis from '../../../dispatcher';
+import TintableSvgButton from '../elements/TintableSvgButton';
+
 
 export default class Stickerpack extends React.Component {
     constructor(props) {
@@ -103,6 +105,7 @@ export default class Stickerpack extends React.Component {
             stickerpackWidget.content.name = stickerpackWidget.name || "Stickerpack";
             console.warn('Stickerpack widget', stickerpackWidget);
             this.widgetId = stickerpackWidget.id;
+
             stickersContent = (
                 <div
                     style={{
@@ -115,18 +118,10 @@ export default class Stickerpack extends React.Component {
                         className='mx_Stickers_content'
                         style={{
                             border: 'none',
-                            height: this.popoverHeight - 30,
+                            height: this.popoverHeight,
                             width: this.popoverWidth,
                         }}
                     >
-                        <div
-                            style={{
-                                'float': 'right',
-                                'fontSize': 'smaller',
-                                'cursor': 'pointer',
-                            }}
-                            onClick={this._removeStickerpackWidgets}
-                        >X</div>
                         <AppTile
                             id={stickerpackWidget.id}
                             url={stickerpackWidget.content.url}
@@ -138,20 +133,12 @@ export default class Stickerpack extends React.Component {
                             creatorUserId={MatrixClientPeg.get().credentials.userId}
                             waitForIframeLoad={true}
                             show={true}
-                            showMenubar={false}
+                            showMenubar={true}
+                            onEditClick={this._launchManageIntegrations}
+                            onDeleteClick={this._removeStickerpackWidgets}
+                            showTitle={false}
+                            showMinimise={false}
                         />
-                    </div>
-                    <div style={{
-                        height: '20px',
-                        position: 'absolute',
-                        bottom: '5px',
-                        right: '19px',
-                        width: '263px',
-                        textAlign: 'right',
-                        padding: '5px',
-                        borderTop: '1px solid #999',
-                    }}>
-                        <span className='mx_Stickers_addLink' onClick={this._launchManageIntegrations} > { _t("Manage sticker packs") } </span>
                     </div>
                 </div>
             );
