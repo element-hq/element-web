@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import MatrixClientPeg from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
+import sdk from '../../../index'
 
 module.exports = React.createClass({
     displayName: 'IncomingCallBox',
