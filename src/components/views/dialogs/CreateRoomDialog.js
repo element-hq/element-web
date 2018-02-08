@@ -55,6 +55,19 @@ export default React.createClass({
                         <div>
                             <input id="textinput" ref="textinput" className="mx_CreateRoomDialog_input" autoFocus={true} size="64" />
                         </div>
+                        <br />
+
+                        <details className="mx_CreateRoomDialog_details">
+                            <summary className="mx_CreateRoomDialog_details_summary">{ _t('Advanced options') }</summary>
+                            <div>
+                                <input type="checkbox" id="checkbox" ref="checkbox" defaultChecked={this.defaultNoFederate} />
+                                <label htmlFor="checkbox">
+                                { _t('Block users on other matrix homeservers from joining this room') }
+                                    <br />
+                                    ({ _t('This setting cannot be changed later!') })
+                                </label>
+                            </div>
+                        </details>
                     </div>
                 </form>
                 <DialogButtons primaryButton={_t('Create Room')}
