@@ -38,31 +38,6 @@ var debug = false;
 
 const TRUNCATE_AT = 10;
 
-var roomListTarget = {
-    canDrop: function() {
-        return true;
-    },
-
-    drop: function(props, monitor, component) {
-        if (debug) console.log("dropped on sublist")
-    },
-
-    hover: function(props, monitor, component) {
-        var item = monitor.getItem();
-
-        if (component.state.sortedList.length == 0 && props.editable) {
-            if (debug) console.log("hovering on sublist " + props.label + ", isOver=" + monitor.isOver());
-
-            if (item.targetList !== component) {
-                 item.targetList.removeRoomTile(item.room);
-                 item.targetList = component;
-            }
-
-            component.moveRoomTile(item.room, 0);
-        }
-    },
-};
-
 var RoomSubList = React.createClass({
     displayName: 'RoomSubList',
 
@@ -277,98 +252,6 @@ var RoomSubList = React.createClass({
         // Doing it this way rather than using forceUpdate(), so that the shouldComponentUpdate()
         // method is honoured
         this.setState(this.state);
-    },
-
-    moveRoomTile: function(room, atIndex) {
-        if (debug) console.log("moveRoomTile: id " + room.roomId + ", atIndex " + atIndex);
-        //console.log("moveRoomTile before: " + JSON.stringify(this.state.rooms));
-        var found = this.findRoomTile(room);
-        var rooms = this.state.sortedList;
-        if (found.room) {
-            if (debug) console.log("removing at index " + found.index + " and adding at index " + atIndex);
-            rooms.splice(found.index, 1);
-            rooms.splice(atIndex, 0, found.room);
-        }
-        else {
-            if (debug) console.log("Adding at index " + atIndex);
-            rooms.splice(atIndex, 0, room);
-        }
-        this.setState({ sortedList: rooms });
-        // console.log("moveRoomTile after: " + JSON.stringify(this.state.rooms));
-    },
-
-    // XXX: this isn't invoked via a property method but indirectly via
-    // the roomList property method.  Unsure how evil this is.
-    removeRoomTile: function(room) {
-        if (debug) console.log("remove room " + room.roomId);
-        var found = this.findRoomTile(room);
-        var rooms = this.state.sortedList;
-        if (found.room) {
-            rooms.splice(found.index, 1);
-        }
-        else {
-            console.warn("Can't remove room " + room.roomId + " - can't find it");
-        }
-        this.setState({ sortedList: rooms });
-    },
-
-    findRoomTile: function(room) {
-        var index = this.state.sortedList.indexOf(room);
-        if (index >= 0) {
-            // console.log("found: room: " + room.roomId + " with index " + index);
-        }
-        else {
-            if (debug) console.log("didn't find room");
-            room = null;
-        }
-        return ({
-            room: room,
-            index: index,
-        });
-    },
-
-    calcManualOrderTagData: function(index) {
-        // we sort rooms by the lexicographic ordering of the 'order' metadata on their tags.
-        // for convenience, we calculate this for now a floating point number between 0.0 and 1.0.
-
-        let orderA = 0.0; // by default we're next to the beginning of the list
-        if (index > 0) {
-            const prevTag = this.state.sortedList[index - 1].tags[this.props.tagName];
-            if (!prevTag) {
-                console.error("Previous room in sublist is not tagged to be in this list. This should never happen.");
-            } else if (prevTag.order === undefined) {
-                console.error("Previous room in sublist has no ordering metadata. This should never happen.");
-            } else {
-                orderA = prevTag.order;
-            }
-        }
-
-        let orderB = 1.0; // by default we're next to the end of the list too
-        if (index < this.state.sortedList.length - 1) {
-            const nextTag = this.state.sortedList[index + 1].tags[this.props.tagName];
-            if (!nextTag) {
-                console.error("Next room in sublist is not tagged to be in this list. This should never happen.");
-            } else if (nextTag.order === undefined) {
-                console.error("Next room in sublist has no ordering metadata. This should never happen.");
-            } else {
-                orderB = nextTag.order;
-            }
-        }
-
-        const order = (orderA + orderB) / 2.0;
-
-        if (order === orderA || order === orderB) {
-            console.error("Cannot describe new list position.  This should be incredibly unlikely.");
-            this.state.sortedList.forEach((room, index) => {
-                MatrixClientPeg.get().setRoomTag(
-                    room.roomId, this.props.tagName,
-                    {order: index / this.state.sortedList.length},
-                );
-            });
-            return index / this.state.sortedList.length;
-        }
-
-        return order;
     },
 
     makeRoomTiles: function() {
