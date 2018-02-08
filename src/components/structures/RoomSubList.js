@@ -85,13 +85,17 @@ var RoomSubList = React.createClass({
     },
 
     componentWillMount: function() {
-        this.sortList(this.applySearchFilter(this.props.list, this.props.searchFilter), this.props.order);
+        this.setState({
+            sortedList: this.applySearchFilter(this.props.list, this.props.searchFilter),
+        });
     },
 
     componentWillReceiveProps: function(newProps) {
         // order the room list appropriately before we re-render
         //if (debug) console.log("received new props, list = " + newProps.list);
-        this.sortList(this.applySearchFilter(newProps.list, newProps.searchFilter), newProps.order);
+        this.setState({
+            sortedList: this.applySearchFilter(newProps.list, newProps.searchFilter),
+        });
     },
 
     applySearchFilter: function(list, filter) {
@@ -137,71 +141,6 @@ var RoomSubList = React.createClass({
             room_id: roomId,
             clear_search: (ev && (ev.keyCode == KeyCode.ENTER || ev.keyCode == KeyCode.SPACE)),
         });
-    },
-
-    tsOfNewestEvent: function(room) {
-        for (var i = room.timeline.length - 1; i >= 0; --i) {
-            var ev = room.timeline[i];
-            if (ev.getTs() &&
-                (Unread.eventTriggersUnreadCount(ev) ||
-                (ev.getSender() === MatrixClientPeg.get().credentials.userId))
-            ) {
-                return ev.getTs();
-            }
-        }
-
-        // we might only have events that don't trigger the unread indicator,
-        // in which case use the oldest event even if normally it wouldn't count.
-        // This is better than just assuming the last event was forever ago.
-        if (room.timeline.length && room.timeline[0].getTs()) {
-            return room.timeline[0].getTs();
-        } else {
-            return Number.MAX_SAFE_INTEGER;
-        }
-    },
-
-    // TODO: factor the comparators back out into a generic comparator
-    // so that view_prev_room and view_next_room can do the right thing
-
-    recentsComparator: function(roomA, roomB) {
-        return this.tsOfNewestEvent(roomB) - this.tsOfNewestEvent(roomA);
-    },
-
-    lexicographicalComparator: function(roomA, roomB) {
-        return roomA.name > roomB.name ? 1 : -1;
-    },
-
-    // Generates the manual comparator using the given list
-    manualComparator: function(roomA, roomB) {
-        if (!roomA.tags[this.props.tagName] || !roomB.tags[this.props.tagName]) return 0;
-
-        // Make sure the room tag has an order element, if not set it to be the bottom
-        var a = roomA.tags[this.props.tagName].order;
-        var b = roomB.tags[this.props.tagName].order;
-
-        // Order undefined room tag orders to the bottom
-        if (a === undefined && b !== undefined) {
-            return 1;
-        } else if (a !== undefined && b === undefined) {
-            return -1;
-        }
-
-        return a == b ? this.lexicographicalComparator(roomA, roomB) : ( a > b  ? 1 : -1);
-    },
-
-    sortList: function(list, order) {
-        if (list === undefined) list = this.state.sortedList;
-        if (order === undefined) order = this.props.order;
-        var comparator;
-        list = list || [];
-        if (order === "manual") comparator = this.manualComparator;
-        if (order === "recent") comparator = this.recentsComparator;
-
-        // Fix undefined orders here, and make sure the backend gets updated as well
-        this._fixUndefinedOrder(list);
-
-        //if (debug) console.log("sorting list for sublist " + this.props.label + " with length " + list.length + ", this.props.list = " + this.props.list);
-        this.setState({ sortedList: list.sort(comparator) });
     },
 
     _shouldShowNotifBadge: function(roomNotifState) {
@@ -378,47 +317,6 @@ var RoomSubList = React.createClass({
 
         this.props.onShowMoreRooms();
         this.props.onHeaderClick(false);
-    },
-
-    // Fix any undefined order elements of a room in a manual ordered list
-    //     room.tag[tagname].order
-    _fixUndefinedOrder: function(list) {
-        if (this.props.order === "manual") {
-            var order = 0.0;
-            var self = this;
-
-            // Find the highest (lowest position) order of a room in a manual ordered list
-            list.forEach(function(room) {
-                if (room.tags.hasOwnProperty(self.props.tagName)) {
-                    if (order < room.tags[self.props.tagName].order) {
-                        order = room.tags[self.props.tagName].order;
-                    }
-                }
-            });
-
-            // Fix any undefined order elements of a room in a manual ordered list
-            // Do this one at a time, as each time a rooms tag data is updated the RoomList
-            // gets triggered and another list is passed in. Doing it one at a time means that
-            // we always correctly calculate the highest order for the list - stops multiple
-            // rooms getting the same order. This is only really relevant for the first time this
-            // is run with historical room tag data, after that there should only be undefined
-            // in the list at a time anyway.
-            for (let i = 0; i < list.length; i++) {
-                if (list[i].tags[self.props.tagName] && list[i].tags[self.props.tagName].order === undefined) {
-                    MatrixClientPeg.get().setRoomTag(list[i].roomId, self.props.tagName, {order: (order + 1.0) / 2.0}).finally(function() {
-                        // Do any final stuff here
-                    }).catch(function(err) {
-                        var ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                        console.error("Failed to add tag " + self.props.tagName + " to room" + err);
-                        Modal.createTrackedDialog('Failed to add tag to room', '', ErrorDialog, {
-                            title: _t('Failed to add tag %(tagName)s to room', {tagName: self.props.tagName}),
-                            description: ((err && err.message) ? err.message : _t('Operation failed')),
-                        });
-                    });
-                    break;
-                };
-            };
-        }
     },
 
     render: function() {
