@@ -50,11 +50,15 @@ function pad(n) {
     return (n < 10 ? '0' : '') + n;
 }
 
-function twelveHourTime(date) {
+function twelveHourTime(date, showSeconds=false) {
     let hours = date.getHours() % 12;
     const minutes = pad(date.getMinutes());
     const ampm = date.getHours() >= 12 ? _t('PM') : _t('AM');
     hours = hours ? hours : 12; // convert 0 -> 12
+    if (showSeconds) {
+        const seconds = pad(date.getSeconds());
+        return `${hours}:${minutes}:${seconds}${ampm}`;
+    }
     return `${hours}:${minutes}${ampm}`;
 }
 
@@ -101,8 +105,15 @@ export function formatFullDate(date, showTwelveHour=false) {
         monthName: months[date.getMonth()],
         day: date.getDate(),
         fullYear: date.getFullYear(),
-        time: formatTime(date, showTwelveHour),
+        time: formatFullTime(date, showTwelveHour),
     });
+}
+
+export function formatFullTime(date, showTwelveHour=false) {
+    if (showTwelveHour) {
+        return twelveHourTime(date, true);
+    }
+    return pad(date.getHours()) + ':' + pad(date.getMinutes()) + ':' + pad(date.getSeconds());
 }
 
 export function formatTime(date, showTwelveHour=false) {
