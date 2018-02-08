@@ -171,6 +171,10 @@ export default React.createClass({
             register_hs_url: null,
             register_is_url: null,
             register_id_sid: null,
+
+            // When showing Modal dialogs we need to set aria-hidden on the root app element
+            // and disable it when there are no dialogs
+            hideToSRUsers: false,
         };
         return s;
     },
@@ -607,6 +611,16 @@ export default React.createClass({
                 break;
             case 'send_event':
                 this.onSendEvent(payload.room_id, payload.event);
+                break;
+            case 'aria_hide_main_app':
+                this.setState({
+                    hideToSRUsers: true,
+                });
+                break;
+            case 'aria_unhide_main_app':
+                this.setState({
+                    hideToSRUsers: false,
+                });
                 break;
         }
     },

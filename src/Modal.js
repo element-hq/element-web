@@ -22,6 +22,7 @@ const ReactDOM = require('react-dom');
 import PropTypes from 'prop-types';
 import Analytics from './Analytics';
 import sdk from './index';
+import dis from './dispatcher';
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 
@@ -187,24 +188,22 @@ class ModalManager {
     }
 
     _reRender() {
-        // Retrieve the root node of the Riot application outside the modal
-        let applicationNode = document.getElementById('matrixchat');
         if (this._modals.length == 0) {
-            if (applicationNode) {
-                // If there is no modal to render, make all of Riot available
-                // to screen reader users again
-                applicationNode.setAttribute('aria-hidden', 'false');
-            }
+            // If there is no modal to render, make all of Riot available
+            // to screen reader users again
+            dis.dispatch({
+                action: 'aria_unhide_main_app',
+            });
             ReactDOM.unmountComponentAtNode(this.getOrCreateContainer());
             return;
         }
 
-        if (applicationNode) {
-            // Hide the content outside the modal to screen reader users
-            // so they won't be able to navigate into it and act on it using
-            // screen reader specific features
-            applicationNode.setAttribute('aria-hidden', 'true');
-        }
+        // Hide the content outside the modal to screen reader users
+        // so they won't be able to navigate into it and act on it using
+        // screen reader specific features
+        dis.dispatch({
+            action: 'aria_hide_main_app',
+        });
 
         const modal = this._modals[0];
         const dialog = (

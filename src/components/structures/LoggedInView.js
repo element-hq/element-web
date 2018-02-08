@@ -327,7 +327,7 @@ const LoggedInView = React.createClass({
         }
 
         return (
-            <div className='mx_MatrixChat_wrapper'>
+            <div className='mx_MatrixChat_wrapper' aria-hidden={this.props.hideToSRUsers}>
                 { topBar }
                 <div className={bodyClasses}>
                     { SettingsStore.isFeatureEnabled("feature_tag_panel") ? <TagPanel /> : <div /> }
