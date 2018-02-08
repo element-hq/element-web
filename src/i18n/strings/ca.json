@@ -867,5 +867,7 @@
     "Import": "Importa",
     "The version of Riot.im": "La versió de Riot.im",
     "Email": "Correu electrònic",
-    "Add email address": "Afegeix correu electrònic"
+    "Add email address": "Afegeix correu electrònic",
+    "I have verified my email address": "He verificat l'adreça de correu electrònic",
+    "Send Reset Email": "Envia email de reinici"
 }
