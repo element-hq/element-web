@@ -101,7 +101,7 @@ export default {
      */
     _addMatrixClientListener(matrixClient, eventName, actionCreator) {
         const listener = (...args) => {
-            dis.dispatch(actionCreator(matrixClient, ...args));
+            dis.dispatch(actionCreator(matrixClient, ...args), true);
         };
         matrixClient.on(eventName, listener);
         this._matrixClientListenersStop.push(() => {
