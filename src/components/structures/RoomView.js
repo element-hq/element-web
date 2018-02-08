@@ -264,12 +264,19 @@ module.exports = React.createClass({
                     isPeeking: true, // this will change to false if peeking fails
                 });
                 MatrixClientPeg.get().peekInRoom(roomId).then((room) => {
+                    if (this.unmounted) {
+                        return;
+                    }
                     this.setState({
                         room: room,
                         peekLoading: false,
                     });
                     this._onRoomLoaded(room);
                 }, (err) => {
+                    if (this.unmounted) {
+                        return;
+                    }
+
                     // Stop peeking if anything went wrong
                     this.setState({
                         isPeeking: false,
@@ -286,7 +293,7 @@ module.exports = React.createClass({
                     } else {
                         throw err;
                     }
-                }).done();
+                });
             }
         } else if (room) {
             // Stop peeking because we have joined this room previously
