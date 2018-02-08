@@ -175,6 +175,7 @@ export default class Stickerpack extends React.Component {
             menuHeight: this.popoverHeight,
             element: this.state.stickersContent,
             onFinished: this.onFinished,
+            menuPaddingTop: 0,
         });
 
 

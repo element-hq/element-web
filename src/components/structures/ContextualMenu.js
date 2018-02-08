@@ -134,6 +134,10 @@ module.exports = {
             menuStyle["backgroundColor"] = props.menuColour;
         }
 
+        if (!isNaN(Number(props.menuPaddingTop))) {
+            menuStyle["paddingTop"] = props.menuPaddingTop;
+        }
+
         // FIXME: If a menu uses getDefaultProps it clobbers the onFinished
         // property set here so you can't close the menu from a button click!
         const menu = (
