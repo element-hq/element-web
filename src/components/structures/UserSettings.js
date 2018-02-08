@@ -794,11 +794,11 @@ module.exports = React.createClass({
         }
         return (
             <div>
-                <h3>{ _t("Bug Report") }</h3>
+                <h3>{ _t("Debug Logs Submission") }</h3>
                 <div className="mx_UserSettings_section">
-                    <p>{ _t("Found a bug?") }</p>
+                    <p>{ _t("Want to send logs?") }</p>
                     <button className="mx_UserSettings_button danger"
-                        onClick={this._onBugReportClicked}>{ _t('Report it') }
+                        onClick={this._onBugReportClicked}>{ _t('Submit debug logs') }
                     </button>
                 </div>
             </div>
