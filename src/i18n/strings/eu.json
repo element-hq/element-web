@@ -980,5 +980,9 @@
     "This room is not public. You will not be able to rejoin without an invite.": "Gela hau ez da publikoa. Ezin izango zara berriro elkartu gonbidapenik gabe.",
     "Community IDs cannot not be empty.": "Komunitate ID-ak ezin dira hutsik egon.",
     "<showDevicesText>Show devices</showDevicesText>, <sendAnywayText>send anyway</sendAnywayText> or <cancelText>cancel</cancelText>.": "<showDevicesText>Erakutsi gailuak</showDevicesText>, <sendAnywayText>bidali hala ere</sendAnywayText> edo <cancelText>ezeztatu</cancelText>.",
-    "<a>In reply to</a> <pill>": "<a>honi erantzunez:</a> <pill>"
+    "<a>In reply to</a> <pill>": "<a>honi erantzunez:</a> <pill>",
+    "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s erabiltzaileak bere pantaila izena aldatu du %(displayName)s izatera.",
+    "Failed to set direct chat tag": "Huts egin du txat zuzenarenaren etiketa jartzean",
+    "Failed to remove tag %(tagName)s from room": "Huts egin du %(tagName)s etiketa gelatik kentzean",
+    "Failed to add tag %(tagName)s to room": "Huts egin du %(tagName)s etiketa gelara gehitzean"
 }
