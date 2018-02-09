@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ import { _t } from 'matrix-react-sdk/lib/languageHandler';
 const Modal = require('matrix-react-sdk/lib/Modal');
 const Resend = require("matrix-react-sdk/lib/Resend");
 import * as UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
+import { isUrlPermitted } from 'matrix-react-sdk/lib/HtmlUtils';
 
 module.exports = React.createClass({
     displayName: 'MessageContextMenu',
@@ -275,7 +277,10 @@ module.exports = React.createClass({
         }
 
         // Bridges can provide a 'external_url' to link back to the source.
-        if( typeof(this.props.mxEvent.event.content.external_url) === "string") {
+        if(
+            typeof(this.props.mxEvent.event.content.external_url) === "string" &&
+            isUrlPermitted(this.props.mxEvent.event.content.external_url)
+        ) {
           externalURLButton = (
               <div className="mx_MessageContextMenu_field">
                   <a href={ this.props.mxEvent.event.content.external_url }
