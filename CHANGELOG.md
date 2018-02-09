@@ -1,3 +1,9 @@
+Changes in [0.11.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.11.4) (2018-02-09)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.11.3...v0.11.4)
+
+ * Add isUrlPermitted function to sanity check URLs
+
 Changes in [0.11.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v0.11.3) (2017-12-04)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v0.11.2...v0.11.3)
