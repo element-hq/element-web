@@ -189,7 +189,7 @@ module.exports = React.createClass({
     _launchManageIntegrations: function() {
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
-                this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room.roomId, 'add_integ') :
+                this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room, 'add_integ') :
                 null;
         Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
             src: src,

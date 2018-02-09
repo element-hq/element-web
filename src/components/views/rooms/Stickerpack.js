@@ -208,7 +208,7 @@ export default class Stickerpack extends React.Component {
         const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
         const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                 this.scalarClient.getScalarInterfaceUrlForRoom(
-                    this.props.room.roomId,
+                    this.props.room,
                     'type_stickerpack',
                     this.widgetId,
                 ) :
