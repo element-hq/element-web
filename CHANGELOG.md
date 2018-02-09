@@ -1,3 +1,10 @@
+Changes in [0.13.5](https://github.com/vector-im/riot-web/releases/tag/v0.13.5) (2018-02-09)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.4...v0.13.5)
+
+ * SECURITY UPDATE: Sanitise URLs from 'external_url'. Thanks to walle303 for contacting
+   us about this vulnerability.
+
 Changes in [0.13.4](https://github.com/vector-im/riot-web/releases/tag/v0.13.4) (2018-01-03)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.3...v0.13.4)
