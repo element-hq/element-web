@@ -984,5 +984,6 @@
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s erabiltzaileak bere pantaila izena aldatu du %(displayName)s izatera.",
     "Failed to set direct chat tag": "Huts egin du txat zuzenarenaren etiketa jartzean",
     "Failed to remove tag %(tagName)s from room": "Huts egin du %(tagName)s etiketa gelatik kentzean",
-    "Failed to add tag %(tagName)s to room": "Huts egin du %(tagName)s etiketa gelara gehitzean"
+    "Failed to add tag %(tagName)s to room": "Huts egin du %(tagName)s etiketa gelara gehitzean",
+    "Clear filter": "Garbitu iragazkia"
 }
