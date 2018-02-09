@@ -1605,7 +1605,8 @@ module.exports = React.createClass({
               displayConfCallNotification={this.state.displayConfCallNotification}
               maxHeight={this.state.auxPanelMaxHeight}
               onResize={this.onChildResize}
-              showApps={this.state.showApps && !this.state.editingRoomSettings} >
+              showApps={this.state.showApps}
+              hideAppsDrawer={this.state.editingRoomSettings} >
                 { aux }
             </AuxPanel>
         );

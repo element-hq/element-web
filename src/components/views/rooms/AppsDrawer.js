@@ -35,7 +35,15 @@ module.exports = React.createClass({
     displayName: 'AppsDrawer',
 
     propTypes: {
+        userId: React.PropTypes.string.isRequired,
         room: React.PropTypes.object.isRequired,
+        showApps: React.PropTypes.bool, // Should apps be rendered
+        hide: React.PropTypes.bool, // If rendered, should apps drawer be visible
+    },
+
+    defaultProps: {
+        showApps: true,
+        hide: false,
     },
 
     getInitialState: function() {
@@ -46,7 +54,7 @@ module.exports = React.createClass({
 
     componentWillMount: function() {
         ScalarMessaging.startListening();
-        MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
+        MatrixClientPeg.get().on('RoomState.events', this.onRoomStateEvents);
     },
 
     componentDidMount: function() {
@@ -56,7 +64,7 @@ module.exports = React.createClass({
             this.scalarClient.connect().then(() => {
                 this.forceUpdate();
             }).catch((e) => {
-                console.log("Failed to connect to integrations server");
+                console.log('Failed to connect to integrations server');
                 // TODO -- Handle Scalar errors
                 //     this.setState({
                 //         scalar_error: err,
@@ -70,7 +78,7 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         ScalarMessaging.stopListening();
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
+            MatrixClientPeg.get().removeListener('RoomState.events', this.onRoomStateEvents);
         }
         dis.unregister(this.dispatcherRef);
     },
@@ -81,7 +89,7 @@ module.exports = React.createClass({
     },
 
     onAction: function(action) {
-        const hideWidgetKey = this.props.room.roomId + "_hide_widget_drawer";
+        const hideWidgetKey = this.props.room.roomId + '_hide_widget_drawer';
         switch (action.action) {
             case 'appsDrawer':
                 // When opening the app drawer when there aren't any apps,
@@ -109,7 +117,7 @@ module.exports = React.createClass({
      * passed through encodeURIComponent.
      * @param {string} pathTemplate The path with template variables e.g. '/foo/$bar'.
      * @param {Object} variables The key/value pairs to replace the template
-     * variables with. E.g. { "$bar": "baz" }.
+     * variables with. E.g. { '$bar': 'baz' }.
      * @return {string} The result of replacing all template variables e.g. '/foo/baz'.
      */
     encodeUri: function(pathTemplate, variables) {
@@ -187,13 +195,13 @@ module.exports = React.createClass({
     },
 
     _launchManageIntegrations: function() {
-        const IntegrationsManager = sdk.getComponent("views.settings.IntegrationsManager");
+        const IntegrationsManager = sdk.getComponent('views.settings.IntegrationsManager');
         const src = (this.scalarClient !== null && this.scalarClient.hasCredentials()) ?
                 this.scalarClient.getScalarInterfaceUrlForRoom(this.props.room, 'add_integ') :
                 null;
         Modal.createTrackedDialog('Integrations Manager', '', IntegrationsManager, {
             src: src,
-        }, "mx_IntegrationsManager");
+        }, 'mx_IntegrationsManager');
     },
 
     onClickAddWidget: function(e) {
@@ -201,12 +209,12 @@ module.exports = React.createClass({
         // Display a warning dialog if the max number of widgets have already been added to the room
         const apps = this._getApps();
         if (apps && apps.length >= MAX_WIDGETS) {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
             const errorMsg = `The maximum number of ${MAX_WIDGETS} widgets have already been added to this room.`;
             console.error(errorMsg);
             Modal.createDialog(ErrorDialog, {
-                title: _t("Cannot add any more widgets"),
-                description: _t("The maximum permitted number of widgets have already been added to this room."),
+                title: _t('Cannot add any more widgets'),
+                description: _t('The maximum permitted number of widgets have already been added to this room.'),
             });
             return;
         }
@@ -238,11 +246,11 @@ module.exports = React.createClass({
         ) {
             addWidget = <div
                 onClick={this.onClickAddWidget}
-                role="button"
-                tabIndex="0"
+                role='button'
+                tabIndex='0'
                 className={this.state.apps.length<2 ?
-                    "mx_AddWidget_button mx_AddWidget_button_full_width" :
-                    "mx_AddWidget_button"
+                    'mx_AddWidget_button mx_AddWidget_button_full_width' :
+                    'mx_AddWidget_button'
                 }
                 title={_t('Add a widget')}>
                 [+] { _t('Add a widget') }
@@ -250,8 +258,8 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className="mx_AppsDrawer">
-                <div id="apps" className="mx_AppsContainer">
+            <div className={'mx_AppsDrawer' + (this.props.hide ? ' mx_AppsDrawer_hidden' : '')}>
+                <div id='apps' className='mx_AppsContainer'>
                     { apps }
                 </div>
                 { this._canUserModify() && addWidget }
