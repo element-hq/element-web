@@ -46,7 +46,7 @@
     "Failed to get public room list": "Huts egin du gela publikoen zerrenda jasotzean",
     "Failed to remove tag %(tagName)s from room": "Huts egin du %(tagName)s etiketa gelatik kentzean",
     "Failed to send report: ": "Huts egin du txostena bidaltzean: ",
-    "Failed to set direct chat tag": "Huts egin du txat zuzeneko etiketa jartzean",
+    "Failed to set direct chat tag": "Huts egin du txat zuzenarenaren etiketa jartzean",
     "Failed to set Direct Message status of room": "Huts egin du Mezu Zuzena egoera gelan ezartzean",
     "Favourite": "Gogokoa",
     "Fetching third party location failed": "Huts egin du hirugarrengoen kokalekua eskuratzean",
