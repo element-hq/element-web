@@ -18,6 +18,10 @@ limitations under the License.
     margin: 5px;
 }
 
+.mx_AppsDrawer_hidden {
+    display: none;
+}
+
 .mx_AppsContainer {
     display: flex;
     flex-direction: row;
