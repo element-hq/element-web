@@ -52,9 +52,9 @@ const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g')
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {makeUserPermalink} from "../../../matrix-to";
-import QuotePreview from "./QuotePreview";
+import ReplyPreview from "./ReplyPreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
-import Quote from "../elements/Quote";
+import Reply from "../elements/Reply";
 import {ContentHelpers} from 'matrix-js-sdk';
 
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
@@ -839,7 +839,7 @@ export default class MessageComposerInput extends React.Component {
         }
 
         const quotingEv = RoomViewStore.getQuotingEvent();
-        const content = quotingEv ? Quote.getRelationship(quotingEv) : {};
+        const content = quotingEv ? Reply.getRelationship(quotingEv) : {};
         // we have finished quoting, clear the quotingEvent
         // TODO maybe delay this until the event actually sends?
         dis.dispatch({
@@ -1159,7 +1159,7 @@ export default class MessageComposerInput extends React.Component {
         return (
             <div className="mx_MessageComposer_input_wrapper">
                 <div className="mx_MessageComposer_autocomplete_wrapper">
-                    { SettingsStore.isFeatureEnabled("feature_rich_quoting") && <QuotePreview /> }
+                    { SettingsStore.isFeatureEnabled("feature_rich_quoting") && <ReplyPreview /> }
                     <Autocomplete
                         ref={(e) => this.autocomplete = e}
                         room={this.props.room}

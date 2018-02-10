@@ -18,7 +18,7 @@ limitations under the License.
 'use strict';
 
 
-import Quote from "../elements/Quote";
+import Reply from "../elements/Reply";
 
 const React = require('react');
 import PropTypes from 'prop-types';
@@ -589,12 +589,12 @@ module.exports = withMatrixClient(React.createClass({
                     </div>
                 );
             }
-            case 'quote': {
+            case 'reply': {
                 return (
                     <div className={classes}>
                         { avatar }
                         { sender }
-                        <div className="mx_EventTile_line mx_EventTile_quote">
+                        <div className="mx_EventTile_line mx_EventTile_reply">
                             <a href={permalink} onClick={this.onPermalinkClicked}>
                                 { timestamp }
                             </a>
@@ -622,7 +622,7 @@ module.exports = withMatrixClient(React.createClass({
                                 { timestamp }
                             </a>
                             { this._renderE2EPadlock() }
-                            { Quote.getQuote(this.props.mxEvent, this.props.onWidgetLoad) }
+                            { Reply.getQuote(this.props.mxEvent, this.props.onWidgetLoad) }
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}

@@ -23,7 +23,7 @@ import {MatrixEvent} from 'matrix-js-sdk';
 import {makeUserPermalink} from "../../../matrix-to";
 import SettingsStore from "../../../settings/SettingsStore";
 
-export default class Quote extends React.Component {
+export default class Reply extends React.Component {
     static propTypes = {
         // The parent event
         parentEv: PropTypes.instanceOf(MatrixEvent),
@@ -68,7 +68,7 @@ export default class Quote extends React.Component {
 
     async initialize() {
         const {parentEv} = this.props;
-        const inReplyTo = Quote.getInReplyTo(parentEv);
+        const inReplyTo = Reply.getInReplyTo(parentEv);
 
         const ev = await this.getEvent(this.room, inReplyTo['event_id']);
         this.setState({
@@ -79,7 +79,7 @@ export default class Quote extends React.Component {
     async loadNextEvent() {
         this.props.onWidgetLoad();
         const ev = this.state.events[0];
-        const inReplyTo = Quote.getInReplyTo(ev);
+        const inReplyTo = Reply.getInReplyTo(ev);
 
         if (!inReplyTo) {
             this.setState({
@@ -139,8 +139,8 @@ export default class Quote extends React.Component {
     }
 
     static getQuote(parentEv, onWidgetLoad) {
-        if (!SettingsStore.isFeatureEnabled("feature_rich_quoting") || !Quote.getInReplyTo(parentEv)) return null;
-        return <Quote parentEv={parentEv} onWidgetLoad={onWidgetLoad} />;
+        if (!SettingsStore.isFeatureEnabled("feature_rich_quoting") || !Reply.getInReplyTo(parentEv)) return null;
+        return <Reply parentEv={parentEv} onWidgetLoad={onWidgetLoad} />;
     }
 
     render() {
@@ -149,10 +149,10 @@ export default class Quote extends React.Component {
             const ev = this.state.loadedEv;
             const Pill = sdk.getComponent('elements.Pill');
             const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
-            header = <blockquote className="mx_Quote">
+            header = <blockquote className="mx_Reply">
                 {
                     _t('<a>In reply to</a> <pill>', {}, {
-                        'a': (sub) => <a onClick={this.onQuoteClick} className="mx_Quote_show">{ sub }</a>,
+                        'a': (sub) => <a onClick={this.onQuoteClick} className="mx_Reply_show">{ sub }</a>,
                         'pill': <Pill type={Pill.TYPE_USER_MENTION} room={room}
                                       url={makeUserPermalink(ev.getSender())} shouldShowPillAvatar={true} />,
                     })
@@ -171,9 +171,9 @@ export default class Quote extends React.Component {
                 dateSep = <a href={this.props.url}><DateSeparator ts={ev.getTs()} /></a>;
             }
 
-            return <blockquote className="mx_Quote" key={ev.getId()}>
+            return <blockquote className="mx_Reply" key={ev.getId()}>
                 { dateSep }
-                <EventTile mxEvent={ev} tileShape="quote" />
+                <EventTile mxEvent={ev} tileShape="reply" />
             </blockquote>;
         });
 

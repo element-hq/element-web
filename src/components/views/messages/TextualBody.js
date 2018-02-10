@@ -182,7 +182,6 @@ module.exports = React.createClass({
 
                 // If the link is a (localised) matrix.to link, replace it with a pill
                 const Pill = sdk.getComponent('elements.Pill');
-                const Quote = sdk.getComponent('elements.Quote');
                 if (Pill.isMessagePillUrl(href)) {
                     const pillContainer = document.createElement('span');
 
