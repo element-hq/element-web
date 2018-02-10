@@ -21,33 +21,20 @@ import MatrixClientPeg from '../../../MatrixClientPeg';
 import {wantsDateSeparator} from '../../../DateUtils';
 import {MatrixEvent} from 'matrix-js-sdk';
 import {makeUserPermalink} from "../../../matrix-to";
-
-// For URLs of matrix.to links in the timeline which have been reformatted by
-// HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
-const REGEX_LOCAL_MATRIXTO = /^#\/room\/([\#\!][^\/]*)\/(\$[^\/]*)$/;
+import SettingsStore from "../../../settings/SettingsStore";
 
 export default class Quote extends React.Component {
-    static isMessageUrl(url) {
-        return !!REGEX_LOCAL_MATRIXTO.exec(url);
-    }
-
-    static childContextTypes = {
-        matrixClient: PropTypes.object,
-        addRichQuote: PropTypes.func,
-    };
-
     static propTypes = {
-        // The matrix.to url of the event
-        url: PropTypes.string,
-        // The original node that was rendered
-        node: PropTypes.instanceOf(Element),
         // The parent event
         parentEv: PropTypes.instanceOf(MatrixEvent),
+
+        onWidgetLoad: PropTypes.func.isRequired,
     };
 
     constructor(props, context) {
         super(props, context);
 
+        /*
         this.state = {
             // The event related to this quote and their nested rich quotes
             events: [],
@@ -55,45 +42,54 @@ export default class Quote extends React.Component {
             show: true,
             // Whether an error was encountered fetching nested older event, show node if it does
             err: false,
+            loading: true,
+        };*/
+
+        this.state = {
+            // The loaded events to be rendered as linear-replies
+            events: [],
+
+            // The latest loaded event which has not yet been shown
+            loadedEv: null,
+            // Whether the component is still loading more events
+            loading: true,
+
+            // Whether as error was encountered fetching a replied to event.
+            err: null,
         };
 
         this.onQuoteClick = this.onQuoteClick.bind(this);
-        this.addRichQuote = this.addRichQuote.bind(this);
-    }
-
-    getChildContext() {
-        return {
-            matrixClient: MatrixClientPeg.get(),
-            addRichQuote: this.addRichQuote,
-        };
-    }
-
-    parseUrl(url) {
-        if (!url) return;
-
-        // Default to the empty array if no match for simplicity
-        // resource and prefix will be undefined instead of throwing
-        const matrixToMatch = REGEX_LOCAL_MATRIXTO.exec(url) || [];
-
-        const [, roomIdentifier, eventId] = matrixToMatch;
-        return {roomIdentifier, eventId};
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const {roomIdentifier, eventId} = this.parseUrl(nextProps.url);
-        if (!roomIdentifier || !eventId) return;
-
-        const room = this.getRoom(roomIdentifier);
-        if (!room) return;
-
-        // Only try and load the event if we know about the room
-        // otherwise we just leave a `Quote` anchor which can be used to navigate/join the room manually.
-        this.setState({ events: [] });
-        if (room) this.getEvent(room, eventId, true);
     }
 
     componentWillMount() {
-        this.componentWillReceiveProps(this.props);
+        this.room = this.getRoom(this.props.parentEv.getRoomId());
+        this.initialize();
+    }
+
+    async initialize() {
+        const {parentEv} = this.props;
+        const inReplyTo = Quote.getInReplyTo(parentEv);
+
+        const ev = await this.getEvent(this.room, inReplyTo['event_id']);
+        this.setState({
+            events: [ev],
+        }, this.loadNextEvent);
+    }
+
+    async loadNextEvent() {
+        this.props.onWidgetLoad();
+        const ev = this.state.events[0];
+        const inReplyTo = Quote.getInReplyTo(ev);
+
+        if (!inReplyTo) {
+            this.setState({
+                loading: false,
+            });
+            return;
+        }
+
+        const loadedEv = await this.getEvent(this.room, inReplyTo['event_id']);
+        this.setState({loadedEv});
     }
 
     getRoom(id) {
@@ -105,84 +101,84 @@ export default class Quote extends React.Component {
         });
     }
 
-    async getEvent(room, eventId, show) {
+    async getEvent(room, eventId) {
         const event = room.findEventById(eventId);
-        if (event) {
-            this.addEvent(event, show);
-            return;
-        }
+        if (event) return event;
 
         await MatrixClientPeg.get().getEventTimeline(room.getUnfilteredTimelineSet(), eventId);
-        this.addEvent(room.findEventById(eventId), show);
-    }
-
-    addEvent(event, show) {
-        const events = [event].concat(this.state.events);
-        this.setState({events, show});
-    }
-
-    // addRichQuote(roomId, eventId) {
-    addRichQuote(href) {
-        const {roomIdentifier, eventId} = this.parseUrl(href);
-        if (!roomIdentifier || !eventId) {
-            this.setState({ err: true });
-            return;
-        }
-
-        const room = this.getRoom(roomIdentifier);
-        if (!room) {
-            this.setState({ err: true });
-            return;
-        }
-
-        this.getEvent(room, eventId, false);
+        return room.findEventById(eventId);
     }
 
     onQuoteClick() {
-        this.setState({ show: true });
+        const events = [this.state.loadedEv].concat(this.state.events);
+
+        this.setState({
+            loadedEv: null,
+            events,
+        }, this.loadNextEvent);
+    }
+
+    static getInReplyTo(ev) {
+        if (ev.isRedacted()) return;
+
+        const {'m.relates_to': mRelatesTo} = ev.getContent();
+        if (mRelatesTo) {
+            return mRelatesTo['m.in_reply_to'];
+        }
+    }
+
+    static getRelationship(ev) {
+        return {
+            'm.relates_to': {
+                'm.in_reply_to': {
+                    'event_id': ev.getId(),
+                },
+            },
+        };
+    }
+
+    static getQuote(parentEv, onWidgetLoad) {
+        if (!SettingsStore.isFeatureEnabled("feature_rich_quoting") || !Quote.getInReplyTo(parentEv)) return null;
+        return <Quote parentEv={parentEv} onWidgetLoad={onWidgetLoad} />;
     }
 
     render() {
-        const events = this.state.events.slice();
-        if (events.length) {
-            const evTiles = [];
-
-            if (!this.state.show) {
-                const oldestEv = events.shift();
-                const Pill = sdk.getComponent('elements.Pill');
-                const room = MatrixClientPeg.get().getRoom(oldestEv.getRoomId());
-
-                evTiles.push(<blockquote className="mx_Quote" key="load">
-                    {
-                        _t('<a>In reply to</a> <pill>', {}, {
-                            'a': (sub) => <a onClick={this.onQuoteClick} className="mx_Quote_show">{ sub }</a>,
-                            'pill': <Pill type={Pill.TYPE_USER_MENTION} room={room}
-                                          url={makeUserPermalink(oldestEv.getSender())} shouldShowPillAvatar={true} />,
-                        })
-                    }
-                </blockquote>);
-            }
-
-            const EventTile = sdk.getComponent('views.rooms.EventTile');
-            const DateSeparator = sdk.getComponent('messages.DateSeparator');
-            events.forEach((ev) => {
-                let dateSep = null;
-
-                if (wantsDateSeparator(this.props.parentEv.getDate(), ev.getDate())) {
-                    dateSep = <a href={this.props.url}><DateSeparator ts={ev.getTs()} /></a>;
+        let header = null;
+        if (this.state.loadedEv) {
+            const ev = this.state.loadedEv;
+            const Pill = sdk.getComponent('elements.Pill');
+            const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
+            header = <blockquote className="mx_Quote">
+                {
+                    _t('<a>In reply to</a> <pill>', {}, {
+                        'a': (sub) => <a onClick={this.onQuoteClick} className="mx_Quote_show">{ sub }</a>,
+                        'pill': <Pill type={Pill.TYPE_USER_MENTION} room={room}
+                                      url={makeUserPermalink(ev.getSender())} shouldShowPillAvatar={true} />,
+                    })
                 }
-
-                evTiles.push(<blockquote className="mx_Quote" key={ev.getId()}>
-                    { dateSep }
-                    <EventTile mxEvent={ev} tileShape="quote" />
-                </blockquote>);
-            });
-
-            return <div>{ evTiles }</div>;
+            </blockquote>;
+        } else if (this.state.loading) {
+            header = <blockquote>LOADING...</blockquote>;
         }
 
-        // Deliberately render nothing if the URL isn't recognised
-        // in case we get an undefined/falsey node, replace it with null to make React happy
-        return this.props.node || null;
+        const EventTile = sdk.getComponent('views.rooms.EventTile');
+        const DateSeparator = sdk.getComponent('messages.DateSeparator');
+        const evTiles = this.state.events.map((ev) => {
+            let dateSep = null;
+
+            if (wantsDateSeparator(this.props.parentEv.getDate(), ev.getDate())) {
+                dateSep = <a href={this.props.url}><DateSeparator ts={ev.getTs()} /></a>;
+            }
+
+            return <blockquote className="mx_Quote" key={ev.getId()}>
+                { dateSep }
+                <EventTile mxEvent={ev} tileShape="quote" />
+            </blockquote>;
+        });
+
+        return <div>
+            <div>{ header }</div>
+            <div>{ evTiles }</div>
+        </div>;
     }
 }

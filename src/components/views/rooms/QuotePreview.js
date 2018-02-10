@@ -71,8 +71,10 @@ export default class QuotePreview extends React.Component {
                          onClick={cancelQuoting} />
                 </div>
                 <div className="mx_QuotePreview_clear" />
-                <EventTile mxEvent={this.state.event} last={true} tileShape="quote" />
+                <EventTile mxEvent={this.state.event} last={true} tileShape="quote" onWidgetLoad={dummyOnWidgetLoad} />
             </div>
         </div>;
     }
 }
+
+function dummyOnWidgetLoad() {}

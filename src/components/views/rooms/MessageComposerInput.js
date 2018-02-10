@@ -51,9 +51,11 @@ const REGEX_MATRIXTO_MARKDOWN_GLOBAL = new RegExp(MATRIXTO_MD_LINK_PATTERN, 'g')
 
 import {asciiRegexp, shortnameToUnicode, emojioneList, asciiList, mapUnicodeToShort} from 'emojione';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import {makeEventPermalink, makeUserPermalink} from "../../../matrix-to";
+import {makeUserPermalink} from "../../../matrix-to";
 import QuotePreview from "./QuotePreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
+import Quote from "../elements/Quote";
+import {ContentHelpers} from 'matrix-js-sdk';
 
 const EMOJI_SHORTNAMES = Object.keys(emojioneList);
 const EMOJI_UNICODE_TO_SHORTNAME = mapUnicodeToShort();
@@ -751,16 +753,9 @@ export default class MessageComposerInput extends React.Component {
             return true;
         }
 
-        const quotingEv = RoomViewStore.getQuotingEvent();
-
         if (this.state.isRichtextEnabled) {
             // We should only send HTML if any block is styled or contains inline style
             let shouldSendHTML = false;
-
-            // If we are quoting we need HTML Content
-            if (quotingEv) {
-                shouldSendHTML = true;
-            }
 
             const blocks = contentState.getBlocksAsArray();
             if (blocks.some((block) => block.getType() !== 'unstyled')) {
@@ -820,15 +815,15 @@ export default class MessageComposerInput extends React.Component {
 
             const md = new Markdown(pt);
             // if contains no HTML and we're not quoting (needing HTML)
-            if (md.isPlainText() && !quotingEv) {
+            if (md.isPlainText()) {
                 contentText = md.toPlaintext();
             } else {
                 contentHTML = md.toHTML();
             }
         }
 
-        let sendHtmlFn = this.client.sendHtmlMessage;
-        let sendTextFn = this.client.sendTextMessage;
+        let sendHtmlFn = ContentHelpers.makeHtmlMessage;
+        let sendTextFn = ContentHelpers.makeTextMessage;
 
         this.historyManager.save(
             contentState,
@@ -839,35 +834,26 @@ export default class MessageComposerInput extends React.Component {
             contentText = contentText.substring(4);
             // bit of a hack, but the alternative would be quite complicated
             if (contentHTML) contentHTML = contentHTML.replace(/\/me ?/, '');
-            sendHtmlFn = this.client.sendHtmlEmote;
-            sendTextFn = this.client.sendEmoteMessage;
+            sendHtmlFn = ContentHelpers.makeHtmlEmote;
+            sendTextFn = ContentHelpers.makeEmoteMessage;
         }
 
-        if (quotingEv) {
-            const cli = MatrixClientPeg.get();
-            const room = cli.getRoom(quotingEv.getRoomId());
-            const sender = room.currentState.getMember(quotingEv.getSender());
-
-            const {body/*, formatted_body*/} = quotingEv.getContent();
-
-            const perma = makeEventPermalink(quotingEv.getRoomId(), quotingEv.getId());
-            contentText = `${sender.name}:\n> ${body}\n\n${contentText}`;
-            contentHTML = `<a href="${perma}">Quote<br></a>${contentHTML}`;
-
-            // we have finished quoting, clear the quotingEvent
-            dis.dispatch({
-                action: 'quote_event',
-                event: null,
-            });
-        }
+        const quotingEv = RoomViewStore.getQuotingEvent();
+        const content = quotingEv ? Quote.getRelationship(quotingEv) : {};
+        // we have finished quoting, clear the quotingEvent
+        // TODO maybe delay this until the event actually sends?
+        dis.dispatch({
+            action: 'quote_event',
+            event: null,
+        });
 
         let sendMessagePromise;
         if (contentHTML) {
-            sendMessagePromise = sendHtmlFn.call(
-                this.client, this.props.room.roomId, contentText, contentHTML,
-            );
+            Object.assign(content, sendHtmlFn(contentText, contentHTML));
+            sendMessagePromise = this.client.sendMessage(this.props.room.roomId, content);
         } else {
-            sendMessagePromise = sendTextFn.call(this.client, this.props.room.roomId, contentText);
+            Object.assign(content, sendTextFn(contentText));
+            sendMessagePromise = this.client.sendMessage(this.props.room.roomId, content);
         }
 
         sendMessagePromise.done((res) => {

@@ -61,10 +61,6 @@ module.exports = React.createClass({
         tileShape: PropTypes.string,
     },
 
-    contextTypes: {
-        addRichQuote: PropTypes.func,
-    },
-
     getInitialState: function() {
         return {
             // the URLs (if any) to be previewed with a LinkPreviewWidget
@@ -205,21 +201,6 @@ module.exports = React.createClass({
 
                     // update the current node with one that's now taken its place
                     node = pillContainer;
-                } else if (SettingsStore.isFeatureEnabled("feature_rich_quoting") && Quote.isMessageUrl(href)) {
-                    if (this.context.addRichQuote) { // We're already a Rich Quote so just append the next one above
-                        this.context.addRichQuote(href);
-                        node.remove();
-                    } else { // We're the first in the chain
-                        const quoteContainer = document.createElement('span');
-
-                        const quote =
-                            <Quote url={href} parentEv={this.props.mxEvent} node={node} />;
-
-                        ReactDOM.render(quote, quoteContainer);
-                        node.parentNode.replaceChild(quoteContainer, node);
-                        node = quoteContainer;
-                    }
-                    pillified = true;
                 }
             } else if (node.nodeType == Node.TEXT_NODE) {
                 const Pill = sdk.getComponent('elements.Pill');

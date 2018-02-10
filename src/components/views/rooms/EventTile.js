@@ -18,6 +18,8 @@ limitations under the License.
 'use strict';
 
 
+import Quote from "../elements/Quote";
+
 const React = require('react');
 import PropTypes from 'prop-types';
 const classNames = require("classnames");
@@ -517,7 +519,7 @@ module.exports = withMatrixClient(React.createClass({
 
         if (needsSenderProfile) {
             let text = null;
-            if (!this.props.tileShape || this.props.tileShape === 'quote') {
+            if (!this.props.tileShape) {
                 if (msgtype === 'm.image') text = _td('%(senderName)s sent an image');
                 else if (msgtype === 'm.video') text = _td('%(senderName)s sent a video');
                 else if (msgtype === 'm.file') text = _td('%(senderName)s uploaded a file');
@@ -598,7 +600,6 @@ module.exports = withMatrixClient(React.createClass({
                             </a>
                             { this._renderE2EPadlock() }
                             <EventTileType ref="tile"
-                                           tileShape="quote"
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
                                            highlightLink={this.props.highlightLink}
@@ -621,6 +622,7 @@ module.exports = withMatrixClient(React.createClass({
                                 { timestamp }
                             </a>
                             { this._renderE2EPadlock() }
+                            { Quote.getQuote(this.props.mxEvent, this.props.onWidgetLoad) }
                             <EventTileType ref="tile"
                                            mxEvent={this.props.mxEvent}
                                            highlights={this.props.highlights}
