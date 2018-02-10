@@ -320,8 +320,8 @@ limitations under the License.
     border-left: $e2e-unverified-color 5px solid;
 }
 
-.mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line:not(.mx_EventTile_reply) .mx_MessageTimestamp,
-.mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line:not(.mx_EventTile_reply) .mx_MessageTimestamp {
+.mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line:not(.mx_EventTile_reply) > a > .mx_MessageTimestamp,
+.mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line:not(.mx_EventTile_reply) > a > .mx_MessageTimestamp {
     left: 3px;
     width: auto;
 }
@@ -332,8 +332,8 @@ limitations under the License.
 }
 */
 
-.mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line:not(.mx_EventTile_reply) .mx_EventTile_e2eIcon,
-.mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line:not(.mx_EventTile_reply) .mx_EventTile_e2eIcon {
+.mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line:not(.mx_EventTile_reply) > .mx_EventTile_e2eIcon,
+.mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line:not(.mx_EventTile_reply) > .mx_EventTile_e2eIcon {
     display: block;
     left: 41px;
 }
