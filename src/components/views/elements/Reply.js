@@ -51,6 +51,8 @@ export default class Reply extends React.Component {
         };
 
         this.onQuoteClick = this.onQuoteClick.bind(this);
+
+        this.unmounted = false;
     }
 
     componentWillMount() {
@@ -58,11 +60,17 @@ export default class Reply extends React.Component {
         this.initialize();
     }
 
+    componentWillUnmount() {
+        this.unmounted = true;
+    }
+
     async initialize() {
         const {parentEv} = this.props;
         const inReplyTo = Reply.getInReplyTo(parentEv);
 
         const ev = await this.getEvent(this.room, inReplyTo['event_id']);
+        if (this.unmounted) return;
+
         if (ev) {
             this.setState({
                 events: [ev],
@@ -78,6 +86,7 @@ export default class Reply extends React.Component {
         const inReplyTo = Reply.getInReplyTo(ev);
 
         if (!inReplyTo) {
+            if (this.unmounted) return;
             this.setState({
                 loading: false,
             });
@@ -85,6 +94,8 @@ export default class Reply extends React.Component {
         }
 
         const loadedEv = await this.getEvent(this.room, inReplyTo['event_id']);
+        if (this.unmounted) return;
+
         if (loadedEv) {
             this.setState({loadedEv});
         } else {
