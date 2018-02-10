@@ -36,10 +36,10 @@
 @import "./matrix-react-sdk/views/elements/_EditableItemList.scss";
 @import "./matrix-react-sdk/views/elements/_MemberEventListSummary.scss";
 @import "./matrix-react-sdk/views/elements/_ProgressBar.scss";
+@import "./matrix-react-sdk/views/elements/_Reply.scss";
 @import "./matrix-react-sdk/views/elements/_RichText.scss";
 @import "./matrix-react-sdk/views/elements/_RoleButton.scss";
 @import "./matrix-react-sdk/views/elements/_ToolTipButton.scss";
-@import "./matrix-react-sdk/views/elements/_Quote.scss";
 @import "./matrix-react-sdk/views/groups/_GroupPublicityToggle.scss";
 @import "./matrix-react-sdk/views/groups/_GroupRoomList.scss";
 @import "./matrix-react-sdk/views/groups/_GroupUserSettings.scss";
@@ -65,6 +65,7 @@
 @import "./matrix-react-sdk/views/rooms/_PinnedEventTile.scss";
 @import "./matrix-react-sdk/views/rooms/_PinnedEventsPanel.scss";
 @import "./matrix-react-sdk/views/rooms/_PresenceLabel.scss";
+@import "./matrix-react-sdk/views/rooms/_ReplyPreview.scss";
 @import "./matrix-react-sdk/views/rooms/_RoomHeader.scss";
 @import "./matrix-react-sdk/views/rooms/_RoomList.scss";
 @import "./matrix-react-sdk/views/rooms/_RoomPreviewBar.scss";
@@ -72,7 +73,6 @@
 @import "./matrix-react-sdk/views/rooms/_RoomTile.scss";
 @import "./matrix-react-sdk/views/rooms/_SearchableEntityList.scss";
 @import "./matrix-react-sdk/views/rooms/_TopUnreadMessagesBar.scss";
-@import "./matrix-react-sdk/views/rooms/_QuotePreview.scss";
 @import "./matrix-react-sdk/views/settings/_DevicesPanel.scss";
 @import "./matrix-react-sdk/views/settings/_IntegrationsManager.scss";
 @import "./matrix-react-sdk/views/voip/_CallView.scss";

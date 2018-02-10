@@ -1,4 +1,4 @@
-.mx_QuotePreview {
+.mx_ReplyPreview {
     position: absolute;
     bottom: 0;
     z-index: 1000;
@@ -11,26 +11,26 @@
     overflow: auto
 }
 
-.mx_QuotePreview_section {
+.mx_ReplyPreview_section {
     border-bottom: 1px solid $primary-hairline-color;
 }
 
-.mx_QuotePreview_header {
+.mx_ReplyPreview_header {
     margin: 12px;
     color: $primary-fg-color;
     font-weight: 400;
     opacity: 0.4;
 }
 
-.mx_QuotePreview_title {
+.mx_ReplyPreview_title {
     float: left;
 }
 
-.mx_QuotePreview_cancel {
+.mx_ReplyPreview_cancel {
     float: right;
     cursor: pointer;
 }
 
-.mx_QuotePreview_clear {
+.mx_ReplyPreview_clear {
     clear: both;
 }
