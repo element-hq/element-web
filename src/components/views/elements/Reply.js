@@ -23,6 +23,9 @@ import {MatrixEvent} from 'matrix-js-sdk';
 import {makeUserPermalink} from "../../../matrix-to";
 import SettingsStore from "../../../settings/SettingsStore";
 
+// This component does no cycle detection, simply because the only way to make such a cycle
+// would be to craft event_id's, using a custom homeserver; even then the impact would be low
+// as each event being loaded (after the first) is triggered by an explicit user action.
 export default class Reply extends React.Component {
     static propTypes = {
         // The parent event
@@ -34,17 +37,6 @@ export default class Reply extends React.Component {
     constructor(props, context) {
         super(props, context);
 
-        /*
-        this.state = {
-            // The event related to this quote and their nested rich quotes
-            events: [],
-            // Whether the top (oldest) event should be shown or spoilered
-            show: true,
-            // Whether an error was encountered fetching nested older event, show node if it does
-            err: false,
-            loading: true,
-        };*/
-
         this.state = {
             // The loaded events to be rendered as linear-replies
             events: [],
@@ -55,7 +47,7 @@ export default class Reply extends React.Component {
             loading: true,
 
             // Whether as error was encountered fetching a replied to event.
-            err: null,
+            err: false,
         };
 
         this.onQuoteClick = this.onQuoteClick.bind(this);
@@ -71,9 +63,13 @@ export default class Reply extends React.Component {
         const inReplyTo = Reply.getInReplyTo(parentEv);
 
         const ev = await this.getEvent(this.room, inReplyTo['event_id']);
-        this.setState({
-            events: [ev],
-        }, this.loadNextEvent);
+        if (ev) {
+            this.setState({
+                events: [ev],
+            }, this.loadNextEvent);
+        } else {
+            this.setState({err: true});
+        }
     }
 
     async loadNextEvent() {
@@ -89,7 +85,11 @@ export default class Reply extends React.Component {
         }
 
         const loadedEv = await this.getEvent(this.room, inReplyTo['event_id']);
-        this.setState({loadedEv});
+        if (loadedEv) {
+            this.setState({loadedEv});
+        } else {
+            this.setState({err: true});
+        }
     }
 
     getRoom(id) {
@@ -105,7 +105,11 @@ export default class Reply extends React.Component {
         const event = room.findEventById(eventId);
         if (event) return event;
 
-        await MatrixClientPeg.get().getEventTimeline(room.getUnfilteredTimelineSet(), eventId);
+        try {
+            await MatrixClientPeg.get().getEventTimeline(room.getUnfilteredTimelineSet(), eventId);
+        } catch (e) {
+            return;
+        }
         return room.findEventById(eventId);
     }
 
@@ -145,7 +149,15 @@ export default class Reply extends React.Component {
 
     render() {
         let header = null;
-        if (this.state.loadedEv) {
+
+        if (this.state.err) {
+            header = <blockquote className="mx_Reply mx_Reply_error">
+                {
+                    _t('Unable to load event that was replied to, ' +
+                        'it either does not exist or you do not have permission to view it.')
+                }
+            </blockquote>;
+        } else if (this.state.loadedEv) {
             const ev = this.state.loadedEv;
             const Pill = sdk.getComponent('elements.Pill');
             const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
@@ -159,7 +171,8 @@ export default class Reply extends React.Component {
                 }
             </blockquote>;
         } else if (this.state.loading) {
-            header = <blockquote>LOADING...</blockquote>;
+            const Spinner = sdk.getComponent("elements.Spinner");
+            header = <Spinner />;
         }
 
         const EventTile = sdk.getComponent('views.rooms.EventTile');
