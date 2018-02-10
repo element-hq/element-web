@@ -121,9 +121,10 @@ export default class Quote extends React.Component {
     static getInReplyTo(ev) {
         if (ev.isRedacted()) return;
 
-        const {'m.relates_to': mRelatesTo} = ev.getContent();
+        const mRelatesTo = ev.getWireContent()['m.relates_to'];
         if (mRelatesTo) {
-            return mRelatesTo['m.in_reply_to'];
+            const mInReplyTo = mRelatesTo['m.in_reply_to'];
+            if ('event_id' in mInReplyTo) return mInReplyTo;
         }
     }
 
