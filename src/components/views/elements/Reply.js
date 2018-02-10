@@ -172,7 +172,7 @@ export default class Reply extends React.Component {
             </blockquote>;
         } else if (this.state.loading) {
             const Spinner = sdk.getComponent("elements.Spinner");
-            header = <Spinner />;
+            header = <Spinner w={16} h={16} />;
         }
 
         const EventTile = sdk.getComponent('views.rooms.EventTile');
