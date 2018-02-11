@@ -137,9 +137,9 @@ export default class Reply extends React.Component {
         if (ev.isRedacted()) return;
 
         const mRelatesTo = ev.getWireContent()['m.relates_to'];
-        if (mRelatesTo) {
+        if (mRelatesTo && mRelatesTo['m.in_reply_to']) {
             const mInReplyTo = mRelatesTo['m.in_reply_to'];
-            if ('event_id' in mInReplyTo) return mInReplyTo;
+            if (mInReplyTo['event_id']) return mInReplyTo;
         }
     }
 
