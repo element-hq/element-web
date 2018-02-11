@@ -187,7 +187,7 @@ module.exports = React.createClass({
         if (this.props.timestamp) {
             title = _t(
                 "Seen by %(displayName)s (%(userName)s) at %(dateTime)s",
-                {displayName: this.props.member.name,
+                {displayName: this.props.member.rawDisplayName,
                  userName: this.props.member.userId,
                  dateTime: formatDate(new Date(this.props.timestamp), this.props.showTwelveHour)},
             );
