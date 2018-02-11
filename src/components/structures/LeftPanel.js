@@ -17,9 +17,8 @@ limitations under the License.
 'use strict';
 
 import React from 'react';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
-import KeyCode from 'matrix-react-sdk/lib/KeyCode';
+import classNames from 'classnames';
+import { KeyCode } from 'matrix-react-sdk/lib/Keyboard';
 import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import MatrixClientPeg from 'matrix-react-sdk/lib/MatrixClientPeg';
@@ -55,7 +54,7 @@ var LeftPanel = React.createClass({
         // We just need to update if any of these things change.
         if (
             this.props.collapsed !== nextProps.collapsed ||
-            this.props.opacity !== nextProps.opacity
+            this.props.disabled !== nextProps.disabled
         ) {
             return true;
         }
@@ -176,14 +175,16 @@ var LeftPanel = React.createClass({
             topBox = <SearchBox collapsed={ this.props.collapsed } onSearch={ this.onSearch } />;
         }
 
-        let classes = "mx_LeftPanel mx_fadable";
-        if (this.props.collapsed) {
-            classes += " collapsed";
-        }
+        let classes = classNames(
+            "mx_LeftPanel", "mx_fadable",
+            {
+                "collapsed": this.props.collapsed,
+                "mx_fadable_faded": this.props.disabled,
+            }
+        );
 
         return (
-            <aside className={classes} style={{ opacity: this.props.opacity }}
-                   onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
+            <aside className={classes} onKeyDown={ this._onKeyDown } onFocus={ this._onFocus } onBlur={ this._onBlur }>
                 { topBox }
                 <CallPreview ConferenceHandler={VectorConferenceHandler} />
                 <RoomList
@@ -196,4 +197,4 @@ var LeftPanel = React.createClass({
     }
 });
 
-module.exports = DragDropContext(HTML5Backend)(LeftPanel);
+module.exports = LeftPanel;

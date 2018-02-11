@@ -16,14 +16,17 @@ limitations under the License.
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
+import SyntaxHighlight from '../views/elements/SyntaxHighlight';
+
 
 module.exports = React.createClass({
     displayName: 'ViewSource',
 
     propTypes: {
-        content: React.PropTypes.object.isRequired,
-        onFinished: React.PropTypes.func.isRequired,
+        content: PropTypes.object.isRequired,
+        onFinished: PropTypes.func.isRequired,
     },
 
     componentDidMount: function() {
@@ -45,9 +48,9 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="mx_ViewSource">
-                <pre>
-                    {JSON.stringify(this.props.content, null, 2)}
-                </pre>
+                <SyntaxHighlight className="json">
+                    { JSON.stringify(this.props.content, null, 2) }
+                </SyntaxHighlight>
             </div>
         );
     }

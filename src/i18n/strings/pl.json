@@ -5,7 +5,7 @@
     "Add an email address above to configure email notifications": "Dodaj adres e-mail powyżej, aby skonfigurować powiadomienia e-mailowe",
     "Advanced notification settings": "Zaawansowane ustawienia powiadomień",
     "All messages": "Wszystkie wiadomości",
-    "All messages (loud)": "Wszystkie wiadomości (głośno)",
+    "All messages (noisy)": "Wszystkie wiadomości (głośno)",
     "All Rooms": "Wszystkie pokoje",
     "All notifications are currently disabled for all targets.": "Wszystkie powiadomienia są obecnie wyłączone dla wszystkich celów.",
     "An error occurred whilst saving your email notification preferences.": "Podczas zapisywania ustawień powiadomień e-mail wystąpił błąd.",
@@ -97,7 +97,6 @@
     "Send logs": "Wyślij logi",
     "Sorry, your browser is <b>not</b> able to run Riot.": "Przepraszamy, Twoja przeglądarka <b>nie jest w stanie</b> uruchomić Riot.",
     "powered by Matrix": "napędzany przez Matrix",
-    "Redact": "Zredaguj",
     "Reject": "Odrzuć",
     "Remove": "Usuń",
     "remove %(name)s from the directory.": "usuń %(name)s z katalogu.",
@@ -207,5 +206,13 @@
     "Event Type": "Typ wydarzenia",
     "Event Content": "Zawartość wydarzenia",
     "State Key": "Klucz stanu",
-    "Invite to this group": "Zaproś do tej grupy"
+    "Toolbox": "Przybornik",
+    "Edit": "Edycja",
+    "Show message in desktop notification": "Pokaż wiadomość w notyfikacji na pulpicie",
+    "Unpin Message": "Odepnij Wiadomość",
+    "Pin Message": "Przypnij Wiadomość",
+    "Register": "Rejestracja",
+    "Rooms": "Pokoje",
+    "Invite to this community": "Zaproś do tej społeczności",
+    "Add rooms to this community": "Dodaj pokoje do tej społeczności"
 }

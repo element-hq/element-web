@@ -20,8 +20,8 @@ limitations under the License.
 var React = require('react');
 var ReactDOM = require('react-dom');
 var classNames = require('classnames');
-var DropTarget = require('react-dnd').DropTarget;
 var sdk = require('matrix-react-sdk');
+import { Droppable } from 'react-beautiful-dnd';
 import { _t } from 'matrix-react-sdk/lib/languageHandler';
 var dis = require('matrix-react-sdk/lib/dispatcher');
 var Unread = require('matrix-react-sdk/lib/Unread');
@@ -30,7 +30,8 @@ var RoomNotifs = require('matrix-react-sdk/lib/RoomNotifs');
 var FormattingUtils = require('matrix-react-sdk/lib/utils/FormattingUtils');
 var AccessibleButton = require('matrix-react-sdk/lib/components/views/elements/AccessibleButton');
 import Modal from 'matrix-react-sdk/lib/Modal';
-import KeyCode from 'matrix-react-sdk/lib/KeyCode';
+import { KeyCode } from 'matrix-react-sdk/lib/Keyboard';
+
 
 // turn this on for drop & drag console debugging galore
 var debug = false;
@@ -246,10 +247,14 @@ var RoomSubList = React.createClass({
     roomNotificationCount: function(truncateAt) {
         var self = this;
 
+        if (this.props.isInvite) {
+            return [0, true];
+        }
+
         return this.props.list.reduce(function(result, room, index) {
             if (truncateAt === undefined || index >= truncateAt) {
                 var roomNotifState = RoomNotifs.getRoomNotifsState(room.roomId);
-                var highlight = room.getUnreadNotificationCount('highlight') > 0 || self.props.isInvite;
+                var highlight = room.getUnreadNotificationCount('highlight') > 0;
                 var notificationCount = room.getUnreadNotificationCount();
 
                 const notifBadges = notificationCount > 0 && self._shouldShowNotifBadge(roomNotifState);
@@ -322,44 +327,45 @@ var RoomSubList = React.createClass({
         });
     },
 
-    calcManualOrderTagData: function(room) {
-        var index = this.state.sortedList.indexOf(room);
-
+    calcManualOrderTagData: function(index) {
         // we sort rooms by the lexicographic ordering of the 'order' metadata on their tags.
         // for convenience, we calculate this for now a floating point number between 0.0 and 1.0.
 
-        var orderA = 0.0; // by default we're next to the beginning of the list
+        let orderA = 0.0; // by default we're next to the beginning of the list
         if (index > 0) {
-            var prevTag = this.state.sortedList[index - 1].tags[this.props.tagName];
+            const prevTag = this.state.sortedList[index - 1].tags[this.props.tagName];
             if (!prevTag) {
-                console.error("Previous room in sublist is not tagged to be in this list. This should never happen.")
-            }
-            else if (prevTag.order === undefined) {
+                console.error("Previous room in sublist is not tagged to be in this list. This should never happen.");
+            } else if (prevTag.order === undefined) {
                 console.error("Previous room in sublist has no ordering metadata. This should never happen.");
-            }
-            else {
+            } else {
                 orderA = prevTag.order;
             }
         }
 
-        var orderB = 1.0; // by default we're next to the end of the list too
+        let orderB = 1.0; // by default we're next to the end of the list too
         if (index < this.state.sortedList.length - 1) {
-            var nextTag = this.state.sortedList[index + 1].tags[this.props.tagName];
+            const nextTag = this.state.sortedList[index + 1].tags[this.props.tagName];
             if (!nextTag) {
-                console.error("Next room in sublist is not tagged to be in this list. This should never happen.")
-            }
-            else if (nextTag.order === undefined) {
+                console.error("Next room in sublist is not tagged to be in this list. This should never happen.");
+            } else if (nextTag.order === undefined) {
                 console.error("Next room in sublist has no ordering metadata. This should never happen.");
-            }
-            else {
+            } else {
                 orderB = nextTag.order;
             }
         }
 
-        var order = (orderA + orderB) / 2.0;
+        const order = (orderA + orderB) / 2.0;
+
         if (order === orderA || order === orderB) {
             console.error("Cannot describe new list position.  This should be incredibly unlikely.");
-            // TODO: renumber the list
+            this.state.sortedList.forEach((room, index) => {
+                MatrixClientPeg.get().setRoomTag(
+                    room.roomId, this.props.tagName,
+                    {order: index / this.state.sortedList.length},
+                );
+            });
+            return index / this.state.sortedList.length;
         }
 
         return order;
@@ -368,12 +374,14 @@ var RoomSubList = React.createClass({
     makeRoomTiles: function() {
         var self = this;
         var DNDRoomTile = sdk.getComponent("rooms.DNDRoomTile");
-        return this.state.sortedList.map(function(room) {
+        return this.state.sortedList.map(function(room, index) {
             // XXX: is it evil to pass in self as a prop to RoomTile?
             return (
                 <DNDRoomTile
+                    index={index} // For DND
                     room={ room }
                     roomSubList={ self }
+                    tagName={self.props.tagName}
                     key={ room.roomId }
                     collapsed={ self.props.collapsed || false}
                     unread={ Unread.doesRoomHaveUnreadMessages(room) }
@@ -394,7 +402,8 @@ var RoomSubList = React.createClass({
         var subListNotifCount = subListNotifications[0];
         var subListNotifHighlight = subListNotifications[1];
 
-        var roomCount = this.props.list.length > 0 ? this.props.list.length : '';
+        var totalTiles = this.props.list.length + (this.props.extraTiles || []).length;
+        var roomCount = totalTiles > 0 ? totalTiles : '';
 
         var chevronClasses = classNames({
             'mx_RoomSubList_chevron': true,
@@ -558,12 +567,18 @@ var RoomSubList = React.createClass({
                           </TruncatedList>;
             }
 
-            return connectDropTarget(
-                <div>
-                    { this._getHeaderJsx() }
-                    { subList }
-                </div>
-            );
+            const subListContent = <div>
+                { this._getHeaderJsx() }
+                { subList }
+            </div>;
+
+            return this.props.editable ? <Droppable droppableId={"room-sub-list-droppable_" + this.props.tagName}>
+                { (provided, snapshot) => (
+                    <div ref={provided.innerRef}>
+                        { subListContent }
+                    </div>
+                ) }
+            </Droppable> : subListContent;
         }
         else {
             var Loader = sdk.getComponent("elements.Spinner");
@@ -577,11 +592,4 @@ var RoomSubList = React.createClass({
     }
 });
 
-// Export the wrapped version, inlining the 'collect' functions
-// to more closely resemble the ES7
-module.exports =
-DropTarget('RoomTile', roomListTarget, function(connect) {
-    return {
-        connectDropTarget: connect.dropTarget(),
-    }
-})(RoomSubList);
+module.exports = RoomSubList;

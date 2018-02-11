@@ -33,10 +33,12 @@ limitations under the License.
     min-height: 70px;
     align-items: center;
     display: flex;
+    padding-bottom: 10px;
 }
 
 .mx_GroupView_header_view {
     border-bottom: 1px solid $primary-hairline-color;
+    padding-bottom: 0px;
 }
 
 .mx_GroupView_header_avatar, .mx_GroupView_header_info {
@@ -52,6 +54,23 @@ limitations under the License.
 .mx_GroupHeader_button object {
     // prevents clicks from being swallowed by svg in 'object' tag
     pointer-events: none;
+}
+
+.mx_GroupView_editable {
+    border-bottom: 1px solid $strong-input-border-color ! important;
+    min-width: 150px;
+    cursor: text;
+}
+
+.mx_GroupView_editable:focus {
+    border-bottom: 1px solid $accent-color ! important;
+    outline: none;
+    box-shadow: none;
+}
+
+.mx_GroupView_header_isUserMember .mx_GroupView_header_name:hover div:not(.mx_GroupView_editable) {
+    color: $accent-color;
+    cursor: pointer;
 }
 
 .mx_GroupView_avatarPicker {
@@ -71,6 +90,8 @@ limitations under the License.
 
 .mx_GroupView_header_leftCol {
     flex: 1;
+
+    overflow: hidden;
 }
 
 .mx_GroupView_header_rightCol {
@@ -101,10 +122,6 @@ limitations under the License.
     /* why isn't text-overflow working? */
     text-overflow: ellipsis;
     border-bottom: 1px solid transparent;
-}
-
-.mx_GroupView_header_name input, .mx_GroupView_header_shortDesc input {
-    width: 400px;
 }
 
 .mx_GroupView_header_shortDesc {
@@ -146,8 +163,12 @@ limitations under the License.
     user-select: none;
 }
 
-.mx_GroupView_rooms_header h3 {
-    margin-bottom: 10px
+.mx_GroupView h3 {
+    text-transform: uppercase;
+    color: $h3-color;
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 10px;
 }
 
 .mx_GroupView_rooms_header .mx_AccessibleButton {
@@ -156,11 +177,24 @@ limitations under the License.
     height: 24px;
 }
 
-.mx_GroupView_rooms_header_addButton {
+.mx_GroupView_group {
+    border-top: 1px solid $primary-hairline-color;
+}
+
+.mx_GroupView_group_disabled {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.mx_GroupView_rooms_header_addRow_button {
     display: inline-block;
 }
 
-.mx_GroupView_rooms_header_addButton_label {
+.mx_GroupView_rooms_header_addRow_button object {
+    pointer-events: none;
+}
+
+.mx_GroupView_rooms_header_addRow_label {
     display: inline-block;
     vertical-align: top;
     line-height: 24px;
@@ -172,6 +206,7 @@ limitations under the License.
     flex-grow: 1;
     border-top: 1px solid $primary-hairline-color;
     padding-top: 10px;
+    word-break: break-word;
 }
 
 .mx_GroupView .mx_RoomView_messageListWrapper {
@@ -180,18 +215,21 @@ limitations under the License.
 
 .mx_GroupView_membershipSection {
     color: $greyed-fg-color;
+    margin-top: 10px;
 }
 
 .mx_GroupView_membershipSubSection {
     justify-content: space-between;
     display: flex;
-    margin-top: 2px;
-    margin-bottom: 2px;
 }
 
 .mx_GroupView_membershipSection_description {
     /* To match textButton */
     line-height: 34px;
+}
+
+.mx_GroupView_membershipSection_description .mx_BaseAvatar {
+    margin-right: 10px;
 }
 
 .mx_GroupView_membershipSection .mx_GroupView_textButton {
@@ -203,14 +241,6 @@ limitations under the License.
 .mx_GroupView_memberSettings_toggle label {
     cursor: pointer;
     user-select: none;
-}
-
-.mx_GroupView_memberSettings h3 {
-    text-transform: uppercase;
-    color: $h3-color;
-    font-weight: 600;
-    font-size: 13px;
-    margin-bottom: 10px;
 }
 
 .mx_GroupView_memberSettings input {
@@ -275,10 +305,22 @@ limitations under the License.
 }
 
 .mx_GroupView_body .gm-scroll-view > *{
-    margin: 0px 50px 11px 68px;
+    margin: 11px 50px 0px 68px;
 }
 
 .mx_GroupView_groupDesc textarea {
-    width: 50%;
+    width: 100%;
+    max-width: 100%;
     height: 150px;
+}
+
+.mx_GroupView_groupDesc_placeholder {
+    background-color: $info-plinth-bg-color;
+    color: $info-plinth-fg-color;
+    border-radius: 10px;
+    text-align: center;
+
+    cursor: pointer;
+    padding: 100px 20px;
+    margin: 20px 0px;
 }

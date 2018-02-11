@@ -21,7 +21,7 @@ import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import Velocity from 'velocity-vector';
 import 'velocity-vector/velocity.ui';
-import UserSettingsStore from 'matrix-react-sdk/lib/UserSettingsStore';
+import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
 
 const CALLOUT_ANIM_DURATION = 1000;
 
@@ -170,9 +170,6 @@ module.exports = React.createClass({
         const GroupsButton = sdk.getComponent('elements.GroupsButton');
         const SettingsButton = sdk.getComponent('elements.SettingsButton');
 
-        const groupsButton =  UserSettingsStore.isFeatureEnabled('feature_groups') ?
-            <GroupsButton tooltip={true} /> : null;
-
         return (
             <div className="mx_BottomLeftMenu">
                 <div className="mx_BottomLeftMenu_options">
@@ -186,12 +183,12 @@ module.exports = React.createClass({
                     <div ref={this._collectCreateRoomButton}>
                         <CreateRoomButton tooltip={true} />
                     </div>
-                    { groupsButton }
+                    <GroupsButton tooltip={true} />
                     <span className="mx_BottomLeftMenu_settings">
                         <SettingsButton tooltip={true} />
                     </span>
                 </div>
             </div>
         );
-    }
+    },
 });

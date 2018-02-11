@@ -1,3 +1,182 @@
+Changes in [0.13.5](https://github.com/vector-im/riot-web/releases/tag/v0.13.5) (2018-02-09)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.4...v0.13.5)
+
+ * SECURITY UPDATE: Sanitise URLs from 'external_url'. Thanks to walle303 for contacting
+   us about this vulnerability.
+
+Changes in [0.13.4](https://github.com/vector-im/riot-web/releases/tag/v0.13.4) (2018-01-03)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.3...v0.13.4)
+
+ * Change config of riot.im electron build to fix some widgets not working. This only affects
+   electron builds using the riot.im config - for all other builds, this is identical to
+   v0.13.3.
+
+Changes in [0.13.3](https://github.com/vector-im/riot-web/releases/tag/v0.13.3) (2017-12-04)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.2...v0.13.3)
+
+ * Bump js-sdk, react-sdk version to pull in fix for [setting room publicity in a group](https://github.com/matrix-org/matrix-js-sdk/commit/aa3201ebb0fff5af2fb733080aa65ed1f7213de6).
+
+Changes in [0.13.2](https://github.com/vector-im/riot-web/releases/tag/v0.13.2) (2017-11-28)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.1...v0.13.2)
+
+
+Changes in [0.13.1](https://github.com/vector-im/riot-web/releases/tag/v0.13.1) (2017-11-17)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.0...v0.13.1)
+
+ * SECURITY UPDATE: Fix the force TURN option for inbound calls. This option forced the use
+   of TURN but only worked for outbound calls and not inbound calls. This means that if you
+   enabled this option expecting it to mask your IP address in calls, your IP would still
+   have been revealed to the room if you accepted an incoming call.
+ * Also adds the Slovak translation.
+
+Changes in [0.13.0](https://github.com/vector-im/riot-web/releases/tag/v0.13.0) (2017-11-15)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.0-rc.3...v0.13.0)
+
+
+Changes in [0.13.0-rc.3](https://github.com/vector-im/riot-web/releases/tag/v0.13.0-rc.3) (2017-11-14)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.0-rc.2...v0.13.0-rc.3)
+
+
+Changes in [0.13.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v0.13.0-rc.2) (2017-11-10)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.13.0-rc.1...v0.13.0-rc.2)
+
+ * Make groups a fully-fleged baked-in feature
+   [\#5566](https://github.com/vector-im/riot-web/pull/5566)
+
+Changes in [0.13.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v0.13.0-rc.1) (2017-11-10)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7...v0.13.0-rc.1)
+
+ * Fix app tile margins.
+   [\#5561](https://github.com/vector-im/riot-web/pull/5561)
+ * Fix wrapping of long room topics (and overlap with apps)
+   [\#5549](https://github.com/vector-im/riot-web/pull/5549)
+ * Don't display widget iframes whilst loading.
+   [\#5555](https://github.com/vector-im/riot-web/pull/5555)
+ * Update from Weblate.
+   [\#5558](https://github.com/vector-im/riot-web/pull/5558)
+ * Adjust CSS for GroupView
+   [\#5543](https://github.com/vector-im/riot-web/pull/5543)
+ * CSS for adding rooms to a group with visibility
+   [\#5546](https://github.com/vector-im/riot-web/pull/5546)
+ * CSS for pinned indicators
+   [\#5511](https://github.com/vector-im/riot-web/pull/5511)
+ * Implement general-purpose tooltip "(?)"-style
+   [\#5540](https://github.com/vector-im/riot-web/pull/5540)
+ * CSS for improving group creation UX, namely setting long description
+   [\#5535](https://github.com/vector-im/riot-web/pull/5535)
+ * CSS for room notif pills in composer
+   [\#5531](https://github.com/vector-im/riot-web/pull/5531)
+ * Do not init a group store when no groupId specified
+   [\#5520](https://github.com/vector-im/riot-web/pull/5520)
+ * CSS for new pinned events indicator
+   [\#5293](https://github.com/vector-im/riot-web/pull/5293)
+ * T3chguy/devtools 1
+   [\#5471](https://github.com/vector-im/riot-web/pull/5471)
+ * Use margin to separate "perms" in the room directory
+   [\#5498](https://github.com/vector-im/riot-web/pull/5498)
+ * Add CSS for CreateGroupDialog to give group ID input suffix and prefix style
+   [\#5505](https://github.com/vector-im/riot-web/pull/5505)
+ * Fix group invites such that they look similar to room invites
+   [\#5504](https://github.com/vector-im/riot-web/pull/5504)
+ * CSS for Your Communities scrollbar
+   [\#5501](https://github.com/vector-im/riot-web/pull/5501)
+ * Add toggle to alter visibility of room-group association
+   [\#5497](https://github.com/vector-im/riot-web/pull/5497)
+ * CSS for room notification pills
+   [\#5494](https://github.com/vector-im/riot-web/pull/5494)
+ * Implement simple GroupRoomInfo
+   [\#5493](https://github.com/vector-im/riot-web/pull/5493)
+ * Add back bottom border to widget title bar
+   [\#5458](https://github.com/vector-im/riot-web/pull/5458)
+ * Prevent group name looking clickable for non-members
+   [\#5478](https://github.com/vector-im/riot-web/pull/5478)
+ * Fix instanceof check, was checking against the Package rather than class
+   [\#5472](https://github.com/vector-im/riot-web/pull/5472)
+ * Use correct group store state when rendering "Invite to this community"
+   [\#5455](https://github.com/vector-im/riot-web/pull/5455)
+ * Leverages ES6 in Notifications
+   [\#5453](https://github.com/vector-im/riot-web/pull/5453)
+ * Re-PR #4412
+   [\#5437](https://github.com/vector-im/riot-web/pull/5437)
+ * fix comma error of features example
+   [\#5410](https://github.com/vector-im/riot-web/pull/5410)
+ * Devtools: make filtering case-insensitive
+   [\#5387](https://github.com/vector-im/riot-web/pull/5387)
+ * Highlight group members icon in group member info
+   [\#5432](https://github.com/vector-im/riot-web/pull/5432)
+ * Use CSS to stop greyed Right/LeftPanel UI from being interactable
+   [\#5422](https://github.com/vector-im/riot-web/pull/5422)
+ * CSS for preventing editing of UI requiring user privilege if user
+   unprivileged
+   [\#5417](https://github.com/vector-im/riot-web/pull/5417)
+ * Only show UI for adding rooms/users to groups to privileged users
+   [\#5409](https://github.com/vector-im/riot-web/pull/5409)
+ * Only show "Invite to this community" when viewing group members
+   [\#5407](https://github.com/vector-im/riot-web/pull/5407)
+ * Add trash can icon for delete widget
+   [\#5397](https://github.com/vector-im/riot-web/pull/5397)
+ * CSS to improve MyGroups in general, and add placeholder
+   [\#5375](https://github.com/vector-im/riot-web/pull/5375)
+ * Rxl881/parallelshell
+   [\#4881](https://github.com/vector-im/riot-web/pull/4881)
+ * Custom server text was i18ned by key
+   [\#5371](https://github.com/vector-im/riot-web/pull/5371)
+ * Run prunei18n
+   [\#5370](https://github.com/vector-im/riot-web/pull/5370)
+ * Update from Weblate.
+   [\#5369](https://github.com/vector-im/riot-web/pull/5369)
+ * Add script to prune unused translations
+   [\#5339](https://github.com/vector-im/riot-web/pull/5339)
+ * CSS for improved MyGroups page
+   [\#5360](https://github.com/vector-im/riot-web/pull/5360)
+ * Add padding-right to Dialogs
+   [\#5346](https://github.com/vector-im/riot-web/pull/5346)
+ * Add div.warning and use the scss var
+   [\#5344](https://github.com/vector-im/riot-web/pull/5344)
+ * Groups->Communities
+   [\#5343](https://github.com/vector-im/riot-web/pull/5343)
+ * Make the 'add rooms' button clickable
+   [\#5342](https://github.com/vector-im/riot-web/pull/5342)
+ * Switch to gen-i18n script
+   [\#5338](https://github.com/vector-im/riot-web/pull/5338)
+ * Use _t as _t
+   [\#5334](https://github.com/vector-im/riot-web/pull/5334)
+ * fix groupview header editing visuals (pt 1)
+   [\#5330](https://github.com/vector-im/riot-web/pull/5330)
+ * bump version to prevent eslint errors
+   [\#5316](https://github.com/vector-im/riot-web/pull/5316)
+ * CSS for invited group members section
+   [\#5303](https://github.com/vector-im/riot-web/pull/5303)
+ * Handle long names in EntityTiles by overflowing correctly
+   [\#5302](https://github.com/vector-im/riot-web/pull/5302)
+ * Disable labs in electron
+   [\#5296](https://github.com/vector-im/riot-web/pull/5296)
+ * CSS for Modifying GroupView UI matrix-org/matrix-react-sdk#1475
+   [\#5295](https://github.com/vector-im/riot-web/pull/5295)
+ * Message/event pinning
+   [\#5142](https://github.com/vector-im/riot-web/pull/5142)
+ * Sorting of networks within a protocol based on name
+   [\#4054](https://github.com/vector-im/riot-web/pull/4054)
+ * allow hiding of notification body for privacy reasons
+   [\#4988](https://github.com/vector-im/riot-web/pull/4988)
+ * Don't use MXIDs on the lightbox if possible
+   [\#5281](https://github.com/vector-im/riot-web/pull/5281)
+ * CSS for lonely room message
+   [\#5267](https://github.com/vector-im/riot-web/pull/5267)
+ * Bring back dark theme code block border
+   [\#5037](https://github.com/vector-im/riot-web/pull/5037)
+ * CSS for remove avatar buttons
+   [\#5282](https://github.com/vector-im/riot-web/pull/5282)
+
 Changes in [0.12.7](https://github.com/vector-im/riot-web/releases/tag/v0.12.7) (2017-10-16)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v0.12.7-rc.3...v0.12.7)

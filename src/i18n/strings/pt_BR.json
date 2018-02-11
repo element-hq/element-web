@@ -1,7 +1,7 @@
 {
     "Add an email address above to configure email notifications": "Insira um endereço de email no campo acima para configurar suas notificações por email",
     "All messages": "Todas as mensagens",
-    "All messages (loud)": "Todas as mensagens (alto)",
+    "All messages (noisy)": "Todas as mensagens (alto)",
     "An error occurred whilst saving your email notification preferences.": "Um erro ocorreu enquanto o sistema estava salvando suas preferências de notificação por email.",
     "Call invitation": "Convite para chamada",
     "Cancel Sending": "Cancelar o envio",
@@ -23,14 +23,12 @@
     "Enter keywords separated by a comma:": "Coloque cada palavras-chave separada por vírgula:",
     "Error": "Erro",
     "Error saving email notification preferences": "Erro ao salvar as preferências de notificação por email",
-    "#example:": "#exemplo",
     "Failed to add tag %(tagName)s to room": "Falha ao adicionar %(tagName)s à sala",
     "Failed to change settings": "Falhou ao mudar as preferências",
     "Failed to forget room %(errCode)s": "Falhou ao esquecer a sala %(errCode)s",
     "Failed to update keywords": "Falha ao alterar as palavras-chave",
     "Failed to get protocol list from Home Server": "Falha em acessar a lista de protocolos do servidor padrão",
     "Failed to get public room list": "Falha ao acessar a lista pública de salas",
-    "Failed to remove tag %(tag)s from room": "Falha ao remover a palavra-chave %(tag)s da sala",
     "Failed to set direct chat tag": "Falha ao definir conversa como pessoal",
     "Failed to set Direct Message status of room": "Falha em definir a mensagem de status da sala",
     "Favourite": "Favorito",
@@ -66,7 +64,6 @@
     "Permalink": "Link permanente",
     "powered by Matrix": "rodando a partir do Matrix",
     "Quote": "Citar",
-    "Redact": "Remover",
     "Reject": "Rejeitar",
     "Remove": "Remover",
     "Remove %(name)s from the directory?": "Remover %(name)s da lista pública de salas?",
@@ -151,7 +148,6 @@
     "You need to be using HTTPS to place a screen-sharing call.": "Você precisa estar usando HTTPS para poder iniciar uma chamada com compartilhamento de tela.",
     "Login": "Fazer login",
     "Welcome to Riot.im": "Seja bem-vinda(o) a Riot.im",
-    "Decentralised, encrypted chat &amp; collaboration powered by": "Colaboração descentralizada e criptografada impulsada por",
     "Search the room directory": "Buscar na lista pública de salas",
     "Chat with Riot Bot": "Conversar com o Bot do Riot",
     "Get started with some tips from Riot Bot!": "Comece com algumas dicas do Bot do Riot!",
@@ -209,6 +205,5 @@
     "Event sent!": "Evento enviado!",
     "Event Type": "Tipo do Evento",
     "Event Content": "Conteúdo do Evento",
-    "State Key": "Chave do Estado",
-    "Invite to this group": "Convide para este grupo"
+    "State Key": "Chave do Estado"
 }

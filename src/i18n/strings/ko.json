@@ -3,7 +3,7 @@
     "Add an email address above to configure email notifications": "이메일 알림을 설정하기 위해 이메일 주소를 추가해주세요",
     "Advanced notification settings": "고급 알림 설정",
     "All messages": "모든 메시지",
-    "All messages (loud)": "모든 메시지 (크게)",
+    "All messages (noisy)": "모든 메시지 (크게)",
     "All Rooms": "모든 방",
     "All notifications are currently disabled for all targets.": "현재 모든 알림이 모든 상대에게서 꺼졌어요.",
     "An error occurred whilst saving your email notification preferences.": "이메일 알림을 설정하다가 오류가 일어났어요.",
@@ -51,7 +51,6 @@
     "Please describe the bug and/or send logs.": "오류를 적어주시거나 로그를 보내주세요.",
     "powered by Matrix": "매트릭스의 지원을 받고 있어요",
     "Quote": "인용하기",
-    "Redact": "지우기",
     "Reject": "거절하기",
     "Remove %(name)s from the directory?": "목록에서 %(name)s을 지우시겠어요?",
     "Remove": "지우기",
@@ -192,5 +191,14 @@
     "Error encountered (%(errorDetail)s).": "오류가 일어났어요 (%(errorDetail)s).",
     "No update available.": "업데이트가 없어요.",
     "Downloading update...": "업데이트를 받는 중...",
-    "Couldn't load home page": "중심 화면을 불러올 수 없어요"
+    "Couldn't load home page": "중심 화면을 불러올 수 없어요",
+    "Show message in desktop notification": "컴퓨터 알림에서 내용 보이기",
+    "Appear Offline": "미접속으로 표시하기",
+    "Bug report sent": "오류 보고서를 보냈어요",
+    "Thank you!": "감사합니다!",
+    "Back": "돌아가기",
+    "Edit": "수정하기",
+    "Toolbox": "도구상자",
+    "Developer Tools": "개발자 도구",
+    "Register": "등록"
 }

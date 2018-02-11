@@ -1,7 +1,7 @@
 {
     "Add an email address above to configure email notifications": "Дадайце адрас электроннай пошты вышэй, каб наладзіць апавяшчэнні",
     "All messages": "Усе паведамленні",
-    "All messages (loud)": "Усе паведамленні (гучна)",
+    "All messages (noisy)": "Усе паведамленні (гучна)",
     "All notifications are currently disabled for all targets.": "Усе апавяшчэнні ў цяперашні час адключаныя для ўсіх мэтаў.",
     "An error occurred whilst saving your email notification preferences.": "Адбылася памылка падчас захавання налады апавяшчэнняў па электроннай пошце.",
     "Cancel Sending": "Адмяніць адпраўку",
@@ -59,7 +59,6 @@
     "Permalink": "Пастаянная спасылка",
     "powered by Matrix": "працуе на Matrix",
     "Quote": "Цытата",
-    "Redact": "Адрэдагаваць",
     "Reject": "Адхіліць",
     "Remove %(name)s from the directory?": "Выдаліць %(name)s з каталога?",
     "Remove": "Выдалiць",

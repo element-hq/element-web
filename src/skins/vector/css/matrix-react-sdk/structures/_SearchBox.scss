@@ -21,6 +21,8 @@ limitations under the License.
     padding-top: 24px;
     padding-bottom: 22px;
 
+    border-bottom: 1px solid $panel-divider-color;
+
     display: flex;
 }
 
@@ -38,7 +40,7 @@ limitations under the License.
 .mx_SearchBox_search {
     flex: 1 1 auto;
     width: 0px;
-    font-family: 'Open Sans', Arial, Helvetica, Sans-Serif;
+    font-family: $font-family;
     font-size: 12px;
     margin-top: -2px;
     height: 24px;
