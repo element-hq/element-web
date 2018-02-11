@@ -186,8 +186,10 @@ module.exports = React.createClass({
         let title;
         if (this.props.timestamp) {
             title = _t(
-                "Seen by %(userName)s at %(dateTime)s",
-                {userName: this.props.member.userId, dateTime: formatDate(new Date(this.props.timestamp), this.props.showTwelveHour)},
+                "Seen by %(displayName)s (%(userName)s) at %(dateTime)s",
+                {displayName: this.props.member.name,
+                 userName: this.props.member.userId,
+                 dateTime: formatDate(new Date(this.props.timestamp), this.props.showTwelveHour)},
             );
         }
 
