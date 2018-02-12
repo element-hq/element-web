@@ -79,6 +79,11 @@ class RoomListStore extends Store {
             }
             break;
             case 'RoomListActions.tagRoom.pending': {
+                // XXX: we only show one optimistic update at any one time.
+                // Ideally we should be making a list of in-flight requests
+                // that are backed by transaction IDs. Until the js-sdk
+                // supports this, we're stuck with only being able to use
+                // the most recent optimistic update.
                 this._generateRoomLists(payload.request);
             }
             break;
