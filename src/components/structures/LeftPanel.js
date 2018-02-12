@@ -26,7 +26,7 @@ import sdk from 'matrix-react-sdk';
 import dis from 'matrix-react-sdk/lib/dispatcher';
 import VectorConferenceHandler from '../../VectorConferenceHandler';
 
-import SettingsStore from "matrix-react-sdk/lib/settings/SettingsStore";
+import SettingsStore from 'matrix-react-sdk/lib/settings/SettingsStore';
 import TagOrderActions from 'matrix-react-sdk/lib/actions/TagOrderActions';
 import RoomListActions from 'matrix-react-sdk/lib/actions/RoomListActions';
 
