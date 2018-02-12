@@ -33,28 +33,25 @@ limitations under the License.
  *                         `${id}.failure`.
  *
  *                     The shape of each are:
- *                     { action: '${id}.pending', request, asyncId }
- *                     { action: '${id}.success', result, asyncId }
- *                     { action: '${id}.failure', err, asyncId }
+ *                     { action: '${id}.pending', request }
+ *                     { action: '${id}.success', result }
+ *                     { action: '${id}.failure', err }
  *
- *                     where `request` is returned by `pendingFn`, result
- *                     is the result of the promise returned by `fn` and
- *                     `asyncId` is a unique ID for each dispatch of the
- *                     asynchronous action.
+ *                     where `request` is returned by `pendingFn` and
+ *                     result is the result of the promise returned by
+ *                     `fn`.
  */
 export function asyncAction(id, fn, pendingFn) {
     return (dispatch) => {
-        const asyncId = Math.random().toString(16).slice(2, 10);
         dispatch({
             action: id + '.pending',
             request:
                 typeof pendingFn === 'function' ? pendingFn() : undefined,
-            asyncId,
         });
         fn().then((result) => {
-            dispatch({action: id + '.success', result, asyncId});
+            dispatch({action: id + '.success', result});
         }).catch((err) => {
-            dispatch({action: id + '.failure', err, asyncId});
+            dispatch({action: id + '.failure', err});
         });
     };
 }
