@@ -371,7 +371,7 @@ module.exports = React.createClass({
                     return;
                 }
 
-                return isRoomVisible[taggedRoom.roomId];
+                return Boolean(isRoomVisible[taggedRoom.roomId]);
             });
         });
 
