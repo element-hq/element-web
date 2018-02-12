@@ -76,6 +76,12 @@ export default React.createClass({
                 className={this.props.className}
                 role="dialog"
                 aria-labelledby='mx_BaseDialog_title'
+                // This should point to a node describing the dialog.
+                // If we were about to completelly follow this recommendation we'd need to
+                // make all the components relying on BaseDialog to be aware of it.
+                // So instead we will use the whole content as the description.
+                // Description comes first and if the content contains more text,
+                // AT users can skip its presentation.
                 aria-describedby={this.props.contentId}
             >
                 <AccessibleButton onClick={this._onCancelClick}
